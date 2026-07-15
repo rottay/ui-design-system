@@ -22,7 +22,7 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, extent, max, min, scaleLinear, scaleSqrt, select } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
@@ -31,6 +31,13 @@ import { useChartDimensions, useChartPersonality, useChartCompact, useChartToolt
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 import { ChartTooltip, TooltipSeries } from '../tooltip';
 import { createChartCrosshair, pointerToContainerPosition } from '../tooltip/crosshair';
+
+const DEFAULT_SCATTER_SIZE_RANGE: [number, number] = [4, 30];
+const MAX_SCATTER_COORDINATE = Number.MAX_VALUE / 4;
+
+function clampCoordinate(value: number): number {
+  return Math.max(-MAX_SCATTER_COORDINATE, Math.min(MAX_SCATTER_COORDINATE, value));
+}
 
 /** A single data point in the scatter plot. */
 export interface ScatterDataPoint {
@@ -90,11 +97,33 @@ function linearRegression(data: ScatterDataPoint[]): { slope: number; intercept:
   }
 
   const denominator = n * sumXX - sumX * sumX;
-  if (denominator === 0) return null;
+  if (!Number.isFinite(denominator) || denominator === 0) return null;
 
   const slope = (n * sumXY - sumX * sumY) / denominator;
   const intercept = (sumY - slope * sumX) / n;
+  if (!Number.isFinite(slope) || !Number.isFinite(intercept)) return null;
   return { slope, intercept };
+}
+
+function paddedDomain(domain: [number, number]): [number, number] {
+  const [minimum, maximum] = domain;
+  if (minimum === maximum) {
+    if (minimum === 0) return [-1, 1];
+    const delta = Math.abs(minimum) * 0.05;
+    const lower = minimum - delta;
+    const upper = maximum + delta;
+    if (Number.isFinite(lower) && Number.isFinite(upper) && lower !== upper) {
+      return [lower, upper];
+    }
+    return minimum > 0 ? [minimum / 2, minimum] : [minimum, minimum / 2];
+  }
+
+  const span = maximum - minimum;
+  if (!Number.isFinite(span)) return [minimum, maximum];
+  const padding = span * 0.05;
+  const lower = minimum - padding;
+  const upper = maximum + padding;
+  return [Number.isFinite(lower) ? lower : minimum, Number.isFinite(upper) ? upper : maximum];
 }
 
 /**
@@ -110,7 +139,7 @@ export const ScatterChart = memo(function ScatterChart({
   yLabel,
   pointRadius = 5,
   bubble = false,
-  sizeRange = [4, 30],
+  sizeRange = DEFAULT_SCATTER_SIZE_RANGE,
   grid = true,
   opacity = 0.7,
   trendLine = false,
@@ -139,11 +168,28 @@ export const ScatterChart = memo(function ScatterChart({
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
+  const resolvedPointRadius = Number.isFinite(pointRadius) && pointRadius >= 0 ? pointRadius : 5;
+  const resolvedOpacity = Number.isFinite(opacity) ? Math.min(1, Math.max(0, opacity)) : 0.7;
+  const resolvedSizeRange = useMemo<[number, number]>(() => {
+    const first = Number.isFinite(sizeRange[0]) && sizeRange[0] >= 0 ? sizeRange[0] : 4;
+    const second = Number.isFinite(sizeRange[1]) && sizeRange[1] >= 0 ? sizeRange[1] : 30;
+    return first <= second ? [first, second] : [second, first];
+  }, [sizeRange]);
+  const finiteData = useMemo(() => data
+    .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y))
+    .map((point) => ({
+      ...point,
+      x: clampCoordinate(point.x),
+      y: clampCoordinate(point.y),
+      ...(point.size == null || (Number.isFinite(point.size) && point.size >= 0)
+        ? {}
+        : { size: undefined }),
+    })), [data]);
 
   const summary = {
     caption: title ? `${title} data summary` : 'Scatter chart data summary',
     headers: ['Label', 'X', 'Y', ...(bubble ? ['Size'] : [])],
-    rows: data.map((point) => [
+    rows: finiteData.map((point) => [
       point.label ?? '-',
       point.x,
       point.y,
@@ -154,7 +200,7 @@ export const ScatterChart = memo(function ScatterChart({
   // Collect unique colors for a legend when points have explicit colors
   const legendNode = legend ? (
     <div data-part="legend" data-variant={bubble ? 'bubble' : 'scatter'} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      {data
+      {finiteData
         .filter((d) => d.label)
         .slice(0, 10) // Limit legend to 10 items to avoid clutter
         .map((d, i) => (
@@ -164,7 +210,7 @@ export const ScatterChart = memo(function ScatterChart({
               style={{
                 width: 10,
                 height: 10,
-                backgroundColor: d.color ?? colors[i % colors.length],
+                backgroundColor: d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)',
                 display: 'inline-block',
               }}
             />
@@ -175,43 +221,47 @@ export const ScatterChart = memo(function ScatterChart({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || !data || data.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
+    if (finiteData.length === 0) return;
 
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = chartHeight - margin.top - margin.bottom;
+    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
+    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
+    const rawInnerWidth = safeChartWidth - margin.left - margin.right;
+    const rawInnerHeight = safeChartHeight - margin.top - margin.bottom;
+    const innerWidth = Number.isFinite(rawInnerWidth) ? Math.max(0, rawInnerWidth) : 0;
+    const innerHeight = Number.isFinite(rawInnerHeight) ? Math.max(0, rawInnerHeight) : 0;
+    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
+    if (innerWidth === 0 || innerHeight === 0) return;
 
     const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('data-variant', bubble ? 'bubble' : 'scatter')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // X scale with 5% padding on each side so points don't sit on axes
-    const xExtent = extent(data, (d) => d.x) as [number, number];
-    const xPadding = (xExtent[1] - xExtent[0]) * 0.05 || 1;
+    const xExtent = extent(finiteData, (d) => d.x) as [number, number];
     const x = scaleLinear()
-      .domain([xExtent[0] - xPadding, xExtent[1] + xPadding])
+      .domain(paddedDomain(xExtent))
       .nice()
       .range([0, innerWidth]);
 
     // Y scale with 5% padding
-    const yExtent = extent(data, (d) => d.y) as [number, number];
-    const yPadding = (yExtent[1] - yExtent[0]) * 0.05 || 1;
+    const yExtent = extent(finiteData, (d) => d.y) as [number, number];
     const y = scaleLinear()
-      .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
+      .domain(paddedDomain(yExtent))
       .nice()
       .range([innerHeight, 0]);
 
     // Bubble size scale (sqrt so area scales linearly with value)
     const sizeScale = bubble
       ? scaleSqrt()
-          .domain([min(data, (d) => d.size ?? 1) ?? 1, max(data, (d) => d.size ?? 1) ?? 1])
-          .range(sizeRange)
+          .domain([min(finiteData, (d) => d.size ?? 1) ?? 1, max(finiteData, (d) => d.size ?? 1) ?? 1])
+          .range(resolvedSizeRange)
       : null;
 
     // X axis
@@ -263,7 +313,7 @@ export const ScatterChart = memo(function ScatterChart({
 
     // Trend line (rendered behind points)
     if (trendLine) {
-      const regression = linearRegression(data);
+      const regression = linearRegression(finiteData);
       if (regression) {
         const xDomain = x.domain();
         const x1 = xDomain[0];
@@ -287,7 +337,7 @@ export const ScatterChart = memo(function ScatterChart({
             .style('opacity', 0)
             .transition()
             .duration(chartPersonality.animationDuration)
-            .delay(data.length * 20)
+            .delay(finiteData.length * 20)
             .style('opacity', 0.6);
         }
       }
@@ -296,7 +346,7 @@ export const ScatterChart = memo(function ScatterChart({
     // Data points
     const circles = g
       .selectAll('.scatter-point')
-      .data(data)
+      .data(finiteData)
       .enter()
       .append('circle')
       .attr('class', 'scatter-point')
@@ -308,11 +358,11 @@ export const ScatterChart = memo(function ScatterChart({
         if (bubble && sizeScale && d.size != null) {
           return sizeScale(d.size);
         }
-        return pointRadius;
+        return resolvedPointRadius;
       })
-      .attr('fill', (d, i) => d.color ?? colors[i % colors.length])
-      .attr('fill-opacity', opacity)
-      .attr('stroke', (d, i) => d.color ?? colors[i % colors.length])
+      .attr('fill', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)')
+      .attr('fill-opacity', resolvedOpacity)
+      .attr('stroke', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)')
       .attr('stroke-width', 1)
       .attr('stroke-opacity', 0.9);
 
@@ -370,7 +420,7 @@ export const ScatterChart = memo(function ScatterChart({
           if (bubble && sizeScale && d.size != null) {
             return sizeScale(d.size);
           }
-          return pointRadius;
+          return resolvedPointRadius;
         });
     }
 
@@ -380,8 +430,8 @@ export const ScatterChart = memo(function ScatterChart({
         .append('text')
         .attr('data-part', 'axis-label')
         .attr('data-axis', 'x')
-        .attr('x', chartWidth / 2)
-        .attr('y', chartHeight - 4)
+        .attr('x', safeChartWidth / 2)
+        .attr('y', safeChartHeight - 4)
         .attr('text-anchor', 'middle')
         .style('font-size', '12px')
         .text(xLabel);
@@ -393,7 +443,7 @@ export const ScatterChart = memo(function ScatterChart({
         .attr('data-part', 'axis-label')
         .attr('data-axis', 'y')
         .attr('transform', 'rotate(-90)')
-        .attr('x', -chartHeight / 2)
+        .attr('x', -safeChartHeight / 2)
         .attr('y', 14)
         .attr('text-anchor', 'middle')
         .style('font-size', '12px')
@@ -408,9 +458,10 @@ export const ScatterChart = memo(function ScatterChart({
     // above), which would otherwise leave a stale React-side tooltip pointing at
     // removed nodes.
     return () => {
+      svg.selectAll('*').interrupt();
       hideTooltip();
     };
-  }, [data, chartWidth, chartHeight, pointRadius, bubble, sizeRange, grid, opacity, trendLine, chartPersonality, colors, margin, xLabel, yLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
+  }, [finiteData, chartWidth, chartHeight, resolvedPointRadius, bubble, resolvedSizeRange, grid, resolvedOpacity, trendLine, chartPersonality, colors, margin, xLabel, yLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
 
   return (
     <ChartScaffold
@@ -425,7 +476,7 @@ export const ScatterChart = memo(function ScatterChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Scatter chart'}
-      ariaDescription={describeChart('Scatter chart', data.length, subtitle, [
+      ariaDescription={describeChart('Scatter chart', finiteData.length, subtitle, [
         bubble ? 'Bubble mode enabled.' : null,
         trendLine ? 'Trend line shown.' : null,
         grid ? 'Grid lines visible.' : null,

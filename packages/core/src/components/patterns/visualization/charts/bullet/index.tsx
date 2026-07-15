@@ -70,24 +70,65 @@ const LABEL_WIDTH = 100;
 /** Right margin for value text in horizontal orientation. */
 const VALUE_TEXT_MARGIN = 60;
 
-/**
- * Resolves the maximum scale value for a bullet item. Falls back to the
- * largest of (highest range band, target, value) * 1.1 for visual headroom.
- */
-function resolveMax(item: BulletDataPoint): number {
-  if (item.max != null) return item.max;
-  const rangeMax = item.ranges ? item.ranges[2] : 0;
-  return Math.max(rangeMax, item.target, item.value) * 1.1;
+interface BulletGeometry {
+  domain: [number, number];
+  ranges: [number, number, number];
 }
 
-/**
- * Resolves range bands for a bullet item. If ranges are not provided, derives
- * them from the target value: [50%, 75%, max].
- */
-function resolveRanges(item: BulletDataPoint): [number, number, number] {
-  if (item.ranges) return item.ranges;
-  const maxVal = resolveMax(item);
-  return [item.target * 0.5, item.target * 0.75, maxVal];
+function isFiniteBulletItem(item: BulletDataPoint): boolean {
+  return Number.isFinite(item.value) &&
+    Number.isFinite(item.target) &&
+    (item.max === undefined || Number.isFinite(item.max)) &&
+    (item.ranges === undefined || item.ranges.every(Number.isFinite));
+}
+
+function hasOrderedRanges(item: BulletDataPoint): boolean {
+  return item.ranges === undefined ||
+    (item.ranges[0] <= item.ranges[1] && item.ranges[1] <= item.ranges[2]);
+}
+
+function isValidBulletItem(item: BulletDataPoint): boolean {
+  return isFiniteBulletItem(item) && hasOrderedRanges(item);
+}
+
+/** Builds a truthful domain that always contains zero, actual, target and ranges. */
+function resolveBulletGeometry(item: BulletDataPoint): BulletGeometry {
+  const candidates = [0, item.value, item.target];
+  if (item.ranges) candidates.push(...item.ranges);
+  if (item.max !== undefined) candidates.push(item.max);
+
+  let domainMin = Math.min(...candidates);
+  let domainMax = Math.max(...candidates);
+
+  if (domainMin === domainMax) {
+    const padding = Math.abs(domainMin) * 0.1 || 1;
+    domainMin -= padding;
+    domainMax += padding;
+  } else if (item.max === undefined) {
+    const span = domainMax - domainMin;
+    if (domainMin < 0) domainMin -= span * 0.1;
+    if (domainMax > 0) domainMax += span * 0.1;
+  }
+
+  const ranges: [number, number, number] = item.ranges
+    ? [
+        item.ranges[0],
+        item.ranges[1],
+        item.ranges[2],
+      ]
+    : domainMin < 0
+      ? [
+          domainMin + (domainMax - domainMin) * 0.5,
+          domainMin + (domainMax - domainMin) * 0.75,
+          domainMax,
+        ]
+      : [item.target * 0.5, item.target * 0.75, domainMax];
+
+  return { domain: [domainMin, domainMax], ranges };
+}
+
+function defaultFormatValue(value: number): string {
+  return String(value);
 }
 
 /**
@@ -134,7 +175,7 @@ export const BulletChart = memo(function BulletChart({
 
   // Compute default height from item count if not provided
   const defaultHeight = useMemo(() => {
-    const totalItems = items.length;
+    const totalItems = Math.max(items.length, 1);
     const topPadding = 12;
     const bottomPadding = 12;
     return topPadding + totalItems * barHeight + (totalItems - 1) * gap + bottomPadding;
@@ -148,14 +189,28 @@ export const BulletChart = memo(function BulletChart({
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
 
-  const formatVal = formatValue ?? ((v: number) => String(v));
+  const formatVal = formatValue ?? defaultFormatValue;
+
+  const hasInvalidItem = items.some((item) => !isFiniteBulletItem(item));
+  const hasMisorderedRanges = items.some((item) => !hasOrderedRanges(item));
+  const fallbackMessage = items.length === 0
+    ? 'No data to display.'
+    : hasInvalidItem
+      ? 'Bullet charts require finite values.'
+      : hasMisorderedRanges
+        ? 'Bullet chart ranges must be ordered from low to high.'
+        : null;
+  const canRender = fallbackMessage === null;
 
   // Default range colors: decreasing opacity of primary
-  const resolvedRangeColors: [string, string, string] = rangeColors ?? [
-    'var(--ds-color-primary-200)',
-    'var(--ds-color-primary-100)',
-    'var(--ds-color-primary-50)',
-  ];
+  const resolvedRangeColors = useMemo<[string, string, string]>(
+    () => rangeColors ?? [
+      'var(--ds-color-primary-200)',
+      'var(--ds-color-primary-100)',
+      'var(--ds-color-primary-50)',
+    ],
+    [rangeColors],
+  );
 
   // Accessible summary table
   const summary = useMemo(() => ({
@@ -163,14 +218,14 @@ export const BulletChart = memo(function BulletChart({
     headers: ['KPI', 'Actual', 'Target', 'Status'],
     rows: items.map((item) => [
       item.label,
-      formatVal(item.value),
-      formatVal(item.target),
-      item.value >= item.target ? 'Met' : 'Below target',
+      Number.isFinite(item.value) ? formatVal(item.value) : 'Invalid',
+      Number.isFinite(item.target) ? formatVal(item.target) : 'Invalid',
+      isValidBulletItem(item) ? (item.value >= item.target ? 'Met' : 'Below target') : 'Invalid',
     ]),
   }), [title, items, formatVal]);
 
   // Legend node
-  const legendNode = legend ? (
+  const legendNode = legend && canRender ? (
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {[
         { label: 'Poor', color: resolvedRangeColors[0] },
@@ -193,31 +248,42 @@ export const BulletChart = memo(function BulletChart({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || items.length === 0) return;
+    if (!svgRef.current) return;
 
     const svg = select(svgRef.current);
+    svg.selectAll('*').interrupt();
     svg.selectAll('*').remove();
 
     svg
       .attr('width', chartWidth)
       .attr('height', chartHeight);
 
+    if (!canRender) {
+      return () => {
+        svg.selectAll('*').interrupt();
+      };
+    }
+
     if (orientation === 'horizontal') {
       // ── Horizontal orientation ──────────────────────────────────────
       const labelW = showLabels ? LABEL_WIDTH : 0;
       const valueW = showLabels ? VALUE_TEXT_MARGIN : 0;
-      const barAreaWidth = chartWidth - labelW - valueW;
+      const barAreaWidth = Math.max(1, chartWidth - labelW - valueW);
 
       items.forEach((item, i) => {
-        const maxVal = resolveMax(item);
-        const ranges = resolveRanges(item);
+        const geometry = resolveBulletGeometry(item);
+        const ranges = geometry.ranges;
         const yOffset = 12 + i * (barHeight + gap);
 
-        const x = scaleLinear().domain([0, maxVal]).range([0, barAreaWidth]).clamp(true);
+        const x = scaleLinear().domain(geometry.domain).range([0, barAreaWidth]).clamp(true);
+        const domainStartX = x(geometry.domain[0]);
+        const zeroX = x(0);
 
         const g = svg.append('g')
           .attr('data-part', 'item')
           .attr('data-orientation', 'horizontal')
+          .attr('data-domain-min', geometry.domain[0])
+          .attr('data-domain-max', geometry.domain[1])
           .attr('transform', `translate(${labelW},${yOffset})`);
 
         // ── Range bands (drawn from widest to narrowest = good, satisfactory, poor) ──
@@ -228,9 +294,12 @@ export const BulletChart = memo(function BulletChart({
         ];
 
         rangeBands.forEach((band, bandIndex) => {
+          const bandEndX = x(band.upper);
+          const bandX = Math.min(domainStartX, bandEndX);
+          const bandWidth = Math.abs(bandEndX - domainStartX);
           const rect = g.append('rect')
             .attr('data-part', 'range-band')
-            .attr('x', 0)
+            .attr('x', bandX)
             .attr('y', 0)
             .attr('height', barHeight)
             .attr('rx', 2)
@@ -243,19 +312,35 @@ export const BulletChart = memo(function BulletChart({
               .transition()
               .duration(chartPersonality.animationDuration * 0.5)
               .delay(i * 80 + bandIndex * 30)
-              .attr('width', x(band.upper));
+              .attr('width', bandWidth);
           } else {
-            rect.attr('width', x(band.upper));
+            rect.attr('width', bandWidth);
           }
         });
+
+        if (geometry.domain[0] < 0) {
+          g.append('line')
+            .attr('data-part', 'zero-baseline')
+            .attr('x1', zeroX)
+            .attr('x2', zeroX)
+            .attr('y1', 0)
+            .attr('y2', barHeight)
+            .attr('stroke', valueColor)
+            .attr('stroke-opacity', 0.45)
+            .attr('stroke-width', 1);
+        }
 
         // ── Value bar (narrow bar, 40% of barHeight, centered) ──
         const valueBarHeight = barHeight * 0.4;
         const valueBarY = (barHeight - valueBarHeight) / 2;
 
+        const valueX = x(item.value);
+        const valueBarX = Math.min(zeroX, valueX);
+        const valueBarWidth = Math.abs(valueX - zeroX);
         const valueRect = g.append('rect')
           .attr('data-part', 'value-bar')
-          .attr('x', 0)
+          .attr('data-direction', item.value < 0 ? 'negative' : item.value > 0 ? 'positive' : 'zero')
+          .attr('x', valueBarX)
           .attr('y', valueBarY)
           .attr('height', valueBarHeight)
           .attr('rx', 1)
@@ -264,13 +349,15 @@ export const BulletChart = memo(function BulletChart({
 
         if (chartPersonality.animate) {
           valueRect
+            .attr('x', zeroX)
             .attr('width', 0)
             .transition()
             .duration(chartPersonality.animationDuration * 0.7)
             .delay(i * 80 + 100)
-            .attr('width', x(item.value));
+            .attr('x', valueBarX)
+            .attr('width', valueBarWidth);
         } else {
-          valueRect.attr('width', x(item.value));
+          valueRect.attr('width', valueBarWidth);
         }
 
         // ── Target marker (vertical line) ──
@@ -352,22 +439,26 @@ export const BulletChart = memo(function BulletChart({
       // ── Vertical orientation ────────────────────────────────────────
       const labelH = showLabels ? 24 : 0;
       const valueH = showLabels ? 20 : 0;
-      const barAreaHeight = chartHeight - labelH - valueH - 24;
+      const barAreaHeight = Math.max(1, chartHeight - labelH - valueH - 24);
       const barWidth = barHeight; // reuse barHeight prop as bar width in vertical mode
       const totalWidth = items.length * barWidth + (items.length - 1) * gap;
       const startX = (chartWidth - totalWidth) / 2;
 
       items.forEach((item, i) => {
-        const maxVal = resolveMax(item);
-        const ranges = resolveRanges(item);
+        const geometry = resolveBulletGeometry(item);
+        const ranges = geometry.ranges;
         const xOffset = startX + i * (barWidth + gap);
 
-        const y = scaleLinear().domain([0, maxVal]).range([barAreaHeight, 0]).clamp(true);
+        const y = scaleLinear().domain(geometry.domain).range([barAreaHeight, 0]).clamp(true);
+        const domainStartY = y(geometry.domain[0]);
+        const zeroY = y(0);
         const barTop = labelH;
 
         const g = svg.append('g')
           .attr('data-part', 'item')
           .attr('data-orientation', 'vertical')
+          .attr('data-domain-min', geometry.domain[0])
+          .attr('data-domain-max', geometry.domain[1])
           .attr('transform', `translate(${xOffset},${barTop})`);
 
         // ── Range bands (drawn from tallest to shortest) ──
@@ -378,8 +469,9 @@ export const BulletChart = memo(function BulletChart({
         ];
 
         rangeBands.forEach((band, bandIndex) => {
-          const bandHeight = barAreaHeight - y(band.upper);
-          const bandY = y(band.upper);
+          const bandEndY = y(band.upper);
+          const bandHeight = Math.abs(domainStartY - bandEndY);
+          const bandY = Math.min(domainStartY, bandEndY);
 
           const rect = g.append('rect')
             .attr('data-part', 'range-band')
@@ -404,14 +496,28 @@ export const BulletChart = memo(function BulletChart({
           }
         });
 
+        if (geometry.domain[0] < 0) {
+          g.append('line')
+            .attr('data-part', 'zero-baseline')
+            .attr('x1', 0)
+            .attr('x2', barWidth)
+            .attr('y1', zeroY)
+            .attr('y2', zeroY)
+            .attr('stroke', valueColor)
+            .attr('stroke-opacity', 0.45)
+            .attr('stroke-width', 1);
+        }
+
         // ── Value bar (narrow, 40% of barWidth, centered) ──
         const valueBarWidth = barWidth * 0.4;
         const valueBarX = (barWidth - valueBarWidth) / 2;
-        const valueBarTop = y(item.value);
-        const valueBarH = barAreaHeight - valueBarTop;
+        const valueY = y(item.value);
+        const valueBarTop = Math.min(zeroY, valueY);
+        const valueBarH = Math.abs(valueY - zeroY);
 
         const valueRect = g.append('rect')
           .attr('data-part', 'value-bar')
+          .attr('data-direction', item.value < 0 ? 'negative' : item.value > 0 ? 'positive' : 'zero')
           .attr('x', valueBarX)
           .attr('width', valueBarWidth)
           .attr('rx', 1)
@@ -420,7 +526,7 @@ export const BulletChart = memo(function BulletChart({
 
         if (chartPersonality.animate) {
           valueRect
-            .attr('y', barAreaHeight)
+            .attr('y', zeroY)
             .attr('height', 0)
             .transition()
             .duration(chartPersonality.animationDuration * 0.7)
@@ -509,10 +615,14 @@ export const BulletChart = memo(function BulletChart({
         }
       });
     }
+
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
   }, [
     items, chartWidth, chartHeight, orientation, barHeight, gap, showLabels,
     formatVal, resolvedRangeColors, valueColor, targetColor,
-    chartPersonality, compactState.compactTooltip,
+    chartPersonality, compactState.compactTooltip, canRender,
   ]);
 
   return (
@@ -532,12 +642,33 @@ export const BulletChart = memo(function BulletChart({
         'Bullet chart',
         items.length,
         subtitle,
-        `${orientation === 'vertical' ? 'Vertical' : 'Horizontal'} orientation. Shows actual vs target values.`,
+        [
+          `${orientation === 'vertical' ? 'Vertical' : 'Horizontal'} orientation. Shows actual vs target values.`,
+          fallbackMessage,
+        ].filter(Boolean).join(' '),
       )}
       summary={summary}
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
+      overlay={fallbackMessage ? (
+        <div
+          data-part="data-fallback"
+          role="status"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 24,
+            textAlign: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          {fallbackMessage}
+        </div>
+      ) : null}
     />
   );
 });

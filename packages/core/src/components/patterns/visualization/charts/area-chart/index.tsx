@@ -3,7 +3,7 @@
 /**
  * @fileoverview AreaChart -- D3-backed multi-series area chart with optional stacking via
  * `d3.stack()`. Uses `scalePoint` for categories and `scaleLinear` for values. Stacked mode
- * applies `stackOffsetNone` / `stackOrderNone` to preserve insertion order. Non-stacked series
+ * applies `stackOffsetDiverging` / `stackOrderNone` to preserve signed values and insertion order. Non-stacked series
  * each receive an independent baseline at `y=0`. Gradient fills and stroke-dashoffset animations
  * are personality-driven.
  *
@@ -20,7 +20,8 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useId, useMemo, useRef } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import {
   area,
   axisBottom,
@@ -29,14 +30,12 @@ import {
   curveMonotoneX,
   curveStepAfter,
   line,
-  max,
   scaleLinear,
   scalePoint,
   select,
   stack,
-  stackOffsetNone,
+  stackOffsetDiverging,
   stackOrderNone,
-  sum,
 } from 'd3';
 
 import type { ChartBaseProps, Series } from '../Charts.types';
@@ -45,6 +44,37 @@ import { useChartDimensions, useChartPersonality, useChartCompact, useChartToolt
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 import { ChartTooltip, TooltipSeries } from '../tooltip';
 import { createChartCrosshair, nearestIndexByPixel, plotLocalPointerPosition, pointerToContainerPosition } from '../tooltip/crosshair';
+
+type AreaPoint = Series['data'][number];
+const FALLBACK_AREA_COLOR = 'var(--ds-color-primary)';
+
+function areaColor(palette: readonly string[], index: number): string {
+  return arrayValueAt(palette, palette.length > 0 ? index % palette.length : 0) ?? FALLBACK_AREA_COLOR;
+}
+
+function validPoint(point: AreaPoint): boolean {
+  if (!Number.isFinite(point.y)) return false;
+  if (point.x instanceof Date) return Number.isFinite(point.x.getTime());
+  if (typeof point.x === 'number') return Number.isFinite(point.x);
+  return typeof point.x === 'string';
+}
+
+function expandedDomain(minimum: number, maximum: number): [number, number] {
+  if (minimum !== maximum) return [minimum, maximum];
+  const delta = Math.max(Math.abs(minimum) * 0.01, 1);
+  const lower = minimum - delta;
+  const upper = maximum + delta;
+  if (Number.isFinite(lower) && Number.isFinite(upper) && lower < upper) return [lower, upper];
+  if (minimum > 0) return [0, minimum];
+  if (minimum < 0) return [minimum, 0];
+  return [-1, 1];
+}
+
+function zeroAnchoredDomain(values: number[]): [number, number] {
+  const minimum = Math.min(0, ...values);
+  const maximum = Math.max(0, ...values);
+  return expandedDomain(minimum, maximum);
+}
 
 /** Props for the {@link AreaChart} component. */
 export interface AreaChartProps extends ChartBaseProps {
@@ -88,6 +118,7 @@ export const AreaChart = memo(function AreaChart({
   compactBreakpoint,
 }: AreaChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const gradientScope = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, curved, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
@@ -96,19 +127,43 @@ export const AreaChart = memo(function AreaChart({
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
-  const pointCount = series.reduce((count, currentSeries) => count + currentSeries.data.length, 0);
+  const resolvedOpacity = Number.isFinite(opacity) ? Math.min(1, Math.max(0, opacity)) : 0.3;
+  const finiteSeries = useMemo(() => series.map((currentSeries) => ({
+    ...currentSeries,
+    data: currentSeries.data.filter(validPoint),
+  })), [series]);
+  const stackOverflow = useMemo(() => {
+    if (!stacked) return false;
+    const totals = new Map<string, { positive: number; negative: number }>();
+    for (const currentSeries of finiteSeries) {
+      const seenCategories = new Set<string>();
+      for (const point of currentSeries.data) {
+        const category = String(point.x);
+        if (seenCategories.has(category)) continue;
+        seenCategories.add(category);
+        const current = totals.get(category) ?? { positive: 0, negative: 0 };
+        const key = point.y < 0 ? 'negative' : 'positive';
+        const next = current[key] + point.y;
+        if (!Number.isFinite(next)) return true;
+        current[key] = next;
+        totals.set(category, current);
+      }
+    }
+    return false;
+  }, [finiteSeries, stacked]);
+  const pointCount = finiteSeries.reduce((count, currentSeries) => count + currentSeries.data.length, 0);
   const summary = {
     caption: title ? `${title} data summary` : 'Area chart data summary',
     headers: ['Series', 'X', 'Y'],
-    rows: series.flatMap((currentSeries) =>
+    rows: finiteSeries.flatMap((currentSeries) =>
       currentSeries.data.map((point) => [currentSeries.name, String(point.x), point.y])
     ),
   };
   const legendNode = legend ? (
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      {series.map((s, i) => (
-        <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: s.color ?? palette[i % palette.length], opacity, display: 'inline-block' }} />
+      {finiteSeries.map((s, i) => (
+        <div key={`${s.name}-${i}`} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: s.color ?? areaColor(palette, i), opacity: resolvedOpacity, display: 'inline-block' }} />
           <span data-part="legend-label">{s.name}</span>
         </div>
       ))}
@@ -116,38 +171,61 @@ export const AreaChart = memo(function AreaChart({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || !series || series.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
 
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = chartHeight - margin.top - margin.bottom;
+    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
+    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
+    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
+
+    const innerWidth = Math.max(0, safeChartWidth - margin.left - margin.right);
+    const innerHeight = Math.max(0, safeChartHeight - margin.top - margin.bottom);
+    const allPoints = finiteSeries.flatMap((currentSeries) => currentSeries.data);
+    if (stackOverflow || allPoints.length === 0 || innerWidth === 0 || innerHeight === 0) {
+      hideTooltip();
+      return;
+    }
 
     const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const allPoints = series.flatMap((s) => s.data);
     const categories = [...new Set(allPoints.map((d) => String(d.x)))];
-
     const x = scalePoint().domain(categories).range([0, innerWidth]);
+    const drawableSeries = finiteSeries
+      .map((currentSeries, index) => ({
+        currentSeries,
+        index,
+        key: `series-${index}`,
+      }))
+      .filter(({ currentSeries }) => currentSeries.data.length > 0);
 
-    // In stacked mode the y-axis must accommodate the summed values at each
-    // category, not just the individual maximums, to avoid clipping.
-    const yMax = stacked
-      ? max(categories, (cat) =>
-          sum(series, (s) => {
-            const pt = s.data.find((d) => String(d.x) === cat);
-            return pt?.y ?? 0;
-          }),
-        ) ?? 0
-      : max(allPoints, (d) => d.y) ?? 0;
-
-    const y = scaleLinear().domain([0, yMax]).nice().range([innerHeight, 0]);
+    // Internal keys keep duplicate display names independent. Diverging offset
+    // accumulates positive and negative contributions on opposite sides of zero.
+    const stackData = categories.map((category) => {
+      const row: Record<string, number | string> = { x: category };
+      drawableSeries.forEach(({ currentSeries, key }) => {
+        row[key] = currentSeries.data.find((point) => String(point.x) === category)?.y ?? 0;
+      });
+      return row;
+    });
+    const stackedLayers = stacked
+      ? stack()
+          .keys(drawableSeries.map(({ key }) => key))
+          .order(stackOrderNone)
+          .offset(stackOffsetDiverging)(stackData as any)
+      : [];
+    const domainValues = stacked
+      ? stackedLayers.flatMap((layer) => layer.flatMap((segment) => [segment[0], segment[1]]))
+      : allPoints.map((point) => point.y);
+    const y = scaleLinear()
+      .domain(zeroAnchoredDomain(domainValues))
+      .nice()
+      .range([innerHeight, 0]);
 
     // Grid
     g.append('g')
@@ -180,31 +258,14 @@ export const AreaChart = memo(function AreaChart({
           : curveLinear;
 
     if (stacked) {
-      // Build a row-per-category matrix that d3.stack expects: each row is an
-      // object { x, seriesA, seriesB, ... } with numeric values per series.
-      const stackData = categories.map((cat) => {
-        const row: Record<string, number | string> = { x: cat };
-        series.forEach((s) => {
-          const pt = s.data.find((d) => String(d.x) === cat);
-          row[s.name] = pt?.y ?? 0;
-        });
-        return row;
-      });
-
-      // stackOrderNone keeps series in their original order (first series at bottom),
-      // stackOffsetNone starts from zero baseline -- both ensure predictable stacking.
-      const stackedSeries = stack()
-        .keys(series.map((s) => s.name))
-        .order(stackOrderNone)
-        .offset(stackOffsetNone);
-
-      const stacked = stackedSeries(stackData as any);
-
       // Each layer contains [y0, y1] pairs; y0 is the cumulative baseline from
-      // lower layers, y1 is the top of the current layer's contribution.
-      stacked.forEach((layer, i) => {
-        const color = series[i]?.color ?? palette[i % palette.length];
-        const gradientId = `area-chart-stack-${i}`;
+      // the same-sign layers, y1 is the edge of the current contribution.
+      stackedLayers.forEach((layer, layerIndex) => {
+        const descriptor = drawableSeries[layerIndex];
+        if (!descriptor) return;
+        const { currentSeries, index } = descriptor;
+        const color = currentSeries.color ?? areaColor(palette, index);
+        const gradientId = `area-chart-${gradientScope}-stack-${index}`;
 
         if (chartPersonality.useGradientFill) {
           const gradient = svg
@@ -230,7 +291,7 @@ export const AreaChart = memo(function AreaChart({
           .datum(layer)
           .attr('data-part', 'area')
           .attr('fill', chartPersonality.useGradientFill ? `url(#${gradientId})` : color)
-          .attr('fill-opacity', chartPersonality.useGradientFill ? 1 : opacity)
+          .attr('fill-opacity', chartPersonality.useGradientFill ? 1 : resolvedOpacity)
           .attr('stroke', color)
           .attr('stroke-width', 1.5)
           .attr('d', stackedArea);
@@ -238,9 +299,10 @@ export const AreaChart = memo(function AreaChart({
     } else {
       // Non-stacked: each series is an independent area from y=0 to d.y, layered
       // with opacity so overlapping regions remain visible underneath.
-      series.forEach((s, i) => {
-        const color = s.color ?? palette[i % palette.length];
-        const gradientId = `area-chart-series-${i}`;
+      finiteSeries.forEach((s, i) => {
+        if (s.data.length === 0) return;
+        const color = s.color ?? areaColor(palette, i);
+        const gradientId = `area-chart-${gradientScope}-series-${i}`;
 
         if (chartPersonality.useGradientFill) {
           const gradient = svg
@@ -258,7 +320,7 @@ export const AreaChart = memo(function AreaChart({
 
         const seriesArea = area<(typeof s.data)[0]>()
           .x((d) => x(String(d.x)) ?? 0)
-          .y0(innerHeight)
+          .y0(y(0))
           .y1((d) => y(d.y))
           .curve(curveType);
 
@@ -271,7 +333,7 @@ export const AreaChart = memo(function AreaChart({
           .datum(s.data)
           .attr('data-part', 'area')
           .attr('fill', chartPersonality.useGradientFill ? `url(#${gradientId})` : color)
-          .attr('fill-opacity', chartPersonality.useGradientFill ? 1 : opacity)
+          .attr('fill-opacity', chartPersonality.useGradientFill ? 1 : resolvedOpacity)
           .attr('d', seriesArea);
 
         const path = g
@@ -329,13 +391,23 @@ export const AreaChart = memo(function AreaChart({
 
           const focusPoints: Array<{ y: number; color: string }> = [];
           const rows: Array<{ name: string; value: number; color: string }> = [];
-          let cumulative = 0;
-          series.forEach((s, i) => {
-            const color = s.color ?? palette[i % palette.length];
+          let positiveCumulative = 0;
+          let negativeCumulative = 0;
+          finiteSeries.forEach((s, i) => {
+            const color = s.color ?? areaColor(palette, i);
             const point = s.data.find((d) => String(d.x) === cat);
             if (!point) return;
-            cumulative += stacked ? point.y : 0;
-            focusPoints.push({ y: stacked ? y(cumulative) : y(point.y), color });
+            let boundary = point.y;
+            if (stacked && point.y > 0) {
+              positiveCumulative += point.y;
+              boundary = positiveCumulative;
+            } else if (stacked && point.y < 0) {
+              negativeCumulative += point.y;
+              boundary = negativeCumulative;
+            } else if (stacked) {
+              boundary = 0;
+            }
+            focusPoints.push({ y: y(boundary), color });
             rows.push({ name: s.name, value: point.y, color });
           });
 
@@ -365,10 +437,10 @@ export const AreaChart = memo(function AreaChart({
     }
 
     if (xAxisLabel) {
-      svg.append('text').attr('data-part', 'axis-label').attr('data-axis', 'x').attr('x', chartWidth / 2).attr('y', chartHeight - 4).attr('text-anchor', 'middle').style('font-size', '12px').text(xAxisLabel);
+      svg.append('text').attr('data-part', 'axis-label').attr('data-axis', 'x').attr('x', safeChartWidth / 2).attr('y', safeChartHeight - 4).attr('text-anchor', 'middle').style('font-size', '12px').text(xAxisLabel);
     }
     if (yAxisLabel) {
-      svg.append('text').attr('data-part', 'axis-label').attr('data-axis', 'y').attr('transform', 'rotate(-90)').attr('x', -chartHeight / 2).attr('y', 14).attr('text-anchor', 'middle').style('font-size', '12px').text(yAxisLabel);
+      svg.append('text').attr('data-part', 'axis-label').attr('data-axis', 'y').attr('transform', 'rotate(-90)').attr('x', -safeChartHeight / 2).attr('y', 14).attr('text-anchor', 'middle').style('font-size', '12px').text(yAxisLabel);
     }
 
     svg.selectAll('.domain').attr('data-part', 'axis-domain');
@@ -378,9 +450,10 @@ export const AreaChart = memo(function AreaChart({
     // above), which would otherwise leave a stale React-side tooltip pointing at
     // removed nodes.
     return () => {
+      svg.selectAll('*').interrupt();
       hideTooltip();
     };
-  }, [series, chartWidth, chartHeight, stacked, opacity, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
+  }, [finiteSeries, chartWidth, chartHeight, stacked, resolvedOpacity, stackOverflow, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip, gradientScope]);
 
   return (
     <ChartScaffold
@@ -397,6 +470,7 @@ export const AreaChart = memo(function AreaChart({
       ariaLabel={title ?? 'Area chart'}
       ariaDescription={describeChart('Area chart', pointCount, subtitle, [
         stacked ? 'Stacked series.' : 'Independent series.',
+        stackOverflow ? 'Stacked values exceed the finite numeric range.' : null,
         xAxisLabel ? `X axis: ${xAxisLabel}.` : null,
         yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
       ].filter(Boolean).join(' '))}
@@ -404,7 +478,21 @@ export const AreaChart = memo(function AreaChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
-      overlay={<ChartTooltip {...tooltipProps} />}
+      overlay={(
+        <>
+          {stackOverflow ? (
+            <div
+              data-part="data-fallback"
+              data-error-code="NUMERIC_OVERFLOW"
+              role="status"
+              style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', padding: 24, textAlign: 'center', pointerEvents: 'none' }}
+            >
+              Stacked values exceed the finite numeric range.
+            </div>
+          ) : null}
+          <ChartTooltip {...tooltipProps} />
+        </>
+      )}
     />
   );
 });

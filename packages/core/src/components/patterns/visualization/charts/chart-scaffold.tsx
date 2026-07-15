@@ -76,8 +76,8 @@ function renderSummary(summary?: ChartSummaryTable): ReactNode {
       {summary.caption ? <caption data-part="summary-caption">{summary.caption}</caption> : null}
       <thead data-part="summary-head">
         <tr data-part="summary-row">
-          {summary.headers.map((header) => (
-            <th key={header} data-part="summary-header">{header}</th>
+          {summary.headers.map((header, index) => (
+            <th key={`${header}-${index}`} data-part="summary-header">{header}</th>
           ))}
         </tr>
       </thead>

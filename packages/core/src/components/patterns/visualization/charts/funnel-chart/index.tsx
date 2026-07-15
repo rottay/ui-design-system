@@ -22,7 +22,7 @@
  */
 
 import { memo, useEffect, useRef } from 'react';
-import { max, select } from 'd3';
+import { select } from 'd3';
 
 import type { ChartBaseProps, DataPoint } from '../Charts.types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
@@ -67,21 +67,36 @@ export const FunnelChart = memo(function FunnelChart({
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
-  const maxValue = data.length > 0 ? Math.max(...data.map((item) => item.value)) : 0;
+  const palette = colors.length > 0 ? colors : DEFAULT_COLORS;
+  const hasInvalidValue = data.some((item) => !Number.isFinite(item.value));
+  const hasNegativeValue = data.some((item) => item.value < 0);
+  const maxValue = data.length > 0 && !hasInvalidValue && !hasNegativeValue
+    ? data.reduce((currentMax, item) => Math.max(currentMax, item.value), 0)
+    : 0;
+  const fallbackMessage = data.length === 0
+    ? 'No data to display.'
+    : hasInvalidValue
+      ? 'Funnel charts require finite values.'
+      : hasNegativeValue
+        ? 'Funnel charts cannot represent negative stages.'
+        : maxValue <= 0
+          ? 'Funnel chart has no positive stages.'
+          : null;
+  const canRender = fallbackMessage === null;
   const summary = {
     caption: title ? `${title} data summary` : 'Funnel chart data summary',
     headers: ['Stage', 'Value', 'Percentage'],
     rows: data.map((item) => [
       item.label,
-      item.value,
-      maxValue === 0 ? '0%' : `${((item.value / maxValue) * 100).toFixed(1)}%`,
+      Number.isFinite(item.value) ? item.value : 'Invalid',
+      canRender ? `${((item.value / maxValue) * 100).toFixed(1)}%` : '0%',
     ]),
   };
-  const legendNode = legend ? (
+  const legendNode = legend && canRender ? (
     <div data-part="legend" data-orientation={orientation} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
         <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? palette.at(i % palette.length) ?? '#6366f1', display: 'inline-block' }} />
           <span data-part="legend-label">{d.label}</span>
         </div>
       ))}
@@ -89,13 +104,21 @@ export const FunnelChart = memo(function FunnelChart({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || !data || data.length === 0) return;
+    if (!svgRef.current) return;
 
     const svg = select(svgRef.current);
+    svg.selectAll('*').interrupt();
     svg.selectAll('*').remove();
+    svg.attr('width', chartWidth).attr('height', chartHeight);
 
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = chartHeight - margin.top - margin.bottom;
+    if (!canRender) {
+      return () => {
+        svg.selectAll('*').interrupt();
+      };
+    }
+
+    const innerWidth = Math.max(1, chartWidth - margin.left - margin.right);
+    const innerHeight = Math.max(1, chartHeight - margin.top - margin.bottom);
 
     const g = svg
       .attr('width', chartWidth)
@@ -105,7 +128,6 @@ export const FunnelChart = memo(function FunnelChart({
       .attr('data-orientation', orientation)
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const maxValue = max(data, (d) => d.value) ?? 1;
     const n = data.length;
 
     if (orientation === 'vertical') {
@@ -119,13 +141,14 @@ export const FunnelChart = memo(function FunnelChart({
         const widthRatio = d.value / maxValue;
         // The bottom edge of the last segment tapers to 80% of its own width
         // to maintain the funnel visual, since there is no next segment to derive from.
-        const nextRatio = i < n - 1 ? data[i + 1].value / maxValue : widthRatio * 0.8;
+        const nextValue = data.at(i + 1)?.value;
+        const nextRatio = nextValue !== undefined ? nextValue / maxValue : widthRatio * 0.8;
         const topWidth = innerWidth * widthRatio;
         const bottomWidth = innerWidth * nextRatio;
         const topX = (innerWidth - topWidth) / 2;
         const bottomX = (innerWidth - bottomWidth) / 2;
         const yPos = i * segmentHeight;
-        const color = d.color ?? colors[i % colors.length];
+        const color = d.color ?? palette.at(i % palette.length) ?? '#6366f1';
 
         const points = [
           [topX, yPos + gap],
@@ -181,14 +204,20 @@ export const FunnelChart = memo(function FunnelChart({
 
         // Conversion rate
         if (showConversion && i > 0) {
-          const rate = ((d.value / data[i - 1].value) * 100).toFixed(1);
+          const previousValue = data.at(i - 1)?.value ?? 0;
+          const rawRate = previousValue > 0 ? (d.value / previousValue) * 100 : null;
+          const rate = rawRate !== null && Number.isFinite(rawRate)
+            ? `${rawRate.toFixed(1)}%`
+            : d.value === 0
+              ? '0.0%'
+              : 'N/A';
           g.append('text')
             .attr('data-part', 'conversion-label')
             .attr('x', innerWidth + 8)
             .attr('y', yPos + 4)
             .attr('dominant-baseline', 'middle')
             .style('font-size', '10px')
-            .text(`${rate}%`);
+            .text(rate);
         }
       });
     } else {
@@ -199,13 +228,14 @@ export const FunnelChart = memo(function FunnelChart({
 
       data.forEach((d, i) => {
         const heightRatio = d.value / maxValue;
-        const nextRatio = i < n - 1 ? data[i + 1].value / maxValue : heightRatio * 0.8;
+        const nextValue = data.at(i + 1)?.value;
+        const nextRatio = nextValue !== undefined ? nextValue / maxValue : heightRatio * 0.8;
         const leftHeight = innerHeight * heightRatio;
         const rightHeight = innerHeight * nextRatio;
         const leftY = (innerHeight - leftHeight) / 2;
         const rightY = (innerHeight - rightHeight) / 2;
         const xPos = i * segmentWidth;
-        const color = d.color ?? colors[i % colors.length];
+        const color = d.color ?? palette.at(i % palette.length) ?? '#6366f1';
 
         const points = [
           [xPos + gap, leftY],
@@ -246,7 +276,11 @@ export const FunnelChart = memo(function FunnelChart({
           .text(d.label);
       });
     }
-  }, [data, chartWidth, chartHeight, orientation, showPercentage, showConversion, chartPersonality, colors, margin]);
+
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
+  }, [data, chartWidth, chartHeight, orientation, showPercentage, showConversion, chartPersonality, palette, margin, canRender, maxValue]);
 
   return (
     <ChartScaffold
@@ -261,9 +295,34 @@ export const FunnelChart = memo(function FunnelChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Funnel chart'}
-      ariaDescription={describeChart('Funnel chart', data.length, subtitle, orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.')}
+      ariaDescription={describeChart(
+        'Funnel chart',
+        data.length,
+        subtitle,
+        [orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.', fallbackMessage]
+          .filter(Boolean)
+          .join(' '),
+      )}
       summary={summary}
       legend={legendNode}
+      overlay={fallbackMessage ? (
+        <div
+          data-part="data-fallback"
+          role="status"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 24,
+            textAlign: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          {fallbackMessage}
+        </div>
+      ) : null}
     />
   );
 });

@@ -19,7 +19,7 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { arrayValueAt } from '@/_internal/utils/collections';
 import {
   axisBottom,
@@ -29,7 +29,6 @@ import {
   max,
   scaleLinear,
   select,
-  sum,
 } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
@@ -70,6 +69,10 @@ export interface HistogramProps extends ChartBaseProps {
 function sturgesBinCount(n: number): number {
   if (n <= 0) return 1;
   return Math.ceil(Math.log2(n) + 1);
+}
+
+function defaultFormatValue(value: number): string {
+  return String(value);
 }
 
 /**
@@ -116,22 +119,29 @@ export const Histogram = memo(function Histogram({
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
+  const finiteValues = useMemo(() => values.filter(Number.isFinite), [values]);
 
   // Compute bins outside useEffect so they can feed the summary table
-  const resolvedBinCount = binCount ?? sturgesBinCount(values.length);
-
-  const binGenerator = bin<number, number>().value((d) => d);
-
-  if (thresholds) {
-    binGenerator.thresholds(thresholds);
-  } else {
-    binGenerator.thresholds(resolvedBinCount);
-  }
-
-  const histogramBins = values.length > 0 ? binGenerator(values) : [];
+  const resolvedBinCount = Number.isFinite(binCount)
+    ? Math.min(512, Math.max(1, Math.floor(binCount as number)))
+    : sturgesBinCount(finiteValues.length);
+  const finiteThresholds = useMemo(
+    () => thresholds?.filter(Number.isFinite).sort((left, right) => left - right),
+    [thresholds],
+  );
+  const histogramBins = useMemo(() => {
+    if (finiteValues.length === 0) return [];
+    const binGenerator = bin<number, number>().value((d) => d);
+    if (finiteThresholds && finiteThresholds.length > 0) {
+      binGenerator.thresholds(finiteThresholds);
+    } else {
+      binGenerator.thresholds(resolvedBinCount);
+    }
+    return binGenerator(finiteValues);
+  }, [finiteThresholds, finiteValues, resolvedBinCount]);
 
   // Build the accessible summary table from computed bins
-  const fmtVal = formatValue ?? ((v: number) => String(v));
+  const fmtVal = formatValue ?? defaultFormatValue;
   const summary = {
     caption: title ? `${title} data summary` : 'Histogram data summary',
     headers: ['Bin Range', density ? 'Density' : 'Frequency'],
@@ -140,8 +150,8 @@ export const Histogram = memo(function Histogram({
       const x1 = b.x1 ?? 0;
       const count = b.length;
       const totalWidth = x1 - x0;
-      const densityVal = values.length > 0 && totalWidth > 0
-        ? count / (values.length * totalWidth)
+      const densityVal = finiteValues.length > 0 && totalWidth > 0
+        ? count / (finiteValues.length * totalWidth)
         : 0;
       return [
         `${fmtVal(x0)} - ${fmtVal(x1)}`,
@@ -167,17 +177,23 @@ export const Histogram = memo(function Histogram({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || values.length === 0 || histogramBins.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
+    if (finiteValues.length === 0 || histogramBins.length === 0) return;
 
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = chartHeight - margin.top - margin.bottom;
+    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
+    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
+    const rawInnerWidth = safeChartWidth - margin.left - margin.right;
+    const rawInnerHeight = safeChartHeight - margin.top - margin.bottom;
+    const innerWidth = Number.isFinite(rawInnerWidth) ? Math.max(0, rawInnerWidth) : 0;
+    const innerHeight = Number.isFinite(rawInnerHeight) ? Math.max(0, rawInnerHeight) : 0;
+    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
+    if (innerWidth === 0 || innerHeight === 0) return;
 
     const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('data-variant', density ? 'density' : 'frequency')
@@ -196,7 +212,7 @@ export const Histogram = memo(function Histogram({
     if (density) {
       yValues = histogramBins.map((b) => {
         const binWidth = (b.x1 ?? 0) - (b.x0 ?? 0);
-        return binWidth > 0 ? b.length / (values.length * binWidth) : 0;
+        return binWidth > 0 ? b.length / (finiteValues.length * binWidth) : 0;
       });
     } else {
       yValues = histogramBins.map((b) => b.length);
@@ -322,7 +338,7 @@ export const Histogram = memo(function Histogram({
 
     // Cumulative distribution line overlay
     if (cumulativeLine) {
-      const totalCount = sum(yValues);
+      const totalCount = finiteValues.length;
       if (totalCount > 0) {
         // Build cumulative points: one at the right edge of each bin
         let cumulative = 0;
@@ -334,7 +350,7 @@ export const Histogram = memo(function Histogram({
         for (let i = 0; i < histogramBins.length; i++) {
           const currentBin = arrayValueAt(histogramBins, i);
           if (!currentBin) continue;
-          cumulative += getYValue(i);
+          cumulative += currentBin.length;
           cumulativeData.push({
             cx: currentBin.x1 ?? 0,
             cy: cumulative / totalCount,
@@ -453,8 +469,11 @@ export const Histogram = memo(function Histogram({
     // Style axis lines
     svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
   }, [
-    values,
+    finiteValues,
     histogramBins,
     yLabel,
     xLabel,
@@ -487,7 +506,7 @@ export const Histogram = memo(function Histogram({
       subtitle={subtitle}
       ariaLabel={title ?? 'Histogram'}
       ariaDescription={describeChart('Histogram', histogramBins.length, subtitle, [
-        `${values.length} data points across ${histogramBins.length} bins.`,
+        `${finiteValues.length} data points across ${histogramBins.length} bins.`,
         density ? 'Density normalization enabled.' : null,
         cumulativeLine ? 'Cumulative distribution line shown.' : null,
         xLabel ? `X axis: ${xLabel}.` : null,

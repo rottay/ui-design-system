@@ -23,7 +23,7 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, max, min, scaleBand, scaleLinear, select } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
@@ -68,6 +68,7 @@ function resolveType(point: WaterfallDataPoint): 'increase' | 'decrease' | 'tota
 
 /** Computes running-total positions for each bar in the waterfall. */
 interface ComputedBar {
+  key: string;
   label: string;
   value: number;
   type: 'increase' | 'decrease' | 'total';
@@ -77,16 +78,27 @@ interface ComputedBar {
 
 function computeBars(data: WaterfallDataPoint[]): ComputedBar[] {
   let runningTotal = 0;
-  return data.map((point) => {
+  const bars: ComputedBar[] = [];
+  for (const [index, point] of data.entries()) {
+    if (!Number.isFinite(point.value)) continue;
+    const key = String(index);
     const type = resolveType(point);
     if (type === 'total') {
       // Total bars display their value starting from zero
-      return { label: point.label, value: point.value, type, start: 0, end: point.value };
+      bars.push({ key, label: point.label, value: point.value, type, start: 0, end: point.value });
+      continue;
     }
     const start = runningTotal;
-    runningTotal += point.value;
-    return { label: point.label, value: point.value, type, start, end: runningTotal };
-  });
+    const nextTotal = runningTotal + point.value;
+    if (!Number.isFinite(nextTotal)) continue;
+    runningTotal = nextTotal;
+    bars.push({ key, label: point.label, value: point.value, type, start, end: runningTotal });
+  }
+  return bars;
+}
+
+function defaultFormatValue(value: number): string {
+  return String(value);
 }
 
 /**
@@ -129,9 +141,9 @@ export const WaterfallChart = memo(function WaterfallChart({
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
 
-  const formatVal = formatValue ?? ((v: number) => String(v));
+  const formatVal = formatValue ?? defaultFormatValue;
 
-  const computedBars = computeBars(data);
+  const computedBars = useMemo(() => computeBars(data), [data]);
   const summary = {
     caption: title ? `${title} data summary` : 'Waterfall chart data summary',
     headers: ['Label', 'Value', 'Type'],
@@ -154,10 +166,12 @@ export const WaterfallChart = memo(function WaterfallChart({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || !data || data.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
+    if (computedBars.length === 0) return;
 
     const innerWidth = chartWidth - margin.left - margin.right;
     const innerHeight = chartHeight - margin.top - margin.bottom;
@@ -170,12 +184,15 @@ export const WaterfallChart = memo(function WaterfallChart({
       .attr('data-orientation', orientation)
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const bars = computeBars(data);
+    const bars = computedBars;
 
     // Compute value domain from all bar start/end positions
     const allValues = bars.flatMap((b) => [b.start, b.end]);
     const domainMin = min(allValues) ?? 0;
     const domainMax = max(allValues) ?? 0;
+    const domain: [number, number] = domainMin === domainMax
+      ? [Math.min(0, domainMin), Math.max(1, domainMax)]
+      : [Math.min(0, domainMin), Math.max(0, domainMax)];
 
     function getBarColor(type: 'increase' | 'decrease' | 'total'): string {
       if (type === 'increase') return increaseColor;
@@ -185,19 +202,19 @@ export const WaterfallChart = memo(function WaterfallChart({
 
     if (orientation === 'vertical') {
       const x = scaleBand()
-        .domain(bars.map((b) => b.label))
+        .domain(bars.map((b) => b.key))
         .range([0, innerWidth])
         .padding(0.3);
 
       const y = scaleLinear()
-        .domain([Math.min(0, domainMin), Math.max(0, domainMax)])
+        .domain(domain)
         .nice()
         .range([innerHeight, 0]);
 
       // X axis
       g.append('g')
         .attr('transform', `translate(0,${innerHeight})`)
-        .call(axisBottom(x))
+        .call(axisBottom(x).tickFormat((key) => bars.find((bar) => bar.key === key)?.label ?? key))
         .selectAll('text')
         .attr('data-part', 'axis-tick-label')
         .style('font-size', '12px');
@@ -223,8 +240,8 @@ export const WaterfallChart = memo(function WaterfallChart({
       if (showConnectors) {
         bars.forEach((bar, i) => {
           if (i < bars.length - 1) {
-            const xPos = (x(bar.label) ?? 0) + x.bandwidth();
-            const nextXPos = x(bars[i + 1].label) ?? 0;
+            const xPos = (x(bar.key) ?? 0) + x.bandwidth();
+            const nextXPos = x(bars[i + 1].key) ?? 0;
             const yPos = y(bar.end);
 
             g.append('line')
@@ -248,7 +265,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         .attr('class', 'waterfall-bar')
         .attr('data-part', 'bar')
         .attr('data-status', (d) => d.type)
-        .attr('x', (d) => x(d.label) ?? 0)
+        .attr('x', (d) => x(d.key) ?? 0)
         .attr('width', x.bandwidth())
         .attr('rx', 2)
         .attr('ry', 2)
@@ -287,7 +304,7 @@ export const WaterfallChart = memo(function WaterfallChart({
           .append('text')
           .attr('class', 'waterfall-value')
           .attr('data-part', 'value-label')
-          .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
+          .attr('x', (d) => (x(d.key) ?? 0) + x.bandwidth() / 2)
           .attr('y', (d) => {
             const topY = y(Math.max(d.start, d.end));
             return d.value >= 0 ? topY - 5 : y(Math.min(d.start, d.end)) + 14;
@@ -299,12 +316,12 @@ export const WaterfallChart = memo(function WaterfallChart({
     } else {
       // Horizontal orientation: categories on Y axis, values on X axis
       const y = scaleBand()
-        .domain(bars.map((b) => b.label))
+        .domain(bars.map((b) => b.key))
         .range([0, innerHeight])
         .padding(0.3);
 
       const x = scaleLinear()
-        .domain([Math.min(0, domainMin), Math.max(0, domainMax)])
+        .domain(domain)
         .nice()
         .range([0, innerWidth]);
 
@@ -318,7 +335,7 @@ export const WaterfallChart = memo(function WaterfallChart({
 
       // Y axis
       g.append('g')
-        .call(axisLeft(y))
+        .call(axisLeft(y).tickFormat((key) => bars.find((bar) => bar.key === key)?.label ?? key))
         .selectAll('text')
         .attr('data-part', 'axis-tick-label')
         .style('font-size', '12px');
@@ -337,8 +354,8 @@ export const WaterfallChart = memo(function WaterfallChart({
       if (showConnectors) {
         bars.forEach((bar, i) => {
           if (i < bars.length - 1) {
-            const yPos = (y(bar.label) ?? 0) + y.bandwidth();
-            const nextYPos = y(bars[i + 1].label) ?? 0;
+            const yPos = (y(bar.key) ?? 0) + y.bandwidth();
+            const nextYPos = y(bars[i + 1].key) ?? 0;
             const xPos = x(bar.end);
 
             g.append('line')
@@ -362,7 +379,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         .attr('class', 'waterfall-bar')
         .attr('data-part', 'bar')
         .attr('data-status', (d) => d.type)
-        .attr('y', (d) => y(d.label) ?? 0)
+        .attr('y', (d) => y(d.key) ?? 0)
         .attr('height', y.bandwidth())
         .attr('rx', 2)
         .attr('ry', 2)
@@ -400,7 +417,7 @@ export const WaterfallChart = memo(function WaterfallChart({
           .append('text')
           .attr('class', 'waterfall-value')
           .attr('data-part', 'value-label')
-          .attr('y', (d) => (y(d.label) ?? 0) + y.bandwidth() / 2)
+          .attr('y', (d) => (y(d.key) ?? 0) + y.bandwidth() / 2)
           .attr('x', (d) => {
             const rightX = x(Math.max(d.start, d.end));
             return d.value >= 0 ? rightX + 5 : x(Math.min(d.start, d.end)) - 5;
@@ -415,7 +432,10 @@ export const WaterfallChart = memo(function WaterfallChart({
     // Style axis lines
     svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-  }, [data, chartWidth, chartHeight, orientation, increaseColor, decreaseColor, totalColor, showConnectors, showValues, formatVal, chartPersonality, margin, tickCount, compactState.compactTooltip]);
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
+  }, [computedBars, chartWidth, chartHeight, orientation, increaseColor, decreaseColor, totalColor, showConnectors, showValues, formatVal, chartPersonality, margin, tickCount, compactState.compactTooltip]);
 
   return (
     <ChartScaffold
@@ -430,7 +450,7 @@ export const WaterfallChart = memo(function WaterfallChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Waterfall chart'}
-      ariaDescription={describeChart('Waterfall chart', data.length, subtitle, [
+      ariaDescription={describeChart('Waterfall chart', computedBars.length, subtitle, [
         orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.',
         showConnectors ? 'Connector lines shown between bars.' : null,
       ].filter(Boolean).join(' '))}

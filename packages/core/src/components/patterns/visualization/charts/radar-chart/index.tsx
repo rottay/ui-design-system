@@ -22,8 +22,8 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
-import { max, scaleLinear, select } from 'd3';
+import { memo, useEffect, useMemo, useRef } from 'react';
+import { scaleLinear, select } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
@@ -70,15 +70,58 @@ export const RadarChart = memo(function RadarChart({
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = height;
-  const allSeries = series ?? [{ name: 'Data', data, color: palette[0] }];
+  const allSeries = useMemo(
+    () => series ?? [{ name: 'Data', data, color: palette[0] }],
+    [data, palette, series],
+  );
+  const referenceAxes = useMemo(
+    () => allSeries.at(0)?.data.map((point) => point.axis) ?? [],
+    [allSeries],
+  );
+  const allValues = useMemo(
+    () => allSeries.flatMap((currentSeries) =>
+      currentSeries.data.map((point) => point.value),
+    ),
+    [allSeries],
+  );
+  const hasInvalidValue = allValues.some((value) => !Number.isFinite(value));
+  const hasNegativeValue = allValues.some((value) => value < 0);
+  const hasAlignedAxes = allSeries.every((currentSeries) =>
+    currentSeries.data.length === referenceAxes.length &&
+    currentSeries.data.every((point, index) => point.axis === referenceAxes.at(index)),
+  );
+  const fallbackMessage = allSeries.length === 0 || referenceAxes.length === 0
+    ? 'No data to display.'
+    : referenceAxes.length < 3
+      ? 'Radar charts require at least three axes.'
+      : hasInvalidValue
+        ? 'Radar charts require finite values.'
+        : hasNegativeValue
+          ? 'Radar charts cannot represent negative values.'
+          : !hasAlignedAxes
+            ? 'Radar chart series must use the same axes.'
+            : null;
+  const canRender = fallbackMessage === null;
+  const observedMax = canRender
+    ? allValues.reduce((currentMax, value) => Math.max(currentMax, value), 0)
+    : 0;
+  const requestedMax = Number.isFinite(maxValueProp) && (maxValueProp ?? 0) > 0
+    ? maxValueProp ?? 1
+    : 1;
+  const domainMax = Math.max(1, observedMax, requestedMax);
+  const safeLevels = Number.isFinite(levels) ? Math.max(1, Math.floor(levels)) : 5;
   const summary = {
     caption: title ? `${title} data summary` : 'Radar chart data summary',
     headers: ['Series', 'Axis', 'Value'],
     rows: allSeries.flatMap((currentSeries) =>
-      currentSeries.data.map((point) => [currentSeries.name, point.axis, point.value])
+      currentSeries.data.map((point) => [
+        currentSeries.name,
+        point.axis,
+        Number.isFinite(point.value) ? point.value : 'Invalid',
+      ])
     ),
   };
-  const legendNode = legend && allSeries.length > 1 ? (
+  const legendNode = legend && canRender && allSeries.length > 1 ? (
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {allSeries.map((s, i) => (
         <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
@@ -92,18 +135,20 @@ export const RadarChart = memo(function RadarChart({
   useEffect(() => {
     if (!svgRef.current) return;
 
-    const allSeries = series ?? [{ name: 'Data', data, color: palette[0] }];
-    if (allSeries.length === 0) return;
-
-    const axes = allSeries[0].data.map((d) => d.axis);
-    const n = axes.length;
-    if (n === 0) return;
-
     const svg = select(svgRef.current);
+    svg.selectAll('*').interrupt();
     svg.selectAll('*').remove();
+    svg.attr('width', chartWidth).attr('height', chartHeight);
 
-    const radius = Math.min(chartWidth, chartHeight) / 2 - 40;
-    const maxValue = maxValueProp ?? max(allSeries.flatMap((s) => s.data.map((d) => d.value))) ?? 1;
+    if (!canRender) {
+      return () => {
+        svg.selectAll('*').interrupt();
+      };
+    }
+
+    const axes = referenceAxes;
+    const n = axes.length;
+    const radius = Math.max(1, Math.min(chartWidth, chartHeight) / 2 - 40);
     // Each axis is equally spaced around the circle; the -PI/2 offset in the
     // trigonometry below rotates the first axis to 12-o'clock instead of 3-o'clock.
     const angleSlice = (2 * Math.PI) / n;
@@ -117,12 +162,12 @@ export const RadarChart = memo(function RadarChart({
 
     // rScale maps data values to radial pixel distance from the centre.
     // domain [0, maxValue] ensures zero is always at the centre.
-    const rScale = scaleLinear().domain([0, maxValue]).range([0, radius]);
+    const rScale = scaleLinear().domain([0, domainMax]).range([0, radius]).clamp(true);
 
     // Grid levels: concentric polygons (not circles) to visually align with
     // the axis lines and reinforce the polygon aesthetic of radar charts.
-    for (let level = 1; level <= levels; level++) {
-      const r = (radius / levels) * level;
+    for (let level = 1; level <= safeLevels; level++) {
+      const r = (radius / safeLevels) * level;
       const points = axes.map((_, i) => {
         const angle = angleSlice * i - Math.PI / 2;
         return [r * Math.cos(angle), r * Math.sin(angle)] as [number, number];
@@ -167,6 +212,7 @@ export const RadarChart = memo(function RadarChart({
     // opacity lets overlapping series remain visible behind each other.
     allSeries.forEach((s, si) => {
       const color = s.color ?? palette[si % palette.length];
+      const isZeroSeries = s.data.every((point) => point.value === 0);
       const points = s.data.map((d, i) => {
         const angle = angleSlice * i - Math.PI / 2;
         const r = rScale(d.value);
@@ -176,6 +222,7 @@ export const RadarChart = memo(function RadarChart({
       const polygon = g
         .append('polygon')
         .attr('data-part', 'series-area')
+        .attr('data-state', isZeroSeries ? 'zero-baseline' : 'value')
         .attr('points', points.map((p) => p.join(',')).join(' '))
         .attr('fill', color)
         .attr('fill-opacity', 0.2)
@@ -189,6 +236,20 @@ export const RadarChart = memo(function RadarChart({
           .duration(chartPersonality.animationDuration)
           .delay(si * 150)
           .attr('opacity', 1);
+      }
+
+      // Keep zero data at the truthful origin. A dedicated centre marker makes
+      // the state visible without projecting zero values to a fake magnitude.
+      if (isZeroSeries) {
+        g.append('circle')
+          .attr('data-part', 'zero-baseline')
+          .attr('data-series', s.name)
+          .attr('cx', 0)
+          .attr('cy', 0)
+          .attr('r', 6)
+          .attr('fill', 'none')
+          .attr('stroke', color)
+          .attr('stroke-width', 2);
       }
 
       // Vertex dots: small circles at each polygon vertex improve readability
@@ -210,7 +271,11 @@ export const RadarChart = memo(function RadarChart({
         }
       });
     });
-  }, [data, series, chartWidth, chartHeight, maxValueProp, levels, showLabels, chartPersonality, palette]);
+
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
+  }, [allSeries, chartWidth, chartHeight, showLabels, chartPersonality, palette, canRender, referenceAxes, domainMax, safeLevels]);
 
   return (
     <ChartScaffold
@@ -225,9 +290,32 @@ export const RadarChart = memo(function RadarChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Radar chart'}
-      ariaDescription={describeChart('Radar chart', summary.rows.length, subtitle, showLabels ? 'Axis labels are visible.' : undefined)}
+      ariaDescription={describeChart(
+        'Radar chart',
+        summary.rows.length,
+        subtitle,
+        [showLabels ? 'Axis labels are visible.' : null, fallbackMessage].filter(Boolean).join(' ') || undefined,
+      )}
       summary={summary}
       legend={legendNode}
+      overlay={fallbackMessage ? (
+        <div
+          data-part="data-fallback"
+          role="status"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 24,
+            textAlign: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          {fallbackMessage}
+        </div>
+      ) : null}
     />
   );
 });

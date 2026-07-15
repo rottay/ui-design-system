@@ -46,7 +46,16 @@
  */
 
 import { memo, useEffect, useMemo, useRef } from 'react';
-import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select, stack, sum, type Selection } from 'd3';
+import {
+  axisBottom,
+  axisLeft,
+  scaleBand,
+  scaleLinear,
+  select,
+  stack,
+  stackOffsetDiverging,
+  type Selection,
+} from 'd3';
 import { arrayValueAt } from '@/_internal/utils/collections';
 
 import type { ChartBaseProps, DataPoint, Series } from '../Charts.types';
@@ -61,6 +70,53 @@ function resolvePaletteColor(palette: readonly string[], index: number): string 
   const paletteIndex = palette.length > 0 ? index % palette.length : 0;
   return arrayValueAt(palette, paletteIndex) ?? FALLBACK_BAR_COLOR;
 }
+
+function isFiniteSeriesPoint(point: Series['data'][number]): boolean {
+  if (!Number.isFinite(point.y)) return false;
+  if (point.x instanceof Date) return Number.isFinite(point.x.getTime());
+  if (typeof point.x === 'number') return Number.isFinite(point.x);
+  return true;
+}
+
+/** A non-degenerate quantitative domain that always keeps zero visible. */
+function valueDomain(values: readonly number[]): [number, number] {
+  let minimum = 0;
+  let maximum = 0;
+  let hasFiniteValue = false;
+  for (const value of values) {
+    if (!Number.isFinite(value)) continue;
+    hasFiniteValue = true;
+    if (value < minimum) minimum = value;
+    if (value > maximum) maximum = value;
+  }
+  if (!hasFiniteValue) return [0, 1];
+  return minimum === maximum ? [0, 1] : [minimum, maximum];
+}
+
+function barGeometry(scale: (value: number) => number, value: number): {
+  position: number;
+  size: number;
+} {
+  const baseline = scale(0);
+  const endpoint = scale(value);
+  return {
+    position: Math.min(baseline, endpoint),
+    size: Math.abs(endpoint - baseline),
+  };
+}
+
+function stackGeometry(
+  scale: (value: number) => number,
+  start: number,
+  end: number,
+): { position: number; size: number } {
+  const startPosition = scale(start);
+  const endPosition = scale(end);
+  return {
+    position: Math.min(startPosition, endPosition),
+    size: Math.abs(endPosition - startPosition),
+  };
+}
 import { createChartCrosshair, pointerToContainerPosition } from '../tooltip/crosshair';
 
 /** Props for the {@link BarChart} component. */
@@ -70,8 +126,6 @@ export interface BarChartProps extends ChartBaseProps {
   orientation?: 'vertical' | 'horizontal';
   /** Stack bars on top of each other (multi-series only). */
   stacked?: boolean;
-  /** Group bars side-by-side (multi-series default, explicit flag is optional). */
-  grouped?: boolean;
   /** Multi-series data. When provided, `data` is ignored. */
   series?: Series[];
   barRadius?: number;
@@ -92,7 +146,6 @@ export const BarChart = memo(function BarChart({
   data,
   orientation = 'vertical',
   stacked = false,
-  grouped = false,
   series,
   barRadius = 4,
   barGap = 0.2,
@@ -126,10 +179,22 @@ export const BarChart = memo(function BarChart({
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
+  const resolvedBarRadius = Number.isFinite(barRadius) ? Math.max(0, barRadius) : 4;
+  const resolvedBarGap = Number.isFinite(barGap) ? Math.min(0.95, Math.max(0, barGap)) : 0.2;
 
   // Determine rendering mode: multi-series (grouped/stacked) vs single-series.
   const isMultiSeries = series != null && series.length > 0;
-  const singleData = data ?? [];
+  const singleData = useMemo(
+    () => (data ?? []).filter((point) => Number.isFinite(point.value)),
+    [data],
+  );
+  const renderSeries = useMemo(
+    () => (series ?? []).map((currentSeries) => ({
+      ...currentSeries,
+      data: currentSeries.data.filter(isFiniteSeriesPoint),
+    })),
+    [series],
+  );
 
   // For multi-series, extract the unique category labels across all series.
   // Each series point uses `x` for the category key (matching the Series type).
@@ -137,7 +202,7 @@ export const BarChart = memo(function BarChart({
     if (!isMultiSeries) return singleData.map((d) => d.label);
     const seen = new Set<string>();
     const result: string[] = [];
-    for (const s of series!) {
+    for (const s of renderSeries) {
       for (const pt of s.data) {
         const key = String(pt.x);
         if (!seen.has(key)) {
@@ -147,22 +212,22 @@ export const BarChart = memo(function BarChart({
       }
     }
     return result;
-  }, [isMultiSeries, singleData, series]);
+  }, [isMultiSeries, singleData, renderSeries]);
 
   // Resolve the color for each series entry.
   const seriesColors = useMemo(() => {
     if (!isMultiSeries) return [];
-    return series!.map((s, i) => s.color ?? resolvePaletteColor(palette, i));
-  }, [isMultiSeries, series, palette]);
+    return renderSeries.map((s, i) => s.color ?? resolvePaletteColor(palette, i));
+  }, [isMultiSeries, renderSeries, palette]);
 
   // Build summary table for accessibility.
   const summary = useMemo(() => {
     if (isMultiSeries) {
       return {
         caption: title ? `${title} data summary` : 'Bar chart data summary',
-        headers: ['Category', ...series!.map((s) => s.name)],
+        headers: ['Category', ...renderSeries.map((s) => s.name)],
         rows: categories.map((cat) => {
-          const values = series!.map((s) => {
+          const values = renderSeries.map((s) => {
             const pt = s.data.find((d) => String(d.x) === cat);
             return pt ? pt.y : 0;
           });
@@ -175,14 +240,14 @@ export const BarChart = memo(function BarChart({
       headers: ['Label', 'Value'],
       rows: singleData.map((item) => [item.label, item.value]),
     };
-  }, [isMultiSeries, title, series, categories, singleData]);
+  }, [isMultiSeries, title, renderSeries, categories, singleData]);
 
   // Build legend node.
   const legendNode = legend ? (
     isMultiSeries ? (
       <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-        {series!.map((s, i) => (
-          <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+        {renderSeries.map((s, i) => (
+          <div key={`${s.name}-${i}`} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
             <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: arrayValueAt(seriesColors, i), display: 'inline-block' }} />
             <span data-part="legend-label">{s.name}</span>
           </div>
@@ -191,7 +256,7 @@ export const BarChart = memo(function BarChart({
     ) : (
       <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
         {singleData.map((d, i) => (
-          <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <div key={`${d.label}-${i}`} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
             <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? resolvePaletteColor(palette, i), display: 'inline-block' }} />
             <span data-part="legend-label">{d.label}</span>
           </div>
@@ -202,19 +267,26 @@ export const BarChart = memo(function BarChart({
 
   // ── D3 rendering ──────────────────────────────────────────────────────────
   useEffect(() => {
-    if (!svgRef.current) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
+
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
+
+    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
+    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
+    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
+
     if (!isMultiSeries && singleData.length === 0) return;
     if (isMultiSeries && categories.length === 0) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
-
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = chartHeight - margin.top - margin.bottom;
+    const rawInnerWidth = safeChartWidth - margin.left - margin.right;
+    const rawInnerHeight = safeChartHeight - margin.top - margin.bottom;
+    const innerWidth = Number.isFinite(rawInnerWidth) ? Math.max(0, rawInnerWidth) : 0;
+    const innerHeight = Number.isFinite(rawInnerHeight) ? Math.max(0, rawInnerHeight) : 0;
+    if (innerWidth === 0 || innerHeight === 0) return;
 
     const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
@@ -269,16 +341,18 @@ export const BarChart = memo(function BarChart({
 
     // ── Multi-series rendering (grouped or stacked) ─────────────────────────
     if (isMultiSeries) {
-      const seriesNames = series!.map((s) => s.name);
+      const seriesNames = renderSeries.map((s) => s.name);
+      const seriesKeys = renderSeries.map((_, index) => `series-${index}`);
 
-      // Build a lookup map: category -> { [seriesName]: value }
-      // d3.stack() expects an array of objects keyed by series name.
+      // D3 needs unique keys even when two consumer-facing series names match.
+      // Display names remain untouched for legends, summaries and tooltips.
       const rowMap = new Map<string, Record<string, number>>();
       for (const cat of categories) {
         const row: Record<string, number> = {};
-        for (const s of series!) {
+        for (const [seriesIndex, s] of renderSeries.entries()) {
           const pt = s.data.find((d) => String(d.x) === cat);
-          row[s.name] = pt ? pt.y : 0;
+          const seriesKey = arrayValueAt(seriesKeys, seriesIndex);
+          if (seriesKey) row[seriesKey] = pt ? pt.y : 0;
         }
         rowMap.set(cat, row);
       }
@@ -289,20 +363,23 @@ export const BarChart = memo(function BarChart({
         const x0 = scaleBand()
           .domain(categories)
           .range([0, innerWidth])
-          .padding(barGap);
+          .padding(resolvedBarGap);
 
         if (stacked) {
           // ── Vertical stacked ────────────────────────────────────────────────
-          const stackGen = stack<Record<string, unknown>>().keys(seriesNames);
-          const stackedData = stackGen(tableRows);
-
-          // Domain upper bound is the max cumulative sum across all categories.
-          const yMax = max(categories, (cat) => {
-            const row = rowMap.get(cat)!;
-            return sum(seriesNames, (name) => row[name]);
-          }) ?? 0;
-
-          const y = scaleLinear().domain([0, yMax]).nice().range([innerHeight, 0]);
+          const stackGen = stack<Record<string, unknown>>()
+            .keys(seriesKeys)
+            .offset(stackOffsetDiverging);
+          const stackedData = stackGen(tableRows).map((layer) =>
+            layer.filter((segment) => Number.isFinite(segment[0]) && Number.isFinite(segment[1])),
+          );
+          const stackedValues = stackedData.flatMap((layer) =>
+            layer.flatMap((segment) => [segment[0], segment[1]]),
+          );
+          const y = scaleLinear()
+            .domain(valueDomain(stackedValues))
+            .nice()
+            .range([innerHeight, 0]);
 
           // Axes
           g.append('g')
@@ -330,7 +407,8 @@ export const BarChart = memo(function BarChart({
           // Render each stacked layer as a group of rects.
           stackedData.forEach((layer, layerIdx) => {
             const color = arrayValueAt(seriesColors, layerIdx) ?? resolvePaletteColor(palette, layerIdx);
-            const seriesName = arrayValueAt(seriesNames, layerIdx);
+            const seriesName = arrayValueAt(seriesNames, layerIdx) ?? '';
+            const seriesKey = arrayValueAt(seriesKeys, layerIdx) ?? '';
 
             const bars = g.selectAll(`.bar-stack-${layerIdx}`)
               .data(layer)
@@ -342,34 +420,35 @@ export const BarChart = memo(function BarChart({
               .attr('data-layout', 'stacked')
               .attr('x', (d) => x0((d.data as Record<string, string>).__category) ?? 0)
               .attr('width', x0.bandwidth())
-              .attr('rx', layerIdx === stackedData.length - 1 ? barRadius : 0)
-              .attr('ry', layerIdx === stackedData.length - 1 ? barRadius : 0)
+              .attr('rx', layerIdx === stackedData.length - 1 ? resolvedBarRadius : 0)
+              .attr('ry', layerIdx === stackedData.length - 1 ? resolvedBarRadius : 0)
               .attr('fill', color);
 
             attachBarHover(bars, (d) => {
               const cat = (d.data as Record<string, string>).__category;
+              const value = Number((d.data as Record<string, unknown>)[seriesKey]) || 0;
               return {
                 cx: (x0(cat) ?? 0) + x0.bandwidth() / 2,
-                cy: y(d[1]),
+                cy: y(value >= 0 ? d[1] : d[0]),
                 label: cat,
-                value: d[1] - d[0],
+                value,
                 seriesName,
               };
             });
 
             if (chartPersonality.animate) {
               bars
-                .attr('y', innerHeight)
+                .attr('y', y(0))
                 .attr('height', 0)
                 .transition()
                 .duration(chartPersonality.animationDuration)
                 .delay((_, i) => i * 50)
-                .attr('y', (d) => y(d[1]))
-                .attr('height', (d) => y(d[0]) - y(d[1]));
+                .attr('y', (d) => stackGeometry(y, d[0], d[1]).position)
+                .attr('height', (d) => stackGeometry(y, d[0], d[1]).size);
             } else {
               bars
-                .attr('y', (d) => y(d[1]))
-                .attr('height', (d) => y(d[0]) - y(d[1]));
+                .attr('y', (d) => stackGeometry(y, d[0], d[1]).position)
+                .attr('height', (d) => stackGeometry(y, d[0], d[1]).size);
             }
 
             if (showValues) {
@@ -384,22 +463,21 @@ export const BarChart = memo(function BarChart({
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
                 .style('font-size', '10px')
-                .text((d) => {
-                  const val = d[1] - d[0];
-                  return val > 0 ? val : '';
-                });
+                .text((d) => Number((d.data as Record<string, unknown>)[seriesKey]) || 0);
             }
           });
         } else {
           // ── Vertical grouped ────────────────────────────────────────────────
           // Inner band subdivides each category slot for side-by-side bars.
           const x1 = scaleBand()
-            .domain(seriesNames)
+            .domain(seriesKeys)
             .range([0, x0.bandwidth()])
             .padding(0.05);
 
-          const yMax = max(series!, (s) => max(s.data, (d) => d.y)) ?? 0;
-          const y = scaleLinear().domain([0, yMax]).nice().range([innerHeight, 0]);
+          const y = scaleLinear()
+            .domain(valueDomain(renderSeries.flatMap((s) => s.data.map((d) => d.y))))
+            .nice()
+            .range([innerHeight, 0]);
 
           // Axes
           g.append('g')
@@ -432,8 +510,9 @@ export const BarChart = memo(function BarChart({
             .attr('class', 'category-group')
             .attr('transform', (cat) => `translate(${x0(cat) ?? 0},0)`);
 
-          series!.forEach((s, sIdx) => {
+          renderSeries.forEach((s, sIdx) => {
             const color = arrayValueAt(seriesColors, sIdx) ?? resolvePaletteColor(palette, sIdx);
+            const seriesKey = arrayValueAt(seriesKeys, sIdx) ?? '';
 
             const bars = categoryGroups
               .append('rect')
@@ -441,19 +520,19 @@ export const BarChart = memo(function BarChart({
               .attr('data-part', 'bar')
               .attr('data-orientation', 'vertical')
               .attr('data-layout', 'grouped')
-              .attr('x', x1(s.name) ?? 0)
+              .attr('x', x1(seriesKey) ?? 0)
               .attr('width', x1.bandwidth())
-              .attr('rx', barRadius)
-              .attr('ry', barRadius)
+              .attr('rx', resolvedBarRadius)
+              .attr('ry', resolvedBarRadius)
               .attr('fill', color)
               // Attach the value for this series at this category.
               .each(function (_cat) {
                 const pt = s.data.find((d) => String(d.x) === _cat);
-                select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesName: s.name });
+                select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesKey, seriesName: s.name });
               });
 
             attachBarHover(bars, (d: any) => ({
-              cx: (x0(d.category) ?? 0) + (x1(d.seriesName) ?? 0) + x1.bandwidth() / 2,
+              cx: (x0(d.category) ?? 0) + (x1(d.seriesKey) ?? 0) + x1.bandwidth() / 2,
               cy: y(d.value),
               label: d.category,
               value: d.value,
@@ -462,17 +541,17 @@ export const BarChart = memo(function BarChart({
 
             if (chartPersonality.animate) {
               bars
-                .attr('y', innerHeight)
+                .attr('y', y(0))
                 .attr('height', 0)
                 .transition()
                 .duration(chartPersonality.animationDuration)
                 .delay((_, i) => (i * seriesNames.length + sIdx) * 30)
-                .attr('y', (d: any) => y(d.value))
-                .attr('height', (d: any) => innerHeight - y(d.value));
+                .attr('y', (d: any) => barGeometry(y, d.value).position)
+                .attr('height', (d: any) => barGeometry(y, d.value).size);
             } else {
               bars
-                .attr('y', (d: any) => y(d.value))
-                .attr('height', (d: any) => innerHeight - y(d.value));
+                .attr('y', (d: any) => barGeometry(y, d.value).position)
+                .attr('height', (d: any) => barGeometry(y, d.value).size);
             }
 
             if (showValues) {
@@ -480,15 +559,15 @@ export const BarChart = memo(function BarChart({
                 .append('text')
                 .attr('class', `value-grouped-${sIdx}`)
                 .attr('data-part', 'value-label')
-                .attr('x', (x1(s.name) ?? 0) + x1.bandwidth() / 2)
+                .attr('x', (x1(seriesKey) ?? 0) + x1.bandwidth() / 2)
                 .attr('text-anchor', 'middle')
                 .style('font-size', '10px')
                 .each(function (_cat) {
                   const pt = s.data.find((d) => String(d.x) === _cat);
                   const val = pt ? pt.y : 0;
                   select(this)
-                    .attr('y', y(val) - 4)
-                    .text(val > 0 ? val : '');
+                    .attr('y', y(val) + (val >= 0 ? -4 : 12))
+                    .text(val);
                 });
             }
           });
@@ -498,19 +577,23 @@ export const BarChart = memo(function BarChart({
         const y0 = scaleBand()
           .domain(categories)
           .range([0, innerHeight])
-          .padding(barGap);
+          .padding(resolvedBarGap);
 
         if (stacked) {
           // ── Horizontal stacked ──────────────────────────────────────────────
-          const stackGen = stack<Record<string, unknown>>().keys(seriesNames);
-          const stackedData = stackGen(tableRows);
-
-          const xMax = max(categories, (cat) => {
-            const row = rowMap.get(cat)!;
-            return sum(seriesNames, (name) => row[name]);
-          }) ?? 0;
-
-          const x = scaleLinear().domain([0, xMax]).nice().range([0, innerWidth]);
+          const stackGen = stack<Record<string, unknown>>()
+            .keys(seriesKeys)
+            .offset(stackOffsetDiverging);
+          const stackedData = stackGen(tableRows).map((layer) =>
+            layer.filter((segment) => Number.isFinite(segment[0]) && Number.isFinite(segment[1])),
+          );
+          const stackedValues = stackedData.flatMap((layer) =>
+            layer.flatMap((segment) => [segment[0], segment[1]]),
+          );
+          const x = scaleLinear()
+            .domain(valueDomain(stackedValues))
+            .nice()
+            .range([0, innerWidth]);
 
           g.append('g')
             .attr('transform', `translate(0,${innerHeight})`)
@@ -527,7 +610,8 @@ export const BarChart = memo(function BarChart({
 
           stackedData.forEach((layer, layerIdx) => {
             const color = arrayValueAt(seriesColors, layerIdx) ?? resolvePaletteColor(palette, layerIdx);
-            const seriesName = arrayValueAt(seriesNames, layerIdx);
+            const seriesName = arrayValueAt(seriesNames, layerIdx) ?? '';
+            const seriesKey = arrayValueAt(seriesKeys, layerIdx) ?? '';
 
             const bars = g.selectAll(`.bar-hstack-${layerIdx}`)
               .data(layer)
@@ -539,45 +623,48 @@ export const BarChart = memo(function BarChart({
               .attr('data-layout', 'stacked')
               .attr('y', (d) => y0((d.data as Record<string, string>).__category) ?? 0)
               .attr('height', y0.bandwidth())
-              .attr('rx', layerIdx === stackedData.length - 1 ? barRadius : 0)
-              .attr('ry', layerIdx === stackedData.length - 1 ? barRadius : 0)
+              .attr('rx', layerIdx === stackedData.length - 1 ? resolvedBarRadius : 0)
+              .attr('ry', layerIdx === stackedData.length - 1 ? resolvedBarRadius : 0)
               .attr('fill', color);
 
             attachBarHover(bars, (d) => {
               const cat = (d.data as Record<string, string>).__category;
+              const value = Number((d.data as Record<string, unknown>)[seriesKey]) || 0;
               return {
-                cx: x(d[1]),
+                cx: x(value >= 0 ? d[1] : d[0]),
                 cy: (y0(cat) ?? 0) + y0.bandwidth() / 2,
                 label: cat,
-                value: d[1] - d[0],
+                value,
                 seriesName,
               };
             });
 
             if (chartPersonality.animate) {
               bars
-                .attr('x', 0)
+                .attr('x', x(0))
                 .attr('width', 0)
                 .transition()
                 .duration(chartPersonality.animationDuration)
                 .delay((_, i) => i * 50)
-                .attr('x', (d) => x(d[0]))
-                .attr('width', (d) => x(d[1]) - x(d[0]));
+                .attr('x', (d) => stackGeometry(x, d[0], d[1]).position)
+                .attr('width', (d) => stackGeometry(x, d[0], d[1]).size);
             } else {
               bars
-                .attr('x', (d) => x(d[0]))
-                .attr('width', (d) => x(d[1]) - x(d[0]));
+                .attr('x', (d) => stackGeometry(x, d[0], d[1]).position)
+                .attr('width', (d) => stackGeometry(x, d[0], d[1]).size);
             }
           });
         } else {
           // ── Horizontal grouped ──────────────────────────────────────────────
           const y1 = scaleBand()
-            .domain(seriesNames)
+            .domain(seriesKeys)
             .range([0, y0.bandwidth()])
             .padding(0.05);
 
-          const xMax = max(series!, (s) => max(s.data, (d) => d.y)) ?? 0;
-          const x = scaleLinear().domain([0, xMax]).nice().range([0, innerWidth]);
+          const x = scaleLinear()
+            .domain(valueDomain(renderSeries.flatMap((s) => s.data.map((d) => d.y))))
+            .nice()
+            .range([0, innerWidth]);
 
           g.append('g')
             .attr('transform', `translate(0,${innerHeight})`)
@@ -599,8 +686,9 @@ export const BarChart = memo(function BarChart({
             .attr('class', 'category-group')
             .attr('transform', (cat) => `translate(0,${y0(cat) ?? 0})`);
 
-          series!.forEach((s, sIdx) => {
+          renderSeries.forEach((s, sIdx) => {
             const color = arrayValueAt(seriesColors, sIdx) ?? resolvePaletteColor(palette, sIdx);
+            const seriesKey = arrayValueAt(seriesKeys, sIdx) ?? '';
 
             const bars = categoryGroups
               .append('rect')
@@ -608,19 +696,19 @@ export const BarChart = memo(function BarChart({
               .attr('data-part', 'bar')
               .attr('data-orientation', 'horizontal')
               .attr('data-layout', 'grouped')
-              .attr('y', y1(s.name) ?? 0)
+              .attr('y', y1(seriesKey) ?? 0)
               .attr('height', y1.bandwidth())
-              .attr('rx', barRadius)
-              .attr('ry', barRadius)
+              .attr('rx', resolvedBarRadius)
+              .attr('ry', resolvedBarRadius)
               .attr('fill', color)
               .each(function (_cat) {
                 const pt = s.data.find((d) => String(d.x) === _cat);
-                select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesName: s.name });
+                select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesKey, seriesName: s.name });
               });
 
             attachBarHover(bars, (d: any) => ({
               cx: x(d.value),
-              cy: (y0(d.category) ?? 0) + (y1(d.seriesName) ?? 0) + y1.bandwidth() / 2,
+              cy: (y0(d.category) ?? 0) + (y1(d.seriesKey) ?? 0) + y1.bandwidth() / 2,
               label: d.category,
               value: d.value,
               seriesName: d.seriesName,
@@ -628,14 +716,17 @@ export const BarChart = memo(function BarChart({
 
             if (chartPersonality.animate) {
               bars
-                .attr('x', 0)
+                .attr('x', x(0))
                 .attr('width', 0)
                 .transition()
                 .duration(chartPersonality.animationDuration)
                 .delay((_, i) => (i * seriesNames.length + sIdx) * 30)
-                .attr('width', (d: any) => x(d.value));
+                .attr('x', (d: any) => barGeometry(x, d.value).position)
+                .attr('width', (d: any) => barGeometry(x, d.value).size);
             } else {
-              bars.attr('x', 0).attr('width', (d: any) => x(d.value));
+              bars
+                .attr('x', (d: any) => barGeometry(x, d.value).position)
+                .attr('width', (d: any) => barGeometry(x, d.value).size);
             }
           });
         }
@@ -646,10 +737,10 @@ export const BarChart = memo(function BarChart({
         const x = scaleBand()
           .domain(singleData.map((d) => d.label))
           .range([0, innerWidth])
-          .padding(barGap);
+          .padding(resolvedBarGap);
 
         const y = scaleLinear()
-          .domain([0, max(singleData, (d) => d.value) ?? 0])
+          .domain(valueDomain(singleData.map((d) => d.value)))
           .nice()
           .range([innerHeight, 0]);
 
@@ -685,8 +776,8 @@ export const BarChart = memo(function BarChart({
           .attr('data-layout', 'single')
           .attr('x', (d) => x(d.label) ?? 0)
           .attr('width', x.bandwidth())
-          .attr('rx', barRadius)
-          .attr('ry', barRadius)
+          .attr('rx', resolvedBarRadius)
+          .attr('ry', resolvedBarRadius)
           .attr('fill', (d, i) => d.color ?? resolvePaletteColor(palette, i));
 
         attachBarHover(bars, (d) => ({
@@ -698,15 +789,17 @@ export const BarChart = memo(function BarChart({
 
         if (chartPersonality.animate) {
           bars
-            .attr('y', innerHeight)
+            .attr('y', y(0))
             .attr('height', 0)
             .transition()
             .duration(chartPersonality.animationDuration)
             .delay((_, i) => i * 50)
-            .attr('y', (d) => y(d.value))
-            .attr('height', (d) => innerHeight - y(d.value));
+            .attr('y', (d) => barGeometry(y, d.value).position)
+            .attr('height', (d) => barGeometry(y, d.value).size);
         } else {
-          bars.attr('y', (d) => y(d.value)).attr('height', (d) => innerHeight - y(d.value));
+          bars
+            .attr('y', (d) => barGeometry(y, d.value).position)
+            .attr('height', (d) => barGeometry(y, d.value).size);
         }
 
         if (showValues) {
@@ -717,7 +810,7 @@ export const BarChart = memo(function BarChart({
             .attr('class', 'value')
             .attr('data-part', 'value-label')
             .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
-            .attr('y', (d) => y(d.value) - 5)
+            .attr('y', (d) => y(d.value) + (d.value >= 0 ? -5 : 14))
             .attr('text-anchor', 'middle')
             .style('font-size', '11px')
             .text((d) => d.value);
@@ -726,10 +819,10 @@ export const BarChart = memo(function BarChart({
         const y = scaleBand()
           .domain(singleData.map((d) => d.label))
           .range([0, innerHeight])
-          .padding(barGap);
+          .padding(resolvedBarGap);
 
         const x = scaleLinear()
-          .domain([0, max(singleData, (d) => d.value) ?? 0])
+          .domain(valueDomain(singleData.map((d) => d.value)))
           .nice()
           .range([0, innerWidth]);
 
@@ -757,8 +850,8 @@ export const BarChart = memo(function BarChart({
           .attr('data-layout', 'single')
           .attr('y', (d) => y(d.label) ?? 0)
           .attr('height', y.bandwidth())
-          .attr('rx', barRadius)
-          .attr('ry', barRadius)
+          .attr('rx', resolvedBarRadius)
+          .attr('ry', resolvedBarRadius)
           .attr('fill', (d, i) => d.color ?? resolvePaletteColor(palette, i));
 
         attachBarHover(bars, (d) => ({
@@ -770,14 +863,17 @@ export const BarChart = memo(function BarChart({
 
         if (chartPersonality.animate) {
           bars
-            .attr('x', 0)
+            .attr('x', x(0))
             .attr('width', 0)
             .transition()
             .duration(chartPersonality.animationDuration)
             .delay((_, i) => i * 50)
-            .attr('width', (d) => x(d.value));
+            .attr('x', (d) => barGeometry(x, d.value).position)
+            .attr('width', (d) => barGeometry(x, d.value).size);
         } else {
-          bars.attr('x', 0).attr('width', (d) => x(d.value));
+          bars
+            .attr('x', (d) => barGeometry(x, d.value).position)
+            .attr('width', (d) => barGeometry(x, d.value).size);
         }
 
         if (showValues) {
@@ -787,7 +883,8 @@ export const BarChart = memo(function BarChart({
             .append('text')
             .attr('class', 'value')
             .attr('data-part', 'value-label')
-            .attr('x', (d) => x(d.value) + 5)
+            .attr('x', (d) => x(d.value) + (d.value >= 0 ? 5 : -5))
+            .attr('text-anchor', (d) => d.value >= 0 ? 'start' : 'end')
             .attr('y', (d) => (y(d.label) ?? 0) + y.bandwidth() / 2)
             .attr('dominant-baseline', 'middle')
             .style('font-size', '11px')
@@ -837,12 +934,13 @@ export const BarChart = memo(function BarChart({
     // above), which would otherwise leave a stale React-side tooltip pointing at
     // removed nodes.
     return () => {
+      svg.selectAll('*').interrupt();
       hideTooltip();
     };
-  }, [data, series, isMultiSeries, singleData, categories, seriesColors, stacked, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
+  }, [isMultiSeries, singleData, renderSeries, categories, seriesColors, stacked, chartWidth, chartHeight, orientation, resolvedBarRadius, resolvedBarGap, showValues, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
 
   const itemCount = isMultiSeries
-    ? series!.reduce((n, s) => n + s.data.length, 0)
+    ? renderSeries.reduce((n, s) => n + s.data.length, 0)
     : singleData.length;
 
   const modeDescriptor = isMultiSeries

@@ -21,7 +21,7 @@
  */
 
 import { memo, useEffect, useRef } from 'react';
-import { arc, interpolate, pie, select, sum, type PieArcDatum } from 'd3';
+import { arc, interpolate, pie, select, type PieArcDatum } from 'd3';
 
 import type { ChartBaseProps, DataPoint } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
@@ -72,13 +72,35 @@ export const PieChart = memo(function PieChart({
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
-  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const hasInvalidValue = data.some((item) => !Number.isFinite(item.value));
+  const hasNegativeValue = data.some((item) => item.value < 0);
+  const rawTotal = hasInvalidValue || hasNegativeValue
+    ? 0
+    : data.reduce((currentTotal, item) => currentTotal + item.value, 0);
+  const hasInvalidTotal = !Number.isFinite(rawTotal);
+  const total = hasInvalidTotal ? 0 : rawTotal;
+  const fallbackMessage = data.length === 0
+    ? 'No data to display.'
+    : hasInvalidValue
+      ? 'Pie charts require finite values.'
+      : hasNegativeValue
+        ? 'Pie charts cannot represent negative values.'
+        : hasInvalidTotal
+          ? 'Pie chart values exceed the supported total.'
+          : total <= 0
+            ? 'Pie chart has no positive values.'
+            : null;
+  const canRender = fallbackMessage === null;
   const summary = {
     caption: title ? `${title} data summary` : 'Pie chart data summary',
     headers: ['Label', 'Value', 'Percentage'],
-    rows: data.map((item) => [item.label, item.value, total === 0 ? '0%' : `${((item.value / total) * 100).toFixed(1)}%`]),
+    rows: data.map((item) => [
+      item.label,
+      Number.isFinite(item.value) ? item.value : 'Invalid',
+      canRender ? `${((item.value / total) * 100).toFixed(1)}%` : '0%',
+    ]),
   };
-  const legendNode = legend ? (
+  const legendNode = legend && canRender ? (
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
         <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
@@ -90,17 +112,28 @@ export const PieChart = memo(function PieChart({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || !data || data.length === 0) return;
+    if (!svgRef.current) return;
 
     const svg = select(svgRef.current);
+    svg.selectAll('*').interrupt();
     svg.selectAll('*').remove();
+    svg.attr('width', chartWidth).attr('height', chartHeight);
+
+    if (!canRender) {
+      return () => {
+        svg.selectAll('*').interrupt();
+      };
+    }
 
     // The outer radius is derived from the smallest dimension so the chart
     // stays circular even in non-square containers; 20px padding prevents clipping.
-    const radius = Math.min(chartWidth, chartHeight) / 2 - 20;
+    const radius = Math.max(1, Math.min(chartWidth, chartHeight) / 2 - 20);
     // When donut mode is off, inner=0 produces a full pie. In donut mode the
     // innerRadius prop is a ratio (0-1) of the outer radius.
-    const inner = donut ? radius * innerRadius : 0;
+    const safeInnerRadius = Number.isFinite(innerRadius)
+      ? Math.min(1, Math.max(0, innerRadius))
+      : 0.6;
+    const inner = donut ? radius * safeInnerRadius : 0;
 
     const g = svg
       .attr('width', chartWidth)
@@ -125,8 +158,6 @@ export const PieChart = memo(function PieChart({
     const labelArc = arc<PieArcDatum<DataPoint>>()
       .innerRadius(radius * 0.7)
       .outerRadius(radius * 0.7);
-
-    const total = sum(data, (d) => d.value);
 
     const slices = g
       .selectAll('.slice')
@@ -184,7 +215,11 @@ export const PieChart = memo(function PieChart({
           return d.data.label;
         });
     }
-  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, palette, compactState.compactTooltip, compactState.hideSeriesLabels]);
+
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
+  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, palette, compactState.compactTooltip, compactState.hideSeriesLabels, canRender, total]);
 
   return (
     <ChartScaffold
@@ -199,11 +234,34 @@ export const PieChart = memo(function PieChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Pie chart'}
-      ariaDescription={describeChart('Pie chart', data.length, subtitle, donut ? 'Rendered as a donut chart.' : undefined)}
+      ariaDescription={describeChart(
+        'Pie chart',
+        data.length,
+        subtitle,
+        [donut ? 'Rendered as a donut chart.' : null, fallbackMessage].filter(Boolean).join(' ') || undefined,
+      )}
       summary={summary}
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
+      overlay={fallbackMessage ? (
+        <div
+          data-part="data-fallback"
+          role="status"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 24,
+            textAlign: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          {fallbackMessage}
+        </div>
+      ) : null}
     />
   );
 });

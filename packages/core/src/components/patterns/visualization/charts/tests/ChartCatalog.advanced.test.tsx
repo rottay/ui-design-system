@@ -324,7 +324,11 @@ describe('chart catalog advanced coverage', () => {
 
     expect(container.querySelectorAll('circle').length).toBe(3);
     expect(container.querySelectorAll('line').length).toBe(2);
-    expect(container.querySelectorAll('marker#arrow').length).toBe(1);
+    const edgeMarker = container.querySelector('marker[data-part="edge-marker"]');
+    expect(edgeMarker?.id).toMatch(/^network-arrow-/);
+    expect([...container.querySelectorAll('line')].every(
+      (edge) => edge.getAttribute('marker-end') === `url(#${edgeMarker!.id})`,
+    )).toBe(true);
     expect(container.querySelectorAll('title').length).toBe(3);
   });
 });

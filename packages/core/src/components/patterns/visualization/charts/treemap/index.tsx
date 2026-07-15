@@ -21,7 +21,7 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { hierarchy, select, treemap } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
@@ -40,6 +40,25 @@ export interface TreeMapProps extends ChartBaseProps {
   data: TreeMapNode[];
   showLabels?: boolean;
   padding?: number;
+}
+
+function normalizeTreeNode(node: TreeMapNode): TreeMapNode | null {
+  const children = (node.children ?? [])
+    .map(normalizeTreeNode)
+    .filter((child): child is TreeMapNode => child !== null);
+  const value = Number.isFinite(node.value) && node.value > 0 ? node.value : 0;
+  if (children.length === 0 && value === 0) return null;
+  return {
+    ...node,
+    value,
+    ...(children.length > 0 ? { children } : { children: undefined }),
+  };
+}
+
+function treeLeaves(nodes: readonly TreeMapNode[]): TreeMapNode[] {
+  return nodes.flatMap((node) => node.children?.length
+    ? treeLeaves(node.children)
+    : [node]);
 }
 
 /**
@@ -72,16 +91,21 @@ export const TreeMap = memo(function TreeMap({
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
+  const normalizedData = useMemo(
+    () => data.map(normalizeTreeNode).filter((node): node is TreeMapNode => node !== null),
+    [data],
+  );
+  const leavesForSummary = useMemo(() => treeLeaves(normalizedData), [normalizedData]);
   const summary = {
     caption: title ? `${title} data summary` : 'Treemap data summary',
     headers: ['Name', 'Value'],
-    rows: data.map((item) => [item.name, item.value]),
+    rows: leavesForSummary.map((item) => [item.name, item.value]),
   };
   const legendNode = legend ? (
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      {data.map((d, i) => (
+      {normalizedData.map((d, i) => (
         <div key={d.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: palette[i % palette.length] ?? 'var(--ds-color-primary)', display: 'inline-block' }} />
           <span data-part="legend-label">{d.name}</span>
         </div>
       ))}
@@ -89,17 +113,19 @@ export const TreeMap = memo(function TreeMap({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || !data || data.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
+    if (normalizedData.length === 0) return;
 
     svg.attr('width', chartWidth).attr('height', chartHeight);
 
     // Wrap the flat data array in a synthetic root node so d3.hierarchy can
     // process it. Sort descending so the largest tiles appear top-left.
-    const root = hierarchy<TreeMapNode>({ name: 'root', value: 0, children: data })
-      .sum((d) => d.value)
+    const root = hierarchy<TreeMapNode>({ name: 'root', value: 0, children: normalizedData })
+      .sum((d) => d.children?.length ? 0 : d.value)
       .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 
     treemap<TreeMapNode>().size([chartWidth, chartHeight]).padding(padding).round(true)(root);
@@ -124,7 +150,7 @@ export const TreeMap = memo(function TreeMap({
       .attr('data-part', 'tile-surface')
       .attr('width', (d: any) => Math.max(0, d.x1 - d.x0))
       .attr('height', (d: any) => Math.max(0, d.y1 - d.y0))
-      .attr('fill', (_, i) => palette[i % palette.length])
+      .attr('fill', (_, i) => palette[i % palette.length] ?? 'var(--ds-color-primary)')
       .attr('rx', 3)
       .attr('stroke-width', 1);
 
@@ -172,10 +198,13 @@ export const TreeMap = memo(function TreeMap({
           if (rectWidth > 40 && d.y1 - d.y0 > 32) {
             select(this).text(d.value ?? '');
           }
-        });
+      });
     }
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
   }, [
-    data,
+    normalizedData,
     chartWidth,
     chartHeight,
     showLabels,
@@ -199,7 +228,7 @@ export const TreeMap = memo(function TreeMap({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Treemap'}
-      ariaDescription={describeChart('Treemap', data.length, subtitle)}
+      ariaDescription={describeChart('Treemap', leavesForSummary.length, subtitle)}
       summary={summary}
       legend={legendNode}
     />

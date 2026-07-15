@@ -17,7 +17,7 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useId, useMemo, useRef } from 'react';
 import { arrayValueAt } from '@/_internal/utils/collections';
 import {
   area,
@@ -26,9 +26,7 @@ import {
   curveLinear,
   curveMonotoneX,
   curveStepAfter,
-  extent,
   line,
-  max,
   scaleLinear,
   scalePoint,
   scaleTime,
@@ -44,6 +42,56 @@ import { useChartDimensions, useChartPersonality, useChartCompact, useChartToolt
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 import { ChartTooltip, TooltipSeries } from '../tooltip';
 import { createChartCrosshair, nearestIndexByPixel, plotLocalPointerPosition, pointerToContainerPosition } from '../tooltip/crosshair';
+
+type LinePoint = Series['data'][number];
+const FALLBACK_LINE_COLOR = 'var(--ds-color-primary)';
+
+function lineColor(palette: readonly string[], index: number): string {
+  return arrayValueAt(palette, palette.length > 0 ? index % palette.length : 0) ?? FALLBACK_LINE_COLOR;
+}
+
+function timeValue(value: LinePoint['x']): number | null {
+  const timestamp = value instanceof Date
+    ? value.getTime()
+    : new Date(value as string | number).getTime();
+  return Number.isFinite(timestamp) ? timestamp : null;
+}
+
+function validPoint(point: LinePoint, xType: LineChartProps['xType']): boolean {
+  if (!Number.isFinite(point.y)) return false;
+  if (xType === 'time') return timeValue(point.x) !== null;
+  if (xType === 'linear') return typeof point.x === 'number' && Number.isFinite(point.x);
+  if (point.x instanceof Date) return Number.isFinite(point.x.getTime());
+  if (typeof point.x === 'number') return Number.isFinite(point.x);
+  return typeof point.x === 'string';
+}
+
+function sameXValue(
+  left: LinePoint['x'],
+  right: LinePoint['x'],
+  xType: LineChartProps['xType'],
+): boolean {
+  if (xType === 'time') return timeValue(left) === timeValue(right);
+  if (xType === 'linear') return left === right;
+  return String(left) === String(right);
+}
+
+function expandedDomain(minimum: number, maximum: number): [number, number] {
+  if (minimum !== maximum) return [minimum, maximum];
+  const delta = Math.max(Math.abs(minimum) * 0.01, 1);
+  const lower = minimum - delta;
+  const upper = maximum + delta;
+  if (Number.isFinite(lower) && Number.isFinite(upper) && lower < upper) return [lower, upper];
+  if (minimum > 0) return [0, minimum];
+  if (minimum < 0) return [minimum, 0];
+  return [-1, 1];
+}
+
+function zeroAnchoredDomain(values: number[]): [number, number] {
+  const minimum = Math.min(0, ...values);
+  const maximum = Math.max(0, ...values);
+  return expandedDomain(minimum, maximum);
+}
 
 /** Props for the {@link LineChart} component. */
 export interface LineChartProps extends ChartBaseProps {
@@ -89,6 +137,7 @@ export const LineChart = memo(function LineChart({
   compactBreakpoint,
 }: LineChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const gradientScope = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
@@ -97,19 +146,23 @@ export const LineChart = memo(function LineChart({
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
-  const pointCount = series.reduce((count, currentSeries) => count + currentSeries.data.length, 0);
+  const finiteSeries = useMemo(() => series.map((currentSeries) => ({
+    ...currentSeries,
+    data: currentSeries.data.filter((point) => validPoint(point, xType)),
+  })), [series, xType]);
+  const pointCount = finiteSeries.reduce((count, currentSeries) => count + currentSeries.data.length, 0);
   const summary = {
     caption: title ? `${title} data summary` : 'Line chart data summary',
     headers: ['Series', 'X', 'Y'],
-    rows: series.flatMap((currentSeries) =>
+    rows: finiteSeries.flatMap((currentSeries) =>
       currentSeries.data.map((point) => [currentSeries.name, String(point.x), point.y])
     ),
   };
   const legendNode = legend ? (
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      {series.map((s, i) => (
-        <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 3, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block' }} />
+      {finiteSeries.map((s, i) => (
+        <div key={`${s.name}-${i}`} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 3, backgroundColor: s.color ?? lineColor(palette, i), display: 'inline-block' }} />
           <span data-part="legend-label">{s.name}</span>
         </div>
       ))}
@@ -117,35 +170,44 @@ export const LineChart = memo(function LineChart({
   ) : null;
 
   useEffect(() => {
-    if (!svgRef.current || !series || series.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
 
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = chartHeight - margin.top - margin.bottom;
+    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
+    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
+    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
+
+    const allPoints = finiteSeries.flatMap((currentSeries) => currentSeries.data);
+    const innerWidth = Math.max(0, safeChartWidth - margin.left - margin.right);
+    const innerHeight = Math.max(0, safeChartHeight - margin.top - margin.bottom);
+    if (allPoints.length === 0 || innerWidth === 0 || innerHeight === 0) {
+      hideTooltip();
+      return;
+    }
 
     const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('data-x-type', xType)
       .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    const allPoints = series.flatMap((s) => s.data);
 
     // X scale -- the type union is necessary because D3's scale factories return
     // incompatible types; the helper `getX` below unifies access with type guards.
     let x: ScalePoint<string> | ScaleTime<number, number> | ScaleLinear<number, number>;
 
     if (xType === 'time') {
+      const timestamps = allPoints.map((point) => timeValue(point.x) as number);
+      const [minimum, maximum] = expandedDomain(Math.min(...timestamps), Math.max(...timestamps));
       x = scaleTime()
-        .domain(extent(allPoints, (d) => new Date(d.x as string | number | Date)) as [Date, Date])
+        .domain([new Date(minimum), new Date(maximum)])
         .range([0, innerWidth]);
     } else if (xType === 'linear') {
+      const xValues = allPoints.map((point) => point.x as number);
       x = scaleLinear()
-        .domain(extent(allPoints, (d) => d.x as number) as [number, number])
+        .domain(expandedDomain(Math.min(...xValues), Math.max(...xValues)))
         .range([0, innerWidth]);
     } else {
       const categories = [...new Set(allPoints.map((d) => String(d.x)))];
@@ -153,7 +215,7 @@ export const LineChart = memo(function LineChart({
     }
 
     const y = scaleLinear()
-      .domain([0, max(allPoints, (d) => d.y) ?? 0])
+      .domain(zeroAnchoredDomain(allPoints.map((point) => point.y)))
       .nice()
       .range([innerHeight, 0]);
 
@@ -199,9 +261,10 @@ export const LineChart = memo(function LineChart({
 
     // Each series is rendered as its own path (not a single multi-path) so that
     // individual stroke colors, area fills, and tooltip dot sets stay independent.
-    series.forEach((s, i) => {
-      const color = s.color ?? palette[i % palette.length];
-      const gradientId = `line-chart-area-${i}`;
+    finiteSeries.forEach((s, i) => {
+      if (s.data.length === 0) return;
+      const color = s.color ?? lineColor(palette, i);
+      const gradientId = `line-chart-${gradientScope}-area-${i}`;
 
       // Area fill: when gradient mode is active, a top-to-bottom linearGradient
       // fades from 32% opacity to 4%, giving depth without obscuring grid lines.
@@ -233,7 +296,7 @@ export const LineChart = memo(function LineChart({
 
         const lineArea = area<(typeof s.data)[0]>()
           .x((d) => getX(d))
-          .y0(innerHeight)
+          .y0(y(0))
           .y1((d) => y(d.y))
           .curve(curveType);
 
@@ -324,9 +387,9 @@ export const LineChart = memo(function LineChart({
 
           const focusPoints: Array<{ y: number; color: string }> = [];
           const rows: Array<{ name: string; value: number; color: string }> = [];
-          series.forEach((s, i) => {
-            const color = s.color ?? palette[i % palette.length];
-            const match = s.data.find((d) => String(d.x) === String(snapped.value));
+          finiteSeries.forEach((s, i) => {
+            const color = s.color ?? lineColor(palette, i);
+            const match = s.data.find((d) => sameXValue(d.x, snapped.value, xType));
             if (!match) return;
             focusPoints.push({ y: y(match.y), color });
             rows.push({ name: s.name, value: match.y, color });
@@ -363,8 +426,8 @@ export const LineChart = memo(function LineChart({
         .append('text')
         .attr('data-part', 'axis-label')
         .attr('data-axis', 'x')
-        .attr('x', chartWidth / 2)
-        .attr('y', chartHeight - 4)
+        .attr('x', safeChartWidth / 2)
+        .attr('y', safeChartHeight - 4)
         .attr('text-anchor', 'middle')
         .style('font-size', '12px')
         .text(xAxisLabel);
@@ -376,7 +439,7 @@ export const LineChart = memo(function LineChart({
         .attr('data-part', 'axis-label')
         .attr('data-axis', 'y')
         .attr('transform', 'rotate(-90)')
-        .attr('x', -chartHeight / 2)
+        .attr('x', -safeChartHeight / 2)
         .attr('y', 14)
         .attr('text-anchor', 'middle')
         .style('font-size', '12px')
@@ -390,9 +453,10 @@ export const LineChart = memo(function LineChart({
     // above), which would otherwise leave a stale React-side tooltip pointing at
     // removed nodes.
     return () => {
+      svg.selectAll('*').interrupt();
       hideTooltip();
     };
-  }, [series, chartWidth, chartHeight, showArea, xType, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
+  }, [finiteSeries, chartWidth, chartHeight, showArea, xType, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip, gradientScope]);
 
   return (
     <ChartScaffold

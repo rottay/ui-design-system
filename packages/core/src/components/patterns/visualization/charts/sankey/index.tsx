@@ -44,7 +44,7 @@
  * ```
  */
 
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { scaleLinear, select } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
@@ -142,13 +142,109 @@ interface LayoutLink {
   source: SankeyLink;
 }
 
+type SankeyDataErrorCode = 'CYCLIC_FLOW' | 'INVALID_DATA';
+
+type SankeyDataValidation =
+  | {
+      ok: true;
+      nodes: SankeyNode[];
+      links: SankeyLink[];
+    }
+  | {
+      ok: false;
+      code: SankeyDataErrorCode;
+      message: string;
+    };
+
+const SANKEY_ERROR_MESSAGES: Record<SankeyDataErrorCode, string> = {
+  CYCLIC_FLOW: 'The flow contains a cycle and cannot be laid out.',
+  INVALID_DATA: 'The flow data contains invalid nodes or links.',
+};
+
+/** Validate the complete graph before the layout can traverse it. */
+function validateSankeyData(
+  nodes: SankeyNode[] | null | undefined,
+  links: SankeyLink[] | null | undefined,
+): SankeyDataValidation {
+  if (!Array.isArray(nodes) || !Array.isArray(links)) {
+    return { ok: false, code: 'INVALID_DATA', message: SANKEY_ERROR_MESSAGES.INVALID_DATA };
+  }
+
+  const nodeIds = new Set<string>();
+  for (const node of nodes) {
+    if (
+      !node
+      || typeof node.id !== 'string'
+      || node.id.trim().length === 0
+      || typeof node.label !== 'string'
+      || nodeIds.has(node.id)
+    ) {
+      return { ok: false, code: 'INVALID_DATA', message: SANKEY_ERROR_MESSAGES.INVALID_DATA };
+    }
+    nodeIds.add(node.id);
+  }
+
+  const incomingCount = new Map<string, number>();
+  const children = new Map<string, string[]>();
+  for (const id of nodeIds) {
+    incomingCount.set(id, 0);
+    children.set(id, []);
+  }
+
+  for (const link of links) {
+    if (
+      !link
+      || typeof link.source !== 'string'
+      || typeof link.target !== 'string'
+      || !nodeIds.has(link.source)
+      || !nodeIds.has(link.target)
+      || !Number.isFinite(link.value)
+      || link.value <= 0
+    ) {
+      return { ok: false, code: 'INVALID_DATA', message: SANKEY_ERROR_MESSAGES.INVALID_DATA };
+    }
+
+    const sourceChildren = children.get(link.source);
+    const targetIncomingCount = incomingCount.get(link.target);
+    if (!sourceChildren || targetIncomingCount === undefined) {
+      return { ok: false, code: 'INVALID_DATA', message: SANKEY_ERROR_MESSAGES.INVALID_DATA };
+    }
+    sourceChildren.push(link.target);
+    incomingCount.set(link.target, targetIncomingCount + 1);
+  }
+
+  // Kahn's algorithm both proves acyclicity and terminates in O(nodes + links).
+  const queue = [...nodeIds].filter((id) => incomingCount.get(id) === 0);
+  let visitedCount = 0;
+  for (let index = 0; index < queue.length; index += 1) {
+    const current = queue[index];
+    if (current === undefined) break;
+    visitedCount += 1;
+    for (const child of children.get(current) ?? []) {
+      const childIncomingCount = incomingCount.get(child);
+      if (childIncomingCount === undefined) {
+        return { ok: false, code: 'INVALID_DATA', message: SANKEY_ERROR_MESSAGES.INVALID_DATA };
+      }
+      const remaining = childIncomingCount - 1;
+      incomingCount.set(child, remaining);
+      if (remaining === 0) queue.push(child);
+    }
+  }
+
+  if (visitedCount !== nodes.length) {
+    return { ok: false, code: 'CYCLIC_FLOW', message: SANKEY_ERROR_MESSAGES.CYCLIC_FLOW };
+  }
+
+  return { ok: true, nodes, links };
+}
+
 // ---------------------------------------------------------------------------
 // Layout algorithm
 // ---------------------------------------------------------------------------
 
 /**
  * Compute node depths (column indices) via BFS from root nodes (nodes with
- * no incoming links). Nodes that form a cycle are placed in the last column.
+ * no incoming links). Cycles have already been rejected by validation.
  */
 function computeDepths(
   nodes: SankeyNode[],
@@ -425,17 +521,18 @@ export const SankeyChart = memo(function SankeyChart({
     [formatValue],
   );
 
-  // Track hovered link/node for highlight coordination.
-  const [hoveredLinkIdx, setHoveredLinkIdx] = useState<number | null>(null);
-  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+  const validation = useMemo(() => validateSankeyData(nodes, links), [nodes, links]);
+  const safeNodes = validation.ok ? validation.nodes : [];
+  const safeLinks = validation.ok ? validation.links : [];
+  const palette = colors.length > 0 ? colors : DEFAULT_COLORS;
 
   // Accessibility summary table.
   const summary = {
     caption: title ? `${title} data summary` : 'Sankey chart data summary',
     headers: ['Source', 'Target', 'Value'],
-    rows: links.map((l) => {
-      const sourceNode = nodes.find((n) => n.id === l.source);
-      const targetNode = nodes.find((n) => n.id === l.target);
+    rows: safeLinks.map((l) => {
+      const sourceNode = safeNodes.find((n) => n.id === l.source);
+      const targetNode = safeNodes.find((n) => n.id === l.target);
       return [
         sourceNode?.label ?? l.source,
         targetNode?.label ?? l.target,
@@ -446,10 +543,18 @@ export const SankeyChart = memo(function SankeyChart({
 
   // Main D3 render effect.
   useEffect(() => {
-    if (!svgRef.current || nodes.length === 0) return;
+    if (!svgRef.current) return;
 
     const svg = select(svgRef.current);
+    svg.selectAll('*').interrupt();
     svg.selectAll('*').remove();
+
+    const clearSvg = () => {
+      svg.selectAll('*').interrupt();
+      svg.selectAll('*').remove();
+    };
+
+    if (!validation.ok || validation.nodes.length === 0) return clearSvg;
 
     const innerWidth = chartWidth - margin.left - margin.right;
     const innerHeight = chartHeight - margin.top - margin.bottom;
@@ -465,13 +570,13 @@ export const SankeyChart = memo(function SankeyChart({
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const { layoutNodes, layoutLinks } = computeLayout(
-      nodes,
-      links,
+      validation.nodes,
+      validation.links,
       innerWidth,
       innerHeight,
       nodeWidth,
       nodePadding,
-      colors,
+      palette,
       align,
     );
 
@@ -664,9 +769,10 @@ export const SankeyChart = memo(function SankeyChart({
         .delay((_, i) => i * 60)
         .attr('opacity', 1);
     }
+
+    return clearSvg;
   }, [
-    nodes,
-    links,
+    validation,
     chartWidth,
     chartHeight,
     nodeWidth,
@@ -676,7 +782,7 @@ export const SankeyChart = memo(function SankeyChart({
     align,
     showLinkValues,
     showNodeLabels,
-    colors,
+    palette,
     margin,
     chartPersonality.animate,
     chartPersonality.animationDuration,
@@ -687,22 +793,44 @@ export const SankeyChart = memo(function SankeyChart({
   ]);
 
   // Legend.
-  const legendNode = legend ? (
+  const legendNode = legend && validation.ok ? (
     <div data-part="legend" data-variant="sankey" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      {nodes.map((n, i) => (
+      {validation.nodes.map((n, i) => (
         <div key={n.id} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
           <span
             data-part="legend-swatch"
             style={{
               width: 12,
               height: 12,
-              backgroundColor: n.color ?? colors[i % colors.length],
+              backgroundColor: n.color ?? palette[i % palette.length],
               display: 'inline-block',
             }}
           />
           <span data-part="legend-label">{n.label}</span>
         </div>
       ))}
+    </div>
+  ) : null;
+
+  const fallbackNode = !validation.ok ? (
+    <div
+      role="status"
+      data-part="chart-fallback"
+      data-state="error"
+      data-error-code={validation.code}
+      style={{ padding: 16, textAlign: 'center' }}
+    >
+      <strong>{validation.code}</strong>
+      <span style={{ display: 'block', marginTop: 4 }}>{validation.message}</span>
+    </div>
+  ) : validation.nodes.length === 0 ? (
+    <div
+      role="status"
+      data-part="chart-fallback"
+      data-state="empty"
+      style={{ padding: 16, textAlign: 'center' }}
+    >
+      No flow data to display.
     </div>
   ) : null;
 
@@ -721,12 +849,14 @@ export const SankeyChart = memo(function SankeyChart({
       ariaLabel={title ?? 'Sankey chart'}
       ariaDescription={describeChart(
         'Sankey flow diagram',
-        nodes.length,
+        safeNodes.length,
         subtitle,
-        `${links.length} flow ${links.length === 1 ? 'link' : 'links'} between ${nodes.length} ${nodes.length === 1 ? 'node' : 'nodes'}.`,
+        validation.ok
+          ? `${safeLinks.length} flow ${safeLinks.length === 1 ? 'link' : 'links'} between ${safeNodes.length} ${safeNodes.length === 1 ? 'node' : 'nodes'}.`
+          : `${validation.code}. ${validation.message}`,
       )}
       summary={summary}
-      legend={legendNode}
+      legend={fallbackNode ?? legendNode}
     />
   );
 });

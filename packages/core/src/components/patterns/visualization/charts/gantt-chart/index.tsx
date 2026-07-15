@@ -19,7 +19,7 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, max, min, scaleBand, scaleTime, select, timeFormat } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
@@ -45,6 +45,8 @@ export interface GanttChartProps extends ChartBaseProps {
   showToday?: boolean;
 }
 
+const DEFAULT_GANTT_MARGIN = { ...DEFAULT_MARGIN, bottom: 30, left: 150 };
+
 /**
  * Renders a Gantt timeline using `scaleTime` (x) and `scaleBand` (y) with task progress overlays.
  *
@@ -67,54 +69,95 @@ export const GanttChart = memo(function GanttChart({
   responsive = true,
   colors = DEFAULT_COLORS,
   tooltip = true,
-  margin = { top: 20, right: 20, bottom: 30, left: 150 },
+  margin = DEFAULT_GANTT_MARGIN,
 }: GanttChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 800;
+  const parsedTasks = useMemo(() => {
+    const seenIds = new Set<string>();
+    return tasks.flatMap((task) => {
+      const start = new Date(task.start);
+      const end = new Date(task.end);
+      if (
+        typeof task.id !== 'string'
+        || task.id.length === 0
+        || seenIds.has(task.id)
+        || !Number.isFinite(start.getTime())
+        || !Number.isFinite(end.getTime())
+        || end < start
+      ) {
+        return [];
+      }
+      seenIds.add(task.id);
+      return [{
+        ...task,
+        start,
+        end,
+        progress: task.progress == null || !Number.isFinite(task.progress)
+          ? undefined
+          : Math.min(100, Math.max(0, task.progress)),
+      }];
+    });
+  }, [tasks]);
+  const baseHeight = Number.isFinite(height) ? Math.max(0, height) : 400;
+  const verticalMargin = margin.top + margin.bottom;
+  const requiredHeight = Number.isFinite(verticalMargin)
+    ? parsedTasks.length * 36 + verticalMargin
+    : baseHeight;
   // Dynamically grow the chart height so every task gets a readable row;
   // the minimum stays at the consumer-supplied `height` to avoid collapse.
-  const dynamicHeight = Math.max(height, tasks.length * 36 + margin.top + margin.bottom);
+  const dynamicHeight = Math.max(baseHeight, requiredHeight);
   const summary = {
     caption: title ? `${title} data summary` : 'Gantt chart data summary',
     headers: ['Task', 'Start', 'End', 'Progress'],
-    rows: tasks.map((task) => [
+    rows: parsedTasks.map((task) => [
       task.name,
-      new Date(task.start).toISOString().slice(0, 10),
-      new Date(task.end).toISOString().slice(0, 10),
+      task.start.toISOString().slice(0, 10),
+      task.end.toISOString().slice(0, 10),
       task.progress ?? 'N/A',
     ]),
   };
 
   useEffect(() => {
-    if (!svgRef.current || !tasks || tasks.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
+    if (parsedTasks.length === 0) return;
 
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = dynamicHeight - margin.top - margin.bottom;
+    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
+    const rawInnerWidth = safeChartWidth - margin.left - margin.right;
+    const rawInnerHeight = dynamicHeight - margin.top - margin.bottom;
+    const innerWidth = Number.isFinite(rawInnerWidth) ? Math.max(0, rawInnerWidth) : 0;
+    const innerHeight = Number.isFinite(rawInnerHeight) ? Math.max(0, rawInnerHeight) : 0;
+    svg.attr('width', safeChartWidth).attr('height', dynamicHeight);
+    if (innerWidth === 0 || innerHeight === 0) return;
 
     const g = svg
-      .attr('width', chartWidth)
-      .attr('height', dynamicHeight)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const parsedTasks = tasks.map((t) => ({
-      ...t,
-      start: new Date(t.start),
-      end: new Date(t.end),
-    }));
-
     // scaleTime maps the full date span (earliest start -> latest end) to pixel
     // width; .nice() rounds the domain to tidy date boundaries (e.g. month start).
+    const earliestStart = min(parsedTasks, (d) => d.start)!;
+    const latestEnd = max(parsedTasks, (d) => d.end)!;
+    const hasConstantDomain = earliestStart.getTime() === latestEnd.getTime();
+    const domainStart = hasConstantDomain
+      ? new Date(earliestStart.getTime() - 12 * 60 * 60 * 1000)
+      : earliestStart;
+    const domainEnd = hasConstantDomain
+      ? new Date(latestEnd.getTime() + 12 * 60 * 60 * 1000)
+      : latestEnd;
     const x = scaleTime()
-      .domain([min(parsedTasks, (d) => d.start)!, max(parsedTasks, (d) => d.end)!])
+      .domain([domainStart, domainEnd])
       .range([0, innerWidth])
       .nice();
+    const taskWidth = (task: (typeof parsedTasks)[number]): number =>
+      Math.max(1, x(task.end) - x(task.start));
 
     // scaleBand assigns each task id an equal-height row with 30% padding between
     // rows for visual separation and hover affordance.
@@ -165,7 +208,7 @@ export const GanttChart = memo(function GanttChart({
       .attr('y', (d) => y(d.id) ?? 0)
       .attr('height', y.bandwidth())
       .attr('rx', 4)
-      .attr('fill', (d, i) => d.color ?? colors[i % colors.length])
+      .attr('fill', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)')
       .attr('opacity', 0.25);
 
     if (chartPersonality.animate) {
@@ -174,9 +217,9 @@ export const GanttChart = memo(function GanttChart({
         .transition()
         .duration(chartPersonality.animationDuration)
         .delay((_, i) => i * 50)
-        .attr('width', (d) => Math.max(0, x(d.end) - x(d.start)));
+        .attr('width', taskWidth);
     } else {
-      rects.attr('width', (d) => Math.max(0, x(d.end) - x(d.start)));
+      rects.attr('width', taskWidth);
     }
 
     // Progress bar
@@ -189,7 +232,7 @@ export const GanttChart = memo(function GanttChart({
         .attr('y', (d) => y(d.id) ?? 0)
         .attr('height', y.bandwidth())
         .attr('rx', 4)
-        .attr('fill', (d, i) => d.color ?? colors[i % colors.length]);
+        .attr('fill', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)');
 
       if (chartPersonality.animate) {
         progressBars
@@ -197,9 +240,9 @@ export const GanttChart = memo(function GanttChart({
           .transition()
           .duration(chartPersonality.animationDuration)
           .delay((_, i) => i * 50)
-          .attr('width', (d) => Math.max(0, (x(d.end) - x(d.start)) * ((d.progress ?? 0) / 100)));
+          .attr('width', (d) => Math.max(1, taskWidth(d) * ((d.progress ?? 0) / 100)));
       } else {
-        progressBars.attr('width', (d) => Math.max(0, (x(d.end) - x(d.start)) * ((d.progress ?? 0) / 100)));
+        progressBars.attr('width', (d) => Math.max(1, taskWidth(d) * ((d.progress ?? 0) / 100)));
       }
     }
 
@@ -236,8 +279,12 @@ export const GanttChart = memo(function GanttChart({
     }
 
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
+
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
   }, [
-    tasks,
+    parsedTasks,
     chartWidth,
     dynamicHeight,
     showProgress,
@@ -262,7 +309,7 @@ export const GanttChart = memo(function GanttChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Gantt chart'}
-      ariaDescription={describeChart('Gantt chart', tasks.length, subtitle, showToday ? 'Includes a marker for today when it falls inside the visible date range.' : undefined)}
+      ariaDescription={describeChart('Gantt chart', parsedTasks.length, subtitle, showToday ? 'Includes a marker for today when it falls inside the visible date range.' : undefined)}
       summary={summary}
     />
   );
