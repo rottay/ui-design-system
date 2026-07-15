@@ -8,7 +8,17 @@
 // Types
 export type {
   ChartBaseProps,
+  ChartColorScheme,
+  ChartCompactCoreConfig,
+  ChartCartesianCompactConfig,
+  ChartSeriesLabelCompactConfig,
   ChartCompactConfig,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartColorsProps,
+  ChartColorSchemeProps,
+  ChartMargin,
+  ChartMarginProps,
   DataPoint,
   SeriesDataPoint,
   Series,
@@ -16,8 +26,29 @@ export type {
 export { DEFAULT_COLORS, DEFAULT_MARGIN, DEFAULT_COMPACT_CONFIG } from './Charts.types';
 
 // Hooks
-export { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip, useChartBrush, useChartExport } from './hooks';
-export type { ChartPersonalityOptions, ResolvedChartPersonality, UseChartCompactOptions, ResolvedChartCompact, UseChartTooltipReturn, BrushSelection, UseChartBrushOptions, UseChartBrushReturn, UseChartExportReturn } from './hooks';
+export {
+  useChartDimensions,
+  useChartPersonality,
+  useChartCompact,
+  useChartTheme,
+  useChartTooltip,
+  useChartBrush,
+  useChartExport,
+} from './hooks';
+export type {
+  ChartPersonalityOptions,
+  ResolvedChartPersonality,
+  UseChartCompactOptions,
+  ResolvedChartCompact,
+  ChartColorOwner,
+  ChartTheme,
+  ChartThemeOwner,
+  UseChartTooltipReturn,
+  BrushSelection,
+  UseChartBrushOptions,
+  UseChartBrushReturn,
+  UseChartExportReturn,
+} from './hooks';
 
 // Utils
 export { exportChart } from './utils';
@@ -80,4 +111,4 @@ export type { SankeyChartProps, SankeyNode, SankeyLink } from './sankey';
 
 // Tooltip
 export { ChartTooltip, TooltipValue, TooltipSeries } from './tooltip';
-export type { ChartTooltipProps } from './tooltip';
+export type { ChartTooltipProps, ChartTooltipVariant } from './tooltip';

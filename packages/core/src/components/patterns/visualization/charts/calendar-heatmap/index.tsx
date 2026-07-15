@@ -34,7 +34,7 @@ import {
   timeMonth,
 } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type { ChartBaseProps, ChartColorSchemeProps } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartTheme } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 import { resolveCssColor } from '../utils/resolve-css-color';
@@ -52,7 +52,7 @@ export interface CalendarHeatMapDataPoint {
 }
 
 /** Props for the {@link CalendarHeatMap} component. */
-export interface CalendarHeatMapProps extends ChartBaseProps {
+export interface CalendarHeatMapProps extends ChartBaseProps, ChartColorSchemeProps {
   data: CalendarHeatMapDataPoint[];
   /** Start date of the range. Default: 1 year ago from today */
   startDate?: Date | string;

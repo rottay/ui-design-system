@@ -24,13 +24,20 @@
 import { memo, useEffect, useRef } from 'react';
 import { select } from 'd3';
 
-import type { ChartBaseProps, DataPoint } from '../Charts.types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartColorsProps,
+  ChartLegendProps,
+  ChartMarginProps,
+  DataPoint,
+} from '../Charts.types';
+import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link FunnelChart} component. */
-export interface FunnelChartProps extends ChartBaseProps {
+export interface FunnelChartProps
+  extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartMarginProps {
   data: DataPoint[];
   showPercentage?: boolean;
   showConversion?: boolean;
@@ -58,7 +65,7 @@ export const FunnelChart = memo(function FunnelChart({
   legend = false,
   animate,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
   tooltip,
   margin = DEFAULT_MARGIN,
 }: FunnelChartProps) {
@@ -67,7 +74,7 @@ export const FunnelChart = memo(function FunnelChart({
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
-  const palette = colors.length > 0 ? colors : DEFAULT_COLORS;
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const hasInvalidValue = data.some((item) => !Number.isFinite(item.value));
   const hasNegativeValue = data.some((item) => item.value < 0);
   const maxValue = data.length > 0 && !hasInvalidValue && !hasNegativeValue

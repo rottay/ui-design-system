@@ -1,38 +1,57 @@
 /**
  * @fileoverview Shared type definitions and color palettes for all chart
- * components. Defines ChartBaseProps (common to every chart), DataPoint/Series
- * shapes, and five named color schemes (default, pastel, vibrant, monochrome,
- * accessible) that map to --ds-color-* CSS variables.
+ * components. Defines the universal chart surface plus opt-in capability
+ * traits, DataPoint/Series shapes, and five named color schemes (default,
+ * pastel, vibrant, monochrome, accessible) that map to --ds-color-* CSS
+ * variables. A chart only extends the traits it actually implements, so its
+ * public TypeScript contract cannot advertise ignored props.
  */
 
 import type { CSSProperties, ReactNode } from 'react';
 
 /**
- * Configuration for compact/responsive chart rendering on small screens.
- * When compact mode is active, charts reduce visual clutter by hiding legends,
- * limiting axis ticks, simplifying tooltips, and enforcing a minimum height.
+ * Compact options shared by every chart family that supports compact mode.
+ * Axis and mark-label controls are composed separately so families cannot
+ * advertise a compact behavior they do not render.
  *
  * @example
  * ```tsx
  * <LineChart
  *   series={data}
  *   compact={{ hideLegend: true, maxTicks: 3, compactTooltip: true }}
+ *   compactMode
  *   autoCompact
  * />
  * ```
  */
-export interface ChartCompactConfig {
+export interface ChartCompactCoreConfig {
   /** Hide legend when compact mode is active */
   hideLegend?: boolean;
-  /** Maximum number of axis ticks in compact mode */
-  maxTicks?: number;
   /** Use compact tooltip (value only, no series name) */
   compactTooltip?: boolean;
-  /** Hide series labels on chart elements */
-  hideSeriesLabels?: boolean;
   /** Minimum height in pixels when compact mode is active */
   minHeight?: number;
 }
+
+/** Compact options implemented by charts with numeric/category axes. */
+export interface ChartCartesianCompactConfig extends ChartCompactCoreConfig {
+  /** Maximum number of axis ticks in compact mode */
+  maxTicks?: number;
+}
+
+/** Compact options implemented by charts that render labels on their marks. */
+export interface ChartSeriesLabelCompactConfig extends ChartCompactCoreConfig {
+  /** Hide series labels on chart elements */
+  hideSeriesLabels?: boolean;
+}
+
+/**
+ * Complete compact configuration accepted by the resolver hook. When compact
+ * mode is active it can hide legends, limit axis ticks, simplify tooltips,
+ * hide mark labels, and enforce a minimum height.
+ */
+export interface ChartCompactConfig
+  extends ChartCartesianCompactConfig, ChartSeriesLabelCompactConfig {}
 
 /** Sensible defaults for compact mode so charts work well on mobile without config */
 export const DEFAULT_COMPACT_CONFIG: Required<ChartCompactConfig> = {
@@ -44,24 +63,21 @@ export const DEFAULT_COMPACT_CONFIG: Required<ChartCompactConfig> = {
 };
 
 /**
- * Common base props shared by every chart component (BarChart, LineChart,
- * PieChart, AreaChart, etc.). Controls dimensions, loading state,
- * title/subtitle, legend visibility, animation, color palette, and margins.
+ * Universal props implemented by every scaffold-backed chart component.
+ * Optional capabilities such as legends, palettes, margins, and compact mode
+ * are declared separately below and composed by each chart family.
  *
  * @example
  * ```tsx
- * // These props are spread into any chart component:
+ * // Universal surface props:
  * <BarChart
  *   width="100%"
  *   height={400}
  *   title="Monthly Revenue"
  *   subtitle="Last 12 months"
- *   legend
  *   animate
  *   responsive
- *   colors={PASTEL_COLORS}
  *   tooltip
- *   margin={{ top: 20, right: 30, bottom: 40, left: 60 }}
  *   data={revenueData}
  * />
  * ```
@@ -81,22 +97,54 @@ export interface ChartBaseProps {
   title?: string;
   /** Subtitle displayed below the title */
   subtitle?: string;
-  /** Whether to show the color legend */
-  legend?: boolean;
   /** Whether to animate data transitions and initial render */
   animate?: boolean;
   /** Whether the chart resizes responsively with its container */
   responsive?: boolean;
-  /** Custom color palette; falls back to DEFAULT_COLORS if not provided */
-  colors?: string[];
-  /** Named palette resolved from the active tenant/brand chart personality */
-  colorScheme?: ChartColorScheme;
   /** Whether to show tooltips on hover/focus */
   tooltip?: boolean;
+}
+
+/** Opt-in legend capability. */
+export interface ChartLegendProps {
+  /** Whether to show the color legend */
+  legend?: boolean;
+}
+
+/** Opt-in explicit palette capability. */
+export interface ChartColorsProps {
+  /** Custom color palette; falls back to the active chart personality */
+  colors?: string[];
+}
+
+/** Opt-in named-palette capability. */
+export interface ChartColorSchemeProps {
+  /** Named palette resolved from the active tenant/brand chart personality */
+  colorScheme?: ChartColorScheme;
+}
+
+/** Insets around the chart drawing area. */
+export interface ChartMargin {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+/** Opt-in drawing-area margin capability. */
+export interface ChartMarginProps {
   /** Pixel margins around the chart drawing area */
-  margin?: { top: number; right: number; bottom: number; left: number };
-  /** Responsive compact configuration for small screens */
-  compact?: ChartCompactConfig;
+  margin?: ChartMargin;
+}
+
+/** Opt-in compact-mode capability, narrowed per chart family. */
+export interface ChartCompactProps<
+  TConfig extends ChartCompactCoreConfig = ChartCompactConfig,
+> {
+  /** Responsive compact configuration, applied only while compact mode is active */
+  compact?: TConfig;
+  /** Explicitly activate compact mode (default: false) */
+  compactMode?: boolean;
   /** Auto-detect compact mode based on container width (default: false) */
   autoCompact?: boolean;
   /** Container width breakpoint below which compact mode activates (default: 640px) */

@@ -37,8 +37,7 @@ import {
   type SimulationNodeDatum,
 } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
-import { DEFAULT_COLORS } from '../Charts.types';
+import type { ChartBaseProps, ChartColorsProps, ChartLegendProps } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -60,7 +59,7 @@ export interface NetworkLink {
 }
 
 /** Props for the {@link NetworkGraph} component. */
-export interface NetworkGraphProps extends ChartBaseProps {
+export interface NetworkGraphProps extends ChartBaseProps, ChartLegendProps, ChartColorsProps {
   nodes: NetworkNode[];
   links: NetworkLink[];
   directed?: boolean;
@@ -153,7 +152,7 @@ export const NetworkGraph = memo(function NetworkGraph({
   legend = false,
   animate = true,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
   tooltip = true,
 }: NetworkGraphProps) {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -169,7 +168,7 @@ export const NetworkGraph = memo(function NetworkGraph({
   const validation = useMemo(() => validateNetworkData(nodes, links), [nodes, links]);
   const graphNodes = validation.ok ? validation.nodes : [];
   const graphLinks = validation.ok ? validation.links : [];
-  const palette = colors.length > 0 ? colors : DEFAULT_COLORS;
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const summary = {
     caption: title ? `${title} data summary` : 'Network graph data summary',
     headers: ['Kind', 'Primary', 'Secondary'],

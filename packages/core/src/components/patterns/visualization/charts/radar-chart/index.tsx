@@ -25,12 +25,18 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { scaleLinear, select } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartColorSchemeProps,
+  ChartColorsProps,
+  ChartLegendProps,
+} from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link RadarChart} component. */
-export interface RadarChartProps extends ChartBaseProps {
+export interface RadarChartProps
+  extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartColorSchemeProps {
   data: { axis: string; value: number }[];
   series?: { name: string; data: { axis: string; value: number }[]; color?: string }[];
   maxValue?: number;

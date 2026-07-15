@@ -31,13 +31,23 @@ import {
   select,
 } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCartesianCompactConfig,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartMarginProps,
+} from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link Histogram} component. */
-export interface HistogramProps extends ChartBaseProps {
+export interface HistogramProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartMarginProps,
+    ChartCompactProps<ChartCartesianCompactConfig> {
   /** Raw numeric values to bin */
   values: number[];
   /** Number of bins. Default: auto (Sturges' formula) */
@@ -109,13 +119,14 @@ export const Histogram = memo(function Histogram({
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: HistogramProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;

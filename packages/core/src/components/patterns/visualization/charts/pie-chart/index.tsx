@@ -23,12 +23,25 @@
 import { memo, useEffect, useRef } from 'react';
 import { arc, interpolate, pie, select, type PieArcDatum } from 'd3';
 
-import type { ChartBaseProps, DataPoint } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartColorSchemeProps,
+  ChartColorsProps,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartSeriesLabelCompactConfig,
+  DataPoint,
+} from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
 /** Props for the {@link PieChart} component. */
-export interface PieChartProps extends ChartBaseProps {
+export interface PieChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartColorSchemeProps,
+    ChartCompactProps<ChartSeriesLabelCompactConfig> {
   data: DataPoint[];
   donut?: boolean;
   innerRadius?: number;
@@ -62,6 +75,7 @@ export const PieChart = memo(function PieChart({
   colorScheme,
   tooltip,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: PieChartProps) {
@@ -69,7 +83,7 @@ export const PieChart = memo(function PieChart({
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const hasInvalidValue = data.some((item) => !Number.isFinite(item.value));

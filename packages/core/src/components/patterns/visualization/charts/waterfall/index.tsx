@@ -26,7 +26,13 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, max, min, scaleBand, scaleLinear, select } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCartesianCompactConfig,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartMarginProps,
+} from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
@@ -42,7 +48,11 @@ export interface WaterfallDataPoint {
 }
 
 /** Props for the {@link WaterfallChart} component. */
-export interface WaterfallChartProps extends ChartBaseProps {
+export interface WaterfallChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartMarginProps,
+    ChartCompactProps<ChartCartesianCompactConfig> {
   data: WaterfallDataPoint[];
   /** Color for increase bars. Default: var(--ds-color-success) */
   increaseColor?: string;
@@ -130,13 +140,14 @@ export const WaterfallChart = memo(function WaterfallChart({
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: WaterfallChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;

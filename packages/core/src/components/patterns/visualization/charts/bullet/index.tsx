@@ -24,7 +24,12 @@
 import { memo, useEffect, useRef, useMemo } from 'react';
 import { scaleLinear, select } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCompactCoreConfig,
+  ChartCompactProps,
+  ChartLegendProps,
+} from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -43,7 +48,10 @@ export interface BulletDataPoint {
 }
 
 /** Props for the {@link BulletChart} component. */
-export interface BulletChartProps extends ChartBaseProps {
+export interface BulletChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartCompactProps<ChartCompactCoreConfig> {
   /** Single or multiple bullet items */
   data: BulletDataPoint | BulletDataPoint[];
   /** Orientation. Default: 'horizontal' */
@@ -162,6 +170,7 @@ export const BulletChart = memo(function BulletChart({
   responsive = true,
   tooltip,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: BulletChartProps) {
@@ -185,7 +194,7 @@ export const BulletChart = memo(function BulletChart({
 
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
 

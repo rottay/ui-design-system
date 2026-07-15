@@ -47,8 +47,12 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { scaleLinear, select } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartColorsProps,
+  ChartLegendProps,
+  ChartMarginProps,
+} from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -79,7 +83,8 @@ export interface SankeyLink {
 }
 
 /** Props for the {@link SankeyChart} component. */
-export interface SankeyChartProps extends ChartBaseProps {
+export interface SankeyChartProps
+  extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartMarginProps {
   /** The set of nodes displayed as rectangles in the diagram. */
   nodes: SankeyNode[];
   /** Directed flows between nodes, rendered as curved paths. */
@@ -506,7 +511,7 @@ export const SankeyChart = memo(function SankeyChart({
   legend = false,
   animate = true,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
   tooltip = true,
   margin = { top: 16, right: 120, bottom: 16, left: 16 },
 }: SankeyChartProps) {
@@ -524,7 +529,7 @@ export const SankeyChart = memo(function SankeyChart({
   const validation = useMemo(() => validateSankeyData(nodes, links), [nodes, links]);
   const safeNodes = validation.ok ? validation.nodes : [];
   const safeLinks = validation.ok ? validation.links : [];
-  const palette = colors.length > 0 ? colors : DEFAULT_COLORS;
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
 
   // Accessibility summary table.
   const summary = {

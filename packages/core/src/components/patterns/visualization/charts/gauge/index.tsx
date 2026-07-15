@@ -23,7 +23,12 @@
 import { memo, useEffect, useRef, useMemo } from 'react';
 import { arc, interpolate, select } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCompactCoreConfig,
+  ChartCompactProps,
+  ChartLegendProps,
+} from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -40,7 +45,10 @@ export interface GaugeSegment {
 }
 
 /** Props for the {@link GaugeChart} component. */
-export interface GaugeChartProps extends ChartBaseProps {
+export interface GaugeChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartCompactProps<ChartCompactCoreConfig> {
   /** Current value (positioned between min and max) */
   value: number;
   /** Minimum value. Default: 0 */
@@ -141,13 +149,14 @@ export const GaugeChart = memo(function GaugeChart({
   responsive = true,
   tooltip,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: GaugeChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const [rangeMin, rangeMax] = useMemo<[number, number]>(() => {

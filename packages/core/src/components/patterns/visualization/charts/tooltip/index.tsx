@@ -27,9 +27,13 @@
 
 import React, { useRef, useLayoutEffect, useState, type CSSProperties } from 'react';
 
+import type { ChartPersonalityTokens } from '../../../../../contracts';
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+
+export type ChartTooltipVariant = ChartPersonalityTokens['tooltipStyle'];
 
 export interface ChartTooltipProps {
   /** Whether tooltip is visible */
@@ -44,6 +48,8 @@ export interface ChartTooltipProps {
   autoFlip?: boolean;
   /** Offset from cursor in pixels. Default: 12 */
   offset?: number;
+  /** Personality-owned visual treatment. Default: detailed */
+  variant?: ChartTooltipVariant;
 }
 
 // ---------------------------------------------------------------------------
@@ -54,9 +60,6 @@ const TOOLTIP_STYLE: CSSProperties = {
   position: 'absolute',
   pointerEvents: 'none',
   zIndex: 10,
-  padding: '8px 12px',
-  fontSize: 12,
-  maxWidth: 280,
   whiteSpace: 'nowrap',
   transition: 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)',
 };
@@ -85,6 +88,7 @@ export function ChartTooltip({
   children,
   autoFlip = true,
   offset = 12,
+  variant = 'detailed',
 }: ChartTooltipProps) {
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [adjusted, setAdjusted] = useState<{ left: number; top: number }>({ left: x + offset, top: y + offset });
@@ -132,9 +136,10 @@ export function ChartTooltip({
   return (
     <div
       ref={tooltipRef}
-      className="ds-chart-tooltip"
+      className={`ds-chart-tooltip ds-chart-tooltip--${variant}`}
       data-part="chart-tooltip"
       data-state={visible ? 'visible' : 'hidden'}
+      data-variant={variant}
       style={{
         ...TOOLTIP_STYLE,
         left: adjusted.left,

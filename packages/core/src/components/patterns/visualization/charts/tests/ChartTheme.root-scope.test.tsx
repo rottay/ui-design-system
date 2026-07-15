@@ -2,7 +2,7 @@ import { useRef, type CSSProperties } from 'react';
 import { act, render, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { useChartTheme } from '../hooks/use-chart-theme';
+import { useChartTheme } from '../../../../../index';
 import { resolveCssColor } from '../utils/resolve-css-color';
 
 vi.mock('../hooks/use-chart-personality', () => ({

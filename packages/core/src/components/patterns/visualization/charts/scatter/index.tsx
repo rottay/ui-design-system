@@ -25,8 +25,15 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, extent, max, min, scaleLinear, scaleSqrt, select } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCartesianCompactConfig,
+  ChartColorsProps,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartMarginProps,
+} from '../Charts.types';
+import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 import { ChartTooltip, TooltipSeries } from '../tooltip';
@@ -56,7 +63,12 @@ export interface ScatterDataPoint {
 }
 
 /** Props for the {@link ScatterChart} component. */
-export interface ScatterChartProps extends ChartBaseProps {
+export interface ScatterChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartMarginProps,
+    ChartCompactProps<ChartCartesianCompactConfig> {
   data: ScatterDataPoint[];
   /** X axis label */
   xLabel?: string;
@@ -153,17 +165,19 @@ export const ScatterChart = memo(function ScatterChart({
   legend = false,
   animate,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: ScatterChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
@@ -210,7 +224,7 @@ export const ScatterChart = memo(function ScatterChart({
               style={{
                 width: 10,
                 height: 10,
-                backgroundColor: d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)',
+                backgroundColor: d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)',
                 display: 'inline-block',
               }}
             />
@@ -360,9 +374,9 @@ export const ScatterChart = memo(function ScatterChart({
         }
         return resolvedPointRadius;
       })
-      .attr('fill', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)')
+      .attr('fill', (d, i) => d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)')
       .attr('fill-opacity', resolvedOpacity)
-      .attr('stroke', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)')
+      .attr('stroke', (d, i) => d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)')
       .attr('stroke-width', 1)
       .attr('stroke-opacity', 0.9);
 
@@ -461,7 +475,7 @@ export const ScatterChart = memo(function ScatterChart({
       svg.selectAll('*').interrupt();
       hideTooltip();
     };
-  }, [finiteData, chartWidth, chartHeight, resolvedPointRadius, bubble, resolvedSizeRange, grid, resolvedOpacity, trendLine, chartPersonality, colors, margin, xLabel, yLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
+  }, [finiteData, chartWidth, chartHeight, resolvedPointRadius, bubble, resolvedSizeRange, grid, resolvedOpacity, trendLine, chartPersonality, palette, margin, xLabel, yLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
 
   return (
     <ChartScaffold
@@ -487,7 +501,7 @@ export const ScatterChart = memo(function ScatterChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
-      overlay={<ChartTooltip {...tooltipProps} />}
+      overlay={<ChartTooltip {...tooltipProps} variant={chartPersonality.tooltipStyle} />}
     />
   );
 });

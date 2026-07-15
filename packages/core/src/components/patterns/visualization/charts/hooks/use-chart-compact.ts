@@ -3,8 +3,8 @@
 /**
  * @fileoverview useChartCompact hook -- resolves compact mode for chart components.
  * Merges explicit compact config with defaults when compact mode is active,
- * either via the `compact` prop or auto-detection from container width using
- * `useBreakpoints`.
+ * either via the `compactMode` prop or auto-detection from container width
+ * using `useBreakpoints`. The `compact` prop only configures active mode.
  */
 
 import { useMemo } from 'react';
@@ -16,8 +16,10 @@ import { DEFAULT_COMPACT_CONFIG } from '../Charts.types';
 const DEFAULT_COMPACT_BREAKPOINT = 640;
 
 export interface UseChartCompactOptions {
-  /** Explicit compact configuration from the consumer */
+  /** Compact configuration from the consumer; does not activate compact mode */
   compact?: ChartCompactConfig;
+  /** Whether to activate compact mode explicitly */
+  compactMode?: boolean;
   /** Whether to auto-detect compact mode from viewport breakpoint */
   autoCompact?: boolean;
   /** Custom breakpoint for auto-compact (default: 640px) */
@@ -55,7 +57,7 @@ const INACTIVE_COMPACT: ResolvedChartCompact = {
  * Resolves compact mode for chart components.
  *
  * Compact mode activates when:
- * 1. An explicit `compact` config is provided (always active), OR
+ * 1. `compactMode` is true, OR
  * 2. `autoCompact` is true AND the container width is below the breakpoint
  *    (uses `useBreakpoints().isMobile` when no containerWidth is given).
  *
@@ -69,6 +71,7 @@ const INACTIVE_COMPACT: ResolvedChartCompact = {
  * ```tsx
  * const compactState = useChartCompact({
  *   compact: { maxTicks: 3 },
+ *   compactMode: true,
  *   autoCompact: true,
  *   containerWidth: dimensions.width,
  * });
@@ -76,14 +79,16 @@ const INACTIVE_COMPACT: ResolvedChartCompact = {
  * ```
  */
 export function useChartCompact(options: UseChartCompactOptions = {}): ResolvedChartCompact {
-  const { compact, autoCompact = false, compactBreakpoint = DEFAULT_COMPACT_BREAKPOINT, containerWidth } = options;
+  const {
+    compact,
+    compactMode = false,
+    autoCompact = false,
+    compactBreakpoint = DEFAULT_COMPACT_BREAKPOINT,
+    containerWidth,
+  } = options;
   const { isMobile } = useBreakpoints();
 
   return useMemo(() => {
-    // Determine whether compact mode should be active.
-    // Explicit compact config always activates compact mode.
-    const hasExplicitCompact = compact !== undefined;
-
     // Auto-compact uses container width when available, otherwise falls back
     // to the viewport-level isMobile breakpoint.
     const autoCompactActive = autoCompact && (
@@ -92,7 +97,7 @@ export function useChartCompact(options: UseChartCompactOptions = {}): ResolvedC
         : isMobile
     );
 
-    const isCompact = hasExplicitCompact || autoCompactActive;
+    const isCompact = compactMode || autoCompactActive;
 
     if (!isCompact) {
       return INACTIVE_COMPACT;
@@ -112,5 +117,5 @@ export function useChartCompact(options: UseChartCompactOptions = {}): ResolvedC
       hideSeriesLabels: merged.hideSeriesLabels,
       minHeight: merged.minHeight,
     };
-  }, [compact, autoCompact, compactBreakpoint, containerWidth, isMobile]);
+  }, [compact, compactMode, autoCompact, compactBreakpoint, containerWidth, isMobile]);
 }

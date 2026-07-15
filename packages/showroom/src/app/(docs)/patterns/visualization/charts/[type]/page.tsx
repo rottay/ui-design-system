@@ -139,168 +139,273 @@ const SPECIFIC_COMPARISONS: Record<string, string[]> = {
   ],
 };
 
+function chartProp(
+  name: string,
+  type: string,
+  description: string,
+  options: { required?: boolean; defaultValue?: string } = {},
+): PropDefinition {
+  return {
+    name,
+    type,
+    required: options.required ?? false,
+    description,
+    ...(options.defaultValue === undefined
+      ? {}
+      : { defaultValue: options.defaultValue }),
+  };
+}
+
+const CHART_BASE_PROPS: PropDefinition[] = [
+  chartProp('width', 'number | string', 'Chart container width; falls back to the family default.'),
+  chartProp('height', 'number', 'Chart height; falls back to the family default.'),
+  chartProp('className', 'string', 'Additional class name applied to the chart wrapper.'),
+  chartProp('style', 'CSSProperties', 'Inline styles applied to the chart wrapper.'),
+  chartProp('loading', 'boolean', 'Displays the governed loading state.', { defaultValue: 'false' }),
+  chartProp('title', 'string', 'Accessible chart title displayed above the plot.'),
+  chartProp('subtitle', 'string', 'Supporting text displayed below the title.'),
+  chartProp('animate', 'boolean', 'Overrides the active tenant animation personality.'),
+  chartProp('responsive', 'boolean', 'Measures and follows the container width.', { defaultValue: 'true' }),
+  chartProp('tooltip', 'boolean', 'Enables the family tooltip behavior.'),
+];
+
+const SPARKLINE_SURFACE_PROPS = CHART_BASE_PROPS.filter(({ name }) =>
+  ['width', 'height', 'className', 'style'].includes(name),
+);
+
+type ChartCapability =
+  | 'legend'
+  | 'colors'
+  | 'colorScheme'
+  | 'margin'
+  | 'compactCore'
+  | 'compactCartesian'
+  | 'compactSeriesLabels';
+
+const CHART_CAPABILITIES: Record<string, ChartCapability[]> = {
+  'bar-chart': ['legend', 'colors', 'colorScheme', 'margin', 'compactCartesian'],
+  'line-chart': ['legend', 'colors', 'colorScheme', 'margin', 'compactCartesian'],
+  'area-chart': ['legend', 'colors', 'colorScheme', 'margin', 'compactCartesian'],
+  'pie-chart': ['legend', 'colors', 'colorScheme', 'compactSeriesLabels'],
+  scatter: ['legend', 'colors', 'margin', 'compactCartesian'],
+  'radar-chart': ['legend', 'colors', 'colorScheme'],
+  gauge: ['legend', 'compactCore'],
+  histogram: ['legend', 'margin', 'compactCartesian'],
+  'funnel-chart': ['legend', 'colors', 'margin'],
+  waterfall: ['legend', 'margin', 'compactCartesian'],
+  sankey: ['legend', 'colors', 'margin'],
+  'gantt-chart': ['colors', 'margin'],
+  sparkline: [],
+  'calendar-heatmap': ['colorScheme'],
+  heatmap: ['margin'],
+  treemap: ['legend', 'colors', 'colorScheme'],
+  'network-graph': ['legend', 'colors'],
+  bullet: ['legend', 'compactCore'],
+};
+
+function getCapabilityProps(chart: ChartEntry): PropDefinition[] {
+  const capabilities = CHART_CAPABILITIES[chart.slug] ?? [];
+  const props: PropDefinition[] = [];
+
+  if (capabilities.includes('legend')) {
+    props.push(chartProp('legend', 'boolean', 'Displays the family legend.'));
+  }
+  if (capabilities.includes('colors')) {
+    props.push(chartProp('colors', 'string[]', 'Explicit palette; otherwise inherits the active tenant chart personality.'));
+  }
+  if (capabilities.includes('colorScheme')) {
+    props.push(chartProp('colorScheme', 'ChartColorScheme', 'Named palette overriding the active tenant chart personality.'));
+  }
+  if (capabilities.includes('margin')) {
+    props.push(chartProp('margin', 'ChartMargin', 'Insets around the SVG drawing area.'));
+  }
+
+  const compactCapability = capabilities.find((capability) => capability.startsWith('compact'));
+  if (compactCapability) {
+    const compactType = compactCapability === 'compactCartesian'
+      ? 'ChartCartesianCompactConfig'
+      : compactCapability === 'compactSeriesLabels'
+        ? 'ChartSeriesLabelCompactConfig'
+        : 'ChartCompactCoreConfig';
+    props.push(
+      chartProp('compact', compactType, 'Configures compact rendering but does not activate it.'),
+      chartProp('compactMode', 'boolean', 'Activates compact rendering explicitly.', { defaultValue: 'false' }),
+      chartProp('autoCompact', 'boolean', 'Activates compact rendering below compactBreakpoint.', { defaultValue: 'false' }),
+      chartProp('compactBreakpoint', 'number', 'Container-width threshold for autoCompact.', { defaultValue: '640' }),
+    );
+  }
+
+  return props;
+}
+
 const SPECIFIC_PROPS: Record<string, PropDefinition[]> = {
   'bar-chart': [
-    {
-      name: 'data',
-      type: '{ label: string; value: number }[]',
-      required: true,
-      description: 'Categorical values rendered into each bar.',
-    },
-    {
-      name: 'height',
-      type: 'number',
-      required: true,
-      description: 'Canvas height used for chart layout and axis spacing.',
-    },
-    {
-      name: 'variant',
-      type: '"simple" | "grouped" | "stacked"',
-      required: false,
-      description: 'Layout strategy for single, grouped, or stacked bar series.',
-    },
-    {
-      name: 'title',
-      type: 'string',
-      required: false,
-      description: 'Optional heading displayed above the chart.',
-    },
+    chartProp('data', 'DataPoint[]', 'Single-series categorical values; ignored when series is provided.'),
+    chartProp('series', 'Series[]', 'Grouped or stacked multi-series values; takes precedence over data.'),
+    chartProp('orientation', '"vertical" | "horizontal"', 'Bar direction.', { defaultValue: '"vertical"' }),
+    chartProp('stacked', 'boolean', 'Stacks multi-series bars instead of grouping them.', { defaultValue: 'false' }),
+    chartProp('barRadius', 'number', 'Corner radius for each bar.', { defaultValue: '4' }),
+    chartProp('barGap', 'number', 'Relative gap between bars.', { defaultValue: '0.2' }),
+    chartProp('showValues', 'boolean', 'Displays values on the bars.', { defaultValue: 'false' }),
+    chartProp('xAxisLabel', 'string', 'Horizontal-axis label.'),
+    chartProp('yAxisLabel', 'string', 'Vertical-axis label.'),
   ],
   'line-chart': [
-    {
-      name: 'series',
-      type: 'ChartSeries[]',
-      required: true,
-      description: 'One or more ordered data series rendered across the x-axis.',
-    },
-    {
-      name: 'height',
-      type: 'number',
-      required: true,
-      description: 'Canvas height for the line chart.',
-    },
-    {
-      name: 'curved',
-      type: 'boolean',
-      defaultValue: 'false',
-      required: false,
-      description: 'Uses smoothed line interpolation for softer trend motion.',
-    },
-    {
-      name: 'showDots',
-      type: 'boolean',
-      defaultValue: 'false',
-      required: false,
-      description: 'Renders visible points for each series value.',
-    },
+    chartProp('series', 'Series[]', 'Ordered series rendered across the x-axis.', { required: true }),
+    chartProp('curved', 'boolean', 'Overrides the active chart personality line mode.'),
+    chartProp('showDots', 'boolean', 'Overrides the active chart personality point treatment.'),
+    chartProp('showArea', 'boolean', 'Fills the area below each line.', { defaultValue: 'false' }),
+    chartProp('xAxisLabel', 'string', 'Horizontal-axis label.'),
+    chartProp('yAxisLabel', 'string', 'Vertical-axis label.'),
+    chartProp('xType', '"category" | "time" | "linear"', 'Scale used by the x-axis.', { defaultValue: '"category"' }),
+  ],
+  'area-chart': [
+    chartProp('series', 'Series[]', 'Ordered series rendered as filled areas.', { required: true }),
+    chartProp('curved', 'boolean', 'Overrides the active chart personality line mode.'),
+    chartProp('stacked', 'boolean', 'Stacks areas cumulatively.', { defaultValue: 'false' }),
+    chartProp('opacity', 'number', 'Area-fill opacity.', { defaultValue: '0.3' }),
+    chartProp('xAxisLabel', 'string', 'Horizontal-axis label.'),
+    chartProp('yAxisLabel', 'string', 'Vertical-axis label.'),
   ],
   'pie-chart': [
-    {
-      name: 'data',
-      type: '{ label: string; value: number }[]',
-      required: true,
-      description: 'Slice labels and values for the part-to-whole chart.',
-    },
-    {
-      name: 'donut',
-      type: 'boolean',
-      defaultValue: 'false',
-      required: false,
-      description: 'Switches the chart from pie to donut presentation.',
-    },
-    {
-      name: 'showPercentage',
-      type: 'boolean',
-      defaultValue: 'false',
-      required: false,
-      description: 'Displays percentages alongside labels or inside slices.',
-    },
-    {
-      name: 'height',
-      type: 'number',
-      required: true,
-      description: 'Canvas height for the chart and legend layout.',
-    },
+    chartProp('data', 'DataPoint[]', 'Slice labels and values.', { required: true }),
+    chartProp('donut', 'boolean', 'Switches from pie to donut presentation.', { defaultValue: 'false' }),
+    chartProp('innerRadius', 'number', 'Inner-radius ratio used in donut mode.', { defaultValue: '0.6' }),
+    chartProp('showLabels', 'boolean', 'Displays slice labels.', { defaultValue: 'true' }),
+    chartProp('showPercentage', 'boolean', 'Displays slice percentages.', { defaultValue: 'false' }),
+  ],
+  scatter: [
+    chartProp('data', 'ScatterDataPoint[]', 'Numeric x/y points, with optional size metadata.', { required: true }),
+    chartProp('xLabel', 'string', 'Horizontal-axis label.'),
+    chartProp('yLabel', 'string', 'Vertical-axis label.'),
+    chartProp('pointRadius', 'number', 'Default point radius.', { defaultValue: '5' }),
+    chartProp('bubble', 'boolean', 'Maps data.size to point radius.', { defaultValue: 'false' }),
+    chartProp('sizeRange', '[number, number]', 'Minimum and maximum bubble radius.', { defaultValue: '[4, 30]' }),
+    chartProp('grid', 'boolean', 'Displays grid lines.', { defaultValue: 'true' }),
+    chartProp('opacity', 'number', 'Point fill opacity.', { defaultValue: '0.7' }),
+    chartProp('trendLine', 'boolean', 'Displays a least-squares trend line.', { defaultValue: 'false' }),
+  ],
+  'radar-chart': [
+    chartProp('data', 'RadarDataPoint[]', 'Primary axis/value polygon.', { required: true }),
+    chartProp('series', 'RadarSeries[]', 'Optional named polygons for multi-series comparison.'),
+    chartProp('maxValue', 'number', 'Explicit radial-domain maximum; inferred when omitted.'),
+    chartProp('levels', 'number', 'Number of concentric grid levels.', { defaultValue: '5' }),
+    chartProp('showLabels', 'boolean', 'Displays axis labels.', { defaultValue: 'true' }),
   ],
   gauge: [
-    {
-      name: 'value',
-      type: 'number',
-      required: true,
-      description: 'Current metric value represented by the gauge.',
-    },
-    {
-      name: 'segments',
-      type: 'GaugeSegment[]',
-      required: false,
-      description: 'Threshold bands and labels that define the gauge ranges.',
-    },
-    {
-      name: 'label',
-      type: 'string',
-      required: false,
-      description: 'Primary metric label shown with the gauge.',
-    },
-    {
-      name: 'height',
-      type: 'number',
-      required: true,
-      description: 'Canvas height for the gauge chart.',
-    },
+    chartProp('value', 'number', 'Current metric value.', { required: true }),
+    chartProp('min', 'number', 'Lower domain bound.', { defaultValue: '0' }),
+    chartProp('max', 'number', 'Upper domain bound.', { defaultValue: '100' }),
+    chartProp('segments', 'GaugeSegment[]', 'Threshold bands and their colors.'),
+    chartProp('showValue', 'boolean', 'Displays the current value.', { defaultValue: 'true' }),
+    chartProp('formatValue', '(value: number) => string', 'Formats the displayed value.'),
+    chartProp('label', 'string', 'Metric label displayed below the value.'),
+    chartProp('startAngle', 'number', 'Arc start angle in degrees.', { defaultValue: '-120' }),
+    chartProp('endAngle', 'number', 'Arc end angle in degrees.', { defaultValue: '120' }),
+    chartProp('innerRadius', 'number', 'Inner-radius ratio.', { defaultValue: '0.7' }),
+    chartProp('showNeedle', 'boolean', 'Displays the needle indicator.', { defaultValue: 'true' }),
+    chartProp('needleColor', 'string', 'Needle color.'),
   ],
-  'gantt-chart': [
-    {
-      name: 'tasks',
-      type: 'GanttTask[]',
-      required: true,
-      description: 'Task records with dates, labels, and optional dependencies.',
-    },
-    {
-      name: 'showToday',
-      type: 'boolean',
-      defaultValue: 'false',
-      required: false,
-      description: 'Renders a marker for the current day in the schedule.',
-    },
-    {
-      name: 'showProgress',
-      type: 'boolean',
-      defaultValue: 'false',
-      required: false,
-      description: 'Displays completion state within each scheduled bar.',
-    },
-    {
-      name: 'onSelectTask',
-      type: '(task) => void',
-      required: false,
-      description: 'Runs when a task bar is selected.',
-    },
+  histogram: [
+    chartProp('values', 'number[]', 'Raw values to distribute into bins.', { required: true }),
+    chartProp('bins', 'number', 'Bin count; Sturges formula is used when omitted.'),
+    chartProp('thresholds', 'number[]', 'Explicit bin thresholds.'),
+    chartProp('xLabel', 'string', 'Horizontal-axis label.'),
+    chartProp('yLabel', 'string', 'Vertical-axis label.', { defaultValue: '"Frequency"' }),
+    chartProp('color', 'string', 'Bar color.'),
+    chartProp('showLabels', 'boolean', 'Displays frequency labels.', { defaultValue: 'false' }),
+    chartProp('cumulativeLine', 'boolean', 'Displays a cumulative-frequency line.', { defaultValue: 'false' }),
+    chartProp('cumulativeColor', 'string', 'Cumulative-line color.'),
+    chartProp('formatValue', '(value: number) => string', 'Formats x-axis values.'),
+    chartProp('density', 'boolean', 'Normalizes frequencies to 0–1.', { defaultValue: 'false' }),
+  ],
+  'funnel-chart': [
+    chartProp('data', 'DataPoint[]', 'Ordered funnel stages.', { required: true }),
+    chartProp('showPercentage', 'boolean', 'Displays each stage share.', { defaultValue: 'true' }),
+    chartProp('showConversion', 'boolean', 'Displays stage-to-stage conversion.', { defaultValue: 'false' }),
+    chartProp('orientation', '"vertical" | "horizontal"', 'Funnel direction.', { defaultValue: '"vertical"' }),
+  ],
+  waterfall: [
+    chartProp('data', 'WaterfallDataPoint[]', 'Ordered increases, decreases, and totals.', { required: true }),
+    chartProp('increaseColor', 'string', 'Color for increase bars.'),
+    chartProp('decreaseColor', 'string', 'Color for decrease bars.'),
+    chartProp('totalColor', 'string', 'Color for total bars.'),
+    chartProp('showConnectors', 'boolean', 'Displays connectors between bars.', { defaultValue: 'true' }),
+    chartProp('showValues', 'boolean', 'Displays values on bars.', { defaultValue: 'true' }),
+    chartProp('formatValue', '(value: number) => string', 'Formats displayed values.'),
+    chartProp('orientation', '"vertical" | "horizontal"', 'Chart direction.', { defaultValue: '"vertical"' }),
   ],
   sankey: [
-    {
-      name: 'nodes',
-      type: 'SankeyNode[]',
-      required: true,
-      description: 'Node definitions used as the source and target entities.',
-    },
-    {
-      name: 'links',
-      type: 'SankeyLink[]',
-      required: true,
-      description: 'Weighted connections rendered between nodes.',
-    },
-    {
-      name: 'height',
-      type: 'number',
-      required: true,
-      description: 'Canvas height for the chart.',
-    },
-    {
-      name: 'nodePadding',
-      type: 'number',
-      required: false,
-      description: 'Vertical space between nodes in the same column.',
-    },
+    chartProp('nodes', 'SankeyNode[]', 'Source and target entities.', { required: true }),
+    chartProp('links', 'SankeyLink[]', 'Weighted directed connections.', { required: true }),
+    chartProp('nodeWidth', 'number', 'Node width in pixels.', { defaultValue: '20' }),
+    chartProp('nodePadding', 'number', 'Vertical gap between nodes.', { defaultValue: '16' }),
+    chartProp('linkOpacity', 'number', 'Base link opacity.', { defaultValue: '0.4' }),
+    chartProp('linkHoverOpacity', 'number', 'Hovered-link opacity.', { defaultValue: '0.7' }),
+    chartProp('align', '"left" | "right" | "center" | "justify"', 'Node-column alignment.', { defaultValue: '"justify"' }),
+    chartProp('showLinkValues', 'boolean', 'Displays values on links.', { defaultValue: 'false' }),
+    chartProp('showNodeLabels', 'boolean', 'Displays node labels.', { defaultValue: 'true' }),
+    chartProp('formatValue', '(value: number) => string', 'Formats link values.'),
+    chartProp('onNodeClick', '(node: SankeyNode) => void', 'Runs when a node is clicked.'),
+    chartProp('onLinkClick', '(link: SankeyLink) => void', 'Runs when a link is clicked.'),
+  ],
+  'gantt-chart': [
+    chartProp('tasks', 'GanttTask[]', 'Scheduled tasks with start/end dates and optional progress.', { required: true }),
+    chartProp('showProgress', 'boolean', 'Displays completion within task bars.', { defaultValue: 'true' }),
+    chartProp('showToday', 'boolean', 'Displays a marker for the current day.', { defaultValue: 'true' }),
+  ],
+  sparkline: [
+    chartProp('data', 'number[]', 'Ordered values rendered as a micro-trend.', { required: true }),
+    chartProp('color', 'string', 'Line color.'),
+    chartProp('fill', 'boolean', 'Fills the area below the line.', { defaultValue: 'false' }),
+    chartProp('fillOpacity', 'number', 'Area-fill opacity.', { defaultValue: '0.15' }),
+    chartProp('strokeWidth', 'number', 'Line width.', { defaultValue: '1.5' }),
+    chartProp('curve', '"sharp" | "smooth" | "step"', 'Interpolation strategy.', { defaultValue: '"smooth"' }),
+    chartProp('showEndDot', 'boolean', 'Displays the last point.', { defaultValue: 'true' }),
+    chartProp('showMinMax', 'boolean', 'Displays minimum and maximum points.', { defaultValue: 'false' }),
+    chartProp('animate', 'boolean', 'Animates the line on mount.', { defaultValue: 'true' }),
+    chartProp('colorScheme', 'ChartColorScheme', 'Named palette from the active tenant chart personality.'),
+  ],
+  'calendar-heatmap': [
+    chartProp('data', 'CalendarHeatMapDataPoint[]', 'Dated activity values.', { required: true }),
+    chartProp('startDate', 'Date | string', 'Visible range start; defaults to one year ago.'),
+    chartProp('endDate', 'Date | string', 'Visible range end; defaults to today.'),
+    chartProp('colorRange', '[string, string]', 'Low/high intensity colors.'),
+    chartProp('colorSteps', 'number', 'Number of discrete color steps.', { defaultValue: '5' }),
+    chartProp('cellSize', 'number', 'Day-cell size in pixels.', { defaultValue: '14' }),
+    chartProp('cellGap', 'number', 'Gap between day cells.', { defaultValue: '2' }),
+    chartProp('showMonthLabels', 'boolean', 'Displays month labels.', { defaultValue: 'true' }),
+    chartProp('showDayLabels', 'boolean', 'Displays weekday labels.', { defaultValue: 'true' }),
+    chartProp('formatTooltip', '(date: Date, value: number) => string', 'Formats cell tooltips.'),
+    chartProp('onCellClick', '(date: Date, value: number) => void', 'Runs when a day cell is clicked.'),
+  ],
+  heatmap: [
+    chartProp('data', '{ x: string; y: string; value: number }[]', 'Matrix coordinates and intensities.', { required: true }),
+    chartProp('xLabels', 'string[]', 'Explicit horizontal-axis order.'),
+    chartProp('yLabels', 'string[]', 'Explicit vertical-axis order.'),
+    chartProp('colorRange', '[string, string]', 'Low/high intensity colors.'),
+    chartProp('cellRadius', 'number', 'Cell corner radius.', { defaultValue: '2' }),
+  ],
+  treemap: [
+    chartProp('data', 'TreeMapNode[]', 'Nested nodes with roll-up values.', { required: true }),
+    chartProp('showLabels', 'boolean', 'Displays labels when cells have room.', { defaultValue: 'true' }),
+    chartProp('padding', 'number', 'Gap between cells.', { defaultValue: '2' }),
+  ],
+  'network-graph': [
+    chartProp('nodes', 'NetworkNode[]', 'Graph nodes.', { required: true }),
+    chartProp('links', 'NetworkLink[]', 'Edges between graph nodes.', { required: true }),
+    chartProp('directed', 'boolean', 'Adds directional markers to edges.', { defaultValue: 'false' }),
+  ],
+  bullet: [
+    chartProp('data', 'BulletDataPoint | BulletDataPoint[]', 'Metrics whose target and ranges live inside each data item.', { required: true }),
+    chartProp('orientation', '"horizontal" | "vertical"', 'Bullet direction.', { defaultValue: '"horizontal"' }),
+    chartProp('barHeight', 'number', 'Bar height in horizontal mode.', { defaultValue: '28' }),
+    chartProp('gap', 'number', 'Gap between bullet items.', { defaultValue: '16' }),
+    chartProp('showLabels', 'boolean', 'Displays values and labels.', { defaultValue: 'true' }),
+    chartProp('formatValue', '(value: number) => string', 'Formats displayed values.'),
+    chartProp('rangeColors', '[string, string, string]', 'Colors for poor, satisfactory, and good ranges.'),
+    chartProp('valueColor', 'string', 'Actual-value bar color.'),
+    chartProp('targetColor', 'string', 'Target-marker color.'),
   ],
 };
 
@@ -320,245 +425,15 @@ function getAlternatives(chart: ChartEntry) {
 }
 
 function getPlaceholderProps(chart: ChartEntry): PropDefinition[] {
-  const sharedProps: PropDefinition[] = [
-    {
-      name: 'className',
-      type: 'string',
-      required: false,
-      description:
-        'Additional class names for layout or product-specific extension points.',
-    },
-    {
-      name: 'style',
-      type: 'CSSProperties',
-      required: false,
-      description:
-        'Inline overrides for one-off sizing or diagnostic rendering changes.',
-    },
+  const surfaceProps = chart.slug === 'sparkline'
+    ? SPARKLINE_SURFACE_PROPS
+    : CHART_BASE_PROPS;
+
+  return [
+    ...(SPECIFIC_PROPS[chart.slug] ?? []),
+    ...getCapabilityProps(chart),
+    ...surfaceProps,
   ];
-
-  const specific = SPECIFIC_PROPS[chart.slug];
-  if (specific) {
-    return [...specific, ...sharedProps];
-  }
-
-  const familyProps: Record<ChartFamily, PropDefinition[]> = {
-    basic: [
-      {
-        name: 'data',
-        type: 'ChartDatum[]',
-        required: true,
-        description: 'Primary data set rendered by the chart.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height used for chart sizing.',
-      },
-      {
-        name: 'xLabel',
-        type: 'string',
-        required: false,
-        description: 'Optional label for the horizontal axis.',
-      },
-      {
-        name: 'yLabel',
-        type: 'string',
-        required: false,
-        description: 'Optional label for the vertical axis.',
-      },
-    ],
-    statistical: [
-      {
-        name: 'data',
-        type: 'number[] | StatisticalDatum[]',
-        required: true,
-        description: 'Distribution or multi-axis values used by the chart.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height for the statistical chart.',
-      },
-      {
-        name: 'thresholds',
-        type: 'number[]',
-        required: false,
-        description: 'Target values or threshold bands used to interpret the chart.',
-      },
-      {
-        name: 'animate',
-        type: 'boolean',
-        defaultValue: 'false',
-        required: false,
-        description: 'Enables animated transitions when data changes.',
-      },
-    ],
-    flow: [
-      {
-        name: 'data',
-        type: 'FlowDatum[]',
-        required: true,
-        description: 'Stage values or link weights for the flow visualization.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height for the chart.',
-      },
-      {
-        name: 'showLabels',
-        type: 'boolean',
-        defaultValue: 'true',
-        required: false,
-        description: 'Controls visibility of labels alongside the flow.',
-      },
-      {
-        name: 'animate',
-        type: 'boolean',
-        defaultValue: 'false',
-        required: false,
-        description: 'Animates updates between flow states.',
-      },
-    ],
-    temporal: [
-      {
-        name: 'data',
-        type: 'TemporalDatum[]',
-        required: true,
-        description: 'Time-based values or tasks rendered by the chart.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height for the temporal chart.',
-      },
-      {
-        name: 'startDate',
-        type: 'string | Date',
-        required: false,
-        description: 'Optional lower bound for the visible time range.',
-      },
-      {
-        name: 'endDate',
-        type: 'string | Date',
-        required: false,
-        description: 'Optional upper bound for the visible time range.',
-      },
-    ],
-    spatial: [
-      {
-        name: 'data',
-        type: 'SpatialDatum[]',
-        required: true,
-        description: 'Matrix or coordinate values rendered into the chart.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height for the heatmap or spatial view.',
-      },
-      {
-        name: 'colorScale',
-        type: 'string[]',
-        required: false,
-        description: 'Optional token-aware color scale for the intensity ramp.',
-      },
-      {
-        name: 'cellRadius',
-        type: 'number',
-        required: false,
-        description: 'Rounding applied to each rendered heatmap cell.',
-      },
-    ],
-    hierarchical: [
-      {
-        name: 'data',
-        type: 'HierarchyDatum[]',
-        required: true,
-        description: 'Nested input structure rendered into the hierarchy chart.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height for the chart.',
-      },
-      {
-        name: 'valueKey',
-        type: 'string',
-        required: false,
-        description: 'Field used to calculate area or weight within the hierarchy.',
-      },
-      {
-        name: 'showLabels',
-        type: 'boolean',
-        defaultValue: 'true',
-        required: false,
-        description: 'Displays labels within chart segments when space allows.',
-      },
-    ],
-    relational: [
-      {
-        name: 'nodes',
-        type: 'GraphNode[]',
-        required: true,
-        description: 'Node entities rendered by the relationship graph.',
-      },
-      {
-        name: 'links',
-        type: 'GraphLink[]',
-        required: true,
-        description: 'Edges connecting nodes in the graph.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height for the graph.',
-      },
-      {
-        name: 'directed',
-        type: 'boolean',
-        defaultValue: 'false',
-        required: false,
-        description: 'Adds directional indicators to graph edges.',
-      },
-    ],
-    kpi: [
-      {
-        name: 'data',
-        type: 'KpiDatum[]',
-        required: true,
-        description: 'Metric values and targets rendered by the chart.',
-      },
-      {
-        name: 'height',
-        type: 'number',
-        required: true,
-        description: 'Canvas height for the compact KPI chart.',
-      },
-      {
-        name: 'target',
-        type: 'number',
-        required: false,
-        description: 'Single target value highlighted by the chart.',
-      },
-      {
-        name: 'ranges',
-        type: 'number[]',
-        required: false,
-        description: 'Threshold bands used to interpret performance.',
-      },
-    ],
-  };
-
-  return [...familyProps[chart.family], ...sharedProps];
 }
 
 function MetaCard({

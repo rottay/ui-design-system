@@ -38,7 +38,16 @@ import {
   stackOrderNone,
 } from 'd3';
 
-import type { ChartBaseProps, Series } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCartesianCompactConfig,
+  ChartColorSchemeProps,
+  ChartColorsProps,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartMarginProps,
+  Series,
+} from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
@@ -77,7 +86,13 @@ function zeroAnchoredDomain(values: number[]): [number, number] {
 }
 
 /** Props for the {@link AreaChart} component. */
-export interface AreaChartProps extends ChartBaseProps {
+export interface AreaChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartColorSchemeProps,
+    ChartMarginProps,
+    ChartCompactProps<ChartCartesianCompactConfig> {
   series: Series[];
   curved?: boolean;
   stacked?: boolean;
@@ -114,6 +129,7 @@ export const AreaChart = memo(function AreaChart({
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: AreaChartProps) {
@@ -122,7 +138,7 @@ export const AreaChart = memo(function AreaChart({
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, curved, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
@@ -490,7 +506,7 @@ export const AreaChart = memo(function AreaChart({
               Stacked values exceed the finite numeric range.
             </div>
           ) : null}
-          <ChartTooltip {...tooltipProps} />
+          <ChartTooltip {...tooltipProps} variant={chartPersonality.tooltipStyle} />
         </>
       )}
     />

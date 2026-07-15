@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { exportChart } from '../utils/export';
+import { exportChart } from '../../../../../index';
 
 function chartSvg(): SVGSVGElement {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

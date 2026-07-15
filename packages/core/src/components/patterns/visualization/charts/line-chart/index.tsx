@@ -36,7 +36,16 @@ import {
   type ScaleTime,
 } from 'd3';
 
-import type { ChartBaseProps, Series } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCartesianCompactConfig,
+  ChartColorSchemeProps,
+  ChartColorsProps,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartMarginProps,
+  Series,
+} from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
@@ -94,7 +103,13 @@ function zeroAnchoredDomain(values: number[]): [number, number] {
 }
 
 /** Props for the {@link LineChart} component. */
-export interface LineChartProps extends ChartBaseProps {
+export interface LineChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartColorSchemeProps,
+    ChartMarginProps,
+    ChartCompactProps<ChartCartesianCompactConfig> {
   series: Series[];
   curved?: boolean;
   showDots?: boolean;
@@ -133,6 +148,7 @@ export const LineChart = memo(function LineChart({
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: LineChartProps) {
@@ -141,7 +157,7 @@ export const LineChart = memo(function LineChart({
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
@@ -479,7 +495,7 @@ export const LineChart = memo(function LineChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
-      overlay={<ChartTooltip {...tooltipProps} />}
+      overlay={<ChartTooltip {...tooltipProps} variant={chartPersonality.tooltipStyle} />}
     />
   );
 });

@@ -33,7 +33,7 @@ import {
   select,
 } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type { ChartBaseProps, ChartMarginProps } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartTheme } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 import { resolveCssColor } from '../utils/resolve-css-color';
@@ -64,7 +64,7 @@ function sequentialDomain(values: number[]): [number, number] {
 }
 
 /** Props for the {@link HeatMap} component. */
-export interface HeatMapProps extends ChartBaseProps {
+export interface HeatMapProps extends ChartBaseProps, ChartMarginProps {
   data: { x: string; y: string; value: number }[];
   xLabels?: string[];
   yLabels?: string[];
@@ -91,7 +91,6 @@ export const HeatMap = memo(function HeatMap({
   loading = false,
   title,
   subtitle,
-  legend = false,
   animate = true,
   responsive = true,
   tooltip = true,

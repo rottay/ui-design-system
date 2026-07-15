@@ -22,8 +22,8 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, max, min, scaleBand, scaleTime, select, timeFormat } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
-import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
+import type { ChartBaseProps, ChartColorsProps, ChartMarginProps } from '../Charts.types';
+import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -39,7 +39,7 @@ export interface GanttTask {
 }
 
 /** Props for the {@link GanttChart} component. */
-export interface GanttChartProps extends ChartBaseProps {
+export interface GanttChartProps extends ChartBaseProps, ChartColorsProps, ChartMarginProps {
   tasks: GanttTask[];
   showProgress?: boolean;
   showToday?: boolean;
@@ -64,16 +64,16 @@ export const GanttChart = memo(function GanttChart({
   loading = false,
   title,
   subtitle,
-  legend = false,
   animate = true,
   responsive = true,
-  colors = DEFAULT_COLORS,
+  colors,
   tooltip = true,
   margin = DEFAULT_GANTT_MARGIN,
 }: GanttChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
+  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 800;
   const parsedTasks = useMemo(() => {
     const seenIds = new Set<string>();
@@ -208,7 +208,7 @@ export const GanttChart = memo(function GanttChart({
       .attr('y', (d) => y(d.id) ?? 0)
       .attr('height', y.bandwidth())
       .attr('rx', 4)
-      .attr('fill', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)')
+      .attr('fill', (d, i) => d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)')
       .attr('opacity', 0.25);
 
     if (chartPersonality.animate) {
@@ -232,7 +232,7 @@ export const GanttChart = memo(function GanttChart({
         .attr('y', (d) => y(d.id) ?? 0)
         .attr('height', y.bandwidth())
         .attr('rx', 4)
-        .attr('fill', (d, i) => d.color ?? colors[i % colors.length] ?? 'var(--ds-color-primary)');
+        .attr('fill', (d, i) => d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)');
 
       if (chartPersonality.animate) {
         progressBars
@@ -291,7 +291,7 @@ export const GanttChart = memo(function GanttChart({
     showToday,
     chartPersonality.animate,
     chartPersonality.animationDuration,
-    colors,
+    palette,
     margin,
     chartPersonality.tooltip,
   ]);

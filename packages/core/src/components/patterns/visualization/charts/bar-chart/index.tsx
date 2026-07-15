@@ -58,7 +58,17 @@ import {
 } from 'd3';
 import { arrayValueAt } from '@/_internal/utils/collections';
 
-import type { ChartBaseProps, DataPoint, Series } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartCartesianCompactConfig,
+  ChartColorSchemeProps,
+  ChartColorsProps,
+  ChartCompactProps,
+  ChartLegendProps,
+  ChartMarginProps,
+  DataPoint,
+  Series,
+} from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
@@ -120,7 +130,13 @@ function stackGeometry(
 import { createChartCrosshair, pointerToContainerPosition } from '../tooltip/crosshair';
 
 /** Props for the {@link BarChart} component. */
-export interface BarChartProps extends ChartBaseProps {
+export interface BarChartProps
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartColorSchemeProps,
+    ChartMarginProps,
+    ChartCompactProps<ChartCartesianCompactConfig> {
   /** Single-series data. Ignored when `series` is provided. */
   data?: DataPoint[];
   orientation?: 'vertical' | 'horizontal';
@@ -167,6 +183,7 @@ export const BarChart = memo(function BarChart({
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
+  compactMode,
   autoCompact,
   compactBreakpoint,
 }: BarChartProps) {
@@ -174,7 +191,7 @@ export const BarChart = memo(function BarChart({
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
@@ -970,7 +987,7 @@ export const BarChart = memo(function BarChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
-      overlay={<ChartTooltip {...tooltipProps} />}
+      overlay={<ChartTooltip {...tooltipProps} variant={chartPersonality.tooltipStyle} />}
     />
   );
 });

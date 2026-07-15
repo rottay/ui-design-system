@@ -46,7 +46,7 @@ describe('useChartCompact', () => {
     expect(result.current.maxTicks).toBe(Infinity);
   });
 
-  it('activates compact mode when explicit compact config is provided', () => {
+  it('keeps compact mode inactive when configuration is provided without activation', () => {
     mockMatchMedia(1440, false);
 
     const { result } = renderHook(
@@ -54,9 +54,22 @@ describe('useChartCompact', () => {
       { wrapper: Wrapper },
     );
 
+    expect(result.current.isCompact).toBe(false);
+    expect(result.current.hideLegend).toBe(false);
+    expect(result.current.maxTicks).toBe(Infinity);
+    expect(result.current.compactTooltip).toBe(false);
+  });
+
+  it('activates compact mode explicitly via compactMode', () => {
+    mockMatchMedia(1440, false);
+
+    const { result } = renderHook(
+      () => useChartCompact({ compactMode: true }),
+      { wrapper: Wrapper },
+    );
+
     expect(result.current.isCompact).toBe(true);
-    expect(result.current.hideLegend).toBe(true);
-    // Other fields should use defaults
+    expect(result.current.hideLegend).toBe(DEFAULT_COMPACT_CONFIG.hideLegend);
     expect(result.current.maxTicks).toBe(DEFAULT_COMPACT_CONFIG.maxTicks);
     expect(result.current.compactTooltip).toBe(DEFAULT_COMPACT_CONFIG.compactTooltip);
   });
@@ -111,13 +124,23 @@ describe('useChartCompact', () => {
     expect(result.current.isCompact).toBe(true);
   });
 
-  it('merges explicit compact config over defaults', () => {
+  it('merges compact configuration only while compact mode is active', () => {
     mockMatchMedia(1440, false);
 
-    const { result } = renderHook(
-      () => useChartCompact({ compact: { maxTicks: 2, hideLegend: false } }),
-      { wrapper: Wrapper },
+    const { result, rerender } = renderHook(
+      ({ compactMode }: { compactMode: boolean }) => useChartCompact({
+        compact: { maxTicks: 2, hideLegend: false },
+        compactMode,
+      }),
+      { initialProps: { compactMode: false }, wrapper: Wrapper },
     );
+
+    expect(result.current.isCompact).toBe(false);
+    expect(result.current.maxTicks).toBe(Infinity);
+    expect(result.current.hideLegend).toBe(false);
+    expect(result.current.compactTooltip).toBe(false);
+
+    rerender({ compactMode: true });
 
     expect(result.current.isCompact).toBe(true);
     expect(result.current.maxTicks).toBe(2);

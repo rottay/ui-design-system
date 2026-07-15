@@ -24,7 +24,12 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { hierarchy, select, treemap } from 'd3';
 
-import type { ChartBaseProps } from '../Charts.types';
+import type {
+  ChartBaseProps,
+  ChartColorSchemeProps,
+  ChartColorsProps,
+  ChartLegendProps,
+} from '../Charts.types';
 import { useChartDimensions, useChartPersonality } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
@@ -36,7 +41,8 @@ export interface TreeMapNode {
 }
 
 /** Props for the {@link TreeMap} component. */
-export interface TreeMapProps extends ChartBaseProps {
+export interface TreeMapProps
+  extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartColorSchemeProps {
   data: TreeMapNode[];
   showLabels?: boolean;
   padding?: number;
