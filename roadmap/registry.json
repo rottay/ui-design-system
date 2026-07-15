@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-07-14",
+ "updated": "2026-07-15",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -1852,7 +1852,18 @@
    },
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. This WO supports the DS-IMP-060 Phase-0 minimum but cannot complete that Phase-6 source ID; status lives only in this registry.",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-07-14 23:55",
+     "by": "codex-orchestrator",
+     "note": "Implementation candidate sealed against docs-engineering@8bc59f42d95ed4b29624590119a3f2338f3314db: exact proof, 2,922-counter zero-lock governance, claim/vertical/data-part/stale-comment gates and deterministic artifact are green locally; independent adversarial review is in progress, so the work order remains open."
+    },
+    {
+     "at": "2026-07-15 00:07",
+     "by": "codex-orchestrator",
+     "note": "Independent adversarial NO-GO: eight paint/CSS fixtures and seven indirect claim fixtures remained falsely green; registry extraction, DOM-linked data-part evidence, negative comment handling, corpus discovery, allowlist semantics and toolchain manifest need hardening. The artifact also hashed mutable registry state and could not converge after progress/done. Zero-lock totality and 100,000-counter stress passed. Corrections and a fresh independent review are required."
+    }
+   ],
    "claimedBy": "codex-gat07",
    "claimedAt": "2026-07-14",
    "doneAt": null,
@@ -1913,14 +1924,14 @@
      "note": "Full gate rerun after hardening: roadmap:check passes 69/69 in normal and TZ=UTC environments; node syntax checks, jq parse and git diff --check are green. Awaiting an independent adversarial reviewer before completion."
     },
     {
-      "at": "2026-07-14 23:13",
-      "by": "codex-gat08-v2",
-      "note": "Implemented schema v2 as an exact 32-capability/65-edge manifest, including the explicit 17-edge DB-driven tenant set, split chat/chart authorities, PDP versus presentation visibility, two-consumer NodeCanvas plus marketing non-consumer, recursive copied-state denylist, total fingerprinting and fail-closed full mutation coverage. Expanded roadmap suite to 73/73 with 32 capability and 65 edge deletion drills, mapping swaps, malformed shapes and reorder stability; awaiting independent adversarial rereview before completion."
+     "at": "2026-07-14 23:13",
+     "by": "codex-gat08-v2",
+     "note": "Implemented schema v2 as an exact 32-capability/65-edge manifest, including the explicit 17-edge DB-driven tenant set, split chat/chart authorities, PDP versus presentation visibility, two-consumer NodeCanvas plus marketing non-consumer, recursive copied-state denylist, total fingerprinting and fail-closed full mutation coverage. Expanded roadmap suite to 73/73 with 32 capability and 65 edge deletion drills, mapping swaps, malformed shapes and reorder stability; awaiting independent adversarial rereview before completion."
     },
     {
-      "at": "2026-07-14 23:39",
-      "by": "codex-orchestrator",
-      "note": "Independent final GO after strict JSON-shape hardening: 85 hostile mutations rejected without throws, 6 JSON-equivalent structures accepted, getters never executed, proxy/inheritance/accessor/sparse-array laundering closed, depth-20000 stress remained total, and the valid fingerprint stayed a0c8e535906ffdee05f120b16b7685b1d30226e46d8eef5be9bd179ecc240291. roadmap:check passed 75/75 in local and UTC environments."
+     "at": "2026-07-14 23:39",
+     "by": "codex-orchestrator",
+     "note": "Independent final GO after strict JSON-shape hardening: 85 hostile mutations rejected without throws, 6 JSON-equivalent structures accepted, getters never executed, proxy/inheritance/accessor/sparse-array laundering closed, depth-20000 stress remained total, and the valid fingerprint stayed a0c8e535906ffdee05f120b16b7685b1d30226e46d8eef5be9bd179ecc240291. roadmap:check passed 75/75 in local and UTC environments."
     }
    ],
    "claimedBy": "codex-orchestrator",
@@ -2357,6 +2368,11 @@
      "at": "2026-07-14 23:09",
      "by": "codex-cra14",
      "note": "Adversarial NO-GO: CSS bundles are stale, Platform remains pinned to 2.17.0 from before the contract, and the barrel bundle loaded particles; correction is in progress."
+    },
+    {
+     "at": "2026-07-15 01:00",
+     "by": "codex-cra14",
+     "note": "Independent technical GO after adversarial correction: Platform 35a2dcf7 rejects spoofed resolver provenance and hostile loaders (53/53), DS runtime/barrel/CSS gates are green. Integration remains blocked: app-platform is pinned to registry DS 2.17.0, producing exactly five particleField TS2353 errors and the old static ParticleField path; keep WO in-progress until consolidated publish and repin."
     }
    ],
    "claimedBy": "codex-cra14",
