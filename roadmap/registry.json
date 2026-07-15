@@ -2107,6 +2107,11 @@
      "at": "2026-07-15 13:13",
      "by": "codex-orchestrator",
      "note": "The DS presentation contract now accepts app-resolved all|resolved access across all 33 surface configs. all short-circuits fields, columns, tabs, actions, row callbacks, allow/deny rules and legacy permission getters; focused unit/integration coverage and core TypeScript are green. Fleet capability registries, app superadmin adapters and visible data-error anatomy remain before closure."
+    },
+    {
+     "at": "2026-07-15 14:09",
+     "by": "codex-orchestrator",
+     "note": "Superadmin presentation adapters are now landed in app-bithire (252a41bb4), app-evnto (af0517880) and app-platform (51a4b0a5). The shared Bithire/Evnto permission resolvers emit and compatibility-bridge access mode all only for superadmin; Platform exposes the same app-owned resolver and wires it into the live Users DetailSurface. Focused suites are green at 2/2, 17/17 and 1/1. Published DS release 2.19.1 carries the 33-surface contract; generated fleet registries, dead factory drain and visible failing-data fixtures remain before closure."
     }
    ],
    "claimedBy": "codex-arc11",
