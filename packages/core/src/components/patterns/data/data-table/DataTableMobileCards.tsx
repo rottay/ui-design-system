@@ -113,8 +113,14 @@ export function DataTableMobileCards<T extends object>({
           rowKey,
           selected: isSelected,
           selectable,
-          toggleSelection: () => onToggleSelection?.(rowKey),
-          open: () => onRowClick?.(row, index),
+          toggleSelection: (event) => {
+            event?.stopPropagation?.();
+            onToggleSelection?.(rowKey);
+          },
+          open: (event) => {
+            event?.stopPropagation?.();
+            onRowClick?.(row, index);
+          },
           actions: resolvedActions,
         };
 

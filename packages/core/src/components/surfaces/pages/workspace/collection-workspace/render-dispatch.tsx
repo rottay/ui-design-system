@@ -579,7 +579,8 @@ export function CollectionRenderDispatch<T extends object>(
       rowKey: itemKey,
       selected,
       selectable: props.selectable ?? false,
-      toggleSelection: () => {
+      toggleSelection: (event) => {
+        event?.stopPropagation?.();
         if (!props.selectable) return;
 
         const nextKeys = selected
@@ -591,7 +592,10 @@ export function CollectionRenderDispatch<T extends object>(
 
         props.onSelectionChange?.(nextKeys, selectedItems);
       },
-      open: () => onRowClick?.(item, index),
+      open: (event) => {
+        event?.stopPropagation?.();
+        onRowClick?.(item, index);
+      },
       actions: actions?.(item, index),
     };
   };

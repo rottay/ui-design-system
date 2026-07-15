@@ -14,6 +14,7 @@
 export type {
   DataTablePatternProps,
   DataTableMobileCardContext,
+  DataTableMobileCardInteractionEvent,
   AggregationFn,
 } from './DataTable.types';
 export { resolveAccessor, resolveRowKey } from './DataTable.types';

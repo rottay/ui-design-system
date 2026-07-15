@@ -653,19 +653,13 @@ describe('CollectionWorkspaceSurface', () => {
                   <span>{`${row.name}: ${context.selected ? 'selected' : 'not selected'}`}</span>
                   <button
                     type="button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      context.toggleSelection();
-                    }}
+                    onClick={context.toggleSelection}
                   >
                     {`Toggle ${row.name}`}
                   </button>
                   <button
                     type="button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      context.open();
-                    }}
+                    onClick={context.open}
                   >
                     {`Open ${row.name}`}
                   </button>
@@ -687,6 +681,7 @@ describe('CollectionWorkspaceSurface', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Open Bob' }));
     expect(onRowClick).toHaveBeenCalledWith(TEST_DATA[1], 1);
+    expect(onRowClick).toHaveBeenCalledTimes(1);
   });
 
   // -------------------------------------------------------------------------

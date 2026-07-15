@@ -42,6 +42,11 @@ export type AggregationFn<T> =
  * preserve the table's selection, open and row-action mechanics instead of
  * rebuilding them from unrelated app state.
  */
+export interface DataTableMobileCardInteractionEvent {
+  /** Stop the card container from replaying the same interaction. */
+  stopPropagation?: () => void;
+}
+
 export interface DataTableMobileCardContext<T> {
   /** The record rendered by this mobile card. */
   item: T;
@@ -54,9 +59,9 @@ export interface DataTableMobileCardContext<T> {
   /** Whether row selection is enabled for this table. */
   selectable: boolean;
   /** Toggle this row in the canonical table selection state. */
-  toggleSelection: () => void;
+  toggleSelection: (event?: DataTableMobileCardInteractionEvent) => void;
   /** Run the table's canonical row-open/click behavior for this record. */
-  open: () => void;
+  open: (event?: DataTableMobileCardInteractionEvent) => void;
   /** Resolved row actions, ready for placement inside the custom card. */
   actions?: ReactNode;
 }
