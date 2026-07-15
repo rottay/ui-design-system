@@ -124,8 +124,8 @@ export function UndoToast({
   const [paused, setPaused] = useState(false);
 
   const uid = useId().replace(/:/g, '');
-  const ringAnimName = `rottay-undo-ring-${uid}`;
-  const barAnimName = `rottay-undo-bar-${uid}`;
+  const ringAnimName = `ds-toast-undo-ring-${uid}`;
+  const barAnimName = `ds-toast-undo-bar-${uid}`;
 
   // Latest callbacks in refs so the window timer never closes over stale state.
   const onUndoRef = useRef(onUndo);

@@ -29,6 +29,8 @@ export type { DSError, DSErrorInput, ErrorSubscriber, UseErrorHandlerOptions, Us
 // PROVIDERS (ResponsiveProvider, etc.)
 // ============================================
 export * from './runtime/responsive';
+export { MotionProvider } from './runtime/motion';
+export type { MotionProviderProps } from './runtime/motion';
 
 // ============================================
 // NAVIGATION (framework-agnostic Link adapter)

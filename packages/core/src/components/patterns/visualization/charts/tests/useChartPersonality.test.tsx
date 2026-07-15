@@ -1,6 +1,6 @@
 import React from 'react';
-import { renderHook } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { act, renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '../../../../../runtime/bootstrap';
 import type { TenantConfig } from '../../../../../contracts';
@@ -34,6 +34,41 @@ function buildWrapper(productProfile: 'events.organizer' | 'recruiting.operator'
   };
 }
 
+function createReducedMotionController(initial: boolean) {
+  let matches = initial;
+  const listeners = new Set<(event: MediaQueryListEvent) => void>();
+  const matchMedia = (query: string) => {
+    const reducedQuery = query.includes('prefers-reduced-motion');
+    return {
+      get matches() {
+        return reducedQuery ? matches : false;
+      },
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn((_type: string, listener: (event: MediaQueryListEvent) => void) => {
+        if (reducedQuery) listeners.add(listener);
+      }),
+      removeEventListener: vi.fn((_type: string, listener: (event: MediaQueryListEvent) => void) => {
+        if (reducedQuery) listeners.delete(listener);
+      }),
+      dispatchEvent: vi.fn(),
+    } as MediaQueryList;
+  };
+
+  return {
+    matchMedia: vi.fn(matchMedia),
+    emit(next: boolean) {
+      matches = next;
+      listeners.forEach((listener) => listener({
+        matches: next,
+        media: '(prefers-reduced-motion: reduce)',
+      } as MediaQueryListEvent));
+    },
+  };
+}
+
 describe('useChartPersonality', () => {
   it('resolves different chart defaults for expressive and dense product profiles', () => {
     mockMatchMedia(1440, false);
@@ -51,5 +86,32 @@ describe('useChartPersonality', () => {
     expect(recruitingResult.result.current.lineMode).toBe('sharp');
     expect(recruitingResult.result.current.showDots).toBe(true);
     expect(recruitingResult.result.current.useGradientFill).toBe(false);
+  });
+
+  it('lets the OS reduced-motion prohibition win over an explicit animate request', () => {
+    mockMatchMedia(1440, true);
+
+    const { result } = renderHook(() => useChartPersonality({ animate: true }), {
+      wrapper: buildWrapper('events.organizer'),
+    });
+
+    expect(result.current.animate).toBe(false);
+    expect(result.current.animationDuration).toBe(0);
+  });
+
+  it('does not replay a settled chart when reduced motion is disabled live', () => {
+    const controller = createReducedMotionController(true);
+    window.matchMedia = controller.matchMedia as typeof window.matchMedia;
+
+    const { result } = renderHook(() => useChartPersonality({ animate: true }), {
+      wrapper: buildWrapper('events.organizer'),
+    });
+    expect(result.current.animate).toBe(false);
+    expect(result.current.animationDuration).toBe(0);
+
+    act(() => controller.emit(false));
+
+    expect(result.current.animate).toBe(false);
+    expect(result.current.animationDuration).toBe(0);
   });
 });

@@ -10,6 +10,14 @@
   explicit and definitely-callable loader transport stays fail-closed.
 - Certify the published tarball through a clean, fully offline consumer with isolated runtime
   packages, resolved exports, ESM/CJS execution, and a supplier-free non-consuming bundle.
+- Close the chart-correctness floor across all 17 families: provider-scoped palettes, deterministic
+  edge semantics, React-owned accessibility, an exact public capability contract, explicit compact
+  mode, and tenant-driven tooltip personalities.
+- Add the SSR-safe `MotionProvider` authority, explicit `durationMs`/`delayMs` APIs with one-release
+  legacy compatibility, final-first reduced-motion behavior, cancelable counters, and motion
+  governance for global keyframes and direct choreography.
+- Adopt the current Motion for React package entry (`motion/react`) at one pinned fleet version while
+  keeping the underlying runtime external and tree-shakeable for consuming applications.
 
 ## 2.19.3
 

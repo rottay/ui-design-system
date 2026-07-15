@@ -12,6 +12,7 @@ import {
   WaterfallChart,
 } from '..';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
+import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
 
 describe('chart public prop runtime contracts', () => {
   it('applies BulletChart gap, rangeColors, and targetColor', async () => {
@@ -250,6 +251,33 @@ describe('chart public prop runtime contracts', () => {
       'stroke-width',
       '4',
     );
+  });
+
+  it('keeps Sparkline static when animate=true but the OS requests reduced motion', () => {
+    mockMatchMedia(1440, true);
+
+    const { container } = renderSurface(
+      <Sparkline data={[2, 5, 3]} animate showEndDot={false} />,
+    );
+
+    const sparkline = container.querySelector('[data-part="sparkline"]') as SVGSVGElement;
+    const line = sparkline.querySelector('[data-part="line"]') as SVGPathElement;
+    expect(sparkline.querySelector('style')).toBeNull();
+    expect(line.getAttribute('class')).toBeNull();
+    expect(line.getAttribute('style')).toBeNull();
+  });
+
+  it('uses the resolved chart personality duration for Sparkline animation', () => {
+    mockMatchMedia(1440, false);
+
+    const { container } = renderSurface(
+      <Sparkline data={[2, 5, 3]} animate showEndDot={false} />,
+    );
+    const line = container.querySelector('[data-part="line"]') as SVGPathElement;
+
+    // generic.default owns a 700ms chart mount duration.
+    expect(line.style.animation).toContain('700ms');
+    expect(line.style.animation).not.toContain('800ms');
   });
 
   it('applies WaterfallChart decreaseColor in horizontal orientation', async () => {

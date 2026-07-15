@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview FadeIn motion primitive - Rottay Design System
@@ -10,16 +10,23 @@
  *
  * @example
  * ```tsx
- * <FadeIn direction="up" distance={20} delay={0.1}>
+ * <FadeIn direction="up" distance={20} delayMs={100}>
  *   <Card>...</Card>
  * </FadeIn>
  * ```
  */
 
-import React, { forwardRef } from 'react';
-import { motion } from 'framer-motion';
-import type { FadeInProps } from '../../types';
-import { useMotionPersonality } from '../../hooks';
+import React, { forwardRef, useMemo } from "react";
+import { motion } from "motion/react";
+import type { FadeInProps } from "../../types";
+import { useMotionPersonality } from "../../hooks";
+import {
+  hasExplicitMotionTiming,
+  motionMillisecondsToSeconds,
+  motionSecondsToMilliseconds,
+  resolveMotionMilliseconds,
+} from "../../internal/timing";
+import { resolveMotionTransformStyle } from "../../internal/transform";
 
 /**
  * Fade content into view while honoring tenant motion defaults and
@@ -33,8 +40,8 @@ import { useMotionPersonality } from '../../hooks';
  * @param props.children - Content to reveal.
  * @param props.direction - Direction the element fades in from. Defaults to `'up'`.
  * @param props.distance - Pixel offset applied along the chosen direction.
- * @param props.duration - Duration in seconds (tween mode only).
- * @param props.delay - Delay in seconds before the animation starts.
+ * @param props.durationMs - Duration in milliseconds.
+ * @param props.delayMs - Delay in milliseconds before the animation starts.
  * @param props.once - When `true` (default), the animation plays only on first viewport entry.
  * @param props.className - CSS class applied to the wrapper `<div>`.
  * @param props.style - Inline styles applied to the wrapper `<div>`.
@@ -44,8 +51,10 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
   (
     {
       children,
-      direction = 'up',
+      direction = "up",
       distance,
+      durationMs,
+      delayMs,
       duration,
       delay,
       once = true,
@@ -60,8 +69,27 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
     // Let product profiles and tenant overrides drive the default motion values.
     // Explicit props still win when a caller wants to opt out of the profile.
     const effectiveDistance = distance ?? motionPersonality.offsetDistance;
-    const effectiveDuration = duration ?? motionPersonality.durationSeconds;
-    const effectiveDelay = delay ?? motionPersonality.delaySeconds;
+    const effectiveDurationMs = resolveMotionMilliseconds({
+      milliseconds: durationMs,
+      legacy: duration,
+      fallbackMilliseconds: motionSecondsToMilliseconds(
+        motionPersonality.durationSeconds
+      ),
+    });
+    const effectiveDelayMs = resolveMotionMilliseconds({
+      milliseconds: delayMs,
+      legacy: delay,
+      fallbackMilliseconds: motionSecondsToMilliseconds(
+        motionPersonality.delaySeconds
+      ),
+    });
+    const effectiveDuration = motionMillisecondsToSeconds(effectiveDurationMs);
+    const effectiveDelay = motionMillisecondsToSeconds(effectiveDelayMs);
+    const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
+    const resolvedStyle = useMemo(
+      () => resolveMotionTransformStyle(style),
+      [style]
+    );
 
     // -- Directional offset calculation ---------------------------------------
     // Maps the human-readable `direction` prop to x/y pixel offsets. Returns
@@ -69,10 +97,14 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
     const getOffset = () => {
       if (shouldReduceMotion) return { x: 0, y: 0 };
       switch (direction) {
-        case 'up': return { x: 0, y: effectiveDistance };
-        case 'down': return { x: 0, y: -effectiveDistance };
-        case 'left': return { x: effectiveDistance, y: 0 };
-        case 'right': return { x: -effectiveDistance, y: 0 };
+        case "up":
+          return { x: 0, y: effectiveDistance };
+        case "down":
+          return { x: 0, y: -effectiveDistance };
+        case "left":
+          return { x: effectiveDistance, y: 0 };
+        case "right":
+          return { x: -effectiveDistance, y: 0 };
       }
     };
 
@@ -86,45 +118,62 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
 
     // -- Transition selection based on entrance mode --------------------------
     // Three branches: instant (reduced motion / none), spring-based, or tween.
-    const transition = shouldReduceMotion || motionPersonality.entrance === 'none'
+    const isStatic =
+      Boolean(shouldReduceMotion) || motionPersonality.entrance === "none";
+    const transition = isStatic
       ? { duration: 0, delay: 0 }
-      : motionPersonality.entrance === 'spring' || motionPersonality.entrance === 'bounce' || motionPersonality.useSpring
+      : motionPersonality.entrance === "spring" ||
+        motionPersonality.entrance === "bounce" ||
+        motionPersonality.useSpring
+      ? hasExplicitDuration
         ? {
-            type: 'spring' as const,
+            type: "spring" as const,
+            duration: effectiveDuration,
+            delay: effectiveDelay,
+            bounce: motionPersonality.entrance === "bounce" ? 0.35 : 0.16,
+          }
+        : {
+            type: "spring" as const,
             stiffness: motionPersonality.springTension,
             damping: motionPersonality.springFriction,
             delay: effectiveDelay,
-            bounce: motionPersonality.entrance === 'bounce' ? 0.35 : 0.16,
+            bounce: motionPersonality.entrance === "bounce" ? 0.35 : 0.16,
           }
-        : {
-            duration: effectiveDuration,
-            delay: effectiveDelay,
-            ease: motionPersonality.entrance === 'slideUp' ? slideEase : fadeEase,
-          };
+      : {
+          duration: effectiveDuration,
+          delay: effectiveDelay,
+          ease: motionPersonality.entrance === "slideUp" ? slideEase : fadeEase,
+        };
 
     // -- Initial state --------------------------------------------------------
     // `entrance === 'fade'` strips the directional offset to produce a pure
     // crossfade; all other modes combine opacity with the positional offset.
-    const initial =
-      shouldReduceMotion || motionPersonality.entrance === 'none'
-        ? { opacity: 1, x: 0, y: 0 }
-        : motionPersonality.entrance === 'fade'
-          ? { opacity: 0, x: 0, y: 0 }
-          : { opacity: 0, x: offset.x, y: offset.y };
+    const initial = isStatic
+      ? { opacity: 1, x: 0, y: 0 }
+      : motionPersonality.entrance === "fade"
+      ? { opacity: 0, x: 0, y: 0 }
+      : { opacity: 0, x: offset.x, y: offset.y };
 
     return (
       <motion.div
         ref={ref}
-        initial={initial}
+        initial={isStatic ? false : initial}
         // `whileInView` keeps the default ergonomic for page content; `animate`
         // is still available when callers want immediate mounting transitions.
-        {...(once
-          ? { whileInView: { opacity: 1, x: 0, y: 0 }, viewport: { once: true, amount: 0.3 } }
-          : { animate: { opacity: 1, x: 0, y: 0 } }
-        )}
+        {...(isStatic
+          ? { animate: { opacity: 1, x: 0, y: 0 } }
+          : once
+          ? {
+              whileInView: { opacity: 1, x: 0, y: 0 },
+              viewport: { once: true, amount: 0.3 },
+            }
+          : { animate: { opacity: 1, x: 0, y: 0 } })}
         transition={transition}
+        transformTemplate={resolvedStyle.transformTemplate}
+        data-ds-motion-primitive="fade-in"
+        data-ds-motion-state={isStatic ? "static" : "entrance"}
         className={className}
-        style={style}
+        style={resolvedStyle.style}
       >
         {children}
       </motion.div>
@@ -132,4 +181,4 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
   }
 );
 
-FadeIn.displayName = 'FadeIn';
+FadeIn.displayName = "FadeIn";

@@ -6,7 +6,7 @@
  * Creates a vertical parallax scrolling effect by mapping the element's
  * scroll progress to a translateY offset. The `speed` multiplier controls
  * how much the content drifts relative to the natural scroll rate. Uses
- * framer-motion's `useScroll` and `useTransform` for GPU-accelerated motion.
+ * Motion's `useScroll` and `useTransform` for GPU-accelerated motion.
  *
  * @example
  * ```tsx
@@ -17,8 +17,9 @@
  */
 
 import React, { forwardRef, useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'motion/react';
 import type { ParallaxProps } from '../../types';
+import { useReducedMotion } from '../../hooks/use-reduced-motion';
 
 /**
  * Apply a vertical parallax scroll effect to its children.

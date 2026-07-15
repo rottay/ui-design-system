@@ -277,7 +277,7 @@ export const AreaChart = memo(function AreaChart({
       // Each layer contains [y0, y1] pairs; y0 is the cumulative baseline from
       // the same-sign layers, y1 is the edge of the current contribution.
       stackedLayers.forEach((layer, layerIndex) => {
-        const descriptor = drawableSeries[layerIndex];
+        const descriptor = arrayValueAt(drawableSeries, layerIndex);
         if (!descriptor) return;
         const { currentSeries, index } = descriptor;
         const color = currentSeries.color ?? areaColor(palette, index);

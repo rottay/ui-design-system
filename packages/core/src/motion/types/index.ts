@@ -4,7 +4,8 @@
  * Organized into three categories:
  *
  * 1. **Entrance animations** -- FadeIn, SlideIn, ScaleIn, ScrollReveal, StaggerChildren.
- *    Controlled via `BaseMotionProps` (duration, delay, once, style).
+ *    Most consume `BaseMotionProps`; ScrollReveal retains its timing fields
+ *    only as deprecated source compatibility because its CSS timeline ignores them.
  *
  * 2. **Interactive effects** -- Parallax, Magnetic, TextReveal, CountUp, Morph.
  *    Driven by scroll position, pointer movement, or numeric interpolation.
@@ -62,7 +63,7 @@
  * component (Dropdown/ContextMenu's popover motion) do not have this gap.
  */
 
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode } from "react";
 
 /**
  * The presence data-state contract: `'open'` while a node should be at its
@@ -71,10 +72,10 @@ import { CSSProperties, ReactNode } from 'react';
  * it unmounts. Style both states with a `transition` (not `@keyframes`) to
  * satisfy the interruptibility law above.
  */
-export type MotionDataState = 'open' | 'closed';
+export type MotionDataState = "open" | "closed";
 
 /** Cardinal direction for directional entrance animations. */
-export type AnimationDirection = 'up' | 'down' | 'left' | 'right';
+export type AnimationDirection = "up" | "down" | "left" | "right";
 
 // ---------------------------------------------------------------------------
 // Entrance animation props
@@ -82,14 +83,25 @@ export type AnimationDirection = 'up' | 'down' | 'left' | 'right';
 
 /**
  * Shared base props for all entrance-style motion components.
- * `once` controls whether the animation replays on re-mount or only fires once.
+ * Canonical timing props carry an explicit `Ms` suffix. The un-suffixed props
+ * remain as deprecated compatibility aliases for one minor release.
  */
 export interface BaseMotionProps {
   /** Animation duration in milliseconds. */
-  duration?: number;
+  durationMs?: number;
   /** Delay before the animation starts, in milliseconds. */
+  delayMs?: number;
+  /**
+   * @deprecated Use `durationMs`. During the compatibility window, positive
+   * values up to 10 are interpreted as seconds and all other values as ms.
+   */
+  duration?: number;
+  /**
+   * @deprecated Use `delayMs`. During the compatibility window, positive
+   * values up to 10 are interpreted as seconds and all other values as ms.
+   */
   delay?: number;
-  /** If true, the animation only plays once (not on re-mount). */
+  /** If true, the viewport-triggered animation only plays on its first entry. */
   once?: boolean;
   /** Additional CSS class name applied to the wrapper element. */
   className?: string;
@@ -126,6 +138,26 @@ export interface ScaleInProps extends BaseMotionProps {
  * `threshold` and `rootMargin` mirror the IntersectionObserver API.
  */
 export interface ScrollRevealProps extends BaseMotionProps {
+  /**
+   * @deprecated ScrollReveal's CSS scroll-timeline path cannot honor explicit
+   * timing. This prop remains accepted for source compatibility and is ignored.
+   */
+  durationMs?: number;
+  /**
+   * @deprecated ScrollReveal's CSS scroll-timeline path cannot honor explicit
+   * timing. This prop remains accepted for source compatibility and is ignored.
+   */
+  delayMs?: number;
+  /**
+   * @deprecated ScrollReveal never consumed this legacy timing prop. It remains
+   * accepted for source compatibility and is ignored.
+   */
+  duration?: number;
+  /**
+   * @deprecated ScrollReveal never consumed this legacy timing prop. It remains
+   * accepted for source compatibility and is ignored.
+   */
+  delay?: number;
   /** Fraction of element visible before triggering (0-1). */
   threshold?: number;
   /** CSS margin string applied to the observer root. */
@@ -138,8 +170,12 @@ export interface ScrollRevealProps extends BaseMotionProps {
  */
 export interface StaggerChildrenProps extends BaseMotionProps {
   /** Delay between consecutive children, in milliseconds. */
+  staggerDelayMs?: number;
+  /** Initial delay before the first child animates, in milliseconds. */
+  delayChildrenMs?: number;
+  /** @deprecated Use `staggerDelayMs`; legacy seconds remain compatible for one minor. */
   staggerDelay?: number;
-  /** Initial delay before the first child animates. */
+  /** @deprecated Use `delayChildrenMs`; legacy seconds remain compatible for one minor. */
   delayChildren?: number;
 }
 
@@ -189,11 +225,15 @@ export interface TextRevealProps {
   /** Inline styles. */
   style?: CSSProperties;
   /** Delay in milliseconds before the reveal starts. */
+  delayMs?: number;
+  /** Total time in milliseconds from the first segment starting to the last settling. */
+  durationMs?: number;
+  /** @deprecated Use `delayMs`; legacy seconds remain compatible for one minor. */
   delay?: number;
-  /** Total animation duration in milliseconds. */
+  /** @deprecated Use `durationMs`; legacy seconds remain compatible for one minor. */
   duration?: number;
   /** Stagger unit: individual characters, whole words, or lines. */
-  type?: 'char' | 'word' | 'line';
+  type?: "char" | "word" | "line";
 }
 
 /**
@@ -206,13 +246,24 @@ export interface CountUpProps {
   /** Target value the counter animates toward. */
   to: number;
   /** Animation duration in milliseconds. */
-  duration?: number;
+  durationMs?: number;
   /** Delay in milliseconds before counting begins. */
+  delayMs?: number;
+  /** @deprecated Use `durationMs`; legacy seconds remain compatible for one minor. */
+  duration?: number;
+  /** @deprecated Use `delayMs`; legacy seconds remain compatible for one minor. */
   delay?: number;
   /** Text prepended to the displayed number (e.g. "$"). */
   prefix?: string;
   /** Text appended to the displayed number (e.g. "%"). */
   suffix?: string;
+  /** Fixed decimal places for the default formatter (clamped to 0-20). */
+  decimals?: number;
+  /**
+   * Explicit locale used by the default number formatter. Falls back to the
+   * active I18nContext locale, then to deterministic standalone `en-US`.
+   */
+  locale?: string;
   /** Custom number formatting function (e.g. toLocaleString). */
   formatter?: (value: number) => string;
   /** Additional CSS class name. */
@@ -280,7 +331,7 @@ export interface GlowEffectProps {
   /** Glow color (CSS color value). */
   color?: string;
   /** Glow spread size. */
-  intensity?: 'sm' | 'md' | 'lg';
+  intensity?: "sm" | "md" | "lg";
   /** Content to wrap with the glow effect. */
   children: ReactNode;
   /** Additional CSS class name. */
@@ -348,21 +399,21 @@ export interface ParticleFieldProps {
   /** Particle movement speed multiplier or explicit numeric drift. */
   speed?: number;
   /** Visual density preset. */
-  density?: 'low' | 'medium' | 'high';
+  density?: "low" | "medium" | "high";
   /** Global visual intensity preset. */
-  intensity?: 'low' | 'medium' | 'high';
+  intensity?: "low" | "medium" | "high";
   /** Mood preset affecting drift, clustering and contrast. */
-  mood?: 'calm' | 'active' | 'focus';
+  mood?: "calm" | "active" | "focus";
   /** Spatial pattern used to distribute the field. */
-  pattern?: 'ambient' | 'orbital';
+  pattern?: "ambient" | "orbital";
   /** Particle geometry. */
-  shape?: 'square' | 'round';
+  shape?: "square" | "round";
   /** Minimum/maximum particle size in CSS pixels. */
   sizeRange?: [number, number];
   /** Base opacity for the entire field. */
   opacity?: number;
   /** Optional blend mode for the field. */
-  blendMode?: CSSProperties['mixBlendMode'];
+  blendMode?: CSSProperties["mixBlendMode"];
   /** Optional emphasis points that brighten nearby particles. */
   focalAreas?: ParticleFieldFocalArea[];
   /** Content rendered above the particle layer. */

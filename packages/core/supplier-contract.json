@@ -8,6 +8,7 @@
     "d3",
     "framer-motion",
     "lucide-react",
+    "motion",
     "three"
   ],
   "nonRuntimeEntrypoints": [
@@ -262,6 +263,7 @@
         "ModalHeader",
         "MoreFieldsToggle",
         "Morph",
+        "MotionProvider",
         "NAV_LINK_DEFAULTS",
         "NAV_LINK_TYPE_COLORS",
         "NavLink",
@@ -734,6 +736,7 @@
         "useChartDimensions",
         "useChartExport",
         "useChartPersonality",
+        "useChartTheme",
         "useChartTooltip",
         "useChat",
         "useCollapseTokens",
@@ -832,38 +835,39 @@
         ],
         "ActiveFiltersBar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ActivityCards": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ActivityCompact": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ActivitySurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ActivityTicker": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ActivityTimeline": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "AdaptiveOverlay": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Affix": [
           "antd"
@@ -880,35 +884,39 @@
         "AntdConfigProvider": [
           "antd"
         ],
+        "AppShell": [
+          "motion"
+        ],
         "AreaChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "AssistantStatusBadge": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "AssistantStatusIndicator": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "AuditSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Aurora": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "AuthSurface": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "AutoComplete": [
           "antd"
@@ -920,51 +928,58 @@
           "antd"
         ],
         "Badge": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "BarChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "BillingSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "BottomTabBar": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Breadcrumb": [
           "antd"
         ],
         "buildViewModes": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "BulkSelectToggle": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "BulletChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Button": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Calendar": [
           "antd"
         ],
         "CalendarHeatMap": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Card": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Carousel": [
           "antd"
@@ -976,8 +991,8 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Checkbox": [
           "antd"
@@ -987,51 +1002,52 @@
         ],
         "CollectionHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "CollectionWorkspace": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "CollectionWorkspaceSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ColorPicker": [
           "antd"
         ],
         "ColumnMenu": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ColumnSettingsDropdown": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "CommandCenterSurface": [
           "@ant-design/icons",
-          "antd"
+          "antd",
+          "motion"
         ],
         "CompareSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ConfirmActionCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ConfirmDialog": [
           "antd"
@@ -1040,107 +1056,113 @@
           "antd"
         ],
         "ContextMenu": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "CopyToCheck": [
           "antd",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "CountUp": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "DashboardHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "DashboardSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "DataTerminalCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "DataTerminalCardProvider": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "DataTerminalStat": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "DatePicker": [
           "antd"
         ],
         "DecisionInboxSurface": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "defaultViewModeIcons": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "defaultViewModeLabels": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Descriptions": [
           "antd"
         ],
         "DesignSystemProvider": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "DetailFormSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "DetailHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "DetailSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Divider": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Drawer": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Dropdown": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "EditHeader": [
           "@ant-design/icons",
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "EditorSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Empty": [
           "antd"
@@ -1149,29 +1171,29 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ExportButton": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "FadeIn": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "FieldFiltersPanel": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "FileBrowserSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Flex": [
           "antd"
@@ -1184,78 +1206,85 @@
         ],
         "FormFactsCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "FormField": [
           "antd"
         ],
         "FormHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "FormSections": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "FormSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "FunnelChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "GanttChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "GaugeChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "GlowEffect": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "GradientBackground": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "GridPattern": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "GuidedDraftFormSurface": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "HamburgerToX": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "HeaderSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Heading": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "HeatMap": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Histogram": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "HoverCard": [
           "antd"
@@ -1267,46 +1296,46 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "inferSharedHeaderActionKind": [
           "lucide-react"
         ],
         "InlineEditControl": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "InlineEditField": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "InlineEditFooter": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "InlineEditGrid": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "InlineEditor": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "InlineEditorGroup": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "InlineEditSection": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Input": [
           "antd"
@@ -1318,22 +1347,23 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "KanbanSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Layout": [
           "antd"
         ],
         "LineChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Link": [
           "antd"
@@ -1345,39 +1375,39 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ListToolbar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "LiveCursor": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "LoadingOverlay": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Magnetic": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "MarketingSurface": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "MediaSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Mentions": [
           "antd"
@@ -1390,8 +1420,8 @@
         ],
         "MessageBubble": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "MessageItem": [
           "antd"
@@ -1401,48 +1431,54 @@
         ],
         "MetricsCards": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "MetricsChart": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "MetricsMinimal": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "MetricsRows": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "MobileHeader": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Modal": [
           "antd"
         ],
         "MoreFieldsToggle": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Morph": [
           "antd",
-          "framer-motion"
+          "motion"
+        ],
+        "MotionProvider": [
+          "motion"
         ],
         "NavLink": [
           "antd"
         ],
         "NetworkGraph": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "normalizeSurfaceDensity": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "notification": [
           "antd"
@@ -1457,49 +1493,51 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "OnboardingSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "OperationalSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "OverlayModal": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "PageShellSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Pagination": [
           "antd"
         ],
         "Paragraph": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Parallax": [
-          "framer-motion"
+          "motion"
         ],
         "ParticleField": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "Particles": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "PasswordInput": [
           "antd"
@@ -1510,8 +1548,8 @@
         ],
         "PatternApprovalInbox": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternApprovalWorkflow": [
           "@ant-design/icons",
@@ -1519,21 +1557,21 @@
         ],
         "PatternBrandStudio": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternCalendarView": [
           "antd"
         ],
         "PatternCockpitHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternColumnSettings": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternCommandPalette": [
           "antd"
@@ -1544,8 +1582,8 @@
         ],
         "PatternDataTable": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternDetailPanel": [
           "@ant-design/icons",
@@ -1571,17 +1609,18 @@
           "lucide-react"
         ],
         "PatternFormBuilder": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternGalleryView": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternGridView": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternInvoiceTemplate": [
           "@ant-design/icons",
@@ -1589,12 +1628,13 @@
         ],
         "PatternKanbanBoard": [
           "@ant-design/icons",
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternListToolbar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternLiveFeed": [
           "@ant-design/icons",
@@ -1609,8 +1649,8 @@
         ],
         "PatternModerationGallery": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternNotificationCenter": [
           "@ant-design/icons",
@@ -1618,8 +1658,8 @@
         ],
         "PatternOperationalLedger": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternPageShell": [
           "@ant-design/icons",
@@ -1635,15 +1675,16 @@
         ],
         "PatternShiftMatrix": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternShortcutsOverlay": [
           "antd"
         ],
         "PatternStatsGrid": [
           "@ant-design/icons",
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternStepWizard": [
           "antd"
@@ -1661,8 +1702,8 @@
         ],
         "PatternWorkbenchHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PatternWorkspaceSwitcher": [
           "@ant-design/icons",
@@ -1670,7 +1711,8 @@
         ],
         "PieChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Popconfirm": [
           "antd"
@@ -1680,42 +1722,45 @@
         ],
         "PremiumFormFactsCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PremiumFormSections": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
+        ],
+        "Presence": [
+          "motion"
         ],
         "PresenceBar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PresenceTypingIndicator": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PreviewDiffCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "PricingSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ProfileSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Progress": [
           "antd"
@@ -1725,7 +1770,8 @@
         ],
         "RadarChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Radio": [
           "antd"
@@ -1735,41 +1781,46 @@
         ],
         "RecordActionBar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "RecordField": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "RecordFieldGrid": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "RecordPanel": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "RecordSummaryStrip": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
+        ],
+        "recordTransitionName": [
+          "motion"
         ],
         "RecordWorkbenchSurface": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "ReportSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "resolveListCardMinWidth": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "resolveSharedHeaderActionIcon": [
           "lucide-react"
@@ -1781,55 +1832,64 @@
           "lucide-react"
         ],
         "resolveSurfaceTabsType": [
-          "antd"
+          "antd",
+          "motion"
+        ],
+        "ResponsiveContext": [
+          "motion"
+        ],
+        "ResponsiveProvider": [
+          "motion"
         ],
         "Result": [
           "antd"
         ],
         "SankeyChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "SavedViewsMenu": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ScaleIn": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "ScatterChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "SchedulerSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ScopeSwitcher": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "ScrollReveal": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "SearchCommandBar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SearchSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Segmented": [
           "antd"
@@ -1839,34 +1899,35 @@
         ],
         "SelectionPreviewRail": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SettingsSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Sheet": [
           "antd"
         ],
         "ShimmerText": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "SidebarSurface": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Skeleton": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "SlideIn": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "Slider": [
           "antd"
@@ -1876,7 +1937,8 @@
         ],
         "Sparkline": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Spinner": [
           "antd"
@@ -1885,26 +1947,29 @@
           "antd"
         ],
         "Spotlight": [
-          "framer-motion"
+          "motion"
         ],
         "StaggerChildren": [
           "antd",
-          "framer-motion"
+          "motion"
+        ],
+        "startDsViewTransition": [
+          "motion"
         ],
         "Statistic": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "StatsHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "StatusFilterPills": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Stepper": [
           "antd"
@@ -1914,86 +1979,86 @@
         ],
         "StreamingText": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceActionFooter": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceCapabilityAnatomy": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceEmptyState": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceEmptyStateCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceErrorState": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceErrorStateCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceFieldGrid": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceLoadingSkeleton": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceLoadingState": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceOfflineBanner": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfacePanel": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceReadField": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceStaleBanner": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "SurfaceSummaryStrip": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Switch": [
           "antd"
@@ -2006,14 +2071,15 @@
         ],
         "TableToolbar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Tabs": [
           "antd"
         ],
         "Tag": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "TagInput": [
           "antd"
@@ -2022,18 +2088,19 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Text": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Textarea": [
           "antd"
         ],
         "TextReveal": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "Timeline": [
           "antd"
@@ -2042,18 +2109,20 @@
           "antd"
         ],
         "Toast": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "ToastContainer": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Toggle": [
           "antd"
         ],
         "ToolCallCard": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Tooltip": [
           "antd"
@@ -2069,18 +2138,20 @@
         ],
         "TreeMap": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "TreeSelect": [
           "antd"
         ],
         "TypingIndicator": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "Typography": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Upload": [
           "antd"
@@ -2088,17 +2159,38 @@
         "useAccentTokens": [
           "antd"
         ],
+        "useAdaptivePosture": [
+          "motion"
+        ],
+        "useBreakpoints": [
+          "motion"
+        ],
         "useCardTokens": [
           "antd"
         ],
+        "useChartCompact": [
+          "motion"
+        ],
         "useChartDimensions": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "useChartPersonality": [
-          "antd"
+          "antd",
+          "motion"
+        ],
+        "useChartTheme": [
+          "antd",
+          "motion"
         ],
         "useColorTokens": [
           "antd"
+        ],
+        "useDeferredPending": [
+          "motion"
+        ],
+        "useFlipLayout": [
+          "motion"
         ],
         "useForm": [
           "antd"
@@ -2108,7 +2200,7 @@
         ],
         "useMotionPersonality": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "useMotionTokens": [
           "antd"
@@ -2119,19 +2211,42 @@
         "useOptionalTokens": [
           "antd"
         ],
+        "usePresence": [
+          "motion"
+        ],
+        "useReducedMotion": [
+          "motion"
+        ],
+        "useResponsive": [
+          "motion"
+        ],
+        "useResponsiveValue": [
+          "motion"
+        ],
+        "useShellContext": [
+          "motion"
+        ],
+        "useSmoothCounter": [
+          "motion"
+        ],
         "useSpacingTokens": [
           "antd"
         ],
         "useSurfaceProfileDefaults": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "useSurfaceProfileDefaultsWithOverrides": [
-          "antd"
+          "antd",
+          "motion"
+        ],
+        "useSurfaceQuery": [
+          "motion"
         ],
         "useSurfaceState": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "useTokens": [
           "antd"
@@ -2139,26 +2254,30 @@
         "useTypographyTokens": [
           "antd"
         ],
+        "useViewTransition": [
+          "motion"
+        ],
         "ViewModeSwitcher": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "VisualizationSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "VoiceInputButton": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WaterfallChart": [
           "antd",
-          "d3"
+          "d3",
+          "motion"
         ],
         "Watermark": [
           "antd"
@@ -2167,52 +2286,52 @@
           "@ant-design/icons",
           "antd",
           "d3",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspaceAdvancedFilters": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspaceColumnsMenu": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspaceCommandBar": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspaceFilterRail": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspaceHeader": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspacePreviewRail": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspaceScopes": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ],
         "WorkspaceShell": [
           "antd",
-          "framer-motion"
+          "motion"
         ],
         "WorkspaceViewsMenu": [
           "antd",
-          "framer-motion",
-          "lucide-react"
+          "lucide-react",
+          "motion"
         ]
       },
       "supplierFreeExports": [
@@ -2225,7 +2344,6 @@
         "APCA_BODY_TEXT_MIN_LC",
         "ASPECT_RATIO_DEFAULTS",
         "AUTOCOMPLETE_DEFAULTS",
-        "AppShell",
         "AspectRatio",
         "AvatarBadge",
         "AvatarFallback",
@@ -2338,7 +2456,6 @@
         "PRODUCT_PROFILES",
         "PatternTenantPreview",
         "Portal",
-        "Presence",
         "ProductProfileContext",
         "ProductProfileProvider",
         "PulseValue",
@@ -2347,8 +2464,6 @@
         "RATE_SIZE_MAP",
         "RATIO_PRESETS",
         "RadioGroup",
-        "ResponsiveContext",
-        "ResponsiveProvider",
         "ResponsiveSlot",
         "SCROLLBAR_SIZES",
         "SCROLL_AREA_DEFAULTS",
@@ -2561,7 +2676,6 @@
         "pickOAuthTransitionVariant",
         "preloadTenantConfig",
         "pt",
-        "recordTransitionName",
         "registerCustomComponent",
         "registerCustomComponents",
         "registerSkinPack",
@@ -2593,7 +2707,6 @@
         "rottayBrandTheme",
         "serializeBrandTheme",
         "setServerHeaders",
-        "startDsViewTransition",
         "stringifySurfaceValue",
         "themanagementmiamiBrandTheme",
         "toBreakpoint",
@@ -2606,12 +2719,9 @@
         "triggerDownload",
         "unregisterCustomComponent",
         "unregisterSkinPack",
-        "useAdaptivePosture",
         "useAriaAnnounce",
         "useAutoSave",
-        "useBreakpoints",
         "useChartBrush",
-        "useChartCompact",
         "useChartExport",
         "useChartTooltip",
         "useChat",
@@ -2623,7 +2733,6 @@
         "useCrossTabSync",
         "useCustomStatus",
         "useDataTable",
-        "useDeferredPending",
         "useDraftSave",
         "useDsFocusMode",
         "useEngineContext",
@@ -2633,7 +2742,6 @@
         "useFeatureContextAlias",
         "useFeatures",
         "useFilterPanel",
-        "useFlipLayout",
         "useFocusTrap",
         "useFormBuilder",
         "useFormDiff",
@@ -2658,24 +2766,17 @@
         "useOptimisticUpdate",
         "usePdfExport",
         "usePortalContainer",
-        "usePresence",
         "useProductProfile",
         "useProductProfileContext",
         "usePulseOnChange",
-        "useReducedMotion",
         "useRegisterCommands",
         "useRegisteredShortcuts",
-        "useResponsive",
-        "useResponsiveValue",
         "useRouterState",
         "useRovingTabindex",
         "useScrollProgress",
-        "useShellContext",
         "useShortcutScope",
-        "useSmoothCounter",
         "useSortableList",
         "useStreamingText",
-        "useSurfaceQuery",
         "useTableExport",
         "useTenant",
         "useTenantBranding",
@@ -2686,7 +2787,6 @@
         "useTranslation",
         "useUndoRedo",
         "useVariant",
-        "useViewTransition",
         "useVirtualScroll",
         "useVoiceInput",
         "warnInDev",
@@ -4089,22 +4189,31 @@
         "commercialGray",
         "commercialTokens"
       ],
-      "symbols": {},
+      "symbols": {
+        "AsciiDiagram": [
+          "motion"
+        ],
+        "MonoStat": [
+          "motion"
+        ],
+        "TerminalBlock": [
+          "motion"
+        ],
+        "Typewriter": [
+          "motion"
+        ]
+      },
       "supplierFreeExports": [
-        "AsciiDiagram",
         "AsciiFrame",
         "COMMERCIAL_GRAY_HEX",
         "COMMERCIAL_INK_HEX",
         "COMMERCIAL_PAPER_HEX",
         "CropMarks",
         "InvertSection",
-        "MonoStat",
         "ProductWindow",
         "SectionFrame",
-        "TerminalBlock",
         "TextureBackdrop",
         "TreeView",
-        "Typewriter",
         "commercialGray",
         "commercialTokens"
       ]

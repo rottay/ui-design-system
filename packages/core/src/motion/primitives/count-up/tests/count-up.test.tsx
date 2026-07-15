@@ -1,123 +1,247 @@
-/**
- * CountUp tabular-numerals + reduced-motion tests (WO-CRA-07).
- *
- * Before this WO, `motion/primitives/count-up/index.tsx` applied no tabular-
- * numeral styling at all (confirmed by grep: zero hits for `tabular` or
- * `font-variant` in the file), so digits jittered column-to-column as the
- * value ticked. These tests fail if the `ds-nums-tabular` class (CRA-01,
- * `foundation/base/typography.css`) is ever removed from the digit span, and
- * separately prove the pre-existing reduced-motion path still renders the
- * final value with no animated ramp.
- */
-import React from 'react';
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { screen } from '@testing-library/react';
-import * as framerMotion from 'framer-motion';
+import React from "react";
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { CountUp } from '..';
-import { renderSurface } from '../../../../components/surfaces/foundation/common/test-utils';
+import { CountUp } from "..";
+import { I18nProvider } from "../../../../i18n";
 
-// `useSpring`'s `duration` argument is the actual reduced-motion contract:
-// `shouldReduceMotion ? 0 : duration * 1000` (count-up/index.tsx). Spying on
-// it proves the guard deterministically, without depending on framer-motion's
-// real frame loop settling in test time (which is slow/flaky in this
-// environment and not what the guard itself is responsible for).
-//
-// `useReducedMotion` is mocked directly (not via a `matchMedia` stub):
-// framer-motion reads the media query through its own internal caching, so a
-// per-test `window.matchMedia` stub set after the module first evaluates does
-// not reliably reach it. Mocking the hook is also the correctly-scoped unit
-// test here -- this suite verifies CountUp's consumption of the flag, not
-// framer-motion's own browser integration.
-const useReducedMotionMock = vi.fn(() => false);
-vi.mock('framer-motion', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('framer-motion')>();
-  return { ...actual, useSpring: vi.fn(actual.useSpring), useReducedMotion: () => useReducedMotionMock() };
+const personality = vi.hoisted(() => ({
+  shouldReduceMotion: false as boolean | null,
+  countUpEnabled: true,
+}));
+const inView = vi.hoisted(() => ({ current: true }));
+
+vi.mock("../../../hooks", () => ({
+  useMotionPersonality: () => personality,
+}));
+
+vi.mock("motion/react", () => ({
+  useInView: () => inView.current,
+}));
+
+let nextFrameId = 1;
+let frames: Array<{ id: number; callback: FrameRequestCallback }> = [];
+
+function flushNextFrame(timestamp: number): void {
+  const frame = frames.shift();
+  if (!frame) throw new Error("No animation frame is scheduled");
+  act(() => frame.callback(timestamp));
+}
+
+beforeEach(() => {
+  frames = [];
+  nextFrameId = 1;
+  Object.assign(personality, {
+    shouldReduceMotion: false,
+    countUpEnabled: true,
+  });
+  inView.current = true;
+  vi.stubGlobal(
+    "requestAnimationFrame",
+    vi.fn((callback: FrameRequestCallback) => {
+      const id = nextFrameId++;
+      frames.push({ id, callback });
+      return id;
+    })
+  );
+  vi.stubGlobal(
+    "cancelAnimationFrame",
+    vi.fn((id: number) => {
+      frames = frames.filter((frame) => frame.id !== id);
+    })
+  );
 });
 
-class IntersectionObserverMock {
-  constructor(private readonly callback: IntersectionObserverCallback) {}
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
-  observe = vi.fn((element: Element) => {
-    this.callback(
-      [{ isIntersecting: true, target: element } as IntersectionObserverEntry],
-      this as unknown as IntersectionObserver
+describe("CountUp final-first rendering", () => {
+  it("renders the final value as the SSR/no-JS baseline and keeps tabular numerals", () => {
+    inView.current = false;
+    const { container } = render(
+      <CountUp from={0} to={1250} prefix="$" suffix="+" />
+    );
+
+    expect(screen.getByText("$1,250+")).toHaveClass("ds-nums-tabular");
+    expect(
+      container.querySelector('[data-ds-motion-primitive="count-up"]')
+    ).not.toBeNull();
+    expect(frames).toHaveLength(0);
+  });
+
+  it("preserves fixed decimal precision in the final baseline and animation", () => {
+    const { rerender } = render(
+      <CountUp from={0} to={12.345} decimals={2} durationMs={200} />
+    );
+
+    expect(screen.getByText("0.00")).toBeInTheDocument();
+    flushNextFrame(1000);
+    flushNextFrame(1200);
+    expect(screen.getByText("12.35")).toBeInTheDocument();
+
+    personality.shouldReduceMotion = true;
+    rerender(<CountUp from={0} to={7.5} decimals={2} durationMs={200} />);
+    expect(screen.getByText("7.50")).toBeInTheDocument();
+  });
+
+  it("uses an explicit deterministic locale and falls back to standalone en-US", () => {
+    inView.current = false;
+    const { rerender } = render(
+      <CountUp to={1234.5} decimals={1} locale="de-DE" />
+    );
+    expect(screen.getByText("1.234,5")).toBeInTheDocument();
+
+    rerender(<CountUp to={1234.5} decimals={1} />);
+    expect(screen.getByText("1,234.5")).toBeInTheDocument();
+  });
+
+  it("inherits the active I18nContext locale when no explicit locale is provided", () => {
+    inView.current = false;
+    const localeSpy = vi.spyOn(Number.prototype, "toLocaleString");
+
+    render(
+      <I18nProvider locale="fr">
+        <CountUp to={1234.5} decimals={1} />
+      </I18nProvider>
+    );
+
+    expect(localeSpy).toHaveBeenCalledWith(
+      "fr",
+      expect.objectContaining({
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })
     );
   });
 
-  unobserve = vi.fn();
-  disconnect = vi.fn();
-  takeRecords = vi.fn(() => []);
-}
+  it("shows the final value immediately and schedules no work under reduced motion", () => {
+    personality.shouldReduceMotion = true;
+    render(<CountUp from={0} to={500} durationMs={900} />);
 
-function stubMatchMedia(reduced: boolean) {
-  vi.stubGlobal(
-    'matchMedia',
-    vi.fn().mockImplementation((query: string) => ({
-      matches: reduced && query.includes('prefers-reduced-motion'),
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }))
-  );
-}
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-  useReducedMotionMock.mockReset().mockReturnValue(false);
-});
-
-describe('CountUp tabular numerals', () => {
-  it('applies the ds-nums-tabular class to the digit span so digits never jitter', () => {
-    vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
-    stubMatchMedia(false);
-
-    renderSurface(<CountUp from={0} to={1250} />);
-
-    const digitSpan = screen.getByText('0', { exact: false });
-    expect(digitSpan.className).toContain('ds-nums-tabular');
+    expect(screen.getByText("500")).toBeInTheDocument();
+    expect(frames).toHaveLength(0);
   });
 
-  it('keeps the tabular class when a prefix/suffix and custom formatter are used', () => {
-    vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
-    stubMatchMedia(false);
+  it("also stays final when the tenant disables count-up motion", () => {
+    personality.countUpEnabled = false;
+    render(<CountUp from={0} to={500} durationMs={900} />);
 
-    renderSurface(<CountUp from={0} to={99} prefix="$" suffix="k" formatter={(n) => n.toFixed(0)} />);
-
-    const digitSpan = screen.getByText('$0k', { exact: false });
-    expect(digitSpan.className).toContain('ds-nums-tabular');
+    expect(screen.getByText("500")).toBeInTheDocument();
+    expect(frames).toHaveLength(0);
   });
 });
 
-describe('CountUp reduced motion', () => {
-  it('collapses the spring duration to 0 when prefers-reduced-motion is set', () => {
-    vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
-    stubMatchMedia(true);
-    useReducedMotionMock.mockReturnValue(true);
+describe("CountUp duration and cancellation", () => {
+  it("honors canonical milliseconds and lands exactly on the target", () => {
+    render(<CountUp from={0} to={100} durationMs={200} />);
 
-    renderSurface(<CountUp from={0} to={500} duration={2} />);
-
-    const useSpringMock = framerMotion.useSpring as unknown as ReturnType<typeof vi.fn>;
-    expect(useSpringMock).toHaveBeenCalled();
-    const [, options] = useSpringMock.mock.calls[useSpringMock.mock.calls.length - 1];
-    expect(options.duration).toBe(0);
+    expect(screen.getByText("0")).toBeInTheDocument();
+    flushNextFrame(1000);
+    flushNextFrame(1100);
+    const halfway = Number(
+      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+    );
+    expect(halfway).toBeGreaterThan(50);
+    expect(halfway).toBeLessThan(100);
+    flushNextFrame(1200);
+    expect(screen.getByText("100")).toBeInTheDocument();
   });
 
-  it('uses the full duration when motion is not reduced, proving the branch is real', () => {
-    vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
-    stubMatchMedia(false);
+  it("preserves legacy seconds for one minor", () => {
+    render(<CountUp from={0} to={100} duration={0.2} />);
 
-    renderSurface(<CountUp from={0} to={500} duration={2} />);
+    flushNextFrame(1000);
+    flushNextFrame(1200);
+    expect(screen.getByText("100")).toBeInTheDocument();
+  });
 
-    const useSpringMock = framerMotion.useSpring as unknown as ReturnType<typeof vi.fn>;
-    const [, options] = useSpringMock.mock.calls[useSpringMock.mock.calls.length - 1];
-    // 2 seconds -> 2000ms, per `duration * 1000`. If the reduced-motion guard
-    // were deleted (always 0, or always the literal duration), one of these
-    // two tests would fail.
-    expect(options.duration).toBe(2000);
+  it("uses canonical timing when both canonical and deprecated props are supplied", () => {
+    render(<CountUp from={0} to={100} durationMs={80} duration={2} />);
+
+    flushNextFrame(1000);
+    flushNextFrame(1080);
+    expect(screen.getByText("100")).toBeInTheDocument();
+  });
+
+  it("cancels the scheduled frame when unmounted", () => {
+    const { unmount } = render(<CountUp from={0} to={100} durationMs={900} />);
+    const pendingFrameId = frames[0]?.id;
+
+    unmount();
+
+    expect(cancelAnimationFrame).toHaveBeenCalledWith(pendingFrameId);
+    expect(frames).toHaveLength(0);
+  });
+
+  it("cancels a pending frame and jumps to the target when reduced motion turns on live", () => {
+    const { rerender } = render(<CountUp from={0} to={100} durationMs={900} />);
+    const pendingFrameId = frames[0]?.id;
+    expect(screen.getByText("0")).toBeInTheDocument();
+
+    personality.shouldReduceMotion = true;
+    rerender(<CountUp from={0} to={100} durationMs={900} />);
+
+    expect(cancelAnimationFrame).toHaveBeenCalledWith(pendingFrameId);
+    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(frames).toHaveLength(0);
+
+    personality.shouldReduceMotion = false;
+    rerender(<CountUp from={0} to={100} durationMs={900} />);
+
+    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(frames).toHaveLength(0);
+  });
+
+  it("retargets a live value change from the last painted value instead of restarting at from", () => {
+    const { rerender } = render(
+      <CountUp from={0} to={100} durationMs={200} />
+    );
+
+    flushNextFrame(1000);
+    flushNextFrame(1100);
+    const beforeRetarget = Number(
+      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+    );
+    expect(beforeRetarget).toBeGreaterThan(0);
+    expect(beforeRetarget).toBeLessThan(100);
+
+    rerender(<CountUp from={0} to={200} durationMs={200} />);
+    const afterRetarget = Number(
+      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+    );
+    expect(afterRetarget).toBe(beforeRetarget);
+    expect(afterRetarget).not.toBe(0);
+
+    flushNextFrame(1200);
+    flushNextFrame(1300);
+    const retargetedProgress = Number(
+      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+    );
+    expect(retargetedProgress).toBeGreaterThan(afterRetarget);
+    expect(retargetedProgress).toBeLessThan(200);
+  });
+
+  it("honors delayMs using a cancelable timer", () => {
+    vi.useFakeTimers();
+    vi.stubGlobal(
+      "requestAnimationFrame",
+      vi.fn((callback: FrameRequestCallback) => {
+        const id = nextFrameId++;
+        frames.push({ id, callback });
+        return id;
+      })
+    );
+    render(<CountUp from={0} to={100} durationMs={200} delayMs={120} />);
+
+    expect(screen.getByText("0")).toBeInTheDocument();
+    expect(frames).toHaveLength(0);
+    act(() => vi.advanceTimersByTime(119));
+    expect(frames).toHaveLength(0);
+    act(() => vi.advanceTimersByTime(1));
+    expect(screen.getByText("0")).toBeInTheDocument();
+    expect(frames).toHaveLength(1);
   });
 });

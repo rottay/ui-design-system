@@ -48,11 +48,8 @@ import React, {
   type ReactNode,
 } from 'react';
 
-import {
-  RESPONSIVE_BREAKPOINTS,
-  buildRangeQuery,
-  buildMinWidthQuery,
-} from '../../hooks/responsive/breakpoints';
+import { buildMinWidthQuery } from '../../hooks/responsive/breakpoints';
+import { useMotionPreference } from '../motion';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -113,7 +110,7 @@ const SSR_DEFAULTS: ResponsiveContextValue = {
   isDesktop: false,
   pointer: 'coarse',
   orientation: 'portrait',
-  prefersReducedMotion: false,
+  prefersReducedMotion: true,
   isPhoneOrTablet: true,
   isTabletOrDesktop: false,
   isTouchDevice: true,
@@ -123,12 +120,13 @@ const SSR_DEFAULTS: ResponsiveContextValue = {
 // Media query strings (computed once, reused for every provider instance)
 // ---------------------------------------------------------------------------
 
-const PHONE_QUERY = buildRangeQuery('xs', 'sm'); // (max-width: 639px)
-const TABLET_QUERY = buildRangeQuery('sm', 'lg'); // (min-width: 640px) and (max-width: 1023px)
-const DESKTOP_QUERY = buildMinWidthQuery('lg'); // (min-width: 1024px)
+const SM_QUERY = buildMinWidthQuery('sm');
+const MD_QUERY = buildMinWidthQuery('md');
+const LG_QUERY = buildMinWidthQuery('lg');
+const XL_QUERY = buildMinWidthQuery('xl');
+const XXL_QUERY = buildMinWidthQuery('2xl');
 const TOUCH_QUERY = '(hover: none) and (pointer: coarse)';
 const LANDSCAPE_QUERY = '(orientation: landscape)';
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 // ---------------------------------------------------------------------------
 // Context
@@ -141,41 +139,73 @@ const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 export const ResponsiveContext = createContext<ResponsiveContextValue | null>(null);
 
 // ---------------------------------------------------------------------------
-// Helper: subscribe to a single media query
+// Atomic media snapshot
 // ---------------------------------------------------------------------------
 
-/**
- * Creates a matchMedia subscription and returns a cleanup function.
- * Handles legacy Safari (<14) addListener/removeListener API.
- */
-function subscribeToQuery(
-  query: string,
-  onChange: (matches: boolean) => void,
+interface ResponsiveMediaSnapshot {
+  isSm: boolean;
+  isMd: boolean;
+  isLg: boolean;
+  isXl: boolean;
+  is2xl: boolean;
+  isTouchDevice: boolean;
+  isLandscape: boolean;
+}
+
+type ResponsiveMediaQueries = Record<keyof ResponsiveMediaSnapshot, MediaQueryList>;
+
+const SSR_MEDIA_SNAPSHOT: ResponsiveMediaSnapshot = {
+  isSm: false,
+  isMd: false,
+  isLg: false,
+  isXl: false,
+  is2xl: false,
+  isTouchDevice: true,
+  isLandscape: false,
+};
+
+function readResponsiveSnapshot(
+  queries: ResponsiveMediaQueries,
+): ResponsiveMediaSnapshot {
+  return {
+    isSm: queries.isSm.matches,
+    isMd: queries.isMd.matches,
+    isLg: queries.isLg.matches,
+    isXl: queries.isXl.matches,
+    is2xl: queries.is2xl.matches,
+    isTouchDevice: queries.isTouchDevice.matches,
+    isLandscape: queries.isLandscape.matches,
+  };
+}
+
+function responsiveSnapshotsEqual(
+  left: ResponsiveMediaSnapshot,
+  right: ResponsiveMediaSnapshot,
+): boolean {
+  return (
+    left.isSm === right.isSm &&
+    left.isMd === right.isMd &&
+    left.isLg === right.isLg &&
+    left.isXl === right.isXl &&
+    left.is2xl === right.is2xl &&
+    left.isTouchDevice === right.isTouchDevice &&
+    left.isLandscape === right.isLandscape
+  );
+}
+
+/** Subscribe one shared callback to a query, including legacy Safari. */
+function subscribeToMediaQuery(
+  query: MediaQueryList,
+  listener: (event: MediaQueryListEvent) => void,
 ): () => void {
-  if (typeof window === 'undefined' || !window.matchMedia) {
-    return () => {};
+  if (typeof query.addEventListener === 'function') {
+    query.addEventListener('change', listener);
+    return () => query.removeEventListener('change', listener);
   }
 
-  const mql = window.matchMedia(query);
-
-  // Set initial value synchronously
-  onChange(mql.matches);
-
-  const listener = (e: MediaQueryListEvent) => onChange(e.matches);
-
-  if (mql.addEventListener) {
-    mql.addEventListener('change', listener);
-    return () => mql.removeEventListener('change', listener);
-  }
-
-  // Legacy fallback
-  if ('addListener' in mql && typeof mql.addListener === 'function') {
-    mql.addListener(listener as any);
-    return () => {
-      if ('removeListener' in mql && typeof mql.removeListener === 'function') {
-        mql.removeListener(listener as any);
-      }
-    };
+  if (typeof query.addListener === 'function') {
+    query.addListener(listener);
+    return () => query.removeListener(listener);
   }
 
   return () => {};
@@ -205,19 +235,21 @@ function deriveActiveBreakpoint(
 }
 
 function buildContextValue(
-  isPhone: boolean,
-  isTablet: boolean,
-  isDesktop: boolean,
-  isTouchDevice: boolean,
-  isLandscape: boolean,
+  media: ResponsiveMediaSnapshot,
   prefersReducedMotion: boolean,
-  activeBreakpoint: ActiveBreakpoint,
 ): ResponsiveContextValue {
-  const deviceClass: DeviceClass = isDesktop
+  const deviceClass: DeviceClass = media.isLg
     ? 'desktop'
-    : isTablet
+    : media.isSm
       ? 'tablet'
       : 'phone';
+  const activeBreakpoint = deriveActiveBreakpoint(
+    media.isSm,
+    media.isMd,
+    media.isLg,
+    media.isXl,
+    media.is2xl,
+  );
 
   return {
     deviceClass,
@@ -225,12 +257,12 @@ function buildContextValue(
     isPhone: deviceClass === 'phone',
     isTablet: deviceClass === 'tablet',
     isDesktop: deviceClass === 'desktop',
-    pointer: isTouchDevice ? 'coarse' : 'fine',
-    orientation: isLandscape ? 'landscape' : 'portrait',
+    pointer: media.isTouchDevice ? 'coarse' : 'fine',
+    orientation: media.isLandscape ? 'landscape' : 'portrait',
     prefersReducedMotion,
     isPhoneOrTablet: deviceClass === 'phone' || deviceClass === 'tablet',
     isTabletOrDesktop: deviceClass === 'tablet' || deviceClass === 'desktop',
-    isTouchDevice,
+    isTouchDevice: media.isTouchDevice,
   };
 }
 
@@ -246,61 +278,58 @@ export interface ResponsiveProviderProps {
  * Provides shared responsive state to the entire subtree via React context.
  *
  * A single instance of this provider should wrap the application root. It
- * creates exactly six matchMedia subscriptions (phone, tablet, desktop, touch,
- * orientation, reduced-motion) and shares the derived state with every
- * `useResponsive()` consumer, eliminating per-component listener overhead.
+ * shares viewport/device subscriptions plus the canonical MotionProvider
+ * preference with every `useResponsive()` consumer, eliminating per-component
+ * reduced-motion listeners.
  *
  * SSR-safe: on the server, all consumers receive mobile-first defaults
  * (phone, coarse pointer, portrait orientation).
  */
-// Breakpoint-level min-width queries for precise activeBreakpoint detection
-const SM_QUERY = buildMinWidthQuery('sm');
-const MD_QUERY = buildMinWidthQuery('md');
-const LG_QUERY = buildMinWidthQuery('lg');
-const XL_QUERY = buildMinWidthQuery('xl');
-const XXL_QUERY = buildMinWidthQuery('2xl');
-
 export function ResponsiveProvider({ children }: ResponsiveProviderProps): React.ReactElement {
-  const [isPhone, setIsPhone] = useState(true);
-  const [isTablet, setIsTablet] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(true);
-  const [isLandscape, setIsLandscape] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  // Precise breakpoint tracking for useResponsiveValue resolution
-  const [isSm, setIsSm] = useState(false);
-  const [isMd, setIsMd] = useState(false);
-  const [isLg, setIsLg] = useState(false);
-  const [isXl, setIsXl] = useState(false);
-  const [is2xl, setIs2xl] = useState(false);
+  const [mediaSnapshot, setMediaSnapshot] = useState<ResponsiveMediaSnapshot>(
+    SSR_MEDIA_SNAPSHOT,
+  );
+  const prefersReducedMotion = useMotionPreference();
 
   useEffect(() => {
-    const cleanups = [
-      subscribeToQuery(PHONE_QUERY, setIsPhone),
-      subscribeToQuery(TABLET_QUERY, setIsTablet),
-      subscribeToQuery(DESKTOP_QUERY, setIsDesktop),
-      subscribeToQuery(TOUCH_QUERY, setIsTouchDevice),
-      subscribeToQuery(LANDSCAPE_QUERY, setIsLandscape),
-      subscribeToQuery(REDUCED_MOTION_QUERY, setPrefersReducedMotion),
-      // Precise breakpoint subscriptions
-      subscribeToQuery(SM_QUERY, setIsSm),
-      subscribeToQuery(MD_QUERY, setIsMd),
-      subscribeToQuery(LG_QUERY, setIsLg),
-      subscribeToQuery(XL_QUERY, setIsXl),
-      subscribeToQuery(XXL_QUERY, setIs2xl),
-    ];
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return undefined;
+    }
+
+    const queries: ResponsiveMediaQueries = {
+      isSm: window.matchMedia(SM_QUERY),
+      isMd: window.matchMedia(MD_QUERY),
+      isLg: window.matchMedia(LG_QUERY),
+      isXl: window.matchMedia(XL_QUERY),
+      is2xl: window.matchMedia(XXL_QUERY),
+      isTouchDevice: window.matchMedia(TOUCH_QUERY),
+      isLandscape: window.matchMedia(LANDSCAPE_QUERY),
+    };
+
+    // Every media-query event reads the entire live set before committing one
+    // object. Boundary changes therefore cannot expose desktop+md or a
+    // transient phone tier while sibling events are still being delivered.
+    const publishSnapshot = (): void => {
+      const next = readResponsiveSnapshot(queries);
+      setMediaSnapshot((current) =>
+        responsiveSnapshotsEqual(current, next) ? current : next,
+      );
+    };
+    const listener = (): void => publishSnapshot();
+
+    publishSnapshot();
+    const cleanups = Object.values(queries).map((query) =>
+      subscribeToMediaQuery(query, listener),
+    );
 
     return () => {
       cleanups.forEach((cleanup) => cleanup());
     };
   }, []);
 
-  const activeBreakpoint = deriveActiveBreakpoint(isSm, isMd, isLg, isXl, is2xl);
-
   const value = useMemo(
-    () => buildContextValue(isPhone, isTablet, isDesktop, isTouchDevice, isLandscape, prefersReducedMotion, activeBreakpoint),
-    [isPhone, isTablet, isDesktop, isTouchDevice, isLandscape, prefersReducedMotion, activeBreakpoint],
+    () => buildContextValue(mediaSnapshot, prefersReducedMotion),
+    [mediaSnapshot, prefersReducedMotion],
   );
 
   return (

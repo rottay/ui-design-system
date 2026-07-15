@@ -208,8 +208,8 @@ export function ChatSurface({
                 {/* When entrance motion is enabled, transcript messages reveal as a coordinated group. */}
                 {profileDefaults.animateEntrance ? (
                   <StaggerChildren
-                    staggerDelay={profileDefaults.staggerDelay}
-                    duration={profileDefaults.entranceDuration}
+                    staggerDelayMs={profileDefaults.staggerDelay}
+                    durationMs={profileDefaults.entranceDuration}
                   >
                     {config.behavior.messages.map((message, index) => (
                       <React.Fragment key={message.id}>
@@ -295,7 +295,7 @@ export function ChatSurface({
     >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
-          <FadeIn duration={profileDefaults.entranceDuration}>
+          <FadeIn durationMs={profileDefaults.entranceDuration}>
             {chatContent}
           </FadeIn>
         ) : (

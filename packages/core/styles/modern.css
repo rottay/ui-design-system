@@ -4358,6 +4358,24 @@
   .animate-spin {
     animation: var(--animate-spin);
   }
+  .\!link {
+    @layer daisyui.l1.l2.l3 {
+      cursor: pointer !important;
+      text-decoration-line: underline !important;
+      &:focus {
+        --tw-outline-style: none !important;
+        outline-style: none !important;
+        @media (forced-colors: active) {
+          outline: 2px solid transparent !important;
+          outline-offset: 2px !important;
+        }
+      }
+      &:focus-visible {
+        outline: 2px solid currentColor !important;
+        outline-offset: 2px !important;
+      }
+    }
+  }
   .link {
     @layer daisyui.l1.l2.l3 {
       cursor: pointer;

@@ -19,6 +19,7 @@
  */
 
 import { useCallback } from 'react';
+import { getReducedMotionSnapshot } from '../../../runtime/motion/reduced-motion-store';
 import { useReducedMotion } from '../use-reduced-motion';
 
 /** A DOM update run inside (or in place of) a view transition. */
@@ -69,10 +70,7 @@ type ViewTransitionDocument = Document & {
 
 /** True when the current environment reports a reduced-motion preference. */
 function environmentPrefersReducedMotion(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-    return false;
-  }
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return getReducedMotionSnapshot();
 }
 
 /**

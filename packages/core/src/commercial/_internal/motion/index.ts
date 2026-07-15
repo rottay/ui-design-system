@@ -10,27 +10,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-
-/**
- * Track the user's reduced-motion preference reactively.
- *
- * Returns `true` when the user has requested reduced motion (or during SSR, so the first
- * client paint is the safe instant-and-visible state until the media query resolves).
- */
-export function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(true);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(query.matches);
-    const onChange = (event: MediaQueryListEvent): void => setReduced(event.matches);
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
-
-  return reduced;
-}
+import { useReducedMotion } from "../../../motion/hooks/use-reduced-motion";
 
 export interface UseRevealOptions {
   /** Fraction of the element visible before the one-shot reveal fires (default 0.35). */
@@ -65,15 +45,26 @@ export function useReveal<T extends HTMLElement = HTMLElement>(
   const { threshold = 0.35, immediate = false } = options;
   const reduced = useReducedMotion();
   const ref = useRef<T | null>(null);
-  const [revealed, setRevealed] = useState(false);
+  const [revealed, setRevealed] = useState(reduced);
+  const resolvedStaticRef = useRef(reduced);
 
   useEffect(() => {
-    if (reduced || immediate) {
+    if (reduced) {
+      // SSR/hydration and live reduced-motion changes resolve to the final
+      // visible state. Latch that decision for this mount so a later
+      // non-reduced snapshot cannot animate content that was already shown.
+      resolvedStaticRef.current = true;
+      setRevealed(true);
+      return;
+    }
+    if (resolvedStaticRef.current) return;
+    if (immediate) {
       setRevealed(true);
       return;
     }
     const node = ref.current;
     if (!node || typeof IntersectionObserver === "undefined") {
+      resolvedStaticRef.current = true;
       setRevealed(true);
       return;
     }
@@ -93,5 +84,9 @@ export function useReveal<T extends HTMLElement = HTMLElement>(
     return () => observer.disconnect();
   }, [reduced, immediate, threshold]);
 
-  return { ref, revealed, animate: revealed && !reduced };
+  return {
+    ref,
+    revealed,
+    animate: revealed && !reduced && !resolvedStaticRef.current,
+  };
 }

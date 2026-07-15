@@ -7,10 +7,10 @@
  * allows per-chart overrides via ChartPersonalityOptions.
  */
 
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useTokens } from '../../../../../hooks/tokens';
-import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 import { useTranslation } from '../../../../../i18n';
+import { useReducedMotion } from '../../../../../motion/hooks/use-reduced-motion';
 import { DEFAULT_COLORS, COLOR_SCHEME_MAP, type ChartColorScheme } from '../Charts.types';
 
 export interface ChartPersonalityOptions {
@@ -60,8 +60,17 @@ export function useChartPersonality(
   options: ChartPersonalityOptions = {}
 ): ResolvedChartPersonality {
   const tokens = useTokens();
-  const { prefersReducedMotion } = useBreakpoints();
+  const prefersReducedMotion = useReducedMotion();
   const { t } = useTranslation('components');
+  const resolvedStaticRef = useRef(prefersReducedMotion);
+
+  // SSR and a live reduced-motion request both expose the final chart. Keep
+  // that decision monotonic for this mount so resolving back to non-reduced
+  // cannot tear down a settled chart and replay its entrance animation.
+  if (prefersReducedMotion) {
+    resolvedStaticRef.current = true;
+  }
+  const resolvedStatic = resolvedStaticRef.current;
 
   // Memoized because every chart in the tree calls this hook, and the
   // personality tokens rarely change. The dep array is kept granular
@@ -75,8 +84,8 @@ export function useChartPersonality(
     const colors = COLOR_SCHEME_MAP[scheme] ?? DEFAULT_COLORS;
 
     return {
-      animate: options.animate ?? (chartPersonality.animateOnMount && !prefersReducedMotion),
-      animationDuration: prefersReducedMotion ? 0 : chartPersonality.mountDuration,
+      animate: !resolvedStatic && (options.animate ?? chartPersonality.animateOnMount),
+      animationDuration: resolvedStatic ? 0 : chartPersonality.mountDuration,
       lineMode: chartPersonality.lineStyle,
       showDots: options.showDots ?? chartPersonality.showDots,
       curved:
@@ -88,5 +97,5 @@ export function useChartPersonality(
       colors,
       loadingLabel: t('chart.loading'),
     };
-  }, [options.animate, options.colorScheme, options.curved, options.showDots, options.tooltip, prefersReducedMotion, t, tokens.personality.chart]);
+  }, [options.animate, options.colorScheme, options.curved, options.showDots, options.tooltip, resolvedStatic, t, tokens.personality.chart]);
 }

@@ -182,7 +182,7 @@ export function SettingsSurface({
     >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
-          <FadeIn duration={profileDefaults.entranceDuration}>
+          <FadeIn durationMs={profileDefaults.entranceDuration}>
             {settingsContent}
           </FadeIn>
         ) : (

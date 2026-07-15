@@ -27,7 +27,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useMediaQuery } from '../../responsive/useMediaQuery';
+import { useReducedMotion } from '../../../motion/hooks/use-reduced-motion';
 
 // Fallbacks used before the document is reachable (SSR, and any host that does
 // not load the DS token sheet). They must equal the token values in
@@ -128,7 +128,7 @@ export function useDeferredPending(
     skeletonAfter = tokenDefaults.current.skeleton,
   } = options;
 
-  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const prefersReducedMotion = useReducedMotion();
 
   const [phase, setPhase] = useState<DeferredPhase>('idle');
 

@@ -4,7 +4,7 @@
  * @fileoverview Morph motion primitive - Rottay Design System
  *
  * Provides smooth layout transitions between visual states using
- * framer-motion's `layout` and `layoutId` capabilities. When children
+ * Motion's `layout` and `layoutId` capabilities. When children
  * swap or reposition, the element morphs its size, position, and opacity
  * with spring or tween physics from the active motion personality.
  *
@@ -17,7 +17,7 @@
  */
 
 import React, { forwardRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import type { MorphProps } from '../../types';
 import { useMotionPersonality } from '../../hooks';
 

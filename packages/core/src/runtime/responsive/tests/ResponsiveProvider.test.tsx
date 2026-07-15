@@ -75,6 +75,45 @@ function createMatchMediaMock(resolver: (query: string) => boolean) {
   return { matchMedia, listeners };
 }
 
+function createLiveViewportMock(initialWidth: number) {
+  let width = initialWidth;
+  const listeners = new Map<string, Set<MediaQueryListener>>();
+  const resolveQuery = (query: string): boolean => viewportResolver(width)(query);
+
+  const matchMedia = vi.fn((query: string): MockMQL => {
+    const queryListeners = listeners.get(query) ?? new Set<MediaQueryListener>();
+    listeners.set(query, queryListeners);
+
+    return {
+      get matches() {
+        return resolveQuery(query);
+      },
+      media: query,
+      addEventListener: vi.fn((event: string, callback: MediaQueryListener) => {
+        if (event === 'change') queryListeners.add(callback);
+      }),
+      removeEventListener: vi.fn((event: string, callback: MediaQueryListener) => {
+        if (event === 'change') queryListeners.delete(callback);
+      }),
+      addListener: vi.fn((callback: MediaQueryListener) => queryListeners.add(callback)),
+      removeListener: vi.fn((callback: MediaQueryListener) => queryListeners.delete(callback)),
+      dispatchEvent: vi.fn(),
+      onchange: null,
+    } as MockMQL;
+  });
+
+  return {
+    matchMedia,
+    setWidth(nextWidth: number) {
+      width = nextWidth;
+      listeners.forEach((queryListeners, query) => {
+        const event = { matches: resolveQuery(query), media: query } as MediaQueryListEvent;
+        queryListeners.forEach((listener) => listener(event));
+      });
+    },
+  };
+}
+
 /**
  * Returns a resolver function that simulates a viewport of the given width.
  * Parses min-width, max-width, and combined range queries.
@@ -181,7 +220,9 @@ describe('ResponsiveProvider', () => {
       expect(result.current.isDesktop).toBe(false);
       expect(result.current.pointer).toBe('coarse');
       expect(result.current.orientation).toBe('portrait');
-      expect(result.current.prefersReducedMotion).toBe(false);
+      // Static-first SSR: motion remains reduced until the browser preference
+      // is known, preventing pre-hydration animation.
+      expect(result.current.prefersReducedMotion).toBe(true);
       expect(result.current.isPhoneOrTablet).toBe(true);
       expect(result.current.isTabletOrDesktop).toBe(false);
       expect(result.current.isTouchDevice).toBe(true);
@@ -482,6 +523,43 @@ describe('ResponsiveProvider', () => {
         expect(screen.getByTestId('activeBreakpoint').textContent).toBe(expectedBreakpoint);
         expect(screen.getByTestId('deviceClass').textContent).toBe(expectedDevice);
       });
+    });
+  });
+
+  describe('atomic live snapshot', () => {
+    it('uses five unique width queries and crosses lg without an inconsistent render', () => {
+      const controller = createLiveViewportMock(1023);
+      window.matchMedia = controller.matchMedia as any;
+      const observations: string[] = [];
+
+      function AtomicConsumer() {
+        const responsive = useResponsive();
+        observations.push(`${responsive.deviceClass}:${responsive.activeBreakpoint}`);
+        return (
+          <span data-testid="atomic-state">{observations[observations.length - 1]}</span>
+        );
+      }
+
+      render(
+        <ResponsiveProvider>
+          <AtomicConsumer />
+        </ResponsiveProvider>,
+      );
+
+      expect(screen.getByTestId('atomic-state')).toHaveTextContent('tablet:md');
+      const widthQueries = controller.matchMedia.mock.calls
+        .map(([query]) => query as string)
+        .filter((query) => query.includes('min-width'));
+      expect(widthQueries).toHaveLength(5);
+      expect(new Set(widthQueries).size).toBe(5);
+      expect(widthQueries.filter((query) => query === '(min-width: 1024px)')).toHaveLength(1);
+      expect(controller.matchMedia.mock.calls.flat().join(' ')).not.toContain('max-width');
+
+      observations.length = 0;
+      act(() => controller.setWidth(1024));
+
+      expect(screen.getByTestId('atomic-state')).toHaveTextContent('desktop:lg');
+      expect(observations).toEqual(['desktop:lg']);
     });
   });
 

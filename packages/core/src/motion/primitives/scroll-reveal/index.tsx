@@ -17,7 +17,7 @@
  */
 
 import React, { forwardRef, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type { ScrollRevealProps } from '../../types';
 import { useMotionPersonality } from '../../hooks';
 
@@ -35,7 +35,7 @@ function supportsScrollTimeline(): boolean {
  *
  * The component delegates entrance style (fade, slide, spring, bounce) to the
  * active motion personality and passes `threshold` and `rootMargin` straight
- * through to framer-motion's `viewport` option, which maps to IntersectionObserver.
+ * through to Motion's `viewport` option, which maps to IntersectionObserver.
  *
  * @param props - {@link ScrollRevealProps}
  * @param props.children - Content to reveal on scroll.
@@ -53,7 +53,7 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
 
     // Feature detection is deferred to mount so the server render and the first
     // client render agree (a synchronous probe would diverge and trip
-    // hydration). Until then the framer-motion fallback path renders.
+    // hydration). Until then the Motion fallback path renders.
     const [useCssTimeline, setUseCssTimeline] = useState(false);
     useEffect(() => {
       if (supportsScrollTimeline()) {
@@ -63,7 +63,7 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
 
     // CSS-first path: when the browser supports scroll-driven animation, the
     // reveal is owned entirely by the `ds-scroll-reveal` class (see
-    // transitions.css). The wrapper carries no framer-motion animation props,
+    // transitions.css). The wrapper carries no Motion animation props,
     // so no JavaScript-driven animation runs; the CSS `view()` timeline is the
     // sole animator. `threshold` and `rootMargin` describe an
     // IntersectionObserver contract that the `view()` timeline approximates

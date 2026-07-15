@@ -183,7 +183,7 @@ const COMPONENT_BUNDLE_EXTERNALS = [
   /^d3\/.*/,
   'antd',
   '@ant-design/icons',
-  'framer-motion',
+  'motion',
   'lucide-react',
   'dayjs',
   /^@rottay\/.*/,
@@ -191,7 +191,7 @@ const COMPONENT_BUNDLE_EXTERNALS = [
   /^@ant-design\/icons\/.*/,
   /^lucide-react\/.*/,
   /^d3-.*/,
-  /^framer-motion\/.*/,
+  /^motion\/.*/,
   /^dayjs\/.*/,
 ];
 

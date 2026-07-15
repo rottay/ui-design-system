@@ -196,7 +196,7 @@ export function FormSurface({
     <PageShellSurface chrome={chrome} loading={loading}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
-          <FadeIn duration={profileDefaults.entranceDuration}>
+          <FadeIn durationMs={profileDefaults.entranceDuration}>
             {formContent}
           </FadeIn>
         ) : (

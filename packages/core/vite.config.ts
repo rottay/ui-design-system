@@ -63,7 +63,7 @@ export default defineConfig({
         /^d3\/.*/,
         'antd',
         '@ant-design/icons',
-        'framer-motion',
+        'motion',
         'lucide-react',
         'dayjs',
         // @rottay domain modules (provided by consuming app)
@@ -73,7 +73,7 @@ export default defineConfig({
         /^@ant-design\/icons\/.*/,
         /^lucide-react\/.*/,
         /^d3-.*/,
-        /^framer-motion\/.*/,
+        /^motion\/.*/,
         /^dayjs\/.*/,
       ],
       output: [

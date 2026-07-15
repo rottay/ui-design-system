@@ -23,7 +23,7 @@
     "@rottay/design-system": "workspace:*",
     "antd": "^5.29.3",
     "d3": "^7.9.0",
-    "framer-motion": "^12.38.0",
+    "motion": "12.42.2",
     "geist": "^1.7.0",
     "lucide-react": "^0.563.0",
     "next": "^16.2.4",

@@ -8,8 +8,9 @@
  * Drop-in `<style>` pattern that ships the animations and hover/cursor
  * styling shared by table-row interactions across the design system. Add
  * this pattern once inside a table wrapper and the underlying primitives
- * automatically pick up the keyframes (`slideInCheckbox`, `pulseCheck`,
- * `fadeIn`) and the row/action-button hover states.
+ * automatically pick up the keyframes (`ds-table-checkbox-slide-in`,
+ * `ds-table-checkbox-pulse-check`, `ds-table-checkbox-fade-in`) and the
+ * row/action-button hover states.
  *
  * The pattern is intentionally engine-free: it only emits CSS that targets
  * generic `table` markup and DS tokens. Consumers can append additional CSS
@@ -17,7 +18,7 @@
  */
 
 const CHECKBOX_ANIMATION_CSS = `
-  @keyframes slideInCheckbox {
+  @keyframes ds-table-checkbox-slide-in {
     from {
       opacity: 0;
       transform: translateX(-8px) scale(0.9);
@@ -28,7 +29,7 @@ const CHECKBOX_ANIMATION_CSS = `
     }
   }
 
-  @keyframes pulseCheck {
+  @keyframes ds-table-checkbox-pulse-check {
     0%, 100% {
       box-shadow: 0 0 0 0 var(--ds-color-primary-200);
     }
@@ -37,7 +38,7 @@ const CHECKBOX_ANIMATION_CSS = `
     }
   }
 
-  @keyframes fadeIn {
+  @keyframes ds-table-checkbox-fade-in {
     from {
       opacity: 0;
     }

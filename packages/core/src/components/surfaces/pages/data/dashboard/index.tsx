@@ -192,8 +192,8 @@ export function DashboardSurface({
     >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
-          <FadeIn duration={profileDefaults.entranceDuration}>
-            <StaggerChildren staggerDelay={profileDefaults.staggerDelay}>
+          <FadeIn durationMs={profileDefaults.entranceDuration}>
+            <StaggerChildren staggerDelayMs={profileDefaults.staggerDelay}>
               {dashboardContent}
             </StaggerChildren>
           </FadeIn>

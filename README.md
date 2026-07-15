@@ -155,18 +155,23 @@ pnpm --filter @rottay/design-system lint:integration
 - **Storybook**: v9 with React + Vite
 - **Styles**: CSS variables + Tailwind 4 (modern engine) + PostCSS
 - **Charts**: D3.js v7
-- **Animation**: Framer Motion v12
+- **Animation**: Motion for React v12 (`motion/react`)
 - **Types**: TypeScript 5.9
 
 ## Peer Dependencies
 
-Apps consuming the DS must install:
+Apps consuming DS symbols must declare the runtime suppliers those symbols
+reach. For example, an app using Ant-backed controls and motion primitives
+declares:
 
 ```json
 {
   "antd": "^5.21.0",
-  "@ant-design/icons": "^5.5.0"
+  "@ant-design/icons": "^5.5.0",
+  "motion": "12.42.2"
 }
 ```
 
-Optional peers: `d3`, `framer-motion`, `geist`, `lucide-react`, `@heroui/react`.
+The packaged `rottay-ds-supplier-honesty` command reports the exact suppliers
+required by each app. Motion is governed as `motion@12.42.2`; its internal
+`framer-motion` package is transitively owned and must not be declared directly.

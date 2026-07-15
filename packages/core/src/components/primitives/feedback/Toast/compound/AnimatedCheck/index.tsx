@@ -53,7 +53,7 @@ export function AnimatedCheck({
 }: AnimatedCheckProps): React.ReactElement {
   const { prefersReducedMotion } = useBreakpoints();
   const uid = useId().replace(/:/g, '');
-  const animationName = `rottay-animated-check-${uid}`;
+  const animationName = `ds-toast-animated-check-${uid}`;
 
   const keyframes = `@keyframes ${animationName}{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}`;
 

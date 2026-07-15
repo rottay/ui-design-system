@@ -1071,7 +1071,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
   return (
     <SurfaceAccentBarWrapper defaults={profileDefaults}>
       {profileDefaults.animateEntrance ? (
-        <FadeIn duration={profileDefaults.entranceDuration}>
+        <FadeIn durationMs={profileDefaults.entranceDuration}>
           {content}
         </FadeIn>
       ) : (

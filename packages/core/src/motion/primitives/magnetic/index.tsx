@@ -17,7 +17,7 @@
  */
 
 import React, { forwardRef, type MouseEvent } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'motion/react';
 import type { MagneticProps } from '../../types';
 import { useMotionPersonality } from '../../hooks';
 

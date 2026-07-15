@@ -1,13 +1,28 @@
 /**
  * BulkSelectToggle skin (WO-SKIN-06 CK-I).
  * Deliberately unlayered so the primitive engine skins and tenant wildcard
- * floor cannot displace the pattern's active ring. Values are transcribed
- * from the former inline styles; slideInCheckbox remains an external shared
- * keyframe exactly as it was before extraction.
+ * floor cannot displace the pattern's active ring. Its entrance keyframe is
+ * local to this stable stylesheet so the pattern never depends on mounting a
+ * separate TableCheckboxStyles component.
  */
 
+@keyframes ds-bulk-select-toggle-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-8px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
 .ds-pattern-bulk-select-toggle .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
-  transition: all 0.2s ease;
+  transition:
+    background-color var(--ds-duration-normal) ease,
+    border-color var(--ds-duration-normal) ease,
+    box-shadow var(--ds-duration-normal) ease,
+    color var(--ds-duration-normal) ease;
 }
 
 .ds-pattern-bulk-select-toggle[data-active='true'] .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
@@ -15,9 +30,9 @@
 }
 
 .ds-pattern-bulk-select-toggle[data-active='true'] [data-part='icon'] {
-  animation: slideInCheckbox 0.2s ease-out;
+  animation: ds-bulk-select-toggle-enter var(--ds-duration-normal) ease-out;
 }
 
 .ds-pattern-bulk-select-toggle[data-has-selection='true'] .ds-bulk-select-toggle__count.ds-bulk-select-toggle__count {
-  animation: slideInCheckbox 0.2s ease-out;
+  animation: ds-bulk-select-toggle-enter var(--ds-duration-normal) ease-out;
 }

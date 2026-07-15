@@ -642,17 +642,3 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
-/* ========================================================================
-   REDUCED MOTION
-   Respect user's motion preferences by disabling animations
-   ======================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01s !important;
-  }
-}

@@ -81,6 +81,10 @@ function resolvePaletteColor(palette: readonly string[], index: number): string 
   return arrayValueAt(palette, paletteIndex) ?? FALLBACK_BAR_COLOR;
 }
 
+function readStackedValue(row: Record<string, unknown>, key: string): number {
+  return Number(Reflect.get(row, key)) || 0;
+}
+
 function isFiniteSeriesPoint(point: Series['data'][number]): boolean {
   if (!Number.isFinite(point.y)) return false;
   if (point.x instanceof Date) return Number.isFinite(point.x.getTime());
@@ -443,7 +447,7 @@ export const BarChart = memo(function BarChart({
 
             attachBarHover(bars, (d) => {
               const cat = (d.data as Record<string, string>).__category;
-              const value = Number((d.data as Record<string, unknown>)[seriesKey]) || 0;
+              const value = readStackedValue(d.data as Record<string, unknown>, seriesKey);
               return {
                 cx: (x0(cat) ?? 0) + x0.bandwidth() / 2,
                 cy: y(value >= 0 ? d[1] : d[0]),
@@ -480,7 +484,7 @@ export const BarChart = memo(function BarChart({
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
                 .style('font-size', '10px')
-                .text((d) => Number((d.data as Record<string, unknown>)[seriesKey]) || 0);
+                .text((d) => readStackedValue(d.data as Record<string, unknown>, seriesKey));
             }
           });
         } else {
@@ -646,7 +650,7 @@ export const BarChart = memo(function BarChart({
 
             attachBarHover(bars, (d) => {
               const cat = (d.data as Record<string, string>).__category;
-              const value = Number((d.data as Record<string, unknown>)[seriesKey]) || 0;
+              const value = readStackedValue(d.data as Record<string, unknown>, seriesKey);
               return {
                 cx: x(value >= 0 ? d[1] : d[0]),
                 cy: (y0(cat) ?? 0) + y0.bandwidth() / 2,

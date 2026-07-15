@@ -114,7 +114,10 @@ export const Sparkline = memo(function Sparkline({
   const resolvedFill = fill ?? chartPersonality.useGradientFill;
   const resolvedCurve = curve ?? chartPersonality.lineMode;
   const resolvedShowEndDot = showEndDot ?? chartPersonality.showDots;
-  const resolvedAnimate = animate ?? chartPersonality.animate;
+  // The personality resolver already applies the explicit prop and then lets
+  // the system reduced-motion prohibition win. Re-applying `animate` here
+  // would allow `animate={true}` to bypass that accessibility decision.
+  const resolvedAnimate = chartPersonality.animate;
 
   // Padding inside the SVG to prevent line/dot clipping at the edges.
   const padding = { x: resolvedShowEndDot || showMinMax ? 4 : 2, y: 2 };
@@ -197,7 +200,7 @@ export const Sparkline = memo(function Sparkline({
   // injected via a <style> element scoped to this instance. This avoids
   // D3 transitions (which would require an effect + DOM mutation) and
   // automatically respects prefers-reduced-motion via a media query.
-  const animationName = `sparkline-draw-${uniqueId.replace(/:/g, '')}`;
+  const animationName = `ds-sparkline-draw-${uniqueId.replace(/:/g, '')}`;
 
   return (
     <svg
@@ -268,7 +271,7 @@ export const Sparkline = memo(function Sparkline({
           strokeDashoffset: 0,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ['--sparkline-length' as any]: 2000,
-          animation: `${animationName} 800ms ease-out forwards`,
+          animation: `${animationName} ${chartPersonality.animationDuration}ms ease-out forwards`,
         } : undefined}
       />
 

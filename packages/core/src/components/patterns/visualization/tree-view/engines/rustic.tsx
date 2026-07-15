@@ -98,7 +98,7 @@ const s = {
   skeleton: (w: string, h: string) => ({
     width: w,
     height: h,
-    animation: 'pulse 1.5s ease-in-out infinite',
+    animation: 'ds-tree-view-rustic-pulse 1.5s ease-in-out infinite',
   } as React.CSSProperties),
 };
 
@@ -228,7 +228,7 @@ export default function RusticTreeView(props: TreeViewProps) {
   if (loading) {
     return (
       <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...s.container, ...style }}>
-        <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
+        <style>{`@keyframes ds-tree-view-rustic-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
         {[1, 2, 3, 4, 5].map((i) => (
           <div data-part="skeleton" className="ds-tree-view-rustic__skeleton" key={i} style={{ ...s.skeleton(`${70 - (i % 3) * 10}%`, '1.25rem'), marginLeft: `${(i % 3) * 1.25}rem`, marginBottom: '0.375rem' }} />
         ))}

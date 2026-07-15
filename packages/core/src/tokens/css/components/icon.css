@@ -50,5 +50,4 @@
      ======================================================================== */
   --ds-icon-transition-duration: 0.2s;
   --ds-icon-transition-timing: ease-in-out;
-  --ds-icon-transition: all var(--ds-icon-transition-duration) var(--ds-icon-transition-timing);
 }

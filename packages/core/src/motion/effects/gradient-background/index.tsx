@@ -17,9 +17,10 @@
  */
 
 import React, { useMemo } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type { GradientBackgroundProps } from '../../types';
 import { useMotionPersonality } from '../../hooks/use-motion-personality';
+import { useReducedMotion } from '../../hooks/use-reduced-motion';
 
 /** Maps personality pulse speed to a duration multiplier for the pan cycle. */
 const PULSE_DURATION_MAP: Record<string, number> = { slow: 1.6, normal: 1, fast: 0.6 };
@@ -57,7 +58,7 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
     4
   );
 
-  // Memoize the gradient string so Framer Motion's animation loop doesn't
+  // Memoize the gradient string so Motion's animation loop doesn't
   // force a new style object allocation on every frame.
   // backgroundSize: 200% 200% is essential - it creates a gradient surface
   // twice as wide/tall as the element so background-position can pan across

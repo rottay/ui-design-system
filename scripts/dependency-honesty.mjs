@@ -26,10 +26,16 @@ export const coreRoot = resolve(repositoryRoot, 'packages/core');
 const sourceRoot = resolve(coreRoot, 'src');
 const supplierContractPath = resolve(coreRoot, 'supplier-contract.json');
 const DESIGN_SYSTEM_PACKAGE = '@rottay/design-system';
+const CANONICAL_MOTION_VERSION = '12.42.2';
+const CANONICAL_FRAMER_TRANSITIVE_RANGE = `^${CANONICAL_MOTION_VERSION}`;
+const RUNTIME_DEPENDENCY_SECTIONS = Object.freeze([
+  'dependencies', 'peerDependencies', 'devDependencies', 'optionalDependencies',
+]);
 
 const TRACKED_SUPPLIERS = Object.freeze([
   'd3',
   'framer-motion',
+  'motion',
   'lucide-react',
   'three',
   '@react-three/fiber',
@@ -185,6 +191,7 @@ export function supplierFamilyForSpecifier(specifier) {
   if (!packageRoot) return null;
   if (packageRoot === 'd3' || packageRoot.startsWith('d3-')) return 'd3';
   if (packageRoot === 'framer-motion') return 'framer-motion';
+  if (packageRoot === 'motion') return 'motion';
   if (packageRoot === 'lucide-react') return 'lucide-react';
   if (packageRoot === 'three' || packageRoot.startsWith('@react-three/')) return 'three';
   if (packageRoot === 'antd' || packageRoot === '@ant-design/icons') return 'antd';
@@ -1777,23 +1784,11 @@ export function deriveSupplierContract(root = coreRoot) {
   const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root, undefined, configPath);
   const program = ts.createProgram({ rootNames: parsed.fileNames, options: parsed.options });
   const checker = program.getTypeChecker();
-  const graphCache = new Map();
+  const runtimeConditions = collectRuntimeExportConditions(manifest);
+  const productiveEntries = collectProductiveEntrypoints(manifest, root);
   const reexportCache = new Map();
   const activeReexports = new Set();
   const entrypoints = {};
-
-  function suppliersForDeclarationFile(file) {
-    if (!isPathInside(file, src)) return [];
-    let suppliers = graphCache.get(file);
-    if (!suppliers) {
-      const graph = traceSourceEntry(file, src);
-      suppliers = [...graph.externalImports.keys()]
-        .filter((packageName) => supplierFamilyForSpecifier(packageName))
-        .sort();
-      graphCache.set(file, suppliers);
-    }
-    return suppliers;
-  }
 
   function governedSupplierForSpecifier(specifier) {
     const packageName = packageRootForSpecifier(specifier);
@@ -1801,6 +1796,96 @@ export function deriveSupplierContract(root = coreRoot) {
     if (TRACKED_SUPPLIERS.includes(packageName)) return packageName;
     const family = supplierFamilyForSpecifier(packageName);
     return family && TRACKED_SUPPLIERS.includes(family) ? family : null;
+  }
+
+  // Reuse the exact program that resolves exported symbols for the runtime-edge
+  // scan below. The former derivator built another TypeScript program and then
+  // retraced the complete dependency closure once per exported declaration,
+  // which made release certification scale with exports x graph size.
+  const runtimeContext = {
+    checker,
+    program,
+    rootSources: new Map(parsed.fileNames.map((file) => [resolve(file), readFileSync(file, 'utf8')])),
+  };
+  const runtimeContexts = runtimeTypeContextMap(ts);
+  for (const sourceFile of program.getSourceFiles()) {
+    runtimeContexts.set(resolve(sourceFile.fileName), runtimeContext);
+  }
+
+  /**
+   * Parse each productive source file once, then propagate supplier sets over
+   * the reverse graph to a fixed point. A fixed point (rather than caching a
+   * recursive DFS result) is required for cycles: A <-> B must expose a
+   * supplier reached from either side regardless of traversal order.
+   */
+  function buildSupplierClosureIndex(seedPaths) {
+    const adjacency = new Map();
+    const directSuppliers = new Map();
+    const pending = [...new Set([...seedPaths].map((file) => resolve(file)))];
+
+    while (pending.length > 0) {
+      const file = pending.pop();
+      if (!file || adjacency.has(file)) continue;
+      const dependencies = new Set();
+      const suppliers = new Set();
+      adjacency.set(file, dependencies);
+      directSuppliers.set(file, suppliers);
+
+      const source = readFileSync(file, 'utf8');
+      const specifiers = new Set(
+        analyzeRuntimeModuleEdges(source, file, ts).edges.map(({ specifier }) => specifier),
+      );
+      for (const specifier of specifiers) {
+        const local = resolveSourceModule(file, specifier, src);
+        if (local) {
+          const dependency = resolve(local);
+          dependencies.add(dependency);
+          if (!adjacency.has(dependency)) pending.push(dependency);
+          continue;
+        }
+        const packageName = packageRootForSpecifier(specifier);
+        if (packageName && supplierFamilyForSpecifier(packageName)) suppliers.add(packageName);
+      }
+    }
+
+    const reverse = new Map([...adjacency.keys()].map((file) => [file, new Set()]));
+    for (const [file, dependencies] of adjacency) {
+      for (const dependency of dependencies) {
+        const parents = reverse.get(dependency) ?? new Set();
+        parents.add(file);
+        reverse.set(dependency, parents);
+      }
+    }
+
+    const closures = new Map(
+      [...adjacency.keys()].map((file) => [file, new Set(directSuppliers.get(file) ?? [])]),
+    );
+    const queue = [...adjacency.keys()];
+    const queued = new Set(queue);
+    while (queue.length > 0) {
+      const dependency = queue.shift();
+      if (!dependency) continue;
+      queued.delete(dependency);
+      const dependencySuppliers = closures.get(dependency) ?? new Set();
+      for (const parent of reverse.get(dependency) ?? []) {
+        const parentSuppliers = closures.get(parent) ?? new Set();
+        const before = parentSuppliers.size;
+        for (const supplier of dependencySuppliers) parentSuppliers.add(supplier);
+        closures.set(parent, parentSuppliers);
+        if (parentSuppliers.size !== before && !queued.has(parent)) {
+          queue.push(parent);
+          queued.add(parent);
+        }
+      }
+    }
+    return closures;
+  }
+
+  const supplierClosures = buildSupplierClosureIndex(productiveEntries.values());
+
+  function suppliersForDeclarationFile(file) {
+    if (!isPathInside(file, src)) return [];
+    return [...(supplierClosures.get(resolve(file)) ?? [])].sort();
   }
 
   function reexportSuppliersForSourceFile(sourceFile) {
@@ -1967,7 +2052,6 @@ export function deriveSupplierContract(root = coreRoot) {
     entrypoints[subpath] = definition;
   }
 
-  const runtimeConditions = collectRuntimeExportConditions(manifest);
   const runtimeSubpaths = new Set(runtimeConditions.map((entry) => entry.subpath));
   for (const subpath of [...runtimeSubpaths].sort()) {
     if (Object.hasOwn(entrypoints, subpath)) continue;
@@ -1977,7 +2061,7 @@ export function deriveSupplierContract(root = coreRoot) {
     const entryPath = candidates.find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
     if (!entryPath) throw new Error(`runtime export ${subpath} has no readable package entry`);
     const exports = directJavaScriptValueExports(entryPath);
-    const suppliers = [...traceSourceEntry(entryPath, src).externalImports.keys()]
+    const suppliers = [...(supplierClosures.get(resolve(entryPath)) ?? [])]
       .map((packageName) => governedSupplierForSpecifier(packageName))
       .filter(Boolean);
     const symbols = {};
@@ -2099,7 +2183,7 @@ export function auditCoreDependencyGraph(root = coreRoot) {
   errors.push(...validateSupplierContract(readJson(resolve(root, 'supplier-contract.json')), deriveSupplierContract(root)));
 
   const report = {};
-  for (const family of ['d3', 'framer-motion', 'lucide-react', 'three', 'antd']) {
+  for (const family of ['d3', 'motion', 'framer-motion', 'lucide-react', 'three', 'antd']) {
     const allFiles = new Set();
     const reachableFiles = new Set();
     for (const [packageName, files] of allImports) {
@@ -2132,7 +2216,10 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-export function parseLockIdentities(lockText, packageNames = ['react', 'react-dom', 'dayjs']) {
+export function parseLockIdentities(
+  lockText,
+  packageNames = ['react', 'react-dom', 'dayjs', 'motion', 'framer-motion'],
+) {
   const packagesSection = lockText.match(/(?:^|\n)packages:\n([\s\S]*?)(?:\n(?:snapshots|patchedDependencies):\n|$)/)?.[1] ?? '';
   const result = {};
   for (const packageName of packageNames) {
@@ -2144,6 +2231,49 @@ export function parseLockIdentities(lockText, packageNames = ['react', 'react-do
   return result;
 }
 
+export function validateMotionRuntimeContract({ coreManifest, showroomManifest, installedMotion }) {
+  const errors = [];
+  const workspaces = [
+    ['packages/core', coreManifest, ['peerDependencies', 'devDependencies']],
+    ['packages/showroom', showroomManifest, ['dependencies']],
+  ];
+
+  for (const [workspace, manifest, requiredMotionSections] of workspaces) {
+    for (const section of requiredMotionSections) {
+      if (manifest[section]?.motion !== CANONICAL_MOTION_VERSION) {
+        errors.push(
+          `${workspace} ${section}.motion must be pinned to ${CANONICAL_MOTION_VERSION}; ` +
+          `found ${manifest[section]?.motion ?? '(none)'}`,
+        );
+      }
+    }
+    for (const section of RUNTIME_DEPENDENCY_SECTIONS) {
+      if (Object.hasOwn(manifest[section] ?? {}, 'framer-motion')) {
+        errors.push(`${workspace} must not declare framer-motion directly in ${section}`);
+      }
+    }
+  }
+
+  if (!installedMotion) {
+    errors.push('packages/core does not expose an installed motion identity');
+    return errors;
+  }
+  if (installedMotion.version !== CANONICAL_MOTION_VERSION) {
+    errors.push(
+      `installed motion must be ${CANONICAL_MOTION_VERSION}; found ${installedMotion.version ?? '(none)'}`,
+    );
+  }
+  if (installedMotion.dependencies?.['framer-motion'] !== CANONICAL_FRAMER_TRANSITIVE_RANGE) {
+    errors.push(
+      `motion@${CANONICAL_MOTION_VERSION} must own framer-motion transitively at ` +
+      `${CANONICAL_FRAMER_TRANSITIVE_RANGE}; found ` +
+      `${installedMotion.dependencies?.['framer-motion'] ?? '(none)'}`,
+    );
+  }
+
+  return errors;
+}
+
 export function auditRuntimeIdentities(root = repositoryRoot) {
   const identities = parseLockIdentities(readFileSync(resolve(root, 'pnpm-lock.yaml'), 'utf8'));
   const errors = [];
@@ -2152,6 +2282,22 @@ export function auditRuntimeIdentities(root = repositoryRoot) {
       errors.push(`${packageName} must have exactly one lock identity; found ${versions.length}: ${versions.join(', ') || '(none)'}`);
     }
   }
+  for (const packageName of ['motion', 'framer-motion']) {
+    if (identities[packageName]?.[0] !== CANONICAL_MOTION_VERSION) {
+      errors.push(
+        `${packageName} must resolve to ${CANONICAL_MOTION_VERSION}; found ${identities[packageName]?.join(', ') || '(none)'}`,
+      );
+    }
+  }
+
+  const installedMotionManifestPath = resolve(root, 'packages/core/node_modules/motion/package.json');
+  errors.push(...validateMotionRuntimeContract({
+    coreManifest: readJson(resolve(root, 'packages/core/package.json')),
+    showroomManifest: readJson(resolve(root, 'packages/showroom/package.json')),
+    installedMotion: existsSync(installedMotionManifestPath)
+      ? readJson(installedMotionManifestPath)
+      : null,
+  }));
 
   const resolvedPaths = {};
   const workspacePaths = {};
@@ -3022,7 +3168,7 @@ export function validatePlatformLocalBoundary({ packageManifest, verifierSource,
     ['react', 'react'],
     ['react-dom', 'react-dom'],
     ['d3', 'd3'],
-    ['framer-motion', 'framer-motion'],
+    ['motion', 'motion'],
     ['antd', 'antd'],
     ['@ant-design/icons', '@ant-design/icons'],
     ['lucide-react', 'lucide-react'],
@@ -3599,7 +3745,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       { cwd: consumerRoot },
     );
     const cliReport = JSON.parse(cliResult.stdout);
-    const missingFixtureSuppliers = ['antd', 'd3', 'framer-motion', 'lucide-react']
+    const missingFixtureSuppliers = ['antd', 'd3', 'motion', 'lucide-react']
       .filter((supplier) => !cliReport.renderedSuppliers?.includes(supplier));
     if (missingFixtureSuppliers.length > 0) {
       throw new Error(`packed supplier CLI missed fixture suppliers: ${missingFixtureSuppliers.join(', ')}`);

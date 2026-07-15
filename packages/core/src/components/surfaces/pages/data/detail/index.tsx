@@ -295,7 +295,7 @@ export function DetailSurface<TRaw, TView>({
 
   if (profileDefaults.animateEntrance) {
     return (
-      <FadeIn duration={profileDefaults.entranceDuration}>
+      <FadeIn durationMs={profileDefaults.entranceDuration}>
         {detailContent}
       </FadeIn>
     );

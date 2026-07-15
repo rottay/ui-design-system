@@ -100,7 +100,7 @@ function renderWizardStepContent(
 
   if (options.animateEntrance) {
     return (
-      <SlideIn direction="up" distance={16} duration={options.entranceDuration}>
+      <SlideIn direction="up" distance={16} durationMs={options.entranceDuration}>
         {stepContent}
       </SlideIn>
     );
@@ -381,7 +381,7 @@ export function WizardSurface({
     <PageShellSurface chrome={chrome} loading={loading}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
-          <FadeIn duration={profileDefaults.entranceDuration}>
+          <FadeIn durationMs={profileDefaults.entranceDuration}>
             {wizardContent}
           </FadeIn>
         ) : (

@@ -5311,7 +5311,6 @@ html.dark {
      ======================================================================== */
   --ds-icon-transition-duration: 0.2s;
   --ds-icon-transition-timing: ease-in-out;
-  --ds-icon-transition: all var(--ds-icon-transition-duration) var(--ds-icon-transition-timing);
 }
 
 }
@@ -11928,12 +11927,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border-top-color: var(--ds-color-primary-600);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 /* =============================================================================
@@ -43022,13 +43015,28 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * BulkSelectToggle skin (WO-SKIN-06 CK-I).
  * Deliberately unlayered so the primitive engine skins and tenant wildcard
- * floor cannot displace the pattern's active ring. Values are transcribed
- * from the former inline styles; slideInCheckbox remains an external shared
- * keyframe exactly as it was before extraction.
+ * floor cannot displace the pattern's active ring. Its entrance keyframe is
+ * local to this stable stylesheet so the pattern never depends on mounting a
+ * separate TableCheckboxStyles component.
  */
 
+@keyframes ds-bulk-select-toggle-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-8px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
 .ds-pattern-bulk-select-toggle .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
-  transition: all 0.2s ease;
+  transition:
+    background-color var(--ds-duration-normal) ease,
+    border-color var(--ds-duration-normal) ease,
+    box-shadow var(--ds-duration-normal) ease,
+    color var(--ds-duration-normal) ease;
 }
 
 .ds-pattern-bulk-select-toggle[data-active='true'] .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
@@ -43036,11 +43044,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 .ds-pattern-bulk-select-toggle[data-active='true'] [data-part='icon'] {
-  animation: slideInCheckbox 0.2s ease-out;
+  animation: ds-bulk-select-toggle-enter var(--ds-duration-normal) ease-out;
 }
 
 .ds-pattern-bulk-select-toggle[data-has-selection='true'] .ds-bulk-select-toggle__count.ds-bulk-select-toggle__count {
-  animation: slideInCheckbox 0.2s ease-out;
+  animation: ds-bulk-select-toggle-enter var(--ds-duration-normal) ease-out;
 }
 
 /**
@@ -47149,8 +47157,33 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-color-bg-elevated);
   border: 1px solid var(--ds-color-border);
   color: var(--ds-color-text-primary);
-  box-shadow: var(--ds-shadow-lg);
+  font-size: 12px;
+  max-width: 280px;
+}
+
+.ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='minimal'] {
+  padding: 4px 8px;
+  max-width: 220px;
+  border-color: var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-sm);
+  box-shadow: none;
+}
+
+.ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='detailed'] {
+  padding: 8px 12px;
   border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-shadow-lg);
+}
+
+.ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='glass'] {
+  padding: 8px 12px;
+  max-width: 300px;
+  background: color-mix(in srgb, var(--ds-color-bg-elevated) 78%, transparent);
+  border-color: color-mix(in srgb, var(--ds-color-border) 72%, transparent);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-lg);
+  backdrop-filter: var(--ds-glass-backdrop-filter, blur(12px));
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter, blur(12px));
 }
 
 .ds-chart-tooltip-value.ds-chart-tooltip-value[data-part='tooltip-value'] > [data-part='swatch'],
@@ -48977,9 +49010,46 @@ html {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
   }
+
+  /* DS motion primitives opt into choreography suppression without replacing
+     caller-owned opacity or transforms. Their SSR render already emits the
+     final visible state through the runtime reduced-motion snapshot. */
+  [data-ds-motion-primitive][data-ds-motion-state='entrance'],
+  [data-ds-motion-primitive][data-ds-motion-state='entrance']::before,
+  [data-ds-motion-primitive][data-ds-motion-state='entrance']::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* MotionProvider's additive runtime override for app/document policy. The OS
+   media-query block above remains the no-JS authority; this seam extends the
+   same choreography suppression to CSS-only effects when React forces reduced
+   motion. */
+html[data-ds-motion='reduced'] {
+  scroll-behavior: auto;
+}
+
+html[data-ds-motion='reduced'] *,
+html[data-ds-motion='reduced'] *::before,
+html[data-ds-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
+}
+
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance'],
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance']::before,
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance']::after {
+  animation: none !important;
+  transition: none !important;
 }
 
 }
@@ -50557,20 +50627,6 @@ html {
 @keyframes ds-backdrop-fade {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-
-/* ========================================================================
-   REDUCED MOTION
-   Respect user's motion preferences by disabling animations
-   ======================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01s !important;
-  }
 }
 
 /**
@@ -55044,6 +55100,24 @@ html {
   }
   .animate-spin {
     animation: var(--animate-spin);
+  }
+  .\!link {
+    @layer daisyui.l1.l2.l3 {
+      cursor: pointer !important;
+      text-decoration-line: underline !important;
+      &:focus {
+        --tw-outline-style: none !important;
+        outline-style: none !important;
+        @media (forced-colors: active) {
+          outline: 2px solid transparent !important;
+          outline-offset: 2px !important;
+        }
+      }
+      &:focus-visible {
+        outline: 2px solid currentColor !important;
+        outline-offset: 2px !important;
+      }
+    }
   }
   .link {
     @layer daisyui.l1.l2.l3 {

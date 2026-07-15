@@ -159,7 +159,7 @@ function CatalogContent() {
                 >
                   <Box data-testid="item-ticker">
                     <Text size="lg" weight="bold" style={{ color: 'var(--ds-color-text-primary)' }}>
-                      <CountUp from={0} to={1250} duration={2} prefix="$" />
+                      <CountUp from={0} to={1250} durationMs={2000} prefix="$" />
                     </Text>
                   </Box>
                 </Item>

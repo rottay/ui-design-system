@@ -16,8 +16,8 @@
  *
  * When a `ResponsiveProvider` is present in the tree, this hook reads from
  * the shared context (zero additional matchMedia subscriptions). When no
- * provider exists, it falls back to creating its own per-component listeners
- * for backward compatibility during gradual adoption.
+ * provider exists, it falls back to per-component viewport listeners while
+ * reduced motion still comes from the shared runtime authority.
  *
  * @example Responsive navigation
  * ```tsx
@@ -33,6 +33,7 @@ import { useContext } from 'react';
 import { useMediaQuery } from '../useMediaQuery';
 import { buildMinWidthQuery, buildRangeQuery } from '../breakpoints';
 import { ResponsiveContext } from '../../../runtime/responsive';
+import { useReducedMotion } from '../../../motion/hooks/use-reduced-motion';
 
 /**
  * Breakpoint detection results
@@ -61,8 +62,8 @@ export interface UseBreakpointsResult {
  * SSR-safe: returns false for all breakpoints on the server.
  *
  * When wrapped in a `ResponsiveProvider`, reads from shared context (no
- * additional matchMedia subscriptions). Without a provider, creates its
- * own subscriptions for backward compatibility.
+ * additional matchMedia subscriptions). Without a provider, creates its own
+ * viewport subscriptions while retaining the shared motion preference.
  *
  * Breakpoints:
  * - Mobile: 0-639px (default, no media query needed)
@@ -110,14 +111,14 @@ export function useBreakpoints(): UseBreakpointsResult {
     };
   }
 
-  // Fallback path: no provider -- create per-component subscriptions.
+  // Fallback path: no provider -- create per-component viewport subscriptions.
   // This preserves backward compatibility so existing code keeps working
   // while the app gradually adopts ResponsiveProvider.
   return useBreakpointsFallback();
 }
 
 /**
- * Internal fallback that creates its own matchMedia subscriptions.
+ * Internal fallback that creates its own viewport matchMedia subscriptions.
  * Only called when no ResponsiveProvider exists in the tree.
  */
 function useBreakpointsFallback(): UseBreakpointsResult {
@@ -131,9 +132,10 @@ function useBreakpointsFallback(): UseBreakpointsResult {
   // Device capability queries use CSS Level 4 interaction media features.
   // `hover: none` + `pointer: coarse` together identify true touch devices
   // (not just small screens), while `prefers-reduced-motion` respects the
-  // OS-level accessibility setting for motion-sensitive users.
+  // OS-level accessibility setting for motion-sensitive users. Reduced motion
+  // itself comes from the singleton runtime store below.
   const isTouchDevice = useMediaQuery('(hover: none) and (pointer: coarse)');
-  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const prefersReducedMotion = useReducedMotion();
 
   // Derived combinations avoid forcing consumers to write `||` checks repeatedly.
   // These are plain booleans (not hooks), so no additional subscriptions are created.

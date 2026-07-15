@@ -239,7 +239,7 @@ function DefaultCardView<TView>({
 
   if (animateEntrance) {
     return (
-      <StaggerChildren staggerDelay={staggerDelay} duration={entranceDuration}>
+      <StaggerChildren staggerDelayMs={staggerDelay} durationMs={entranceDuration}>
         {gridContent}
       </StaggerChildren>
     );
@@ -559,7 +559,7 @@ export function ListSurface<TRaw, TView extends object>({
             active view transition. */}
         <Box style={{ viewTransitionName: 'ds-vt-list-body' }}>
           {profileDefaults.animateEntrance ? (
-            <FadeIn duration={profileDefaults.entranceDuration}>
+            <FadeIn durationMs={profileDefaults.entranceDuration}>
               {listContent}
             </FadeIn>
           ) : (

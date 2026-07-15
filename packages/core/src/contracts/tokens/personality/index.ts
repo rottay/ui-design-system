@@ -25,7 +25,7 @@
 
 // Animation tokens are the most complex personality dimension because they
 // influence both CSS transitions (via CSS variables) and JS animation libraries
-// (framer-motion, react-spring). The dual representation is why we have both
+// (Motion for React, react-spring). The dual representation is why we have both
 // CSS-friendly strings (entrance, pulseSpeed) and numeric values (springTension).
 
 /** Animation personality tokens */

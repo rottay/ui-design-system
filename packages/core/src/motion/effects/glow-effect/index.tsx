@@ -5,7 +5,7 @@
  *
  * Wraps child content in a pulsing box-shadow glow whose color, blur radius,
  * and animation speed are derived from prop-based intensity tiers and the
- * tenant's motion personality. Uses Framer Motion's `animate` prop to
+ * tenant's motion personality. Uses Motion for React's `animate` prop to
  * smoothly interpolate between two shadow states ("breathe" effect) on the
  * GPU-accelerated compositor layer.
  *
@@ -16,9 +16,10 @@
  */
 
 import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type { GlowEffectProps } from '../../types';
 import { useMotionPersonality } from '../../hooks/use-motion-personality';
+import { useReducedMotion } from '../../hooks/use-reduced-motion';
 
 /**
  * Blur and spread pixel values for each intensity tier.
@@ -44,7 +45,7 @@ const PULSE_DURATION_MAP: Record<string, number> = { slow: 1.6, normal: 1, fast:
  * @param props.children - Content displayed inside the glowing wrapper.
  * @param props.className - Optional CSS class for the motion container.
  * @param props.style - Optional inline styles merged onto the motion container.
- * @returns A Framer Motion div with an animated box-shadow glow.
+ * @returns A Motion div with an animated box-shadow glow.
  */
 export const GlowEffect: React.FC<GlowEffectProps> = ({
   color = 'var(--ds-color-primary-500)',

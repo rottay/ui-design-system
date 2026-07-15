@@ -25,6 +25,7 @@ import {
   supplierFamilyForSpecifier,
   traceSourceEntry,
   validateAppSupplierManifest,
+  validateMotionRuntimeContract,
   validatePackedManifest,
   validatePlatformLocalBoundary,
   validateSupplierDeclarations,
@@ -44,7 +45,7 @@ test('module parsing ignores type-only imports but keeps static, dynamic, and re
     parseModuleSpecifiers(`
       import type { Selection } from './types';
       import { scaleLinear } from 'd3';
-      export { motion } from 'framer-motion';
+      export { motion } from 'motion/react';
       const icons = import('lucide-react');
       const antd = require('antd');
       import { type IconProps } from 'type-only-inline-import';
@@ -52,20 +53,20 @@ test('module parsing ignores type-only imports but keeps static, dynamic, and re
       import { type Scale, scaleBand } from 'mixed-inline-import';
       export { type Selection, select } from 'mixed-inline-export';
     `).sort(),
-    ['antd', 'd3', 'framer-motion', 'lucide-react', 'mixed-inline-export', 'mixed-inline-import'],
+    ['antd', 'd3', 'lucide-react', 'mixed-inline-export', 'mixed-inline-import', 'motion/react'],
   );
 });
 
 test('module parsing accepts only the finite literal runtime-edge syntax contract', () => {
   assert.deepEqual(
     parseModuleSpecifiers(`
-      const motion = require('framer-motion');
+      const motion = require('motion/react');
       const icons = require('lucide-react');
       const antd = import('antd');
       import d3 = require('d3');
       void motion; void icons; void antd; void d3;
     `).sort(),
-    ['antd', 'd3', 'framer-motion', 'lucide-react'],
+    ['antd', 'd3', 'lucide-react', 'motion/react'],
   );
   for (const source of [
     "const supplier = 'd3'; import(supplier);",
@@ -442,7 +443,7 @@ test('packaged app scanner accepts computed data access and inventories finite r
     mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
     writeFileSync(resolve(fixtureRoot, 'src/fixture.ts'), `
       import { Button } from 'antd';
-      import Motion = require('framer-motion');
+      import Motion = require('motion/react');
       function read(record: any, key: string, values: any[], index: number) {
         return [record[key], values[index]];
       }
@@ -459,7 +460,7 @@ test('packaged app scanner accepts computed data access and inventories finite r
 
     assert.deepEqual(
       [...scanned.directSuppliers.keys()].sort(),
-      ['antd', 'd3-scale', 'framer-motion', 'lucide-react'],
+      ['antd', 'd3-scale', 'lucide-react', 'motion'],
     );
   } finally {
     rmSync(fixtureRoot, { recursive: true, force: true });
@@ -501,6 +502,8 @@ test('packaged app scanner rejects static and definitely-callable constructor tr
 
 test('supplier families include Three adapters and the Ant icon package', () => {
   assert.equal(supplierFamilyForSpecifier('d3-scale'), 'd3');
+  assert.equal(supplierFamilyForSpecifier('motion/react'), 'motion');
+  assert.equal(supplierFamilyForSpecifier('framer-motion'), 'framer-motion');
   assert.equal(supplierFamilyForSpecifier('@react-three/fiber'), 'three');
   assert.equal(supplierFamilyForSpecifier('@ant-design/icons/es/icons/UserOutlined'), 'antd');
   assert.equal(supplierFamilyForSpecifier('react'), null);
@@ -560,10 +563,10 @@ test('a peer with zero production importers is rejected', () => {
 test('an app importer fixture fails when its supplier is undeclared', () => {
   const errors = validateAppSupplierManifest({
     manifest: { name: 'fixture', dependencies: {} },
-    importedPackages: imports([['framer-motion', 'src/card.tsx']]),
+    importedPackages: imports([['motion', 'src/card.tsx']]),
   });
   assert.deepEqual(errors, [
-    'fixture imports framer-motion in src/card.tsx but it is undeclared',
+    'fixture imports motion in src/card.tsx but it is undeclared',
   ]);
 });
 
@@ -571,7 +574,7 @@ test('app manifest scanning accepts computed data access and still collects lite
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-app-manifest-fixture-'));
   const source = `
     import { Button } from 'antd';
-    import Motion = require('framer-motion');
+    import Motion = require('motion/react');
     function read(record: any, key: string, values: any, index: number) {
       return [record[key], values[index]];
     }
@@ -608,7 +611,7 @@ test('app manifest scanning accepts computed data access and still collects lite
       /fixture-app imports d3-scale .* but it is undeclared/.test(error)
     )));
     assert.ok(importErrors.some((error) => (
-      /fixture-app imports framer-motion .* but it is undeclared/.test(error)
+      /fixture-app imports motion .* but it is undeclared/.test(error)
     )));
     assert.ok(importErrors.some((error) => (
       /fixture-app imports lucide-react .* but it is undeclared/.test(error)
@@ -616,7 +619,7 @@ test('app manifest scanning accepts computed data access and still collects lite
     assert.deepEqual(audit.suppliers, {
       antd: 1,
       'd3-scale': 1,
-      'framer-motion': 1,
+      motion: 1,
       'lucide-react': 1,
     });
   } finally {
@@ -734,17 +737,31 @@ test('supplier contract derivation attributes named and wildcard external re-exp
     }));
     writeFileSync(
       resolve(fixtureRoot, 'src/index.ts'),
-      "export { motion } from 'framer-motion';\n" +
+      "export { motion } from 'motion/react';\n" +
       "export * from 'd3';\n" +
-      "import { animate as importedAnimate } from 'framer-motion';\n" +
-      "import * as motionNamespace from 'framer-motion';\n" +
+      "export { cycleMotion } from './cycle-a';\n" +
+      "import { animate as importedAnimate } from 'motion/react';\n" +
+      "import * as motionNamespace from 'motion/react';\n" +
       "export { importedAnimate as animateAlias, motionNamespace };\n",
     );
+    writeFileSync(
+      resolve(fixtureRoot, 'src/cycle-a.ts'),
+      "import { motionFromCycle } from './cycle-b';\n" +
+      "export const cycleMotion = motionFromCycle;\n" +
+      "export const cycleA = true;\n",
+    );
+    writeFileSync(
+      resolve(fixtureRoot, 'src/cycle-b.ts'),
+      "import { cycleA } from './cycle-a';\n" +
+      "import { motion } from 'motion/react';\n" +
+      "export const motionFromCycle = cycleA ? motion : motion;\n",
+    );
     const derived = deriveSupplierContract(fixtureRoot);
-    assert.deepEqual(derived.entrypoints['.'].symbols.motion, ['framer-motion']);
+    assert.deepEqual(derived.entrypoints['.'].symbols.motion, ['motion']);
     assert.deepEqual(derived.entrypoints['.'].symbols.scaleLinear, ['d3']);
-    assert.deepEqual(derived.entrypoints['.'].symbols.animateAlias, ['framer-motion']);
-    assert.deepEqual(derived.entrypoints['.'].symbols.motionNamespace, ['framer-motion']);
+    assert.deepEqual(derived.entrypoints['.'].symbols.animateAlias, ['motion']);
+    assert.deepEqual(derived.entrypoints['.'].symbols.motionNamespace, ['motion']);
+    assert.deepEqual(derived.entrypoints['.'].symbols.cycleMotion, ['motion']);
     assert.ok(!derived.entrypoints['.'].supplierFreeExports.includes('motion'));
     assert.ok(!derived.entrypoints['.'].supplierFreeExports.includes('scaleLinear'));
     assert.ok(!derived.entrypoints['.'].supplierFreeExports.includes('animateAlias'));
@@ -899,6 +916,40 @@ packages:
 snapshots:
 `);
   assert.deepEqual(identities.react, ['18.3.1', '19.2.5']);
+});
+
+test('Motion runtime contract rejects direct Framer in every section and requires its exact transitive range', () => {
+  const valid = {
+    coreManifest: {
+      peerDependencies: { motion: '12.42.2' },
+      devDependencies: { motion: '12.42.2' },
+    },
+    showroomManifest: { dependencies: { motion: '12.42.2' } },
+    installedMotion: {
+      version: '12.42.2',
+      dependencies: { 'framer-motion': '^12.42.2' },
+    },
+  };
+  assert.deepEqual(validateMotionRuntimeContract(valid), []);
+
+  const errors = validateMotionRuntimeContract({
+    coreManifest: {
+      peerDependencies: { motion: '12.42.2' },
+      devDependencies: { motion: '12.42.2' },
+      dependencies: { 'framer-motion': '^12.42.2' },
+    },
+    showroomManifest: {
+      dependencies: { motion: '12.42.2' },
+      optionalDependencies: { 'framer-motion': '^12.42.2' },
+    },
+    installedMotion: {
+      version: '12.42.2',
+      dependencies: { 'framer-motion': '^12.42.20' },
+    },
+  });
+  assert(errors.some((error) => /packages\/core.*dependencies/.test(error)), errors.join('\n'));
+  assert(errors.some((error) => /packages\/showroom.*optionalDependencies/.test(error)), errors.join('\n'));
+  assert(errors.some((error) => /transitively at \^12\.42\.2/.test(error)), errors.join('\n'));
 });
 
 test('packed manifest rejects workspace and filesystem dependency leaks', () => {
@@ -1211,13 +1262,15 @@ test('live core graph has no false optional or zero-importer peer', () => {
   assert.deepEqual(auditCoreDependencyGraph().errors, []);
 });
 
-test('live lock and installed workspace expose one React, ReactDOM and Dayjs identity', () => {
+test('live lock and installed workspace expose one runtime identity with Motion direct and Framer transitive', () => {
   const result = auditRuntimeIdentities();
   assert.deepEqual(result.errors, []);
   assert.deepEqual(result.identities, {
     react: ['19.2.5'],
     'react-dom': ['19.2.5'],
     dayjs: ['1.11.20'],
+    motion: ['12.42.2'],
+    'framer-motion': ['12.42.2'],
   });
 });
 

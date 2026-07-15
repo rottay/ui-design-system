@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview ScaleIn motion primitive - Rottay Design System
@@ -10,16 +10,23 @@
  *
  * @example
  * ```tsx
- * <ScaleIn initialScale={0.85} delay={0.2}>
+ * <ScaleIn initialScale={0.85} delayMs={200}>
  *   <Avatar size="xl" />
  * </ScaleIn>
  * ```
  */
 
-import React, { forwardRef } from 'react';
-import { motion } from 'framer-motion';
-import type { ScaleInProps } from '../../types';
-import { useMotionPersonality } from '../../hooks';
+import React, { forwardRef, useMemo } from "react";
+import { motion } from "motion/react";
+import type { ScaleInProps } from "../../types";
+import { useMotionPersonality } from "../../hooks";
+import {
+  hasExplicitMotionTiming,
+  motionMillisecondsToSeconds,
+  motionSecondsToMilliseconds,
+  resolveMotionMilliseconds,
+} from "../../internal/timing";
+import { resolveMotionTransformStyle } from "../../internal/transform";
 
 /**
  * Scale content into view while preserving reduced-motion and entrance-token behavior.
@@ -31,8 +38,8 @@ import { useMotionPersonality } from '../../hooks';
  * @param props - {@link ScaleInProps}
  * @param props.children - Content to reveal with a scale animation.
  * @param props.initialScale - Starting scale factor (e.g. `0.8`). Falls back to the personality's `initialScale`.
- * @param props.duration - Duration in seconds (tween mode only).
- * @param props.delay - Delay in seconds before the animation begins.
+ * @param props.durationMs - Duration in milliseconds.
+ * @param props.delayMs - Delay in milliseconds before the animation begins.
  * @param props.once - When `true` (default), the animation fires only on first viewport entry.
  * @param props.className - CSS class applied to the motion wrapper.
  * @param props.style - Inline styles applied to the motion wrapper.
@@ -43,6 +50,8 @@ export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
     {
       children,
       initialScale,
+      durationMs,
+      delayMs,
       duration,
       delay,
       once = true,
@@ -57,50 +66,86 @@ export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
     // Fall back to the personality's default scale when no explicit value is
     // provided, keeping the look consistent across the product.
     const effectiveScale = initialScale ?? motionPersonality.initialScale;
-    const effectiveDuration = duration ?? motionPersonality.durationSeconds;
-    const effectiveDelay = delay ?? motionPersonality.delaySeconds;
+    const effectiveDurationMs = resolveMotionMilliseconds({
+      milliseconds: durationMs,
+      legacy: duration,
+      fallbackMilliseconds: motionSecondsToMilliseconds(
+        motionPersonality.durationSeconds
+      ),
+    });
+    const effectiveDelayMs = resolveMotionMilliseconds({
+      milliseconds: delayMs,
+      legacy: delay,
+      fallbackMilliseconds: motionSecondsToMilliseconds(
+        motionPersonality.delaySeconds
+      ),
+    });
+    const effectiveDuration = motionMillisecondsToSeconds(effectiveDurationMs);
+    const effectiveDelay = motionMillisecondsToSeconds(effectiveDelayMs);
+    const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
+    const resolvedStyle = useMemo(
+      () => resolveMotionTransformStyle(style),
+      [style]
+    );
 
     // -- Transition: instant | spring | tween ---------------------------------
     // Bounce entrances use a higher bounce coefficient (0.32) to create a
     // noticeable overshoot, while standard springs stay subtle (0.12).
-    const transition = shouldReduceMotion || motionPersonality.entrance === 'none'
+    const isStatic =
+      Boolean(shouldReduceMotion) || motionPersonality.entrance === "none";
+    const transition = isStatic
       ? { duration: 0, delay: 0 }
-      : motionPersonality.entrance === 'spring' || motionPersonality.entrance === 'bounce' || motionPersonality.useSpring
+      : motionPersonality.entrance === "spring" ||
+        motionPersonality.entrance === "bounce" ||
+        motionPersonality.useSpring
+      ? hasExplicitDuration
         ? {
-            type: 'spring' as const,
+            type: "spring" as const,
+            duration: effectiveDuration,
+            delay: effectiveDelay,
+            bounce: motionPersonality.entrance === "bounce" ? 0.32 : 0.12,
+          }
+        : {
+            type: "spring" as const,
             stiffness: motionPersonality.springTension,
             damping: motionPersonality.springFriction,
             delay: effectiveDelay,
-            bounce: motionPersonality.entrance === 'bounce' ? 0.32 : 0.12,
+            bounce: motionPersonality.entrance === "bounce" ? 0.32 : 0.12,
           }
-        : {
-            duration: effectiveDuration,
-            delay: effectiveDelay,
-            ease: 'easeOut' as const,
-          };
+      : {
+          duration: effectiveDuration,
+          delay: effectiveDelay,
+          ease: "easeOut" as const,
+        };
 
     // -- Initial state --------------------------------------------------------
     // Pure `fade` entrance strips the scale transform to avoid competing with
     // the opacity transition. All other entrances combine both channels.
-    const initial =
-      shouldReduceMotion || motionPersonality.entrance === 'none'
-        ? { opacity: 1, scale: 1 }
-        : motionPersonality.entrance === 'fade'
-          ? { opacity: 0, scale: 1 }
-          : { opacity: 0, scale: effectiveScale };
+    const initial = isStatic
+      ? { opacity: 1, scale: 1 }
+      : motionPersonality.entrance === "fade"
+      ? { opacity: 0, scale: 1 }
+      : { opacity: 0, scale: effectiveScale };
 
     return (
       <motion.div
         ref={ref}
-        initial={initial}
+        initial={isStatic ? false : initial}
         // Viewport-based reveal is the common case; callers can opt into direct animate mode.
-        {...(once
-          ? { whileInView: { opacity: 1, scale: 1 }, viewport: { once: true, amount: 0.3 } }
-          : { animate: { opacity: 1, scale: 1 } }
-        )}
+        {...(isStatic
+          ? { animate: { opacity: 1, scale: 1 } }
+          : once
+          ? {
+              whileInView: { opacity: 1, scale: 1 },
+              viewport: { once: true, amount: 0.3 },
+            }
+          : { animate: { opacity: 1, scale: 1 } })}
         transition={transition}
+        transformTemplate={resolvedStyle.transformTemplate}
+        data-ds-motion-primitive="scale-in"
+        data-ds-motion-state={isStatic ? "static" : "entrance"}
         className={className}
-        style={style}
+        style={resolvedStyle.style}
       >
         {children}
       </motion.div>
@@ -108,4 +153,4 @@ export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
   }
 );
 
-ScaleIn.displayName = 'ScaleIn';
+ScaleIn.displayName = "ScaleIn";

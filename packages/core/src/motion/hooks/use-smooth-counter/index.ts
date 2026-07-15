@@ -21,7 +21,8 @@
  * ```
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from '../use-reduced-motion';
 
 /**
  * Return a smoothly interpolated numeric value that transitions from
@@ -37,11 +38,32 @@ import { useEffect, useState } from 'react';
  * @returns The current interpolated value (not rounded -- callers should round if needed).
  */
 export function useSmoothCounter(from: number, to: number, duration: number = 1000, delay: number = 0): number {
-  const [count, setCount] = useState(from);
+  const prefersReducedMotion = useReducedMotion();
+  const shouldRenderFinal = prefersReducedMotion || !Number.isFinite(duration) || duration <= 0;
+  const [count, setCount] = useState(() => shouldRenderFinal ? to : from);
+  const wasStaticRef = useRef(shouldRenderFinal);
+  const previousTargetRef = useRef(to);
 
   useEffect(() => {
-    let animationFrame: number;
-    let delayTimer: ReturnType<typeof setTimeout>;
+    let animationFrame: number | null = null;
+    let delayTimer: ReturnType<typeof setTimeout> | null = null;
+    const wasStatic = wasStaticRef.current;
+    const targetChanged = previousTargetRef.current !== to;
+
+    wasStaticRef.current = shouldRenderFinal;
+    previousTargetRef.current = to;
+
+    if (shouldRenderFinal) {
+      setCount(to);
+      return;
+    }
+
+    // SSR/hydration deliberately starts in the safe final state. Do not make
+    // settled content jump backwards merely because a non-reduced client has
+    // now resolved; future value changes can animate normally.
+    if (wasStatic && !targetChanged) return;
+
+    setCount(from);
 
     // Quartic ease-out: fast start, smooth deceleration. Gives a more
     // dramatic initial motion than quadratic, matching the dashboard
@@ -80,10 +102,10 @@ export function useSmoothCounter(from: number, to: number, duration: number = 10
     }
 
     return () => {
-      cancelAnimationFrame(animationFrame);
-      clearTimeout(delayTimer);
+      if (animationFrame !== null) cancelAnimationFrame(animationFrame);
+      if (delayTimer !== null) clearTimeout(delayTimer);
     };
-  }, [from, to, duration, delay]);
+  }, [from, to, duration, delay, shouldRenderFinal]);
 
   return count;
 }

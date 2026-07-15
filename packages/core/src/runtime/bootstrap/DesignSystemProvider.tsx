@@ -89,6 +89,7 @@ import { getVerticalPreset } from '../verticals/registry';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenant/storage';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
+import { MotionProvider } from '../motion';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 import { appearanceToVariables } from '../../compilers/appearance';
 import { isBundledTenant } from '../tenant/registry';
@@ -484,14 +485,16 @@ export function DesignSystemProvider({
               cssBaseUrl={cssBaseUrl}
             >
               <FeatureProvider features={normalizedConfig.features ?? []}>
-                <ResponsiveProvider>
-                  <CommandRegistryProvider>
-                    <AntdConfigProvider>
-                      <SystemCssVariablesBridge />
-                      <MemoizedChildren>{children}</MemoizedChildren>
-                    </AntdConfigProvider>
-                  </CommandRegistryProvider>
-                </ResponsiveProvider>
+                <MotionProvider>
+                  <ResponsiveProvider>
+                    <CommandRegistryProvider>
+                      <AntdConfigProvider>
+                        <SystemCssVariablesBridge />
+                        <MemoizedChildren>{children}</MemoizedChildren>
+                      </AntdConfigProvider>
+                    </CommandRegistryProvider>
+                  </ResponsiveProvider>
+                </MotionProvider>
               </FeatureProvider>
             </ThemeProvider>
           </EngineProvider>

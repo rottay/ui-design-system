@@ -17,9 +17,9 @@
  */
 
 import React, { useId } from 'react';
-import { useReducedMotion } from 'framer-motion';
 import type { GridPatternProps } from '../../types';
 import { useMotionPersonality } from '../../hooks/use-motion-personality';
+import { useReducedMotion } from '../../hooks/use-reduced-motion';
 
 /** Maps personality pulse speed to a duration multiplier for the dot fade cycle. */
 const PULSE_DURATION_MAP: Record<string, number> = { slow: 1.6, normal: 1, fast: 0.6 };

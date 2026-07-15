@@ -26,7 +26,6 @@ export const iconStroke = {
 export const iconTransition = {
   duration: 'var(--ds-icon-transition-duration)',
   timing: 'var(--ds-icon-transition-timing)',
-  all: 'var(--ds-icon-transition)',
 } as const;
 
 // Combined icon tokens

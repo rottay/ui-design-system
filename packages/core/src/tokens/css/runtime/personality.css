@@ -639,7 +639,44 @@ html {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
   }
+
+  /* DS motion primitives opt into choreography suppression without replacing
+     caller-owned opacity or transforms. Their SSR render already emits the
+     final visible state through the runtime reduced-motion snapshot. */
+  [data-ds-motion-primitive][data-ds-motion-state='entrance'],
+  [data-ds-motion-primitive][data-ds-motion-state='entrance']::before,
+  [data-ds-motion-primitive][data-ds-motion-state='entrance']::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* MotionProvider's additive runtime override for app/document policy. The OS
+   media-query block above remains the no-JS authority; this seam extends the
+   same choreography suppression to CSS-only effects when React forces reduced
+   motion. */
+html[data-ds-motion='reduced'] {
+  scroll-behavior: auto;
+}
+
+html[data-ds-motion='reduced'] *,
+html[data-ds-motion='reduced'] *::before,
+html[data-ds-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
+}
+
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance'],
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance']::before,
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance']::after {
+  animation: none !important;
+  transition: none !important;
 }

@@ -25,6 +25,7 @@
 
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, max, min, scaleBand, scaleLinear, select } from 'd3';
+import { arrayValueAt } from '@/_internal/utils/collections';
 
 import type {
   ChartBaseProps,
@@ -250,9 +251,10 @@ export const WaterfallChart = memo(function WaterfallChart({
       // Connector lines between adjacent bars
       if (showConnectors) {
         bars.forEach((bar, i) => {
-          if (i < bars.length - 1) {
+          const nextBar = arrayValueAt(bars, i + 1);
+          if (nextBar) {
             const xPos = (x(bar.key) ?? 0) + x.bandwidth();
-            const nextXPos = x(bars[i + 1].key) ?? 0;
+            const nextXPos = x(nextBar.key) ?? 0;
             const yPos = y(bar.end);
 
             g.append('line')
@@ -364,9 +366,10 @@ export const WaterfallChart = memo(function WaterfallChart({
       // Connector lines
       if (showConnectors) {
         bars.forEach((bar, i) => {
-          if (i < bars.length - 1) {
+          const nextBar = arrayValueAt(bars, i + 1);
+          if (nextBar) {
             const yPos = (y(bar.key) ?? 0) + y.bandwidth();
-            const nextYPos = y(bars[i + 1].key) ?? 0;
+            const nextYPos = y(nextBar.key) ?? 0;
             const xPos = x(bar.end);
 
             g.append('line')

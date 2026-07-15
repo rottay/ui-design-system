@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
       'lucide-react',
       'antd',
       '@ant-design/icons',
-      'framer-motion',
+      'motion/react',
     ],
   },
 };

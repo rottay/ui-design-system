@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview StaggerChildren motion primitive - Rottay Design System
  *
  * Coordinates the reveal timing of a list of child elements so they animate
  * in sequentially rather than all at once. Each child is delayed by
- * `staggerDelay` seconds after the previous one, producing a cascading
+ * `staggerDelayMs` milliseconds after the previous one, producing a cascading
  * entrance effect commonly used for card grids, nav items, and list views.
  *
  * @example
  * ```tsx
- * <StaggerChildren staggerDelay={0.08}>
+ * <StaggerChildren staggerDelayMs={80}>
  *   {items.map((item) => (
  *     <motion.div key={item.id} variants={childVariants}>
  *       <Card>{item.title}</Card>
@@ -20,84 +20,164 @@
  * ```
  */
 
-import React, { forwardRef } from 'react';
-import { motion } from 'framer-motion';
-import type { StaggerChildrenProps } from '../../types';
-import { useMotionPersonality } from '../../hooks';
+import React, { forwardRef, useMemo } from "react";
+import { motion } from "motion/react";
+import type { StaggerChildrenProps } from "../../types";
+import { useMotionPersonality } from "../../hooks";
+import {
+  hasExplicitMotionTiming,
+  motionMillisecondsToSeconds,
+  motionSecondsToMilliseconds,
+  resolveMotionMilliseconds,
+} from "../../internal/timing";
+import { resolveMotionTransformStyle } from "../../internal/transform";
 
 /**
  * Reveal children as a coordinated, staggered group while preserving
  * reduced-motion behavior.
  *
- * Uses framer-motion's variant propagation: the container transitions from
+ * Uses Motion's variant propagation: the container transitions from
  * `"hidden"` to `"visible"`, and children that also define those variant
  * keys inherit the stagger schedule automatically.
  *
  * @param props - {@link StaggerChildrenProps}
  * @param props.children - Elements to stagger. Each should consume `variants` for full effect.
- * @param props.staggerDelay - Seconds between each child's entrance. Defaults to personality delay (min 0.04s).
- * @param props.delayChildren - Seconds to wait before the first child starts. Defaults to half the personality delay.
+ * @param props.durationMs - Duration of the container entrance in milliseconds.
+ * @param props.delayMs - Delay before the container entrance in milliseconds.
+ * @param props.staggerDelayMs - Milliseconds between each child's entrance.
+ * @param props.delayChildrenMs - Milliseconds before the first child starts.
+ * @param props.once - Whether viewport choreography runs only on first entry.
  * @param props.className - CSS class applied to the container wrapper.
  * @param props.style - Inline styles applied to the container wrapper.
  * @returns A `motion.div` container that orchestrates staggered child reveals.
  */
 export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
-  ({ children, staggerDelay, delayChildren, className, style }, ref) => {
+  (
+    {
+      children,
+      durationMs,
+      delayMs,
+      staggerDelayMs,
+      delayChildrenMs,
+      duration,
+      delay,
+      staggerDelay,
+      delayChildren,
+      once = true,
+      className,
+      style,
+    },
+    ref
+  ) => {
     const motionPersonality = useMotionPersonality();
     const shouldReduceMotion = motionPersonality.shouldReduceMotion;
 
-    // Floor stagger at 0.04s so individual items are visually distinguishable
-    // even with fast personality defaults. The initial delay before the first
-    // child is half the stagger to avoid a dead gap on entry.
-    const effectiveStaggerDelay = staggerDelay ?? Math.max(motionPersonality.delaySeconds, 0.04);
-    const effectiveDelayChildren = delayChildren ?? Math.max(motionPersonality.delaySeconds * 0.5, 0);
+    const personalityDelayMs = motionSecondsToMilliseconds(
+      motionPersonality.delaySeconds
+    );
+    const personalityDurationMs = motionSecondsToMilliseconds(
+      motionPersonality.durationSeconds
+    );
+    const effectiveDurationMs = resolveMotionMilliseconds({
+      milliseconds: durationMs,
+      legacy: duration,
+      fallbackMilliseconds: Math.max(personalityDurationMs * 0.45, 180),
+    });
+    const effectiveDelayMs = resolveMotionMilliseconds({
+      milliseconds: delayMs,
+      legacy: delay,
+      fallbackMilliseconds: 0,
+    });
+    const effectiveStaggerDelayMs = resolveMotionMilliseconds({
+      milliseconds: staggerDelayMs,
+      legacy: staggerDelay,
+      fallbackMilliseconds: Math.max(personalityDelayMs, 40),
+    });
+    const effectiveDelayChildrenMs = resolveMotionMilliseconds({
+      milliseconds: delayChildrenMs,
+      legacy: delayChildren,
+      fallbackMilliseconds: Math.max(personalityDelayMs * 0.5, 0),
+    });
+    const effectiveDuration = motionMillisecondsToSeconds(effectiveDurationMs);
+    const effectiveDelay = motionMillisecondsToSeconds(effectiveDelayMs);
+    const effectiveStaggerDelay = motionMillisecondsToSeconds(
+      effectiveStaggerDelayMs
+    );
+    const effectiveDelayChildren = motionMillisecondsToSeconds(
+      effectiveDelayChildrenMs
+    );
+    const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
     const entrance = motionPersonality.entrance;
     const fadeEase = [0.16, 1, 0.3, 1] as const;
+    const isStatic = Boolean(shouldReduceMotion) || entrance === "none";
+    const resolvedStyle = useMemo(
+      () => resolveMotionTransformStyle(style),
+      [style]
+    );
+
+    const choreography = isStatic
+      ? { duration: 0, delay: 0, delayChildren: 0, staggerChildren: 0 }
+      : entrance === "spring" ||
+        entrance === "bounce" ||
+        motionPersonality.useSpring
+      ? hasExplicitDuration
+        ? {
+            type: "spring" as const,
+            duration: effectiveDuration,
+            delay: effectiveDelay,
+            delayChildren: effectiveDelayChildren,
+            staggerChildren: effectiveStaggerDelay,
+            bounce: entrance === "bounce" ? 0.28 : 0.1,
+          }
+        : {
+            type: "spring" as const,
+            stiffness: motionPersonality.springTension,
+            damping: motionPersonality.springFriction,
+            delay: effectiveDelay,
+            delayChildren: effectiveDelayChildren,
+            staggerChildren: effectiveStaggerDelay,
+            bounce: entrance === "bounce" ? 0.28 : 0.1,
+          }
+      : {
+          duration: effectiveDuration,
+          delay: effectiveDelay,
+          delayChildren: effectiveDelayChildren,
+          staggerChildren: effectiveStaggerDelay,
+          ease: fadeEase,
+        };
 
     return (
       <motion.div
         ref={ref}
         // Setting `initial` to `false` when entrance is 'none' prevents
-        // framer-motion from applying hidden styles entirely, avoiding a
+        // Motion from applying hidden styles entirely, avoiding a
         // flash of invisible content.
-        initial={entrance === 'none' ? false : 'hidden'}
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        initial={isStatic ? false : "hidden"}
+        {...(isStatic
+          ? { animate: "visible" }
+          : { whileInView: "visible", viewport: { once, amount: 0.2 } })}
         variants={{
-          hidden:
-            shouldReduceMotion || entrance === 'none'
-              ? { opacity: 1 }
-              : entrance === 'fade'
-                ? { opacity: 0 }
-                // Non-fade entrances add a scaled-down vertical offset (40% of
-                // the personality's distance) for a subtler group-level shift.
-                : { opacity: 0, y: Math.max(motionPersonality.offsetDistance * 0.4, 6) },
+          hidden: isStatic
+            ? { opacity: 1 }
+            : entrance === "fade"
+            ? { opacity: 0 }
+            : // Non-fade entrances add a scaled-down vertical offset (40% of
+              // the personality's distance) for a subtler group-level shift.
+              {
+                opacity: 0,
+                y: Math.max(motionPersonality.offsetDistance * 0.4, 6),
+              },
           visible: {
             opacity: 1,
             y: 0,
-            transition: {
-              // Disable sequencing entirely when reduced motion is active so
-              // all children appear simultaneously and instantly.
-              delayChildren: shouldReduceMotion || entrance === 'none' ? 0 : effectiveDelayChildren,
-              staggerChildren: shouldReduceMotion || entrance === 'none' ? 0 : effectiveStaggerDelay,
-              ...(entrance === 'spring' || entrance === 'bounce' || motionPersonality.useSpring
-                ? {
-                    type: 'spring' as const,
-                    stiffness: motionPersonality.springTension,
-                    damping: motionPersonality.springFriction,
-                    bounce: entrance === 'bounce' ? 0.28 : 0.1,
-                  }
-                : {
-                    // Duration is shortened to 45% of the personality default
-                    // because the stagger itself adds perceived duration.
-                    duration: Math.max(motionPersonality.durationSeconds * 0.45, 0.18),
-                    ease: fadeEase,
-                  }),
-            },
+            transition: choreography,
           },
         }}
+        transformTemplate={resolvedStyle.transformTemplate}
+        data-ds-motion-primitive="stagger-children"
+        data-ds-motion-state={isStatic ? "static" : "entrance"}
         className={className}
-        style={style}
+        style={resolvedStyle.style}
       >
         {children}
       </motion.div>
@@ -105,4 +185,4 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
   }
 );
 
-StaggerChildren.displayName = 'StaggerChildren';
+StaggerChildren.displayName = "StaggerChildren";

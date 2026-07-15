@@ -125,6 +125,54 @@ describe('animation hooks', () => {
     vi.useRealTimers();
   });
 
+  it('renders a zero-duration smooth counter at its final value without scheduling a frame', () => {
+    vi.stubGlobal('matchMedia', vi.fn(() => ({
+      matches: false,
+      media: '(prefers-reduced-motion: reduce)',
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+    })));
+    const requestFrame = vi.fn();
+    vi.stubGlobal('requestAnimationFrame', requestFrame);
+
+    const { result } = renderHook(() => useSmoothCounter(0, 100, 0));
+
+    expect(result.current).toBe(100);
+    expect(Number.isNaN(result.current)).toBe(false);
+    expect(requestFrame).not.toHaveBeenCalled();
+  });
+
+  it('cancels an active smooth counter and jumps final on a live reduced-motion change', () => {
+    const listeners = new Set<(event: MediaQueryListEvent) => void>();
+    let matches = false;
+    vi.stubGlobal('matchMedia', vi.fn(() => ({
+      get matches() {
+        return matches;
+      },
+      media: '(prefers-reduced-motion: reduce)',
+      addEventListener: vi.fn((_type: string, listener: (event: MediaQueryListEvent) => void) => listeners.add(listener)),
+      removeEventListener: vi.fn((_type: string, listener: (event: MediaQueryListEvent) => void) => listeners.delete(listener)),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+    })));
+    vi.stubGlobal('requestAnimationFrame', vi.fn(() => 42));
+    const cancelFrame = vi.fn();
+    vi.stubGlobal('cancelAnimationFrame', cancelFrame);
+
+    const { result } = renderHook(() => useSmoothCounter(0, 100, 1000));
+    expect(result.current).toBe(0);
+
+    act(() => {
+      matches = true;
+      listeners.forEach((listener) => listener({ matches: true } as MediaQueryListEvent));
+    });
+
+    expect(cancelFrame).toHaveBeenCalledWith(42);
+    expect(result.current).toBe(100);
+  });
+
   it('reads the prefers-reduced-motion media query', async () => {
     vi.stubGlobal('matchMedia', vi.fn().mockImplementation(() => ({
       matches: true,
@@ -177,7 +225,7 @@ describe('animation hooks', () => {
 
       return (
         <output data-testid="motion">
-          {`${motion.durationSeconds}:${motion.delaySeconds}:${motion.offsetDistance}:${motion.hoverLift}`}
+          {`${motion.durationSeconds}:${motion.delaySeconds}:${motion.durationMs}:${motion.delayMs}:${motion.offsetDistance}:${motion.hoverLift}`}
         </output>
       );
     }
@@ -211,9 +259,11 @@ describe('animation hooks', () => {
 
     await waitFor(() => {
       const raw = screen.getByTestId('motion').textContent ?? '';
-      const [duration, delay, offset, hoverLift] = raw.split(':').map(Number);
+      const [duration, delay, durationMs, delayMs, offset, hoverLift] = raw.split(':').map(Number);
       expect(duration).toBeGreaterThan(0);
       expect(delay).toBeGreaterThanOrEqual(0);
+      expect(durationMs).toBe(duration * 1000);
+      expect(delayMs).toBe(delay * 1000);
       expect(offset).toBeGreaterThan(0);
       expect(hoverLift).toBeGreaterThanOrEqual(0);
     });

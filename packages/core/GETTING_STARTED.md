@@ -489,7 +489,7 @@ Use the builder functions (`createListSurfaceConfig`, `createDashboardSurfaceCon
 
 ### Supplier dependency errors
 
-`antd`, `@ant-design/icons`, `framer-motion`, `lucide-react`, and `d3` are runtime suppliers exposed as design-system peers. A consuming app must declare every supplier reached by the DS symbols it imports. Run the packaged honesty gate to identify the exact declarations required by that app:
+`antd`, `@ant-design/icons`, `motion`, `lucide-react`, and `d3` are runtime suppliers exposed as design-system peers. A consuming app must declare every supplier reached by the DS symbols it imports. Motion primitives require the pinned `motion@12.42.2` package; `framer-motion` remains an implementation dependency owned transitively by Motion and must not be declared directly. Run the packaged honesty gate to identify the exact declarations required by that app:
 
 ```bash
 pnpm exec rottay-ds-supplier-honesty

@@ -6,9 +6,8 @@
  * respecting the user's reduced-motion preference.
  */
 
-import { useReducedMotion } from 'framer-motion';
-
 import { useTokens } from '../../../hooks';
+import { useReducedMotion } from '../use-reduced-motion';
 
 /**
  * Central motion defaults resolved from product profile + tenant/theme tokens.
@@ -19,6 +18,8 @@ export function useMotionPersonality() {
   const tokens = useTokens();
   const shouldReduceMotion = useReducedMotion();
   const animation = tokens.personality.animation;
+  const durationMs = shouldReduceMotion ? 0 : Math.max(animation.entranceDuration, 160);
+  const delayMs = shouldReduceMotion ? 0 : Math.max(animation.staggerDelay, 0);
 
   return {
     shouldReduceMotion,
@@ -27,8 +28,10 @@ export function useMotionPersonality() {
     // When the user has prefers-reduced-motion enabled, all time-based and
     // distance-based values are zeroed out. This ensures elements appear in
     // their final position immediately without any movement or flicker.
-    durationSeconds: shouldReduceMotion ? 0 : Math.max(animation.entranceDuration / 1000, 0.16),
-    delaySeconds: shouldReduceMotion ? 0 : Math.max(animation.staggerDelay / 1000, 0),
+    durationMs,
+    delayMs,
+    durationSeconds: durationMs / 1000,
+    delaySeconds: delayMs / 1000,
     // Offset distance derives from intensity so playful personalities move
     // further while formal ones barely shift. The 12px floor prevents
     // zero-distance animations that would look like a glitch.

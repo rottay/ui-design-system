@@ -10,7 +10,7 @@ import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/com
 //
 // A long page of ScrollReveal sections. Where the browser supports the view()
 // scroll timeline the reveal is CSS-driven (ds-scroll-reveal); otherwise the
-// primitive falls back to the framer-motion whileInView path. Each section is
+// primitive falls back to the Motion whileInView path. Each section is
 // tall enough to enter from below the fold so the reveal is visible while
 // scrolling.
 //

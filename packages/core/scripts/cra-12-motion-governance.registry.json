@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "baselineStatus": "awaiting-first-party-app-lock-repin",
+  "policy": {
+    "canonicalMotionVersion": "12.42.2",
+    "canonicalFramerVersion": "12.42.2",
+    "allowedDirectImportRoots": [
+      {
+        "repo": "ui-design-system",
+        "pathPrefix": "packages/core/src/motion/",
+        "owner": "design-system",
+        "reason": "The design-system motion layer is the sole Motion adapter authority."
+      },
+      {
+        "repo": "ui-design-system",
+        "pathPrefix": "packages/core/src/runtime/motion/",
+        "owner": "design-system",
+        "reason": "MotionProvider is the runtime adapter boundary for the DS motion layer."
+      }
+    ],
+    "allowedDynamicKeyframes": [
+      {
+        "repo": "ui-design-system",
+        "path": "packages/core/src/components/patterns/visualization/charts/sparkline/index.tsx",
+        "symbol": "${animationName}",
+        "owner": "design-system",
+        "requiresSourcePattern": "const animationName = `ds-sparkline-draw-",
+        "reason": "Per-instance SVG draw keyframe with a DS-owned collision-safe prefix."
+      },
+      {
+        "repo": "ui-design-system",
+        "path": "packages/core/src/components/primitives/feedback/Toast/compound/AnimatedCheck/index.tsx",
+        "symbol": "${animationName}",
+        "owner": "design-system",
+        "requiresSourcePattern": "const animationName = `ds-toast-animated-check-",
+        "reason": "Per-instance toast check keyframe with a DS-owned collision-safe prefix."
+      },
+      {
+        "repo": "ui-design-system",
+        "path": "packages/core/src/components/primitives/feedback/Toast/compound/UndoToast/index.tsx",
+        "symbol": "${ringAnimName}",
+        "owner": "design-system",
+        "requiresSourcePattern": "const ringAnimName = `ds-toast-undo-ring-",
+        "reason": "Per-instance toast ring keyframe with a DS-owned collision-safe prefix."
+      },
+      {
+        "repo": "ui-design-system",
+        "path": "packages/core/src/components/primitives/feedback/Toast/compound/UndoToast/index.tsx",
+        "symbol": "${barAnimName}",
+        "owner": "design-system",
+        "requiresSourcePattern": "const barAnimName = `ds-toast-undo-bar-",
+        "reason": "Per-instance toast bar keyframe with a DS-owned collision-safe prefix."
+      }
+    ]
+  },
+  "baselines": {}
+}

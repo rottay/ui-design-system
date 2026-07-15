@@ -15,5 +15,6 @@ export * from './verticals';
 export * from './product-profiles';
 export * from './features';
 export * from './responsive';
+export * from './motion';
 export * from './adapters/navigation';
 export * from './adapters/focus-mode';

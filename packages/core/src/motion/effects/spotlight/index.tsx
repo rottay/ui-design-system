@@ -18,8 +18,8 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useReducedMotion } from 'framer-motion';
 import type { SpotlightProps } from '../../types';
+import { useReducedMotion } from '../../hooks/use-reduced-motion';
 
 /**
  * Cursor-following spotlight overlay for interactive content containers.
