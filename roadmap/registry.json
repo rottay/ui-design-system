@@ -2112,6 +2112,11 @@
      "at": "2026-07-15 14:09",
      "by": "codex-orchestrator",
      "note": "Superadmin presentation adapters are now landed in app-bithire (252a41bb4), app-evnto (af0517880) and app-platform (51a4b0a5). The shared Bithire/Evnto permission resolvers emit and compatibility-bridge access mode all only for superadmin; Platform exposes the same app-owned resolver and wires it into the live Users DetailSurface. Focused suites are green at 2/2, 17/17 and 1/1. Published DS release 2.19.1 carries the 33-surface contract; generated fleet registries, dead factory drain and visible failing-data fixtures remain before closure."
+    },
+    {
+     "at": "2026-07-15 14:45",
+     "by": "codex-orchestrator",
+     "note": "CollectionWorkspaceSurface now consumes app-resolved access and preserves registered column plus row-action anatomy beside visible data errors (DS 7cc5c74a). Bithire forwards the superadmin all contract into the live Agent Roster (0d464f275), and its manifest/lock now pin published @rottay/design-system 2.19.2 (622a8f088). The focused DS collection suite is green at 36/36, core TypeScript and the 2.19.2 package build are green, and the focused Bithire adapter/adoption suite is green at 3/3. Generated fleet registries and dead factory drain remain before ARC-11 closure."
     }
    ],
    "claimedBy": "codex-arc11",
