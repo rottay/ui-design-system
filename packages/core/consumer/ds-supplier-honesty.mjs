@@ -334,7 +334,12 @@ function createLexicalSymbolResolver(ts, sourceFile, checker) {
   };
 }
 
-function createRuntimeAnalysisProgram(ts, source, fileName) {
+function createRuntimeAnalysisProgram(
+  ts,
+  source,
+  fileName,
+  { enforceComputedCapabilities = true } = {},
+) {
   const shared = runtimeTypeContextFor(fileName);
   if (shared) {
     const sharedSourceFile = shared.program.getSourceFile(resolve(fileName));
@@ -372,9 +377,15 @@ function createRuntimeAnalysisProgram(ts, source, fileName) {
   };
 }
 
-function analyzeRuntimeModuleEdges(source, fileName, ts) {
+function analyzeRuntimeModuleEdges(
+  source,
+  fileName,
+  ts,
+  { enforceComputedCapabilities = true } = {},
+) {
   const typeContext = runtimeTypeContextFor(fileName);
-  const cached = runtimeAnalysisCache.get(fileName);
+  const cacheKey = `${enforceComputedCapabilities ? "strict" : "manifest"}\0${fileName}`;
+  const cached = runtimeAnalysisCache.get(cacheKey);
   if (
     cached?.source === source && cached.typescript === ts && cached.typeContext === typeContext
   ) return cached.analysis;
@@ -384,11 +395,16 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
       edges: [],
       sourceFile: ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true),
     };
-    runtimeAnalysisCache.set(fileName, { analysis, source, typeContext, typescript: ts });
+    runtimeAnalysisCache.set(cacheKey, { analysis, source, typeContext, typescript: ts });
     return analysis;
   }
 
-  const { checker, sourceFile, symbolAt } = createRuntimeAnalysisProgram(ts, source, fileName);
+  const { checker, sourceFile, symbolAt } = createRuntimeAnalysisProgram(
+    ts,
+    source,
+    fileName,
+    { enforceComputedCapabilities },
+  );
   const edges = [];
   const createRequireSymbols = new Set();
   const nodeModuleObjectSymbols = new Set();
@@ -957,6 +973,22 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
     return Array.isArray(type.types) && type.types.some((part) => typePotentiallyCallable(part, seen));
   }
 
+  function typeDefinitelyCallable(type, seen = new Set()) {
+    if (!type || seen.has(type)) return false;
+    seen.add(type);
+    if (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.NonPrimitive)) return false;
+    if (type.intrinsicName === "error") return false;
+    if (
+      checker.getSignaturesOfType(type, ts.SignatureKind.Call).length > 0 ||
+      checker.getSignaturesOfType(type, ts.SignatureKind.Construct).length > 0
+    ) return true;
+    if (type.flags & ts.TypeFlags.TypeParameter) {
+      const constraint = checker.getBaseConstraintOfType(type);
+      return Boolean(constraint && constraint !== type && typeDefinitelyCallable(constraint, seen));
+    }
+    return false;
+  }
+
   function typeNodeProvesNonCallable(node) {
     if (!node || typeof checker.getTypeFromTypeNode !== "function") return false;
     return !typePotentiallyCallable(checker.getTypeFromTypeNode(node));
@@ -1023,6 +1055,40 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
     return typePotentiallyCallable(checker.getTypeAtLocation(unwrapRuntimeExpression(expression)));
   }
 
+  function definitelyCallableExpression(expression, resolvingSymbols = new Set()) {
+    if (!expression) return false;
+    let runtimeValue = expression;
+    while (
+      ts.isParenthesizedExpression(runtimeValue) || ts.isNonNullExpression(runtimeValue) ||
+      ts.isSatisfiesExpression(runtimeValue)
+    ) runtimeValue = runtimeValue.expression;
+    if (ts.isAsExpression(runtimeValue) || ts.isTypeAssertionExpression(runtimeValue)) {
+      return definitelyCallableExpression(runtimeValue.expression, resolvingSymbols);
+    }
+    if (
+      ts.isArrowFunction(runtimeValue) || ts.isFunctionExpression(runtimeValue) ||
+      ts.isClassExpression(runtimeValue)
+    ) return true;
+    if (ts.isIdentifier(runtimeValue)) {
+      const symbol = symbolAt(runtimeValue);
+      if (symbol && !resolvingSymbols.has(symbol)) {
+        resolvingSymbols.add(symbol);
+        const declaredCallable = (symbol.declarations ?? []).some((declaration) => {
+          if (ts.isFunctionDeclaration(declaration) || ts.isClassDeclaration(declaration)) return true;
+          return (
+            (ts.isVariableDeclaration(declaration) || ts.isParameter(declaration) ||
+             ts.isPropertyDeclaration(declaration)) && declaration.initializer &&
+            definitelyCallableExpression(declaration.initializer, resolvingSymbols)
+          );
+        });
+        resolvingSymbols.delete(symbol);
+        if (declaredCallable) return true;
+      }
+    }
+    return typeof checker.getTypeAtLocation === "function" &&
+      typeDefinitelyCallable(checker.getTypeAtLocation(unwrapRuntimeExpression(expression)));
+  }
+
   function bindingSourceExpression(node) {
     const pattern = node.parent;
     const owner = pattern?.parent;
@@ -1032,7 +1098,7 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
     return null;
   }
 
-  function unsupportedConstructorAccess(node) {
+  function unsupportedConstructorAccess(node, includeOpaqueComputed = true) {
     if (!runtimeNode(node)) return false;
     if (
       (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) &&
@@ -1040,7 +1106,9 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
     ) return true;
     if (
       ts.isElementAccessExpression(node) && propertyText(node) === null &&
-      callableExpression(node.expression)
+      (includeOpaqueComputed
+        ? callableExpression(node.expression)
+        : definitelyCallableExpression(node.expression))
     ) return true;
     if (
       ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent) &&
@@ -1049,7 +1117,9 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
     if (
       ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent) &&
       node.propertyName && ts.isComputedPropertyName(node.propertyName) && bindingPropertyText(node) === null &&
-      callableExpression(bindingSourceExpression(node))
+      (includeOpaqueComputed
+        ? callableExpression(bindingSourceExpression(node))
+        : definitelyCallableExpression(bindingSourceExpression(node)))
     ) return true;
     if (!ts.isCallExpression(node)) return false;
     const descriptorAccess = (
@@ -1060,7 +1130,9 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
     if (!descriptorAccess) return false;
     const property = staticPropertyText(node.arguments[1]);
     return property === 'constructor' || (
-      property === null && callableExpression(node.arguments[0])
+      property === null && (includeOpaqueComputed
+        ? callableExpression(node.arguments[0])
+        : definitelyCallableExpression(node.arguments[0]))
     );
   }
 
@@ -1290,7 +1362,7 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
   }
 
   function visit(node) {
-    if (unsupportedConstructorAccess(node)) {
+    if (unsupportedConstructorAccess(node, enforceComputedCapabilities)) {
       unresolved(node, 'constructor property capability');
     } else if (ts.isImportDeclaration(node)) {
       if (runtimeImportClauseHasValue(ts, node.importClause)) {
@@ -1380,7 +1452,7 @@ function analyzeRuntimeModuleEdges(source, fileName, ts) {
 
   visit(sourceFile);
   const analysis = { edges, sourceFile };
-  runtimeAnalysisCache.set(fileName, { analysis, source, typeContext, typescript: ts });
+  runtimeAnalysisCache.set(cacheKey, { analysis, source, typeContext, typescript: ts });
   return analysis;
 }
 export function scanAppSuppliers({ appRoot, contract, typescript }) {
@@ -1401,7 +1473,9 @@ export function scanAppSuppliers({ appRoot, contract, typescript }) {
   for (const file of files) {
     const source = readFileSync(file, "utf8");
     const displayFile = relative(appRoot, file).split(sep).join("/");
-    const analysis = analyzeRuntimeModuleEdges(source, file, typescript);
+    const analysis = analyzeRuntimeModuleEdges(source, file, typescript, {
+      enforceComputedCapabilities: false,
+    });
 
     function recordModule(specifier, clause) {
       const root = packageRoot(specifier);

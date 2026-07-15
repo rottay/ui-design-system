@@ -2,6 +2,8 @@
 
 import { spawnSync } from 'node:child_process';
 import {
+  constants as fsConstants,
+  cpSync,
   existsSync,
   lstatSync,
   mkdtempSync,
@@ -401,7 +403,12 @@ function createLexicalSymbolResolver(ts, sourceFile, checker) {
   };
 }
 
-function createRuntimeAnalysisProgram(ts, source, fileName, forceBindings = false) {
+function createRuntimeAnalysisProgram(
+  ts,
+  source,
+  fileName,
+  { enforceComputedCapabilities = true, forceBindings = false } = {},
+) {
   const shared = runtimeTypeContextFor(ts, fileName);
   if (shared) {
     const sharedSourceFile = shared.program.getSourceFile(resolve(fileName));
@@ -445,15 +452,24 @@ function createRuntimeAnalysisProgram(ts, source, fileName, forceBindings = fals
  * propagation is a fixed point over symbols, so declaration order cannot hide
  * require/eval/Function/createRequire while local parameters and shadowing do
  * not inherit the meaning of a global merely because they share its name.
+ * Computed constructor-capability inference stays enabled by default for core
+ * closure and fixture certification. App manifest inventory disables only that
+ * inference because ordinary data access is outside import-to-manifest parity.
  */
-export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = loadTypeScript()) {
+export function analyzeRuntimeModuleEdges(
+  source,
+  fileName = 'fixture.ts',
+  ts = loadTypeScript(),
+  { enforceComputedCapabilities = true } = {},
+) {
   let cache = runtimeAnalysisCaches.get(ts);
   if (!cache) {
     cache = new Map();
     runtimeAnalysisCaches.set(ts, cache);
   }
   const typeContext = runtimeTypeContextFor(ts, fileName);
-  const cached = cache.get(fileName);
+  const cacheKey = `${enforceComputedCapabilities ? 'strict' : 'manifest'}\0${fileName}`;
+  const cached = cache.get(cacheKey);
   if (cached?.source === source && cached.typeContext === typeContext) return cached.analysis;
 
   if (!/\.(?:[cm]?[jt]sx?)$/i.test(fileName)) {
@@ -461,11 +477,16 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
       edges: [],
       sourceFile: ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true),
     };
-    cache.set(fileName, { analysis, source, typeContext });
+    cache.set(cacheKey, { analysis, source, typeContext });
     return analysis;
   }
 
-  const { checker, sourceFile, symbolAt } = createRuntimeAnalysisProgram(ts, source, fileName);
+  const { checker, sourceFile, symbolAt } = createRuntimeAnalysisProgram(
+    ts,
+    source,
+    fileName,
+    { enforceComputedCapabilities },
+  );
   const edges = [];
   const createRequireSymbols = new Set();
   const nodeModuleObjectSymbols = new Set();
@@ -1034,6 +1055,22 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
     return Array.isArray(type.types) && type.types.some((part) => typePotentiallyCallable(part, seen));
   }
 
+  function typeDefinitelyCallable(type, seen = new Set()) {
+    if (!type || seen.has(type)) return false;
+    seen.add(type);
+    if (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.NonPrimitive)) return false;
+    if (type.intrinsicName === 'error') return false;
+    if (
+      checker.getSignaturesOfType(type, ts.SignatureKind.Call).length > 0 ||
+      checker.getSignaturesOfType(type, ts.SignatureKind.Construct).length > 0
+    ) return true;
+    if (type.flags & ts.TypeFlags.TypeParameter) {
+      const constraint = checker.getBaseConstraintOfType(type);
+      return Boolean(constraint && constraint !== type && typeDefinitelyCallable(constraint, seen));
+    }
+    return false;
+  }
+
   function typeNodeProvesNonCallable(node) {
     if (!node || typeof checker.getTypeFromTypeNode !== 'function') return false;
     return !typePotentiallyCallable(checker.getTypeFromTypeNode(node));
@@ -1100,6 +1137,40 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
     return typePotentiallyCallable(checker.getTypeAtLocation(unwrapRuntimeExpression(expression)));
   }
 
+  function definitelyCallableExpression(expression, resolvingSymbols = new Set()) {
+    if (!expression) return false;
+    let runtimeValue = expression;
+    while (
+      ts.isParenthesizedExpression(runtimeValue) || ts.isNonNullExpression(runtimeValue) ||
+      ts.isSatisfiesExpression(runtimeValue)
+    ) runtimeValue = runtimeValue.expression;
+    if (ts.isAsExpression(runtimeValue) || ts.isTypeAssertionExpression(runtimeValue)) {
+      return definitelyCallableExpression(runtimeValue.expression, resolvingSymbols);
+    }
+    if (
+      ts.isArrowFunction(runtimeValue) || ts.isFunctionExpression(runtimeValue) ||
+      ts.isClassExpression(runtimeValue)
+    ) return true;
+    if (ts.isIdentifier(runtimeValue)) {
+      const symbol = symbolAt(runtimeValue);
+      if (symbol && !resolvingSymbols.has(symbol)) {
+        resolvingSymbols.add(symbol);
+        const declaredCallable = (symbol.declarations ?? []).some((declaration) => {
+          if (ts.isFunctionDeclaration(declaration) || ts.isClassDeclaration(declaration)) return true;
+          return (
+            (ts.isVariableDeclaration(declaration) || ts.isParameter(declaration) ||
+             ts.isPropertyDeclaration(declaration)) && declaration.initializer &&
+            definitelyCallableExpression(declaration.initializer, resolvingSymbols)
+          );
+        });
+        resolvingSymbols.delete(symbol);
+        if (declaredCallable) return true;
+      }
+    }
+    return typeof checker.getTypeAtLocation === 'function' &&
+      typeDefinitelyCallable(checker.getTypeAtLocation(unwrapRuntimeExpression(expression)));
+  }
+
   function bindingSourceExpression(node) {
     const pattern = node.parent;
     const owner = pattern?.parent;
@@ -1109,7 +1180,7 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
     return null;
   }
 
-  function unsupportedConstructorAccess(node) {
+  function unsupportedConstructorAccess(node, includeOpaqueComputed = true) {
     if (!runtimeNode(node)) return false;
     if (
       (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) &&
@@ -1117,7 +1188,9 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
     ) return true;
     if (
       ts.isElementAccessExpression(node) && propertyText(node) === null &&
-      callableExpression(node.expression)
+      (includeOpaqueComputed
+        ? callableExpression(node.expression)
+        : definitelyCallableExpression(node.expression))
     ) return true;
     if (
       ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent) &&
@@ -1126,7 +1199,9 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
     if (
       ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent) &&
       node.propertyName && ts.isComputedPropertyName(node.propertyName) && bindingPropertyText(node) === null &&
-      callableExpression(bindingSourceExpression(node))
+      (includeOpaqueComputed
+        ? callableExpression(bindingSourceExpression(node))
+        : definitelyCallableExpression(bindingSourceExpression(node)))
     ) return true;
     if (!ts.isCallExpression(node)) return false;
     const descriptorAccess = (
@@ -1137,7 +1212,9 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
     if (!descriptorAccess) return false;
     const property = staticPropertyText(node.arguments[1]);
     return property === 'constructor' || (
-      property === null && callableExpression(node.arguments[0])
+      property === null && (includeOpaqueComputed
+        ? callableExpression(node.arguments[0])
+        : definitelyCallableExpression(node.arguments[0]))
     );
   }
 
@@ -1367,7 +1444,7 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
   }
 
   function visit(node) {
-    if (unsupportedConstructorAccess(node)) {
+    if (unsupportedConstructorAccess(node, enforceComputedCapabilities)) {
       unresolved(node, 'constructor property capability');
     } else if (ts.isImportDeclaration(node)) {
       if (runtimeImportClauseHasValue(ts, node.importClause)) {
@@ -1457,7 +1534,7 @@ export function analyzeRuntimeModuleEdges(source, fileName = 'fixture.ts', ts = 
 
   visit(sourceFile);
   const analysis = { edges, sourceFile };
-  cache.set(fileName, { analysis, source, typeContext });
+  cache.set(cacheKey, { analysis, source, typeContext });
   return analysis;
 }
 export function parseModuleSpecifiers(source, fileName = 'fixture.ts') {
@@ -1493,7 +1570,9 @@ function collectFileImports(files) {
   for (const file of files) {
     const source = readFileSync(file, 'utf8');
     for (const specifier of new Set(
-      analyzeRuntimeModuleEdges(source, file, ts).edges.map(({ specifier }) => specifier),
+      analyzeRuntimeModuleEdges(source, file, ts, {
+        enforceComputedCapabilities: false,
+      }).edges.map(({ specifier }) => specifier),
     )) {
       const packageRoot = packageRootForSpecifier(specifier);
       if (!packageRoot) continue;
@@ -2184,7 +2263,9 @@ export function collectDesignSystemImports(files) {
   const imports = new Map();
   for (const file of files) {
     const source = readFileSync(file, 'utf8');
-    const analysis = analyzeRuntimeModuleEdges(source, file, ts);
+    const analysis = analyzeRuntimeModuleEdges(source, file, ts, {
+      enforceComputedCapabilities: false,
+    });
     const displayPath = normalizePath(relative(repositoryRoot, file));
 
     function recordDeclaration(specifier, clause) {
@@ -2402,7 +2483,12 @@ function parseNextAliasEvidence(source) {
 
 function inspectJavaScriptExecutable(source, fileName) {
   const ts = loadTypeScript();
-  const { sourceFile, symbolAt } = createRuntimeAnalysisProgram(ts, source, fileName, true);
+  const { sourceFile, symbolAt } = createRuntimeAnalysisProgram(
+    ts,
+    source,
+    fileName,
+    { forceBindings: true },
+  );
   const errors = [];
   const readOnlyBindings = new Map();
   const readOnlyFsMethods = new Set([
@@ -3238,33 +3324,224 @@ async function bundleRuntimeExportFixtures(consumerRoot, fixtures) {
   };
 }
 
-function exactInstalledVersion(root, packageName) {
-  const manifestPath = resolve(root, 'node_modules', ...packageName.split('/'), 'package.json');
-  if (!existsSync(manifestPath)) {
-    throw new Error(`cannot certify packed consumer without installed producer fixture ${packageName}`);
+function installedPackageDirectory(fromPackage, packageName) {
+  const requireFromPackage = createRequire(resolve(fromPackage, 'package.json'));
+  const candidates = [];
+  try {
+    candidates.push(requireFromPackage.resolve(`${packageName}/package.json`));
+  } catch {
+    // Some packages intentionally hide package.json behind exports.
   }
-  return readJson(manifestPath).version;
+  try {
+    candidates.push(requireFromPackage.resolve(packageName));
+  } catch {
+    // The caller decides whether an absent optional package is acceptable.
+  }
+  for (const candidate of candidates) {
+    let current = statSync(candidate).isDirectory() ? candidate : dirname(candidate);
+    while (true) {
+      const manifestPath = resolve(current, 'package.json');
+      if (existsSync(manifestPath) && readJson(manifestPath).name === packageName) {
+        return realpathSync(current);
+      }
+      const parent = dirname(current);
+      if (parent === current) break;
+      current = parent;
+    }
+  }
+  return null;
 }
 
-function installPackedConsumer({ consumerRoot, tarball, packedManifest, producerRoot }) {
-  const dependencies = {
-    [packedManifest.name]: `file:${tarball}`,
-  };
+export function localizeRuntimeFixtureManifest(manifest, installedDependencies) {
+  const localized = JSON.parse(JSON.stringify(manifest));
+  // These are immutable consumer fixtures. Producer lifecycle hooks are not
+  // part of the published runtime contract and must never execute here.
+  delete localized.scripts;
+  for (const section of ['dependencies', 'optionalDependencies']) {
+    for (const packageName of Object.keys(localized[section] ?? {}).sort()) {
+      const installedPath = installedDependencies[packageName];
+      if (!installedPath) {
+        if (section === 'optionalDependencies') {
+          delete localized[section][packageName];
+          continue;
+        }
+        throw new Error(`${manifest.name}@${manifest.version} requires unavailable runtime dependency ${packageName}`);
+      }
+      localized[section][packageName] = pathToFileURL(installedPath).href;
+    }
+    if (localized[section] && Object.keys(localized[section]).length === 0) delete localized[section];
+  }
+  return localized;
+}
+
+function collectInstalledRuntimeFixtureGraph(producerRoot, directPackageNames) {
+  const nodes = new Map();
+  const roots = new Map();
+  const pending = directPackageNames.sort().map((packageName) => ({
+    fromPackage: producerRoot,
+    packageName,
+    root: true,
+  }));
+
+  while (pending.length > 0) {
+    const request = pending.shift();
+    const packageDir = installedPackageDirectory(request.fromPackage, request.packageName);
+    if (!packageDir) {
+      throw new Error(`cannot certify packed consumer without installed producer fixture ${request.packageName}`);
+    }
+    if (request.root) {
+      const existing = roots.get(request.packageName);
+      if (existing && existing !== packageDir) {
+        throw new Error(`packed consumer requires conflicting root identities for ${request.packageName}`);
+      }
+      roots.set(request.packageName, packageDir);
+    }
+    if (nodes.has(packageDir)) continue;
+
+    const manifest = readJson(resolve(packageDir, 'package.json'));
+    const edges = {};
+    nodes.set(packageDir, { edges, manifest, packageDir });
+    for (const section of ['dependencies', 'optionalDependencies']) {
+      for (const packageName of Object.keys(manifest[section] ?? {}).sort()) {
+        const dependencyDir = installedPackageDirectory(packageDir, packageName);
+        if (!dependencyDir) {
+          if (section === 'optionalDependencies') continue;
+          throw new Error(`${manifest.name}@${manifest.version} requires unavailable runtime dependency ${packageName}`);
+        }
+        edges[packageName] = dependencyDir;
+        pending.push({ fromPackage: packageDir, packageName, root: false });
+      }
+    }
+    for (const packageName of Object.keys(manifest.peerDependencies ?? {}).sort()) {
+      if (manifest.peerDependenciesMeta?.[packageName]?.optional === true) continue;
+      const peerDir = installedPackageDirectory(packageDir, packageName);
+      if (!peerDir) {
+        throw new Error(`${manifest.name}@${manifest.version} requires unavailable runtime peer ${packageName}`);
+      }
+      pending.push({ fromPackage: packageDir, packageName, root: true });
+    }
+  }
+  return { nodes, roots };
+}
+
+function fixturePackageSlug(node, index) {
+  const identity = `${node.manifest.name}-${node.manifest.version}`
+    .replace(/^@/, '')
+    .replace(/[^a-zA-Z0-9._-]+/g, '-');
+  return `${String(index).padStart(3, '0')}-${identity}`;
+}
+
+function packInstalledRuntimeFixtures({ fixtureRoot, packedManifest, producerRoot }) {
   const runtimeDeclarations = {
     ...(packedManifest.dependencies ?? {}),
     ...(packedManifest.optionalDependencies ?? {}),
     ...(packedManifest.peerDependencies ?? {}),
   };
-  for (const packageName of Object.keys(runtimeDeclarations).sort()) {
-    dependencies[packageName] = exactInstalledVersion(producerRoot, packageName);
+  const graph = collectInstalledRuntimeFixtureGraph(producerRoot, Object.keys(runtimeDeclarations));
+  const orderedNodes = [...graph.nodes.values()].sort((left, right) => (
+    `${left.manifest.name}\0${left.manifest.version}\0${left.packageDir}`
+      .localeCompare(`${right.manifest.name}\0${right.manifest.version}\0${right.packageDir}`)
+  ));
+  const stagedPaths = new Map();
+  const stagesRoot = resolve(fixtureRoot, 'runtime-stages');
+  mkdirSync(stagesRoot, { recursive: true });
+
+  orderedNodes.forEach((node, index) => {
+    const bundledDependencies = node.manifest.bundleDependencies ?? node.manifest.bundledDependencies ?? [];
+    if (bundledDependencies === true || bundledDependencies.length > 0) {
+      throw new Error(
+        `${node.manifest.name}@${node.manifest.version} uses bundledDependencies; ` +
+        'the offline fixture cannot discard its installed node_modules',
+      );
+    }
+    const stagedPath = resolve(stagesRoot, fixturePackageSlug(node, index));
+    const symlink = packageHasSymlink(node.packageDir);
+    if (symlink) {
+      throw new Error(`${node.manifest.name}@${node.manifest.version} contains an installed symlink: ${symlink}`);
+    }
+    cpSync(node.packageDir, stagedPath, {
+      recursive: true,
+      mode: fsConstants.COPYFILE_FICLONE,
+      filter(sourcePath) {
+        return sourcePath === node.packageDir || basename(sourcePath) !== 'node_modules';
+      },
+    });
+    stagedPaths.set(node.packageDir, stagedPath);
+  });
+
+  for (const node of orderedNodes) {
+    const installedDependencies = Object.fromEntries(
+      Object.entries(node.edges).map(([packageName, packageDir]) => [
+        packageName,
+        stagedPaths.get(packageDir),
+      ]),
+    );
+    const localized = localizeRuntimeFixtureManifest(node.manifest, installedDependencies);
+    writeFileSync(resolve(stagedPaths.get(node.packageDir), 'package.json'), JSON.stringify(localized, null, 2));
   }
+
+  const tarballs = new Map();
+  const packsRoot = resolve(fixtureRoot, 'runtime-packs');
+  mkdirSync(packsRoot, { recursive: true });
+  for (const [packageName, packageDir] of [...graph.roots].sort(([left], [right]) => left.localeCompare(right))) {
+    const node = graph.nodes.get(packageDir);
+    const packRoot = resolve(packsRoot, fixturePackageSlug(node, tarballs.size));
+    mkdirSync(packRoot, { recursive: true });
+    spawnChecked('npm', ['pack', '--ignore-scripts', '--pack-destination', packRoot], {
+      cwd: stagedPaths.get(packageDir),
+      env: {
+        ...process.env,
+        npm_config_cache: resolve(fixtureRoot, 'npm-cache'),
+        npm_config_ignore_scripts: 'true',
+        npm_config_offline: 'true',
+      },
+    });
+    const packed = readdirSync(packRoot).filter((file) => file.endsWith('.tgz'));
+    if (packed.length !== 1) {
+      throw new Error(`expected one local runtime tarball for ${packageName}; found ${packed.length}`);
+    }
+    tarballs.set(packageName, resolve(packRoot, packed[0]));
+  }
+  return { stagedPackages: orderedNodes.length, tarballs };
+}
+
+function installPackedConsumer({ consumerRoot, tarball, packedManifest, producerRoot, fixtureRoot }) {
+  const runtimeFixtures = packInstalledRuntimeFixtures({ fixtureRoot, packedManifest, producerRoot });
+  const dependencies = {
+    [packedManifest.name]: pathToFileURL(tarball).href,
+  };
+  for (const [packageName, runtimeTarball] of runtimeFixtures.tarballs) {
+    dependencies[packageName] = pathToFileURL(runtimeTarball).href;
+  }
+  const overrides = Object.fromEntries(
+    [...runtimeFixtures.tarballs].map(([packageName, runtimeTarball]) => [
+      packageName,
+      pathToFileURL(runtimeTarball).href,
+    ]),
+  );
   writeFileSync(resolve(consumerRoot, 'package.json'), JSON.stringify({
     name: 'packed-consumer',
     private: true,
     type: 'module',
     dependencies,
+    pnpm: { overrides },
   }, null, 2));
-  spawnChecked('pnpm', ['install', '--prefer-offline', '--ignore-scripts', '--no-frozen-lockfile'], { cwd: consumerRoot });
+  spawnChecked(
+    'pnpm',
+    [
+      'install',
+      '--offline',
+      '--ignore-scripts',
+      '--no-frozen-lockfile',
+      '--config.auto-install-peers=false',
+      '--store-dir',
+      resolve(fixtureRoot, 'consumer-store'),
+    ],
+    {
+      cwd: consumerRoot,
+      env: { ...process.env, npm_config_offline: 'true' },
+    },
+  );
   const installedPackage = resolve(consumerRoot, 'node_modules', ...packedManifest.name.split('/'));
   if (!existsSync(installedPackage)) throw new Error('packed tarball was not installed in the consumer fixture');
   const installedRealPath = realpathSync(installedPackage);
@@ -3272,7 +3549,7 @@ function installPackedConsumer({ consumerRoot, tarball, packedManifest, producer
   if (relativeToProducer !== '..' && !relativeToProducer.startsWith(`..${sep}`)) {
     throw new Error(`packed consumer resolves through the producer workspace: ${installedRealPath}`);
   }
-  return installedPackage;
+  return { installedPackage, runtimeFixtures };
 }
 
 export async function auditPackedArtifact(root = coreRoot) {
@@ -3298,7 +3575,13 @@ export async function auditPackedArtifact(root = coreRoot) {
 
     const consumerRoot = resolve(temporaryRoot, 'consumer');
     mkdirSync(consumerRoot, { recursive: true });
-    const installedPackage = installPackedConsumer({ consumerRoot, tarball, packedManifest, producerRoot: root });
+    const { installedPackage, runtimeFixtures: installedRuntimeFixtures } = installPackedConsumer({
+      consumerRoot,
+      fixtureRoot: temporaryRoot,
+      packedManifest,
+      producerRoot: root,
+      tarball,
+    });
 
     const fixtureSource = resolve(consumerRoot, 'src/fixture.tsx');
     mkdirSync(dirname(fixtureSource), { recursive: true });
@@ -3407,6 +3690,8 @@ export async function auditPackedArtifact(root = coreRoot) {
       tarball: basename(tarball),
       exportCount: exportSpecifiers.length,
       installedFromTarball: true,
+      installedRuntimePackages: installedRuntimeFixtures.tarballs.size,
+      stagedRuntimePackages: installedRuntimeFixtures.stagedPackages,
       supplierCli: cliReport.contract,
       executedImportConditions: runtimeFixtures.import.length,
       executedRequireConditions: runtimeFixtures.require.length,

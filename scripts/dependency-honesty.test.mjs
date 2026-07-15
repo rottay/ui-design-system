@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 import test from 'node:test';
 
 import {
+  auditAppSupplierManifest,
   auditCoreDependencyGraph,
   auditPlatformExecutableClosure,
   auditRuntimeIdentities,
@@ -15,6 +16,7 @@ import {
   coreRoot,
   deriveSupplierContract,
   loadSupplierContract,
+  localizeRuntimeFixtureManifest,
   parseLockIdentities,
   parseModuleSpecifiers,
   repositoryRoot,
@@ -434,6 +436,69 @@ test('packaged app scanner fails closed when suppliers or the DS hide behind run
   }
 });
 
+test('packaged app scanner accepts computed data access and inventories finite runtime suppliers', () => {
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-packaged-app-manifest-'));
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    writeFileSync(resolve(fixtureRoot, 'src/fixture.ts'), `
+      import { Button } from 'antd';
+      import Motion = require('framer-motion');
+      function read(record: any, key: string, values: any[], index: number) {
+        return [record[key], values[index]];
+      }
+      const d3 = import('d3-scale');
+      const icons = require('lucide-react');
+      console.log(Button, Motion, read, d3, icons);
+    `);
+    const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+    const scanned = scanPackagedAppSuppliers({
+      appRoot: fixtureRoot,
+      contract: loadSupplierContract(),
+      typescript: requireFromCore('typescript'),
+    });
+
+    assert.deepEqual(
+      [...scanned.directSuppliers.keys()].sort(),
+      ['antd', 'd3-scale', 'framer-motion', 'lucide-react'],
+    );
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
+test('packaged app scanner rejects static and definitely-callable constructor transport in manifest mode', () => {
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-packaged-static-constructor-'));
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+    for (const source of [
+      `(() => {}).constructor("return import('d3')")();`,
+      `(() => {})['constructor']("return import('d3')")();`,
+      `const key = 'constructor'; (() => {})[key]("return import('d3')")();`,
+      `Object.getOwnPropertyDescriptor(() => {}, 'constructor').value("return import('d3')")();`,
+      `Reflect.get(() => {}, 'constructor')("return import('d3')")();`,
+      `Reflect.getOwnPropertyDescriptor(() => {}, 'constructor').value("return import('d3')")();`,
+      `declare const key: string; (() => {})[key]("return import('d3')")();`,
+      `declare const key: string; declare const fn: (source: string) => unknown; fn[key]("return import('d3')")();`,
+      `declare const key: string; Object.getOwnPropertyDescriptor(() => {}, key).value("return import('d3')")();`,
+      `declare const key: string; Reflect.get(() => {}, key)("return import('d3')")();`,
+    ]) {
+      writeFileSync(resolve(fixtureRoot, 'src/fixture.ts'), source);
+      assert.throws(
+        () => scanPackagedAppSuppliers({
+          appRoot: fixtureRoot,
+          contract: loadSupplierContract(),
+          typescript: requireFromCore('typescript'),
+        }),
+        /unresolved runtime module edge \(constructor property capability\).*src\/fixture\.ts/,
+        source,
+      );
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('supplier families include Three adapters and the Ant icon package', () => {
   assert.equal(supplierFamilyForSpecifier('d3-scale'), 'd3');
   assert.equal(supplierFamilyForSpecifier('@react-three/fiber'), 'three');
@@ -500,6 +565,95 @@ test('an app importer fixture fails when its supplier is undeclared', () => {
   assert.deepEqual(errors, [
     'fixture imports framer-motion in src/card.tsx but it is undeclared',
   ]);
+});
+
+test('app manifest scanning accepts computed data access and still collects literal runtime suppliers', () => {
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-app-manifest-fixture-'));
+  const source = `
+    import { Button } from 'antd';
+    import Motion = require('framer-motion');
+    function read(record: any, key: string, values: any, index: number) {
+      return [record[key], values[index]];
+    }
+    const d3 = import('d3-scale');
+    const icons = require('lucide-react');
+    console.log(Button, Motion, read, d3, icons);
+  `;
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    mkdirSync(resolve(fixtureRoot, 'scripts'), { recursive: true });
+    writeFileSync(
+      resolve(fixtureRoot, 'package.json'),
+      JSON.stringify({ name: 'fixture-app', dependencies: {} }),
+    );
+    writeFileSync(resolve(fixtureRoot, 'src/fixture.ts'), source);
+    writeFileSync(
+      resolve(fixtureRoot, 'scripts/ds-supplier-contract.snapshot.json'),
+      JSON.stringify(loadSupplierContract()),
+    );
+    writeFileSync(
+      resolve(fixtureRoot, 'scripts/ds-supplier-honesty.mjs'),
+      readFileSync(resolve(coreRoot, 'consumer/ds-supplier-honesty.mjs'), 'utf8'),
+    );
+
+    assert.throws(() => parseModuleSpecifiers(source), /constructor property capability/);
+    const audit = auditAppSupplierManifest(fixtureRoot);
+    const importErrors = audit.errors.filter((error) => error.includes(' imports '));
+    assert.deepEqual(audit.errors, importErrors);
+    assert.equal(importErrors.length, 4);
+    assert.ok(importErrors.some((error) => (
+      /fixture-app imports antd .* but it is undeclared/.test(error)
+    )));
+    assert.ok(importErrors.some((error) => (
+      /fixture-app imports d3-scale .* but it is undeclared/.test(error)
+    )));
+    assert.ok(importErrors.some((error) => (
+      /fixture-app imports framer-motion .* but it is undeclared/.test(error)
+    )));
+    assert.ok(importErrors.some((error) => (
+      /fixture-app imports lucide-react .* but it is undeclared/.test(error)
+    )));
+    assert.deepEqual(audit.suppliers, {
+      antd: 1,
+      'd3-scale': 1,
+      'framer-motion': 1,
+      'lucide-react': 1,
+    });
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
+test('source app audit rejects static and definitely-callable constructor transport in manifest mode', () => {
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-source-static-constructor-'));
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    writeFileSync(
+      resolve(fixtureRoot, 'package.json'),
+      JSON.stringify({ name: 'fixture-app', dependencies: {} }),
+    );
+    for (const source of [
+      `(() => {}).constructor("return import('d3')")();`,
+      `(() => {})['constructor']("return import('d3')")();`,
+      `const key = 'constructor'; (() => {})[key]("return import('d3')")();`,
+      `Object.getOwnPropertyDescriptor(() => {}, 'constructor').value("return import('d3')")();`,
+      `Reflect.get(() => {}, 'constructor')("return import('d3')")();`,
+      `Reflect.getOwnPropertyDescriptor(() => {}, 'constructor').value("return import('d3')")();`,
+      `declare const key: string; (() => {})[key]("return import('d3')")();`,
+      `declare const key: string; declare const fn: (source: string) => unknown; fn[key]("return import('d3')")();`,
+      `declare const key: string; Object.getOwnPropertyDescriptor(() => {}, key).value("return import('d3')")();`,
+      `declare const key: string; Reflect.get(() => {}, key)("return import('d3')")();`,
+    ]) {
+      writeFileSync(resolve(fixtureRoot, 'src/fixture.ts'), source);
+      assert.throws(
+        () => auditAppSupplierManifest(fixtureRoot),
+        /unresolved runtime module edge \(constructor property capability\).*src\/fixture\.ts/,
+        source,
+      );
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
 });
 
 test('a runtime app supplier in devDependencies only is rejected', () => {
@@ -657,6 +811,38 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   assert.equal(fixtures.import.length, 6);
   assert.equal(fixtures.require.length, 5);
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/supplier-honesty-cli')));
+});
+
+test('offline runtime fixtures localize required packages and omit unavailable optional packages', () => {
+  const fixtureRoot = resolve(tmpdir(), 'rottay-ds-local-runtime-fixtures');
+  const localized = localizeRuntimeFixtureManifest({
+    name: 'runtime-parent',
+    version: '1.2.3',
+    dependencies: { required: '^2.0.0' },
+    optionalDependencies: { installedOptional: '^3.0.0', unavailableOptional: '^4.0.0' },
+    peerDependencies: { react: '^19.0.0' },
+    scripts: { prepare: 'must-not-run' },
+  }, {
+    required: resolve(fixtureRoot, 'required'),
+    installedOptional: resolve(fixtureRoot, 'installed-optional'),
+  });
+
+  assert.equal(localized.dependencies.required, new URL('required', `file://${fixtureRoot}/`).href);
+  assert.equal(
+    localized.optionalDependencies.installedOptional,
+    new URL('installed-optional', `file://${fixtureRoot}/`).href,
+  );
+  assert.equal(Object.hasOwn(localized.optionalDependencies, 'unavailableOptional'), false);
+  assert.deepEqual(localized.peerDependencies, { react: '^19.0.0' });
+  assert.equal(Object.hasOwn(localized, 'scripts'), false);
+  assert.throws(
+    () => localizeRuntimeFixtureManifest({
+      name: 'broken-parent',
+      version: '1.0.0',
+      dependencies: { missing: '^1.0.0' },
+    }, {}),
+    /broken-parent@1\.0\.0 requires unavailable runtime dependency missing/,
+  );
 });
 
 test('contractless fallback is exact per legacy app and new or incomplete releases fail closed', () => {

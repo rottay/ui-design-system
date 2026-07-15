@@ -438,6 +438,7 @@
         "Steps",
         "StreamingText",
         "SurfaceActionFooter",
+        "SurfaceCapabilityAnatomy",
         "SurfaceEmptyState",
         "SurfaceEmptyStateCard",
         "SurfaceErrorBoundary",
@@ -647,6 +648,7 @@
         "getVerticalPreset",
         "hasCustomComponent",
         "inferSharedHeaderActionKind",
+        "isAllSurfaceAccess",
         "isDarkSurfacePalette",
         "isFieldVisibleForRow",
         "isFilterGroup",
@@ -654,6 +656,7 @@
         "isKnownTenant",
         "isOAuthProvider",
         "isOAuthTransitionVariantId",
+        "isResolvedSurfaceAccess",
         "isValidBranding",
         "isValidEngine",
         "isValidEngineName",
@@ -697,6 +700,8 @@
         "resolveStackSpacing",
         "resolveSurfaceAction",
         "resolveSurfaceButtonVariant",
+        "resolveSurfaceCapability",
+        "resolveSurfaceCapabilityRegistry",
         "resolveSurfaceDetailActionVariant",
         "resolveSurfacePermission",
         "resolveSurfaceTabsType",
@@ -988,12 +993,14 @@
         "CollectionWorkspace": [
           "@ant-design/icons",
           "antd",
+          "d3",
           "framer-motion",
           "lucide-react"
         ],
         "CollectionWorkspaceSurface": [
           "@ant-design/icons",
           "antd",
+          "d3",
           "framer-motion",
           "lucide-react"
         ],
@@ -1915,6 +1922,13 @@
           "framer-motion",
           "lucide-react"
         ],
+        "SurfaceCapabilityAnatomy": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
         "SurfaceEmptyState": [
           "@ant-design/icons",
           "antd",
@@ -2525,6 +2539,7 @@
         "getThicknessValue",
         "getVerticalPreset",
         "hasCustomComponent",
+        "isAllSurfaceAccess",
         "isDarkSurfacePalette",
         "isFieldVisibleForRow",
         "isFilterGroup",
@@ -2532,6 +2547,7 @@
         "isKnownTenant",
         "isOAuthProvider",
         "isOAuthTransitionVariantId",
+        "isResolvedSurfaceAccess",
         "isValidBranding",
         "isValidEngine",
         "isValidEngineName",
@@ -2568,6 +2584,8 @@
         "resolveStackSpacing",
         "resolveSurfaceAction",
         "resolveSurfaceButtonVariant",
+        "resolveSurfaceCapability",
+        "resolveSurfaceCapabilityRegistry",
         "resolveSurfaceDetailActionVariant",
         "resolveSurfacePermission",
         "resolveTenant",
