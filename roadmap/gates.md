@@ -173,3 +173,39 @@ it before WO-ENG-06 is fine — the violation baseline ratchets down as color pu
 a rendered pixel, so they can interleave with the engine lane wherever the Files overlap notes
 (`scripts/engine-token-audit.mjs`, `.github/workflows/ci.yml`, `packages/showroom/e2e/`) are
 coordinated between orchestrators.
+
+## DS improvements — Wave 0
+
+These work orders execute the requirements pinned at `docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8`. Their only live status is `roadmap/registry.json`; the audit documents remain requirements and evidence, never a parallel status board.
+
+### WO-GAT-05 DS improvements registry governance
+- **Source IDs / phase** — DS-IMP-127; Phase 0.
+- **Outcome** — Every DS-IMP-001..128 has exactly one executable authority, explicit deferred owner/date/phase, absorbed successor, or routed external owner/link. DS-IMP-061 remains Phase 1, while this WO freezes its Phase-0 schema/claim boundary so no false Advanced editor promise enters execution.
+- **Steps** — Validate the pinned requirements, roadmap and adjudication paths; reject missing/duplicate IDs, duplicate WO authorities, invalid dependencies, terminal dispositions without successors, external links that do not resolve, and any second DS live-status store.
+- **Acceptance gate** — `jq` parses the registry; the namespace is exactly 128 unique contiguous IDs; each executable item points to one existing WO whose `sourceIds` contains it; no WO claims an absorbed/routed/deferred ID; all terminal links resolve. Inject one duplicate and one missing ID and prove the check fails, then restore.
+- **Execution control** — Roll back this mapping atomically before any new claim; disable by rejecting claim/done transitions. Telemetry: missing/duplicate authorities and invalid routes. Stop on the first incomplete authority or competing status source.
+- **Do NOT** — Do not mark functional work done, mirror external status, or create another registry/lane.
+
+### WO-GAT-06 Per-phase rollback and telemetry controls
+- **Source IDs / phase** — DS-IMP-128; Phase 0.
+- **Outcome** — Phase 0, 1, 2A, 2B, 2C, 3, 4, 5 and 6 each have a decision owner/date, rollback, disable/kill path, telemetry and falsifiable stop conditions before functional work can be claimed.
+- **Steps** — Keep the nine records in `traceability.ds-improvements.phaseControls`; validate exact phase names, non-empty controls and owner/date; require every DS-improvements WO to reference one phase.
+- **Acceptance gate** — Registry check is green; delete each required control field in a drill and observe a red check; every functional Wave-0 WO depends on this WO and WO-GAT-05.
+- **Execution control** — Registry-only rollback before functional claims; disable by blocking claims. Telemetry: completeness and rollback-drill evidence. Stop if any phase control is absent or empty.
+- **Do NOT** — Do not treat prose in docs as a runtime switch or claim a rollback that has not been named.
+
+### WO-GAT-07 Exact proof and claim floor
+- **Source IDs / phase** — DS-IMP-005, 006, 055, 056, 059 and 060; Phase 0.
+- **Outcome** — Completed/measured-zero paint gates are exact, public claims have a production consumer or executable fixture, the clean dependency graph is reproducible twice, and Phase 0 lands the minimal unconsumed-export claim gate without pretending the Phase-6 certification is complete.
+- **Steps** — Regenerate baselines at a pinned revision; remove non-zero ceilings from completed keys; add evasion drills; enumerate public exports/props/config claims and link each to production consumption or a fixture; persist or classify inventory evidence rather than copying stale numerics.
+- **Acceptance gate** — Two clean runs agree; exact-zero injection and an unconsumed-export injection both fail; no completed key has slack; every supported claim has executable evidence or is removed/corrected. Existing known failures remain an explicit reproducible ledger, never silently broadened.
+- **Execution control** — Roll back only the affected ratchet/claim slice; disable new claims while retaining prior runtime behavior. Telemetry: exact-zero state, unconsumed exports and claim coverage. Stop on slack, non-reproducibility or unsupported public claims.
+- **Do NOT** — Do not lower a baseline to green, turn current counts into eternal constants, or call the full system certified here.
+
+### WO-GAT-08 Cross-program convergence ledger
+- **Source IDs / phase** — DS-IMP-123; Phase 0.
+- **Outcome** — One ordering/ownership ledger links DS work to modules/apps, compliance and token economy while each external program keeps its own status authority.
+- **Steps** — Record owner, dependency direction and canonical external path for every contested capability; place chart correctness before compliance/economy consumers; preserve app ownership for permissions/domain truth; apply promote-before-second-copy to generic UI mechanics.
+- **Acceptance gate** — Every contested capability has exactly one implementation owner and one status authority; all links resolve; a scan finds no copied external statuses in this registry; UIDS-NF-001 and other overlaps have one canonical owner.
+- **Execution control** — Roll back ledger links only; disable downstream claims whose owner/order is unresolved. Telemetry: unowned overlaps, duplicate statuses and broken links. Stop on duplicated implementation or shadow status.
+- **Do NOT** — Do not absorb financial truth, AI transport, compliance policy or app authorization into the DS.

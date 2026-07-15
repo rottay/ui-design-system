@@ -22,6 +22,7 @@
  *   next                       list actionable WOs (todo with satisfied deps)
  *   show <WO-ID>               print the full WO spec block + current state
  *   delegate <WO-ID>           print the ready-to-paste delegation prompt + fences + state warnings
+ *   trace <DS-IMP-ID>          show disposition + live authority WO state
  *   claim <WO-ID> [--by name]  mark in-progress (refused while dependencies are open)
  *   progress <WO-ID> --note "t" [--by name]  append a step-level progress entry (in-progress only)
  *   done <WO-ID> --evidence "<how the acceptance gate was proven>"
@@ -46,6 +47,412 @@ const REGISTRY_PATH = path.join(ROADMAP, "registry.json");
 const STATUS_PATH = path.join(ROADMAP, "STATUS.md");
 const LANES = ["engine-modern", "craft", "gates", "tokens", "architecture", "skin-adoption"];
 const STATUSES = ["todo", "in-progress", "done"];
+const DS_IMPROVEMENTS_KEY = "ds-improvements";
+const DS_IMPROVEMENTS_PREFIX = "DS-IMP";
+const DS_IMPROVEMENTS_FIRST = 1;
+const DS_IMPROVEMENTS_LAST = 128;
+const DS_IMPROVEMENTS_DISPOSITIONS = new Set(["execute", "deferred", "absorbed", "routed", "rejected"]);
+const DS_IMPROVEMENTS_PHASES = ["0", "1", "2A", "2B", "2C", "3", "4", "5", "6"];
+
+const dsImprovementId = (number) => `${DS_IMPROVEMENTS_PREFIX}-${String(number).padStart(3, "0")}`;
+const expectedDsImprovementIds = () => Array.from(
+  { length: DS_IMPROVEMENTS_LAST - DS_IMPROVEMENTS_FIRST + 1 },
+  (_, index) => dsImprovementId(DS_IMPROVEMENTS_FIRST + index),
+);
+const isNonEmptyString = (value) => typeof value === "string" && value.trim().length > 0;
+const isNonEmptyStringArray = (value) => Array.isArray(value)
+  && value.length > 0
+  && value.every(isNonEmptyString);
+const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
+const isFullGitSha = (value) => typeof value === "string" && /^[0-9a-f]{40}$/i.test(value);
+const isIsoDate = (value) => {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
+};
+
+function sourceReference(program) {
+  if (isNonEmptyString(program?.source)) {
+    return { path: program.source, revision: program.sourceRevision };
+  }
+  if (program?.source && typeof program.source === "object" && !Array.isArray(program.source)) {
+    return {
+      path: program.source.path,
+      revision: program.source.revision ?? program.source.sourceRevision ?? program.sourceRevision,
+    };
+  }
+  return { path: null, revision: program?.sourceRevision };
+}
+
+function canonicalIds(item) {
+  if (Array.isArray(item?.canonicalIds)) return item.canonicalIds;
+  if (Array.isArray(item?.canonical)) return item.canonical;
+  if (isNonEmptyString(item?.canonical)) return [item.canonical];
+  return [];
+}
+
+/**
+ * Validate the DS improvements traceability program without creating a second
+ * status store. Trace items point at work orders; only workOrders[].status is
+ * authoritative.
+ *
+ * Bootstrap compatibility is intentional: the completed pre-program roadmap
+ * has neither a DS improvements traceability block nor DS-IMP sourceIds. Once
+ * either side is introduced, both sides become mandatory and this validation
+ * fails closed on a partial activation.
+ */
+export function validateDsImprovementsTraceability(
+  reg,
+  { today = new Date().toISOString().slice(0, 10) } = {},
+) {
+  const errors = [];
+  const workOrders = Array.isArray(reg?.workOrders) ? reg.workOrders : [];
+  const workOrderMap = Object.fromEntries(workOrders.map((workOrder) => [workOrder.id, workOrder]));
+  const dsWorkOrders = workOrders.filter((workOrder) =>
+    (workOrder.sourceIds || []).some((id) => isNonEmptyString(id) && id.startsWith(`${DS_IMPROVEMENTS_PREFIX}-`))
+  );
+  const program = reg?.traceability?.[DS_IMPROVEMENTS_KEY];
+
+  if (!program) {
+    if (dsWorkOrders.length > 0) {
+      errors.push(
+        `traceability.${DS_IMPROVEMENTS_KEY} is missing while ${dsWorkOrders.length} work order(s) declare DS-IMP sourceIds`,
+      );
+    }
+    return errors;
+  }
+
+  const source = sourceReference(program);
+  if (!isNonEmptyString(source.path)) {
+    errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.source must be a non-empty path or { path, revision } object`);
+  } else if (!fs.existsSync(path.resolve(ROOT, source.path))) {
+    errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.source does not exist from the repository root: ${source.path}`);
+  }
+  if (!isFullGitSha(source.revision)) {
+    errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.sourceRevision must be a full 40-character Git SHA`);
+  }
+  if (!isNonEmptyString(program.adjudication)) {
+    errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.adjudication must be a non-empty string`);
+  } else if (!fs.existsSync(path.resolve(ROOT, program.adjudication))) {
+    errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.adjudication does not exist from the repository root: ${program.adjudication}`);
+  }
+  if (
+    program.range?.prefix !== DS_IMPROVEMENTS_PREFIX
+    || program.range?.first !== DS_IMPROVEMENTS_FIRST
+    || program.range?.last !== DS_IMPROVEMENTS_LAST
+  ) {
+    errors.push(
+      `traceability.${DS_IMPROVEMENTS_KEY}.range must be { prefix: "${DS_IMPROVEMENTS_PREFIX}", first: ${DS_IMPROVEMENTS_FIRST}, last: ${DS_IMPROVEMENTS_LAST} }`,
+    );
+  }
+
+  const phaseControls = program.phaseControls;
+  const phaseControlKeys = phaseControls && typeof phaseControls === "object" && !Array.isArray(phaseControls)
+    ? Object.keys(phaseControls)
+    : [];
+  if (!phaseControls || typeof phaseControls !== "object" || Array.isArray(phaseControls)) {
+    errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.phaseControls must be an object`);
+  }
+  for (const phase of DS_IMPROVEMENTS_PHASES) {
+    const controls = phaseControls?.[phase];
+    if (!controls || typeof controls !== "object" || Array.isArray(controls)) {
+      errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.phaseControls.${phase} is required`);
+      continue;
+    }
+    for (const field of ["decisionOwner", "rollback", "disable"]) {
+      if (!isNonEmptyString(controls[field])) {
+        errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.phaseControls.${phase}.${field} must be non-empty`);
+      }
+    }
+    if (!isIsoDate(controls.decisionDate)) {
+      errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.phaseControls.${phase}.decisionDate must be a valid YYYY-MM-DD date`);
+    }
+    for (const field of ["telemetry", "stopConditions"]) {
+      if (!isNonEmptyStringArray(controls[field])) {
+        errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.phaseControls.${phase}.${field} must be a non-empty string array`);
+      }
+    }
+  }
+  for (const phase of phaseControlKeys) {
+    if (!DS_IMPROVEMENTS_PHASES.includes(phase)) {
+      errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.phaseControls.${phase} is not a declared DS improvements phase`);
+    }
+  }
+
+  const items = Array.isArray(program.items) ? program.items : [];
+  if (!Array.isArray(program.items)) {
+    errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.items must be an array`);
+  }
+
+  const expectedIds = expectedDsImprovementIds();
+  const expectedSet = new Set(expectedIds);
+  const itemCounts = new Map();
+  const firstItemById = new Map();
+  const sourceBacklinks = new Map();
+
+  for (const workOrder of workOrders) {
+    const seenInWorkOrder = new Set();
+    for (const sourceId of workOrder.sourceIds || []) {
+      if (!isNonEmptyString(sourceId) || !sourceId.startsWith(`${DS_IMPROVEMENTS_PREFIX}-`)) continue;
+      if (seenInWorkOrder.has(sourceId)) {
+        errors.push(`${workOrder.id}: sourceIds contains duplicate ${sourceId}`);
+        continue;
+      }
+      seenInWorkOrder.add(sourceId);
+      const backlinks = sourceBacklinks.get(sourceId) || [];
+      backlinks.push(workOrder.id);
+      sourceBacklinks.set(sourceId, backlinks);
+    }
+  }
+
+  for (const [sourceId, backlinks] of sourceBacklinks) {
+    if (backlinks.length > 1) {
+      errors.push(`${sourceId}: sourceId is repeated across work orders: ${backlinks.join(", ")}`);
+    }
+  }
+
+  for (const item of items) {
+    const id = item?.id;
+    if (!isNonEmptyString(id)) {
+      errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.items contains an item without a valid id`);
+      continue;
+    }
+    itemCounts.set(id, (itemCounts.get(id) || 0) + 1);
+    if (!firstItemById.has(id)) firstItemById.set(id, item);
+    if (!expectedSet.has(id)) {
+      errors.push(`${id}: outside the required ${dsImprovementId(1)}..${dsImprovementId(128)} range`);
+    }
+    if (hasOwn(item, "status")) {
+      errors.push(`${id}: trace items must never store status; status belongs only to workOrders[]`);
+    }
+  }
+
+  for (const [id, count] of itemCounts) {
+    if (count > 1) errors.push(`${id}: duplicate traceability item (${count} entries)`);
+  }
+  for (const id of expectedIds) {
+    if (!itemCounts.has(id)) errors.push(`${id}: missing traceability item`);
+  }
+
+  for (const [id, item] of firstItemById) {
+    const disposition = item.disposition;
+    if (!DS_IMPROVEMENTS_DISPOSITIONS.has(disposition)) {
+      errors.push(`${id}: invalid disposition "${disposition}"`);
+      continue;
+    }
+
+    if (disposition === "execute") {
+      if (!isNonEmptyString(item.authority) || Array.isArray(item.authority) || hasOwn(item, "authorities")) {
+        errors.push(`${id}: execute requires exactly one authority WO id`);
+      } else if (!workOrderMap[item.authority]) {
+        errors.push(`${id}: authority ${item.authority} does not exist in workOrders[]`);
+      } else if (
+        !Array.isArray(workOrderMap[item.authority].programs)
+        || !workOrderMap[item.authority].programs.includes(DS_IMPROVEMENTS_KEY)
+      ) {
+        errors.push(`${id}: authority ${item.authority} programs must include ${DS_IMPROVEMENTS_KEY}`);
+      }
+    }
+
+    if (disposition === "execute") {
+      const backlinks = sourceBacklinks.get(id) || [];
+      if (backlinks.length !== 1) {
+        errors.push(`${id}: execute requires exactly one work-order sourceId backlink (found ${backlinks.length})`);
+      } else if (backlinks[0] !== item.authority) {
+        errors.push(`${id}: execute backlink ${backlinks[0]} must match authority ${item.authority}`);
+      }
+      if (hasOwn(item, "external")) errors.push(`${id}: execute must not declare an external authority`);
+      if (hasOwn(item, "decisionRef")) errors.push(`${id}: execute must not declare decisionRef`);
+    }
+
+    if (disposition === "deferred") {
+      if (!isNonEmptyString(item.owner)) {
+        errors.push(`${id}: deferred requires a non-empty owner`);
+      }
+      if (!isIsoDate(item.reviewBy)) {
+        errors.push(`${id}: deferred reviewBy must be a valid YYYY-MM-DD date`);
+      } else if (item.reviewBy < today) {
+        errors.push(`${id}: deferred reviewBy ${item.reviewBy} is overdue as of ${today}`);
+      }
+      if (!isNonEmptyString(item.reason)) {
+        errors.push(`${id}: deferred requires a non-empty reason`);
+      }
+      if (!DS_IMPROVEMENTS_PHASES.includes(item.targetPhase)) {
+        errors.push(`${id}: deferred targetPhase must be one of ${DS_IMPROVEMENTS_PHASES.join(", ")}`);
+      }
+      if (hasOwn(item, "authority") || hasOwn(item, "authorities")) {
+        errors.push(`${id}: deferred must not declare an authority`);
+      }
+      if (hasOwn(item, "external")) {
+        errors.push(`${id}: deferred must not declare external routing`);
+      }
+    }
+
+    if (disposition === "absorbed") {
+      const ids = canonicalIds(item);
+      if (ids.length === 0) {
+        errors.push(`${id}: absorbed requires at least one canonical DS-IMP id`);
+      }
+      for (const canonicalId of ids) {
+        if (!expectedSet.has(canonicalId)) {
+          errors.push(`${id}: absorbed canonical id ${canonicalId} is outside the DS-IMP range`);
+        } else if (!firstItemById.has(canonicalId)) {
+          errors.push(`${id}: absorbed canonical id ${canonicalId} does not exist in traceability items`);
+        } else if (canonicalId === id) {
+          errors.push(`${id}: absorbed cannot name itself as a canonical id`);
+        }
+      }
+      if (!isNonEmptyString(item.decisionRef)) {
+        errors.push(`${id}: absorbed requires a non-empty decisionRef`);
+      }
+      if (hasOwn(item, "authority") || hasOwn(item, "authorities")) {
+        errors.push(`${id}: absorbed is terminal and must not declare an authority`);
+      }
+      if (hasOwn(item, "external")) errors.push(`${id}: absorbed must not declare an external authority`);
+    }
+
+    if (disposition === "routed") {
+      if (hasOwn(item, "authority") || hasOwn(item, "authorities")) {
+        errors.push(`${id}: routed work must not declare a DS work-order authority`);
+      }
+      if (!isNonEmptyString(item.external?.owner) || !isNonEmptyString(item.external?.path)) {
+        errors.push(`${id}: routed requires external.owner and external.path`);
+      } else if (!fs.existsSync(path.resolve(ROOT, item.external.path))) {
+        errors.push(`${id}: routed external.path does not exist from the repository root: ${item.external.path}`);
+      }
+      if (item.external && hasOwn(item.external, "status")) {
+        errors.push(`${id}: routed external links must never copy external status`);
+      }
+    }
+
+    if (disposition === "rejected") {
+      if (!isNonEmptyString(item.decisionRef)) {
+        errors.push(`${id}: rejected requires a non-empty decisionRef`);
+      }
+      if (hasOwn(item, "authority") || hasOwn(item, "authorities") || hasOwn(item, "external")) {
+        errors.push(`${id}: rejected is terminal and must not declare an authority`);
+      }
+    }
+  }
+
+  const absorbedState = new Map();
+  const absorbedCycles = new Set();
+  const visitAbsorbed = (id, stack) => {
+    absorbedState.set(id, 1);
+    const item = firstItemById.get(id);
+    for (const canonicalId of canonicalIds(item)) {
+      if (canonicalId === id || firstItemById.get(canonicalId)?.disposition !== "absorbed") continue;
+      if (absorbedState.get(canonicalId) === 1) {
+        const cycleStart = stack.indexOf(canonicalId);
+        const cycle = [...stack.slice(cycleStart), canonicalId].join(" -> ");
+        if (!absorbedCycles.has(cycle)) {
+          absorbedCycles.add(cycle);
+          errors.push(`absorbed canonical cycle: ${cycle}`);
+        }
+      } else if (absorbedState.get(canonicalId) !== 2) {
+        visitAbsorbed(canonicalId, [...stack, canonicalId]);
+      }
+    }
+    absorbedState.set(id, 2);
+  };
+  for (const [id, item] of firstItemById) {
+    if (item.disposition === "absorbed" && !absorbedState.has(id)) visitAbsorbed(id, [id]);
+  }
+
+  for (const workOrder of dsWorkOrders) {
+    const dsSourceIds = (workOrder.sourceIds || []).filter((id) =>
+      isNonEmptyString(id) && id.startsWith(`${DS_IMPROVEMENTS_PREFIX}-`)
+    );
+    const execution = workOrder.execution;
+    const phase = workOrder.phase ?? execution?.phase;
+
+    if (!isNonEmptyString(phase)) {
+      errors.push(`${workOrder.id}: DS-IMP work orders require phase`);
+    } else if (!hasOwn(phaseControls || {}, phase)) {
+      errors.push(`${workOrder.id}: phase ${phase} is not declared in traceability.${DS_IMPROVEMENTS_KEY}.phaseControls`);
+    }
+    if (!execution || typeof execution !== "object" || Array.isArray(execution)) {
+      errors.push(`${workOrder.id}: DS-IMP work orders require an execution controls object`);
+    } else {
+      if (!isNonEmptyString(execution.decisionOwner)) {
+        errors.push(`${workOrder.id}: execution.decisionOwner must be non-empty`);
+      }
+      if (!isNonEmptyStringArray(execution.touchedRepos)) {
+        errors.push(`${workOrder.id}: execution.touchedRepos must be a non-empty string array`);
+      }
+      if (!isNonEmptyString(execution.rollback)) {
+        errors.push(`${workOrder.id}: execution.rollback must be non-empty`);
+      }
+      if (!isNonEmptyString(execution.disable)) {
+        errors.push(`${workOrder.id}: execution.disable must be non-empty (use "not-applicable" explicitly)`);
+      }
+      if (!isNonEmptyStringArray(execution.telemetry)) {
+        errors.push(`${workOrder.id}: execution.telemetry must be a non-empty string array`);
+      }
+      if (!isNonEmptyStringArray(execution.stopConditions)) {
+        errors.push(`${workOrder.id}: execution.stopConditions must be a non-empty string array`);
+      }
+    }
+
+    for (const sourceId of new Set(dsSourceIds)) {
+      if (!expectedSet.has(sourceId)) {
+        errors.push(`${workOrder.id}: sourceIds contains out-of-range ${sourceId}`);
+        continue;
+      }
+      const item = firstItemById.get(sourceId);
+      if (!item || item.disposition !== "execute" || item.authority !== workOrder.id) {
+        errors.push(`${workOrder.id}: sourceIds ${sourceId} must resolve back to execute authority ${workOrder.id}`);
+      }
+    }
+  }
+
+  return errors;
+}
+
+/** Derive program progress from the unique execute-authority work orders. */
+export function summarizeDsImprovements(reg) {
+  const program = reg?.traceability?.[DS_IMPROVEMENTS_KEY];
+  if (!program || !Array.isArray(program.items)) return null;
+
+  const workOrderMap = byId(reg);
+  const authorityIds = [...new Set(
+    program.items
+      .filter((item) => item?.disposition === "execute" && isNonEmptyString(item.authority))
+      .map((item) => item.authority),
+  )];
+  const counts = { done: 0, "in-progress": 0, todo: 0, unknown: 0 };
+  for (const authorityId of authorityIds) {
+    const status = workOrderMap[authorityId]?.status;
+    if (STATUSES.includes(status)) counts[status] += 1;
+    else counts.unknown += 1;
+  }
+  const sourceCounts = { done: 0, "in-progress": 0, todo: 0, unknown: 0 };
+  for (const item of program.items.filter((candidate) => candidate?.disposition === "execute")) {
+    const status = workOrderMap[item.authority]?.status;
+    if (STATUSES.includes(status)) sourceCounts[status] += 1;
+    else sourceCounts.unknown += 1;
+  }
+  const dispositionCounts = Object.fromEntries(
+    [...DS_IMPROVEMENTS_DISPOSITIONS].map((disposition) => [
+      disposition,
+      program.items.filter((item) => item?.disposition === disposition).length,
+    ]),
+  );
+  return {
+    total: authorityIds.length,
+    executeSourceIds: dispositionCounts.execute,
+    authorityIds,
+    ...counts,
+    sourceDone: sourceCounts.done,
+    sourceInProgress: sourceCounts["in-progress"],
+    sourceTodo: sourceCounts.todo,
+    sourceUnknown: sourceCounts.unknown,
+    deferred: dispositionCounts.deferred,
+    absorbed: dispositionCounts.absorbed,
+    routed: dispositionCounts.routed,
+    rejected: dispositionCounts.rejected,
+  };
+}
 
 const loadRegistry = () => JSON.parse(fs.readFileSync(REGISTRY_PATH, "utf8"));
 const saveRegistry = (reg) => {
@@ -114,6 +521,7 @@ function check() {
     if (w.status === "done" && !w.evidence) errors.push(`${w.id}: done without evidence — reopen or record evidence`);
     if (w.status === "done") for (const d of w.dependsOn || []) if (map[d].status !== "done") errors.push(`${w.id}: done but dependency ${d} is ${map[d].status}`);
   }
+  errors.push(...validateDsImprovementsTraceability(reg));
   errors.push(...detectCycles(reg).map((c) => `dependency cycle: ${c}`));
   if (errors.length) {
     console.error(`roadmap:check FAILED (${errors.length}):`);
@@ -125,6 +533,12 @@ function check() {
 
 function generateStatus() {
   const reg = loadRegistry();
+  const traceabilityErrors = validateDsImprovementsTraceability(reg);
+  if (traceabilityErrors.length) {
+    console.error(`roadmap:status REFUSED — DS improvements traceability is invalid (${traceabilityErrors.length}):`);
+    for (const error of traceabilityErrors) console.error("  - " + error);
+    process.exit(1);
+  }
   const map = byId(reg);
   const today = new Date().toISOString().slice(0, 10);
   const counts = (lane) => {
@@ -149,6 +563,20 @@ function generateStatus() {
     lines.push(`| [${lane}](./${lane}.md) | ${c.done} | ${c["in-progress"]} | ${c.todo} | ${c.total} |`);
   }
   lines.push("");
+  const dsImprovements = summarizeDsImprovements(reg);
+  if (dsImprovements) {
+    const dsPct = dsImprovements.executeSourceIds
+      ? Math.round((dsImprovements.sourceDone / dsImprovements.executeSourceIds) * 100)
+      : 0;
+    lines.push(`## DS improvements burn-down — ${dsImprovements.sourceDone}/${dsImprovements.executeSourceIds} execute source IDs done (${dsPct}%)`);
+    lines.push("");
+    lines.push("> Derived live from the unique execute-authority work orders. Deferred items never count as done; absorbed, routed, and rejected items remain separate dispositions.");
+    lines.push("");
+    lines.push("| Source IDs done | Source IDs in progress | Source IDs todo | Execute authorities done/total | Deferred | Absorbed | Routed | Rejected |");
+    lines.push("| --- | --- | --- | --- | --- | --- | --- | --- |");
+    lines.push(`| ${dsImprovements.sourceDone} | ${dsImprovements.sourceInProgress} | ${dsImprovements.sourceTodo} | ${dsImprovements.done}/${dsImprovements.total} | ${dsImprovements.deferred} | ${dsImprovements.absorbed} | ${dsImprovements.routed} | ${dsImprovements.rejected} |`);
+    lines.push("");
+  }
   const inProg = reg.workOrders.filter((w) => w.status === "in-progress");
   lines.push("## In progress");
   lines.push("");
@@ -216,7 +644,8 @@ const flag = (args, name) => {
   return i >= 0 ? args[i + 1] : null;
 };
 
-const [cmd, arg, ...rest] = process.argv.slice(2);
+export function main(argv = process.argv.slice(2)) {
+const [cmd, arg, ...rest] = argv;
 const args = [arg, ...rest].filter(Boolean);
 
 switch (cmd) {
@@ -244,6 +673,49 @@ switch (cmd) {
     for (const p of w.progressLog || []) console.log(`[progress] ${p.at} ${p.by}: ${p.note}`);
     if (w.status === "in-progress" && (w.progressLog || []).length) console.log("[handoff] resume from the last progress entry — do not redo completed steps");
     if (open.length) console.log(`[warn] not actionable yet — complete ${open.join(", ")} first`);
+    break;
+  }
+  case "trace": {
+    const reg = loadRegistry();
+    const errors = validateDsImprovementsTraceability(reg);
+    if (errors.length) {
+      console.error(`REFUSED: DS improvements traceability is invalid (${errors.length}); run roadmap:check for the full list.`);
+      process.exit(1);
+    }
+    const program = reg.traceability?.[DS_IMPROVEMENTS_KEY];
+    if (!program) {
+      console.error(`DS improvements traceability is not initialized in ${REGISTRY_PATH}`);
+      process.exit(1);
+    }
+    const item = program.items.find((candidate) => candidate.id === arg);
+    if (!item) {
+      console.error(`Unknown DS improvement id: ${arg}`);
+      process.exit(1);
+    }
+
+    console.log(`${item.id} disposition=${item.disposition}`);
+    if (item.disposition === "execute") {
+      const authority = byId(reg)[item.authority];
+      console.log(`authority=${authority.id} status=${authority.status} lane=${authority.lane} title=${authority.title}`);
+    } else if (item.disposition === "absorbed") {
+      const ids = canonicalIds(item);
+      if (ids.length) console.log(`canonicalIds=${ids.join(",")}`);
+      console.log(`decisionRef=${item.decisionRef}`);
+    } else if (item.disposition === "deferred") {
+      console.log(`owner=${item.owner}`);
+      console.log(`reviewBy=${item.reviewBy}`);
+      console.log(`targetPhase=${item.targetPhase}`);
+      console.log(`reason=${item.reason}`);
+    } else if (item.disposition === "routed") {
+      console.log(`externalOwner=${item.external.owner}`);
+      console.log(`externalPath=${item.external.path}`);
+    } else if (item.disposition === "rejected") {
+      console.log(`decisionRef=${item.decisionRef}`);
+    }
+    const source = sourceReference(program);
+    console.log(`source=${source.path}`);
+    console.log(`sourceRevision=${source.revision}`);
+    console.log(`adjudication=${program.adjudication}`);
     break;
   }
   case "claim": {
@@ -299,6 +771,11 @@ switch (cmd) {
     break;
   }
   default:
-    console.log("Usage: roadmap-status.mjs <status|check|next|show WO-ID|delegate WO-ID|claim WO-ID [--by name]|progress WO-ID --note \"...\" [--by name]|done WO-ID --evidence \"...\"|reopen WO-ID [--note ...]>");
+    console.log("Usage: roadmap-status.mjs <status|check|next|show WO-ID|delegate WO-ID|trace DS-IMP-ID|claim WO-ID [--by name]|progress WO-ID --note \"...\" [--by name]|done WO-ID --evidence \"...\"|reopen WO-ID [--note ...]>");
     process.exit(cmd ? 1 : 0);
 }
+}
+
+const invokedDirectly = process.argv[1]
+  && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (invokedDirectly) main();

@@ -1724,6 +1724,1691 @@
    "claimedAt": "2026-07-14",
    "doneAt": "2026-07-15",
    "evidence": "@rottay/design-system@2.19.0 was built, packed and published to GitHub Packages as latest (tarball sha 6235a48a1858ef4ac3a5a129d882fc30ca6f29a7). Core build, engine/token/artifact checks, Storybook build budgets (17.71 MB/50 MB; largest chunk 2.05 MB/3 MB), full showroom visual gates 487/487, signature 11/11, hairline 2/2 and the standing unit ledger (only the 10-file allowlist: 13 failed tests, 82 passed) were certified. app-bithire alone was repinned exactly 2.18.0->2.19.0 from the registry (commit 72405adbf); its seven same-seed before/after screens keep identical dimensions, six are pixel-identical and login differs only 0.4514% from its clock/activity animation. BitHire static certification passed end-to-end: unit 222/222 suites (1960 tests), contracts 113/113 (1193), architecture 150/150 (982 passed, 1 expected skip), integration API 20/20 (304), plus all lint/architecture/roadmap/docs/listing/UX/schema/styles/domain/i18n/dependency/override gates. app-platform remains pinned 2.17.0 and app-evnto 2.8.24; 2.19.0 is their external-release marker, not an unauthorized repin."
+  },
+  {
+   "id": "WO-GAT-05",
+   "title": "DS improvements registry governance",
+   "lane": "gates",
+   "order": 5,
+   "size": "S",
+   "status": "done",
+   "dependsOn": [
+    "WO-SKIN-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-127"
+   ],
+   "phase": "0",
+   "notes": "Also freezes the Phase-0 schema/claim boundary for deferred DS-IMP-061; runtime TenantThemeConfig delivery remains Phase 1. Sources pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8.",
+   "progressLog": [],
+   "claimedBy": "codex",
+   "claimedAt": "2026-07-15",
+   "doneAt": "2026-07-15",
+   "evidence": "Pinned docs-engineering revision 969205380fd24eb45947bf3748db5a6cacd798f8; registry maps exactly DS-IMP-001..128 as 21 execute, 99 deferred, 6 absorbed and 2 routed with no duplicate authority or shadow status; node --test scripts/roadmap-status.test.mjs passes 22/22 including missing-ID, duplicate-ID, backlink, routed-path, deferred-expiry and absorbed-cycle red drills; pnpm roadmap:check reports 73 WOs consistent across 6 lanes; trace commands resolve execute/deferred/routed authorities.",
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "docs-engineering"
+    ],
+    "rollback": "Revert this one-time mapping before any new work is claimed.",
+    "disable": "Leave every mapped work order todo and reject claim/done when authority validation fails.",
+    "telemetry": [
+     "missing authorities",
+     "duplicate authorities",
+     "invalid terminal dispositions",
+     "invalid external routes"
+    ],
+    "stopConditions": [
+     "any DS-IMP is missing or duplicated",
+     "an executable ID lacks one WO",
+     "a terminal disposition lacks a canonical successor or valid route",
+     "another DS live status store appears"
+    ]
+   }
+  },
+  {
+   "id": "WO-GAT-06",
+   "title": "Per-phase rollback and telemetry controls",
+   "lane": "gates",
+   "order": 6,
+   "size": "S",
+   "status": "done",
+   "dependsOn": [
+    "WO-GAT-05"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-128"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": "codex",
+   "claimedAt": "2026-07-15",
+   "doneAt": "2026-07-15",
+   "evidence": "Registry defines exact keyed phaseControls for 0,1,2A,2B,2C,3,4,5,6; every record has decisionOwner, decisionDate, rollback, disable, telemetry and stopConditions; all 11 Wave-0 authority WOs reference a declared phase and complete execution controls; 22/22 roadmap-status tests include missing phase/control and incomplete-WO red drills; pnpm roadmap:check green.",
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system"
+    ],
+    "rollback": "Registry-only control: revert before functional Wave 0 work is claimed.",
+    "disable": "Block every functional claim until all nine phase-control records validate.",
+    "telemetry": [
+     "phase-control completeness",
+     "owner/date completeness",
+     "rollback drill evidence"
+    ],
+    "stopConditions": [
+     "any phase lacks owner, rollback, disable, telemetry or stop conditions"
+    ]
+   }
+  },
+  {
+   "id": "WO-GAT-07",
+   "title": "Exact proof and claim floor",
+   "lane": "gates",
+   "order": 7,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-005",
+    "DS-IMP-006",
+    "DS-IMP-055",
+    "DS-IMP-056",
+    "DS-IMP-059",
+    "DS-IMP-060"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "exact-zero counters",
+     "unconsumed public exports",
+     "claim-to-fixture coverage",
+     "clean-graph repeatability"
+    ],
+    "stopConditions": [
+     "a completed counter has slack",
+     "a public claim lacks a production consumer or fixture",
+     "two clean runs disagree"
+    ]
+   }
+  },
+  {
+   "id": "WO-GAT-08",
+   "title": "Cross-program convergence ledger",
+   "lane": "gates",
+   "order": 8,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-123"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "docs-engineering"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "unowned contested capabilities",
+     "duplicate status records",
+     "broken external registry links"
+    ],
+    "stopConditions": [
+     "DS duplicates compliance/economy/module status",
+     "a contested capability lacks owner/order/link"
+    ]
+   }
+  },
+  {
+   "id": "WO-ARC-10",
+   "title": "Root dependency honesty",
+   "lane": "architecture",
+   "order": 10,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-001",
+    "DS-IMP-115"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-bithire",
+     "app-platform",
+     "app-evnto"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "root static dependency graph",
+     "runtime identity count",
+     "consumer bundle sentinels"
+    ],
+    "stopConditions": [
+     "root reaches a falsely optional peer",
+     "React/ReactDOM/Dayjs identity duplicates",
+     "an app renders an undeclared supplier"
+    ]
+   }
+  },
+  {
+   "id": "WO-ARC-11",
+   "title": "Superadmin presentation bypass",
+   "lane": "architecture",
+   "order": 11,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-072"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-bithire",
+     "app-platform",
+     "app-evnto"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "registered capability visibility",
+     "all-mode filter bypass",
+     "data-load error rendering"
+    ],
+    "stopConditions": [
+     "all mode hides a route/field/column/tab/action",
+     "a Prisma/data error removes capability anatomy"
+    ]
+   }
+  },
+  {
+   "id": "WO-ENG-23",
+   "title": "Evnto certified theme source",
+   "lane": "engine-modern",
+   "order": 23,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-062"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-evnto"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "Evnto DS pin",
+     "theme-source count",
+     "density/radius/depth/motion divergence"
+    ],
+    "stopConditions": [
+     "Evnto has multiple structural theme authorities",
+     "certified repin changes behavior without compatibility evidence"
+    ]
+   }
+  },
+  {
+   "id": "WO-CRA-11",
+   "title": "Adaptive contract truth",
+   "lane": "craft",
+   "order": 11,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-073"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-bithire",
+     "app-platform",
+     "app-evnto"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "adaptive fields with production consumers",
+     "phone navigation availability",
+     "dead config factories"
+    ],
+    "stopConditions": [
+     "an adaptive field exists only in types/tests",
+     "a phone route has no navigation door"
+    ]
+   }
+  },
+  {
+   "id": "WO-CRA-12",
+   "title": "Motion authority and unit floor",
+   "lane": "craft",
+   "order": 12,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-083",
+    "DS-IMP-084",
+    "DS-IMP-085"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "ambiguous motion units",
+     "motion authority count",
+     "global keyframe/direct-library paths"
+    ],
+    "stopConditions": [
+     "public timing is unit-ambiguous",
+     "more than one runtime authority governs reduced motion",
+     "certified routes use raw global choreography"
+    ]
+   }
+  },
+  {
+   "id": "WO-CRA-13",
+   "title": "Chart correctness floor",
+   "lane": "craft",
+   "order": 13,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-095",
+    "DS-IMP-096",
+    "DS-IMP-097"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "provider color resolution",
+     "invalid/empty/cycle fixtures",
+     "public prop consumption",
+     "accessible DOM retention"
+    ],
+    "stopConditions": [
+     "provider colors collapse",
+     "invalid data renders nondeterministically",
+     "D3 deletes accessible DOM",
+     "a public prop has no consumer"
+    ]
+   }
+  },
+  {
+   "id": "WO-CRA-14",
+   "title": "ParticleField quarantine and hardening",
+   "lane": "craft",
+   "order": 14,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-106"
+   ],
+   "phase": "0",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-platform"
+    ],
+    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "telemetry": [
+     "live high-intensity routes",
+     "DPR/count budget",
+     "RAF suspension",
+     "cleanup/context loss",
+     "fallback use"
+    ],
+    "stopConditions": [
+     "a live route bypasses the static fallback before gates pass",
+     "hidden/offscreen RAF continues",
+     "context loss or reduced motion has no fallback"
+    ]
+   }
   }
- ]
+ ],
+ "traceability": {
+  "ds-improvements": {
+   "sourceRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
+   "roadmap": "/Users/daniel/Developer/Rottay/docs-engineering/engineering/audits/ds-improvements/09-implementation-roadmap-and-gates.md",
+   "adjudication": "/Users/daniel/Developer/Rottay/docs-engineering/engineering/audits/ds-improvements/13-claude-reaudit-adjudication.md",
+   "statusAuthority": "roadmap/registry.json",
+   "items": [
+    {
+     "id": "DS-IMP-001",
+     "disposition": "execute",
+     "authority": "WO-ARC-10",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-002",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-003",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-004",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-005",
+     "disposition": "execute",
+     "authority": "WO-GAT-07",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-006",
+     "disposition": "execute",
+     "authority": "WO-GAT-07",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-007",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-008",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-009",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-010",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-011",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-012",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-013",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-014",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-015",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-016",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-017",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-018",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-019",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-020",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-021",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-022",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-023",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-024",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-025",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-026",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-027",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-028",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-029",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-030",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-031",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-032",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-033",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-034",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-035",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-036",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-037",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-038",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-039",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-040",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-041",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-042",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-043",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-044",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-045",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-046",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-047",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-048",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-049",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-050",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-051",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-052",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-053",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "5",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-054",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-055",
+     "disposition": "execute",
+     "authority": "WO-GAT-07",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-056",
+     "disposition": "execute",
+     "authority": "WO-GAT-07",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-057",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-058",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-059",
+     "disposition": "execute",
+     "authority": "WO-GAT-07",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-060",
+     "disposition": "execute",
+     "authority": "WO-GAT-07",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-061",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Phase 0 freezes its schema/claim boundary under WO-GAT-05; DB-to-SSR/provider/compiler runtime delivery starts in Phase 1."
+    },
+    {
+     "id": "DS-IMP-062",
+     "disposition": "execute",
+     "authority": "WO-ENG-23",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-063",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-064",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-065",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-066",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-067",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2A",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-068",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-069",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-070",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-071",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Phase 3 target is conditional on two independent consumers; do not start a node-canvas pilot before that gate."
+    },
+    {
+     "id": "DS-IMP-072",
+     "disposition": "execute",
+     "authority": "WO-ARC-11",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-073",
+     "disposition": "execute",
+     "authority": "WO-CRA-11",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-074",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-075",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-076",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-077",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-078",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-079",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-080",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-081",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-082",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-083",
+     "disposition": "execute",
+     "authority": "WO-CRA-12",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-084",
+     "disposition": "execute",
+     "authority": "WO-CRA-12",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-085",
+     "disposition": "execute",
+     "authority": "WO-CRA-12",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-086",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-087",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-088",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-089",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-090",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-091",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2B",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-092",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-093",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Signature prototypes may start in Phase 3; supplier fleet migration and conformance close in Phase 4."
+    },
+    {
+     "id": "DS-IMP-094",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-095",
+     "disposition": "execute",
+     "authority": "WO-CRA-13",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-096",
+     "disposition": "execute",
+     "authority": "WO-CRA-13",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-097",
+     "disposition": "execute",
+     "authority": "WO-CRA-13",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-098",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-099",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-100",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-101",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-102",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-103",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-104",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-105",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-106",
+     "disposition": "execute",
+     "authority": "WO-CRA-14",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-107",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-108",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-109",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-110",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "2C",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-111",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "3",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-112",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-113",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "6",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-114",
+     "disposition": "absorbed",
+     "canonicalIds": [
+      "DS-IMP-060"
+     ],
+     "reason": "Requirement is enforced by the canonical ID(s); no independent work order or status is allowed.",
+     "decisionRef": "13-claude-reaudit-adjudication.md#ds-imp-114128-disposition"
+    },
+    {
+     "id": "DS-IMP-115",
+     "disposition": "execute",
+     "authority": "WO-ARC-10",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-116",
+     "disposition": "absorbed",
+     "canonicalIds": [
+      "DS-IMP-104"
+     ],
+     "reason": "Requirement is enforced by the canonical ID(s); no independent work order or status is allowed.",
+     "decisionRef": "13-claude-reaudit-adjudication.md#ds-imp-114128-disposition"
+    },
+    {
+     "id": "DS-IMP-117",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "1",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-118",
+     "disposition": "absorbed",
+     "canonicalIds": [
+      "DS-IMP-005",
+      "DS-IMP-012",
+      "DS-IMP-060"
+     ],
+     "reason": "Requirement is enforced by the canonical ID(s); no independent work order or status is allowed.",
+     "decisionRef": "13-claude-reaudit-adjudication.md#ds-imp-114128-disposition"
+    },
+    {
+     "id": "DS-IMP-119",
+     "disposition": "absorbed",
+     "canonicalIds": [
+      "DS-IMP-072",
+      "DS-IMP-073"
+     ],
+     "reason": "Requirement is enforced by the canonical ID(s); no independent work order or status is allowed.",
+     "decisionRef": "13-claude-reaudit-adjudication.md#ds-imp-114128-disposition"
+    },
+    {
+     "id": "DS-IMP-120",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-121",
+     "disposition": "deferred",
+     "owner": "design-system-program",
+     "targetPhase": "4",
+     "reviewBy": "2026-08-31",
+     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+    },
+    {
+     "id": "DS-IMP-122",
+     "disposition": "routed",
+     "reason": "Owned and statused by the linked external program; the DS records only this boundary.",
+     "external": {
+      "owner": "dm-ia-chat",
+      "path": "/Users/daniel/Developer/Rottay/docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/modules/dm-ia-chat/README.md"
+     }
+    },
+    {
+     "id": "DS-IMP-123",
+     "disposition": "execute",
+     "authority": "WO-GAT-08",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-124",
+     "disposition": "routed",
+     "reason": "Owned and statused by the linked external program; the DS records only this boundary.",
+     "external": {
+      "owner": "token-economy",
+      "path": "/Users/daniel/Developer/Rottay/docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/token-economy/README.md"
+     }
+    },
+    {
+     "id": "DS-IMP-125",
+     "disposition": "absorbed",
+     "canonicalIds": [
+      "DS-IMP-060",
+      "DS-IMP-064",
+      "DS-IMP-092"
+     ],
+     "reason": "Requirement is enforced by the canonical ID(s); no independent work order or status is allowed.",
+     "decisionRef": "13-claude-reaudit-adjudication.md#ds-imp-114128-disposition"
+    },
+    {
+     "id": "DS-IMP-126",
+     "disposition": "absorbed",
+     "canonicalIds": [
+      "DS-IMP-025",
+      "DS-IMP-026",
+      "DS-IMP-027",
+      "DS-IMP-028",
+      "DS-IMP-029",
+      "DS-IMP-030"
+     ],
+     "reason": "Requirement is enforced by the canonical ID(s); no independent work order or status is allowed.",
+     "decisionRef": "13-claude-reaudit-adjudication.md#ds-imp-114128-disposition"
+    },
+    {
+     "id": "DS-IMP-127",
+     "disposition": "execute",
+     "authority": "WO-GAT-05",
+     "phase": "0"
+    },
+    {
+     "id": "DS-IMP-128",
+     "disposition": "execute",
+     "authority": "WO-GAT-06",
+     "phase": "0"
+    }
+   ],
+   "source": "/Users/daniel/Developer/Rottay/docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+   "range": {
+    "prefix": "DS-IMP",
+    "first": 1,
+    "last": 128
+   },
+   "phaseControls": {
+    "0": {
+     "decisionOwner": "design-system-program",
+     "decisionDate": "2026-07-13",
+     "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
+     "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+     "telemetry": [
+      "dependency graph identity",
+      "exact-zero and claim-gate state",
+      "theme validation/fallback",
+      "live particle-route exposure"
+     ],
+     "stopConditions": [
+      "duplicate runtime identity",
+      "a completed exact-zero counter regresses",
+      "an invalid theme changes first paint",
+      "an ungoverned particle route remains live"
+     ]
+    },
+    "1": {
+     "decisionOwner": "design-system-architecture",
+     "decisionDate": "2026-07-13",
+     "rollback": "Select the prior scoped provider/artifact path without deleting persisted tenant data.",
+     "disable": "Disable new provider scoping/layer selection and retain legacy-engine compatibility.",
+     "telemetry": [
+      "cross-root bleed",
+      "portal ownership",
+      "CSP/SSR failures",
+      "modern-bundle dependency presence"
+     ],
+     "stopConditions": [
+      "cross-root or portal bleed",
+      "SSR/hydration mismatch",
+      "modern-only bundle reaches antd",
+      "tenant data cannot round-trip safely"
+     ]
+    },
+    "3": {
+     "decisionOwner": "design-system-brand",
+     "decisionDate": "2026-07-13",
+     "rollback": "Switch grammar and tenant selections to the prior first-party baseline.",
+     "disable": "Disable an individual recipe/signature prototype through the manifest.",
+     "telemetry": [
+      "blinded-review outcomes",
+      "contrast/a11y failures",
+      "Advanced-theme validation/fallback"
+     ],
+     "stopConditions": [
+      "vertical distinction gate fails",
+      "tenant change needs a DS release",
+      "WCAG AA fails",
+      "invalid Advanced data changes output"
+     ]
+    },
+    "4": {
+     "decisionOwner": "platform-adoption",
+     "decisionDate": "2026-07-13",
+     "rollback": "Repin the previous certified DS release and rerun anatomy/slot compatibility.",
+     "disable": "Disable promoted adapters or perimeter consumers independently while preserving DB data.",
+     "telemetry": [
+      "app migration coverage",
+      "direct supplier paths",
+      "AI host errors",
+      "whitelabel perimeter divergence"
+     ],
+     "stopConditions": [
+      "app requires a DS internal selector",
+      "route loses behavior/accessibility",
+      "tenant identity diverges",
+      "AI transport leaks into DS"
+     ]
+    },
+    "5": {
+     "decisionOwner": "skin-adoption",
+     "decisionDate": "2026-07-13",
+     "rollback": "Retain each byte-exact predecessor until retroactive conformance evidence is green.",
+     "disable": "Stop the category checkpoint and keep its predecessor active.",
+     "telemetry": [
+      "exact-zero regression",
+      "nested-owner mismatch",
+      "visual/state diff"
+     ],
+     "stopConditions": [
+      "completed file regains paint writes",
+      "nested ownership depends on import order",
+      "visual/state/a11y parity fails"
+     ]
+    },
+    "6": {
+     "decisionOwner": "design-system-release",
+     "decisionDate": "2026-07-13",
+     "rollback": "Certification changes no runtime default; reopen the owning item and block release.",
+     "disable": "Block publish/repin and retain the previous certified release.",
+     "telemetry": [
+      "clean-install gates",
+      "cross-app route matrix",
+      "tenant isolation",
+      "package/adoption reports",
+      "claim-integrity failures"
+     ],
+     "stopConditions": [
+      "a blocking gate is red",
+      "external status is mirrored",
+      "public claim lacks executable evidence",
+      "registered capability is hidden from superadmin"
+     ]
+    },
+    "2A": {
+     "decisionOwner": "design-system-craft",
+     "decisionDate": "2026-07-13",
+     "rollback": "Select legacy composition and leave recipes/resolvers opt-in.",
+     "disable": "Disable an individual recipe in the manifest without disabling TenantThemeConfig.",
+     "telemetry": [
+      "recipe adoption",
+      "deprecated extension use",
+      "resolver errors"
+     ],
+     "stopConditions": [
+      "recipe changes behavior/accessibility",
+      "resolver crosses provider ownership",
+      "public field lacks a production consumer"
+     ]
+    },
+    "2B": {
+     "decisionOwner": "design-system-experience",
+     "decisionDate": "2026-07-13",
+     "rollback": "Keep topology, motion and icon compatibility aliases for one minor and select the prior adapter.",
+     "disable": "Disable individual motion recipes or supplier adapters while preserving static/reduced-motion output.",
+     "telemetry": [
+      "mobile task failure",
+      "reduced-motion violations",
+      "unmapped icons",
+      "direct supplier paths"
+     ],
+     "stopConditions": [
+      "phone primary action is unreachable",
+      "reduced motion animates",
+      "direct supplier paths grow",
+      "semantic and brand icons are conflated"
+     ]
+    },
+    "2C": {
+     "decisionOwner": "visualization-runtime",
+     "decisionDate": "2026-07-13",
+     "rollback": "Keep legacy Bar/Line/HeatMap exports for one minor through a compatibility adapter.",
+     "disable": "Feature-flag Spatial, WebGPU and effects independently and fall back to governed SVG/static output.",
+     "telemetry": [
+      "kernel mounts/errors",
+      "fallback use",
+      "context loss",
+      "long tasks",
+      "RAF suspension",
+      "bundle cost"
+     ],
+     "stopConditions": [
+      "data semantics change silently",
+      "React accessibility DOM is deleted",
+      "context loss lacks fallback",
+      "hidden/offscreen work continues",
+      "budget is exceeded"
+     ]
+    }
+   }
+  }
+ }
 }

@@ -57,7 +57,8 @@
     "visual:approve": "pnpm --filter @rottay/showroom run test:visual:approve",
     "whitelabel:test": "pnpm --filter @rottay/showroom run test:whitelabel",
     "roadmap:status": "node scripts/roadmap-status.mjs status",
-    "roadmap:check": "node scripts/roadmap-status.mjs check",
+    "roadmap:test": "node --test scripts/roadmap-status.test.mjs",
+    "roadmap:check": "pnpm roadmap:test && node scripts/roadmap-status.mjs check",
     "roadmap:commercial": "node scripts/roadmap-commercial-status.mjs status",
     "roadmap:commercial:check": "node scripts/roadmap-commercial-status.mjs check"
   },

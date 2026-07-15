@@ -289,3 +289,37 @@ CRA-08 after WO-ENG-01** (they pair: CRA-08 owns page-level continuity, CRA-06 o
 choreography — coordinate shared `transitions.css` edits); **CRA-07 after WO-ENG-01 + WO-ENG-04**.
 Every visual WO's acceptance gate additionally REQUIRES the sighted before/after captures under both
 tenant palettes (a dark-surface and a light-surface tenant); the owner approves signature moments.
+
+## DS improvements — Wave 0
+
+### WO-CRA-11 Adaptive contract truth
+- **Source IDs / phase** — DS-IMP-073; Phase 0.
+- **Outcome** — No adaptive/mobile field exists only in a type, builder or test. Every retained value has a production renderer and behavior fixture; dead config is wired or deleted. Evnto gets an immediate phone navigation door before full topology work.
+- **Steps** — Build a field-to-renderer inventory across DS and apps; remove false options or wire them end to end; add 360px keyboard/safe-area/overflow fixtures; restore the minimal Evnto phone navigation path.
+- **Acceptance gate** — Zero type-only adaptive fields; zero dead `create*Config` exports; every retained field changes production output in a fixture; required phone routes expose navigation and primary action without undeclared horizontal overflow.
+- **Execution control** — Roll back one adaptive field/route at a time and retain the desktop path. Telemetry: field-consumer coverage, dead factories and phone navigation availability. Stop on hidden primary action, unreachable navigation or fake configuration.
+- **Do NOT** — Do not shrink desktop tables as the only mobile strategy or claim Phase-2B task projection here.
+
+### WO-CRA-12 Motion authority and unit floor
+- **Source IDs / phase** — DS-IMP-083, 084 and 085; Phase 0.
+- **Outcome** — Public motion values use explicit milliseconds; one SSR-safe MotionProvider is the runtime authority; CSS reduced-motion is the aligned pre-hydration/no-JS fail-safe; global motion is namespaced before new recipes land.
+- **Steps** — Normalize ambiguous callers against 80/120/200/320/500/900ms boundary tests; consolidate reduced-motion and preference resolution; namespace bare keyframes; gate `transition: all`, raw route timing and direct product-route choreography.
+- **Acceptance gate** — Boundary tests pass; SSR first paint and hydration agree; reduced-motion fixtures reach final values immediately, including CountUp; fleet scans report zero unapproved global keyframes, `transition: all`, raw product timing and direct library choreography.
+- **Execution control** — Preserve compatibility mapping for one minor; disable a recipe to static final output. Telemetry: ambiguous units, authority count and forbidden paths. Stop on hydration motion, reduced-motion animation or multiple authorities.
+- **Do NOT** — Do not mandate a particular hook/spring implementation or add new expressive motion before this floor is green.
+
+### WO-CRA-13 Chart correctness floor
+- **Source IDs / phase** — DS-IMP-095, 096 and 097; Phase 0.
+- **Outcome** — Existing charts resolve colors from their owning provider root, handle negative/zero/constant/invalid/cyclic/empty transitions deterministically, keep accessible React DOM intact, and expose only public props with real consumers/fixtures.
+- **Steps** — Add two-root SSR/hydration/export color fixtures; repair domain/scale/definition identity and empty transitions; reject cyclic quantitative Sankey input with a typed visible fallback; move accessible title/description ownership outside imperative D3 redraw; inventory public props.
+- **Acceptance gate** — Two simultaneous roots render distinct monotonic heatmap steps; all edge fixtures pass or return typed errors; D3 cannot delete accessible name/description; compact mode is explicit; every public prop has production consumption/fixture or is removed.
+- **Execution control** — Keep legacy chart exports/rendering while correcting semantics; disable a broken family to its deterministic static/error fallback. Telemetry: color resolution, edge-case results, accessible DOM and prop coverage. Stop on silent data-semantic change or inaccessible output.
+- **Do NOT** — Do not start ChartKernel/renderer migration or use Three to mask correctness defects.
+
+### WO-CRA-14 ParticleField quarantine and hardening
+- **Source IDs / phase** — DS-IMP-106; Phase 0 Stage A plus the hardening prerequisite for Phase 2C.
+- **Outcome** — The five live Platform high-intensity `ai-field` routes use a static/disabled fallback until ParticleField passes provider color, DPR/count, suspension, cleanup, accessible alternative, context-loss and reduced-motion gates.
+- **Steps** — Add an immediate route-level kill switch/static fallback; centralize lifecycle and resource bounds; pause RAF offscreen/hidden; clean listeners/resources; handle context loss; resolve colors from the provider root; expose a meaningful labelled non-canvas alternative.
+- **Acceptance gate** — Before hardening, zero live high-intensity route bypasses quarantine. After hardening, DPR/count budgets, hidden/offscreen suspension, rapid mount/unmount cleanup, context-loss fallback, reduced-motion and two-provider color fixtures pass; long-task/bundle budgets remain under recorded ceilings.
+- **Execution control** — Kill switch returns every route to the static fallback independently. Telemetry: exposed routes, DPR/count, RAF state, cleanup/context loss and fallback. Stop on background work, leaked resources, missing alternative or budget breach.
+- **Do NOT** — Do not exempt functional canvas from accessibility/lifecycle proof, enable WebGPU, or add ambient Three scenes in Wave 0.
