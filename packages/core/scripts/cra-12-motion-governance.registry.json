@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "baselineStatus": "awaiting-first-party-app-lock-repin",
+  "baselineStatus": "active",
   "policy": {
     "canonicalMotionVersion": "12.42.2",
     "canonicalFramerVersion": "12.42.2",
@@ -53,5 +53,75 @@
       }
     ]
   },
-  "baselines": {}
+  "baselines": {
+    "dependency-state": {
+      "owner": "design-system",
+      "reason": "Canonical DS 2.19.4 and Motion 12.42.2 fleet identity snapshot.",
+      "expires": "2026-12-31",
+      "files": [
+        { "repo": "app-bithire", "scope": "repository", "maxCount": 1, "maxFiles": 1, "digest": "9636b8218140eec45424f591a24558ccbacf472f0ba07b72b7362412422df7bc" },
+        { "repo": "app-evnto", "scope": "repository", "maxCount": 1, "maxFiles": 1, "digest": "9636b8218140eec45424f591a24558ccbacf472f0ba07b72b7362412422df7bc" },
+        { "repo": "app-platform", "scope": "repository", "maxCount": 1, "maxFiles": 1, "digest": "9636b8218140eec45424f591a24558ccbacf472f0ba07b72b7362412422df7bc" },
+        { "repo": "ui-design-system", "scope": "repository", "maxCount": 1, "maxFiles": 1, "digest": "7b6882603a1b6818a6c8bf5846be8a1ba145f751278075c625496448e650f74f" }
+      ]
+    },
+    "direct-motion-import": {
+      "owner": "design-system",
+      "reason": "Exact migration inventory; app-level choreography must decrease toward DS adapters.",
+      "expires": "2026-12-31",
+      "files": [
+        { "repo": "app-evnto", "scope": "marketing", "maxCount": 6, "maxFiles": 6, "digest": "44fb0a0f0b1af61f2cbbf004bb92bff199b852bf8bc2981aafa26331b43f6b59" },
+        { "repo": "app-platform", "scope": "marketing", "maxCount": 53, "maxFiles": 53, "digest": "b3810622b31fb19765ae2fdeba3302cd440ea0ca24721cc3f017ae72aec4e21e" },
+        { "repo": "app-platform", "scope": "product", "maxCount": 7, "maxFiles": 7, "digest": "e9c5c3ec7c5e5fc6ba4a87a40292b5fa374d45091c5e85f0b3043ee97b3c1f1b" }
+      ]
+    },
+    "global-keyframes": {
+      "owner": "design-system",
+      "reason": "Exact pre-CRA12 global keyframe inventory; new or mutated global names are forbidden.",
+      "expires": "2026-12-31",
+      "files": [
+        { "repo": "app-bithire", "scope": "product", "maxCount": 566, "maxFiles": 101, "digest": "8a71b5fff93bbd24c0577171f8c1358347f74313ecd32c4a94c9d3fc7e683430" },
+        { "repo": "app-bithire", "scope": "showroom", "maxCount": 52, "maxFiles": 4, "digest": "0862da6c96990a576e1cdf56db5f794cf66cd0f3ffa0f14fa70373d33508ebd5" },
+        { "repo": "app-evnto", "scope": "product", "maxCount": 29, "maxFiles": 20, "digest": "c6309958ac80821b5b77850c7e4ead78b8b153ddde9b7637e17a58ee436a9ee9" },
+        { "repo": "app-platform", "scope": "marketing", "maxCount": 2, "maxFiles": 1, "digest": "008e739b8cc9e7b862da97335290d8fff5b6e4091e4560c9edcc355a0b1f5389" },
+        { "repo": "app-platform", "scope": "product", "maxCount": 107, "maxFiles": 17, "digest": "2ddd561279ddbc2f52141f638bc7ee7f5ed7ad8e5fb4f511b5669d4555c2d6bf" },
+        { "repo": "ui-design-system", "scope": "ds-internal", "maxCount": 243, "maxFiles": 56, "digest": "93f43dedd90b8066c086b4b196d0b50f6310018aa4e69d2d837f1c95046f52ef" },
+        { "repo": "ui-design-system", "scope": "showroom", "maxCount": 30, "maxFiles": 7, "digest": "117bd6c68831f7b04882fba89e62f01ca8df27609c8cc82e3bf339fe6e8d40c2" },
+        { "repo": "ui-design-system", "scope": "test", "maxCount": 22, "maxFiles": 4, "digest": "851531b6d85fa567905f12c9dbb0a2789de75da0e426d2413c12ea50bf566665" }
+      ]
+    },
+    "raw-motion-timing": {
+      "owner": "design-system",
+      "reason": "Exact pre-CRA12 raw timing inventory; additions and body drift are forbidden.",
+      "expires": "2026-12-31",
+      "files": [
+        { "repo": "app-bithire", "scope": "marketing", "maxCount": 68, "maxFiles": 3, "digest": "9d295091aad4457098ab1389bf2f672fabd0e3e53d8d398c6b11056107bfc5d4" },
+        { "repo": "app-bithire", "scope": "product", "maxCount": 935, "maxFiles": 285, "digest": "5100bcaea5b05e6f45a14f6264555c5ff603741642c3251cf79ab88576608c99" },
+        { "repo": "app-bithire", "scope": "showroom", "maxCount": 90, "maxFiles": 14, "digest": "2010c8b59cebd4b1f1f06b89e09814dea07f342a732c40f8b60fa51ce3f6cf13" },
+        { "repo": "app-bithire", "scope": "test", "maxCount": 1, "maxFiles": 1, "digest": "e6e5602f0fb3ec8d12cb4c6c358a601681fd8faf776e81ac83d56126b7cf2b79" },
+        { "repo": "app-evnto", "scope": "marketing", "maxCount": 32, "maxFiles": 9, "digest": "4742cc7badc59a9f7f93bf679d6fc2f4ccf0ae17b42fba37dd0cb2c43dfcf7de" },
+        { "repo": "app-evnto", "scope": "product", "maxCount": 127, "maxFiles": 84, "digest": "9eefd161d0e8813e1497bf1bfa1be375e1e4567c9771f5283756354ff4e77950" },
+        { "repo": "app-platform", "scope": "marketing", "maxCount": 184, "maxFiles": 46, "digest": "b046fd8816f0b0dff300059d6af545d8000dd91a9ce5cf34b670f78cb47b4c87" },
+        { "repo": "app-platform", "scope": "product", "maxCount": 188, "maxFiles": 61, "digest": "0648725b7051d8243f6e56b2dd3b39475b49ace27c124bfb64f78965fc070a01" },
+        { "repo": "ui-design-system", "scope": "ds-internal", "maxCount": 508, "maxFiles": 175, "digest": "0458a39dfde37e964f82c52e27805dbb1eab852a60c6a784304aa01222d05ff4" },
+        { "repo": "ui-design-system", "scope": "showroom", "maxCount": 42, "maxFiles": 16, "digest": "167bbc9f40a5b2b51dae8eab51cfbb95c57ec0a228556e1a11a3762c8c9c2660" },
+        { "repo": "ui-design-system", "scope": "test", "maxCount": 38, "maxFiles": 7, "digest": "c79bc41bd11e411e802b1036cd719889e4b623edbf1ea33b50004b243b4b7b80" }
+      ]
+    },
+    "transition-all": {
+      "owner": "design-system",
+      "reason": "Exact pre-CRA12 transition-all inventory; additions and body drift are forbidden.",
+      "expires": "2026-12-31",
+      "files": [
+        { "repo": "app-bithire", "scope": "product", "maxCount": 81, "maxFiles": 44, "digest": "d6222ab116ad985fa4fb88c53fae6bc2367b1dcea3613807d3c4ace978531b78" },
+        { "repo": "app-bithire", "scope": "showroom", "maxCount": 29, "maxFiles": 12, "digest": "45af2209a4d9548e3eb1ca4fc731cab70c999da0340df9e2dd98e8df93f372e9" },
+        { "repo": "app-evnto", "scope": "marketing", "maxCount": 1, "maxFiles": 1, "digest": "6c96c024272d9cce0044bbe9698845f6df3a9e7f7d4d54d685114157e6287a90" },
+        { "repo": "app-evnto", "scope": "product", "maxCount": 6, "maxFiles": 6, "digest": "6663cc6caaf8ccd3ea02249aeba7e9cb318dd5a23e2df433e2d099e73e564678" },
+        { "repo": "app-platform", "scope": "product", "maxCount": 22, "maxFiles": 11, "digest": "76c16a38efa57a239e4869a14c7d8722dfd35f8670cd8822470427f1257b0342" },
+        { "repo": "ui-design-system", "scope": "ds-internal", "maxCount": 87, "maxFiles": 53, "digest": "846e953ca815d0355390a5143cd1ce35303a7b607ed66241eaa0a2b3d1196c4f" },
+        { "repo": "ui-design-system", "scope": "showroom", "maxCount": 3, "maxFiles": 2, "digest": "82879b3a39e52f45c641e4f46f0d61df0a53291587217395f63d7cfa57460db1" },
+        { "repo": "ui-design-system", "scope": "test", "maxCount": 1, "maxFiles": 1, "digest": "52dc9674706b16f682eeb395716140b5cd4e93486f668597c476e1356dcf6331" }
+      ]
+    }
+  }
 }
