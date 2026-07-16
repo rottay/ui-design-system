@@ -15,6 +15,7 @@
  */
 
 import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
+import { useResponsive } from '../../../runtime/responsive';
 
 /**
  * Responsive stacking overrides accepted by surfaces with split layouts.
@@ -49,9 +50,11 @@ export function useSurfaceResponsiveLayout(
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
+  hasResolvedViewport: boolean;
   shouldStack: boolean;
 } {
   const { isMobile, isTablet, isDesktop } = useBreakpoints();
+  const { hasResolvedViewport } = useResponsive();
 
   // Mobile stacking defaults to true (opt-out) because most split layouts
   // are unusable on small screens. Tablet stacking defaults to false (opt-in)
@@ -64,6 +67,7 @@ export function useSurfaceResponsiveLayout(
     isMobile,
     isTablet,
     isDesktop,
+    hasResolvedViewport,
     shouldStack,
   };
 }

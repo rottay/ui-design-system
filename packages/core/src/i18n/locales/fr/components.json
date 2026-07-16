@@ -146,6 +146,9 @@
       "form_title": "Formulaire",
       "summary_title": "Resume"
     },
+    "form": {
+      "discard_changes": "Ignorer les modifications non enregistrées du formulaire ?"
+    },
     "search": {
       "placeholder": "Rechercher",
       "empty_query_title": "Commencez a taper pour rechercher",
@@ -188,6 +191,8 @@
       "empty_title": "Aucune etape disponible",
       "empty_description": "Ce flux ne contient encore aucune etape configuree.",
       "step_error_fallback": "Veuillez verifier cette etape.",
+      "step_counter": "Étape {current} sur {total} : {title}",
+      "discard_changes": "Ignorer les modifications non enregistrées de l’assistant ?",
       "complete": "Terminer"
     },
     "chat": {

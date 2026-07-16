@@ -25,6 +25,7 @@
  */
 
 import React, { useState } from 'react';
+import { ActionDock } from '../../../../primitives/navigation/ActionDock';
 import type { StepWizardProps } from '../StepWizard.types';
 
 const ROOT_CLASS_NAME = 'ds-pattern-step-wizard ds-engine-rustic';
@@ -36,7 +37,10 @@ const ROOT_CLASS_NAME = 'ds-pattern-step-wizard ds-engine-rustic';
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
-    padding: '1.5rem',
+    paddingTop: '1.5rem',
+    paddingRight: '1.5rem',
+    paddingBottom: '1.5rem',
+    paddingLeft: '1.5rem',
   } as React.CSSProperties,
   stepsHorizontal: {
     display: 'flex',
@@ -44,12 +48,13 @@ const s = {
     gap: 0,
     marginBottom: '1.5rem',
   } as React.CSSProperties,
-  stepIndicator: (active: boolean, completed: boolean) => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    flex: 1,
-  } as React.CSSProperties),
+  stepIndicator: (active: boolean, completed: boolean) =>
+    ({
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      flex: 1,
+    } as React.CSSProperties),
   // Step dot: three visual states -- completed (filled primary), active
   // (outlined primary), and future (neutral). Completed dots show a checkmark;
   // active/future dots show the 1-based step number.
@@ -63,13 +68,14 @@ const s = {
     fontWeight: 600,
     flexShrink: 0,
   } as React.CSSProperties,
-  stepLabel: (active: boolean) => ({
-    fontSize: 'var(--ds-font-size-xs)',
-    fontWeight: active ? 600 : 400,
-    whiteSpace: 'nowrap' as const,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  } as React.CSSProperties),
+  stepLabel: (active: boolean) =>
+    ({
+      fontSize: 'var(--ds-font-size-xs)',
+      fontWeight: active ? 600 : 400,
+      whiteSpace: 'nowrap' as const,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    } as React.CSSProperties),
   stepLine: {
     flex: 1,
     height: 2,
@@ -81,11 +87,12 @@ const s = {
     marginBottom: '1rem',
     overflow: 'hidden',
   } as React.CSSProperties,
-  progressFill: (pct: number) => ({
-    width: `${pct}%`,
-    height: '100%',
-    transition: 'width 300ms ease',
-  } as React.CSSProperties),
+  progressFill: (pct: number) =>
+    ({
+      width: `${pct}%`,
+      height: '100%',
+      transition: 'width 300ms ease',
+    } as React.CSSProperties),
   content: {
     minHeight: 200,
   } as React.CSSProperties,
@@ -110,11 +117,12 @@ const s = {
     cursor: 'pointer',
     transition: 'background 150ms',
   } as React.CSSProperties,
-  skeleton: (w: string, h: string) => ({
-    width: w,
-    height: h,
-    animation: 'ds-step-wizard-rustic-pulse 1.5s ease-in-out infinite',
-  } as React.CSSProperties),
+  skeleton: (w: string, h: string) =>
+    ({
+      width: w,
+      height: h,
+      animation: 'ds-step-wizard-rustic-pulse 1.5s ease-in-out infinite',
+    } as React.CSSProperties),
 };
 
 /**
@@ -140,6 +148,9 @@ export default function RusticStepWizard(props: StepWizardProps) {
     allowSkip = false,
     showProgress = true,
     orientation = 'horizontal',
+    progressPosture = 'rail',
+    formatProgressLabel,
+    actionPosture = 'inline',
     nextLabel = 'Next',
     prevLabel = 'Back',
     completeLabel = 'Complete',
@@ -166,6 +177,13 @@ export default function RusticStepWizard(props: StepWizardProps) {
 
   const isLast = current === steps.length - 1;
   const currentDef = steps[current];
+  const stickyActions = actionPosture === 'sticky-bottom';
+  const progressLabel =
+    formatProgressLabel?.({
+      current: current + 1,
+      total: steps.length,
+      title: currentDef?.title ?? '',
+    }) ?? `Step ${current + 1} of ${steps.length}: ${currentDef?.title ?? ''}`;
   // Progress percentage: 1-based (step 1 of 3 = 33%, not 0%).
   const progress = Math.round(((current + 1) / steps.length) * 100);
 
@@ -191,11 +209,7 @@ export default function RusticStepWizard(props: StepWizardProps) {
         return true;
       }
 
-      setValidationMessage(
-        typeof result === 'string'
-          ? result
-          : 'Please complete this step before continuing.'
-      );
+      setValidationMessage(typeof result === 'string' ? result : 'Please complete this step before continuing.');
 
       return false;
     } finally {
@@ -228,7 +242,12 @@ export default function RusticStepWizard(props: StepWizardProps) {
   // typical rendered height to prevent layout shift.
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...s.container, ...style }}>
+      <div
+        data-part="root"
+        data-loading="true"
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+        style={{ ...s.container, ...style }}
+      >
         <div data-part="skeleton-progress" style={s.skeleton('100%', '1.5rem')} />
         <div data-part="skeleton-content" style={{ ...s.skeleton('100%', '12rem'), marginTop: '1.5rem' }} />
       </div>
@@ -237,23 +256,135 @@ export default function RusticStepWizard(props: StepWizardProps) {
 
   const isVertical = orientation === 'vertical';
 
+  const navigationContent = (
+    <div
+      data-part="nav-bar"
+      style={{
+        ...s.nav,
+        width: '100%',
+        marginTop: stickyActions ? 0 : s.nav.marginTop,
+        flexWrap: 'wrap',
+        gap: '0.5rem',
+      }}
+    >
+      <div>
+        {current > 0 && (
+          <button
+            type="button"
+            data-part="prev-button"
+            disabled={isValidating || actionsDisabled}
+            style={s.btn}
+            onClick={() => setCurrent(current - 1)}
+          >
+            {prevLabel}
+          </button>
+        )}
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flex: '1 1 auto',
+          flexWrap: 'wrap',
+          justifyContent: 'flex-end',
+          gap: '0.5rem',
+          alignItems: 'center',
+          minWidth: 0,
+        }}
+      >
+        {footer}
+        {allowSkip && currentDef?.optional && !isLast && (
+          <button
+            type="button"
+            data-part="skip-button"
+            disabled={isValidating || actionsDisabled}
+            style={s.btn}
+            onClick={() => setCurrent(current + 1)}
+          >
+            {skipLabel}
+          </button>
+        )}
+        {isLast ? (
+          showCompleteAction ? (
+            <button
+              type="button"
+              data-part="complete-button"
+              disabled={isValidating || actionsDisabled || completeDisabled}
+              style={s.btn}
+              onClick={handleComplete}
+            >
+              {completeLabel}
+            </button>
+          ) : null
+        ) : (
+          <button
+            type="button"
+            data-part="next-button"
+            disabled={isValidating || actionsDisabled}
+            style={s.btn}
+            onClick={handleAdvance}
+          >
+            {nextLabel}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
   return (
-    <div data-part="root" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...s.container, ...style }}>
+    <div
+      data-part="root"
+      data-action-posture={actionPosture}
+      data-progress-posture={progressPosture}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      style={{
+        ...s.container,
+        ...(stickyActions
+          ? {
+              paddingBottom: 'var(--ds-step-wizard-action-dock-reserved-space, 7rem)',
+            }
+          : {}),
+        ...style,
+      }}
+    >
+      {showProgress && progressPosture === 'counter' && (
+        <div data-part="step-counter" role="status" aria-live="polite" aria-label={progressLabel}>
+          {progressLabel}
+        </div>
+      )}
+
       {/* Horizontal step indicators: dot + label pairs connected by lines.
           Completed steps show a checkmark; active/future steps show their number. */}
-      {showProgress && !isVertical && (
+      {showProgress && progressPosture === 'rail' && !isVertical && (
         <>
           <div data-part="step-rail" data-orientation="horizontal" style={s.stepsHorizontal}>
             {steps.map((step, i) => (
               <React.Fragment key={step.key}>
-                <div data-part="step" data-active={i === current} data-completed={i < current} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                  <div data-part="step-indicator" data-active={i === current} data-completed={i < current} style={s.stepDot}>
+                <div
+                  data-part="step"
+                  data-active={i === current}
+                  data-completed={i < current}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                  }}
+                >
+                  <div
+                    data-part="step-indicator"
+                    data-active={i === current}
+                    data-completed={i < current}
+                    style={s.stepDot}
+                  >
                     {i < current ? '\u2713' : i + 1}
                   </div>
-                  <span data-part="step-title" data-active={i === current} style={s.stepLabel(i === current)}>{step.title}</span>
+                  <span data-part="step-title" data-active={i === current} style={s.stepLabel(i === current)}>
+                    {step.title}
+                  </span>
                 </div>
                 {/* Connecting line between dots; colored primary when completed */}
-                {i < steps.length - 1 && <div data-part="step-connector" data-completed={i < current} style={s.stepLine} />}
+                {i < steps.length - 1 && (
+                  <div data-part="step-connector" data-completed={i < current} style={s.stepLine} />
+                )}
               </React.Fragment>
             ))}
           </div>
@@ -265,18 +396,37 @@ export default function RusticStepWizard(props: StepWizardProps) {
       )}
 
       {/* Vertical mode: step list sidebar + content area side by side */}
-      {showProgress && isVertical ? (
+      {showProgress && progressPosture === 'rail' && isVertical ? (
         <div style={{ display: 'flex', gap: '1.5rem' }}>
           <div data-part="step-rail" data-orientation="vertical" style={{ width: 180, flexShrink: 0 }}>
             {steps.map((step, i) => (
-              <div key={step.key} data-part="step" data-active={i === current} data-completed={i < current} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-                <div data-part="step-indicator" data-active={i === current} data-completed={i < current} style={s.stepDot}>
+              <div
+                key={step.key}
+                data-part="step"
+                data-active={i === current}
+                data-completed={i < current}
+                style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}
+              >
+                <div
+                  data-part="step-indicator"
+                  data-active={i === current}
+                  data-completed={i < current}
+                  style={s.stepDot}
+                >
                   {i < current ? '\u2713' : i + 1}
                 </div>
                 <div data-part="step-label-group">
-                  <div data-part="step-title" data-active={i === current} style={s.stepLabel(i === current)}>{step.title}</div>
+                  <div data-part="step-title" data-active={i === current} style={s.stepLabel(i === current)}>
+                    {step.title}
+                  </div>
                   {step.description && (
-                    <div data-part="step-description" style={{ fontSize: 'var(--ds-font-size-xs)', marginTop: 2 }}>
+                    <div
+                      data-part="step-description"
+                      style={{
+                        fontSize: 'var(--ds-font-size-xs)',
+                        marginTop: 2,
+                      }}
+                    >
                       {step.description}
                     </div>
                   )}
@@ -284,47 +434,37 @@ export default function RusticStepWizard(props: StepWizardProps) {
               </div>
             ))}
           </div>
-          <div data-part="content" style={{ flex: 1, minWidth: 0, ...s.content }}>{currentDef?.content}</div>
+          <div data-part="content" style={{ flex: 1, minWidth: 0, ...s.content }}>
+            {currentDef?.content}
+          </div>
         </div>
       ) : (
-        <div data-part="content" style={s.content}>{currentDef?.content}</div>
+        <div data-part="content" style={s.content}>
+          {currentDef?.content}
+        </div>
       )}
 
       {/* Validation error banner */}
       {validationMessage && (
-        <div data-part="error-panel" style={s.error}>{validationMessage}</div>
+        <div data-part="error-panel" style={s.error}>
+          {validationMessage}
+        </div>
       )}
 
-      {/* Navigation bar: Back (ghost) on left, Skip/Next/Complete on right.
-          All buttons disable during async validation. */}
-      <div data-part="nav-bar" style={s.nav}>
-        <div>
-          {current > 0 && (
-            <button data-part="prev-button" disabled={isValidating || actionsDisabled} style={s.btn} onClick={() => setCurrent(current - 1)}>{prevLabel}</button>
-          )}
-        </div>
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          {footer}
-          {/* Skip only appears for optional, non-final steps */}
-          {allowSkip && currentDef?.optional && !isLast && (
-            <button data-part="skip-button" disabled={isValidating || actionsDisabled} style={s.btn} onClick={() => setCurrent(current + 1)}>{skipLabel}</button>
-          )}
-          {isLast ? (
-            showCompleteAction ? (
-              <button
-                data-part="complete-button"
-                disabled={isValidating || actionsDisabled || completeDisabled}
-                style={s.btn}
-                onClick={handleComplete}
-              >
-                {completeLabel}
-              </button>
-            ) : null
-          ) : (
-            <button data-part="next-button" disabled={isValidating || actionsDisabled} style={s.btn} onClick={handleAdvance}>{nextLabel}</button>
-          )}
-        </div>
-      </div>
+      {/* Navigation preserves disabled/loading/validation state in both postures. */}
+      {stickyActions ? (
+        <ActionDock
+          mode="fixed"
+          position="bottom"
+          className="ds-step-wizard__action-dock"
+          data-testid="step-wizard-action-dock"
+          aria-label="Wizard actions"
+        >
+          {navigationContent}
+        </ActionDock>
+      ) : (
+        navigationContent
+      )}
     </div>
   );
 }

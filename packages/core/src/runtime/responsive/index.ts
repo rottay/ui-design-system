@@ -13,6 +13,7 @@ export {
 export type {
   ResponsiveProviderProps,
   ResponsiveContextValue,
+  ResolvedResponsiveContextValue,
   DeviceClass,
   PointerType,
   Orientation,

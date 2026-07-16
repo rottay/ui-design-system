@@ -10,14 +10,16 @@
  * presentation while delegating actual field rendering to `PatternFormBuilder`.
  */
 
-import { Button, Card, Grid, Stack, Text, Flex } from '../../../../primitives';
+import { ActionDock, Button, Card, Grid, Stack, Text, Flex } from '../../../../primitives';
 import { PatternFormBuilder } from '../../../../patterns';
 import { FadeIn } from '../../../../../motion';
+import { useUnsavedChangesGuard } from '../../../../../hooks/form';
 import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../../../foundation/helpers';
 import type { FormSurfaceConfig } from '../../../foundation/types';
 import { PageShellSurface } from '../../../layout/page-shell';
 import { useSurfaceProfileDefaults } from '../../../foundation/profile-defaults';
 import { useSurfaceResponsiveLayout } from '../../../foundation/responsive';
+import { useSurfaceTranslations } from '../../../foundation/i18n';
 import {
   resolveStackSpacing,
   resolveLabelTextTransform,
@@ -33,14 +35,18 @@ export interface FormSurfaceProps {
 }
 
 /** Page-level form shell with error handling, action normalization, and optional aside content. */
-export function FormSurface({
-  config,
-  loading = false,
-  error,
-  onRetry,
-}: FormSurfaceProps): React.ReactElement {
+export function FormSurface({ config, loading = false, error, onRetry }: FormSurfaceProps): React.ReactElement {
+  const { tSurface } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaults();
-  const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
+  const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
+  const dirtyState = config.behavior.dirtyState;
+  const { requestDiscard } = useUnsavedChangesGuard({
+    isDirty: dirtyState?.isDirty ?? false,
+    message: dirtyState?.message ?? tSurface('form.discard_changes'),
+    confirmDiscard: dirtyState?.confirmDiscard,
+    onDiscard: dirtyState?.onDiscard,
+    onBlocked: dirtyState?.onBlocked,
+  });
   // Fields are permission-filtered before reaching the form builder so
   // restricted fields never appear in the DOM at all.
   const visibleFields = filterSurfaceFields(config.behavior.fields, config.access ?? config.permissions);
@@ -55,13 +61,8 @@ export function FormSurface({
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
   };
-  const showAside =
-    !!config.presentation.aside &&
-    (!isMobile || config.visual.hideAsideOnMobile === false);
-  const resolvedLayout =
-    shouldStack && config.visual.layout === 'horizontal'
-      ? 'vertical'
-      : config.visual.layout;
+  const showAside = !!config.presentation.aside && (!isMobile || config.visual.hideAsideOnMobile === false);
+  const resolvedLayout = shouldStack && config.visual.layout === 'horizontal' ? 'vertical' : config.visual.layout;
   const resolvedColumns = shouldStack ? 1 : config.visual.columns;
 
   if (error) {
@@ -72,38 +73,24 @@ export function FormSurface({
     );
   }
 
-  // The sticky posture is a paint (a scrim gradient) plus a layout. `data-sticky`
-  // carries the condition into the skin; the layout stays here.
-  const actionsSticky = Boolean(isMobile && config.visual.mobileActionsSticky);
+  // Mobile persistence uses the canonical viewport-aware ActionDock; the
+  // surface skin owns its scrim and reserves scroll space for the fixed bar.
+  const actionsSticky = Boolean(hasResolvedViewport && isMobile && config.visual.mobileActionsSticky);
 
-  const actionsNode = (
-    <Flex
-      data-part="actions"
-      data-sticky={actionsSticky}
-      direction={isMobile ? 'column' : 'row'}
-      gap={8}
-      wrap="wrap"
-      justify="end"
-      style={
-        actionsSticky
-          ? {
-              position: 'sticky',
-              bottom: 0,
-              paddingTop: 12,
-              paddingBottom: 4,
-              zIndex: 1,
-            }
-          : undefined
-      }
-    >
+  const actionButtons = (
+    <>
       {cancelAction && (
         <Button
           variant={resolveSurfaceButtonVariant(cancelAction.variant)}
           disabled={cancelAction.disabled}
           loading={cancelAction.loading}
           icon={cancelAction.icon}
-          onClick={() => cancelAction.onClick?.(undefined as void)}
-          style={isMobile ? { width: '100%', justifyContent: 'center' } : undefined}
+          onClick={() => {
+            if (requestDiscard('cancel')) {
+              cancelAction.onClick?.(undefined as void);
+            }
+          }}
+          style={isMobile ? { flex: 1, justifyContent: 'center' } : undefined}
         >
           {cancelAction.label}
         </Button>
@@ -112,14 +99,30 @@ export function FormSurface({
         <Button
           variant={resolveSurfaceButtonVariant(submitAction.variant ?? 'primary')}
           htmlType="submit"
-          disabled={submitAction.disabled}
+          disabled={config.behavior.disabled || submitAction.disabled}
           loading={submitAction.loading}
           icon={submitAction.icon}
-          style={isMobile ? { width: '100%', justifyContent: 'center' } : undefined}
+          style={isMobile ? { flex: 1, justifyContent: 'center' } : undefined}
         >
           {submitAction.label}
         </Button>
       )}
+    </>
+  );
+
+  const actionsNode = actionsSticky ? (
+    <ActionDock
+      mode="fixed"
+      position="bottom"
+      className="ds-form__action-dock"
+      data-testid="form-surface-action-dock"
+      aria-label="Form actions"
+    >
+      {actionButtons}
+    </ActionDock>
+  ) : (
+    <Flex data-part="actions" direction={isMobile ? 'column' : 'row'} gap={8} wrap="wrap" justify="end">
+      {actionButtons}
     </Flex>
   );
 
@@ -127,7 +130,14 @@ export function FormSurface({
   // enough. This keeps the form full-width by default, matching the most
   // common create/edit screen layout without explicit configuration.
   const formContent = (
-    <Grid className="ds-surface ds-form" columns={showAside && !shouldStack ? 12 : 1} gap={sectionSpacing} style={{ width: '100%' }}>
+    <Grid
+      className={['ds-surface ds-form', actionsSticky ? 'ds-form--sticky-actions' : undefined]
+        .filter(Boolean)
+        .join(' ')}
+      columns={showAside && !shouldStack ? 12 : 1}
+      gap={sectionSpacing}
+      style={{ width: '100%' }}
+    >
       <Grid.Item span={showAside && !shouldStack ? 8 : undefined}>
         <Card variant={profileDefaults.cardVariant} style={{ width: '100%' }}>
           <Card.Body>
@@ -155,6 +165,7 @@ export function FormSurface({
                 fields={visibleFields}
                 layout={resolvedLayout}
                 columns={resolvedColumns}
+                autoAdaptive
                 renderField={config.presentation.renderField}
                 actions={actionsNode}
                 onSubmit={(values) => submitAction?.onClick?.(values)}
@@ -196,9 +207,7 @@ export function FormSurface({
     <PageShellSurface chrome={chrome} loading={loading}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>
-            {formContent}
-          </FadeIn>
+          <FadeIn durationMs={profileDefaults.entranceDuration}>{formContent}</FadeIn>
         ) : (
           formContent
         )}

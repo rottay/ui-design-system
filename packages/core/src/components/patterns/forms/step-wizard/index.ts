@@ -8,13 +8,10 @@
 import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { StepWizardProps } from './StepWizard.types';
 
-export type { StepWizardProps, WizardStep } from './StepWizard.types';
+export type { StepWizardProps, StepWizardProgressLabelContext, WizardStep } from './StepWizard.types';
 
-export const PatternStepWizard = createEngineComponent<StepWizardProps>(
-  'PatternStepWizard',
-  {
-    classic: () => import('./engines/classic'),
-    modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
-  }
-);
+export const PatternStepWizard = createEngineComponent<StepWizardProps>('PatternStepWizard', {
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
+});

@@ -19,6 +19,7 @@
 
 import React, { useState } from 'react';
 import { Alert, Card, Steps, Button, Space, Skeleton, Progress } from 'antd';
+import { ActionDock } from '../../../../primitives/navigation/ActionDock';
 import type { StepWizardProps } from '../StepWizard.types';
 
 /**
@@ -44,6 +45,9 @@ export default function ClassicStepWizard(props: StepWizardProps) {
     allowSkip = false,
     showProgress = true,
     orientation = 'horizontal',
+    progressPosture = 'rail',
+    formatProgressLabel,
+    actionPosture = 'inline',
     nextLabel = 'Next',
     prevLabel = 'Back',
     completeLabel = 'Complete',
@@ -71,6 +75,13 @@ export default function ClassicStepWizard(props: StepWizardProps) {
 
   const isLast = current === steps.length - 1;
   const currentDef = steps[current];
+  const stickyActions = actionPosture === 'sticky-bottom';
+  const progressLabel =
+    formatProgressLabel?.({
+      current: current + 1,
+      total: steps.length,
+      title: currentDef?.title ?? '',
+    }) ?? `Step ${current + 1} of ${steps.length}: ${currentDef?.title ?? ''}`;
 
   /**
    * Runs the active step's async `validate` function (if defined).
@@ -104,11 +115,7 @@ export default function ClassicStepWizard(props: StepWizardProps) {
         return true;
       }
 
-      setValidationMessage(
-        typeof result === 'string'
-          ? result
-          : 'Please complete this step before continuing.'
-      );
+      setValidationMessage(typeof result === 'string' ? result : 'Please complete this step before continuing.');
 
       return false;
     } finally {
@@ -146,13 +153,87 @@ export default function ClassicStepWizard(props: StepWizardProps) {
     );
   }
 
+  const navigationContent = (
+    <div
+      data-part="nav-bar"
+      style={{
+        width: '100%',
+        marginTop: stickyActions ? 0 : 24,
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 8,
+      }}
+    >
+      <div>
+        {current > 0 && (
+          <Button disabled={isValidating || actionsDisabled} onClick={() => setCurrent(current - 1)}>
+            {prevLabel}
+          </Button>
+        )}
+      </div>
+      <Space wrap style={{ marginLeft: 'auto', justifyContent: 'flex-end' }}>
+        {footer}
+        {allowSkip && currentDef?.optional && !isLast && (
+          <Button disabled={isValidating || actionsDisabled} onClick={() => setCurrent(current + 1)}>
+            {skipLabel}
+          </Button>
+        )}
+        {isLast ? (
+          showCompleteAction ? (
+            <Button
+              type="primary"
+              loading={isValidating}
+              disabled={actionsDisabled || completeDisabled}
+              onClick={handleComplete}
+            >
+              {completeLabel}
+            </Button>
+          ) : null
+        ) : (
+          <Button type="primary" loading={isValidating} disabled={actionsDisabled} onClick={handleAdvance}>
+            {nextLabel}
+          </Button>
+        )}
+      </Space>
+    </div>
+  );
+
   return (
-    <Card className={className} style={style}>
+    <Card
+      className={['ds-pattern-step-wizard', 'ds-engine-classic', className].filter(Boolean).join(' ')}
+      data-action-posture={actionPosture}
+      data-progress-posture={progressPosture}
+      style={{
+        ...(stickyActions
+          ? {
+              paddingBottom: 'var(--ds-step-wizard-action-dock-reserved-space, 7rem)',
+            }
+          : {}),
+        ...style,
+      }}
+    >
       {/* Progress indicator: horizontal renders steps inline above content;
           vertical renders steps in a sidebar with content alongside. */}
       {showProgress && (
         <div style={{ marginBottom: 24 }}>
-          {orientation === 'horizontal' ? (
+          {progressPosture === 'counter' ? (
+            <div
+              data-part="step-counter"
+              role="status"
+              aria-live="polite"
+              aria-label={progressLabel}
+              style={{
+                color: 'var(--ds-color-text-secondary)',
+                fontSize: 'var(--ds-font-size-sm)',
+                fontWeight: 'var(--ds-typography-heading-font-weight, 600)',
+                lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
+              }}
+            >
+              {progressLabel}
+            </div>
+          ) : orientation === 'horizontal' ? (
             <Steps
               current={current}
               items={steps.map((s) => ({
@@ -181,10 +262,14 @@ export default function ClassicStepWizard(props: StepWizardProps) {
 
       {/* In horizontal mode, the content renders below the progress bar.
           The Progress component provides a compact percentage-based bar on top. */}
-      {(orientation === 'horizontal' || !showProgress) && (
+      {(progressPosture === 'counter' || orientation === 'horizontal' || !showProgress) && (
         <>
-          {showProgress && (
-            <Progress percent={Math.round(((current + 1) / steps.length) * 100)} showInfo={false} style={{ marginBottom: 16 }} />
+          {showProgress && progressPosture === 'rail' && (
+            <Progress
+              percent={Math.round(((current + 1) / steps.length) * 100)}
+              showInfo={false}
+              style={{ marginBottom: 16 }}
+            />
           )}
           <div style={{ minHeight: 200 }}>{currentDef?.content}</div>
         </>
@@ -202,36 +287,20 @@ export default function ClassicStepWizard(props: StepWizardProps) {
         />
       )}
 
-      {/* Navigation bar: Back on the left, Skip/Next/Complete on the right.
-          Skip only appears when `allowSkip` is true AND the step is optional.
-          All buttons disable during validation to prevent double-submission. */}
-      <div style={{ marginTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          {current > 0 && (
-            <Button disabled={isValidating || actionsDisabled} onClick={() => setCurrent(current - 1)}>{prevLabel}</Button>
-          )}
-        </div>
-        <Space>
-          {footer}
-          {allowSkip && currentDef?.optional && !isLast && (
-            <Button disabled={isValidating || actionsDisabled} onClick={() => setCurrent(current + 1)}>{skipLabel}</Button>
-          )}
-          {isLast ? (
-            showCompleteAction ? (
-              <Button
-                type="primary"
-                loading={isValidating}
-                disabled={actionsDisabled || completeDisabled}
-                onClick={handleComplete}
-              >
-                {completeLabel}
-              </Button>
-            ) : null
-          ) : (
-            <Button type="primary" loading={isValidating} disabled={actionsDisabled} onClick={handleAdvance}>{nextLabel}</Button>
-          )}
-        </Space>
-      </div>
+      {/* Navigation preserves the same buttons and validation state in both postures. */}
+      {stickyActions ? (
+        <ActionDock
+          mode="fixed"
+          position="bottom"
+          className="ds-step-wizard__action-dock"
+          data-testid="step-wizard-action-dock"
+          aria-label="Wizard actions"
+        >
+          {navigationContent}
+        </ActionDock>
+      ) : (
+        navigationContent
+      )}
     </Card>
   );
 }

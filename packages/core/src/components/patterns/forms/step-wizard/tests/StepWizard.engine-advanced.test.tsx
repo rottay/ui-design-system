@@ -40,34 +40,29 @@ describe('StepWizard advanced engine coverage', () => {
     vi.useRealTimers();
   });
 
-  it.each(ENGINE_COMPONENTS)(
-    'covers loading and vertical progress branches in the %s engine',
-    (engine, Component) => {
-      const { rerender, container } = render(
-        <Component {...buildProps({ loading: true })} />
-      );
+  it.each(ENGINE_COMPONENTS)('covers loading and vertical progress branches in the %s engine', (engine, Component) => {
+    const { rerender, container } = render(<Component {...buildProps({ loading: true })} />);
 
-      if (engine === 'classic') {
-        expect(container.querySelector('.ant-skeleton')).toBeTruthy();
-      } else if (engine === 'modern') {
-        expect(container.querySelector('.ds-step-wizard-skeleton')).toBeTruthy();
-      } else {
-        expect(container.querySelector('[data-part="skeleton-progress"]')).toBeTruthy();
-      }
-
-      rerender(
-        <Component
-          {...buildProps({
-            orientation: 'vertical',
-            currentStep: 1,
-          })}
-        />
-      );
-
-      expect(screen.getByText('Review content')).toBeInTheDocument();
-      expect(screen.getByText('Footer slot')).toBeInTheDocument();
+    if (engine === 'classic') {
+      expect(container.querySelector('.ant-skeleton')).toBeTruthy();
+    } else if (engine === 'modern') {
+      expect(container.querySelector('.ds-step-wizard-skeleton')).toBeTruthy();
+    } else {
+      expect(container.querySelector('[data-part="skeleton-progress"]')).toBeTruthy();
     }
-  );
+
+    rerender(
+      <Component
+        {...buildProps({
+          orientation: 'vertical',
+          currentStep: 1,
+        })}
+      />
+    );
+
+    expect(screen.getByText('Review content')).toBeInTheDocument();
+    expect(screen.getByText('Footer slot')).toBeInTheDocument();
+  });
 
   it.each(ENGINE_COMPONENTS)(
     'covers skip, previous, disabled actions, and validation fallback branches in the %s engine',
@@ -168,6 +163,34 @@ describe('StepWizard advanced engine coverage', () => {
 
       expect(screen.queryByRole('button', { name: 'Complete' })).not.toBeInTheDocument();
       expect(screen.getByText('Only step')).toBeInTheDocument();
+    }
+  );
+
+  it.each(ENGINE_COMPONENTS)(
+    'keeps counter progress and canonical sticky actions in parity in the %s engine',
+    async (_engine, Component) => {
+      render(
+        <Component
+          {...buildProps({
+            progressPosture: 'counter',
+            actionPosture: 'sticky-bottom',
+            formatProgressLabel: ({ current, total, title }) => `Paso ${current} de ${total}: ${title}`,
+          })}
+        />
+      );
+
+      expect(screen.getByRole('status', { name: 'Paso 1 de 2: Details' })).toHaveTextContent('Paso 1 de 2: Details');
+      expect(document.querySelector('[data-part="step-rail"]')).toBeNull();
+      expect(document.querySelector('[data-part="progress-track"], .ant-progress')).toBeNull();
+
+      const dock = await screen.findByTestId('step-wizard-action-dock');
+      expect(dock).toHaveAttribute('data-mode', 'fixed');
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Next' }));
+
+      expect(await screen.findByText('Review content')).toBeInTheDocument();
+      expect(screen.getByRole('status', { name: 'Paso 2 de 2: Review' })).toBeInTheDocument();
+      expect(screen.getByTestId('step-wizard-action-dock')).toBe(dock);
     }
   );
 });

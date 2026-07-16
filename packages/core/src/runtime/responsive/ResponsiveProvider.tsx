@@ -13,6 +13,7 @@
  * - **Pointer type**: coarse (touch) or fine (mouse)
  * - **Orientation**: portrait or landscape
  * - **Reduced motion**: respects OS accessibility setting
+ * - **Virtual keyboard**: bottom viewport occlusion while editing at scale 1
  *
  * SSR-safe: returns mobile-first defaults (phone, coarse, portrait) when
  * window is undefined so server-rendered markup matches the smallest layout.
@@ -39,14 +40,7 @@
  * @category System
  * @package @rottay/design-system
  */
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-  type ReactNode,
-} from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 
 import { buildMinWidthQuery } from '../../hooks/responsive/breakpoints';
 import { useMotionPreference } from '../motion';
@@ -74,6 +68,11 @@ export type Orientation = 'portrait' | 'landscape';
 export type ActiveBreakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 export interface ResponsiveContextValue {
+  /**
+   * True after the browser has published its first real matchMedia snapshot.
+   * Optional for backward compatibility with legacy custom context providers.
+   */
+  hasResolvedViewport?: boolean;
   /** Canonical device tier: phone (0-639), tablet (640-1023), desktop (1024+). */
   deviceClass: DeviceClass;
   /** Precise active breakpoint for accurate ResponsiveValue resolution. */
@@ -96,13 +95,25 @@ export interface ResponsiveContextValue {
   isTabletOrDesktop: boolean;
   /** True when pointer is coarse (touch-primary device). */
   isTouchDevice: boolean;
+  /** Bottom inset, in CSS pixels, currently occluded by the virtual keyboard. */
+  virtualKeyboardInset?: number;
+  /** True when an editable control is focused and the virtual keyboard occludes the viewport. */
+  isVirtualKeyboardOpen?: boolean;
+}
+
+/** Fully normalized responsive value returned by `useResponsive()`. */
+export interface ResolvedResponsiveContextValue extends ResponsiveContextValue {
+  hasResolvedViewport: boolean;
+  virtualKeyboardInset: number;
+  isVirtualKeyboardOpen: boolean;
 }
 
 // ---------------------------------------------------------------------------
 // SSR-safe defaults (mobile-first)
 // ---------------------------------------------------------------------------
 
-const SSR_DEFAULTS: ResponsiveContextValue = {
+const SSR_DEFAULTS: ResolvedResponsiveContextValue = {
+  hasResolvedViewport: false,
   deviceClass: 'phone',
   activeBreakpoint: 'xs',
   isPhone: true,
@@ -114,6 +125,8 @@ const SSR_DEFAULTS: ResponsiveContextValue = {
   isPhoneOrTablet: true,
   isTabletOrDesktop: false,
   isTouchDevice: true,
+  virtualKeyboardInset: 0,
+  isVirtualKeyboardOpen: false,
 };
 
 // ---------------------------------------------------------------------------
@@ -127,6 +140,18 @@ const XL_QUERY = buildMinWidthQuery('xl');
 const XXL_QUERY = buildMinWidthQuery('2xl');
 const TOUCH_QUERY = '(hover: none) and (pointer: coarse)';
 const LANDSCAPE_QUERY = '(orientation: landscape)';
+const NON_EDITING_INPUT_TYPES = new Set([
+  'button',
+  'checkbox',
+  'color',
+  'file',
+  'hidden',
+  'image',
+  'radio',
+  'range',
+  'reset',
+  'submit',
+]);
 
 // ---------------------------------------------------------------------------
 // Context
@@ -152,6 +177,11 @@ interface ResponsiveMediaSnapshot {
   isLandscape: boolean;
 }
 
+interface VirtualKeyboardSnapshot {
+  inset: number;
+  isOpen: boolean;
+}
+
 type ResponsiveMediaQueries = Record<keyof ResponsiveMediaSnapshot, MediaQueryList>;
 
 const SSR_MEDIA_SNAPSHOT: ResponsiveMediaSnapshot = {
@@ -164,9 +194,12 @@ const SSR_MEDIA_SNAPSHOT: ResponsiveMediaSnapshot = {
   isLandscape: false,
 };
 
-function readResponsiveSnapshot(
-  queries: ResponsiveMediaQueries,
-): ResponsiveMediaSnapshot {
+const SSR_VIRTUAL_KEYBOARD_SNAPSHOT: VirtualKeyboardSnapshot = {
+  inset: 0,
+  isOpen: false,
+};
+
+function readResponsiveSnapshot(queries: ResponsiveMediaQueries): ResponsiveMediaSnapshot {
   return {
     isSm: queries.isSm.matches,
     isMd: queries.isMd.matches,
@@ -178,10 +211,7 @@ function readResponsiveSnapshot(
   };
 }
 
-function responsiveSnapshotsEqual(
-  left: ResponsiveMediaSnapshot,
-  right: ResponsiveMediaSnapshot,
-): boolean {
+function responsiveSnapshotsEqual(left: ResponsiveMediaSnapshot, right: ResponsiveMediaSnapshot): boolean {
   return (
     left.isSm === right.isSm &&
     left.isMd === right.isMd &&
@@ -193,11 +223,54 @@ function responsiveSnapshotsEqual(
   );
 }
 
+function virtualKeyboardSnapshotsEqual(left: VirtualKeyboardSnapshot, right: VirtualKeyboardSnapshot): boolean {
+  return left.inset === right.inset && left.isOpen === right.isOpen;
+}
+
+/**
+ * Whether the focused element can summon a software keyboard. Read-only and
+ * non-textual inputs are deliberately excluded: focus alone does not imply
+ * keyboard occlusion for those controls.
+ */
+function isEditableElement(element: Element | null): boolean {
+  if (!(element instanceof HTMLElement)) return false;
+
+  if (element instanceof HTMLTextAreaElement) {
+    return !element.disabled && !element.readOnly;
+  }
+
+  if (element instanceof HTMLSelectElement) {
+    return !element.disabled;
+  }
+
+  if (element instanceof HTMLInputElement) {
+    return !element.disabled && !element.readOnly && !NON_EDITING_INPUT_TYPES.has(element.type);
+  }
+
+  if (element.isContentEditable) return true;
+
+  const editableAncestor = element.closest('[contenteditable]');
+  return editableAncestor !== null && editableAncestor.getAttribute('contenteditable') !== 'false';
+}
+
+function readVirtualKeyboardSnapshot(
+  viewport: VisualViewport | null,
+  editableHasFocus: boolean
+): VirtualKeyboardSnapshot {
+  if (!viewport || !editableHasFocus || viewport.scale !== 1) {
+    return SSR_VIRTUAL_KEYBOARD_SNAPSHOT;
+  }
+
+  const inset = Math.max(0, Math.round(window.innerHeight - viewport.height - viewport.offsetTop));
+
+  return {
+    inset,
+    isOpen: inset > 0,
+  };
+}
+
 /** Subscribe one shared callback to a query, including legacy Safari. */
-function subscribeToMediaQuery(
-  query: MediaQueryList,
-  listener: (event: MediaQueryListEvent) => void,
-): () => void {
+function subscribeToMediaQuery(query: MediaQueryList, listener: (event: MediaQueryListEvent) => void): () => void {
   if (typeof query.addEventListener === 'function') {
     query.addEventListener('change', listener);
     return () => query.removeEventListener('change', listener);
@@ -224,7 +297,7 @@ function deriveActiveBreakpoint(
   isMd: boolean,
   isLg: boolean,
   isXl: boolean,
-  is2xl: boolean,
+  is2xl: boolean
 ): ActiveBreakpoint {
   if (is2xl) return '2xl';
   if (isXl) return 'xl';
@@ -237,21 +310,14 @@ function deriveActiveBreakpoint(
 function buildContextValue(
   media: ResponsiveMediaSnapshot,
   prefersReducedMotion: boolean,
-): ResponsiveContextValue {
-  const deviceClass: DeviceClass = media.isLg
-    ? 'desktop'
-    : media.isSm
-      ? 'tablet'
-      : 'phone';
-  const activeBreakpoint = deriveActiveBreakpoint(
-    media.isSm,
-    media.isMd,
-    media.isLg,
-    media.isXl,
-    media.is2xl,
-  );
+  virtualKeyboard: VirtualKeyboardSnapshot,
+  hasResolvedViewport: boolean
+): ResolvedResponsiveContextValue {
+  const deviceClass: DeviceClass = media.isLg ? 'desktop' : media.isSm ? 'tablet' : 'phone';
+  const activeBreakpoint = deriveActiveBreakpoint(media.isSm, media.isMd, media.isLg, media.isXl, media.is2xl);
 
   return {
+    hasResolvedViewport,
     deviceClass,
     activeBreakpoint,
     isPhone: deviceClass === 'phone',
@@ -263,6 +329,8 @@ function buildContextValue(
     isPhoneOrTablet: deviceClass === 'phone' || deviceClass === 'tablet',
     isTabletOrDesktop: deviceClass === 'tablet' || deviceClass === 'desktop',
     isTouchDevice: media.isTouchDevice,
+    virtualKeyboardInset: virtualKeyboard.inset,
+    isVirtualKeyboardOpen: virtualKeyboard.isOpen,
   };
 }
 
@@ -286,9 +354,10 @@ export interface ResponsiveProviderProps {
  * (phone, coarse pointer, portrait orientation).
  */
 export function ResponsiveProvider({ children }: ResponsiveProviderProps): React.ReactElement {
-  const [mediaSnapshot, setMediaSnapshot] = useState<ResponsiveMediaSnapshot>(
-    SSR_MEDIA_SNAPSHOT,
-  );
+  const [mediaSnapshot, setMediaSnapshot] = useState<ResponsiveMediaSnapshot>(SSR_MEDIA_SNAPSHOT);
+  const [virtualKeyboardSnapshot, setVirtualKeyboardSnapshot] =
+    useState<VirtualKeyboardSnapshot>(SSR_VIRTUAL_KEYBOARD_SNAPSHOT);
+  const [hasResolvedViewport, setHasResolvedViewport] = useState(false);
   const prefersReducedMotion = useMotionPreference();
 
   useEffect(() => {
@@ -311,30 +380,62 @@ export function ResponsiveProvider({ children }: ResponsiveProviderProps): React
     // transient phone tier while sibling events are still being delivered.
     const publishSnapshot = (): void => {
       const next = readResponsiveSnapshot(queries);
-      setMediaSnapshot((current) =>
-        responsiveSnapshotsEqual(current, next) ? current : next,
-      );
+      setMediaSnapshot((current) => (responsiveSnapshotsEqual(current, next) ? current : next));
+      setHasResolvedViewport(true);
     };
     const listener = (): void => publishSnapshot();
 
     publishSnapshot();
-    const cleanups = Object.values(queries).map((query) =>
-      subscribeToMediaQuery(query, listener),
-    );
+    const cleanups = Object.values(queries).map((query) => subscribeToMediaQuery(query, listener));
 
     return () => {
       cleanups.forEach((cleanup) => cleanup());
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return undefined;
+    }
+
+    const viewport = window.visualViewport;
+    let editableHasFocus = isEditableElement(document.activeElement);
+
+    const publishSnapshot = (): void => {
+      const next = readVirtualKeyboardSnapshot(viewport, editableHasFocus);
+      setVirtualKeyboardSnapshot((current) => (virtualKeyboardSnapshotsEqual(current, next) ? current : next));
+    };
+
+    const handleFocusIn = (event: FocusEvent): void => {
+      editableHasFocus = isEditableElement(event.target as Element | null);
+      publishSnapshot();
+    };
+
+    const handleFocusOut = (event: FocusEvent): void => {
+      editableHasFocus = isEditableElement(event.relatedTarget as Element | null);
+      publishSnapshot();
+    };
+
+    publishSnapshot();
+    viewport?.addEventListener('resize', publishSnapshot);
+    viewport?.addEventListener('scroll', publishSnapshot);
+    document.addEventListener('focusin', handleFocusIn);
+    document.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      viewport?.removeEventListener('resize', publishSnapshot);
+      viewport?.removeEventListener('scroll', publishSnapshot);
+      document.removeEventListener('focusin', handleFocusIn);
+      document.removeEventListener('focusout', handleFocusOut);
+    };
+  }, []);
+
   const value = useMemo(
-    () => buildContextValue(mediaSnapshot, prefersReducedMotion),
-    [mediaSnapshot, prefersReducedMotion],
+    () => buildContextValue(mediaSnapshot, prefersReducedMotion, virtualKeyboardSnapshot, hasResolvedViewport),
+    [mediaSnapshot, prefersReducedMotion, virtualKeyboardSnapshot, hasResolvedViewport]
   );
 
-  return (
-    <ResponsiveContext.Provider value={value}>{children}</ResponsiveContext.Provider>
-  );
+  return <ResponsiveContext.Provider value={value}>{children}</ResponsiveContext.Provider>;
 }
 
 // ---------------------------------------------------------------------------
@@ -352,7 +453,7 @@ export function ResponsiveProvider({ children }: ResponsiveProviderProps): React
  * const { deviceClass, isDesktop, isTouchDevice } = useResponsive();
  * ```
  */
-export function useResponsive(): ResponsiveContextValue {
+export function useResponsive(): ResolvedResponsiveContextValue {
   const context = useContext(ResponsiveContext);
 
   // Graceful fallback: no provider means we return SSR defaults.
@@ -363,5 +464,23 @@ export function useResponsive(): ResponsiveContextValue {
     return SSR_DEFAULTS;
   }
 
-  return context;
+  if (
+    context.hasResolvedViewport !== undefined &&
+    context.virtualKeyboardInset !== undefined &&
+    context.isVirtualKeyboardOpen !== undefined
+  ) {
+    return context as ResolvedResponsiveContextValue;
+  }
+
+  const virtualKeyboardInset = context.virtualKeyboardInset ?? 0;
+
+  return {
+    ...context,
+    // A caller-provided legacy context already represents an intentional
+    // viewport snapshot. Only the provider's SSR value is unresolved.
+    hasResolvedViewport: context.hasResolvedViewport ?? true,
+    virtualKeyboardInset,
+    isVirtualKeyboardOpen:
+      context.isVirtualKeyboardOpen ?? virtualKeyboardInset > 0,
+  };
 }

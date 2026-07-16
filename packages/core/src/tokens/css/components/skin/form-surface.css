@@ -27,9 +27,12 @@
   color: var(--ds-color-text-muted);
 }
 
-/* Mobile sticky action bar: the gradient is a scrim that fades the form out from
-   under the buttons. It exists only in the sticky posture. */
-.ds-surface.ds-form [data-part='actions'][data-sticky='true'] {
+/* A fixed ActionDock leaves the form scrollable through its final field/action. */
+.ds-surface.ds-form.ds-form--sticky-actions {
+  padding-block-end: var(--ds-form-action-dock-reserved-space, 6rem);
+}
+
+.ds-form__action-dock.rottay-action-dock[data-part='root'][data-placement][data-mode] {
   background: linear-gradient(to top, var(--ds-color-bg-primary) 85%, transparent);
 }
 

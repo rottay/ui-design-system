@@ -139,6 +139,23 @@ export interface SurfaceAction<TView = void> {
   loading?: boolean;
 }
 
+/** Reasons surfaced by form and wizard discard protection. */
+export type SurfaceDirtyStateReason = 'navigation' | 'cancel' | 'back' | 'step-change' | 'command';
+
+/**
+ * Framework-neutral dirty-state contract for form-like surfaces.
+ *
+ * Surfaces protect explicit discard actions and browser unload. Client-side
+ * router transitions remain app-owned and can use the public guard hook.
+ */
+export interface SurfaceDirtyStateConfig {
+  isDirty: boolean;
+  message?: string;
+  confirmDiscard?: (message: string, reason: SurfaceDirtyStateReason) => boolean;
+  onDiscard?: (reason: SurfaceDirtyStateReason) => void;
+  onBlocked?: (reason: SurfaceDirtyStateReason) => void;
+}
+
 /**
  * Permissions are intentionally lightweight.
  *
@@ -728,7 +745,7 @@ export interface SurfaceFieldDef extends FieldDef {
 
 /** Visual layout configuration for form surfaces. */
 export interface FormSurfaceVisualConfig {
-  /** Form layout mode: vertical, horizontal, inline, or steps. */
+  /** Form layout mode: vertical, horizontal, grid, or steps. */
   layout?: FormBuilderProps['layout'];
   /** Number of columns in multi-column form layouts. */
   columns?: number;
@@ -790,6 +807,8 @@ export interface FormSurfaceBehaviorConfig {
   currentStep?: number;
   /** Called when the user navigates between form steps. */
   onStepChange?: (step: number) => void;
+  /** Protect browser unload and explicit cancel while form values are dirty. */
+  dirtyState?: SurfaceDirtyStateConfig;
 }
 
 /** Complete form surface configuration for create/edit pages. */
@@ -868,8 +887,16 @@ export interface WizardSurfaceVisualConfig {
   allowSkip?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Use a compact step indicator on mobile (numbers only, no labels). */
+  /**
+   * Use a compact step counter on mobile. Raw configs opt in explicitly;
+   * `createWizardSurfaceConfig()` defaults this to `true`.
+   */
   compactStepsOnMobile?: boolean;
+  /**
+   * Keep wizard navigation and draft/cancel actions visible on mobile.
+   * Raw configs opt in explicitly; `createWizardSurfaceConfig()` defaults this to `true`.
+   */
+  mobileActionsSticky?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -918,6 +945,8 @@ export interface WizardSurfaceBehaviorConfig {
   readOnly?: boolean;
   showLabels?: boolean;
   showRequired?: boolean;
+  /** Protect browser unload and explicit cancel while wizard values are dirty. */
+  dirtyState?: SurfaceDirtyStateConfig;
 }
 
 /** Complete wizard surface configuration for multi-step flows. */
@@ -1243,10 +1272,7 @@ export interface SearchSurfacePresentationConfig {
   /** Preview panel content for the currently selected result (split layout). */
   resultPreview?: (result: SearchSurfaceResult) => ReactNode;
   /** Custom result row/card renderer. Receives selection state for highlighting. */
-  renderResult?: (
-    result: SearchSurfaceResult,
-    context: { index: number; selected: boolean }
-  ) => ReactNode;
+  renderResult?: (result: SearchSurfaceResult, context: { index: number; selected: boolean }) => ReactNode;
   footer?: ReactNode;
 }
 
@@ -1326,10 +1352,7 @@ export interface EditorSurfacePresentationConfig {
   /** Status bar at the bottom (e.g., word count, save status). */
   statusBar?: ReactNode;
   /** Custom editor component renderer. Falls back to a plain textarea. */
-  renderEditor?: (
-    value: string,
-    onChange: (value: string) => void
-  ) => ReactNode;
+  renderEditor?: (value: string, onChange: (value: string) => void) => ReactNode;
 }
 
 /** Behavioral config: content value, save/publish lifecycle, and disabled state. */
@@ -1520,10 +1543,7 @@ export interface MediaSurfacePresentationConfig {
   chrome: SurfacePageChrome;
   emptyState?: ReactNode;
   /** Custom grid item renderer with selection state for highlighting. */
-  renderGridItem?: (
-    item: MediaSurfaceItem,
-    context: { index: number; selected: boolean }
-  ) => ReactNode;
+  renderGridItem?: (item: MediaSurfaceItem, context: { index: number; selected: boolean }) => ReactNode;
   /** Custom preview renderer for the selected media item (detail layout). */
   renderPreview?: (item: MediaSurfaceItem) => ReactNode;
   /** Custom details panel renderer for the selected media item. */

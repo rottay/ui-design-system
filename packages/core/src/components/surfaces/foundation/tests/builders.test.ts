@@ -168,6 +168,7 @@ describe('surface config builders', () => {
     } as any);
     expect(config.visual.stackOnMobile).toBe(true);
     expect(config.visual.compactStepsOnMobile).toBe(true);
+    expect(config.visual.mobileActionsSticky).toBe(true);
   });
 
   it('injects mobile defaults for onboarding surface', () => {
@@ -363,12 +364,17 @@ describe('surface config builders', () => {
     expect(auth.visual.compactFormOnMobile).toBe(false);
 
     const wizard = createWizardSurfaceConfig({
-      visual: { stackOnMobile: false, compactStepsOnMobile: false },
+      visual: {
+        stackOnMobile: false,
+        compactStepsOnMobile: false,
+        mobileActionsSticky: false,
+      },
       presentation: { chrome: { title: 'Wizard' } },
       behavior: { steps: [] },
     } as any);
     expect(wizard.visual.stackOnMobile).toBe(false);
     expect(wizard.visual.compactStepsOnMobile).toBe(false);
+    expect(wizard.visual.mobileActionsSticky).toBe(false);
 
     const onboarding = createOnboardingSurfaceConfig({
       visual: { stackOnMobile: false, hideIllustrationOnMobile: false },

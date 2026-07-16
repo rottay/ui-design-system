@@ -45,6 +45,16 @@ export interface WizardStep {
   validate?: () => boolean | string | Promise<boolean | string>;
 }
 
+/** Values passed to the localized compact-progress formatter. */
+export interface StepWizardProgressLabelContext {
+  /** One-based active step number. */
+  current: number;
+  /** Total number of steps in the flow. */
+  total: number;
+  /** Current app-owned step title. */
+  title: string;
+}
+
 /**
  * Props for the StepWizard pattern component.
  *
@@ -118,6 +128,28 @@ export interface StepWizardProps extends PatternBaseProps {
    * - `'vertical'`: Steps stacked top-to-bottom with content beside them.
    */
   orientation?: 'horizontal' | 'vertical';
+
+  /**
+   * Progress presentation independent from orientation.
+   * `counter` renders a compact, accessible "Step N of M" status instead of
+   * the full rail while keeping the same active-step state.
+   * @default 'rail'
+   */
+  progressPosture?: 'rail' | 'counter';
+
+  /**
+   * Formats the visible and accessible compact progress label.
+   * Surfaces should bind this to their tenant-overridable i18n authority.
+   */
+  formatProgressLabel?: (context: StepWizardProgressLabelContext) => string;
+
+  /**
+   * Placement of the wizard navigation controls.
+   * `sticky-bottom` composes the canonical ActionDock and reserves content
+   * space so the fixed controls never cover the active step.
+   * @default 'inline'
+   */
+  actionPosture?: 'inline' | 'sticky-bottom';
 
   /** Custom label for the "Next" navigation button. */
   nextLabel?: string;

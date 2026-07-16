@@ -146,6 +146,9 @@
       "form_title": "Formulario",
       "summary_title": "Resumo"
     },
+    "form": {
+      "discard_changes": "Descartar as alterações não salvas do formulário?"
+    },
     "search": {
       "placeholder": "Buscar",
       "empty_query_title": "Comece a digitar para buscar",
@@ -188,6 +191,8 @@
       "empty_title": "Nenhuma etapa disponivel",
       "empty_description": "Este fluxo ainda nao possui etapas configuradas.",
       "step_error_fallback": "Revise esta etapa.",
+      "step_counter": "Etapa {current} de {total}: {title}",
+      "discard_changes": "Descartar as alterações não salvas do assistente?",
       "complete": "Concluir"
     },
     "chat": {

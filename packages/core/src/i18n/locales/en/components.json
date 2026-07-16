@@ -198,6 +198,9 @@
       "form_title": "Form",
       "summary_title": "Summary"
     },
+    "form": {
+      "discard_changes": "Discard unsaved form changes?"
+    },
     "search": {
       "placeholder": "Search",
       "empty_query_title": "Start typing to search",
@@ -240,6 +243,8 @@
       "empty_title": "No wizard steps available",
       "empty_description": "This flow does not have any steps configured yet.",
       "step_error_fallback": "Please review this step.",
+      "step_counter": "Step {current} of {total}: {title}",
+      "discard_changes": "Discard unsaved wizard changes?",
       "complete": "Complete"
     },
     "chat": {

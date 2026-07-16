@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import type { FormBuilderProps } from '../FormBuilder.types';
 import ClassicFormBuilder from '../engines/classic';
@@ -18,6 +19,55 @@ const ENGINE_COMPONENTS = {
 } satisfies Record<StableEngineName, React.ComponentType<FormBuilderProps>>;
 
 describe('PatternFormBuilder runtime engines', () => {
+  it.each(Object.entries(ENGINE_COMPONENTS))(
+    'blocks programmatic and Enter-key submission while disabled in the %s engine',
+    async (_engine, Component) => {
+      const onSubmit = vi.fn();
+      const onValidationChange = vi.fn();
+      const user = userEvent.setup();
+
+      const { container, rerender } = render(
+        <Component
+          disabled
+          fields={[]}
+          actions={<button type="submit">Save disabled form</button>}
+          onSubmit={onSubmit}
+          onValidationChange={onValidationChange}
+        />
+      );
+
+      const button = await screen.findByRole('button', {
+        name: 'Save disabled form',
+      });
+      const form = container.querySelector('form');
+      expect(form).not.toBeNull();
+
+      fireEvent.submit(form as HTMLFormElement);
+      expect(onSubmit).not.toHaveBeenCalled();
+      expect(onValidationChange).not.toHaveBeenCalled();
+
+      button.focus();
+      await user.keyboard('{Enter}');
+      expect(onSubmit).not.toHaveBeenCalled();
+      expect(onValidationChange).not.toHaveBeenCalled();
+
+      rerender(
+        <Component
+          fields={[]}
+          actions={<button type="submit">Save enabled form</button>}
+          onSubmit={onSubmit}
+          onValidationChange={onValidationChange}
+        />
+      );
+      const enabledButton = screen.getByRole('button', {
+        name: 'Save enabled form',
+      });
+      enabledButton.focus();
+      await user.keyboard('{Enter}');
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+    }
+  );
+
   it.each(Object.entries(ENGINE_COMPONENTS))(
     'renders the rich field matrix through the %s engine',
     async (_engine, Component) => {

@@ -13,11 +13,19 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, cleanup } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
 import React from 'react';
+import { hydrateRoot, type Root } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 
-import { ResponsiveProvider, useResponsive } from '../index';
+import {
+  ResponsiveContext,
+  ResponsiveProvider,
+  useResponsive,
+  type ResolvedResponsiveContextValue,
+  type ResponsiveContextValue,
+} from '../index';
 import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
 import { useResponsiveValue } from '../../../hooks/responsive/useResponsiveValue';
 
@@ -107,7 +115,10 @@ function createLiveViewportMock(initialWidth: number) {
     setWidth(nextWidth: number) {
       width = nextWidth;
       listeners.forEach((queryListeners, query) => {
-        const event = { matches: resolveQuery(query), media: query } as MediaQueryListEvent;
+        const event = {
+          matches: resolveQuery(query),
+          media: query,
+        } as MediaQueryListEvent;
         queryListeners.forEach((listener) => listener(event));
       });
     },
@@ -155,6 +166,7 @@ function ResponsiveConsumer() {
   const ctx = useResponsive();
   return (
     <div>
+      <span data-testid="hasResolvedViewport">{String(ctx.hasResolvedViewport)}</span>
       <span data-testid="deviceClass">{ctx.deviceClass}</span>
       <span data-testid="activeBreakpoint">{ctx.activeBreakpoint}</span>
       <span data-testid="isPhone">{String(ctx.isPhone)}</span>
@@ -166,6 +178,58 @@ function ResponsiveConsumer() {
       <span data-testid="isPhoneOrTablet">{String(ctx.isPhoneOrTablet)}</span>
       <span data-testid="isTabletOrDesktop">{String(ctx.isTabletOrDesktop)}</span>
       <span data-testid="isTouchDevice">{String(ctx.isTouchDevice)}</span>
+      <span data-testid="virtualKeyboardInset">{ctx.virtualKeyboardInset}</span>
+      <span data-testid="isVirtualKeyboardOpen">{String(ctx.isVirtualKeyboardOpen)}</span>
+    </div>
+  );
+}
+
+const LEGACY_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
+  deviceClass: 'tablet',
+  activeBreakpoint: 'md',
+  isPhone: false,
+  isTablet: true,
+  isDesktop: false,
+  pointer: 'fine',
+  orientation: 'portrait',
+  prefersReducedMotion: false,
+  isPhoneOrTablet: true,
+  isTabletOrDesktop: true,
+  isTouchDevice: false,
+};
+
+function LegacyContextConsumer() {
+  const responsive: ResolvedResponsiveContextValue = useResponsive();
+
+  return (
+    <div>
+      <span data-testid="legacy-resolved">{String(responsive.hasResolvedViewport)}</span>
+      <span data-testid="legacy-keyboard-inset">{responsive.virtualKeyboardInset}</span>
+      <span data-testid="legacy-keyboard-open">{String(responsive.isVirtualKeyboardOpen)}</span>
+    </div>
+  );
+}
+
+let mobileOnlyRenderCount = 0;
+
+function MobileOnlyPosture(): React.ReactElement {
+  mobileOnlyRenderCount += 1;
+  return <span data-testid="mobile-only-posture">Mobile posture</span>;
+}
+
+function ResolvedPostureConsumer(): React.ReactElement {
+  const responsive = useResponsive();
+  const resolvedMobile = responsive.hasResolvedViewport && responsive.isPhone;
+
+  return (
+    <div
+      data-testid="resolved-posture"
+      data-resolved={responsive.hasResolvedViewport}
+      data-device={responsive.deviceClass}
+      data-action-posture={resolvedMobile ? 'sticky-bottom' : 'inline'}
+      data-progress-posture={resolvedMobile ? 'counter' : 'rail'}
+    >
+      {resolvedMobile ? <MobileOnlyPosture /> : null}
     </div>
   );
 }
@@ -186,7 +250,14 @@ function BreakpointsConsumer() {
 
 /** Component that uses useResponsiveValue and renders the resolved value. */
 function ResponsiveValueConsumer() {
-  const cols = useResponsiveValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5, '2xl': 6 });
+  const cols = useResponsiveValue({
+    base: 1,
+    sm: 2,
+    md: 3,
+    lg: 4,
+    xl: 5,
+    '2xl': 6,
+  });
   return <span data-testid="rv-cols">{cols}</span>;
 }
 
@@ -201,6 +272,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  cleanup();
   window.matchMedia = originalMatchMedia;
   vi.restoreAllMocks();
 });
@@ -215,6 +287,7 @@ describe('ResponsiveProvider', () => {
       const { result } = renderHook(() => useResponsive());
 
       expect(result.current.deviceClass).toBe('phone');
+      expect(result.current.hasResolvedViewport).toBe(false);
       expect(result.current.isPhone).toBe(true);
       expect(result.current.isTablet).toBe(false);
       expect(result.current.isDesktop).toBe(false);
@@ -226,6 +299,20 @@ describe('ResponsiveProvider', () => {
       expect(result.current.isPhoneOrTablet).toBe(true);
       expect(result.current.isTabletOrDesktop).toBe(false);
       expect(result.current.isTouchDevice).toBe(true);
+      expect(result.current.virtualKeyboardInset).toBe(0);
+      expect(result.current.isVirtualKeyboardOpen).toBe(false);
+    });
+
+    it('normalizes a legacy custom context to the strong hook return contract', () => {
+      render(
+        <ResponsiveContext.Provider value={LEGACY_RESPONSIVE_CONTEXT}>
+          <LegacyContextConsumer />
+        </ResponsiveContext.Provider>
+      );
+
+      expect(screen.getByTestId('legacy-resolved')).toHaveTextContent('true');
+      expect(screen.getByTestId('legacy-keyboard-inset')).toHaveTextContent('0');
+      expect(screen.getByTestId('legacy-keyboard-open')).toHaveTextContent('false');
     });
   });
 
@@ -241,6 +328,7 @@ describe('ResponsiveProvider', () => {
       );
 
       expect(screen.getByTestId('deviceClass').textContent).toBe('phone');
+      expect(screen.getByTestId('hasResolvedViewport')).toHaveTextContent('true');
       expect(screen.getByTestId('isPhone').textContent).toBe('true');
       expect(screen.getByTestId('isTablet').textContent).toBe('false');
       expect(screen.getByTestId('isDesktop').textContent).toBe('false');
@@ -290,6 +378,46 @@ describe('ResponsiveProvider', () => {
       expect(screen.getByTestId('pointer').textContent).toBe('fine');
       expect(screen.getByTestId('isPhoneOrTablet').textContent).toBe('false');
       expect(screen.getByTestId('isTabletOrDesktop').textContent).toBe('true');
+    });
+
+    it('hydrates from neutral inline postures without ever mounting mobile-only desktop UI', async () => {
+      const { matchMedia } = createMatchMediaMock(viewportResolver(1280));
+      window.matchMedia = matchMedia as any;
+      mobileOnlyRenderCount = 0;
+      const element = (
+        <ResponsiveProvider>
+          <ResolvedPostureConsumer />
+        </ResponsiveProvider>
+      );
+
+      const html = renderToString(element);
+      expect(html).toContain('data-resolved="false"');
+      expect(html).toContain('data-action-posture="inline"');
+      expect(html).toContain('data-progress-posture="rail"');
+      expect(html).not.toContain('Mobile posture');
+      expect(mobileOnlyRenderCount).toBe(0);
+
+      const container = document.createElement('div');
+      container.innerHTML = html;
+      document.body.appendChild(container);
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      let root: Root | undefined;
+
+      await act(async () => {
+        root = hydrateRoot(container, element);
+      });
+
+      const posture = container.querySelector('[data-testid="resolved-posture"]');
+      expect(posture).toHaveAttribute('data-resolved', 'true');
+      expect(posture).toHaveAttribute('data-device', 'desktop');
+      expect(posture).toHaveAttribute('data-action-posture', 'inline');
+      expect(posture).toHaveAttribute('data-progress-posture', 'rail');
+      expect(container).not.toHaveTextContent('Mobile posture');
+      expect(mobileOnlyRenderCount).toBe(0);
+      expect(consoleError.mock.calls.some((call) => String(call[0]).toLowerCase().includes('hydration'))).toBe(false);
+
+      await act(async () => root?.unmount());
+      container.remove();
     });
   });
 
@@ -494,7 +622,11 @@ describe('ResponsiveProvider', () => {
   });
 
   describe('activeBreakpoint at each boundary', () => {
-    const cases: Array<{ width: number; expectedBreakpoint: string; expectedDevice: string }> = [
+    const cases: Array<{
+      width: number;
+      expectedBreakpoint: string;
+      expectedDevice: string;
+    }> = [
       { width: 375, expectedBreakpoint: 'xs', expectedDevice: 'phone' },
       { width: 639, expectedBreakpoint: 'xs', expectedDevice: 'phone' },
       { width: 640, expectedBreakpoint: 'sm', expectedDevice: 'tablet' },
@@ -535,15 +667,13 @@ describe('ResponsiveProvider', () => {
       function AtomicConsumer() {
         const responsive = useResponsive();
         observations.push(`${responsive.deviceClass}:${responsive.activeBreakpoint}`);
-        return (
-          <span data-testid="atomic-state">{observations[observations.length - 1]}</span>
-        );
+        return <span data-testid="atomic-state">{observations[observations.length - 1]}</span>;
       }
 
       render(
         <ResponsiveProvider>
           <AtomicConsumer />
-        </ResponsiveProvider>,
+        </ResponsiveProvider>
       );
 
       expect(screen.getByTestId('atomic-state')).toHaveTextContent('tablet:md');
@@ -571,11 +701,23 @@ describe('ResponsiveProvider', () => {
 
     const cases: Array<{ width: number; expected: number; reason: string }> = [
       { width: 375, expected: 1, reason: 'xs -> base' },
-      { width: 640, expected: 1, reason: 'sm -> cascades to base (no sm defined)' },
+      {
+        width: 640,
+        expected: 1,
+        reason: 'sm -> cascades to base (no sm defined)',
+      },
       { width: 768, expected: 2, reason: 'md -> md=2' },
-      { width: 1024, expected: 2, reason: 'lg -> cascades to md=2 (no lg defined)' },
+      {
+        width: 1024,
+        expected: 2,
+        reason: 'lg -> cascades to md=2 (no lg defined)',
+      },
       { width: 1280, expected: 4, reason: 'xl -> xl=4' },
-      { width: 1536, expected: 4, reason: '2xl -> cascades to xl=4 (no 2xl defined)' },
+      {
+        width: 1536,
+        expected: 4,
+        reason: '2xl -> cascades to xl=4 (no 2xl defined)',
+      },
     ];
 
     cases.forEach(({ width, expected, reason }) => {
@@ -597,7 +739,14 @@ describe('ResponsiveProvider', () => {
   describe('context path vs fallback path produce same results', () => {
     function FallbackValueConsumer() {
       // Without a provider, useResponsiveValue uses the fallback path
-      const cols = useResponsiveValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5, '2xl': 6 });
+      const cols = useResponsiveValue({
+        base: 1,
+        sm: 2,
+        md: 3,
+        lg: 4,
+        xl: 5,
+        '2xl': 6,
+      });
       return <span data-testid="fb-cols">{cols}</span>;
     }
 

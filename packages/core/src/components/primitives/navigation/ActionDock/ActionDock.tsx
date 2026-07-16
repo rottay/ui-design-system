@@ -24,8 +24,11 @@
  * @package @rottay/design-system
  */
 
+import type { CSSProperties } from 'react';
+
 import { Box } from '../../layout/Box';
 import { Flex } from '../../layout/Flex';
+import { useResponsive } from '../../../../runtime/responsive';
 
 import type { ActionDockProps } from './ActionDock.types';
 
@@ -50,18 +53,24 @@ export function ActionDock({
   style,
 }: ActionDockProps) {
   const rootClassName = ['rottay-action-dock', className].filter(Boolean).join(' ');
+  const { virtualKeyboardInset, isVirtualKeyboardOpen } = useResponsive();
+  const responsiveStyle = {
+    ...style,
+    '--ds-virtual-keyboard-inset': `${Math.max(0, virtualKeyboardInset)}px`,
+  } as CSSProperties;
 
   return (
     <Box
       id={id}
       className={rootClassName}
-      style={style}
+      style={responsiveStyle}
       data-testid={dataTestId}
       role="toolbar"
       aria-label={ariaLabel ?? `${position === 'top' ? 'Top' : 'Bottom'} actions`}
       data-part="root"
       data-placement={position}
       data-mode={mode}
+      data-keyboard-open={isVirtualKeyboardOpen ? 'true' : 'false'}
     >
       <Flex className="rottay-action-dock__actions" align="center">
         {children}

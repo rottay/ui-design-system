@@ -180,6 +180,7 @@ export function createWizardSurfaceConfig(
     visual: {
       stackOnMobile: true,
       compactStepsOnMobile: true,
+      mobileActionsSticky: true,
       ...config.visual,
     },
   };

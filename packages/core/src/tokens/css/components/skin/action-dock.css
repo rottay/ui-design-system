@@ -37,20 +37,31 @@
 }
 
 .rottay-action-dock[data-part='root'][data-placement='bottom'] {
-  inset-block-end: 0;
   padding-block-start: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
   padding-block-end: max(
     var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
-    var(--ds-action-dock-safe-area-bottom, env(safe-area-inset-bottom, 0px))
+    var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px)))
   );
   box-shadow: var(--ds-action-dock-shadow-bottom, var(--ds-shadow-navbar));
+}
+
+.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
+  inset-block-end: calc(var(--ds-shell-bottom-inset, 0px) + var(--ds-virtual-keyboard-inset, 0px));
+}
+
+.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
+  inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
+}
+
+.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
+  inset-block-end: 0;
 }
 
 .rottay-action-dock[data-part='root'][data-placement='top'] {
   inset-block-start: 0;
   padding-block-start: max(
     var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
-    var(--ds-action-dock-safe-area-top, env(safe-area-inset-top, 0px))
+    var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
   );
   padding-block-end: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
   box-shadow: var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));

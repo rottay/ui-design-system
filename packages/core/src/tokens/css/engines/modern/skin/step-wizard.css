@@ -47,6 +47,22 @@
   border-radius: var(--ds-radius-lg);
 }
 
+.ds-pattern-step-wizard.ds-engine-modern[data-part='root'][data-action-posture='sticky-bottom'] {
+  padding-block-end: var(--ds-step-wizard-action-dock-reserved-space, 7rem);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-counter'][data-part='step-counter'] {
+  margin-block-end: var(--ds-spacing-5, 1.25rem);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-typography-heading-font-weight, 600);
+  line-height: var(--ds-line-height-sm, 1.25rem);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__action-dock [data-part='nav-bar'][data-part='nav-bar'] {
+  border-top: 0;
+}
+
 /* ---- loading skeleton shimmer bars ---- */
 .ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'] {
   border-radius: var(--ds-radius-full);
@@ -79,7 +95,8 @@
   border: 2px solid var(--ds-color-border-secondary);
   box-shadow: none;
 }
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+.ds-pattern-step-wizard.ds-engine-modern
+  [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
   border: none;

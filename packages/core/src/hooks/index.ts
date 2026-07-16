@@ -270,7 +270,13 @@ export type {
 // ============================================================================
 // Form hooks -- auto-save, draft persistence, change tracking
 // ============================================================================
-export { useAutoSave, useDraftSave, useFormDiff } from './form';
+export {
+  useAutoSave,
+  useDraftSave,
+  useFormDiff,
+  UNSAVED_CHANGES_GUARD_CONTRACT,
+  useUnsavedChangesGuard,
+} from './form';
 export type {
   AutoSaveStatus,
   UseAutoSaveOptions,
@@ -280,6 +286,9 @@ export type {
   FormDiffEntry,
   UseFormDiffOptions,
   UseFormDiffReturn,
+  UnsavedChangeGuardReason,
+  UseUnsavedChangesGuardOptions,
+  UseUnsavedChangesGuardReturn,
 } from './form';
 
 // ============================================================================

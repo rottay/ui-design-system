@@ -7,7 +7,7 @@
  * UX with automatic saving, recoverable drafts, and visual diff indicators.
  *
  * @remarks
- * Three complementary hooks that can be composed together:
+ * Four complementary hooks that can be composed together:
  *
  * - **useAutoSave** - Debounced auto-save with status tracking (idle/saving/saved/error).
  *   Ideal for inline editing and settings forms.
@@ -15,6 +15,8 @@
  *   Prevents data loss from accidental navigation or tab closure.
  * - **useFormDiff** - Deep-compares original and current form data, returning
  *   a list of changed fields with before/after values for visual indicators.
+ * - **useUnsavedChangesGuard** - Protects dirty work during browser unloads
+ *   and explicit navigation, cancel, back, step, or command actions.
  *
  * @example Composing auto-save with draft recovery
  * ```tsx
@@ -57,3 +59,16 @@ export type {
   UseFormDiffOptions,
   UseFormDiffReturn,
 } from './form-diff';
+
+// -- Unsaved Changes Guard --
+// Router-agnostic unload and explicit-action protection for dirty forms,
+// wizards, drawers, and other editable surfaces.
+export {
+  UNSAVED_CHANGES_GUARD_CONTRACT,
+  useUnsavedChangesGuard,
+} from './unsaved-changes-guard';
+export type {
+  UnsavedChangeGuardReason,
+  UseUnsavedChangesGuardOptions,
+  UseUnsavedChangesGuardReturn,
+} from './unsaved-changes-guard';

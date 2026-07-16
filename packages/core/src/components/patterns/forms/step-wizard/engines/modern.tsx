@@ -21,6 +21,7 @@
  */
 
 import React, { useState, type CSSProperties } from 'react';
+import { ActionDock } from '../../../../primitives/navigation/ActionDock';
 import type { StepWizardProps } from '../StepWizard.types';
 
 /* ---------------------------------------------------------------------------
@@ -30,13 +31,7 @@ import type { StepWizardProps } from '../StepWizard.types';
 /** Checkmark icon for completed steps */
 const CheckIcon = () => (
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-    <path
-      d="M3 8l3.5 3.5L13 5"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+    <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -140,6 +135,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
     allowSkip = false,
     showProgress = true,
     orientation = 'horizontal',
+    progressPosture = 'rail',
+    formatProgressLabel,
+    actionPosture = 'inline',
     nextLabel = 'Next',
     prevLabel = 'Back',
     completeLabel = 'Complete',
@@ -165,6 +163,13 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   const isLast = current === steps.length - 1;
   const currentDef = steps[current];
+  const stickyActions = actionPosture === 'sticky-bottom';
+  const progressLabel =
+    formatProgressLabel?.({
+      current: current + 1,
+      total: steps.length,
+      title: currentDef?.title ?? '',
+    }) ?? `Step ${current + 1} of ${steps.length}: ${currentDef?.title ?? ''}`;
   // Progress percentage: 1-based so step 1 of 3 shows 33%, not 0%.
   const progress = Math.round(((current + 1) / steps.length) * 100);
 
@@ -188,11 +193,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         return true;
       }
 
-      setValidationMessage(
-        typeof result === 'string'
-          ? result
-          : 'Please complete this step before continuing.'
-      );
+      setValidationMessage(typeof result === 'string' ? result : 'Please complete this step before continuing.');
 
       return false;
     } finally {
@@ -410,15 +411,18 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   const navDisabled = isValidating || actionsDisabled;
 
-  const navigationBar = (
+  const navigationContent = (
     <div
       data-part="nav-bar"
       style={{
+        width: '100%',
         display: 'flex',
+        flexWrap: 'wrap',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 24,
-        paddingTop: 20,
+        gap: 8,
+        marginTop: stickyActions ? 0 : 24,
+        paddingTop: stickyActions ? 0 : 20,
       }}
     >
       {/* Left side: Previous */}
@@ -440,7 +444,17 @@ export default function ModernStepWizard(props: StepWizardProps) {
       </div>
 
       {/* Right side: Footer + Skip + Next/Complete */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div
+        style={{
+          display: 'flex',
+          flex: '1 1 auto',
+          flexWrap: 'wrap',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          gap: 8,
+          minWidth: 0,
+        }}
+      >
         {footer}
 
         {/* Skip: shown for optional steps that are not the final step */}
@@ -492,17 +506,40 @@ export default function ModernStepWizard(props: StepWizardProps) {
     </div>
   );
 
+  const navigationBar = stickyActions ? (
+    <ActionDock
+      mode="fixed"
+      position="bottom"
+      className="ds-step-wizard__action-dock"
+      data-testid="step-wizard-action-dock"
+      aria-label="Wizard actions"
+    >
+      {navigationContent}
+    </ActionDock>
+  ) : (
+    navigationContent
+  );
+
   /* -- Render ------------------------------------------------------------- */
 
   return (
     <div
       data-part="root"
+      data-action-posture={actionPosture}
+      data-progress-posture={progressPosture}
       className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
       style={{ ...cardStyle, ...style }}
     >
       <div style={{ padding: 24 }}>
+        {/* Compact posture retains a live, named progress status. */}
+        {showProgress && progressPosture === 'counter' && (
+          <div data-part="step-counter" role="status" aria-live="polite" aria-label={progressLabel}>
+            {progressLabel}
+          </div>
+        )}
+
         {/* Progress bar (subtle, at the very top) */}
-        {showProgress && (
+        {showProgress && progressPosture === 'rail' && (
           <div
             data-part="progress-track"
             style={{
@@ -524,7 +561,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         )}
 
         {/* Step indicators */}
-        {showProgress && !isVertical && (
+        {showProgress && progressPosture === 'rail' && !isVertical && (
           <div
             data-part="step-rail"
             data-orientation="horizontal"
@@ -539,7 +576,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         )}
 
         {/* Vertical layout: indicators alongside content */}
-        {showProgress && isVertical ? (
+        {showProgress && progressPosture === 'rail' && isVertical ? (
           <div style={{ display: 'flex', gap: 32 }}>
             {/* Vertical step rail */}
             <div
@@ -558,7 +595,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
             {/* Content area */}
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div data-part="content" style={contentAreaStyle}>{currentDef?.content}</div>
+              <div data-part="content" style={contentAreaStyle}>
+                {currentDef?.content}
+              </div>
               {errorDisplay}
               {navigationBar}
             </div>
@@ -566,7 +605,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
         ) : (
           <>
             {/* Horizontal: content below the step indicators */}
-            <div data-part="content" style={contentAreaStyle}>{currentDef?.content}</div>
+            <div data-part="content" style={contentAreaStyle}>
+              {currentDef?.content}
+            </div>
             {errorDisplay}
             {navigationBar}
           </>

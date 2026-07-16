@@ -11,13 +11,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Card, Flex, Grid, Stack, Text } from '../../../../primitives';
 import { PatternFormBuilder, PatternStepWizard } from '../../../../patterns';
 import { FadeIn, SlideIn } from '../../../../../motion';
+import { useUnsavedChangesGuard } from '../../../../../hooks/form';
 import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../../../foundation/helpers';
 import { useSurfaceTranslations } from '../../../foundation/i18n';
 import { useSurfaceProfileDefaults } from '../../../foundation/profile-defaults';
-import {
-  resolveStackSpacing,
-  SurfaceAccentBarWrapper,
-} from '../../../foundation/personality-helpers';
+import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../foundation/personality-helpers';
 import type {
   WizardSurfaceConfig,
   WizardSurfaceStepConfig,
@@ -46,10 +44,7 @@ function renderWizardStepContent(
     entranceDuration: number;
   }
 ): React.ReactNode {
-  const contentNode =
-    typeof step.content === 'function'
-      ? step.content(context)
-      : step.content;
+  const contentNode = typeof step.content === 'function' ? step.content(context) : step.content;
 
   const visibleFields = filterSurfaceFields(step.fields ?? [], config.access ?? config.permissions);
 
@@ -82,6 +77,7 @@ function renderWizardStepContent(
               fields={visibleFields}
               layout={step.layout ?? 'vertical'}
               columns={step.columns}
+              autoAdaptive
               renderField={config.presentation.renderField}
               onSubmit={() => undefined}
               onValidationChange={onValidationChange}
@@ -116,22 +112,24 @@ export interface WizardSurfaceProps {
   onRetry?: () => void | Promise<void>;
 }
 
-export function WizardSurface({
-  config,
-  loading = false,
-  error,
-  onRetry,
-}: WizardSurfaceProps): React.ReactElement {
+export function WizardSurface({ config, loading = false, error, onRetry }: WizardSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaults();
-  const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
+  const resolvedMobile = hasResolvedViewport && isMobile;
+  const dirtyState = config.behavior.dirtyState;
+  const { requestDiscard } = useUnsavedChangesGuard({
+    isDirty: dirtyState?.isDirty ?? false,
+    message: dirtyState?.message ?? tSurface('wizard.discard_changes'),
+    confirmDiscard: dirtyState?.confirmDiscard,
+    onDiscard: dirtyState?.onDiscard,
+    onBlocked: dirtyState?.onBlocked,
+  });
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // The wizard supports both controlled (app owns values + step) and
   // uncontrolled (surface manages them) modes. Controlled mode is common
   // when the wizard integrates with external state management (e.g. Zustand).
-  const [internalValues, setInternalValues] = useState<Record<string, unknown>>(
-    config.behavior.initialValues ?? {}
-  );
+  const [internalValues, setInternalValues] = useState<Record<string, unknown>>(config.behavior.initialValues ?? {});
   const [internalStep, setInternalStep] = useState(config.behavior.currentStep ?? 0);
   // Step errors are keyed by step.key so validation state persists when
   // navigating between steps. This lets users fix errors on a previous step
@@ -139,9 +137,7 @@ export function WizardSurface({
   const [stepErrors, setStepErrors] = useState<Record<string, Record<string, string>>>({});
 
   const isControlledValues = config.behavior.values !== undefined;
-  const resolvedValues = isControlledValues
-    ? (config.behavior.values ?? {})
-    : internalValues;
+  const resolvedValues = isControlledValues ? config.behavior.values ?? {} : internalValues;
   const currentStep = config.behavior.currentStep ?? internalStep;
 
   useEffect(() => {
@@ -212,7 +208,17 @@ export function WizardSurface({
         ),
       };
     });
-  }, [config, currentStep, goToStep, resolvedValues, setValues, tSurface, profileDefaults.cardVariant, profileDefaults.animateEntrance, profileDefaults.entranceDuration]);
+  }, [
+    config,
+    currentStep,
+    goToStep,
+    resolvedValues,
+    setValues,
+    tSurface,
+    profileDefaults.cardVariant,
+    profileDefaults.animateEntrance,
+    profileDefaults.entranceDuration,
+  ]);
 
   const activeContext: WizardSurfaceStepRenderContext = {
     values: resolvedValues,
@@ -242,26 +248,26 @@ export function WizardSurface({
           variant={resolveSurfaceButtonVariant(cancelAction.variant)}
           disabled={cancelAction.disabled}
           loading={cancelAction.loading}
-          onClick={() => cancelAction.onClick?.(undefined as void)}
+          onClick={() => {
+            if (requestDiscard('cancel')) {
+              cancelAction.onClick?.(undefined as void);
+            }
+          }}
         >
           {cancelAction.icon}
-          <Text style={{ marginLeft: cancelAction.icon ? 8 : 0 }}>
-            {cancelAction.label}
-          </Text>
+          <Text style={{ marginLeft: cancelAction.icon ? 8 : 0 }}>{cancelAction.label}</Text>
         </Button>
       )}
 
       {saveDraftAction && (
         <Button
           variant={resolveSurfaceButtonVariant(saveDraftAction.variant)}
-          disabled={saveDraftAction.disabled}
+          disabled={config.behavior.disabled || saveDraftAction.disabled}
           loading={saveDraftAction.loading}
           onClick={() => saveDraftAction.onClick?.(resolvedValues)}
         >
           {saveDraftAction.icon}
-          <Text style={{ marginLeft: saveDraftAction.icon ? 8 : 0 }}>
-            {saveDraftAction.label}
-          </Text>
+          <Text style={{ marginLeft: saveDraftAction.icon ? 8 : 0 }}>{saveDraftAction.label}</Text>
         </Button>
       )}
 
@@ -307,11 +313,7 @@ export function WizardSurface({
     <Grid className="ds-surface ds-wizard" columns={asideNode && !shouldStack ? 12 : 1} gap={sectionSpacing}>
       <Grid.Item span={asideNode && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
-          {config.presentation.description && (
-            <Text data-part="description">
-              {config.presentation.description}
-            </Text>
-          )}
+          {config.presentation.description && <Text data-part="description">{config.presentation.description}</Text>}
 
           {config.presentation.error && (
             <Card className="ds-wizard__error-card" variant={profileDefaults.cardVariant}>
@@ -331,15 +333,12 @@ export function WizardSurface({
                 optional: step.optional,
                 content: step.renderedContent,
                 // Validation is two-phase: first check form-level field errors
-              // from the PatternFormBuilder, then run the step's custom validate
-              // function. The first field error message is surfaced to the
-              // StepWizard pattern which displays it inline.
-              validate: async () => {
+                // from the PatternFormBuilder, then run the step's custom validate
+                // function. The first field error message is surfaced to the
+                // StepWizard pattern which displays it inline.
+                validate: async () => {
                   if (validationErrors && Object.keys(validationErrors).length > 0) {
-                    return (
-                      Object.values(validationErrors)[0] ??
-                      tSurface('wizard.step_error_fallback')
-                    );
+                    return Object.values(validationErrors)[0] ?? tSurface('wizard.step_error_fallback');
                   }
 
                   const result = await step.validate?.();
@@ -353,12 +352,17 @@ export function WizardSurface({
             onComplete={() => submitAction?.onClick?.(resolvedValues)}
             allowSkip={config.visual.allowSkip}
             showProgress={config.visual.showProgress}
-            orientation={config.visual.orientation}
+            orientation={resolvedMobile ? 'horizontal' : config.visual.orientation}
+            progressPosture={resolvedMobile && config.visual.compactStepsOnMobile ? 'counter' : 'rail'}
+            formatProgressLabel={({ current, total, title }) =>
+              tSurface('wizard.step_counter', { current, total, title })
+            }
+            actionPosture={resolvedMobile && config.visual.mobileActionsSticky ? 'sticky-bottom' : 'inline'}
             nextLabel={config.behavior.nextLabel}
             prevLabel={config.behavior.prevLabel}
             completeLabel={submitAction?.label ?? tSurface('wizard.complete')}
             skipLabel={config.behavior.skipLabel}
-            actionsDisabled={false}
+            actionsDisabled={config.behavior.disabled}
             completeDisabled={submitAction?.disabled || submitAction?.loading}
             showCompleteAction={!!submitAction}
             footer={wizardFooter}
@@ -381,9 +385,7 @@ export function WizardSurface({
     <PageShellSurface chrome={chrome} loading={loading}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
-          <FadeIn durationMs={profileDefaults.entranceDuration}>
-            {wizardContent}
-          </FadeIn>
+          <FadeIn durationMs={profileDefaults.entranceDuration}>{wizardContent}</FadeIn>
         ) : (
           wizardContent
         )}

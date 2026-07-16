@@ -146,6 +146,9 @@
       "form_title": "النموذج",
       "summary_title": "الملخص"
     },
+    "form": {
+      "discard_changes": "هل تريد تجاهل تغييرات النموذج غير المحفوظة؟"
+    },
     "search": {
       "placeholder": "بحث",
       "empty_query_title": "ابدأ الكتابة للبحث",
@@ -188,6 +191,8 @@
       "empty_title": "لا توجد خطوات متاحة في المعالج",
       "empty_description": "لا يحتوي هذا التدفق على أي خطوات مُعدّة بعد.",
       "step_error_fallback": "يرجى مراجعة هذه الخطوة.",
+      "step_counter": "الخطوة {current} من {total}: {title}",
+      "discard_changes": "هل تريد تجاهل تغييرات المعالج غير المحفوظة؟",
       "complete": "إكمال"
     },
     "chat": {

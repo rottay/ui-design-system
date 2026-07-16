@@ -198,6 +198,9 @@
       "form_title": "Formulario",
       "summary_title": "Resumen"
     },
+    "form": {
+      "discard_changes": "¿Descartar los cambios sin guardar del formulario?"
+    },
     "search": {
       "placeholder": "Buscar",
       "empty_query_title": "Empieza a escribir para buscar",
@@ -240,6 +243,8 @@
       "empty_title": "No hay pasos configurados",
       "empty_description": "Este flujo todavia no tiene pasos configurados.",
       "step_error_fallback": "Revisa este paso.",
+      "step_counter": "Paso {current} de {total}: {title}",
+      "discard_changes": "¿Descartar los cambios sin guardar del asistente?",
       "complete": "Completar"
     },
     "chat": {

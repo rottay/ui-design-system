@@ -27,6 +27,7 @@ import { arrayValueAt } from '@/_internal/utils/collections';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import { resolveAdaptiveFormFieldColumnSpan, resolveAdaptiveFormLayout } from '../adaptive-layout';
 
 /* -- DS Primitive imports ------------------------------------------------- */
 import { Input } from '../../../../primitives/inputs/Input';
@@ -84,7 +85,6 @@ const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
   </svg>
 );
 
-
 /* ---------------------------------------------------------------------------
  * ModernFormBuilder
  * -------------------------------------------------------------------------*/
@@ -130,10 +130,13 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   const { isMobile, isTablet } = useBreakpoints();
 
-  const adaptedLayout = autoAdaptive && isMobile && layout === 'grid' ? 'vertical' : layout;
-  const adaptedColumns = autoAdaptive
-    ? (isMobile ? 1 : isTablet ? Math.min(columns, 2) : columns)
-    : columns;
+  const { layout: adaptedLayout, columns: adaptedColumns } = resolveAdaptiveFormLayout({
+    layout,
+    columns,
+    autoAdaptive,
+    isMobile,
+    isTablet,
+  });
 
   /* -- State ------------------------------------------------------------ */
 
@@ -233,6 +236,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
+      if (disabled) return;
+
       const errs = validate();
       setErrors(errs);
       onValidationChange?.(errs);
@@ -240,11 +245,14 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         onSubmit(currentValues);
       }
     },
-    [validate, onSubmit, currentValues, onValidationChange]
+    [disabled, validate, onSubmit, currentValues, onValidationChange]
   );
 
   const toggleSection = useCallback((sectionKey: string) => {
-    setCollapsedSections((prev: Record<string, boolean>) => ({ ...prev, [sectionKey]: !prev[sectionKey] }));
+    setCollapsedSections((prev: Record<string, boolean>) => ({
+      ...prev,
+      [sectionKey]: !prev[sectionKey],
+    }));
   }, []);
 
   /* -- Measure section heights for smooth collapse animation ------------ */
@@ -263,26 +271,51 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     (field: FieldDef): ReactNode => {
       const val = readRecordValue(currentValues, field.name);
       if (val === undefined || val === null || val === '') {
-        return <span data-part="readonly-value" data-field-type="empty" style={readOnlyTextStyle}>--</span>;
+        return (
+          <span data-part="readonly-value" data-field-type="empty" style={readOnlyTextStyle}>
+            --
+          </span>
+        );
       }
 
       switch (field.type) {
         case 'checkbox':
         case 'switch':
-          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{val ? 'Yes' : 'No'}</span>;
+          return (
+            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+              {val ? 'Yes' : 'No'}
+            </span>
+          );
         case 'select':
         case 'radio': {
           const opt = field.options?.find((o) => o.value === val);
-          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{opt?.label ?? String(val)}</span>;
+          return (
+            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+              {opt?.label ?? String(val)}
+            </span>
+          );
         }
         case 'multi-select': {
           const vals = val as string[];
           const labels = vals.map((v) => field.options?.find((o) => o.value === v)?.label ?? v);
-          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{labels.join(', ')}</span>;
+          return (
+            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+              {labels.join(', ')}
+            </span>
+          );
         }
         case 'color':
           return (
-            <span data-part="readonly-value" data-field-type={field.type} style={{ ...readOnlyTextStyle, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span
+              data-part="readonly-value"
+              data-field-type={field.type}
+              style={{
+                ...readOnlyTextStyle,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
               {/* `background` is the hex the user picked -- a value computed from data,
                   never selectable from a token set, so it cannot leave the TSX. */}
               <span data-part="color-swatch" style={{ width: 20, height: 20, background: String(val) }} />
@@ -290,11 +323,23 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             </span>
           );
         case 'rating':
-          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{'*'.repeat(val as number) + ` (${val}/5)`}</span>;
+          return (
+            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+              {'*'.repeat(val as number) + ` (${val}/5)`}
+            </span>
+          );
         case 'file':
-          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>[File attached]</span>;
+          return (
+            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+              [File attached]
+            </span>
+          );
         default:
-          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{String(val)}</span>;
+          return (
+            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+              {String(val)}
+            </span>
+          );
       }
     },
     [currentValues]
@@ -418,11 +463,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           );
         case 'switch':
           return (
-            <Switch
-              checked={!!val}
-              onChange={(checked) => updateValue(field.name, checked)}
-              disabled={fieldDisabled}
-            />
+            <Switch checked={!!val} onChange={(checked) => updateValue(field.name, checked)} disabled={fieldDisabled} />
           );
         /* ------------------------------------------------------------------
          * DS Primitive inputs -- DatePicker, TimePicker, Upload, ColorPicker,
@@ -472,7 +513,11 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           // FormBuilder deals in raw Files only.
           const toFileList = (raw: unknown) => {
             if (!raw) return [];
-            const files: File[] = Array.isArray(raw) ? raw.filter((f): f is File => f instanceof File) : (raw instanceof File ? [raw] : []);
+            const files: File[] = Array.isArray(raw)
+              ? raw.filter((f): f is File => f instanceof File)
+              : raw instanceof File
+              ? [raw]
+              : [];
             return files.map((f, i) => ({
               uid: `fb-file-${i}-${f.name}`,
               name: f.name,
@@ -490,9 +535,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               onChange={(info: UploadChangeInfo) => {
                 // Preserve only actual File objects -- drop stale entries
                 // without originFileObj (e.g., after removal).
-                const files = info.fileList
-                  .map((f) => f.originFileObj)
-                  .filter((f): f is File => f instanceof File);
+                const files = info.fileList.map((f) => f.originFileObj).filter((f): f is File => f instanceof File);
                 updateValue(field.name, files.length === 0 ? null : files.length === 1 ? files[0] : files);
               }}
               beforeUpload={() => false}
@@ -567,7 +610,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ maxWidth: 720, width: '100%', ...style }}>
+      <div
+        data-part="root"
+        data-loading="true"
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+        style={{ maxWidth: 720, width: '100%', ...style }}
+      >
         {/* Title shimmer */}
         <div
           data-part="skeleton-bar"
@@ -645,10 +693,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   /* -- Visible fields --------------------------------------------------- */
 
-  const visibleFields = useMemo(
-    () => fields.filter((f) => !isHidden(f)),
-    [fields, isHidden]
-  );
+  const visibleFields = useMemo(() => fields.filter((f) => !isHidden(f)), [fields, isHidden]);
 
   /* -- Step field distribution ------------------------------------------ */
 
@@ -675,9 +720,19 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
    * Otherwise all fields belong to a default unnamed section.
    */
   const groupedSections = useMemo(() => {
-    const fieldsToGroup = adaptedLayout === 'steps' ? (arrayValueAt(stepFields, currentStep) ?? []) : visibleFields;
-    const sections: { key: string; title?: string; description?: string; fields: FieldDef[] }[] = [];
-    let current: { key: string; title?: string; description?: string; fields: FieldDef[] } = {
+    const fieldsToGroup = adaptedLayout === 'steps' ? arrayValueAt(stepFields, currentStep) ?? [] : visibleFields;
+    const sections: {
+      key: string;
+      title?: string;
+      description?: string;
+      fields: FieldDef[];
+    }[] = [];
+    let current: {
+      key: string;
+      title?: string;
+      description?: string;
+      fields: FieldDef[];
+    } = {
       key: '__default',
       fields: [],
     };
@@ -710,6 +765,13 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       : defaultRender;
     const error = readRecordValue(errors, field.name) as string | undefined;
     const showLabel = showLabels && field.type !== 'checkbox';
+    const columnSpan = resolveAdaptiveFormFieldColumnSpan({
+      columnSpan: field.colSpan,
+      columns: adaptedColumns,
+      autoAdaptive,
+      isMobile,
+      isTablet,
+    });
 
     return (
       <div
@@ -717,7 +779,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         data-part="field"
         style={{
           width: '100%',
-          ...(adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
+          ...(adaptedLayout === 'grid' && columnSpan ? { gridColumn: `span ${columnSpan}` } : {}),
         }}
       >
         {showLabel ? (
@@ -774,18 +836,21 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
     if (adaptedLayout === 'horizontal') {
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: gapStr }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'flex-start',
+            gap: gapStr,
+          }}
+        >
           {fieldElements}
         </div>
       );
     }
 
     // vertical (default)
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {fieldElements}
-      </div>
-    );
+    return <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>{fieldElements}</div>;
   };
 
   /* -- Render ----------------------------------------------------------- */
@@ -797,26 +862,37 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   };
 
   return (
-    <form data-part="root" onSubmit={handleSubmit} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={formContainerStyle}>
+    <form
+      data-part="root"
+      onSubmit={handleSubmit}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      style={formContainerStyle}
+    >
       {/* Title & description */}
       {(title || description) && (
         <div style={{ marginBottom: 24 }}>
           {title && (
-            <div data-part="title" style={{
-              fontSize: 18,
-              fontWeight: 600,
-              lineHeight: '26px',
-              letterSpacing: '-0.01em',
-            }}>
+            <div
+              data-part="title"
+              style={{
+                fontSize: 18,
+                fontWeight: 600,
+                lineHeight: '26px',
+                letterSpacing: '-0.01em',
+              }}
+            >
               {title}
             </div>
           )}
           {description && (
-            <div data-part="description" style={{
-              fontSize: 14,
-              lineHeight: '20px',
-              marginTop: 4,
-            }}>
+            <div
+              data-part="description"
+              style={{
+                fontSize: 14,
+                lineHeight: '20px',
+                marginTop: 4,
+              }}
+            >
               {description}
             </div>
           )}
@@ -825,7 +901,15 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Wizard step indicator */}
       {adaptedLayout === 'steps' && stepLabels && (
-        <div data-part="step-list" style={{ display: 'flex', alignItems: 'flex-start', gap: 0, marginBottom: 32 }}>
+        <div
+          data-part="step-list"
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 0,
+            marginBottom: 32,
+          }}
+        >
           {stepLabels.map((label, i) => {
             const isActive = i === currentStep;
             const isCompleted = i < currentStep;
@@ -877,7 +961,13 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                   >
                     {isCompleted ? (
                       <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path
+                          d="M3 8l3.5 3.5L13 5"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     ) : (
                       i + 1
@@ -913,10 +1003,13 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           <div key={section.key}>
             {/* Section divider (between sections, not before first) */}
             {sectionIdx > 0 && (
-              <div data-part="section-divider" style={{
-                height: 1,
-                margin: '28px 0',
-              }} />
+              <div
+                data-part="section-divider"
+                style={{
+                  height: 1,
+                  margin: '28px 0',
+                }}
+              />
             )}
 
             {/* Section header */}
@@ -939,20 +1032,26 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                 }}
               >
                 <div>
-                  <div data-part="section-title" style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    lineHeight: '22px',
-                    letterSpacing: '-0.005em',
-                  }}>
+                  <div
+                    data-part="section-title"
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 600,
+                      lineHeight: '22px',
+                      letterSpacing: '-0.005em',
+                    }}
+                  >
                     {section.title}
                   </div>
                   {section.description && (
-                    <div data-part="section-description" style={{
-                      fontSize: 13,
-                      lineHeight: '18px',
-                      marginTop: 4,
-                    }}>
+                    <div
+                      data-part="section-description"
+                      style={{
+                        fontSize: 13,
+                        lineHeight: '18px',
+                        marginTop: 4,
+                      }}
+                    >
                       {section.description}
                     </div>
                   )}
@@ -965,15 +1064,15 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             <div
               data-part="section-content"
               data-collapsed={isCollapsed}
-              ref={(el) => { Reflect.set(sectionContentRefs.current, section.key, el); }}
+              ref={(el) => {
+                Reflect.set(sectionContentRefs.current, section.key, el);
+              }}
               style={{
                 overflow: 'hidden',
                 transition: hasSectionHeader
                   ? `max-height var(--ds-motion-normal) var(--ds-motion-ease-out), opacity var(--ds-motion-normal) var(--ds-motion-ease-out)`
                   : undefined,
-                maxHeight: hasSectionHeader
-                  ? (isCollapsed ? 0 : (contentHeight ?? 2000))
-                  : undefined,
+                maxHeight: hasSectionHeader ? (isCollapsed ? 0 : contentHeight ?? 2000) : undefined,
                 opacity: isCollapsed ? 0 : 1,
               }}
             >
@@ -985,13 +1084,16 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Wizard step navigation */}
       {adaptedLayout === 'steps' && stepLabels && (
-        <div data-part="wizard-nav" style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: 28,
-          paddingTop: 20,
-        }}>
+        <div
+          data-part="wizard-nav"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 28,
+            paddingTop: 20,
+          }}
+        >
           <div>
             {currentStep > 0 && (
               <button
@@ -1019,10 +1121,13 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {/* Step counter text */}
-            <span data-part="wizard-step-counter" style={{
-              fontSize: 13,
-              marginRight: 4,
-            }}>
+            <span
+              data-part="wizard-step-counter"
+              style={{
+                fontSize: 13,
+                marginRight: 4,
+              }}
+            >
               Step {currentStep + 1} of {stepLabels.length}
             </span>
             {currentStep < stepLabels.length - 1 && (
@@ -1052,14 +1157,17 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Action bar */}
       {actions && (
-        <div data-part="action-bar" style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          gap: 12,
-          paddingTop: 20,
-          marginTop: 32,
-        }}>
+        <div
+          data-part="action-bar"
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: 12,
+            paddingTop: 20,
+            marginTop: 32,
+          }}
+        >
           {actions}
         </div>
       )}

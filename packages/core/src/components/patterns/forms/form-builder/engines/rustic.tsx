@@ -25,6 +25,7 @@ import { arrayValueAt } from '@/_internal/utils/collections';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import { resolveAdaptiveFormFieldColumnSpan, resolveAdaptiveFormLayout } from '../adaptive-layout';
 
 // Personality-driven easing and duration: these reference CSS custom properties
 // so tenant themes can tune animation feel without touching component code.
@@ -117,7 +118,7 @@ const s = {
       fontWeight: active ? 'var(--ds-typography-heading-font-weight, 600)' : 400,
       cursor: 'pointer',
       transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
-    }) as CSSProperties,
+    } as CSSProperties),
   navRow: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -192,10 +193,13 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
 
   const { isMobile, isTablet } = useBreakpoints();
 
-  const adaptedLayout = autoAdaptive && isMobile && layout === 'grid' ? 'vertical' : layout;
-  const adaptedColumns = autoAdaptive
-    ? (isMobile ? 1 : isTablet ? Math.min(columns, 2) : columns)
-    : columns;
+  const { layout: adaptedLayout, columns: adaptedColumns } = resolveAdaptiveFormLayout({
+    layout,
+    columns,
+    autoAdaptive,
+    isMobile,
+    isTablet,
+  });
 
   // Lazy initializer: field-level defaults are merged first, then overridden
   // by initialValues so server-loaded data always takes precedence.
@@ -276,6 +280,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
+      if (disabled) return;
+
       const errs = validate();
       setErrors(errs);
       onValidationChange?.(errs);
@@ -283,7 +289,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         onSubmit(currentValues);
       }
     },
-    [validate, onSubmit, currentValues, onValidationChange]
+    [disabled, validate, onSubmit, currentValues, onValidationChange]
   );
 
   // Maps each FieldDef type to a native HTML input element styled with
@@ -309,7 +315,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
               onChange={(e) => updateValue(field.name, e.target.value)}
               disabled={fieldDisabled}
               readOnly={readOnly}
-              data-error={Boolean(readRecordValue(errors, field.name))} style={s.input}
+              data-error={Boolean(readRecordValue(errors, field.name))}
+              style={s.input}
             />
           );
         case 'number':
@@ -325,7 +332,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
               max={field.validation?.max}
               disabled={fieldDisabled}
               readOnly={readOnly}
-              data-error={Boolean(readRecordValue(errors, field.name))} style={s.input}
+              data-error={Boolean(readRecordValue(errors, field.name))}
+              style={s.input}
             />
           );
         case 'textarea':
@@ -355,7 +363,9 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             >
               {field.placeholder && <option value="">{field.placeholder}</option>}
               {field.options?.map((opt) => (
-                <option key={opt.value} value={opt.value} disabled={opt.disabled}>{opt.label}</option>
+                <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+                  {opt.label}
+                </option>
               ))}
             </select>
           );
@@ -375,7 +385,9 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
               style={{ ...s.select, minHeight: 80 }}
             >
               {field.options?.map((opt) => (
-                <option key={opt.value} value={opt.value} disabled={opt.disabled}>{opt.label}</option>
+                <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+                  {opt.label}
+                </option>
               ))}
             </select>
           );
@@ -395,7 +407,11 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
           );
         case 'radio':
           return (
-            <div data-part="value-input" data-field-type="radio" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div
+              data-part="value-input"
+              data-field-type="radio"
+              style={{ display: 'flex', flexDirection: 'column', gap: 6 }}
+            >
               {field.options?.map((opt) => (
                 <label key={opt.value} data-part="choice-row" style={s.checkboxRow}>
                   <input
@@ -427,18 +443,86 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             </label>
           );
         case 'date':
-          return <input data-part="value-input" data-field-type="date" type="date" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
+          return (
+            <input
+              data-part="value-input"
+              data-field-type="date"
+              type="date"
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              disabled={fieldDisabled}
+              readOnly={readOnly}
+              data-error={Boolean(readRecordValue(errors, field.name))}
+              style={s.input}
+            />
+          );
         case 'time':
-          return <input data-part="value-input" data-field-type="time" type="time" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
+          return (
+            <input
+              data-part="value-input"
+              data-field-type="time"
+              type="time"
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              disabled={fieldDisabled}
+              readOnly={readOnly}
+              data-error={Boolean(readRecordValue(errors, field.name))}
+              style={s.input}
+            />
+          );
         case 'datetime':
-          return <input data-part="value-input" data-field-type="datetime" type="datetime-local" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
+          return (
+            <input
+              data-part="value-input"
+              data-field-type="datetime"
+              type="datetime-local"
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              disabled={fieldDisabled}
+              readOnly={readOnly}
+              data-error={Boolean(readRecordValue(errors, field.name))}
+              style={s.input}
+            />
+          );
         case 'file':
-          return <input data-part="value-input" data-field-type="file" type="file" disabled={fieldDisabled} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} onChange={(e) => updateValue(field.name, e.target.files)} />;
+          return (
+            <input
+              data-part="value-input"
+              data-field-type="file"
+              type="file"
+              disabled={fieldDisabled}
+              data-error={Boolean(readRecordValue(errors, field.name))}
+              style={s.input}
+              onChange={(e) => updateValue(field.name, e.target.files)}
+            />
+          );
         case 'color':
           // Native color inputs only accept concrete color strings, not CSS vars.
-          return <input data-part="value-input" data-field-type="color" type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, cursor: 'pointer' }} />;
+          return (
+            <input
+              data-part="value-input"
+              data-field-type="color"
+              type="color"
+              value={(val as string) ?? '#111827'}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              disabled={fieldDisabled}
+              style={{ width: 48, height: 36, padding: 2, cursor: 'pointer' }}
+            />
+          );
         case 'slider':
-          return <input data-part="value-input" data-field-type="slider" type="range" value={(val as number) ?? 0} onChange={(e) => updateValue(field.name, Number(e.target.value))} min={field.validation?.min ?? 0} max={field.validation?.max ?? 100} disabled={fieldDisabled} style={{ width: '100%' }} />;
+          return (
+            <input
+              data-part="value-input"
+              data-field-type="slider"
+              type="range"
+              value={(val as number) ?? 0}
+              onChange={(e) => updateValue(field.name, Number(e.target.value))}
+              min={field.validation?.min ?? 0}
+              max={field.validation?.max ?? 100}
+              disabled={fieldDisabled}
+              style={{ width: '100%' }}
+            />
+          );
         case 'rating':
           return (
             <div data-part="value-input" data-field-type="rating" style={{ display: 'flex', gap: 4 }}>
@@ -448,7 +532,10 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
                   data-part="rating-star"
                   data-active={(val as number) >= star}
                   onClick={() => !fieldDisabled && updateValue(field.name, star)}
-                  style={{ cursor: fieldDisabled ? 'default' : 'pointer', fontSize: 20 }}
+                  style={{
+                    cursor: fieldDisabled ? 'default' : 'pointer',
+                    fontSize: 20,
+                  }}
                 >
                   &#9733;
                 </span>
@@ -458,16 +545,25 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'custom':
           return field.render?.(field, val, (v) => updateValue(field.name, v)) ?? null;
         default:
-          return <input data-part="value-input" data-field-type={field.type} type="text" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
+          return (
+            <input
+              data-part="value-input"
+              data-field-type={field.type}
+              type="text"
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              disabled={fieldDisabled}
+              readOnly={readOnly}
+              data-error={Boolean(readRecordValue(errors, field.name))}
+              style={s.input}
+            />
+          );
       }
     },
     [currentValues, disabled, readOnly, updateValue, errors]
   );
 
-  const visibleFields = useMemo(
-    () => fields.filter((f) => !isHidden(f)),
-    [fields, isHidden]
-  );
+  const visibleFields = useMemo(() => fields.filter((f) => !isHidden(f)), [fields, isHidden]);
 
   // Distribute fields evenly across steps when explicit step assignments are
   // not provided. This auto-grouping lets consumers add a wizard layout by
@@ -505,9 +601,15 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     // Horizontal layout puts label and input side-by-side in a flex row;
     // other layouts stack them vertically.
     const fieldStyle: CSSProperties =
-      adaptedLayout === 'horizontal'
-        ? { display: 'flex', alignItems: 'flex-start', gap: 12 }
-        : {};
+      adaptedLayout === 'horizontal' ? { display: 'flex', alignItems: 'flex-start', gap: 12 } : {};
+
+    const columnSpan = resolveAdaptiveFormFieldColumnSpan({
+      columnSpan: field.colSpan,
+      columns: adaptedColumns,
+      autoAdaptive,
+      isMobile,
+      isTablet,
+    });
 
     return (
       <div
@@ -515,25 +617,43 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         data-part="field"
         style={{
           ...fieldStyle,
-          ...(adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
+          ...(adaptedLayout === 'grid' && columnSpan ? { gridColumn: `span ${columnSpan}` } : {}),
         }}
       >
         {showLabel && (
-          <label data-part="field-label" style={{ ...s.label, ...(adaptedLayout === 'horizontal' ? { minWidth: 140, paddingTop: 8 } : {}) }}>
+          <label
+            data-part="field-label"
+            style={{
+              ...s.label,
+              ...(adaptedLayout === 'horizontal' ? { minWidth: 140, paddingTop: 8 } : {}),
+            }}
+          >
             {field.label ?? field.name}
-            {showRequired && field.required && <span data-part="required-mark" style={s.required}>*</span>}
+            {showRequired && field.required && (
+              <span data-part="required-mark" style={s.required}>
+                *
+              </span>
+            )}
           </label>
         )}
         <div data-part="field-content" style={adaptedLayout === 'horizontal' ? { flex: 1 } : undefined}>
           {content}
-          {field.description && !error && <div data-part="field-description" style={s.hint}>{field.description}</div>}
-          {error && <div data-part="field-error" style={s.error}>{error}</div>}
+          {field.description && !error && (
+            <div data-part="field-description" style={s.hint}>
+              {field.description}
+            </div>
+          )}
+          {error && (
+            <div data-part="field-error" style={s.error}>
+              {error}
+            </div>
+          )}
         </div>
       </div>
     );
   };
 
-  const fieldsToRender = adaptedLayout === 'steps' ? (arrayValueAt(stepFields, currentStep) ?? []) : visibleFields;
+  const fieldsToRender = adaptedLayout === 'steps' ? arrayValueAt(stepFields, currentStep) ?? [] : visibleFields;
   const fieldElements = fieldsToRender.map(renderFormField);
   const gapStr = typeof gap === 'number' ? `${gap}px` : gap;
 
@@ -541,7 +661,11 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
   // Gap is unified across both strategies so field spacing stays consistent.
   const containerStyle: CSSProperties =
     adaptedLayout === 'grid'
-      ? { display: 'grid', gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`, gap: gapStr }
+      ? {
+          display: 'grid',
+          gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`,
+          gap: gapStr,
+        }
       : { display: 'flex', flexDirection: 'column', gap: gapStr };
 
   return (
@@ -551,8 +675,16 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
       className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
       style={{ fontFamily: 'var(--ds-font-family-base)', ...style }}
     >
-      {title && <h3 data-part="title" style={s.title}>{title}</h3>}
-      {description && <p data-part="description" style={s.description}>{description}</p>}
+      {title && (
+        <h3 data-part="title" style={s.title}>
+          {title}
+        </h3>
+      )}
+      {description && (
+        <p data-part="description" style={s.description}>
+          {description}
+        </p>
+      )}
 
       {/* Step bar renders a bottom-bordered indicator for each step.
           Steps up to and including the current one are highlighted with
@@ -573,15 +705,28 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         </div>
       )}
 
-      <div data-part="fields" style={containerStyle}>{fieldElements}</div>
+      <div data-part="fields" style={containerStyle}>
+        {fieldElements}
+      </div>
 
       {adaptedLayout === 'steps' && stepLabels && (
         <div data-part="wizard-nav" style={s.navRow}>
-          <button type="button" data-part="wizard-prev-button" style={s.btn} disabled={currentStep === 0} onClick={() => handleStepChange(currentStep - 1)}>
+          <button
+            type="button"
+            data-part="wizard-prev-button"
+            style={s.btn}
+            disabled={currentStep === 0}
+            onClick={() => handleStepChange(currentStep - 1)}
+          >
             Previous
           </button>
           {currentStep < stepLabels.length - 1 && (
-            <button type="button" data-part="wizard-next-button" style={s.btnPrimary} onClick={() => handleStepChange(currentStep + 1)}>
+            <button
+              type="button"
+              data-part="wizard-next-button"
+              style={s.btnPrimary}
+              onClick={() => handleStepChange(currentStep + 1)}
+            >
               Next
             </button>
           )}
@@ -590,7 +735,11 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
 
       {/* Submit area is position:sticky so it stays visible when the form
           scrolls inside a modal or side panel. */}
-      {actions && <div data-part="action-bar" style={s.submitArea}>{actions}</div>}
+      {actions && (
+        <div data-part="action-bar" style={s.submitArea}>
+          {actions}
+        </div>
+      )}
     </form>
   );
 }

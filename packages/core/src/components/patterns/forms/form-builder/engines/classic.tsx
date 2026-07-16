@@ -43,6 +43,7 @@ import {
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import { resolveAdaptiveFormFieldColumnSpan, resolveAdaptiveFormLayout } from '../adaptive-layout';
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
@@ -93,10 +94,13 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
 
   const { isMobile, isTablet } = useBreakpoints();
 
-  const adaptedLayout = autoAdaptive && isMobile && layout === 'grid' ? 'vertical' : layout;
-  const adaptedColumns = autoAdaptive
-    ? (isMobile ? 1 : isTablet ? Math.min(columns, 2) : columns)
-    : columns;
+  const { layout: adaptedLayout, columns: adaptedColumns } = resolveAdaptiveFormLayout({
+    layout,
+    columns,
+    autoAdaptive,
+    isMobile,
+    isTablet,
+  });
 
   // Lazy initializer merges field-level defaults with caller-supplied initialValues.
   // initialValues wins over defaultValue so server-loaded data takes precedence.
@@ -172,6 +176,8 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
+      if (disabled) return;
+
       const errs = validate();
       setErrors(errs);
       // Notify parent of validation state regardless of outcome so it can
@@ -181,7 +187,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
         onSubmit(currentValues);
       }
     },
-    [validate, onSubmit, currentValues, onValidationChange]
+    [disabled, validate, onSubmit, currentValues, onValidationChange]
   );
 
   // Maps each FieldDef type to the corresponding Ant Design input component.
@@ -200,55 +206,158 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
         case 'email':
         case 'password':
           return field.type === 'password' ? (
-            <Input.Password placeholder={field.placeholder} value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} {...commonProps} />
+            <Input.Password
+              placeholder={field.placeholder}
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              {...commonProps}
+            />
           ) : (
-            <Input type={field.type} placeholder={field.placeholder} value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} {...commonProps} />
+            <Input
+              type={field.type}
+              placeholder={field.placeholder}
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              {...commonProps}
+            />
           );
         case 'number':
-          return <InputNumber placeholder={field.placeholder} value={val as number} onChange={(v) => updateValue(field.name, v)} min={field.validation?.min} max={field.validation?.max} style={{ width: '100%' }} {...commonProps} />;
+          return (
+            <InputNumber
+              placeholder={field.placeholder}
+              value={val as number}
+              onChange={(v) => updateValue(field.name, v)}
+              min={field.validation?.min}
+              max={field.validation?.max}
+              style={{ width: '100%' }}
+              {...commonProps}
+            />
+          );
         case 'textarea':
-          return <TextArea placeholder={field.placeholder} value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} rows={4} {...commonProps} />;
+          return (
+            <TextArea
+              placeholder={field.placeholder}
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              rows={4}
+              {...commonProps}
+            />
+          );
         case 'select':
-          return <Select placeholder={field.placeholder} value={val as string} onChange={(v) => updateValue(field.name, v)} options={field.options} disabled={fieldDisabled} style={{ width: '100%' }} />;
+          return (
+            <Select
+              placeholder={field.placeholder}
+              value={val as string}
+              onChange={(v) => updateValue(field.name, v)}
+              options={field.options}
+              disabled={fieldDisabled}
+              style={{ width: '100%' }}
+            />
+          );
         case 'multi-select':
-          return <Select mode="multiple" placeholder={field.placeholder} value={(val as string[]) ?? []} onChange={(v) => updateValue(field.name, v)} options={field.options} disabled={fieldDisabled} style={{ width: '100%' }} />;
+          return (
+            <Select
+              mode="multiple"
+              placeholder={field.placeholder}
+              value={(val as string[]) ?? []}
+              onChange={(v) => updateValue(field.name, v)}
+              options={field.options}
+              disabled={fieldDisabled}
+              style={{ width: '100%' }}
+            />
+          );
         case 'checkbox':
-          return <Checkbox checked={!!val} onChange={(e) => updateValue(field.name, e.target.checked)} disabled={fieldDisabled}>{field.label}</Checkbox>;
+          return (
+            <Checkbox
+              checked={!!val}
+              onChange={(e) => updateValue(field.name, e.target.checked)}
+              disabled={fieldDisabled}
+            >
+              {field.label}
+            </Checkbox>
+          );
         case 'radio':
           return (
             <Radio.Group value={val} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled}>
-              {field.options?.map((opt) => <Radio key={opt.value} value={opt.value} disabled={opt.disabled}>{opt.label}</Radio>)}
+              {field.options?.map((opt) => (
+                <Radio key={opt.value} value={opt.value} disabled={opt.disabled}>
+                  {opt.label}
+                </Radio>
+              ))}
             </Radio.Group>
           );
         case 'switch':
           return <Switch checked={!!val} onChange={(v) => updateValue(field.name, v)} disabled={fieldDisabled} />;
         case 'date':
-          return <DatePicker value={val as any} onChange={(v) => updateValue(field.name, v)} style={{ width: '100%' }} disabled={fieldDisabled} />;
+          return (
+            <DatePicker
+              value={val as any}
+              onChange={(v) => updateValue(field.name, v)}
+              style={{ width: '100%' }}
+              disabled={fieldDisabled}
+            />
+          );
         case 'time':
-          return <TimePicker value={val as any} onChange={(v) => updateValue(field.name, v)} style={{ width: '100%' }} disabled={fieldDisabled} />;
+          return (
+            <TimePicker
+              value={val as any}
+              onChange={(v) => updateValue(field.name, v)}
+              style={{ width: '100%' }}
+              disabled={fieldDisabled}
+            />
+          );
         case 'datetime':
-          return <DatePicker showTime value={val as any} onChange={(v) => updateValue(field.name, v)} style={{ width: '100%' }} disabled={fieldDisabled} />;
+          return (
+            <DatePicker
+              showTime
+              value={val as any}
+              onChange={(v) => updateValue(field.name, v)}
+              style={{ width: '100%' }}
+              disabled={fieldDisabled}
+            />
+          );
         case 'file':
-          return <Upload disabled={fieldDisabled}><Button>Upload</Button></Upload>;
+          return (
+            <Upload disabled={fieldDisabled}>
+              <Button>Upload</Button>
+            </Upload>
+          );
         case 'color':
-          return <ColorPicker value={val as string} onChange={(_, hex) => updateValue(field.name, hex)} disabled={fieldDisabled} />;
+          return (
+            <ColorPicker
+              value={val as string}
+              onChange={(_, hex) => updateValue(field.name, hex)}
+              disabled={fieldDisabled}
+            />
+          );
         case 'slider':
-          return <Slider value={val as number} onChange={(v) => updateValue(field.name, v)} min={field.validation?.min ?? 0} max={field.validation?.max ?? 100} disabled={fieldDisabled} />;
+          return (
+            <Slider
+              value={val as number}
+              onChange={(v) => updateValue(field.name, v)}
+              min={field.validation?.min ?? 0}
+              max={field.validation?.max ?? 100}
+              disabled={fieldDisabled}
+            />
+          );
         case 'rating':
           return <Rate value={val as number} onChange={(v) => updateValue(field.name, v)} disabled={fieldDisabled} />;
         case 'custom':
           return field.render?.(field, val, (v) => updateValue(field.name, v)) ?? null;
         default:
-          return <Input value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} {...commonProps} />;
+          return (
+            <Input
+              value={(val as string) ?? ''}
+              onChange={(e) => updateValue(field.name, e.target.value)}
+              {...commonProps}
+            />
+          );
       }
     },
     [currentValues, disabled, readOnly, updateValue]
   );
 
-  const visibleFields = useMemo(
-    () => fields.filter((f) => !isHidden(f)),
-    [fields, isHidden]
-  );
+  const visibleFields = useMemo(() => fields.filter((f) => !isHidden(f)), [fields, isHidden]);
 
   // Distribute fields evenly across steps when explicit step assignments are
   // not provided. This auto-grouping lets consumers add a wizard layout by just
@@ -272,18 +381,37 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
       : defaultRender;
     const error = readRecordValue(errors, field.name) as string | undefined;
 
+    const columnSpan = resolveAdaptiveFormFieldColumnSpan({
+      columnSpan: field.colSpan,
+      columns: adaptedColumns,
+      autoAdaptive,
+      isMobile,
+      isTablet,
+    });
+
     return (
       <Form.Item
         key={field.name}
-        label={showLabels && field.type !== 'checkbox' ? (
-          <>
-            {field.label ?? field.name}
-            {showRequired && field.required && <span style={{ color: 'var(--ds-color-danger, #ff4d4f)', marginLeft: 4 }}>*</span>}
-          </>
-        ) : undefined}
+        label={
+          showLabels && field.type !== 'checkbox' ? (
+            <>
+              {field.label ?? field.name}
+              {showRequired && field.required && (
+                <span
+                  style={{
+                    color: 'var(--ds-color-danger, #ff4d4f)',
+                    marginLeft: 4,
+                  }}
+                >
+                  *
+                </span>
+              )}
+            </>
+          ) : undefined
+        }
         help={error || field.description}
         validateStatus={error ? 'error' : undefined}
-        style={adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : undefined}
+        style={adaptedLayout === 'grid' && columnSpan ? { gridColumn: `span ${columnSpan}` } : undefined}
       >
         {content}
       </Form.Item>
@@ -295,7 +423,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
   const formLayout = adaptedLayout === 'horizontal' ? 'horizontal' : 'vertical';
 
   // In step mode, only the current step's fields are rendered.
-  const fieldsToRender = adaptedLayout === 'steps' ? (arrayValueAt(stepFields, currentStep) ?? []) : visibleFields;
+  const fieldsToRender = adaptedLayout === 'steps' ? arrayValueAt(stepFields, currentStep) ?? [] : visibleFields;
 
   const fieldElements = fieldsToRender.map(renderFormField);
 
@@ -303,7 +431,13 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
   // layouts rely on Ant Form's built-in stacking behaviour.
   const wrappedFields =
     adaptedLayout === 'grid' ? (
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`, gap: typeof gap === 'number' ? `${gap}px` : gap }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`,
+          gap: typeof gap === 'number' ? `${gap}px` : gap,
+        }}
+      >
         {fieldElements}
       </div>
     ) : (
@@ -340,7 +474,13 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
       </Form>
 
       {adaptedLayout === 'steps' && stepLabels && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: 16,
+          }}
+        >
           <Button disabled={currentStep === 0} onClick={() => handleStepChange(currentStep - 1)}>
             Previous
           </Button>
