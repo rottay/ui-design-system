@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import React, { act, type CSSProperties } from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createRoot, hydrateRoot, type Root } from 'react-dom/client';
@@ -13,6 +16,10 @@ import { createSvgLineDatumKey } from '../SvgLineDatumKey';
 import { SvgLineRenderer } from '../SvgLineRenderer';
 
 const defaultResizeObserver = globalThis.ResizeObserver;
+const CHART_FOUNDATION_CSS = readFileSync(
+  join(__dirname, '../../../../../../../tokens/css/components/skin/chart-foundation.css'),
+  'utf8',
+);
 
 function measuredRect(width: number, height = 240): DOMRect {
   return {
@@ -457,6 +464,7 @@ describe('React-owned SVG renderers', () => {
 
     fireEvent.pointerOver(screening, { pointerType: 'mouse' });
     const hoverTooltip = screen.getByRole('tooltip');
+    expect(hoverTooltip).toHaveAttribute('data-side', 'bottom');
     fireEvent.pointerOut(screening, {
       pointerType: 'mouse',
       relatedTarget: hoverTooltip,
@@ -489,6 +497,7 @@ describe('React-owned SVG renderers', () => {
     expect(movedTabStops).toHaveLength(1);
     expect(movedTabStops.item(0)).toBe(offer);
     expect(screen.getByRole('tooltip')).toHaveTextContent('0');
+    expect(screen.getByRole('tooltip')).toHaveAttribute('data-side', 'top');
     expect(changes).toHaveBeenLastCalledWith(
       expect.objectContaining({ key: 'offer', datum: expect.objectContaining({ id: 'offer' }) }),
       { input: 'keyboard', reason: 'focus' },
@@ -728,6 +737,46 @@ describe('React-owned SVG renderers', () => {
         }),
       }),
       { input: 'pointer', pointerType: 'mouse', reason: 'action' },
+    );
+  });
+
+  it('keeps static marks inert and preserves redundant forced-color encodings', () => {
+    const { container } = render(
+      <>
+        <SvgBarRenderer
+          ariaLabel="Static bars"
+          responsive={false}
+          data={[{ id: 'bar', category: 'Bar', value: 7 }]}
+        />
+        <SvgLineRenderer
+          ariaLabel="Static lines"
+          responsive={false}
+          series={[
+            { id: 'first', label: 'First', points: [{ id: 'a', x: 'A', value: 1 }] },
+            { id: 'second', label: 'Second', points: [{ id: 'a', x: 'A', value: 2 }] },
+          ]}
+        />
+        <SvgHeatMapRenderer
+          ariaLabel="Static heatmap"
+          responsive={false}
+          data={[{ id: 'cell', column: 'A', row: 'One', value: 3 }]}
+        />
+      </>,
+    );
+
+    expect(container.querySelectorAll('[data-part="chart-renderer"][data-interaction="static"]'))
+      .toHaveLength(3);
+    expect(container.querySelector('[data-part="interaction-target"]')).not.toBeInTheDocument();
+    expect(container.querySelectorAll('[data-part="forced-color-value-label"]')).toHaveLength(2);
+    expect(container.querySelector('[data-series-id="second"]')).toHaveAttribute(
+      'data-series-index',
+      '1',
+    );
+    expect(CHART_FOUNDATION_CSS).toContain(
+      "[data-interaction]:not([data-interaction='static'])\n  [data-part='bar-mark']:hover",
+    );
+    expect(CHART_FOUNDATION_CSS).toContain(
+      "[data-part='line-series'][data-series-index='1'] [data-part='line']",
     );
   });
 });

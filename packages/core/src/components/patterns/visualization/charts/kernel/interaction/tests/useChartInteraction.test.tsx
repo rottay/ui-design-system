@@ -152,7 +152,9 @@ describe('useChartInteraction', () => {
     await waitFor(() => expect(document.activeElement).toBe(d));
 
     fireEvent.keyDown(d, { key: 'Enter' });
+    fireEvent.click(d, { detail: 0 });
     fireEvent.keyDown(d, { key: ' ' });
+    fireEvent.click(d, { detail: 0 });
     expect(action).toHaveBeenCalledTimes(2);
     expect(action).toHaveBeenNthCalledWith(
       1,
@@ -193,6 +195,8 @@ describe('useChartInteraction', () => {
       clientY: 10,
     });
     fireEvent.pointerCancel(beta, { pointerType: 'touch', pointerId: 8 });
+    fireEvent.click(beta, { detail: 1 });
+    fireEvent.pointerDown(beta, { pointerType: 'mouse', pointerId: 9, button: 2 });
     fireEvent.click(beta, { detail: 1 });
     expect(action).toHaveBeenCalledTimes(1);
   });

@@ -459,6 +459,10 @@ export function useChartInteraction<TDatum>({
     readonly clientX: number;
     readonly clientY: number;
   } | null>(null);
+  const lastKeyboardActionRef = useRef<{
+    readonly key: string;
+    readonly timestamp: number;
+  } | null>(null);
 
   const controlled = interactive && interaction.activeKey !== undefined;
   const controlledActiveKey = controlled && interaction.activeKey !== null
@@ -570,6 +574,8 @@ export function useChartInteraction<TDatum>({
   }, []);
 
   const reset = useCallback((meta: ChartInteractionMeta = PROGRAMMATIC_ESCAPE) => {
+    pointerActivationRef.current = null;
+    lastKeyboardActionRef.current = null;
     updateHoverKey(null);
     updatePinnedKey(null);
     commitActive(null, meta);
@@ -629,6 +635,7 @@ export function useChartInteraction<TDatum>({
       && event.currentTarget.contains(event.relatedTarget)
     ) return;
 
+    pointerActivationRef.current = null;
     updateFocusKey(null);
     updatePinnedKey(null);
     commitActive(hoverKeyRef.current, { input: 'keyboard', reason: 'focus' });
@@ -671,6 +678,10 @@ export function useChartInteraction<TDatum>({
 
   const handlePointerDown = useCallback((event: ReactPointerEvent<Element>) => {
     rootElementRef.current = event.currentTarget;
+    if (event.button !== 0) {
+      pointerActivationRef.current = null;
+      return;
+    }
     const key = pointerDatumKey(event, normalizedItems, navigation);
     const resolvedPointerType = pointerType(event.pointerType);
     if (!key || !itemByKeyRef.current.has(key)) {
@@ -739,6 +750,16 @@ export function useChartInteraction<TDatum>({
     const pointerActivation = activation?.key === key ? activation : null;
     const synthesizedActivation = !pointerActivation && event.detail === 0;
     if (!pointerActivation && !synthesizedActivation) return;
+    if (synthesizedActivation) {
+      const lastKeyboardAction = lastKeyboardActionRef.current;
+      lastKeyboardActionRef.current = null;
+      if (
+        lastKeyboardAction?.key === key
+        && Date.now() - lastKeyboardAction.timestamp < 500
+      ) return;
+    } else {
+      lastKeyboardActionRef.current = null;
+    }
 
     if (interaction.mode === 'explore') {
       if (!pointerActivation) return;
@@ -803,6 +824,7 @@ export function useChartInteraction<TDatum>({
       event.preventDefault();
       const item = itemByKeyRef.current.get(currentKey);
       if (!item) return;
+      lastKeyboardActionRef.current = { key: currentKey, timestamp: Date.now() };
       updatePinnedKey(null);
       updateHoverKey(null);
       commitActive(currentKey, { input: 'keyboard', reason: 'action' });

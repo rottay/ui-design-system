@@ -89,10 +89,13 @@ export function ChartRendererSurface({
   const tooltipXPercent = tooltipAnchor && width > 0
     ? Math.min(100, Math.max(0, (tooltipAnchor.x / width) * 100))
     : 0;
+  const tooltipYPercent = tooltipAnchor && height > 0
+    ? Math.min(100, Math.max(0, (tooltipAnchor.y / height) * 100))
+    : 0;
   const tooltipPosition: ChartTooltipPositionStyle | undefined = tooltipAnchor && width > 0 && height > 0
     ? {
         '--ds-chart-tooltip-x': `${tooltipXPercent}%`,
-        '--ds-chart-tooltip-y': `${Math.min(100, Math.max(0, (tooltipAnchor.y / height) * 100))}%`,
+        '--ds-chart-tooltip-y': `${tooltipYPercent}%`,
       }
     : undefined;
 
@@ -135,12 +138,13 @@ export function ChartRendererSurface({
         {ariaDescription ? <desc id={descriptionId}>{ariaDescription}</desc> : null}
         {children}
       </svg>
-      {hasTooltip && tooltipId && tooltipKey ? (
+      {hasTooltip && tooltipId && tooltipKey !== undefined ? (
         <div
           id={tooltipId}
           data-part="interaction-tooltip"
           data-chart-tooltip-key={tooltipKey}
           data-align={tooltipXPercent < 20 ? 'start' : tooltipXPercent > 80 ? 'end' : 'center'}
+          data-side={tooltipYPercent < 24 ? 'bottom' : 'top'}
           role="tooltip"
           style={tooltipPosition}
         >
