@@ -3735,7 +3735,14 @@ function installPackedConsumer({ consumerRoot, tarball, packedManifest, producer
 export async function auditPackedArtifact(root = coreRoot) {
   assertPackedBuildPrerequisite(root);
 
-  const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-dependency-honesty-'));
+  // pnpm encodes local tarball paths into store filenames. Darwin's default
+  // TMPDIR lives under a long `/var/folders/...` prefix, which can push those
+  // filenames beyond the filesystem component limit even though the package
+  // graph itself is valid. Keep this offline fixture short and isolated.
+  const temporaryBase = process.platform === 'darwin' && existsSync('/tmp')
+    ? '/tmp'
+    : tmpdir();
+  const temporaryRoot = mkdtempSync(resolve(temporaryBase, 'rds-pack-'));
   try {
     const packDir = resolve(temporaryRoot, 'pack');
     const extractDir = resolve(temporaryRoot, 'extract');
