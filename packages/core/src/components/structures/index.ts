@@ -32,5 +32,8 @@ export type {
   ShellSidebarSlots,
   ShellHeaderSlots,
   ShellGeometry,
+  ShellInset,
+  ShellInsetByPosture,
+  ShellPosture,
   ShellContextValue,
 } from './shell';

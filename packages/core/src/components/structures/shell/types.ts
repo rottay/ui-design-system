@@ -5,7 +5,8 @@
  * - Sidebar geometry (width, collapsed width, transitions)
  * - Header chrome (sticky, height, backdrop)
  * - Content offset and padding
- * - Mobile responsive behavior (overlay sidebar)
+ * - Phone/tablet responsive behavior (accessible overlay navigation)
+ * - Safe-area and bottom-navigation insets
  *
  * The consuming app provides slot content for:
  * - Sidebar: logo, navigation menu, user footer
@@ -14,6 +15,15 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
+
+/** Canonical shell posture derived from the shared responsive authority. */
+export type ShellPosture = 'phone' | 'tablet' | 'desktop';
+
+/** CSS length accepted by shell inset contracts. Numbers are interpreted as px. */
+export type ShellInset = number | string;
+
+/** Optional per-posture fixed-chrome insets. Missing tiers fall back to safe-area. */
+export type ShellInsetByPosture = Partial<Record<ShellPosture, ShellInset>>;
 
 // ---------------------------------------------------------------------------
 // Sidebar slots
@@ -26,6 +36,8 @@ export interface ShellSidebarSlots {
   nav?: ReactNode;
   /** User profile card at the bottom of the sidebar. */
   footer?: ReactNode;
+  /** Accessible name for compact navigation and its trigger. @default 'Navigation' */
+  navigationLabel?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -56,6 +68,16 @@ export interface ShellGeometry {
   sidebarHeaderHeight?: number;
   /** Collapse transition. @default '220ms cubic-bezier(0.16, 1, 0.3, 1)' */
   collapseTransition?: string;
+  /**
+   * Total fixed chrome inset at the viewport bottom. AppShell publishes it as
+   * `--ds-shell-bottom-inset` and reserves it exactly once around the main area.
+   * It may be one value for every posture or a posture map. Missing posture
+   * entries fall back to the device safe area. Include the safe area when
+   * composing a bottom navigation value, for example
+   * `{ phone: 'calc(58px + env(safe-area-inset-bottom, 0px))' }`.
+   * @default 'env(safe-area-inset-bottom, 0px)'
+   */
+  bottomInset?: ShellInset | ShellInsetByPosture;
 }
 
 // ---------------------------------------------------------------------------
@@ -103,4 +125,5 @@ export const SHELL_DEFAULTS = {
   headerHeight: 64,
   sidebarHeaderHeight: 104,
   collapseTransition: '220ms cubic-bezier(0.16, 1, 0.3, 1)',
+  bottomInset: 'env(safe-area-inset-bottom, 0px)',
 } as const;
