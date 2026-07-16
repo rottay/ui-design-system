@@ -35,6 +35,11 @@
       "import": "./dist/marks.js",
       "require": "./dist/marks.cjs"
     },
+    "./pictograms": {
+      "types": "./dist/pictograms.d.ts",
+      "import": "./dist/pictograms.js",
+      "require": "./dist/pictograms.cjs"
+    },
     "./charts": {
       "types": "./dist/charts.d.ts",
       "import": "./dist/charts.js",
@@ -191,6 +196,7 @@
     "sourceEntrypoints": {
       "./icons": "icon-entry.ts",
       "./marks": "mark-entry.ts",
+      "./pictograms": "pictogram-entry.ts",
       "./charts": "chart-entry.ts",
       "./charts/spec": "chart-spec-entry.ts",
       "./charts/access": "chart-access-entry.ts",

@@ -46,6 +46,7 @@ export default defineConfig({
         server: resolve(__dirname, 'src/server.ts'),
         icons: resolve(__dirname, 'src/icon-entry.ts'),
         marks: resolve(__dirname, 'src/mark-entry.ts'),
+        pictograms: resolve(__dirname, 'src/pictogram-entry.ts'),
         charts: resolve(__dirname, 'src/chart-entry.ts'),
         'chart-spec': resolve(__dirname, 'src/chart-spec-entry.ts'),
         'chart-access': resolve(__dirname, 'src/chart-access-entry.ts'),
