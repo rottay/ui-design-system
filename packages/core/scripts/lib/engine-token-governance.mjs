@@ -19,7 +19,7 @@ export const ENGINE_TOKEN_MINIMUM = Object.freeze({
   'effects.gradientConsumers': 1,
   'effects.glassConsumers': 1,
   'effects.glowConsumers': 1,
-  'fleet.inlinePaint.filesScanned': 769,
-  'runtimeSvgPaint.filesScanned': 1047,
-  'embeddedCssPaint.filesScanned': 1047,
+  'fleet.inlinePaint.filesScanned': 784,
+  'runtimeSvgPaint.filesScanned': 1062,
+  'embeddedCssPaint.filesScanned': 1062,
 });

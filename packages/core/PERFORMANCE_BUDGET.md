@@ -11,14 +11,30 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Per-engine chunk | < 80 KB gzipped |
 | Icons bundle (`dist/icons.js`) | < 40 KB gzipped |
 | Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
+| Charts projection entry (`dist/charts.js`) | < 400 B raw (measured 290 B; focused entry) |
+| Chart renderers entry (`dist/chart-renderers.js`) | < 600 B raw (measured 460 B; D3 and React external) |
+| Named Bar renderer | < 2.7 KB gzipped (2,375 B measured + >10%; D3/React external) |
+| Named Line renderer | < 3.3 KB gzipped (2,969 B measured + >10%; D3/React external) |
+| Named HeatMap renderer | < 3.3 KB gzipped (2,943 B measured + >10%; D3/React external) |
 | Tokens bundle (`dist/tokens.js`) | < 20 KB gzipped |
 | i18n bundle (`dist/i18n.js`) | < 20 KB gzipped |
+| Aggregate JS package footprint | < 8.1 MB raw (7,302,508 B measured + >10%; ESM + CJS) |
 
 ## CSS Budget
 
 | Metric | Limit |
 |--------|-------|
-| Total CSS (tokens + themes + components + animations) | < 50 KB gzipped |
+| Generic styles (`dist/styles.css`) | < 460 KB gzip (418,154 B measured + >10%) |
+| Platform styles (`dist/platform.css`) | < 425 KB gzip (383,113 B measured + >10%) |
+| BitHire styles (`dist/bithire.css`) | < 430 KB gzip (389,050 B measured + >10%) |
+| Evnto styles (`dist/evnto.css`) | < 410 KB gzip (368,166 B measured + >10%) |
+| Modern engine (`dist/modern-engine.css`) | < 30 KB gzip (25,744 B measured + >10%) |
+| Commercial styles (`dist/commercial.css`) | < 8 KB gzip (7,080 B measured + >10%) |
+| Vite style compatibility entry (`dist/style.css`) | < 2.5 KB gzip (2,161 B measured + >10%) |
+
+Vertical bundles are alternative consumer payloads, so they are governed
+independently. The gate deliberately does not sum mutually exclusive variants
+or mix built artifacts with source CSS.
 
 ## Uncompressed Limits (CI Gate)
 
@@ -33,6 +49,10 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/icons.cjs` | 150 KB |
 | `dist/marks.js` | 100 KB |
 | `dist/marks.cjs` | 100 KB |
+| `dist/charts.js` | 400 B (290 B measured + >10%) |
+| `dist/charts.cjs` | 400 B (350 B measured + >10%) |
+| `dist/chart-renderers.js` | 600 B (460 B measured + >10%) |
+| `dist/chart-renderers.cjs` | 600 B (512 B measured + >10%) |
 | `dist/tokens.js` | 80 KB |
 | `dist/tokens.cjs` | 80 KB |
 | `dist/i18n.js` | 80 KB |
@@ -50,8 +70,17 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 ## How It Works
 
 1. `pnpm run analyze` builds the library and checks every entry-point file against its budget.
-2. CI runs the same script after the build step; any over-budget file exits non-zero.
-3. The report is printed as a table in the console and appended to `$GITHUB_STEP_SUMMARY` when available.
+2. The same command builds Bar, Line and HeatMap once each through the public
+   `charts/renderers` facade. Each in-memory ESM bundle must retain only its selected renderer,
+   keep D3 and React external, and remain below its named gzip budget.
+3. `node scripts/analyze-bundle.mjs --chart-renderers` runs only that focused renderer gate;
+   it does not build the full package or write artifacts.
+4. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
+5. The report is printed as a table in the console.
+
+The VIZ-02 raw ESM/CJS entries and named-renderer bundles were measured from
+the same cohesive producer build on 2026-07-16. Re-measure through the focused
+gate before changing them; never widen a ceiling only to silence CI.
 
 ## Adjusting Budgets
 

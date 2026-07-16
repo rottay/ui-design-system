@@ -2172,10 +2172,6 @@
         "useChartCompact": [
           "motion"
         ],
-        "useChartDimensions": [
-          "antd",
-          "motion"
-        ],
         "useChartPersonality": [
           "antd",
           "motion"
@@ -2722,6 +2718,7 @@
         "useAriaAnnounce",
         "useAutoSave",
         "useChartBrush",
+        "useChartDimensions",
         "useChartExport",
         "useChartTooltip",
         "useChat",
@@ -4230,6 +4227,25 @@
         "ChartFrame",
         "resolveChartProjection"
       ]
+    },
+    "./charts/renderers": {
+      "exports": [
+        "SvgBarRenderer",
+        "SvgHeatMapRenderer",
+        "SvgLineRenderer"
+      ],
+      "symbols": {
+        "SvgBarRenderer": [
+          "d3"
+        ],
+        "SvgHeatMapRenderer": [
+          "d3"
+        ],
+        "SvgLineRenderer": [
+          "d3"
+        ]
+      },
+      "supplierFreeExports": []
     },
     "./eslint": {
       "exports": [

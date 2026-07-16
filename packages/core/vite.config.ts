@@ -47,6 +47,7 @@ export default defineConfig({
         icons: resolve(__dirname, 'src/icon-entry.ts'),
         marks: resolve(__dirname, 'src/mark-entry.ts'),
         charts: resolve(__dirname, 'src/chart-entry.ts'),
+        'chart-renderers': resolve(__dirname, 'src/chart-renderers-entry.ts'),
         eslint: resolve(__dirname, 'src/eslint.ts'),
         commercial: resolve(__dirname, 'src/commercial.ts'),
         // Only real package.json exports are listed as entries.

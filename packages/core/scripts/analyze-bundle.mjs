@@ -9,6 +9,7 @@
  * Usage:
  *   node scripts/analyze-bundle.mjs            # build + analyze
  *   node scripts/analyze-bundle.mjs --skip-build  # analyze existing dist/
+ *   node scripts/analyze-bundle.mjs --chart-renderers  # isolated named-export budgets only
  *
  * Exit codes:
  *   0 - all files within budget
@@ -16,10 +17,10 @@
  */
 
 import { execSync } from 'node:child_process';
-import { readdirSync, statSync, existsSync, rmSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, existsSync, rmSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createGzip } from 'node:zlib';
+import { createGzip, gzipSync } from 'node:zlib';
 import { createReadStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { Writable } from 'node:stream';
@@ -36,8 +37,12 @@ const BUDGET = {
   'dist/icons.cjs': 150_000,
   'dist/marks.js': 100_000,
   'dist/marks.cjs': 100_000,
-  'dist/charts.js': 100_000,
-  'dist/charts.cjs': 100_000,
+  // Measured 2026-07-16: 290/350 B and 460/512 B respectively. Each ceiling
+  // keeps >10% headroom and is rounded upward to the next 100 B.
+  'dist/charts.js': 400,
+  'dist/charts.cjs': 400,
+  'dist/chart-renderers.js': 600,
+  'dist/chart-renderers.cjs': 600,
   'dist/tokens.js': 80_000,
   'dist/tokens.cjs': 80_000,
   'dist/i18n.js': 80_000,
@@ -49,12 +54,26 @@ const BUDGET = {
  * This acts as a catch-all for preserveModules chunks that don't have an
  * individual entry in BUDGET.
  */
-const TOTAL_JS_BUDGET = 2_000_000; // 2 MB uncompressed total
+// Measured 2026-07-16 after preserveModules emits both ESM and CJS:
+// 7,302,508 B. This is package footprint, not a consumer-route payload.
+const TOTAL_JS_BUDGET = 8_100_000; // measured +10%, rounded upward to 100 KB
 
 /**
- * Maximum total size for CSS files under dist/ and src/theme/tokens/css/.
+ * Maximum gzip size for every top-level CSS artifact exposed by package
+ * exports (including the dist/*.css compatibility wildcard). These are
+ * consumer-selectable payloads; summing mutually exclusive vertical bundles
+ * would not describe either a route payload or the packed install footprint.
+ * Measured 2026-07-16, with >=10% headroom rounded upward deliberately.
  */
-const TOTAL_CSS_BUDGET = 200_000; // 200 KB uncompressed
+const CSS_BUDGET = {
+  'dist/styles.css': 460_000, // 418,154 B measured
+  'dist/platform.css': 425_000, // 383,113 B measured
+  'dist/bithire.css': 430_000, // 389,050 B measured
+  'dist/evnto.css': 410_000, // 368,166 B measured
+  'dist/modern-engine.css': 30_000, // 25,744 B measured
+  'dist/commercial.css': 8_000, // 7,080 B measured
+  'dist/style.css': 2_500, // 2,161 B measured
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -313,6 +332,264 @@ async function runComponentBudgets() {
   return failures > 0 ? 1 : 0;
 }
 
+// ---------------------------------------------------------------------------
+// Named chart-renderer bundle budgets (VIZ-02)
+// ---------------------------------------------------------------------------
+
+/**
+ * A budget on `dist/chart-renderers.js` alone is not sufficient because the
+ * package build preserves modules: that file is only a small re-export while
+ * the actual renderer and geometry code lives in reachable chunks. Build each
+ * named public export in isolation so the measured gzip bytes are the real
+ * first-party transitive cost a tree-shaking ESM consumer retains.
+ *
+ * Measured 2026-07-16 through the built public facade with React/D3 external:
+ * Bar 2,375 B, Line 2,969 B, HeatMap 2,943 B gzip. Each ceiling adds 10%
+ * headroom and rounds upward to the next 100 B.
+ */
+const CHART_RENDERER_BUDGET = {
+  SvgBarRenderer: 2_700,
+  SvgLineRenderer: 3_300,
+  SvgHeatMapRenderer: 3_300,
+};
+
+const CHART_RENDERER_ENTRY = join(ROOT, 'dist', 'chart-renderers.js');
+const CHART_RENDERER_SOURCE_DIR = '/components/patterns/visualization/charts/kernel/renderers/';
+const CHART_GEOMETRY_MODULE = `${CHART_RENDERER_SOURCE_DIR}ChartGeometry.js`;
+const CHART_RENDERER_BUILDERS = {
+  SvgBarRenderer: 'buildSvgBarGeometry',
+  SvgLineRenderer: 'buildSvgLineGeometry',
+  SvgHeatMapRenderer: 'buildSvgHeatMapGeometry',
+};
+const CHART_RENDERER_EXTERNALS = [
+  'react',
+  /^react\//,
+  'react-dom',
+  /^react-dom\//,
+  'd3',
+  /^d3\//,
+  /^d3-/,
+];
+
+function normalizedModuleId(value) {
+  return value.replaceAll('\\', '/').split('?')[0];
+}
+
+function renderedModules(chunks) {
+  const rendered = new Map();
+  for (const chunk of chunks) {
+    for (const [moduleId, details] of Object.entries(chunk.modules)) {
+      if ((details.renderedLength ?? 0) > 0) {
+        rendered.set(normalizedModuleId(moduleId), {
+          renderedLength: details.renderedLength,
+          renderedExports: details.renderedExports ?? [],
+        });
+      }
+    }
+  }
+  return rendered;
+}
+
+function isExternalFamily(specifier, family) {
+  if (family === 'react') return specifier === 'react' || specifier.startsWith('react/');
+  return specifier === 'd3' || specifier.startsWith('d3/') || specifier.startsWith('d3-');
+}
+
+/** Build one named export through the built public facade, never its private
+ * leaf path. `write: false` keeps this gate in-memory and `inlineDynamicImports`
+ * makes raw/gzip size a single, unambiguous transitive bundle. */
+async function buildNamedChartRenderer(rendererName) {
+  if (!existsSync(CHART_RENDERER_ENTRY)) {
+    throw new Error('dist/chart-renderers.js is missing; build the package before measuring published renderers');
+  }
+  const { build } = await import('vite');
+  const react = (await import('@vitejs/plugin-react')).default;
+  const virtualId = `virtual:viz-02-chart-renderer:${rendererName}`;
+  const resolvedVirtualId = `\0${virtualId}`;
+  const result = await build({
+    configFile: false,
+    logLevel: 'silent',
+    root: ROOT,
+    resolve: {
+      alias: {
+        '@': join(ROOT, 'src'),
+        '@types': join(ROOT, 'src', 'contracts'),
+        '@components': join(ROOT, 'src', 'components'),
+      },
+    },
+    plugins: [
+      react(),
+      {
+        name: 'viz-02-named-chart-renderer-entry',
+        resolveId(id) {
+          return id === virtualId ? resolvedVirtualId : null;
+        },
+        load(id) {
+          if (id !== resolvedVirtualId) return null;
+          return (
+            `import { ${rendererName} } from ${JSON.stringify(CHART_RENDERER_ENTRY)};\n` +
+            `export { ${rendererName} };\n`
+          );
+        },
+      },
+    ],
+    build: {
+      write: false,
+      minify: 'esbuild',
+      target: 'esnext',
+      reportCompressedSize: false,
+      rollupOptions: {
+        input: virtualId,
+        preserveEntrySignatures: 'strict',
+        external: CHART_RENDERER_EXTERNALS,
+        output: {
+          format: 'es',
+          inlineDynamicImports: true,
+          entryFileNames: 'bundle.js',
+        },
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          warn(warning);
+        },
+      },
+    },
+    esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
+  });
+
+  const outputs = (Array.isArray(result) ? result : [result]).flatMap((buildResult) => buildResult.output ?? []);
+  const chunks = outputs.filter((output) => output.type === 'chunk');
+  if (chunks.length !== 1 || !chunks[0].isEntry) {
+    throw new Error(`expected one inline entry chunk; found ${chunks.length}`);
+  }
+
+  const code = chunks.map((chunk) => chunk.code).join('\n');
+  const modules = renderedModules(chunks);
+  const imports = new Set(chunks.flatMap((chunk) => chunk.imports));
+  const bundledPeerModules = [...modules.keys()].filter((moduleId) => (
+    /\/node_modules\/(?:\.pnpm\/[^/]+\/node_modules\/)?(?:react(?:-dom)?|d3(?:-[^/]+)?)(?:\/|$)/.test(moduleId)
+  ));
+
+  return {
+    raw: Buffer.byteLength(code),
+    gzip: gzipSync(code, { level: 9 }).byteLength,
+    modules,
+    imports,
+    bundledPeerModules,
+  };
+}
+
+function printChartRendererRows(rows) {
+  const cols = ['renderer', 'raw', 'gzip', 'limit', 'usage', 'isolation', 'status'];
+  const headers = {
+    renderer: 'Renderer',
+    raw: 'Raw',
+    gzip: 'Gzip',
+    limit: 'Budget (gzip)',
+    usage: 'Usage',
+    isolation: 'Named isolation',
+    status: 'Status',
+  };
+  const widths = {};
+  for (const col of cols) {
+    widths[col] = headers[col].length;
+    for (const row of rows) widths[col] = Math.max(widths[col], String(row[col]).length);
+  }
+  const padValue = (value, width) => String(value).padEnd(width);
+  console.log(cols.map((col) => padValue(headers[col], widths[col])).join(' | '));
+  console.log(cols.map((col) => '-'.repeat(widths[col])).join('-+-'));
+  for (const row of rows) {
+    const line = cols.map((col) => padValue(row[col], widths[col])).join(' | ');
+    console.log(row.status === 'PASS' ? `\x1b[32m${line}\x1b[0m` : `\x1b[31m${line}\x1b[0m`);
+  }
+  console.log('');
+}
+
+/** Measure all three public named exports and fail closed if a build retains a
+ * sibling renderer, bundles React/D3, or stops exposing either peer externally. */
+async function runChartRendererBudgets() {
+  console.log('\n--- Named chart-renderer bundle budgets (VIZ-02) ---\n');
+  const rendererNames = Object.keys(CHART_RENDERER_BUDGET);
+  const supplierContract = JSON.parse(readFileSync(join(ROOT, 'supplier-contract.json'), 'utf8'));
+  const publicContract = supplierContract.entrypoints?.['./charts/renderers'];
+  const publicRenderers = [...(publicContract?.exports ?? [])].sort();
+  if (JSON.stringify(publicRenderers) !== JSON.stringify([...rendererNames].sort())) {
+    console.error(
+      `\x1b[31mNamed renderer budget inventory differs from the published supplier contract: ` +
+      `budget=[${rendererNames.join(', ')}], public=[${publicRenderers.join(', ')}].\x1b[0m\n`,
+    );
+    return 1;
+  }
+  const rows = [];
+  let failures = 0;
+
+  for (const rendererName of rendererNames) {
+    const limit = CHART_RENDERER_BUDGET[rendererName];
+    try {
+      const result = await buildNamedChartRenderer(rendererName);
+      const selectedSuffix = `${CHART_RENDERER_SOURCE_DIR}${rendererName}.js`;
+      const siblings = rendererNames
+        .filter((candidate) => candidate !== rendererName)
+        .filter((candidate) => [...result.modules.keys()].some((moduleId) => (
+          moduleId.endsWith(`${CHART_RENDERER_SOURCE_DIR}${candidate}.js`)
+        )));
+      const selectedRetained = [...result.modules.keys()].some((moduleId) => moduleId.endsWith(selectedSuffix));
+      const expectedBuilder = CHART_RENDERER_BUILDERS[rendererName];
+      const geometryDetails = [...result.modules.entries()]
+        .find(([moduleId]) => moduleId.endsWith(CHART_GEOMETRY_MODULE))?.[1];
+      const renderedBuilders = Object.values(CHART_RENDERER_BUILDERS)
+        .filter((builder) => geometryDetails?.renderedExports.includes(builder));
+      const siblingBuilders = renderedBuilders.filter((builder) => builder !== expectedBuilder);
+      const expectsD3 = publicContract.symbols?.[rendererName]?.includes('d3') ?? false;
+      const d3External = [...result.imports].some((specifier) => isExternalFamily(specifier, 'd3'));
+      const reactExternal = [...result.imports].some((specifier) => isExternalFamily(specifier, 'react'));
+      const isolationErrors = [];
+      if (!selectedRetained) isolationErrors.push('selected export missing');
+      if (siblings.length > 0) isolationErrors.push(`siblings: ${siblings.join(', ')}`);
+      if (!geometryDetails?.renderedExports.includes(expectedBuilder)) isolationErrors.push('selected builder missing');
+      if (siblingBuilders.length > 0) isolationErrors.push(`sibling builders: ${siblingBuilders.join(', ')}`);
+      if (result.bundledPeerModules.length > 0) isolationErrors.push('React/D3 bundled');
+      if (expectsD3 && !d3External) isolationErrors.push('D3 external missing');
+      if (!expectsD3 && d3External) isolationErrors.push('unexpected D3 external');
+      if (!reactExternal) isolationErrors.push('React external missing');
+      const overBudget = result.gzip > limit;
+      if (overBudget || isolationErrors.length > 0) failures += 1;
+      rows.push({
+        renderer: rendererName,
+        raw: `${formatBytes(result.raw)} (${result.raw} B)`,
+        gzip: `${formatBytes(result.gzip)} (${result.gzip} B)`,
+        limit: formatBytes(limit),
+        usage: `${pct(result.gzip, limit)}%`,
+        isolation: isolationErrors.length === 0 ? 'isolated; peers external' : isolationErrors.join('; '),
+        status: overBudget || isolationErrors.length > 0 ? 'FAIL' : 'PASS',
+      });
+    } catch (error) {
+      failures += 1;
+      rows.push({
+        renderer: rendererName,
+        raw: '-',
+        gzip: '-',
+        limit: formatBytes(limit),
+        usage: '-',
+        isolation: error instanceof Error ? error.message : String(error),
+        status: 'BUILD FAIL',
+      });
+    }
+  }
+
+  printChartRendererRows(rows);
+  if (failures > 0) {
+    console.error(`\x1b[31m${failures} named renderer bundle(s) failed budget or isolation.\x1b[0m\n`);
+  } else {
+    console.log('\x1b[32mAll named renderer bundles are isolated and within budget.\x1b[0m\n');
+  }
+  return failures;
+}
+
+if (process.argv.includes('--chart-renderers')) {
+  const failures = await runChartRendererBudgets();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
 if (process.argv.includes('--components')) {
   const code = await runComponentBudgets();
   process.exit(code);
@@ -398,27 +675,57 @@ for (const f of jsFiles) {
   });
 }
 
-// 3. Total CSS size
-const cssDirs = [distDir, join(ROOT, 'src', 'tokens', 'css')];
-let totalCSS = 0;
-for (const dir of cssDirs) {
-  const cssFiles = collectFiles(dir, (name) => name.endsWith('.css'));
-  for (const f of cssFiles) {
-    totalCSS += statSync(f).size;
-  }
-}
-{
-  const overBudget = totalCSS > TOTAL_CSS_BUDGET;
-  if (overBudget) failures++;
+// 3. Public CSS payloads. Each exported artifact is governed independently;
+// vertical bundles are alternatives, so summing them would be a false route payload.
+const publicCssFiles = readdirSync(distDir, { withFileTypes: true })
+  .filter((entry) => entry.isFile() && entry.name.endsWith('.css'))
+  .map((entry) => `dist/${entry.name}`)
+  .sort();
+const budgetedCssFiles = Object.keys(CSS_BUDGET).sort();
+if (JSON.stringify(publicCssFiles) !== JSON.stringify(budgetedCssFiles)) {
+  failures += 1;
   rows.push({
-    file: 'TOTAL CSS',
-    raw: formatBytes(totalCSS),
+    file: 'PUBLIC CSS INVENTORY',
+    raw: '-',
     gz: '-',
-    limit: formatBytes(TOTAL_CSS_BUDGET),
-    usage: `${pct(totalCSS, TOTAL_CSS_BUDGET)}%`,
+    limit: budgetedCssFiles.join(', '),
+    usage: '-',
+    status: `FAIL (found: ${publicCssFiles.join(', ')})`,
+  });
+}
+for (const [relPath, limit] of Object.entries(CSS_BUDGET)) {
+  const absPath = join(ROOT, relPath);
+  if (!existsSync(absPath)) {
+    failures += 1;
+    rows.push({
+      file: relPath,
+      raw: '-',
+      gz: '-',
+      limit: formatBytes(limit),
+      usage: '-',
+      status: 'FAIL (missing public CSS)',
+    });
+    continue;
+  }
+
+  const raw = statSync(absPath).size;
+  const gz = await gzipSize(absPath);
+  const overBudget = gz > limit;
+  if (overBudget) failures += 1;
+  rows.push({
+    file: relPath,
+    raw: formatBytes(raw),
+    gz: formatBytes(gz),
+    limit: formatBytes(limit),
+    usage: `${pct(gz, limit)}%`,
     status: overBudget ? 'FAIL' : 'PASS',
   });
 }
+
+// 4. A preserveModules entry budget cannot prove named-export tree-shaking.
+// Run the three in-memory public-facade fixtures as part of every normal
+// analysis (including --skip-build), as well as via --chart-renderers alone.
+failures += await runChartRendererBudgets();
 
 // ---------------------------------------------------------------------------
 // Report

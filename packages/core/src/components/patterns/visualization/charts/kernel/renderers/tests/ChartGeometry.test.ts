@@ -1,0 +1,166 @@
+import { describe, expect, it } from 'vitest';
+
+import {
+  buildSvgBarGeometry,
+  buildSvgHeatMapGeometry,
+  buildSvgLineGeometry,
+} from '../ChartGeometry';
+
+describe('React-owned chart geometry', () => {
+  it('keeps the bar baseline between negative and positive marks', () => {
+    const geometry = buildSvgBarGeometry({
+      width: 480,
+      height: 280,
+      data: [
+        { id: 'loss', category: 'Loss', value: -20 },
+        { id: 'gain', category: 'Gain', value: 40 },
+        { id: 'invalid', category: 'Invalid', value: Number.NaN },
+      ],
+    });
+
+    const loss = geometry.bars.find((bar) => bar.id === 'loss');
+    const gain = geometry.bars.find((bar) => bar.id === 'gain');
+
+    expect(geometry.bars).toHaveLength(2);
+    expect(loss).toBeDefined();
+    expect(gain).toBeDefined();
+    expect(loss?.y).toBe(geometry.baseline);
+    expect((loss?.y ?? 0) + (loss?.height ?? 0)).toBeGreaterThan(geometry.baseline);
+    expect(gain?.y).toBeLessThan(geometry.baseline);
+    expect((gain?.y ?? 0) + (gain?.height ?? 0)).toBe(geometry.baseline);
+  });
+
+  it('builds deterministic series paths without retaining invalid points', () => {
+    const options = {
+      width: 560,
+      height: 300,
+      xType: 'category' as const,
+      curve: 'smooth' as const,
+      showArea: true,
+      series: [
+        {
+          id: 'revenue',
+          label: 'Revenue',
+          points: [
+            { id: 'jan', x: 'Jan', value: 10 },
+            { id: 'feb', x: 'Feb', value: 25 },
+            { id: 'bad', x: 'Mar', value: Number.POSITIVE_INFINITY },
+          ],
+        },
+      ],
+    };
+
+    const first = buildSvgLineGeometry(options);
+    const second = buildSvgLineGeometry(options);
+
+    expect(first).toEqual(second);
+    expect(first.series[0]?.points).toHaveLength(2);
+    expect(first.series[0]?.path).toMatch(/^M/);
+    expect(first.series[0]?.areaPath).toMatch(/^M/);
+  });
+
+  it('uses bounded UTC ticks and rejects timezone-ambiguous timestamps', () => {
+    const geometry = buildSvgLineGeometry({
+      width: 560,
+      height: 300,
+      xType: 'time',
+      maxTicks: 4,
+      series: [{
+        id: 'activity',
+        label: 'Activity',
+        points: [
+          { id: 'start', x: '2026-01-01', value: 1 },
+          { id: 'end', x: '2026-01-02T00:00:00Z', value: 2 },
+          { id: 'ambiguous', x: '2026-01-01T12:00:00', value: 99 },
+          { id: 'outside-date', x: Number.MAX_VALUE, value: 99 },
+        ],
+      }],
+    });
+
+    expect(geometry.series[0]?.points.map((point) => point.id)).toEqual(['start', 'end']);
+    expect(geometry.xTicks.length).toBeLessThanOrEqual(4);
+    expect(new Set(geometry.xTicks.map((tick) => tick.label)).size)
+      .toBe(geometry.xTicks.length);
+    expect(geometry.xTicks.every((tick) => tick.label.endsWith('Z'))).toBe(true);
+  });
+
+  it('bounds ticks and plot geometry even with dense categories and oversized insets', () => {
+    const geometry = buildSvgBarGeometry({
+      width: 120,
+      height: 80,
+      maxTicks: 3,
+      insets: { top: 200, right: 200, bottom: 200, left: 200 },
+      data: Array.from({ length: 12 }, (_, index) => ({
+        id: `bar-${index}`,
+        category: `Category ${index}`,
+        value: index,
+      })),
+    });
+
+    expect(geometry.categoryTicks.length).toBeLessThanOrEqual(3);
+    expect(geometry.valueTicks.length).toBeLessThanOrEqual(3);
+    expect(geometry.plot.x).toBeLessThanOrEqual(geometry.width);
+    expect(geometry.plot.y).toBeLessThanOrEqual(geometry.height);
+    expect(geometry.plot.x + geometry.plot.width).toBeLessThanOrEqual(geometry.width);
+    expect(geometry.plot.y + geometry.plot.height).toBeLessThanOrEqual(geometry.height);
+  });
+
+  it('returns distinct monotonic provider-resolved heatmap fills', () => {
+    const geometry = buildSvgHeatMapGeometry({
+      width: 420,
+      height: 240,
+      colorRange: ['#102030', '#90a0b0'],
+      data: [
+        { id: 'low', column: 'Low', row: 'Only', value: 0 },
+        { id: 'mid', column: 'Mid', row: 'Only', value: 5 },
+        { id: 'high', column: 'High', row: 'Only', value: 10 },
+      ],
+    });
+
+    expect(geometry.cells.map((cell) => cell.cellColor)).toEqual([
+      'rgb(16, 32, 48)',
+      'rgb(80, 96, 112)',
+      'rgb(144, 160, 176)',
+    ]);
+  });
+
+  it('excludes cells outside explicit domains before computing color geometry', () => {
+    const geometry = buildSvgHeatMapGeometry({
+      width: 420,
+      height: 240,
+      colorRange: ['not-a-color', 'also-not-a-color'],
+      xLabels: ['Included'],
+      yLabels: ['Row'],
+      data: [
+        { id: 'inside', column: 'Included', row: 'Row', value: 10 },
+        { id: 'outside-x', column: 'Outside', row: 'Row', value: 10_000 },
+        { id: 'outside-y', column: 'Included', row: 'Outside', value: -10_000 },
+      ],
+    });
+
+    expect(geometry.cells).toHaveLength(1);
+    expect(geometry.cells[0]?.id).toBe('inside');
+    expect(geometry.cells[0]?.cellColor).toBe('rgb(0, 114, 178)');
+  });
+
+  it('honors explicit empty domains and rejects duplicate semantic coordinates', () => {
+    expect(buildSvgHeatMapGeometry({
+      width: 420,
+      height: 240,
+      colorRange: ['#ffffff', '#000000'],
+      xLabels: [],
+      yLabels: [],
+      data: [{ id: 'cell', column: 'A', row: 'B', value: 1 }],
+    }).cells).toHaveLength(0);
+
+    expect(() => buildSvgHeatMapGeometry({
+      width: 420,
+      height: 240,
+      colorRange: ['#ffffff', '#000000'],
+      data: [
+        { id: 'first', column: 'A', row: 'B', value: 1 },
+        { id: 'second', column: 'A', row: 'B', value: 2 },
+      ],
+    })).toThrowError('[ChartGeometry] Duplicate heatmap coordinate: A\u0000B.');
+  });
+});

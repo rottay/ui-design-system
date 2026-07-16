@@ -340,6 +340,29 @@ not transition DS-IMP-098/099/100 or certify the production white-label canary. 
 is React-owned Bar, Line and HeatMap renderers on this frame, followed by vertical `ChartGrammar` and
 `InsightLayer`.
 
+#### Owner continuation — VIZ-02 React-owned renderer pilot (2026-07-16)
+
+VIZ-02 adds the focused `@rottay/design-system/charts/renderers` boundary with React-owned
+`SvgBarRenderer`, `SvgLineRenderer` and `SvgHeatMapRenderer`. D3 is restricted to immutable geometry,
+UTC time scales, paths and interpolation; it cannot select, append, remove, mutate or transition DOM.
+The renderers preserve stable semantic IDs, reject duplicate coordinates, handle negative/invalid/
+constant domains deterministically, resolve HeatMap colors from the owning provider root and reflow
+geometry from one container `ResizeObserver` instead of shrinking SVG typography. A fixed opt-out
+retains intrinsic dimensions and constructs no observer.
+
+This pilot intentionally uses one static `role="img"` model without per-mark tab stops. Roving
+keyboard/touch exploration, a summary/table/download alternative, vertical `ChartGrammar` and the
+`InsightLayer` remain under DS-IMP-100/101 and are not claimed complete here. The legacy chart family
+continues to coexist for at least one minor.
+
+Release acceptance is fail-closed: public types plus packed ESM/CJS must resolve from an installed
+tarball; `/charts` remains supplier-free while `/charts/renderers` declares only D3; named Bar, Line
+and HeatMap builds must retain neither sibling renderers nor sibling geometry builders and must keep
+React/D3 external; measured bundle and public-CSS budgets, engine paint ratchets, provider-root,
+SSR/hydration, responsive/fixed, reduced-motion and forced-colors contracts must remain green. The
+first application canary is BitHire Teams Performance (placements by sprint + revenue trend) with a
+declared phone summary projection; it must not branch on tenant slug or hostname.
+
 ### WO-CRA-14 ParticleField Stage-A quarantine
 - **Source IDs / phase** — Supports DS-IMP-106 Stage A in Phase 0; it has no final source authority. WO-CRA-15 remains the only DS-IMP-106 completion authority.
 - **Depends on** — WO-GAT-05 and WO-GAT-06.

@@ -335,7 +335,7 @@
 
 .ds-surface.ds-collection-workspace [data-part='preview-accordion-icon'] {
   flex: 0 0 auto;
-  transition: transform var(--ds-motion-fast, 140ms) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-surface.ds-collection-workspace [data-part='preview-accordion-trigger'][data-expanded='true'] [data-part='preview-accordion-icon'] {

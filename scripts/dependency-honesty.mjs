@@ -3794,6 +3794,22 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  type ChartSummaryProjectionView,\n` +
       `  type ChartTopNProjectionView,\n` +
       `} from ${JSON.stringify(`${packedManifest.name}/charts`)};\n` +
+      `import {\n` +
+      `  SvgBarRenderer,\n` +
+      `  SvgHeatMapRenderer,\n` +
+      `  SvgLineRenderer,\n` +
+      `  type ChartGeometryInsets,\n` +
+      `  type SvgBarDatum,\n` +
+      `  type SvgBarRendererProps,\n` +
+      `  type SvgHeatMapDatum,\n` +
+      `  type SvgHeatMapRendererProps,\n` +
+      `  type SvgLineCurve,\n` +
+      `  type SvgLinePoint,\n` +
+      `  type SvgLineRendererProps,\n` +
+      `  type SvgLineSeries,\n` +
+      `  type SvgLineXType,\n` +
+      `  type SvgLineXValue,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/charts/renderers`)};\n` +
       `const chartSpec = {\n` +
       `  desktop: { mode: 'full', rendererId: 'packed.full' },\n` +
       `  phone: { mode: 'summary', rendererId: 'packed.summary', summaryId: 'packed.total' },\n` +
@@ -3812,7 +3828,19 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  ChartSummaryProjectionView, ChartTopNProjectionView,\n` +
       `];\n` +
       `const packedChartTypes = null as unknown as PackedChartTypes;\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, packedChartTypes);\n',
+      `const rendererInsets: ChartGeometryInsets = { top: 8, right: 8, bottom: 24, left: 32 };\n` +
+      `const barData: readonly SvgBarDatum[] = [{ id: 'bar', category: 'A', value: 1 }];\n` +
+      `const heatData: readonly SvgHeatMapDatum[] = [{ id: 'cell', column: 'A', row: 'B', value: 1 }];\n` +
+      `const lineX: SvgLineXValue = 'A';\n` +
+      `const linePoint: SvgLinePoint = { id: 'point', x: lineX, value: 1 };\n` +
+      `const lineSeries: readonly SvgLineSeries[] = [{ id: 'line', label: 'Line', points: [linePoint] }];\n` +
+      `const lineCurve: SvgLineCurve = 'smooth';\n` +
+      `const lineXType: SvgLineXType = 'category';\n` +
+      `const barProps = { ariaLabel: 'Bar', data: barData, insets: rendererInsets } satisfies SvgBarRendererProps;\n` +
+      `const heatProps = { ariaLabel: 'Heat', data: heatData, insets: rendererInsets } satisfies SvgHeatMapRendererProps;\n` +
+      `const lineProps = { ariaLabel: 'Line', series: lineSeries, curve: lineCurve, xType: lineXType, insets: rendererInsets } satisfies SvgLineRendererProps;\n` +
+      `const rendererComponents = [SvgBarRenderer, SvgHeatMapRenderer, SvgLineRenderer];\n` +
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, packedChartTypes, rendererComponents, barProps, heatProps, lineProps);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {
@@ -3857,9 +3885,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 8 || runtimeFixtures.require.length !== 7) {
+    if (runtimeFixtures.import.length !== 9 || runtimeFixtures.require.length !== 8) {
       throw new Error(
-        `packed runtime condition inventory drifted; expected 8 import + 7 require, found ` +
+        `packed runtime condition inventory drifted; expected 9 import + 8 require, found ` +
         `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
       );
     }

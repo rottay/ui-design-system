@@ -40,6 +40,11 @@
       "import": "./dist/charts.js",
       "require": "./dist/charts.cjs"
     },
+    "./charts/renderers": {
+      "types": "./dist/chart-renderers.d.ts",
+      "import": "./dist/chart-renderers.js",
+      "require": "./dist/chart-renderers.cjs"
+    },
     "./styles": {
       "style": "./dist/styles.css",
       "import": "./dist/styles.css",
@@ -152,7 +157,8 @@
     "sourceEntrypoints": {
       "./icons": "icon-entry.ts",
       "./marks": "mark-entry.ts",
-      "./charts": "chart-entry.ts"
+      "./charts": "chart-entry.ts",
+      "./charts/renderers": "chart-renderers-entry.ts"
     },
     "gateCommands": {
       "test:unit": [
