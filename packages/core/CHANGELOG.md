@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.9
+
+### Patch Changes
+
+- Project compact collection headers from the shared responsive authority and preserve phone action
+  continuity: the primary action renders once in a sticky ActionDock, secondary quick actions remain
+  reachable through an accessible More sheet, stable keys de-duplicate safely, and desktop stays intact.
+- Add fixed/sticky ActionDock modes with tokenized stacking, spacing, shadows and safe areas; expose
+  root DOM/a11y hooks and add identity-only `CollectionHeader` projection without component-local
+  viewport subscriptions.
+
 ## 2.19.8
 
 ### Patch Changes
