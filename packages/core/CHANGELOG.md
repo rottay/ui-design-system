@@ -10,6 +10,9 @@
   registry so apps preview and publish against one fail-closed policy.
 - Expose ten color-only chart-category dials without allowing tenant data to
   alter chart renderers or data semantics.
+- Reject duplicate tenant chart colors and any category color below 3:1
+  non-text contrast against the emitted chart surfaces, including both
+  deterministic surfaces when the tenant selects automatic color mode.
 - Expand the bounded Advanced artifact budget to 512 variables plus an 88 KiB
   canonical payload ceiling, and allow only code-owned font-pack references in
   tenant font-family lists.
