@@ -3776,8 +3776,8 @@ export async function auditPackedArtifact(root = coreRoot) {
       compilerOptions: {
         jsx: 'react-jsx',
         lib: ['ES2022', 'DOM'],
-        module: 'NodeNext',
-        moduleResolution: 'NodeNext',
+        module: 'ESNext',
+        moduleResolution: 'Bundler',
         noEmit: true,
         skipLibCheck: true,
         strict: true,
