@@ -1,0 +1,385 @@
+import { createHash } from 'node:crypto';
+import { describe, expect, it, vi } from 'vitest';
+import type {
+  TenantThemeConfigIdentityV1,
+  TenantThemeDocumentV1,
+  TenantThemeVerticalEnvelopeV1,
+} from '../../../contracts/tenant-theme';
+import {
+  TENANT_THEME_COMPILER_VERSION,
+  TENANT_THEME_CONFIG_V1_SCHEMA,
+  TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST,
+  TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST,
+  TenantThemeValidationError,
+  canonicalizeTenantThemeValue,
+  compileTenantThemeConfig,
+  hydrateTenantThemeConfig,
+  parseTenantThemeDocument,
+  sha256TenantThemeValue,
+  tenantThemeArtifactRootAttributes,
+  validateTenantThemeConfig,
+  validateTenantThemeDocument,
+} from '..';
+
+const IDENTITY: TenantThemeConfigIdentityV1 = {
+  tenantId: 'tenant_01',
+  slug: 'themanagementmiami',
+  verticalKey: 'bithire',
+  rowVersion: 7,
+};
+
+const SIMPLE_DOCUMENT: TenantThemeDocumentV1 = {
+  schemaVersion: 1,
+  mode: 'simple',
+  appearance: {
+    palette: { primary: '#0F766E', secondary: '#8C6D46', accent: '#E2725B' },
+    typography: {
+      fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
+      fontFamilyHeading: "'Fraunces', Georgia, 'Times New Roman', serif",
+    },
+    density: 'normal',
+    motion: { intensity: 0.62, durationScale: 1.15, ambient: 'subtle' },
+    shape: { buttonStyle: 'soft' },
+    surfaces: { elevation: 'elevated' },
+    navigation: { sidebarTone: 'subtle' },
+  },
+};
+
+const ADVANCED_DOCUMENT: TenantThemeDocumentV1 = {
+  schemaVersion: 1,
+  mode: 'advanced',
+  visualFoundation: {
+    general: SIMPLE_DOCUMENT.mode === 'simple' ? SIMPLE_DOCUMENT.appearance : {},
+    advanced: {
+      tokenOverrides: {
+        '--ds-color-bg-primary': '#FBF6EC',
+        '--ds-color-success': '#5B8A3A',
+        '--ds-color-warning': '#C39E22',
+        '--ds-color-error': '#C0392B',
+        '--ds-color-info': '#5B6FA8',
+        '--ds-font-family-display': "'Fraunces', Georgia, 'Times New Roman', serif",
+        '--ds-radius-sm': '4px',
+        '--ds-radius-md': '6px',
+        '--ds-radius-lg': '8px',
+        '--ds-radius-xl': '12px',
+        '--ds-shadow-md': '0 4px 10px rgba(46, 38, 28, 0.08), 0 1px 3px rgba(46, 38, 28, 0.05)',
+        '--ds-gradient-primary': 'linear-gradient(135deg, #0F766E, #E2725B)',
+        '--ds-effect-intensity': 0.45,
+      },
+      chrome: {
+        sidebar: {
+          bg: '#FFFEFB',
+          border: '#E2D9CC',
+          text: '#2E261C',
+          itemBgActive: 'var(--ds-tint-8)',
+        },
+        table: {
+          bg: '#FFFEFB',
+          headerBg: '#FFFFFF',
+          rowBgHover: '#FBF3E7',
+          rowBgSelected: 'var(--ds-tint-12)',
+          headerFontWeight: 700,
+        },
+        cardComponent: {
+          bg: '#FFFEFB',
+          border: 'transparent',
+          shadow: '0 4px 10px rgba(46, 38, 28, 0.08)',
+          radius: '8px',
+          titleFontWeight: 600,
+        },
+        metricCard: {
+          bg: '#FFFEFB',
+          meterFill: 'linear-gradient(90deg, #0F766E, #E2725B)',
+          valueColor: '#2E261C',
+        },
+      },
+    },
+  },
+};
+
+const BITHIRE_TEST_ENVELOPE: TenantThemeVerticalEnvelopeV1 = {
+  schemaVersion: 1,
+  verticalKey: 'bithire',
+  allowedModes: ['simple', 'advanced'],
+  advanced: {
+    chromeFamilies: ['sidebar', 'table', 'cardComponent', 'metricCard'],
+    allowTokenOverrides: true,
+  },
+  ranges: {
+    densityScale: { min: 0.85, max: 1.15 },
+    effectIntensity: { min: 0, max: 0.6 },
+    motionIntensity: { min: 0, max: 0.8 },
+    motionDurationScale: { min: 0.75, max: 1.25 },
+  },
+};
+
+const hydrate = (
+  document: TenantThemeDocumentV1 = SIMPLE_DOCUMENT,
+  identity: TenantThemeConfigIdentityV1 = IDENTITY,
+) => hydrateTenantThemeConfig(document, identity);
+
+describe('TenantThemeConfig v1 server contract', () => {
+  it('uses a portable SHA-256 implementation with the canonical known vector', () => {
+    const expected = createHash('sha256').update('abc').digest('hex');
+    expect(sha256TenantThemeValue('abc')).toBe(expected);
+    expect(sha256TenantThemeValue('abc')).toBe('ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
+  });
+
+  it('publishes immutable schema/document drift sentinels', () => {
+    expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toBe(
+      'sha256-6a849d6f23fce5687fb2ee9c7619d9ad2f960032c441063c6c71839dd7b97d34',
+    );
+    expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).toBe(
+      'sha256-2552db483bf5143bbbb714f3e9b0cfdb25a9c329c9bf43680f1eb7b838a626fa',
+    );
+    expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA)).toBe(true);
+    expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.documents.simple)).toBe(true);
+    expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.limits)).toBe(true);
+    expect(() => {
+      (TENANT_THEME_CONFIG_V1_SCHEMA.limits as { maxDepth: number }).maxDepth = 999;
+    }).toThrow(TypeError);
+  });
+
+  it('keeps row identity out of the persisted document and hydrates from trusted columns', () => {
+    expect(validateTenantThemeDocument(SIMPLE_DOCUMENT).success).toBe(true);
+    expect(validateTenantThemeDocument({ ...SIMPLE_DOCUMENT, tenantId: IDENTITY.tenantId })).toMatchObject({
+      success: false,
+      issues: [{ code: 'unknown_key', path: '$.tenantId' }],
+    });
+    expect(hydrate()).toMatchObject({ ...IDENTITY, mode: 'simple' });
+  });
+
+  it('fails closed when trusted row identity disagrees with request/directory identity', () => {
+    expect(() => hydrateTenantThemeConfig(SIMPLE_DOCUMENT, IDENTITY, {
+      expectedIdentity: { tenantId: 'another-tenant', slug: IDENTITY.slug },
+    })).toThrow(TenantThemeValidationError);
+  });
+
+  it('does not touch browser globals while validating and compiling for SSR', () => {
+    vi.stubGlobal('window', undefined);
+    vi.stubGlobal('document', undefined);
+    vi.stubGlobal('localStorage', undefined);
+    expect(() => compileTenantThemeConfig(hydrate())).not.toThrow();
+    vi.unstubAllGlobals();
+  });
+});
+
+describe('deterministic artifact compilation and isolation', () => {
+  it('normalizes key order and emits byte-identical artifacts', () => {
+    const ordered = hydrate();
+    const reversed = {
+      rowVersion: IDENTITY.rowVersion,
+      verticalKey: IDENTITY.verticalKey,
+      slug: IDENTITY.slug,
+      tenantId: IDENTITY.tenantId,
+      appearance: {
+        navigation: { sidebarTone: 'subtle' },
+        surfaces: { elevation: 'elevated' },
+        shape: { buttonStyle: 'soft' },
+        motion: { ambient: 'subtle', durationScale: 1.15, intensity: 0.62 },
+        density: 'normal',
+        typography: {
+          fontFamilyHeading: "'Fraunces', Georgia, 'Times New Roman', serif",
+          fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
+        },
+        palette: { accent: '#E2725B', secondary: '#8C6D46', primary: '#0F766E' },
+      },
+      mode: 'simple',
+      schemaVersion: 1,
+    };
+    const left = compileTenantThemeConfig(ordered);
+    const right = compileTenantThemeConfig(reversed);
+    expect(canonicalizeTenantThemeValue(ordered)).toBe(canonicalizeTenantThemeValue(reversed));
+    expect(right).toEqual(left);
+  });
+
+  it('includes row/compiler identity in the cache digest', () => {
+    const current = compileTenantThemeConfig(hydrate());
+    const next = compileTenantThemeConfig(hydrate(SIMPLE_DOCUMENT, { ...IDENTITY, rowVersion: 8 }));
+    expect(current.compilerVersion).toBe(TENANT_THEME_COMPILER_VERSION);
+    expect(current.digest).not.toBe(next.digest);
+    expect(current.variables).toEqual(next.variables);
+  });
+
+  it('keeps compiler-owned bounded presets valid even when their emitted value exceeds authored caps', () => {
+    const artifact = compileTenantThemeConfig(hydrate({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { shape: { buttonStyle: 'pill' } },
+    }));
+    expect(artifact.variables['--ds-radius-button']).toBe('9999px');
+  });
+
+  it('emits separate root/vertical/tenant scopes and one exact combined selector', () => {
+    const artifact = compileTenantThemeConfig(hydrate());
+    expect(artifact.scopes).toEqual({
+      root: { attribute: 'data-ds-root', selector: ':where([data-ds-root])' },
+      vertical: {
+        attribute: 'data-vertical',
+        value: 'bithire',
+        selector: ':where([data-ds-root][data-vertical="bithire"])',
+      },
+      tenant: {
+        attribute: 'data-tenant',
+        value: 'themanagementmiami',
+        selector: ':where([data-ds-root][data-tenant="themanagementmiami"])',
+      },
+      combinedSelector: ':where([data-ds-root][data-vertical="bithire"][data-tenant="themanagementmiami"])',
+    });
+    expect(artifact.css).toContain(`${artifact.scopes.combinedSelector} {`);
+    expect(artifact.css).not.toContain('html[data-tenant');
+    expect(tenantThemeArtifactRootAttributes(artifact)).toEqual({
+      'data-ds-root': '',
+      'data-vertical': 'bithire',
+      'data-tenant': 'themanagementmiami',
+    });
+  });
+
+  it('keeps two tenants on distinct provider roots with no selector/value bleed', () => {
+    const management = compileTenantThemeConfig(hydrate());
+    const bithire = compileTenantThemeConfig(hydrate({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { palette: { primary: '#2563EB' }, typography: { fontFamilyBase: 'Inter, sans-serif' } },
+    }, { ...IDENTITY, tenantId: 'tenant_02', slug: 'bithire' }));
+
+    expect(management.variables['--ds-color-primary']).toBe('#0F766E');
+    expect(bithire.variables['--ds-color-primary']).toBe('#2563EB');
+    expect(management.css).not.toContain('data-tenant="bithire"');
+    expect(bithire.css).not.toContain('data-tenant="themanagementmiami"');
+    expect(management.scopes.combinedSelector).not.toBe(bithire.scopes.combinedSelector);
+  });
+
+  it('compiles a legal Management Advanced projection with strong visual divergence', () => {
+    const management = compileTenantThemeConfig(hydrate(ADVANCED_DOCUMENT), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+    const baseline = compileTenantThemeConfig(hydrate({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { palette: { primary: '#2563EB' }, surfaces: { elevation: 'flat' } },
+    }, { ...IDENTITY, tenantId: 'tenant_02', slug: 'bithire' }));
+    const changed = Object.keys(management.variables).filter(
+      (key) => management.variables[key] !== baseline.variables[key],
+    );
+
+    expect(changed.length).toBeGreaterThan(20);
+    expect(management.variables).toMatchObject({
+      '--ds-color-bg-primary': '#FBF6EC',
+      '--ds-font-family-display': "'Fraunces', Georgia, 'Times New Roman', serif",
+      '--ds-card-bg': '#FFFEFB',
+      '--ds-table-header-bg': '#FFFFFF',
+      '--ds-effect-intensity': '0.45',
+    });
+    expect(management.verticalEnvelopeDigest).toMatch(/^sha256-/);
+  });
+});
+
+describe('closed schema and hostile input rejection', () => {
+  it.each([
+    ['unknown schema', { ...SIMPLE_DOCUMENT, schemaVersion: 2 }, 'unsupported_schema_version'],
+    ['engine', { ...SIMPLE_DOCUMENT, engine: 'custom' }, 'unknown_key'],
+    ['raw css', { ...SIMPLE_DOCUMENT, rawCss: ':root{--pwned:red}' }, 'unknown_key'],
+    ['selector', { ...SIMPLE_DOCUMENT, selector: 'html *' }, 'unknown_key'],
+    ['topology', { ...SIMPLE_DOCUMENT, topology: { phone: 'desktop-table' } }, 'unknown_key'],
+  ])('rejects %s at the document boundary', (_name, input, code) => {
+    const result = validateTenantThemeDocument(input);
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.issues.some((issue) => issue.code === code)).toBe(true);
+  });
+
+  it('rejects selector injection in tenant/vertical identities', () => {
+    const hostile = { ...hydrate(), slug: 'acme"]{color:red}/*' };
+    expect(validateTenantThemeConfig(hostile).success).toBe(false);
+    expect(() => compileTenantThemeConfig(hostile)).toThrow(TenantThemeValidationError);
+  });
+
+  it('rejects private token references and declaration breakouts', () => {
+    for (const value of ['var(--ds-private-secret)', 'red; } html { color: hotpink', 'url(https://evil.invalid/x)']) {
+      const document = {
+        schemaVersion: 1,
+        mode: 'advanced' as const,
+        visualFoundation: { advanced: { chrome: { sidebar: { bg: value } } } },
+      };
+      const input = { ...document, ...IDENTITY };
+      expect(validateTenantThemeConfig(input).success).toBe(false);
+    }
+  });
+
+  it('rejects arbitrary token names and vertical-owned chrome/topology fields', () => {
+    const invalidAdvancedValues = [
+      { tokenOverrides: { '--ds-private-secret': '#fff' } },
+      { chrome: { sidebar: { iconSize: '48px' } } },
+      { chrome: { metricCard: { iconBg: '#fff' } } },
+      { chrome: { shell: { commandHomeIconBorder: '#fff' } } },
+      { chrome: { cardComponent: { hoverTransform: 'translateY(-8px)' } } },
+      { chrome: { signalCard: { topLineDisplay: 'none' } } },
+      { chrome: { listingGrid: { columns: '1fr 1fr' } } },
+      { chrome: { card: { showBorder: false } } },
+      { chrome: { accent: { iconContainerShape: 'square' } } },
+    ];
+
+    for (const advanced of invalidAdvancedValues) {
+      const result = validateTenantThemeDocument({
+        schemaVersion: 1,
+        mode: 'advanced',
+        visualFoundation: { advanced },
+      });
+      expect(result.success, JSON.stringify(advanced)).toBe(false);
+    }
+  });
+
+  it('enforces value, field and payload caps', () => {
+    const hostileValues = [
+      { cardComponent: { padding: '-1rem' } },
+      { cardComponent: { radius: '9999px' } },
+      { cardComponent: { shadow: '0 0 9999px rgba(0,0,0,.4)' } },
+      { cardComponent: { shadow: '0 1px #000, 0 2px #000, 0 3px #000, 0 4px #000, 0 5px #000' } },
+      { cardComponent: { bg: 'linear-gradient(#111,#222,#333,#444,#555,#666,#777,#888,#999)' } },
+    ];
+    for (const chrome of hostileValues) {
+      const result = validateTenantThemeDocument({
+        schemaVersion: 1,
+        mode: 'advanced',
+        visualFoundation: { advanced: { chrome } },
+      });
+      expect(result.success, JSON.stringify(chrome)).toBe(false);
+    }
+
+    const overlong = validateTenantThemeDocument({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { typography: { fontFamilyBase: 'A'.repeat(70_000) } },
+    });
+    expect(overlong.success).toBe(false);
+    if (!overlong.success) expect(overlong.issues.some((issue) => issue.message.includes('65'))).toBe(true);
+  });
+
+  it('requires an explicit, matching vertical envelope for Advanced compilation', () => {
+    const config = hydrate(ADVANCED_DOCUMENT);
+    expect(() => compileTenantThemeConfig(config)).toThrow(/requires a vertical policy envelope/i);
+    expect(() => compileTenantThemeConfig(config, {
+      verticalEnvelope: { ...BITHIRE_TEST_ENVELOPE, verticalKey: 'platform' },
+    })).toThrow(/does not match/i);
+    expect(() => compileTenantThemeConfig(config, {
+      verticalEnvelope: {
+        ...BITHIRE_TEST_ENVELOPE,
+        advanced: { chromeFamilies: ['sidebar'], allowTokenOverrides: true },
+      },
+    })).toThrow(/disabled by this vertical/i);
+    expect(() => compileTenantThemeConfig(config, {
+      verticalEnvelope: {
+        ...BITHIRE_TEST_ENVELOPE,
+        allowedModes: ['advanced', 'advanced'],
+      },
+    })).toThrow(/unique non-empty/i);
+  });
+
+  it('parses into a detached canonical value rather than retaining tainted references', () => {
+    const source = structuredClone(SIMPLE_DOCUMENT);
+    const parsed = parseTenantThemeDocument(source);
+    (source.appearance as { palette?: { primary?: string } }).palette!.primary = '#FFFFFF';
+    expect(parsed.mode).toBe('simple');
+    if (parsed.mode === 'simple') expect(parsed.appearance.palette?.primary).toBe('#0F766E');
+  });
+});

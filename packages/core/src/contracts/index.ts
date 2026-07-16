@@ -47,6 +47,9 @@ export type {
 // Tenant types
 export * from './tenants';
 
+// Versioned, server-safe tenant theme persistence contract
+export * from './tenant-theme';
+
 // Product profile types
 export * from './product-profiles';
 

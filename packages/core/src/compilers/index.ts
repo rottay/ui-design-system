@@ -5,3 +5,4 @@
  * _shared/: color math, scale builders (used by runtime + static)
  */
 export * from './brand-theme';
+export * from './tenant-theme';
