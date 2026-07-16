@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.26
+
+### Patch Changes
+
+- Expand the supplier-free semantic icon corpus from 40 to 43 roles with
+  `navigation.route`, `bithire.job`, and `bithire.offer`, backed by pinned
+  Phosphor SSR glyphs and exact provenance coverage.
+- Keep apps on semantic product meaning rather than supplier component names,
+  enabling the first BitHire Global Search adoption without local spinner
+  keyframes or direct icon-supplier coupling.
+
 ## 2.19.25
 
 ### Patch Changes
