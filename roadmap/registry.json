@@ -2536,7 +2536,13 @@
    },
    "phase": "0",
    "notes": "Phase-0 support milestone only. Completion adds bounded DS and BitHire canary evidence but cannot complete DS-IMP-090 or DS-IMP-091; the full supplier decision and four-facade matrix remain WO-CRA-17 in Phase 2B. DS-IMP-093 is explicitly out of scope.",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-07-16 18:35",
+     "by": "codex-icon-canary",
+     "note": "Published @rottay/design-system@2.19.26 with the 43-name Semantic Icon v2 corpus after a green production build and 14/14 focal tests. BitHire commit 55abe366b pins 2.19.26, migrates Global Search to semantic names, removes its local spinner, and adds a 2/2 architecture guard; exact remote certification and production sighted proof remain pending."
+    }
+   ],
    "claimedBy": "codex-icon-canary",
    "claimedAt": "2026-07-16",
    "doneAt": null,
