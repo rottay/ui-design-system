@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "supplierPackages": [
     "@ant-design/icons",
+    "@phosphor-icons/react",
     "@react-three/drei",
     "@react-three/fiber",
     "antd",
@@ -499,6 +500,7 @@
         "TreeSelect",
         "TypingIndicator",
         "Typography",
+        "UNSAVED_CHANGES_GUARD_CONTRACT",
         "UPLOAD_DEFAULTS",
         "Upload",
         "VERTICAL_REGISTRY",
@@ -822,6 +824,7 @@
         "useTranslation",
         "useTypographyTokens",
         "useUndoRedo",
+        "useUnsavedChangesGuard",
         "useVariant",
         "useViewTransition",
         "useVirtualScroll",
@@ -831,7 +834,8 @@
       ],
       "symbols": {
         "ActionDock": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "ActiveFiltersBar": [
           "antd",
@@ -1454,7 +1458,8 @@
           "motion"
         ],
         "Modal": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "MoreFieldsToggle": [
           "antd",
@@ -1687,7 +1692,8 @@
           "motion"
         ],
         "PatternStepWizard": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternTimeline": [
           "antd"
@@ -2523,6 +2529,7 @@
         "TokenInspector",
         "TooltipSeries",
         "TooltipValue",
+        "UNSAVED_CHANGES_GUARD_CONTRACT",
         "UPLOAD_DEFAULTS",
         "VERTICAL_REGISTRY",
         "WATERMARK_DEFAULTS",
@@ -2786,6 +2793,7 @@
         "useToast",
         "useTranslation",
         "useUndoRedo",
+        "useUnsavedChangesGuard",
         "useVariant",
         "useVirtualScroll",
         "useVoiceInput",
@@ -2967,8 +2975,12 @@
         "HighlighterIcon",
         "HistoryIcon",
         "HomeIcon",
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
         "ICON_SIZE_MAP",
         "ICON_SIZE_TOKENS",
+        "Icon",
         "ImageIcon",
         "ImageOffIcon",
         "InboxIcon",
@@ -3157,7 +3169,8 @@
         "XCircleIcon",
         "XIcon",
         "ZapIcon",
-        "createIcon"
+        "createIcon",
+        "isIconName"
       ],
       "symbols": {
         "AccessibilityIcon": [
@@ -3582,6 +3595,9 @@
         ],
         "HomeIcon": [
           "lucide-react"
+        ],
+        "Icon": [
+          "@phosphor-icons/react"
         ],
         "ImageIcon": [
           "lucide-react"
@@ -4146,15 +4162,20 @@
         ]
       },
       "wildcard": [
+        "@phosphor-icons/react",
         "lucide-react"
       ],
       "supplierFreeExports": [
         "AlertIcon",
         "BaseIcon",
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
         "ICON_SIZE_MAP",
         "ICON_SIZE_TOKENS",
         "LoaderIcon",
-        "createIcon"
+        "createIcon",
+        "isIconName"
       ]
     },
     "./eslint": {

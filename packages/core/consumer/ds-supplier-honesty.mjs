@@ -1646,8 +1646,8 @@ function validateContractShape(contract) {
       if (!classified.has(symbol)) errors.push(`supplier contract leaves ${entrypoint}#${symbol} unclassified`);
     }
   }
-  if (JSON.stringify(contract.entrypoints?.["./icons"]?.wildcard ?? []) !== JSON.stringify(["lucide-react"])) {
-    errors.push("./icons must retain its governed lucide-react wildcard");
+  if (JSON.stringify(contract.entrypoints?.["./icons"]?.wildcard ?? []) !== JSON.stringify(["@phosphor-icons/react", "lucide-react"])) {
+    errors.push("./icons must retain its governed functional and compatibility suppliers");
   }
   if (errors.length > 0) throw new Error(`invalid DS supplier contract:\n- ${errors.join("\n- ")}`);
 }

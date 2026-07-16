@@ -51,6 +51,7 @@ export function createIcon(
       className = '',
       style,
       title,
+      children,
       'aria-hidden': ariaHidden,
       'aria-label': ariaLabel,
       ...rest
@@ -60,19 +61,25 @@ export function createIcon(
       ? size
       : (typeof size === 'string' ? (ICON_SIZE_MAP[size] ?? size) : ICON_SIZE_MAP.md);
     const resolvedStrokeWidth = strokeWidth ?? 'var(--ds-icon-stroke-width, 1.5)';
+    const hasAccessibleName = Boolean(title || ariaLabel);
 
-    return React.createElement(LucideComponent, {
-      ref,
-      size: resolvedSize,
-      color,
-      strokeWidth: resolvedStrokeWidth,
-      className: `rottay-icon ${className}`.trim(),
-      style,
-      'aria-hidden': title || ariaLabel ? undefined : (ariaHidden ?? true),
-      'aria-label': ariaLabel,
-      ...rest,
-      ...(title ? { 'aria-hidden': false, role: 'img' } : {}),
-    } as LucideProps);
+    return React.createElement(
+      LucideComponent,
+      {
+        ref,
+        size: resolvedSize,
+        color,
+        strokeWidth: resolvedStrokeWidth,
+        className: `rottay-icon ${className}`.trim(),
+        style,
+        ...rest,
+        'aria-hidden': hasAccessibleName ? undefined : (ariaHidden ?? true),
+        'aria-label': ariaLabel ?? title,
+        role: hasAccessibleName ? 'img' : rest.role,
+      } as LucideProps,
+      title ? React.createElement('title', null, title) : undefined,
+      children,
+    );
   });
 
   DSIcon.displayName = displayName;

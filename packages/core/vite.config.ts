@@ -44,7 +44,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         server: resolve(__dirname, 'src/server.ts'),
-        icons: resolve(__dirname, 'src/icons.ts'),
+        icons: resolve(__dirname, 'src/icon-entry.ts'),
         eslint: resolve(__dirname, 'src/eslint.ts'),
         commercial: resolve(__dirname, 'src/commercial.ts'),
         // Only real package.json exports are listed as entries.
@@ -63,6 +63,7 @@ export default defineConfig({
         /^d3\/.*/,
         'antd',
         '@ant-design/icons',
+        '@phosphor-icons/react',
         'motion',
         'lucide-react',
         'dayjs',
@@ -71,6 +72,7 @@ export default defineConfig({
         // Externalize submodules for better tree-shaking
         /^antd\/.*/,
         /^@ant-design\/icons\/.*/,
+        /^@phosphor-icons\/react\/.*/,
         /^lucide-react\/.*/,
         /^d3-.*/,
         /^motion\/.*/,

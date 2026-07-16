@@ -61,13 +61,9 @@ export { arePropsEqual, createPropsComparator } from './_internal/utils';
 // Icons live behind a dedicated subpath so the root export does not pull
 // the icon catalog into every consumer bundle.
 //
-// `@rottay/design-system/icons` exports the DS's own curated icon set:
-// BaseIcon, UserIcon, ChevronDownIcon, SearchIcon, and a few more.
-// The set is intentionally small.
-//
-// For the full Ant Design icon catalog, import directly from
-// `@ant-design/icons` — it is a peer dependency of the DS and is always
-// installed in consuming apps.
+// `@rottay/design-system/icons` exports the supplier-independent semantic
+// Icon facade plus the temporary Lucide-shaped compatibility catalog.
+// Product code should use semantic names; suppliers stay behind adapters.
 //
 // Neither catalog is re-exported from this root barrel.
 

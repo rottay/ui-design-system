@@ -43,6 +43,7 @@
 @import '../components/tag.css' layer(rottay-components);
 @import '../components/toggle.css' layer(rottay-components);
 @import '../components/icon.css' layer(rottay-components);
+@import '../components/semantic-icon.css' layer(rottay-components);
 @import '../components/spinner.css' layer(rottay-components);
 @import '../components/rate.css' layer(rottay-components);
 @import '../components/space.css' layer(rottay-components);

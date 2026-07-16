@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, utimesSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
 import test from 'node:test';
 
 import {
@@ -13,6 +13,7 @@ import {
   assertPackedBuildPrerequisite,
   collectDesignSystemImports,
   collectRuntimeExportConditions,
+  collectSourceEntrypoints,
   coreRoot,
   deriveSupplierContract,
   loadSupplierContract,
@@ -504,6 +505,7 @@ test('supplier families include Three adapters and the Ant icon package', () => 
   assert.equal(supplierFamilyForSpecifier('d3-scale'), 'd3');
   assert.equal(supplierFamilyForSpecifier('motion/react'), 'motion');
   assert.equal(supplierFamilyForSpecifier('framer-motion'), 'framer-motion');
+  assert.equal(supplierFamilyForSpecifier('@phosphor-icons/react/ssr'), '@phosphor-icons/react');
   assert.equal(supplierFamilyForSpecifier('@react-three/fiber'), 'three');
   assert.equal(supplierFamilyForSpecifier('@ant-design/icons/es/icons/UserOutlined'), 'antd');
   assert.equal(supplierFamilyForSpecifier('react'), null);
@@ -772,6 +774,8 @@ test('supplier contract derivation attributes named and wildcard external re-exp
 
 test('supplier contract deletion drills fail for AreaChart, CountUp, and the icons wildcard', () => {
   const contract = loadSupplierContract();
+  assert.deepEqual(contract.entrypoints['./icons'].symbols.Icon, ['@phosphor-icons/react']);
+  assert.deepEqual(contract.entrypoints['./icons'].wildcard, ['@phosphor-icons/react', 'lucide-react']);
   for (const symbol of ['AreaChart', 'CountUp']) {
     const mutated = structuredClone(contract);
     delete mutated.entrypoints['.'].symbols[symbol];
@@ -784,7 +788,7 @@ test('supplier contract deletion drills fail for AreaChart, CountUp, and the ico
   delete missingWildcard.entrypoints['./icons'].wildcard;
   assert.throws(
     () => requiredSuppliersForDesignSystemImports(new Map(), missingWildcard),
-    /icons must retain its governed lucide-react wildcard/,
+    /icons must retain its governed functional and compatibility suppliers/,
   );
 });
 
@@ -1259,7 +1263,14 @@ test('packed-artifact prerequisite rejects missing and stale build outputs', () 
 });
 
 test('live core graph has no false optional or zero-importer peer', () => {
-  assert.deepEqual(auditCoreDependencyGraph().errors, []);
+  const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
+  assert.equal(basename(collectSourceEntrypoints(manifest).get('./icons')), 'icon-entry.ts');
+  const graph = auditCoreDependencyGraph();
+  assert.deepEqual(graph.errors, []);
+  assert.deepEqual(graph.report['@phosphor-icons/react'], {
+    productionImporters: 1,
+    rootReachableImporters: 0,
+  });
 });
 
 test('live lock and installed workspace expose one runtime identity with Motion direct and Framer transitive', () => {

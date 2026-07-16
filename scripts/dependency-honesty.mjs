@@ -36,6 +36,7 @@ const TRACKED_SUPPLIERS = Object.freeze([
   'd3',
   'framer-motion',
   'motion',
+  '@phosphor-icons/react',
   'lucide-react',
   'three',
   '@react-three/fiber',
@@ -45,7 +46,7 @@ const TRACKED_SUPPLIERS = Object.freeze([
 ]);
 
 const WILDCARD_ENTRYPOINT_SUPPLIERS = Object.freeze({
-  './icons': Object.freeze(['lucide-react']),
+  './icons': Object.freeze(['@phosphor-icons/react', 'lucide-react']),
 });
 
 const APP_REPOSITORIES = Object.freeze([
@@ -198,6 +199,7 @@ export function supplierFamilyForSpecifier(specifier) {
   if (packageRoot === 'd3' || packageRoot.startsWith('d3-')) return 'd3';
   if (packageRoot === 'framer-motion') return 'framer-motion';
   if (packageRoot === 'motion') return 'motion';
+  if (packageRoot === '@phosphor-icons/react') return '@phosphor-icons/react';
   if (packageRoot === 'lucide-react') return 'lucide-react';
   if (packageRoot === 'three' || packageRoot.startsWith('@react-three/')) return 'three';
   if (packageRoot === 'antd' || packageRoot === '@ant-design/icons') return 'antd';
@@ -1693,11 +1695,17 @@ export function collectSourceEntrypoints(manifest, src = sourceRoot) {
     const target = runtimeJavaScriptTarget(definition);
     if (!target) continue;
     const name = basename(target, '.js');
-    const sourceEntry = SOURCE_EXTENSIONS
-      .map((extension) => resolve(src, `${name}${extension}`))
-      .find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
+    const configuredSource = manifest.releaseSync?.sourceEntrypoints?.[subpath];
+    const sourceEntry = typeof configuredSource === 'string'
+      ? resolve(src, configuredSource)
+      : SOURCE_EXTENSIONS
+        .map((extension) => resolve(src, `${name}${extension}`))
+        .find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
     if (!sourceEntry) {
       throw new Error(`export ${subpath} points to ${target} but source entry ${name} is missing`);
+    }
+    if (!existsSync(sourceEntry) || !statSync(sourceEntry).isFile()) {
+      throw new Error(`export ${subpath} configures missing source entry ${configuredSource}`);
     }
     entries.set(subpath, sourceEntry);
   }
@@ -1709,12 +1717,17 @@ export function collectProductiveEntrypoints(manifest, root = coreRoot) {
   const entries = collectSourceEntrypoints(manifest, resolve(root, 'src'));
   for (const condition of collectRuntimeExportConditions(manifest)) {
     let path;
+    const configuredSource = manifest.releaseSync?.sourceEntrypoints?.[condition.subpath];
+    if (typeof configuredSource === 'string') {
+      const candidate = resolve(root, 'src', configuredSource);
+      if (existsSync(candidate) && statSync(candidate).isFile()) path = candidate;
+    }
     const distMatch = condition.target.match(/^\.\/dist\/([^/]+?)\.(?:cjs|js)$/);
-    if (distMatch) {
+    if (!path && distMatch) {
       path = SOURCE_EXTENSIONS
         .map((extension) => resolve(root, 'src', `${distMatch[1]}${extension}`))
         .find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
-    } else {
+    } else if (!path) {
       const candidate = resolve(root, condition.target);
       if (existsSync(candidate) && statSync(candidate).isFile()) path = candidate;
     }
@@ -2193,7 +2206,7 @@ export function auditCoreDependencyGraph(root = coreRoot) {
   errors.push(...validateSupplierContract(readJson(resolve(root, 'supplier-contract.json')), deriveSupplierContract(root)));
 
   const report = {};
-  for (const family of ['d3', 'motion', 'framer-motion', 'lucide-react', 'three', 'antd']) {
+  for (const family of ['d3', 'motion', 'framer-motion', '@phosphor-icons/react', 'lucide-react', 'three', 'antd']) {
     const allFiles = new Set();
     const reachableFiles = new Set();
     for (const [packageName, files] of allImports) {
@@ -2391,8 +2404,8 @@ export function validateSupplierContractShape(contract) {
       if (!classified.has(symbol)) errors.push(`supplier contract leaves ${entrypoint}#${symbol} unclassified`);
     }
   }
-  if (JSON.stringify(contract.entrypoints?.['./icons']?.wildcard ?? []) !== JSON.stringify(['lucide-react'])) {
-    errors.push('./icons must retain its governed lucide-react wildcard');
+  if (JSON.stringify(contract.entrypoints?.['./icons']?.wildcard ?? []) !== JSON.stringify(['@phosphor-icons/react', 'lucide-react'])) {
+    errors.push('./icons must retain its governed functional and compatibility suppliers');
   }
   return errors;
 }
@@ -3744,8 +3757,8 @@ export async function auditPackedArtifact(root = coreRoot) {
     writeFileSync(
       fixtureSource,
       `import { AreaChart, CountUp, FadeIn, ScaleIn } from ${JSON.stringify(packedManifest.name)};\n` +
-      `import { CopyIcon } from ${JSON.stringify(`${packedManifest.name}/icons`)};\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon);\n',
+      `import { CopyIcon, Icon } from ${JSON.stringify(`${packedManifest.name}/icons`)};\n` +
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon);\n',
     );
     const packagedCli = resolve(installedPackage, 'consumer/ds-supplier-honesty.mjs');
     if (!existsSync(packagedCli)) throw new Error('packed supplier CLI is missing from the installed tarball');
@@ -3755,7 +3768,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       { cwd: consumerRoot },
     );
     const cliReport = JSON.parse(cliResult.stdout);
-    const missingFixtureSuppliers = ['antd', 'd3', 'motion', 'lucide-react']
+    const missingFixtureSuppliers = ['@phosphor-icons/react', 'antd', 'd3', 'motion', 'lucide-react']
       .filter((supplier) => !cliReport.renderedSuppliers?.includes(supplier));
     if (missingFixtureSuppliers.length > 0) {
       throw new Error(`packed supplier CLI missed fixture suppliers: ${missingFixtureSuppliers.join(', ')}`);

@@ -151,33 +151,38 @@ Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated art
 - The brand compiler (`compilers/brand-theme/`) converts BrandTheme to CSS vars and personality tokens.
 - First-party tenant artifacts (`tokens/css/artifacts/{bithire,evnto,rottay}/index.css`) are build products assembled from the BrandTheme `.ts` file plus a declared `_source/extension.css`. Regenerate with `pnpm -C packages/core build:vertical-css`; hand-edits fail `lint:artifacts` (chained into `pretest` and `lint`).
 
-## Icon System (109 curated icons)
+## Icon system (semantic facade + compatibility catalog)
 
-Icons are centralized in the DS via `createIcon()` factory wrapping lucide-react.
-Apps MUST import icons from `@rottay/design-system/icons`, NOT directly from `lucide-react`.
+New product code uses the supplier-independent `Icon` facade backed by the
+fixed semantic registry. Phosphor is confined to `src/icons/adapters/`; apps
+MUST NOT import Phosphor, Lucide, Ant icons, or another functional supplier
+directly. The existing Lucide-shaped named catalog remains temporary compat.
 
 ### Import pattern
 ```tsx
-// CORRECT
-import { SearchIcon, PlusIcon, CheckIcon } from '@rottay/design-system/icons';
+// CORRECT for new product code
+import { Icon } from '@rottay/design-system/icons';
 
-// WRONG - do not import lucide directly
+<Icon name="action.search" decorative />
+<Icon name="status.warning" label="Requires attention" />
+
+// WRONG - suppliers never cross the adapter boundary
 import { Search, Plus, Check } from 'lucide-react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 ```
 
-### Categories (10)
-navigation, action, status, content, communication, user, data, layout, media, misc
+`IconProps` requires either a non-empty `label` or `decorative={true}`. Tenant
+configuration may change semantic tone only; it cannot select the supplier,
+glyph, role mapping, weight family, or motion recipe.
 
 ### Token customization
-- `--ds-icon-stroke-width: 1.5` (tenant-overridable for heavier/lighter look)
 - `--ds-icon-{xs|sm|md|lg|xl|2xl}-size` for sizing
 - Color via `currentColor` (inherits from parent text, tenant-aware)
 
 ### Adding new icons
-Add one line to the appropriate `src/icons/catalog/{category}.ts`:
-```tsx
-export const NewIcon = createIcon(LucideNew, 'NewIcon');
-```
+Add a semantic name to `src/icons/semantic/registry.ts`, map it only inside the
+supplier adapter, extend the fixed-corpus tests, and update provenance when the
+supplier/version changes. Do not add a new vendor-shaped alias for product use.
 
 ---
 
