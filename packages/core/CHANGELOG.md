@@ -1,5 +1,18 @@
 # @rottay/design-system
 
+## 2.19.16
+
+### Patch Changes
+
+- Add the focused `charts/renderers` entry with React-owned Bar, Line and HeatMap SVG renderers;
+  D3 remains limited to immutable scales, paths, UTC time and color interpolation.
+- Recompute geometry from one container observer so responsive charts preserve readable typography,
+  while fixed mode retains intrinsic dimensions and creates no observer.
+- Harden negative, constant, invalid and duplicate-domain behavior; preserve semantic SVG across
+  reconciliation and SSR/hydration; isolate provider-root HeatMap palettes.
+- Certify the built ESM/CJS facade, named-export and geometry-builder tree-shaking, public CSS payloads,
+  engine paint ratchets and offline tarball TypeScript/runtime consumption with measured budgets.
+
 ## 2.19.15
 
 ### Patch Changes
