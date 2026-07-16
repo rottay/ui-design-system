@@ -1,5 +1,18 @@
 # @rottay/design-system
 
+## 2.19.11
+
+### Patch Changes
+
+- Adapt FormBuilder grids consistently across classic, modern and rustic: phone layouts project to
+  one column, tablet grids cap at two tracks, and desktop or explicit opt-out preserves caller values.
+- Add a backward-compatible responsive viewport authority for virtual-keyboard occlusion and first
+  client resolution, and let fixed ActionDock instances consume app-shell, safe-area and keyboard insets.
+- Add opt-in mobile FormSurface and WizardSurface action docks, compact localized wizard progress,
+  localized dirty-work protection, and complete disabled submission/draft semantics.
+- Preserve legacy custom responsive contexts while exposing a strongly normalized hook return for new
+  consumers, including SSR-neutral posture until the real viewport snapshot resolves.
+
 ## 2.19.10
 
 ### Patch Changes
