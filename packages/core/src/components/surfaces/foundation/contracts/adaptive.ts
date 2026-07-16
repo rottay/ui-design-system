@@ -22,8 +22,14 @@ export type CollectionPosture = 'table' | 'cards' | 'list' | 'board';
 /** How a form surface lays out its section navigation. */
 export type FormSectionLayout = 'sidebar-nav' | 'pill-nav' | 'dropdown-nav' | 'stacked';
 
-/** How a supporting pane (sidebar, preview rail) is rendered. */
-export type PanePosture = 'inline' | 'sheet' | 'accordion' | 'hidden';
+/**
+ * How a supporting pane (sidebar, preview rail) is presented.
+ *
+ * `route` delegates the supporting content to a dedicated destination when the
+ * record is activated. `hidden` only suppresses the pane and carries no
+ * navigation semantics.
+ */
+export type PanePosture = 'inline' | 'sheet' | 'accordion' | 'route' | 'hidden';
 
 /** How the action bar is positioned. */
 export type ActionBarPosture = 'inline' | 'sticky-bottom' | 'floating';
@@ -75,7 +81,9 @@ export interface SurfacePosture {
  * const adaptive: AdaptiveConfig = {
  *   desktop: { collection: 'table', pane: 'inline', filters: 'inline' },
  *   tablet: { collection: 'table', pane: 'sheet', filters: 'dropdown' },
- *   phone: { collection: 'cards', pane: 'hidden', filters: 'sheet', compactHeader: true },
+ *   // `route` opens the dedicated record destination. Use `hidden` when the
+ *   // supporting pane should disappear without introducing navigation.
+ *   phone: { collection: 'cards', pane: 'route', filters: 'sheet', compactHeader: true },
  * };
  * ```
  */

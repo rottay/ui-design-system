@@ -52,6 +52,16 @@ const PHONE_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
   isTouchDevice: true,
 };
 
+const TABLET_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
+  ...PHONE_RESPONSIVE_CONTEXT,
+  deviceClass: 'tablet',
+  activeBreakpoint: 'md',
+  isPhone: false,
+  isTablet: true,
+  isDesktop: false,
+  isTabletOrDesktop: true,
+};
+
 const DESKTOP_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
   ...PHONE_RESPONSIVE_CONTEXT,
   deviceClass: 'desktop',
@@ -516,6 +526,171 @@ describe('CollectionWorkspaceSurface', () => {
       'data-active',
       'true',
     );
+  });
+
+  it('projects tablet filters into a transactional anchored dropdown', async () => {
+    const onFilterChange = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={TABLET_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Test Collection',
+            },
+            adaptive: {
+              desktop: { filters: 'inline' },
+              tablet: { filters: 'dropdown' },
+              phone: { filters: 'sheet' },
+            },
+            controls: {
+              filters: [
+                {
+                  key: 'status',
+                  label: 'Lifecycle status',
+                  type: 'select',
+                  options: [
+                    { label: 'Active', value: 'active' },
+                    { label: 'Inactive', value: 'inactive' },
+                  ],
+                },
+              ],
+              onFilterChange,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    expect(screen.queryByText('Lifecycle status')).not.toBeInTheDocument();
+    const trigger = await screen.findByRole('button', { name: 'Advanced filters' });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).toHaveAttribute('aria-controls');
+
+    fireEvent.click(trigger);
+    let dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
+    expect(dialog).toHaveAttribute('id', trigger.getAttribute('aria-controls'));
+    expect(dialog).toHaveAttribute('data-part', 'filter-dropdown-surface');
+    expect(dialog).toHaveStyle({ position: 'fixed' });
+    const statusSelect = within(dialog).getByRole('combobox');
+    await waitFor(() => expect(statusSelect).toHaveFocus());
+
+    fireEvent.change(statusSelect, { target: { value: 'active' } });
+    fireEvent.keyDown(document, { key: 'Escape' });
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Advanced filters' }))
+        .not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
+    });
+    expect(onFilterChange).not.toHaveBeenCalled();
+
+    fireEvent.click(trigger);
+    dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
+    expect(within(dialog).getByRole<HTMLSelectElement>('combobox').value).toBe('');
+    fireEvent.change(within(dialog).getByRole('combobox'), {
+      target: { value: 'inactive' },
+    });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Apply filters' }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Advanced filters' }))
+        .not.toBeInTheDocument();
+    });
+    expect(onFilterChange).toHaveBeenCalledTimes(1);
+    expect(onFilterChange).toHaveBeenCalledWith({ status: 'inactive' });
+  });
+
+  it('exposes the same anchored dropdown contract in non-premium tablet mode', async () => {
+    renderSurface(
+      <ResponsiveContext.Provider value={TABLET_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: { tablet: { filters: 'dropdown' } },
+            controls: {
+              filters: [
+                {
+                  key: 'query',
+                  label: 'Candidate query',
+                  type: 'text',
+                  placeholder: 'Filter candidates',
+                },
+              ],
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    expect(screen.queryByPlaceholderText('Filter candidates')).not.toBeInTheDocument();
+    const trigger = await screen.findByRole('button', { name: 'Advanced filters' });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(trigger).toHaveAttribute('aria-controls');
+
+    fireEvent.click(trigger);
+    const dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
+    expect(dialog).toHaveAttribute('data-part', 'filter-dropdown-surface');
+    expect(within(dialog).getByPlaceholderText('Filter candidates')).toBeInTheDocument();
+
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }));
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Advanced filters' }))
+        .not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
+    });
+  });
+
+  it('hydrates canonical filters when an open inline panel becomes a dropdown', async () => {
+    function PostureTransitionHarness() {
+      const [responsive, setResponsive] = React.useState(DESKTOP_RESPONSIVE_CONTEXT);
+
+      return (
+        <>
+          <button type="button" onClick={() => setResponsive(TABLET_RESPONSIVE_CONTEXT)}>
+            Use tablet posture
+          </button>
+          <ResponsiveContext.Provider value={responsive}>
+            <CollectionWorkspaceSurface
+              {...buildProps({
+                header: { eyebrow: 'People', title: 'Test Collection' },
+                adaptive: {
+                  desktop: { filters: 'inline' },
+                  tablet: { filters: 'dropdown' },
+                },
+                controls: {
+                  filters: [
+                    {
+                      key: 'status',
+                      label: 'Lifecycle status',
+                      type: 'select',
+                      options: [{ label: 'Active', value: 'active' }],
+                    },
+                  ],
+                  filterValues: { status: 'active' },
+                },
+              })}
+            />
+          </ResponsiveContext.Provider>
+        </>
+      );
+    }
+
+    renderSurface(<PostureTransitionHarness />);
+    const trigger = await screen.findByRole('button', { name: /Advanced filters/ });
+    fireEvent.click(trigger);
+    expect(screen.getAllByText('Lifecycle status').length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Use tablet posture' }));
+    const dialog = await screen.findByRole(
+      'dialog',
+      { name: 'Advanced filters' },
+      { timeout: 1000 },
+    );
+    await waitFor(() => {
+      expect((within(dialog).getByRole('combobox') as HTMLSelectElement).value)
+        .toBe('active');
+    });
   });
 
   it('exposes the same dialog trigger contract in non-premium phone mode', async () => {
@@ -1409,6 +1584,474 @@ describe('CollectionWorkspaceSurface', () => {
 
     // Preview rail only shows when exactly 1 item is selected
     expect(screen.queryByTestId('preview-rail')).not.toBeInTheDocument();
+  });
+
+  it('projects a phone cards selection into a details sheet without clearing selection', async () => {
+    const onSelectionChange = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              phone: { collection: 'cards', pane: 'sheet' },
+            },
+            behavior: {
+              selection: {
+                enabled: true,
+                selectedKeys: ['1'],
+                onSelectionChange,
+              },
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => (
+                  <div data-testid="sheet-raw-preview">
+                    Raw preview: {item.name} ({item.status})
+                  </div>
+                ),
+              },
+            },
+            viewModes: {
+              cards: {
+                renderCard: (row, _index, context) => (
+                  <div data-testid={`sheet-card-${row.id}`}>
+                    {row.name}: {context.selected ? 'selected' : 'not selected'}
+                  </div>
+                ),
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const dialog = await screen.findByRole('dialog', { name: 'Test Collection details' });
+    expect(within(dialog).getByTestId('sheet-raw-preview')).toHaveTextContent(
+      'Raw preview: Alice (active)',
+    );
+    expect(screen.getByTestId('sheet-card-1')).toHaveTextContent('Alice: selected');
+
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Close' }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Test Collection details' }))
+        .not.toBeInTheDocument();
+    });
+    expect(screen.getByTestId('sheet-card-1')).toHaveTextContent('Alice: selected');
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it('keeps a selected compact preview alive across a loading refetch', async () => {
+    function RefetchHarness() {
+      const [phase, setPhase] = React.useState<'ready' | 'loading' | 'restored'>('ready');
+      const rows = phase === 'loading' ? [] : TEST_DATA;
+
+      return (
+        <>
+          <button type="button" onClick={() => setPhase('loading')}>Start refetch</button>
+          <button type="button" onClick={() => setPhase('restored')}>Finish refetch</button>
+          <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+            <CollectionWorkspaceSurface
+              {...buildProps({
+                data: rows,
+                loading: phase === 'loading',
+                adaptive: { phone: { collection: 'cards', pane: 'sheet' } },
+                behavior: {
+                  selection: { enabled: true, selectedKeys: ['1'] },
+                  previewRail: {
+                    enabled: true,
+                    render: (item: TestRow) => (
+                      <div data-testid="refetch-preview">Preview {item.name}</div>
+                    ),
+                  },
+                },
+              })}
+            />
+          </ResponsiveContext.Provider>
+        </>
+      );
+    }
+
+    renderSurface(<RefetchHarness />);
+    let dialog = await screen.findByRole('dialog', { name: 'Test Collection details' });
+    expect(within(dialog).getByTestId('refetch-preview')).toHaveTextContent('Preview Alice');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start refetch' }));
+    dialog = await screen.findByRole('dialog', { name: 'Test Collection details' });
+    expect(within(dialog).getByText('Loading details…')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Finish refetch' }));
+    dialog = await screen.findByRole('dialog', { name: 'Test Collection details' });
+    expect(await within(dialog).findByTestId('refetch-preview')).toHaveTextContent(
+      'Preview Alice',
+    );
+  });
+
+  it('removes a stale accordion disclosure after its item disappears from settled data', async () => {
+    function RemovedPreviewHarness() {
+      const [rows, setRows] = React.useState(TEST_DATA);
+
+      return (
+        <>
+          <button type="button" onClick={() => setRows([])}>Remove preview item</button>
+          <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+            <CollectionWorkspaceSurface
+              {...buildProps({
+                data: rows,
+                adaptive: { phone: { collection: 'cards', pane: 'accordion' } },
+                behavior: {
+                  selection: { enabled: true, selectedKeys: ['1'] },
+                  previewRail: {
+                    enabled: true,
+                    render: (item: TestRow) => <div>Preview {item.name}</div>,
+                  },
+                },
+              })}
+            />
+          </ResponsiveContext.Provider>
+        </>
+      );
+    }
+
+    const { container } = renderSurface(<RemovedPreviewHarness />);
+    await waitFor(() => {
+      expect(container.querySelector('[data-part="preview-accordion"]'))
+        .toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Remove preview item' }));
+    await waitFor(() => {
+      expect(container.querySelector('[data-part="preview-accordion"]'))
+        .not.toBeInTheDocument();
+    });
+  });
+
+  it('does not reopen a dismissed focused preview when unrelated selection changes', async () => {
+    const onSelectionChange = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: { phone: { collection: 'cards', pane: 'sheet' } },
+            behavior: {
+              focus: {
+                enabled: true,
+                focusedKey: '1',
+                onFocusChange: vi.fn(),
+              },
+              selection: {
+                enabled: true,
+                selectedKeys: [],
+                onSelectionChange,
+              },
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => <div>Focused preview {item.name}</div>,
+              },
+            },
+            viewModes: {
+              cards: {
+                renderCard: (row, _index, context) => (
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      context.toggleSelection(event);
+                    }}
+                  >
+                    Select {row.name}
+                  </button>
+                ),
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const dialog = await screen.findByRole('dialog', { name: 'Test Collection details' });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Close' }));
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Test Collection details' }))
+        .not.toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Select Bob' }));
+    expect(onSelectionChange).toHaveBeenCalledWith(['2'], [TEST_DATA[1]]);
+    expect(screen.queryByRole('dialog', { name: 'Test Collection details' }))
+      .not.toBeInTheDocument();
+  });
+
+  it('renders an accordion preview after the collection and preserves its internal action', async () => {
+    const onPreviewAction = vi.fn();
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              phone: { collection: 'cards', pane: 'accordion' },
+            },
+            behavior: {
+              selection: {
+                enabled: true,
+                selectedKeys: ['2'],
+              },
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => (
+                  <button type="button" onClick={onPreviewAction}>
+                    Review {item.name}
+                  </button>
+                ),
+              },
+            },
+            viewModes: {
+              cards: {
+                renderCard: (row) => <div>{`Accordion card ${row.name}`}</div>,
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const collection = container.querySelector<HTMLElement>('[data-part="collection"]');
+    const accordion = container.querySelector<HTMLElement>('[data-part="preview-accordion"]');
+    expect(collection).not.toBeNull();
+    expect(accordion).not.toBeNull();
+    expect(
+      collection!.compareDocumentPosition(accordion!) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    const disclosure = accordion!.querySelector<HTMLElement>(
+      '[data-part="preview-accordion-trigger"]',
+    );
+    expect(disclosure).not.toBeNull();
+    await waitFor(() => expect(disclosure).toHaveAttribute('aria-expanded', 'true'));
+
+    fireEvent.click(within(accordion!).getByRole('button', { name: 'Review Bob' }));
+    expect(onPreviewAction).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(disclosure!);
+    expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+    expect(within(accordion!).queryByRole('button', { name: 'Review Bob' }))
+      .not.toBeInTheDocument();
+    fireEvent.click(disclosure!);
+    expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.click(within(accordion!).getByRole('button', { name: 'Review Bob' }));
+    expect(onPreviewAction).toHaveBeenCalledTimes(2);
+  });
+
+  it('routes once from the named route posture without opening a preview or row callback', async () => {
+    const onNavigate = vi.fn();
+    const onRowClick = vi.fn();
+    const onFocusChange = vi.fn();
+    const onCardAction = vi.fn();
+    const onCheckboxChange = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              phone: { collection: 'cards', pane: 'route' },
+            },
+            onRowClick,
+            mobileCard: (row) => (
+              <div>
+                {`Route card ${row.name}`}
+                <button type="button" onClick={onCardAction}>
+                  Archive {row.name}
+                </button>
+                <label>
+                  <input type="checkbox" onChange={onCheckboxChange} />
+                  Select {row.name}
+                </label>
+              </div>
+            ),
+            behavior: {
+              focus: {
+                enabled: true,
+                focusedKey: null,
+                onFocusChange,
+              },
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => (
+                  <div data-testid="route-preview">Preview {item.name}</div>
+                ),
+                mobileNavigation: {
+                  enabled: true,
+                  onClick: onNavigate,
+                },
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Archive Alice' }));
+    expect(onCardAction).toHaveBeenCalledTimes(1);
+    expect(onNavigate).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByText('Select Alice'));
+    expect(onCheckboxChange).toHaveBeenCalledTimes(1);
+    expect(onNavigate).not.toHaveBeenCalled();
+
+    const cardActivation = screen.getByRole('button', {
+      name: 'Open Test Collection item 1',
+    });
+    expect(cardActivation.tagName).toBe('BUTTON');
+    cardActivation.focus();
+    expect(cardActivation).toHaveFocus();
+    fireEvent.click(cardActivation);
+
+    expect(onNavigate).toHaveBeenCalledTimes(1);
+    expect(onNavigate).toHaveBeenCalledWith(TEST_DATA[0]);
+    expect(onRowClick).not.toHaveBeenCalled();
+    expect(onFocusChange).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('route-preview')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog', { name: 'Test Collection details' }))
+      .not.toBeInTheDocument();
+    expect(screen.queryByText('Test Collection details')).not.toBeInTheDocument();
+  });
+
+  it('exposes a native record link for fallback cards in the route posture', async () => {
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              phone: { collection: 'cards', pane: 'route' },
+            },
+            behavior: {
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => <div>Preview {item.name}</div>,
+                mobileNavigation: {
+                  enabled: true,
+                  href: (item: TestRow) => `/records/${item.id}`,
+                },
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    expect(await screen.findByRole('link', {
+      name: 'Open Test Collection item 1',
+    })).toHaveAttribute('href', '/records/1');
+  });
+
+  it('does not invoke disabled mobile navigation from the route posture', async () => {
+    const onNavigate = vi.fn();
+    const onRowClick = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              phone: { collection: 'cards', pane: 'route' },
+            },
+            onRowClick,
+            mobileCard: (row) => <div>{`Disabled route card ${row.name}`}</div>,
+            behavior: {
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => <div>Preview {item.name}</div>,
+                mobileNavigation: {
+                  enabled: false,
+                  onClick: onNavigate,
+                },
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    fireEvent.click(await screen.findByText('Disabled route card Alice'));
+    expect(onNavigate).not.toHaveBeenCalled();
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+    expect(onRowClick).toHaveBeenCalledWith(TEST_DATA[0], 0);
+  });
+
+  it('keeps hidden plus mobileNavigation as a legacy routing alias', async () => {
+    const onNavigate = vi.fn();
+    const onRowClick = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              phone: { collection: 'cards', pane: 'hidden' },
+            },
+            onRowClick,
+            mobileCard: (row) => <div>{`Legacy route card ${row.name}`}</div>,
+            behavior: {
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => (
+                  <div data-testid="legacy-route-preview">Preview {item.name}</div>
+                ),
+                mobileNavigation: {
+                  enabled: true,
+                  onClick: onNavigate,
+                },
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    fireEvent.click(await screen.findByText('Legacy route card Alice'));
+
+    expect(onNavigate).toHaveBeenCalledTimes(1);
+    expect(onNavigate).toHaveBeenCalledWith(TEST_DATA[0]);
+    expect(onRowClick).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('legacy-route-preview')).not.toBeInTheDocument();
+  });
+
+  it('keeps the explicit desktop inline posture on the preview rail', async () => {
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={DESKTOP_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: {
+              desktop: { collection: 'table', pane: 'inline' },
+              phone: { collection: 'cards', pane: 'sheet' },
+            },
+            behavior: {
+              selection: {
+                enabled: true,
+                selectedKeys: ['3'],
+              },
+              previewRail: {
+                enabled: true,
+                render: (item: TestRow) => (
+                  <div data-testid="inline-preview">Inline preview {item.name}</div>
+                ),
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    expect(await screen.findByTestId('inline-preview')).toHaveTextContent(
+      'Inline preview Charlie',
+    );
+    expect(container.querySelector('[data-part="preview-rail"]')).toBeInTheDocument();
+    expect(screen.queryByRole('dialog', { name: 'Test Collection details' }))
+      .not.toBeInTheDocument();
+    expect(container.querySelector('[data-part="preview-accordion"]')).not.toBeInTheDocument();
   });
 
   // -------------------------------------------------------------------------

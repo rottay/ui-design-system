@@ -70,6 +70,7 @@ import { ActionDock } from '../../../../primitives/navigation/ActionDock';
 import { AdaptiveOverlay } from '../../../../primitives/overlay/AdaptiveOverlay';
 import { WorkspaceShell } from '../../../layout/collection-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
+import { CollectionFilterDropdown } from './filter-dropdown';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
 import { resolveDensityStyleVars, normalizeDensityMode } from '../../../../../tokens/ts/base/density';
 import type { DensityMode } from '../../../../../tokens/ts/base/density';
@@ -474,6 +475,7 @@ function UtilityIcon({
   ariaControls,
   ariaExpanded,
   ariaHasPopup,
+  buttonRef,
 }: {
   icon: ReactNode;
   label: string;
@@ -482,10 +484,12 @@ function UtilityIcon({
   ariaControls?: string;
   ariaExpanded?: boolean;
   ariaHasPopup?: React.AriaAttributes['aria-haspopup'];
+  buttonRef?: React.Ref<HTMLButtonElement>;
 }) {
   return (
     <Box
       as="button"
+      ref={buttonRef}
       className="ds-collection-workspace__utility-icon-toggle"
       data-part="utility-icon-toggle"
       data-active={active ? 'true' : 'false'}
@@ -852,12 +856,22 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [filterDraftValues, setFilterDraftValues] = useState<Record<string, unknown>>({});
   const [compactActionsOpen, setCompactActionsOpen] = useState(false);
-  const filterSheetId = `ds-collection-filter-sheet-${useId().replace(/:/g, '')}`;
+  const [compactPreviewOpen, setCompactPreviewOpen] = useState(false);
+  const [compactPreviewKey, setCompactPreviewKey] = useState<string | null>(null);
+  const dismissedCompactPreviewKeyRef = useRef<string | null>(null);
+  const unavailableCompactPreviewKeyRef = useRef<string | null>(null);
+  const filterDisclosureId = `ds-collection-filter-${useId().replace(/:/g, '')}`;
+  const filterDropdownAnchorRef = useRef<HTMLButtonElement | null>(null);
   const compactActionsId = `ds-collection-actions-${useId().replace(/:/g, '')}`;
+  const compactPreviewId = `ds-collection-preview-${useId().replace(/:/g, '')}`;
   const usesFilterSheet = Boolean(
-    hasFilters && posture.filters === 'sheet' && !posture.isDesktop,
+    hasFilters && posture.filters === 'sheet',
   );
-  const inlineFiltersExpanded = filtersExpanded && !usesFilterSheet;
+  const usesFilterDropdown = Boolean(
+    hasFilters && posture.filters === 'dropdown',
+  );
+  const usesFilterDisclosure = usesFilterSheet || usesFilterDropdown;
+  const inlineFiltersExpanded = filtersExpanded && !usesFilterDisclosure;
   const usesStickyActionContinuity = posture.actionBar === 'sticky-bottom';
   const usesMinimalHeader = Boolean(
     posture.compactHeader && usesStickyActionContinuity,
@@ -878,7 +892,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     return workspace.activeViewMode;
   }, [posture.collection, posture.breakpoint, workspace.activeViewMode]);
 
-  const filterLayout = posture.filters === 'dropdown' ? 'stacked' : 'inline';
   const showOptionalChrome = !posture.compactHeader && !posture.isPhone;
   const showContextChrome = Boolean(
     resolvedContextSlot && (showOptionalChrome || chrome?.context === true),
@@ -892,10 +905,16 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const focusedKey = behavior?.focus?.focusedKey ?? null;
   const previewKey = focusedKey
     ?? (workspace.selectedKeys.length === 1 ? workspace.selectedKeys[0] : null);
+  const panePosture = posture.pane ?? 'inline';
+  const previewEnabled = Boolean(
+    behavior?.previewRail?.enabled && behavior.previewRail.render,
+  );
+  const usesPreviewSheet = previewEnabled && panePosture === 'sheet';
+  const usesPreviewAccordion = previewEnabled && panePosture === 'accordion';
+  const usesCompactPreview = usesPreviewSheet || usesPreviewAccordion;
   const previewRailAllowed = effectiveViewMode === 'table' || effectiveViewMode === 'list';
-  const showPreviewRail = behavior?.previewRail?.enabled
-    && behavior.previewRail.render
-    && posture.pane !== 'hidden'
+  const showPreviewRail = previewEnabled
+    && panePosture === 'inline'
     && previewRailAllowed
     && previewKey != null;
   const previewRailResizable = behavior?.previewRail?.resizable ?? true;
@@ -1015,31 +1034,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     [commitPreviewRailWidth, previewRailResizable],
   );
 
-  const handleRowClick = useCallback(
-    (item: T, index: number) => {
-      // Mobile navigation: when pane is hidden and mobileNavigation is enabled,
-      // navigate instead of opening the preview rail.
-      const mobileNav = behavior?.previewRail?.mobileNavigation;
-      if (posture.pane === 'hidden' && mobileNav?.enabled) {
-        if (mobileNav.href) {
-          window.location.href = mobileNav.href(item);
-          return;
-        }
-        if (mobileNav.onClick) {
-          mobileNav.onClick(item);
-          return;
-        }
-      }
-
-      if (focusEnabled && behavior?.focus?.onFocusChange) {
-        const key = resolveKey(item, rowKey);
-        behavior.focus.onFocusChange(key === focusedKey ? null : key);
-      }
-      (onRowClick ?? behavior?.onRowClick)?.(item, index);
-    },
-    [focusEnabled, behavior?.focus, behavior?.onRowClick, behavior?.previewRail?.mobileNavigation, onRowClick, posture.pane, rowKey, focusedKey],
-  );
-
   const renderPreviewRail = useCallback(
     (railItem: T) => {
       const configuredWidth = previewRailResizable
@@ -1107,7 +1101,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               />
             </Box>
           ) : null}
-          {behavior!.previewRail!.render!(railItem)}
+          {behavior!.previewRail!.render!(railItem, { pane: 'inline', compact: false })}
         </Box>
       );
     },
@@ -1250,6 +1244,192 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       .map(({ item }) => item);
   }, [draftedData, effectiveColumns, effectiveSorting, usesExternalSorting]);
 
+  const resolvedCompactPreviewKey = compactPreviewKey
+    ?? (unavailableCompactPreviewKeyRef.current === previewKey ? null : previewKey);
+  const previewItem = useMemo(
+    () => resolvedCompactPreviewKey == null
+      ? undefined
+      : displayData.find((item) => resolveKey(item, rowKey) === resolvedCompactPreviewKey),
+    [displayData, resolvedCompactPreviewKey, rowKey],
+  );
+  const compactPreviewVisible = Boolean(
+    usesCompactPreview && compactPreviewOpen && resolvedCompactPreviewKey != null,
+  );
+
+  const handleCompactPreviewOpenChange = useCallback((open: boolean) => {
+    if (open) {
+      const nextKey = compactPreviewKey ?? previewKey;
+      if (nextKey == null) return;
+      dismissedCompactPreviewKeyRef.current = null;
+      setCompactPreviewKey(nextKey);
+      setCompactPreviewOpen(true);
+      return;
+    }
+
+    dismissedCompactPreviewKeyRef.current = compactPreviewKey ?? previewKey;
+    setCompactPreviewOpen(false);
+  }, [compactPreviewKey, previewKey]);
+
+  const openCompactPreviewForKey = useCallback((key: string) => {
+    dismissedCompactPreviewKeyRef.current = null;
+    unavailableCompactPreviewKeyRef.current = null;
+    setCompactPreviewKey(key);
+    setCompactPreviewOpen(true);
+  }, []);
+
+  const previousExternalPreviewKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    const previousExternalKey = previousExternalPreviewKeyRef.current;
+
+    if (!usesCompactPreview) {
+      previousExternalPreviewKeyRef.current = null;
+      dismissedCompactPreviewKeyRef.current = null;
+      unavailableCompactPreviewKeyRef.current = null;
+      setCompactPreviewKey(null);
+      setCompactPreviewOpen(false);
+      return;
+    }
+
+    previousExternalPreviewKeyRef.current = previewKey;
+    if (previewKey == null) {
+      if (previousExternalKey != null) {
+        dismissedCompactPreviewKeyRef.current = null;
+        unavailableCompactPreviewKeyRef.current = null;
+        setCompactPreviewKey(null);
+        setCompactPreviewOpen(false);
+      }
+      return;
+    }
+
+    if (unavailableCompactPreviewKeyRef.current === previewKey) {
+      if (compactPreviewKey != null) setCompactPreviewKey(null);
+      return;
+    }
+
+    if (unavailableCompactPreviewKeyRef.current != null) {
+      unavailableCompactPreviewKeyRef.current = null;
+    }
+
+    if (compactPreviewKey !== previewKey) {
+      setCompactPreviewKey(previewKey);
+      if (dismissedCompactPreviewKeyRef.current !== previewKey) {
+        setCompactPreviewOpen(true);
+      }
+    }
+  }, [compactPreviewKey, previewKey, usesCompactPreview]);
+
+  useEffect(() => {
+    if (
+      !usesCompactPreview
+      || !compactPreviewOpen
+      || resolvedCompactPreviewKey == null
+      || previewItem
+      || loading
+    ) {
+      return;
+    }
+
+    // Loading may transiently empty the collection. Only close once the app
+    // declares a settled dataset that no longer contains the previewed item.
+    dismissedCompactPreviewKeyRef.current = resolvedCompactPreviewKey;
+    unavailableCompactPreviewKeyRef.current = resolvedCompactPreviewKey;
+    setCompactPreviewKey(null);
+    setCompactPreviewOpen(false);
+  }, [
+    compactPreviewOpen,
+    loading,
+    previewItem,
+    resolvedCompactPreviewKey,
+    usesCompactPreview,
+  ]);
+
+  const handleWorkspaceSelectionChange = useCallback((keys: string[], items: T[]) => {
+    workspace.setSelection(keys, items);
+    if (!usesCompactPreview || focusedKey) return;
+
+    if (keys.length === 1) {
+      openCompactPreviewForKey(keys[0]);
+      return;
+    }
+
+    dismissedCompactPreviewKeyRef.current = null;
+    setCompactPreviewKey(null);
+    setCompactPreviewOpen(false);
+  }, [focusedKey, openCompactPreviewForKey, usesCompactPreview, workspace]);
+
+  const handleRowClick = useCallback(
+    (item: T, index: number) => {
+      const mobileNav = behavior?.previewRail?.mobileNavigation;
+      const usesDeclaredRoute = posture.pane === 'route';
+      const usesLegacyHiddenRoute = posture.pane === 'hidden' && mobileNav?.enabled;
+      const usesEnabledNavigation = mobileNav?.enabled === true;
+
+      // `route` is the named navigation posture. Keep hidden + mobileNavigation
+      // as a compatibility alias until apps migrate their adaptive configs.
+      if (usesDeclaredRoute || usesLegacyHiddenRoute) {
+        if (usesEnabledNavigation && mobileNav?.href) {
+          window.location.href = mobileNav.href(item);
+          return;
+        }
+        if (usesEnabledNavigation && mobileNav?.onClick) {
+          mobileNav.onClick(item);
+          return;
+        }
+
+        if (usesDeclaredRoute) {
+          (onRowClick ?? behavior?.onRowClick)?.(item, index);
+          return;
+        }
+      }
+
+      const key = resolveKey(item, rowKey);
+      if (focusEnabled && behavior?.focus?.onFocusChange) {
+        const nextKey = key === focusedKey ? null : key;
+        behavior.focus.onFocusChange(nextKey);
+        if (usesCompactPreview) {
+          if (nextKey) openCompactPreviewForKey(nextKey);
+          else handleCompactPreviewOpenChange(false);
+        }
+      } else if (usesCompactPreview) {
+        openCompactPreviewForKey(key);
+      }
+      (onRowClick ?? behavior?.onRowClick)?.(item, index);
+    },
+    [
+      behavior?.focus,
+      behavior?.onRowClick,
+      behavior?.previewRail?.mobileNavigation,
+      focusEnabled,
+      focusedKey,
+      handleCompactPreviewOpenChange,
+      onRowClick,
+      openCompactPreviewForKey,
+      posture.pane,
+      rowKey,
+      usesCompactPreview,
+    ],
+  );
+
+  const resolveRowHref = useCallback((item: T) => {
+    const mobileNav = behavior?.previewRail?.mobileNavigation;
+    const usesDeclaredRoute = posture.pane === 'route';
+    const usesLegacyHiddenRoute = posture.pane === 'hidden' && mobileNav?.enabled;
+    if (
+      (!usesDeclaredRoute && !usesLegacyHiddenRoute)
+      || mobileNav?.enabled !== true
+      || !mobileNav.href
+    ) {
+      return undefined;
+    }
+
+    return mobileNav.href(item);
+  }, [behavior?.previewRail?.mobileNavigation, posture.pane]);
+
+  const resolveRowActivationLabel = useCallback(
+    (_item: T, index: number) => `Open ${title} item ${index + 1}`,
+    [title],
+  );
+
   const hasColumnMenu = Boolean(
     controls?.columnSettings?.enabled &&
       (
@@ -1337,33 +1517,33 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     () => countActiveFilterValues(filterDraftValues),
     [filterDraftValues],
   );
-  const openFilterSheet = useCallback(() => {
+  const openFilterDisclosure = useCallback(() => {
     setFilterDraftValues({ ...workspace.filterValues });
     setFiltersExpanded(true);
   }, [workspace.filterValues]);
-  const closeFilterSheet = useCallback(() => {
+  const closeFilterDisclosure = useCallback(() => {
     setFilterDraftValues({ ...workspace.filterValues });
     setFiltersExpanded(false);
   }, [workspace.filterValues]);
-  const applyFilterSheet = useCallback(() => {
+  const applyFilterDisclosure = useCallback(() => {
     workspace.applyFilters({ ...filterDraftValues });
     setFiltersExpanded(false);
   }, [filterDraftValues, workspace]);
-  const clearFilterSheetDraft = useCallback(() => {
+  const clearFilterDraft = useCallback(() => {
     setFilterDraftValues(resolveDefaultFilterValues(controls?.filters));
   }, [controls?.filters]);
   const handleFiltersToggle = useCallback(() => {
-    if (!usesFilterSheet) {
+    if (!usesFilterDisclosure) {
       setFiltersExpanded((current) => !current);
       return;
     }
-    if (filtersExpanded) closeFilterSheet();
-    else openFilterSheet();
-  }, [closeFilterSheet, filtersExpanded, openFilterSheet, usesFilterSheet]);
-  const handleFilterSheetOpenChange = useCallback((open: boolean) => {
-    if (open) openFilterSheet();
-    else closeFilterSheet();
-  }, [closeFilterSheet, openFilterSheet]);
+    if (filtersExpanded) closeFilterDisclosure();
+    else openFilterDisclosure();
+  }, [closeFilterDisclosure, filtersExpanded, openFilterDisclosure, usesFilterDisclosure]);
+  const handleFilterDisclosureOpenChange = useCallback((open: boolean) => {
+    if (open) openFilterDisclosure();
+    else closeFilterDisclosure();
+  }, [closeFilterDisclosure, openFilterDisclosure]);
 
   useEffect(() => {
     if (!isPremium || typeof window === 'undefined') return;
@@ -1403,9 +1583,25 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     isPremium,
   ]);
 
+  const previousUsesFilterDisclosureRef = useRef(usesFilterDisclosure);
   useEffect(() => {
-    if (posture.isDesktop) setFiltersExpanded(false);
-  }, [posture.isDesktop]);
+    const previouslyUsedDisclosure = previousUsesFilterDisclosureRef.current;
+    previousUsesFilterDisclosureRef.current = usesFilterDisclosure;
+
+    if (!hasFilters) {
+      setFiltersExpanded(false);
+      return;
+    }
+
+    if (!previouslyUsedDisclosure && usesFilterDisclosure && filtersExpanded) {
+      setFilterDraftValues({ ...workspace.filterValues });
+      return;
+    }
+
+    if (previouslyUsedDisclosure && !usesFilterDisclosure) {
+      setFiltersExpanded(false);
+    }
+  }, [filtersExpanded, hasFilters, usesFilterDisclosure, workspace.filterValues]);
 
   useEffect(() => {
     if (!usesStickyActionContinuity || actionOverflowItems.length === 0) {
@@ -1436,21 +1632,33 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     [focusEnabled, focusedKey, rowKey],
   );
 
+  const filterDraftPanel = hasFilters ? (
+    <PatternFilterPanel
+      filters={controls!.filters!}
+      values={filterDraftValues}
+      onChange={setFilterDraftValues}
+      onReset={clearFilterDraft}
+      activeCount={draftActiveFilterCount}
+      layout="stacked"
+      showReset={draftActiveFilterCount > 0}
+    />
+  ) : null;
+
   const filterSheet = usesFilterSheet ? (
     <AdaptiveOverlay
       mode="sheet"
       open={filtersExpanded}
-      onOpenChange={handleFilterSheetOpenChange}
+      onOpenChange={handleFilterDisclosureOpenChange}
       title="Advanced filters"
-      id={filterSheetId}
+      id={filterDisclosureId}
       aria-label="Advanced filters"
       className="ds-collection-workspace__filter-sheet"
       footer={(
         <Flex gap={2} justify="end">
-          <Button variant="secondary" onClick={closeFilterSheet}>
+          <Button variant="secondary" onClick={closeFilterDisclosure}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={applyFilterSheet}>
+          <Button variant="primary" onClick={applyFilterDisclosure}>
             Apply filters
           </Button>
         </Flex>
@@ -1461,17 +1669,111 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         data-part="filter-sheet-content"
         style={{ minWidth: 0 }}
       >
-        <PatternFilterPanel
-          filters={controls!.filters!}
-          values={filterDraftValues}
-          onChange={setFilterDraftValues}
-          onReset={clearFilterSheetDraft}
-          activeCount={draftActiveFilterCount}
-          layout="stacked"
-          showReset={draftActiveFilterCount > 0}
-        />
+        {filterDraftPanel}
       </Box>
     </AdaptiveOverlay>
+  ) : null;
+
+  const filterDropdown = hasFilters ? (
+    <CollectionFilterDropdown
+      anchorRef={filterDropdownAnchorRef}
+      open={usesFilterDropdown && filtersExpanded}
+      onOpenChange={handleFilterDisclosureOpenChange}
+      id={filterDisclosureId}
+      ariaLabel="Advanced filters"
+    >
+      <Box
+        className="ds-collection-workspace__filter-dropdown-content"
+        data-part="filter-dropdown-content"
+        style={{ minWidth: 0 }}
+      >
+        {filterDraftPanel}
+        <Flex
+          className="ds-collection-workspace__filter-dropdown-actions"
+          data-part="filter-dropdown-actions"
+          gap={2}
+          justify="end"
+          style={{ marginTop: 'var(--ds-spacing-md, 16px)' }}
+        >
+          <Button variant="secondary" onClick={closeFilterDisclosure}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={applyFilterDisclosure}>
+            Apply filters
+          </Button>
+        </Flex>
+      </Box>
+    </CollectionFilterDropdown>
+  ) : null;
+
+  const compactPreviewSheet = usesPreviewSheet ? (
+    <AdaptiveOverlay
+      mode="sheet"
+      open={compactPreviewVisible}
+      onOpenChange={handleCompactPreviewOpenChange}
+      title={`${title} details`}
+      id={compactPreviewId}
+      aria-label={`${title} details`}
+      className="ds-collection-workspace__preview-sheet"
+    >
+      <Box
+        className="ds-collection-workspace__preview-sheet-content"
+        data-part="preview-sheet-content"
+        data-preview-key={resolvedCompactPreviewKey ?? undefined}
+        style={{ minWidth: 0 }}
+      >
+        {previewItem
+          ? behavior!.previewRail!.render!(previewItem, { pane: 'sheet', compact: true })
+          : loading && resolvedCompactPreviewKey != null
+            ? <Text color="muted">Loading details…</Text>
+            : null}
+      </Box>
+    </AdaptiveOverlay>
+  ) : null;
+
+  const compactPreviewAccordion = usesPreviewAccordion && resolvedCompactPreviewKey != null ? (
+    <Box
+      className="ds-collection-workspace__preview-accordion"
+      data-part="preview-accordion"
+      data-preview-key={resolvedCompactPreviewKey ?? undefined}
+      data-expanded={compactPreviewOpen ? 'true' : 'false'}
+      style={{ width: '100%', minWidth: 0 }}
+    >
+      <Button
+        id={`${compactPreviewId}-trigger`}
+        variant="ghost"
+        block
+        aria-expanded={compactPreviewOpen}
+        aria-controls={`${compactPreviewId}-region`}
+        data-part="preview-accordion-trigger"
+        data-expanded={compactPreviewOpen ? 'true' : 'false'}
+        onClick={() => handleCompactPreviewOpenChange(!compactPreviewOpen)}
+      >
+        <Flex align="center" justify="between" gap={2} style={{ width: '100%' }}>
+          <Text as="span" weight="semibold">{`${title} details`}</Text>
+          <ChevronDownIcon
+            aria-hidden
+            data-part="preview-accordion-icon"
+            size={16}
+          />
+        </Flex>
+      </Button>
+      {compactPreviewOpen ? (
+        <Box
+          id={`${compactPreviewId}-region`}
+          role="region"
+          aria-labelledby={`${compactPreviewId}-trigger`}
+          data-part="preview-accordion-content"
+          style={{ minWidth: 0 }}
+        >
+          {previewItem
+            ? behavior!.previewRail!.render!(previewItem, { pane: 'accordion', compact: true })
+            : loading
+              ? <Text color="muted">Loading details…</Text>
+              : null}
+        </Box>
+      ) : null}
+    </Box>
   ) : null;
 
   const compactActionsSheet = usesStickyActionContinuity
@@ -1526,7 +1828,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     const toolbarViewMode: ViewMode = workspace.activeViewMode === 'table' ? 'list' : 'cards';
 
     return (
-      <Stack
+      <>
+        <Stack
         className="ds-surface ds-collection-workspace"
         data-part="root"
         data-surface-mode={surfaceMode}
@@ -1596,25 +1899,26 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             maxViews={controls.savedViews.maxViews}
           />
         )}
-        {hasFilters && !usesFilterSheet && (
+        {hasFilters && !usesFilterDisclosure && (
           <PatternFilterPanel
             filters={controls!.filters!}
             values={workspace.filterValues}
             onChange={workspace.applyFilters}
             onReset={workspace.resetFilters}
             activeCount={workspace.activeFilterCount}
-            layout={filterLayout}
+            layout="inline"
           />
         )}
-        {usesFilterSheet && (
+        {usesFilterDisclosure && (
           <Button
+            ref={filterDropdownAnchorRef}
             variant="secondary"
             icon={<FilterIcon size={15} />}
             aria-label={hasActiveFilters ? `Advanced filters (${activeFilterCount})` : 'Advanced filters'}
             aria-expanded={filtersExpanded}
             aria-haspopup="dialog"
-            aria-controls={filterSheetId}
-            onClick={openFilterSheet}
+            aria-controls={filterDisclosureId}
+            onClick={handleFiltersToggle}
           >
             Filters{hasActiveFilters ? ` (${activeFilterCount})` : ''}
           </Button>
@@ -1635,12 +1939,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               actions={actions}
               actionsColumnWidth={actionsColumnWidth}
               onRowClick={handleRowClick}
+              rowHref={resolveRowHref}
+              rowActivationLabel={resolveRowActivationLabel}
               onRowDoubleClick={behavior?.onRowDoubleClick}
               expandedRow={behavior?.expandedRow}
               renderRow={focusEnabled ? renderRow : undefined}
               selectable={selectionEnabled}
               selectedKeys={selectionEnabled ? workspace.selectedKeys : undefined}
-              onSelectionChange={selectionEnabled ? workspace.setSelection : undefined}
+              onSelectionChange={selectionEnabled ? handleWorkspaceSelectionChange : undefined}
               bulkActions={behavior?.bulkActions}
               sorting={effectiveSorting}
               onSortChange={handleSortChange}
@@ -1683,9 +1989,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             return renderPreviewRail(railItem);
           })()}
         </Flex>
-        {footerSlot}
+        {compactPreviewAccordion}
+          {footerSlot}
+        </Stack>
         {filterSheet}
-      </Stack>
+        {filterDropdown}
+        {compactPreviewSheet}
+      </>
     );
   }
 
@@ -1956,7 +2266,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 </Flex>
               </Box>
 
-              {hasFilters && !usesFilterSheet && (
+              {hasFilters && !usesFilterDisclosure && (
                 <Box
                   className="ds-collection-workspace__filters-strip"
                   data-part="filters-strip"
@@ -2144,9 +2454,10 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 label={hasActiveFilters ? `Advanced filters (${activeFilterCount})` : 'Advanced filters'}
                 active={filtersExpanded || hasActiveFilters}
                 onClick={handleFiltersToggle}
-                ariaControls={usesFilterSheet ? filterSheetId : undefined}
+                ariaControls={usesFilterDisclosure ? filterDisclosureId : undefined}
                 ariaExpanded={filtersExpanded}
-                ariaHasPopup={usesFilterSheet ? 'dialog' : undefined}
+                ariaHasPopup={usesFilterDisclosure ? 'dialog' : undefined}
+                buttonRef={filterDropdownAnchorRef}
               />
             )}
 
@@ -2266,12 +2577,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               actions={actions}
               actionsColumnWidth={actionsColumnWidth}
               onRowClick={handleRowClick}
+              rowHref={resolveRowHref}
+              rowActivationLabel={resolveRowActivationLabel}
               onRowDoubleClick={behavior?.onRowDoubleClick}
               expandedRow={behavior?.expandedRow}
               renderRow={focusEnabled ? renderRow : undefined}
               selectable={selectionEnabled}
               selectedKeys={selectionEnabled ? workspace.selectedKeys : undefined}
-              onSelectionChange={selectionEnabled ? workspace.setSelection : undefined}
+              onSelectionChange={selectionEnabled ? handleWorkspaceSelectionChange : undefined}
               bulkActions={behavior?.bulkActions}
               sorting={effectiveSorting}
               onSortChange={handleSortChange}
@@ -2319,6 +2632,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         </Flex>
       </Box>
 
+      {compactPreviewAccordion}
+
       {footerSlot}
     </Stack>
   );
@@ -2336,7 +2651,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           previewEmphasis={shellConfig?.previewEmphasis}
           particleField={shellConfig?.particleField}
           focusActive={Boolean(focusedKey)}
-          previewActive={Boolean(showPreviewRail)}
+          previewActive={Boolean(showPreviewRail || compactPreviewVisible)}
           className={['ds-surface ds-collection-workspace', enhanced ? 'ds-collection-enhanced' : undefined].filter(Boolean).join(' ')}
           style={{
             width: '100%',
@@ -2367,6 +2682,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       )}
 
       {filterSheet}
+      {filterDropdown}
+      {compactPreviewSheet}
       {compactActionsSheet}
 
       {/* Sticky bottom action bar (phone posture) */}

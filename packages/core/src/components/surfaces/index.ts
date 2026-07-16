@@ -46,6 +46,7 @@ export type {
   WorkspaceViewModeConfig,
   WorkspaceSelectionConfig,
   WorkspacePreviewRailConfig,
+  WorkspacePreviewRenderContext,
   WorkspaceFocusConfig,
   WorkspaceCellEditingConfig,
   WorkspaceResponsiveConfig,

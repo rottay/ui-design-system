@@ -56,6 +56,10 @@ export interface CollectionRenderDispatchProps<T extends object> {
   actions?: (row: T, index: number) => ReactNode;
   actionsColumnWidth?: number | string;
   onRowClick?: (row: T, index: number) => void;
+  /** Optional semantic destination for card activation. */
+  rowHref?: (row: T, index: number) => string | undefined;
+  /** Accessible label for the card activation target. */
+  rowActivationLabel?: (row: T, index: number) => string;
   onRowDoubleClick?: (row: T, index: number) => void;
   expandedRow?: (row: T) => ReactNode;
   renderRow?: (row: T, defaultRender: ReactNode, index: number) => ReactNode;
@@ -198,16 +202,50 @@ function getColumnValue<T extends object>(
   return String(rawValue);
 }
 
+const INTERACTIVE_CARD_TARGET_SELECTOR = [
+  'a[href]',
+  'button',
+  'input',
+  'label',
+  'option',
+  'select',
+  'textarea',
+  'summary',
+  '[contenteditable="true"]',
+  '[role="button"]',
+  '[role="link"]',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
+function isNestedInteractiveCardTarget(
+  target: EventTarget | null,
+  currentTarget: HTMLElement,
+): boolean {
+  if (!(target instanceof Element) || target === currentTarget) return false;
+  const interactiveTarget = target.closest<HTMLElement>(INTERACTIVE_CARD_TARGET_SELECTOR);
+  return Boolean(
+    interactiveTarget
+    && interactiveTarget !== currentTarget
+    && currentTarget.contains(interactiveTarget),
+  );
+}
+
 function renderFallbackCard<T extends object>({
   row,
   index,
   columns,
   actions,
+  href,
+  activationLabel,
+  onActivate,
 }: {
   row: T;
   index: number;
   columns: ColumnDef<T>[];
   actions?: (row: T, index: number) => ReactNode;
+  href?: string;
+  activationLabel: string;
+  onActivate?: () => void;
 }): ReactNode {
   const visibleColumns = columns
     .filter((column) => column.visible !== false)
@@ -306,16 +344,42 @@ function renderFallbackCard<T extends object>({
         ))}
       </Box>
 
-      {actionContent ? (
+      {actionContent || href || onActivate ? (
         <Box
           className="ds-collection-render-dispatch__fallback-actions"
           data-part="fallback-actions"
+          onClick={(event) => event.stopPropagation()}
           style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 8,
+            flexWrap: 'wrap',
             marginTop: 'auto',
             paddingTop: 10,
           }}
         >
           {actionContent}
+          {href ? (
+            <a
+              className="ds-collection-render-dispatch__fallback-open-link"
+              data-part="fallback-open-link"
+              href={href}
+              aria-label={activationLabel}
+            >
+              Open details
+            </a>
+          ) : onActivate ? (
+            <button
+              type="button"
+              className="ds-collection-render-dispatch__fallback-open-link"
+              data-part="fallback-open-link"
+              aria-label={activationLabel}
+              onClick={onActivate}
+            >
+              Open details
+            </button>
+          ) : null}
         </Box>
       ) : null}
     </Box>
@@ -562,6 +626,8 @@ export function CollectionRenderDispatch<T extends object>(
     mobileCard,
     actions,
     onRowClick,
+    rowHref,
+    rowActivationLabel,
     focusEnabled,
   } = props;
 
@@ -835,23 +901,66 @@ export function CollectionRenderDispatch<T extends object>(
         >
           {data.map((item, i) => {
             const isLoneFinalCard = hasLoneFinalCard && i === data.length - 1;
+            const href = rowHref?.(item, i);
+            const activationLabel = rowActivationLabel?.(item, i) ?? `Open item ${i + 1}`;
+            const hasActivation = Boolean(onRowClick);
             return (
             <Box
               className="ds-collection-render-dispatch__card-item"
               data-part="card-item"
               data-lone-final={isLoneFinalCard ? 'true' : 'false'}
+              data-activatable={hasActivation ? 'true' : 'false'}
+              data-href={href}
               key={resolveKey(item, rowKey)}
-              onClick={() => onRowClick?.(item, i)}
+              onClick={(event) => {
+                if (isNestedInteractiveCardTarget(event.target, event.currentTarget)) return;
+                onRowClick?.(item, i);
+              }}
               style={{
                 cursor: focusEnabled || onRowClick ? 'pointer' : undefined,
                 gridColumn: isLoneFinalCard ? '1 / -1' : undefined,
                 minWidth: 0,
                 height: '100%',
+                position: 'relative',
               }}
             >
+              {cardRenderer && hasActivation ? (
+                href ? (
+                  <a
+                    className="ds-collection-render-dispatch__card-activation"
+                    data-part="card-activation"
+                    href={href}
+                    aria-label={activationLabel}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    {activationLabel}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className="ds-collection-render-dispatch__card-activation"
+                    data-part="card-activation"
+                    aria-label={activationLabel}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onRowClick?.(item, i);
+                    }}
+                  >
+                    {activationLabel}
+                  </button>
+                )
+              ) : null}
               {cardRenderer
                 ? cardRenderer(item, i, createCardContext(item, i))
-                : renderFallbackCard({ row: item, index: i, columns, actions })}
+                : renderFallbackCard({
+                    row: item,
+                    index: i,
+                    columns,
+                    actions,
+                    href,
+                    activationLabel,
+                    onActivate: onRowClick ? () => onRowClick(item, i) : undefined,
+                  })}
             </Box>
             );
           })}

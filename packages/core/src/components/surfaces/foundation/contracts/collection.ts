@@ -24,6 +24,7 @@ import type {
   SurfaceCapabilityRegistration,
   SurfacePermissionsConfig,
 } from '../types';
+import type { PanePosture } from './adaptive';
 
 // ---------------------------------------------------------------------------
 // Canonical view modes
@@ -329,6 +330,13 @@ export interface WorkspaceSelectionConfig<T> {
 }
 
 /** Preview rail (side panel for focused or selected item). */
+export interface WorkspacePreviewRenderContext {
+  /** Resolved structural container for this render. */
+  pane: Extract<PanePosture, 'inline' | 'sheet' | 'accordion'>;
+  /** True when the preview is rendered in a compact disclosure. */
+  compact: boolean;
+}
+
 export interface WorkspacePreviewRailConfig<T> {
   enabled: boolean;
   width?: string;
@@ -342,7 +350,7 @@ export interface WorkspacePreviewRailConfig<T> {
   storageKey?: string;
   /** Called whenever the user resizes the rail. */
   onWidthChange?: (width: number) => void;
-  render?: (item: T) => ReactNode;
+  render?: (item: T, context: WorkspacePreviewRenderContext) => ReactNode;
   /** Declarative mobile navigation when pane is hidden. */
   mobileNavigation?: {
     /** Enable mobile auto-routing. Default: false. */
