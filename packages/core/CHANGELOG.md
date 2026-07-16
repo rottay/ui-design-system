@@ -1,5 +1,20 @@
 # @rottay/design-system
 
+## 2.19.12
+
+### Patch Changes
+
+- Add a supplier-independent semantic `Icon` facade with a pinned 40-concept Phosphor SSR corpus,
+  explicit accessible/decorative intent, logical RTL mirroring, semantic tones and reduced-motion output.
+- Keep the Lucide-shaped catalog as a compatibility surface while fixing its SVG title/name contract,
+  and isolate the new supplier behind the focused icon entry so the package root cannot load it.
+- Embed the pinned semantic glyph corpus inside that focused entry so CommonJS consumers are not
+  exposed to Phosphor's invalid `type: module` + `index.cjs.js` conditional export.
+- Extend dependency honesty and provenance to account for both the functional supplier and legacy
+  compatibility supplier, including a root non-reachability gate for Phosphor.
+- Preserve authored first-party `BrandTheme` baselines on first render and merge DB/session branding
+  overlays without allowing bounded tenant payloads to replace the registered visual grammar.
+
 ## 2.19.11
 
 ### Patch Changes

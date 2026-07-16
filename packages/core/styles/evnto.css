@@ -5315,6 +5315,82 @@ html.dark {
 }
 @layer rottay-components {
 /**
+ * Supplier-independent Icon facade presentation.
+ * Glyph meaning and supplier stay in the TypeScript registry/adapter; CSS owns
+ * only bounded tone, logical direction, and observable state presentation.
+ */
+
+:root {
+  --ds-icon-busy-duration: calc(var(--ds-motion-glacial) * 2);
+}
+
+.rottay-semantic-icon {
+  display: inline-block;
+  flex: none;
+  vertical-align: -0.125em;
+  color: var(--ds-icon-default-color, currentColor);
+  transform-origin: center;
+}
+
+.rottay-semantic-icon[data-icon-tone='muted'] {
+  color: var(--ds-color-text-muted, currentColor);
+}
+
+.rottay-semantic-icon[data-icon-tone='primary'] {
+  color: var(--ds-color-primary, currentColor);
+}
+
+.rottay-semantic-icon[data-icon-tone='success'] {
+  color: var(--ds-color-success, currentColor);
+}
+
+.rottay-semantic-icon[data-icon-tone='warning'] {
+  color: var(--ds-color-warning, currentColor);
+}
+
+.rottay-semantic-icon[data-icon-tone='error'] {
+  color: var(--ds-color-error, currentColor);
+}
+
+.rottay-semantic-icon[data-icon-tone='info'] {
+  color: var(--ds-color-info, currentColor);
+}
+
+/* :dir() follows the nearest authored direction and needs no document access. */
+.rottay-semantic-icon[data-icon-mirrored='auto']:dir(rtl) {
+  transform: scaleX(-1);
+}
+
+.rottay-semantic-icon[data-icon-state='busy'],
+.rottay-semantic-icon[data-icon-name='status.loading'] {
+  animation: ds-icon-semantic-busy var(--ds-icon-busy-duration) linear infinite;
+  will-change: rotate;
+}
+
+@keyframes ds-icon-semantic-busy {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-semantic-icon {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-semantic-icon {
+    color: CanvasText !important;
+    forced-color-adjust: auto;
+  }
+}
+
+}
+@layer rottay-components {
+/**
  * Spinner Component Tokens - Rottay Design System
  *
  * Design tokens specific to the Spinner component.
