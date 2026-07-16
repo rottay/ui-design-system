@@ -1,5 +1,20 @@
 # @rottay/design-system
 
+## 2.19.19
+
+### Patch Changes
+
+- Add server-safe `charts/spec` contracts with a closed vertical grammar and bounded app-authored
+  insight provenance, without tenant identity, hostname branching, browser APIs or chart suppliers.
+- Resolve chart personality through the existing provider and DB-owned tenant overlay, keeping
+  BitHire and The Management Miami visually distinct while preserving semantic status meaning.
+- Add accessible Bar, Line and HeatMap exploration with roving focus, touch/pen cancellation,
+  assistive-technology clicks, persistent edge-aware tooltips and forced-colors differentiation.
+- Add React-owned target, band, event and direct-label insights plus a focused `charts/access`
+  boundary for bounded summaries, paged tables and formula-safe full-dataset CSV export.
+- Certify SSR/hydration, hostile input, WCAG non-text contrast, stable collision-safe SVG IDs,
+  supplier boundaries and measured isolated/deduplicated renderer budgets.
+
 ## 2.19.18
 
 ### Patch Changes
