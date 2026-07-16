@@ -63,7 +63,6 @@ export default defineConfig({
         /^d3\/.*/,
         'antd',
         '@ant-design/icons',
-        '@phosphor-icons/react',
         'motion',
         'lucide-react',
         'dayjs',
@@ -72,7 +71,12 @@ export default defineConfig({
         // Externalize submodules for better tree-shaking
         /^antd\/.*/,
         /^@ant-design\/icons\/.*/,
-        /^@phosphor-icons\/react\/.*/,
+        // The semantic icon entry intentionally embeds its pinned 40-glyph
+        // Phosphor SSR corpus. Phosphor 2.1.10 advertises a CommonJS condition
+        // that points at a `.js` file inside a `type: module` package, which
+        // breaks packed CJS consumers. Keeping the supplier inside the focused
+        // entry avoids exposing that upstream packaging defect while the root
+        // entry remains supplier-free because it cannot reach icon-entry.ts.
         /^lucide-react\/.*/,
         /^d3-.*/,
         /^motion\/.*/,

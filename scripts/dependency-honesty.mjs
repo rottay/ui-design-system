@@ -3352,6 +3352,11 @@ function spawnChecked(command, args, options = {}) {
     cwd: options.cwd ?? repositoryRoot,
     encoding: 'utf8',
     env: options.env ?? process.env,
+    // Supplier packages can ship multi-megabyte, single-line CJS bundles. If
+    // Node reports an error from one of them, the default 1 MiB buffer cuts
+    // the diagnostic before the actual exception and makes the pack gate
+    // impossible to debug.
+    maxBuffer: options.maxBuffer ?? 64 * 1024 * 1024,
     stdio: options.stdio ?? 'pipe',
   });
   if (result.status !== 0) {
@@ -3821,11 +3826,16 @@ export async function auditPackedArtifact(root = coreRoot) {
     const requireProbe = resolve(consumerRoot, 'runtime-require-exports-probe.cjs');
     writeFileSync(
       requireProbe,
+      'try {\n' +
       'const result = {};\n' +
       runtimeFixtures.require
         .map(({ specifier }) => `result[${JSON.stringify(specifier)}] = Object.keys(require(${JSON.stringify(specifier)})).sort();`)
         .join('\n') +
-      '\nconsole.log(JSON.stringify(result));\n',
+      '\nconsole.log(JSON.stringify(result));\n' +
+      '} catch (error) {\n' +
+      "console.error(JSON.stringify({ name: error?.name, message: error?.message, code: error?.code, stack: error?.stack }));\n" +
+      'process.exitCode = 1;\n' +
+      '}\n',
     );
     const requireResult = spawnChecked(process.execPath, [requireProbe], { cwd: consumerRoot });
     const requiredRuntimeExports = JSON.parse(requireResult.stdout.trim());
