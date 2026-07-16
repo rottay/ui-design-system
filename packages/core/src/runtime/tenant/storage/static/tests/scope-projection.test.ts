@@ -72,7 +72,7 @@ describe('first-party static dual-scope projection', () => {
     expect(projectFirstPartyArtifactScopes(fixture, 'bithire', 'bithire')).toBe(fixture);
   });
 
-  it('targets a provider root itself so nested roots establish an independent baseline', () => {
+  it('targets a provider root itself without requiring an html or tenant match', () => {
     const projected = projectFirstPartyArtifactScopes(
       `${BITHIRE_LEGACY} .surface { color: var(--ds-color-text); }`,
       'bithire',
@@ -80,7 +80,7 @@ describe('first-party static dual-scope projection', () => {
     );
 
     // This branch starts at any matching provider root; it does not require the
-    // root to be `html` or top-level, so it also works inside another DS root.
+    // root itself to be `html` or to carry the first-party tenant slug.
     expect(projected).toContain(`${BITHIRE_ROOT}) .surface`);
     expect(projected).not.toContain(`[data-vertical='bithire'][data-tenant='bithire']`);
   });

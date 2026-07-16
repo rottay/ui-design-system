@@ -194,7 +194,7 @@ function firstSignificantCharacter(source: string): string | undefined {
  * The provider branch is wrapped in `:where()` and paired with the untouched
  * legacy selector through `:is()`. Consequently `:is()` takes its specificity
  * from the legacy arm, so existing cascade behavior remains unchanged while a
- * nested provider root can establish the same vertical baseline independently.
+ * matching provider root receives the same vertical baseline directly.
  */
 export function projectFirstPartyArtifactScopes(
   css: string,

@@ -224,9 +224,10 @@ describe('deterministic artifact compilation and isolation', () => {
         value: 'themanagementmiami',
         selector: ':where([data-ds-root][data-tenant="themanagementmiami"])',
       },
-      combinedSelector: ':where([data-ds-root][data-vertical="bithire"][data-tenant="themanagementmiami"])',
+      combinedSelector: '[data-ds-root][data-vertical="bithire"][data-tenant="themanagementmiami"]',
     });
     expect(artifact.css).toContain(`${artifact.scopes.combinedSelector} {`);
+    expect(artifact.css).not.toContain('@layer');
     expect(artifact.css).not.toContain('html[data-tenant');
     expect(tenantThemeArtifactRootAttributes(artifact)).toEqual({
       'data-ds-root': '',
@@ -248,6 +249,50 @@ describe('deterministic artifact compilation and isolation', () => {
     expect(management.css).not.toContain('data-tenant="bithire"');
     expect(bithire.css).not.toContain('data-tenant="themanagementmiami"');
     expect(management.scopes.combinedSelector).not.toBe(bithire.scopes.combinedSelector);
+  });
+
+  it('keeps the exact tenant overlay above the static baseline and local to sibling/nested roots', () => {
+    const management = compileTenantThemeConfig(hydrate());
+    const bithire = compileTenantThemeConfig(hydrate({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { palette: { primary: '#2563EB' } },
+    }, { ...IDENTITY, tenantId: 'tenant_02', slug: 'bithire' }));
+    const managementRoot = document.createElement('section');
+    const nestedBithireRoot = document.createElement('section');
+    const siblingBithireRoot = document.createElement('section');
+    const style = document.createElement('style');
+
+    for (const [root, slug] of [
+      [managementRoot, 'themanagementmiami'],
+      [nestedBithireRoot, 'bithire'],
+      [siblingBithireRoot, 'bithire'],
+    ] as const) {
+      root.setAttribute('data-ds-root', '');
+      root.setAttribute('data-vertical', 'bithire');
+      root.setAttribute('data-tenant', slug);
+    }
+    managementRoot.append(nestedBithireRoot);
+    document.body.append(managementRoot, siblingBithireRoot);
+
+    // Deliberately put the static baseline last. The exact runtime selector
+    // must still win by specificity, while each nested root keeps its own value.
+    style.textContent = [
+      management.css,
+      bithire.css,
+      ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) { --ds-color-primary: #3A6FB0; }",
+    ].join('\n');
+    document.head.append(style);
+
+    try {
+      expect(getComputedStyle(managementRoot).getPropertyValue('--ds-color-primary').trim()).toBe('#0F766E');
+      expect(getComputedStyle(nestedBithireRoot).getPropertyValue('--ds-color-primary').trim()).toBe('#2563EB');
+      expect(getComputedStyle(siblingBithireRoot).getPropertyValue('--ds-color-primary').trim()).toBe('#2563EB');
+    } finally {
+      style.remove();
+      managementRoot.remove();
+      siblingBithireRoot.remove();
+    }
   });
 
   it('compiles a legal Management Advanced projection with strong visual divergence', () => {

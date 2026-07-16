@@ -707,7 +707,12 @@ function buildScopes(config: TenantThemeConfigV1): TenantThemeArtifactV1['scopes
     root: { attribute: 'data-ds-root', selector: rootSelector },
     vertical: { attribute: 'data-vertical', value: config.verticalKey, selector: verticalSelector },
     tenant: { attribute: 'data-tenant', value: config.slug, selector: tenantSelector },
-    combinedSelector: `:where([data-ds-root][data-vertical="${config.verticalKey}"][data-tenant="${config.slug}"])`,
+    // The effective tenant overlay intentionally keeps all three attributes
+    // outside :where(). First-party vertical artifacts are unlayered and their
+    // provider branch inherits the legacy html[data-tenant] specificity. The
+    // exact (0,3,0) selector therefore guarantees that a validated DB artifact
+    // wins on its own root without depending on stylesheet insertion order.
+    combinedSelector: `[data-ds-root][data-vertical="${config.verticalKey}"][data-tenant="${config.slug}"]`,
   };
 }
 
@@ -731,13 +736,15 @@ function renderArtifactCss(
   variables: Readonly<Record<string, string>>,
   digest: string,
 ): string {
-  const declarations = Object.entries(variables).map(([key, value]) => `    ${key}: ${value};`).join('\n');
+  const declarations = Object.entries(variables).map(([key, value]) => `  ${key}: ${value};`).join('\n');
   return [
     `/* TenantThemeArtifact v1 | ${TENANT_THEME_COMPILER_VERSION} | ${digest} */`,
-    '@layer tenant {',
-    `  ${selector} {`,
+    // Keep the runtime tenant overlay unlayered. In the author origin, normal
+    // declarations outside a cascade layer outrank every named layer; putting
+    // this rule in `@layer tenant` would make the unlayered vertical baseline
+    // impossible to override regardless of source order or specificity.
+    `${selector} {`,
     declarations,
-    '  }',
     '}',
     '',
   ].join('\n');
