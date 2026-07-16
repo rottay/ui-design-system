@@ -11,7 +11,7 @@
  */
 
 /* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
-html[data-tenant='evnto'] {
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
   --ds-button-default-bg: #FFFFFF;
   --ds-button-default-bg-hover: #FAFAFA;
   --ds-button-default-border: rgba(0, 0, 0, 0.1);
@@ -249,7 +249,7 @@ html[data-tenant='evnto'] {
   --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
 }
 
-/* === Declared artifact extension (authored source, generator-preserved) === */
+/* === Declared artifact extension (authored source, mechanically scoped) === */
 /* ============================================
    EVNTO BRAND COLORS (Light Mode Default)
    Declared extension: the DaisyUI oklch bridge and domain-owned ticket/
@@ -257,7 +257,7 @@ html[data-tenant='evnto'] {
    block (not diffed against the compiled block) so each theme-scoped
    selector stays independently readable.
    ============================================ */
-html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])):not([data-theme='dark']):not(.dark) {
   /* ============================================
      DaisyUI 5 color bridge (oklch format)
      Maps Evnto brand (minimal light theme) to DaisyUI 5's
@@ -507,8 +507,8 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
    and chrome are single-valued and light-authored, so dark mode is
    declared extension.
    ============================================ */
-html[data-tenant='evnto'][data-theme='dark'],
-html[data-tenant='evnto'].dark {
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'],
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
   color-scheme: dark;
 
   /* DaisyUI 5 color contract (oklch) - dark variant */

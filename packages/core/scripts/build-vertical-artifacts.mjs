@@ -106,7 +106,7 @@ function checkGeneratedRampApca(slug, brandTheme, compiledCssVariables) {
 let stale = 0;
 const apcaFailures = [];
 
-for (const { slug, displayName, selector, authoredThemePath, brandTheme } of artifacts) {
+for (const { slug, verticalKey, displayName, selector, authoredThemePath, brandTheme } of artifacts) {
   const artifactPath = resolve(root, `src/tokens/css/artifacts/${slug}/index.css`);
   const extensionPath = resolve(root, `src/tokens/css/artifacts/${slug}/_source/extension.css`);
 
@@ -114,6 +114,7 @@ for (const { slug, displayName, selector, authoredThemePath, brandTheme } of art
   apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled.cssVariables));
   const output = renderVerticalArtifact({
     tenantSlug: slug,
+    verticalKey,
     authoredThemePath,
     displayName,
     selector,

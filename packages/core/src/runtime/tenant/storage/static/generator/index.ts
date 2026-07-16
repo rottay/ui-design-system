@@ -15,9 +15,12 @@ import { compileBrandTheme, brandThemeToBranding, brandThemeToChromeVariables, m
 import { isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor, buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor, buildElevationScale } from '../../../../../compilers/_shared/color-math';
 import { appearanceToVariables } from '../../../../../compilers/appearance';
 import { getVerticalPreset } from '../../../../verticals/registry';
-import type { VerticalPreset } from '../../../../verticals/types';
+import type { VerticalKey, VerticalPreset } from '../../../../verticals/types';
 import { getProductProfile } from '../../../../product-profiles/registry';
 import { resolvePartialPersonalityCssVariables } from '../../../../personality/primitives';
+import { projectFirstPartyArtifactScopes } from './scope-projection';
+
+export { projectFirstPartyArtifactScopes } from './scope-projection';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
@@ -580,6 +583,8 @@ export const FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND =
 export interface FirstPartyArtifactSpec {
   /** Tenant slug, e.g. `'bithire'`. */
   slug: string;
+  /** Vertical baseline projected onto provider roots, e.g. `'platform'`. */
+  verticalKey: VerticalKey;
   /** Human-facing product name for the header banner. */
   displayName: string;
   /** Selector the compiled variable block is scoped to. */
@@ -606,6 +611,7 @@ export interface FirstPartyArtifactSpec {
 export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
   {
     slug: 'bithire',
+    verticalKey: 'bithire',
     displayName: 'BitHire',
     authoredThemePath: 'tokens/ts/brand-themes/bithire/bithire.ts',
     // Compiler-native tenant selector. Dark-mode overrides in the extension use
@@ -614,6 +620,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
   },
   {
     slug: 'evnto',
+    verticalKey: 'evnto',
     displayName: 'Evnto',
     authoredThemePath: 'tokens/ts/brand-themes/evnto/evnto.ts',
     // Light-first, same shape as bithire: dark-mode overrides in the extension
@@ -622,6 +629,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
   },
   {
     slug: 'rottay',
+    verticalKey: 'platform',
     displayName: 'Rottay',
     authoredThemePath: 'tokens/ts/brand-themes/platform/rottay.ts',
     // Rottay is dark-first: the tenant's unscoped default rendering is dark.
@@ -650,6 +658,8 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
 export interface RenderVerticalArtifactInput {
   /** Tenant slug, e.g. `'bithire'`. */
   tenantSlug: string;
+  /** Vertical key used by provider roots, e.g. `'platform'` for Rottay. */
+  verticalKey: VerticalKey;
   /** Path to the authored theme, relative to `packages/core/src`. */
   authoredThemePath: string;
   /** Human-facing product name for the header banner. */
@@ -658,7 +668,7 @@ export interface RenderVerticalArtifactInput {
   selector: string;
   /** Flat CSS variable map from `compileBrandTheme(...).cssVariables`. */
   compiledCssVariables: Record<string, string>;
-  /** Authored, generator-preserved CSS appended verbatim after the compiled block. */
+  /** Authored CSS appended after the compiled block, before mechanical scope projection. */
   extensionCss: string;
   /** Command a developer runs to regenerate the artifact (shown in the header). */
   regenerateCommand: string;
@@ -669,11 +679,14 @@ export interface RenderVerticalArtifactInput {
  *
  * Output layout: a `GENERATED` header, the compiled `BrandTheme` variables
  * (keys sorted so regeneration is byte-stable) scoped to `selector`, then the
- * declared extension verbatim. The compiled block is the sole definer of every
- * compiler-owned variable; the extension must not redeclare those keys.
+ * declared extension. As the final mechanical step, every exact owner selector
+ * in both sections is projected onto the equivalent provider vertical root.
+ * Declarations and non-owner selectors stay byte-stable. The compiled block is
+ * the sole definer of every compiler-owned variable; the extension must not
+ * redeclare those keys.
  */
 export function renderVerticalArtifact(input: RenderVerticalArtifactInput): string {
-  const { tenantSlug, authoredThemePath, displayName, selector, compiledCssVariables, extensionCss, regenerateCommand } = input;
+  const { tenantSlug, verticalKey, authoredThemePath, displayName, selector, compiledCssVariables, extensionCss, regenerateCommand } = input;
 
   const header = [
     `/* ${GENERATED_ARTIFACT_BANNER} */`,
@@ -701,9 +714,13 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
   ].join('\n');
 
   const extensionSection = [
-    '/* === Declared artifact extension (authored source, generator-preserved) === */',
+    '/* === Declared artifact extension (authored source, mechanically scoped) === */',
     extensionCss.replace(/^\s+/, '').replace(/\s+$/, ''),
   ].join('\n');
 
-  return `${header}\n\n${compiledBlock}\n\n${extensionSection}\n`;
+  return projectFirstPartyArtifactScopes(
+    `${header}\n\n${compiledBlock}\n\n${extensionSection}\n`,
+    tenantSlug,
+    verticalKey,
+  );
 }

@@ -1,18 +1,20 @@
 /**
  * Build vertical CSS bundles
  *
- * Creates per-vertical dist artifacts that are truly tenant-scoped:
- *   dist/platform.css = base tokens + modern engine + rottay tenant
- *   dist/bithire.css  = base tokens + modern engine + bithire tenant
- *   dist/evnto.css    = base tokens + modern engine + evnto tenant
+ * Creates per-vertical dist artifacts with a dual static scope:
+ *   dist/platform.css = base tokens + modern engine + platform/rottay baseline
+ *   dist/bithire.css  = base tokens + modern engine + bithire baseline
+ *   dist/evnto.css    = base tokens + modern engine + evnto baseline
  *   dist/styles.css   = base tokens + modern engine + ALL tenants (dev/Storybook)
  *
- * Each vertical bundle includes ONLY its own tenant CSS. No cross-tenant contamination.
- * Cross-contamination is enforced at build time (build fails on violation).
+ * Each vertical bundle includes ONLY its own baseline. Its generated selectors
+ * support both the legacy html[data-tenant] root and nested data-ds-root +
+ * data-vertical providers. Cross-vertical contamination fails the build.
  *
- * Tenant CSS is placed UNLAYERED at the end of each bundle. This wins over DaisyUI
- * defaults by both higher specificity (html[data-tenant='X'] > :root) and later
- * source order. A @layer wrapper is intentionally NOT used.
+ * Vertical CSS is placed UNLAYERED at the end of each bundle. The generated
+ * :is(legacy, :where(provider-root)) selector takes its specificity from the
+ * legacy arm, so it still wins over DaisyUI defaults together with later source
+ * order. A @layer wrapper is intentionally NOT used.
  *
  * styles/{index,modern,platform,rottay,bithire,evnto}.css are committed to git.
  * --check regenerates the bundles in memory and diffs them against those files,
@@ -140,8 +142,8 @@ for (const { name, tenantFile } of verticals) {
   let tenantCss = readFile(tenantPath);
   tenantCss = resolveImports(tenantCss, dirname(tenantPath));
 
-  // Tenant CSS is kept UNLAYERED intentionally:
-  // 1. html[data-tenant='X'] selector has higher specificity than DaisyUI's :root defaults
+  // Vertical CSS is kept UNLAYERED intentionally:
+  // 1. :is(legacy, :where(provider-root)) keeps the legacy arm's specificity
   // 2. Source order: tenant CSS comes after modern-engine.css (DaisyUI + Tailwind)
   // Both guarantees together ensure tenant --color-* values always override DaisyUI defaults.
   // A layered copy (@layer rottay-tenants) is NOT needed and was removed to save ~10-50KB per bundle.
@@ -159,18 +161,24 @@ for (const { name, tenantFile } of verticals) {
     tenantCss,
   ].join('\n');
 
-  // Verify no cross-tenant contamination
+  // Verify no cross-tenant or cross-provider-root contamination.
   const otherTenants = verticals.filter(v => v.name !== name);
   for (const other of otherTenants) {
-    // Check for data-tenant selectors of other tenants
-    const otherSelector = `data-tenant='${other.name === 'platform' ? 'rottay' : other.name}'`;
-    // Only flag if the selector appears outside comments
+    const otherSlug = other.name === 'platform' ? 'rottay' : other.name;
+    const forbiddenOwners = [
+      `data-tenant='${otherSlug}'`,
+      `data-tenant="${otherSlug}"`,
+      `data-vertical='${other.name}'`,
+      `data-vertical="${other.name}"`,
+    ];
+    // Only flag ownership selectors outside comments.
     const lines = bundle.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       if (line.startsWith('/*') || line.startsWith('*')) continue; // Skip comments
-      if (line.includes(otherSelector)) {
-        throw new Error(`Cross-tenant contamination: ${name}.css contains ${otherSelector} at line ${i + 1}`);
+      const forbiddenOwner = forbiddenOwners.find((owner) => line.includes(owner));
+      if (forbiddenOwner) {
+        throw new Error(`Cross-vertical contamination: ${name}.css contains ${forbiddenOwner} at line ${i + 1}`);
       }
     }
   }
@@ -230,7 +238,7 @@ if (check) {
   console.log(`  -> dist/styles.css (${Math.round(stylesBundle.length / 1024)}KB)`);
 }
 
-if (!check) console.log('Done. All vertical bundles are tenant-scoped.');
+if (!check) console.log('Done. All vertical bundles are dual-scoped and isolated.');
 
 if (check && stale > 0) {
   console.error(`\n${stale} vertical bundle(s) are stale or hand-edited. Regenerate with:\n  pnpm -C packages/core build:vertical-css`);

@@ -58088,7 +58088,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  */
 
 /* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
-html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light {
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform']))[data-theme='light'], :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])).light {
   --ds-button-default-bg: #18181B;
   --ds-button-default-bg-active: #2A2A2F;
   --ds-button-default-bg-hover: #222226;
@@ -58432,14 +58432,14 @@ html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light
   --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
 }
 
-/* === Declared artifact extension (authored source, generator-preserved) === */
+/* === Declared artifact extension (authored source, mechanically scoped) === */
 /* ============================================
    ROTTAY DARK THEME (default for tenant)
    rottayBrandTheme.chrome (sidebar/layout/table/controls) is single-valued
    and dark-authored; it cannot represent both themes, so palette and chrome
    for this state are declared extension, alongside the DaisyUI oklch bridge.
    ============================================ */
-html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])):not([data-theme='light']):not(.light) {
   color-scheme: dark;
   color: var(--ds-color-text-primary, #F0F0F0);
 
@@ -60040,8 +60040,8 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
    complete, self-contained block (not diffed against the compiled block)
    so each theme-scoped selector stays independently readable.
    ============================================ */
-html[data-tenant='rottay'][data-theme='light'],
-html[data-tenant='rottay'].light {
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform']))[data-theme='light'],
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])).light {
   color-scheme: light;
 
   /* ============================================

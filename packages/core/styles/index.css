@@ -58089,7 +58089,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  */
 
 /* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
-html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light {
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform']))[data-theme='light'], :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])).light {
   --ds-button-default-bg: #18181B;
   --ds-button-default-bg-active: #2A2A2F;
   --ds-button-default-bg-hover: #222226;
@@ -58433,14 +58433,14 @@ html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light
   --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
 }
 
-/* === Declared artifact extension (authored source, generator-preserved) === */
+/* === Declared artifact extension (authored source, mechanically scoped) === */
 /* ============================================
    ROTTAY DARK THEME (default for tenant)
    rottayBrandTheme.chrome (sidebar/layout/table/controls) is single-valued
    and dark-authored; it cannot represent both themes, so palette and chrome
    for this state are declared extension, alongside the DaisyUI oklch bridge.
    ============================================ */
-html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])):not([data-theme='light']):not(.light) {
   color-scheme: dark;
   color: var(--ds-color-text-primary, #F0F0F0);
 
@@ -60041,8 +60041,8 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
    complete, self-contained block (not diffed against the compiled block)
    so each theme-scoped selector stays independently readable.
    ============================================ */
-html[data-tenant='rottay'][data-theme='light'],
-html[data-tenant='rottay'].light {
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform']))[data-theme='light'],
+:is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='platform'])).light {
   color-scheme: light;
 
   /* ============================================
@@ -61554,7 +61554,7 @@ html[data-tenant='rottay'].light {
  */
 
 /* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
-html[data-tenant='bithire'] {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
   --ds-breadcrumb-active-color: #162A43;
   --ds-breadcrumb-bg: color-mix(in srgb, #3A6FB0 4%, #FFFFFF);
   --ds-breadcrumb-border: color-mix(in srgb, #D3DEEA 82%, transparent);
@@ -61992,8 +61992,8 @@ html[data-tenant='bithire'] {
   --ds-workspace-shell-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
 }
 
-/* === Declared artifact extension (authored source, generator-preserved) === */
-html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
+/* === Declared artifact extension (authored source, mechanically scoped) === */
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])):not([data-theme='dark']):not(.dark) {
   /* ============================================
      DaisyUI 5 color bridge (oklch format)
      Maps BitHire brand (LinkedIn-inspired) to DaisyUI 5's
@@ -62323,8 +62323,8 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
    BITHIRE DARK MODE
    Corporate dark blue palette
    ============================================ */
-html[data-tenant='bithire'][data-theme='dark'],
-html[data-tenant='bithire'].dark {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'],
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   color-scheme: dark;
 
   /* ============================================
@@ -62620,8 +62620,8 @@ html[data-tenant='bithire'].dark {
    BitHire intentionally stays in a light LinkedIn/tech aesthetic even when
    the shell receives `.dark` from system/host preferences.
    ============================================ */
-html[data-tenant='bithire'][data-theme='dark'],
-html[data-tenant='bithire'].dark {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'],
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   color-scheme: light;
 
   --color-primary: oklch(50% 0.14 250);
@@ -62752,8 +62752,8 @@ html[data-tenant='bithire'].dark {
   --ds-workspace-shell-shadow: 0 1px 2px rgba(22, 42, 67, 0.04), 0 10px 24px rgba(22, 42, 67, 0.06);
 }
 
-html[data-tenant='bithire'][data-theme='dark'],
-html[data-tenant='bithire'].dark {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'],
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   --ds-surface-border: var(--ds-color-border);
   --ds-surface-border-strong: var(--ds-color-border-secondary);
   --ds-surface-border-soft: var(--ds-color-border-subtle);
@@ -62894,7 +62894,7 @@ html[data-tenant='bithire'].dark {
 /* Command / AI home tenant identity.
    Mirrors chrome.shell.commandHome* in brand-themes/bithire.ts for the
    static CSS bundle until the vertical CSS builder emits BrandTheme chrome. */
-html[data-tenant='bithire'] {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
   --ds-home-grid-line: var(--ds-command-home-grid-line);
   --ds-home-panel-border: var(--ds-command-home-panel-border);
   --ds-home-panel-shadow: var(--ds-command-home-panel-shadow);
@@ -62906,7 +62906,7 @@ html[data-tenant='bithire'] {
    Shared BitHire table preview rail, collection preview,
    and tooltip elevation rules. Keep tenant-scoped.
    ============================================ */
-html[data-tenant='bithire'] {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
   --ds-z-index-tooltip: 2700;
   --ds-tooltip-z-index: 2700;
   --ds-list-preview-rail-gap: clamp(14px, 1.45vw, 22px);
@@ -62982,7 +62982,7 @@ html[data-tenant='bithire'] {
   }
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-data-table-card tbody tr[data-bithire-preview-focused='true'],
     .ds-data-table-card tbody tr[data-bithire-preview-focused='true'],
@@ -62995,7 +62995,7 @@ html[data-tenant='bithire']
     0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent) !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-data-table-card tbody tr[data-bithire-preview-focused='true'] td,
     .ds-data-table-card tbody tr[data-bithire-preview-focused='true'] td,
@@ -63004,7 +63004,7 @@ html[data-tenant='bithire']
   background: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)) !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-data-table-card :is(td, th):has([role='tooltip'][aria-hidden='false']),
     .ds-data-table-card :is(td, th):has([role='tooltip'][aria-hidden='false']),
@@ -63015,7 +63015,7 @@ html[data-tenant='bithire']
   z-index: 8;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-data-table-card:has([role='tooltip'][aria-hidden='false']),
     .ds-data-table-card:has([role='tooltip'][aria-hidden='false']),
@@ -63030,7 +63030,7 @@ html[data-tenant='bithire']
   overflow: visible !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-data-table-card tr:has([role='tooltip'][aria-hidden='false']),
     .ds-data-table-card tr:has([role='tooltip'][aria-hidden='false']),
@@ -63040,7 +63040,7 @@ html[data-tenant='bithire']
   z-index: 12;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-data-table-card [role='tooltip'][aria-hidden='false'],
     .ds-data-table-card [role='tooltip'][aria-hidden='false'],
@@ -63061,43 +63061,43 @@ html[data-tenant='bithire']
   word-break: normal;
 }
 
-html[data-tenant='bithire'] :where(.bithire-collection-polish) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.bithire-collection-polish) {
   --ds-listing-grid-min-card-width: min(300px, 100%);
 }
 
-html[data-tenant='bithire'] :where(.bithire-collection-polish .ds-collection-enhanced) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.bithire-collection-polish .ds-collection-enhanced) {
   min-width: 0;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.bithire-collection-polish .ds-collection-enhanced [data-ds-collection-body='true']) {
   padding-top: 12px !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.bithire-collection-polish .bithire-collection-preview, .bithire-collection-polish .bithire-collection-preview-frame) {
   width: 100%;
   min-width: 0;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.bithire-collection-polish .bithire-collection-preview [style*="white-space: nowrap"]) {
   min-width: 0;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.bithire-collection-polish .bithire-collection-preview-frame__close-row) {
   display: flex;
   justify-content: flex-end;
   margin-block-end: 8px;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.bithire-collection-polish button[aria-label], .bithire-collection-polish [role='button']) {
   scroll-margin: 12px;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-collection-polish .ds-engine-modern tr[data-row-index]:focus,
     .bithire-collection-polish .ds-engine-modern tr[data-row-index]:focus-within
@@ -63108,7 +63108,7 @@ html[data-tenant='bithire']
   box-shadow: inset 3px 0 0 var(--ds-color-primary);
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-collection-polish .ds-engine-modern tr[data-row-index]:focus td,
     .bithire-collection-polish .ds-engine-modern tr[data-row-index]:focus-within td
@@ -63116,7 +63116,7 @@ html[data-tenant='bithire']
   background: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)) !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .bithire-collection-polish .ds-collection-enhanced tbody tr:focus-within,
     .bithire-collection-polish .ds-collection-enhanced tbody tr:has([role='tooltip'][aria-hidden='false'])
@@ -63126,7 +63126,7 @@ html[data-tenant='bithire']
 }
 
 @supports selector(:has(*)) {
-  html[data-tenant='bithire']
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
     :where(
       .bithire-collection-polish div:has(> .bithire-collection-preview),
       .bithire-collection-polish div:has(> .bithire-collection-preview-frame)
@@ -63138,12 +63138,12 @@ html[data-tenant='bithire']
 }
 
 @media (max-width: 720px) {
-  html[data-tenant='bithire'] :where(.bithire-collection-polish) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.bithire-collection-polish) {
     --ds-listing-grid-min-card-width: 100%;
   }
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.ds-collection-enhanced > [data-ds-collection-toolbar-row='true']) {
   margin: var(--ds-list-shell-section-gap) 18px 0;
   padding: 12px 0 14px !important;
@@ -63152,13 +63152,13 @@ html[data-tenant='bithire']
   overflow: visible !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.ds-collection-enhanced > [data-ds-collection-body='true']) {
   padding: 16px 18px 22px !important;
   min-width: 0;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.ds-collection-enhanced > [data-ds-collection-body='true'] > div) {
   align-items: flex-start !important;
   gap: var(--ds-list-preview-rail-gap) !important;
@@ -63166,15 +63166,15 @@ html[data-tenant='bithire']
   max-width: 100%;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.ds-collection-enhanced [data-bithire-preview-rail='true']),
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.ds-collection-enhanced .ds-collection-preview-rail) {
   position: sticky !important;
   z-index: 12;
 }
 
-html[data-tenant='bithire'] :where(.bithire-preview-rail-close) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.bithire-preview-rail-close) {
   display: inline-grid;
   place-items: center;
   width: 32px;
@@ -63191,57 +63191,57 @@ html[data-tenant='bithire'] :where(.bithire-preview-rail-close) {
   z-index: 1500;
 }
 
-html[data-tenant='bithire'] :where(.bithire-preview-rail-close:hover) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.bithire-preview-rail-close:hover) {
   color: var(--ds-color-primary);
   border-color: color-mix(in srgb, var(--ds-color-primary) 44%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card));
 }
 
-html[data-tenant='bithire'] :where(.bithire-preview-rail-close:focus-visible) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.bithire-preview-rail-close:focus-visible) {
   outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 58%, transparent);
   outline-offset: 2px;
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel) {
   color: var(--ds-color-text-primary);
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__header) {
   background: color-mix(in srgb, var(--ds-table-header-bg) 82%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__body) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__content) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__content) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__actions) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__actions) {
   min-width: 0;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__actions :is(button, a, [role='button'])) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__actions :is(button, a, [role='button'])) {
   min-width: 0;
   max-width: 100%;
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__detail-field) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__detail-field) {
   min-height: 34px;
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__detail-field-label) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__detail-field-label) {
   max-width: 100%;
 }
 
-html[data-tenant='bithire'] :where(.rt-expanded-panel__detail-field-value) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__detail-field-value) {
   max-width: min(58%, 360px);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview) {
   position: relative;
   display: grid;
   width: 100%;
@@ -63258,21 +63258,21 @@ html[data-tenant='bithire'] :where(.rt-collection-preview) {
   animation: bithire-preview-enter var(--ds-list-preview-motion-duration) var(--ds-list-preview-motion-ease) both;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview--compact) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview--compact) {
   --ds-list-preview-panel-padding: 12px;
   --ds-list-preview-panel-gap: 10px;
   --ds-list-preview-section-padding: 10px;
   --ds-list-preview-section-gap: 8px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview--loose) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview--loose) {
   --ds-list-preview-panel-padding: 16px;
   --ds-list-preview-panel-gap: 14px;
   --ds-list-preview-section-padding: 13px;
   --ds-list-preview-section-gap: 12px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__header) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -63280,7 +63280,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__header) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__header-main) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__header-main) {
   display: flex;
   align-items: flex-start;
   flex: 1 1 auto;
@@ -63288,7 +63288,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__header-main) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__media) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__media) {
   display: inline-grid;
   flex: 0 0 36px;
   place-items: center;
@@ -63302,13 +63302,13 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__media) {
   font-weight: 800;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__identity) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__identity) {
   display: grid;
   min-width: 0;
   gap: 4px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__eyebrow) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__eyebrow) {
   color: var(--ds-color-primary);
   font-family: var(--ds-font-family-mono);
   font-size: 0.6875rem;
@@ -63318,7 +63318,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__eyebrow) {
   text-transform: uppercase;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__title) {
   margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-display, var(--ds-font-family-heading, var(--ds-font-family-base)));
@@ -63329,14 +63329,14 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__title) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__description) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__description) {
   color: var(--ds-color-text-secondary);
   font-size: 0.8125rem;
   line-height: 1.48;
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__actions) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__actions) {
   display: flex;
   flex: 0 1 auto;
   flex-wrap: wrap;
@@ -63346,12 +63346,12 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__actions) {
   max-width: 100%;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__actions :is(button, a, [role='button'])) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__actions :is(button, a, [role='button'])) {
   min-width: 0;
   white-space: nowrap;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__close) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__close) {
   display: inline-grid;
   flex: 0 0 auto;
   place-items: center;
@@ -63367,18 +63367,18 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__close) {
   cursor: pointer;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__close:hover) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__close:hover) {
   color: var(--ds-color-primary);
   border-color: color-mix(in srgb, var(--ds-color-primary) 44%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__close:focus-visible) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__close:focus-visible) {
   outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 58%, transparent);
   outline-offset: 2px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section) {
   min-width: 0;
   padding: var(--ds-list-preview-section-padding);
   border: 1px solid color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-list-preview-panel-border)) 14%, var(--ds-list-preview-panel-border));
@@ -63387,7 +63387,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__section) {
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 64%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-emphasis='strong']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section[data-preview-emphasis='strong']) {
   border-color: color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 28%, var(--ds-list-preview-panel-border));
   background:
     linear-gradient(
@@ -63400,22 +63400,22 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-
     0 10px 20px color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 5%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-emphasis='subtle']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section[data-preview-emphasis='subtle']) {
   border-style: dashed;
   background: color-mix(in srgb, var(--ds-surface-card) 64%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__body) {
   display: grid;
   min-width: 0;
   gap: var(--ds-list-preview-section-gap);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview--entity .rt-collection-preview__body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview--entity .rt-collection-preview__body) {
   gap: 10px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero) {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -63432,7 +63432,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero) {
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 42%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-visual) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-visual) {
   display: inline-grid;
   flex: 0 0 44px;
   place-items: center;
@@ -63447,14 +63447,14 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-visual) {
   font-weight: 800;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-main) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-main) {
   display: grid;
   flex: 1 1 auto;
   min-width: 0;
   gap: 5px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-kicker) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-kicker) {
   color: var(--ds-color-primary);
   font-family: var(--ds-font-family-mono);
   font-size: 0.6875rem;
@@ -63464,7 +63464,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-kicker) {
   text-transform: uppercase;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-title-row) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-title-row) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -63472,7 +63472,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-title-row) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-title) {
   min-width: 0;
   margin: 0;
   color: var(--ds-color-text-primary);
@@ -63483,7 +63483,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-title) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-subtitle) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-subtitle) {
   min-width: 0;
   color: var(--ds-color-text-secondary);
   font-size: 0.78125rem;
@@ -63491,7 +63491,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-subtitle) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-description) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-description) {
   min-width: 0;
   color: var(--ds-color-text-secondary);
   font-size: 0.8125rem;
@@ -63499,14 +63499,14 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-description) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-meta, .rt-collection-preview__hero-badges) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-meta, .rt-collection-preview__hero-badges) {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-aside) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-aside) {
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
@@ -63515,7 +63515,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-aside) {
   min-width: 32px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section-header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section-header) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -63524,42 +63524,42 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__section-header) {
   margin-block-end: var(--ds-list-preview-row-gap);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section-identity) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section-identity) {
   display: grid;
   min-width: 0;
   gap: 3px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section-title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section-title) {
   color: var(--ds-color-text-primary);
   font-size: 0.8125rem;
   font-weight: 780;
   line-height: 1.25;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section-description) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section-description) {
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
   line-height: 1.42;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section-content) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section-content) {
   min-width: 0;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.rt-collection-preview__section-content > :not(:first-child)) {
   margin-block-start: var(--ds-list-preview-row-gap);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__badges) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__badges) {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary) {
   --rt-collection-preview-tone: var(--ds-color-primary);
   display: flex;
   align-items: flex-start;
@@ -63576,7 +63576,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__summary) {
     transform var(--ds-list-preview-motion-duration) ease;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary[data-preview-prominence='strong']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary[data-preview-prominence='strong']) {
   gap: 12px;
   padding: 13px;
   border-color: color-mix(in srgb, var(--rt-collection-preview-tone) 34%, var(--ds-list-preview-panel-border));
@@ -63591,12 +63591,12 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__summary[data-preview-
     0 10px 22px color-mix(in srgb, var(--rt-collection-preview-tone) 7%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary[data-preview-prominence='subtle']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary[data-preview-prominence='subtle']) {
   border-color: color-mix(in srgb, var(--rt-collection-preview-tone) 14%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--rt-collection-preview-tone) 4%, var(--ds-surface-card));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary-icon) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary-icon) {
   display: inline-grid;
   flex: 0 0 30px;
   place-items: center;
@@ -63608,20 +63608,20 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__summary-icon) {
   color: var(--rt-collection-preview-tone);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary[data-preview-prominence='strong'] .rt-collection-preview__summary-icon) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary[data-preview-prominence='strong'] .rt-collection-preview__summary-icon) {
   flex-basis: 34px;
   width: 34px;
   height: 34px;
   box-shadow: 0 8px 18px color-mix(in srgb, var(--rt-collection-preview-tone) 10%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary-body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary-body) {
   display: grid;
   min-width: 0;
   gap: 4px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary-title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary-title) {
   color: var(--ds-color-text-primary);
   font-size: 0.875rem;
   font-weight: 780;
@@ -63629,27 +63629,27 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__summary-title) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary[data-preview-prominence='strong'] .rt-collection-preview__summary-title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary[data-preview-prominence='strong'] .rt-collection-preview__summary-title) {
   font-size: 0.9375rem;
   font-weight: 820;
   line-height: 1.24;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary-detail) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary-detail) {
   color: var(--ds-color-text-secondary);
   font-size: 0.8125rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__summary-meta) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary-meta) {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-grid) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-grid) {
   --rt-collection-preview-grid-min: min(100%, 156px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--rt-collection-preview-grid-min), 1fr));
@@ -63657,7 +63657,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__metric-grid) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric) {
   --rt-collection-preview-tone: var(--ds-color-primary);
   display: grid;
   min-width: 0;
@@ -63668,14 +63668,14 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__metric) {
   background: color-mix(in srgb, var(--rt-collection-preview-tone) 5%, var(--ds-surface-card));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-header) {
   display: flex;
   align-items: center;
   gap: 7px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-icon) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-icon) {
   display: inline-grid;
   flex: 0 0 24px;
   place-items: center;
@@ -63686,7 +63686,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__metric-icon) {
   color: var(--rt-collection-preview-tone);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-label) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-label) {
   min-width: 0;
   color: var(--ds-color-text-secondary);
   font-size: 0.71875rem;
@@ -63697,7 +63697,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__metric-label) {
   white-space: nowrap;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-value) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-value) {
   min-width: 0;
   color: var(--ds-color-text-primary);
   font-size: 0.9375rem;
@@ -63707,33 +63707,33 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__metric-value) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-detail) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-detail) {
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-progress) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-progress) {
   height: 4px;
   overflow: hidden;
   border-radius: 999px;
   background: color-mix(in srgb, var(--ds-color-border-secondary) 68%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-progress-bar) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-progress-bar) {
   height: 100%;
   border-radius: inherit;
   background: var(--rt-collection-preview-tone);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-list) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-list) {
   display: grid;
   min-width: 0;
   gap: 8px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-item) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-item) {
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -63744,7 +63744,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__detail-item) {
   background: color-mix(in srgb, var(--ds-surface-card) 72%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-icon) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-icon) {
   display: inline-grid;
   flex: 0 0 28px;
   place-items: center;
@@ -63756,14 +63756,14 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__detail-icon) {
   color: var(--ds-color-primary);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-body) {
   display: grid;
   flex: 1 1 auto;
   min-width: 0;
   gap: 3px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-row) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-row) {
   display: grid;
   grid-template-columns: minmax(92px, 0.72fr) minmax(0, 1fr);
   align-items: start;
@@ -63771,13 +63771,13 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__detail-row) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-label) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-label) {
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
   line-height: 1.35;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-value) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-value) {
   min-width: 0;
   color: var(--ds-color-text-primary);
   font-size: 0.75rem;
@@ -63787,37 +63787,37 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__detail-value) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-item .rt-collection-preview__detail-value) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-item .rt-collection-preview__detail-value) {
   font-size: 0.8125rem;
   text-align: start;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-description) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-description) {
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-meta) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-meta) {
   margin-block-start: 2px;
   color: var(--ds-color-text-secondary);
   font-weight: 500;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-actions) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-actions) {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-actions :is(button, a, [role='button'])) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-actions :is(button, a, [role='button'])) {
   flex: 1 1 128px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action) {
   display: flex;
   align-items: center;
   justify-content: flex-start !important;
@@ -63834,28 +63834,28 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action) {
   cursor: pointer;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action:hover) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action:hover) {
   border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
   color: var(--ds-color-text-primary);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action:focus-visible) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action:focus-visible) {
   outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 58%, transparent);
   outline-offset: 2px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action[disabled]) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action[disabled]) {
   cursor: not-allowed;
   opacity: 0.58;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action[data-preview-action-primary='true']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action[data-preview-action-primary='true']) {
   border-color: color-mix(in srgb, var(--ds-color-primary) 36%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-primary) 11%, var(--ds-surface-card));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-icon) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action-icon) {
   display: inline-grid;
   flex: 0 0 30px;
   place-items: center;
@@ -63867,14 +63867,14 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-icon) {
   color: var(--ds-color-primary);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action-body) {
   display: grid;
   flex: 1 1 auto;
   min-width: 0;
   gap: 3px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action-title) {
   min-width: 0;
   font-size: 0.8125rem;
   font-weight: 760;
@@ -63882,7 +63882,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-title) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-description) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action-description) {
   min-width: 0;
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
@@ -63890,12 +63890,12 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-descript
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__footer) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__footer) {
   min-width: 0;
   padding-block-start: 2px;
 }
 
-html[data-tenant='bithire'] {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
   --ds-list-preview-panel-gap: clamp(10px, 1.2vw, 14px);
   --ds-list-preview-section-gap: clamp(10px, 1.1vw, 13px);
   --ds-list-preview-row-gap: 10px;
@@ -63907,11 +63907,11 @@ html[data-tenant='bithire'] {
   --ds-list-preview-meter-height: 6px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview) {
   isolation: isolate;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview[data-preview-panel-variant='decision-cockpit']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview[data-preview-panel-variant='decision-cockpit']) {
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-list-preview-panel-border));
   background:
     linear-gradient(
@@ -63924,11 +63924,11 @@ html[data-tenant='bithire'] :where(.rt-collection-preview[data-preview-panel-var
     inset 3px 0 0 color-mix(in srgb, var(--ds-color-primary) 44%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__body) {
   gap: var(--ds-list-preview-section-gap);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section) {
   padding: var(--ds-list-preview-section-padding);
   border-color: color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-list-preview-panel-border)) 14%, var(--ds-list-preview-panel-border));
   background:
@@ -63939,11 +63939,11 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__section) {
     );
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section + .rt-collection-preview__section) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section + .rt-collection-preview__section) {
   margin-block-start: 2px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-section-variant='band']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section[data-preview-section-variant='band']) {
   border-inline-start: 3px solid color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 58%, var(--ds-list-preview-panel-border));
   background:
     linear-gradient(
@@ -63953,7 +63953,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-
     );
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-section-variant='callout']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section[data-preview-section-variant='callout']) {
   border-color: color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 34%, var(--ds-list-preview-panel-border));
   background:
     linear-gradient(
@@ -63966,14 +63966,14 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-
     0 10px 22px color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 6%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__section[data-preview-section-variant='plain']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__section[data-preview-section-variant='plain']) {
   padding: 0;
   border-color: transparent;
   background: transparent;
   box-shadow: none;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-cockpit) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-cockpit) {
   display: grid;
   min-width: 0;
   gap: var(--ds-list-preview-row-gap);
@@ -63989,7 +63989,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__decision-cockpit) {
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 44%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-cockpit-header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-cockpit-header) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -63997,20 +63997,20 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__decision-cockpit-head
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-cockpit-identity) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-cockpit-identity) {
   display: grid;
   min-width: 0;
   gap: 3px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-cockpit-body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-cockpit-body) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--ds-list-preview-cockpit-min-column-width), 1fr));
   gap: 8px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-tile) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-content: start;
@@ -64028,7 +64028,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile) {
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 36%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-icon) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-tile-icon) {
   display: inline-grid;
   place-items: center;
   width: 26px;
@@ -64039,13 +64039,13 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-icon) {
   color: var(--rt-collection-preview-tone, var(--ds-color-primary));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-tile-body) {
   display: grid;
   min-width: 0;
   gap: 3px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-label) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-tile-label) {
   min-width: 0;
   color: var(--ds-color-text-secondary);
   font-size: 0.71875rem;
@@ -64054,7 +64054,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-label) 
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-value) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-tile-value) {
   min-width: 0;
   color: var(--ds-color-text-primary);
   font-size: 0.9375rem;
@@ -64064,7 +64064,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-value) 
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-detail, .rt-collection-preview__decision-tile-meta) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-tile-detail, .rt-collection-preview__decision-tile-meta) {
   min-width: 0;
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
@@ -64072,18 +64072,18 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-detail,
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__decision-tile-meta) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__decision-tile-meta) {
   color: var(--rt-collection-preview-tone, var(--ds-color-primary));
   font-weight: 700;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane) {
   display: grid;
   min-width: 0;
   gap: var(--ds-list-preview-lane-gap);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-header) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -64091,32 +64091,32 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-header) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-identity) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-identity) {
   display: grid;
   min-width: 0;
   gap: 3px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-title) {
   color: var(--ds-color-text-primary);
   font-size: 0.8125rem;
   font-weight: 780;
   line-height: 1.25;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-description) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-description) {
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
   line-height: 1.42;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-items) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-items) {
   display: grid;
   min-width: 0;
   gap: var(--ds-list-preview-lane-gap);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item) {
   --rt-collection-preview-lane-progress: 0%;
   position: relative;
   display: grid;
@@ -64127,7 +64127,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item) {
   padding: 8px 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-marker) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-marker) {
   display: inline-grid;
   position: relative;
   z-index: 1;
@@ -64143,13 +64143,13 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-marker) {
   line-height: 1;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-body) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item-body) {
   display: grid;
   min-width: 0;
   gap: 4px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item-header) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -64157,7 +64157,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-header) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-label) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item-label) {
   min-width: 0;
   color: var(--ds-color-text-primary);
   font-size: 0.8125rem;
@@ -64166,7 +64166,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-label) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-value) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item-value) {
   flex: 0 0 auto;
   color: var(--rt-collection-preview-tone, var(--ds-color-primary));
   font-size: 0.75rem;
@@ -64176,7 +64176,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-value) {
   text-align: end;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-detail, .rt-collection-preview__lane-item-meta) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item-detail, .rt-collection-preview__lane-item-meta) {
   min-width: 0;
   color: var(--ds-color-text-secondary);
   font-size: 0.75rem;
@@ -64184,19 +64184,19 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-detail, .rt
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item-meta) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item-meta) {
   color: var(--ds-color-text-muted);
   font-weight: 650;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-meter) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-meter) {
   height: var(--ds-list-preview-meter-height);
   overflow: hidden;
   border-radius: var(--ds-radius-full, 9999px);
   background: color-mix(in srgb, var(--ds-color-border-secondary) 68%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-meter-bar) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-meter-bar) {
   width: var(--rt-collection-preview-lane-progress);
   height: 100%;
   border-radius: inherit;
@@ -64209,11 +64209,11 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane-meter-bar) {
   transition: width 180ms ease;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lane-variant='timeline'] .rt-collection-preview__lane-items) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane[data-preview-lane-variant='timeline'] .rt-collection-preview__lane-items) {
   gap: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lane-variant='timeline'] .rt-collection-preview__lane-item:not(:last-child)::before) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane[data-preview-lane-variant='timeline'] .rt-collection-preview__lane-item:not(:last-child)::before) {
   content: "";
   position: absolute;
   inset-block-start: calc(var(--ds-list-preview-lane-marker-size) + 8px);
@@ -64223,18 +64223,18 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lan
   background: color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 22%, var(--ds-color-border-secondary));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lane-variant='funnel'] .rt-collection-preview__lane-item) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane[data-preview-lane-variant='funnel'] .rt-collection-preview__lane-item) {
   padding: 9px;
   border: 1px solid color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 14%, var(--ds-color-border-secondary));
   border-radius: var(--ds-radius-sm, 6px);
   background: color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 4%, var(--ds-surface-card));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lane-variant='funnel'] .rt-collection-preview__lane-marker) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane[data-preview-lane-variant='funnel'] .rt-collection-preview__lane-marker) {
   border-radius: var(--ds-radius-sm, 8px);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lane-variant='meter'] .rt-collection-preview__lane-item) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane[data-preview-lane-variant='meter'] .rt-collection-preview__lane-item) {
   grid-template-columns: minmax(0, 1fr);
   padding: 9px 10px;
   border: 1px solid color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 14%, var(--ds-color-border-secondary));
@@ -64247,52 +64247,52 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lan
     );
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane[data-preview-lane-variant='meter'] .rt-collection-preview__lane-marker) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane[data-preview-lane-variant='meter'] .rt-collection-preview__lane-marker) {
   display: none;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item[data-preview-lane-state='complete'] .rt-collection-preview__lane-marker) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item[data-preview-lane-state='complete'] .rt-collection-preview__lane-marker) {
   border-color: color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 48%, var(--ds-color-border-secondary));
   background: var(--rt-collection-preview-tone, var(--ds-color-primary));
   color: var(--ds-color-text-on-primary, white);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item[data-preview-lane-state='current'] .rt-collection-preview__lane-marker) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item[data-preview-lane-state='current'] .rt-collection-preview__lane-marker) {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--rt-collection-preview-tone, var(--ds-color-primary)) 12%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item[data-preview-lane-state='blocked']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item[data-preview-lane-state='blocked']) {
   --rt-collection-preview-tone: var(--ds-color-error);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__lane-item[data-preview-lane-state='muted']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__lane-item[data-preview-lane-state='muted']) {
   opacity: 0.7;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__media, .rt-collection-preview__hero-visual) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__media, .rt-collection-preview__hero-visual) {
   aspect-ratio: 1;
   isolation: isolate;
   overflow: hidden;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__media > :is(img, svg), .rt-collection-preview__hero-visual > :is(img, svg)) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__media > :is(img, svg), .rt-collection-preview__hero-visual > :is(img, svg)) {
   display: block;
   max-width: 100%;
   max-height: 100%;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__media > img, .rt-collection-preview__hero-visual > img) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__media > img, .rt-collection-preview__hero-visual > img) {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__media > svg, .rt-collection-preview__hero-visual > svg) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__media > svg, .rt-collection-preview__hero-visual > svg) {
   width: 52%;
   height: 52%;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: stretch;
@@ -64307,7 +64307,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero) {
     );
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-visual) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-visual) {
   flex-basis: var(--ds-list-preview-hero-visual-size);
   width: var(--ds-list-preview-hero-visual-size);
   height: var(--ds-list-preview-hero-visual-size);
@@ -64323,12 +64323,12 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-visual) {
     0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-main) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-main) {
   align-content: start;
   gap: 8px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-header) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
@@ -64336,23 +64336,23 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-header) {
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-identity) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-identity) {
   display: grid;
   gap: 4px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-title-row) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-title-row) {
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-title) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-title) {
   flex: 1 1 12rem;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-copy) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-copy) {
   display: grid;
   gap: 4px;
   min-width: 0;
@@ -64360,27 +64360,27 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__hero-copy) {
   border-block-start: 1px solid color-mix(in srgb, var(--ds-list-preview-panel-border) 56%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-meta) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-meta) {
   padding-block-start: 7px;
   border-block-start: 1px solid color-mix(in srgb, var(--ds-list-preview-panel-border) 50%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-aside) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-aside) {
   min-width: 0;
   max-width: min(100%, 11rem);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__hero-aside :is(button, a, [role='button'])) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-aside :is(button, a, [role='button'])) {
   min-width: 0;
   max-width: 100%;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-grid) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-grid) {
   --rt-collection-preview-grid-min: min(100%, 144px);
   gap: 9px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric) {
   align-content: start;
   gap: 7px;
   min-height: 84px;
@@ -64394,19 +64394,19 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__metric) {
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 34%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-icon) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-icon) {
   border: 1px solid color-mix(in srgb, var(--rt-collection-preview-tone) 16%, var(--ds-color-border-secondary));
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-label) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-label) {
   white-space: normal;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__metric-progress) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__metric-progress) {
   height: 5px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-list) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-list) {
   gap: 0;
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 58%, transparent);
   border-radius: var(--ds-radius-sm, 6px);
@@ -64414,7 +64414,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__detail-list) {
   overflow: hidden;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-row) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-row) {
   display: grid;
   grid-template-columns: minmax(7.25rem, 0.62fr) minmax(0, 1fr);
   align-items: start;
@@ -64424,44 +64424,44 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__detail-row) {
   border-block-end: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 48%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-row:last-child) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-row:last-child) {
   border-block-end: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-label) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-label) {
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__detail-value) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-value) {
   min-width: 0;
   text-align: end;
   overflow-wrap: anywhere;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-actions) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-actions) {
   display: grid;
   gap: 8px;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-header) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action-header) {
   display: grid;
   gap: 3px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action-items) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action-items) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--ds-list-preview-action-min-width), 1fr));
   gap: 8px;
   min-width: 0;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-actions :is(button, a, [role='button'])) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-actions :is(button, a, [role='button'])) {
   flex: initial;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action) {
   width: 100%;
   min-height: 60px;
   transition:
@@ -64471,18 +64471,18 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action) {
     transform 160ms ease;
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action:hover) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action:hover) {
   transform: translateY(-1px);
   box-shadow: 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 
-html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action[aria-disabled='true']) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__quick-action[aria-disabled='true']) {
   cursor: not-allowed;
   opacity: 0.58;
   pointer-events: none;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where([role='tooltip'][aria-hidden='true']) {
   display: none !important;
   opacity: 0 !important;
@@ -64490,7 +64490,7 @@ html[data-tenant='bithire']
   visibility: hidden !important;
 }
 
-html[data-tenant='bithire'] :where([role='tooltip']:not([aria-hidden='true'])) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where([role='tooltip']:not([aria-hidden='true'])) {
   writing-mode: horizontal-tb !important;
   text-orientation: mixed !important;
   white-space: normal !important;
@@ -64505,7 +64505,7 @@ html[data-tenant='bithire'] :where([role='tooltip']:not([aria-hidden='true'])) {
   z-index: var(--ds-z-index-tooltip, 2700) !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .ds-collection-enhanced [role='tooltip']:not([aria-hidden='true']),
     .rt-collection-preview [role='tooltip']:not([aria-hidden='true']),
@@ -64515,12 +64515,12 @@ html[data-tenant='bithire']
   isolation: isolate;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(.rottay-tooltip, .ds-tooltip, .tooltip) {
   z-index: var(--ds-z-index-tooltip, 2700) !important;
 }
 
-html[data-tenant='bithire']
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .rottay-tooltip [role='tooltip'],
     .ds-tooltip__content,
@@ -64531,23 +64531,23 @@ html[data-tenant='bithire']
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-tenant='bithire'] :where(.rt-collection-preview) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview) {
     animation: none !important;
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__summary, .rt-collection-preview__quick-action, .rt-collection-preview__lane-meter-bar) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__summary, .rt-collection-preview__quick-action, .rt-collection-preview__lane-meter-bar) {
     transition: none !important;
     transform: none !important;
   }
 }
 
 @media (max-width: 1180px) {
-  html[data-tenant='bithire']
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
     :where(.ds-collection-enhanced > [data-ds-collection-body='true'] > div) {
     flex-direction: column !important;
   }
 
-  html[data-tenant='bithire']
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
     :where(.ds-collection-enhanced .ds-collection-preview-rail) {
     width: 100% !important;
     min-inline-size: 0;
@@ -64563,58 +64563,58 @@ html[data-tenant='bithire']
 }
 
 @media (max-width: 780px) {
-  html[data-tenant='bithire'] {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
     --ds-list-preview-hero-visual-size: 42px;
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__hero-header) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-header) {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__hero-aside) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__hero-aside) {
     justify-content: flex-start;
     width: 100%;
     max-width: 100%;
   }
 
-  html[data-tenant='bithire']
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
     :where(.ds-collection-enhanced > [data-ds-collection-toolbar-row='true']) {
     margin: 12px 14px 0;
   }
 
-  html[data-tenant='bithire']
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))
     :where(.ds-collection-enhanced > [data-ds-collection-body='true']) {
     padding: 14px 14px 18px !important;
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__header) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__header) {
     flex-direction: column;
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__header-main) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__header-main) {
     width: 100%;
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__actions) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__actions) {
     justify-content: flex-start;
     width: 100%;
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__detail-row) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-row) {
     grid-template-columns: 1fr;
     gap: 4px;
   }
 
-  html[data-tenant='bithire'] :where(.rt-collection-preview__detail-value) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-collection-preview__detail-value) {
     text-align: start;
   }
 
-  html[data-tenant='bithire'] :where(.rt-expanded-panel__detail-field) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__detail-field) {
     align-items: flex-start !important;
     flex-direction: column;
   }
 
-  html[data-tenant='bithire'] :where(.rt-expanded-panel__detail-field-value) {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-expanded-panel__detail-field-value) {
     max-width: 100%;
     text-align: start !important;
   }
@@ -64634,8 +64634,8 @@ html[data-tenant='bithire']
  * component styles without !important.
  * ============================================================================ */
 
-html[data-tenant='bithire'] .rottay-tag,
-html[data-tenant='bithire'] .ant-tag {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag {
   border-radius: var(--ds-tag-radius-full, 9999px);
   font-size: var(--ds-text-detail-size, 0.75rem);
   font-weight: 600;
@@ -64653,41 +64653,41 @@ html[data-tenant='bithire'] .ant-tag {
 
 /* Six-tone vocabulary (S4): bg = tint-8 of the tone, text = the tone color,
  * border = tint-24 of the tone. Neutral/info fall back to the primary tint. */
-html[data-tenant='bithire'] .rottay-tag--default {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag--default {
   background: var(--ds-tint-8);
   color: var(--ds-color-text-secondary, #52677E);
   border-color: var(--ds-tint-24);
 }
-html[data-tenant='bithire'] .rottay-tag--primary,
-html[data-tenant='bithire'] .ant-tag-blue {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag--primary,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-blue {
   background: var(--ds-tint-8);
   color: var(--ds-color-primary);
   border-color: var(--ds-tint-24);
 }
-html[data-tenant='bithire'] .rottay-tag--success,
-html[data-tenant='bithire'] .ant-tag-success,
-html[data-tenant='bithire'] .ant-tag-green {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag--success,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-success,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-green {
   background: var(--ds-tint-success-8);
   color: var(--ds-color-success);
   border-color: var(--ds-tint-success-24);
 }
-html[data-tenant='bithire'] .rottay-tag--warning,
-html[data-tenant='bithire'] .ant-tag-warning,
-html[data-tenant='bithire'] .ant-tag-gold,
-html[data-tenant='bithire'] .ant-tag-orange {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag--warning,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-warning,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-gold,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-orange {
   background: var(--ds-tint-warning-8);
   color: var(--ds-color-warning);
   border-color: var(--ds-tint-warning-24);
 }
-html[data-tenant='bithire'] .rottay-tag--error,
-html[data-tenant='bithire'] .ant-tag-error,
-html[data-tenant='bithire'] .ant-tag-red {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag--error,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-error,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-red {
   background: var(--ds-tint-error-8);
   color: var(--ds-color-error);
   border-color: var(--ds-tint-error-24);
 }
-html[data-tenant='bithire'] .rottay-tag--secondary,
-html[data-tenant='bithire'] .ant-tag-cyan {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag--secondary,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag-cyan {
   background: var(--ds-tint-info-8);
   color: var(--ds-color-info);
   border-color: var(--ds-tint-info-24);
@@ -64695,15 +64695,15 @@ html[data-tenant='bithire'] .ant-tag-cyan {
 
 /* Interactive tags (filters, removable skills) take the §2.5 interaction
  * states: tint-4 hover on top of the resting tone tint. */
-html[data-tenant='bithire'] .ant-tag[style*='cursor: pointer']:hover,
-html[data-tenant='bithire'] .rottay-tag--clickable:hover {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag[style*='cursor: pointer']:hover,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag--clickable:hover {
   filter: brightness(0.98);
 }
 
 /* Counting badges render tabular figures (§8.6); no saturated pulse. */
-html[data-tenant='bithire'] .ant-badge-count,
-html[data-tenant='bithire'] .ant-scroll-number,
-html[data-tenant='bithire'] .rottay-badge {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-badge-count,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-scroll-number,
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-badge {
   font-variant-numeric: tabular-nums;
 }
 
@@ -64713,18 +64713,18 @@ html[data-tenant='bithire'] .rottay-badge {
  * data-table cells align digit-for-digit by default so screens stop hand-setting
  * font-variant-numeric per cell — the property only affects digits, so covering the
  * whole table is safe for text columns. */
-html[data-tenant='bithire'] {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
   --ds-text-display-numeric: tabular-nums;
   --ds-text-title-numeric: tabular-nums;
 }
-html[data-tenant='bithire'] :where(.ds-pattern-data-table) :where(td, th) {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) :where(.ds-pattern-data-table) :where(td, th) {
   font-variant-numeric: tabular-nums;
 }
 
 /* Tooltip — the calm level-2 paper overlay (§8.2): white surface, tint hairline,
  * radius-sm, detail-size ink text, ~280px max. Opacity-only enter at calm,
  * position never animates; exit is instant (antd hideDelay). */
-html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-inner {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tooltip .ant-tooltip-inner {
   background: var(--ds-color-bg-primary, #FFFFFF);
   color: var(--ds-color-text-primary, #162A43);
   border: 1px solid var(--ds-tint-12);
@@ -64735,7 +64735,7 @@ html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-inner {
   max-width: var(--ds-tooltip-max-width, 280px);
   padding: 6px 10px;
 }
-html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-arrow::before {
+:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tooltip .ant-tooltip-arrow::before {
   background: var(--ds-color-bg-primary, #FFFFFF);
 }
 
@@ -64744,13 +64744,13 @@ html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-arrow::before {
  * compiled block) so DS components reading var(--ds-motion-*) go instant, and
  * neutralize the tag transition authored above. */
 @media (prefers-reduced-motion: reduce) {
-  html[data-tenant='bithire'] {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
     --ds-motion-instant: 0ms;
     --ds-motion-calm: 0ms;
     --ds-motion-deliberate: 0ms;
   }
-  html[data-tenant='bithire'] .rottay-tag,
-  html[data-tenant='bithire'] .ant-tag {
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .rottay-tag,
+  :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) .ant-tag {
     transition: none;
   }
 }
@@ -64780,7 +64780,7 @@ html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-arrow::before {
  * readable in production bundles and button/pill text cannot disappear against
  * light surfaces.
  */
-html[data-tenant="bithire"] {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) {
   --ds-control-ink: var(--ds-color-text-primary);
   --ds-control-ink-muted: var(--ds-color-text-secondary);
   --ds-control-on-brand: var(
@@ -65355,30 +65355,30 @@ html[data-tenant="bithire"] {
    (WO-UX-05 stage E). Bithire-scoped :where() button/badge compat rules,
    zero !important.
    ============================================ */
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(.btn-primary, .ds-btn--primary, .ant-btn-primary) {
   color: var(--ds-button-primary-color);
   background: var(--ds-button-primary-bg);
   border-color: var(--ds-button-primary-border);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(.btn-secondary, .ds-btn--secondary, .ant-btn-default) {
   color: var(--ds-button-secondary-color);
   background: var(--ds-button-secondary-bg);
   border-color: var(--ds-button-secondary-border);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(.btn-ghost, .ds-btn--ghost, .ant-btn-text, .ant-btn-link) {
   color: var(--ds-button-ghost-color);
 }
 
-html[data-tenant="bithire"] :where(.btn-link, .ds-btn--link, .ant-btn-link) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.btn-link, .ds-btn--link, .ant-btn-link) {
   color: var(--ds-button-link-color);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .badge-default,
     .ds-badge--default,
@@ -65391,19 +65391,19 @@ html[data-tenant="bithire"]
   border-color: var(--ds-badge-default-border);
 }
 
-html[data-tenant="bithire"] :where(.badge-primary, .ds-badge--primary) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.badge-primary, .ds-badge--primary) {
   color: var(--ds-badge-primary-color);
   background: var(--ds-badge-primary-bg);
   border-color: var(--ds-badge-primary-border);
 }
 
-html[data-tenant="bithire"] :where(.badge-secondary, .ds-badge--secondary) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.badge-secondary, .ds-badge--secondary) {
   color: var(--ds-badge-secondary-color);
   background: var(--ds-badge-secondary-bg);
   border-color: var(--ds-badge-secondary-border);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .badge-success,
     .ds-badge--success,
@@ -65414,26 +65414,26 @@ html[data-tenant="bithire"]
   border-color: var(--ds-badge-success-border);
 }
 
-html[data-tenant="bithire"] :where(.badge-warning, .ds-badge--warning) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.badge-warning, .ds-badge--warning) {
   color: var(--ds-badge-warning-color);
   background: var(--ds-badge-warning-bg);
   border-color: var(--ds-badge-warning-border);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(.badge-error, .ds-badge--error, .bithire-form-required-pill) {
   color: var(--ds-badge-error-color);
   background: var(--ds-badge-error-bg);
   border-color: var(--ds-badge-error-border);
 }
 
-html[data-tenant="bithire"] :where(.badge-info, .ds-badge--info) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.badge-info, .ds-badge--info) {
   color: var(--ds-badge-info-color);
   background: var(--ds-badge-info-bg);
   border-color: var(--ds-badge-info-border);
 }
 
-html[data-tenant="bithire"] :where(.badge, .ds-badge) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.badge, .ds-badge) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -65464,11 +65464,11 @@ html[data-tenant="bithire"] :where(.badge, .ds-badge) {
   white-space: nowrap;
 }
 
-html[data-tenant="bithire"] :where(.badge > *, .ds-badge > *) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.badge > *, .ds-badge > *) {
   min-width: 0;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     .ds-surface-hero,
     .rt-surface-hero,
@@ -65489,11 +65489,11 @@ html[data-tenant="bithire"]
 /* ============================================
    Inline-editor skin — relocated from app globals (WO-UX-06 follow-up)
    ============================================ */
-html[data-tenant="bithire"] :where([data-bithire-detail-editor-suite="true"]) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where([data-bithire-detail-editor-suite="true"]) {
   gap: 0 !important;
 }
 
-html[data-tenant="bithire"] :where([data-bithire-detail-edit-panel="true"]) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where([data-bithire-detail-edit-panel="true"]) {
   --rt-detail-soft-accent: color-mix(
     in srgb,
     var(--ds-color-primary) 10%,
@@ -65529,7 +65529,7 @@ html[data-tenant="bithire"] :where([data-bithire-detail-edit-panel="true"]) {
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-edit-panel="true"][data-bithire-detail-edit-panel-embedded="true"]
   ) {
@@ -65541,7 +65541,7 @@ html[data-tenant="bithire"]
   background-size: auto !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-editor-suite="true"]
       > [data-bithire-detail-edit-panel="true"]
@@ -65556,7 +65556,7 @@ html[data-tenant="bithire"]
   border-bottom-right-radius: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-edit-panel="true"]:has(
       + [data-bithire-detail-coverage-panel="true"]
@@ -65572,13 +65572,13 @@ html[data-tenant="bithire"]
   border-bottom-right-radius: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where(form, [role="form"]) {
   width: 100%;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-edit-header="true"]) {
   position: relative;
@@ -65606,7 +65606,7 @@ html[data-tenant="bithire"]
   );
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-edit-panel="true"]:has(
       [data-bithire-detail-advanced-toggle-placement="header-right"]
@@ -65616,19 +65616,19 @@ html[data-tenant="bithire"]
   padding-inline-end: clamp(150px, 18vw, 220px) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-editor-header-actions="true"]) {
   min-height: 28px;
   gap: 6px !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-header="true"])
   > :where(.rottay-flex:first-child) {
   align-items: center !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-header="true"])
   > :where(.rottay-flex:first-child)
   > :where(.rottay-stack:last-child) {
@@ -65640,7 +65640,7 @@ html[data-tenant="bithire"]
   min-width: 0;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-editor="true"])
   :where(
     [data-bithire-detail-editor-icon="true"],
@@ -65667,7 +65667,7 @@ html[data-tenant="bithire"]
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 74%, transparent);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-editor="true"])
   :where(
     [data-bithire-detail-editor-eyebrow="true"],
@@ -65682,7 +65682,7 @@ html[data-tenant="bithire"]
   text-transform: uppercase;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-editor="true"])
   :where([data-bithire-detail-editor-title="true"]) {
   color: var(--ds-color-text-primary);
@@ -65695,7 +65695,7 @@ html[data-tenant="bithire"]
   line-height: 1.15;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-editor="true"])
   :where([data-bithire-detail-editor-description="true"]) {
   max-width: 70ch;
@@ -65706,7 +65706,7 @@ html[data-tenant="bithire"]
   white-space: nowrap;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where(
     [data-bithire-detail-primary-fields="true"],
@@ -65769,7 +65769,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where(
     .rt-form-section,
@@ -65782,7 +65782,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section="true"]) {
   min-width: 0 !important;
@@ -65794,7 +65794,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section-header="true"]) {
   min-width: 0;
@@ -65823,14 +65823,14 @@ html[data-tenant="bithire"]
   );
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section-header="true"])
   > :where(.rottay-flex:first-child) {
   align-items: center !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section-header="true"])
   > :where(.rottay-flex:first-child)
@@ -65842,14 +65842,14 @@ html[data-tenant="bithire"]
   gap: 2px 8px !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section="true"]:first-child)
   :where([data-bithire-detail-editor-section-header="true"]) {
   border-top-color: transparent;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section-title="true"]) {
   color: var(--ds-color-text-primary);
@@ -65857,7 +65857,7 @@ html[data-tenant="bithire"]
   line-height: 1.2;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section-description="true"]) {
   max-width: 72ch;
@@ -65867,20 +65867,20 @@ html[data-tenant="bithire"]
   white-space: nowrap;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section-content="true"]) {
   min-width: 0;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-editor-section="true"]:first-child) {
   border-top-color: transparent !important;
   padding-top: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-advanced-fields="true"]) {
   border-top-color: color-mix(
@@ -65890,7 +65890,7 @@ html[data-tenant="bithire"]
   ) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -65909,7 +65909,7 @@ html[data-tenant="bithire"]
   row-gap: clamp(12px, 1.35vw, 20px) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -65940,7 +65940,7 @@ html[data-tenant="bithire"]
   overflow: visible !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -65976,7 +65976,7 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -65990,7 +65990,7 @@ html[data-tenant="bithire"]
   grid-column: 1 / -1 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66012,7 +66012,7 @@ html[data-tenant="bithire"]
   margin-bottom: 7px !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66033,7 +66033,7 @@ html[data-tenant="bithire"]
   min-height: 22px !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66051,7 +66051,7 @@ html[data-tenant="bithire"]
   min-width: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66068,7 +66068,7 @@ html[data-tenant="bithire"]
   max-width: 100%;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66077,7 +66077,7 @@ html[data-tenant="bithire"]
   grid-column: span 2 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66086,7 +66086,7 @@ html[data-tenant="bithire"]
   grid-column: span 3 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66095,7 +66095,7 @@ html[data-tenant="bithire"]
   grid-column: 1 / -1 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66119,7 +66119,7 @@ html[data-tenant="bithire"]
   overflow: visible !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66148,7 +66148,7 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66159,7 +66159,7 @@ html[data-tenant="bithire"]
   grid-column: span 2 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66170,7 +66170,7 @@ html[data-tenant="bithire"]
   grid-column: span 3 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66181,13 +66181,13 @@ html[data-tenant="bithire"]
   grid-column: 1 / -1 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
   )
   > :where([data-bithire-detail-edit-section])::before,
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66196,7 +66196,7 @@ html[data-tenant="bithire"]
   content: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66229,7 +66229,7 @@ html[data-tenant="bithire"]
   overflow: visible !important;
 }
 
-html[data-tenant="bithire"] :where([data-bithire-detail-field-icon="true"]) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where([data-bithire-detail-field-icon="true"]) {
   display: grid;
   place-items: center;
   width: 24px;
@@ -66252,7 +66252,7 @@ html[data-tenant="bithire"] :where([data-bithire-detail-field-icon="true"]) {
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 74%, transparent);
 }
 
-html[data-tenant="bithire"] :where([data-bithire-detail-field-control="true"]) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where([data-bithire-detail-field-control="true"]) {
   position: relative;
   box-sizing: border-box;
   min-width: 0 !important;
@@ -66264,20 +66264,20 @@ html[data-tenant="bithire"] :where([data-bithire-detail-field-control="true"]) {
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-field-control="true"]) {
   width: min(100%, var(--rt-detail-control-inline-size, 100%)) !important;
   overflow: visible !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
   )
   :where(.rottay-flex):has(:where(input, textarea, select, [role="combobox"])),
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66294,13 +66294,13 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
   )
   :where(.rottay-box):has(> :where(input, textarea, select, [role="combobox"])),
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66317,7 +66317,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66328,7 +66328,7 @@ html[data-tenant="bithire"]
   gap: 6px !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66342,7 +66342,7 @@ html[data-tenant="bithire"]
   min-width: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66354,7 +66354,7 @@ html[data-tenant="bithire"]
   width: 100% !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-control-row="true"]) {
   display: flex !important;
   flex-direction: row !important;
@@ -66369,28 +66369,28 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-control-row="true"])
   > * {
   width: auto !important;
   max-width: 100% !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-control-row="true"])
   > :first-child {
   flex: 1 1 260px !important;
   min-width: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-control-row="true"])
   > :not(:first-child) {
   flex: 0 0 auto !important;
   width: auto !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-inline-control-row="true"])
   :where(input, textarea, select, [role="combobox"]) {
   width: 100% !important;
@@ -66399,7 +66399,7 @@ html[data-tenant="bithire"]
   min-inline-size: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66414,7 +66414,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66427,7 +66427,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-edit-panel="true"],
     [data-bithire-detail-read-panel="true"],
@@ -66459,7 +66459,7 @@ html[data-tenant="bithire"]
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 76%, transparent);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-edit-panel="true"],
     [data-bithire-detail-read-panel="true"],
@@ -66479,7 +66479,7 @@ html[data-tenant="bithire"]
     inset 0 1px 0 color-mix(in srgb, white 74%, transparent);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66496,7 +66496,7 @@ html[data-tenant="bithire"]
   text-transform: uppercase !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66505,14 +66505,14 @@ html[data-tenant="bithire"]
   max-width: 100% !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-field-control-wrapper="true"]) {
   inline-size: min(100%, var(--rt-detail-control-inline-size, 100%)) !important;
   min-inline-size: 0 !important;
   max-inline-size: 100% !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-field-control-wrapper="true"])
   :where(
     input,
@@ -66531,7 +66531,7 @@ html[data-tenant="bithire"]
   min-inline-size: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-field-control-wrapper="true"]:has(
       [data-bithire-detail-inline-control-row="true"]
@@ -66547,7 +66547,7 @@ html[data-tenant="bithire"]
   min-inline-size: 0 !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-field-control-width="compact"],
     [data-bithire-detail-field-control-kind="number-stepper"],
@@ -66557,7 +66557,7 @@ html[data-tenant="bithire"]
   --rt-detail-control-inline-size: 280px;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-field-control-width="wide"],
     [data-bithire-detail-field-control-kind="phone"],
@@ -66568,7 +66568,7 @@ html[data-tenant="bithire"]
   --rt-detail-control-inline-size: 520px;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66586,7 +66586,7 @@ html[data-tenant="bithire"]
   );
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66600,7 +66600,7 @@ html[data-tenant="bithire"]
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 42%, transparent) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66621,17 +66621,17 @@ html[data-tenant="bithire"]
   box-shadow: var(--ds-detail-control-shadow) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-smart-control="date-control"]) {
   width: min(100%, 360px) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-smart-control="segmented-choice"]) {
   width: min(100%, 560px) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66650,7 +66650,7 @@ html[data-tenant="bithire"]
   font-family: var(--ds-font-family-base) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66659,7 +66659,7 @@ html[data-tenant="bithire"]
   border-color: var(--ds-detail-control-border-hover) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66685,7 +66685,7 @@ html[data-tenant="bithire"]
   outline: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-primary-fields="true"],
     [data-bithire-detail-advanced-fields="true"]
@@ -66695,7 +66695,7 @@ html[data-tenant="bithire"]
   resize: vertical;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-field-control-width="natural"])
   :where(input, select, [role="combobox"]) {
@@ -66703,7 +66703,7 @@ html[data-tenant="bithire"]
   min-width: min(100%, 12rem);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-smart-control="number-stepper"])
   :where(button, input) {
   height: 38px !important;
@@ -66714,14 +66714,14 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-smart-control="number-stepper"])
   > :where(:not(:first-child)) {
   border-inline-start: 1px solid
     color-mix(in srgb, var(--ds-color-text-primary) 9%, transparent) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-advanced-toggle="true"],
     [data-bithire-detail-coverage-toggle="true"]
@@ -66759,7 +66759,7 @@ html[data-tenant="bithire"]
     inset 0 1px 0 color-mix(in srgb, white 76%, transparent) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-divider="true"],
     [data-bithire-detail-more-sticky="true"],
@@ -66787,7 +66787,7 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where(
     [data-bithire-detail-primary-fields],
@@ -66803,7 +66803,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-divider="true"],
     [data-bithire-detail-more-sticky="true"],
@@ -66827,7 +66827,7 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-divider="true"],
     [data-bithire-detail-more-sticky="true"],
@@ -66852,7 +66852,7 @@ html[data-tenant="bithire"]
   pointer-events: auto;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-divider="true"],
     [data-bithire-detail-more-sticky="true"],
@@ -66876,7 +66876,7 @@ html[data-tenant="bithire"]
   pointer-events: auto;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-divider="true"][data-bithire-detail-more-sticky="true"],
     [data-bithire-detail-more-sticky="true"],
@@ -66905,7 +66905,7 @@ html[data-tenant="bithire"]
   backdrop-filter: blur(10px);
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-sticky="true"],
     [data-bithire-detail-more-fields-sticky="true"],
@@ -66914,7 +66914,7 @@ html[data-tenant="bithire"]
   content: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-fields-divider="true"][data-bithire-detail-more-fields-state="collapsed"]
   ) {
@@ -66931,14 +66931,14 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-fields-divider="true"][data-bithire-detail-more-fields-state="collapsed"]
   )::before {
   content: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-advanced-toggle-placement="header-right"]) {
   position: absolute !important;
   z-index: 7;
@@ -66954,14 +66954,14 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-advanced-toggle-placement="header-right"]
   )::before {
   content: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-advanced-toggle-placement="bottom-center"]) {
   position: relative !important;
   inset: auto !important;
@@ -66976,14 +66976,14 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-advanced-toggle-placement="bottom-center"]
   )::before {
   content: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-advanced-toggle-placement="bottom-center"][data-bithire-detail-advanced-toggle-label="show-more"]
   ) {
@@ -66993,7 +66993,7 @@ html[data-tenant="bithire"]
   margin: 12px 0 2px !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-advanced-toggle-placement="floating-top"]) {
   position: fixed !important;
   top: var(--rt-detail-sticky-top, 72px);
@@ -67041,7 +67041,7 @@ html[data-tenant="bithire"]
   }
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-more-fields-divider="true"],
     [data-bithire-detail-more-fields-sticky="true"]
@@ -67067,7 +67067,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-footer="true"])
   :where(
     [data-bithire-detail-action-kind="inline-cancel"],
@@ -67086,7 +67086,7 @@ html[data-tenant="bithire"]
   color: var(--ds-color-text-primary) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-footer="true"])
   :where(
     [data-bithire-detail-action-kind="inline-save"],
@@ -67121,7 +67121,7 @@ html[data-tenant="bithire"]
   color: var(--ds-control-on-brand, var(--ds-color-text-on-primary)) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-edit-footer="true"]) {
   margin-top: 0 !important;
@@ -67139,17 +67139,17 @@ html[data-tenant="bithire"]
   );
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-footer-actions="true"]) {
   margin-inline-start: auto;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-footer-summary="true"]) {
   overflow-wrap: anywhere;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-footer-state="error"]) {
   border-color: color-mix(
     in srgb,
@@ -67159,7 +67159,7 @@ html[data-tenant="bithire"]
 }
 
 @media (max-width: 960px) {
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where([data-bithire-detail-edit-panel="true"])
     :where([data-bithire-detail-edit-footer="true"]) {
     position: sticky;
@@ -67186,20 +67186,20 @@ html[data-tenant="bithire"]
     backdrop-filter: blur(16px);
   }
 
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where([data-bithire-detail-edit-footer-actions="true"]) {
     flex: 0 0 auto;
   }
 }
 
 @media (max-width: 720px) {
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where([data-bithire-detail-edit-panel="true"])
     :where([data-bithire-detail-edit-footer="true"]) {
     bottom: calc(58px + env(safe-area-inset-bottom, 0px));
   }
 
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where([data-bithire-detail-edit-footer-actions="true"])
     :where(:is(button, a, [role="button"])) {
     flex: 1 1 124px;
@@ -67208,7 +67208,7 @@ html[data-tenant="bithire"]
 }
 
 @media (min-width: 1680px) {
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where([data-bithire-detail-edit-panel="true"])
     :where(
       [data-bithire-detail-primary-fields="true"],
@@ -67219,7 +67219,7 @@ html[data-tenant="bithire"]
 }
 
 @media (max-width: 1180px) {
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where([data-bithire-detail-edit-panel="true"])
     :where(
       [data-bithire-detail-primary-fields="true"],
@@ -67231,7 +67231,7 @@ html[data-tenant="bithire"]
 }
 
 @media (max-width: 760px) {
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where([data-bithire-detail-edit-panel="true"])
     :where(
       [data-bithire-detail-primary-fields="true"],
@@ -67243,7 +67243,7 @@ html[data-tenant="bithire"]
     padding: 12px 14px !important;
   }
 
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where(
       [data-bithire-detail-primary-fields="true"],
       [data-bithire-detail-advanced-fields="true"]
@@ -67253,7 +67253,7 @@ html[data-tenant="bithire"]
       [data-bithire-detail-field-span="3"],
       [data-bithire-detail-field-span="full"]
     ),
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where(
       [data-bithire-detail-primary-fields="true"],
       [data-bithire-detail-advanced-fields="true"]
@@ -67266,7 +67266,7 @@ html[data-tenant="bithire"]
     grid-column: 1 / -1 !important;
   }
 
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where(
       [data-bithire-detail-primary-fields="true"],
       [data-bithire-detail-advanced-fields="true"]
@@ -67279,7 +67279,7 @@ html[data-tenant="bithire"]
         [data-bithire-detail-more-fields-sticky="true"]
       )
     ),
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where(
       [data-bithire-detail-primary-fields="true"],
       [data-bithire-detail-advanced-fields="true"]
@@ -67289,7 +67289,7 @@ html[data-tenant="bithire"]
     padding: 8px 0 10px 12px !important;
   }
 
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where(
       [data-bithire-detail-primary-fields="true"],
       [data-bithire-detail-advanced-fields="true"]
@@ -67298,7 +67298,7 @@ html[data-tenant="bithire"]
     min-height: auto;
   }
 
-  html[data-tenant="bithire"]
+  :is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
     :where(
       [data-bithire-detail-more-divider="true"],
       [data-bithire-detail-more-sticky="true"],
@@ -67315,20 +67315,20 @@ html[data-tenant="bithire"]
   }
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where(textarea[data-bithire-dictation-target="true"]) {
   padding-inline-end: 44px !important;
 }
 
-html[data-tenant="bithire"] :where(.rt-detail-dictation-host) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-detail-dictation-host) {
   position: absolute;
   z-index: 5;
   display: inline-flex;
   pointer-events: none;
 }
 
-html[data-tenant="bithire"] :where(.rt-detail-dictation-button) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-detail-dictation-button) {
   display: inline-grid;
   place-items: center;
   width: 28px;
@@ -67353,7 +67353,7 @@ html[data-tenant="bithire"] :where(.rt-detail-dictation-button) {
   pointer-events: auto;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(.rt-detail-dictation-button:hover:not(:disabled)) {
   border-color: color-mix(
     in srgb,
@@ -67367,7 +67367,7 @@ html[data-tenant="bithire"]
   );
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(.rt-detail-dictation-button[data-listening="true"]) {
   border-color: color-mix(
     in srgb,
@@ -67377,21 +67377,21 @@ html[data-tenant="bithire"]
   color: var(--ds-color-error);
 }
 
-html[data-tenant="bithire"] :where(.rt-detail-dictation-button:disabled) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where(.rt-detail-dictation-button:disabled) {
   opacity: 0.48;
   cursor: not-allowed;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-advanced-fields][hidden]),
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-advanced-fields][data-bithire-detail-advanced-fields-state="collapsed"]
   ) {
   display: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-tags-structured="true"]) {
   display: block;
@@ -67399,13 +67399,13 @@ html[data-tenant="bithire"]
   min-width: 0;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-tag-chip="true"]) {
   white-space: normal !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-workflow-card="detail"]) {
   border: 0 !important;
@@ -67417,7 +67417,7 @@ html[data-tenant="bithire"]
 /* Detail nav soft-segmented selected state (the ONE tab treatment — no
    bottom-border strips, no primary underlines). Pinned home: the shared
    detail polish gate asserts this selector lives in globals.css. */
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-nav-item="true"][data-active="true"]) {
   border-radius: var(--ds-radius-md, 8px);
   background: var(
@@ -67435,7 +67435,7 @@ html[data-tenant="bithire"]
 /* ============================================
    Field-coverage panel skin — relocated from app globals (WO-UX-06 follow-up)
    ============================================ */
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-panel="true"]) {
   --rt-detail-coverage-border: color-mix(
     in srgb,
@@ -67468,7 +67468,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-coverage-panel="true"]:not(
       [data-bithire-detail-coverage-embedded="true"]
@@ -67495,7 +67495,7 @@ html[data-tenant="bithire"]
     inset 0 1px 0 color-mix(in srgb, white 72%, transparent) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-editor-suite="true"]
       > [data-bithire-detail-coverage-panel="true"]
@@ -67512,7 +67512,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where(
     [data-bithire-detail-edit-panel="true"]
       + [data-bithire-detail-coverage-panel="true"]
@@ -67529,18 +67529,18 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-panel="true"])
   :where([data-bithire-detail-coverage-header="true"]) {
   gap: 10px !important;
   padding: 0 0 4px !important;
 }
 
-html[data-tenant="bithire"] :where([data-bithire-detail-coverage-body="true"]) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where([data-bithire-detail-coverage-body="true"]) {
   gap: clamp(10px, 1.1vw, 16px) !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-group="true"]) {
   gap: 0 !important;
   padding-top: clamp(8px, 0.9vw, 12px);
@@ -67556,7 +67556,7 @@ html[data-tenant="bithire"]
   box-shadow: none !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-group-header="true"]) {
   min-height: 38px;
   padding-block: 7px 9px !important;
@@ -67567,7 +67567,7 @@ html[data-tenant="bithire"]
   ) !important;
 }
 
-html[data-tenant="bithire"] :where([data-bithire-detail-coverage-grid="true"]) {
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire'])) :where([data-bithire-detail-coverage-grid="true"]) {
   display: grid !important;
   grid-template-columns: repeat(
     auto-fit,
@@ -67579,7 +67579,7 @@ html[data-tenant="bithire"] :where([data-bithire-detail-coverage-grid="true"]) {
   border-left: 0;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-field="true"]) {
   position: relative;
   min-width: 0 !important;
@@ -67591,7 +67591,7 @@ html[data-tenant="bithire"]
   overflow: visible !important;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-field="true"])::before {
   content: "";
   position: absolute;
@@ -67608,7 +67608,7 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-field="true"])::after {
   content: "";
   position: absolute;
@@ -67624,12 +67624,12 @@ html[data-tenant="bithire"]
   pointer-events: none;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-field="true"][data-populated="false"]) {
   opacity: 0.82;
 }
 
-html[data-tenant="bithire"]
+:is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical='bithire']))
   :where([data-bithire-detail-coverage-field="true"])
   :where(pre) {
   max-height: 112px !important;
@@ -67649,7 +67649,7 @@ html[data-tenant="bithire"]
  */
 
 /* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
-html[data-tenant='evnto'] {
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
   --ds-button-default-bg: #FFFFFF;
   --ds-button-default-bg-hover: #FAFAFA;
   --ds-button-default-border: rgba(0, 0, 0, 0.1);
@@ -67887,7 +67887,7 @@ html[data-tenant='evnto'] {
   --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
 }
 
-/* === Declared artifact extension (authored source, generator-preserved) === */
+/* === Declared artifact extension (authored source, mechanically scoped) === */
 /* ============================================
    EVNTO BRAND COLORS (Light Mode Default)
    Declared extension: the DaisyUI oklch bridge and domain-owned ticket/
@@ -67895,7 +67895,7 @@ html[data-tenant='evnto'] {
    block (not diffed against the compiled block) so each theme-scoped
    selector stays independently readable.
    ============================================ */
-html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])):not([data-theme='dark']):not(.dark) {
   /* ============================================
      DaisyUI 5 color bridge (oklch format)
      Maps Evnto brand (minimal light theme) to DaisyUI 5's
@@ -68145,8 +68145,8 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
    and chrome are single-valued and light-authored, so dark mode is
    declared extension.
    ============================================ */
-html[data-tenant='evnto'][data-theme='dark'],
-html[data-tenant='evnto'].dark {
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'],
+:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
   color-scheme: dark;
 
   /* DaisyUI 5 color contract (oklch) - dark variant */

@@ -13,6 +13,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import postcss from 'postcss';
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../../compilers/brand-theme';
@@ -42,6 +43,7 @@ function generate(slug: string): string {
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
   return renderVerticalArtifact({
     tenantSlug: spec.slug,
+    verticalKey: spec.verticalKey,
     authoredThemePath: spec.authoredThemePath,
     displayName: spec.displayName,
     selector: spec.selector,
@@ -49,6 +51,16 @@ function generate(slug: string): string {
     extensionCss: readFileSync(resolve(ARTIFACTS_DIR, `${slug}/_source/extension.css`), 'utf8'),
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   });
+}
+
+function countInRuleSelectors(css: string, fragments: readonly string[]): number {
+  let count = 0;
+  postcss.parse(css).walkRules((rule) => {
+    for (const fragment of fragments) {
+      count += rule.selector.split(fragment).length - 1;
+    }
+  });
+  return count;
 }
 
 describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
@@ -69,3 +81,37 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
     });
   },
 );
+
+describe('first-party generated artifact scope ownership', () => {
+  it.each(FIRST_PARTY_ARTIFACT_SPECS)(
+    '$slug projects its complete static baseline onto the $verticalKey provider root only',
+    (spec) => {
+      const generated = generate(spec.slug);
+      const ownRoot = `[data-ds-root][data-vertical='${spec.verticalKey}']`;
+      const extension = readFileSync(
+        resolve(ARTIFACTS_DIR, `${spec.slug}/_source/extension.css`),
+        'utf8',
+      );
+      const authoredSelectors = `${spec.selector} {}\n${extension}`;
+      const legacyOwners = [
+        `html[data-tenant='${spec.slug}']`,
+        `html[data-tenant="${spec.slug}"]`,
+      ];
+      const authoredOwnerCount = countInRuleSelectors(authoredSelectors, legacyOwners);
+
+      expect(generated).toContain(ownRoot);
+      expect(generated).toContain(`html[data-tenant='${spec.slug}']`);
+      // Every authored legacy arm survives unchanged and gets exactly one
+      // provider-root peer, including both single- and double-quoted sources.
+      expect(countInRuleSelectors(generated, legacyOwners)).toBe(authoredOwnerCount);
+      expect(countInRuleSelectors(generated, [ownRoot])).toBe(authoredOwnerCount);
+
+      for (const other of FIRST_PARTY_ARTIFACT_SPECS) {
+        if (other.verticalKey === spec.verticalKey) continue;
+        expect(generated).not.toContain(
+          `[data-ds-root][data-vertical='${other.verticalKey}']`,
+        );
+      }
+    },
+  );
+});
