@@ -99,4 +99,4 @@ runtime source.
 - Supplier-contract and packed-artifact gates prove the public runtime matches
   what consumers install.
 
-Last verified: 2026-07-16 (`@rottay/design-system@2.19.24`)
+Last verified: 2026-07-16 (`@rottay/design-system@2.19.25`)

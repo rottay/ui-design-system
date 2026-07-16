@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.25
+
+### Patch Changes
+
+- Add an explicit `compiled-artifact` visual-authority mode for DB-backed
+  tenants. It preserves tenant, locale, theme, motion and feature contexts while
+  disabling provider-owned CSS loading, fallbacks, inline variables and
+  generated chrome, so the exact SSR artifact remains the sole visual source.
+- Clean up only provider-owned legacy theme emitters when authority changes and
+  preserve the externally mounted immutable artifact across hydration.
+
 ## 2.19.24
 
 ### Patch Changes
