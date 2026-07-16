@@ -224,7 +224,7 @@ describe('deterministic artifact compilation and isolation', () => {
         value: 'themanagementmiami',
         selector: ':where([data-ds-root][data-tenant="themanagementmiami"])',
       },
-      combinedSelector: '[data-ds-root][data-vertical="bithire"][data-tenant="themanagementmiami"]',
+      combinedSelector: '[data-ds-root][data-vertical="bithire"][data-tenant][data-tenant="themanagementmiami"]',
     });
     expect(artifact.css).toContain(`${artifact.scopes.combinedSelector} {`);
     expect(artifact.css).not.toContain('@layer');
@@ -275,12 +275,12 @@ describe('deterministic artifact compilation and isolation', () => {
     managementRoot.append(nestedBithireRoot);
     document.body.append(managementRoot, siblingBithireRoot);
 
-    // Deliberately put the static baseline last. The exact runtime selector
-    // must still win by specificity, while each nested root keeps its own value.
+    // Deliberately put the highest-specificity static root-state baseline last.
+    // The exact runtime selector must still win, while each root keeps its value.
     style.textContent = [
       management.css,
       bithire.css,
-      ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) { --ds-color-primary: #3A6FB0; }",
+      ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])):not([data-theme='dark']):not(.dark) { --ds-color-primary: #3A6FB0; }",
     ].join('\n');
     document.head.append(style);
 

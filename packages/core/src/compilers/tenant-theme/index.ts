@@ -707,12 +707,13 @@ function buildScopes(config: TenantThemeConfigV1): TenantThemeArtifactV1['scopes
     root: { attribute: 'data-ds-root', selector: rootSelector },
     vertical: { attribute: 'data-vertical', value: config.verticalKey, selector: verticalSelector },
     tenant: { attribute: 'data-tenant', value: config.slug, selector: tenantSelector },
-    // The effective tenant overlay intentionally keeps all three attributes
-    // outside :where(). First-party vertical artifacts are unlayered and their
-    // provider branch inherits the legacy html[data-tenant] specificity. The
-    // exact (0,3,0) selector therefore guarantees that a validated DB artifact
-    // wins on its own root without depending on stylesheet insertion order.
-    combinedSelector: `[data-ds-root][data-vertical="${config.verticalKey}"][data-tenant="${config.slug}"]`,
+    // The effective tenant overlay intentionally keeps its attributes outside
+    // :where(). First-party vertical artifacts are unlayered and their state
+    // variants reach (0,3,1) through the legacy html[data-tenant] arm plus two
+    // pseudo-classes. Requiring both tenant presence and the exact tenant value
+    // is semantically redundant but yields (0,4,0), so the validated DB artifact
+    // always wins on its own root without !important or insertion-order coupling.
+    combinedSelector: `[data-ds-root][data-vertical="${config.verticalKey}"][data-tenant][data-tenant="${config.slug}"]`,
   };
 }
 
