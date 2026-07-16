@@ -496,3 +496,57 @@ DS-IMP-106/110 completion claim or source-item transition.
 - **Acceptance gate** — Two roots keep distinct colors; adaptive DPR/count caps hold; hidden/offscreen work reaches zero RAF; cleanup and context-loss fixtures pass; reduced motion, coarse pointer, save-data and unsupported devices receive meaningful fallback; long-task, bundle and one-context budgets stay within their recorded ceilings.
 - **Execution control** — Keep all Platform routes on the Stage-A fallback and disable the runtime globally or per route without losing the static alternative. Telemetry covers color isolation, DPR/count, RAF state, cleanup, context loss, fallback/a11y and performance budgets.
 - **Do NOT** — Do not reopen live exposure merely because Stage A is done, hide missing meaning behind a poster, enable WebGPU without its later gate, or start ambient Three work before this WO certifies.
+
+#### Owner continuation — Spatial v1 policy kernel and lifecycle host (2026-07-16)
+
+The first bounded Spatial v1 source slice now exists as evidence beneath WO-CRA-15 without reopening
+any Platform route or completing DS-IMP-106/107/108. The focused `./spatial/spec` entry is server-safe
+and supplier-neutral: it contains no React, browser, Three or R3F runtime and exposes the exact v1
+scene-module protocol `{ version: 1, backend: 'webgl2', Scene }`, hostile-input validation, the
+`static | reduced | live-low | live-high` policy resolver and immutable quality ceilings. WebGL2 is
+the only admitted v1 backend; WebGL1 and WebGPU-shaped input fail closed. `live-low` caps DPR at 1.25,
+disables antialiasing and uses default power preference; `live-high` caps DPR at 1.5, permits
+antialiasing and uses high-performance preference. Missing evidence can only lower or disable work.
+
+The focused client-only `./spatial` entry exposes `SpatialExperience` without importing or owning a
+renderer supplier. It server-renders the app-owned poster without probing or loading, treats reduced
+motion as final, waits for hydration, intersection, shared visibility/pointer/power posture, desktop
+viewport evidence and an exact WebGL2 probe, and releases the temporary probe context. A document-wide
+FIFO lease admits at most one live host. Lazy module/load/render/scene/context failures fail back to the
+poster, a loader that does not settle within 15 seconds fails safe and releases its lease, Canvas
+registration accepts only one descendant Canvas and transactionally restores its prior accessibility
+attributes on cleanup, context loss prevents the default browser path and invokes the app-provided
+disposer, and retry explicitly invalidates the failed probe/module state. Stale scene callbacks are
+revoked across unmount, loader replacement, offscreen and hidden transitions. Eight sustained reported
+frames at or above 25ms can downgrade `auto` quality from high to low but never promote or replace
+meaning.
+
+The host renders a labelled region with app-owned description and keeps the renderer Canvas
+presentational. Any `inspect | navigate | manipulate` scene is rejected before probing unless the app
+supplies both keyboard/domain controls and a labelled equivalent 2D/list alternative; optional
+pause/resume and retry controls remain app copy. Scene graph, Three/R3F dependency, data, domain
+interaction, copy, controls, poster/reduced content and equivalent alternative remain app-owned. The
+two source entrypoints are wired only as focused package/Vite entries and are absent from the root
+barrel; that source wiring is not an installed-tarball or bundle certification.
+
+Current focused evidence is 51/51 green tests (28 policy/validation and 23 lifecycle-host contracts):
+fail-closed policy precedence and all static/low/high
+postures; immutable DPR/antialias/power ceilings; exact/hostile scene-module validation; WebGL2-only
+probe caching and temporary-context release; FIFO lease and stale-waiter cleanup; SSR and reduced
+no-load/no-probe behavior; admission after hydration/in-view/capability/lease; second-host contention;
+context-loss disposal, fallback and explicit retry; interactive alternative/controls enforcement; and
+sustained-frame adaptive downgrade. The host suite also covers loader timeout and late settlement,
+loader replacement, rapid unmount, hidden/offscreen callback revocation, phone/coarse/constrained
+admission denial, modern/legacy media-listener cleanup, duplicate/hostile Canvas registration,
+idempotent disposal, event deduplication and stable pause focus/2D alternatives. These are deterministic
+unit/JSDOM contracts, not real-browser or production-device certification.
+
+No source item moves to complete from this continuation. DS-IMP-106 remains open because the current
+ParticleField color/count/DPR/RAF/lifecycle hardening has only focused unit evidence: the five
+quarantined Platform routes, the independent Stage-A kill switch, the other existing Canvas/WebGL
+paths and measured real-browser/performance certification remain incomplete. DS-IMP-107 remains open
+because feature-flagged WebGPU parity is intentionally absent, the Platform constellation has not
+adopted the host, and packed ESM/CJS/types, supplier-isolation, bundle, real context creation/loss and
+cross-host browser evidence are pending. DS-IMP-108 remains open until real-browser phone/coarse/
+save-data/visibility/offscreen behavior, zero suspended RAF and demand-loop enforcement, actual R3F
+mount/unmount/context lifecycle, keyboard/AT equivalence and long-task/frame/memory/DPR budgets pass.

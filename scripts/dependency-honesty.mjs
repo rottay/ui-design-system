@@ -3930,6 +3930,41 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  type UnmeasuredEffectBudget,\n` +
       `  type VerifiedEffectProvenance,\n` +
       `} from ${JSON.stringify(`${packedManifest.name}/effects`)};\n` +
+      `import {\n` +
+      `  SPATIAL_SCENE_MODULE_VERSION as SPATIAL_HOST_MODULE_VERSION,\n` +
+      `  SpatialExperience,\n` +
+      `  type SpatialExperienceEvent,\n` +
+      `  type SpatialExperienceLabels,\n` +
+      `  type SpatialExperienceProps,\n` +
+      `  type SpatialPerformanceSample,\n` +
+      `  type SpatialSceneLoader,\n` +
+      `  type SpatialSceneModule,\n` +
+      `  type SpatialSceneRuntimeProps,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/spatial`)};\n` +
+      `import {\n` +
+      `  SPATIAL_QUALITY_BUDGETS,\n` +
+      `  SPATIAL_SCENE_MODULE_VERSION,\n` +
+      `  downgradeSpatialMode,\n` +
+      `  isSpatialSceneModule,\n` +
+      `  resolveSpatialPolicy,\n` +
+      `  resolveSpatialQualityBudget,\n` +
+      `  type SpatialBackend,\n` +
+      `  type SpatialCapability,\n` +
+      `  type SpatialContextState,\n` +
+      `  type SpatialInteraction,\n` +
+      `  type SpatialLiveMode,\n` +
+      `  type SpatialMode,\n` +
+      `  type SpatialPointer,\n` +
+      `  type SpatialPolicyInput,\n` +
+      `  type SpatialPower,\n` +
+      `  type SpatialPowerPreference,\n` +
+      `  type SpatialPurpose,\n` +
+      `  type SpatialQuality,\n` +
+      `  type SpatialQualityBudget,\n` +
+      `  type SpatialResolution,\n` +
+      `  type SpatialResolutionReason,\n` +
+      `  type SpatialSceneModuleContract,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/spatial/spec`)};\n` +
       `const chartSpec = {\n` +
       `  desktop: { mode: 'full', rendererId: 'packed.full' },\n` +
       `  phone: { mode: 'summary', rendererId: 'packed.summary', summaryId: 'packed.total' },\n` +
@@ -4025,7 +4060,22 @@ export async function auditPackedArtifact(root = coreRoot) {
       `];\n` +
       `const packedEffectTypes = null as unknown as PackedEffectTypes;\n` +
       `const effectValues = [EFFECT_DEFINITIONS, EFFECT_IDS, EFFECT_REGISTRY, EFFECT_REGISTRY_VERSION, EFFECT_RESEARCH_PROVENANCE, getEffectDefinition, isEffectDefinition, isEffectId];\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, effectResolution, packedEffectTypes, effectValues);\n',
+      `const spatialPolicyInput: SpatialPolicyInput = { enabled: true, hydrated: true, capability: 'webgl2', contextState: 'ready', lease: true, visible: true, inView: true, reduce: false, phone: false, tablet: false, pointer: 'fine', power: 'normal', quality: 'auto', adaptiveLow: false, contractReady: true };\n` +
+      `const spatialResolution: SpatialResolution = resolveSpatialPolicy(spatialPolicyInput);\n` +
+      `const spatialBudget: SpatialQualityBudget | null = resolveSpatialQualityBudget(spatialResolution.mode);\n` +
+      `const spatialDowngrade: SpatialMode = downgradeSpatialMode(spatialResolution.mode);\n` +
+      `const PackedSpatialScene = (_props: SpatialSceneRuntimeProps) => null;\n` +
+      `const spatialModule: SpatialSceneModule = { version: SPATIAL_HOST_MODULE_VERSION, backend: 'webgl2', Scene: PackedSpatialScene };\n` +
+      `const spatialContract: SpatialSceneModuleContract<typeof PackedSpatialScene> = spatialModule;\n` +
+      `const spatialLoader: SpatialSceneLoader = async () => spatialModule;\n` +
+      `const spatialLabels: SpatialExperienceLabels = { controls: 'Packed controls', alternative: 'Packed alternative', retry: 'Retry', pause: 'Pause', resume: 'Resume' };\n` +
+      `const spatialProps: SpatialExperienceProps = { id: 'packed-spatial', label: 'Packed spatial', purpose: 'explanation', description: 'Packed spatial fixture', poster: 'Poster', reduced: 'Reduced', alternative: 'Alternative', controls: 'Controls', labels: spatialLabels, loadScene: spatialLoader, interaction: 'inspect' };\n` +
+      `const spatialPerformance: SpatialPerformanceSample = { frameTimeMs: 16 };\n` +
+      `const spatialEvent: SpatialExperienceEvent = { type: 'mode', id: spatialProps.id, mode: spatialResolution.mode, backend: spatialResolution.backend, reason: spatialResolution.reason };\n` +
+      `type PackedSpatialTypes = [SpatialBackend, SpatialCapability, SpatialContextState, SpatialInteraction, SpatialLiveMode, SpatialPointer, SpatialPower, SpatialPowerPreference, SpatialPurpose, SpatialQuality, SpatialResolutionReason];\n` +
+      `const packedSpatialTypes = null as unknown as PackedSpatialTypes;\n` +
+      `const spatialValues = [SPATIAL_QUALITY_BUDGETS, SPATIAL_SCENE_MODULE_VERSION, SpatialExperience, isSpatialSceneModule(spatialContract), spatialBudget, spatialDowngrade, spatialPerformance, spatialEvent];\n` +
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, effectResolution, packedEffectTypes, effectValues, spatialProps, packedSpatialTypes, spatialValues);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {
@@ -4041,6 +4091,45 @@ export async function auditPackedArtifact(root = coreRoot) {
       include: ['src/fixture.tsx'],
     }, null, 2));
     spawnChecked('pnpm', ['exec', 'tsc', '--project', 'tsconfig.json'], { cwd: consumerRoot });
+
+    const spatialSpecServerSource = resolve(consumerRoot, 'src/spatial-spec-server.ts');
+    writeFileSync(
+      spatialSpecServerSource,
+      `import {\n` +
+      `  SPATIAL_QUALITY_BUDGETS,\n` +
+      `  SPATIAL_SCENE_MODULE_VERSION,\n` +
+      `  downgradeSpatialMode,\n` +
+      `  isSpatialSceneModule,\n` +
+      `  resolveSpatialPolicy,\n` +
+      `  resolveSpatialQualityBudget,\n` +
+      `  type SpatialPolicyInput,\n` +
+      `  type SpatialResolution,\n` +
+      `  type SpatialSceneModuleContract,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/spatial/spec`)};\n` +
+      `const input: SpatialPolicyInput = { enabled: true, hydrated: true, contractReady: true, visible: true, inView: true, reduce: false, phone: false, tablet: false, pointer: 'fine', power: 'normal', contextState: 'ready', capability: 'webgl2', lease: true, quality: 'auto' };\n` +
+      `const resolution: SpatialResolution = resolveSpatialPolicy(input);\n` +
+      `const scene = () => null;\n` +
+      `const moduleContract: SpatialSceneModuleContract<typeof scene> = { version: SPATIAL_SCENE_MODULE_VERSION, backend: 'webgl2', Scene: scene };\n` +
+      `void [SPATIAL_QUALITY_BUDGETS, downgradeSpatialMode(resolution.mode), isSpatialSceneModule(moduleContract), resolveSpatialQualityBudget(resolution.mode)];\n`,
+    );
+    writeFileSync(resolve(consumerRoot, 'tsconfig.spatial-spec-server.json'), JSON.stringify({
+      compilerOptions: {
+        lib: ['ES2022'],
+        module: 'ESNext',
+        moduleResolution: 'Bundler',
+        noEmit: true,
+        skipLibCheck: false,
+        strict: true,
+        target: 'ES2022',
+        types: [],
+      },
+      include: ['src/spatial-spec-server.ts'],
+    }, null, 2));
+    spawnChecked(
+      'pnpm',
+      ['exec', 'tsc', '--project', 'tsconfig.spatial-spec-server.json'],
+      { cwd: consumerRoot },
+    );
     const packagedCli = resolve(installedPackage, 'consumer/ds-supplier-honesty.mjs');
     if (!existsSync(packagedCli)) throw new Error('packed supplier CLI is missing from the installed tarball');
     const cliResult = spawnChecked(
@@ -4177,6 +4266,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       stagedRuntimePackages: installedRuntimeFixtures.stagedPackages,
       supplierCli: cliReport.contract,
       typecheckedConsumer: true,
+      typecheckedServerSafeSpatialSpec: true,
       executedImportConditions: runtimeFixtures.import.length,
       executedRequireConditions: runtimeFixtures.require.length,
       runtimeBundleEntries: runtimeBundles.entries,

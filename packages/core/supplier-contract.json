@@ -4348,6 +4348,36 @@
         "resolveEffect"
       ]
     },
+    "./spatial": {
+      "exports": [
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "SpatialExperience"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "SpatialExperience"
+      ]
+    },
+    "./spatial/spec": {
+      "exports": [
+        "SPATIAL_QUALITY_BUDGETS",
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "downgradeSpatialMode",
+        "isSpatialSceneModule",
+        "resolveSpatialPolicy",
+        "resolveSpatialQualityBudget"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "SPATIAL_QUALITY_BUDGETS",
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "downgradeSpatialMode",
+        "isSpatialSceneModule",
+        "resolveSpatialPolicy",
+        "resolveSpatialQualityBudget"
+      ]
+    },
     "./eslint": {
       "exports": [
         "configs",

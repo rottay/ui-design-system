@@ -877,6 +877,66 @@ test('chart-renderer runtime contract includes the public datum-key utility', ()
   });
 });
 
+test('spatial runtime contracts are exact and supplier-free', () => {
+  const contract = loadSupplierContract();
+  const spatialExports = [
+    'SPATIAL_SCENE_MODULE_VERSION',
+    'SpatialExperience',
+  ];
+  const spatialSpecExports = [
+    'SPATIAL_QUALITY_BUDGETS',
+    'SPATIAL_SCENE_MODULE_VERSION',
+    'downgradeSpatialMode',
+    'isSpatialSceneModule',
+    'resolveSpatialPolicy',
+    'resolveSpatialQualityBudget',
+  ];
+  assert.deepEqual(contract.entrypoints['./spatial'], {
+    exports: spatialExports,
+    symbols: {},
+    supplierFreeExports: spatialExports,
+  });
+  assert.deepEqual(contract.entrypoints['./spatial/spec'], {
+    exports: spatialSpecExports,
+    symbols: {},
+    supplierFreeExports: spatialSpecExports,
+  });
+});
+
+test('root, motion, and effects cannot reach spatial or a Three supplier', () => {
+  const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
+  const sourceRoot = resolve(coreRoot, 'src');
+  const entries = collectSourceEntrypoints(manifest, sourceRoot);
+  const graphs = new Map(
+    ['.', './motion', './effects', './spatial', './spatial/spec']
+      .map((subpath) => [subpath, traceSourceEntry(entries.get(subpath), sourceRoot)]),
+  );
+  const isSpatialPath = (path) => /\/(?:contracts\/spatial|runtime\/spatial(?:-react)?)(?:\/|$)|\/spatial(?:-spec)?-entry\./.test(
+    path.replaceAll('\\', '/'),
+  );
+
+  for (const subpath of ['.', './motion', './effects']) {
+    const graph = graphs.get(subpath);
+    assert.equal([...graph.visited].some(isSpatialPath), false, subpath);
+    assert.equal(
+      [...graph.externalImports].some(([specifier]) => supplierFamilyForSpecifier(specifier) === 'three'),
+      false,
+      subpath,
+    );
+  }
+
+  assert.deepEqual([...graphs.get('./spatial').externalImports.keys()].sort(), ['react']);
+  assert.deepEqual([...graphs.get('./spatial/spec').externalImports.keys()], []);
+  for (const subpath of ['./spatial', './spatial/spec']) {
+    assert.equal(
+      [...graphs.get(subpath).externalImports]
+        .some(([specifier]) => supplierFamilyForSpecifier(specifier) === 'three'),
+      false,
+      subpath,
+    );
+  }
+});
+
 test('runtime closure follows unfortunately named files reached by an exported entry', () => {
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-runtime-closure-'));
   try {
@@ -900,8 +960,8 @@ test('runtime export inventory includes the public CLI import and every CJS cond
     entry.subpath === './supplier-honesty-cli' && entry.mode === 'import' && entry.target.endsWith('.mjs')
   )));
   const fixtures = runtimeExportFixtures(manifest);
-  assert.equal(fixtures.import.length, 13);
-  assert.equal(fixtures.require.length, 12);
+  assert.equal(fixtures.import.length, 15);
+  assert.equal(fixtures.require.length, 14);
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/supplier-honesty-cli')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts')));
@@ -915,6 +975,10 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/motion')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/effects')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/effects')));
+  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/spatial')));
+  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/spatial')));
+  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/spatial/spec')));
+  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/spatial/spec')));
 });
 
 test('offline runtime fixtures localize required packages and omit unavailable optional packages', () => {
@@ -1363,12 +1427,23 @@ test('live core graph has no false optional or zero-importer peer', () => {
   );
   assert.equal(basename(collectSourceEntrypoints(manifest).get('./motion')), 'motion-entry.ts');
   assert.equal(basename(collectSourceEntrypoints(manifest).get('./effects')), 'effects-entry.ts');
+  assert.equal(basename(collectSourceEntrypoints(manifest).get('./spatial')), 'spatial-entry.ts');
+  assert.equal(
+    basename(collectSourceEntrypoints(manifest).get('./spatial/spec')),
+    'spatial-spec-entry.ts',
+  );
   const graph = auditCoreDependencyGraph();
   assert.deepEqual(graph.errors, []);
   assert.deepEqual(graph.report['@phosphor-icons/react'], {
     productionImporters: 1,
     rootReachableImporters: 0,
   });
+  assert.deepEqual(graph.report.three, {
+    productionImporters: 0,
+    rootReachableImporters: 0,
+  });
+  assert.deepEqual(graph.entries['./spatial'].packages, ['react']);
+  assert.deepEqual(graph.entries['./spatial/spec'].packages, []);
 });
 
 test('live lock and installed workspace expose one runtime identity with Motion direct and Framer transitive', () => {

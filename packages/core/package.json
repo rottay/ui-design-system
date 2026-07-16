@@ -65,6 +65,16 @@
       "import": "./dist/effects.js",
       "require": "./dist/effects.cjs"
     },
+    "./spatial": {
+      "types": "./dist/spatial.d.ts",
+      "import": "./dist/spatial.js",
+      "require": "./dist/spatial.cjs"
+    },
+    "./spatial/spec": {
+      "types": "./dist/spatial-spec.d.ts",
+      "import": "./dist/spatial-spec.js",
+      "require": "./dist/spatial-spec.cjs"
+    },
     "./styles": {
       "style": "./dist/styles.css",
       "import": "./dist/styles.css",
@@ -186,7 +196,9 @@
       "./charts/access": "chart-access-entry.ts",
       "./charts/renderers": "chart-renderers-entry.ts",
       "./motion": "motion-entry.ts",
-      "./effects": "effects-entry.ts"
+      "./effects": "effects-entry.ts",
+      "./spatial": "spatial-entry.ts",
+      "./spatial/spec": "spatial-spec-entry.ts"
     },
     "gateCommands": {
       "test:unit": [

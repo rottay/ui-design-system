@@ -32,6 +32,7 @@ describe('public api contract', () => {
     expect(publicApi).not.toHaveProperty('corporateTheme');
     expect(publicApi).not.toHaveProperty('evntoTheme');
     expect(publicApi).not.toHaveProperty('minimalTheme');
+    expect(publicApi).not.toHaveProperty('SpatialExperience');
   });
 
   it('exposes only the supported package subpaths', () => {
@@ -39,13 +40,28 @@ describe('public api contract', () => {
       exports: Record<string, unknown>;
     };
 
-    // Current canonical exports: root, server, icons, per-vertical styles, and internal paths
+    // Current canonical exports: root, focused runtime boundaries and styles.
     const currentExports = Object.keys(packageJson.exports).sort();
 
     // Required subpaths that must exist
     const required = ['.', './server', './icons', './styles', './styles.css'];
     for (const path of required) {
       expect(currentExports, `missing required export: ${path}`).toContain(path);
+    }
+
+    const focusedRuntimeBoundaries = [
+      './marks',
+      './charts',
+      './charts/spec',
+      './charts/access',
+      './charts/renderers',
+      './motion',
+      './effects',
+      './spatial',
+      './spatial/spec',
+    ];
+    for (const path of focusedRuntimeBoundaries) {
+      expect(currentExports, `missing focused export: ${path}`).toContain(path);
     }
 
     // Per-vertical CSS bundles (the canonical app-facing contract)

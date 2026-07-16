@@ -98,10 +98,40 @@ the stylesheet.
 | `@rottay/design-system/server`          | Server-side utilities                            |
 | `@rottay/design-system/icons`           | Icon system                                      |
 | `@rottay/design-system/marks`           | Governed brand and cloud-provider marks          |
+| `@rottay/design-system/charts`          | Focused chart components                         |
+| `@rottay/design-system/charts/spec`     | Server-safe visualization contracts              |
+| `@rottay/design-system/charts/access`   | Accessible chart data companion                  |
+| `@rottay/design-system/charts/renderers`| Isolated chart renderer family                    |
+| `@rottay/design-system/motion`          | Semantic motion policy and recipes               |
+| `@rottay/design-system/effects`         | Supplier-neutral effect governance               |
+| `@rottay/design-system/spatial`         | Optional React spatial lifecycle host            |
+| `@rottay/design-system/spatial/spec`    | Server-safe spatial policy and module contract   |
 | `@rottay/design-system/styles.css`      | Full CSS bundle (all tenants, for dev/Storybook) |
 | `@rottay/design-system/styles/platform` | CSS bundle for Platform app (rottay tenant)      |
 | `@rottay/design-system/styles/bithire`  | CSS bundle for BitHire app                       |
 | `@rottay/design-system/styles/evnto`    | CSS bundle for Evnto app                         |
+
+Spatial scenes stay app-owned and lazy. The host owns SSR fallback, device and
+motion admission, WebGL2 capability, one-context leasing, suspension, quality,
+Canvas failure and telemetry; it never puts Three/R3F in the root package graph.
+
+```tsx
+import { SpatialExperience } from "@rottay/design-system/spatial";
+
+<SpatialExperience
+  id="service-map"
+  label="Service relationship map"
+  purpose="explanation"
+  description="How requests move through the service layers."
+  poster={<StaticServiceMap />}
+  reduced={<StaticServiceMap />}
+  loadScene={() => import("./service-map-scene").then(({ ServiceMapScene }) => ({
+    version: 1,
+    backend: "webgl2",
+    Scene: ServiceMapScene,
+  }))}
+/>
+```
 
 ## Scripts
 
