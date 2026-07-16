@@ -1,5 +1,15 @@
 # @rottay/design-system
 
+## 2.19.8
+
+### Patch Changes
+
+- Harden AdaptiveOverlay and Sheet across classic, modern and rustic engines with a controlled close
+  lifecycle, rich titles, real-dialog ARIA, fixed footer anatomy, focus restoration, safe-area/dynamic
+  viewport support and stack-aware Sheet scroll/Escape coordination.
+- Turn `adaptive.filters: 'sheet'` into a transactional mobile filter workspace: edits remain draft-only
+  until Apply, Cancel and dismiss discard them, Clear resets the draft, and desktop filters remain inline.
+
 ## 2.19.7
 
 ### Patch Changes
