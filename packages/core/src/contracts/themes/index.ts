@@ -9,6 +9,7 @@
  */
 
 import type { EngineName } from '../engine';
+import type { TenantMotionDial } from '../motion';
 import type {
   SurfaceTokens,
   ChartPersonalityTokens,
@@ -143,6 +144,12 @@ export interface BrandSurfaces {
   effectIntensity?: number;
 }
 
+/**
+ * @deprecated Open-ended brand motion is retained for one compatibility minor
+ * while bundled themes migrate. Runtime choreography now resolves through the
+ * vertical MotionProfile plus the bounded TenantMotionDial; DB tenants must
+ * not author springs, bounce, keyframes or loop topology.
+ */
 export interface BrandMotion {
   intensity?: number;
   entrance?: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
@@ -661,7 +668,8 @@ export type VerticalTheme = BrandTheme;
  * were declared but never wired have been removed or narrowed:
  * - typography.scale: removed (needs calc() adoption across all primitives)
  * - shape.radiusScale: removed (same reason)
- * - motion.level: removed (no consumer — re-add with personality integration)
+ * - motion is deliberately bounded to a semantic dial; arbitrary timing,
+ *   springs, keyframes and topology remain owned by the vertical envelope
  * - media (logo/logoMark/favicon): removed (no CSS reader — re-add when
  *   sidebar/header components consume --ds-tenant-logo vars)
  * - data.chartColorFamily: removed (no chart palette system)
@@ -683,6 +691,11 @@ export interface TenantAppearanceGeneral {
   };
   /** Multiplies the spacing array in useTokens(). Not a CSS variable. */
   density?: 'compact' | 'normal' | 'spacious';
+  /**
+   * Tenant-owned motion preference. Values are clamped by the runtime policy;
+   * tenants cannot inject choreography, loops, keyframes or spring physics.
+   */
+  motion?: TenantMotionDial;
   surfaces?: {
     elevation?: 'flat' | 'soft' | 'elevated';
   };

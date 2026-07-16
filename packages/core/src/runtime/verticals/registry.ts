@@ -48,6 +48,7 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
     label: 'Evnto',
     description: 'Event management vertical with expressive animations, comfortable layout, and live-status presentation.',
     engine: 'modern',
+    motionProfile: 'expressive',
     density: 'comfortable',
     personality: {
       animation: {
@@ -128,6 +129,7 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
     label: 'BitHire',
     description: 'Recruiting vertical with editorial aesthetics, comfortable density, and people-first workflows.',
     engine: 'modern',
+    motionProfile: 'calm',
     density: 'comfortable',
     personality: {
       animation: {
@@ -203,6 +205,7 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
     label: 'Platform',
     description: 'Admin vertical with sharp aesthetics, compact density, and operational dashboard defaults.',
     engine: 'modern',
+    motionProfile: 'precise',
     density: 'compact',
     personality: {
       animation: {

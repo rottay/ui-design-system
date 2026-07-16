@@ -3810,6 +3810,34 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  type SvgLineXType,\n` +
       `  type SvgLineXValue,\n` +
       `} from ${JSON.stringify(`${packedManifest.name}/charts/renderers`)};\n` +
+      `import {\n` +
+      `  MOTION_DIAL_BOUNDS,\n` +
+      `  MOTION_PROFILE_DEFAULTS,\n` +
+      `  MOTION_PROFILE_ENVELOPES,\n` +
+      `  MOTION_RECIPE_NAMES,\n` +
+      `  MotionProvider,\n` +
+      `  normalizeTenantMotionDial,\n` +
+      `  resolveMotionPolicy,\n` +
+      `  resolveMotionRecipe,\n` +
+      `  useMotionPolicy,\n` +
+      `  useMotionPreference,\n` +
+      `  useMotionRecipe,\n` +
+      `  type AmbientMotion,\n` +
+      `  type MotionCompositorProperty,\n` +
+      `  type MotionContextValue,\n` +
+      `  type MotionCurve,\n` +
+      `  type MotionPointer,\n` +
+      `  type MotionPolicy,\n` +
+      `  type MotionPolicyInput,\n` +
+      `  type MotionPower,\n` +
+      `  type MotionProfile,\n` +
+      `  type MotionProviderProps,\n` +
+      `  type MotionRecipeName,\n` +
+      `  type MotionRecipeResolveOptions,\n` +
+      `  type NormalizedTenantMotionDial,\n` +
+      `  type ResolvedMotionRecipe,\n` +
+      `  type TenantMotionDial,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/motion`)};\n` +
       `const chartSpec = {\n` +
       `  desktop: { mode: 'full', rendererId: 'packed.full' },\n` +
       `  phone: { mode: 'summary', rendererId: 'packed.summary', summaryId: 'packed.total' },\n` +
@@ -3840,7 +3868,19 @@ export async function auditPackedArtifact(root = coreRoot) {
       `const heatProps = { ariaLabel: 'Heat', data: heatData, insets: rendererInsets } satisfies SvgHeatMapRendererProps;\n` +
       `const lineProps = { ariaLabel: 'Line', series: lineSeries, curve: lineCurve, xType: lineXType, insets: rendererInsets } satisfies SvgLineRendererProps;\n` +
       `const rendererComponents = [SvgBarRenderer, SvgHeatMapRenderer, SvgLineRenderer];\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, packedChartTypes, rendererComponents, barProps, heatProps, lineProps);\n',
+      `const motionDial = { intensity: 0.4, durationScale: 1, ambient: 'off' } satisfies TenantMotionDial;\n` +
+      `const motionInput = { profile: 'calm', tenantDial: motionDial, reduce: false, pointer: 'fine', power: 'normal', visible: true } satisfies MotionPolicyInput;\n` +
+      `const motionPolicy: MotionPolicy = resolveMotionPolicy(motionInput);\n` +
+      `const motionOptions: MotionRecipeResolveOptions = { active: true, itemCount: 3 };\n` +
+      `const motionRecipe: ResolvedMotionRecipe = resolveMotionRecipe('feedback.confirm', motionPolicy, motionOptions);\n` +
+      `type PackedMotionTypes = [\n` +
+      `  AmbientMotion, MotionCompositorProperty, MotionContextValue, MotionCurve, MotionPointer,\n` +
+      `  MotionPower, MotionProfile, MotionProviderProps, MotionRecipeName,\n` +
+      `  NormalizedTenantMotionDial,\n` +
+      `];\n` +
+      `const packedMotionTypes = null as unknown as PackedMotionTypes;\n` +
+      `const motionValues = [MOTION_DIAL_BOUNDS, MOTION_PROFILE_DEFAULTS, MOTION_PROFILE_ENVELOPES, MOTION_RECIPE_NAMES, MotionProvider, normalizeTenantMotionDial, useMotionPolicy, useMotionPreference, useMotionRecipe];\n` +
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, packedChartTypes, rendererComponents, barProps, heatProps, lineProps, motionPolicy, motionRecipe, packedMotionTypes, motionValues);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {
@@ -3885,9 +3925,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 9 || runtimeFixtures.require.length !== 8) {
+    if (runtimeFixtures.import.length !== 10 || runtimeFixtures.require.length !== 9) {
       throw new Error(
-        `packed runtime condition inventory drifted; expected 9 import + 8 require, found ` +
+        `packed runtime condition inventory drifted; expected 10 import + 9 require, found ` +
         `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
       );
     }

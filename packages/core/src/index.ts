@@ -108,7 +108,11 @@ export * from './i18n';
 // ============================================
 // MOTION (animations, effects, hooks)
 // ============================================
-export * from './motion';
+// Keep the root's legacy primitives/effects barrel explicit. The focused
+// package entry also emits `dist/motion.d.ts`; a bare `./motion` declaration
+// re-export would resolve to that file after packing and shadow the
+// `dist/motion/index.d.ts` directory barrel.
+export * from './motion/index';
 
 // ============================================
 // COMPONENTS

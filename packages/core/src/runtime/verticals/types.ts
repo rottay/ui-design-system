@@ -13,6 +13,7 @@ import type { EngineName } from '../../contracts/engine';
 import type { PersonalityTokens } from '../../contracts/tokens/personality';
 import type { TenantTokenOverrides } from '../../contracts/tenants';
 import type { ProductProfileKey } from '../../contracts/product-profiles';
+import type { MotionProfile } from '../../contracts/verticals';
 
 /**
  * Known vertical keys.
@@ -47,6 +48,11 @@ export interface VerticalPreset {
   description?: string;
   /** Preferred rendering engine for this vertical */
   engine: EngineName;
+  /**
+   * Semantic motion envelope for the vertical. Optional for one compatibility
+   * minor so externally registered presets keep resolving to the calm default.
+   */
+  motionProfile?: MotionProfile;
   /** Default UI density */
   density: 'compact' | 'comfortable' | 'spacious';
   /** Personality tokens that define the visual mood of this vertical */

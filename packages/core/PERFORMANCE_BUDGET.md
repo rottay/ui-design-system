@@ -13,6 +13,9 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
 | Charts projection entry (`dist/charts.js`) | < 400 B raw (measured 290 B; focused entry) |
 | Chart renderers entry (`dist/chart-renderers.js`) | < 600 B raw (measured 460 B; D3 and React external) |
+| Semantic motion entry (`dist/motion.js`) | < 1.1 KB raw (922 B measured; React and Motion external) |
+| Pure motion policy fixture | < 2.1 KB gzipped (1,822 B measured + >10%; no React/Motion retained) |
+| Motion provider fixture | < 2.3 KB gzipped (2,076 B measured + >10%; React/Motion external) |
 | Named Bar renderer | < 2.7 KB gzipped (2,375 B measured + >10%; D3/React external) |
 | Named Line renderer | < 3.3 KB gzipped (2,969 B measured + >10%; D3/React external) |
 | Named HeatMap renderer | < 3.3 KB gzipped (2,943 B measured + >10%; D3/React external) |
@@ -53,6 +56,8 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/charts.cjs` | 400 B (350 B measured + >10%) |
 | `dist/chart-renderers.js` | 600 B (460 B measured + >10%) |
 | `dist/chart-renderers.cjs` | 600 B (512 B measured + >10%) |
+| `dist/motion.js` | 1.1 KB (922 B measured + >10%) |
+| `dist/motion.cjs` | 1.1 KB (930 B measured + >10%) |
 | `dist/tokens.js` | 80 KB |
 | `dist/tokens.cjs` | 80 KB |
 | `dist/i18n.js` | 80 KB |
@@ -73,14 +78,20 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 2. The same command builds Bar, Line and HeatMap once each through the public
    `charts/renderers` facade. Each in-memory ESM bundle must retain only its selected renderer,
    keep D3 and React external, and remain below its named gzip budget.
-3. `node scripts/analyze-bundle.mjs --chart-renderers` runs only that focused renderer gate;
+3. The semantic motion gate bundles the pure policy and `MotionProvider` separately through the
+   public facade. Pure resolution must retain neither React nor Motion; the provider must keep both
+   peers external. `node scripts/analyze-bundle.mjs --motion` runs only this focused gate.
+4. `node scripts/analyze-bundle.mjs --chart-renderers` runs only that focused renderer gate;
    it does not build the full package or write artifacts.
-4. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
-5. The report is printed as a table in the console.
+5. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
+6. The report is printed as a table in the console.
 
 The VIZ-02 raw ESM/CJS entries and named-renderer bundles were measured from
 the same cohesive producer build on 2026-07-16. Re-measure through the focused
 gate before changing them; never widen a ceiling only to silence CI.
+
+The MOT-01 raw ESM/CJS facade and isolated policy/provider fixtures were measured from the same
+2.19.17 producer build on 2026-07-16. The isolation gate is part of every normal analysis.
 
 ## Adjusting Budgets
 

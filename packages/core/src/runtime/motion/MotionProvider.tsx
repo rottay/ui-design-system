@@ -9,18 +9,27 @@ import React, {
 } from 'react';
 import { MotionConfig } from 'motion/react';
 
+import type { TenantMotionDial } from '../../contracts/motion';
+import type { MotionProfile } from '../../contracts/verticals';
 import {
   MotionContext,
   useMotionPreference,
+  useMotionPolicy,
   type MotionContextValue,
 } from './MotionPreference';
+import { useMotionEnvironment } from './motion-environment-store';
+import { resolveMotionPolicy } from './policy';
 import { useSystemReducedMotion } from './reduced-motion-store';
 
-export { MotionContext, useMotionPreference };
+export { MotionContext, useMotionPolicy, useMotionPreference };
 export type { MotionContextValue };
 
 export interface MotionProviderProps {
   children: ReactNode;
+  /** Semantic vertical envelope. Defaults to the inherited profile or `calm`. */
+  profile?: MotionProfile;
+  /** Bounded tenant preference; arbitrary choreography is intentionally absent. */
+  tenantDial?: TenantMotionDial;
   /**
    * Additively force reduced motion. React motion policy is inherited by this
    * subtree; while an explicit override is mounted, the conservative CSS seam
@@ -84,17 +93,56 @@ function registerForcedReducedMotion(): () => void {
  */
 export function MotionProvider({
   children,
+  profile,
+  tenantDial,
   reducedMotion = false,
 }: MotionProviderProps): React.ReactElement {
   const parentContext = useContext(MotionContext);
   const systemPrefersReducedMotion = useSystemReducedMotion();
+  const environment = useMotionEnvironment();
   const prefersReducedMotion =
     Boolean(parentContext?.prefersReducedMotion) ||
     systemPrefersReducedMotion ||
     reducedMotion;
+  const inheritedDial = parentContext?.policy
+    ? {
+        intensity: parentContext.policy.intensity,
+        durationScale: parentContext.policy.durationScale,
+        ambient: parentContext.policy.ambient,
+      }
+    : undefined;
+  const pointer = parentContext?.policy.pointer === 'coarse' || environment.pointer === 'coarse'
+    ? 'coarse'
+    : 'fine';
+  const power = parentContext?.policy.power === 'constrained' || environment.power === 'constrained'
+    ? 'constrained'
+    : 'normal';
+  const visible = (parentContext?.policy.visible ?? true) && environment.visible;
+  const policy = useMemo(
+    () => resolveMotionPolicy({
+      profile: profile ?? parentContext?.policy.profile ?? 'calm',
+      tenantDial: tenantDial ?? inheritedDial,
+      reduce: prefersReducedMotion,
+      pointer,
+      power,
+      visible,
+    }),
+    [
+      inheritedDial?.ambient,
+      inheritedDial?.durationScale,
+      inheritedDial?.intensity,
+      parentContext?.policy.profile,
+      pointer,
+      power,
+      prefersReducedMotion,
+      profile,
+      tenantDial,
+      visible,
+    ],
+  );
   const value = useMemo(
-    () => ({ systemPrefersReducedMotion, prefersReducedMotion }),
-    [systemPrefersReducedMotion, prefersReducedMotion],
+    () => ({ systemPrefersReducedMotion, prefersReducedMotion, policy }),
+    [systemPrefersReducedMotion, prefersReducedMotion, policy],
   );
 
   // CSS-only effects cannot consume React context. Mirror explicit provider

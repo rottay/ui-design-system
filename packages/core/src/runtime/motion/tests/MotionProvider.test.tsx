@@ -14,6 +14,7 @@ type ChangeListener = (event: MediaQueryListEvent) => void;
 function createReducedMotionController(initial: boolean, legacy = false) {
   let matches = initial;
   const listeners = new Set<ChangeListener>();
+  const pointerListeners = new Set<ChangeListener>();
 
   const addEventListener = vi.fn((_type: string, listener: ChangeListener) => {
     listeners.add(listener);
@@ -37,12 +38,30 @@ function createReducedMotionController(initial: boolean, legacy = false) {
     dispatchEvent: vi.fn(),
   } as unknown as MediaQueryList;
 
-  const matchMedia = vi.fn(() => mediaQuery);
+  const pointerMediaQuery = {
+    matches: false,
+    media: '(pointer: coarse)',
+    onchange: null,
+    addEventListener: vi.fn((_type: string, listener: ChangeListener) => {
+      pointerListeners.add(listener);
+    }),
+    removeEventListener: vi.fn((_type: string, listener: ChangeListener) => {
+      pointerListeners.delete(listener);
+    }),
+    addListener: vi.fn((listener: ChangeListener) => pointerListeners.add(listener)),
+    removeListener: vi.fn((listener: ChangeListener) => pointerListeners.delete(listener)),
+    dispatchEvent: vi.fn(),
+  } as unknown as MediaQueryList;
+
+  const matchMedia = vi.fn((query: string) =>
+    query === '(pointer: coarse)' ? pointerMediaQuery : mediaQuery
+  );
 
   return {
     addEventListener,
     addListener,
     listeners,
+    pointerListeners,
     matchMedia,
     removeEventListener,
     removeListener,
@@ -107,7 +126,7 @@ describe('MotionProvider', () => {
     container.remove();
   });
 
-  it('fans all React consumers out through exactly one live media-query listener', () => {
+  it('fans all React consumers out through one listener per environment authority', () => {
     const controller = createReducedMotionController(false);
     window.matchMedia = controller.matchMedia as typeof window.matchMedia;
 
@@ -121,8 +140,9 @@ describe('MotionProvider', () => {
     );
 
     expect(controller.listeners.size).toBe(1);
+    expect(controller.pointerListeners.size).toBe(1);
     expect(controller.addEventListener).toHaveBeenCalledTimes(1);
-    expect(controller.matchMedia).toHaveBeenCalledTimes(1);
+    expect(controller.matchMedia).toHaveBeenCalledTimes(2);
 
     act(() => controller.emit(true));
     expect(screen.getByTestId('preference-0')).toHaveTextContent('true');
@@ -133,6 +153,7 @@ describe('MotionProvider', () => {
 
     unmount();
     expect(controller.listeners.size).toBe(0);
+    expect(controller.pointerListeners.size).toBe(0);
     expect(controller.removeEventListener).toHaveBeenCalledTimes(1);
   });
 

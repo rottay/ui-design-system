@@ -19,7 +19,7 @@
 import React, { forwardRef, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import type { ParallaxProps } from '../../types';
-import { useReducedMotion } from '../../hooks/use-reduced-motion';
+import { useMotionPolicy } from '../../../runtime/motion';
 
 /**
  * Apply a vertical parallax scroll effect to its children.
@@ -38,7 +38,8 @@ import { useReducedMotion } from '../../hooks/use-reduced-motion';
  */
 export const Parallax = forwardRef<HTMLDivElement, ParallaxProps>(
   ({ children, speed = 0.5, className, style }, ref) => {
-    const shouldReduceMotion = useReducedMotion();
+    const policy = useMotionPolicy();
+    const motionEnabled = policy.allowContinuousMotion;
     const targetRef = useRef<HTMLDivElement>(null);
 
     // Track scroll progress from when the element enters the bottom of the
@@ -52,15 +53,24 @@ export const Parallax = forwardRef<HTMLDivElement, ParallaxProps>(
     // Map the 0-1 scroll progress to a symmetric Y displacement range.
     // Positive speed moves the content upward as the user scrolls down,
     // producing the classic "slower background" parallax illusion.
+    const distance = Math.min(12, 12 * policy.intensity * Math.abs(speed));
+    const direction = speed < 0 ? -1 : 1;
     const y = useTransform(
       scrollYProgress,
       [0, 1],
-      shouldReduceMotion ? [0, 0] : [100 * speed, -100 * speed]
+      motionEnabled
+        ? [distance * direction, -distance * direction]
+        : [0, 0]
     );
 
     return (
       <div ref={targetRef} style={{ position: 'relative' }}>
-        <motion.div ref={ref} style={{ y, ...style }} className={className}>
+        <motion.div
+          ref={ref}
+          style={{ y, ...style }}
+          className={className}
+          data-ds-motion-state={motionEnabled ? 'continuous' : 'static'}
+        >
           {children}
         </motion.div>
       </div>

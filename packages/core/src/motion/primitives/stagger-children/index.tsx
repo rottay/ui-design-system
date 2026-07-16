@@ -20,7 +20,7 @@
  * ```
  */
 
-import React, { forwardRef, useMemo } from "react";
+import React, { Children, forwardRef, useMemo } from "react";
 import { motion } from "motion/react";
 import type { StaggerChildrenProps } from "../../types";
 import { useMotionPersonality } from "../../hooks";
@@ -98,13 +98,37 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
       legacy: delayChildren,
       fallbackMilliseconds: Math.max(personalityDelayMs * 0.5, 0),
     });
-    const effectiveDuration = motionMillisecondsToSeconds(effectiveDurationMs);
-    const effectiveDelay = motionMillisecondsToSeconds(effectiveDelayMs);
+    const durationScale = motionPersonality.policy.durationScale;
+    const scaleExplicitTiming = (value: number, explicit: boolean): number =>
+      explicit ? Math.round(value * durationScale) : value;
+    const childCount = Children.count(children);
+    const scaledStaggerDelayMs = scaleExplicitTiming(
+      effectiveStaggerDelayMs,
+      hasExplicitMotionTiming(staggerDelayMs, staggerDelay),
+    );
+    const boundedStaggerDelayMs = childCount > 1
+      ? Math.min(
+          scaledStaggerDelayMs,
+          motionPersonality.staggerMaxMs / (childCount - 1),
+        )
+      : scaledStaggerDelayMs;
+    const effectiveDuration = motionMillisecondsToSeconds(
+      scaleExplicitTiming(
+        effectiveDurationMs,
+        hasExplicitMotionTiming(durationMs, duration),
+      ),
+    );
+    const effectiveDelay = motionMillisecondsToSeconds(
+      scaleExplicitTiming(effectiveDelayMs, hasExplicitMotionTiming(delayMs, delay)),
+    );
     const effectiveStaggerDelay = motionMillisecondsToSeconds(
-      effectiveStaggerDelayMs
+      boundedStaggerDelayMs,
     );
     const effectiveDelayChildren = motionMillisecondsToSeconds(
-      effectiveDelayChildrenMs
+      scaleExplicitTiming(
+        effectiveDelayChildrenMs,
+        hasExplicitMotionTiming(delayChildrenMs, delayChildren),
+      ),
     );
     const hasExplicitDuration = hasExplicitMotionTiming(durationMs, duration);
     const entrance = motionPersonality.entrance;
@@ -165,7 +189,7 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
               // the personality's distance) for a subtler group-level shift.
               {
                 opacity: 0,
-                y: Math.max(motionPersonality.offsetDistance * 0.4, 6),
+                y: motionPersonality.offsetDistance * 0.4,
               },
           visible: {
             opacity: 1,

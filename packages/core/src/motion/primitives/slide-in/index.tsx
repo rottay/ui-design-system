@@ -68,8 +68,7 @@ export const SlideIn = forwardRef<HTMLDivElement, SlideInProps>(
     // Keep slide animations aligned with profile defaults unless the caller
     // intentionally overrides them. The 24px floor ensures the slide is always
     // visually distinct from a FadeIn even with low-motion personalities.
-    const effectiveDistance =
-      distance ?? Math.max(motionPersonality.offsetDistance, 24);
+    const effectiveDistance = distance ?? motionPersonality.offsetDistance;
     const effectiveDurationMs = resolveMotionMilliseconds({
       milliseconds: durationMs,
       legacy: duration,

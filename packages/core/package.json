@@ -45,6 +45,11 @@
       "import": "./dist/chart-renderers.js",
       "require": "./dist/chart-renderers.cjs"
     },
+    "./motion": {
+      "types": "./dist/motion.d.ts",
+      "import": "./dist/motion.js",
+      "require": "./dist/motion.cjs"
+    },
     "./styles": {
       "style": "./dist/styles.css",
       "import": "./dist/styles.css",
@@ -158,7 +163,8 @@
       "./icons": "icon-entry.ts",
       "./marks": "mark-entry.ts",
       "./charts": "chart-entry.ts",
-      "./charts/renderers": "chart-renderers-entry.ts"
+      "./charts/renderers": "chart-renderers-entry.ts",
+      "./motion": "motion-entry.ts"
     },
     "gateCommands": {
       "test:unit": [

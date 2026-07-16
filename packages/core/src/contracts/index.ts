@@ -26,6 +26,24 @@ export * from './engine';
 // Theme types
 export * from './themes';
 
+// Supplier-neutral motion policy and recipe types. Runtime constants live only
+// in the focused `@rottay/design-system/motion` entry so the package root does
+// not grow a second value surface for this optional capability.
+export type {
+  AmbientMotion,
+  MotionCompositorProperty,
+  MotionCurve,
+  MotionPointer,
+  MotionPolicy,
+  MotionPolicyInput,
+  MotionPower,
+  MotionRecipeName,
+  MotionRecipeResolveOptions,
+  NormalizedTenantMotionDial,
+  ResolvedMotionRecipe,
+  TenantMotionDial,
+} from './motion';
+
 // Tenant types
 export * from './tenants';
 

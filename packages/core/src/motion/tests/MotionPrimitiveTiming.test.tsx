@@ -16,10 +16,12 @@ interface MotionCall {
 const motionCalls = vi.hoisted(() => [] as MotionCall[]);
 const personality = vi.hoisted(() => ({
   shouldReduceMotion: false as boolean | null,
+  policy: { durationScale: 1 },
   entrance: "fade" as "none" | "fade" | "slideUp" | "spring" | "bounce",
   useSpring: false,
   durationSeconds: 0.2,
   delaySeconds: 0.04,
+  staggerMaxMs: 200,
   offsetDistance: 18,
   initialScale: 0.94,
   springTension: 170,
@@ -76,6 +78,8 @@ beforeEach(() => {
     useSpring: false,
     durationSeconds: 0.2,
     delaySeconds: 0.04,
+    policy: { durationScale: 1 },
+    staggerMaxMs: 200,
   });
 });
 
@@ -167,6 +171,34 @@ describe("public motion primitive timing", () => {
       delayChildren: 0.2,
     });
     expect(call.props.viewport).toMatchObject({ once: false });
+  });
+
+  it("scales explicit timing and caps total StaggerChildren choreography", () => {
+    Object.assign(personality, {
+      policy: { durationScale: 1.5 },
+      staggerMaxMs: 180,
+    });
+
+    render(
+      <StaggerChildren
+        durationMs={200}
+        delayMs={40}
+        staggerDelayMs={100}
+        delayChildrenMs={80}
+      >
+        {Array.from({ length: 5 }, (_, index) => <div key={index}>{index}</div>)}
+      </StaggerChildren>
+    );
+
+    const variants = lastCall().props.variants as {
+      visible: { transition: Record<string, number> };
+    };
+    expect(variants.visible.transition).toMatchObject({
+      duration: 0.3,
+      delay: 0.06,
+      delayChildren: 0.12,
+      staggerChildren: 0.045,
+    });
   });
 
   it.each([

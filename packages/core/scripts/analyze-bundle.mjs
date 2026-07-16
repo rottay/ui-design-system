@@ -43,6 +43,10 @@ const BUDGET = {
   'dist/charts.cjs': 400,
   'dist/chart-renderers.js': 600,
   'dist/chart-renderers.cjs': 600,
+  // Measured 2026-07-16: 922/930 B. Each ceiling keeps >10% headroom
+  // and rounds upward to the next 100 B.
+  'dist/motion.js': 1_100,
+  'dist/motion.cjs': 1_100,
   'dist/tokens.js': 80_000,
   'dist/tokens.cjs': 80_000,
   'dist/i18n.js': 80_000,
@@ -392,6 +396,7 @@ function renderedModules(chunks) {
 
 function isExternalFamily(specifier, family) {
   if (family === 'react') return specifier === 'react' || specifier.startsWith('react/');
+  if (family === 'motion') return specifier === 'motion' || specifier.startsWith('motion/');
   return specifier === 'd3' || specifier.startsWith('d3/') || specifier.startsWith('d3-');
 }
 
@@ -585,8 +590,200 @@ async function runChartRendererBudgets() {
   return failures;
 }
 
+// ---------------------------------------------------------------------------
+// Semantic motion facade isolation budgets (MOT-01)
+// ---------------------------------------------------------------------------
+
+const MOTION_ENTRY = join(ROOT, 'dist', 'motion.js');
+const MOTION_FIXTURE_EXPORTS = Object.freeze({
+  policy: Object.freeze([
+    'MOTION_DIAL_BOUNDS',
+    'MOTION_PROFILE_DEFAULTS',
+    'MOTION_PROFILE_ENVELOPES',
+    'MOTION_RECIPE_NAMES',
+    'normalizeTenantMotionDial',
+    'resolveMotionPolicy',
+    'resolveMotionRecipe',
+  ]),
+  provider: Object.freeze(['MotionProvider']),
+});
+
+// Measured 2026-07-16 through the built public facade: pure policy 1,822 B
+// gzip and provider 2,076 B gzip. Each ceiling adds 10% and rounds upward.
+const MOTION_FIXTURE_BUDGET = Object.freeze({
+  policy: 2_100,
+  provider: 2_300,
+});
+
+const MOTION_EXTERNALS = [
+  'react',
+  /^react\//,
+  'react-dom',
+  /^react-dom\//,
+  'motion',
+  /^motion\//,
+];
+
+async function buildMotionFixture(name) {
+  if (!existsSync(MOTION_ENTRY)) {
+    throw new Error('dist/motion.js is missing; build the package before measuring semantic motion');
+  }
+  const exportedNames = MOTION_FIXTURE_EXPORTS[name];
+  if (!exportedNames) throw new Error(`unknown semantic motion fixture ${name}`);
+
+  const { build } = await import('vite');
+  const virtualId = `virtual:mot-01-${name}`;
+  const resolvedVirtualId = `\0${virtualId}`;
+  const result = await build({
+    configFile: false,
+    logLevel: 'silent',
+    root: ROOT,
+    plugins: [{
+      name: 'mot-01-semantic-motion-entry',
+      resolveId(id) {
+        return id === virtualId ? resolvedVirtualId : null;
+      },
+      load(id) {
+        if (id !== resolvedVirtualId) return null;
+        const names = exportedNames.join(', ');
+        return `import { ${names} } from ${JSON.stringify(MOTION_ENTRY)};\nexport { ${names} };\n`;
+      },
+    }],
+    build: {
+      write: false,
+      minify: 'esbuild',
+      target: 'esnext',
+      reportCompressedSize: false,
+      rollupOptions: {
+        input: virtualId,
+        preserveEntrySignatures: 'strict',
+        external: MOTION_EXTERNALS,
+        output: {
+          format: 'es',
+          inlineDynamicImports: true,
+          entryFileNames: 'bundle.js',
+        },
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          warn(warning);
+        },
+      },
+    },
+    esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
+  });
+
+  const outputs = (Array.isArray(result) ? result : [result])
+    .flatMap((buildResult) => buildResult.output ?? []);
+  const chunks = outputs.filter((output) => output.type === 'chunk');
+  if (chunks.length !== 1 || !chunks[0].isEntry) {
+    throw new Error(`expected one inline entry chunk; found ${chunks.length}`);
+  }
+
+  const code = chunks.map((chunk) => chunk.code).join('\n');
+  const modules = renderedModules(chunks);
+  return {
+    raw: Buffer.byteLength(code),
+    gzip: gzipSync(code, { level: 9 }).byteLength,
+    modules,
+    imports: new Set(chunks.flatMap((chunk) => chunk.imports)),
+    bundledPeerModules: [...modules.keys()].filter((moduleId) => (
+      /\/node_modules\/(?:\.pnpm\/[^/]+\/node_modules\/)?(?:react(?:-dom)?|motion)(?:\/|$)/.test(moduleId)
+    )),
+  };
+}
+
+function printMotionFixtureRows(rows) {
+  const cols = ['fixture', 'raw', 'gzip', 'limit', 'isolation', 'status'];
+  const widths = Object.fromEntries(cols.map((column) => [column, column.length]));
+  for (const row of rows) {
+    for (const column of cols) {
+      widths[column] = Math.max(widths[column], String(row[column]).length);
+    }
+  }
+  const line = (row) => cols
+    .map((column) => String(row[column]).padEnd(widths[column]))
+    .join(' | ');
+  console.log(line(Object.fromEntries(cols.map((column) => [column, column]))));
+  console.log(cols.map((column) => '-'.repeat(widths[column])).join('-+-'));
+  for (const row of rows) {
+    const rendered = line(row);
+    console.log(row.status === 'PASS' ? `\x1b[32m${rendered}\x1b[0m` : `\x1b[31m${rendered}\x1b[0m`);
+  }
+  console.log('');
+}
+
+async function runMotionFixtureBudgets() {
+  console.log('\n--- Semantic motion isolation budgets (MOT-01) ---\n');
+  const supplierContract = JSON.parse(readFileSync(join(ROOT, 'supplier-contract.json'), 'utf8'));
+  const publicContract = supplierContract.entrypoints?.['./motion'];
+  const rows = [];
+  let failures = 0;
+
+  if (!publicContract?.symbols?.MotionProvider?.includes('motion')) {
+    console.error('\x1b[31mMotionProvider must declare the motion supplier in supplier-contract.json.\x1b[0m\n');
+    return 1;
+  }
+  for (const exportedName of MOTION_FIXTURE_EXPORTS.policy) {
+    if (!publicContract.supplierFreeExports?.includes(exportedName)) {
+      console.error(`\x1b[31m${exportedName} must remain supplier-free in the motion contract.\x1b[0m\n`);
+      return 1;
+    }
+  }
+
+  for (const name of Object.keys(MOTION_FIXTURE_EXPORTS)) {
+    const limit = MOTION_FIXTURE_BUDGET[name];
+    try {
+      const result = await buildMotionFixture(name);
+      const reactExternal = [...result.imports].some((specifier) => isExternalFamily(specifier, 'react'));
+      const motionExternal = [...result.imports].some((specifier) => isExternalFamily(specifier, 'motion'));
+      const isolationErrors = [];
+      if (result.bundledPeerModules.length > 0) isolationErrors.push('React/Motion bundled');
+      if (name === 'policy') {
+        if (reactExternal || motionExternal) isolationErrors.push('supplier retained by pure policy');
+        const clientRuntimeRetained = [...result.modules.keys()].some((moduleId) => (
+          /\/runtime\/motion\/(?:MotionProvider|MotionPreference|motion-environment-store|reduced-motion-store)\.js$/.test(moduleId)
+        ));
+        if (clientRuntimeRetained) isolationErrors.push('client runtime retained');
+      } else {
+        if (!reactExternal) isolationErrors.push('React external missing');
+        if (!motionExternal) isolationErrors.push('Motion external missing');
+      }
+      const overBudget = result.gzip > limit;
+      if (overBudget || isolationErrors.length > 0) failures += 1;
+      rows.push({
+        fixture: name,
+        raw: `${formatBytes(result.raw)} (${result.raw} B)`,
+        gzip: `${formatBytes(result.gzip)} (${result.gzip} B)`,
+        limit: formatBytes(limit),
+        isolation: isolationErrors.length === 0
+          ? name === 'policy' ? 'pure; no React/Motion' : 'React/Motion external'
+          : isolationErrors.join('; '),
+        status: overBudget || isolationErrors.length > 0 ? 'FAIL' : 'PASS',
+      });
+    } catch (error) {
+      failures += 1;
+      rows.push({
+        fixture: name,
+        raw: '-',
+        gzip: '-',
+        limit: formatBytes(limit),
+        isolation: error instanceof Error ? error.message : String(error),
+        status: 'BUILD FAIL',
+      });
+    }
+  }
+
+  printMotionFixtureRows(rows);
+  return failures;
+}
+
 if (process.argv.includes('--chart-renderers')) {
   const failures = await runChartRendererBudgets();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
+if (process.argv.includes('--motion')) {
+  const failures = await runMotionFixtureBudgets();
   process.exit(failures > 0 ? 1 : 0);
 }
 
@@ -726,6 +923,7 @@ for (const [relPath, limit] of Object.entries(CSS_BUDGET)) {
 // Run the three in-memory public-facade fixtures as part of every normal
 // analysis (including --skip-build), as well as via --chart-renderers alone.
 failures += await runChartRendererBudgets();
+failures += await runMotionFixtureBudgets();
 
 // ---------------------------------------------------------------------------
 // Report

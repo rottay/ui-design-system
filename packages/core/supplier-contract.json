@@ -4247,6 +4247,38 @@
       },
       "supplierFreeExports": []
     },
+    "./motion": {
+      "exports": [
+        "MOTION_DIAL_BOUNDS",
+        "MOTION_PROFILE_DEFAULTS",
+        "MOTION_PROFILE_ENVELOPES",
+        "MOTION_RECIPE_NAMES",
+        "MotionProvider",
+        "normalizeTenantMotionDial",
+        "resolveMotionPolicy",
+        "resolveMotionRecipe",
+        "useMotionPolicy",
+        "useMotionPreference",
+        "useMotionRecipe"
+      ],
+      "symbols": {
+        "MotionProvider": [
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "MOTION_DIAL_BOUNDS",
+        "MOTION_PROFILE_DEFAULTS",
+        "MOTION_PROFILE_ENVELOPES",
+        "MOTION_RECIPE_NAMES",
+        "normalizeTenantMotionDial",
+        "resolveMotionPolicy",
+        "resolveMotionRecipe",
+        "useMotionPolicy",
+        "useMotionPreference",
+        "useMotionRecipe"
+      ]
+    },
     "./eslint": {
       "exports": [
         "configs",

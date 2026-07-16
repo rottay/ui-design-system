@@ -38,7 +38,7 @@ import { useMotionPersonality } from '../../hooks';
 export const Magnetic = forwardRef<HTMLDivElement, MagneticProps>(
   ({ children, strength = 0.3, className, style }, ref) => {
     const motionPersonality = useMotionPersonality();
-    const shouldReduceMotion = motionPersonality.shouldReduceMotion;
+    const motionEnabled = motionPersonality.policy.allowHoverEffects;
 
     // Raw motion values track the cursor displacement without triggering
     // React re-renders; the springs smooth the raw values before layout.
@@ -56,14 +56,17 @@ export const Magnetic = forwardRef<HTMLDivElement, MagneticProps>(
     const springY = useSpring(y, springConfig);
 
     const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-      if (shouldReduceMotion) return;
+      if (!motionEnabled) return;
 
       // Use element-local coordinates so the same strength setting feels stable
       // regardless of where the component lives on the page. The offset from
       // center is multiplied by `strength` to control maximum displacement.
       const rect = e.currentTarget.getBoundingClientRect();
-      x.set((e.clientX - rect.left - rect.width / 2) * strength);
-      y.set((e.clientY - rect.top - rect.height / 2) * strength);
+      const maxDistance = motionPersonality.offsetDistance;
+      const clamp = (value: number): number =>
+        Math.max(-maxDistance, Math.min(maxDistance, value));
+      x.set(clamp((e.clientX - rect.left - rect.width / 2) * strength));
+      y.set(clamp((e.clientY - rect.top - rect.height / 2) * strength));
     };
 
     // Reset to origin on leave so the element springs back to its resting position.
@@ -77,6 +80,7 @@ export const Magnetic = forwardRef<HTMLDivElement, MagneticProps>(
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        data-ds-motion-state={motionEnabled ? 'interactive' : 'static'}
         style={{ x: springX, y: springY, ...style }}
         className={className}
       >

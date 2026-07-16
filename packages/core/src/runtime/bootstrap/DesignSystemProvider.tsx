@@ -82,7 +82,14 @@ import { TenantProvider } from '../tenant/context/TenantProvider';
 import { ProductProfileProvider } from '../product-profiles/ProductProfileProvider';
 import { FeatureProvider } from '../features';
 import { I18nProvider } from '../../i18n';
-import type { TenantConfig, EngineName, ProductProfile, ProductProfileKey } from '../../contracts';
+import type {
+  EngineName,
+  MotionProfile,
+  ProductProfile,
+  ProductProfileKey,
+  TenantConfig,
+  TenantMotionDial,
+} from '../../contracts';
 import type { LocaleTranslations, SupportedLocale } from '../../i18n/types';
 import type { VerticalKey, VerticalPreset } from '../verticals/types';
 import { getVerticalPreset } from '../verticals/registry';
@@ -171,6 +178,39 @@ export interface DesignSystemProviderProps {
  * Simple loading component - minimal to avoid SSR issues
  */
 const LoadingScreen: React.FC = () => null;
+
+const LEGACY_PROFILE_DURATION_MS: Readonly<Record<MotionProfile, number>> = {
+  precise: 180,
+  calm: 200,
+  expressive: 350,
+};
+
+/**
+ * One-minor compatibility bridge from the old open-ended BrandMotion shape to
+ * the bounded tenant dial. New DB configs write appearance.general.motion.
+ */
+function resolveTenantMotionDial(
+  config: TenantConfig | null,
+  profile: MotionProfile,
+): TenantMotionDial | undefined {
+  if (!config) return undefined;
+
+  const explicit = config.appearance?.general?.motion;
+  const legacy = config.brandTheme?.motion;
+  const legacyDurationScale = config.tokenOverrides?.motion?.durationScale;
+  if (!explicit && !legacy && legacyDurationScale === undefined) return undefined;
+
+  const derivedDurationScale = legacyDurationScale
+    ?? (typeof legacy?.entranceDuration === 'number'
+      ? legacy.entranceDuration / LEGACY_PROFILE_DURATION_MS[profile]
+      : undefined);
+
+  return {
+    intensity: explicit?.intensity ?? legacy?.intensity,
+    durationScale: explicit?.durationScale ?? derivedDurationScale,
+    ambient: explicit?.ambient,
+  };
+}
 
 /**
  * Memoized children boundary.
@@ -415,6 +455,11 @@ export function DesignSystemProvider({
   }, [tenantConfig, resolvedVertical]);
 
   const normalizedConfig = resolvedVisualConfig?.config ?? null;
+  const motionProfile = resolvedVertical?.motionProfile ?? 'calm';
+  const tenantMotionDial = useMemo(
+    () => resolveTenantMotionDial(normalizedConfig, motionProfile),
+    [motionProfile, normalizedConfig],
+  );
 
   // Resolve TenantAppearance (General + Advanced) into CSS custom properties.
   // These are layered ON TOP of brandTheme/tokenOverrides in the merge chain.
@@ -485,7 +530,7 @@ export function DesignSystemProvider({
               cssBaseUrl={cssBaseUrl}
             >
               <FeatureProvider features={normalizedConfig.features ?? []}>
-                <MotionProvider>
+                <MotionProvider profile={motionProfile} tenantDial={tenantMotionDial}>
                   <ResponsiveProvider>
                     <CommandRegistryProvider>
                       <AntdConfigProvider>

@@ -363,6 +363,31 @@ SSR/hydration, responsive/fixed, reduced-motion and forced-colors contracts must
 first application canary is BitHire Teams Performance (placements by sprint + revenue trend) with a
 declared phone summary projection; it must not branch on tenant slug or hostname.
 
+#### Owner continuation — MOT-01 semantic motion and runtime policy (2026-07-16)
+
+MOT-01 opens the first bounded Phase-2B motion slice without reimplementing the completed unit,
+Presence, FLIP, View Transition or reduced-motion floors. It introduces the focused
+`@rottay/design-system/motion` boundary, reuses the canonical `precise | calm | expressive`
+`MotionProfile`, and restricts tenant configuration to a DB-safe `{ intensity, durationScale,
+ambient: off | subtle }` dial. The vertical owns curve, cadence and displacement envelopes; a
+tenant can scale those values but cannot author springs, bounce, keyframes or loop topology.
+
+One runtime policy combines OS reduced motion, pointer posture, save-data/2g, document visibility
+and the tenant dial. Active product state is distinct from ambient decoration: a tenant may disable
+ambient atmosphere without suppressing finite feedback or a genuinely running AI/tool state.
+Coarse, reduced, constrained and hidden environments receive stable final output; continuous work
+has a one-slot ceiling, finite emphasis is capped at 500ms, and public recipes name only transform
+and opacity. `DesignSystemProvider` derives the profile from the vertical and the dial from
+`appearance.general.motion`; neither the DS nor an app may branch on tenant slug or hostname.
+
+Release acceptance requires hostile-input bounds, the complete policy matrix, SSR/hydration and
+live preference changes, one browser source set with cleanup, real duration/stagger consumption,
+vertical/tenant invariance, supplier-contract parity, isolated packed ESM/CJS/types and measured
+bundle budgets. The first application canary is BitHire's shared ambient backdrop: at most one
+offscreen-aware desktop loop when ambient policy allows it and zero loops on coarse, reduced,
+constrained, hidden or offscreen states. This is evidence toward DS-IMP-086/088/089 only; those
+source items remain open until the full Motion.List/AI-state and fleet adoption gates complete.
+
 ### WO-CRA-14 ParticleField Stage-A quarantine
 - **Source IDs / phase** — Supports DS-IMP-106 Stage A in Phase 0; it has no final source authority. WO-CRA-15 remains the only DS-IMP-106 completion authority.
 - **Depends on** — WO-GAT-05 and WO-GAT-06.

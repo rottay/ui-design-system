@@ -42,6 +42,51 @@ describe('appearanceGeneralToVariables', () => {
     expect(vars['--ds-density-scale']).toBeUndefined();
   });
 
+  it('emits the bounded motion dial for CSS-only pre-hydration seams', () => {
+    const vars = appearanceGeneralToVariables({
+      motion: {
+        intensity: 0.72,
+        durationScale: 1.25,
+        ambient: 'subtle',
+      },
+    });
+
+    expect(vars).toMatchObject({
+      '--ds-motion-intensity': '0.72',
+      '--ds-motion-duration-scale': '1.25',
+      '--ds-motion-ambient': 'subtle',
+    });
+  });
+
+  it('clamps finite motion numbers to the public dial bounds', () => {
+    const minimum = appearanceGeneralToVariables({
+      motion: { intensity: -100, durationScale: -100 },
+    });
+    const maximum = appearanceGeneralToVariables({
+      motion: { intensity: 100, durationScale: 100 },
+    });
+
+    expect(minimum['--ds-motion-intensity']).toBe('0');
+    expect(minimum['--ds-motion-duration-scale']).toBe('0.5');
+    expect(maximum['--ds-motion-intensity']).toBe('1');
+    expect(maximum['--ds-motion-duration-scale']).toBe('1.5');
+  });
+
+  it('does not leak invalid or CSS-shaped motion input into variables', () => {
+    const vars = appearanceGeneralToVariables({
+      motion: {
+        intensity: 'var(--attacker)',
+        durationScale: Number.POSITIVE_INFINITY,
+        ambient: 'url(https://attacker.invalid)',
+      },
+    } as unknown as TenantAppearanceGeneral);
+
+    expect(vars['--ds-motion-intensity']).toBeUndefined();
+    expect(vars['--ds-motion-duration-scale']).toBeUndefined();
+    expect(vars['--ds-motion-ambient']).toBeUndefined();
+    expect(Object.values(vars).join(' ')).not.toContain('attacker');
+  });
+
   it('shape.buttonStyle pill produces --ds-radius-button 9999px', () => {
     const vars = appearanceGeneralToVariables({ shape: { buttonStyle: 'pill' } });
     expect(vars['--ds-radius-button']).toBe('9999px');

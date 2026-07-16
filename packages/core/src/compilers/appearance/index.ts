@@ -18,6 +18,7 @@ import type {
   TenantAppearanceGeneral,
   TenantAppearanceAdvanced,
 } from '../../contracts/themes';
+import { MOTION_DIAL_BOUNDS } from '../../contracts/motion';
 import { isValidCssColor, clampValue } from '../_shared/color-math';
 import { chromeToVariables } from '../_shared/chrome-variables';
 
@@ -94,6 +95,37 @@ export function appearanceGeneralToVariables(
   }
 
   // Density is consumed by useTokens() as a JS factor, not a CSS variable.
+
+  // Motion is consumed by MotionProvider as structured data. These variables
+  // keep the same bounded values available to CSS-only pre-hydration seams.
+  if (general.motion) {
+    const { intensity, durationScale, ambient } = general.motion;
+    if (typeof intensity === 'number' && Number.isFinite(intensity)) {
+      setVar(
+        vars,
+        '--ds-motion-intensity',
+        clampValue(
+          intensity,
+          MOTION_DIAL_BOUNDS.intensity.min,
+          MOTION_DIAL_BOUNDS.intensity.max,
+        ),
+      );
+    }
+    if (typeof durationScale === 'number' && Number.isFinite(durationScale)) {
+      setVar(
+        vars,
+        '--ds-motion-duration-scale',
+        clampValue(
+          durationScale,
+          MOTION_DIAL_BOUNDS.durationScale.min,
+          MOTION_DIAL_BOUNDS.durationScale.max,
+        ),
+      );
+    }
+    if (ambient === 'off' || ambient === 'subtle') {
+      setVar(vars, '--ds-motion-ambient', ambient);
+    }
+  }
 
   // Navigation — sidebarTone maps to real sidebar chrome variables
   if (general.navigation?.sidebarTone) {
