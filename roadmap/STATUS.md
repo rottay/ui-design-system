@@ -7,7 +7,7 @@
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
 | [engine-modern](./engine-modern.md) | 22 | 0 | 1 | 23 |
-| [craft](./craft.md) | 12 | 1 | 4 | 17 |
+| [craft](./craft.md) | 12 | 2 | 3 | 17 |
 | [gates](./gates.md) | 8 | 0 | 1 | 9 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
 | [architecture](./architecture.md) | 10 | 1 | 0 | 11 |
@@ -27,7 +27,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | WO-GAT-07 | done | 0 | DS-IMP-060 | DS-IMP-060-phase-0-minimum | WO-GAT-09 | 6 |
 | WO-CRA-14 | in-progress | 0 | DS-IMP-106 | DS-IMP-106-stage-a-quarantine | WO-CRA-15 | 2C |
-| WO-CRA-16 | todo | 0 | DS-IMP-090, DS-IMP-091 | DS-IMP-090-091-semantic-icon-v2-global-search-canary | WO-CRA-17 | 2B |
+| WO-CRA-16 | in-progress | 0 | DS-IMP-090, DS-IMP-091 | DS-IMP-090-091-semantic-icon-v2-global-search-canary | WO-CRA-17 | 2B |
 
 ## In progress
 
@@ -35,13 +35,13 @@
 | --- | --- | --- | --- | --- |
 | WO-ARC-11 | Superadmin presentation bypass | codex-arc11 | 2026-07-15 | 2026-07-15 14:50 — The app-resolved presentation contract now preserves explicit field, tab and individual-action anatomy through collection and detail load failures (DS 4fc07796), with Bithire Agent Roster registrations landed in 68119289f. Published @rottay/design-system 2.19.3 (release 336bd5ea) is pinned by Bithire 220ef765b. Focused DS coverage is green at 57/57, core TypeScript and the 2.19.3 build are green, and the focused Bithire suite remains green at 3/3. Authorization and data access remain app/server-owned; the DS only renders final all/resolved presentation decisions. |
 | WO-CRA-14 | ParticleField Stage-A quarantine | codex-cra14 | 2026-07-14 | 2026-07-15 01:00 — Independent technical GO after adversarial correction: Platform 35a2dcf7 rejects spoofed resolver provenance and hostile loaders (53/53), DS runtime/barrel/CSS gates are green. Integration remains blocked: app-platform is pinned to registry DS 2.17.0, producing exactly five particleField TS2353 errors and the old static ParticleField path; keep WO in-progress until consolidated publish and repin. |
+| WO-CRA-16 | Semantic Icon v2 and BitHire Global Search canary | codex-icon-canary | 2026-07-16 | (no entries — log via `progress`) |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
 | WO-ENG-23 | Evnto certified theme source | M | engine-modern | ds-improvements |
-| WO-CRA-16 | Semantic Icon v2 and BitHire Global Search canary | S | craft | ds-improvements |
 
 ## Blocked (dependencies or phase claim lock)
 
