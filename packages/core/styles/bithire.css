@@ -27664,24 +27664,55 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * still yields to a caller's inline `style`.
  *
  * SCOPE ROOT carries `rottay-action-dock` + `data-part='root'` +
- * `data-placement`. The two shadows differ only in the sign of their Y offset;
- * both are token-free literals carried over verbatim (P-70 candidate).
+ * `data-placement` + `data-mode`. Component variables deliberately fall back
+ * to semantic spacing, elevation, and stacking tokens so tenants can tune the
+ * dock without application-owned CSS.
  *
- * SPECIFICITY (P-48): `background` and `box-shadow` are non-border paint —
- * (0,3,0) suffices; the `[data-placement]` presence check buys the third unit
- * on the shared background rule.
+ * SPECIFICITY (P-48): `background` and `box-shadow` are non-border paint;
+ * selectors remain rooted in the component class plus explicit state data.
  */
 
-.rottay-action-dock[data-part='root'][data-placement] {
+.rottay-action-dock[data-part='root'][data-placement][data-mode] {
+  box-sizing: border-box;
+  width: 100%;
+  padding-inline: var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem));
+  z-index: var(--ds-action-dock-z-index, var(--ds-z-index-fixed, 1200));
   background: var(--ds-color-bg-primary);
 }
 
+.rottay-action-dock[data-part='root'][data-mode='fixed'] {
+  position: fixed;
+  inset-inline: 0;
+}
+
+.rottay-action-dock[data-part='root'][data-mode='sticky'] {
+  position: sticky;
+  z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
+}
+
 .rottay-action-dock[data-part='root'][data-placement='bottom'] {
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  inset-block-end: 0;
+  padding-block-start: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
+  padding-block-end: max(
+    var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
+    var(--ds-action-dock-safe-area-bottom, env(safe-area-inset-bottom, 0px))
+  );
+  box-shadow: var(--ds-action-dock-shadow-bottom, var(--ds-shadow-navbar));
 }
 
 .rottay-action-dock[data-part='root'][data-placement='top'] {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  inset-block-start: 0;
+  padding-block-start: max(
+    var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
+    var(--ds-action-dock-safe-area-top, env(safe-area-inset-top, 0px))
+  );
+  padding-block-end: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
+  box-shadow: var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
+}
+
+.rottay-action-dock__actions {
+  width: 100%;
+  gap: var(--ds-action-dock-gap, var(--ds-spacing-3, 0.75rem));
 }
 
 /**
@@ -43785,12 +43816,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar[data-part='sticky-action-bar'] {
+.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode='sticky'] {
   background: var(--ds-color-bg-primary);
   border-top: 1px solid var(--ds-color-border-secondary);
 }
 
-.ds-surface.ds-collection-workspace .ds-collection-workspace__sticky-primary-action[data-part='sticky-primary-action'] {
+.ds-surface.ds-collection-workspace .rottay-button.ds-collection-workspace__sticky-primary-action {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary, #fff);
   border: none;
