@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.10
+
+### Patch Changes
+
+- Materialize every named collection filter posture: inline remains canonical and direct, while
+  sheet and anchored dropdown share one transactional draft with accessible dismissal and focus.
+- Materialize preview panes as resizable inline rails, sheets, accessible accordions, native route
+  activation, or truly hidden content while preserving canonical selection and action continuity.
+- Add compact preview render context, stale-item cleanup, viewport-safe dropdown placement, nested
+  control portal handling, and keyboard-safe card activation without nested interactive semantics.
+
 ## 2.19.9
 
 ### Patch Changes
