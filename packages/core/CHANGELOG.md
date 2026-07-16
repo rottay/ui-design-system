@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.27
+
+### Patch Changes
+
+- Expand the supplier-free semantic corpus to v3 with seven authentication,
+  visibility, inbox, and live-status roles, for a fixed total of 50 names.
+- Add Google to the separate `BrandMark` corpus with pinned theSVG provenance
+  and deterministic color, mono, light, dark, and wordmark fallbacks.
+- Preserve exact SSR rendering, accessible decorative/named behavior, RTL,
+  forced-colors, and supplier-free public types across both asset facades.
+
 ## 2.19.26
 
 ### Patch Changes
