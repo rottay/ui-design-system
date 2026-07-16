@@ -319,6 +319,27 @@ tenant palettes (a dark-surface and a light-surface tenant); the owner approves 
 - **Execution control** — Keep legacy chart exports/rendering while correcting semantics; disable a broken family to its deterministic static/error fallback. Telemetry: color resolution, edge-case results, accessible DOM and prop coverage. Stop on silent data-semantic change or inaccessible output.
 - **Do NOT** — Do not start ChartKernel/renderer migration or use Three to mask correctness defects.
 
+#### Owner continuation — VIZ-01 bounded projection pilot (2026-07-16)
+
+WO-CRA-13 is complete, so the owner authorized the first additive visualization slice without
+claiming the Phase 2C source items complete. VIZ-01 introduces a focused
+`@rottay/design-system/charts` boundary containing a JSON-serializable `ChartProjectionSpec`, a
+deterministic phone/tablet/desktop resolver, and an accessible `ChartFrame`. The application keeps
+semantic ownership: it names renderer, metric, summary and omission IDs; the DS only chooses the
+declared responsive posture and renders common title, question, insight, toolbar, legend, source,
+freshness and state anatomy. A phone projection cannot be `full`.
+
+The first real consumer is BitHire's activity heatmap: desktop/tablet retain the calendar while
+phone renders a meaningful summary of event count, active days, peak and covered period, with no
+wide hidden SVG. The same spec and component contract must serve BitHire and The Management;
+provider/DB tokens may change paint and personality, but neither the DS nor the app may branch on a
+tenant slug or hostname. Acceptance requires focused resolver/frame tests, isolated packed ESM/CJS
+and TypeScript-consumer proof for the new subpath, a 360/768/1280 canary contract, and reduced-motion,
+keyboard/touch and forced-colors coverage. This pilot is evidence toward DS-IMP-099/100 only; it does
+not transition DS-IMP-098/099/100 or certify the production white-label canary. The next checkpoint
+is React-owned Bar, Line and HeatMap renderers on this frame, followed by vertical `ChartGrammar` and
+`InsightLayer`.
+
 ### WO-CRA-14 ParticleField Stage-A quarantine
 - **Source IDs / phase** — Supports DS-IMP-106 Stage A in Phase 0; it has no final source authority. WO-CRA-15 remains the only DS-IMP-106 completion authority.
 - **Depends on** — WO-GAT-05 and WO-GAT-06.
