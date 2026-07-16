@@ -10,6 +10,7 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Main CJS bundle (`dist/index.cjs`) | < 150 KB gzipped |
 | Per-engine chunk | < 80 KB gzipped |
 | Icons bundle (`dist/icons.js`) | < 40 KB gzipped |
+| Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
 | Tokens bundle (`dist/tokens.js`) | < 20 KB gzipped |
 | i18n bundle (`dist/i18n.js`) | < 20 KB gzipped |
 
@@ -30,6 +31,8 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/index.cjs` | 500 KB |
 | `dist/icons.js` | 150 KB |
 | `dist/icons.cjs` | 150 KB |
+| `dist/marks.js` | 100 KB |
+| `dist/marks.cjs` | 100 KB |
 | `dist/tokens.js` | 80 KB |
 | `dist/tokens.cjs` | 80 KB |
 | `dist/i18n.js` | 80 KB |

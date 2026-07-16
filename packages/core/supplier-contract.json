@@ -5,6 +5,7 @@
     "@phosphor-icons/react",
     "@react-three/drei",
     "@react-three/fiber",
+    "@thesvg/react",
     "antd",
     "d3",
     "framer-motion",
@@ -4176,6 +4177,53 @@
         "LoaderIcon",
         "createIcon",
         "isIconName"
+      ]
+    },
+    "./marks": {
+      "exports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "BrandMark",
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "CloudServiceMark",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "isBrandMarkName",
+        "isCloudProvider",
+        "isCloudService",
+        "isMarkVariant"
+      ],
+      "symbols": {
+        "BrandMark": [
+          "@thesvg/react"
+        ],
+        "CloudServiceMark": [
+          "@thesvg/react"
+        ]
+      },
+      "wildcard": [
+        "@thesvg/react"
+      ],
+      "supplierFreeExports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "isBrandMarkName",
+        "isCloudProvider",
+        "isCloudService",
+        "isMarkVariant"
       ]
     },
     "./eslint": {

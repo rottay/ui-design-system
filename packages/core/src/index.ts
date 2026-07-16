@@ -67,6 +67,10 @@ export { arePropsEqual, createPropsComparator } from './_internal/utils';
 //
 // Neither catalog is re-exported from this root barrel.
 
+// Brand/provider marks are a distinct asset class under
+// `@rottay/design-system/marks`. They are also intentionally absent here so
+// root consumers cannot load the pinned mark renderer by accident.
+
 // ============================================
 // TENANCY (schema, registry, resolver, storage, CSS generation)
 // ============================================

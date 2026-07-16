@@ -34,6 +34,8 @@ const BUDGET = {
   'dist/index.cjs': 500_000,
   'dist/icons.js': 150_000,
   'dist/icons.cjs': 150_000,
+  'dist/marks.js': 100_000,
+  'dist/marks.cjs': 100_000,
   'dist/tokens.js': 80_000,
   'dist/tokens.cjs': 80_000,
   'dist/i18n.js': 80_000,

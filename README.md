@@ -85,6 +85,7 @@ import { SearchIcon, PlusIcon, CheckIcon } from "@rottay/design-system/icons";
 | --------------------------------------- | ---------------------------------------------------------------------- |
 | `@rottay/design-system`                 | All components, hooks, utilities                                       |
 | `@rottay/design-system/icons`           | 109 curated icons                                                      |
+| `@rottay/design-system/marks`           | Governed brand and cloud-provider marks                                |
 | `@rottay/design-system/server`          | Server-only utilities (branding validation)                            |
 | `@rottay/design-system/eslint`          | ESLint rules (no-raw-html, no-hardcoded-colors, no-db-in-components)   |
 | `@rottay/design-system/styles`          | Full bundle: component skins, states, keyframes, tokens, all tenants   |

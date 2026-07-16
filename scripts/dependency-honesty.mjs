@@ -37,6 +37,7 @@ const TRACKED_SUPPLIERS = Object.freeze([
   'framer-motion',
   'motion',
   '@phosphor-icons/react',
+  '@thesvg/react',
   'lucide-react',
   'three',
   '@react-three/fiber',
@@ -47,6 +48,7 @@ const TRACKED_SUPPLIERS = Object.freeze([
 
 const WILDCARD_ENTRYPOINT_SUPPLIERS = Object.freeze({
   './icons': Object.freeze(['@phosphor-icons/react', 'lucide-react']),
+  './marks': Object.freeze(['@thesvg/react']),
 });
 
 const APP_REPOSITORIES = Object.freeze([
@@ -200,6 +202,7 @@ export function supplierFamilyForSpecifier(specifier) {
   if (packageRoot === 'framer-motion') return 'framer-motion';
   if (packageRoot === 'motion') return 'motion';
   if (packageRoot === '@phosphor-icons/react') return '@phosphor-icons/react';
+  if (packageRoot === '@thesvg/react') return '@thesvg/react';
   if (packageRoot === 'lucide-react') return 'lucide-react';
   if (packageRoot === 'three' || packageRoot.startsWith('@react-three/')) return 'three';
   if (packageRoot === 'antd' || packageRoot === '@ant-design/icons') return 'antd';
@@ -2206,7 +2209,7 @@ export function auditCoreDependencyGraph(root = coreRoot) {
   errors.push(...validateSupplierContract(readJson(resolve(root, 'supplier-contract.json')), deriveSupplierContract(root)));
 
   const report = {};
-  for (const family of ['d3', 'motion', 'framer-motion', '@phosphor-icons/react', 'lucide-react', 'three', 'antd']) {
+  for (const family of ['d3', 'motion', 'framer-motion', '@phosphor-icons/react', '@thesvg/react', 'lucide-react', 'three', 'antd']) {
     const allFiles = new Set();
     const reachableFiles = new Set();
     for (const [packageName, files] of allImports) {
@@ -2406,6 +2409,9 @@ export function validateSupplierContractShape(contract) {
   }
   if (JSON.stringify(contract.entrypoints?.['./icons']?.wildcard ?? []) !== JSON.stringify(['@phosphor-icons/react', 'lucide-react'])) {
     errors.push('./icons must retain its governed functional and compatibility suppliers');
+  }
+  if (JSON.stringify(contract.entrypoints?.['./marks']?.wildcard ?? []) !== JSON.stringify(['@thesvg/react'])) {
+    errors.push('./marks must retain its governed brand/provider supplier');
   }
   return errors;
 }
@@ -3763,7 +3769,8 @@ export async function auditPackedArtifact(root = coreRoot) {
       fixtureSource,
       `import { AreaChart, CountUp, FadeIn, ScaleIn } from ${JSON.stringify(packedManifest.name)};\n` +
       `import { CopyIcon, Icon } from ${JSON.stringify(`${packedManifest.name}/icons`)};\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon);\n',
+      `import { BrandMark, CloudServiceMark } from ${JSON.stringify(`${packedManifest.name}/marks`)};\n` +
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark);\n',
     );
     const packagedCli = resolve(installedPackage, 'consumer/ds-supplier-honesty.mjs');
     if (!existsSync(packagedCli)) throw new Error('packed supplier CLI is missing from the installed tarball');
@@ -3773,7 +3780,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       { cwd: consumerRoot },
     );
     const cliReport = JSON.parse(cliResult.stdout);
-    const missingFixtureSuppliers = ['@phosphor-icons/react', 'antd', 'd3', 'motion', 'lucide-react']
+    const missingFixtureSuppliers = ['@phosphor-icons/react', '@thesvg/react', 'antd', 'd3', 'motion', 'lucide-react']
       .filter((supplier) => !cliReport.renderedSuppliers?.includes(supplier));
     if (missingFixtureSuppliers.length > 0) {
       throw new Error(`packed supplier CLI missed fixture suppliers: ${missingFixtureSuppliers.join(', ')}`);
@@ -3794,9 +3801,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 6 || runtimeFixtures.require.length !== 5) {
+    if (runtimeFixtures.import.length !== 7 || runtimeFixtures.require.length !== 6) {
       throw new Error(
-        `packed runtime condition inventory drifted; expected 6 import + 5 require, found ` +
+        `packed runtime condition inventory drifted; expected 7 import + 6 require, found ` +
         `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
       );
     }

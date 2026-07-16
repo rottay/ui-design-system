@@ -30,6 +30,11 @@
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
     },
+    "./marks": {
+      "types": "./dist/marks.d.ts",
+      "import": "./dist/marks.js",
+      "require": "./dist/marks.cjs"
+    },
     "./styles": {
       "style": "./dist/styles.css",
       "import": "./dist/styles.css",
@@ -140,7 +145,8 @@
   },
   "releaseSync": {
     "sourceEntrypoints": {
-      "./icons": "icon-entry.ts"
+      "./icons": "icon-entry.ts",
+      "./marks": "mark-entry.ts"
     },
     "gateCommands": {
       "test:unit": [
@@ -271,15 +277,19 @@
   "peerDependencies": {
     "@ant-design/icons": "^5.5.0",
     "@phosphor-icons/react": ">=2.1.10 <3.0.0",
+    "@thesvg/react": "3.2.7",
     "antd": "^5.21.0",
     "d3": "^7.9.0",
-    "motion": "12.42.2",
     "lucide-react": ">=0.545.0 <1.0.0",
+    "motion": "12.42.2",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
     "typescript": "^5.7.0"
   },
   "peerDependenciesMeta": {
+    "@thesvg/react": {
+      "optional": true
+    },
     "typescript": {
       "optional": true
     }
@@ -299,6 +309,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@thesvg/react": "3.2.7",
     "@types/d3": "^7.4.3",
     "@types/node": "^20.19.39",
     "@types/react": "^19.2.14",
@@ -306,14 +317,14 @@
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
-    "autoprefixer": "^10.5.0",
     "antd": "^5.29.3",
-    "daisyui": "^5.5.19",
+    "autoprefixer": "^10.5.0",
     "d3": "^7.9.0",
-    "motion": "12.42.2",
+    "daisyui": "^5.5.19",
     "happy-dom": "^20.9.0",
     "jsdom": "^27.4.0",
     "lucide-react": "^0.563.0",
+    "motion": "12.42.2",
     "postcss": "^8.5.10",
     "postcss-cli": "^11.0.1",
     "react": "^19.2.5",
@@ -321,6 +332,7 @@
     "rollup-plugin-preserve-directives": "^0.4.0",
     "storybook": "^9.1.20",
     "tailwindcss": "^4.2.4",
+    "thesvg": "3.2.6",
     "typescript": "^5.9.3",
     "vite": "^5.4.21",
     "vite-plugin-dts": "^3.9.1",

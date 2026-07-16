@@ -184,6 +184,14 @@ Add a semantic name to `src/icons/semantic/registry.ts`, map it only inside the
 supplier adapter, extend the fixed-corpus tests, and update provenance when the
 supplier/version changes. Do not add a new vendor-shaped alias for product use.
 
+Brand and cloud-provider identity is a separate asset class. Product code uses
+`BrandMark` or `CloudServiceMark` from `@rottay/design-system/marks`; the
+pinpoint `@thesvg/react` imports stay inside `src/marks/adapters/`. Never use a
+brand mark for an action/navigation concept, never load a remote mark at
+runtime, and never pass supplier types through the public API. A tenant may
+provide its own approved company logo through the tenant-brand contract, but
+cannot select an arbitrary catalog mark or replace functional glyph meaning.
+
 ---
 
 ## Chart System (19 types)

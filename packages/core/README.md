@@ -97,6 +97,7 @@ the stylesheet.
 | `@rottay/design-system`                 | Components, providers, hooks                     |
 | `@rottay/design-system/server`          | Server-side utilities                            |
 | `@rottay/design-system/icons`           | Icon system                                      |
+| `@rottay/design-system/marks`           | Governed brand and cloud-provider marks          |
 | `@rottay/design-system/styles.css`      | Full CSS bundle (all tenants, for dev/Storybook) |
 | `@rottay/design-system/styles/platform` | CSS bundle for Platform app (rottay tenant)      |
 | `@rottay/design-system/styles/bithire`  | CSS bundle for BitHire app                       |

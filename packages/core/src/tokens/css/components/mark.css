@@ -1,0 +1,35 @@
+/**
+ * Layout and high-contrast behavior for local brand/cloud marks.
+ * Geometry and faithful asset colors remain owned by the audited SVG asset.
+ */
+
+.rottay-mark {
+  display: inline-block;
+  flex: none;
+  vertical-align: -0.125em;
+  overflow: visible;
+}
+
+.rottay-mark[data-mark-variant='mono'],
+.rottay-mark[data-mark-variant='light'],
+.rottay-mark[data-mark-variant='dark'] {
+  color: currentColor;
+}
+
+@media (forced-colors: active) {
+  /* Preserve intentional multicolor identity and unmodified AWS service art. */
+  .rottay-mark[data-mark-kind='cloud-service'],
+  .rottay-mark[data-mark-kind='brand'][data-mark-variant='color'],
+  .rottay-mark[data-mark-kind='brand'][data-mark-variant='wordmark'] {
+    forced-color-adjust: none;
+  }
+
+  /* Monochrome/theme variants participate in the user's contrast palette. */
+  .rottay-mark[data-mark-kind='brand'][data-mark-variant='mono'],
+  .rottay-mark[data-mark-kind='brand'][data-mark-variant='light'],
+  .rottay-mark[data-mark-kind='brand'][data-mark-variant='dark'] {
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}
+
