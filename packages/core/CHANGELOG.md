@@ -1,5 +1,14 @@
 # @rottay/design-system
 
+## 2.19.14
+
+### Patch Changes
+
+- Repair the `marks` declaration entry so TypeScript consumers resolve the public facade instead of
+  cycling between the generated entry files.
+- Extend packed-artifact certification with an isolated TypeScript consumer, keeping runtime and type
+  export conditions under the same offline tarball gate.
+
 ## 2.19.13
 
 ### Patch Changes

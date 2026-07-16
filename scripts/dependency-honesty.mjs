@@ -3772,6 +3772,20 @@ export async function auditPackedArtifact(root = coreRoot) {
       `import { BrandMark, CloudServiceMark } from ${JSON.stringify(`${packedManifest.name}/marks`)};\n` +
       'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark);\n',
     );
+    writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
+      compilerOptions: {
+        jsx: 'react-jsx',
+        lib: ['ES2022', 'DOM'],
+        module: 'NodeNext',
+        moduleResolution: 'NodeNext',
+        noEmit: true,
+        skipLibCheck: true,
+        strict: true,
+        target: 'ES2022',
+      },
+      include: ['src/fixture.tsx'],
+    }, null, 2));
+    spawnChecked('pnpm', ['exec', 'tsc', '--project', 'tsconfig.json'], { cwd: consumerRoot });
     const packagedCli = resolve(installedPackage, 'consumer/ds-supplier-honesty.mjs');
     if (!existsSync(packagedCli)) throw new Error('packed supplier CLI is missing from the installed tarball');
     const cliResult = spawnChecked(
@@ -3879,6 +3893,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       installedRuntimePackages: installedRuntimeFixtures.tarballs.size,
       stagedRuntimePackages: installedRuntimeFixtures.stagedPackages,
       supplierCli: cliReport.contract,
+      typecheckedConsumer: true,
       executedImportConditions: runtimeFixtures.import.length,
       executedRequireConditions: runtimeFixtures.require.length,
       runtimeBundleEntries: runtimeBundles.entries,
