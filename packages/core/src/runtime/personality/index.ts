@@ -11,3 +11,6 @@
  */
 export * from './primitives';
 export { DEFAULT_PERSONALITY } from './defaults';
+export { resolveChartPersonality } from './chart-personality';
+export type { ChartPersonalityResolutionInput } from './chart-personality';
+export { useResolvedChartPersonality } from './useResolvedChartPersonality';

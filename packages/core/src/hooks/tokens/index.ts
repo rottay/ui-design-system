@@ -29,6 +29,7 @@ import { useProductProfileContext as useProductProfile } from '../../runtime/pro
 import { useEngineContext } from '../../runtime/engines';
 import { getEngineTokens } from './engine-tokens';
 import { DEFAULT_PERSONALITY } from '../../runtime/personality/defaults';
+import { resolveChartPersonality } from '../../runtime/personality/chart-personality';
 import { brandThemeToTokenOverrides, brandThemeToPersonality } from '../../compilers/brand-theme';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../contracts';
 
@@ -283,6 +284,11 @@ export function useTokens(): DesignTokens {
     // Each sub-object is spread independently so customizing one dimension
     // does not wipe out another.
     const verticalPersonality = vertical?.personality;
+    const chartPersonality = resolveChartPersonality({
+      tenantConfig: config,
+      vertical,
+      productProfile: profile,
+    });
     let personality: PersonalityTokens;
 
     if (hasBrandTheme) {
@@ -293,7 +299,7 @@ export function useTokens(): DesignTokens {
       const tenantPersonality = config.personality;
       personality = {
         animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...btPersonality.animation, ...tenantPersonality?.animation },
-        chart: { ...DEFAULT_PERSONALITY.chart, ...verticalPersonality?.chart, ...btPersonality.chart, ...tenantPersonality?.chart },
+        chart: chartPersonality,
         typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...btPersonality.typography, ...tenantPersonality?.typography },
         accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...btPersonality.accent, ...tenantPersonality?.accent },
         card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...btPersonality.card, ...tenantPersonality?.card },
@@ -304,7 +310,7 @@ export function useTokens(): DesignTokens {
       const tenantPersonality = config.personality;
       personality = {
         animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...productPersonality?.animation, ...tenantPersonality?.animation },
-        chart: { ...DEFAULT_PERSONALITY.chart, ...verticalPersonality?.chart, ...productPersonality?.chart, ...tenantPersonality?.chart },
+        chart: chartPersonality,
         typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...productPersonality?.typography, ...tenantPersonality?.typography },
         accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...productPersonality?.accent, ...tenantPersonality?.accent },
         card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...productPersonality?.card, ...tenantPersonality?.card },

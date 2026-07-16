@@ -10,6 +10,8 @@
  *   node scripts/analyze-bundle.mjs            # build + analyze
  *   node scripts/analyze-bundle.mjs --skip-build  # analyze existing dist/
  *   node scripts/analyze-bundle.mjs --chart-renderers  # isolated named-export budgets only
+ *   node scripts/analyze-bundle.mjs --chart-access  # bounded data-access facade budgets only
+ *   node scripts/analyze-bundle.mjs --chart-spec  # server-safe chart contract purity/budget only
  *   node scripts/analyze-bundle.mjs --effects  # EffectRegistry purity/budget only
  *
  * Exit codes:
@@ -38,12 +40,22 @@ const BUDGET = {
   'dist/icons.cjs': 150_000,
   'dist/marks.js': 100_000,
   'dist/marks.cjs': 100_000,
-  // Measured 2026-07-16: 290/350 B and 460/512 B respectively. Each ceiling
-  // keeps >10% headroom and is rounded upward to the next 100 B.
-  'dist/charts.js': 400,
-  'dist/charts.cjs': 400,
-  'dist/chart-renderers.js': 600,
-  'dist/chart-renderers.cjs': 600,
+  // Measured from the VIZ-03D cohesive build on 2026-07-16: 443/495 B after
+  // adding ChartInsightSummary. Both ceilings retain >10% headroom.
+  'dist/charts.js': 500,
+  'dist/charts.cjs': 600,
+  // VIZ-03A cohesive-build measurements: 607/643 B. These ceilings retain
+  // >10% headroom and round upward to the next 100 B.
+  'dist/chart-spec.js': 700,
+  'dist/chart-spec.cjs': 800,
+  // VIZ-03C cohesive-build measurements: 651/695 B. These ceilings retain
+  // >10% headroom and round upward to the next 100 B.
+  'dist/chart-access.js': 800,
+  'dist/chart-access.cjs': 800,
+  // VIZ-03 renderer-facade measurements: 615/659 B after the pure datum-key
+  // helper was added. Runtime costs are governed independently below.
+  'dist/chart-renderers.js': 700,
+  'dist/chart-renderers.cjs': 800,
   // Measured 2026-07-16: 922/930 B. Each ceiling keeps >10% headroom
   // and rounds upward to the next 100 B.
   'dist/motion.js': 1_100,
@@ -352,15 +364,29 @@ async function runComponentBudgets() {
  * named public export in isolation so the measured gzip bytes are the real
  * first-party transitive cost a tree-shaking ESM consumer retains.
  *
- * Measured 2026-07-16 through the built public facade with React/D3 external:
- * Bar 2,375 B, Line 2,969 B, HeatMap 2,943 B gzip. Each ceiling adds 10%
- * headroom and rounds upward to the next 100 B.
+ * Rebaselined for VIZ-03 on 2026-07-16 through the built public facade with
+ * React/D3 external: Bar 11,427 B, Line 12,099 B, HeatMap 10,135 B gzip.
+ * The deliberate increase is the shared accessible interaction, insight and
+ * responsive surface runtime; sibling renderers remain absent. Each ceiling
+ * adds at least 10% headroom and rounds upward to the next 100 B.
  */
 const CHART_RENDERER_BUDGET = {
-  SvgBarRenderer: 2_700,
-  SvgLineRenderer: 3_300,
-  SvgHeatMapRenderer: 3_300,
+  SvgBarRenderer: 12_600,
+  SvgLineRenderer: 13_400,
+  SvgHeatMapRenderer: 11_200,
 };
+
+// Measured provisionally from the current source entry on 2026-07-16 at
+// 101 B gzip with no imports. This helper must remain independently tree-shakeable; renderer
+// component budget increases require an implementation fix, not wider limits.
+const CHART_RENDERER_UTILITY_BUDGET = {
+  createSvgLineDatumKey: 200,
+};
+
+// Measured 15,647 B gzip in the same build. The combined fixture proves that
+// shared interaction/insight infrastructure is deduplicated instead of paying
+// the three isolated costs additively; the ceiling retains >10% headroom.
+const CHART_RENDERER_SUITE_BUDGET = 17_300;
 
 const CHART_RENDERER_ENTRY = join(ROOT, 'dist', 'chart-renderers.js');
 const CHART_RENDERER_SOURCE_DIR = '/components/patterns/visualization/charts/kernel/renderers/';
@@ -408,13 +434,16 @@ function isExternalFamily(specifier, family) {
 /** Build one named export through the built public facade, never its private
  * leaf path. `write: false` keeps this gate in-memory and `inlineDynamicImports`
  * makes raw/gzip size a single, unambiguous transitive bundle. */
-async function buildNamedChartRenderer(rendererName) {
+async function buildChartRendererExports(exportNames) {
   if (!existsSync(CHART_RENDERER_ENTRY)) {
     throw new Error('dist/chart-renderers.js is missing; build the package before measuring published renderers');
   }
+  const names = Array.isArray(exportNames) ? exportNames : [exportNames];
+  if (names.length === 0) throw new Error('at least one chart-renderer export is required');
   const { build } = await import('vite');
   const react = (await import('@vitejs/plugin-react')).default;
-  const virtualId = `virtual:viz-02-chart-renderer:${rendererName}`;
+  const exportList = names.join(', ');
+  const virtualId = `virtual:viz-02-chart-renderer:${names.join('-')}`;
   const resolvedVirtualId = `\0${virtualId}`;
   const result = await build({
     configFile: false,
@@ -437,8 +466,8 @@ async function buildNamedChartRenderer(rendererName) {
         load(id) {
           if (id !== resolvedVirtualId) return null;
           return (
-            `import { ${rendererName} } from ${JSON.stringify(CHART_RENDERER_ENTRY)};\n` +
-            `export { ${rendererName} };\n`
+            `import { ${exportList} } from ${JSON.stringify(CHART_RENDERER_ENTRY)};\n` +
+            `export { ${exportList} };\n`
           );
         },
       },
@@ -488,6 +517,10 @@ async function buildNamedChartRenderer(rendererName) {
   };
 }
 
+async function buildNamedChartRenderer(rendererName) {
+  return buildChartRendererExports([rendererName]);
+}
+
 function printChartRendererRows(rows) {
   const cols = ['renderer', 'raw', 'gzip', 'limit', 'usage', 'isolation', 'status'];
   const headers = {
@@ -514,18 +547,20 @@ function printChartRendererRows(rows) {
   console.log('');
 }
 
-/** Measure all three public named exports and fail closed if a build retains a
- * sibling renderer, bundles React/D3, or stops exposing either peer externally. */
+/** Measure every renderer component and its public utility export. Fail closed
+ * if the contract drifts, a component retains a sibling, or peers are bundled. */
 async function runChartRendererBudgets() {
   console.log('\n--- Named chart-renderer bundle budgets (VIZ-02) ---\n');
   const rendererNames = Object.keys(CHART_RENDERER_BUDGET);
+  const utilityNames = Object.keys(CHART_RENDERER_UTILITY_BUDGET);
   const supplierContract = JSON.parse(readFileSync(join(ROOT, 'supplier-contract.json'), 'utf8'));
   const publicContract = supplierContract.entrypoints?.['./charts/renderers'];
-  const publicRenderers = [...(publicContract?.exports ?? [])].sort();
-  if (JSON.stringify(publicRenderers) !== JSON.stringify([...rendererNames].sort())) {
+  const publicExports = [...(publicContract?.exports ?? [])].sort();
+  const governedExports = [...rendererNames, ...utilityNames].sort();
+  if (JSON.stringify(publicExports) !== JSON.stringify(governedExports)) {
     console.error(
-      `\x1b[31mNamed renderer budget inventory differs from the published supplier contract: ` +
-      `budget=[${rendererNames.join(', ')}], public=[${publicRenderers.join(', ')}].\x1b[0m\n`,
+      `\x1b[31mChart-renderer budget inventory differs from the published supplier contract: ` +
+      `budget=[${governedExports.join(', ')}], public=[${publicExports.join(', ')}].\x1b[0m\n`,
     );
     return 1;
   }
@@ -586,11 +621,91 @@ async function runChartRendererBudgets() {
     }
   }
 
+  for (const utilityName of utilityNames) {
+    const limit = CHART_RENDERER_UTILITY_BUDGET[utilityName];
+    try {
+      const result = await buildNamedChartRenderer(utilityName);
+      const definingModule = [...result.modules.entries()].find(([moduleId]) => (
+        moduleId.endsWith(`${CHART_RENDERER_SOURCE_DIR}SvgLineDatumKey.js`)
+      ))?.[1];
+      const d3External = [...result.imports].some((specifier) => isExternalFamily(specifier, 'd3'));
+      const isolationErrors = [];
+      if (!definingModule?.renderedExports.includes(utilityName)) isolationErrors.push('utility export missing');
+      if (result.bundledPeerModules.length > 0) isolationErrors.push('React/D3 bundled');
+      if (d3External) isolationErrors.push('D3 retained by pure key helper');
+      const overBudget = result.gzip > limit;
+      if (overBudget || isolationErrors.length > 0) failures += 1;
+      rows.push({
+        renderer: utilityName,
+        raw: `${formatBytes(result.raw)} (${result.raw} B)`,
+        gzip: `${formatBytes(result.gzip)} (${result.gzip} B)`,
+        limit: formatBytes(limit),
+        usage: `${pct(result.gzip, limit)}%`,
+        isolation: isolationErrors.length === 0 ? 'isolated; D3 absent; peers not bundled' : isolationErrors.join('; '),
+        status: overBudget || isolationErrors.length > 0 ? 'FAIL' : 'PASS',
+      });
+    } catch (error) {
+      failures += 1;
+      rows.push({
+        renderer: utilityName,
+        raw: '-',
+        gzip: '-',
+        limit: formatBytes(limit),
+        usage: '-',
+        isolation: error instanceof Error ? error.message : String(error),
+        status: 'BUILD FAIL',
+      });
+    }
+  }
+
+  try {
+    const result = await buildChartRendererExports(rendererNames);
+    const retainedRenderers = rendererNames.filter((rendererName) => (
+      [...result.modules.keys()].some((moduleId) => (
+        moduleId.endsWith(`${CHART_RENDERER_SOURCE_DIR}${rendererName}.js`)
+      ))
+    ));
+    const geometryDetails = [...result.modules.entries()]
+      .find(([moduleId]) => moduleId.endsWith(CHART_GEOMETRY_MODULE))?.[1];
+    const retainedBuilders = Object.values(CHART_RENDERER_BUILDERS)
+      .filter((builder) => geometryDetails?.renderedExports.includes(builder));
+    const d3External = [...result.imports].some((specifier) => isExternalFamily(specifier, 'd3'));
+    const reactExternal = [...result.imports].some((specifier) => isExternalFamily(specifier, 'react'));
+    const isolationErrors = [];
+    if (retainedRenderers.length !== rendererNames.length) isolationErrors.push('renderer family incomplete');
+    if (retainedBuilders.length !== rendererNames.length) isolationErrors.push('geometry family incomplete');
+    if (result.bundledPeerModules.length > 0) isolationErrors.push('React/D3 bundled');
+    if (!d3External) isolationErrors.push('D3 external missing');
+    if (!reactExternal) isolationErrors.push('React external missing');
+    const overBudget = result.gzip > CHART_RENDERER_SUITE_BUDGET;
+    if (overBudget || isolationErrors.length > 0) failures += 1;
+    rows.push({
+      renderer: 'All renderers',
+      raw: `${formatBytes(result.raw)} (${result.raw} B)`,
+      gzip: `${formatBytes(result.gzip)} (${result.gzip} B)`,
+      limit: formatBytes(CHART_RENDERER_SUITE_BUDGET),
+      usage: `${pct(result.gzip, CHART_RENDERER_SUITE_BUDGET)}%`,
+      isolation: isolationErrors.length === 0 ? 'deduped; peers external' : isolationErrors.join('; '),
+      status: overBudget || isolationErrors.length > 0 ? 'FAIL' : 'PASS',
+    });
+  } catch (error) {
+    failures += 1;
+    rows.push({
+      renderer: 'All renderers',
+      raw: '-',
+      gzip: '-',
+      limit: formatBytes(CHART_RENDERER_SUITE_BUDGET),
+      usage: '-',
+      isolation: error instanceof Error ? error.message : String(error),
+      status: 'BUILD FAIL',
+    });
+  }
+
   printChartRendererRows(rows);
   if (failures > 0) {
-    console.error(`\x1b[31m${failures} named renderer bundle(s) failed budget or isolation.\x1b[0m\n`);
+    console.error(`\x1b[31m${failures} chart-renderer export bundle(s) failed budget or isolation.\x1b[0m\n`);
   } else {
-    console.log('\x1b[32mAll named renderer bundles are isolated and within budget.\x1b[0m\n');
+    console.log('\x1b[32mAll chart-renderer exports are isolated and within budget.\x1b[0m\n');
   }
   return failures;
 }
@@ -831,6 +946,73 @@ const EFFECTS_EXTERNALS = [
   /^lucide-react\//,
 ];
 
+// ---------------------------------------------------------------------------
+// Server-safe chart specification facade isolation budget (VIZ-03A)
+// ---------------------------------------------------------------------------
+
+const CHART_SPEC_ENTRY = join(ROOT, 'dist', 'chart-spec.js');
+const CHART_SPEC_CJS_ENTRY = join(ROOT, 'dist', 'chart-spec.cjs');
+const CHART_SPEC_TYPES_ENTRY = join(ROOT, 'dist', 'chart-spec.d.ts');
+const CHART_SPEC_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'chart-spec-entry.d.ts');
+const CHART_SPEC_FIXTURE_EXPORTS = Object.freeze([
+  'CHART_GRAMMARS',
+  'CHART_GRAMMAR_IDS',
+  'CHART_GRAMMAR_REGISTRY',
+  'isChartGrammar',
+  'isChartGrammarId',
+  'isChartInsightSpec',
+  'isChartInsightSummary',
+  'resolveChartGrammar',
+]);
+
+// The cohesive producer build on 2026-07-16 retained every public value at
+// 1,787 B gzip. This ceiling keeps >20% headroom.
+const CHART_SPEC_FIXTURE_BUDGET = 2_200;
+const CHART_SPEC_ARTIFACT_FRAGMENT = '/components/patterns/visualization/charts/kernel/spec/';
+const BROWSER_RUNTIME_PATTERN = /\b(?:window|document|navigator|localStorage|sessionStorage|fetch|requestAnimationFrame|cancelAnimationFrame|matchMedia|ResizeObserver|IntersectionObserver|MutationObserver|HTMLElement|SVGElement)\b/;
+const DOM_DECLARATION_PATTERN = /\b(?:Window|Document|Navigator|Storage|HTMLElement|SVGElement|ResizeObserver|IntersectionObserver|MutationObserver)\b/;
+
+const CHART_ACCESS_ENTRY = join(ROOT, 'dist', 'chart-access.js');
+const CHART_ACCESS_CJS_ENTRY = join(ROOT, 'dist', 'chart-access.cjs');
+const CHART_ACCESS_TYPES_ENTRY = join(ROOT, 'dist', 'chart-access.d.ts');
+const CHART_ACCESS_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'chart-access-entry.d.ts');
+const CHART_ACCESS_FIXTURE_EXPORTS = Object.freeze([
+  'CHART_DATA_ACCESS_CSV_MIME_TYPE',
+  'CHART_DATA_ACCESS_PAGE_SIZE_MAX',
+  'CHART_DATA_ACCESS_SUMMARY_LIMIT',
+  'ChartDataAccess',
+  'sanitizeChartDataAccessCsvFilename',
+  'serializeChartDataAccessCsv',
+]);
+const CHART_ACCESS_PURE_EXPORTS = Object.freeze([
+  'CHART_DATA_ACCESS_CSV_MIME_TYPE',
+  'sanitizeChartDataAccessCsvFilename',
+  'serializeChartDataAccessCsv',
+]);
+// VIZ-03C cohesive-build measurements: all exports 2,380 B gzip and pure CSV
+// exports 791 B gzip. The ceilings retain >15% and >25% headroom.
+const CHART_ACCESS_FIXTURE_BUDGET = 2_800;
+const CHART_ACCESS_PURE_BUDGET = 1_000;
+const CHART_ACCESS_ARTIFACT_FRAGMENT = '/components/patterns/visualization/charts/kernel/access/';
+
+function isChartSpecArtifact(file) {
+  const normalized = file.replaceAll('\\', '/');
+  return normalized === CHART_SPEC_ENTRY.replaceAll('\\', '/')
+    || normalized === CHART_SPEC_CJS_ENTRY.replaceAll('\\', '/')
+    || normalized === CHART_SPEC_TYPES_ENTRY.replaceAll('\\', '/')
+    || normalized === CHART_SPEC_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
+    || normalized.includes(CHART_SPEC_ARTIFACT_FRAGMENT);
+}
+
+function isChartAccessArtifact(file) {
+  const normalized = file.replaceAll('\\', '/');
+  return normalized === CHART_ACCESS_ENTRY.replaceAll('\\', '/')
+    || normalized === CHART_ACCESS_CJS_ENTRY.replaceAll('\\', '/')
+    || normalized === CHART_ACCESS_TYPES_ENTRY.replaceAll('\\', '/')
+    || normalized === CHART_ACCESS_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
+    || normalized.includes(CHART_ACCESS_ARTIFACT_FRAGMENT);
+}
+
 function resolveArtifactSpecifier(fromFile, specifier, extension) {
   const base = resolve(dirname(fromFile), specifier);
   const candidates = [
@@ -934,6 +1116,193 @@ function auditEffectsDeclarationClosure() {
   }
   if (forbidden.length > 0) {
     errors.push(`declaration visual/client modules retained: ${forbidden.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
+}
+
+function auditChartSpecCjsClosure() {
+  if (!existsSync(CHART_SPEC_CJS_ENTRY)) {
+    return ['dist/chart-spec.cjs is missing'];
+  }
+  const pending = [CHART_SPEC_CJS_ENTRY];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const source = stripJsComments(readFileSync(file, 'utf8'));
+    const requireCalls = [...source.matchAll(/\brequire\s*\(/g)].length;
+    const literalRequires = [...source.matchAll(/\brequire\s*\(\s*(['"])([^'"]+)\1\s*\)/g)];
+    if (requireCalls !== literalRequires.length) {
+      errors.push(`computed/non-literal require in ${relative(ROOT, file)}`);
+    }
+    if (/\bimport\s*\(/.test(source)) {
+      errors.push(`dynamic import in ${relative(ROOT, file)}`);
+    }
+    if (/(?:^|[;\n])\s*['"]use client['"]/.test(source)) {
+      errors.push(`client directive in ${relative(ROOT, file)}`);
+    }
+    if (BROWSER_RUNTIME_PATTERN.test(source)) {
+      errors.push(`browser runtime in ${relative(ROOT, file)}`);
+    }
+    for (const match of literalRequires) {
+      const specifier = match[2];
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.cjs');
+      if (!target) errors.push(`unresolved CJS edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const foreign = [...visited].filter((file) => !isChartSpecArtifact(file));
+  if (external.size > 0) errors.push(`CJS external requires retained: ${[...external].join(', ')}`);
+  if (foreign.length > 0) {
+    errors.push(`CJS client/foreign modules retained: ${foreign.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
+}
+
+function auditChartSpecDeclarationClosure() {
+  if (!existsSync(CHART_SPEC_TYPES_ENTRY)) {
+    return ['dist/chart-spec.d.ts is missing'];
+  }
+  const pending = [CHART_SPEC_TYPES_ENTRY];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const source = stripJsComments(readFileSync(file, 'utf8'));
+    if (DOM_DECLARATION_PATTERN.test(source) || /<reference\s+lib=['"]dom['"]/.test(source)) {
+      errors.push(`browser declaration in ${relative(ROOT, file)}`);
+    }
+    const specifiers = [
+      ...source.matchAll(/\bfrom\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+      ...source.matchAll(/\bimport\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/<reference\s+types=['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+    ].map((match) => match[1]);
+    for (const specifier of new Set(specifiers)) {
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.d.ts');
+      if (!target) errors.push(`unresolved declaration edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const foreign = [...visited].filter((file) => !isChartSpecArtifact(file));
+  if (external.size > 0) errors.push(`declaration suppliers retained: ${[...external].join(', ')}`);
+  if (foreign.length > 0) {
+    errors.push(`declaration client/foreign modules retained: ${foreign.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
+}
+
+function isAllowedChartAccessReactEdge(specifier) {
+  return specifier === 'react' || specifier.startsWith('react/');
+}
+
+function auditChartAccessCjsClosure() {
+  if (!existsSync(CHART_ACCESS_CJS_ENTRY)) {
+    return ['dist/chart-access.cjs is missing'];
+  }
+  const pending = [CHART_ACCESS_CJS_ENTRY];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const source = stripJsComments(readFileSync(file, 'utf8'));
+    const requireCalls = [...source.matchAll(/\brequire\s*\(/g)].length;
+    const literalRequires = [...source.matchAll(/\brequire\s*\(\s*(['"])([^'"]+)\1\s*\)/g)];
+    if (requireCalls !== literalRequires.length) {
+      errors.push(`computed/non-literal require in ${relative(ROOT, file)}`);
+    }
+    if (/\bimport\s*\(/.test(source)) {
+      errors.push(`dynamic import in ${relative(ROOT, file)}`);
+    }
+    for (const match of literalRequires) {
+      const specifier = match[2];
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.cjs');
+      if (!target) errors.push(`unresolved CJS edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const unexpectedExternal = [...external].filter((specifier) => (
+    !isAllowedChartAccessReactEdge(specifier)
+  ));
+  const foreign = [...visited].filter((file) => !isChartAccessArtifact(file));
+  if (unexpectedExternal.length > 0) {
+    errors.push(`CJS non-React requires retained: ${unexpectedExternal.join(', ')}`);
+  }
+  if (foreign.length > 0) {
+    errors.push(`CJS foreign modules retained: ${foreign.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
+}
+
+function auditChartAccessDeclarationClosure() {
+  if (!existsSync(CHART_ACCESS_TYPES_ENTRY)) {
+    return ['dist/chart-access.d.ts is missing'];
+  }
+  const pending = [CHART_ACCESS_TYPES_ENTRY];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const source = stripJsComments(readFileSync(file, 'utf8'));
+    const specifiers = [
+      ...source.matchAll(/\bfrom\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+      ...source.matchAll(/\bimport\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/<reference\s+types=['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+    ].map((match) => match[1]);
+    for (const specifier of new Set(specifiers)) {
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.d.ts');
+      if (!target) errors.push(`unresolved declaration edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const unexpectedExternal = [...external].filter((specifier) => (
+    !isAllowedChartAccessReactEdge(specifier)
+  ));
+  const foreign = [...visited].filter((file) => !isChartAccessArtifact(file));
+  if (unexpectedExternal.length > 0) {
+    errors.push(`declaration non-React suppliers retained: ${unexpectedExternal.join(', ')}`);
+  }
+  if (foreign.length > 0) {
+    errors.push(`declaration foreign modules retained: ${foreign.map((file) => relative(ROOT, file)).join(', ')}`);
   }
   return errors;
 }
@@ -1060,8 +1429,318 @@ async function runEffectsFixtureBudget() {
   }
 }
 
+async function buildChartSpecFixture() {
+  if (!existsSync(CHART_SPEC_ENTRY)) {
+    throw new Error('dist/chart-spec.js is missing; build the package before measuring the chart specification facade');
+  }
+
+  const { build } = await import('vite');
+  const virtualId = 'virtual:viz-03a-chart-spec';
+  const resolvedVirtualId = `\0${virtualId}`;
+  const result = await build({
+    configFile: false,
+    logLevel: 'silent',
+    root: ROOT,
+    plugins: [{
+      name: 'viz-03a-chart-spec-entry',
+      resolveId(id) {
+        return id === virtualId ? resolvedVirtualId : null;
+      },
+      load(id) {
+        if (id !== resolvedVirtualId) return null;
+        const names = CHART_SPEC_FIXTURE_EXPORTS.join(', ');
+        return `import { ${names} } from ${JSON.stringify(CHART_SPEC_ENTRY)};\nexport { ${names} };\n`;
+      },
+    }],
+    build: {
+      write: false,
+      minify: 'esbuild',
+      target: 'esnext',
+      reportCompressedSize: false,
+      rollupOptions: {
+        input: virtualId,
+        preserveEntrySignatures: 'strict',
+        external: EFFECTS_EXTERNALS,
+        output: {
+          format: 'es',
+          inlineDynamicImports: true,
+          entryFileNames: 'bundle.js',
+        },
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          warn(warning);
+        },
+      },
+    },
+    esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
+  });
+
+  const outputs = (Array.isArray(result) ? result : [result])
+    .flatMap((buildResult) => buildResult.output ?? []);
+  const chunks = outputs.filter((output) => output.type === 'chunk');
+  if (chunks.length !== 1 || !chunks[0].isEntry) {
+    throw new Error(`expected one inline chart-spec entry chunk; found ${chunks.length}`);
+  }
+
+  const code = chunks.map((chunk) => chunk.code).join('\n');
+  const modules = renderedModules(chunks);
+  return {
+    code,
+    raw: Buffer.byteLength(code),
+    gzip: gzipSync(code, { level: 9 }).byteLength,
+    modules,
+    imports: new Set(chunks.flatMap((chunk) => chunk.imports)),
+    dynamicImports: new Set(chunks.flatMap((chunk) => chunk.dynamicImports ?? [])),
+    emittedAssets: outputs.filter((output) => output.type === 'asset').map((asset) => asset.fileName),
+    supplierModules: [...modules.keys()].filter((moduleId) => moduleId.includes('/node_modules/')),
+  };
+}
+
+async function runChartSpecFixtureBudget() {
+  console.log('\n--- Chart specification purity and isolation budget (VIZ-03A) ---\n');
+  const supplierContract = JSON.parse(readFileSync(join(ROOT, 'supplier-contract.json'), 'utf8'));
+  const publicContract = supplierContract.entrypoints?.['./charts/spec'];
+  const contractExports = [...(publicContract?.exports ?? [])].sort();
+  const fixtureExports = [...CHART_SPEC_FIXTURE_EXPORTS].sort();
+  const contractErrors = [];
+  if (JSON.stringify(contractExports) !== JSON.stringify(fixtureExports)) {
+    contractErrors.push('public export inventory drifted');
+  }
+  if (Object.keys(publicContract?.symbols ?? {}).length !== 0) {
+    contractErrors.push('supplier symbols declared');
+  }
+  if (JSON.stringify([...(publicContract?.supplierFreeExports ?? [])].sort()) !== JSON.stringify(fixtureExports)) {
+    contractErrors.push('not every runtime export is supplier-free');
+  }
+  if (contractErrors.length > 0) {
+    console.error(`\x1b[31mChart-spec supplier contract failed: ${contractErrors.join('; ')}.\x1b[0m\n`);
+    return 1;
+  }
+
+  try {
+    const result = await buildChartSpecFixture();
+    const foreignModules = [...result.modules.keys()].filter((moduleId) => (
+      moduleId !== '\0virtual:viz-03a-chart-spec' && !isChartSpecArtifact(moduleId)
+    ));
+    const isolationErrors = [];
+    if (result.imports.size > 0) {
+      isolationErrors.push(`external imports retained: ${[...result.imports].join(', ')}`);
+    }
+    if (result.dynamicImports.size > 0) {
+      isolationErrors.push(`dynamic imports retained: ${[...result.dynamicImports].join(', ')}`);
+    }
+    if (result.emittedAssets.length > 0) {
+      isolationErrors.push(`assets emitted: ${result.emittedAssets.join(', ')}`);
+    }
+    if (result.supplierModules.length > 0) isolationErrors.push('supplier module bundled');
+    if (foreignModules.length > 0) isolationErrors.push('client/foreign runtime retained');
+    if (BROWSER_RUNTIME_PATTERN.test(result.code)) isolationErrors.push('browser runtime retained');
+    if (/(?:^|[;\n])\s*['"]use client['"]/.test(result.code)) isolationErrors.push('client directive retained');
+    isolationErrors.push(...auditChartSpecCjsClosure());
+    isolationErrors.push(...auditChartSpecDeclarationClosure());
+
+    const rawEntries = [CHART_SPEC_ENTRY, CHART_SPEC_CJS_ENTRY].map((entry) => ({
+      entry,
+      size: existsSync(entry) ? statSync(entry).size : Number.POSITIVE_INFINITY,
+      limit: BUDGET[`dist/${entry.split('/').at(-1)}`],
+    }));
+    for (const { entry, size, limit } of rawEntries) {
+      if (!Number.isFinite(size)) isolationErrors.push(`${relative(ROOT, entry)} is missing`);
+      else if (size > limit) isolationErrors.push(`${relative(ROOT, entry)} is over its ${limit} B raw budget`);
+    }
+
+    const overBudget = result.gzip > CHART_SPEC_FIXTURE_BUDGET;
+    const status = overBudget || isolationErrors.length > 0 ? 'FAIL' : 'PASS';
+    const rawSummary = rawEntries
+      .map(({ entry, size, limit }) => `${relative(ROOT, entry)} ${Number.isFinite(size) ? `${size} B` : 'missing'}/${limit} B`)
+      .join('; ');
+    console.log(
+      `ChartSpec | raw entries ${rawSummary} | fixture raw ${formatBytes(result.raw)} (${result.raw} B) | ` +
+      `gzip ${formatBytes(result.gzip)} (${result.gzip} B) | ` +
+      `limit ${formatBytes(CHART_SPEC_FIXTURE_BUDGET)} | ` +
+      `${isolationErrors.length === 0 ? 'pure JSON contract; no suppliers/client/browser runtime' : isolationErrors.join('; ')} | ${status}\n`,
+    );
+    return status === 'PASS' ? 0 : 1;
+  } catch (error) {
+    console.error(`\x1b[31mChart-spec fixture build failed: ${error instanceof Error ? error.message : String(error)}\x1b[0m\n`);
+    return 1;
+  }
+}
+
+async function buildChartAccessFixture(name, fixtureExports) {
+  if (!existsSync(CHART_ACCESS_ENTRY)) {
+    throw new Error('dist/chart-access.js is missing; build the package before measuring chart data access');
+  }
+
+  const { build } = await import('vite');
+  const virtualId = `virtual:viz-03c-chart-access:${name}`;
+  const resolvedVirtualId = `\0${virtualId}`;
+  const result = await build({
+    configFile: false,
+    logLevel: 'silent',
+    root: ROOT,
+    plugins: [{
+      name: `viz-03c-chart-access-${name}`,
+      resolveId(id) {
+        return id === virtualId ? resolvedVirtualId : null;
+      },
+      load(id) {
+        if (id !== resolvedVirtualId) return null;
+        const names = fixtureExports.join(', ');
+        return `import { ${names} } from ${JSON.stringify(CHART_ACCESS_ENTRY)};\nexport { ${names} };\n`;
+      },
+    }],
+    build: {
+      write: false,
+      minify: 'esbuild',
+      target: 'esnext',
+      reportCompressedSize: false,
+      rollupOptions: {
+        input: virtualId,
+        preserveEntrySignatures: 'strict',
+        external: EFFECTS_EXTERNALS,
+        output: {
+          format: 'es',
+          inlineDynamicImports: true,
+          entryFileNames: 'bundle.js',
+        },
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          warn(warning);
+        },
+      },
+    },
+    esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
+  });
+
+  const outputs = (Array.isArray(result) ? result : [result])
+    .flatMap((buildResult) => buildResult.output ?? []);
+  const chunks = outputs.filter((output) => output.type === 'chunk');
+  if (chunks.length !== 1 || !chunks[0].isEntry) {
+    throw new Error(`expected one inline chart-access ${name} chunk; found ${chunks.length}`);
+  }
+  const code = chunks.map((chunk) => chunk.code).join('\n');
+  const modules = renderedModules(chunks);
+  return {
+    code,
+    raw: Buffer.byteLength(code),
+    gzip: gzipSync(code, { level: 9 }).byteLength,
+    modules,
+    imports: new Set(chunks.flatMap((chunk) => chunk.imports)),
+    dynamicImports: new Set(chunks.flatMap((chunk) => chunk.dynamicImports ?? [])),
+    emittedAssets: outputs.filter((output) => output.type === 'asset').map((asset) => asset.fileName),
+    supplierModules: [...modules.keys()].filter((moduleId) => moduleId.includes('/node_modules/')),
+  };
+}
+
+async function runChartAccessFixtureBudgets() {
+  console.log('\n--- Chart data-access isolation budgets (VIZ-03C) ---\n');
+  const supplierContract = JSON.parse(readFileSync(join(ROOT, 'supplier-contract.json'), 'utf8'));
+  const publicContract = supplierContract.entrypoints?.['./charts/access'];
+  const contractExports = [...(publicContract?.exports ?? [])].sort();
+  const fixtureExports = [...CHART_ACCESS_FIXTURE_EXPORTS].sort();
+  const contractErrors = [];
+  if (JSON.stringify(contractExports) !== JSON.stringify(fixtureExports)) {
+    contractErrors.push('public export inventory drifted');
+  }
+  if (Object.keys(publicContract?.symbols ?? {}).length !== 0) {
+    contractErrors.push('governed supplier symbols declared');
+  }
+  if (JSON.stringify([...(publicContract?.supplierFreeExports ?? [])].sort()) !== JSON.stringify(fixtureExports)) {
+    contractErrors.push('not every runtime export is governed-supplier-free');
+  }
+  if (contractErrors.length > 0) {
+    console.error(`\x1b[31mChart-access supplier contract failed: ${contractErrors.join('; ')}.\x1b[0m\n`);
+    return 1;
+  }
+
+  try {
+    const [all, pure] = await Promise.all([
+      buildChartAccessFixture('all', CHART_ACCESS_FIXTURE_EXPORTS),
+      buildChartAccessFixture('pure-csv', CHART_ACCESS_PURE_EXPORTS),
+    ]);
+    const isolationErrors = [];
+    const unexpectedImports = [...all.imports].filter((specifier) => (
+      !isAllowedChartAccessReactEdge(specifier)
+    ));
+    if (unexpectedImports.length > 0) {
+      isolationErrors.push(`non-React imports retained: ${unexpectedImports.join(', ')}`);
+    }
+    if (![...all.imports].some((specifier) => isAllowedChartAccessReactEdge(specifier))) {
+      isolationErrors.push('React external missing from component fixture');
+    }
+    if (all.dynamicImports.size > 0) {
+      isolationErrors.push(`dynamic imports retained: ${[...all.dynamicImports].join(', ')}`);
+    }
+    if (all.emittedAssets.length > 0) {
+      isolationErrors.push(`assets emitted: ${all.emittedAssets.join(', ')}`);
+    }
+    if (all.supplierModules.length > 0) isolationErrors.push('supplier module bundled');
+    const foreignModules = [...all.modules.keys()].filter((moduleId) => (
+      !moduleId.startsWith('\0virtual:viz-03c-chart-access:')
+      && !isChartAccessArtifact(moduleId)
+    ));
+    if (foreignModules.length > 0) isolationErrors.push('foreign runtime retained');
+    isolationErrors.push(...auditChartAccessCjsClosure());
+    isolationErrors.push(...auditChartAccessDeclarationClosure());
+
+    const pureErrors = [];
+    if (pure.imports.size > 0) pureErrors.push(`imports retained: ${[...pure.imports].join(', ')}`);
+    if (pure.dynamicImports.size > 0) pureErrors.push('dynamic import retained');
+    if (pure.emittedAssets.length > 0) pureErrors.push('asset emitted');
+    if (pure.supplierModules.length > 0) pureErrors.push('supplier module bundled');
+    const pureClientModules = [...pure.modules.keys()].filter((moduleId) => (
+      moduleId.endsWith(`${CHART_ACCESS_ARTIFACT_FRAGMENT}ChartDataAccess.js`)
+    ));
+    if (pureClientModules.length > 0) pureErrors.push('client component retained by pure CSV fixture');
+
+    const rawEntries = [CHART_ACCESS_ENTRY, CHART_ACCESS_CJS_ENTRY].map((entry) => ({
+      entry,
+      size: existsSync(entry) ? statSync(entry).size : Number.POSITIVE_INFINITY,
+      limit: BUDGET[`dist/${entry.split('/').at(-1)}`],
+    }));
+    for (const { entry, size, limit } of rawEntries) {
+      if (!Number.isFinite(size)) isolationErrors.push(`${relative(ROOT, entry)} is missing`);
+      else if (size > limit) isolationErrors.push(`${relative(ROOT, entry)} is over its ${limit} B raw budget`);
+    }
+
+    const allOverBudget = all.gzip > CHART_ACCESS_FIXTURE_BUDGET;
+    const pureOverBudget = pure.gzip > CHART_ACCESS_PURE_BUDGET;
+    const failed = allOverBudget || pureOverBudget || isolationErrors.length > 0 || pureErrors.length > 0;
+    const rawSummary = rawEntries
+      .map(({ entry, size, limit }) => `${relative(ROOT, entry)} ${Number.isFinite(size) ? `${size} B` : 'missing'}/${limit} B`)
+      .join('; ');
+    console.log(
+      `ChartDataAccess all | raw entries ${rawSummary} | fixture ${all.raw} B raw / ${all.gzip} B gzip ` +
+      `(limit ${CHART_ACCESS_FIXTURE_BUDGET} B) | ` +
+      `${isolationErrors.length === 0 ? 'access-only; React external' : isolationErrors.join('; ')} | ` +
+      `${allOverBudget || isolationErrors.length > 0 ? 'FAIL' : 'PASS'}\n`,
+    );
+    console.log(
+      `ChartDataAccess pure CSV | ${pure.raw} B raw / ${pure.gzip} B gzip ` +
+      `(limit ${CHART_ACCESS_PURE_BUDGET} B) | ` +
+      `${pureErrors.length === 0 ? 'import-free; client component absent' : pureErrors.join('; ')} | ` +
+      `${pureOverBudget || pureErrors.length > 0 ? 'FAIL' : 'PASS'}\n`,
+    );
+    return failed ? 1 : 0;
+  } catch (error) {
+    console.error(`\x1b[31mChart-access fixture build failed: ${error instanceof Error ? error.message : String(error)}\x1b[0m\n`);
+    return 1;
+  }
+}
+
 if (process.argv.includes('--chart-renderers')) {
   const failures = await runChartRendererBudgets();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
+if (process.argv.includes('--chart-access')) {
+  const failures = await runChartAccessFixtureBudgets();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
+if (process.argv.includes('--chart-spec')) {
+  const failures = await runChartSpecFixtureBudget();
   process.exit(failures > 0 ? 1 : 0);
 }
 
@@ -1208,9 +1887,11 @@ for (const [relPath, limit] of Object.entries(CSS_BUDGET)) {
 }
 
 // 4. A preserveModules entry budget cannot prove named-export tree-shaking.
-// Run the three in-memory public-facade fixtures as part of every normal
+// Run the in-memory public-facade fixtures as part of every normal
 // analysis (including --skip-build), as well as via --chart-renderers alone.
 failures += await runChartRendererBudgets();
+failures += await runChartAccessFixtureBudgets();
+failures += await runChartSpecFixtureBudget();
 failures += await runMotionFixtureBudgets();
 failures += await runEffectsFixtureBudget();
 

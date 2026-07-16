@@ -40,6 +40,16 @@
       "import": "./dist/charts.js",
       "require": "./dist/charts.cjs"
     },
+    "./charts/spec": {
+      "types": "./dist/chart-spec.d.ts",
+      "import": "./dist/chart-spec.js",
+      "require": "./dist/chart-spec.cjs"
+    },
+    "./charts/access": {
+      "types": "./dist/chart-access.d.ts",
+      "import": "./dist/chart-access.js",
+      "require": "./dist/chart-access.cjs"
+    },
     "./charts/renderers": {
       "types": "./dist/chart-renderers.d.ts",
       "import": "./dist/chart-renderers.js",
@@ -156,6 +166,8 @@
     "analyze": "node scripts/analyze-bundle.mjs",
     "analyze:skip-build": "node scripts/analyze-bundle.mjs --skip-build",
     "analyze:components": "node scripts/analyze-bundle.mjs --components",
+    "analyze:chart-access": "node scripts/analyze-bundle.mjs --chart-access",
+    "analyze:chart-spec": "node scripts/analyze-bundle.mjs --chart-spec",
     "analyze:effects": "node scripts/analyze-bundle.mjs --effects",
     "effects:provenance": "node ../../scripts/effect-registry-audit.mjs",
     "lint": "pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/build-vertical-css.mjs --check",
@@ -170,6 +182,8 @@
       "./icons": "icon-entry.ts",
       "./marks": "mark-entry.ts",
       "./charts": "chart-entry.ts",
+      "./charts/spec": "chart-spec-entry.ts",
+      "./charts/access": "chart-access-entry.ts",
       "./charts/renderers": "chart-renderers-entry.ts",
       "./motion": "motion-entry.ts",
       "./effects": "effects-entry.ts"

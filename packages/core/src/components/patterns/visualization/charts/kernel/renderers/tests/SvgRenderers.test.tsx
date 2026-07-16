@@ -1,5 +1,5 @@
 import React, { act, type CSSProperties } from 'react';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createRoot, hydrateRoot, type Root } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -9,6 +9,7 @@ import { DesignSystemProvider } from '@/runtime/bootstrap';
 import { ChartFrame } from '../../ChartFrame';
 import { SvgBarRenderer } from '../SvgBarRenderer';
 import { SvgHeatMapRenderer } from '../SvgHeatMapRenderer';
+import { createSvgLineDatumKey } from '../SvgLineDatumKey';
 import { SvgLineRenderer } from '../SvgLineRenderer';
 
 const defaultResizeObserver = globalThis.ResizeObserver;
@@ -421,5 +422,312 @@ describe('React-owned SVG renderers', () => {
       firstRoot.unmount();
       secondRoot.unmount();
     });
+  });
+
+  it('explores bars with one roving focus target and an anchored accessible tooltip', async () => {
+    const changes = vi.fn();
+    const { container } = render(
+      <SvgBarRenderer
+        ariaLabel="Interactive pipeline"
+        responsive={false}
+        data={[
+          { id: 'screening', category: 'Screening', value: 12 },
+          { id: 'offer', category: 'Offer', value: 4 },
+        ]}
+        interaction={{
+          mode: 'explore',
+          onActiveChange: changes,
+          renderTooltip: ({ datum }) => datum.id === 'offer'
+            ? 0
+            : `${datum.category}: ${datum.value}`,
+        }}
+      />,
+    );
+    const screening = screen.getByRole('img', { name: 'Screening: 12' });
+    const offer = screen.getByRole('img', { name: 'Offer: 4' });
+    const chart = screen.getByRole('group', { name: 'Interactive pipeline' });
+
+    expect(chart).toHaveAttribute('data-interaction', 'explore');
+    const initialTabStops = container.querySelectorAll(
+      '[data-chart-datum-key][tabindex="0"]',
+    );
+    expect(initialTabStops).toHaveLength(1);
+    expect(initialTabStops.item(0)).toBe(screening);
+    expect(container.querySelectorAll('[data-part="interaction-target"]')).toHaveLength(2);
+
+    fireEvent.pointerOver(screening, { pointerType: 'mouse' });
+    const hoverTooltip = screen.getByRole('tooltip');
+    fireEvent.pointerOut(screening, {
+      pointerType: 'mouse',
+      relatedTarget: hoverTooltip,
+    });
+    expect(screen.getByRole('tooltip')).toBe(hoverTooltip);
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+    fireEvent.pointerOver(screening, { pointerType: 'mouse' });
+    const reopenedTooltip = screen.getByRole('tooltip');
+    fireEvent.pointerOut(screening, {
+      pointerType: 'mouse',
+      relatedTarget: reopenedTooltip,
+    });
+    fireEvent.pointerOut(reopenedTooltip, {
+      pointerType: 'mouse',
+      relatedTarget: container,
+    });
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+    fireEvent.focus(screening);
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Screening: 12');
+    expect(screening).toHaveAttribute('aria-describedby', screen.getByRole('tooltip').id);
+
+    fireEvent.keyDown(screening, { key: 'ArrowRight' });
+    await waitFor(() => expect(document.activeElement).toBe(offer));
+    const movedTabStops = container.querySelectorAll(
+      '[data-chart-datum-key][tabindex="0"]',
+    );
+    expect(movedTabStops).toHaveLength(1);
+    expect(movedTabStops.item(0)).toBe(offer);
+    expect(screen.getByRole('tooltip')).toHaveTextContent('0');
+    expect(changes).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: 'offer', datum: expect.objectContaining({ id: 'offer' }) }),
+      { input: 'keyboard', reason: 'focus' },
+    );
+  });
+
+  it('invokes select actions from delegated pointer and keyboard input', () => {
+    const action = vi.fn();
+    render(
+      <SvgBarRenderer
+        ariaLabel="Selectable stages"
+        responsive={false}
+        data={[
+          { id: 'first', category: 'First', value: 1 },
+          { id: 'second', category: 'Second', value: 2 },
+        ]}
+        interaction={{
+          mode: 'select',
+          actionLabel: 'Select stage',
+          onAction: action,
+        }}
+      />,
+    );
+    const first = screen.getByRole('button', { name: 'First: 1. Select stage' });
+    const second = screen.getByRole('button', { name: 'Second: 2. Select stage' });
+
+    fireEvent.pointerDown(second, { pointerType: 'mouse' });
+    fireEvent.click(second);
+    expect(action).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ key: 'second', datum: expect.objectContaining({ id: 'second' }) }),
+      { input: 'pointer', pointerType: 'mouse', reason: 'action' },
+    );
+
+    fireEvent.focus(first);
+    fireEvent.keyDown(first, { key: 'Enter' });
+    expect(action).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ key: 'first', datum: expect.objectContaining({ id: 'first' }) }),
+      { input: 'keyboard', reason: 'action' },
+    );
+  });
+
+  it('keeps repeated line point ids unique and interactive when dots are visually hidden', () => {
+    const { container } = render(
+      <SvgLineRenderer
+        ariaLabel="Two projections"
+        responsive={false}
+        showDots={false}
+        series={[
+          {
+            id: 'forecast',
+            label: 'Forecast',
+            points: [{ id: 'july', x: 'Jul', value: 8 }],
+          },
+          {
+            id: 'actual',
+            label: 'Actual',
+            points: [{ id: 'july', x: 'Jul', value: 7 }],
+          },
+        ]}
+        interaction={{ mode: 'explore' }}
+      />,
+    );
+    const marks = [...container.querySelectorAll('[data-part="line-point-mark"]')];
+
+    expect(marks).toHaveLength(2);
+    expect(marks.map((mark) => mark.getAttribute('data-chart-datum-key'))).toEqual([
+      createSvgLineDatumKey('forecast', 'july'),
+      createSvgLineDatumKey('actual', 'july'),
+    ]);
+    expect(new Set(marks.map((mark) => mark.getAttribute('data-chart-datum-key'))).size).toBe(2);
+    expect(container.querySelectorAll('[data-part="point"]')).toHaveLength(0);
+    expect(container.querySelectorAll('[data-part="interaction-target"]')).toHaveLength(2);
+    expect(container.querySelectorAll('[data-chart-datum-key][tabindex="0"]')).toHaveLength(1);
+  });
+
+  it('navigates heatmap cells by visual row and column', async () => {
+    const { container } = render(
+      <SvgHeatMapRenderer
+        ariaLabel="Capacity matrix"
+        responsive={false}
+        data={[
+          { id: 'r1c1', column: 'Week 1', row: 'Team A', value: 1 },
+          { id: 'r1c2', column: 'Week 2', row: 'Team A', value: 2 },
+          { id: 'r2c1', column: 'Week 1', row: 'Team B', value: 3 },
+          { id: 'r2c2', column: 'Week 2', row: 'Team B', value: 4 },
+        ]}
+        interaction={{ mode: 'explore' }}
+      />,
+    );
+    const cell = (id: string) => container.querySelector(
+      `[data-part="heatmap-cell-mark"][data-datum-id="${id}"]`,
+    ) as SVGGElement;
+
+    fireEvent.focus(cell('r1c1'));
+    fireEvent.keyDown(cell('r1c1'), { key: 'ArrowRight' });
+    await waitFor(() => expect(document.activeElement).toBe(cell('r1c2')));
+    fireEvent.keyDown(cell('r1c2'), { key: 'ArrowDown' });
+    await waitFor(() => expect(document.activeElement).toBe(cell('r2c2')));
+    const finalTabStops = container.querySelectorAll(
+      '[data-chart-datum-key][tabindex="0"]',
+    );
+    expect(finalTabStops).toHaveLength(1);
+    expect(finalTabStops.item(0)).toBe(cell('r2c2'));
+  });
+
+  it('keeps Line vertical navigation aligned to visual X when series are sparse', async () => {
+    render(
+      <SvgLineRenderer
+        ariaLabel="Sparse series"
+        responsive={false}
+        series={[
+          {
+            id: 'forecast',
+            label: 'Forecast',
+            points: [
+              { id: 'jan', x: 'Jan', value: 2 },
+              { id: 'mar', x: 'Mar', value: 4 },
+            ],
+          },
+          {
+            id: 'actual',
+            label: 'Actual',
+            points: [
+              { id: 'jan', x: 'Jan', value: 1 },
+              { id: 'feb', x: 'Feb', value: 3 },
+              { id: 'mar', x: 'Mar', value: 5 },
+            ],
+          },
+        ]}
+        interaction={{ mode: 'explore' }}
+      />,
+    );
+    const forecastMarch = screen.getByRole('img', { name: 'Forecast, Mar: 4' });
+    const actualMarch = screen.getByRole('img', { name: 'Actual, Mar: 5' });
+
+    fireEvent.focus(forecastMarch);
+    fireEvent.keyDown(forecastMarch, { key: 'ArrowDown' });
+    await waitFor(() => expect(document.activeElement).toBe(actualMarch));
+  });
+
+  it('hydrates colocated interactive renderers with stable unique tooltip ids', async () => {
+    const element = (
+      <>
+        <SvgBarRenderer
+          ariaLabel="First interactive chart"
+          responsive={false}
+          data={[{ id: 'first', category: 'First', value: 1 }]}
+          interaction={{
+            mode: 'explore',
+            defaultActiveKey: 'first',
+            renderTooltip: ({ label }) => label,
+          }}
+        />
+        <SvgBarRenderer
+          ariaLabel="Second interactive chart"
+          responsive={false}
+          data={[{ id: 'second', category: 'Second', value: 2 }]}
+          interaction={{
+            mode: 'explore',
+            defaultActiveKey: 'second',
+            renderTooltip: ({ label }) => label,
+          }}
+        />
+      </>
+    );
+    const container = document.createElement('div');
+    container.innerHTML = renderToString(element);
+    document.body.appendChild(container);
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    let root: Root | undefined;
+    const idsBefore = [...container.querySelectorAll('[role="tooltip"]')]
+      .map((tooltip) => tooltip.id);
+
+    expect(idsBefore).toHaveLength(2);
+    expect(new Set(idsBefore).size).toBe(2);
+    await act(async () => {
+      root = hydrateRoot(container, element);
+    });
+    expect([...container.querySelectorAll('[role="tooltip"]')].map((tooltip) => tooltip.id))
+      .toEqual(idsBefore);
+    expect(
+      consoleError.mock.calls.some((call) => String(call[0]).toLowerCase().includes('hydration')),
+    ).toBe(false);
+
+    await act(async () => root?.unmount());
+    container.remove();
+  });
+
+  it('routes overlapping dense hit targets to the nearest visual datum', () => {
+    const action = vi.fn();
+    const points = Array.from({ length: 20 }, (_, index) => ({
+      id: `point-${index + 1}`,
+      x: `P${index + 1}`,
+      value: 1,
+    }));
+    const { container } = render(
+      <SvgLineRenderer
+        ariaLabel="Dense selectable series"
+        width={160}
+        height={160}
+        responsive={false}
+        series={[{ id: 'dense', label: 'Dense', points }]}
+        interaction={{
+          mode: 'select',
+          actionLabel: 'Select point',
+          onAction: action,
+        }}
+      />,
+    );
+    const svg = container.querySelector('[data-part="chart-svg"]') as SVGSVGElement;
+    vi.spyOn(svg, 'getBoundingClientRect').mockReturnValue(measuredRect(160, 160));
+    const targets = [...container.querySelectorAll<SVGCircleElement>(
+      '[data-part="interaction-target"]',
+    )];
+    const firstTarget = targets[0]!;
+    const paintedLastTarget = targets[targets.length - 1]!;
+    const clientX = Number(firstTarget.getAttribute('cx'));
+    const clientY = Number(firstTarget.getAttribute('cy'));
+
+    expect(targets).toHaveLength(20);
+    expect(targets.every((target) => target.getAttribute('r') === '12')).toBe(true);
+    fireEvent.pointerDown(paintedLastTarget, {
+      pointerType: 'mouse',
+      pointerId: 12,
+      clientX,
+      clientY,
+    });
+    fireEvent.click(paintedLastTarget, { detail: 1, clientX, clientY });
+
+    expect(action).toHaveBeenCalledWith(
+      expect.objectContaining({
+        key: createSvgLineDatumKey('dense', 'point-1'),
+        datum: expect.objectContaining({
+          point: expect.objectContaining({ id: 'point-1' }),
+        }),
+      }),
+      { input: 'pointer', pointerType: 'mouse', reason: 'action' },
+    );
   });
 });

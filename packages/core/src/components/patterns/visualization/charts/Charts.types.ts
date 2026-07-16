@@ -159,31 +159,28 @@ export type ChartColorScheme =
   | 'accessible';
 
 /**
- * Colorblind-safe categorical palette using perceptually distinct hues.
- * Based on established accessible color sets (Wong, 2011). Fixed hex rather
- * than `--ds-color-*` tokens: colorblind distinctness is validated against
- * these exact values, not against whatever hue a tenant assigns to primary.
+ * Restrained legacy categorical fallback. The React-owned kernel resolves a
+ * theme-aware/provider-scoped channel instead; this concrete sequence remains
+ * for imperative families and SSR fallbacks while they migrate. It excludes
+ * raw black and bright yellow because each disappears on a supported surface.
  */
 export const ACCESSIBLE_COLORS = [
-  '#0072B2', // blue
-  '#E69F00', // orange
-  '#009E73', // bluish green
-  '#CC79A7', // reddish purple
-  '#F0E442', // yellow
-  '#56B4E9', // sky blue
-  '#D55E00', // vermilion
-  '#000000', // black
-  '#999999', // grey
-  '#661100', // dark red
+  '#2F6B9A',
+  '#A23B72',
+  '#1F7A55',
+  '#9A5700',
+  '#355CB5',
+  '#7A4595',
+  '#5F6368',
+  '#006D77',
+  '#9B4A5A',
+  '#4D6A00',
 ];
 
 /**
- * Default 10-color palette for a no-config chart. Equal to the accessible
- * Wong (2011) sequence: a rotation through primary/info/success/warning/
- * error/secondary at matching weight puts 6 distinct hues -- 3 of them
- * status-semantic (success/warning/error) -- in front of a chart the moment
- * it has 3+ series, which both reads as a rainbow and repurposes status
- * colors as arbitrary category colors.
+ * Default 10-color palette for a no-config legacy chart. Status tokens are
+ * not reused as arbitrary categories. New kernel renderers additionally map
+ * the same channel through provider-scoped light/dark variables.
  */
 export const DEFAULT_COLORS = ACCESSIBLE_COLORS;
 

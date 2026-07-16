@@ -1,7 +1,12 @@
 'use client';
 
-import { useMemo, type CSSProperties } from 'react';
+import { useId, useMemo, type CSSProperties } from 'react';
 
+import { useResolvedChartGrammar } from '../grammar';
+import { ChartInsightLayer } from '../insight/InsightLayer';
+import type { ChartInteraction } from '../interaction/ChartInteraction';
+import type { ChartInsightSpec } from '../spec';
+import { useChartInteraction } from '../interaction/useChartInteraction';
 import { useChartDimensions } from '../../hooks/use-chart-dimensions';
 import {
   buildSvgBarGeometry,
@@ -28,6 +33,9 @@ export interface SvgBarRendererProps {
   readonly maxTicks?: number;
   readonly barRadius?: number;
   readonly showValues?: boolean;
+  /** Static, app-authored annotation specs. */
+  readonly insights?: readonly ChartInsightSpec[];
+  readonly interaction?: ChartInteraction<SvgBarDatum>;
   readonly className?: string;
   readonly style?: CSSProperties;
 }
@@ -44,11 +52,14 @@ export function SvgBarRenderer({
   insets,
   bandPadding,
   maxTicks,
-  barRadius = 4,
+  barRadius,
   showValues = false,
+  insights,
+  interaction,
   className,
   style,
 }: SvgBarRendererProps): React.ReactElement {
+  const grammar = useResolvedChartGrammar();
   const { containerRef, dimensions } = useChartDimensions(width, height, responsive);
   const geometryWidth = responsive ? dimensions.width : width;
   const geometry = useMemo(
@@ -63,7 +74,86 @@ export function SvgBarRenderer({
     }),
     [bandPadding, data, geometryWidth, height, insets, maxTicks, orientation],
   );
-  const radius = Number.isFinite(barRadius) ? Math.max(0, barRadius) : 4;
+  const interactionItems = useMemo(
+    () => geometry.bars.map((bar) => {
+      const label = bar.ariaLabel ?? `${bar.category}: ${bar.valueLabel ?? bar.value}`;
+      const datum: SvgBarDatum = {
+        id: bar.id,
+        category: bar.category,
+        value: bar.value,
+        ...(bar.valueLabel === undefined ? {} : { valueLabel: bar.valueLabel }),
+        ...(bar.ariaLabel === undefined ? {} : { ariaLabel: bar.ariaLabel }),
+        ...(bar.color === undefined ? {} : { color: bar.color }),
+      };
+      return {
+        key: bar.id,
+        label,
+        datum,
+        x: bar.x + bar.width / 2,
+        y: bar.y + bar.height / 2,
+      };
+    }),
+    [geometry.bars],
+  );
+  const insightCoordinates = useMemo(() => {
+    const valueAxis = geometry.orientation === 'vertical' ? 'y' : 'x';
+    const categoryAxis = geometry.orientation === 'vertical' ? 'x' : 'y';
+    const valueAnchors = [
+      { value: 0, position: geometry.baseline },
+      ...geometry.bars.map((bar) => ({
+        value: bar.value,
+        position: geometry.orientation === 'vertical'
+          ? bar.value >= 0 ? bar.y : bar.y + bar.height
+          : bar.value >= 0 ? bar.x + bar.width : bar.x,
+      })),
+    ];
+    return {
+      valueAxis,
+      valueAnchors,
+      numericEventAxis: valueAxis,
+      numericEventAnchors: valueAnchors,
+      categoricalEventAxis: categoryAxis,
+      categoricalEventAnchors: geometry.bars.map((bar) => ({
+        key: bar.category,
+        position: geometry.orientation === 'vertical'
+          ? bar.x + bar.width / 2
+          : bar.y + bar.height / 2,
+      })),
+      datumAnchors: geometry.bars.map((bar) => ({
+        id: bar.id,
+        x: geometry.orientation === 'vertical'
+          ? bar.x + bar.width / 2
+          : bar.value >= 0 ? bar.x + bar.width : bar.x,
+        y: geometry.orientation === 'vertical'
+          ? bar.value >= 0 ? bar.y : bar.y + bar.height
+          : bar.y + bar.height / 2,
+      })),
+    } as const;
+  }, [geometry]);
+  const interactionState = useChartInteraction({
+    items: interactionItems,
+    interaction,
+    navigation: orientation === 'vertical' ? 'horizontal' : 'vertical',
+  });
+  const tooltipId = useId();
+  const activeBar = interactionState.activeKey
+    ? geometry.bars.find((bar) => bar.id === interactionState.activeKey)
+    : undefined;
+  const tooltip = interactionState.activeDatum && interaction && interaction.mode !== 'static'
+    ? interaction.renderTooltip?.(interactionState.activeDatum)
+    : undefined;
+  const grammarRadius = grammar.marks === 'human-rounded'
+    ? 8
+    : grammar.marks === 'tactile-temporal'
+      ? 5
+      : grammar.marks === 'technical-sharp'
+        ? 0
+        : 4;
+  const radius = barRadius === undefined
+    ? grammarRadius
+    : Number.isFinite(barRadius)
+      ? Math.max(0, barRadius)
+      : grammarRadius;
 
   return (
     <ChartRendererSurface
@@ -77,6 +167,15 @@ export function SvgBarRenderer({
       className={['ds-chart-renderer-bar', className].filter(Boolean).join(' ')}
       style={style}
       ownerRef={containerRef}
+      interactionMode={interactionState.mode}
+      interactionRootProps={interactionState.rootProps}
+      tooltip={tooltip}
+      tooltipId={tooltipId}
+      tooltipKey={interactionState.activeKey ?? undefined}
+      tooltipAnchor={activeBar ? {
+        x: activeBar.x + activeBar.width / 2,
+        y: activeBar.y,
+      } : undefined}
     >
       <g data-part="grid" aria-hidden="true">
         {geometry.valueTicks.map((tick) => (
@@ -133,21 +232,58 @@ export function SvgBarRenderer({
       />
 
       <g data-part="marks">
-        {geometry.bars.map((bar) => {
+        {geometry.bars.map((bar, barIndex) => {
           const paintStyle: ChartPaintStyle = {
             '--ds-chart-mark-color': bar.color ?? 'var(--ds-chart-series-1, var(--ds-color-primary))',
           };
           const accessibleLabel = bar.ariaLabel ?? `${bar.category}: ${bar.valueLabel ?? bar.value}`;
+          const datumProps = interactionState.getDatumProps(bar.id);
+          const interactive = interactionState.mode !== 'static';
+          const actionable = interactionState.mode === 'select' || interactionState.mode === 'drill';
+          const markLabel = actionable && interaction && interaction.mode !== 'static'
+            ? `${accessibleLabel}. ${interaction.actionLabel}`
+            : accessibleLabel;
+          const hitWidth = Math.max(24, bar.width);
+          const hitHeight = Math.max(24, bar.height);
+          const hitX = bar.x - (hitWidth - bar.width) / 2;
+          const hitY = bar.y - (hitHeight - bar.height) / 2;
 
           return (
             <g
               key={bar.id}
               data-part="bar-mark"
               data-datum-id={bar.id}
-              aria-label={accessibleLabel}
+              data-mark-index={barIndex % 5}
+              {...datumProps}
+              role={interactive ? actionable ? 'button' : 'img' : undefined}
+              aria-label={markLabel}
+              aria-describedby={datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false ? tooltipId : undefined}
               style={paintStyle}
             >
-              <title>{accessibleLabel}</title>
+              {!interactive ? <title>{accessibleLabel}</title> : null}
+              {interactive ? (
+                <>
+                  <rect
+                    data-part="interaction-target"
+                    x={hitX}
+                    y={hitY}
+                    width={hitWidth}
+                    height={hitHeight}
+                    fill="transparent"
+                    pointerEvents="all"
+                    aria-hidden="true"
+                  />
+                  <rect
+                    data-part="interaction-halo"
+                    x={hitX}
+                    y={hitY}
+                    width={hitWidth}
+                    height={hitHeight}
+                    rx={Math.max(radius, 4)}
+                    aria-hidden="true"
+                  />
+                </>
+              ) : null}
               <rect
                 data-part="bar"
                 x={bar.x}
@@ -166,11 +302,28 @@ export function SvgBarRenderer({
                 >
                   {bar.valueLabel ?? bar.value}
                 </text>
-              ) : null}
+              ) : (
+                <text
+                  data-part="forced-color-value-label"
+                  display="none"
+                  x={bar.valueX}
+                  y={bar.valueY}
+                  textAnchor={orientation === 'vertical' ? 'middle' : bar.value >= 0 ? 'start' : 'end'}
+                  dominantBaseline={orientation === 'horizontal' ? 'middle' : undefined}
+                  aria-hidden="true"
+                >
+                  {bar.valueLabel ?? bar.value}
+                </text>
+              )}
             </g>
           );
         })}
       </g>
+      <ChartInsightLayer
+        insights={insights}
+        plot={geometry.plot}
+        {...insightCoordinates}
+      />
     </ChartRendererSurface>
   );
 }

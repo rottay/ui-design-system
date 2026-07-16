@@ -806,6 +806,77 @@ test('runtime contract excludes type-only barrel collisions and includes the CLI
   assert.equal(contract.nonRuntimeEntrypoints.includes('./supplier-honesty-cli'), false);
 });
 
+test('chart-spec runtime contract is exact and supplier-free', () => {
+  const chartSpecExports = [
+    'CHART_GRAMMARS',
+    'CHART_GRAMMAR_IDS',
+    'CHART_GRAMMAR_REGISTRY',
+    'isChartGrammar',
+    'isChartGrammarId',
+    'isChartInsightSpec',
+    'isChartInsightSummary',
+    'resolveChartGrammar',
+  ];
+  const definition = loadSupplierContract().entrypoints['./charts/spec'];
+  assert.deepEqual(definition, {
+    exports: chartSpecExports,
+    symbols: {},
+    supplierFreeExports: chartSpecExports,
+  });
+});
+
+test('chart experience contract exposes the bounded summary without internal layers', () => {
+  const chartExports = [
+    'ChartFrame',
+    'ChartInsightSummary',
+    'resolveChartProjection',
+  ];
+  const definition = loadSupplierContract().entrypoints['./charts'];
+  assert.deepEqual(definition, {
+    exports: chartExports,
+    symbols: {},
+    supplierFreeExports: chartExports,
+  });
+  assert.equal(definition.exports.includes('ChartInsightLayer'), false);
+  assert.equal(definition.exports.includes('InsightLayer'), false);
+});
+
+test('chart-access runtime contract is exact and supplier-free', () => {
+  const accessExports = [
+    'CHART_DATA_ACCESS_CSV_MIME_TYPE',
+    'CHART_DATA_ACCESS_PAGE_SIZE_MAX',
+    'CHART_DATA_ACCESS_SUMMARY_LIMIT',
+    'ChartDataAccess',
+    'sanitizeChartDataAccessCsvFilename',
+    'serializeChartDataAccessCsv',
+  ];
+  const definition = loadSupplierContract().entrypoints['./charts/access'];
+  assert.deepEqual(definition, {
+    exports: accessExports,
+    symbols: {},
+    supplierFreeExports: accessExports,
+  });
+});
+
+test('chart-renderer runtime contract includes the public datum-key utility', () => {
+  const rendererExports = [
+    'SvgBarRenderer',
+    'SvgHeatMapRenderer',
+    'SvgLineRenderer',
+    'createSvgLineDatumKey',
+  ];
+  const definition = loadSupplierContract().entrypoints['./charts/renderers'];
+  assert.deepEqual(definition, {
+    exports: rendererExports,
+    symbols: {
+      SvgBarRenderer: ['d3'],
+      SvgHeatMapRenderer: ['d3'],
+      SvgLineRenderer: ['d3'],
+    },
+    supplierFreeExports: ['createSvgLineDatumKey'],
+  });
+});
+
 test('runtime closure follows unfortunately named files reached by an exported entry', () => {
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-runtime-closure-'));
   try {
@@ -829,11 +900,15 @@ test('runtime export inventory includes the public CLI import and every CJS cond
     entry.subpath === './supplier-honesty-cli' && entry.mode === 'import' && entry.target.endsWith('.mjs')
   )));
   const fixtures = runtimeExportFixtures(manifest);
-  assert.equal(fixtures.import.length, 11);
-  assert.equal(fixtures.require.length, 10);
+  assert.equal(fixtures.import.length, 13);
+  assert.equal(fixtures.require.length, 12);
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/supplier-honesty-cli')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts')));
+  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts/spec')));
+  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/spec')));
+  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts/access')));
+  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/access')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts/renderers')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/renderers')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/motion')));
@@ -1274,6 +1349,14 @@ test('live core graph has no false optional or zero-importer peer', () => {
   const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
   assert.equal(basename(collectSourceEntrypoints(manifest).get('./icons')), 'icon-entry.ts');
   assert.equal(basename(collectSourceEntrypoints(manifest).get('./charts')), 'chart-entry.ts');
+  assert.equal(
+    basename(collectSourceEntrypoints(manifest).get('./charts/spec')),
+    'chart-spec-entry.ts',
+  );
+  assert.equal(
+    basename(collectSourceEntrypoints(manifest).get('./charts/access')),
+    'chart-access-entry.ts',
+  );
   assert.equal(
     basename(collectSourceEntrypoints(manifest).get('./charts/renderers')),
     'chart-renderers-entry.ts',

@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useId,
   useMemo,
   useState,
   type CSSProperties,
@@ -13,6 +14,8 @@ import {
   PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
 } from '../../utils/resolve-css-color';
+import type { ChartInteraction } from '../interaction/ChartInteraction';
+import { useChartInteraction } from '../interaction/useChartInteraction';
 import {
   buildSvgHeatMapGeometry,
   type ChartGeometryInsets,
@@ -43,6 +46,7 @@ export interface SvgHeatMapRendererProps {
   readonly insets?: ChartGeometryInsets;
   readonly cellPadding?: number;
   readonly cellRadius?: number;
+  readonly interaction?: ChartInteraction<SvgHeatMapDatum>;
   readonly className?: string;
   readonly style?: CSSProperties;
 }
@@ -104,6 +108,7 @@ export function SvgHeatMapRenderer({
   insets,
   cellPadding,
   cellRadius = 3,
+  interaction,
   className,
   style,
 }: SvgHeatMapRendererProps): React.ReactElement {
@@ -123,6 +128,42 @@ export function SvgHeatMapRenderer({
     }),
     [cellPadding, data, geometryWidth, height, insets, resolvedRange, xLabels, yLabels],
   );
+  const interactionItems = useMemo(() => {
+    const columns = new Map(geometry.xTicks.map((tick, index) => [String(tick.value), index]));
+    const rows = new Map(geometry.yTicks.map((tick, index) => [String(tick.value), index]));
+    return geometry.cells.map((cell) => {
+      const label = cell.ariaLabel ?? `${cell.column}, ${cell.row}: ${cell.valueLabel ?? cell.value}`;
+      const datum: SvgHeatMapDatum = {
+        id: cell.id,
+        column: cell.column,
+        row: cell.row,
+        value: cell.value,
+        ...(cell.valueLabel === undefined ? {} : { valueLabel: cell.valueLabel }),
+        ...(cell.ariaLabel === undefined ? {} : { ariaLabel: cell.ariaLabel }),
+      };
+      return {
+        key: cell.id,
+        label,
+        datum,
+        x: cell.x + cell.width / 2,
+        y: cell.y + cell.height / 2,
+        row: rows.get(cell.row),
+        column: columns.get(cell.column),
+      };
+    });
+  }, [geometry.cells, geometry.xTicks, geometry.yTicks]);
+  const interactionState = useChartInteraction({
+    items: interactionItems,
+    interaction,
+    navigation: 'grid',
+  });
+  const tooltipId = useId();
+  const activeCell = interactionState.activeKey
+    ? geometry.cells.find((cell) => cell.id === interactionState.activeKey)
+    : undefined;
+  const tooltip = interactionState.activeDatum && interaction && interaction.mode !== 'static'
+    ? interaction.renderTooltip?.(interactionState.activeDatum)
+    : undefined;
   const radius = Number.isFinite(cellRadius) ? Math.max(0, cellRadius) : 3;
 
   return (
@@ -137,6 +178,15 @@ export function SvgHeatMapRenderer({
       className={['ds-chart-renderer-heatmap', className].filter(Boolean).join(' ')}
       style={style}
       ownerRef={containerRef}
+      interactionMode={interactionState.mode}
+      interactionRootProps={interactionState.rootProps}
+      tooltip={tooltip}
+      tooltipId={tooltipId}
+      tooltipKey={interactionState.activeKey ?? undefined}
+      tooltipAnchor={activeCell ? {
+        x: activeCell.x + activeCell.width / 2,
+        y: activeCell.y,
+      } : undefined}
     >
       <g data-part="axis" data-axis="x" aria-hidden="true">
         {geometry.xTicks.map((tick) => (
@@ -177,21 +227,100 @@ export function SvgHeatMapRenderer({
           const paintStyle: ChartCellPaintStyle = {
             '--ds-chart-cell-color': cell.cellColor,
           };
+          const datumProps = interactionState.getDatumProps(cell.id);
+          const interactive = interactionState.mode !== 'static';
+          const actionable = interactionState.mode === 'select' || interactionState.mode === 'drill';
+          const markLabel = actionable && interaction && interaction.mode !== 'static'
+            ? `${accessibleLabel}. ${interaction.actionLabel}`
+            : accessibleLabel;
+
+          if (interactive) {
+            const hitWidth = Math.max(24, cell.width);
+            const hitHeight = Math.max(24, cell.height);
+            const hitX = cell.x - (hitWidth - cell.width) / 2;
+            const hitY = cell.y - (hitHeight - cell.height) / 2;
+            return (
+              <g
+                key={cell.id}
+                data-part="heatmap-cell-mark"
+                data-datum-id={cell.id}
+                {...datumProps}
+                role={actionable ? 'button' : 'img'}
+                aria-label={markLabel}
+                aria-describedby={datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false ? tooltipId : undefined}
+                style={paintStyle}
+              >
+                <rect
+                  data-part="interaction-target"
+                  x={hitX}
+                  y={hitY}
+                  width={hitWidth}
+                  height={hitHeight}
+                  fill="transparent"
+                  pointerEvents="all"
+                  aria-hidden="true"
+                />
+                <rect
+                  data-part="interaction-halo"
+                  x={hitX}
+                  y={hitY}
+                  width={hitWidth}
+                  height={hitHeight}
+                  rx={Math.max(radius, 4)}
+                  aria-hidden="true"
+                />
+                <rect
+                  data-part="cell"
+                  data-datum-id={cell.id}
+                  x={cell.x}
+                  y={cell.y}
+                  width={cell.width}
+                  height={cell.height}
+                  rx={radius}
+                  aria-hidden="true"
+                />
+                <text
+                  data-part="forced-color-value-label"
+                  display="none"
+                  x={cell.x + cell.width / 2}
+                  y={cell.y + cell.height / 2}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  aria-hidden="true"
+                >
+                  {cell.valueLabel ?? cell.value}
+                </text>
+              </g>
+            );
+          }
+
           return (
-            <rect
-              key={cell.id}
-              data-part="cell"
-              data-datum-id={cell.id}
-              x={cell.x}
-              y={cell.y}
-              width={cell.width}
-              height={cell.height}
-              rx={radius}
-              aria-label={accessibleLabel}
-              style={paintStyle}
-            >
-              <title>{accessibleLabel}</title>
-            </rect>
+            <g key={cell.id} data-part="heatmap-cell-static">
+              <rect
+                data-part="cell"
+                data-datum-id={cell.id}
+                x={cell.x}
+                y={cell.y}
+                width={cell.width}
+                height={cell.height}
+                rx={radius}
+                aria-label={accessibleLabel}
+                style={paintStyle}
+              >
+                <title>{accessibleLabel}</title>
+              </rect>
+              <text
+                data-part="forced-color-value-label"
+                display="none"
+                x={cell.x + cell.width / 2}
+                y={cell.y + cell.height / 2}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                aria-hidden="true"
+              >
+                {cell.valueLabel ?? cell.value}
+              </text>
+            </g>
           );
         })}
       </g>

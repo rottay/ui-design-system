@@ -321,6 +321,60 @@
   --ds-chart-axis-color: var(--ds-chart-axis);
   --ds-chart-tooltip-bg: var(--ds-surface-card-bg);
   --ds-chart-tooltip-border: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-surface-card-border));
+  /* Theme-aware categorical fallbacks. Every color clears WCAG 2.2 non-text
+   * contrast (3:1) against the representative BitHire and The Management
+   * Miami card/plot surfaces. These are data colors, never status aliases.
+   * Tenant/DB-owned --ds-chart-category-* channels remain the outer override. */
+  --ds-chart-accessible-1: #2f6b9a;
+  --ds-chart-accessible-2: #a23b72;
+  --ds-chart-accessible-3: #1f7a55;
+  --ds-chart-accessible-4: #9a5700;
+  --ds-chart-accessible-5: #355cb5;
+  --ds-chart-accessible-6: #7a4595;
+  --ds-chart-accessible-7: #5f6368;
+  --ds-chart-accessible-8: #006d77;
+  --ds-chart-accessible-9: #9b4a5a;
+  --ds-chart-accessible-10: #4d6a00;
+  --ds-chart-default-1: #0f766e;
+  --ds-chart-default-2: #8c6d46;
+  --ds-chart-default-3: #b24d3a;
+  --ds-chart-default-4: #296f68;
+  --ds-chart-default-5: #735838;
+  --ds-chart-default-6: #963f31;
+  --ds-chart-default-7: #3d756f;
+  --ds-chart-default-8: #7d6140;
+  --ds-chart-default-9: #a04435;
+  --ds-chart-default-10: #5e5a52;
+  --ds-chart-monochrome-1: #2c5587;
+  --ds-chart-monochrome-2: #3a6fb0;
+  --ds-chart-monochrome-3: #21528b;
+  --ds-chart-monochrome-4: #4b78ad;
+  --ds-chart-monochrome-5: #315f97;
+  --ds-chart-monochrome-6: #103968;
+  --ds-chart-monochrome-7: #526f91;
+  --ds-chart-monochrome-8: #37699f;
+  --ds-chart-monochrome-9: #274b77;
+  --ds-chart-monochrome-10: #5a789a;
+  --ds-chart-pastel-1: #527aa3;
+  --ds-chart-pastel-2: #9b557a;
+  --ds-chart-pastel-3: #3d8065;
+  --ds-chart-pastel-4: #9a652b;
+  --ds-chart-pastel-5: #5c6fb0;
+  --ds-chart-pastel-6: #80628f;
+  --ds-chart-pastel-7: #686868;
+  --ds-chart-pastel-8: #3b777c;
+  --ds-chart-pastel-9: #95606a;
+  --ds-chart-pastel-10: #62752e;
+  --ds-chart-vibrant-1: #006b63;
+  --ds-chart-vibrant-2: #a12b68;
+  --ds-chart-vibrant-3: #007a4d;
+  --ds-chart-vibrant-4: #a65000;
+  --ds-chart-vibrant-5: #244fc0;
+  --ds-chart-vibrant-6: #702a91;
+  --ds-chart-vibrant-7: #4e545b;
+  --ds-chart-vibrant-8: #00727b;
+  --ds-chart-vibrant-9: #a3364f;
+  --ds-chart-vibrant-10: #486900;
   --ds-skeleton-bg: linear-gradient(
     90deg,
     var(--ds-surface-panel-bg) 25%,
@@ -421,6 +475,59 @@
   --ds-home-panel-border: var(--ds-command-home-panel-border);
   --ds-home-panel-shadow: var(--ds-command-home-panel-shadow);
   --ds-home-compact-action-height: var(--ds-command-home-compact-action-height);
+}
+
+:where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
+  --ds-chart-accessible-1: #7db7e8;
+  --ds-chart-accessible-2: #f08cb7;
+  --ds-chart-accessible-3: #62d2a2;
+  --ds-chart-accessible-4: #f3b766;
+  --ds-chart-accessible-5: #8faeff;
+  --ds-chart-accessible-6: #c59add;
+  --ds-chart-accessible-7: #c5c7c9;
+  --ds-chart-accessible-8: #65cdd5;
+  --ds-chart-accessible-9: #e59aa8;
+  --ds-chart-accessible-10: #b7d86a;
+  --ds-chart-default-1: #65cfc1;
+  --ds-chart-default-2: #d5b58a;
+  --ds-chart-default-3: #f08a74;
+  --ds-chart-default-4: #8addd2;
+  --ds-chart-default-5: #e2c49b;
+  --ds-chart-default-6: #f6a18f;
+  --ds-chart-default-7: #52b8ac;
+  --ds-chart-default-8: #c9a575;
+  --ds-chart-default-9: #e77a64;
+  --ds-chart-default-10: #beb8ad;
+  --ds-chart-monochrome-1: #6bb5f5;
+  --ds-chart-monochrome-2: #8cc8fa;
+  --ds-chart-monochrome-3: #3b9af0;
+  --ds-chart-monochrome-4: #a0d0fa;
+  --ds-chart-monochrome-5: #5aaaf2;
+  --ds-chart-monochrome-6: #b7dafb;
+  --ds-chart-monochrome-7: #72b9f4;
+  --ds-chart-monochrome-8: #93c9f7;
+  --ds-chart-monochrome-9: #4d9fe8;
+  --ds-chart-monochrome-10: #c4e1fc;
+  --ds-chart-pastel-1: #94bfe3;
+  --ds-chart-pastel-2: #e7a7c2;
+  --ds-chart-pastel-3: #8bd0b1;
+  --ds-chart-pastel-4: #e5be87;
+  --ds-chart-pastel-5: #aabbf0;
+  --ds-chart-pastel-6: #c5aad2;
+  --ds-chart-pastel-7: #c9c9c9;
+  --ds-chart-pastel-8: #8dc9cd;
+  --ds-chart-pastel-9: #d5a8b0;
+  --ds-chart-pastel-10: #bed28b;
+  --ds-chart-vibrant-1: #55dccb;
+  --ds-chart-vibrant-2: #ff73b0;
+  --ds-chart-vibrant-3: #4de09e;
+  --ds-chart-vibrant-4: #ffb44d;
+  --ds-chart-vibrant-5: #7f9fff;
+  --ds-chart-vibrant-6: #d38bf1;
+  --ds-chart-vibrant-7: #d1d5db;
+  --ds-chart-vibrant-8: #45d5e1;
+  --ds-chart-vibrant-9: #ff8194;
+  --ds-chart-vibrant-10: #b5e34b;
 }
 
 @keyframes ds-surface-enter {

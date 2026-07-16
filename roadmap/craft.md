@@ -363,6 +363,59 @@ SSR/hydration, responsive/fixed, reduced-motion and forced-colors contracts must
 first application canary is BitHire Teams Performance (placements by sprint + revenue trend) with a
 declared phone summary projection; it must not branch on tenant slug or hostname.
 
+#### Owner continuation — VIZ-03 semantic grammar and interaction pilot (2026-07-16)
+
+VIZ-03 continues the additive visualization kernel and now has a locally implemented, focused-test
+baseline; this evidence does **not** declare DS-IMP-099/100/101 or the visualization program complete.
+The server-safe, JSON-only `@rottay/design-system/charts/spec` boundary contains the closed first-party
+`neutral | bithire | platform | evnto` ChartGrammar registry and typed insight contracts without React,
+browser, D3, tenant-runtime or renderer imports. Grammar owns visual posture and separation of the
+categorical, sequential, diverging and status channels; the application continues to own the question,
+data, units, aggregation, thresholds, annotations and phone priority. The registry is immutable and
+JSON-round-trippable; unknown/hostile grammar input resolves to neutral, while non-finite values,
+inverted bands, excess keys and generated summaries without provenance fail closed in focused tests.
+
+Runtime personality is also implemented without identity branching. The shared resolver applies
+`DEFAULT -> vertical -> (BrandTheme.charts | ProductProfile.chart) -> tenant DB chart`, where the
+BrandTheme path excludes legacy ProductProfile leakage and the final tenant layer remains the bounded
+DB-owned override. Provider-root fixtures exercise BitHire and The Management with the same component
+tree and data but distinct chart finish; neither the resolver, grammar nor renderer reads a tenant slug
+or hostname. Bar and Line consume the grammar/personality defaults, and D3 remains geometry-only.
+
+The palette baseline now resolves five bounded schemes through ten provider-scoped category channels,
+keeps status colors out of arbitrary categorical series, and lets tenant-owned
+`--ds-chart-category-*` channels retain final precedence. The light/dark contrast matrix is executable:
+all audited scheme entries clear 3:1 against their chart surfaces, with a measured minimum of 4.00:1;
+raw black/yellow is not the accessible default.
+
+Accessible interaction is implemented for the React-owned Bar, Line and HeatMap pilots through one
+`static | explore | select | drill` state contract. Hover, visible/roving focus, keyboard, mouse,
+touch/pen pinning, Enter/Space, Escape/reset, outside dismissal and controlled/uncontrolled state
+converge on opaque datum keys. Scroll gestures do not create phantom touch selections, synthesized AT
+clicks remain operable, dense overlapping marks use nearest visual geometry, RTL navigation uses the
+visual grid, and static mode does not acquire interactive hover/motion. Focus targets, reduced-motion,
+high-contrast and forced-colors fallbacks have focused DOM/CSS coverage; real-browser certification is
+still an exit gate below.
+
+The initial non-interactive `InsightLayer` is implemented for app-declared target, band, direct-label
+and event facts using React-owned SVG plus pure geometry. Invalid/out-of-range facts fail closed,
+direct labels require an unambiguous datum, and `ChartInsightSummary` renders only app-owned copy while
+stamping mode, source IDs and method provenance. The focused `@rottay/design-system/charts/access`
+companion adds at most five summary facts plus an on-demand table capped at 50 rows per page; the table
+is absent from the DOM while closed, labels remain app-owned/localizable, and close/Escape returns
+focus. Full-data CSV export uses CRLF/RFC-style quoting, neutralizes spreadsheet formulas after leading
+whitespace, sanitizes the filename and exposes an injectable downloader.
+
+Focused grammar, hostile-input, personality SSR/provider-root, palette-contrast, interaction,
+renderer, insight, data-access/CSV and public supplier-contract tests are green locally, as is the
+package TypeScript gate. Release acceptance remains fail-closed and open: brush/zoom, the complete
+analytical-purpose/insight catalog and production drill workflows are not implemented; real-browser
+assistive-technology and forced-colors canaries (including 200% zoom and 360/768/1280 postures) are not
+yet certified. Installed-tarball ESM/CJS/TypeScript proof and final isolated/transitive bundle budgets
+must also pass before release/adoption is claimed. The BitHire Teams Performance canary may remove its
+visual hardcodes only after those gates; no hostname-specific CSS or tenant-specific component branch
+is permitted.
+
 #### Owner continuation — MOT-01 semantic motion and runtime policy (2026-07-16)
 
 MOT-01 opens the first bounded Phase-2B motion slice without reimplementing the completed unit,

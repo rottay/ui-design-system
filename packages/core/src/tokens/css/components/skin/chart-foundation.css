@@ -263,9 +263,210 @@
   }
 }
 
+/* VIZ-03 — bounded summary plus an on-demand paged table. The complete data
+ * set is never carried in hidden DOM; this skin remains intrinsically narrow. */
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access'] {
+  display: grid;
+  gap: var(--ds-spacing-3);
+  min-inline-size: 0;
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-summary'] {
+  display: grid;
+  gap: var(--ds-spacing-2);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-summary-heading'] {
+  margin: 0;
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-heading);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-facts'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+  gap: var(--ds-spacing-2);
+  margin: 0;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-fact'] {
+  display: grid;
+  gap: var(--ds-spacing-1);
+  min-inline-size: 0;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-bg-secondary);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-fact'] dt {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-fact'] dd {
+  min-inline-size: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--ds-font-size-sm);
+  font-variant-numeric: var(--ds-numeric-tabular);
+  font-weight: 650;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-trigger'],
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-action'],
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] button {
+  inline-size: fit-content;
+  min-block-size: 2.25rem;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-bg-secondary);
+  color: var(--ds-color-text-primary);
+  font: inherit;
+  font-size: var(--ds-font-size-sm);
+  cursor: pointer;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-trigger']:focus-visible,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-action']:focus-visible,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] button:focus-visible,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table-scroll']:focus-visible {
+  outline: 3px solid var(--ds-color-focus, var(--ds-color-primary));
+  outline-offset: 2px;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (hover: hover) {
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-trigger']:hover,
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-action']:hover,
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-pagination'] button:not(:disabled):hover {
+    border-color: var(--ds-color-primary);
+    background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-color-bg-secondary));
+  }
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-disclosure'] {
+  display: grid;
+  gap: var(--ds-spacing-3);
+  min-inline-size: 0;
+  padding: var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-primary);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-actions'],
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table-scroll'] {
+  max-block-size: min(28rem, 70vh);
+  min-inline-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] {
+  inline-size: 100%;
+  min-inline-size: max-content;
+  border-collapse: collapse;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] caption {
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  text-align: start;
+  font-weight: 650;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] th,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] td {
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border-block-start: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  text-align: start;
+  vertical-align: top;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] th {
+  position: sticky;
+  z-index: 1;
+  inset-block-start: 0;
+  background: var(--ds-color-bg-secondary);
+  font-weight: 650;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-empty'] {
+  margin: 0;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+}
+
+@media (forced-colors: active) {
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-fact'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-disclosure'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-table-scroll'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-trigger'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-action'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-pagination'] button {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}
+
 /* VIZ-02 — React-owned SVG renderer anatomy. D3 computes geometry only; all
  * visible nodes stay in React so updates cannot erase semantics or focus. */
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] {
+  position: relative;
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-color-text-secondary);
@@ -340,17 +541,203 @@
   fill: var(--ds-chart-cell-color, var(--ds-color-primary));
 }
 
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='bar-mark'],
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point'],
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell'] {
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='bar-mark'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='point'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='cell'] {
   transition: opacity var(--ds-motion-duration-fast) ease,
     filter var(--ds-motion-duration-fast) ease;
 }
 
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='bar-mark']:hover,
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point']:hover,
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell']:hover {
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-chart-datum-key] {
+  outline: none;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='interaction-target'] {
+  cursor: default;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction='select']
+  [data-part='interaction-target'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction='drill']
+  [data-part='interaction-target'] {
+  cursor: pointer;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='interaction-halo'] {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 3;
+  opacity: 0;
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+  transition: opacity var(--ds-motion-duration-fast) ease;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-chart-datum-key][data-active='true'] > [data-part='interaction-halo'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-chart-datum-key][data-focused='true'] > [data-part='interaction-halo'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-chart-datum-key]:focus-visible > [data-part='interaction-halo'] {
+  stroke: var(--ds-color-focus, var(--ds-color-primary));
+  opacity: 1;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  > [data-part='interaction-tooltip'] {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: var(--ds-chart-tooltip-y, 0%);
+  left: var(--ds-chart-tooltip-x, 0%);
+  max-inline-size: min(18rem, calc(100% - var(--ds-spacing-4)));
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px solid var(--ds-chart-tooltip-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-chart-tooltip-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-color-text-primary);
+  box-shadow: var(--ds-shadow-lg);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-body);
+  pointer-events: auto;
+  transform: translate(-50%, calc(-100% - var(--ds-spacing-2)));
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  > [data-part='interaction-tooltip'][data-align='start'] {
+  transform: translate(0, calc(-100% - var(--ds-spacing-2)));
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  > [data-part='interaction-tooltip'][data-align='end'] {
+  transform: translate(-100%, calc(-100% - var(--ds-spacing-2)));
+}
+
+/* VIZ-03 — vertical grammar is presentation posture, never data semantics.
+ * The runtime stamps the resolved vertical recipe on each standalone renderer,
+ * so the same component tree remains recognizable outside ChartFrame too. */
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='light-sparse']
+  [data-part='grid-line'] {
+  opacity: 0.42;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='light-sparse']
+  [data-part='grid-line']:nth-child(even) {
+  opacity: 0;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='precise-compact']
+  [data-part='grid-line'] {
+  opacity: 0.72;
+  stroke-dasharray: 2 2;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='soft-temporal']
+  [data-part='grid-line'] {
+  opacity: 0.52;
+  stroke-dasharray: 1 4;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='border-led']
+  [data-part='baseline'] {
+  stroke-width: 1.5;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='high-contrast-compact']
+  [data-part='baseline'] {
+  stroke-width: 1.5;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='high-contrast-compact']
+  [data-part='axis-tick-label'] {
+  font-family: var(--ds-font-family-mono, var(--ds-font-family-body));
+  font-size: calc(var(--ds-font-size-xs) * 0.94);
+  font-weight: 600;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='soft-editorial']
+  [data-part='axis-tick-label'] {
+  letter-spacing: 0.01em;
+}
+
+.ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'][data-chart-marks='human-rounded']
+  [data-part='line'] {
+  stroke-linecap: round;
+  stroke-width: 2.25;
+}
+
+.ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'][data-chart-marks='technical-sharp']
+  [data-part='line'] {
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 1.5;
+}
+
+.ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'][data-chart-marks='tactile-temporal']
+  [data-part='line'] {
+  stroke-width: 2.5;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='bar-mark']:hover,
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='point']:hover,
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='cell']:hover {
   opacity: 0.82;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='forced-color-value-label'] {
+  display: none;
+}
+
+/* VIZ-03D — static InsightLayer. Geometry and app-owned labels stay in SVG;
+ * the layer never captures pointer or keyboard interaction. */
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-layer'] {
+  pointer-events: none;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-rule'] {
+  stroke: var(--ds-chart-insight-color, var(--ds-color-text-primary));
+  stroke-dasharray: 4 3;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'] {
+  fill: color-mix(in srgb, var(--ds-chart-insight-color, var(--ds-color-primary)) 16%, transparent);
+  stroke: var(--ds-chart-insight-color, var(--ds-color-primary));
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-anchor'] {
+  fill: var(--ds-chart-insight-color, var(--ds-color-text-primary));
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-label'] {
+  fill: var(--ds-chart-insight-color, var(--ds-color-text-primary));
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+  unicode-bidi: plaintext;
+}
+
+:where([dir='rtl']) .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='insight-label'] {
+  direction: rtl;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -358,6 +745,23 @@
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point'],
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell'] {
     transition: none;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-part='interaction-halo'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    > [data-part='interaction-tooltip'] {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-chart-datum-key][data-active='true'] > [data-part='interaction-halo'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-chart-datum-key]:focus-visible > [data-part='interaction-halo'] {
+    stroke-width: 4;
   }
 }
 
@@ -378,5 +782,75 @@
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'] [data-part='area'] {
     fill: transparent;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='1'] [data-part='line'] {
+    stroke-dasharray: 8 3;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='2'] [data-part='line'] {
+    stroke-dasharray: 2 3;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='3'] [data-part='line'] {
+    stroke-dasharray: 10 3 2 3;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='4'] [data-part='line'] {
+    stroke-dasharray: 1 3;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-part='forced-color-value-label'] {
+    display: block;
+    fill: Canvas;
+    stroke: CanvasText;
+    stroke-width: 3;
+    paint-order: stroke fill;
+    font-family: var(--ds-font-family-body);
+    font-size: var(--ds-font-size-xs);
+    font-weight: 700;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-rule'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'] {
+    stroke: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'] {
+    fill: Highlight;
+    fill-opacity: 0.2;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-anchor'] {
+    fill: Highlight;
+    stroke: Canvas;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-label'] {
+    fill: CanvasText;
+    stroke: Canvas;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-part='interaction-halo'] {
+    stroke: Highlight;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    > [data-part='interaction-tooltip'] {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
   }
 }

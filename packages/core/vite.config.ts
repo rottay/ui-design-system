@@ -47,6 +47,8 @@ export default defineConfig({
         icons: resolve(__dirname, 'src/icon-entry.ts'),
         marks: resolve(__dirname, 'src/mark-entry.ts'),
         charts: resolve(__dirname, 'src/chart-entry.ts'),
+        'chart-spec': resolve(__dirname, 'src/chart-spec-entry.ts'),
+        'chart-access': resolve(__dirname, 'src/chart-access-entry.ts'),
         'chart-renderers': resolve(__dirname, 'src/chart-renderers-entry.ts'),
         motion: resolve(__dirname, 'src/motion-entry.ts'),
         effects: resolve(__dirname, 'src/effects-entry.ts'),

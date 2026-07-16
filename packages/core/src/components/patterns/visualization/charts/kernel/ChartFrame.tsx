@@ -11,11 +11,17 @@
 
 import {
   useId,
+  useMemo,
   type CSSProperties,
   type ReactNode,
 } from 'react';
 
 import { useResponsive } from '@/runtime/responsive';
+import { useResolvedChartPersonality } from '@/runtime/personality';
+import {
+  resolveChartSeriesVariables,
+  useResolvedChartGrammar,
+} from './grammar';
 import {
   resolveChartProjection,
   type ChartDeviceClass,
@@ -110,6 +116,8 @@ export function ChartFrame(props: ChartFrameProps): React.ReactElement {
   const questionId = useId();
   const descriptionId = useId();
   const { deviceClass: responsiveDeviceClass } = useResponsive();
+  const grammar = useResolvedChartGrammar();
+  const chartPersonality = useResolvedChartPersonality();
   const deviceClass = deviceClassOverride ?? responsiveDeviceClass;
   const resolvedView = resolveChartProjection(projection, deviceClass);
   const state = props.state ?? 'ready';
@@ -120,6 +128,14 @@ export function ChartFrame(props: ChartFrameProps): React.ReactElement {
   ]);
   const frameClassName = ['ds-chart-frame', className].filter(Boolean).join(' ');
   const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  const colorScheme = chartPersonality.colorScheme ?? 'default';
+  const frameStyle = useMemo<CSSProperties>(
+    () => ({
+      ...resolveChartSeriesVariables(colorScheme),
+      ...style,
+    }),
+    [colorScheme, style],
+  );
 
   return (
     <section
@@ -129,10 +145,22 @@ export function ChartFrame(props: ChartFrameProps): React.ReactElement {
       data-device-class={deviceClass}
       data-projection-mode={resolvedView.mode}
       data-renderer-id={resolvedView.rendererId}
+      data-chart-grammar={grammar.id}
+      data-chart-posture={grammar.posture}
+      data-chart-grid={grammar.grid}
+      data-chart-axes={grammar.axes}
+      data-chart-marks={grammar.marks}
+      data-chart-annotations={grammar.annotations}
+      data-chart-motion={grammar.motion}
+      data-chart-color-scheme={colorScheme}
+      data-chart-line-style={chartPersonality.lineStyle}
+      data-chart-show-dots={chartPersonality.showDots ? 'true' : 'false'}
+      data-chart-gradient-fill={chartPersonality.useGradientFill ? 'true' : 'false'}
+      data-chart-tooltip-style={chartPersonality.tooltipStyle}
       aria-labelledby={titleId}
       aria-describedby={describedBy}
       aria-busy={state === 'loading' ? true : undefined}
-      style={style}
+      style={frameStyle}
     >
       <header data-part="header">
         <div data-part="copy">

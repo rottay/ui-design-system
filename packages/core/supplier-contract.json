@@ -4217,19 +4217,64 @@
     "./charts": {
       "exports": [
         "ChartFrame",
+        "ChartInsightSummary",
         "resolveChartProjection"
       ],
       "symbols": {},
       "supplierFreeExports": [
         "ChartFrame",
+        "ChartInsightSummary",
         "resolveChartProjection"
+      ]
+    },
+    "./charts/spec": {
+      "exports": [
+        "CHART_GRAMMARS",
+        "CHART_GRAMMAR_IDS",
+        "CHART_GRAMMAR_REGISTRY",
+        "isChartGrammar",
+        "isChartGrammarId",
+        "isChartInsightSpec",
+        "isChartInsightSummary",
+        "resolveChartGrammar"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "CHART_GRAMMARS",
+        "CHART_GRAMMAR_IDS",
+        "CHART_GRAMMAR_REGISTRY",
+        "isChartGrammar",
+        "isChartGrammarId",
+        "isChartInsightSpec",
+        "isChartInsightSummary",
+        "resolveChartGrammar"
+      ]
+    },
+    "./charts/access": {
+      "exports": [
+        "CHART_DATA_ACCESS_CSV_MIME_TYPE",
+        "CHART_DATA_ACCESS_PAGE_SIZE_MAX",
+        "CHART_DATA_ACCESS_SUMMARY_LIMIT",
+        "ChartDataAccess",
+        "sanitizeChartDataAccessCsvFilename",
+        "serializeChartDataAccessCsv"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "CHART_DATA_ACCESS_CSV_MIME_TYPE",
+        "CHART_DATA_ACCESS_PAGE_SIZE_MAX",
+        "CHART_DATA_ACCESS_SUMMARY_LIMIT",
+        "ChartDataAccess",
+        "sanitizeChartDataAccessCsvFilename",
+        "serializeChartDataAccessCsv"
       ]
     },
     "./charts/renderers": {
       "exports": [
         "SvgBarRenderer",
         "SvgHeatMapRenderer",
-        "SvgLineRenderer"
+        "SvgLineRenderer",
+        "createSvgLineDatumKey"
       ],
       "symbols": {
         "SvgBarRenderer": [
@@ -4242,7 +4287,9 @@
           "d3"
         ]
       },
-      "supplierFreeExports": []
+      "supplierFreeExports": [
+        "createSvgLineDatumKey"
+      ]
     },
     "./motion": {
       "exports": [

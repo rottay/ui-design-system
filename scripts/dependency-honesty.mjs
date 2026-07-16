@@ -3779,12 +3779,14 @@ export async function auditPackedArtifact(root = coreRoot) {
       `import { BrandMark, CloudServiceMark } from ${JSON.stringify(`${packedManifest.name}/marks`)};\n` +
       `import {\n` +
       `  ChartFrame,\n` +
+      `  ChartInsightSummary,\n` +
       `  resolveChartProjection,\n` +
       `  type ChartAlternateProjectionView,\n` +
       `  type ChartDeviceClass,\n` +
       `  type ChartFrameHeadingLevel,\n` +
       `  type ChartFrameProps,\n` +
       `  type ChartFrameStatus,\n` +
+      `  type ChartInsightSummaryProps,\n` +
       `  type ChartFullProjectionView,\n` +
       `  type ChartMicroProjectionView,\n` +
       `  type ChartPhoneProjectionView,\n` +
@@ -3795,15 +3797,72 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  type ChartTopNProjectionView,\n` +
       `} from ${JSON.stringify(`${packedManifest.name}/charts`)};\n` +
       `import {\n` +
+      `  CHART_GRAMMARS,\n` +
+      `  CHART_GRAMMAR_IDS,\n` +
+      `  CHART_GRAMMAR_REGISTRY,\n` +
+      `  isChartGrammar,\n` +
+      `  isChartGrammarId,\n` +
+      `  isChartInsightSpec,\n` +
+      `  isChartInsightSummary,\n` +
+      `  resolveChartGrammar,\n` +
+      `  type ChartAnnotationPosture,\n` +
+      `  type ChartAxisPosture,\n` +
+      `  type ChartBandInsightSpec,\n` +
+      `  type ChartCategoricalPaletteReference,\n` +
+      `  type ChartDirectLabelInsightSpec,\n` +
+      `  type ChartDivergingPaletteReference,\n` +
+      `  type ChartEventInsightSpec,\n` +
+      `  type ChartGrammar,\n` +
+      `  type ChartGrammarChannels,\n` +
+      `  type ChartGrammarId,\n` +
+      `  type ChartGrammarMotionPosture,\n` +
+      `  type ChartGrammarPosture,\n` +
+      `  type ChartGridPosture,\n` +
+      `  type ChartInsightProvenance,\n` +
+      `  type ChartInsightSpec,\n` +
+      `  type ChartInsightSummary as ChartInsightSummarySpec,\n` +
+      `  type ChartMarkPosture,\n` +
+      `  type ChartSequentialPaletteReference,\n` +
+      `  type ChartStatusPaletteReference,\n` +
+      `  type ChartTargetInsightSpec,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/charts/spec`)};\n` +
+      `import {\n` +
+      `  CHART_DATA_ACCESS_CSV_MIME_TYPE,\n` +
+      `  CHART_DATA_ACCESS_PAGE_SIZE_MAX,\n` +
+      `  CHART_DATA_ACCESS_SUMMARY_LIMIT,\n` +
+      `  ChartDataAccess,\n` +
+      `  sanitizeChartDataAccessCsvFilename,\n` +
+      `  serializeChartDataAccessCsv,\n` +
+      `  type ChartDataAccessCellValue,\n` +
+      `  type ChartDataAccessColumn,\n` +
+      `  type ChartDataAccessCsvDownload,\n` +
+      `  type ChartDataAccessCsvFile,\n` +
+      `  type ChartDataAccessLabels,\n` +
+      `  type ChartDataAccessPageStatus,\n` +
+      `  type ChartDataAccessProps,\n` +
+      `  type ChartDataAccessSummaryFact,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/charts/access`)};\n` +
+      `import {\n` +
+      `  createSvgLineDatumKey,\n` +
       `  SvgBarRenderer,\n` +
       `  SvgHeatMapRenderer,\n` +
       `  SvgLineRenderer,\n` +
+      `  type ChartActionInteraction,\n` +
+      `  type ChartActiveDatum,\n` +
+      `  type ChartExploreInteraction,\n` +
       `  type ChartGeometryInsets,\n` +
+      `  type ChartInteraction,\n` +
+      `  type ChartInteractionMeta,\n` +
+      `  type ChartInteractionMode,\n` +
+      `  type ChartInteractionPointerType,\n` +
+      `  type ChartInteractionReason,\n` +
+      `  type ChartStaticInteraction,\n` +
       `  type SvgBarDatum,\n` +
       `  type SvgBarRendererProps,\n` +
       `  type SvgHeatMapDatum,\n` +
       `  type SvgHeatMapRendererProps,\n` +
       `  type SvgLineCurve,\n` +
+      `  type SvgLineInteractionDatum,\n` +
       `  type SvgLinePoint,\n` +
       `  type SvgLineRendererProps,\n` +
       `  type SvgLineSeries,\n` +
@@ -3889,12 +3948,53 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  ChartSummaryProjectionView, ChartTopNProjectionView,\n` +
       `];\n` +
       `const packedChartTypes = null as unknown as PackedChartTypes;\n` +
+      `const chartGrammarId: ChartGrammarId = 'bithire';\n` +
+      `const chartGrammar: ChartGrammar = resolveChartGrammar(chartGrammarId);\n` +
+      `const chartInsight: ChartInsightSpec = { id: 'target', type: 'target', value: 42, label: 'Target' };\n` +
+      `const chartSummary: ChartInsightSummarySpec = { id: 'summary', mode: 'computed', text: 'On target', provenance: { sourceIds: ['packed-source'], methodId: 'packed-method' } };\n` +
+      `const chartInsightSummaryProps: ChartInsightSummaryProps = { summary: chartSummary };\n` +
+      `type PackedChartSpecTypes = [\n` +
+      `  ChartAnnotationPosture, ChartAxisPosture, ChartBandInsightSpec,\n` +
+      `  ChartCategoricalPaletteReference, ChartDirectLabelInsightSpec,\n` +
+      `  ChartDivergingPaletteReference, ChartEventInsightSpec, ChartGrammarChannels,\n` +
+      `  ChartGrammarMotionPosture, ChartGrammarPosture, ChartGridPosture,\n` +
+      `  ChartInsightProvenance, ChartMarkPosture, ChartSequentialPaletteReference,\n` +
+      `  ChartStatusPaletteReference, ChartTargetInsightSpec,\n` +
+      `];\n` +
+      `const packedChartSpecTypes = null as unknown as PackedChartSpecTypes;\n` +
+      `const chartSpecValues = [CHART_GRAMMARS, CHART_GRAMMAR_IDS, CHART_GRAMMAR_REGISTRY, isChartGrammar, isChartGrammarId, isChartInsightSpec, isChartInsightSummary];\n` +
+      `interface PackedAccessRow { readonly id: string; readonly label: string; readonly value: number; }\n` +
+      `const accessRows: readonly PackedAccessRow[] = [{ id: 'row-1', label: 'Packed', value: 1 }];\n` +
+      `const accessColumns = [\n` +
+      `  { id: 'label', label: 'Label', getValue: (row: PackedAccessRow) => row.label },\n` +
+      `  { id: 'value', label: 'Value', getValue: (row: PackedAccessRow) => row.value },\n` +
+      `] as const satisfies readonly [ChartDataAccessColumn<PackedAccessRow>, ...ChartDataAccessColumn<PackedAccessRow>[]];\n` +
+      `const accessSummary = [{ id: 'fact-1', label: 'Total', value: '1' }] satisfies readonly ChartDataAccessSummaryFact[];\n` +
+      `const accessLabels: ChartDataAccessLabels = { summaryHeading: 'Summary', openTable: 'Open table', closeTable: 'Close table', exportCsv: 'Export CSV', tableCaption: 'Packed data', previousPage: 'Previous', nextPage: 'Next', emptyTable: 'No data', pageStatus: ({ page, pageCount }) => \`Page \${page} of \${pageCount}\` };\n` +
+      `const accessDownload: ChartDataAccessCsvDownload = () => undefined;\n` +
+      `const accessProps = { summary: accessSummary, columns: accessColumns, rows: accessRows, getRowKey: (row: PackedAccessRow) => row.id, labels: accessLabels, csvFilename: 'packed.csv', downloadCsv: accessDownload } satisfies ChartDataAccessProps<PackedAccessRow>;\n` +
+      `const accessPageStatus: ChartDataAccessPageStatus = { page: 1, pageCount: 1, firstRow: 1, lastRow: 1, totalRows: 1 };\n` +
+      `const accessCell: ChartDataAccessCellValue = accessRows.length;\n` +
+      `const accessFile: ChartDataAccessCsvFile = { content: serializeChartDataAccessCsv(accessRows, accessColumns), filename: sanitizeChartDataAccessCsvFilename('packed.csv'), mimeType: CHART_DATA_ACCESS_CSV_MIME_TYPE, rowCount: accessRows.length };\n` +
+      `const accessValues = [CHART_DATA_ACCESS_CSV_MIME_TYPE, CHART_DATA_ACCESS_PAGE_SIZE_MAX, CHART_DATA_ACCESS_SUMMARY_LIMIT, ChartDataAccess, sanitizeChartDataAccessCsvFilename, serializeChartDataAccessCsv];\n` +
       `const rendererInsets: ChartGeometryInsets = { top: 8, right: 8, bottom: 24, left: 32 };\n` +
       `const barData: readonly SvgBarDatum[] = [{ id: 'bar', category: 'A', value: 1 }];\n` +
       `const heatData: readonly SvgHeatMapDatum[] = [{ id: 'cell', column: 'A', row: 'B', value: 1 }];\n` +
       `const lineX: SvgLineXValue = 'A';\n` +
       `const linePoint: SvgLinePoint = { id: 'point', x: lineX, value: 1 };\n` +
       `const lineSeries: readonly SvgLineSeries[] = [{ id: 'line', label: 'Line', points: [linePoint] }];\n` +
+      `const lineInteractionDatum: SvgLineInteractionDatum = { series: { id: 'line', label: 'Line' }, point: linePoint };\n` +
+      `const lineDatumKey = createSvgLineDatumKey(lineInteractionDatum.series.id, lineInteractionDatum.point.id);\n` +
+      `const chartInteractionMeta: ChartInteractionMeta = { input: 'keyboard', reason: 'focus' };\n` +
+      `const chartActiveDatum: ChartActiveDatum<SvgLineInteractionDatum> = { key: lineDatumKey, label: 'Line point', datum: lineInteractionDatum };\n` +
+      `const chartInteraction: ChartInteraction<SvgLineInteractionDatum> = { mode: 'static' };\n` +
+      `type PackedChartInteractionTypes = [\n` +
+      `  ChartActionInteraction<SvgLineInteractionDatum>,\n` +
+      `  ChartExploreInteraction<SvgLineInteractionDatum>,\n` +
+      `  ChartInteractionMode, ChartInteractionPointerType, ChartInteractionReason,\n` +
+      `  ChartStaticInteraction,\n` +
+      `];\n` +
+      `const packedChartInteractionTypes = null as unknown as PackedChartInteractionTypes;\n` +
       `const lineCurve: SvgLineCurve = 'smooth';\n` +
       `const lineXType: SvgLineXType = 'category';\n` +
       `const barProps = { ariaLabel: 'Bar', data: barData, insets: rendererInsets } satisfies SvgBarRendererProps;\n` +
@@ -3925,7 +4025,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       `];\n` +
       `const packedEffectTypes = null as unknown as PackedEffectTypes;\n` +
       `const effectValues = [EFFECT_DEFINITIONS, EFFECT_IDS, EFFECT_REGISTRY, EFFECT_REGISTRY_VERSION, EFFECT_RESEARCH_PROVENANCE, getEffectDefinition, isEffectDefinition, isEffectId];\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, packedChartTypes, rendererComponents, barProps, heatProps, lineProps, motionPolicy, motionRecipe, packedMotionTypes, motionValues, effectResolution, packedEffectTypes, effectValues);\n',
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, effectResolution, packedEffectTypes, effectValues);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {
@@ -3998,9 +4098,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 11 || runtimeFixtures.require.length !== 10) {
+    if (runtimeFixtures.import.length !== 13 || runtimeFixtures.require.length !== 12) {
       throw new Error(
-        `packed runtime condition inventory drifted; expected 11 import + 10 require, found ` +
+        `packed runtime condition inventory drifted; expected 13 import + 12 require, found ` +
         `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
       );
     }

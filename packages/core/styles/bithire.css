@@ -6192,6 +6192,60 @@ html.dark {
   --ds-chart-axis-color: var(--ds-chart-axis);
   --ds-chart-tooltip-bg: var(--ds-surface-card-bg);
   --ds-chart-tooltip-border: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-surface-card-border));
+  /* Theme-aware categorical fallbacks. Every color clears WCAG 2.2 non-text
+   * contrast (3:1) against the representative BitHire and The Management
+   * Miami card/plot surfaces. These are data colors, never status aliases.
+   * Tenant/DB-owned --ds-chart-category-* channels remain the outer override. */
+  --ds-chart-accessible-1: #2f6b9a;
+  --ds-chart-accessible-2: #a23b72;
+  --ds-chart-accessible-3: #1f7a55;
+  --ds-chart-accessible-4: #9a5700;
+  --ds-chart-accessible-5: #355cb5;
+  --ds-chart-accessible-6: #7a4595;
+  --ds-chart-accessible-7: #5f6368;
+  --ds-chart-accessible-8: #006d77;
+  --ds-chart-accessible-9: #9b4a5a;
+  --ds-chart-accessible-10: #4d6a00;
+  --ds-chart-default-1: #0f766e;
+  --ds-chart-default-2: #8c6d46;
+  --ds-chart-default-3: #b24d3a;
+  --ds-chart-default-4: #296f68;
+  --ds-chart-default-5: #735838;
+  --ds-chart-default-6: #963f31;
+  --ds-chart-default-7: #3d756f;
+  --ds-chart-default-8: #7d6140;
+  --ds-chart-default-9: #a04435;
+  --ds-chart-default-10: #5e5a52;
+  --ds-chart-monochrome-1: #2c5587;
+  --ds-chart-monochrome-2: #3a6fb0;
+  --ds-chart-monochrome-3: #21528b;
+  --ds-chart-monochrome-4: #4b78ad;
+  --ds-chart-monochrome-5: #315f97;
+  --ds-chart-monochrome-6: #103968;
+  --ds-chart-monochrome-7: #526f91;
+  --ds-chart-monochrome-8: #37699f;
+  --ds-chart-monochrome-9: #274b77;
+  --ds-chart-monochrome-10: #5a789a;
+  --ds-chart-pastel-1: #527aa3;
+  --ds-chart-pastel-2: #9b557a;
+  --ds-chart-pastel-3: #3d8065;
+  --ds-chart-pastel-4: #9a652b;
+  --ds-chart-pastel-5: #5c6fb0;
+  --ds-chart-pastel-6: #80628f;
+  --ds-chart-pastel-7: #686868;
+  --ds-chart-pastel-8: #3b777c;
+  --ds-chart-pastel-9: #95606a;
+  --ds-chart-pastel-10: #62752e;
+  --ds-chart-vibrant-1: #006b63;
+  --ds-chart-vibrant-2: #a12b68;
+  --ds-chart-vibrant-3: #007a4d;
+  --ds-chart-vibrant-4: #a65000;
+  --ds-chart-vibrant-5: #244fc0;
+  --ds-chart-vibrant-6: #702a91;
+  --ds-chart-vibrant-7: #4e545b;
+  --ds-chart-vibrant-8: #00727b;
+  --ds-chart-vibrant-9: #a3364f;
+  --ds-chart-vibrant-10: #486900;
   --ds-skeleton-bg: linear-gradient(
     90deg,
     var(--ds-surface-panel-bg) 25%,
@@ -6292,6 +6346,59 @@ html.dark {
   --ds-home-panel-border: var(--ds-command-home-panel-border);
   --ds-home-panel-shadow: var(--ds-command-home-panel-shadow);
   --ds-home-compact-action-height: var(--ds-command-home-compact-action-height);
+}
+
+:where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
+  --ds-chart-accessible-1: #7db7e8;
+  --ds-chart-accessible-2: #f08cb7;
+  --ds-chart-accessible-3: #62d2a2;
+  --ds-chart-accessible-4: #f3b766;
+  --ds-chart-accessible-5: #8faeff;
+  --ds-chart-accessible-6: #c59add;
+  --ds-chart-accessible-7: #c5c7c9;
+  --ds-chart-accessible-8: #65cdd5;
+  --ds-chart-accessible-9: #e59aa8;
+  --ds-chart-accessible-10: #b7d86a;
+  --ds-chart-default-1: #65cfc1;
+  --ds-chart-default-2: #d5b58a;
+  --ds-chart-default-3: #f08a74;
+  --ds-chart-default-4: #8addd2;
+  --ds-chart-default-5: #e2c49b;
+  --ds-chart-default-6: #f6a18f;
+  --ds-chart-default-7: #52b8ac;
+  --ds-chart-default-8: #c9a575;
+  --ds-chart-default-9: #e77a64;
+  --ds-chart-default-10: #beb8ad;
+  --ds-chart-monochrome-1: #6bb5f5;
+  --ds-chart-monochrome-2: #8cc8fa;
+  --ds-chart-monochrome-3: #3b9af0;
+  --ds-chart-monochrome-4: #a0d0fa;
+  --ds-chart-monochrome-5: #5aaaf2;
+  --ds-chart-monochrome-6: #b7dafb;
+  --ds-chart-monochrome-7: #72b9f4;
+  --ds-chart-monochrome-8: #93c9f7;
+  --ds-chart-monochrome-9: #4d9fe8;
+  --ds-chart-monochrome-10: #c4e1fc;
+  --ds-chart-pastel-1: #94bfe3;
+  --ds-chart-pastel-2: #e7a7c2;
+  --ds-chart-pastel-3: #8bd0b1;
+  --ds-chart-pastel-4: #e5be87;
+  --ds-chart-pastel-5: #aabbf0;
+  --ds-chart-pastel-6: #c5aad2;
+  --ds-chart-pastel-7: #c9c9c9;
+  --ds-chart-pastel-8: #8dc9cd;
+  --ds-chart-pastel-9: #d5a8b0;
+  --ds-chart-pastel-10: #bed28b;
+  --ds-chart-vibrant-1: #55dccb;
+  --ds-chart-vibrant-2: #ff73b0;
+  --ds-chart-vibrant-3: #4de09e;
+  --ds-chart-vibrant-4: #ffb44d;
+  --ds-chart-vibrant-5: #7f9fff;
+  --ds-chart-vibrant-6: #d38bf1;
+  --ds-chart-vibrant-7: #d1d5db;
+  --ds-chart-vibrant-8: #45d5e1;
+  --ds-chart-vibrant-9: #ff8194;
+  --ds-chart-vibrant-10: #b5e34b;
 }
 
 @keyframes ds-surface-enter {
@@ -47776,9 +47883,210 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
 }
 
+/* VIZ-03 — bounded summary plus an on-demand paged table. The complete data
+ * set is never carried in hidden DOM; this skin remains intrinsically narrow. */
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access'] {
+  display: grid;
+  gap: var(--ds-spacing-3);
+  min-inline-size: 0;
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-summary'] {
+  display: grid;
+  gap: var(--ds-spacing-2);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-summary-heading'] {
+  margin: 0;
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-heading);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-facts'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+  gap: var(--ds-spacing-2);
+  margin: 0;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-fact'] {
+  display: grid;
+  gap: var(--ds-spacing-1);
+  min-inline-size: 0;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-bg-secondary);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-fact'] dt {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-fact'] dd {
+  min-inline-size: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--ds-font-size-sm);
+  font-variant-numeric: var(--ds-numeric-tabular);
+  font-weight: 650;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-trigger'],
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-action'],
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] button {
+  inline-size: fit-content;
+  min-block-size: 2.25rem;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-bg-secondary);
+  color: var(--ds-color-text-primary);
+  font: inherit;
+  font-size: var(--ds-font-size-sm);
+  cursor: pointer;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-trigger']:focus-visible,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-action']:focus-visible,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] button:focus-visible,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table-scroll']:focus-visible {
+  outline: 3px solid var(--ds-color-focus, var(--ds-color-primary));
+  outline-offset: 2px;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (hover: hover) {
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-trigger']:hover,
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-action']:hover,
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-pagination'] button:not(:disabled):hover {
+    border-color: var(--ds-color-primary);
+    background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-color-bg-secondary));
+  }
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-disclosure'] {
+  display: grid;
+  gap: var(--ds-spacing-3);
+  min-inline-size: 0;
+  padding: var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-primary);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-actions'],
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-pagination'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table-scroll'] {
+  max-block-size: min(28rem, 70vh);
+  min-inline-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] {
+  inline-size: 100%;
+  min-inline-size: max-content;
+  border-collapse: collapse;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] caption {
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  text-align: start;
+  font-weight: 650;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] th,
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] td {
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border-block-start: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  text-align: start;
+  vertical-align: top;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-table'] th {
+  position: sticky;
+  z-index: 1;
+  inset-block-start: 0;
+  background: var(--ds-color-bg-secondary);
+  font-weight: 650;
+}
+
+.ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+  [data-part='data-empty'] {
+  margin: 0;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+}
+
+@media (forced-colors: active) {
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-fact'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-disclosure'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-table-scroll'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-trigger'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-action'],
+  .ds-chart-data-access.ds-chart-data-access[data-part='chart-data-access']
+    [data-part='data-pagination'] button {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}
+
 /* VIZ-02 — React-owned SVG renderer anatomy. D3 computes geometry only; all
  * visible nodes stay in React so updates cannot erase semantics or focus. */
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] {
+  position: relative;
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-color-text-secondary);
@@ -47853,17 +48161,203 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   fill: var(--ds-chart-cell-color, var(--ds-color-primary));
 }
 
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='bar-mark'],
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point'],
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell'] {
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='bar-mark'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='point'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='cell'] {
   transition: opacity var(--ds-motion-duration-fast) ease,
     filter var(--ds-motion-duration-fast) ease;
 }
 
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='bar-mark']:hover,
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point']:hover,
-.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell']:hover {
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-chart-datum-key] {
+  outline: none;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='interaction-target'] {
+  cursor: default;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction='select']
+  [data-part='interaction-target'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction='drill']
+  [data-part='interaction-target'] {
+  cursor: pointer;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='interaction-halo'] {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 3;
+  opacity: 0;
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+  transition: opacity var(--ds-motion-duration-fast) ease;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-chart-datum-key][data-active='true'] > [data-part='interaction-halo'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-chart-datum-key][data-focused='true'] > [data-part='interaction-halo'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-chart-datum-key]:focus-visible > [data-part='interaction-halo'] {
+  stroke: var(--ds-color-focus, var(--ds-color-primary));
+  opacity: 1;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  > [data-part='interaction-tooltip'] {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: var(--ds-chart-tooltip-y, 0%);
+  left: var(--ds-chart-tooltip-x, 0%);
+  max-inline-size: min(18rem, calc(100% - var(--ds-spacing-4)));
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px solid var(--ds-chart-tooltip-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-chart-tooltip-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-color-text-primary);
+  box-shadow: var(--ds-shadow-lg);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-body);
+  pointer-events: auto;
+  transform: translate(-50%, calc(-100% - var(--ds-spacing-2)));
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  > [data-part='interaction-tooltip'][data-align='start'] {
+  transform: translate(0, calc(-100% - var(--ds-spacing-2)));
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  > [data-part='interaction-tooltip'][data-align='end'] {
+  transform: translate(-100%, calc(-100% - var(--ds-spacing-2)));
+}
+
+/* VIZ-03 — vertical grammar is presentation posture, never data semantics.
+ * The runtime stamps the resolved vertical recipe on each standalone renderer,
+ * so the same component tree remains recognizable outside ChartFrame too. */
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='light-sparse']
+  [data-part='grid-line'] {
+  opacity: 0.42;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='light-sparse']
+  [data-part='grid-line']:nth-child(even) {
+  opacity: 0;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='precise-compact']
+  [data-part='grid-line'] {
+  opacity: 0.72;
+  stroke-dasharray: 2 2;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-grid='soft-temporal']
+  [data-part='grid-line'] {
+  opacity: 0.52;
+  stroke-dasharray: 1 4;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='border-led']
+  [data-part='baseline'] {
+  stroke-width: 1.5;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='high-contrast-compact']
+  [data-part='baseline'] {
+  stroke-width: 1.5;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='high-contrast-compact']
+  [data-part='axis-tick-label'] {
+  font-family: var(--ds-font-family-mono, var(--ds-font-family-body));
+  font-size: calc(var(--ds-font-size-xs) * 0.94);
+  font-weight: 600;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-axes='soft-editorial']
+  [data-part='axis-tick-label'] {
+  letter-spacing: 0.01em;
+}
+
+.ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'][data-chart-marks='human-rounded']
+  [data-part='line'] {
+  stroke-linecap: round;
+  stroke-width: 2.25;
+}
+
+.ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'][data-chart-marks='technical-sharp']
+  [data-part='line'] {
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 1.5;
+}
+
+.ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'][data-chart-marks='tactile-temporal']
+  [data-part='line'] {
+  stroke-width: 2.5;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='bar-mark']:hover,
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='point']:hover,
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='cell']:hover {
   opacity: 0.82;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='forced-color-value-label'] {
+  display: none;
+}
+
+/* VIZ-03D — static InsightLayer. Geometry and app-owned labels stay in SVG;
+ * the layer never captures pointer or keyboard interaction. */
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-layer'] {
+  pointer-events: none;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-rule'] {
+  stroke: var(--ds-chart-insight-color, var(--ds-color-text-primary));
+  stroke-dasharray: 4 3;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'] {
+  fill: color-mix(in srgb, var(--ds-chart-insight-color, var(--ds-color-primary)) 16%, transparent);
+  stroke: var(--ds-chart-insight-color, var(--ds-color-primary));
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-anchor'] {
+  fill: var(--ds-chart-insight-color, var(--ds-color-text-primary));
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-label'] {
+  fill: var(--ds-chart-insight-color, var(--ds-color-text-primary));
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+  unicode-bidi: plaintext;
+}
+
+:where([dir='rtl']) .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  [data-part='insight-label'] {
+  direction: rtl;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -47871,6 +48365,23 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point'],
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell'] {
     transition: none;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-part='interaction-halo'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    > [data-part='interaction-tooltip'] {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-chart-datum-key][data-active='true'] > [data-part='interaction-halo'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-chart-datum-key]:focus-visible > [data-part='interaction-halo'] {
+    stroke-width: 4;
   }
 }
 
@@ -47891,6 +48402,76 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'] [data-part='area'] {
     fill: transparent;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='1'] [data-part='line'] {
+    stroke-dasharray: 8 3;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='2'] [data-part='line'] {
+    stroke-dasharray: 2 3;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='3'] [data-part='line'] {
+    stroke-dasharray: 10 3 2 3;
+  }
+
+  .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
+    [data-part='line-series'][data-series-index='4'] [data-part='line'] {
+    stroke-dasharray: 1 3;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-part='forced-color-value-label'] {
+    display: block;
+    fill: Canvas;
+    stroke: CanvasText;
+    stroke-width: 3;
+    paint-order: stroke fill;
+    font-family: var(--ds-font-family-body);
+    font-size: var(--ds-font-size-xs);
+    font-weight: 700;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-rule'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'] {
+    stroke: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-band'] {
+    fill: Highlight;
+    fill-opacity: 0.2;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-anchor'] {
+    fill: Highlight;
+    stroke: Canvas;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='insight-label'] {
+    fill: CanvasText;
+    stroke: Canvas;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    [data-part='interaction-halo'] {
+    stroke: Highlight;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+    > [data-part='interaction-tooltip'] {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
   }
 }
 
