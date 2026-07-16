@@ -21,13 +21,13 @@ const entrypointPaths = [
 ];
 
 const FILES = {
-  scaffold: { path: 'chart-scaffold.tsx', start: [4, 0], floor: [0, 0], topology: '7128c939d91ecdb86bf4861f6e98c64f12ad69f5b313ddecc1b2280425814ae0' },
+  scaffold: { path: 'chart-scaffold.tsx', start: [4, 0], floor: [0, 0], topology: 'bb0a9fc043ee1fab3c8f7fbafc690cb4a64436967f233ddfb38feee0f9bce2f5' },
   brush: { path: 'hooks/use-chart-brush.ts', start: [12, 0], floor: [0, 0], topology: 'ff3639d218c5fb49579fc315d595ce11fb8e7a3acb0018eda6f2cef6c980f12a' },
   exportHook: { path: 'hooks/use-chart-export.ts', start: [1, 0], floor: [0, 0], topology: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
   theme: { path: 'hooks/use-chart-theme.ts', start: [4, 0], floor: [4, 0], topology: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
   tooltip: { path: 'tooltip/index.tsx', start: [11, 0], floor: [2, 0], topology: '89be9e4d95bd9c886ebf76bf2439ddd86c1fc368aa8d63a1dc72a7daaff6f6e0' },
   crosshair: { path: 'tooltip/crosshair.ts', start: [0, 4], floor: [0, 1], topology: '13e42bf71b21e37452b3e4d30b6238efc2cc86410b1c47b40b0a642739e4a7be' },
-  exporter: { path: 'utils/export.ts', start: [2, 4], floor: [2, 4], topology: '9f02066a213d04963aa441dcf4805feceb85887f55e8a88f572a03bed73b5f8a' },
+  exporter: { path: 'utils/export.ts', start: [2, 5], floor: [2, 5], topology: '9f02066a213d04963aa441dcf4805feceb85887f55e8a88f572a03bed73b5f8a' },
 };
 
 function pathFor(entry) {
@@ -76,7 +76,7 @@ function renderAnatomy(text, path) {
   return anatomy.join('\n');
 }
 
-test('CK-E foundation lands at its exact 8 inline + 5 runtime Stage-1 floor', () => {
+test('CK-E foundation lands at its exact 8 inline + 6 runtime floor', () => {
   let inlineTotal = 0;
   let runtimeTotal = 0;
   for (const [name, entry] of Object.entries(FILES)) {
@@ -90,7 +90,7 @@ test('CK-E foundation lands at its exact 8 inline + 5 runtime Stage-1 floor', ()
     inlineTotal += inline;
     runtimeTotal += runtime.count;
   }
-  assert.deepEqual([inlineTotal, runtimeTotal], [8, 5]);
+  assert.deepEqual([inlineTotal, runtimeTotal], [8, 6]);
 });
 
 test('CK-E foundation exposes scaffold, brush, tooltip and crosshair anatomy', () => {
@@ -109,7 +109,7 @@ test('CK-E foundation exposes scaffold, brush, tooltip and crosshair anatomy', (
   assert.match(brush, /'data-state': isBrushing \? 'brushing' : pixelSelection \? 'selected' : 'idle'/);
 
   const tooltip = source(FILES.tooltip);
-  assert.match(tooltip, /className="ds-chart-tooltip"/);
+  assert.match(tooltip, /ds-chart-tooltip--\$\{variant\}/);
   for (const part of ['chart-tooltip', 'tooltip-value', 'tooltip-series', 'series-row', 'swatch', 'label', 'value']) {
     assert.match(tooltip, new RegExp(`data-part="${part}"`), `tooltip lacks ${part}`);
   }
@@ -125,11 +125,11 @@ test('CK-E foundation exposes scaffold, brush, tooltip and crosshair anatomy', (
 
 test('CK-E exporter classification is explicit, counted and exact', () => {
   const exporter = source(FILES.exporter);
-  assert.equal(exporter.split('@runtime-svg-paint-copy').length - 1, 2);
+  assert.equal(exporter.split('@runtime-svg-paint-copy').length - 1, 3);
   const runtime = analyzeRuntimeSvgPaint(exporter, pathFor(FILES.exporter));
-  assert.equal(runtime.count, 4);
-  assert.equal(runtime.classifiedPaint, 4);
-  assert.equal(runtime.domSetAttributes, 4);
+  assert.equal(runtime.count, 5);
+  assert.equal(runtime.classifiedPaint, 5);
+  assert.equal(runtime.domSetAttributes, 5);
   assert.equal(runtime.unclassified, 0);
 });
 
@@ -145,7 +145,7 @@ test('CK-E foundation floors pin theme data, tooltip swatches, crosshair data an
       inline: runtime['patterns/visualization/charts/utils/export.ts'].floor,
       runtime: runtime['patterns/visualization/charts/utils/export.ts'].runtimeSvgFloor,
     },
-    { inline: 2, runtime: 4 }
+    { inline: 2, runtime: 5 }
   );
 
   const theme = source(FILES.theme);
@@ -153,11 +153,14 @@ test('CK-E foundation floors pin theme data, tooltip swatches, crosshair data an
   assert.equal(theme.match(/background: `var\(\$\{CSS_VARS\.surfaceBg\}\)`/g)?.length, 2);
   assert.equal(theme.match(/background: resolveName\(CSS_VARS\.surfaceBg, FALLBACK_HEX\.surfaceBg\)/g)?.length, 1);
   assert.doesNotMatch(source(FILES.exportHook), /backgroundColor: '#ffffff'/);
-  assert.match(source(FILES.exporter), /const bgColor = options\.backgroundColor \?\? '#ffffff';/);
+  assert.match(
+    source(FILES.exporter),
+    /const bgColor = resolveCssColor\(\s*options\.backgroundColor \?\? '#ffffff',\s*svgElement,\s*'#ffffff',\s*\);/,
+  );
   const start = Object.values(FILES).reduce((sum, entry) => sum + entry.start[0] + entry.start[1], 0);
   const floor = Object.values(FILES).reduce((sum, entry) => sum + entry.floor[0] + entry.floor[1], 0);
-  assert.equal(start, 42);
-  assert.equal(floor, 13);
+  assert.equal(start, 43);
+  assert.equal(floor, 14);
   assert.equal(start - floor, 29);
 });
 

@@ -2,6 +2,10 @@
 
 Status: **Stage-1 certified** at `506d065f` (2026-07-14).
 
+Post-certification note (CRA13): chart export now also resolves variable-backed attributes already
+present on the cloned SVG. The live exporter contract is therefore five classified DOM copy sites
+behind three statement markers; the exact 506d065f boundary recorded below remains historical.
+
 This contract is the executable authority for CK-E. It supersedes the stale `476 instrumented`
 headline in `wo-skin-06-ck-e-inventory.md` and consumes the corrected per-file measurements in
 `wo-skin-06-ck-e-reaudit.md`.

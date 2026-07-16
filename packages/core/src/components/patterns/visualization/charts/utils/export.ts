@@ -98,6 +98,7 @@ function resolveVariableAttributes(
 
     const resolved = resolveCssColor(attribute.value, original);
     if (resolved) {
+      // @runtime-svg-paint-copy -- preserves any variable-backed attribute on the exported clone.
       clone.setAttribute(attribute.name, resolved);
     } else {
       clone.removeAttribute(attribute.name);

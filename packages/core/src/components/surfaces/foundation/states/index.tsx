@@ -160,6 +160,7 @@ export function SurfaceCapabilityAnatomy({
 
   return (
     <Box
+      className="ds-surface ds-capability-anatomy"
       data-part="capability-anatomy"
       data-capability-count={capabilities.length}
       aria-label={ariaLabel}
@@ -193,8 +194,6 @@ export function SurfaceCapabilityAnatomy({
             style={{
               minWidth: 0,
               padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
-              border: '1px solid var(--ds-color-border, currentColor)',
-              borderRadius: 'var(--ds-radius-md, 8px)',
               opacity: capability.disabled ? 0.5 : 0.72,
             }}
           >

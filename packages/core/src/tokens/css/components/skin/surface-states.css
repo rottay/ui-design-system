@@ -42,3 +42,8 @@
 .ds-surface.ds-stale-banner > [data-part='description'][data-part='description'][data-part='description'] {
   color: inherit;
 }
+
+.ds-surface.ds-capability-anatomy [data-part='capability'] {
+  border: 1px solid var(--ds-color-border, currentColor);
+  border-radius: var(--ds-radius-md, 8px);
+}

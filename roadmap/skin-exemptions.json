@@ -35,8 +35,8 @@
       },
       "patterns/visualization/charts/utils/export.ts": {
         "floor": 2,
-        "runtimeSvgFloor": 4,
-        "why": "The exporter copies runtime-computed paint into two CSSStyleDeclaration paths and four SVG presentation-attribute paths. It preserves rendered chart fidelity for export; a static skin cannot know the property/value pairs."
+        "runtimeSvgFloor": 5,
+        "why": "The exporter copies runtime-computed paint into two CSSStyleDeclaration paths and five SVG presentation-attribute paths, including variable-backed attributes already present on the clone. It preserves rendered chart fidelity for export; a static skin cannot know the property/value pairs."
       },
       "patterns/misc/tenant-preview/engines/modern.tsx": {
         "floor": 22,
@@ -71,9 +71,9 @@
         "why": "Legend/tooltip value objects retain two runtime colour sites; eight D3 area, gradient, line and dot sinks consume caller-derived series colours."
       },
       "patterns/visualization/charts/radar-chart/index.tsx": {
-        "floor": 3,
-        "runtimeSvgFloor": 3,
-        "why": "Three inline series-colour value sites and three D3 polygon/point sinks consume runtime palette or caller-supplied series colours."
+        "floor": 2,
+        "runtimeSvgFloor": 4,
+        "why": "Two inline series-colour value sites (the default series colour and legend swatch) and four D3 polygon, emphasis and point sinks consume runtime palette or caller-supplied series colours."
       },
       "patterns/visualization/charts/scatter/index.tsx": {
         "floor": 1,
@@ -112,8 +112,8 @@
       },
       "patterns/visualization/charts/bullet/index.tsx": {
         "floor": 12,
-        "runtimeSvgFloor": 6,
-        "why": "Twelve value-object and legend sites plus six D3 range/value/target sinks trace to caller-overridable range, value and target colours."
+        "runtimeSvgFloor": 8,
+        "why": "Twelve value-object and legend sites plus eight D3 range/value/target sinks across the horizontal and vertical render paths trace to caller-overridable range, value and target colours."
       },
       "patterns/visualization/charts/sankey/index.tsx": {
         "floor": 3,
