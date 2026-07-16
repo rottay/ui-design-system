@@ -82,7 +82,7 @@ export default defineConfig({
         /^antd\/.*/,
         /^@ant-design\/icons\/.*/,
         /^@thesvg\/react\/.*/,
-        // The semantic icon entry intentionally embeds its pinned 40-glyph
+        // The semantic icon entry intentionally embeds its pinned 50-glyph
         // Phosphor SSR corpus. Phosphor 2.1.10 advertises a CommonJS condition
         // that points at a `.js` file inside a `type: module` package, which
         // breaks packed CJS consumers. Keeping the supplier inside the focused

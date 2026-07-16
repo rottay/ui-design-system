@@ -1,7 +1,7 @@
 import type { IconRole } from './types';
 
 /**
- * Fixed v2 semantic corpus. Names describe product meaning, never supplier glyphs.
+ * Fixed v3 semantic corpus. Names describe product meaning, never supplier glyphs.
  * Additions require an explicit corpus/version review; aliases do not belong here.
  */
 export const ICON_NAMES = [
@@ -15,6 +15,8 @@ export const ICON_NAMES = [
   'action.confirm',
   'action.retry',
   'action.play',
+  'action.reveal',
+  'action.conceal',
   'navigation.home',
   'navigation.back',
   'navigation.forward',
@@ -29,11 +31,16 @@ export const ICON_NAMES = [
   'status.info',
   'status.loading',
   'status.secure',
+  'status.live',
   'communication.email',
   'communication.message',
   'communication.notification',
   'communication.voice',
   'communication.call',
+  'communication.inbox',
+  'auth.password',
+  'auth.passkey',
+  'auth.sso',
   'data.chart',
   'data.table',
   'data.gauge',

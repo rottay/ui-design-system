@@ -4,6 +4,7 @@ export const BRAND_MARK_NAMES = [
   'openai',
   'anthropic',
   'github',
+  'google',
   'linkedin',
   'instagram',
   'x',
@@ -60,6 +61,13 @@ const BRAND_VARIANT_REGISTRY: Readonly<Record<BrandMarkName, InternalBrandVarian
       mono: { resolved: 'mono', sourceVariant: 'mono' },
       light: { resolved: 'light', sourceVariant: 'light' },
       dark: { resolved: 'dark', sourceVariant: 'dark' },
+      wordmark: { resolved: 'wordmark', sourceVariant: 'wordmark' },
+    }),
+    google: variants({
+      color: { resolved: 'color', sourceVariant: 'default' },
+      mono: { resolved: 'mono', sourceVariant: 'mono' },
+      light: { resolved: 'mono', sourceVariant: 'mono' },
+      dark: { resolved: 'mono', sourceVariant: 'mono' },
       wordmark: { resolved: 'wordmark', sourceVariant: 'wordmark' },
     }),
     linkedin: variants({

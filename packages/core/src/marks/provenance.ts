@@ -70,6 +70,7 @@ export const BRAND_MARK_PROVENANCE: Readonly<Record<BrandMarkName, BrandMarkProv
       'https://www.anthropic.com/',
     ),
     github: brand('github', 'github', 'GitHub', 'CC0-1.0', 'https://github.com/'),
+    google: brand('google', 'google', 'Google', 'CC0-1.0', 'https://www.google.com/'),
     linkedin: brand('linkedin', 'linkedin', 'LinkedIn', 'MIT', 'https://www.linkedin.com/'),
     instagram: brand(
       'instagram',

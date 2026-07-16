@@ -3,7 +3,14 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { BriefcaseIcon } from '@phosphor-icons/react/dist/ssr/Briefcase';
 import { CompassIcon } from '@phosphor-icons/react/dist/ssr/Compass';
+import { EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
+import { EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
+import { FingerprintIcon } from '@phosphor-icons/react/dist/ssr/Fingerprint';
 import { HandshakeIcon } from '@phosphor-icons/react/dist/ssr/Handshake';
+import { KeyIcon } from '@phosphor-icons/react/dist/ssr/Key';
+import { LockIcon } from '@phosphor-icons/react/dist/ssr/Lock';
+import { MailboxIcon } from '@phosphor-icons/react/dist/ssr/Mailbox';
+import { PulseIcon } from '@phosphor-icons/react/dist/ssr/Pulse';
 import { render, screen } from '@testing-library/react';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -32,6 +39,8 @@ const EXPECTED_NAMES = [
   'action.confirm',
   'action.retry',
   'action.play',
+  'action.reveal',
+  'action.conceal',
   'navigation.home',
   'navigation.back',
   'navigation.forward',
@@ -46,11 +55,16 @@ const EXPECTED_NAMES = [
   'status.info',
   'status.loading',
   'status.secure',
+  'status.live',
   'communication.email',
   'communication.message',
   'communication.notification',
   'communication.voice',
   'communication.call',
+  'communication.inbox',
+  'auth.password',
+  'auth.passkey',
+  'auth.sso',
   'data.chart',
   'data.table',
   'data.gauge',
@@ -72,12 +86,12 @@ function svgChildren(markup: string): string {
 }
 
 describe('semantic Icon corpus', () => {
-  it('publishes the fixed, unique 43-name corpus', () => {
+  it('publishes the fixed, unique 50-name v3 corpus', () => {
     expect(ICON_NAMES).toEqual(EXPECTED_NAMES);
-    expect(ICON_NAMES).toHaveLength(43);
-    expect(new Set(ICON_NAMES)).toHaveProperty('size', 43);
+    expect(ICON_NAMES).toHaveLength(50);
+    expect(new Set(ICON_NAMES)).toHaveProperty('size', 50);
     expect(ICON_CORPUS.map(({ name }) => name)).toEqual(EXPECTED_NAMES);
-    expect(ICON_CORPUS).toHaveLength(43);
+    expect(ICON_CORPUS).toHaveLength(50);
     expect(
       ICON_CORPUS.filter(
         ({ name }) =>
@@ -87,6 +101,27 @@ describe('semantic Icon corpus', () => {
       { name: 'navigation.route', role: 'navigation', autoMirror: false },
       { name: 'bithire.job', role: 'feature', autoMirror: false },
       { name: 'bithire.offer', role: 'feature', autoMirror: false },
+    ]);
+    expect(
+      ICON_CORPUS.filter(({ name }) =>
+        [
+          'action.reveal',
+          'action.conceal',
+          'auth.password',
+          'auth.passkey',
+          'auth.sso',
+          'communication.inbox',
+          'status.live',
+        ].includes(name),
+      ),
+    ).toEqual([
+      { name: 'action.reveal', role: 'control', autoMirror: false },
+      { name: 'action.conceal', role: 'control', autoMirror: false },
+      { name: 'status.live', role: 'status', autoMirror: false },
+      { name: 'communication.inbox', role: 'control', autoMirror: false },
+      { name: 'auth.password', role: 'control', autoMirror: false },
+      { name: 'auth.passkey', role: 'control', autoMirror: false },
+      { name: 'auth.sso', role: 'control', autoMirror: false },
     ]);
   });
 
@@ -101,7 +136,7 @@ describe('semantic Icon corpus', () => {
       <>{ICON_NAMES.map((name) => <Icon key={name} name={name} decorative />)}</>,
     );
 
-    expect((html.match(/<svg/g) ?? [])).toHaveLength(43);
+    expect((html.match(/<svg/g) ?? [])).toHaveLength(50);
     for (const name of ICON_NAMES) {
       expect(html).toContain(`data-icon-name="${name}"`);
     }
@@ -121,9 +156,27 @@ describe('semantic Icon corpus', () => {
     }
   });
 
+  it('maps every v3 addition to its exact pinned Phosphor SSR glyph and role weight', () => {
+    const cases = [
+      ['action.reveal', EyeIcon, 'regular'],
+      ['action.conceal', EyeSlashIcon, 'regular'],
+      ['auth.password', LockIcon, 'regular'],
+      ['auth.passkey', FingerprintIcon, 'regular'],
+      ['auth.sso', KeyIcon, 'regular'],
+      ['communication.inbox', MailboxIcon, 'regular'],
+      ['status.live', PulseIcon, 'duotone'],
+    ] as const;
+
+    for (const [name, Glyph, weight] of cases) {
+      const semantic = renderToStaticMarkup(<Icon name={name} decorative />);
+      const supplier = renderToStaticMarkup(<Glyph weight={weight} />);
+      expect(svgChildren(semantic), name).toBe(svgChildren(supplier));
+    }
+  });
+
   it('records pinned supplier provenance without exposing supplier props', () => {
     expect(ICON_PROVENANCE).toEqual({
-      corpusVersion: 2,
+      corpusVersion: 3,
       supplier: 'Phosphor Icons',
       packageName: '@phosphor-icons/react',
       packageVersion: '2.1.10',

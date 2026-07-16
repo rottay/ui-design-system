@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import openaiCatalog from 'thesvg/openai';
 import anthropicCatalog from 'thesvg/anthropic';
 import githubCatalog from 'thesvg/github';
+import googleCatalog from 'thesvg/google';
 import linkedinCatalog from 'thesvg/linkedin';
 import instagramCatalog from 'thesvg/instagram';
 import xCatalog from 'thesvg/x';
@@ -45,6 +46,7 @@ const EXPECTED_BRANDS = [
   'openai',
   'anthropic',
   'github',
+  'google',
   'linkedin',
   'instagram',
   'x',
@@ -56,6 +58,7 @@ const RAW_CATALOG_BY_SLUG = {
   openai: openaiCatalog,
   anthropic: anthropicCatalog,
   github: githubCatalog,
+  google: googleCatalog,
   linkedin: linkedinCatalog,
   instagram: instagramCatalog,
   x: xCatalog,
@@ -95,7 +98,7 @@ describe('mark corpus and SSR boundary', () => {
       </>,
     );
 
-    expect((html.match(/<svg/g) ?? [])).toHaveLength(11);
+    expect((html.match(/<svg/g) ?? [])).toHaveLength(12);
     for (const name of BRAND_MARK_NAMES) expect(html).toContain(`data-mark-name="${name}"`);
     for (const service of CLOUD_SERVICES) {
       expect(html).toContain(`data-mark-service="${service}"`);
@@ -181,6 +184,11 @@ describe('brand variant and cloud optical resolution', () => {
       ['x', 'wordmark', 'mono', 'mono'],
       ['chrome', 'dark', 'mono', 'mono'],
       ['github', 'wordmark', 'wordmark', 'wordmark'],
+      ['google', 'color', 'color', 'default'],
+      ['google', 'mono', 'mono', 'mono'],
+      ['google', 'light', 'mono', 'mono'],
+      ['google', 'dark', 'mono', 'mono'],
+      ['google', 'wordmark', 'wordmark', 'wordmark'],
     ] as const;
 
     for (const [name, requested, resolvedVariant, sourceVariant] of cases) {
@@ -268,7 +276,7 @@ describe('mark provenance and supplier boundary', () => {
       ...Object.values(CLOUD_SERVICE_MARK_PROVENANCE),
     ];
 
-    expect(records).toHaveLength(11);
+    expect(records).toHaveLength(12);
     for (const record of records) {
       const raw = RAW_CATALOG_BY_SLUG[record.slug as keyof typeof RAW_CATALOG_BY_SLUG];
       expect(raw, record.slug).toBeDefined();
@@ -294,6 +302,14 @@ describe('mark provenance and supplier boundary', () => {
       packageName: '@thesvg/react',
       version: '3.2.7',
     });
+    expect(BRAND_MARK_PROVENANCE.google).toMatchObject({
+      kind: 'brand',
+      name: 'google',
+      slug: 'google',
+      title: 'Google',
+      license: 'CC0-1.0',
+      url: 'https://www.google.com/',
+    });
   });
 
   it('keeps vendor types and unsafe/raw rendering out of the public API', () => {
@@ -311,7 +327,7 @@ describe('mark provenance and supplier boundary', () => {
     );
 
     expect(publicSources).not.toMatch(/@thesvg|OpenaiVariant|AwsAmazon/i);
-    expect(imports).toHaveLength(11);
+    expect(imports).toHaveLength(12);
     expect(imports.every((path) => path.startsWith('@thesvg/react/'))).toBe(true);
     expect(imports).not.toContain('@thesvg/react');
     expect(adapter).not.toMatch(/dangerouslySetInnerHTML|<svg[\s>]|https?:\/\/|from ['"]thesvg/i);

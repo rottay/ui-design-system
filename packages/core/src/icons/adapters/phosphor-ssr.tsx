@@ -15,7 +15,10 @@ import { CheckIcon } from '@phosphor-icons/react/dist/ssr/Check';
 import { CompassIcon } from '@phosphor-icons/react/dist/ssr/Compass';
 import { CopyIcon } from '@phosphor-icons/react/dist/ssr/Copy';
 import { EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr/EnvelopeSimple';
+import { EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
+import { EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
 import { FileMagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/FileMagnifyingGlass';
+import { FingerprintIcon } from '@phosphor-icons/react/dist/ssr/Fingerprint';
 import { FunnelIcon } from '@phosphor-icons/react/dist/ssr/Funnel';
 import { GaugeIcon } from '@phosphor-icons/react/dist/ssr/Gauge';
 import { GearIcon } from '@phosphor-icons/react/dist/ssr/Gear';
@@ -23,12 +26,16 @@ import { HandshakeIcon } from '@phosphor-icons/react/dist/ssr/Handshake';
 import { HouseIcon } from '@phosphor-icons/react/dist/ssr/House';
 import { InfoIcon } from '@phosphor-icons/react/dist/ssr/Info';
 import { KanbanIcon } from '@phosphor-icons/react/dist/ssr/Kanban';
+import { KeyIcon } from '@phosphor-icons/react/dist/ssr/Key';
 import { ListIcon } from '@phosphor-icons/react/dist/ssr/List';
+import { LockIcon } from '@phosphor-icons/react/dist/ssr/Lock';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
+import { MailboxIcon } from '@phosphor-icons/react/dist/ssr/Mailbox';
 import { PencilSimpleIcon } from '@phosphor-icons/react/dist/ssr/PencilSimple';
 import { PhoneIcon } from '@phosphor-icons/react/dist/ssr/Phone';
 import { PlayIcon } from '@phosphor-icons/react/dist/ssr/Play';
 import { PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+import { PulseIcon } from '@phosphor-icons/react/dist/ssr/Pulse';
 import { RobotIcon } from '@phosphor-icons/react/dist/ssr/Robot';
 import { ShieldCheckIcon } from '@phosphor-icons/react/dist/ssr/ShieldCheck';
 import { SparkleIcon } from '@phosphor-icons/react/dist/ssr/Sparkle';
@@ -66,6 +73,8 @@ const PHOSPHOR_GLYPHS = {
   'action.confirm': CheckIcon,
   'action.retry': ArrowClockwiseIcon,
   'action.play': PlayIcon,
+  'action.reveal': EyeIcon,
+  'action.conceal': EyeSlashIcon,
   'navigation.home': HouseIcon,
   'navigation.back': ArrowLeftIcon,
   'navigation.forward': ArrowRightIcon,
@@ -80,11 +89,16 @@ const PHOSPHOR_GLYPHS = {
   'status.info': InfoIcon,
   'status.loading': SpinnerGapIcon,
   'status.secure': ShieldCheckIcon,
+  'status.live': PulseIcon,
   'communication.email': EnvelopeSimpleIcon,
   'communication.message': ChatCircleDotsIcon,
   'communication.notification': BellIcon,
   'communication.voice': WaveformIcon,
   'communication.call': PhoneIcon,
+  'communication.inbox': MailboxIcon,
+  'auth.password': LockIcon,
+  'auth.passkey': FingerprintIcon,
+  'auth.sso': KeyIcon,
   'data.chart': ChartBarIcon,
   'data.table': TableIcon,
   'data.gauge': GaugeIcon,

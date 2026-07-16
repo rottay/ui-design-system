@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import Openai, { type OpenaiVariant } from '@thesvg/react/openai';
 import Anthropic, { type AnthropicVariant } from '@thesvg/react/anthropic';
 import Github, { type GithubVariant } from '@thesvg/react/github';
+import Google, { type GoogleVariant } from '@thesvg/react/google';
 import Linkedin, { type LinkedinVariant } from '@thesvg/react/linkedin';
 import Instagram, { type InstagramVariant } from '@thesvg/react/instagram';
 import X, { type XVariant } from '@thesvg/react/x';
@@ -117,6 +118,8 @@ export const TheSvgBrandMarkAdapter = forwardRef<SVGSVGElement, BrandMarkAdapter
         return <Anthropic {...svgProps} variant={sourceVariant as AnthropicVariant} />;
       case 'github':
         return <Github {...svgProps} variant={sourceVariant as GithubVariant} />;
+      case 'google':
+        return <Google {...svgProps} variant={sourceVariant as GoogleVariant} />;
       case 'linkedin':
         return <Linkedin {...svgProps} variant={sourceVariant as LinkedinVariant} />;
       case 'instagram':
@@ -176,4 +179,3 @@ export const TheSvgCloudServiceMarkAdapter = forwardRef<
 });
 
 TheSvgCloudServiceMarkAdapter.displayName = 'TheSvgCloudServiceMarkAdapter';
-
