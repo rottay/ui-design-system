@@ -36,6 +36,7 @@ describe('ThemeProvider', () => {
   beforeEach(() => {
     // Clear document head before each test
     document.head.innerHTML = '';
+    document.documentElement.style.cssText = '';
     linkBehavior = 'success';
     tenantLoadedCallbacks.clear();
     pendingTimeouts = [];
@@ -71,6 +72,7 @@ describe('ThemeProvider', () => {
     pendingTimeouts = [];
     // Clean up DOM
     document.head.innerHTML = '';
+    document.documentElement.style.cssText = '';
     document.createElement = originalCreateElement;
     consoleErrorSpy.mockRestore();
     consoleWarnSpy.mockRestore();
@@ -263,6 +265,70 @@ describe('ThemeProvider', () => {
       expect(accentColor).toBe('#00FF00');
       expect(primaryAlpha).toBe('rgba(255, 0, 0, 0.10)');
     });
+  });
+
+  it('keeps provider as the default visual authority for every runtime emitter', async () => {
+    const generatedChromeCss = `html[data-tenant='rottay'] { --ds-sidebar-bg: #123456; }`;
+
+    render(
+      <ThemeProvider
+        skipCssLoading
+        branding={{
+          primaryColor: '#FF0000',
+          secondaryColor: '#0000FF',
+          accentColor: '#00FF00',
+        }}
+        tokenOverrides={{ glass: { blur: '12px' } }}
+        appearanceVars={{ '--ds-runtime-appearance-probe': 'present' }}
+        generatedChromeCss={generatedChromeCss}
+      >
+        <TestConsumer />
+      </ThemeProvider>
+    );
+
+    await waitFor(() => {
+      const rootStyle = document.documentElement.style;
+      expect(rootStyle.getPropertyValue('--ds-color-primary')).toBe('#FF0000');
+      expect(rootStyle.getPropertyValue('--ds-glass-blur')).toBe('12px');
+      expect(rootStyle.getPropertyValue('--ds-runtime-appearance-probe')).toBe('present');
+      expect(document.getElementById('ds-chrome-rottay')?.textContent).toBe(generatedChromeCss);
+    });
+  });
+
+  it('yields every visual emitter to an externally mounted compiled artifact', async () => {
+    const artifact = originalCreateElement('style');
+    artifact.id = 'app-tenant-theme-artifact';
+    artifact.textContent = `html[data-tenant='acme'] { --ds-color-primary: #112233; }`;
+    document.head.appendChild(artifact);
+
+    render(
+      <ThemeProvider
+        tenant="acme"
+        visualAuthority="compiled-artifact"
+        branding={{
+          primaryColor: '#FF0000',
+          secondaryColor: '#0000FF',
+          accentColor: '#00FF00',
+        }}
+        tokenOverrides={{ glass: { blur: '12px' } }}
+        appearanceVars={{ '--ds-runtime-appearance-probe': 'must-not-exist' }}
+        generatedChromeCss={`html[data-tenant='acme'] { --ds-sidebar-bg: #123456; }`}
+      >
+        <TestConsumer />
+      </ThemeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('config-name').textContent).toBe('acme');
+    });
+
+    const rootStyle = document.documentElement.style;
+    expect(rootStyle.getPropertyValue('--ds-color-primary')).toBe('');
+    expect(rootStyle.getPropertyValue('--ds-glass-blur')).toBe('');
+    expect(rootStyle.getPropertyValue('--ds-runtime-appearance-probe')).toBe('');
+    expect(document.getElementById('ds-chrome-acme')).toBeNull();
+    expect(document.querySelectorAll('link[id^="tenant-theme-"]')).toHaveLength(0);
+    expect(document.getElementById(artifact.id)?.textContent).toBe(artifact.textContent);
   });
 
   it('accepts custom cssBaseUrl', async () => {

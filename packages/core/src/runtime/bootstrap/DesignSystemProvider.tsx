@@ -78,6 +78,7 @@
 import React, { ReactNode, useState, useEffect, useRef, useMemo, memo } from 'react';
 import { EngineProvider } from '../engines/EngineProvider';
 import { ThemeProvider } from '../theming';
+import type { VisualAuthority } from '../theming';
 import { TenantProvider } from '../tenant/context/TenantProvider';
 import { ProductProfileProvider } from '../product-profiles/ProductProfileProvider';
 import { FeatureProvider } from '../features';
@@ -122,6 +123,15 @@ export interface DesignSystemProviderProps {
    * Takes precedence over tenantSlug if both are provided.
    */
   tenantConfig?: TenantConfig;
+  /**
+   * Selects the single owner of tenant visual CSS variables.
+   *
+   * `provider` (default) preserves the runtime/bundled behavior. Use
+   * `compiled-artifact` when the app has already mounted the exact compiled
+   * tenant artifact during SSR; tenant, locale, theme, motion, and feature
+   * contexts remain active while provider-owned visual emitters are disabled.
+   */
+  visualAuthority?: VisualAuthority;
   /**
    * Runtime tenant overrides applied on top of the resolved tenant.
    *
@@ -371,6 +381,7 @@ export function DesignSystemProvider({
   children,
   tenantSlug: propTenantSlug,
   tenantConfig: propTenantConfig,
+  visualAuthority = 'provider',
   tenantOverrides,
   productProfile,
   vertical,
@@ -516,17 +527,19 @@ export function DesignSystemProvider({
   // Resolve TenantAppearance (General + Advanced) into CSS custom properties.
   // These are layered ON TOP of brandTheme/tokenOverrides in the merge chain.
   const appearanceCssVars = useMemo(() => {
+    if (visualAuthority === 'compiled-artifact') return undefined;
     if (!normalizedConfig?.appearance) return undefined;
     const vars = appearanceToVariables(normalizedConfig.appearance);
     return Object.keys(vars).length > 0 ? vars : undefined;
-  }, [normalizedConfig?.appearance]);
+  }, [normalizedConfig?.appearance, visualAuthority]);
 
   const generatedTenantCss = useMemo(() => {
+    if (visualAuthority === 'compiled-artifact') return undefined;
     if (!resolvedVisualConfig) return undefined;
     const config = resolvedVisualConfig.config;
     if (!config?.brandTheme || isBundledTenant(config.slug)) return undefined;
     return generateTenantCssFromResolvedVisualConfig(resolvedVisualConfig);
-  }, [resolvedVisualConfig]);
+  }, [resolvedVisualConfig, visualAuthority]);
 
   if (loading || !normalizedConfig) {
     return <LoadingScreen />;
@@ -573,9 +586,10 @@ export function DesignSystemProvider({
             <ThemeProvider
               theme={theme}
               tenant={normalizedConfig.slug}
+              visualAuthority={visualAuthority}
               vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
-              branding={normalizedConfig.branding}
-              tokenOverrides={normalizedConfig.tokenOverrides}
+              branding={visualAuthority === 'provider' ? normalizedConfig.branding : undefined}
+              tokenOverrides={visualAuthority === 'provider' ? normalizedConfig.tokenOverrides : undefined}
               appearanceVars={appearanceCssVars}
               generatedChromeCss={generatedTenantCss}
               skipCssLoading={skipCssLoading}
@@ -586,7 +600,7 @@ export function DesignSystemProvider({
                   <ResponsiveProvider>
                     <CommandRegistryProvider>
                       <AntdConfigProvider>
-                        <SystemCssVariablesBridge />
+                        {visualAuthority === 'provider' ? <SystemCssVariablesBridge /> : null}
                         <MemoizedChildren>{children}</MemoizedChildren>
                       </AntdConfigProvider>
                     </CommandRegistryProvider>

@@ -119,6 +119,17 @@ DesignSystemProvider props (forceEngine, productProfile)
           > DEFAULT_PERSONALITY
 ```
 
+**Runtime visual authority:** `DesignSystemProvider` also exposes an independent,
+mutually exclusive ownership contract. `visualAuthority="provider"` is the
+backward-compatible default and lets `ThemeProvider` load/emit tenant visuals.
+`visualAuthority="compiled-artifact"` means the application has already mounted
+the exact server-compiled tenant artifact. In that mode the complete normalized
+`TenantConfig` still reaches tenant, locale, theme, motion, feature, token-read,
+and component contexts, but the runtime does not load tenant CSS or emit
+branding variables, token overrides, appearance variables, personality bridge
+variables, or generated chrome CSS. This prevents inline specificity from silently overriding the canonical
+artifact; precedence is ownership-based instead of cascade-order-dependent.
+
 **Usage:**
 
 ```tsx

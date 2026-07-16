@@ -9,6 +9,7 @@ import React from 'react';
 import { render, act } from '@testing-library/react';
 import { describe, it, expect, afterEach } from 'vitest';
 import { DesignSystemProvider } from '../../../runtime/bootstrap/DesignSystemProvider';
+import { useTenantContext } from '../../../runtime/tenant/context/TenantProvider';
 import type { TenantConfig } from '../../../contracts';
 
 function makeConfig(overrides: Partial<TenantConfig>): TenantConfig {
@@ -22,6 +23,17 @@ function makeConfig(overrides: Partial<TenantConfig>): TenantConfig {
     branding: { companyName: 'Test' },
     ...overrides,
   } as TenantConfig;
+}
+
+function TenantConfigProbe() {
+  const { config } = useTenantContext();
+  return (
+    <div
+      data-testid="tenant-config-probe"
+      data-company={config.branding.companyName}
+      data-primary={config.branding.primaryColor}
+    />
+  );
 }
 
 afterEach(() => {
@@ -153,5 +165,42 @@ describe('TenantAppearance via DesignSystemProvider', () => {
 
     const root = document.documentElement;
     expect(root.style.getPropertyValue('--ds-color-success')).toBe('#00FF00');
+  });
+
+  it('compiled-artifact keeps tenant context complete without re-emitting visual variables', async () => {
+    let view: ReturnType<typeof render> | undefined;
+
+    await act(async () => {
+      view = render(
+        <DesignSystemProvider
+          visualAuthority="compiled-artifact"
+          tenantConfig={makeConfig({
+            branding: {
+              companyName: 'Artifact-owned Tenant',
+              primaryColor: '#FF5500',
+            },
+            tokenOverrides: { glass: { blur: '18px' } },
+            appearance: {
+              general: { palette: { primary: '#00AA88' } },
+              advanced: {
+                tokenOverrides: { '--ds-runtime-appearance-probe': 'must-not-exist' },
+              },
+            },
+          })}
+        >
+          <TenantConfigProbe />
+        </DesignSystemProvider>
+      );
+    });
+
+    const probe = view?.getByTestId('tenant-config-probe');
+    expect(probe).toHaveAttribute('data-company', 'Artifact-owned Tenant');
+    expect(probe).toHaveAttribute('data-primary', '#FF5500');
+
+    const rootStyle = document.documentElement.style;
+    expect(rootStyle.getPropertyValue('--ds-color-primary')).toBe('');
+    expect(rootStyle.getPropertyValue('--ds-glass-blur')).toBe('');
+    expect(rootStyle.getPropertyValue('--ds-runtime-appearance-probe')).toBe('');
+    expect(document.getElementById('ds-personality-tokens')).toBeNull();
   });
 });

@@ -12,7 +12,7 @@
 // ============================================
 export * from './runtime/engines';
 export { ThemeProvider, ThemeContext } from './runtime/theming';
-export type { ThemeProviderProps, ThemeConfig, ThemeContextValue } from './runtime/theming';
+export type { ThemeProviderProps, VisualAuthority, ThemeConfig, ThemeContextValue } from './runtime/theming';
 export * from './runtime/features';
 export * from './runtime/bootstrap';
 export * from './contracts';

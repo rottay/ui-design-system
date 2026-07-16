@@ -478,6 +478,17 @@ const ROTTAY_EMERGENCY_TOKENS = `
 // helpful error message.
 export const ThemeContext = createContext<ThemeContextValue | null>(null);
 
+/**
+ * Selects the single owner of tenant visual CSS variables.
+ *
+ * - `provider` preserves the legacy runtime behavior: ThemeProvider may load
+ *   tenant CSS and emit branding, token, appearance, and generated chrome CSS.
+ * - `compiled-artifact` declares that an app/SSR layer already mounted the
+ *   exact compiled tenant artifact. ThemeProvider keeps theme/tenant context
+ *   and DOM attributes active, but does not emit or load competing visual CSS.
+ */
+export type VisualAuthority = 'provider' | 'compiled-artifact';
+
 // ─────────────────────────────────────────────────────────────────
 // PROVIDER
 // ─────────────────────────────────────────────────────────────────
@@ -498,6 +509,12 @@ export interface ThemeProviderProps {
   theme?: string;
   /** Initial tenant slug. Defaults to {@link DEFAULT_TENANT}. */
   tenant?: string;
+  /**
+   * Owner of tenant visual CSS variables. Defaults to `provider` for backward
+   * compatibility. Use `compiled-artifact` only when the application has
+   * already mounted the canonical compiled artifact (typically during SSR).
+   */
+  visualAuthority?: VisualAuthority;
   /**
    * Industry vertical hint for fallback resolution.
    * When the requested tenant CSS fails to load, the provider falls back to
@@ -546,6 +563,7 @@ export function ThemeProvider({
   children,
   theme: initialTheme = 'base',
   tenant: initialTenant = DEFAULT_TENANT,
+  visualAuthority = 'provider',
   vertical,
   branding,
   tokenOverrides,
@@ -556,6 +574,7 @@ export function ThemeProvider({
   cssBaseUrl = '/themes',
   skipCssLoading = false,
 }: ThemeProviderProps): React.ReactElement {
+  const providerOwnsVisualCss = visualAuthority === 'provider';
   const [theme, setThemeState] = useState(initialTheme);
   const [resolvedTheme, setResolvedTheme] = useState<'dark' | 'light' | 'base'>(
     initialTheme === 'dark' ? 'dark' : initialTheme === 'light' ? 'light' : 'base'
@@ -710,21 +729,41 @@ export function ThemeProvider({
   const loadTenant = useCallback(
     async (tenantName: string) => {
       // Don't reload if already loaded
-      if (tenant === tenantName && config?.isLoaded && !config?.isError) {
+      const configMatchesAuthority = providerOwnsVisualCss
+        ? config?.cssUrl !== 'compiled-artifact'
+        : config?.cssUrl === 'compiled-artifact';
+      if (
+        tenant === tenantName
+        && config?.isLoaded
+        && !config?.isError
+        && configMatchesAuthority
+      ) {
         return;
       }
 
       setIsLoading(true);
       setIsFallback(false);
 
-      // When using bundled CSS (skipCssLoading=true), skip individual CSS loading
-      // The tenant styles are applied via html[data-tenant='x'] selectors
-      // which TenantProvider sets on the HTML element
-      if (skipCssLoading) {
+      // When using bundled CSS (skipCssLoading=true), skip individual CSS loading.
+      // `compiled-artifact` is stricter: the app/SSR layer already mounted the
+      // exact tenant artifact, so loading another tenant stylesheet would create
+      // a second visual authority and make cascade order determine correctness.
+      if (!providerOwnsVisualCss) {
+        // A provider may switch authority during previews/hydration. Remove
+        // only artifacts created by this provider's legacy loading/fallback
+        // paths before yielding ownership to the externally mounted artifact.
+        document
+          .querySelectorAll(`[id^="${THEME_LINK_ID_PREFIX}"]`)
+          .forEach((link) => link.remove());
+        document.getElementById('rottay-emergency-tokens')?.remove();
+        if (emergencyTokensInjected) setEmergencyTokensInjected(false);
+      }
+
+      if (skipCssLoading || !providerOwnsVisualCss) {
         setConfig({
           name: tenantName,
           tenant: tenantName,
-          cssUrl: 'bundled',
+          cssUrl: providerOwnsVisualCss ? 'bundled' : 'compiled-artifact',
           isLoaded: true,
           isError: false,
           isFallback: false,
@@ -788,7 +827,7 @@ export function ThemeProvider({
         setIsLoading(false);
       }
     },
-    [tenant, config, cssBaseUrl, fallbackTenantSlug, loadTenantCSS, fallbackToDefault, injectEmergencyTokens, onError, skipCssLoading]
+    [tenant, config, cssBaseUrl, fallbackTenantSlug, loadTenantCSS, fallbackToDefault, injectEmergencyTokens, onError, providerOwnsVisualCss, skipCssLoading]
   );
 
   /**
@@ -826,9 +865,15 @@ export function ThemeProvider({
 
   useEffect(() => {
     // Skip if branding hasn't actually changed (prevents Fast Refresh loops)
-    const fullKey = brandingKey + tokenOverridesKey + appearanceKey + resolvedTheme;
+    const fullKey = visualAuthority + brandingKey + tokenOverridesKey + appearanceKey + resolvedTheme;
     if (lastBrandingRef.current === fullKey) return;
     lastBrandingRef.current = fullKey;
+
+    // The exact compiled artifact is the sole visual authority in this mode.
+    // Returning before touching documentElement also means a transition from
+    // provider -> compiled-artifact first runs the previous effect's cleanup,
+    // removing every inline variable that ThemeProvider owned.
+    if (!providerOwnsVisualCss) return;
 
     const style = document.documentElement.style;
     // Track every CSS variable we set so we can clean them up on unmount or
@@ -1036,14 +1081,14 @@ export function ThemeProvider({
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandingKey, tokenOverridesKey, appearanceKey, resolvedTheme]);
+  }, [brandingKey, tokenOverridesKey, appearanceKey, providerOwnsVisualCss, resolvedTheme, visualAuthority]);
 
   // Chrome CSS injection for dynamic/DB-backed tenants with BrandTheme.
   // Uses a scoped <style> tag with html[data-tenant='x'] selector so dark-mode
   // selectors can override it properly (unlike inline styles).
   const chromeCssId = `ds-chrome-${tenant}`;
   useEffect(() => {
-    if (!generatedChromeCss) {
+    if (!providerOwnsVisualCss || !generatedChromeCss) {
       // Remove any previous chrome style tag
       document.getElementById(chromeCssId)?.remove();
       return;
@@ -1056,7 +1101,7 @@ export function ThemeProvider({
     }
     styleEl.textContent = generatedChromeCss;
     return () => { styleEl?.remove(); };
-  }, [generatedChromeCss, chromeCssId]);
+  }, [generatedChromeCss, chromeCssId, providerOwnsVisualCss]);
 
   /**
    * Theme state needs to materialize into DOM attributes because the CSS token
@@ -1130,7 +1175,7 @@ export function ThemeProvider({
   useEffect(() => {
     loadTenant(initialTenant);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialTenant]);
+  }, [initialTenant, visualAuthority]);
 
   // Memoize context value to prevent unnecessary re-renders in consumers.
   // Every field in the dependency array is either a primitive or a stable

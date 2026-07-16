@@ -67,6 +67,23 @@ DS base tokens --> vertical baseline --> BrandTheme --> CSS artifacts
 - **Tenant customization**: `TenantAppearanceAdvanced` with chrome sections (controls, table, card, modal, tabs, sidebar, layout)
 - Vertical identity is **static-first** (file-defined), tenant branding is **runtime, bounded** (DB-driven)
 
+Runtime visual ownership is explicit and mutually exclusive:
+
+- `visualAuthority="provider"` (default) preserves bundled/runtime behavior: the provider may load tenant CSS and emit branding, token, appearance, and generated chrome variables.
+- `visualAuthority="compiled-artifact"` is for applications that already mounted the canonical compiled artifact during SSR. Tenant config still powers tenant, locale, theme, motion, feature, and component context, while the provider emits no competing tenant CSS variables, personality bridge, or chrome stylesheet.
+
+```tsx
+<style id="tenant-theme-artifact">{/* exact server-compiled CSS */}</style>
+<DesignSystemProvider
+  tenantConfig={canonicalTenantConfig}
+  visualAuthority="compiled-artifact"
+>
+  <App />
+</DesignSystemProvider>
+```
+
+Do not select `compiled-artifact` without mounting the artifact first: the mode intentionally has no provider-owned visual fallback.
+
 ### Icon System
 
 109 curated icons via `createIcon()` wrapping lucide-react.
