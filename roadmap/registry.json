@@ -2509,7 +2509,7 @@
   },
   {
    "id": "WO-CRA-16",
-   "title": "Semantic Icon v2 and BitHire Global Search canary",
+   "title": "Semantic Icon v2/v3 BitHire Global Search and Auth/Login canaries",
    "lane": "craft",
    "order": 16,
    "size": "S",
@@ -2528,19 +2528,24 @@
     "DS-IMP-091"
    ],
    "milestone": {
-    "id": "DS-IMP-090-091-semantic-icon-v2-global-search-canary",
-    "scope": "Extend the supplier-free Semantic Icon corpus and adopt it in BitHire Global Search without claiming the supplier decision, complete facade family or fleet migration.",
+    "id": "DS-IMP-090-091-bithire-semantic-asset-canaries",
+    "scope": "Extend the supplier-free Semantic Icon corpus through two bounded BitHire canaries: v2 in Global Search and v3 in Auth/Login, with Google OAuth rendered through the established BrandMark facade, without claiming the supplier decision, FeaturePictogram, complete facade family, fleet migration, vertical recipes or signature glyphs.",
     "completionEffect": "none",
     "finalAuthority": "WO-CRA-17",
     "finalPhase": "2B"
    },
    "phase": "0",
-   "notes": "Phase-0 support milestone only. Completion adds bounded DS and BitHire canary evidence but cannot complete DS-IMP-090 or DS-IMP-091; the full supplier decision and four-facade matrix remain WO-CRA-17 in Phase 2B. DS-IMP-093 is explicitly out of scope.",
+   "notes": "Phase-0 support milestone only. The v2 Global Search and v3 Auth/Login plus Google BrandMark evidence remain bounded canaries and cannot complete DS-IMP-090 or DS-IMP-091; the supplier bakeoff, FeaturePictogram and complete four-facade matrix remain WO-CRA-17 in Phase 2B. Fleet migration, vertical recipes, signature glyphs and DS-IMP-093 are explicitly out of scope.",
    "progressLog": [
     {
      "at": "2026-07-16 18:35",
      "by": "codex-icon-canary",
      "note": "Published @rottay/design-system@2.19.26 with the 43-name Semantic Icon v2 corpus after a green production build and 14/14 focal tests. BitHire commit 55abe366b pins 2.19.26, migrates Global Search to semantic names, removes its local spinner, and adds a 2/2 architecture guard; exact remote certification and production sighted proof remain pending."
+    },
+    {
+     "at": "2026-07-16 18:39",
+     "by": "codex-auth-icon-canary",
+     "note": "The second bounded canary is in implementation: Semantic Icon v3 is extending Auth/Login actions through supplier-free names and Google OAuth through the established BrandMark facade. Focused DS and BitHire contracts, release/pin evidence and exact remote certification remain pending; no supplier decision, FeaturePictogram, fleet migration or source completion is claimed."
     }
    ],
    "claimedBy": "codex-icon-canary",
@@ -2553,19 +2558,22 @@
      "ui-design-system",
      "app-bithire"
     ],
-    "rollback": "Remove only the additive Semantic Icon v2 names or return BitHire Global Search to its established DS compatibility aliases while preserving the existing facade corpus.",
-    "disable": "Disable the bounded Global Search semantic-icon canary without disabling the existing Icon, BrandMark or CloudServiceMark facades.",
+    "rollback": "Remove only the affected additive Semantic Icon v2/v3 names, return either bounded BitHire consumer to its established DS compatibility aliases, or return Google OAuth to the prior branded asset while preserving the existing facade corpus.",
+    "disable": "Disable the Global Search and Auth/Login semantic-icon canaries independently without disabling the existing Icon, BrandMark or CloudServiceMark facades.",
     "telemetry": [
-     "semantic-name registry, provenance and adapter parity",
+     "v2/v3 semantic-name registry, provenance and adapter parity",
      "unknown-name and SSR failures",
      "Global Search semantic-name coverage",
-     "direct supplier or supplier-shaped alias paths in the canary"
+     "Auth/Login semantic-name coverage",
+     "Google OAuth BrandMark asset-class resolution",
+     "direct supplier or supplier-shaped alias paths in either canary"
     ],
     "stopConditions": [
      "a public type exposes the supplier",
      "a semantic name lacks provenance or an adapter",
      "named and decorative accessibility contracts diverge",
-     "Global Search retains an ungoverned supplier path",
+     "Global Search or Auth/Login retains an ungoverned supplier path",
+     "Google OAuth renders outside BrandMark or its containing control loses its accessible name",
      "support evidence increments DS-IMP-090 or DS-IMP-091 completion"
     ]
    }
@@ -2591,7 +2599,7 @@
     "DS-IMP-091"
    ],
    "phase": "2B",
-   "notes": "Final authority for DS-IMP-090 and DS-IMP-091. WO-CRA-16 is only a Phase-0 Semantic Icon v2 and BitHire Global Search support milestone; this WO remains phase-locked until the owner opens Phase 2B. Fleet supplier migration (DS-IMP-092) and vertical recipes/signature glyphs (DS-IMP-093) remain separate authorities.",
+   "notes": "Final authority for DS-IMP-090 and DS-IMP-091. WO-CRA-16 remains only a Phase-0 support milestone for the bounded Semantic Icon v2 Global Search and v3 Auth/Login plus Google BrandMark canaries; this WO remains phase-locked until the owner opens Phase 2B. Fleet supplier migration (DS-IMP-092) and vertical recipes/signature glyphs (DS-IMP-093) remain separate authorities.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,

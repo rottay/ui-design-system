@@ -27,7 +27,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | WO-GAT-07 | done | 0 | DS-IMP-060 | DS-IMP-060-phase-0-minimum | WO-GAT-09 | 6 |
 | WO-CRA-14 | in-progress | 0 | DS-IMP-106 | DS-IMP-106-stage-a-quarantine | WO-CRA-15 | 2C |
-| WO-CRA-16 | in-progress | 0 | DS-IMP-090, DS-IMP-091 | DS-IMP-090-091-semantic-icon-v2-global-search-canary | WO-CRA-17 | 2B |
+| WO-CRA-16 | in-progress | 0 | DS-IMP-090, DS-IMP-091 | DS-IMP-090-091-bithire-semantic-asset-canaries | WO-CRA-17 | 2B |
 
 ## In progress
 
@@ -35,7 +35,7 @@
 | --- | --- | --- | --- | --- |
 | WO-ARC-11 | Superadmin presentation bypass | codex-arc11 | 2026-07-15 | 2026-07-15 14:50 — The app-resolved presentation contract now preserves explicit field, tab and individual-action anatomy through collection and detail load failures (DS 4fc07796), with Bithire Agent Roster registrations landed in 68119289f. Published @rottay/design-system 2.19.3 (release 336bd5ea) is pinned by Bithire 220ef765b. Focused DS coverage is green at 57/57, core TypeScript and the 2.19.3 build are green, and the focused Bithire suite remains green at 3/3. Authorization and data access remain app/server-owned; the DS only renders final all/resolved presentation decisions. |
 | WO-CRA-14 | ParticleField Stage-A quarantine | codex-cra14 | 2026-07-14 | 2026-07-15 01:00 — Independent technical GO after adversarial correction: Platform 35a2dcf7 rejects spoofed resolver provenance and hostile loaders (53/53), DS runtime/barrel/CSS gates are green. Integration remains blocked: app-platform is pinned to registry DS 2.17.0, producing exactly five particleField TS2353 errors and the old static ParticleField path; keep WO in-progress until consolidated publish and repin. |
-| WO-CRA-16 | Semantic Icon v2 and BitHire Global Search canary | codex-icon-canary | 2026-07-16 | 2026-07-16 18:35 — Published @rottay/design-system@2.19.26 with the 43-name Semantic Icon v2 corpus after a green production build and 14/14 focal tests. BitHire commit 55abe366b pins 2.19.26, migrates Global Search to semantic names, removes its local spinner, and adds a 2/2 architecture guard; exact remote certification and production sighted proof remain pending. |
+| WO-CRA-16 | Semantic Icon v2/v3 BitHire Global Search and Auth/Login canaries | codex-icon-canary | 2026-07-16 | 2026-07-16 18:39 — The second bounded canary is in implementation: Semantic Icon v3 is extending Auth/Login actions through supplier-free names and Google OAuth through the established BrandMark facade. Focused DS and BitHire contracts, release/pin evidence and exact remote certification remain pending; no supplier decision, FeaturePictogram, fleet migration or source completion is claimed. |
 
 ## Next up (todo, dependencies satisfied)
 
