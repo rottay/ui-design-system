@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import type {
   TenantThemeConfigIdentityV1,
@@ -27,6 +29,11 @@ const IDENTITY: TenantThemeConfigIdentityV1 = {
   verticalKey: 'bithire',
   rowVersion: 7,
 };
+
+const BITHIRE_STATIC_ARTIFACT = readFileSync(
+  resolve(process.cwd(), 'src/tokens/css/artifacts/bithire/index.css'),
+  'utf8',
+);
 
 const SIMPLE_DOCUMENT: TenantThemeDocumentV1 = {
   schemaVersion: 1,
@@ -251,8 +258,10 @@ describe('deterministic artifact compilation and isolation', () => {
     expect(management.scopes.combinedSelector).not.toBe(bithire.scopes.combinedSelector);
   });
 
-  it('keeps the exact tenant overlay above the static baseline and local to sibling/nested roots', () => {
-    const management = compileTenantThemeConfig(hydrate());
+  it('keeps the exact tenant overlay above the generated static artifact and local to sibling/nested roots', () => {
+    const management = compileTenantThemeConfig(hydrate(ADVANCED_DOCUMENT), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
     const bithire = compileTenantThemeConfig(hydrate({
       schemaVersion: 1,
       mode: 'simple',
@@ -275,17 +284,18 @@ describe('deterministic artifact compilation and isolation', () => {
     managementRoot.append(nestedBithireRoot);
     document.body.append(managementRoot, siblingBithireRoot);
 
-    // Deliberately put the highest-specificity static root-state baseline last.
-    // The exact runtime selector must still win, while each root keeps its value.
+    // Deliberately put the complete generated static artifact last. This covers
+    // its highest-specificity light/dark root-state variants, not a toy selector.
     style.textContent = [
       management.css,
       bithire.css,
-      ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])):not([data-theme='dark']):not(.dark) { --ds-color-primary: #3A6FB0; }",
+      BITHIRE_STATIC_ARTIFACT,
     ].join('\n');
     document.head.append(style);
 
     try {
       expect(getComputedStyle(managementRoot).getPropertyValue('--ds-color-primary').trim()).toBe('#0F766E');
+      expect(getComputedStyle(managementRoot).getPropertyValue('--ds-color-bg-primary').trim()).toBe('#FBF6EC');
       expect(getComputedStyle(nestedBithireRoot).getPropertyValue('--ds-color-primary').trim()).toBe('#2563EB');
       expect(getComputedStyle(siblingBithireRoot).getPropertyValue('--ds-color-primary').trim()).toBe('#2563EB');
     } finally {
