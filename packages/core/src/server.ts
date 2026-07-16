@@ -32,6 +32,7 @@ export {
   TENANT_THEME_CONFIG_V1_SCHEMA,
   TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST,
   TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST,
+  TENANT_THEME_VERTICAL_ENVELOPES_V1,
   TenantThemeValidationError,
   canonicalizeTenantThemeValue,
   sha256TenantThemeValue,
@@ -42,6 +43,7 @@ export {
   parseTenantThemeConfig,
   hydrateTenantThemeConfig,
   compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
   tenantThemeArtifactRootAttributes,
 } from './compilers/tenant-theme';
 export type {
@@ -64,6 +66,7 @@ export type {
   TenantThemeDocument,
   TenantThemeDocumentValidationResult,
   TenantThemeDocumentV1,
+  TenantThemeFontPackIdV1,
   TenantThemeSimpleConfigV1,
   TenantThemeSimpleDocumentV1,
   TenantThemeRootAttributesV1,
@@ -79,6 +82,7 @@ export {
   TENANT_THEME_OVERRIDE_TOKENS_V1,
   TENANT_THEME_REFERENCE_TOKENS_V1,
   TENANT_THEME_CHROME_FAMILIES_V1,
+  TENANT_THEME_FONT_PACK_IDS_V1,
 } from './contracts/tenant-theme';
 
 // A11y: branding contrast validation (Wave 6.2 Accessibility Guardian)

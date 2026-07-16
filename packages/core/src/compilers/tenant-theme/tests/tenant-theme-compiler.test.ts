@@ -12,9 +12,11 @@ import {
   TENANT_THEME_CONFIG_V1_SCHEMA,
   TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST,
   TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST,
+  TENANT_THEME_VERTICAL_ENVELOPES_V1,
   TenantThemeValidationError,
   canonicalizeTenantThemeValue,
   compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
   parseTenantThemeDocument,
   sha256TenantThemeValue,
@@ -104,21 +106,7 @@ const ADVANCED_DOCUMENT: TenantThemeDocumentV1 = {
   },
 };
 
-const BITHIRE_TEST_ENVELOPE: TenantThemeVerticalEnvelopeV1 = {
-  schemaVersion: 1,
-  verticalKey: 'bithire',
-  allowedModes: ['simple', 'advanced'],
-  advanced: {
-    chromeFamilies: ['sidebar', 'table', 'cardComponent', 'metricCard'],
-    allowTokenOverrides: true,
-  },
-  ranges: {
-    densityScale: { min: 0.85, max: 1.15 },
-    effectIntensity: { min: 0, max: 0.6 },
-    motionIntensity: { min: 0, max: 0.8 },
-    motionDurationScale: { min: 0.75, max: 1.25 },
-  },
-};
+const BITHIRE_TEST_ENVELOPE = getTenantThemeVerticalEnvelope('bithire')!;
 
 const hydrate = (
   document: TenantThemeDocumentV1 = SIMPLE_DOCUMENT,
@@ -134,17 +122,47 @@ describe('TenantThemeConfig v1 server contract', () => {
 
   it('publishes immutable schema/document drift sentinels', () => {
     expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toBe(
-      'sha256-6a849d6f23fce5687fb2ee9c7619d9ad2f960032c441063c6c71839dd7b97d34',
+      'sha256-5fd9955bb737c574118043c15d70575be8daea96aa8104bc9005a8067b4fb304',
     );
     expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).toBe(
-      'sha256-2552db483bf5143bbbb714f3e9b0cfdb25a9c329c9bf43680f1eb7b838a626fa',
+      'sha256-9c4c5ee91ebb5a2a5f64afeeecf6e038ae9b4acba0a6149eaa2b89a6300f0211',
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.documents.simple)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.limits)).toBe(true);
+    expect(TENANT_THEME_COMPILER_VERSION).toBe('tenant-theme-compiler@2');
+    expect(TENANT_THEME_CONFIG_V1_SCHEMA.limits).toMatchObject({
+      maxCompiledVariables: 512,
+      maxCompiledVariableBytes: 90_112,
+    });
     expect(() => {
       (TENANT_THEME_CONFIG_V1_SCHEMA.limits as { maxDepth: number }).maxDepth = 999;
     }).toThrow(TypeError);
+  });
+
+  it('owns the complete BitHire policy envelope in the server-safe registry', () => {
+    expect(BITHIRE_TEST_ENVELOPE).toEqual({
+      schemaVersion: 1,
+      verticalKey: 'bithire',
+      allowedModes: ['simple', 'advanced'],
+      advanced: {
+        chromeFamilies: [
+          'sidebar', 'layout', 'shell', 'toolbar', 'filterPill', 'breadcrumb', 'search',
+          'controls', 'table', 'cardComponent', 'metricCard', 'signalCard', 'workspaceCard',
+          'compactCard', 'tallCard', 'collectionCard', 'listingGrid', 'modal', 'tabs',
+        ],
+        allowTokenOverrides: true,
+      },
+      ranges: {
+        densityScale: { min: 0.85, max: 1.15 },
+        effectIntensity: { min: 0, max: 0.65 },
+        motionIntensity: { min: 0, max: 0.8 },
+        motionDurationScale: { min: 0.75, max: 1.35 },
+      },
+    } satisfies TenantThemeVerticalEnvelopeV1);
+    expect(Object.isFrozen(TENANT_THEME_VERTICAL_ENVELOPES_V1)).toBe(true);
+    expect(Object.isFrozen(BITHIRE_TEST_ENVELOPE.advanced?.chromeFamilies)).toBe(true);
+    expect(getTenantThemeVerticalEnvelope('unknown')).toBeUndefined();
   });
 
   it('keeps row identity out of the persisted document and hydrates from trusted columns', () => {
@@ -215,6 +233,45 @@ describe('deterministic artifact compilation and isolation', () => {
       appearance: { shape: { buttonStyle: 'pill' } },
     }));
     expect(artifact.variables['--ds-radius-button']).toBe('9999px');
+  });
+
+  it('accepts only code-owned font-pack references inside font-family lists', () => {
+    const document = structuredClone(ADVANCED_DOCUMENT);
+    if (document.mode !== 'advanced') throw new Error('Expected Advanced fixture');
+    document.visualFoundation.general = {
+      ...document.visualFoundation.general,
+      typography: {
+        ...document.visualFoundation.general?.typography,
+        fontFamilyHeading: "var(--ds-font-pack-editorial), Georgia, 'Times New Roman', serif",
+      },
+    };
+    document.visualFoundation.advanced = {
+      ...document.visualFoundation.advanced,
+      tokenOverrides: {
+        ...document.visualFoundation.advanced?.tokenOverrides,
+        '--ds-font-family-display': "var(--ds-font-pack-editorial), Georgia, 'Times New Roman', serif",
+      },
+    };
+
+    const artifact = compileTenantThemeConfig(hydrate(document), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+    expect(artifact.variables['--ds-font-family-heading']).toContain('var(--ds-font-pack-editorial)');
+    expect(artifact.variables['--ds-font-family-display']).toContain('var(--ds-font-pack-editorial)');
+  });
+
+  it.each([
+    'var(--ds-font-family-heading), serif',
+    'var(--ds-font-pack-editorial, Georgia), serif',
+    'var(--ds-font-pack-Editorial), serif',
+    'var(--ds-font-pack-unknown), serif',
+    'var(--ds-font-pack-editorial); color: red',
+  ])('rejects unsafe font-family variable reference %s', (fontFamilyHeading) => {
+    expect(validateTenantThemeDocument({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { typography: { fontFamilyHeading } },
+    }).success).toBe(false);
   });
 
   it('emits separate root/vertical/tenant scopes and one exact combined selector', () => {
@@ -382,6 +439,72 @@ describe('closed schema and hostile input rejection', () => {
       });
       expect(result.success, JSON.stringify(advanced)).toBe(false);
     }
+  });
+
+  it('keeps ramp tokens reference-only while deriving all seven roles from legal base seeds', () => {
+    const authoredRamp = validateTenantThemeDocument({
+      schemaVersion: 1,
+      mode: 'advanced',
+      visualFoundation: {
+        advanced: { tokenOverrides: { '--ds-color-primary-500': '#FF00FF' } },
+      },
+    });
+    expect(authoredRamp.success).toBe(false);
+
+    const artifact = compileTenantThemeConfig(hydrate(ADVANCED_DOCUMENT), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+    for (const role of ['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info'] as const) {
+      for (const step of [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const) {
+        expect(artifact.variables[`--ds-color-${role}-${step}`]).toMatch(/^#[0-9A-F]{6}$/);
+      }
+    }
+  });
+
+  it.each([
+    'rgb(15 118 110)',
+    'hsl(176 77% 26%)',
+    'oklch(0.52 0.09 190)',
+  ])('preserves valid v1 functional color seed %s and derives a safe ramp', (primary) => {
+    const document = {
+      schemaVersion: 1,
+      mode: 'simple' as const,
+      appearance: { palette: { primary } },
+    };
+    expect(validateTenantThemeDocument(document).success).toBe(true);
+    const artifact = compileTenantThemeConfig(hydrate(document));
+    expect(artifact.variables['--ds-color-primary']).toBe(primary);
+    expect(artifact.variables['--ds-color-primary-50']).toContain('color-mix(in oklch');
+  });
+
+  it('admits ten color-only chart categories without opening renderer or data semantics', () => {
+    const categories = Object.fromEntries(
+      Array.from({ length: 10 }, (_, index) => [`--ds-chart-category-${index + 1}`, '#0F766E']),
+    );
+    const document = {
+      schemaVersion: 1,
+      mode: 'advanced' as const,
+      visualFoundation: { advanced: { tokenOverrides: categories } },
+    };
+    expect(validateTenantThemeDocument(document).success).toBe(true);
+    const artifact = compileTenantThemeConfig(hydrate(document), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+    expect(artifact.variables['--ds-chart-category-1']).toBe('#0F766E');
+    expect(artifact.variables['--ds-chart-category-10']).toBe('#0F766E');
+
+    expect(validateTenantThemeDocument({
+      ...document,
+      visualFoundation: {
+        advanced: { tokenOverrides: { '--ds-chart-category-1': 'linear-gradient(#000, #fff)' } },
+      },
+    }).success).toBe(false);
+    expect(validateTenantThemeDocument({
+      ...document,
+      visualFoundation: {
+        advanced: { tokenOverrides: { '--ds-chart-category-1': 'rgb(15 118 110)' } },
+      },
+    }).success).toBe(false);
   });
 
   it('enforces value, field and payload caps', () => {

@@ -19,7 +19,8 @@ import type {
   TenantAppearanceAdvanced,
 } from '../../contracts/themes';
 import { MOTION_DIAL_BOUNDS } from '../../contracts/motion';
-import { isValidCssColor, clampValue } from '../_shared/color-math';
+import { RAMP_STEPS, deriveOklchRamp, type RampSurface } from '../../_internal/color/oklch/ramp';
+import { isValidCssColor, isHexColor, normalizeHexColor, clampValue } from '../_shared/color-math';
 import { chromeToVariables } from '../_shared/chrome-variables';
 
 // ── Validation helpers ──────────────────────────────────────
@@ -62,6 +63,84 @@ const ELEVATION_PRESET: Record<string, Record<string, string>> = {
     '--ds-elevation-3': '0 8px 16px rgba(0,0,0,0.12)',
   },
 };
+
+/**
+ * Code-owned fallback grounds for the single palette admitted by Appearance
+ * v1. The final compiled surface wins when it is a concrete hex color.
+ * `auto` is deliberately light-first: v1 does not carry independent light and
+ * dark seeds/grounds, so pretending to derive two honest ramps would make SSR
+ * and hydration depend on ambient browser state. A future schema can add dual
+ * palettes without changing this deterministic v2 artifact contract.
+ */
+const APPEARANCE_RAMP_GROUNDS: Record<RampSurface, string> = {
+  light: '#FFFFFF',
+  dark: '#0C0C0E',
+};
+
+const FUNCTIONAL_RAMP_SEED_WEIGHTS = [8, 16, 28, 42, 64, 100, 84, 66, 48, 28] as const;
+
+function deriveFunctionalOklchRamp(
+  seed: string,
+  surface: RampSurface,
+  ground: string,
+): Record<number, string> {
+  const far = surface === 'dark' ? APPEARANCE_RAMP_GROUNDS.light : '#161616';
+
+  return Object.fromEntries(RAMP_STEPS.map((step, index) => {
+    const seedWeight = FUNCTIONAL_RAMP_SEED_WEIGHTS[index];
+    const mixTarget = index <= 5 ? ground : far;
+    return [step, seedWeight === 100
+      ? seed
+      : `color-mix(in oklch, ${seed} ${seedWeight}%, ${mixTarget})`];
+  }));
+}
+
+function resolveAppearanceRampGround(
+  surface: RampSurface,
+  compiledBaseVariables: Readonly<Record<string, string>>,
+): string {
+  const candidates = surface === 'dark'
+    ? ['--ds-color-dark-bg', '--ds-color-bg-primary']
+    : ['--ds-color-bg-primary', '--ds-color-background', '--ds-color-bg'];
+  for (const name of candidates) {
+    const candidate = compiledBaseVariables[name];
+    if (candidate && isHexColor(candidate)) return normalizeHexColor(candidate);
+  }
+  return APPEARANCE_RAMP_GROUNDS[surface];
+}
+
+/**
+ * Derive compiler-owned ramps for every final semantic base color. General
+ * supplies primary/secondary/accent; legal Advanced overrides may replace
+ * those bases and add success/warning/error/info before this final projection.
+ *
+ * Hex seeds use the concrete, gamut-mapped OKLCH derivation shared with
+ * BrandTheme. Other CSS Color v1 inputs remain backwards compatible through a
+ * deterministic CSS `color-mix(in oklch, ...)` projection. Advanced data never
+ * authors ramp names: `appearanceToVariables` derives and applies them last.
+ */
+export function deriveAppearanceColorRamps(
+  general: TenantAppearanceGeneral,
+  compiledBaseVariables: Readonly<Record<string, string>> = appearanceGeneralToVariables(general),
+): Record<string, string> {
+  const palette = general.palette;
+  const surface: RampSurface = palette?.backgroundMode === 'dark' ? 'dark' : 'light';
+  const ground = resolveAppearanceRampGround(surface, compiledBaseVariables);
+  const vars: Record<string, string> = {};
+
+  for (const role of [
+    'primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info',
+  ] as const) {
+    const seed = compiledBaseVariables[`--ds-color-${role}`];
+    if (!seed || !isValidCssColor(seed)) continue;
+    const ramp = isHexColor(seed)
+      ? deriveOklchRamp(normalizeHexColor(seed), ground, surface)
+      : deriveFunctionalOklchRamp(seed, surface, ground);
+    for (const step of RAMP_STEPS) vars[`--ds-color-${role}-${step}`] = ramp[step];
+  }
+
+  return vars;
+}
 
 /**
  * Convert TenantAppearanceGeneral into a flat Record of CSS custom property
@@ -233,6 +312,11 @@ export function appearanceToVariables(
   if (appearance.advanced) {
     Object.assign(vars, appearanceAdvancedToVariables(appearance.advanced));
   }
+
+  // Derived ramps are compiler-owned output. Apply them after Advanced so a
+  // broad runtime Appearance object cannot accidentally arbitrate ramp names;
+  // TenantTheme's closed schema rejects those names at the DB boundary too.
+  Object.assign(vars, deriveAppearanceColorRamps(appearance.general ?? {}, vars));
 
   return vars;
 }

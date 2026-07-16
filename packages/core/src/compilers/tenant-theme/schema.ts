@@ -10,6 +10,7 @@ import { MOTION_DIAL_BOUNDS } from '../../contracts/motion';
 import {
   TENANT_THEME_OVERRIDE_TOKENS_V1,
   TENANT_THEME_REFERENCE_TOKENS_V1,
+  TENANT_THEME_FONT_PACK_IDS_V1,
   TENANT_THEME_SCHEMA_VERSION,
 } from '../../contracts/tenant-theme';
 
@@ -17,7 +18,7 @@ export type TenantThemeSchemaNode =
   | { type: 'object'; fields: Readonly<Record<string, TenantThemeSchemaNode>>; required?: readonly string[] }
   | { type: 'literal'; value: string | number }
   | { type: 'enum'; values: readonly (string | number)[] }
-  | { type: 'string'; format: 'identifier' | 'slug' | 'color' | 'font-family' | 'visual-value' }
+  | { type: 'string'; format: 'identifier' | 'slug' | 'color' | 'hex-color' | 'font-family' | 'visual-value' }
   | { type: 'number'; integer?: boolean; min?: number; max?: number };
 
 const literal = (value: string | number): TenantThemeSchemaNode => ({ type: 'literal', value });
@@ -39,6 +40,7 @@ const visualFields = (fields: readonly string[]): Readonly<Record<string, Tenant
   Object.fromEntries(fields.map((field) => [field, string('visual-value')]));
 
 const COLOR = string('color');
+const HEX_COLOR = string('hex-color');
 const VISUAL = string('visual-value');
 const FONT_WEIGHT = number({ min: 1, max: 1000 });
 const OPACITY = number({ min: 0, max: 1 });
@@ -311,7 +313,9 @@ const chrome = object({
 
 const tokenValueRules: Readonly<Record<string, TenantThemeSchemaNode>> = Object.fromEntries(
   TENANT_THEME_OVERRIDE_TOKENS_V1.map((token) => {
-    if (token.startsWith('--ds-color-') || token.startsWith('--ds-overlay-')) return [token, COLOR];
+    if (token.startsWith('--ds-chart-category-')) return [token, HEX_COLOR];
+    if (token.startsWith('--ds-color-')
+      || token.startsWith('--ds-overlay-')) return [token, COLOR];
     if (token.startsWith('--ds-font-family-')) return [token, string('font-family')];
     if (token.startsWith('--ds-line-height-')) return [token, number({ min: 0.5, max: 3 })];
     if (token === '--ds-density-scale') return [token, number({ min: 0.75, max: 1.25 })];
@@ -393,11 +397,17 @@ export const TENANT_THEME_CONFIG_V1_SCHEMA = deepFreeze({
   ]),
   overrideTokens: TENANT_THEME_OVERRIDE_TOKENS_V1,
   referenceTokens: TENANT_THEME_REFERENCE_TOKENS_V1,
+  fontPackIds: TENANT_THEME_FONT_PACK_IDS_V1,
   limits: Object.freeze({
     maxDocumentBytes: 65_536,
     maxDepth: 10,
     maxObjectFields: 400,
-    maxCompiledVariables: 240,
+    // Advanced can legally project broad chrome plus 70 compiler-owned color
+    // ramp variables. The adversarial max-byte v2 fixture emits 69,894 bytes:
+    // 64 KiB is 4,358 bytes too small; 88 KiB leaves 20,218 bytes of headroom
+    // while remaining a hard SSR/hydration ceiling.
+    maxCompiledVariables: 512,
+    maxCompiledVariableBytes: 90_112,
     maxStringLength: 512,
     maxFontFamilyLength: 200,
     maxShadowLayers: 4,

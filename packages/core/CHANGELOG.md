@@ -1,5 +1,19 @@
 # @rottay/design-system
 
+## 2.19.22
+
+### Patch Changes
+
+- Upgrade TenantTheme compilation to `tenant-theme-compiler@2`, deriving
+  deterministic, surface-aware OKLCH ramps for all seven final color roles.
+- Publish the code-owned BitHire vertical envelope through the server-safe
+  registry so apps preview and publish against one fail-closed policy.
+- Expose ten color-only chart-category dials without allowing tenant data to
+  alter chart renderers or data semantics.
+- Expand the bounded Advanced artifact budget to 512 variables plus an 88 KiB
+  canonical payload ceiling, and allow only code-owned font-pack references in
+  tenant font-family lists.
+
 ## 2.19.21
 
 ### Patch Changes

@@ -10,7 +10,9 @@ import {
   appearanceGeneralToVariables,
   appearanceAdvancedToVariables,
   appearanceToVariables,
+  deriveAppearanceColorRamps,
 } from '..';
+import { RAMP_STEPS } from '../../../_internal/color/oklch/ramp';
 import type {
   TenantAppearanceGeneral,
   TenantAppearanceAdvanced,
@@ -278,5 +280,98 @@ describe('appearanceToVariables', () => {
     expect(vars['--ds-sidebar-bg']).toBe('#custom');
     // General's other sidebar vars survive
     expect(vars['--ds-sidebar-text']).toBe('var(--ds-color-text-primary)');
+  });
+
+  it('derives complete compiler-owned OKLCH ramps for every final base color role', () => {
+    const vars = appearanceToVariables({
+      general: {
+        palette: { primary: '#0F766E', secondary: '#8C6D46', accent: '#E2725B' },
+      },
+      advanced: {
+        tokenOverrides: {
+          '--ds-color-success': '#5B8A3A',
+          '--ds-color-warning': '#C39E22',
+          '--ds-color-error': '#C0392B',
+          '--ds-color-info': '#5B6FA8',
+        },
+      },
+    });
+
+    for (const role of ['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info'] as const) {
+      for (const step of RAMP_STEPS) {
+        expect(vars[`--ds-color-${role}-${step}`]).toMatch(/^#[0-9A-F]{6}$/);
+      }
+    }
+  });
+
+  it('keeps dark ramps surface-aware while auto is deterministic light-first', () => {
+    const light = deriveAppearanceColorRamps({
+      palette: { primary: '#0F766E', backgroundMode: 'light' },
+    });
+    const auto = deriveAppearanceColorRamps({
+      palette: { primary: '#0F766E', backgroundMode: 'auto' },
+    });
+    const dark = deriveAppearanceColorRamps({
+      palette: { primary: '#0F766E', backgroundMode: 'dark' },
+    });
+
+    expect(auto).toEqual(light);
+    expect(dark['--ds-color-primary-50']).not.toBe(light['--ds-color-primary-50']);
+    expect(dark['--ds-color-primary-900']).not.toBe(light['--ds-color-primary-900']);
+  });
+
+  it('keys concrete ramps to the final tenant surface with deterministic fallbacks', () => {
+    const cream = deriveAppearanceColorRamps(
+      { palette: { primary: '#0F766E', backgroundMode: 'light' } },
+      { '--ds-color-primary': '#0F766E', '--ds-color-bg-primary': '#FBF6EC' },
+    );
+    const white = deriveAppearanceColorRamps(
+      { palette: { primary: '#0F766E', backgroundMode: 'light' } },
+      { '--ds-color-primary': '#0F766E' },
+    );
+    const warmDark = deriveAppearanceColorRamps(
+      { palette: { primary: '#0F766E', backgroundMode: 'dark' } },
+      { '--ds-color-primary': '#0F766E', '--ds-color-dark-bg': '#201B15' },
+    );
+    const defaultDark = deriveAppearanceColorRamps(
+      { palette: { primary: '#0F766E', backgroundMode: 'dark' } },
+      { '--ds-color-primary': '#0F766E' },
+    );
+
+    expect(cream['--ds-color-primary-50']).not.toBe(white['--ds-color-primary-50']);
+    expect(warmDark['--ds-color-primary-50']).not.toBe(defaultDark['--ds-color-primary-50']);
+  });
+
+  it('preserves v1 functional colors through deterministic OKLCH formulas', () => {
+    const vars = appearanceToVariables({
+      general: { palette: { primary: 'hsl(170 78% 26%)', backgroundMode: 'dark' } },
+    });
+
+    expect(vars['--ds-color-primary']).toBe('hsl(170 78% 26%)');
+    expect(vars['--ds-color-primary-50']).toBe(
+      'color-mix(in oklch, hsl(170 78% 26%) 8%, #0C0C0E)',
+    );
+    expect(vars['--ds-color-primary-500']).toBe('hsl(170 78% 26%)');
+    expect(vars['--ds-color-primary-900']).toBe(
+      'color-mix(in oklch, hsl(170 78% 26%) 28%, #FFFFFF)',
+    );
+  });
+
+  it('reapplies derived ramps from the final Advanced seed and never accepts authored ramp values', () => {
+    const vars = appearanceToVariables({
+      general: { palette: { primary: '#0F766E' } },
+      advanced: {
+        tokenOverrides: {
+          '--ds-color-primary': '#2563EB',
+          '--ds-color-primary-500': '#FF00FF',
+        },
+      },
+    } as unknown as Parameters<typeof appearanceToVariables>[0]);
+
+    expect(vars['--ds-color-primary-500']).toMatch(/^#[0-9A-F]{6}$/);
+    expect(vars['--ds-color-primary-500']).not.toBe('#FF00FF');
+    expect(vars['--ds-color-primary-500']).toBe(
+      deriveAppearanceColorRamps({}, { '--ds-color-primary': '#2563EB' })['--ds-color-primary-500'],
+    );
   });
 });

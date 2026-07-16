@@ -21,6 +21,7 @@ import type {
 } from '../../contracts/tenant-theme';
 import {
   TENANT_THEME_CHROME_FAMILIES_V1,
+  TENANT_THEME_FONT_PACK_IDS_V1,
   TENANT_THEME_REFERENCE_TOKENS_V1,
   TENANT_THEME_SCHEMA_VERSION,
 } from '../../contracts/tenant-theme';
@@ -34,7 +35,48 @@ import {
 export { TENANT_THEME_CONFIG_V1_SCHEMA } from './schema';
 export type { TenantThemeSchemaNode } from './schema';
 
-export const TENANT_THEME_COMPILER_VERSION = 'tenant-theme-compiler@1' as const;
+export const TENANT_THEME_COMPILER_VERSION = 'tenant-theme-compiler@2' as const;
+
+function deepFreezeTenantThemeValue<T>(value: T): Readonly<T> {
+  if (value !== null && typeof value === 'object') {
+    for (const child of Object.values(value as Record<string, unknown>)) deepFreezeTenantThemeValue(child);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+/**
+ * Code-owned vertical policy registry. Apps resolve the trusted vertical from
+ * their tenant directory, then ask this registry for the compilation envelope;
+ * neither client payloads nor tenant JSONB can supply or widen this authority.
+ */
+export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
+  bithire: {
+    schemaVersion: TENANT_THEME_SCHEMA_VERSION,
+    verticalKey: 'bithire',
+    allowedModes: ['simple', 'advanced'],
+    advanced: {
+      chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
+      allowTokenOverrides: true,
+    },
+    ranges: {
+      densityScale: { min: 0.85, max: 1.15 },
+      effectIntensity: { min: 0, max: 0.65 },
+      motionIntensity: { min: 0, max: 0.8 },
+      motionDurationScale: { min: 0.75, max: 1.35 },
+    },
+  },
+} as const satisfies Readonly<Record<string, TenantThemeVerticalEnvelopeV1>>);
+
+/** Resolve a trusted code-owned envelope; unknown verticals fail closed. */
+export function getTenantThemeVerticalEnvelope(
+  verticalKey: string,
+): TenantThemeVerticalEnvelopeV1 | undefined {
+  if (!Object.prototype.hasOwnProperty.call(TENANT_THEME_VERTICAL_ENVELOPES_V1, verticalKey)) return undefined;
+  return TENANT_THEME_VERTICAL_ENVELOPES_V1[
+    verticalKey as keyof typeof TENANT_THEME_VERTICAL_ENVELOPES_V1
+  ];
+}
 
 const SHA256_CONSTANTS = [
   0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -175,6 +217,7 @@ const documentSchemaSource = {
   forbiddenCapabilities: TENANT_THEME_CONFIG_V1_SCHEMA.forbiddenCapabilities,
   overrideTokens: TENANT_THEME_CONFIG_V1_SCHEMA.overrideTokens,
   referenceTokens: TENANT_THEME_CONFIG_V1_SCHEMA.referenceTokens,
+  fontPackIds: TENANT_THEME_CONFIG_V1_SCHEMA.fontPackIds,
   limits: TENANT_THEME_CONFIG_V1_SCHEMA.limits,
 };
 
@@ -378,6 +421,29 @@ function isTenantColor(value: string): boolean {
     && !/^(?:var|inherit|currentColor|unset|initial|none)\b/i.test(value);
 }
 
+const FONT_PACK_REFERENCE = /var\(--ds-font-pack-([a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)\)/g;
+
+/**
+ * Admit only code-owned font-pack variables inside an otherwise ordinary CSS
+ * font-family list. Arbitrary `var()` references and fallback arguments stay
+ * forbidden, so DB data can choose a loaded pack but cannot name private DS
+ * tokens or turn font loading into a tenant-owned asset channel.
+ */
+function isSafeFontFamily(value: string): boolean {
+  const limits = TENANT_THEME_CONFIG_V1_SCHEMA.limits;
+  if (value.length === 0 || value.length > limits.maxFontFamilyLength || value !== value.trim()) return false;
+  const references = value.match(FONT_PACK_REFERENCE) ?? [];
+  const allVarFunctions = value.match(/var\s*\(/gi) ?? [];
+  if (references.length !== allVarFunctions.length) return false;
+  const allowedPacks = new Set<string>(TENANT_THEME_FONT_PACK_IDS_V1);
+  for (const reference of references) {
+    const packId = /^var\(--ds-font-pack-(.+)\)$/.exec(reference)?.[1];
+    if (!packId || !allowedPacks.has(packId)) return false;
+  }
+  const withoutFontPacks = value.replace(FONT_PACK_REFERENCE, 'FontPack');
+  return /^[\p{L}\p{N}\s'",._-]+$/u.test(withoutFontPacks);
+}
+
 function validateNode(
   value: unknown,
   rule: TenantThemeSchemaNode,
@@ -445,10 +511,11 @@ function validateNode(
     case 'color':
       valid = isTenantColor(value);
       break;
+    case 'hex-color':
+      valid = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
+      break;
     case 'font-family':
-      valid = value.length <= TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxFontFamilyLength
-        && value === value.trim()
-        && /^[\p{L}\p{N}\s'",._-]+$/u.test(value);
+      valid = isSafeFontFamily(value);
       break;
     case 'visual-value':
       valid = isSafeVisualValue(value, path);
@@ -762,7 +829,8 @@ export function compileTenantThemeConfig(
 
   const normalizedAppearance = normalizeAppearance(config);
   const variables = sortedVariables(appearanceToVariables(normalizedAppearance as TenantAppearance));
-  if (Object.keys(variables).length > TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariables) {
+  const compiledVariableCount = Object.keys(variables).length;
+  if (compiledVariableCount > TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariables) {
     throw new TenantThemeValidationError([{
       code: 'invalid_value',
       path: '$.visualFoundation',
@@ -777,6 +845,14 @@ export function compileTenantThemeConfig(
         message: 'Appearance compiler emitted an unsafe variable declaration',
       }]);
     }
+  }
+  const compiledVariableBytes = new TextEncoder().encode(canonicalizeTenantThemeValue(variables)).byteLength;
+  if (compiledVariableBytes > TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariableBytes) {
+    throw new TenantThemeValidationError([{
+      code: 'invalid_value',
+      path: '$.visualFoundation',
+      message: `Compiled variable payload exceeds ${TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariableBytes} bytes`,
+    }]);
   }
 
   const scopes = buildScopes(config);

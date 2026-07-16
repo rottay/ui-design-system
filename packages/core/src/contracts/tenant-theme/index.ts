@@ -40,6 +40,16 @@ export const TENANT_THEME_OVERRIDE_TOKENS_V1 = [
   '--ds-color-primary',
   '--ds-color-secondary',
   '--ds-color-accent',
+  '--ds-chart-category-1',
+  '--ds-chart-category-2',
+  '--ds-chart-category-3',
+  '--ds-chart-category-4',
+  '--ds-chart-category-5',
+  '--ds-chart-category-6',
+  '--ds-chart-category-7',
+  '--ds-chart-category-8',
+  '--ds-chart-category-9',
+  '--ds-chart-category-10',
   '--ds-color-success',
   '--ds-color-warning',
   '--ds-color-error',
@@ -241,6 +251,10 @@ export const TENANT_THEME_CHROME_FAMILIES_V1 = [
   'modal',
   'tabs',
 ] as const satisfies readonly (keyof TenantThemeChromeV1)[];
+
+/** Code-owned static font packs TenantTheme may reference by CSS variable. */
+export const TENANT_THEME_FONT_PACK_IDS_V1 = ['editorial'] as const;
+export type TenantThemeFontPackIdV1 = (typeof TENANT_THEME_FONT_PACK_IDS_V1)[number];
 
 export interface TenantThemeAdvancedAppearanceV1 {
   chrome?: TenantThemeChromeV1;
