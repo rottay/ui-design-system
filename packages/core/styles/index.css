@@ -27692,20 +27692,31 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 .rottay-action-dock[data-part='root'][data-placement='bottom'] {
-  inset-block-end: 0;
   padding-block-start: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
   padding-block-end: max(
     var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
-    var(--ds-action-dock-safe-area-bottom, env(safe-area-inset-bottom, 0px))
+    var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px)))
   );
   box-shadow: var(--ds-action-dock-shadow-bottom, var(--ds-shadow-navbar));
+}
+
+.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
+  inset-block-end: calc(var(--ds-shell-bottom-inset, 0px) + var(--ds-virtual-keyboard-inset, 0px));
+}
+
+.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
+  inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
+}
+
+.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
+  inset-block-end: 0;
 }
 
 .rottay-action-dock[data-part='root'][data-placement='top'] {
   inset-block-start: 0;
   padding-block-start: max(
     var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
-    var(--ds-action-dock-safe-area-top, env(safe-area-inset-top, 0px))
+    var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
   );
   padding-block-end: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
   box-shadow: var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
@@ -32634,6 +32645,22 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: var(--ds-radius-lg);
 }
 
+.ds-pattern-step-wizard.ds-engine-modern[data-part='root'][data-action-posture='sticky-bottom'] {
+  padding-block-end: var(--ds-step-wizard-action-dock-reserved-space, 7rem);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-counter'][data-part='step-counter'] {
+  margin-block-end: var(--ds-spacing-5, 1.25rem);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-typography-heading-font-weight, 600);
+  line-height: var(--ds-line-height-sm, 1.25rem);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__action-dock [data-part='nav-bar'][data-part='nav-bar'] {
+  border-top: 0;
+}
+
 /* ---- loading skeleton shimmer bars ---- */
 .ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'] {
   border-radius: var(--ds-radius-full);
@@ -32666,7 +32693,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 2px solid var(--ds-color-border-secondary);
   box-shadow: none;
 }
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+.ds-pattern-step-wizard.ds-engine-modern
+  [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
   border: none;
@@ -34127,6 +34155,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: var(--ds-radius-lg);
 }
 
+.ds-pattern-step-wizard.ds-engine-rustic[data-part='root'][data-action-posture='sticky-bottom'] {
+  padding-block-end: var(--ds-step-wizard-action-dock-reserved-space, 7rem);
+}
+
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-counter'][data-part='step-counter'] {
+  margin-block-end: var(--ds-spacing-5, 1.25rem);
+  color: var(--ds-color-neutral-600);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-typography-heading-font-weight, 600);
+  line-height: var(--ds-line-height-sm, 1.25rem);
+}
+
 /* ---- loading skeleton shimmer bars (was s.skeleton; width/height stay inline,
         they are call-site arguments) ---- */
 .ds-pattern-step-wizard.ds-engine-rustic [data-part='skeleton-progress'],
@@ -34150,7 +34190,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-primary-700);
   border: 2px solid var(--ds-color-primary-600);
 }
-.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+.ds-pattern-step-wizard.ds-engine-rustic
+  [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
   background: var(--ds-color-primary-600);
   color: var(--ds-color-text-on-primary);
 }
@@ -36151,9 +36192,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-muted);
 }
 
-/* Mobile sticky action bar: the gradient is a scrim that fades the form out from
-   under the buttons. It exists only in the sticky posture. */
-.ds-surface.ds-form [data-part='actions'][data-sticky='true'] {
+/* A fixed ActionDock leaves the form scrollable through its final field/action. */
+.ds-surface.ds-form.ds-form--sticky-actions {
+  padding-block-end: var(--ds-form-action-dock-reserved-space, 6rem);
+}
+
+.ds-form__action-dock.rottay-action-dock[data-part='root'][data-placement][data-mode] {
   background: linear-gradient(to top, var(--ds-color-bg-primary) 85%, transparent);
 }
 
