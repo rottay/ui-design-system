@@ -28,6 +28,7 @@ import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP } from '../Modal.types';
 import { useModalInertSiblings } from '../utils/useModalInertSiblings';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import { syncDialogAttributes } from '../../shared/dialog-attributes';
 
 /**
  * Classic engine implementation of Modal using Ant Design.
@@ -63,7 +64,35 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
     disableAnimation = MODAL_DEFAULTS.disableAnimation,
     className = '',
     style = {},
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
+  const panelRef = React.useRef<HTMLDivElement>(null);
+
+  const setPanelRef = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      panelRef.current = node;
+      syncDialogAttributes(node, {
+        id,
+        dataTestId,
+        ariaLabel,
+        ariaDescribedBy,
+      });
+    },
+    [ariaDescribedBy, ariaLabel, dataTestId, id]
+  );
+
+  React.useEffect(() => {
+    if (!open) return;
+    syncDialogAttributes(panelRef.current, {
+      id,
+      dataTestId,
+      ariaLabel,
+      ariaDescribedBy,
+    });
+  }, [ariaDescribedBy, ariaLabel, dataTestId, id, open]);
 
   /** Whether the modal should render as fullscreen on the current viewport. */
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
@@ -119,6 +148,7 @@ export default function ClassicModal(props: ModalProps): React.ReactElement | nu
       destroyOnHidden
       className={`rottay-modal rottay-modal--classic ${className}`}
       style={modalStyle}
+      panelRef={setPanelRef}
       styles={{
         body: bodyStyle,
         mask: showBackdrop ? undefined : { display: 'none' },

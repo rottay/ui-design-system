@@ -22,7 +22,7 @@
 
 'use client';
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useId } from 'react';
 import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } from '../Modal.types';
 import { Portal } from '../utils/Portal';
@@ -76,7 +76,14 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     disableAnimation = MODAL_DEFAULTS.disableAnimation,
     className = '',
     style = {},
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
+  const generatedLabelId = useId();
+  const titleId = `${id || generatedLabelId}-title`;
+  const descriptionId = `${id || generatedLabelId}-description`;
 
   /** Whether the modal should render as fullscreen on the current viewport. */
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
@@ -270,6 +277,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
         <div style={modalContainerStyle}>
           <FocusTrap active={open} autoFocus restoreFocus>
             <div
+              id={id}
+              data-testid={dataTestId}
               data-part="surface"
               data-open="true"
               data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
@@ -279,8 +288,9 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
               style={modalStyle}
               role="dialog"
               aria-modal="true"
-              aria-labelledby={title ? 'modal-title' : undefined}
-              aria-describedby={description ? 'modal-description' : undefined}
+              aria-label={ariaLabel}
+              aria-labelledby={!ariaLabel && title && !header ? titleId : undefined}
+              aria-describedby={ariaDescribedBy || (description ? descriptionId : undefined)}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -288,7 +298,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
                 <div data-part="header" data-divider={divider ? 'true' : 'false'} style={headerStyle}>
                   <div data-part="title" style={titleStyle}>
                     {header || (
-                      title && <span id="modal-title">{title}</span>
+                      title && <span id={titleId}>{title}</span>
                     )}
                   </div>
                   {closable && (
@@ -321,7 +331,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
               <div data-part="body" style={bodyStyle}>
                 {description && (
                   <p
-                    id="modal-description"
+                    id={descriptionId}
                     data-part="description"
                     style={{
                       marginTop: 0,

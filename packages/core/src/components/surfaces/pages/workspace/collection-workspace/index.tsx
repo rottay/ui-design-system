@@ -15,11 +15,11 @@
  * Advanced filters are collapsible -- hidden by default, toggled via button.
  */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { CheckSquare2, ChevronDown, Filter } from 'lucide-react';
 import { arrayValueAt } from '@/_internal/utils/collections';
-import type { ColumnDef, EditableConfig, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
+import type { ColumnDef, EditableConfig, FilterDef, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
 import type {
   CollectionWorkspaceChromeConfig,
   CollectionWorkspaceConfig,
@@ -36,7 +36,10 @@ import type {
   SearchCommandBarConfig,
   SearchCommandBarCommand,
 } from '../../../../structures/workspace/search-command-bar';
-import { useCollectionWorkspace } from '../../../foundation/hooks/useCollectionWorkspace';
+import {
+  isCollectionFilterValueActive,
+  useCollectionWorkspace,
+} from '../../../foundation/hooks/useCollectionWorkspace';
 import { useAdaptivePosture } from '../../../foundation/hooks/useAdaptivePosture';
 import {
   isResolvedSurfaceAccess,
@@ -57,6 +60,7 @@ import { Stack } from '../../../../primitives/layout/Stack';
 import { Flex } from '../../../../primitives/layout/Flex';
 import { Text } from '../../../../primitives/display/Typography';
 import { Button } from '../../../../primitives/inputs/Button';
+import { AdaptiveOverlay } from '../../../../primitives/overlay/AdaptiveOverlay';
 import { WorkspaceShell } from '../../../layout/collection-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
@@ -159,6 +163,18 @@ function resolveKey<T extends object>(
 function readCollectionRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
   return Reflect.get(value, key);
+}
+
+function resolveDefaultFilterValues(filters: FilterDef[] | undefined): Record<string, unknown> {
+  const defaults: Record<string, unknown> = {};
+  for (const filter of filters ?? []) {
+    if (filter.defaultValue !== undefined) defaults[filter.key] = filter.defaultValue;
+  }
+  return defaults;
+}
+
+function countActiveFilterValues(values: Record<string, unknown>): number {
+  return Object.values(values).filter(isCollectionFilterValueActive).length;
 }
 
 function resolveSortValue<T extends object>(row: T, column: ColumnDef<T>): unknown {
@@ -418,11 +434,17 @@ function UtilityIcon({
   label,
   active,
   onClick,
+  ariaControls,
+  ariaExpanded,
+  ariaHasPopup,
 }: {
   icon: ReactNode;
   label: string;
   active?: boolean;
   onClick: () => void;
+  ariaControls?: string;
+  ariaExpanded?: boolean;
+  ariaHasPopup?: React.AriaAttributes['aria-haspopup'];
 }) {
   return (
     <Box
@@ -433,6 +455,9 @@ function UtilityIcon({
       onClick={onClick}
       title={label}
       aria-label={label}
+      aria-controls={ariaControls}
+      aria-expanded={ariaExpanded}
+      aria-haspopup={ariaHasPopup}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -788,6 +813,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   // Collapsible advanced filters
   const hasFilters = Boolean(controls?.filters && controls.filters.length > 0);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [filterDraftValues, setFilterDraftValues] = useState<Record<string, unknown>>({});
+  const filterSheetId = `ds-collection-filter-sheet-${useId().replace(/:/g, '')}`;
+  const usesFilterSheet = Boolean(
+    hasFilters && posture.filters === 'sheet' && !posture.isDesktop,
+  );
+  const inlineFiltersExpanded = filtersExpanded && !usesFilterSheet;
 
   const effectiveViewMode = useMemo(() => {
     if (posture.collection && posture.breakpoint !== 'desktop') {
@@ -796,8 +827,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     return workspace.activeViewMode;
   }, [posture.collection, posture.breakpoint, workspace.activeViewMode]);
 
-  const filterLayout = posture.filters === 'sheet' || posture.filters === 'dropdown'
-    ? 'stacked' : 'inline';
+  const filterLayout = posture.filters === 'dropdown' ? 'stacked' : 'inline';
   const showOptionalChrome = !posture.compactHeader && !posture.isPhone;
   const showContextChrome = Boolean(
     resolvedContextSlot && (showOptionalChrome || chrome?.context === true),
@@ -1250,6 +1280,39 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       workspace.resetFilters();
     }
   }, [activeFilters?.onClearAll, workspace]);
+  const activeFilterCount = workspace.activeFilterCount;
+  const hasActiveFilters = activeFilterCount > 0;
+  const draftActiveFilterCount = useMemo(
+    () => countActiveFilterValues(filterDraftValues),
+    [filterDraftValues],
+  );
+  const openFilterSheet = useCallback(() => {
+    setFilterDraftValues({ ...workspace.filterValues });
+    setFiltersExpanded(true);
+  }, [workspace.filterValues]);
+  const closeFilterSheet = useCallback(() => {
+    setFilterDraftValues({ ...workspace.filterValues });
+    setFiltersExpanded(false);
+  }, [workspace.filterValues]);
+  const applyFilterSheet = useCallback(() => {
+    workspace.applyFilters({ ...filterDraftValues });
+    setFiltersExpanded(false);
+  }, [filterDraftValues, workspace]);
+  const clearFilterSheetDraft = useCallback(() => {
+    setFilterDraftValues(resolveDefaultFilterValues(controls?.filters));
+  }, [controls?.filters]);
+  const handleFiltersToggle = useCallback(() => {
+    if (!usesFilterSheet) {
+      setFiltersExpanded((current) => !current);
+      return;
+    }
+    if (filtersExpanded) closeFilterSheet();
+    else openFilterSheet();
+  }, [closeFilterSheet, filtersExpanded, openFilterSheet, usesFilterSheet]);
+  const handleFilterSheetOpenChange = useCallback((open: boolean) => {
+    if (open) openFilterSheet();
+    else closeFilterSheet();
+  }, [closeFilterSheet, openFilterSheet]);
 
   useEffect(() => {
     if (!isPremium || typeof window === 'undefined') return;
@@ -1268,7 +1331,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       const key = event.key.toLowerCase();
       if (key === 'f' && hasFilters) {
         event.preventDefault();
-        setFiltersExpanded((prev) => !prev);
+        handleFiltersToggle();
       } else if (key === 'c' && hasColumnMenu) {
         event.preventDefault();
         window.dispatchEvent(new CustomEvent(COLLECTION_WORKSPACE_COLUMNS_EVENT));
@@ -1283,10 +1346,15 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   }, [
     canToggleSelectionMode,
     handleSelectionModeToggle,
+    handleFiltersToggle,
     hasColumnMenu,
     hasFilters,
     isPremium,
   ]);
+
+  useEffect(() => {
+    if (posture.isDesktop) setFiltersExpanded(false);
+  }, [posture.isDesktop]);
 
   // Focused row render
   const renderRow = useCallback(
@@ -1310,6 +1378,44 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     },
     [focusEnabled, focusedKey, rowKey],
   );
+
+  const filterSheet = usesFilterSheet ? (
+    <AdaptiveOverlay
+      mode="sheet"
+      open={filtersExpanded}
+      onOpenChange={handleFilterSheetOpenChange}
+      title="Advanced filters"
+      id={filterSheetId}
+      aria-label="Advanced filters"
+      className="ds-collection-workspace__filter-sheet"
+      footer={(
+        <Flex gap={2} justify="end">
+          <Button variant="secondary" onClick={closeFilterSheet}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={applyFilterSheet}>
+            Apply filters
+          </Button>
+        </Flex>
+      )}
+    >
+      <Box
+        className="ds-collection-workspace__filter-sheet-content"
+        data-part="filter-sheet-content"
+        style={{ minWidth: 0 }}
+      >
+        <PatternFilterPanel
+          filters={controls!.filters!}
+          values={filterDraftValues}
+          onChange={setFilterDraftValues}
+          onReset={clearFilterSheetDraft}
+          activeCount={draftActiveFilterCount}
+          layout="stacked"
+          showReset={draftActiveFilterCount > 0}
+        />
+      </Box>
+    </AdaptiveOverlay>
+  ) : null;
 
   // -------------------------------------------------------------------------
   // Non-premium (legacy) mode: keep old stacked layout for backward compat
@@ -1394,7 +1500,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             maxViews={controls.savedViews.maxViews}
           />
         )}
-        {hasFilters && (
+        {hasFilters && !usesFilterSheet && (
           <PatternFilterPanel
             filters={controls!.filters!}
             values={workspace.filterValues}
@@ -1403,6 +1509,19 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             activeCount={workspace.activeFilterCount}
             layout={filterLayout}
           />
+        )}
+        {usesFilterSheet && (
+          <Button
+            variant="secondary"
+            icon={<Filter size={15} />}
+            aria-label={hasActiveFilters ? `Advanced filters (${activeFilterCount})` : 'Advanced filters'}
+            aria-expanded={filtersExpanded}
+            aria-haspopup="dialog"
+            aria-controls={filterSheetId}
+            onClick={openFilterSheet}
+          >
+            Filters{hasActiveFilters ? ` (${activeFilterCount})` : ''}
+          </Button>
         )}
         <Flex className="ds-collection-workspace__content" data-part="content" gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
           <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0 }}>
@@ -1469,6 +1588,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           })()}
         </Flex>
         {footerSlot}
+        {filterSheet}
       </Stack>
     );
   }
@@ -1479,8 +1599,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   const hasScopes = controls?.scopes?.enabled && controls.scopes.scopes.length > 0;
   const hasSavedViews = controls?.savedViews?.enabled && controls.savedViews.views && controls.savedViews.views.length > 0;
-  const activeFilterCount = resolvedActiveFilters?.filters.length ?? workspace.activeFilterCount;
-  const hasActiveFilters = activeFilterCount > 0;
   const showInlineResultCount = !resolvedContextSlot;
   const shellConfig = presentation?.shell;
   const useWorkspaceShell = Boolean(isPremium && shellConfig);
@@ -1645,12 +1763,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       <Box
         className="ds-collection-workspace__toolbar-row"
         data-part="toolbar-row"
-        data-filters-expanded={filtersExpanded ? 'true' : 'false'}
+        data-filters-expanded={inlineFiltersExpanded ? 'true' : 'false'}
         data-ds-collection-toolbar-row="true"
         style={{
           padding: '6px 16px 0',
           position: 'relative',
-          zIndex: filtersExpanded ? 24 : 4,
+          zIndex: inlineFiltersExpanded ? 24 : 4,
           overflow: 'visible',
         }}
       >
@@ -1667,9 +1785,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             style={{
               flex: 1,
               minWidth: 0,
-              overflow: filtersExpanded ? 'visible' : 'hidden',
+              overflow: inlineFiltersExpanded ? 'visible' : 'hidden',
               position: 'relative',
-              zIndex: filtersExpanded ? 16 : 1,
+              zIndex: inlineFiltersExpanded ? 16 : 1,
             }}
           >
             <Box
@@ -1681,14 +1799,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               <Box
                 className="ds-collection-workspace__views-strip"
                 data-part="views-strip"
-                data-active={filtersExpanded ? 'false' : 'true'}
+                data-active={inlineFiltersExpanded ? 'false' : 'true'}
                 data-ds-collection-views-strip="true"
                 style={{
-                  maxHeight: filtersExpanded ? 0 : 52,
+                  maxHeight: inlineFiltersExpanded ? 0 : 52,
                   overflow: 'hidden',
                   transition:
                     'max-height 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1)',
-                  pointerEvents: filtersExpanded ? 'none' : undefined,
+                  pointerEvents: inlineFiltersExpanded ? 'none' : undefined,
                 }}
               >
                 <Flex align="center" gap={8} wrap="nowrap" style={{ minWidth: 0 }}>
@@ -1734,20 +1852,20 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 </Flex>
               </Box>
 
-              {hasFilters && (
+              {hasFilters && !usesFilterSheet && (
                 <Box
                   className="ds-collection-workspace__filters-strip"
                   data-part="filters-strip"
-                  data-active={filtersExpanded ? 'true' : 'false'}
+                  data-active={inlineFiltersExpanded ? 'true' : 'false'}
                   data-ds-collection-filters-strip="true"
                   style={{
-                    maxHeight: filtersExpanded ? (posture.isPhone ? 96 : 48) : 0,
-                    overflow: filtersExpanded ? 'visible' : 'hidden',
+                    maxHeight: inlineFiltersExpanded ? (posture.isPhone ? 96 : 48) : 0,
+                    overflow: inlineFiltersExpanded ? 'visible' : 'hidden',
                     transition:
                       'max-height 240ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease, transform 240ms cubic-bezier(0.16, 1, 0.3, 1)',
-                    pointerEvents: filtersExpanded ? undefined : 'none',
+                    pointerEvents: inlineFiltersExpanded ? undefined : 'none',
                     position: 'relative',
-                    zIndex: filtersExpanded ? 28 : 1,
+                    zIndex: inlineFiltersExpanded ? 28 : 1,
                   }}
                 >
                   <Flex
@@ -1921,7 +2039,10 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 icon={<Filter size={15} />}
                 label={hasActiveFilters ? `Advanced filters (${activeFilterCount})` : 'Advanced filters'}
                 active={filtersExpanded || hasActiveFilters}
-                onClick={() => setFiltersExpanded((prev) => !prev)}
+                onClick={handleFiltersToggle}
+                ariaControls={usesFilterSheet ? filterSheetId : undefined}
+                ariaExpanded={filtersExpanded}
+                ariaHasPopup={usesFilterSheet ? 'dialog' : undefined}
               />
             )}
 
@@ -2140,6 +2261,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           {premiumContent}
         </Box>
       )}
+
+      {filterSheet}
 
       {/* Sticky bottom action bar (phone posture) */}
       {posture.actionBar === 'sticky-bottom' && primaryAction && (

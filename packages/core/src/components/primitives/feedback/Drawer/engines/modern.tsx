@@ -14,7 +14,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useId } from 'react';
 import type { DrawerProps, DrawerSize } from '../Drawer.types';
 import { DRAWER_DEFAULTS } from '../Drawer.types';
 import { usePresence } from '../../../../../motion/hooks/use-presence';
@@ -113,7 +113,13 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     mask = DRAWER_DEFAULTS.mask,
     className = '',
     style,
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
+  const generatedTitleId = useId();
+  const titleId = `${id || generatedTitleId}-title`;
 
   // -- handlers ---------------------------------------------------------------
 
@@ -254,12 +260,16 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       {/* Drawer panel */}
       <div
         ref={presenceRef}
+        id={id}
+        data-testid={dataTestId}
         data-part="surface"
         data-placement={placement}
         data-open={dataState === 'open' ? 'true' : 'false'}
         role="dialog"
         aria-modal="true"
-        aria-label={typeof title === 'string' ? title : undefined}
+        aria-label={ariaLabel}
+        aria-labelledby={!ariaLabel && title ? titleId : undefined}
+        aria-describedby={ariaDescribedBy}
         className={`rottay-drawer rottay-drawer-${placement} rottay-drawer--modern ${className}`.trim()}
         style={getPositionStyles()}
       >
@@ -279,6 +289,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             <div style={{ flex: '1 1 auto', minWidth: 0 }}>
               {title && (
                 <div
+                  id={titleId}
                   data-part="title"
                   style={{
                     fontSize: '16px',

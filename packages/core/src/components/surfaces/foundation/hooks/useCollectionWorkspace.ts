@@ -62,6 +62,15 @@ interface UseCollectionWorkspaceReturn<T> {
   isMobile: boolean;
 }
 
+/** Whether a filter value carries a meaningful constraint. */
+export function isCollectionFilterValueActive(value: unknown): boolean {
+  if (value === undefined || value === null) return false;
+  if (value === false) return false;
+  if (typeof value === 'string') return value.trim().length > 0;
+  if (Array.isArray(value)) return value.some(isCollectionFilterValueActive);
+  return true;
+}
+
 /**
  * Shared state hook for collection workspace orchestration.
  *
@@ -178,9 +187,7 @@ export function useCollectionWorkspace<T>(
   }, [controls?.filters, applyFilters]);
 
   const activeFilterCount = useMemo(() => {
-    return Object.values(filterValues).filter(
-      (v) => v !== undefined && v !== null && v !== '',
-    ).length;
+    return Object.values(filterValues).filter(isCollectionFilterValueActive).length;
   }, [filterValues]);
 
   // -------------------------------------------------------------------------

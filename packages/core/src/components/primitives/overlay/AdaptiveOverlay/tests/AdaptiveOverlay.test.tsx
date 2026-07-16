@@ -34,8 +34,8 @@ vi.mock('../../../../../runtime/responsive', () => ({
 // ---------------------------------------------------------------------------
 
 vi.mock('../../Modal', () => {
-  const MockModalBody = ({ children }: any) => (
-    <div data-testid="modal-body">{children}</div>
+  const MockModalBody = ({ children, className, style }: any) => (
+    <div data-testid="modal-body" className={className} style={style}>{children}</div>
   );
   MockModalBody.displayName = 'ModalBody';
 
@@ -45,11 +45,26 @@ vi.mock('../../Modal', () => {
     children,
     title,
     footer,
+    engine,
+    className,
+    style,
+    id,
+    'aria-label': ariaLabel,
     'data-testid': testId,
   }: any) => {
     if (!open) return null;
     return (
-      <div data-testid={testId ?? 'adaptive-overlay'} data-mode="modal" role="dialog" aria-modal="true">
+      <div
+        id={id}
+        data-testid={testId ?? 'adaptive-overlay'}
+        data-mode="modal"
+        data-engine={engine}
+        className={className}
+        style={style}
+        role="dialog"
+        aria-modal="true"
+        aria-label={ariaLabel}
+      >
         <div data-testid="modal-backdrop" onClick={onClose} />
         {title && <div data-testid="modal-title">{title}</div>}
         <div data-testid="modal-content">{children}</div>
@@ -79,6 +94,11 @@ vi.mock('../../../feedback/Drawer', () => {
     footer,
     placement,
     width,
+    engine,
+    className,
+    style,
+    id,
+    'aria-label': ariaLabel,
     'data-testid': testId,
   }: any) => {
     if (!open) return null;
@@ -88,8 +108,13 @@ vi.mock('../../../feedback/Drawer', () => {
         data-mode="drawer"
         data-placement={placement}
         data-width={width}
+        data-engine={engine}
+        className={className}
+        style={style}
+        id={id}
         role="dialog"
         aria-modal="true"
+        aria-label={ariaLabel}
       >
         <div data-testid="drawer-backdrop" onClick={onClose} />
         {title && <div data-testid="drawer-title">{title}</div>}
@@ -119,15 +144,31 @@ vi.mock('../../Sheet', () => {
     side,
     showHandle,
     showOverlay,
+    footer,
+    engine,
+    id,
+    'data-testid': testId,
+    'aria-label': ariaLabel,
+    surfaceClassName,
+    surfaceStyle,
+    bodyClassName,
+    bodyStyle,
+    footerClassName,
+    footerStyle,
   }: any) => {
     if (!open) return null;
     return (
       <div
-        data-testid="adaptive-overlay"
+        id={id}
+        data-testid={testId ?? 'adaptive-overlay'}
         data-mode="sheet"
         data-side={side}
+        data-engine={engine}
+        className={surfaceClassName}
+        style={surfaceStyle}
         role="dialog"
         aria-modal="true"
+        aria-label={ariaLabel}
       >
         {showOverlay !== false && (
           <div
@@ -137,7 +178,14 @@ vi.mock('../../Sheet', () => {
         )}
         {showHandle && <div data-testid="sheet-handle" />}
         {title && <div data-testid="sheet-title">{title}</div>}
-        <div data-testid="sheet-content">{children}</div>
+        <div data-testid="sheet-content" className={bodyClassName} style={bodyStyle}>
+          {children}
+        </div>
+        {footer != null && (
+          <div data-testid="sheet-footer" className={footerClassName} style={footerStyle}>
+            {footer}
+          </div>
+        )}
       </div>
     );
   };
@@ -310,6 +358,36 @@ describe('AdaptiveOverlay', () => {
       fireEvent.click(screen.getByTestId('sheet-overlay'));
       expect(onClose).toHaveBeenCalledTimes(1);
     });
+
+    it('supports the controlled onOpenChange API without a legacy onClose handler', () => {
+      setDeviceClass('phone');
+      const onOpenChange = vi.fn();
+      render(
+        <AdaptiveOverlay open onOpenChange={onOpenChange}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      fireEvent.click(screen.getByTestId('sheet-overlay'));
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('notifies each close API exactly once when both are provided', () => {
+      setDeviceClass('phone');
+      const onClose = vi.fn();
+      const onOpenChange = vi.fn();
+      render(
+        <AdaptiveOverlay open onClose={onClose} onOpenChange={onOpenChange}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      fireEvent.click(screen.getByTestId('sheet-overlay'));
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
   });
 
   // -----------------------------------------------------------------------
@@ -347,6 +425,21 @@ describe('AdaptiveOverlay', () => {
       expect(screen.getByTestId('sheet-title')).toHaveTextContent('Sheet Title');
     });
 
+    it('accepts rich title content', () => {
+      setDeviceClass('phone');
+      render(
+        <AdaptiveOverlay
+          open
+          onOpenChange={() => {}}
+          title={<span data-testid="rich-title">Filter candidates</span>}
+        >
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(screen.getByTestId('rich-title')).toHaveTextContent('Filter candidates');
+    });
+
     it('renders footer in modal mode', () => {
       setDeviceClass('desktop');
       render(
@@ -367,6 +460,19 @@ describe('AdaptiveOverlay', () => {
       );
       expect(screen.getByTestId('drawer-footer')).toBeInTheDocument();
       expect(screen.getByText('Save')).toBeInTheDocument();
+    });
+
+    it('keeps the sheet footer outside its body hook', () => {
+      setDeviceClass('phone');
+      render(
+        <AdaptiveOverlay open onOpenChange={() => {}} footer={<button>Apply</button>}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(screen.getByTestId('sheet-content')).not.toContainElement(
+        screen.getByTestId('sheet-footer')
+      );
     });
   });
 
@@ -396,6 +502,42 @@ describe('AdaptiveOverlay', () => {
     });
   });
 
+  describe('modal layout', () => {
+    it('normalizes numeric width on desktop and lets explicit surface styles override it', () => {
+      setDeviceClass('desktop');
+      const { rerender } = render(
+        <AdaptiveOverlay open onOpenChange={() => {}} width={640}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(screen.getByTestId('adaptive-overlay')).toHaveStyle({ width: '640px' });
+
+      rerender(
+        <AdaptiveOverlay
+          open
+          onOpenChange={() => {}}
+          width={640}
+          surfaceStyle={{ width: '42rem' }}
+        >
+          Content
+        </AdaptiveOverlay>
+      );
+      expect(screen.getByTestId('adaptive-overlay')).toHaveStyle({ width: '42rem' });
+    });
+
+    it('does not pin a forced phone modal to the desktop width', () => {
+      setDeviceClass('phone');
+      render(
+        <AdaptiveOverlay open onOpenChange={() => {}} mode="modal" width={640}>
+          Content
+        </AdaptiveOverlay>
+      );
+
+      expect(screen.getByTestId('adaptive-overlay').style.width).toBe('');
+    });
+  });
+
   // -----------------------------------------------------------------------
   // Sheet: bottom side and handle
   // -----------------------------------------------------------------------
@@ -419,6 +561,37 @@ describe('AdaptiveOverlay', () => {
         </AdaptiveOverlay>
       );
       expect(screen.getByTestId('sheet-handle')).toBeInTheDocument();
+    });
+
+    it('forwards engine, dialog identity, accessible name, and anatomy hooks', () => {
+      setDeviceClass('phone');
+      render(
+        <AdaptiveOverlay
+          engine="rustic"
+          open
+          onOpenChange={() => {}}
+          id="advanced-filters"
+          data-testid="advanced-filter-sheet"
+          aria-label="Advanced filters"
+          surfaceClassName="surface-hook"
+          bodyClassName="body-hook"
+          footerClassName="footer-hook"
+          footer={<button>Done</button>}
+        >
+          Content
+        </AdaptiveOverlay>
+      );
+
+      const dialog = screen.getByTestId('advanced-filter-sheet');
+      expect(dialog).toHaveAttribute('id', 'advanced-filters');
+      expect(dialog).toHaveAccessibleName('Advanced filters');
+      expect(dialog).toHaveAttribute('data-engine', 'rustic');
+      expect(dialog).toHaveClass('surface-hook');
+      expect(screen.getByTestId('sheet-content')).toHaveClass('body-hook');
+      expect(screen.getByTestId('sheet-footer')).toHaveClass(
+        'rottay-adaptive-overlay-footer',
+        'footer-hook'
+      );
     });
   });
 

@@ -68,6 +68,7 @@ import React from 'react';
 import { Drawer as AntDrawer } from 'antd';
 import type { DrawerProps, DrawerSize } from '../Drawer.types';
 import { DRAWER_DEFAULTS } from '../Drawer.types';
+import { syncDialogAttributes } from '../../../overlay/shared/dialog-attributes';
 
 // ============================================================================
 // Constants
@@ -175,7 +176,35 @@ export default function ClassicDrawer(props: DrawerProps): React.ReactElement {
     // Styling
     className,
     style,
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
+  const panelRef = React.useRef<HTMLDivElement>(null);
+
+  const setPanelRef = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      panelRef.current = node;
+      syncDialogAttributes(node, {
+        id,
+        dataTestId,
+        ariaLabel,
+        ariaDescribedBy,
+      });
+    },
+    [ariaDescribedBy, ariaLabel, dataTestId, id]
+  );
+
+  React.useEffect(() => {
+    if (!open) return;
+    syncDialogAttributes(panelRef.current, {
+      id,
+      dataTestId,
+      ariaLabel,
+      ariaDescribedBy,
+    });
+  }, [ariaDescribedBy, ariaLabel, dataTestId, id, open]);
 
   // ---------------------------------------------------------------------------
   // Event Handlers
@@ -233,6 +262,7 @@ export default function ClassicDrawer(props: DrawerProps): React.ReactElement {
       // Styling
       className={className}
       style={style}
+      panelRef={setPanelRef}
     >
       {children}
     </AntDrawer>

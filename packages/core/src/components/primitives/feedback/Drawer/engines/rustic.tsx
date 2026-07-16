@@ -70,7 +70,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useId } from 'react';
 import type { DrawerProps, DrawerSize } from '../Drawer.types';
 import { DRAWER_DEFAULTS } from '../Drawer.types';
 
@@ -187,7 +187,13 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
     // Styling
     className = '',
     style,
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
+  const generatedTitleId = useId();
+  const titleId = `${id || generatedTitleId}-title`;
 
   // ---------------------------------------------------------------------------
   // Event Handlers
@@ -405,6 +411,8 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
 
       {/* Drawer Container */}
       <div
+        id={id}
+        data-testid={dataTestId}
         data-part="surface"
         data-placement={placement}
         data-open={open ? 'true' : 'false'}
@@ -412,12 +420,15 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
         style={getDrawerStyle()}
         role="dialog"
         aria-modal="true"
+        aria-label={ariaLabel}
+        aria-labelledby={!ariaLabel && title ? titleId : undefined}
+        aria-describedby={ariaDescribedBy}
       >
         {/* Header section */}
         {(title || closable) && (
           <div data-part="header" style={headerStyle}>
             {title && (
-              <h3 data-part="title" style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}>
+              <h3 id={titleId} data-part="title" style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}>
                 {title}
               </h3>
             )}

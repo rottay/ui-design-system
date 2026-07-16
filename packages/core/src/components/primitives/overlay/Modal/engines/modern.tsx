@@ -19,7 +19,7 @@
 
 'use client';
 
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useRef, useId } from 'react';
 import type { ModalProps } from '../Modal.types';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../Modal.types';
 import { Portal } from '../utils/Portal';
@@ -138,7 +138,14 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     disableAnimation: _disableAnimation = MODAL_DEFAULTS.disableAnimation,
     className = '',
     style = {},
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
+  const generatedLabelId = useId();
+  const titleId = `${id || generatedLabelId}-title`;
+  const descriptionId = `${id || generatedLabelId}-description`;
 
   /** Whether the modal should render as fullscreen on the current viewport. */
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
@@ -246,9 +253,14 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     <Portal>
       <dialog
         ref={dialogRef}
+        id={id}
+        data-testid={dataTestId}
         data-part="root"
         className={`rottay-modal rottay-modal--modern rottay-overlay-modal-shell--modern ${className}`}
         aria-modal="true"
+        aria-label={ariaLabel}
+        aria-labelledby={!ariaLabel && title && !header ? titleId : undefined}
+        aria-describedby={ariaDescribedBy || (description ? descriptionId : undefined)}
         style={{
           /* Reset native dialog styling */
           position: 'fixed',
@@ -332,6 +344,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                   <>
                     {title && (
                       <div
+                        id={titleId}
                         data-part="title"
                         style={{
                           fontSize: '16px',
@@ -344,6 +357,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                     )}
                     {description && (
                       <div
+                        id={descriptionId}
                         data-part="description"
                         style={{
                           fontSize: '13px',

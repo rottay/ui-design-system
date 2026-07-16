@@ -330,7 +330,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
   describe('Sheet', () => {
     it.each(ENGINES)(
-      'open: stamps root/backdrop/surface(data-open,data-placement)/handle/header/title/close-button/body, portal posture split by engine under the %s engine',
+      'open: stamps root/backdrop/surface(data-open,data-placement)/handle/header/title/close-button/body and portals under the %s engine',
       async (engine) => {
         const { container } = renderWithEngine(
           <Sheet open onOpenChange={vi.fn()} side="bottom" title="Sheet title">
@@ -340,12 +340,11 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         );
 
         const rootSelector = `.rottay-sheet--${engine}[data-part='root']`;
-        const root =
-          engine === 'modern' ? await waitForPart(container, 'root') : await waitForDocumentSurface(rootSelector);
+        const root = await waitForDocumentSurface(rootSelector);
 
-        // Portal posture: modern stays in-tree; rustic portals via a direct
-        // createPortal (checkpoint contract P4).
-        expect(container.contains(root)).toBe(engine === 'modern');
+        // Both engines escape ancestor clipping. Modern uses the shared portal
+        // root while rustic portals directly into document.body.
+        expect(container.contains(root)).toBe(false);
 
         const surface = root.querySelector("[data-part='surface']") as HTMLElement;
         expect(surface).not.toBeNull();

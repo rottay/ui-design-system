@@ -14,9 +14,12 @@
  * @package @rottay/design-system
  */
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useId } from 'react';
 import type { SheetProps } from '../Sheet.types';
 import { SHEET_DEFAULTS } from '../Sheet.types';
+import { Portal } from '../../Modal/utils/Portal';
+import { FocusTrap } from '../../Modal/utils/FocusTrap';
+import { useSheetOverlayRuntime } from '../utils/overlay-runtime';
 
 // ============================================================================
 // Constants
@@ -96,35 +99,53 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     side = SHEET_DEFAULTS.side,
     children,
     title,
+    footer,
     showHandle = SHEET_DEFAULTS.showHandle,
     showOverlay = SHEET_DEFAULTS.showOverlay,
     closeOnEscape = SHEET_DEFAULTS.closeOnEscape,
     closeOnOverlayClick = SHEET_DEFAULTS.closeOnOverlayClick,
     className,
+    style,
+    rootClassName,
+    rootStyle,
     panelClassName,
     panelStyle,
+    surfaceClassName,
+    surfaceStyle,
+    bodyClassName,
+    bodyStyle,
+    footerClassName,
+    footerStyle,
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
+    autoFocus = SHEET_DEFAULTS.autoFocus,
+    restoreFocus = SHEET_DEFAULTS.restoreFocus,
+    initialFocus,
+    finalFocus,
   } = props;
+  const generatedTitleId = useId();
+  const titleId = `${id || generatedTitleId}-title`;
+  const { isTopmost } = useSheetOverlayRuntime(open);
 
   const handleClose = useCallback(() => {
     onOpenChange(false);
   }, [onOpenChange]);
 
   const handleEscape = useCallback((e: KeyboardEvent) => {
-    if (closeOnEscape && e.key === 'Escape') {
+    if (closeOnEscape && e.key === 'Escape' && isTopmost()) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
       onOpenChange(false);
     }
-  }, [closeOnEscape, onOpenChange]);
+  }, [closeOnEscape, isTopmost, onOpenChange]);
 
-  // Lock body scroll and bind Escape handler while open; cleanup restores both
+  // Stack-aware Escape handling; the shared runtime owns body scroll locking.
   useEffect(() => {
-    if (open) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
-    };
+    if (!open) return;
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [open, handleEscape]);
 
   // Bail early when closed -- no DOM footprint remains
@@ -153,9 +174,11 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         left: 0,
         right: 0,
         bottom: 0,
-        maxHeight: '85vh',
-        minHeight: '30vh',
+        maxHeight:
+          'var(--ds-sheet-max-height, var(--ds-sheet-viewport-max-height, 85vh))',
+        minHeight: 'var(--ds-sheet-min-height, 30vh)',
         ...panelStyle,
+        ...surfaceStyle,
       };
     }
 
@@ -168,6 +191,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         width: SIDE_PANEL_WIDTH,
         maxWidth: '100vw',
         ...panelStyle,
+        ...surfaceStyle,
       };
     }
 
@@ -180,21 +204,24 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
       width: SIDE_PANEL_WIDTH,
       maxWidth: '100vw',
       ...panelStyle,
+      ...surfaceStyle,
     };
   };
 
   return (
-    <>
+    <Portal>
       {/* ---- Wrapper ---- */}
       <div
         data-part="root"
-        className={`rottay-sheet--modern ${className || ''}`}
+        className={`rottay-sheet--modern ${className || ''} ${rootClassName || ''}`}
         style={{
           position: 'fixed',
           inset: 0,
           // Tokenized overlay stack (spec section 9), matching Drawer's
           // backdrop/panel pair instead of a magic 50.
           zIndex: 'var(--ds-z-overlay)',
+          ...style,
+          ...rootStyle,
         }}
       >
         {/* ---- Backdrop overlay ---- */}
@@ -212,15 +239,34 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
 
         {/* ---- Panel ---- */}
         <div
+          id={id}
           role="dialog"
           aria-modal="true"
-          aria-label={typeof title === 'string' ? title : undefined}
+          aria-label={ariaLabel}
+          aria-labelledby={!ariaLabel && title ? titleId : undefined}
+          aria-describedby={ariaDescribedBy}
+          data-testid={dataTestId}
           data-part="surface"
           data-open="true"
           data-placement={side}
-          className={panelClassName || undefined}
+          className={surfaceClassName || panelClassName || undefined}
           style={getPanelPositionStyles()}
         >
+          <FocusTrap
+            active={open}
+            autoFocus={autoFocus}
+            restoreFocus={restoreFocus}
+            initialFocus={initialFocus}
+            finalFocus={finalFocus}
+            className="rottay-sheet__focus-scope"
+            style={{
+              display: 'flex',
+              flex: '1 1 auto',
+              flexDirection: 'column',
+              minHeight: 0,
+              overflow: 'hidden',
+            }}
+          >
           {/* Handle bar -- bottom sheet only */}
           {isBottom && showHandle && (
             <div
@@ -255,6 +301,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
               }}
             >
               <div
+                id={titleId}
                 data-part="title"
                 style={{
                   fontSize: '16px',
@@ -273,22 +320,34 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
           {/* Scrollable content area */}
           <div
             data-part="body"
+            className={bodyClassName}
             style={{
               flex: '1 1 auto',
+              minHeight: 0,
               overflowY: 'auto',
               padding: '16px',
-              ...(isBottom && !title
-                ? { maxHeight: 'calc(85vh - 40px)' }
-                : isBottom
-                  ? { maxHeight: 'calc(85vh - 100px)' }
-                  : {}),
+              ...bodyStyle,
             }}
           >
             {children}
           </div>
+
+          {footer != null && (
+            <div
+              data-part="footer"
+              className={footerClassName}
+              style={{
+                flexShrink: 0,
+                ...footerStyle,
+              }}
+            >
+              {footer}
+            </div>
+          )}
+          </FocusTrap>
         </div>
       </div>
-    </>
+    </Portal>
   );
 }
 

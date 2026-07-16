@@ -29,6 +29,8 @@ export interface SheetProps extends EngineAwareProps {
   children: ReactNode;
   /** Title displayed in the sheet header */
   title?: ReactNode;
+  /** Footer actions. Rendered outside the scrollable body. */
+  footer?: ReactNode;
   /** Optional snap points for bottom sheet (percentage heights, e.g. [0.25, 0.5, 1]) */
   snapPoints?: number[];
   /** Whether to show the drag handle (bottom sheet only) */
@@ -43,6 +45,42 @@ export interface SheetProps extends EngineAwareProps {
   panelClassName?: string;
   /** Additional styles for the sheet panel */
   panelStyle?: CSSProperties;
+  /** Additional class for the fixed root wrapper. */
+  rootClassName?: string;
+  /** Additional styles for the fixed root wrapper. */
+  rootStyle?: CSSProperties;
+  /** Additional class for the dialog surface. Takes precedence over the legacy panel alias. */
+  surfaceClassName?: string;
+  /** Additional styles for the dialog surface. Takes precedence over the legacy panel alias. */
+  surfaceStyle?: CSSProperties;
+  /** Additional class for the scrollable body. */
+  bodyClassName?: string;
+  /** Additional styles for the scrollable body. */
+  bodyStyle?: CSSProperties;
+  /** Additional class for the non-scrolling footer. */
+  footerClassName?: string;
+  /** Additional styles for the non-scrolling footer. */
+  footerStyle?: CSSProperties;
+  /** ID applied to the dialog surface. */
+  id?: string;
+  /** Test hook applied to the dialog surface. */
+  'data-testid'?: string;
+  /** Accessible name for the dialog surface. */
+  'aria-label'?: string;
+  /** Accessible description relationship for the dialog surface. */
+  'aria-describedby'?: string;
+  /** Whether focus moves into the sheet when it opens. */
+  autoFocus?: boolean;
+  /**
+   * Whether focus returns to the previously focused element when it closes.
+   * Modern and rustic honor this toggle. Classic delegates to Ant Drawer's
+   * native focus restoration, which is always enabled.
+   */
+  restoreFocus?: boolean;
+  /** Initial focus target within the sheet (all engines). */
+  initialFocus?: string | HTMLElement | null;
+  /** Focus target after the sheet closes (all engines when restoration is enabled). */
+  finalFocus?: string | HTMLElement | null;
 }
 
 /**
@@ -54,4 +92,6 @@ export const SHEET_DEFAULTS = {
   showOverlay: true,
   closeOnEscape: true,
   closeOnOverlayClick: true,
+  autoFocus: true,
+  restoreFocus: true,
 };

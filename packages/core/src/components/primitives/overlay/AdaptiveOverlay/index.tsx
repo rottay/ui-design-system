@@ -50,7 +50,7 @@
  * @package @rottay/design-system
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useResponsive } from '../../../../runtime/responsive';
 import { Modal } from '../Modal';
 import { Drawer } from '../../feedback/Drawer';
@@ -114,20 +114,51 @@ function useResolvedMode(mode: AdaptiveOverlayProps['mode']): ResolvedOverlayMod
 export function AdaptiveOverlay({
   open,
   onClose,
+  onOpenChange,
   title,
   children,
+  engine,
   mode = ADAPTIVE_OVERLAY_DEFAULTS.mode,
   width = ADAPTIVE_OVERLAY_DEFAULTS.width,
   footer,
   className,
   style,
+  surfaceClassName,
+  surfaceStyle,
+  bodyClassName,
+  bodyStyle,
+  footerClassName,
+  footerStyle,
   id,
   'data-testid': dataTestId,
   'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
 }: AdaptiveOverlayProps): React.ReactElement | null {
   const resolvedMode = useResolvedMode(mode);
+  const { isPhone } = useResponsive();
 
   const testId = dataTestId ?? 'adaptive-overlay';
+  const resolvedSurfaceClassName = [className, surfaceClassName]
+    .filter(Boolean)
+    .join(' ') || undefined;
+  const resolvedSurfaceStyle = { ...style, ...surfaceStyle };
+  const normalizedWidth = typeof width === 'number' ? `${width}px` : width;
+  const modalSurfaceStyle = {
+    ...(!isPhone && normalizedWidth ? { width: normalizedWidth } : {}),
+    ...resolvedSurfaceStyle,
+  };
+  const resolvedFooter = footer != null ? (
+    <div className={footerClassName} style={footerStyle}>
+      {footer}
+    </div>
+  ) : undefined;
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      onOpenChange?.(nextOpen);
+      if (!nextOpen) onClose?.();
+    },
+    [onClose, onOpenChange],
+  );
 
   // -------------------------------------------------------------------------
   // Modal (desktop)
@@ -135,19 +166,23 @@ export function AdaptiveOverlay({
   if (resolvedMode === 'modal') {
     return (
       <Modal
+        engine={engine}
         open={open}
-        onClose={onClose}
+        onClose={() => handleOpenChange(false)}
         title={title}
-        footer={footer}
-        className={className}
-        style={style}
+        footer={resolvedFooter}
+        className={resolvedSurfaceClassName}
+        style={modalSurfaceStyle}
         id={id}
         data-testid={testId}
         aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
         closeOnBackdropClick
         closeOnEscape
       >
-        <Modal.Body>{children}</Modal.Body>
+        <Modal.Body className={bodyClassName} style={bodyStyle}>
+          {children}
+        </Modal.Body>
       </Modal>
     );
   }
@@ -158,21 +193,25 @@ export function AdaptiveOverlay({
   if (resolvedMode === 'drawer') {
     return (
       <Drawer
+        engine={engine}
         open={open}
-        onClose={onClose}
+        onClose={() => handleOpenChange(false)}
         title={title}
-        footer={footer}
+        footer={resolvedFooter}
         placement="right"
         width={width}
-        className={className}
-        style={style}
+        className={resolvedSurfaceClassName}
+        style={resolvedSurfaceStyle}
         id={id}
         data-testid={testId}
         aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
         closeOnOverlayClick
         closeOnEscape
       >
-        {children}
+        <div className={bodyClassName} style={bodyStyle}>
+          {children}
+        </div>
       </Drawer>
     );
   }
@@ -182,31 +221,34 @@ export function AdaptiveOverlay({
   // -------------------------------------------------------------------------
   return (
     <Sheet
+      engine={engine}
       open={open}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) onClose();
-      }}
+      onOpenChange={handleOpenChange}
       title={title}
+      footer={footer}
       side="bottom"
       showHandle
       showOverlay
       closeOnEscape
       closeOnOverlayClick
-      panelClassName={className}
-      panelStyle={style}
+      surfaceClassName={resolvedSurfaceClassName}
+      surfaceStyle={resolvedSurfaceStyle}
+      bodyClassName={bodyClassName}
+      bodyStyle={bodyStyle}
+      footerClassName={[
+        'rottay-adaptive-overlay-footer',
+        footerClassName,
+      ].filter(Boolean).join(' ')}
+      footerStyle={{
+        padding: 'var(--ds-spacing-4, 16px)',
+        ...footerStyle,
+      }}
+      id={id}
+      data-testid={testId}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
     >
       {children}
-      {footer != null && (
-        <div
-          data-part="footer"
-          className="rottay-adaptive-overlay-footer"
-          style={{
-            padding: 'var(--ds-spacing-4, 16px)',
-          }}
-        >
-          {footer}
-        </div>
-      )}
     </Sheet>
   );
 }

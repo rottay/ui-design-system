@@ -4,8 +4,9 @@
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
  *
- * PORTAL: this engine does NOT portal (rustic DOES) — it renders in-tree as a
- * `position: fixed` wrapper. The scope class anchors every rule regardless.
+ * PORTAL: both production engines portal so the sheet escapes ancestor clipping.
+ * Modern uses the shared `#rottay-portal-root`; rustic portals directly to body.
+ * The scope class anchors every rule regardless of the selected container.
  *
  * SIDE: `data-placement` carries the `side` prop. The engine's radius lookup was
  * `RADIUS_BY_SIDE[side] || RADIUS_BY_SIDE.bottom`, so the BOTTOM value is the base rule
@@ -39,6 +40,19 @@
   to   { transform: translateX(0); }
 }
 
+/* ---- viewport contract ---- */
+.rottay-sheet--modern[data-part='root'] {
+  --ds-sheet-viewport-max-height: 85vh;
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .rottay-sheet--modern[data-part='root'] {
+    --ds-sheet-viewport-max-height: 85dvh;
+    height: 100dvh;
+  }
+}
+
 /* ---- backdrop ---- */
 .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent);
@@ -51,6 +65,9 @@
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-3);
   border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+}
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='bottom'] {
+  padding-bottom: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'] {
   border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
@@ -88,6 +105,17 @@
   color: var(--ds-color-text-primary);
 }
 
+/* ---- scroll anatomy ---- */
+.rottay-sheet--modern[data-part='root'] [data-part='body'] {
+  min-height: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.rottay-sheet--modern[data-part='root'] [data-part='footer'] {
+  flex-shrink: 0;
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
 /* ---- close button: the removed imperative hover becomes a :hover rule. The rustic
         engine's close button has NO hover (only a dead transition) — that asymmetry
         ships today and is preserved. ---- */
@@ -99,4 +127,12 @@
 }
 .rottay-sheet--modern[data-part='root'] [data-part='close-button']:hover {
   background-color: var(--ds-surface-highlight);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'],
+  .rottay-sheet--modern[data-part='root'] > [data-part='surface'] {
+    animation: none !important;
+    transition: none !important;
+  }
 }

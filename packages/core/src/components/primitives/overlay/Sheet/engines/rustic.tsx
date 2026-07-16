@@ -18,10 +18,12 @@
  * @package @rottay/design-system
  */
 
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useRef, useId } from 'react';
 import { createPortal } from 'react-dom';
 import type { SheetProps } from '../Sheet.types';
 import { SHEET_DEFAULTS } from '../Sheet.types';
+import { FocusTrap } from '../../Modal/utils/FocusTrap';
+import { useSheetOverlayRuntime } from '../utils/overlay-runtime';
 
 /**
  * Rustic engine implementation of Sheet using vanilla HTML/CSS and createPortal.
@@ -40,35 +42,52 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
     side = SHEET_DEFAULTS.side,
     children,
     title,
+    footer,
     showHandle = SHEET_DEFAULTS.showHandle,
     showOverlay = SHEET_DEFAULTS.showOverlay,
     closeOnEscape = SHEET_DEFAULTS.closeOnEscape,
     closeOnOverlayClick = SHEET_DEFAULTS.closeOnOverlayClick,
     className,
     style,
+    rootClassName,
+    rootStyle,
     panelClassName,
     panelStyle,
+    surfaceClassName,
+    surfaceStyle,
+    bodyClassName,
+    bodyStyle,
+    footerClassName,
+    footerStyle,
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
+    autoFocus = SHEET_DEFAULTS.autoFocus,
+    restoreFocus = SHEET_DEFAULTS.restoreFocus,
+    initialFocus,
+    finalFocus,
   } = props;
 
   const panelRef = useRef<HTMLDivElement>(null);
+  const generatedTitleId = useId();
+  const titleId = `${id || generatedTitleId}-title`;
+  const { isTopmost } = useSheetOverlayRuntime(open);
   const isBottom = side === 'bottom';
 
   const handleEscape = useCallback((e: KeyboardEvent) => {
-    if (closeOnEscape && e.key === 'Escape') {
+    if (closeOnEscape && e.key === 'Escape' && isTopmost()) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
       onOpenChange(false);
     }
-  }, [closeOnEscape, onOpenChange]);
+  }, [closeOnEscape, isTopmost, onOpenChange]);
 
-  // Lock body scroll and bind Escape handler while open; cleanup restores both
+  // Stack-aware Escape handling; the shared runtime owns body scroll locking.
   useEffect(() => {
-    if (open) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
-    };
+    if (!open) return;
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [open, handleEscape]);
 
   // Bail early when closed or during SSR where document is unavailable
@@ -82,7 +101,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
   const getPanelStyle = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
-      zIndex: 1060,
+      zIndex: 'var(--ds-z-drawer, 1400)',
       fontFamily: 'var(--ds-font-family-base, inherit)',
       display: 'flex',
       flexDirection: 'column',
@@ -98,8 +117,9 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           bottom: 0,
           left: 0,
           right: 0,
-          maxHeight: '85vh',
-          minHeight: '30vh',
+          maxHeight:
+            'var(--ds-sheet-max-height, var(--ds-sheet-viewport-max-height, 85vh))',
+          minHeight: 'var(--ds-sheet-min-height, 30vh)',
         };
       case 'left':
         return {
@@ -125,7 +145,11 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
   };
 
   return createPortal(
-    <div data-part="root" className={`rottay-sheet--rustic ${className || ''}`} style={style}>
+    <div
+      data-part="root"
+      className={`rottay-sheet--rustic ${className || ''} ${rootClassName || ''}`}
+      style={{ ...style, ...rootStyle }}
+    >
       {/* Overlay sits one z-index below the panel so clicks land on it for dismissal */}
       {showOverlay && (
         <div
@@ -133,7 +157,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           style={{
             position: 'fixed',
             inset: 0,
-            zIndex: 1059,
+            zIndex: 'var(--ds-z-overlay, 1300)',
             transition: 'opacity var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
           }}
           onClick={closeOnOverlayClick ? () => onOpenChange(false) : undefined}
@@ -141,14 +165,34 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
       )}
       <div
         ref={panelRef}
+        id={id}
         role="dialog"
         aria-modal="true"
+        aria-label={ariaLabel}
+        aria-labelledby={!ariaLabel && title ? titleId : undefined}
+        aria-describedby={ariaDescribedBy}
+        data-testid={dataTestId}
         data-part="surface"
         data-open="true"
         data-placement={side}
-        className={panelClassName}
-        style={{ ...getPanelStyle(), ...panelStyle }}
+        className={surfaceClassName || panelClassName}
+        style={{ ...getPanelStyle(), ...panelStyle, ...surfaceStyle }}
       >
+        <FocusTrap
+          active={open}
+          autoFocus={autoFocus}
+          restoreFocus={restoreFocus}
+          initialFocus={initialFocus}
+          finalFocus={finalFocus}
+          className="rottay-sheet__focus-scope"
+          style={{
+            display: 'flex',
+            flex: '1 1 auto',
+            flexDirection: 'column',
+            minHeight: 0,
+            overflow: 'hidden',
+          }}
+        >
         {/* Drag handle indicator for bottom sheets -- visual affordance for swipe-to-close */}
         {isBottom && showHandle && (
           <div
@@ -179,7 +223,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
               padding: '12px 16px',
             }}
           >
-            <span data-part="title" style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)' }}>{title}</span>
+            <span id={titleId} data-part="title" style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)' }}>{title}</span>
             <button
               type="button"
               data-part="close-button"
@@ -199,14 +243,31 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
         )}
         <div
           data-part="body"
+          className={bodyClassName}
           style={{
-            padding: 16,
+            padding: 'var(--ds-spacing-4, 16px)',
             overflowY: 'auto',
             flex: 1,
+            minHeight: 0,
+            ...bodyStyle,
           }}
         >
           {children}
         </div>
+
+        {footer != null && (
+          <div
+            data-part="footer"
+            className={footerClassName}
+            style={{
+              flexShrink: 0,
+              ...footerStyle,
+            }}
+          >
+            {footer}
+          </div>
+        )}
+        </FocusTrap>
       </div>
     </div>,
     document.body

@@ -12,6 +12,10 @@ import type { CollectionWorkspaceConfig } from '../../../../foundation/contracts
 import type { CollectionWorkspaceSurfaceProps } from '../index';
 import type { ColumnDef } from '../../../../../patterns/foundation/types';
 import { renderSurface } from '../../../../foundation/common/test-utils';
+import {
+  ResponsiveContext,
+  type ResponsiveContextValue,
+} from '../../../../../../runtime/responsive';
 
 // ---------------------------------------------------------------------------
 // Test data helpers
@@ -33,6 +37,32 @@ const TEST_COLUMNS: ColumnDef<TestRow>[] = [
   { key: 'name', title: 'Name', dataIndex: 'name' },
   { key: 'status', title: 'Status', dataIndex: 'status' },
 ];
+
+const PHONE_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
+  deviceClass: 'phone',
+  activeBreakpoint: 'xs',
+  isPhone: true,
+  isTablet: false,
+  isDesktop: false,
+  pointer: 'coarse',
+  orientation: 'portrait',
+  prefersReducedMotion: false,
+  isPhoneOrTablet: true,
+  isTabletOrDesktop: false,
+  isTouchDevice: true,
+};
+
+const DESKTOP_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
+  ...PHONE_RESPONSIVE_CONTEXT,
+  deviceClass: 'desktop',
+  activeBreakpoint: 'lg',
+  isPhone: false,
+  isDesktop: true,
+  pointer: 'fine',
+  isPhoneOrTablet: false,
+  isTabletOrDesktop: true,
+  isTouchDevice: false,
+};
 
 function buildProps(
   overrides?: Partial<CollectionWorkspaceSurfaceProps<TestRow>>,
@@ -185,6 +215,43 @@ describe('useCollectionWorkspace', () => {
     expect(result.current.filterValues).toEqual({ status: 'all' });
   });
 
+  it('keeps coherently empty applied values out of the canonical count while preserving zero', () => {
+    const config: CollectionWorkspaceConfig<{ id: string }> = {
+      ...baseConfig,
+      controls: {
+        filters: [
+          { key: 'tags', label: 'Tags', type: 'multi-select' },
+          { key: 'range', label: 'Range', type: 'date-range' },
+          { key: 'query', label: 'Query', type: 'text' },
+          { key: 'published', label: 'Published', type: 'boolean' },
+          { key: 'capacity', label: 'Capacity', type: 'number' },
+        ],
+      },
+    };
+
+    const { result } = renderHook(() =>
+      useCollectionWorkspace({ config }),
+    );
+
+    act(() => result.current.applyFilters({
+      tags: [],
+      range: ['', ''],
+      query: '   ',
+      published: false,
+    }));
+
+    expect(result.current.filterValues).toEqual({
+      tags: [],
+      range: ['', ''],
+      query: '   ',
+      published: false,
+    });
+    expect(result.current.activeFilterCount).toBe(0);
+
+    act(() => result.current.applyFilters({ capacity: 0 }));
+    expect(result.current.activeFilterCount).toBe(1);
+  });
+
   it('manages selection state', () => {
     const onSelectionChange = vi.fn();
     const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
@@ -316,6 +383,225 @@ describe('CollectionWorkspaceSurface', () => {
 
     expect(await screen.findByTestId('header-slot')).toBeInTheDocument();
     expect(await screen.findByTestId('footer-slot')).toBeInTheDocument();
+  });
+
+  it('projects adaptive phone filters into a transactional sheet backed by canonical state', async () => {
+    const onFilterChange = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Test Collection',
+            },
+            activeFilters: {
+              filters: [
+                {
+                  key: 'search',
+                  label: 'Search',
+                  value: 'alice',
+                },
+              ],
+              onRemove: vi.fn(),
+              onClearAll: vi.fn(),
+            },
+            adaptive: {
+              desktop: { filters: 'inline' },
+              phone: { filters: 'sheet' },
+            },
+            controls: {
+              filters: [
+                {
+                  key: 'status',
+                  label: 'Lifecycle status',
+                  type: 'select',
+                  options: [
+                    { label: 'Active', value: 'active' },
+                    { label: 'Inactive', value: 'inactive' },
+                  ],
+                },
+              ],
+              onFilterChange,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    expect(screen.queryByText('Lifecycle status')).not.toBeInTheDocument();
+
+    const trigger = await screen.findByRole('button', { name: 'Advanced filters' });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    const controlledId = trigger.getAttribute('aria-controls');
+    expect(controlledId).toBeTruthy();
+    fireEvent.click(trigger);
+
+    const dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
+    expect(dialog).toHaveAttribute('id', controlledId);
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(await screen.findByText('Lifecycle status')).toBeInTheDocument();
+    const statusSelect = dialog.querySelector<HTMLSelectElement>('select');
+    expect(statusSelect).not.toBeNull();
+
+    fireEvent.change(statusSelect!, { target: { value: 'active' } });
+    expect(onFilterChange).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(onFilterChange).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: /Advanced filters/ }));
+    let reopenedDialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
+    expect(reopenedDialog.querySelector<HTMLSelectElement>('select')?.value).toBe('');
+
+    fireEvent.change(reopenedDialog.querySelector<HTMLSelectElement>('select')!, {
+      target: { value: 'inactive' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Apply filters' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(onFilterChange).toHaveBeenCalledTimes(1);
+    expect(onFilterChange).toHaveBeenCalledWith({ status: 'inactive' });
+
+    fireEvent.click(screen.getByRole('button', { name: /Advanced filters/ }));
+    reopenedDialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
+    expect(reopenedDialog.querySelector<HTMLSelectElement>('select')?.value).toBe('inactive');
+
+    fireEvent.click(
+      reopenedDialog.querySelector<HTMLButtonElement>('[data-part="reset-button"]')!,
+    );
+    expect(screen.getByRole('dialog', { name: 'Advanced filters' })).toBeInTheDocument();
+    expect(reopenedDialog.querySelector<HTMLSelectElement>('select')?.value).toBe('');
+    expect(onFilterChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the same adaptive filter content inline on desktop', async () => {
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={DESKTOP_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Test Collection',
+            },
+            adaptive: {
+              desktop: { filters: 'inline' },
+              phone: { filters: 'sheet' },
+            },
+            controls: {
+              filters: [
+                {
+                  key: 'status',
+                  label: 'Lifecycle status',
+                  type: 'select',
+                  options: [{ label: 'Active', value: 'active' }],
+                },
+              ],
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const trigger = await screen.findByRole('button', { name: 'Advanced filters' });
+    expect(trigger).not.toHaveAttribute('aria-haspopup');
+    expect(trigger).not.toHaveAttribute('aria-controls');
+    fireEvent.click(trigger);
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(await screen.findByText('Lifecycle status')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="filters-strip"]')).toHaveAttribute(
+      'data-active',
+      'true',
+    );
+  });
+
+  it('exposes the same dialog trigger contract in non-premium phone mode', async () => {
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: { phone: { filters: 'sheet' } },
+            controls: {
+              filters: [
+                {
+                  key: 'query',
+                  label: 'Candidate query',
+                  type: 'text',
+                  placeholder: 'Filter candidates',
+                },
+              ],
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const trigger = await screen.findByRole('button', { name: 'Advanced filters' });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).toHaveAttribute('aria-controls');
+
+    fireEvent.click(trigger);
+    expect(
+      await screen.findByRole('dialog', { name: 'Advanced filters' }),
+    ).toHaveAttribute('id', trigger.getAttribute('aria-controls'));
+    expect(await screen.findByPlaceholderText('Filter candidates')).toBeInTheDocument();
+  });
+
+  it('keeps the mobile advanced-filter count at zero after applying an empty multi-select', async () => {
+    const onFilterChange = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Test Collection',
+            },
+            activeFilters: {
+              filters: [{ key: 'search', label: 'Search', value: 'alice' }],
+              onRemove: vi.fn(),
+              onClearAll: vi.fn(),
+            },
+            adaptive: { phone: { filters: 'sheet' } },
+            controls: {
+              filters: [
+                {
+                  key: 'skills',
+                  label: 'Skills',
+                  type: 'multi-select',
+                  options: [{ label: 'React', value: 'react' }],
+                },
+              ],
+              onFilterChange,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Advanced filters' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
+    const option = dialog.querySelector<HTMLInputElement>('input[type="checkbox"]');
+    expect(option).not.toBeNull();
+
+    fireEvent.click(option!);
+    fireEvent.click(option!);
+    expect(onFilterChange).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Apply filters' }));
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(onFilterChange).toHaveBeenCalledTimes(1);
+    expect(onFilterChange).toHaveBeenCalledWith({ skills: [] });
+    expect(screen.getByRole('button', { name: 'Advanced filters' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    expect(screen.queryByRole('button', { name: 'Advanced filters (1)' })).not.toBeInTheDocument();
   });
 
   // -------------------------------------------------------------------------
