@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.13
+
+### Patch Changes
+
+- Add supplier-independent `BrandMark` and `CloudServiceMark` facades under the focused `marks`
+  entrypoint, backed by a fixed seven-brand and four-AWS-service corpus from pinned theSVG packages.
+- Resolve unsupported brand variants deterministically, choose AWS optical assets by rendered size,
+  and fail closed when runtime names or accessible/decorative intent are invalid.
+- Record per-asset source, version, license and trademark provenance; preserve faithful color in forced
+  colors; and keep the mark renderer unreachable from the package root through supplier-honesty gates.
+
 ## 2.19.12
 
 ### Patch Changes
