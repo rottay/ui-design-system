@@ -1,7 +1,7 @@
 import type { IconRole } from './types';
 
 /**
- * Fixed v1 semantic corpus. Names describe product meaning, never supplier glyphs.
+ * Fixed v2 semantic corpus. Names describe product meaning, never supplier glyphs.
  * Additions require an explicit corpus/version review; aliases do not belong here.
  */
 export const ICON_NAMES = [
@@ -22,6 +22,7 @@ export const ICON_NAMES = [
   'navigation.menu',
   'navigation.settings',
   'navigation.profile',
+  'navigation.route',
   'status.success',
   'status.warning',
   'status.error',
@@ -45,6 +46,8 @@ export const ICON_NAMES = [
   'bithire.interview',
   'bithire.pipeline',
   'bithire.evidence',
+  'bithire.job',
+  'bithire.offer',
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];

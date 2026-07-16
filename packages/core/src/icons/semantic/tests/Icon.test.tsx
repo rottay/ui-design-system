@@ -1,6 +1,9 @@
 import React, { createRef } from 'react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { BriefcaseIcon } from '@phosphor-icons/react/dist/ssr/Briefcase';
+import { CompassIcon } from '@phosphor-icons/react/dist/ssr/Compass';
+import { HandshakeIcon } from '@phosphor-icons/react/dist/ssr/Handshake';
 import { render, screen } from '@testing-library/react';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -36,6 +39,7 @@ const EXPECTED_NAMES = [
   'navigation.menu',
   'navigation.settings',
   'navigation.profile',
+  'navigation.route',
   'status.success',
   'status.warning',
   'status.error',
@@ -59,15 +63,31 @@ const EXPECTED_NAMES = [
   'bithire.interview',
   'bithire.pipeline',
   'bithire.evidence',
+  'bithire.job',
+  'bithire.offer',
 ] as const;
 
+function svgChildren(markup: string): string {
+  return markup.replace(/^<svg[^>]*>|<\/svg>$/g, '');
+}
+
 describe('semantic Icon corpus', () => {
-  it('publishes the fixed, unique 40-name corpus', () => {
+  it('publishes the fixed, unique 43-name corpus', () => {
     expect(ICON_NAMES).toEqual(EXPECTED_NAMES);
-    expect(ICON_NAMES).toHaveLength(40);
-    expect(new Set(ICON_NAMES)).toHaveProperty('size', 40);
+    expect(ICON_NAMES).toHaveLength(43);
+    expect(new Set(ICON_NAMES)).toHaveProperty('size', 43);
     expect(ICON_CORPUS.map(({ name }) => name)).toEqual(EXPECTED_NAMES);
-    expect(ICON_CORPUS).toHaveLength(40);
+    expect(ICON_CORPUS).toHaveLength(43);
+    expect(
+      ICON_CORPUS.filter(
+        ({ name }) =>
+          name === 'navigation.route' || name === 'bithire.job' || name === 'bithire.offer',
+      ),
+    ).toEqual([
+      { name: 'navigation.route', role: 'navigation', autoMirror: false },
+      { name: 'bithire.job', role: 'feature', autoMirror: false },
+      { name: 'bithire.offer', role: 'feature', autoMirror: false },
+    ]);
   });
 
   it('guards unknown runtime names fail-closed', () => {
@@ -81,15 +101,29 @@ describe('semantic Icon corpus', () => {
       <>{ICON_NAMES.map((name) => <Icon key={name} name={name} decorative />)}</>,
     );
 
-    expect((html.match(/<svg/g) ?? [])).toHaveLength(40);
+    expect((html.match(/<svg/g) ?? [])).toHaveLength(43);
     for (const name of ICON_NAMES) {
       expect(html).toContain(`data-icon-name="${name}"`);
     }
   });
 
+  it('maps the v2 additions to their pinned Phosphor SSR glyphs', () => {
+    const cases = [
+      ['navigation.route', CompassIcon, 'regular'],
+      ['bithire.job', BriefcaseIcon, 'duotone'],
+      ['bithire.offer', HandshakeIcon, 'duotone'],
+    ] as const;
+
+    for (const [name, Glyph, weight] of cases) {
+      const semantic = renderToStaticMarkup(<Icon name={name} decorative />);
+      const supplier = renderToStaticMarkup(<Glyph weight={weight} />);
+      expect(svgChildren(semantic)).toBe(svgChildren(supplier));
+    }
+  });
+
   it('records pinned supplier provenance without exposing supplier props', () => {
     expect(ICON_PROVENANCE).toEqual({
-      corpusVersion: 1,
+      corpusVersion: 2,
       supplier: 'Phosphor Icons',
       packageName: '@phosphor-icons/react',
       packageVersion: '2.1.10',

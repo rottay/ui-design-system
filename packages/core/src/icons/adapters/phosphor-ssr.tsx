@@ -6,17 +6,20 @@ import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { ArrowsOutSimpleIcon } from '@phosphor-icons/react/dist/ssr/ArrowsOutSimple';
 import { BellIcon } from '@phosphor-icons/react/dist/ssr/Bell';
 import { BrainIcon } from '@phosphor-icons/react/dist/ssr/Brain';
+import { BriefcaseIcon } from '@phosphor-icons/react/dist/ssr/Briefcase';
 import { CalendarCheckIcon } from '@phosphor-icons/react/dist/ssr/CalendarCheck';
 import { ChartBarIcon } from '@phosphor-icons/react/dist/ssr/ChartBar';
 import { ChatCircleDotsIcon } from '@phosphor-icons/react/dist/ssr/ChatCircleDots';
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr/CheckCircle';
 import { CheckIcon } from '@phosphor-icons/react/dist/ssr/Check';
+import { CompassIcon } from '@phosphor-icons/react/dist/ssr/Compass';
 import { CopyIcon } from '@phosphor-icons/react/dist/ssr/Copy';
 import { EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr/EnvelopeSimple';
 import { FileMagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/FileMagnifyingGlass';
 import { FunnelIcon } from '@phosphor-icons/react/dist/ssr/Funnel';
 import { GaugeIcon } from '@phosphor-icons/react/dist/ssr/Gauge';
 import { GearIcon } from '@phosphor-icons/react/dist/ssr/Gear';
+import { HandshakeIcon } from '@phosphor-icons/react/dist/ssr/Handshake';
 import { HouseIcon } from '@phosphor-icons/react/dist/ssr/House';
 import { InfoIcon } from '@phosphor-icons/react/dist/ssr/Info';
 import { KanbanIcon } from '@phosphor-icons/react/dist/ssr/Kanban';
@@ -70,6 +73,7 @@ const PHOSPHOR_GLYPHS = {
   'navigation.menu': ListIcon,
   'navigation.settings': GearIcon,
   'navigation.profile': UserCircleIcon,
+  'navigation.route': CompassIcon,
   'status.success': CheckCircleIcon,
   'status.warning': WarningIcon,
   'status.error': XCircleIcon,
@@ -93,6 +97,8 @@ const PHOSPHOR_GLYPHS = {
   'bithire.interview': CalendarCheckIcon,
   'bithire.pipeline': KanbanIcon,
   'bithire.evidence': FileMagnifyingGlassIcon,
+  'bithire.job': BriefcaseIcon,
+  'bithire.offer': HandshakeIcon,
 } as const satisfies Record<IconName, PhosphorIcon>;
 
 interface PhosphorSsrAdapterProps {
