@@ -1,5 +1,19 @@
 # @rottay/design-system
 
+## 2.19.20
+
+### Patch Changes
+
+- Add supplier-neutral `spatial/spec` policy contracts and a focused `spatial` lifecycle host with
+  fail-closed WebGL2 admission, one-context leasing, app-owned semantic fallbacks, bounded quality,
+  visibility suspension, context-loss recovery and stale-callback cleanup.
+- Certify Spatial SSR/reduced/device behavior, hostile loaders and Canvas registration, package
+  isolation, real export inventories, ESM/CJS/declaration closures and measured raw/gzip budgets.
+- Harden accessible chart activation, touch cancellation, persistent edge-aware tooltips, RTL
+  placement, dense target selection, forced-colors affordances and SSR-safe identifiers.
+- Upgrade `AppShell` to canonical phone/tablet/desktop postures, accessible compact navigation,
+  `100dvh` and safe-area geometry, 44 px controls and a single posture-aware bottom-inset contract.
+
 ## 2.19.19
 
 ### Patch Changes

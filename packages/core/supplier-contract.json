@@ -891,6 +891,7 @@
           "antd"
         ],
         "AppShell": [
+          "antd",
           "motion"
         ],
         "AreaChart": [
@@ -2213,6 +2214,7 @@
           "motion"
         ],
         "useShellContext": [
+          "antd",
           "motion"
         ],
         "useSmoothCounter": [

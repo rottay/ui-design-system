@@ -23,6 +23,10 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Motion provider fixture | < 2.3 KB gzipped (2,076 B measured + >10%; React/Motion external) |
 | EffectRegistry entry (`dist/effects.js` / `.cjs`) | < 800 B raw each (652/676 B measured + >10%) |
 | EffectRegistry all-export fixture | < 5.5 KB gzipped (4,829 B measured + >10%; ESM/CJS/types supplier-neutral) |
+| Spatial host entry (`dist/spatial.js` / `.cjs`) | < 300/400 B raw (257/317 B measured + >10%) |
+| Spatial specification entry (`dist/spatial-spec.js` / `.cjs`) | < 700/700 B raw (573/609 B measured + >10%) |
+| Spatial host all-export fixture | < 6.9 KB gzipped (6,216 B measured + >10%; React is the only external) |
+| Spatial specification all-export fixture | < 1.3 KB gzipped (1,097 B measured + >10%; no external/browser runtime) |
 | Named Bar renderer | < 12.6 KB gzipped (11,427 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
 | Named Line renderer | < 13.4 KB gzipped (12,099 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
 | Named HeatMap renderer | < 11.2 KB gzipped (10,135 B measured + >10%; accessible interaction runtime, D3/React external) |
@@ -73,6 +77,10 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/motion.cjs` | 1.1 KB (930 B measured + >10%) |
 | `dist/effects.js` | 800 B (652 B measured + >10%) |
 | `dist/effects.cjs` | 800 B (676 B measured + >10%) |
+| `dist/spatial.js` | 300 B (257 B measured + >10%) |
+| `dist/spatial.cjs` | 400 B (317 B measured + >10%) |
+| `dist/spatial-spec.js` | 700 B (573 B measured + >10%) |
+| `dist/spatial-spec.cjs` | 700 B (609 B measured + >10%) |
 | `dist/tokens.js` | 80 KB |
 | `dist/tokens.cjs` | 80 KB |
 | `dist/i18n.js` | 80 KB |
@@ -112,8 +120,19 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    both raw facade ceilings. `node scripts/analyze-bundle.mjs --chart-access` runs only this gate.
 7. `node scripts/analyze-bundle.mjs --chart-renderers` runs only that focused renderer gate;
    it does not build the full package or write artifacts.
-8. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
-9. The report is printed as a table in the console.
+8. The SPATIAL-01 gate uses `export *` fixtures and compares both the built-facade and bundled
+   runtime export inventories with the supplier contract, so a stale hand-written list cannot
+   hide a new export. The server-safe `./spatial/spec` fixture rejects every external import,
+   React, DOM/browser runtime, Three/R3F, asset and dynamic import. The `./spatial` host fixture
+   permits external React only and rejects Three/R3F, Motion, D3, assets and dynamic imports.
+   Import expressions are captured from Rollup's parsed module graph before inlining; asset
+   inlining is disabled and both emitted assets and asset module IDs are denied. Both facades
+   independently walk their CJS and declaration closures, including triple-slash path/type/lib
+   references; the spec denies DOM, WebWorker and ScriptHost declaration libraries. The gate
+   also enforces the four raw facade ceilings. `node scripts/analyze-bundle.mjs --spatial` runs
+   only this focused gate.
+9. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
+10. The report is printed as a table in the console.
 
 The VIZ-03 raw ESM/CJS entries and named-renderer bundles were measured from
 the same cohesive producer build on 2026-07-16. Re-measure through the focused
@@ -130,6 +149,16 @@ The VIZ-03A/C/D chart-spec, access, experience and renderer measurements come fr
 cohesive producer build on 2026-07-16. The gates must remain supplier-, browser-, client- and
 asset-safe according to each public boundary; do not increase component budgets to absorb
 unrelated code.
+
+## Spatial Baseline
+
+The cohesive 2.19.20 producer build on 2026-07-16 measured the host facades at
+257/317 B raw, the specification facades at 573/609 B raw, the host all-export
+fixture at 6,216 B gzip and the specification fixture at 1,097 B gzip. The
+single `SPATIAL_BASELINE_BYTES` object records those exact values;
+`deriveSpatialBudget()` creates every ceiling as measured +10%, rounded up to
+the next 100 B. Re-measure all six together when the public boundary changes;
+never replace exact baselines with rounded limits.
 
 ## Adjusting Budgets
 

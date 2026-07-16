@@ -48214,8 +48214,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   > [data-part='interaction-tooltip'] {
   position: absolute;
   z-index: 2;
-  inset-block-start: var(--ds-chart-tooltip-y, 0%);
+  top: var(--ds-chart-tooltip-y, 0%);
   left: var(--ds-chart-tooltip-x, 0%);
+  box-sizing: border-box;
   max-inline-size: min(18rem, calc(100% - var(--ds-spacing-4)));
   padding: var(--ds-spacing-2) var(--ds-spacing-3);
   border: 1px solid var(--ds-chart-tooltip-border, var(--ds-color-border));
@@ -48226,17 +48227,25 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-body);
   pointer-events: auto;
-  transform: translate(-50%, calc(-100% - var(--ds-spacing-2)));
+  transform: translate(
+    var(--ds-chart-tooltip-shift-x, -50%),
+    var(--ds-chart-tooltip-shift-y, calc(-100% - var(--ds-spacing-2)))
+  );
 }
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
   > [data-part='interaction-tooltip'][data-align='start'] {
-  transform: translate(0, calc(-100% - var(--ds-spacing-2)));
+  --ds-chart-tooltip-shift-x: 0%;
 }
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
   > [data-part='interaction-tooltip'][data-align='end'] {
-  transform: translate(-100%, calc(-100% - var(--ds-spacing-2)));
+  --ds-chart-tooltip-shift-x: -100%;
+}
+
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
+  > [data-part='interaction-tooltip'][data-side='bottom'] {
+  --ds-chart-tooltip-shift-y: var(--ds-spacing-2);
 }
 
 /* VIZ-03 — vertical grammar is presentation posture, never data semantics.

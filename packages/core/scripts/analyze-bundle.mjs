@@ -13,6 +13,7 @@
  *   node scripts/analyze-bundle.mjs --chart-access  # bounded data-access facade budgets only
  *   node scripts/analyze-bundle.mjs --chart-spec  # server-safe chart contract purity/budget only
  *   node scripts/analyze-bundle.mjs --effects  # EffectRegistry purity/budget only
+ *   node scripts/analyze-bundle.mjs --spatial  # Spatial spec/host purity and isolation only
  *
  * Exit codes:
  *   0 - all files within budget
@@ -31,6 +32,38 @@ import { Writable } from 'node:stream';
 // ---------------------------------------------------------------------------
 // Configuration -- keep in sync with PERFORMANCE_BUDGET.md
 // ---------------------------------------------------------------------------
+
+/**
+ * SPATIAL BASELINE INJECTION POINT (six exact byte measurements).
+ *
+ * Exact measurements from the cohesive 2.19.20 producer build on 2026-07-16.
+ * Ceilings are derived as measured +10%, rounded up to 100 B.
+ */
+const SPATIAL_BASELINE_BYTES = Object.freeze({
+  spatialEsmRaw: 257,
+  spatialCjsRaw: 317,
+  spatialSpecEsmRaw: 573,
+  spatialSpecCjsRaw: 609,
+  spatialHostFixtureGzip: 6_216,
+  spatialSpecFixtureGzip: 1_097,
+});
+
+function deriveSpatialBudget(measuredBytes) {
+  if (!Number.isInteger(measuredBytes) || measuredBytes <= 0) return null;
+  return Math.ceil((measuredBytes * 1.1) / 100) * 100;
+}
+
+const SPATIAL_RAW_BUDGET = Object.freeze({
+  'dist/spatial.js': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialEsmRaw),
+  'dist/spatial.cjs': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialCjsRaw),
+  'dist/spatial-spec.js': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialSpecEsmRaw),
+  'dist/spatial-spec.cjs': deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialSpecCjsRaw),
+});
+
+const SPATIAL_FIXTURE_BUDGET = Object.freeze({
+  host: deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialHostFixtureGzip),
+  spec: deriveSpatialBudget(SPATIAL_BASELINE_BYTES.spatialSpecFixtureGzip),
+});
 
 /** Maximum uncompressed size in bytes for each entry-point file. */
 const BUDGET = {
@@ -64,6 +97,9 @@ const BUDGET = {
   // and rounds upward to the next 100 B.
   'dist/effects.js': 800,
   'dist/effects.cjs': 800,
+  ...Object.fromEntries(
+    Object.entries(SPATIAL_RAW_BUDGET).filter(([, limit]) => limit !== null),
+  ),
   'dist/tokens.js': 80_000,
   'dist/tokens.cjs': 80_000,
   'dist/i18n.js': 80_000,
@@ -969,8 +1005,11 @@ const CHART_SPEC_FIXTURE_EXPORTS = Object.freeze([
 // 1,787 B gzip. This ceiling keeps >20% headroom.
 const CHART_SPEC_FIXTURE_BUDGET = 2_200;
 const CHART_SPEC_ARTIFACT_FRAGMENT = '/components/patterns/visualization/charts/kernel/spec/';
-const BROWSER_RUNTIME_PATTERN = /\b(?:window|document|navigator|localStorage|sessionStorage|fetch|requestAnimationFrame|cancelAnimationFrame|matchMedia|ResizeObserver|IntersectionObserver|MutationObserver|HTMLElement|SVGElement)\b/;
-const DOM_DECLARATION_PATTERN = /\b(?:Window|Document|Navigator|Storage|HTMLElement|SVGElement|ResizeObserver|IntersectionObserver|MutationObserver)\b/;
+const BROWSER_RUNTIME_PATTERN = /\b(?:window|document|navigator|localStorage|sessionStorage|fetch|requestAnimationFrame|cancelAnimationFrame|matchMedia|ResizeObserver|IntersectionObserver|MutationObserver|HTMLElement|HTMLCanvasElement|SVGElement|OffscreenCanvas|WebGLRenderingContext|WebGL2RenderingContext|GPUDevice|GPUCanvasContext)\b/;
+const DOM_DECLARATION_PATTERN = /\b(?:Window|Document|Navigator|Storage|HTMLElement|HTMLCanvasElement|SVGElement|ResizeObserver|IntersectionObserver|MutationObserver|OffscreenCanvas|WebGLRenderingContext|WebGL2RenderingContext|GPUDevice|GPUCanvasContext)\b/;
+const SPATIAL_BROWSER_RUNTIME_PATTERN = /\b(?:window|document|navigator|localStorage|sessionStorage|indexedDB|location|history|screen|fetch|requestAnimationFrame|cancelAnimationFrame|matchMedia|ResizeObserver|IntersectionObserver|MutationObserver|Worker|SharedWorker|ServiceWorker|WebSocket|EventSource|BroadcastChannel|HTMLElement|HTMLCanvasElement|SVGElement|OffscreenCanvas|WebGLRenderingContext|WebGL2RenderingContext|GPUDevice|GPUCanvasContext)\b/;
+const SPATIAL_DOM_DECLARATION_PATTERN = /\b(?:Window|Document|Navigator|Storage|Location|History|Screen|Element|HTMLElement|HTMLCanvasElement|SVGElement|Node|Event|EventTarget|CustomEvent|MediaQueryList|ResizeObserver|IntersectionObserver|MutationObserver|Request|Response|Headers|URL|URLSearchParams|Blob|File|FormData|AbortController|AbortSignal|ReadableStream|WritableStream|TransformStream|Worker|SharedWorker|ServiceWorker|WebSocket|EventSource|BroadcastChannel|MessageChannel|MessagePort|ImageBitmap|ImageData|CanvasRenderingContext2D|OffscreenCanvas|WebGLRenderingContext|WebGL2RenderingContext|GPUDevice|GPUCanvasContext)\b/;
+const BROWSER_DECLARATION_LIB_PATTERN = /^(?:dom(?:\..+)?|webworker(?:\..+)?|scripthost)$/i;
 
 const CHART_ACCESS_ENTRY = join(ROOT, 'dist', 'chart-access.js');
 const CHART_ACCESS_CJS_ENTRY = join(ROOT, 'dist', 'chart-access.cjs');
@@ -995,6 +1034,51 @@ const CHART_ACCESS_FIXTURE_BUDGET = 2_800;
 const CHART_ACCESS_PURE_BUDGET = 1_000;
 const CHART_ACCESS_ARTIFACT_FRAGMENT = '/components/patterns/visualization/charts/kernel/access/';
 
+// ---------------------------------------------------------------------------
+// Spatial policy/host facade isolation gate (SPATIAL-01)
+// ---------------------------------------------------------------------------
+
+const SPATIAL_ENTRY = join(ROOT, 'dist', 'spatial.js');
+const SPATIAL_CJS_ENTRY = join(ROOT, 'dist', 'spatial.cjs');
+const SPATIAL_TYPES_ENTRY = join(ROOT, 'dist', 'spatial.d.ts');
+const SPATIAL_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'spatial-entry.d.ts');
+const SPATIAL_SPEC_ENTRY = join(ROOT, 'dist', 'spatial-spec.js');
+const SPATIAL_SPEC_CJS_ENTRY = join(ROOT, 'dist', 'spatial-spec.cjs');
+const SPATIAL_SPEC_TYPES_ENTRY = join(ROOT, 'dist', 'spatial-spec.d.ts');
+const SPATIAL_SPEC_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'spatial-spec-entry.d.ts');
+
+const SPATIAL_HOST_FIXTURE_EXPORTS = Object.freeze([
+  'SPATIAL_SCENE_MODULE_VERSION',
+  'SpatialExperience',
+]);
+const SPATIAL_SPEC_FIXTURE_EXPORTS = Object.freeze([
+  'SPATIAL_QUALITY_BUDGETS',
+  'SPATIAL_SCENE_MODULE_VERSION',
+  'downgradeSpatialMode',
+  'isSpatialSceneModule',
+  'resolveSpatialPolicy',
+  'resolveSpatialQualityBudget',
+]);
+
+const SPATIAL_SPEC_ARTIFACT_FRAGMENTS = Object.freeze([
+  '/contracts/spatial/',
+  '/runtime/spatial/',
+]);
+// SpatialExperience consumes the supplier-neutral motion policy hook directly.
+// Keep this allowlist finite so MotionProvider, recipes and renderer adapters
+// cannot enter the host closure while the external Motion package stays banned.
+const SPATIAL_HOST_BRIDGE_ARTIFACT_FRAGMENTS = Object.freeze([
+  '/contracts/motion/',
+  '/contracts/verticals/',
+  '/runtime/motion/MotionPreference.',
+  '/runtime/motion/motion-environment-store.',
+  '/runtime/motion/policy.',
+  '/runtime/motion/reduced-motion-store.',
+  '/runtime/spatial-react/',
+]);
+const SPATIAL_ASSET_MODULE_PATTERN = /\.(?:avif|bmp|css|eot|gif|glb|gltf|ico|jpe?g|less|mp3|mp4|ogg|otf|png|sass|scss|svg|ttf|wav|wasm|webm|webp|woff2?)$/i;
+const SPATIAL_INLINE_ASSET_PATTERN = /\bdata:(?:application\/wasm|audio\/|font\/|image\/|model\/|video\/)/i;
+
 function isChartSpecArtifact(file) {
   const normalized = file.replaceAll('\\', '/');
   return normalized === CHART_SPEC_ENTRY.replaceAll('\\', '/')
@@ -1011,6 +1095,25 @@ function isChartAccessArtifact(file) {
     || normalized === CHART_ACCESS_TYPES_ENTRY.replaceAll('\\', '/')
     || normalized === CHART_ACCESS_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
     || normalized.includes(CHART_ACCESS_ARTIFACT_FRAGMENT);
+}
+
+function isSpatialSpecArtifact(file) {
+  const normalized = file.replaceAll('\\', '/');
+  return normalized === SPATIAL_SPEC_ENTRY.replaceAll('\\', '/')
+    || normalized === SPATIAL_SPEC_CJS_ENTRY.replaceAll('\\', '/')
+    || normalized === SPATIAL_SPEC_TYPES_ENTRY.replaceAll('\\', '/')
+    || normalized === SPATIAL_SPEC_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
+    || SPATIAL_SPEC_ARTIFACT_FRAGMENTS.some((fragment) => normalized.includes(fragment));
+}
+
+function isSpatialHostArtifact(file) {
+  const normalized = file.replaceAll('\\', '/');
+  return normalized === SPATIAL_ENTRY.replaceAll('\\', '/')
+    || normalized === SPATIAL_CJS_ENTRY.replaceAll('\\', '/')
+    || normalized === SPATIAL_TYPES_ENTRY.replaceAll('\\', '/')
+    || normalized === SPATIAL_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
+    || isSpatialSpecArtifact(file)
+    || SPATIAL_HOST_BRIDGE_ARTIFACT_FRAGMENTS.some((fragment) => normalized.includes(fragment));
 }
 
 function resolveArtifactSpecifier(fromFile, specifier, extension) {
@@ -1030,6 +1133,163 @@ function stripJsComments(source) {
   return source
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/(^|[^:])\/\/.*$/gm, '$1');
+}
+
+function containsImportExpression(ast) {
+  if (!ast || typeof ast !== 'object') return false;
+  const pending = [ast];
+  const visited = new Set();
+  while (pending.length > 0) {
+    const node = pending.pop();
+    if (!node || typeof node !== 'object' || visited.has(node)) continue;
+    visited.add(node);
+    if (node.type === 'ImportExpression') return true;
+    for (const value of Object.values(node)) {
+      if (Array.isArray(value)) pending.push(...value);
+      else if (value && typeof value === 'object') pending.push(value);
+    }
+  }
+  return false;
+}
+
+function isSpatialReactEdge(specifier) {
+  return specifier === 'react' || specifier.startsWith('react/');
+}
+
+function auditSpatialCjsClosure({
+  entry,
+  label,
+  isAllowedArtifact,
+  browserSafe,
+  reactRequired,
+}) {
+  if (!existsSync(entry)) return [`${relative(ROOT, entry)} is missing`];
+  const pending = [entry];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const source = stripJsComments(readFileSync(file, 'utf8'));
+    const requireCalls = [...source.matchAll(/\brequire\s*\(/g)].length;
+    const literalRequires = [...source.matchAll(/\brequire\s*\(\s*(['"])([^'"]+)\1\s*\)/g)];
+    if (requireCalls !== literalRequires.length) {
+      errors.push(`computed/non-literal require in ${relative(ROOT, file)}`);
+    }
+    if (/\bimport\s*\(/.test(source)) {
+      errors.push(`dynamic import in ${relative(ROOT, file)}`);
+    }
+    if (browserSafe && /(?:^|[;\n])\s*['"]use client['"]/.test(source)) {
+      errors.push(`client directive in ${relative(ROOT, file)}`);
+    }
+    if (browserSafe && SPATIAL_BROWSER_RUNTIME_PATTERN.test(source)) {
+      errors.push(`browser runtime in ${relative(ROOT, file)}`);
+    }
+    for (const match of literalRequires) {
+      const specifier = match[2];
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.cjs');
+      if (!target) errors.push(`unresolved CJS edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const unexpectedExternal = [...external].filter((specifier) => !(
+    reactRequired && isSpatialReactEdge(specifier)
+  ));
+  const foreign = [...visited].filter((file) => !isAllowedArtifact(file));
+  if (unexpectedExternal.length > 0) {
+    errors.push(`${label} CJS non-React requires retained: ${unexpectedExternal.join(', ')}`);
+  }
+  if (reactRequired && ![...external].some(isSpatialReactEdge)) {
+    errors.push(`${label} CJS React external missing`);
+  }
+  if (foreign.length > 0) {
+    errors.push(`${label} CJS foreign modules retained: ${foreign.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
+}
+
+function auditSpatialDeclarationClosure({
+  entry,
+  label,
+  isAllowedArtifact,
+  browserSafe,
+  reactRequired,
+}) {
+  if (!existsSync(entry)) return [`${relative(ROOT, entry)} is missing`];
+  const pending = [entry];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const rawSource = readFileSync(file, 'utf8');
+    const source = stripJsComments(rawSource);
+    const referencePaths = [
+      ...rawSource.matchAll(/<reference\s+path\s*=\s*['"]([^'"]+)['"]/g),
+    ].map((match) => match[1]);
+    const referenceTypes = [
+      ...rawSource.matchAll(/<reference\s+types\s*=\s*['"]([^'"]+)['"]/g),
+    ].map((match) => match[1]);
+    const referenceLibs = [
+      ...rawSource.matchAll(/<reference\s+lib\s*=\s*['"]([^'"]+)['"]/g),
+    ].map((match) => match[1]);
+    if (
+      browserSafe
+      && (
+        SPATIAL_DOM_DECLARATION_PATTERN.test(source)
+        || SPATIAL_BROWSER_RUNTIME_PATTERN.test(source)
+        || referenceLibs.some((lib) => BROWSER_DECLARATION_LIB_PATTERN.test(lib.trim()))
+      )
+    ) {
+      errors.push(`browser declaration in ${relative(ROOT, file)}`);
+    }
+    for (const specifier of new Set(referencePaths)) {
+      const target = resolveArtifactSpecifier(file, specifier, '.d.ts');
+      if (!target) errors.push(`unresolved declaration reference ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+    const specifiers = [
+      ...source.matchAll(/\bfrom\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+      ...source.matchAll(/\bimport\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+    ].map((match) => match[1]).concat(referenceTypes);
+    for (const specifier of new Set(specifiers)) {
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.d.ts');
+      if (!target) errors.push(`unresolved declaration edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const unexpectedExternal = [...external].filter((specifier) => !(
+    reactRequired && isSpatialReactEdge(specifier)
+  ));
+  const foreign = [...visited].filter((file) => !isAllowedArtifact(file));
+  if (unexpectedExternal.length > 0) {
+    errors.push(`${label} declaration non-React suppliers retained: ${unexpectedExternal.join(', ')}`);
+  }
+  if (reactRequired && ![...external].some(isSpatialReactEdge)) {
+    errors.push(`${label} declaration React external missing`);
+  }
+  if (foreign.length > 0) {
+    errors.push(`${label} declaration foreign modules retained: ${foreign.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
 }
 
 function auditEffectsCjsClosure() {
@@ -1729,6 +1989,344 @@ async function runChartAccessFixtureBudgets() {
   }
 }
 
+async function buildSpatialFixture(name, entry) {
+  if (!existsSync(entry)) {
+    throw new Error(`${relative(ROOT, entry)} is missing; build the package before measuring Spatial`);
+  }
+
+  const { build } = await import('vite');
+  const virtualId = `virtual:spatial-01-${name}`;
+  const resolvedVirtualId = `\0${virtualId}`;
+  const normalizedEntry = normalizedModuleId(entry);
+  const entryRuntimeExports = new Set();
+  const sourceDynamicImports = new Set();
+  const result = await build({
+    configFile: false,
+    logLevel: 'silent',
+    root: ROOT,
+    plugins: [{
+      name: `spatial-01-${name}-entry`,
+      resolveId(id) {
+        return id === virtualId ? resolvedVirtualId : null;
+      },
+      load(id) {
+        if (id !== resolvedVirtualId) return null;
+        return `export * from ${JSON.stringify(entry)};\n`;
+      },
+      moduleParsed(moduleInfo) {
+        const moduleId = normalizedModuleId(moduleInfo.id);
+        if (moduleId === normalizedEntry) {
+          for (const exported of moduleInfo.exports ?? []) entryRuntimeExports.add(exported);
+        }
+        if (
+          (moduleInfo.dynamicallyImportedIds?.length ?? 0) > 0
+          || containsImportExpression(moduleInfo.ast)
+        ) {
+          sourceDynamicImports.add(moduleId);
+        }
+      },
+    }],
+    build: {
+      write: false,
+      assetsInlineLimit: 0,
+      minify: 'esbuild',
+      target: 'esnext',
+      reportCompressedSize: false,
+      rollupOptions: {
+        input: virtualId,
+        preserveEntrySignatures: 'strict',
+        // Known peers stay external so an accidental edge is visible in the
+        // output import inventory instead of being hidden inside the fixture.
+        external: EFFECTS_EXTERNALS,
+        output: {
+          format: 'es',
+          inlineDynamicImports: true,
+          entryFileNames: 'bundle.js',
+        },
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          warn(warning);
+        },
+      },
+    },
+    esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
+  });
+
+  const outputs = (Array.isArray(result) ? result : [result])
+    .flatMap((buildResult) => buildResult.output ?? []);
+  const chunks = outputs.filter((output) => output.type === 'chunk');
+  if (chunks.length !== 1 || !chunks[0].isEntry) {
+    throw new Error(`expected one inline Spatial ${name} chunk; found ${chunks.length}`);
+  }
+  const code = chunks.map((chunk) => chunk.code).join('\n');
+  const modules = renderedModules(chunks);
+  return {
+    code,
+    raw: Buffer.byteLength(code),
+    gzip: gzipSync(code, { level: 9 }).byteLength,
+    modules,
+    imports: new Set(chunks.flatMap((chunk) => chunk.imports)),
+    dynamicImports: new Set(chunks.flatMap((chunk) => chunk.dynamicImports ?? [])),
+    emittedAssets: outputs.filter((output) => output.type === 'asset').map((asset) => asset.fileName),
+    assetModuleIds: [...modules.keys()].filter((moduleId) => SPATIAL_ASSET_MODULE_PATTERN.test(moduleId)),
+    bundledExternalModules: [...modules.keys()].filter((moduleId) => moduleId.includes('/node_modules/')),
+    entryRuntimeExports,
+    fixtureRuntimeExports: new Set(chunks[0].exports ?? []),
+    sourceDynamicImports,
+    virtualId: resolvedVirtualId,
+  };
+}
+
+function validateSpatialPublicContract(publicContract, expectedExports) {
+  const expected = [...expectedExports].sort();
+  const errors = [];
+  if (JSON.stringify([...(publicContract?.exports ?? [])].sort()) !== JSON.stringify(expected)) {
+    errors.push('public export inventory drifted');
+  }
+  if (Object.keys(publicContract?.symbols ?? {}).length !== 0) {
+    errors.push('governed supplier symbols declared');
+  }
+  if (
+    JSON.stringify([...(publicContract?.supplierFreeExports ?? [])].sort())
+    !== JSON.stringify(expected)
+  ) {
+    errors.push('not every runtime export is governed-supplier-free');
+  }
+  return errors;
+}
+
+function validateSpatialRuntimeExports(result, expectedExports) {
+  const expected = [...expectedExports].sort();
+  const entryRuntime = [...result.entryRuntimeExports].sort();
+  const fixtureRuntime = [...result.fixtureRuntimeExports].sort();
+  const errors = [];
+  if (JSON.stringify(entryRuntime) !== JSON.stringify(expected)) {
+    errors.push(`built facade export inventory drifted (found: ${entryRuntime.join(', ') || 'none'})`);
+  }
+  if (JSON.stringify(fixtureRuntime) !== JSON.stringify(expected)) {
+    errors.push(`all-export fixture inventory drifted (found: ${fixtureRuntime.join(', ') || 'none'})`);
+  }
+  return errors;
+}
+
+function inspectSpatialRawFacade(entry, baselineKey) {
+  const relPath = relative(ROOT, entry).replaceAll('\\', '/');
+  const size = existsSync(entry) ? statSync(entry).size : Number.POSITIVE_INFINITY;
+  const limit = SPATIAL_RAW_BUDGET[relPath] ?? null;
+  const errors = [];
+  if (!Number.isFinite(size)) errors.push(`${relPath} is missing`);
+  else if (limit !== null && size > limit) errors.push(`${relPath} exceeds ${limit} B`);
+  return { baselineKey, entry, relPath, size, limit, errors };
+}
+
+function formatSpatialRawFacades(measurements) {
+  return measurements.map(({ relPath, size, limit }) => (
+    `${relPath} ${Number.isFinite(size) ? `${size} B` : 'missing'}`
+    + `/${limit === null ? 'PENDING' : `${limit} B`}`
+  )).join('; ');
+}
+
+async function runSpatialFixtureBudgets() {
+  console.log('\n--- Spatial policy/host purity and isolation (SPATIAL-01) ---\n');
+  const supplierContract = JSON.parse(readFileSync(join(ROOT, 'supplier-contract.json'), 'utf8'));
+  const hostContractErrors = validateSpatialPublicContract(
+    supplierContract.entrypoints?.['./spatial'],
+    SPATIAL_HOST_FIXTURE_EXPORTS,
+  );
+  const specContractErrors = validateSpatialPublicContract(
+    supplierContract.entrypoints?.['./spatial/spec'],
+    SPATIAL_SPEC_FIXTURE_EXPORTS,
+  );
+  if (hostContractErrors.length > 0 || specContractErrors.length > 0) {
+    console.error(
+      '\x1b[31mSpatial supplier contract failed: '
+      + [
+        ...hostContractErrors.map((error) => `host ${error}`),
+        ...specContractErrors.map((error) => `spec ${error}`),
+      ].join('; ')
+      + '.\x1b[0m\n',
+    );
+    return 1;
+  }
+
+  try {
+    // Sequential builds keep peak memory bounded during normal CI analysis.
+    const spec = await buildSpatialFixture(
+      'spec',
+      SPATIAL_SPEC_ENTRY,
+    );
+    const host = await buildSpatialFixture(
+      'host',
+      SPATIAL_ENTRY,
+    );
+
+    const specIsolationErrors = validateSpatialRuntimeExports(
+      spec,
+      SPATIAL_SPEC_FIXTURE_EXPORTS,
+    );
+    const specForeignModules = [...spec.modules.keys()].filter((moduleId) => (
+      moduleId !== spec.virtualId && !isSpatialSpecArtifact(moduleId)
+    ));
+    if (spec.imports.size > 0) {
+      specIsolationErrors.push(`external imports retained: ${[...spec.imports].join(', ')}`);
+    }
+    if (spec.dynamicImports.size > 0) {
+      specIsolationErrors.push(`dynamic imports retained: ${[...spec.dynamicImports].join(', ')}`);
+    }
+    if (spec.sourceDynamicImports.size > 0) {
+      specIsolationErrors.push(`source dynamic imports found: ${[...spec.sourceDynamicImports].join(', ')}`);
+    }
+    if (spec.emittedAssets.length > 0) {
+      specIsolationErrors.push(`assets emitted: ${spec.emittedAssets.join(', ')}`);
+    }
+    if (spec.assetModuleIds.length > 0) {
+      specIsolationErrors.push(`asset modules retained: ${spec.assetModuleIds.join(', ')}`);
+    }
+    if (SPATIAL_INLINE_ASSET_PATTERN.test(spec.code)) {
+      specIsolationErrors.push('inline asset retained');
+    }
+    if (spec.bundledExternalModules.length > 0) {
+      specIsolationErrors.push('external supplier module bundled');
+    }
+    if (specForeignModules.length > 0) {
+      specIsolationErrors.push(`client/foreign runtime retained: ${specForeignModules.join(', ')}`);
+    }
+    if (SPATIAL_BROWSER_RUNTIME_PATTERN.test(spec.code)) {
+      specIsolationErrors.push('browser runtime retained');
+    }
+    if (/(?:^|[;\n])\s*['"]use client['"]/.test(spec.code)) {
+      specIsolationErrors.push('client directive retained');
+    }
+    specIsolationErrors.push(...auditSpatialCjsClosure({
+      entry: SPATIAL_SPEC_CJS_ENTRY,
+      label: 'Spatial spec',
+      isAllowedArtifact: isSpatialSpecArtifact,
+      browserSafe: true,
+      reactRequired: false,
+    }));
+    specIsolationErrors.push(...auditSpatialDeclarationClosure({
+      entry: SPATIAL_SPEC_TYPES_ENTRY,
+      label: 'Spatial spec',
+      isAllowedArtifact: isSpatialSpecArtifact,
+      browserSafe: true,
+      reactRequired: false,
+    }));
+
+    const hostIsolationErrors = validateSpatialRuntimeExports(
+      host,
+      SPATIAL_HOST_FIXTURE_EXPORTS,
+    );
+    const unexpectedHostImports = [...host.imports].filter((specifier) => (
+      !isSpatialReactEdge(specifier)
+    ));
+    const hostForeignModules = [...host.modules.keys()].filter((moduleId) => (
+      moduleId !== host.virtualId && !isSpatialHostArtifact(moduleId)
+    ));
+    if (unexpectedHostImports.length > 0) {
+      hostIsolationErrors.push(`non-React imports retained: ${unexpectedHostImports.join(', ')}`);
+    }
+    if (![...host.imports].some(isSpatialReactEdge)) {
+      hostIsolationErrors.push('React external missing');
+    }
+    if (host.dynamicImports.size > 0) {
+      hostIsolationErrors.push(`dynamic imports retained: ${[...host.dynamicImports].join(', ')}`);
+    }
+    if (host.sourceDynamicImports.size > 0) {
+      hostIsolationErrors.push(`source dynamic imports found: ${[...host.sourceDynamicImports].join(', ')}`);
+    }
+    if (host.emittedAssets.length > 0) {
+      hostIsolationErrors.push(`assets emitted: ${host.emittedAssets.join(', ')}`);
+    }
+    if (host.assetModuleIds.length > 0) {
+      hostIsolationErrors.push(`asset modules retained: ${host.assetModuleIds.join(', ')}`);
+    }
+    if (SPATIAL_INLINE_ASSET_PATTERN.test(host.code)) {
+      hostIsolationErrors.push('inline asset retained');
+    }
+    if (host.bundledExternalModules.length > 0) {
+      hostIsolationErrors.push('external supplier module bundled');
+    }
+    if (hostForeignModules.length > 0) {
+      hostIsolationErrors.push(`foreign runtime retained: ${hostForeignModules.join(', ')}`);
+    }
+    hostIsolationErrors.push(...auditSpatialCjsClosure({
+      entry: SPATIAL_CJS_ENTRY,
+      label: 'Spatial host',
+      isAllowedArtifact: isSpatialHostArtifact,
+      browserSafe: false,
+      reactRequired: true,
+    }));
+    hostIsolationErrors.push(...auditSpatialDeclarationClosure({
+      entry: SPATIAL_TYPES_ENTRY,
+      label: 'Spatial host',
+      isAllowedArtifact: isSpatialHostArtifact,
+      browserSafe: false,
+      reactRequired: true,
+    }));
+
+    const hostRaw = [
+      inspectSpatialRawFacade(SPATIAL_ENTRY, 'spatialEsmRaw'),
+      inspectSpatialRawFacade(SPATIAL_CJS_ENTRY, 'spatialCjsRaw'),
+    ];
+    const specRaw = [
+      inspectSpatialRawFacade(SPATIAL_SPEC_ENTRY, 'spatialSpecEsmRaw'),
+      inspectSpatialRawFacade(SPATIAL_SPEC_CJS_ENTRY, 'spatialSpecCjsRaw'),
+    ];
+    const pendingBaselines = [
+      ...hostRaw,
+      ...specRaw,
+    ].filter(({ limit }) => limit === null).map(({ baselineKey }) => baselineKey);
+    if (SPATIAL_FIXTURE_BUDGET.host === null) {
+      pendingBaselines.push('spatialHostFixtureGzip');
+    }
+    if (SPATIAL_FIXTURE_BUDGET.spec === null) {
+      pendingBaselines.push('spatialSpecFixtureGzip');
+    }
+    const hostRawErrors = hostRaw.flatMap(({ errors }) => errors);
+    const specRawErrors = specRaw.flatMap(({ errors }) => errors);
+    const hostOverBudget = SPATIAL_FIXTURE_BUDGET.host !== null
+      && host.gzip > SPATIAL_FIXTURE_BUDGET.host;
+    const specOverBudget = SPATIAL_FIXTURE_BUDGET.spec !== null
+      && spec.gzip > SPATIAL_FIXTURE_BUDGET.spec;
+    const hostFailed = hostIsolationErrors.length > 0
+      || hostRawErrors.length > 0
+      || hostOverBudget
+      || pendingBaselines.some((key) => key.startsWith('spatial') && !key.startsWith('spatialSpec'));
+    const specFailed = specIsolationErrors.length > 0
+      || specRawErrors.length > 0
+      || specOverBudget
+      || pendingBaselines.some((key) => key.startsWith('spatialSpec'));
+
+    console.log(
+      `Spatial spec | raw facades ${formatSpatialRawFacades(specRaw)} | `
+      + `fixture ${spec.raw} B raw / ${spec.gzip} B gzip `
+      + `(limit ${SPATIAL_FIXTURE_BUDGET.spec === null ? 'PENDING' : `${SPATIAL_FIXTURE_BUDGET.spec} B`}) | `
+      + `${specIsolationErrors.length === 0 ? 'no imports/React/DOM/browser/Three/R3F/assets/dynamic' : specIsolationErrors.join('; ')} | `
+      + `${specFailed ? 'FAIL' : 'PASS'}\n`,
+    );
+    console.log(
+      `Spatial host | raw facades ${formatSpatialRawFacades(hostRaw)} | `
+      + `fixture ${host.raw} B raw / ${host.gzip} B gzip `
+      + `(limit ${SPATIAL_FIXTURE_BUDGET.host === null ? 'PENDING' : `${SPATIAL_FIXTURE_BUDGET.host} B`}) | `
+      + `${hostIsolationErrors.length === 0 ? 'React-only external; no Three/R3F/Motion/D3/assets/dynamic' : hostIsolationErrors.join('; ')} | `
+      + `${hostFailed ? 'FAIL' : 'PASS'}\n`,
+    );
+    if (pendingBaselines.length > 0) {
+      console.error(
+        '\x1b[31mSpatial byte baseline pending. Paste the six exact measurements into '
+        + `SPATIAL_BASELINE_BYTES: ${pendingBaselines.join(', ')}.\x1b[0m\n`,
+      );
+    }
+    if (hostRawErrors.length > 0 || specRawErrors.length > 0) {
+      console.error(`\x1b[31mSpatial raw facade failures: ${[...hostRawErrors, ...specRawErrors].join('; ')}.\x1b[0m\n`);
+    }
+    return hostFailed || specFailed ? 1 : 0;
+  } catch (error) {
+    console.error(`\x1b[31mSpatial fixture build failed: ${error instanceof Error ? error.message : String(error)}\x1b[0m\n`);
+    return 1;
+  }
+}
+
 if (process.argv.includes('--chart-renderers')) {
   const failures = await runChartRendererBudgets();
   process.exit(failures > 0 ? 1 : 0);
@@ -1751,6 +2349,11 @@ if (process.argv.includes('--motion')) {
 
 if (process.argv.includes('--effects')) {
   const failures = await runEffectsFixtureBudget();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
+if (process.argv.includes('--spatial')) {
+  const failures = await runSpatialFixtureBudgets();
   process.exit(failures > 0 ? 1 : 0);
 }
 
@@ -1894,6 +2497,7 @@ failures += await runChartAccessFixtureBudgets();
 failures += await runChartSpecFixtureBudget();
 failures += await runMotionFixtureBudgets();
 failures += await runEffectsFixtureBudget();
+failures += await runSpatialFixtureBudgets();
 
 // ---------------------------------------------------------------------------
 // Report

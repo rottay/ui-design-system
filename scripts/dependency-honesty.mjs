@@ -4187,9 +4187,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 13 || runtimeFixtures.require.length !== 12) {
+    if (runtimeFixtures.import.length !== 15 || runtimeFixtures.require.length !== 14) {
       throw new Error(
-        `packed runtime condition inventory drifted; expected 13 import + 12 require, found ` +
+        `packed runtime condition inventory drifted; expected 15 import + 14 require, found ` +
         `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
       );
     }
