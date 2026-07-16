@@ -1,9 +1,10 @@
 'use client';
 
 /**
- * Shared 2-step tenant branding hook.
+ * Shared registry + two-step tenant branding hook.
  *
- * Step 1 (instant): Builds a TenantConfig from session data for first paint.
+ * Step 0 (synchronous): Resolves a known tenant from the in-package registry.
+ * Step 1 (instant): Overlays session branding for first paint.
  * Step 2 (async): Fetches full config (personality, tokenOverrides) from
  *   the public branding endpoint after mount.
  *
@@ -23,6 +24,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { TenantConfig } from '../../../../contracts';
+import { getKnownTenantConfig } from '../../../../runtime/tenant/registry';
 import type { VerticalKey } from '../../../../runtime/verticals/types';
 
 /** Minimal session shape needed by the hook. Apps cast their session to this. */
@@ -132,6 +134,33 @@ function buildConfigFromResponse(
   };
 }
 
+/**
+ * Layer a bounded session/API config over an authored registry tenant.
+ *
+ * Registry tenants such as `themanagementmiami` carry the canonical BrandTheme
+ * needed to compile their runtime CSS. Session and public-branding payloads are
+ * intentionally narrower and must not erase or replace that authored theme.
+ * Their allowed branding/config fields still win through the normal
+ * TenantConfig merge path.
+ */
+function overlayKnownTenantConfig(
+  knownConfig: TenantConfig | undefined,
+  overrideConfig: TenantConfig | undefined,
+): TenantConfig | undefined {
+  if (!knownConfig) return overrideConfig;
+  if (!overrideConfig) return knownConfig;
+
+  return {
+    ...knownConfig,
+    ...overrideConfig,
+    branding: {
+      ...knownConfig.branding,
+      ...overrideConfig.branding,
+    },
+    brandTheme: knownConfig.brandTheme ?? overrideConfig.brandTheme,
+  };
+}
+
 export function useTenantBranding(
   options: UseTenantBrandingOptions,
 ): UseTenantBrandingReturn {
@@ -143,11 +172,32 @@ export function useTenantBranding(
   const tenantName = session?.user?.tenancy?.tenant?.name;
   const brandingPrimary = session?.user?.tenancy?.tenant?.whitelabelBranding?.primaryColor;
 
-  // Step 1: Quick config from session (instant, for first paint)
+  // Step 0: Known tenants are available during SSR and the first client render.
+  // This avoids handing an undefined config to DesignSystemProvider while its
+  // async storage path waits for an effect.
+  const knownTenantConfig = useMemo(
+    () => getKnownTenantConfig(tenantSlug),
+    [tenantSlug],
+  );
+
+  // Step 1: Quick session overlay (instant, for first paint). The known
+  // BrandTheme remains attached so DB/session branding cannot collapse a rich
+  // first-party tenant back to the vertical default.
   const sessionConfig = useMemo(
-    () => buildConfigFromSession(session, tenantSlug, vertical),
+    () => overlayKnownTenantConfig(
+      knownTenantConfig,
+      buildConfigFromSession(session, tenantSlug, vertical),
+    ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isSuperAdmin, hasWhitelabeling, tenantName, brandingPrimary, tenantSlug, vertical],
+    [
+      isSuperAdmin,
+      hasWhitelabeling,
+      tenantName,
+      brandingPrimary,
+      tenantSlug,
+      vertical,
+      knownTenantConfig,
+    ],
   );
 
   // Step 2: Full config from DB (async, loads after mount)
@@ -165,7 +215,10 @@ export function useTenantBranding(
       if (!res.ok) return;
       const json = await res.json();
       if (!json?.success || !json?.data) return;
-      const newConfig = buildConfigFromResponse(json.data, tenantSlug, vertical, session);
+      const newConfig = overlayKnownTenantConfig(
+        knownTenantConfig,
+        buildConfigFromResponse(json.data, tenantSlug, vertical, session),
+      );
       setFullConfig((prev) => {
         if (JSON.stringify(prev) === JSON.stringify(newConfig)) return prev;
         return newConfig;
@@ -173,7 +226,7 @@ export function useTenantBranding(
     } catch {
       /* Non-critical: keep current config */
     }
-  }, [slug, brandingEndpoint, tenantSlug, vertical, session]);
+  }, [slug, brandingEndpoint, tenantSlug, vertical, session, knownTenantConfig]);
 
   // Initial fetch (guarded by fetchedRef)
   useEffect(() => {
@@ -208,7 +261,8 @@ export function useTenantBranding(
     };
   }, [isSuperAdmin, hasWhitelabeling, slug, refetch]);
 
-  // Final config: full (80+ fields) > session (9 fields) > undefined (vertical defaults)
+  // Final config: DB overlay > session overlay > known registry tenant >
+  // undefined (unknown tenants continue to the app/provider fallback path).
   const tenantConfig = fullConfig ?? sessionConfig;
 
   return { tenantConfig, loading };
