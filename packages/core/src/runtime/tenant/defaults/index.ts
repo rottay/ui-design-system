@@ -58,3 +58,21 @@ export function getDefaultTenantConfig(overrides?: Partial<TenantConfig>): Tenan
     },
   };
 }
+
+/**
+ * Creates a neutral, identity-preserving shell for a tenant whose published
+ * config is temporarily unavailable. It intentionally carries no brand colors,
+ * logo, features, or authored tenant theme, so it cannot impersonate another
+ * tenant while the owning app decides whether to render or fail closed.
+ */
+export function getUnresolvedTenantConfig(slug: string): TenantConfig {
+  const normalizedSlug = slug.trim().toLowerCase() || 'default';
+  return {
+    slug: normalizedSlug,
+    name: normalizedSlug,
+    theme: 'base',
+    plan: 'starter',
+    features: [],
+    branding: { companyName: normalizedSlug },
+  };
+}

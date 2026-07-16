@@ -3,98 +3,100 @@
 This document is the single source of truth for how the DS handles tenant identity,
 branding, and customization. All implementation must conform to these rules.
 
-## Two Tenant Classes
+## Two Authority Classes
 
-### Bundled First-Party Verticals (file-first)
+### Code-owned vertical baselines (file-first)
 
-Tenants: `rottay`, `bithire`, `evnto`, `themanagementmiami`.
+Baselines: `rottay`, `bithire`, `evnto`.
 
-- Resolved from the DS registry (`runtime/tenant/registry/`) — zero network, zero DB.
-- App hosts MUST short-circuit before any DB branding fetch for these slugs.
-- Use `isKnownTenant(slug)` to detect. When true, pass only `tenantSlug` to DSP.
-- Visual identity comes from `BrandTheme` authored in `tokens/ts/brand-themes/`.
-- CSS artifacts live in `tokens/css/artifacts/{slug}/`.
-- `BUNDLED_TENANT_SLUGS` controls which tenants have pre-bundled CSS.
+- They define the visual grammar shared by a product vertical: topology,
+  component recipes, semantic icon roles, chart renderers, motion posture and
+  accessibility behavior.
+- They resolve from `runtime/tenant/registry/` with zero network and have a
+  generated CSS artifact under `tokens/css/artifacts/{slug}/`.
+- Use `isBundledTenant(slug)` when a host must distinguish these baselines from
+  customer tenants. `isKnownTenant` is registry discovery, not a DB policy.
+- The full `BrandTheme` remains code-owned and is not tenant-editable.
 
-### Runtime DB Tenants (core-first)
+### Published customer tenants (DB-owned)
 
-All other tenants (created by platform admins at runtime).
+Every real customer tenant, including `themanagementmiami`, is owned by the
+canonical tenancy DB.
 
-- Resolved via the DB adapter in `app-platform/src/lib/tenancy/`.
-- Use `appearance.general` as the primary customization contract.
-- Use `appearance.advanced` for expert-level, guarded overrides.
-- Legacy fields (`branding`, `personality`, `tokenOverrides`) remain for backward compat.
-- Do NOT receive arbitrary `BrandTheme` — that is reserved for bundled verticals.
+- The hostname selects tenant identity only. It must never select CSS,
+  components or a checked-in theme.
+- Apps load the tenant's published `TenantThemeDocument`, validate the closed
+  schema and vertical envelope, compile it, then pass that exact artifact to
+  SSR and hydration.
+- A checked-in customer theme may be an explicit migration or visual-regression
+  fixture. It must never enter the automatic registry, aggregate token catalog
+  or generic CSS bundle.
+- Superadmin has the same branding resolution path as every other viewer. Broad
+  data access must not bypass tenant identity or branding.
 
-## Customization Contracts
-
-### appearance.general (DB tenants — primary)
-
-Safe, high-signal, preset-based. Every field has a real runtime consumer.
-
-| Field | What it does |
-|-------|-------------|
-| `palette.primary/secondary/accent` | Core colors (CSS vars via ThemeProvider) |
-| `palette.backgroundMode` | Theme mode: light/dark/auto (feeds ThemeProvider) |
-| `typography.fontFamilyBase/Heading` | Font families (CSS vars) |
-| `shape.buttonStyle` | sharp/soft/pill (maps to --ds-radius-button) |
-| `density` | compact/normal/spacious (JS factor in useTokens spacing) |
-| `surfaces.elevation` | flat/soft/elevated (shadow presets) |
-| `navigation.sidebarTone` | subtle/strong/inverse (sidebar chrome vars) |
-
-### appearance.advanced (DB tenants — optional, bounded)
-
-Expert-level, fine-grained. Only admitted fields are compiled.
-
-| Field | What it does |
-|-------|-------------|
-| `chrome.sidebar` (7 fields) | bg, border, text, textMuted, itemColorActive, itemBgActive, itemBgHover |
-| `chrome.layout` (full) | bg, headerBg, headerBackdrop, headerBorder, siderBg, siderBorder |
-| `chrome.controls.buttonPrimary` (2 fields) | bg, text |
-| `tokenOverrides` | Raw `--ds-*` key/value pairs (allowlisted) |
-
-### brandTheme (bundled verticals — richest)
-
-Full visual identity for first-party verticals. Code-owned, not DB-editable.
-
-Includes: palette, typography, surfaces, motion, charts, chrome (sidebar/layout/shell/controls/table), engineBridge.
-
-## Merge Chain (implemented)
+## Runtime Authority and Precedence
 
 ```
-DS base
-  -> engine base tokens
-    -> vertical tokenOverrides / personality
-      -> BrandTheme (bundled) OR appearance (DB)
-        -> tenant tokenOverrides (legacy compat)
-          -> ThemeProvider + modern/theme.css + primitive renderers
+DS defaults
+  -> code-owned vertical baseline
+    -> published DB tenant override
+      -> explicit preview override (editor only)
 ```
 
-## Removed / Narrowed
+The DB is not queried by browser components. The server compiles and caches an
+immutable artifact keyed by `{ tenantId, rowVersion, compilerVersion }`; SSR
+embeds that artifact and the client hydrates it. A cache or fetch failure must
+preserve the requested tenant identity and fail closed, never fall through to
+Rottay or another customer's styling.
 
-| Field | Status | Reason |
-|-------|--------|--------|
-| `brandThemeId` | Removed | No runtime consumer. Re-add when preset registry is built. |
-| `appearance.general.typography.scale` | Removed | Needs calc() adoption. |
-| `appearance.general.shape.radiusScale` | Removed | Same. |
-| `appearance.general.motion.level` | Removed | No consumer. |
-| `appearance.general.media.*` | Removed | No CSS reader. |
-| `appearance.general.data.chartColorFamily` | Removed | No chart palette system. |
-| `appearance.advanced.chrome.shell/table` | Removed | No compiler path. |
-| `appearance.advanced.motion/charts/darkMode` | Removed | No compiler. |
+## Customization Contract
 
-## Deprecation Path
+`TenantThemeDocument` schema v1 compiled by `tenant-theme-compiler@2` is the
+only write contract for tenant customization.
 
-| Legacy field | Superseded by | Status |
-|-------------|---------------|--------|
-| `TenantConfig.personality` | `brandTheme.motion/chrome/typography` | Compat — kept for existing consumers |
-| `TenantConfig.tokenOverrides` | `brandTheme.surfaces` | Compat — kept for existing consumers |
-| `TenantConfig.branding` | `brandTheme.palette + typography` | Compat — normalized by DSP |
+- General fields expose bounded palette, typography, shape, density, motion,
+  elevation and navigation dials.
+- Advanced fields expose only allowlisted visual values across DS chrome
+  families and allowlisted reference/override tokens.
+- Chart tenants may choose the bounded category palette; renderer, data
+  semantics and insight provenance remain code-owned.
+- Font selection uses approved font-pack identifiers. Asset fields store
+  references to approved static/CDN assets, not arbitrary executable content.
+- The vertical envelope caps fields, values, variable count and canonical byte
+  size. Unknown keys, schema/compiler drift, invalid contrast and duplicate
+  chart colors are rejected before publication.
+
+Tenants cannot change component topology, permissions, glyph semantics,
+responsive information hierarchy, chart renderer, spatial lifecycle, motion
+topology or accessibility behavior.
+
+## Publication and Concurrency
+
+- Platform is the editor; the canonical tenancy DB is the authority.
+- Publication uses compare-and-swap row versions. Stale editors receive a
+  conflict and cannot silently overwrite a newer theme.
+- A migration seed is insert-only. Once the tenant exists, later Platform edits
+  win and rerunning a seed must be a no-op or explicit recovery operation.
+- Schema digest, vertical-envelope digest, compiler version and artifact digest
+  travel with the published document so consumers can reject drift.
+
+## Compatibility
+
+Legacy `TenantConfig.branding`, `personality`, `appearance` and
+`tokenOverrides` remain readable at compatibility boundaries, but new writes
+must normalize into `TenantThemeDocument`. The deprecated
+`themanagementmiamiBrandTheme` export is an explicit fixture only and is not a
+runtime source.
 
 ## Enforcement
 
-- `audit-integration.mjs` Rule 4 catches stale "not yet wired" comments in contracts.
-- `lint-folder-index.mjs` enforces taxonomy.
-- Provider-level tests in `compilers/appearance/tests/` prove appearance propagation.
+- Registry/bundle tests prove that only the three code-owned baselines are
+  automatic and that TMM has no legacy CSS authority.
+- Compiler tests prove schema/envelope validation, deterministic artifacts,
+  contrast and budget limits.
+- Host/app architecture tests prove custom tenants require an explicit DB
+  artifact and that superadmin does not skip branding.
+- Supplier-contract and packed-artifact gates prove the public runtime matches
+  what consumers install.
 
-Last verified: 2026-04-11
+Last verified: 2026-07-16 (`@rottay/design-system@2.19.24`)

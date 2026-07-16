@@ -1,7 +1,13 @@
 /**
- * The Management Miami first-party vertical theme.
+ * The Management Miami tenant migration/regression fixture.
  *
- * Second tenant on the bithire vertical, authored to read as a different
+ * This checked-in specimen is intentionally explicit-only: production tenant
+ * identity is published from the tenancy DB and compiled by the runtime v2
+ * contract. It must never be added to KNOWN_TENANTS, tokens.brandThemes, or a
+ * shipped tenant CSS bundle. The fixture exists to make migrations and visual
+ * regression evidence reproducible without becoming a second runtime truth.
+ *
+ * It is authored to read as a different
  * company rather than a recolor (owner request 2026-07-09: "hacé que
  * themanagement y bithire se vean realmente distintas"). Reference: South
  * Florida hospitality/property brand — Art Deco geometry, warm earth palette,

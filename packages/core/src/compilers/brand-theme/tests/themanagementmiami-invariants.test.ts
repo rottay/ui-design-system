@@ -215,8 +215,8 @@ describe('semantic-color-collision invariant (owner decision 2026-07-09)', () =>
 // the trap this work order found themanagementmiami sitting in.
 
 describe('BUNDLED_TENANT_SLUGS promise holds for every member', () => {
-  it('themanagementmiami is a known tenant but is not a member of BUNDLED_TENANT_SLUGS', () => {
-    expect(isKnownTenant('themanagementmiami')).toBe(true);
+  it('themanagementmiami is an explicit fixture, never a known or bundled runtime tenant', () => {
+    expect(isKnownTenant('themanagementmiami')).toBe(false);
     expect(BUNDLED_TENANT_SLUGS.has('themanagementmiami')).toBe(false);
     expect(isBundledTenant('themanagementmiami')).toBe(false);
   });
@@ -226,13 +226,8 @@ describe('BUNDLED_TENANT_SLUGS promise holds for every member', () => {
     expect(existsSync(artifactPath), `expected tokens/css/artifacts/${slug}/index.css to exist`).toBe(true);
   });
 
-  it('themanagementmiami has a legacy CSS artifact on disk that this tenant deliberately does not use', () => {
-    // The legacy file stays on disk and in the shipped CSS bundle (retiring it
-    // is WO-ARC-06's scope, not this tenant's registration). It is excluded
-    // from BUNDLED_TENANT_SLUGS above specifically so the compiled brandTheme
-    // in this file -- not the legacy Acme Green stylesheet -- is what a
-    // consumer using this tenant's dynamic path renders.
+  it('themanagementmiami legacy CSS cannot become a second runtime authority', () => {
     const legacyPath = resolve(TEST_DIR, '../../../tokens/css/legacy/themanagementmiami/index.css');
-    expect(existsSync(legacyPath)).toBe(true);
+    expect(existsSync(legacyPath)).toBe(false);
   });
 });

@@ -127,13 +127,50 @@ describe('tenant storage facade', () => {
     expect(config.name).toBe('Remote Tenant');
   });
 
-  it('returns the default tenant when every source fails', async () => {
+  it('preserves requested identity and retries after every source fails', async () => {
     mockedLoadStaticTenantConfig.mockRejectedValue(new Error('missing'));
     mockedFetchRemoteTenantConfig.mockRejectedValue(new Error('offline'));
 
     const config = await getTenantConfig('unknown-tenant');
 
-    expect(config.slug).toBe('rottay');
+    expect(config).toMatchObject({
+      slug: 'unknown-tenant',
+      name: 'unknown-tenant',
+      features: [],
+      branding: { companyName: 'unknown-tenant' },
+    });
+
+    mockedFetchRemoteTenantConfig.mockResolvedValue({
+      slug: 'unknown-tenant',
+      name: 'Recovered Tenant',
+      theme: 'base',
+      plan: 'starter',
+      features: [],
+      branding: { companyName: 'Recovered Tenant' },
+    });
+    const recovered = await getTenantConfig('unknown-tenant');
+
+    expect(recovered.name).toBe('Recovered Tenant');
+    expect(mockedFetchRemoteTenantConfig).toHaveBeenCalledTimes(2);
+  });
+
+  it('rejects a remote payload belonging to another tenant', async () => {
+    mockedLoadStaticTenantConfig.mockRejectedValue(new Error('missing'));
+    mockedFetchRemoteTenantConfig.mockResolvedValue({
+      slug: 'tenant-b',
+      name: 'Tenant B',
+      theme: 'base',
+      plan: 'starter',
+      features: [],
+      branding: { companyName: 'Tenant B' },
+    });
+
+    const config = await getTenantConfig('tenant-a');
+
+    expect(config).toMatchObject({
+      slug: 'tenant-a',
+      branding: { companyName: 'tenant-a' },
+    });
   });
 
   it('preloads tenant configs through the same cache path', async () => {

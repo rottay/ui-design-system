@@ -96,7 +96,12 @@ export * from './compilers';
 // ============================================
 // Consumers (and the in-app artifact drift test) resolve the canonical vertical
 // BrandTheme from here; the CSS artifact is a generated projection of these.
-export { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme, themanagementmiamiBrandTheme } from './tokens/ts/brand-themes';
+export { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './tokens/ts/brand-themes';
+/**
+ * @deprecated Explicit migration/regression fixture only. Runtime customer
+ * themes are supplied from the tenancy DB and are never auto-registered here.
+ */
+export { themanagementmiamiBrandTheme } from './tokens/ts/brand-themes';
 // Whitelabel proof fixtures (WO-GAT-03) — never product tenants — consumed by the showroom probe surface.
 export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './tokens/ts/brand-themes';
 

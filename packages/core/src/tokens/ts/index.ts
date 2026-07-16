@@ -29,7 +29,7 @@ export * from './mirrors';
 import { baseTokens } from './base';
 import { componentTokens } from './components';
 import { tenantTokens } from './mirrors';
-import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme, themanagementmiamiBrandTheme } from './brand-themes';
+import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './brand-themes';
 
 /** Nested aggregate of all token tiers for discovery and runtime introspection. */
 export const tokens = {
@@ -44,7 +44,6 @@ export const tokens = {
     rottay: rottayBrandTheme,
     bithire: bithireBrandTheme,
     evnto: evntoBrandTheme,
-    themanagementmiami: themanagementmiamiBrandTheme,
   },
 } as const;
 

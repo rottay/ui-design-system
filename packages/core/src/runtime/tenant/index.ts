@@ -99,6 +99,7 @@ export type { GenerateTenantCssOptions, RenderVerticalArtifactInput, FirstPartyA
 export {
   getKnownTenantConfig,
   isKnownTenant,
+  isBundledTenant,
   getKnownTenantSlugs,
   getDefaultTenant,
   DEFAULT_TENANT_SLUG,

@@ -1,5 +1,25 @@
 # @rottay/design-system
 
+## 2.19.24
+
+### Patch Changes
+
+- Make published tenant data the sole runtime authority for customer themes:
+  remove The Management Miami from the automatic registry and generic CSS,
+  while retaining its checked-in theme only as an explicit migration and
+  visual-regression fixture.
+- Preserve customer identity during async branding resolution and fetch the
+  published theme for every customer session, including superadmins, without
+  ever falling through to another tenant's styling. Host-resolved identity now
+  wins over stale session data, and late responses are discarded after a
+  mounted consumer switches tenant.
+- Export `isBundledTenant` from the public tenant barrel so apps can distinguish
+  code-owned vertical baselines from DB-owned customer tenants.
+- Key both public async tenant-resolution paths by the resolved slug, discard
+  late responses after context switches, reject mismatched payload identities
+  and use an uncached neutral shell instead of aliasing unresolved customers to
+  Rottay.
+
 ## 2.19.23
 
 ### Patch Changes

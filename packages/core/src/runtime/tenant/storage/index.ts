@@ -9,7 +9,7 @@
  * 3. Known tenants registry (built-in configs)
  * 4. Static files
  * 5. Remote API
- * 6. Default config (rottay)
+ * 6. Identity-safe generic config for the requested slug
  *
  * This file is intentionally the only place that knows the full fallback chain.
  * Providers and apps should call `getTenantConfig()` rather than reimplementing
@@ -19,8 +19,8 @@
 import type { TenantConfig } from '../../../contracts';
 import { loadStaticTenantConfig } from './static';
 import { fetchRemoteTenantConfig } from './remote';
-import { getDefaultTenantConfig } from '../defaults';
-import { getKnownTenantConfig, getDefaultTenant } from '../registry';
+import { getUnresolvedTenantConfig } from '../defaults';
+import { getKnownTenantConfig } from '../registry';
 
 export { loadStaticTenantConfig } from './static';
 export { generateTenantCss, generateTenantCssFile, buildTenantSelector } from './static';
@@ -65,6 +65,14 @@ function getFromLocalStorage(slug: string): TenantConfig | null {
       return null;
     }
 
+    if (
+      typeof config?.slug !== 'string'
+      || config.slug.trim().toLowerCase() !== slug
+    ) {
+      localStorage.removeItem(`${STORAGE_KEY}-${slug}`);
+      return null;
+    }
+
     return config;
   } catch {
     return null;
@@ -99,17 +107,17 @@ function saveToLocalStorage(slug: string, config: TenantConfig): void {
  * 3. Known registry (bundled first-party tenants -- zero network)
  * 4. Static files (`/.designsystem/tenants/<slug>/config.json`)
  * 5. Remote API (platform-managed tenants in the database)
- * 6. Default Rottay config (absolute safety net)
+ * 6. Identity-safe generic config for the requested slug
  *
  * WHY six levels: the DS must render predictably in every environment --
  * local dev (no API), preview deploys (static files only), production
  * (full API), and CI (bundled registry). Each level adds resilience.
  *
  * @param slug - Tenant identifier to resolve (case-insensitive).
- * @returns A guaranteed-valid TenantConfig. Never throws.
+ * @returns A guaranteed-valid TenantConfig. Never aliases another tenant.
  */
 export async function getTenantConfig(slug: string): Promise<TenantConfig> {
-  const normalizedSlug = slug.toLowerCase();
+  const normalizedSlug = slug.trim().toLowerCase() || 'default';
 
   // 1. Check memory cache
   if (cache.has(normalizedSlug)) {
@@ -135,6 +143,9 @@ export async function getTenantConfig(slug: string): Promise<TenantConfig> {
   // versioned assets instead of serving them from an API.
   try {
     const config = await loadStaticTenantConfig(normalizedSlug);
+    if (config.slug.trim().toLowerCase() !== normalizedSlug) {
+      throw new Error('Static tenant payload identity mismatch');
+    }
     cache.set(normalizedSlug, config);
     saveToLocalStorage(normalizedSlug, config);
     return config;
@@ -145,6 +156,9 @@ export async function getTenantConfig(slug: string): Promise<TenantConfig> {
   // 5. Remote API is the canonical path for platform-managed tenants.
   try {
     const config = await fetchRemoteTenantConfig(normalizedSlug);
+    if (config.slug.trim().toLowerCase() !== normalizedSlug) {
+      throw new Error('Remote tenant payload identity mismatch');
+    }
     cache.set(normalizedSlug, config);
     saveToLocalStorage(normalizedSlug, config);
     return config;
@@ -152,11 +166,10 @@ export async function getTenantConfig(slug: string): Promise<TenantConfig> {
     // API failed, continue
   }
 
-  // 6. Final safety net. We always return a valid tenant so the DS can render
-  // predictably even when tenant resolution fails upstream.
-  const defaultConfig = getDefaultTenant();
-  cache.set(normalizedSlug, defaultConfig);
-  return defaultConfig;
+  // 6. Final safety net. Preserve the unresolved identity and use only generic
+  // DS defaults. Never cache a failed lookup: a transient outage must not pin
+  // the fallback or prevent the next request from recovering from DB/static.
+  return getUnresolvedTenantConfig(normalizedSlug);
 }
 
 /**
@@ -172,9 +185,10 @@ export async function getTenantConfig(slug: string): Promise<TenantConfig> {
  */
 export function clearTenantCache(slug?: string): void {
   if (slug) {
-    cache.delete(slug);
+    const normalizedSlug = slug.trim().toLowerCase();
+    cache.delete(normalizedSlug);
     if (typeof window !== 'undefined') {
-      localStorage.removeItem(`${STORAGE_KEY}-${slug}`);
+      localStorage.removeItem(`${STORAGE_KEY}-${normalizedSlug}`);
     }
   } else {
     cache.clear();

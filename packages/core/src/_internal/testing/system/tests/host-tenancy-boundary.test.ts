@@ -2,7 +2,7 @@
  * @fileoverview Host-tenancy boundary guardrails.
  * Verifies the tenant registry contract and bundled CSS artifacts.
  *
- * 1. All first-party tenants are recognized by `isKnownTenant()`.
+ * 1. Only first-party vertical baselines are recognized by `isKnownTenant()`.
  * 2. Arbitrary slugs are rejected.
  * 3. Every slug in `BUNDLED_TENANT_SLUGS` has a corresponding CSS file on disk
  *    at the conventional `tokens/css/artifacts/<slug>/index.css` path. This is
@@ -42,8 +42,8 @@ describe('tenant registry', () => {
     expect(isKnownTenant('evnto')).toBe(true);
   });
 
-  it('recognizes themanagementmiami as a known tenant', () => {
-    expect(isKnownTenant('themanagementmiami')).toBe(true);
+  it('does not auto-register the DB-owned themanagementmiami tenant', () => {
+    expect(isKnownTenant('themanagementmiami')).toBe(false);
   });
 
   it('rejects an arbitrary slug', () => {
@@ -55,16 +55,13 @@ describe('tenant registry', () => {
     expect(isKnownTenant('BITHIRE')).toBe(true);
   });
 
-  it('returns at least the four first-party slugs', () => {
+  it('returns exactly the three file-owned vertical baselines', () => {
     const slugs = getKnownTenantSlugs();
-    expect(slugs).toContain('rottay');
-    expect(slugs).toContain('bithire');
-    expect(slugs).toContain('evnto');
-    expect(slugs).toContain('themanagementmiami');
+    expect(new Set(slugs)).toEqual(new Set(['rottay', 'bithire', 'evnto']));
   });
 
-  it('themanagementmiami is a known tenant but is NOT bundled -- its CSS compiles at runtime like a DB-driven tenant', () => {
-    expect(isKnownTenant('themanagementmiami')).toBe(true);
+  it('themanagementmiami is neither known nor bundled and must arrive as an explicit DB config', () => {
+    expect(isKnownTenant('themanagementmiami')).toBe(false);
     expect(isBundledTenant('themanagementmiami')).toBe(false);
     expect(BUNDLED_TENANT_SLUGS.has('themanagementmiami')).toBe(false);
   });
@@ -89,8 +86,8 @@ describe('bundled tenant CSS artifacts', () => {
     });
   }
 
-  it('themanagementmiami has a legacy CSS artifact on disk that is deliberately excluded from BUNDLED_TENANT_SLUGS', () => {
+  it('themanagementmiami has no legacy CSS artifact that can override its DB artifact', () => {
     const legacyPath = join(SRC_ROOT, 'tokens/css/legacy/themanagementmiami/index.css');
-    expect(existsSync(legacyPath)).toBe(true);
+    expect(existsSync(legacyPath)).toBe(false);
   });
 });

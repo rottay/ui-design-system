@@ -107,6 +107,7 @@ describe('torture fixtures are not product tenants', () => {
     const slugs = getKnownTenantSlugs();
     expect(slugs).not.toContain('torture-dark');
     expect(slugs).not.toContain('torture-light');
+    expect(slugs).not.toContain('themanagementmiami');
   });
 
   it('has no bundled CSS artifact', () => {

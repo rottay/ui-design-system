@@ -3,7 +3,8 @@
 /**
  * Shared registry + two-step tenant branding hook.
  *
- * Step 0 (synchronous): Resolves a known tenant from the in-package registry.
+ * Step 0 (synchronous): Resolves a vertical baseline or a tenant-identity
+ *   fallback that can never collapse to another tenant.
  * Step 1 (instant): Overlays session branding for first paint.
  * Step 2 (async): Fetches full config (personality, tokenOverrides) from
  *   the public branding endpoint after mount.
@@ -71,6 +72,17 @@ export interface UseTenantBrandingReturn {
   loading: boolean;
 }
 
+function matchingSessionTenant(
+  session: TenantBrandingSession | null,
+  tenantSlug: string,
+) {
+  const tenant = session?.user?.tenancy?.tenant;
+  if (!tenant?.slug) return undefined;
+  return tenant.slug.trim().toLowerCase() === tenantSlug.trim().toLowerCase()
+    ? tenant
+    : undefined;
+}
+
 /**
  * Builds a quick TenantConfig from session data (9 fields, instant).
  * Returns undefined when the DS should use vertical defaults.
@@ -80,7 +92,7 @@ function buildConfigFromSession(
   tenantSlug: string,
   vertical: VerticalKey,
 ): TenantConfig | undefined {
-  const tenant = session?.user?.tenancy?.tenant;
+  const tenant = matchingSessionTenant(session, tenantSlug);
   if (!tenant) return undefined;
 
   const isSuperAdmin = session?.user?.permissions?.isSuperAdmin ?? false;
@@ -110,6 +122,30 @@ function buildConfigFromSession(
 }
 
 /**
+ * Preserve an unknown/customer tenant's identity while its DB artifact loads.
+ * Supplying this config keeps DesignSystemProvider on its synchronous path, so
+ * a failed or delayed request can never enter the generic Rottay fallback.
+ */
+function buildTenantIdentityFallback(
+  session: TenantBrandingSession | null,
+  tenantSlug: string,
+  vertical: VerticalKey,
+): TenantConfig {
+  const tenant = matchingSessionTenant(session, tenantSlug);
+  return {
+    slug: tenantSlug,
+    name: tenant?.name || tenantSlug,
+    theme: 'base',
+    plan: (tenant?.plan as TenantConfig['plan']) || 'starter',
+    features: tenant?.features || [],
+    vertical,
+    branding: {
+      companyName: tenant?.name || tenantSlug,
+    },
+  };
+}
+
+/**
  * Builds a full TenantConfig from the branding API response payload.
  * Shared by the initial fetch and periodic/visibility-based refreshes.
  */
@@ -119,13 +155,14 @@ function buildConfigFromResponse(
   vertical: VerticalKey,
   session: TenantBrandingSession | null,
 ): TenantConfig {
+  const tenant = matchingSessionTenant(session, tenantSlug);
   return {
     slug: tenantSlug,
     name: (data.branding as Record<string, unknown> | undefined)?.companyName as string || tenantSlug,
     engine: (data.engine as TenantConfig['engine']) || undefined,
     theme: (data.theme as string) || 'base',
-    plan: (session?.user?.tenancy?.tenant?.plan as TenantConfig['plan']) || 'starter',
-    features: session?.user?.tenancy?.tenant?.features || [],
+    plan: (tenant?.plan as TenantConfig['plan']) || 'starter',
+    features: tenant?.features || [],
     vertical,
     branding: (data.branding as TenantConfig['branding']) || {},
     personality: (data.personality as TenantConfig['personality']) || undefined,
@@ -135,11 +172,11 @@ function buildConfigFromResponse(
 }
 
 /**
- * Layer a bounded session/API config over an authored registry tenant.
+ * Layer a bounded session/API config over an authored vertical baseline.
  *
- * Registry tenants such as `themanagementmiami` carry the canonical BrandTheme
- * needed to compile their runtime CSS. Session and public-branding payloads are
- * intentionally narrower and must not erase or replace that authored theme.
+ * Registry entries are file-owned vertical baselines only. Customer tenants
+ * never enter the registry; their API payload is the visual authority. Session
+ * and public-branding payloads remain unable to replace a baseline BrandTheme.
  * Their allowed branding/config fields still win through the normal
  * TenantConfig merge path.
  */
@@ -166,12 +203,6 @@ export function useTenantBranding(
 ): UseTenantBrandingReturn {
   const { tenantSlug, session, vertical, brandingEndpoint = '/api/public/tenant-branding' } = options;
 
-  // Extract stable primitives for useMemo deps
-  const isSuperAdmin = session?.user?.permissions?.isSuperAdmin ?? false;
-  const hasWhitelabeling = session?.user?.tenancy?.tenant?.hasWhitelabeling ?? false;
-  const tenantName = session?.user?.tenancy?.tenant?.name;
-  const brandingPrimary = session?.user?.tenancy?.tenant?.whitelabelBranding?.primaryColor;
-
   // Step 0: Known tenants are available during SSR and the first client render.
   // This avoids handing an undefined config to DesignSystemProvider while its
   // async storage path waits for an effect.
@@ -188,61 +219,108 @@ export function useTenantBranding(
       knownTenantConfig,
       buildConfigFromSession(session, tenantSlug, vertical),
     ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      isSuperAdmin,
-      hasWhitelabeling,
-      tenantName,
-      brandingPrimary,
-      tenantSlug,
-      vertical,
-      knownTenantConfig,
-    ],
+    [session, tenantSlug, vertical, knownTenantConfig],
   );
 
   // Step 2: Full config from DB (async, loads after mount)
-  const [fullConfig, setFullConfig] = useState<TenantConfig | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
-  const fetchedRef = useRef(false);
+  const shouldFetchCustomerConfig = !knownTenantConfig;
+  // The request identity comes from the host/middleware-resolved slug. Session
+  // data is only an optional matching overlay and can never redirect a fetch.
+  const slug = tenantSlug;
+  const requestKey = shouldFetchCustomerConfig
+    ? JSON.stringify([brandingEndpoint, slug, vertical])
+    : null;
+  const activeRequestKeyRef = useRef(requestKey);
+  activeRequestKeyRef.current = requestKey;
+  const requestSequenceRef = useRef(0);
+  const fetchedKeyRef = useRef<string | null>(null);
+  const [requestState, setRequestState] = useState<{
+    key: string | null;
+    config: TenantConfig | undefined;
+    loading: boolean;
+  }>(() => ({
+    key: requestKey,
+    config: undefined,
+    loading: requestKey !== null,
+  }));
 
-  const slug = session?.user?.tenancy?.tenant?.slug;
+  const fullConfig = requestKey !== null && requestState.key === requestKey
+    ? requestState.config
+    : undefined;
+  const loading = requestKey !== null && (
+    requestState.key !== requestKey || requestState.loading
+  );
+
+  const safeSessionConfig = useMemo(
+    () => sessionConfig ?? (
+      shouldFetchCustomerConfig
+        ? buildTenantIdentityFallback(session, tenantSlug, vertical)
+        : undefined
+    ),
+    [sessionConfig, shouldFetchCustomerConfig, session, tenantSlug, vertical],
+  );
 
   // Shared refetch function for interval and visibility refresh
   const refetch = useCallback(async () => {
-    if (!slug) return;
+    if (!slug || !requestKey) return;
+    const requestSequence = ++requestSequenceRef.current;
+    let newConfig: TenantConfig | undefined;
     try {
       const res = await fetch(`${brandingEndpoint}/${slug}`);
-      if (!res.ok) return;
-      const json = await res.json();
-      if (!json?.success || !json?.data) return;
-      const newConfig = overlayKnownTenantConfig(
-        knownTenantConfig,
-        buildConfigFromResponse(json.data, tenantSlug, vertical, session),
-      );
-      setFullConfig((prev) => {
-        if (JSON.stringify(prev) === JSON.stringify(newConfig)) return prev;
-        return newConfig;
-      });
+      if (res.ok) {
+        const json = await res.json();
+        const responseSlug = typeof json?.data?.slug === 'string'
+          ? json.data.slug.trim().toLowerCase()
+          : null;
+        if (json?.success && json?.data && responseSlug === slug) {
+          newConfig = overlayKnownTenantConfig(
+            knownTenantConfig,
+            buildConfigFromResponse(json.data, tenantSlug, vertical, session),
+          );
+        }
+      }
     } catch {
       /* Non-critical: keep current config */
     }
-  }, [slug, brandingEndpoint, tenantSlug, vertical, session, knownTenantConfig]);
+
+    // A slow response for tenant A must never win after the mounted consumer
+    // has switched to tenant B.
+    if (
+      activeRequestKeyRef.current !== requestKey
+      || requestSequenceRef.current !== requestSequence
+    ) return;
+    setRequestState((previous) => {
+      const previousConfig = previous.key === requestKey
+        ? previous.config
+        : undefined;
+      const nextConfig = newConfig ?? previousConfig;
+      if (
+        previous.key === requestKey
+        && !previous.loading
+        && JSON.stringify(previousConfig) === JSON.stringify(nextConfig)
+      ) {
+        return previous;
+      }
+      return { key: requestKey, config: nextConfig, loading: false };
+    });
+  }, [slug, requestKey, brandingEndpoint, tenantSlug, vertical, session, knownTenantConfig]);
 
   // Initial fetch (guarded by fetchedRef)
   useEffect(() => {
-    if (isSuperAdmin || !hasWhitelabeling || fetchedRef.current) return;
-    if (!slug) return;
+    if (!requestKey) {
+      fetchedKeyRef.current = null;
+      return;
+    }
+    if (fetchedKeyRef.current === requestKey) return;
 
-    fetchedRef.current = true;
-    setLoading(true);
-
-    refetch().finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuperAdmin, hasWhitelabeling, slug, refetch]);
+    fetchedKeyRef.current = requestKey;
+    setRequestState({ key: requestKey, config: undefined, loading: true });
+    void refetch();
+  }, [requestKey, refetch]);
 
   // Periodic refresh (every 5 minutes) + visibility-based refresh
   useEffect(() => {
-    if (isSuperAdmin || !hasWhitelabeling || !slug) return;
+    if (!requestKey || !slug) return;
 
     const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
@@ -259,11 +337,12 @@ export function useTenantBranding(
       clearInterval(interval);
       document.removeEventListener('visibilitychange', onVisibilityChange);
     };
-  }, [isSuperAdmin, hasWhitelabeling, slug, refetch]);
+  }, [requestKey, slug, refetch]);
 
-  // Final config: DB overlay > session overlay > known registry tenant >
-  // undefined (unknown tenants continue to the app/provider fallback path).
-  const tenantConfig = fullConfig ?? sessionConfig;
+  // Final config: DB artifact > session/identity-safe config > vertical baseline.
+  // An unknown customer never receives undefined, which would let the provider
+  // enter its generic cross-tenant fallback chain.
+  const tenantConfig = fullConfig ?? safeSessionConfig;
 
   return { tenantConfig, loading };
 }

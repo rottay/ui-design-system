@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from 'react';
 import {
   DesignSystemProvider,
   getKnownTenantConfig,
+  themanagementmiamiBrandTheme,
   tortureDarkBrandTheme,
   tortureLightBrandTheme,
   type BrandTheme,
@@ -23,13 +24,12 @@ import {
 //     registered for this to work.
 //   - rottay: the real first-party tenant, used as the differential reference
 //     the Playwright spec compares the torture fixtures against.
-//   - bithire / themanagementmiami: the bithire vertical's two real tenants
-//     (WO-ENG-20). Both resolve through getKnownTenantConfig() like rottay.
-//     themanagementmiami is unbundled (no CSS artifact), so it also compiles
-//     at render time through the dynamic path, same as the torture fixtures --
-//     it is simply a real, tasteful theme instead of a hostile one. Used for
-//     sighted side-by-side comparison against bithire, not the differential
-//     violation count (that stays scoped to the torture-dark/rottay pair).
+//   - bithire / themanagementmiami: the bithire vertical baseline and one
+//     explicit tenant regression fixture. The customer is deliberately NOT in
+//     the DS known-tenant registry: production resolves its published config
+//     from the tenancy DB. This page supplies the checked-in specimen directly
+//     so sighted regression remains reproducible without creating a runtime
+//     source of truth.
 //
 // Tenant, theme, and text direction are all anchored on <html>
 // (ThemeProvider writes document.documentElement, TenantProvider writes
@@ -49,8 +49,8 @@ export const TORTURE_FIXTURES: TortureFixture[] = [
   'themanagementmiami',
 ];
 
-/** Fixtures that resolve through the known-tenant registry rather than an inline synthetic config. */
-const KNOWN_TENANT_FIXTURES: ReadonlySet<TortureFixture> = new Set(['rottay', 'bithire', 'evnto', 'themanagementmiami']);
+/** Vertical baselines that resolve through the known-tenant registry. */
+const KNOWN_TENANT_FIXTURES: ReadonlySet<TortureFixture> = new Set(['rottay', 'bithire', 'evnto']);
 
 /** Fixtures that render clear-mode (light) rather than the torture fixtures' dark/light pairing. */
 const LIGHT_FORCED_FIXTURES: ReadonlySet<TortureFixture> = new Set(['torture-light', 'bithire', 'themanagementmiami']);
@@ -70,6 +70,20 @@ function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined 
       features: ['*'],
       branding: { companyName: 'Torture Dark' },
       brandTheme: tortureDarkBrandTheme,
+    };
+  }
+
+  if (fixture === 'themanagementmiami') {
+    return {
+      slug: 'themanagementmiami',
+      name: 'The Management Miami fixture',
+      vertical: 'bithire',
+      engine: 'modern',
+      theme: 'light',
+      plan: 'enterprise',
+      features: ['*'],
+      branding: { companyName: 'The Management Miami' },
+      brandTheme: themanagementmiamiBrandTheme,
     };
   }
 

@@ -5,7 +5,7 @@
  *   dist/platform.css = base tokens + modern engine + platform/rottay baseline
  *   dist/bithire.css  = base tokens + modern engine + bithire baseline
  *   dist/evnto.css    = base tokens + modern engine + evnto baseline
- *   dist/styles.css   = base tokens + modern engine + ALL tenants (dev/Storybook)
+ *   dist/styles.css   = base tokens + modern engine + all file-owned vertical baselines
  *
  * Each vertical bundle includes ONLY its own baseline. Its generated selectors
  * support both the legacy html[data-tenant] root and nested data-ds-root +
@@ -207,7 +207,6 @@ const allTenantsCss = [
   'artifacts/rottay/index.css',
   'artifacts/bithire/index.css',
   'artifacts/evnto/index.css',
-  'legacy/themanagementmiami/index.css',
 ].map((f) => {
   const p = resolve(srcCss, f);
   return readFile(p);

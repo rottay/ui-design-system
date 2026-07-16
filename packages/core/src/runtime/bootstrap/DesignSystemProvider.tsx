@@ -94,6 +94,7 @@ import type { LocaleTranslations, SupportedLocale } from '../../i18n/types';
 import type { VerticalKey, VerticalPreset } from '../verticals/types';
 import { getVerticalPreset } from '../verticals/registry';
 import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../tenant/storage';
+import { getUnresolvedTenantConfig } from '../tenant/defaults';
 import { SystemCssVariablesBridge } from './SystemCssVariablesBridge';
 import { ResponsiveProvider } from '../responsive';
 import { MotionProvider } from '../motion';
@@ -113,7 +114,7 @@ export interface DesignSystemProviderProps {
   /**
    * Tenant slug to resolve config from registry/API.
    * Use this when you want the design system to handle config resolution.
-   * Falls back to default tenant (rottay) if not found.
+   * An unresolved slug retains its own identity with generic DS defaults.
    */
   tenantSlug?: string | null;
   /**
@@ -391,35 +392,86 @@ export function DesignSystemProvider({
   }, [propTenantConfig, tenantOverrides]);
 
   // ASYNC PATH: When only tenantSlug is provided, resolve via storage facade
-  const [asyncTenantConfig, setAsyncTenantConfig] = useState<TenantConfig | null>(null);
-  const [loading, setLoading] = useState(!propTenantConfig);
-  const asyncLoadedRef = useRef(false);
+  const asyncRequestSlug = (propTenantSlug ?? DEFAULT_TENANT_SLUG)
+    .trim()
+    .toLowerCase() || DEFAULT_TENANT_SLUG;
+  const asyncRequestKey = propTenantConfig ? null : asyncRequestSlug;
+  const activeAsyncRequestRef = useRef(asyncRequestKey);
+  activeAsyncRequestRef.current = asyncRequestKey;
+  const tenantOverridesRef = useRef(tenantOverrides);
+  tenantOverridesRef.current = tenantOverrides;
+  const onTenantResolvedRef = useRef(onTenantResolved);
+  onTenantResolvedRef.current = onTenantResolved;
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
+  const [asyncRequestState, setAsyncRequestState] = useState<{
+    key: string | null;
+    config: TenantConfig | null;
+    loading: boolean;
+  }>(() => ({
+    key: asyncRequestKey,
+    config: null,
+    loading: asyncRequestKey !== null,
+  }));
 
   useEffect(() => {
-    if (propTenantConfig) return;
-    if (asyncLoadedRef.current) return; // Only load once
+    if (!asyncRequestKey) return;
+    const requestKey = asyncRequestKey;
+    let cancelled = false;
+    setAsyncRequestState({ key: requestKey, config: null, loading: true });
 
     const loadTenant = async () => {
+      let resolvedTenantConfig: TenantConfig;
+      let resolvedFromSource = true;
       try {
-        const slug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
-        const resolvedTenantConfig = await resolveTenantConfig(slug);
-        const mergedTenantConfig = mergeTenantConfig(resolvedTenantConfig, tenantOverrides);
-        asyncLoadedRef.current = true;
-        setAsyncTenantConfig(mergedTenantConfig);
-        onTenantResolved?.(mergedTenantConfig);
+        resolvedTenantConfig = await resolveTenantConfig(requestKey);
+        if (resolvedTenantConfig.slug.trim().toLowerCase() !== requestKey) {
+          throw new Error('Resolved tenant payload identity mismatch');
+        }
       } catch (error) {
-        onError?.(error as Error);
-        const defaultTenantConfig = await resolveTenantConfig(DEFAULT_TENANT_SLUG);
-        asyncLoadedRef.current = true;
-        setAsyncTenantConfig(mergeTenantConfig(defaultTenantConfig, tenantOverrides));
-      } finally {
-        setLoading(false);
+        resolvedFromSource = false;
+        onErrorRef.current?.(error as Error);
+        resolvedTenantConfig = getUnresolvedTenantConfig(requestKey);
+      }
+
+      if (cancelled || activeAsyncRequestRef.current !== requestKey) return;
+      setAsyncRequestState({
+        key: requestKey,
+        config: resolvedTenantConfig,
+        loading: false,
+      });
+      if (resolvedFromSource) {
+        const mergedTenantConfig = mergeTenantConfig(
+          resolvedTenantConfig,
+          tenantOverridesRef.current,
+        );
+        try {
+          onTenantResolvedRef.current?.(mergedTenantConfig);
+        } catch (error) {
+          onErrorRef.current?.(error as Error);
+        }
       }
     };
 
-    loadTenant();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propTenantSlug]);
+    void loadTenant();
+    return () => {
+      cancelled = true;
+    };
+  }, [asyncRequestKey]);
+
+  const asyncTenantConfig = useMemo(() => {
+    if (
+      !asyncRequestKey
+      || asyncRequestState.key !== asyncRequestKey
+      || !asyncRequestState.config
+    ) {
+      return null;
+    }
+    return mergeTenantConfig(asyncRequestState.config, tenantOverrides);
+  }, [asyncRequestKey, asyncRequestState, tenantOverrides]);
+  const loading = asyncRequestKey !== null && (
+    asyncRequestState.key !== asyncRequestKey || asyncRequestState.loading
+  );
 
   // Final resolved config: sync path takes priority
   const tenantConfig = syncTenantConfig ?? asyncTenantConfig;

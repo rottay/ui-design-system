@@ -457,7 +457,6 @@
 @import '../artifacts/rottay/index.css' layer(rottay-tenants);
 @import '../artifacts/bithire/index.css' layer(rottay-tenants);
 @import '../artifacts/evnto/index.css' layer(rottay-tenants);
-@import '../legacy/themanagementmiami/index.css' layer(rottay-tenants);
 
 /* =============================================================================
    LAYER 5: PERSONALITY OVERRIDES (rottay-personality)

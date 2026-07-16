@@ -472,9 +472,9 @@ describe('DesignSystemProvider chrome injection logic', () => {
     expect(BUNDLED_TENANT_SLUGS.has('rottay')).toBe(true);
     expect(BUNDLED_TENANT_SLUGS.has('bithire')).toBe(true);
     expect(BUNDLED_TENANT_SLUGS.has('evnto')).toBe(true);
-    // themanagementmiami is a known, fully-configured tenant (KNOWN_TENANTS)
-    // with no precompiled CSS artifact -- it is intentionally NOT bundled
-    // (WO-ENG-20); its CSS compiles at runtime from brandTheme instead.
+    // Customer tenants are never bundled or auto-registered. The Management
+    // Miami is supplied explicitly from its published DB artifact in product
+    // code and only from a checked-in fixture in regression tests.
     expect(BUNDLED_TENANT_SLUGS.has('themanagementmiami')).toBe(false);
     expect(BUNDLED_TENANT_SLUGS.size).toBe(3);
   });
@@ -485,7 +485,7 @@ describe('DesignSystemProvider chrome injection logic', () => {
     expect(isBundledTenant('evnto')).toBe(true);
   });
 
-  it('themanagementmiami is NOT bundled -- it gets generated chrome CSS like any DB-driven tenant', () => {
+  it('themanagementmiami is NOT bundled -- its explicit DB config gets generated chrome CSS', () => {
     expect(isBundledTenant('themanagementmiami')).toBe(false);
   });
 

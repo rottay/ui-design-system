@@ -113,8 +113,8 @@ describe('first-party artifact integrity', () => {
     expect(css).not.toMatch(/--ds-button-[\w-]+-text\s*:/);
   });
 
-  it('legacy tenant (themanagementmiami) exists', () => {
-    expect(existsSync(resolve(CSS_SRC, 'legacy/themanagementmiami/index.css'))).toBe(true);
+  it('DB-owned tenants have no legacy CSS authority', () => {
+    expect(existsSync(resolve(CSS_SRC, 'legacy/themanagementmiami/index.css'))).toBe(false);
   });
 
   it('public entrypoint source files exist in entrypoints/', () => {

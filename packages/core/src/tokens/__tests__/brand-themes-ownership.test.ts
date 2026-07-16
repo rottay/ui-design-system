@@ -26,15 +26,6 @@ const VERTICAL_BY_SLUG: Record<string, VerticalFolder> = {
   evnto: 'evnto',
 };
 
-/**
- * Tenants with no precompiled artifact (they resolve through the dynamic
- * path, e.g. themanagementmiami per WO-ENG-20) but still owned by a
- * vertical folder in the source tree.
- */
-const UNBUNDLED_TENANT_VERTICAL: Record<string, VerticalFolder> = {
-  themanagementmiami: 'bithire',
-};
-
 describe('brand-themes tree pins vertical ownership', () => {
   it('every FIRST_PARTY_ARTIFACT_SPECS slug resolves inside its vertical folder', () => {
     expect(FIRST_PARTY_ARTIFACT_SPECS.length).toBeGreaterThan(0);
@@ -46,17 +37,12 @@ describe('brand-themes tree pins vertical ownership', () => {
     }
   });
 
-  it('unbundled tenants still resolve inside their vertical folder', () => {
-    for (const [slug, vertical] of Object.entries(UNBUNDLED_TENANT_VERTICAL)) {
-      const filePath = resolve(BRAND_THEMES_DIR, vertical, `${slug}.ts`);
-      expect(() => statSync(filePath)).not.toThrow();
-    }
-  });
-
-  it('torture fixtures live outside every vertical folder', () => {
+  it('tenant and torture fixtures live outside every vertical folder', () => {
     expect(() => statSync(resolve(BRAND_THEMES_DIR, FIXTURES_FOLDER, 'torture.ts'))).not.toThrow();
+    expect(() => statSync(resolve(BRAND_THEMES_DIR, FIXTURES_FOLDER, 'themanagementmiami.ts'))).not.toThrow();
     for (const vertical of VERTICAL_FOLDERS) {
       expect(() => statSync(resolve(BRAND_THEMES_DIR, vertical, 'torture.ts'))).toThrow();
+      expect(() => statSync(resolve(BRAND_THEMES_DIR, vertical, 'themanagementmiami.ts'))).toThrow();
     }
   });
 
