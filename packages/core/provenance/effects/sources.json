@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-07-16",
+  "sources": {
+    "react-bits": {
+      "repository": "https://github.com/DavidHDev/react-bits",
+      "revision": "271b49c3ba1db60686e53c8c9a28b7583d5477d5",
+      "licenseFile": "licenses/react-bits-LICENSE.md",
+      "licenseId": "LicenseRef-MIT-Commons-Clause-1.0",
+      "licenseSha256": "f4c33af6739191537738662d223b68d77bc226f4b57ea883e16481d8cc5c73c9",
+      "adoptionBoundary": "restricted-reference-only",
+      "sourceCopied": false
+    },
+    "motion-primitives": {
+      "repository": "https://github.com/ibelick/motion-primitives",
+      "revision": "92586e62a951eb9b6bfd1cc7c8a4e6e2ab6ba17d",
+      "licenseFile": "licenses/motion-primitives-LICENCE.md",
+      "licenseId": "MIT",
+      "licenseSha256": "f668f5ef3635eb906f10b1eea9a32e449eb6e1a183ab6879ef6d56c0980dd2f3",
+      "adoptionBoundary": "reference-only",
+      "sourceCopied": false
+    },
+    "magicui": {
+      "repository": "https://github.com/magicuidesign/magicui",
+      "revision": "61f1aa5aa28dafa459e7d011e46ce2392b22ee24",
+      "licenseFile": "licenses/magicui-LICENSE.md",
+      "licenseId": "MIT",
+      "licenseSha256": "0147b84235ed916b8b4e89c1f80655351c5afe7d211b629be61f553a227b34ba",
+      "adoptionBoundary": "reference-only",
+      "sourceCopied": false
+    },
+    "cult-ui": {
+      "repository": "https://github.com/nolly-studio/cult-ui",
+      "revision": "a3308bad8496b036adf2fbd29d50b877fb3c5987",
+      "licenseFile": "licenses/cult-ui-LICENSE.md",
+      "licenseId": "MIT",
+      "licenseSha256": "d0470e1591e3b0f38e13719d20ef872ee68adbc5fa1a843e0a761ef5bdd5cc63",
+      "adoptionBoundary": "reference-only",
+      "sourceCopied": false
+    }
+  }
+}

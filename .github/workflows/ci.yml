@@ -51,7 +51,7 @@ jobs:
           CORE="false"
           SHOWROOM="false"
 
-          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/dependency-honesty\.(mjs|test\.mjs)$|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
+          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/dependency-honesty\.(mjs|test\.mjs)$|scripts/effect-registry-audit(\.test)?\.mjs$|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
             CORE="true"
           fi
 
@@ -110,6 +110,11 @@ jobs:
 
       - name: Audit machinery regression tests
         run: pnpm --filter @rottay/design-system run test:scripts
+
+      - name: Effect provenance and registry evidence
+        run: |
+          pnpm effects:provenance
+          pnpm effects:provenance:test
 
       - name: Checkout WO-GAT-07 documentation evidence
         uses: actions/checkout@v4

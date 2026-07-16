@@ -1539,11 +1539,9 @@
           "motion"
         ],
         "ParticleField": [
-          "antd",
           "motion"
         ],
         "Particles": [
-          "antd",
           "motion"
         ],
         "PasswordInput": [
@@ -2316,7 +2314,6 @@
           "motion"
         ],
         "WorkspaceShell": [
-          "antd",
           "motion"
         ],
         "WorkspaceViewsMenu": [
@@ -4277,6 +4274,31 @@
         "useMotionPolicy",
         "useMotionPreference",
         "useMotionRecipe"
+      ]
+    },
+    "./effects": {
+      "exports": [
+        "EFFECT_DEFINITIONS",
+        "EFFECT_IDS",
+        "EFFECT_REGISTRY",
+        "EFFECT_REGISTRY_VERSION",
+        "EFFECT_RESEARCH_PROVENANCE",
+        "getEffectDefinition",
+        "isEffectDefinition",
+        "isEffectId",
+        "resolveEffect"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "EFFECT_DEFINITIONS",
+        "EFFECT_IDS",
+        "EFFECT_REGISTRY",
+        "EFFECT_REGISTRY_VERSION",
+        "EFFECT_RESEARCH_PROVENANCE",
+        "getEffectDefinition",
+        "isEffectDefinition",
+        "isEffectId",
+        "resolveEffect"
       ]
     },
     "./eslint": {

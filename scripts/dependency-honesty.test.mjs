@@ -829,8 +829,8 @@ test('runtime export inventory includes the public CLI import and every CJS cond
     entry.subpath === './supplier-honesty-cli' && entry.mode === 'import' && entry.target.endsWith('.mjs')
   )));
   const fixtures = runtimeExportFixtures(manifest);
-  assert.equal(fixtures.import.length, 10);
-  assert.equal(fixtures.require.length, 9);
+  assert.equal(fixtures.import.length, 11);
+  assert.equal(fixtures.require.length, 10);
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/supplier-honesty-cli')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts')));
@@ -838,6 +838,8 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/renderers')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/motion')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/motion')));
+  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/effects')));
+  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/effects')));
 });
 
 test('offline runtime fixtures localize required packages and omit unavailable optional packages', () => {
@@ -1277,6 +1279,7 @@ test('live core graph has no false optional or zero-importer peer', () => {
     'chart-renderers-entry.ts',
   );
   assert.equal(basename(collectSourceEntrypoints(manifest).get('./motion')), 'motion-entry.ts');
+  assert.equal(basename(collectSourceEntrypoints(manifest).get('./effects')), 'effects-entry.ts');
   const graph = auditCoreDependencyGraph();
   assert.deepEqual(graph.errors, []);
   assert.deepEqual(graph.report['@phosphor-icons/react'], {

@@ -25,6 +25,7 @@ import {
 import { useChartPersonality } from './use-chart-personality';
 import { DEFAULT_COLORS } from '../Charts.types';
 import {
+  PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
   type ChartColorOwner,
 } from '../utils/resolve-css-color';
@@ -272,14 +273,7 @@ export function useChartTheme(
     while (current) {
       observer.observe(current, {
         attributes: true,
-        attributeFilter: [
-          'class',
-          'style',
-          'data-tenant',
-          'data-theme',
-          'data-engine',
-          'data-skin',
-        ],
+        attributeFilter: [...PROVIDER_PAINT_ATTRIBUTE_FILTER],
       });
       current = current.parentElement;
     }

@@ -49,6 +49,7 @@ export default defineConfig({
         charts: resolve(__dirname, 'src/chart-entry.ts'),
         'chart-renderers': resolve(__dirname, 'src/chart-renderers-entry.ts'),
         motion: resolve(__dirname, 'src/motion-entry.ts'),
+        effects: resolve(__dirname, 'src/effects-entry.ts'),
         eslint: resolve(__dirname, 'src/eslint.ts'),
         commercial: resolve(__dirname, 'src/commercial.ts'),
         // Only real package.json exports are listed as entries.

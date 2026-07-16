@@ -20,13 +20,14 @@
 
 import type { ComponentType, CSSProperties } from 'react';
 import type { ComponentExtensions } from '../extensions';
+import type { EngineName } from './identity';
+
+export type { EngineName } from './identity';
 
 /**
  * Available engine names in the Rottay Design System.
  * Each engine maps to a distinct UI library and visual personality.
  */
-export type EngineName = 'classic' | 'modern' | 'rustic' | 'custom';
-
 /**
  * Props that allow a component to select its rendering engine.
  * Most components extend this interface to support per-component engine override.

@@ -9,7 +9,10 @@ import {
 } from 'react';
 
 import { useChartDimensions } from '../../hooks/use-chart-dimensions';
-import { resolveCssColor } from '../../utils/resolve-css-color';
+import {
+  PROVIDER_PAINT_ATTRIBUTE_FILTER,
+  resolveCssColor,
+} from '../../utils/resolve-css-color';
 import {
   buildSvgHeatMapGeometry,
   type ChartGeometryInsets,
@@ -66,16 +69,7 @@ function useProviderResolvedRange(
     while (current) {
       observer.observe(current, {
         attributes: true,
-        attributeFilter: [
-          'class',
-          'style',
-          'data-tenant',
-          'data-css-tenant',
-          'data-brand-artifact',
-          'data-theme',
-          'data-engine',
-          'data-skin',
-        ],
+        attributeFilter: [...PROVIDER_PAINT_ATTRIBUTE_FILTER],
       });
       current = current.parentElement;
     }

@@ -388,6 +388,42 @@ offscreen-aware desktop loop when ambient policy allows it and zero loops on coa
 constrained, hidden or offscreen states. This is evidence toward DS-IMP-086/088/089 only; those
 source items remain open until the full Motion.List/AI-state and fleet adoption gates complete.
 
+#### Owner continuation — EFX-01A effect registry (2026-07-16)
+
+EFX-01A opens the source-only governance kernel for expressive effects without promoting any
+runtime or claiming DS-IMP-106/110 complete. Registry version 1 is a closed catalog of exactly
+eleven canonical capabilities: Aurora, GlassCard, GlowEffect, GradientBackground, GridPattern,
+Magnetic, NoiseTexture, Parallax, ParticleField, ShimmerText and Spotlight. `Particles` remains a
+compatibility component name, never a second registry ID. Tenant input cannot add definitions,
+change admission or open a lab kill switch.
+
+Every definition separates its target `product | expressive | lab` tier from observed runtime
+facts and carries purpose, renderer/loop/lazy posture, canonical verticals, built-in engines,
+static/touch/reduced fallbacks, ARIA strategy, lifecycle posture, provenance and a byte-exact
+budget state. Admission is fail-closed: the ten lightweight capabilities remain `candidate` and
+ParticleField remains `quarantined`; none is `certified`. The inventory deliberately records that
+Aurora, GlowEffect, GradientBackground, GridPattern and ShimmerText are currently non-lazy and do
+not suspend offscreen/hidden work. Certification, not aspiration, is what enforces product
+non-perpetual loops, expressive/lab lazy loading, measured gzip/layer/loop budgets, verified
+authorized source and continuous-loop suspension. Lab additionally requires owner, telemetry and
+an exact registry-owned kill switch.
+
+Research provenance pins React Bits, Motion Primitives, Magic UI and Cult UI revisions, license
+identifiers and license hashes as `reference-only`; React Bits stays restricted research and none
+of those records claims copied source. The audit cross-checks those public records against the
+byte-verified ledger and refuses any certified definition until an authorized-source ledger exists.
+The pure resolver exposes only canonical-ID lookup publicly, returns static output for
+candidate/quarantined/ambiguous policy and cannot accept a caller-forged certified definition.
+
+The packaging continuation authorizes the governance-only `./effects` subpath with nine frozen
+runtime values plus its public types. The cohesive 2.19.17 producer build measured the raw ESM/CJS
+entries at 652/676 bytes and the all-export consumer fixture at 4,829 bytes gzip; ratchets are
+800 bytes raw per entry and 5,500 bytes gzip. Release gates reject React, suppliers, dynamic imports,
+assets, any visual/client module, an impure CJS closure or an impure declaration graph, and the
+packed TypeScript fixture proves the definition-level resolver stays unimportable. This continuation
+still authorizes no visual effect export or rewrite, ParticleField promotion, Platform route reopen,
+DS-IMP-106/110 completion claim or source-item transition.
+
 ### WO-CRA-14 ParticleField Stage-A quarantine
 - **Source IDs / phase** — Supports DS-IMP-106 Stage A in Phase 0; it has no final source authority. WO-CRA-15 remains the only DS-IMP-106 completion authority.
 - **Depends on** — WO-GAT-05 and WO-GAT-06.

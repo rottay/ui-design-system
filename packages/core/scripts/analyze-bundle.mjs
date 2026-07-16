@@ -10,6 +10,7 @@
  *   node scripts/analyze-bundle.mjs            # build + analyze
  *   node scripts/analyze-bundle.mjs --skip-build  # analyze existing dist/
  *   node scripts/analyze-bundle.mjs --chart-renderers  # isolated named-export budgets only
+ *   node scripts/analyze-bundle.mjs --effects  # EffectRegistry purity/budget only
  *
  * Exit codes:
  *   0 - all files within budget
@@ -18,7 +19,7 @@
 
 import { execSync } from 'node:child_process';
 import { readFileSync, readdirSync, statSync, existsSync, rmSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createGzip, gzipSync } from 'node:zlib';
 import { createReadStream } from 'node:fs';
@@ -47,6 +48,10 @@ const BUDGET = {
   // and rounds upward to the next 100 B.
   'dist/motion.js': 1_100,
   'dist/motion.cjs': 1_100,
+  // Measured 2026-07-16: 652/676 B. Each ceiling keeps >10% headroom
+  // and rounds upward to the next 100 B.
+  'dist/effects.js': 800,
+  'dist/effects.cjs': 800,
   'dist/tokens.js': 80_000,
   'dist/tokens.cjs': 80_000,
   'dist/i18n.js': 80_000,
@@ -777,6 +782,284 @@ async function runMotionFixtureBudgets() {
   return failures;
 }
 
+// ---------------------------------------------------------------------------
+// Supplier-neutral EffectRegistry facade isolation budget (EFX-01A)
+// ---------------------------------------------------------------------------
+
+const EFFECTS_ENTRY = join(ROOT, 'dist', 'effects.js');
+const EFFECTS_CJS_ENTRY = join(ROOT, 'dist', 'effects.cjs');
+const EFFECTS_TYPES_ENTRY = join(ROOT, 'dist', 'effects.d.ts');
+const EFFECTS_FIXTURE_EXPORTS = Object.freeze([
+  'EFFECT_DEFINITIONS',
+  'EFFECT_IDS',
+  'EFFECT_REGISTRY',
+  'EFFECT_REGISTRY_VERSION',
+  'EFFECT_RESEARCH_PROVENANCE',
+  'getEffectDefinition',
+  'isEffectDefinition',
+  'isEffectId',
+  'resolveEffect',
+]);
+
+// Measured 2026-07-16 through all nine public values: 4,829 B gzip. The
+// ceiling keeps >10% headroom and rounds upward to the next 500 B.
+const EFFECTS_FIXTURE_BUDGET = 5_500;
+const EFFECTS_EXTERNALS = [
+  'react',
+  /^react\//,
+  'react-dom',
+  /^react-dom\//,
+  'motion',
+  /^motion\//,
+  'd3',
+  /^d3(?:-|\/)/,
+  'three',
+  /^three\//,
+  '@react-three/fiber',
+  /^@react-three\/fiber\//,
+  '@react-three/drei',
+  /^@react-three\/drei\//,
+  'antd',
+  /^antd\//,
+  '@ant-design/icons',
+  /^@ant-design\/icons\//,
+  '@phosphor-icons/react',
+  /^@phosphor-icons\/react\//,
+  '@thesvg/react',
+  /^@thesvg\/react\//,
+  'lucide-react',
+  /^lucide-react\//,
+];
+
+function resolveArtifactSpecifier(fromFile, specifier, extension) {
+  const base = resolve(dirname(fromFile), specifier);
+  const candidates = [
+    base,
+    `${base}${extension}`,
+    join(base, `index${extension}`),
+  ];
+  if (extension === '.d.ts' && /\.[cm]?js$/.test(base)) {
+    candidates.unshift(base.replace(/\.[cm]?js$/, '.d.ts'));
+  }
+  return candidates.find((candidate) => existsSync(candidate) && statSync(candidate).isFile()) ?? null;
+}
+
+function stripJsComments(source) {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/(^|[^:])\/\/.*$/gm, '$1');
+}
+
+function auditEffectsCjsClosure() {
+  if (!existsSync(EFFECTS_CJS_ENTRY)) {
+    return ['dist/effects.cjs is missing'];
+  }
+  const pending = [EFFECTS_CJS_ENTRY];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const source = stripJsComments(readFileSync(file, 'utf8'));
+    const requireCalls = [...source.matchAll(/\brequire\s*\(/g)].length;
+    const literalRequires = [...source.matchAll(/\brequire\s*\(\s*(['"])([^'"]+)\1\s*\)/g)];
+    if (requireCalls !== literalRequires.length) {
+      errors.push(`computed/non-literal require in ${relative(ROOT, file)}`);
+    }
+    if (/\bimport\s*\(/.test(source)) {
+      errors.push(`dynamic import in ${relative(ROOT, file)}`);
+    }
+    for (const match of literalRequires) {
+      const specifier = match[2];
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.cjs');
+      if (!target) errors.push(`unresolved CJS edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const forbidden = [...visited].filter((file) => (
+    /\/(?:components|hooks|motion)\//.test(file)
+  ));
+  if (external.size > 0) errors.push(`CJS external requires retained: ${[...external].join(', ')}`);
+  if (forbidden.length > 0) {
+    errors.push(`CJS visual/client modules retained: ${forbidden.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
+}
+
+function auditEffectsDeclarationClosure() {
+  if (!existsSync(EFFECTS_TYPES_ENTRY)) {
+    return ['dist/effects.d.ts is missing'];
+  }
+  const pending = [EFFECTS_TYPES_ENTRY];
+  const visited = new Set();
+  const external = new Set();
+  const errors = [];
+
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (!file || visited.has(file)) continue;
+    visited.add(file);
+    const source = stripJsComments(readFileSync(file, 'utf8'));
+    const specifiers = [
+      ...source.matchAll(/\bfrom\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+      ...source.matchAll(/\bimport\s+['"]([^'"]+)['"]/g),
+      ...source.matchAll(/<reference\s+types=['"]([^'"]+)['"]/g),
+      ...source.matchAll(/\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g),
+    ].map((match) => match[1]);
+    for (const specifier of new Set(specifiers)) {
+      if (!specifier.startsWith('.')) {
+        external.add(specifier);
+        continue;
+      }
+      const target = resolveArtifactSpecifier(file, specifier, '.d.ts');
+      if (!target) errors.push(`unresolved declaration edge ${specifier} from ${relative(ROOT, file)}`);
+      else pending.push(target);
+    }
+  }
+
+  const forbidden = [...visited].filter((file) => (
+    /\/(?:components|hooks|motion)\//.test(file)
+  ));
+  if (external.size > 0) {
+    errors.push(`declaration suppliers retained: ${[...external].join(', ')}`);
+  }
+  if (forbidden.length > 0) {
+    errors.push(`declaration visual/client modules retained: ${forbidden.map((file) => relative(ROOT, file)).join(', ')}`);
+  }
+  return errors;
+}
+
+async function buildEffectsFixture() {
+  if (!existsSync(EFFECTS_ENTRY)) {
+    throw new Error('dist/effects.js is missing; build the package before measuring EffectRegistry');
+  }
+
+  const { build } = await import('vite');
+  const virtualId = 'virtual:efx-01-effect-registry';
+  const resolvedVirtualId = `\0${virtualId}`;
+  const result = await build({
+    configFile: false,
+    logLevel: 'silent',
+    root: ROOT,
+    plugins: [{
+      name: 'efx-01-effect-registry-entry',
+      resolveId(id) {
+        return id === virtualId ? resolvedVirtualId : null;
+      },
+      load(id) {
+        if (id !== resolvedVirtualId) return null;
+        const names = EFFECTS_FIXTURE_EXPORTS.join(', ');
+        return `import { ${names} } from ${JSON.stringify(EFFECTS_ENTRY)};\nexport { ${names} };\n`;
+      },
+    }],
+    build: {
+      write: false,
+      minify: 'esbuild',
+      target: 'esnext',
+      reportCompressedSize: false,
+      rollupOptions: {
+        input: virtualId,
+        preserveEntrySignatures: 'strict',
+        external: EFFECTS_EXTERNALS,
+        output: {
+          format: 'es',
+          inlineDynamicImports: true,
+          entryFileNames: 'bundle.js',
+        },
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          warn(warning);
+        },
+      },
+    },
+    esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
+  });
+
+  const outputs = (Array.isArray(result) ? result : [result])
+    .flatMap((buildResult) => buildResult.output ?? []);
+  const chunks = outputs.filter((output) => output.type === 'chunk');
+  if (chunks.length !== 1 || !chunks[0].isEntry) {
+    throw new Error(`expected one inline EffectRegistry entry chunk; found ${chunks.length}`);
+  }
+
+  const code = chunks.map((chunk) => chunk.code).join('\n');
+  const modules = renderedModules(chunks);
+  return {
+    raw: Buffer.byteLength(code),
+    gzip: gzipSync(code, { level: 9 }).byteLength,
+    modules,
+    imports: new Set(chunks.flatMap((chunk) => chunk.imports)),
+    dynamicImports: new Set(chunks.flatMap((chunk) => chunk.dynamicImports ?? [])),
+    emittedAssets: outputs.filter((output) => output.type === 'asset').map((asset) => asset.fileName),
+    supplierModules: [...modules.keys()].filter((moduleId) => moduleId.includes('/node_modules/')),
+  };
+}
+
+async function runEffectsFixtureBudget() {
+  console.log('\n--- EffectRegistry purity and isolation budget (EFX-01A) ---\n');
+  const supplierContract = JSON.parse(readFileSync(join(ROOT, 'supplier-contract.json'), 'utf8'));
+  const publicContract = supplierContract.entrypoints?.['./effects'];
+  const contractExports = [...(publicContract?.exports ?? [])].sort();
+  const fixtureExports = [...EFFECTS_FIXTURE_EXPORTS].sort();
+  const contractErrors = [];
+  if (JSON.stringify(contractExports) !== JSON.stringify(fixtureExports)) {
+    contractErrors.push('public export inventory drifted');
+  }
+  if (Object.keys(publicContract?.symbols ?? {}).length !== 0) {
+    contractErrors.push('supplier symbols declared');
+  }
+  if (JSON.stringify([...(publicContract?.supplierFreeExports ?? [])].sort()) !== JSON.stringify(fixtureExports)) {
+    contractErrors.push('not every runtime export is supplier-free');
+  }
+  if (contractErrors.length > 0) {
+    console.error(`\x1b[31mEffectRegistry supplier contract failed: ${contractErrors.join('; ')}.\x1b[0m\n`);
+    return 1;
+  }
+
+  try {
+    const result = await buildEffectsFixture();
+    const clientRuntimeModules = [...result.modules.keys()].filter((moduleId) => (
+      /\/(?:components|hooks|motion)\//.test(moduleId)
+      || /\/runtime\/motion\//.test(moduleId)
+    ));
+    const isolationErrors = [];
+    if (result.imports.size > 0) {
+      isolationErrors.push(`external imports retained: ${[...result.imports].join(', ')}`);
+    }
+    if (result.dynamicImports.size > 0) {
+      isolationErrors.push(`dynamic imports retained: ${[...result.dynamicImports].join(', ')}`);
+    }
+    if (result.emittedAssets.length > 0) {
+      isolationErrors.push(`assets emitted: ${result.emittedAssets.join(', ')}`);
+    }
+    if (result.supplierModules.length > 0) isolationErrors.push('supplier module bundled');
+    if (clientRuntimeModules.length > 0) isolationErrors.push('client/visual runtime retained');
+    isolationErrors.push(...auditEffectsCjsClosure());
+    isolationErrors.push(...auditEffectsDeclarationClosure());
+    const overBudget = result.gzip > EFFECTS_FIXTURE_BUDGET;
+    const status = overBudget || isolationErrors.length > 0 ? 'FAIL' : 'PASS';
+    console.log(
+      `EffectRegistry | raw ${formatBytes(result.raw)} (${result.raw} B) | ` +
+      `gzip ${formatBytes(result.gzip)} (${result.gzip} B) | ` +
+      `limit ${formatBytes(EFFECTS_FIXTURE_BUDGET)} | ` +
+      `${isolationErrors.length === 0 ? 'pure; no suppliers/client runtime' : isolationErrors.join('; ')} | ${status}\n`,
+    );
+    return status === 'PASS' ? 0 : 1;
+  } catch (error) {
+    console.error(`\x1b[31mEffectRegistry fixture build failed: ${error instanceof Error ? error.message : String(error)}\x1b[0m\n`);
+    return 1;
+  }
+}
+
 if (process.argv.includes('--chart-renderers')) {
   const failures = await runChartRendererBudgets();
   process.exit(failures > 0 ? 1 : 0);
@@ -784,6 +1067,11 @@ if (process.argv.includes('--chart-renderers')) {
 
 if (process.argv.includes('--motion')) {
   const failures = await runMotionFixtureBudgets();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
+if (process.argv.includes('--effects')) {
+  const failures = await runEffectsFixtureBudget();
   process.exit(failures > 0 ? 1 : 0);
 }
 
@@ -924,6 +1212,7 @@ for (const [relPath, limit] of Object.entries(CSS_BUDGET)) {
 // analysis (including --skip-build), as well as via --chart-renderers alone.
 failures += await runChartRendererBudgets();
 failures += await runMotionFixtureBudgets();
+failures += await runEffectsFixtureBudget();
 
 // ---------------------------------------------------------------------------
 // Report
