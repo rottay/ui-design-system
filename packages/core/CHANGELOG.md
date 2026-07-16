@@ -1,5 +1,20 @@
 # @rottay/design-system
 
+## 2.19.17
+
+### Patch Changes
+
+- Add the focused `motion` entry with three vertical-owned motion identities, a bounded DB-safe
+  tenant dial and twelve supplier-neutral semantic recipes.
+- Resolve one runtime policy across reduced-motion, coarse pointer, constrained network/power and
+  document visibility; share browser listeners and clean them after the last consumer.
+- Keep active product-state motion distinct from tenant-owned ambient decoration, cap finite moments,
+  displacement, stagger and concurrent-loop intent, and expose stable final states when motion is unsafe.
+- Derive profile and tenant dial inside `DesignSystemProvider`, map the legacy open-ended brand shape
+  for one compatibility minor, and make duration, stagger, parallax and magnetic bounds effective.
+- Certify hostile input, SSR/hydration, live preference changes, vertical/tenant invariance and the
+  packed ESM/CJS/TypeScript subpath through supplier-honesty and measured bundle gates.
+
 ## 2.19.16
 
 ### Patch Changes
