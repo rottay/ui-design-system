@@ -47622,6 +47622,163 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   stroke: var(--ds-color-bg-primary);
 }
 
+/* VIZ-01 — renderer-neutral ChartFrame anatomy. The frame owns chrome and
+ * semantic states only; projected renderers retain ownership of their marks. */
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] {
+  display: grid;
+  gap: var(--ds-spacing-4, 1rem);
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='header'] {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-spacing-4, 1rem);
+  min-inline-size: 0;
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='header'] > [data-part='copy'] {
+  display: grid;
+  gap: var(--ds-spacing-1, 0.25rem);
+  min-inline-size: 0;
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='title'] {
+  margin: 0;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-lg, 1.125rem);
+  line-height: var(--ds-line-height-heading, 1.25);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='question'] {
+  margin: 0;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: 600;
+  line-height: var(--ds-line-height-body, 1.5);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='description'],
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='state-description'],
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='metadata'] {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  line-height: var(--ds-line-height-body, 1.5);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='toolbar'] {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-spacing-2, 0.5rem);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='view'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='legend'] {
+  min-inline-size: 0;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='insight'] {
+  padding: var(--ds-spacing-3, 0.75rem);
+  border-inline-start: 3px solid var(--ds-color-primary);
+  border-radius: var(--ds-radius-sm, 0.25rem);
+  background: var(--ds-color-bg-secondary);
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='state'] {
+  display: grid;
+  place-content: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  min-block-size: 10rem;
+  padding: var(--ds-spacing-6, 1.5rem);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-md, 0.5rem);
+  background: var(--ds-color-bg-secondary);
+  text-align: center;
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='state'][data-state='error'] {
+  border-color: var(--ds-color-error);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='state-label'] {
+  font-weight: 600;
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='state-action'] {
+  display: flex;
+  justify-content: center;
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='metadata'] {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 0.5rem) var(--ds-spacing-4, 1rem);
+  padding-block-start: var(--ds-spacing-2, 0.5rem);
+  border-block-start: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='freshness'] {
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+}
+
+@media (max-width: 40rem) {
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] {
+    gap: var(--ds-spacing-3, 0.75rem);
+  }
+
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='header'] {
+    display: grid;
+    gap: var(--ds-spacing-3, 0.75rem);
+  }
+
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] [data-part='toolbar'] {
+    justify-content: flex-start;
+    inline-size: 100%;
+  }
+
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='state'] {
+    min-block-size: 8rem;
+    padding: var(--ds-spacing-4, 1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'],
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='state'] {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='state'],
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='metadata'] {
+    border-color: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='insight'] {
+    border-color: Highlight;
+    background: Canvas;
+    color: CanvasText;
+  }
+}
+
 /** AreaChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
 .ds-chart-area [data-part='legend-swatch'] {

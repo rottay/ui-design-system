@@ -1,5 +1,18 @@
 # @rottay/design-system
 
+## 2.19.15
+
+### Patch Changes
+
+- Add the focused `charts` entry with a renderer-neutral `ChartFrame` and JSON-serializable
+  phone/tablet/desktop projection contract; phone policies cannot select a full chart.
+- Render loading, empty and error feedback without mounting stale marks, and expose shared question,
+  toolbar, legend, insight and provenance anatomy through provider-scoped tokens.
+- Keep the new boundary supplier-free by separating responsive motion preference from the Motion
+  renderer while preserving provider overrides and public compatibility.
+- Extend supplier honesty, bundle budgets and the offline packed TypeScript/runtime fixture to certify
+  the new ESM/CJS subpath before application adoption.
+
 ## 2.19.14
 
 ### Patch Changes
