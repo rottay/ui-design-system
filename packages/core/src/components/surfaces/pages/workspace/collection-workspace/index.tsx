@@ -17,8 +17,13 @@
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { CheckSquare2, ChevronDown, Filter } from 'lucide-react';
 import { arrayValueAt } from '@/_internal/utils/collections';
+import {
+  CheckSquareIcon,
+  ChevronDownIcon,
+  FilterIcon,
+  MoreHorizontalIcon,
+} from '../../../../../icons';
 import type { ColumnDef, EditableConfig, FilterDef, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
 import type {
   CollectionWorkspaceChromeConfig,
@@ -31,6 +36,7 @@ import type { DensityKey, ViewMode } from '../../../../patterns/data/list-toolba
 import type {
   CollectionHeaderMetaItem,
   CollectionHeaderProps,
+  CollectionHeaderQuickAction,
 } from '../../../../structures/headers/collection';
 import type {
   SearchCommandBarConfig,
@@ -60,6 +66,7 @@ import { Stack } from '../../../../primitives/layout/Stack';
 import { Flex } from '../../../../primitives/layout/Flex';
 import { Text } from '../../../../primitives/display/Typography';
 import { Button } from '../../../../primitives/inputs/Button';
+import { ActionDock } from '../../../../primitives/navigation/ActionDock';
 import { AdaptiveOverlay } from '../../../../primitives/overlay/AdaptiveOverlay';
 import { WorkspaceShell } from '../../../layout/collection-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
@@ -128,7 +135,20 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
   defaultViewMode?: 'table' | 'cards';
   /** Per-mode render configurations (grid, kanban, gallery, calendar, cards) */
   viewModes?: CollectionViewModeConfigs<T>;
-  primaryAction?: { label: string; onClick: () => void; icon?: ReactNode };
+  primaryAction?: {
+    /** Stable identity used to de-duplicate the same action from header quick actions. */
+    key?: string;
+    label: string;
+    onClick: () => void;
+    icon?: ReactNode;
+    disabled?: boolean;
+    /** Canonical mutation/busy posture forwarded to the DS Button. */
+    pending?: boolean;
+    pendingLabel?: string;
+    /** Backward-compatible busy alias. Prefer `pending`. */
+    loading?: boolean;
+    ariaLabel?: string;
+  };
   icon?: ReactNode;
   adaptive?: AdaptiveConfig;
 }
@@ -175,6 +195,23 @@ function resolveDefaultFilterValues(filters: FilterDef[] | undefined): Record<st
 
 function countActiveFilterValues(values: Record<string, unknown>): number {
   return Object.values(values).filter(isCollectionFilterValueActive).length;
+}
+
+function normalizeCollectionActionLabel(label: string): string {
+  return label.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function isPrimaryCollectionAction(
+  action: CollectionHeaderQuickAction,
+  primaryAction: CollectionWorkspaceProps<object>['primaryAction'],
+): boolean {
+  if (!primaryAction) return false;
+
+  if (primaryAction.key) return action.key === primaryAction.key;
+  if (action.onClick === primaryAction.onClick) return true;
+
+  return normalizeCollectionActionLabel(action.label)
+    === normalizeCollectionActionLabel(primaryAction.label);
 }
 
 function resolveSortValue<T extends object>(row: T, column: ColumnDef<T>): unknown {
@@ -653,7 +690,7 @@ function PageSizeControl({
               </option>
             ))}
           </select>
-          <ChevronDown
+          <ChevronDownIcon
             aria-hidden
             className="ds-collection-page-size-control__chevron"
             data-part="page-size-chevron"
@@ -814,11 +851,25 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const hasFilters = Boolean(controls?.filters && controls.filters.length > 0);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [filterDraftValues, setFilterDraftValues] = useState<Record<string, unknown>>({});
+  const [compactActionsOpen, setCompactActionsOpen] = useState(false);
   const filterSheetId = `ds-collection-filter-sheet-${useId().replace(/:/g, '')}`;
+  const compactActionsId = `ds-collection-actions-${useId().replace(/:/g, '')}`;
   const usesFilterSheet = Boolean(
     hasFilters && posture.filters === 'sheet' && !posture.isDesktop,
   );
   const inlineFiltersExpanded = filtersExpanded && !usesFilterSheet;
+  const usesStickyActionContinuity = posture.actionBar === 'sticky-bottom';
+  const usesMinimalHeader = Boolean(
+    posture.compactHeader && usesStickyActionContinuity,
+  );
+  const actionOverflowItems = useMemo(
+    () => usesStickyActionContinuity
+      ? (resolvedHeader?.quickActions ?? []).filter(
+          (action) => !isPrimaryCollectionAction(action, primaryAction),
+        )
+      : [],
+    [primaryAction, resolvedHeader?.quickActions, usesStickyActionContinuity],
+  );
 
   const effectiveViewMode = useMemo(() => {
     if (posture.collection && posture.breakpoint !== 'desktop') {
@@ -1356,6 +1407,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     if (posture.isDesktop) setFiltersExpanded(false);
   }, [posture.isDesktop]);
 
+  useEffect(() => {
+    if (!usesStickyActionContinuity || actionOverflowItems.length === 0) {
+      setCompactActionsOpen(false);
+    }
+  }, [actionOverflowItems.length, usesStickyActionContinuity]);
+
   // Focused row render
   const renderRow = useCallback(
     (row: T, defaultRender: ReactNode, _index: number) => {
@@ -1416,6 +1473,45 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       </Box>
     </AdaptiveOverlay>
   ) : null;
+
+  const compactActionsSheet = usesStickyActionContinuity
+    && actionOverflowItems.length > 0 ? (
+      <AdaptiveOverlay
+        mode="sheet"
+        open={compactActionsOpen}
+        onOpenChange={setCompactActionsOpen}
+        title="More actions"
+        id={compactActionsId}
+        aria-label="More actions"
+        className="ds-collection-workspace__compact-actions-sheet"
+      >
+        <Stack
+          spacing="sm"
+          className="ds-collection-workspace__compact-actions-list"
+          data-part="compact-actions-list"
+        >
+          {actionOverflowItems.map((action) => (
+            <Button
+              key={action.key}
+              variant={action.variant ?? 'default'}
+              icon={action.icon}
+              block
+              data-action-key={action.key}
+              onClick={() => {
+                setCompactActionsOpen(false);
+                action.onClick();
+              }}
+              style={{
+                minHeight: 'var(--ds-size-touch-target, 44px)',
+                justifyContent: 'flex-start',
+              }}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </Stack>
+      </AdaptiveOverlay>
+    ) : null;
 
   // -------------------------------------------------------------------------
   // Non-premium (legacy) mode: keep old stacked layout for backward compat
@@ -1513,7 +1609,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         {usesFilterSheet && (
           <Button
             variant="secondary"
-            icon={<Filter size={15} />}
+            icon={<FilterIcon size={15} />}
             aria-label={hasActiveFilters ? `Advanced filters (${activeFilterCount})` : 'Advanced filters'}
             aria-expanded={filtersExpanded}
             aria-haspopup="dialog"
@@ -1609,7 +1705,10 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     useAtmosphericShell && resolvedHeader?.layoutVariant === 'editorial-tech',
   );
   const promotedShortcuts =
-    editorialTechMasthead && searchCommand && resolvedHeader?.shortcuts?.length
+    !usesMinimalHeader
+    && editorialTechMasthead
+    && searchCommand
+    && resolvedHeader?.shortcuts?.length
       ? resolvedHeader.shortcuts
       : undefined;
   const commandTopRailSlot = promotedShortcuts ? (
@@ -1654,7 +1753,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       {resolvedHeader && (
         <CollectionHeader
           {...resolvedHeader}
-          shortcuts={promotedShortcuts ? undefined : resolvedHeader.shortcuts}
+          compact={posture.compactHeader}
+          minimal={usesMinimalHeader}
+          quickActions={usesStickyActionContinuity ? undefined : resolvedHeader.quickActions}
+          shortcuts={usesMinimalHeader || promotedShortcuts
+            ? undefined
+            : resolvedHeader.shortcuts}
           surfaceVariant={useWorkspaceShell ? 'embedded' : resolvedHeader.surfaceVariant}
         />
       )}
@@ -1977,7 +2081,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           <Flex className="ds-collection-workspace__utilities" data-part="utilities" align="center" gap={4} style={{ flexShrink: 0 }}>
             {canToggleSelectionMode && (
               <UtilityIcon
-                icon={<CheckSquare2 size={15} />}
+                icon={<CheckSquareIcon size={15} />}
                 label={
                   selectionEnabled
                     ? `${behavior?.selection?.selectedKeys?.length ?? workspace.selectedKeys.length} selected`
@@ -2036,7 +2140,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
             {hasFilters && (
               <UtilityIcon
-                icon={<Filter size={15} />}
+                icon={<FilterIcon size={15} />}
                 label={hasActiveFilters ? `Advanced filters (${activeFilterCount})` : 'Advanced filters'}
                 active={filtersExpanded || hasActiveFilters}
                 onClick={handleFiltersToggle}
@@ -2263,44 +2367,69 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       )}
 
       {filterSheet}
+      {compactActionsSheet}
 
       {/* Sticky bottom action bar (phone posture) */}
-      {posture.actionBar === 'sticky-bottom' && primaryAction && (
-        <Box
+      {posture.actionBar === 'sticky-bottom'
+        && (primaryAction || actionOverflowItems.length > 0) && (
+        <ActionDock
+          mode="sticky"
           className="ds-surface ds-collection-workspace ds-collection-workspace__sticky-action-bar"
-          data-part="sticky-action-bar"
-          style={{
-            position: 'sticky',
-            bottom: 0,
-            padding: 'var(--ds-spacing-sm, 8px) var(--ds-spacing-md, 16px)',
-            zIndex: 10,
-          }}
+          data-testid="collection-action-dock"
+          aria-label="Collection actions"
         >
-          <Flex gap={3} justify="between" align="center">
-            {workspace.hasSelection && (
-              <Text className="ds-collection-workspace__muted-text" data-part="muted-text" size="sm" color="muted">{workspace.selectedKeys.length} selected</Text>
-            )}
-            <Box
-              as="button"
-              className="ds-collection-workspace__sticky-primary-action"
-              data-part="sticky-primary-action"
-              onClick={primaryAction.onClick}
+          {workspace.hasSelection && (
+            <Text
+              className="ds-collection-workspace__muted-text"
+              data-part="muted-text"
+              size="sm"
+              color="muted"
+              aria-live="polite"
+              style={{ flexShrink: 1, whiteSpace: 'nowrap' }}
+            >
+              {workspace.selectedKeys.length} selected
+            </Text>
+          )}
+
+          {actionOverflowItems.length > 0 && (
+            <Button
+              variant="secondary"
+              icon={<MoreHorizontalIcon aria-hidden size={18} />}
+              aria-label="More actions"
+              aria-haspopup="dialog"
+              aria-expanded={compactActionsOpen}
+              aria-controls={compactActionsId}
+              onClick={() => setCompactActionsOpen(true)}
               style={{
-                marginLeft: 'auto',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                cursor: 'pointer',
-                padding: '8px 16px',
-                fontWeight: 600,
-                fontSize: 14,
+                minHeight: 'var(--ds-size-touch-target, 44px)',
+                flex: '0 0 auto',
               }}
             >
-              {primaryAction.icon}
+              More
+            </Button>
+          )}
+
+          {primaryAction && (
+            <Button
+              variant="primary"
+              icon={primaryAction.icon}
+              disabled={primaryAction.disabled}
+              pending={primaryAction.pending ?? primaryAction.loading}
+              pendingLabel={primaryAction.pendingLabel}
+              aria-label={primaryAction.ariaLabel}
+              onClick={primaryAction.onClick}
+              className="ds-collection-workspace__sticky-primary-action"
+              style={{
+                minWidth: 0,
+                minHeight: 'var(--ds-size-touch-target, 44px)',
+                flex: '1 1 auto',
+                justifyContent: 'center',
+              }}
+            >
               {primaryAction.label}
-            </Box>
-          </Flex>
-        </Box>
+            </Button>
+          )}
+        </ActionDock>
       )}
     </>
   );

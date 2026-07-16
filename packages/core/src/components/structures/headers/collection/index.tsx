@@ -23,11 +23,11 @@
  * users, or any specific entity. All copy comes from props.
  */
 
-import { useEffect, useState, type ReactNode } from 'react';
-
-import { Keyboard } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 import { Box, Button, Flex, Text } from '../../../primitives';
+import { KeyboardIcon } from '../../../../icons';
+import { useResponsive } from '../../../../runtime/responsive';
 
 export interface CollectionHeaderQuickAction {
   key: string;
@@ -71,6 +71,16 @@ export interface CollectionHeaderProps {
   quickActions?: CollectionHeaderQuickAction[];
   /** When embedded, the header becomes visually transparent to a parent shell. */
   surfaceVariant?: 'default' | 'embedded';
+  /**
+   * Overrides the responsive layout projection. When omitted, phone and tablet
+   * device classes from `ResponsiveProvider` use the compact composition.
+   */
+  compact?: boolean;
+  /**
+   * Identity-only projection intended for constrained mobile contexts. Keeps
+   * the eyebrow and title while omitting supporting and interactive clusters.
+   */
+  minimal?: boolean;
 }
 
 export function CollectionHeader({
@@ -85,33 +95,18 @@ export function CollectionHeader({
   shortcuts,
   quickActions,
   surfaceVariant = 'default',
+  compact,
+  minimal = false,
 }: CollectionHeaderProps) {
-  const [isCompactViewport, setIsCompactViewport] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return;
-    }
-
-    const mediaQuery = window.matchMedia('(max-width: 959px)');
-    const syncViewport = () => setIsCompactViewport(mediaQuery.matches);
-    syncViewport();
-
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', syncViewport);
-      return () => mediaQuery.removeEventListener('change', syncViewport);
-    }
-
-    mediaQuery.addListener(syncViewport);
-    return () => mediaQuery.removeListener(syncViewport);
-  }, []);
+  const { isPhoneOrTablet } = useResponsive();
 
   const embedded = surfaceVariant === 'embedded';
   const useDisplayTitle = titleTreatment === 'display';
   const useDottedTitle = titleTreatment === 'dotted';
   const useMonoSubtitle = subtitleTreatment === 'mono-technical';
   const editorialTech = layoutVariant === 'editorial-tech';
-  const compactLayout = isCompactViewport;
+  const compactLayout = compact ?? isPhoneOrTablet;
+  const minimalLayout = minimal;
   const displayInk = 'var(--ds-collection-header-display-color, var(--ds-color-primary))';
   const compactMetaItems = metaItems ?? [];
   const inlineMetaItems = metaItemsPlacement === 'inline-start' ? compactMetaItems : [];
@@ -164,21 +159,27 @@ export function CollectionHeader({
     <Box
       data-part="root"
       data-embedded={embedded}
+      data-compact={compactLayout}
+      data-minimal={minimalLayout}
       className="ds-structure ds-collection-header"
       style={{
         position: 'relative',
         overflow: 'hidden',
-        padding: embedded
-          ? editorialTech
-            ? compactLayout
-              ? 'var(--ds-spacing-4, 16px) var(--ds-spacing-4, 16px) var(--ds-spacing-1, 4px)'
-              : 'var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px) var(--ds-spacing-1, 4px)'
-            : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-2, 8px)'
-          : editorialTech
-            ? compactLayout
-              ? 'var(--ds-spacing-4, 16px) var(--ds-spacing-4, 16px) var(--ds-spacing-2, 8px)'
-              : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)'
-            : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)',
+        padding: minimalLayout
+          ? embedded
+            ? 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)'
+            : 'var(--ds-spacing-3, 12px)'
+          : embedded
+            ? editorialTech
+              ? compactLayout
+                ? 'var(--ds-spacing-4, 16px) var(--ds-spacing-4, 16px) var(--ds-spacing-1, 4px)'
+                : 'var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px) var(--ds-spacing-1, 4px)'
+              : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-2, 8px)'
+            : editorialTech
+              ? compactLayout
+                ? 'var(--ds-spacing-4, 16px) var(--ds-spacing-4, 16px) var(--ds-spacing-2, 8px)'
+                : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)'
+              : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)',
       }}
     >
       <Flex
@@ -198,9 +199,10 @@ export function CollectionHeader({
                 : '1 1 clamp(280px, 38%, 460px)',
             maxWidth: compactLayout ? '100%' : editorialTech ? 680 : 560,
             display: 'grid',
-            gap: editorialTech ? 0 : undefined,
+            gap: minimalLayout ? 'var(--ds-spacing-2, 8px)' : editorialTech ? 0 : undefined,
           }}
         >
+          {minimalLayout && eyebrowChip}
           <Box
             data-part="title"
             data-title-treatment={titleTreatment}
@@ -211,15 +213,17 @@ export function CollectionHeader({
               fontFamily: useDisplayTitle
                 ? 'var(--ds-font-family-display, var(--ds-font-family-heading))'
                 : 'var(--ds-font-family-heading)',
-              fontSize: useDisplayTitle
-                ? 'clamp(42px, 5.4vw, 58px)'
-                : useDottedTitle
-                  ? compactLayout
-                    ? 'clamp(26px, 8.8vw, 34px)'
-                    : editorialTech
-                      ? 'clamp(40px, 5.2vw, 54px)'
-                      : 'clamp(38px, 4.8vw, 52px)'
-                : 'var(--ds-font-size-fluid-4xl)',
+              fontSize: minimalLayout
+                ? 'var(--ds-font-size-fluid-3xl)'
+                : useDisplayTitle
+                  ? 'clamp(42px, 5.4vw, 58px)'
+                  : useDottedTitle
+                    ? compactLayout
+                      ? 'clamp(26px, 8.8vw, 34px)'
+                      : editorialTech
+                        ? 'clamp(40px, 5.2vw, 54px)'
+                        : 'clamp(38px, 4.8vw, 52px)'
+                    : 'var(--ds-font-size-fluid-4xl)',
               fontWeight: useDisplayTitle
                 ? ('var(--ds-font-weight-semibold, 600)' as any)
                 : useDottedTitle
@@ -267,7 +271,7 @@ export function CollectionHeader({
           >
             {title}
           </Box>
-          {editorialTech && !compactLayout ? (
+          {!minimalLayout && (editorialTech && !compactLayout ? (
             <Flex
               align="start"
               gap={12}
@@ -377,8 +381,8 @@ export function CollectionHeader({
                 {subtitle}
               </Text>
             </Flex>
-          )}
-          {editorialTech && !compactLayout && (
+          ))}
+          {!minimalLayout && editorialTech && !compactLayout && (
             <Box
               data-part="editorial-tech-rule"
               style={{
@@ -390,7 +394,7 @@ export function CollectionHeader({
           )}
         </Box>
 
-        {quickActions && quickActions.length > 0 && (
+        {!minimalLayout && quickActions && quickActions.length > 0 && (
           <Box
             data-part="secondary-rail"
             style={{
@@ -517,7 +521,7 @@ export function CollectionHeader({
                         textTransform: 'uppercase' as const,
                       }}
                     >
-                      <Keyboard data-part="shortcuts-label-icon" style={{ width: 10, height: 10 }} />
+                      <KeyboardIcon data-part="shortcuts-label-icon" style={{ width: 10, height: 10 }} />
                       Shortcuts
                     </Box>
                     {shortcuts.map((shortcut) => (
@@ -545,7 +549,7 @@ export function CollectionHeader({
           </Box>
         )}
 
-        {!quickActions?.length && (eyebrowChip || compactMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
+        {!minimalLayout && !quickActions?.length && (eyebrowChip || compactMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
           <Box
             data-part="secondary-rail"
             style={{

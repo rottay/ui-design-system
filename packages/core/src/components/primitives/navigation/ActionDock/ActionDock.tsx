@@ -4,9 +4,9 @@
  * @fileoverview ActionDock - floating action bar for mobile.
  *
  * @description
- * A fixed-position container for sticky bottom (or top) action buttons on
- * mobile screens. Renders children in a horizontal Flex row with consistent
- * padding, shadow, and safe area insets for notched devices.
+ * A fixed or sticky container for bottom (or top) action buttons on mobile
+ * screens. Renders children in a horizontal Flex row with tokenized padding,
+ * shadow, stacking, and safe area insets for notched devices.
  *
  * Engine-agnostic: composes DS primitives (Box, Flex) which resolve
  * through the engine system themselves.
@@ -24,8 +24,6 @@
  * @package @rottay/design-system
  */
 
-import type { CSSProperties } from 'react';
-
 import { Box } from '../../layout/Box';
 import { Flex } from '../../layout/Flex';
 
@@ -36,55 +34,36 @@ import type { ActionDockProps } from './ActionDock.types';
 // ---------------------------------------------------------------------------
 
 /**
- * Floating action bar for mobile sticky bottom (or top) actions.
+ * Action bar for fixed or sticky mobile bottom (or top) actions.
  *
  * Renders children (typically Button components) in a horizontal Flex row
- * with 16px horizontal padding, shadow, and safe area padding.
+ * with tenant-tokenizable spacing, shadow, stacking, and safe area padding.
  */
 export function ActionDock({
   children,
   position = 'bottom',
+  mode = 'fixed',
+  id,
+  className,
+  'data-testid': dataTestId = 'action-dock',
+  'aria-label': ariaLabel,
   style,
 }: ActionDockProps) {
-  const isBottom = position === 'bottom';
-
-  const containerStyle: CSSProperties = {
-    position: 'fixed',
-    left: 0,
-    right: 0,
-    width: '100%',
-    paddingLeft: 16,
-    paddingRight: 16,
-    zIndex: 39,
-    ...(isBottom
-      ? {
-          bottom: 0,
-          paddingTop: 12,
-          paddingBottom: `max(12px, env(safe-area-inset-bottom, 12px))`,
-        }
-      : {
-          top: 0,
-          paddingTop: `max(12px, env(safe-area-inset-top, 12px))`,
-          paddingBottom: 12,
-        }),
-    ...style,
-  };
+  const rootClassName = ['rottay-action-dock', className].filter(Boolean).join(' ');
 
   return (
     <Box
-      className="rottay-action-dock"
-      style={containerStyle}
-      data-testid="action-dock"
+      id={id}
+      className={rootClassName}
+      style={style}
+      data-testid={dataTestId}
       role="toolbar"
-      aria-label={`${position === 'top' ? 'Top' : 'Bottom'} actions`}
+      aria-label={ariaLabel ?? `${position === 'top' ? 'Top' : 'Bottom'} actions`}
       data-part="root"
       data-placement={position}
+      data-mode={mode}
     >
-      <Flex
-        gap={12}
-        align="center"
-        style={{ width: '100%' }}
-      >
+      <Flex className="rottay-action-dock__actions" align="center">
         {children}
       </Flex>
     </Box>

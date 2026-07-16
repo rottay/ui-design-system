@@ -319,6 +319,7 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
           titleTreatment="dotted"
           subtitle="All active candidates"
           layoutVariant="editorial-tech"
+          compact={false}
           metaItems={[
             { key: 'a', label: '12 active', tone: 'primary' },
             { key: 'b', label: '3 flagged', tone: 'success' },

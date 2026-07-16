@@ -1,135 +1,130 @@
 /**
- * ActionDock Tests
- * Colocated with component following approved architecture
+ * ActionDock behavior and skin contract tests.
  */
 
 import React from 'react';
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe, expect, it } from 'vitest';
+
+import {
+  renderWithEngine,
+  STABLE_ENGINES,
+} from '../../../../../_internal/testing/helpers/engine-test-utils';
 import { ActionDock } from '../';
 
-vi.mock('../../../../../runtime/engines/factory', () => ({
-  createEngineComponent: () => {
-    const MockActionDock = ({ children, position = 'bottom', style }: any) => {
-      const isBottom = position === 'bottom';
-      const containerStyle: React.CSSProperties = {
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        width: '100%',
-        zIndex: 39,
-        ...(isBottom ? { bottom: 0 } : { top: 0 }),
-        ...style,
-      };
-      return (
-        <div
-          style={containerStyle}
-          data-testid="action-dock"
-          role="toolbar"
-          aria-label={`${position === 'top' ? 'Top' : 'Bottom'} actions`}
-        >
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center', width: '100%' }}>
-            {children}
-          </div>
-        </div>
-      );
-    };
-    MockActionDock.displayName = 'ActionDock';
-    return MockActionDock;
-  },
-}));
+const ACTION_DOCK_SKIN = readFileSync(
+  join(__dirname, '../../../../../tokens/css/components/skin/action-dock.css'),
+  'utf8',
+);
+const COLLECTION_WORKSPACE_SKIN = readFileSync(
+  join(__dirname, '../../../../../tokens/css/components/skin/collection-workspace.css'),
+  'utf8',
+);
 
 describe('ActionDock', () => {
-  it('renders correctly', () => {
-    render(
-      <ActionDock>
-        <button>Action</button>
+  it.each(STABLE_ENGINES)(
+    'renders the real component as a fixed bottom dock under %s',
+    async (engine) => {
+      const { findByTestId } = renderWithEngine(
+        <ActionDock>
+          <button type="button">Save</button>
+        </ActionDock>,
+        engine,
+      );
+
+      const dock = await findByTestId('action-dock');
+      expect(dock).toHaveAttribute('role', 'toolbar');
+      expect(dock).toHaveAttribute('aria-label', 'Bottom actions');
+      expect(dock).toHaveAttribute('data-part', 'root');
+      expect(dock).toHaveAttribute('data-placement', 'bottom');
+      expect(dock).toHaveAttribute('data-mode', 'fixed');
+      expect(dock).toHaveTextContent('Save');
+    },
+  );
+
+  it('supports a sticky top dock without stamping global horizontal offsets inline', async () => {
+    const { findByTestId } = renderWithEngine(
+      <ActionDock position="top" mode="sticky">
+        <button type="button">Continue</button>
       </ActionDock>,
+      'modern',
     );
-    expect(screen.getByTestId('action-dock')).toBeInTheDocument();
+
+    const dock = await findByTestId('action-dock');
+    expect(dock).toHaveAttribute('data-placement', 'top');
+    expect(dock).toHaveAttribute('data-mode', 'sticky');
+    expect(dock).toHaveAttribute('aria-label', 'Top actions');
+    expect(dock.style.left).toBe('');
+    expect(dock.style.right).toBe('');
   });
 
-  it('renders children', () => {
-    render(
-      <ActionDock>
-        <button data-testid="action-btn-1">Save</button>
-        <button data-testid="action-btn-2">Cancel</button>
+  it('forwards custom root attributes and merges the custom class and style', async () => {
+    const { findByTestId } = renderWithEngine(
+      <ActionDock
+        id="candidate-actions"
+        className="candidate-actions"
+        data-testid="candidate-action-dock"
+        aria-label="Candidate actions"
+        style={{ background: 'green' }}
+      >
+        <button type="button">Shortlist</button>
       </ActionDock>,
+      'rustic',
     );
-    expect(screen.getByTestId('action-btn-1')).toBeInTheDocument();
-    expect(screen.getByTestId('action-btn-2')).toBeInTheDocument();
+
+    const dock = await findByTestId('candidate-action-dock');
+    expect(dock).toHaveAttribute('id', 'candidate-actions');
+    expect(dock).toHaveClass('rottay-action-dock', 'candidate-actions');
+    expect(dock).toHaveAttribute('aria-label', 'Candidate actions');
+    expect(dock).toHaveStyle({ background: 'green' });
   });
 
-  it('positions at bottom by default', () => {
-    render(
-      <ActionDock>
-        <button>Save</button>
-      </ActionDock>,
+  it('keeps layout, stacking, spacing, and safe areas tenant-tokenizable', () => {
+    expect(ACTION_DOCK_SKIN).toContain(
+      'var(--ds-action-dock-z-index, var(--ds-z-index-fixed, 1200))',
     );
-    const dock = screen.getByTestId('action-dock');
-    expect(dock).toHaveStyle({ position: 'fixed', bottom: '0' });
+    expect(ACTION_DOCK_SKIN).toContain(
+      'var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100))',
+    );
+    expect(ACTION_DOCK_SKIN).toContain(
+      'var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem))',
+    );
+    expect(ACTION_DOCK_SKIN).toContain(
+      'var(--ds-action-dock-gap, var(--ds-spacing-3, 0.75rem))',
+    );
+    expect(ACTION_DOCK_SKIN).toContain(
+      'var(--ds-action-dock-safe-area-bottom, env(safe-area-inset-bottom, 0px))',
+    );
+    expect(ACTION_DOCK_SKIN).toContain(
+      'var(--ds-action-dock-safe-area-top, env(safe-area-inset-top, 0px))',
+    );
   });
 
-  it('positions at top when position="top"', () => {
-    render(
-      <ActionDock position="top">
-        <button>Save</button>
-      </ActionDock>,
-    );
-    const dock = screen.getByTestId('action-dock');
-    expect(dock).toHaveStyle({ position: 'fixed', top: '0' });
+  it('limits global horizontal anchoring to fixed mode', () => {
+    const fixedRule = ACTION_DOCK_SKIN.match(
+      /\[data-mode='fixed'\]\s*\{([^}]*)\}/,
+    )?.[1];
+    const stickyRule = ACTION_DOCK_SKIN.match(
+      /\[data-mode='sticky'\]\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(fixedRule).toContain('inset-inline: 0');
+    expect(stickyRule).not.toMatch(/inset-inline|\bleft\b|\bright\b/);
   });
 
-  it('has z-index 39 (below BottomTabBar)', () => {
-    render(
-      <ActionDock>
-        <button>Save</button>
-      </ActionDock>,
+  it('keeps collection integration selectors aligned with composed component anatomy', () => {
+    expect(COLLECTION_WORKSPACE_SKIN).toContain(
+      '.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode=\'sticky\']',
     );
-    const dock = screen.getByTestId('action-dock');
-    expect(dock).toHaveStyle({ zIndex: '39' });
-  });
-
-  it('has toolbar role for accessibility', () => {
-    render(
-      <ActionDock>
-        <button>Save</button>
-      </ActionDock>,
+    expect(COLLECTION_WORKSPACE_SKIN).toContain(
+      '.rottay-button.ds-collection-workspace__sticky-primary-action',
     );
-    expect(screen.getByRole('toolbar')).toBeInTheDocument();
-  });
-
-  it('has appropriate aria-label based on position', () => {
-    const { rerender } = render(
-      <ActionDock>
-        <button>Save</button>
-      </ActionDock>,
+    expect(COLLECTION_WORKSPACE_SKIN).not.toContain(
+      "[data-part='sticky-action-bar']",
     );
-    expect(screen.getByRole('toolbar')).toHaveAttribute('aria-label', 'Bottom actions');
-
-    rerender(
-      <ActionDock position="top">
-        <button>Save</button>
-      </ActionDock>,
+    expect(COLLECTION_WORKSPACE_SKIN).not.toContain(
+      "[data-part='sticky-primary-action']",
     );
-    expect(screen.getByRole('toolbar')).toHaveAttribute('aria-label', 'Top actions');
-  });
-
-  it('merges custom style', () => {
-    render(
-      <ActionDock style={{ background: 'green' }}>
-        <button>Save</button>
-      </ActionDock>,
-    );
-    expect(screen.getByTestId('action-dock')).toHaveStyle({ background: 'green' });
-  });
-
-  it('renders single child correctly', () => {
-    render(
-      <ActionDock>
-        <button data-testid="single-action">Confirm</button>
-      </ActionDock>,
-    );
-    expect(screen.getByTestId('single-action')).toBeInTheDocument();
   });
 });

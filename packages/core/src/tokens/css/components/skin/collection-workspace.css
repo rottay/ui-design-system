@@ -268,12 +268,12 @@
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar[data-part='sticky-action-bar'] {
+.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode='sticky'] {
   background: var(--ds-color-bg-primary);
   border-top: 1px solid var(--ds-color-border-secondary);
 }
 
-.ds-surface.ds-collection-workspace .ds-collection-workspace__sticky-primary-action[data-part='sticky-primary-action'] {
+.ds-surface.ds-collection-workspace .rottay-button.ds-collection-workspace__sticky-primary-action {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary, #fff);
   border: none;

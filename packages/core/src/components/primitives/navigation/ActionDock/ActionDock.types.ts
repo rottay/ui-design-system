@@ -14,9 +14,9 @@ import type { ReactNode, CSSProperties } from 'react';
  * Props interface for the ActionDock component.
  *
  * @description
- * A floating action container that sticks to the bottom (or top) of the
- * viewport for mobile action buttons. Renders children (typically Buttons)
- * in a horizontal row with consistent padding and safe area insets.
+ * A floating action container that anchors to the viewport or sticks within
+ * its layout container. Renders children (typically Buttons) in a horizontal
+ * row with tokenized padding and safe area insets.
  *
  * @example
  * ```tsx
@@ -31,6 +31,19 @@ export interface ActionDockProps {
   children: ReactNode;
   /** Position of the dock on the viewport. @default 'bottom' */
   position?: 'bottom' | 'top';
+  /**
+   * Positioning strategy. Fixed docks attach to the viewport; sticky docks
+   * stay in their layout container. @default 'fixed'
+   */
+  mode?: 'fixed' | 'sticky';
+  /** Optional DOM id for the dock root. */
+  id?: string;
+  /** Additional CSS class appended to the dock root. */
+  className?: string;
+  /** Test id for the dock root. @default 'action-dock' */
+  'data-testid'?: string;
+  /** Accessible name for the toolbar. Defaults to a placement-aware label. */
+  'aria-label'?: string;
   /** Additional inline styles merged with the dock container. */
   style?: CSSProperties;
 }
@@ -40,4 +53,5 @@ export interface ActionDockProps {
  */
 export const ACTION_DOCK_DEFAULTS: Partial<ActionDockProps> = {
   position: 'bottom',
+  mode: 'fixed',
 };

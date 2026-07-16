@@ -4,7 +4,7 @@
 
 import { describe, expect, it, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import React from 'react';
 import { useCollectionWorkspace } from '../../../../foundation/hooks/useCollectionWorkspace';
 import { CollectionWorkspaceSurface } from '../index';
@@ -602,6 +602,371 @@ describe('CollectionWorkspaceSurface', () => {
       'false',
     );
     expect(screen.queryByRole('button', { name: 'Advanced filters (1)' })).not.toBeInTheDocument();
+  });
+
+  // -------------------------------------------------------------------------
+  // Adaptive compact header and action continuity
+  // -------------------------------------------------------------------------
+
+  it('projects phone chrome into a minimal header and one compact action dock', async () => {
+    const onAddCandidate = vi.fn();
+    const onRunMatching = vi.fn();
+    const onExport = vi.fn();
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Candidates',
+              subtitle: 'Search, compare, and move candidates through the funnel.',
+              metaItems: [{ key: 'active', label: '3 active' }],
+              shortcuts: [{ key: 'search', label: 'Press / to search' }],
+              quickActions: [
+                {
+                  key: 'add-candidate',
+                  label: 'Add candidate',
+                  onClick: onAddCandidate,
+                  variant: 'primary',
+                },
+                {
+                  key: 'matching',
+                  label: 'Run matching',
+                  onClick: onRunMatching,
+                },
+                {
+                  key: 'export',
+                  label: 'Export candidates',
+                  onClick: onExport,
+                },
+              ],
+            },
+            adaptive: {
+              desktop: { compactHeader: false, actionBar: 'inline' },
+              phone: { compactHeader: true, actionBar: 'sticky-bottom' },
+            },
+            primaryAction: {
+              key: 'add-candidate',
+              label: 'Add candidate',
+              onClick: onAddCandidate,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const header = container.querySelector<HTMLElement>('.ds-collection-header');
+    expect(header).not.toBeNull();
+    expect(header).toHaveAttribute('data-compact', 'true');
+    expect(header).toHaveAttribute('data-minimal', 'true');
+    expect(within(header!).getByText('People')).toBeInTheDocument();
+    expect(within(header!).getByText('Candidates')).toBeInTheDocument();
+    expect(within(header!).queryByText(/Search, compare/)).not.toBeInTheDocument();
+    expect(within(header!).queryByText('3 active')).not.toBeInTheDocument();
+    expect(within(header!).queryByText('Press / to search')).not.toBeInTheDocument();
+    expect(header!.querySelector('[data-part="secondary-rail"]')).not.toBeInTheDocument();
+
+    const dock = await screen.findByTestId('collection-action-dock');
+    expect(dock).toHaveAttribute('role', 'toolbar');
+    expect(dock).toHaveAttribute('aria-label', 'Collection actions');
+    expect(dock).toHaveAttribute('data-part', 'root');
+    expect(dock).toHaveAttribute('data-mode', 'sticky');
+    expect(screen.getAllByRole('button', { name: 'Add candidate' })).toHaveLength(1);
+    expect(within(dock).getByRole('button', { name: 'Add candidate' }))
+      .toHaveClass('ds-collection-workspace__sticky-primary-action');
+
+    const moreTrigger = within(dock).getByRole('button', { name: 'More actions' });
+    expect(moreTrigger).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(moreTrigger).toHaveAttribute('aria-expanded', 'false');
+    const controlledId = moreTrigger.getAttribute('aria-controls');
+    expect(controlledId).toBeTruthy();
+    fireEvent.click(moreTrigger);
+
+    const dialog = await screen.findByRole('dialog', { name: 'More actions' });
+    expect(dialog).toHaveAttribute('id', controlledId);
+    expect(moreTrigger).toHaveAttribute('aria-expanded', 'true');
+    expect(within(dialog).queryByRole('button', { name: 'Add candidate' })).not.toBeInTheDocument();
+    expect(within(dialog).getByRole('button', { name: 'Export candidates' })).toBeInTheDocument();
+
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Run matching' }));
+    expect(onRunMatching).toHaveBeenCalledTimes(1);
+    expect(onAddCandidate).not.toHaveBeenCalled();
+    expect(onExport).not.toHaveBeenCalled();
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'More actions' })).not.toBeInTheDocument());
+    expect(moreTrigger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('keeps sticky action continuity independent from header compactness', async () => {
+    const onCreate = vi.fn();
+    const onExport = vi.fn();
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Candidates',
+              subtitle: 'Candidate pipeline',
+              quickActions: [
+                { key: 'create', label: 'Create candidate', onClick: onCreate },
+                { key: 'export', label: 'Export candidates', onClick: onExport },
+              ],
+            },
+            adaptive: {
+              phone: { compactHeader: false, actionBar: 'sticky-bottom' },
+            },
+            primaryAction: {
+              key: 'create',
+              label: 'Create candidate',
+              onClick: onCreate,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const header = container.querySelector<HTMLElement>('.ds-collection-header');
+    expect(header).toHaveAttribute('data-minimal', 'false');
+    expect(within(header!).getByText('Candidate pipeline')).toBeInTheDocument();
+    expect(within(header!).queryByRole('button')).not.toBeInTheDocument();
+
+    const dock = await screen.findByTestId('collection-action-dock');
+    expect(within(dock).getByRole('button', { name: 'Create candidate' })).toBeInTheDocument();
+    expect(within(dock).getByRole('button', { name: 'More actions' })).toBeInTheDocument();
+  });
+
+  it('de-duplicates compact secondary actions by handler or normalized label when no primary key exists', async () => {
+    const onPrimary = vi.fn();
+    const onLabelDuplicate = vi.fn();
+    const onSecondary = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Candidates',
+              subtitle: 'Candidate pipeline',
+              quickActions: [
+                {
+                  key: 'handler-copy',
+                  label: 'Duplicate by handler',
+                  onClick: onPrimary,
+                },
+                {
+                  key: 'label-copy',
+                  label: '  ADD   CANDIDATE  ',
+                  onClick: onLabelDuplicate,
+                },
+                {
+                  key: 'secondary',
+                  label: 'Compare candidates',
+                  onClick: onSecondary,
+                },
+              ],
+            },
+            adaptive: {
+              phone: { compactHeader: true, actionBar: 'sticky-bottom' },
+            },
+            primaryAction: {
+              label: 'Add candidate',
+              onClick: onPrimary,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'More actions' }));
+    const dialog = await screen.findByRole('dialog', { name: 'More actions' });
+
+    expect(within(dialog).queryByRole('button', { name: 'Duplicate by handler' })).not.toBeInTheDocument();
+    expect(within(dialog).queryByRole('button', { name: /add\s+candidate/i })).not.toBeInTheDocument();
+    expect(within(dialog).getByRole('button', { name: 'Compare candidates' })).toBeInTheDocument();
+
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Compare candidates' }));
+    expect(onSecondary).toHaveBeenCalledTimes(1);
+    expect(onPrimary).not.toHaveBeenCalled();
+    expect(onLabelDuplicate).not.toHaveBeenCalled();
+  });
+
+  it('treats stable action keys as authoritative before handler or label fallbacks', async () => {
+    const onPrimary = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Candidates',
+              subtitle: 'Candidate pipeline',
+              quickActions: [
+                {
+                  key: 'same-handler-different-key',
+                  label: 'Same handler, different action',
+                  onClick: onPrimary,
+                },
+                {
+                  key: 'same-label-different-key',
+                  label: 'Add candidate',
+                  onClick: vi.fn(),
+                },
+                {
+                  key: 'create',
+                  label: 'Duplicate by stable key',
+                  onClick: vi.fn(),
+                },
+              ],
+            },
+            adaptive: {
+              phone: { compactHeader: true, actionBar: 'sticky-bottom' },
+            },
+            primaryAction: {
+              key: 'create',
+              label: 'Add candidate',
+              onClick: onPrimary,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'More actions' }));
+    const dialog = await screen.findByRole('dialog', { name: 'More actions' });
+
+    expect(within(dialog).getByRole('button', { name: 'Same handler, different action' })).toBeInTheDocument();
+    expect(within(dialog).getByRole('button', { name: 'Add candidate' })).toBeInTheDocument();
+    expect(within(dialog).queryByRole('button', { name: 'Duplicate by stable key' })).not.toBeInTheDocument();
+  });
+
+  it('does not reopen the overflow sheet when actions disappear and later return', async () => {
+    let setOverflowVisible: React.Dispatch<React.SetStateAction<boolean>> = () => undefined;
+
+    function DynamicActionsHarness() {
+      const [overflowVisible, updateOverflowVisible] = React.useState(true);
+      setOverflowVisible = updateOverflowVisible;
+
+      return (
+        <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+          <CollectionWorkspaceSurface
+            {...buildProps({
+              header: {
+                eyebrow: 'People',
+                title: 'Candidates',
+                subtitle: 'Candidate pipeline',
+                quickActions: overflowVisible
+                  ? [{ key: 'export', label: 'Export candidates', onClick: vi.fn() }]
+                  : [],
+              },
+              adaptive: {
+                phone: { compactHeader: true, actionBar: 'sticky-bottom' },
+              },
+            })}
+          />
+        </ResponsiveContext.Provider>
+      );
+    }
+
+    renderSurface(<DynamicActionsHarness />);
+    fireEvent.click(await screen.findByRole('button', { name: 'More actions' }));
+    expect(await screen.findByRole('dialog', { name: 'More actions' })).toBeInTheDocument();
+
+    act(() => setOverflowVisible(false));
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'More actions' })).not.toBeInTheDocument();
+    });
+
+    act(() => setOverflowVisible(true));
+    expect(await screen.findByRole('button', { name: 'More actions' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    expect(screen.queryByRole('dialog', { name: 'More actions' })).not.toBeInTheDocument();
+  });
+
+  it('forwards disabled, loading, and accessible-name state to the compact primary action', async () => {
+    const onCreate = vi.fn();
+
+    renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Candidates',
+              subtitle: 'Candidate pipeline',
+            },
+            adaptive: {
+              phone: { compactHeader: true, actionBar: 'sticky-bottom' },
+            },
+            primaryAction: {
+              label: 'Add candidate',
+              onClick: onCreate,
+              disabled: true,
+              loading: true,
+              ariaLabel: 'Create candidate securely',
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const primary = await screen.findByRole('button', { name: 'Create candidate securely' });
+    expect(primary).toBeDisabled();
+    expect(primary).toHaveAttribute('aria-busy', 'true');
+    fireEvent.click(primary);
+    expect(onCreate).not.toHaveBeenCalled();
+  });
+
+  it('preserves desktop header quick actions without creating a compact action dock', async () => {
+    const onAddCandidate = vi.fn();
+    const onExport = vi.fn();
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={DESKTOP_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            header: {
+              eyebrow: 'People',
+              title: 'Candidates',
+              subtitle: 'Candidate pipeline',
+              quickActions: [
+                {
+                  key: 'add-candidate',
+                  label: 'Add candidate',
+                  onClick: onAddCandidate,
+                  variant: 'primary',
+                },
+                {
+                  key: 'export',
+                  label: 'Export candidates',
+                  onClick: onExport,
+                },
+              ],
+            },
+            adaptive: {
+              desktop: { compactHeader: false, actionBar: 'inline' },
+              phone: { compactHeader: true, actionBar: 'sticky-bottom' },
+            },
+            primaryAction: {
+              key: 'add-candidate',
+              label: 'Add candidate',
+              onClick: onAddCandidate,
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const header = container.querySelector<HTMLElement>('.ds-collection-header');
+    expect(header).not.toBeNull();
+    expect(header).toHaveAttribute('data-compact', 'false');
+    expect(header).toHaveAttribute('data-minimal', 'false');
+    expect(within(header!).getByRole('button', { name: 'Add candidate' })).toBeInTheDocument();
+    expect(within(header!).getByRole('button', { name: 'Export candidates' })).toBeInTheDocument();
+    expect(screen.queryByTestId('collection-action-dock')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'More actions' })).not.toBeInTheDocument();
   });
 
   // -------------------------------------------------------------------------
