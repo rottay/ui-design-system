@@ -7,6 +7,7 @@
  */
 
 import type { TenantAppearance } from '../../contracts/themes';
+import { contrastRatio } from '../../_internal/a11y/contrast';
 import type {
   NormalizedTenantThemeAppearanceV1,
   TenantThemeArtifactV1,
@@ -799,6 +800,81 @@ function sortedVariables(variables: Record<string, string>): Record<string, stri
   return Object.fromEntries(Object.entries(variables).sort(([left], [right]) => left.localeCompare(right)));
 }
 
+const CHART_CATEGORY_TOKEN = /^--ds-chart-category-(?:[1-9]|10)$/;
+const CHART_CATEGORY_MIN_CONTRAST = 3;
+const DEFAULT_CHART_GROUNDS = {
+  light: '#FFFFFF',
+  dark: '#0C0C0E',
+} as const;
+const CHART_SURFACE_TOKENS = [
+  '--ds-color-bg-primary',
+  '--ds-color-background',
+  '--ds-color-bg',
+  '--ds-card-bg',
+  '--ds-metric-card-bg',
+  '--ds-table-bg',
+] as const;
+
+/**
+ * Guard tenant-authored categorical channels before they become chart marks.
+ * Exact duplicates are not a palette, and every supplied mark color must keep
+ * the WCAG 2.2 non-text/UI 3:1 floor against the concrete chart surfaces the
+ * same artifact emits. `auto` must remain usable before either color-scheme
+ * branch is known, so it is checked against both deterministic base grounds.
+ * Chart anatomy still supplies labels/patterns; color is never the sole cue.
+ */
+function validateCompiledChartCategories(
+  appearance: NormalizedTenantThemeAppearanceV1,
+  variables: Readonly<Record<string, string>>,
+): TenantThemeValidationIssue[] {
+  const categories = Object.entries(variables).filter(([token]) => CHART_CATEGORY_TOKEN.test(token));
+  if (categories.length === 0) return [];
+
+  const issues: TenantThemeValidationIssue[] = [];
+  const seen = new Map<string, string>();
+  for (const [token, value] of categories) {
+    const canonical = value.toUpperCase();
+    const previous = seen.get(canonical);
+    if (previous) {
+      issues.push({
+        code: 'invalid_value',
+        path: `$.visualFoundation.advanced.tokenOverrides[${JSON.stringify(token)}]`,
+        message: `Chart category duplicates ${previous}; categorical channels must be unique`,
+      });
+    } else {
+      seen.set(canonical, token);
+    }
+  }
+
+  const mode = appearance.general?.palette?.backgroundMode ?? 'light';
+  const grounds = new Set<string>();
+  if (mode === 'auto') {
+    grounds.add(DEFAULT_CHART_GROUNDS.light);
+    grounds.add(DEFAULT_CHART_GROUNDS.dark);
+  } else {
+    grounds.add(DEFAULT_CHART_GROUNDS[mode]);
+  }
+  for (const token of CHART_SURFACE_TOKENS) {
+    const value = variables[token];
+    if (value && /^#[0-9a-fA-F]{6}$/.test(value)) grounds.add(value.toUpperCase());
+  }
+
+  for (const [token, value] of categories) {
+    for (const ground of grounds) {
+      const ratio = contrastRatio(value, ground);
+      if (ratio + Number.EPSILON < CHART_CATEGORY_MIN_CONTRAST) {
+        issues.push({
+          code: 'invalid_value',
+          path: `$.visualFoundation.advanced.tokenOverrides[${JSON.stringify(token)}]`,
+          message: `Chart category contrast ${ratio.toFixed(2)}:1 on ${ground} is below ${CHART_CATEGORY_MIN_CONTRAST}:1`,
+        });
+      }
+    }
+  }
+
+  return issues;
+}
+
 function renderArtifactCss(
   selector: string,
   variables: Readonly<Record<string, string>>,
@@ -829,6 +905,8 @@ export function compileTenantThemeConfig(
 
   const normalizedAppearance = normalizeAppearance(config);
   const variables = sortedVariables(appearanceToVariables(normalizedAppearance as TenantAppearance));
+  const chartCategoryIssues = validateCompiledChartCategories(normalizedAppearance, variables);
+  if (chartCategoryIssues.length > 0) throw new TenantThemeValidationError(chartCategoryIssues);
   const compiledVariableCount = Object.keys(variables).length;
   if (compiledVariableCount > TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariables) {
     throw new TenantThemeValidationError([{

@@ -477,9 +477,13 @@ describe('closed schema and hostile input rejection', () => {
     expect(artifact.variables['--ds-color-primary-50']).toContain('color-mix(in oklch');
   });
 
-  it('admits ten color-only chart categories without opening renderer or data semantics', () => {
+  it('admits an accessible unique color-only chart palette without opening renderer or data semantics', () => {
+    const palette = [
+      '#0F766E', '#8C6D46', '#B24D3A', '#296F68', '#735838',
+      '#963F31', '#3D756F', '#7D6140', '#A04435', '#5E5A52',
+    ];
     const categories = Object.fromEntries(
-      Array.from({ length: 10 }, (_, index) => [`--ds-chart-category-${index + 1}`, '#0F766E']),
+      palette.map((color, index) => [`--ds-chart-category-${index + 1}`, color]),
     );
     const document = {
       schemaVersion: 1,
@@ -491,7 +495,7 @@ describe('closed schema and hostile input rejection', () => {
       verticalEnvelope: BITHIRE_TEST_ENVELOPE,
     });
     expect(artifact.variables['--ds-chart-category-1']).toBe('#0F766E');
-    expect(artifact.variables['--ds-chart-category-10']).toBe('#0F766E');
+    expect(artifact.variables['--ds-chart-category-10']).toBe('#5E5A52');
 
     expect(validateTenantThemeDocument({
       ...document,
@@ -505,6 +509,26 @@ describe('closed schema and hostile input rejection', () => {
         advanced: { tokenOverrides: { '--ds-chart-category-1': 'rgb(15 118 110)' } },
       },
     }).success).toBe(false);
+  });
+
+  it('rejects duplicate or low-contrast tenant chart categories at compilation', () => {
+    const compileCategories = (categories: Record<string, string>, backgroundMode: 'light' | 'dark' | 'auto' = 'light') =>
+      compileTenantThemeConfig(hydrate({
+        schemaVersion: 1,
+        mode: 'advanced',
+        visualFoundation: {
+          general: { palette: { backgroundMode } },
+          advanced: { tokenOverrides: categories },
+        },
+      }), { verticalEnvelope: BITHIRE_TEST_ENVELOPE });
+
+    expect(() => compileCategories({
+      '--ds-chart-category-1': '#0F766E',
+      '--ds-chart-category-2': '#0f766e',
+    })).toThrow(/must be unique/i);
+    expect(() => compileCategories({ '--ds-chart-category-1': '#FDFDFD' })).toThrow(/below 3:1/i);
+    expect(() => compileCategories({ '--ds-chart-category-1': '#111111' }, 'dark')).toThrow(/below 3:1/i);
+    expect(() => compileCategories({ '--ds-chart-category-1': '#767676' }, 'auto')).not.toThrow();
   });
 
   it('enforces value, field and payload caps', () => {
