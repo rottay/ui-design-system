@@ -1,5 +1,23 @@
 # @rottay/design-system
 
+## 2.19.18
+
+### Patch Changes
+
+- Add the supplier-neutral `effects` entry with a frozen, versioned catalog of eleven canonical
+  capabilities, fail-closed admission and canonical-ID-only resolution.
+- Record target tier separately from observed runtime facts; keep every lightweight effect as a
+  candidate and `ParticleField` quarantined until its final route/adoption authority certifies.
+- Pin reference-only research revisions and exact license hashes, cross-check public provenance
+  against archived evidence and refuse certification without an authorized-source ledger.
+- Harden `ParticleField` with lazy policy/viewport admission, bounded DPR/count/pixels, one global
+  RAF lease, deterministic simulation, context recovery and exact resource cleanup.
+- Share provider-scoped CSS variable resolution across charts and Canvas, including nested
+  fallbacks, cycle rejection, tenant-root isolation and live theme mutation.
+- Certify focused accessibility, SSR/hydration, hostile-input and lifecycle behavior plus packed
+  ESM/CJS/TypeScript purity; ratchet entries to 800 bytes raw and the all-export fixture to
+  5,500 bytes gzip.
+
 ## 2.19.17
 
 ### Patch Changes
