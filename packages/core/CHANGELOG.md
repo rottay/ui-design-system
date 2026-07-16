@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.21
+
+### Patch Changes
+
+- Add the closed, server-safe `TenantThemeConfig` v1 document/config contract,
+  deterministic compiler, SSR root attributes and strict vertical-envelope validation.
+- Project first-party BitHire, Evnto and Platform artifacts onto both their legacy
+  tenant roots and isolated `data-ds-root` vertical roots without cross-vertical imports.
+- Emit DB tenant overlays unlayered on the exact tenant + vertical root so validated
+  runtime themes deterministically override their static vertical baseline.
+
 ## 2.19.20
 
 ### Patch Changes
