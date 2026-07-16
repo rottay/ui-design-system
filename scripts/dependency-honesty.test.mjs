@@ -829,9 +829,11 @@ test('runtime export inventory includes the public CLI import and every CJS cond
     entry.subpath === './supplier-honesty-cli' && entry.mode === 'import' && entry.target.endsWith('.mjs')
   )));
   const fixtures = runtimeExportFixtures(manifest);
-  assert.equal(fixtures.import.length, 6);
-  assert.equal(fixtures.require.length, 5);
+  assert.equal(fixtures.import.length, 8);
+  assert.equal(fixtures.require.length, 7);
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/supplier-honesty-cli')));
+  assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts')));
+  assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts')));
 });
 
 test('offline runtime fixtures localize required packages and omit unavailable optional packages', () => {
@@ -1265,6 +1267,7 @@ test('packed-artifact prerequisite rejects missing and stale build outputs', () 
 test('live core graph has no false optional or zero-importer peer', () => {
   const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
   assert.equal(basename(collectSourceEntrypoints(manifest).get('./icons')), 'icon-entry.ts');
+  assert.equal(basename(collectSourceEntrypoints(manifest).get('./charts')), 'chart-entry.ts');
   const graph = auditCoreDependencyGraph();
   assert.deepEqual(graph.errors, []);
   assert.deepEqual(graph.report['@phosphor-icons/react'], {

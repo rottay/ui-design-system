@@ -3770,7 +3770,42 @@ export async function auditPackedArtifact(root = coreRoot) {
       `import { AreaChart, CountUp, FadeIn, ScaleIn } from ${JSON.stringify(packedManifest.name)};\n` +
       `import { CopyIcon, Icon } from ${JSON.stringify(`${packedManifest.name}/icons`)};\n` +
       `import { BrandMark, CloudServiceMark } from ${JSON.stringify(`${packedManifest.name}/marks`)};\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark);\n',
+      `import {\n` +
+      `  ChartFrame,\n` +
+      `  resolveChartProjection,\n` +
+      `  type ChartAlternateProjectionView,\n` +
+      `  type ChartDeviceClass,\n` +
+      `  type ChartFrameHeadingLevel,\n` +
+      `  type ChartFrameProps,\n` +
+      `  type ChartFrameStatus,\n` +
+      `  type ChartFullProjectionView,\n` +
+      `  type ChartMicroProjectionView,\n` +
+      `  type ChartPhoneProjectionView,\n` +
+      `  type ChartProjectionSpec,\n` +
+      `  type ChartProjectionView,\n` +
+      `  type ChartRankedRowsProjectionView,\n` +
+      `  type ChartSummaryProjectionView,\n` +
+      `  type ChartTopNProjectionView,\n` +
+      `} from ${JSON.stringify(`${packedManifest.name}/charts`)};\n` +
+      `const chartSpec = {\n` +
+      `  desktop: { mode: 'full', rendererId: 'packed.full' },\n` +
+      `  phone: { mode: 'summary', rendererId: 'packed.summary', summaryId: 'packed.total' },\n` +
+      `} satisfies ChartProjectionSpec;\n` +
+      `const chartDevice: ChartDeviceClass = 'phone';\n` +
+      `const chartView: ChartProjectionView = resolveChartProjection(chartSpec, chartDevice);\n` +
+      `const chartPhoneView: ChartPhoneProjectionView = chartSpec.phone;\n` +
+      `const chartFrameProps: Pick<ChartFrameProps, 'projection' | 'renderView' | 'title'> = {\n` +
+      `  projection: chartSpec,\n` +
+      `  renderView: (view) => view.rendererId,\n` +
+      `  title: 'Packed chart',\n` +
+      `};\n` +
+      `type PackedChartTypes = [\n` +
+      `  ChartAlternateProjectionView, ChartFrameHeadingLevel, ChartFrameStatus,\n` +
+      `  ChartFullProjectionView, ChartMicroProjectionView, ChartRankedRowsProjectionView,\n` +
+      `  ChartSummaryProjectionView, ChartTopNProjectionView,\n` +
+      `];\n` +
+      `const packedChartTypes = null as unknown as PackedChartTypes;\n` +
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, packedChartTypes);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {
@@ -3815,9 +3850,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 7 || runtimeFixtures.require.length !== 6) {
+    if (runtimeFixtures.import.length !== 8 || runtimeFixtures.require.length !== 7) {
       throw new Error(
-        `packed runtime condition inventory drifted; expected 7 import + 6 require, found ` +
+        `packed runtime condition inventory drifted; expected 8 import + 7 require, found ` +
         `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
       );
     }

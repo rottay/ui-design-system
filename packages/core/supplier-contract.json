@@ -93,6 +93,7 @@
         "Card",
         "Carousel",
         "Cascader",
+        "ChartFrame",
         "ChartTooltip",
         "ChatSurface",
         "Checkbox",
@@ -684,6 +685,7 @@
         "registerSkinPack",
         "renderVerticalArtifact",
         "resolveAccessor",
+        "resolveChartProjection",
         "resolveColumnValue",
         "resolveEngine",
         "resolveFieldAccessForRow",
@@ -835,8 +837,7 @@
       ],
       "symbols": {
         "ActionDock": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "ActiveFiltersBar": [
           "antd",
@@ -1693,8 +1694,7 @@
           "motion"
         ],
         "PatternStepWizard": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "PatternTimeline": [
           "antd"
@@ -1840,12 +1840,6 @@
         ],
         "resolveSurfaceTabsType": [
           "antd",
-          "motion"
-        ],
-        "ResponsiveContext": [
-          "motion"
-        ],
-        "ResponsiveProvider": [
           "motion"
         ],
         "Result": [
@@ -2224,12 +2218,6 @@
         "useReducedMotion": [
           "motion"
         ],
-        "useResponsive": [
-          "motion"
-        ],
-        "useResponsiveValue": [
-          "motion"
-        ],
         "useShellContext": [
           "motion"
         ],
@@ -2372,6 +2360,7 @@
         "CONTAINER_PADDINGS",
         "CONTEXTMENU_DEFAULTS",
         "Callout",
+        "ChartFrame",
         "ChartTooltip",
         "CheckboxGroup",
         "CommandRegistryProvider",
@@ -2471,6 +2460,8 @@
         "RATE_SIZE_MAP",
         "RATIO_PRESETS",
         "RadioGroup",
+        "ResponsiveContext",
+        "ResponsiveProvider",
         "ResponsiveSlot",
         "SCROLLBAR_SIZES",
         "SCROLL_AREA_DEFAULTS",
@@ -2689,6 +2680,7 @@
         "registerSkinPack",
         "renderVerticalArtifact",
         "resolveAccessor",
+        "resolveChartProjection",
         "resolveColumnValue",
         "resolveEngine",
         "resolveFieldAccessForRow",
@@ -2779,6 +2771,8 @@
         "usePulseOnChange",
         "useRegisterCommands",
         "useRegisteredShortcuts",
+        "useResponsive",
+        "useResponsiveValue",
         "useRouterState",
         "useRovingTabindex",
         "useScrollProgress",
@@ -4224,6 +4218,17 @@
         "isCloudProvider",
         "isCloudService",
         "isMarkVariant"
+      ]
+    },
+    "./charts": {
+      "exports": [
+        "ChartFrame",
+        "resolveChartProjection"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "ChartFrame",
+        "resolveChartProjection"
       ]
     },
     "./eslint": {

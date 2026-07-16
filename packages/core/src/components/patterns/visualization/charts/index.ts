@@ -54,6 +54,24 @@ export type {
 export { exportChart } from './utils';
 export type { ChartExportOptions } from './utils';
 
+// Responsive chart experience kernel
+export { ChartFrame, resolveChartProjection } from './kernel';
+export type {
+  ChartAlternateProjectionView,
+  ChartDeviceClass,
+  ChartFrameHeadingLevel,
+  ChartFrameProps,
+  ChartFrameStatus,
+  ChartFullProjectionView,
+  ChartMicroProjectionView,
+  ChartPhoneProjectionView,
+  ChartProjectionSpec,
+  ChartProjectionView,
+  ChartRankedRowsProjectionView,
+  ChartSummaryProjectionView,
+  ChartTopNProjectionView,
+} from './kernel';
+
 // Charts
 export { BarChart } from './bar-chart';
 export type { BarChartProps } from './bar-chart';

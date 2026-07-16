@@ -1,7 +1,6 @@
 'use client';
 
 import React, {
-  createContext,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -10,14 +9,15 @@ import React, {
 } from 'react';
 import { MotionConfig } from 'motion/react';
 
+import {
+  MotionContext,
+  useMotionPreference,
+  type MotionContextValue,
+} from './MotionPreference';
 import { useSystemReducedMotion } from './reduced-motion-store';
 
-export interface MotionContextValue {
-  /** Raw operating-system preference. */
-  systemPrefersReducedMotion: boolean;
-  /** Effective policy after the provider's additive override. */
-  prefersReducedMotion: boolean;
-}
+export { MotionContext, useMotionPreference };
+export type { MotionContextValue };
 
 export interface MotionProviderProps {
   children: ReactNode;
@@ -34,8 +34,6 @@ export interface MotionProviderProps {
    */
   reducedMotion?: boolean;
 }
-
-export const MotionContext = createContext<MotionContextValue | null>(null);
 
 const forcedReducedMotionProviders = new Set<symbol>();
 let attributeBeforeFirstForcedProvider: string | null | undefined;
@@ -115,15 +113,4 @@ export function MotionProvider({
       </MotionConfig>
     </MotionContext.Provider>
   );
-}
-
-/**
- * Resolve the effective preference. Outside MotionProvider it falls back to
- * the same singleton store, so standalone DS components do not create a
- * second browser listener or lose SSR safety.
- */
-export function useMotionPreference(): boolean {
-  const context = useContext(MotionContext);
-  const systemPrefersReducedMotion = useSystemReducedMotion();
-  return context?.prefersReducedMotion ?? systemPrefersReducedMotion;
 }

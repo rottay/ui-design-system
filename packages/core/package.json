@@ -35,6 +35,11 @@
       "import": "./dist/marks.js",
       "require": "./dist/marks.cjs"
     },
+    "./charts": {
+      "types": "./dist/charts.d.ts",
+      "import": "./dist/charts.js",
+      "require": "./dist/charts.cjs"
+    },
     "./styles": {
       "style": "./dist/styles.css",
       "import": "./dist/styles.css",
@@ -146,7 +151,8 @@
   "releaseSync": {
     "sourceEntrypoints": {
       "./icons": "icon-entry.ts",
-      "./marks": "mark-entry.ts"
+      "./marks": "mark-entry.ts",
+      "./charts": "chart-entry.ts"
     },
     "gateCommands": {
       "test:unit": [

@@ -43,7 +43,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 
 import { buildMinWidthQuery } from '../../hooks/responsive/breakpoints';
-import { useMotionPreference } from '../motion';
+import { useMotionPreference } from '../motion/MotionPreference';
 
 // ---------------------------------------------------------------------------
 // Types
