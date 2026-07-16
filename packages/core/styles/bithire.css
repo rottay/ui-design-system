@@ -9306,6 +9306,17 @@ html[data-tenant] .ant-drawer-mask {
   background: var(--ds-drawer-overlay-bg);
 }
 
+/* Sheet-specific mobile viewport contract. */
+.rottay-sheet-classic {
+  --ds-sheet-viewport-max-height: 85vh;
+}
+
+@supports (height: 100dvh) {
+  .rottay-sheet-classic {
+    --ds-sheet-viewport-max-height: 85dvh;
+  }
+}
+
 /* =============================================================================
    BREADCRUMB - .ant-breadcrumb
    ============================================================================= */
@@ -26602,8 +26613,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
  *
- * PORTAL: this engine does NOT portal (rustic DOES) — it renders in-tree as a
- * `position: fixed` wrapper. The scope class anchors every rule regardless.
+ * PORTAL: both production engines portal so the sheet escapes ancestor clipping.
+ * Modern uses the shared `#rottay-portal-root`; rustic portals directly to body.
+ * The scope class anchors every rule regardless of the selected container.
  *
  * SIDE: `data-placement` carries the `side` prop. The engine's radius lookup was
  * `RADIUS_BY_SIDE[side] || RADIUS_BY_SIDE.bottom`, so the BOTTOM value is the base rule
@@ -26637,6 +26649,19 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   to   { transform: translateX(0); }
 }
 
+/* ---- viewport contract ---- */
+.rottay-sheet--modern[data-part='root'] {
+  --ds-sheet-viewport-max-height: 85vh;
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .rottay-sheet--modern[data-part='root'] {
+    --ds-sheet-viewport-max-height: 85dvh;
+    height: 100dvh;
+  }
+}
+
 /* ---- backdrop ---- */
 .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent);
@@ -26649,6 +26674,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-3);
   border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+}
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='bottom'] {
+  padding-bottom: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'] {
   border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
@@ -26686,6 +26714,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-primary);
 }
 
+/* ---- scroll anatomy ---- */
+.rottay-sheet--modern[data-part='root'] [data-part='body'] {
+  min-height: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.rottay-sheet--modern[data-part='root'] [data-part='footer'] {
+  flex-shrink: 0;
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
 /* ---- close button: the removed imperative hover becomes a :hover rule. The rustic
         engine's close button has NO hover (only a dead transition) — that asymmetry
         ships today and is preserved. ---- */
@@ -26697,6 +26736,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-sheet--modern[data-part='root'] [data-part='close-button']:hover {
   background-color: var(--ds-surface-highlight);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'],
+  .rottay-sheet--modern[data-part='root'] > [data-part='surface'] {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /**
@@ -26725,6 +26772,21 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  */
 
 /* ---- backdrop ---- */
+.rottay-sheet--rustic[data-part='root'] {
+  --ds-sheet-viewport-max-height: 85vh;
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  z-index: var(--ds-z-overlay, 1300);
+}
+
+@supports (height: 100dvh) {
+  .rottay-sheet--rustic[data-part='root'] {
+    --ds-sheet-viewport-max-height: 85dvh;
+    height: 100dvh;
+  }
+}
+
 .rottay-sheet--rustic[data-part='root'] > [data-part='backdrop'] {
   background-color: var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))));
   backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
@@ -26744,6 +26806,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-sheet--rustic[data-part='root'] > [data-part='surface'][data-placement='bottom'] {
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  padding-bottom: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 .rottay-sheet--rustic[data-part='root'] > [data-part='surface'][data-placement='left'] {
   border-top-right-radius: 16px;
@@ -26768,12 +26831,31 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-modal-title-color, inherit);
 }
 
+/* ---- scroll anatomy ---- */
+.rottay-sheet--rustic[data-part='root'] [data-part='body'] {
+  min-height: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.rottay-sheet--rustic[data-part='root'] [data-part='footer'] {
+  flex-shrink: 0;
+  border-top: 1px solid var(--ds-modal-header-border, var(--ds-color-neutral-200));
+}
+
 /* ---- close button: resting chrome only; this engine has no hover state ---- */
 .rottay-sheet--rustic[data-part='root'] [data-part='close-button'] {
   border: none;
   background: transparent;
   border-radius: 4px;
   color: var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #6b7280));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-sheet--rustic[data-part='root'] > [data-part='backdrop'],
+  .rottay-sheet--rustic[data-part='root'] > [data-part='surface'] {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /**
@@ -43023,6 +43105,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-surface.ds-stale-banner > [data-part='description'][data-part='description'][data-part='description'] {
   color: inherit;
+}
+
+.ds-surface.ds-capability-anatomy [data-part='capability'] {
+  border: 1px solid var(--ds-color-border, currentColor);
+  border-radius: var(--ds-radius-md, 8px);
 }
 
 /**
