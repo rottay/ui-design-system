@@ -1,5 +1,12 @@
 # @rottay/design-system
 
+## 2.19.23
+
+### Patch Changes
+
+- Regenerate the published supplier contract so the root and server entries
+  declare every TenantTheme compiler v2 export consumed by certified apps.
+
 ## 2.19.22
 
 ### Patch Changes
