@@ -486,6 +486,26 @@ DS-IMP-106/110 completion claim or source-item transition.
 - **Execution control** — Return every route to the shared static fallback and never restore high-intensity exposure before WO-CRA-15. Telemetry: route inventory, kill-switch state, live mounts, fallback activation and lazy-chunk presence. Stop on any bypass, Canvas/RAF work, absent/unlabelled fallback or false source completion.
 - **Do NOT** — Do not harden the runtime here, count Stage A as DS-IMP-106 completion, enable WebGPU, or add ambient Three scenes in Wave 0.
 
+### WO-CRA-16 Semantic Icon v2 and BitHire Global Search canary
+- **Source IDs / phase** — Supports DS-IMP-090 and DS-IMP-091 in Phase 0; it has no final source authority. WO-CRA-17 remains the only completion authority for both source items.
+- **Depends on** — WO-GAT-05 and WO-GAT-06.
+- **Outcome** — The additive Semantic Icon v2 corpus and BitHire Global Search consume supplier-free semantic names through `Icon`, while `BrandMark` and `CloudServiceMark` remain separate asset classes and every existing compatibility path keeps working.
+- **Steps** — Add the bounded navigation/job/offer semantics to the canonical registry, provenance ledger and Phosphor SSR adapter; migrate only BitHire's shared Global Search canary; add focused architecture coverage that rejects direct supplier use and supplier-shaped DS aliases in that surface.
+- **Acceptance gate** — Registry, provenance and adapter are one-to-one and duplicate-free; every v2 semantic name server-renders with supplier-free public props; Global Search resolves every migrated result/action through `Icon`; focused DS SSR/API tests plus the BitHire architecture contract pass. Completing this WO leaves DS-IMP-090 and DS-IMP-091 open.
+- **Execution control** — Roll back only the additive names or the Global Search consumer and retain the established facade/compatibility aliases. Telemetry: semantic-name coverage, unknown-name failures, SSR output and direct-supplier paths in the canary. Stop on a public supplier type, missing provenance, inaccessible output, unresolved name or false source completion.
+- **Do NOT** — Do not claim the supplier bakeoff, `FeaturePictogram`, fleet migration, vertical recipes, signature glyphs or DS-IMP-093 here; do not remove Lucide compatibility aliases in this milestone.
+
+## DS improvements — Phase 2B final authority
+
+### WO-CRA-17 Icon supplier decision and semantic asset facades
+- **Source IDs / phase** — DS-IMP-090 and DS-IMP-091; Phase 2B final authority.
+- **Depends on** — WO-GAT-05, WO-GAT-06 and WO-CRA-16. Phase 2B must also be explicitly open.
+- **Outcome** — A timeboxed Hugeicons Pro versus Phosphor decision is reproducible and licensed for Rottay's internal distribution model, and the public `Icon`, `BrandMark`, `CloudServiceMark` and `FeaturePictogram` facades fully separate functional, brand/provider and large illustrative assets without leaking supplier types.
+- **Steps** — Run the canonical 40-icon bakeoff across roles, vertical grammars, supported engines, 12–24px, light/dark and mobile; obtain the required written Hugeicons build/distribution terms or retain Phosphor at the deadline; complete the four facades, registries/codegen, pinned provenance, offline adapters and accessible renderer contracts; keep compatibility aliases for one minor.
+- **Acceptance gate** — The decision ledger covers license/internal distribution, hermetic CI, visual/optical results, SSR/RSC, build, tree-shaking and measured one-icon bundle output; Hugeicons builds make zero `npm.hugeicons.com` calls or the decision records Phosphor fallback. Public types and packed ESM/CJS remain supplier-free; all four facades pass semantic-name, decorative/named, SSR/hydration, RTL, forced-colors, variant/optical fallback, provenance and asset-class separation tests across the certified matrix.
+- **Execution control** — Retain the prior certified adapter and one-minor compatibility aliases; disable one supplier or asset-class adapter independently without conflating functional icons, marks and pictograms. Telemetry: unmapped names, direct supplier paths, per-entry bundle retention, SSR/RSC failures, accessible-name failures and provenance coverage. Stop on absent written distribution rights, network-dependent builds, supplier leakage, asset-class conflation, inaccessible SVG output or an uncertified optical variant.
+- **Do NOT** — Do not absorb DS-IMP-092 fleet migration or DS-IMP-093 vertical recipes/signature glyphs into this authority; do not treat a canary, package publish or supplier fallback alone as completion.
+
 ## DS improvements — Phase 2C final authority
 
 ### WO-CRA-15 ParticleField and Canvas/WebGL hardening

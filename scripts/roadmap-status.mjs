@@ -75,7 +75,7 @@ const DS_IMPROVEMENTS_PHASE_INDEX = new Map(
 // Adjudicated program-plan lock. Mutable status/evidence/review dates are
 // deliberately excluded; trace mapping and mapped-WO topology changes require
 // a reviewed code+registry update when the owner opens the next wave.
-const DS_IMPROVEMENTS_PLAN_SHA256 = "a0c8e535906ffdee05f120b16b7685b1d30226e46d8eef5be9bd179ecc240291";
+const DS_IMPROVEMENTS_PLAN_SHA256 = "ebcbfab3121da368f8279a0573a552c6d4142880cb2f5d055c93eec65ecce752";
 const DS_IMPROVEMENTS_SOURCE_REVISION = "969205380fd24eb45947bf3748db5a6cacd798f8";
 const DS_IMPROVEMENTS_DOC_ROOT = path.resolve(
   ROOT,

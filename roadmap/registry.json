@@ -2506,6 +2506,116 @@
      "a recorded performance or resource budget is exceeded"
     ]
    }
+  },
+  {
+   "id": "WO-CRA-16",
+   "title": "Semantic Icon v2 and BitHire Global Search canary",
+   "lane": "craft",
+   "order": 16,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [],
+   "supportsSourceIds": [
+    "DS-IMP-090",
+    "DS-IMP-091"
+   ],
+   "milestone": {
+    "id": "DS-IMP-090-091-semantic-icon-v2-global-search-canary",
+    "scope": "Extend the supplier-free Semantic Icon corpus and adopt it in BitHire Global Search without claiming the supplier decision, complete facade family or fleet migration.",
+    "completionEffect": "none",
+    "finalAuthority": "WO-CRA-17",
+    "finalPhase": "2B"
+   },
+   "phase": "0",
+   "notes": "Phase-0 support milestone only. Completion adds bounded DS and BitHire canary evidence but cannot complete DS-IMP-090 or DS-IMP-091; the full supplier decision and four-facade matrix remain WO-CRA-17 in Phase 2B. DS-IMP-093 is explicitly out of scope.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "iconography-system",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-bithire"
+    ],
+    "rollback": "Remove only the additive Semantic Icon v2 names or return BitHire Global Search to its established DS compatibility aliases while preserving the existing facade corpus.",
+    "disable": "Disable the bounded Global Search semantic-icon canary without disabling the existing Icon, BrandMark or CloudServiceMark facades.",
+    "telemetry": [
+     "semantic-name registry, provenance and adapter parity",
+     "unknown-name and SSR failures",
+     "Global Search semantic-name coverage",
+     "direct supplier or supplier-shaped alias paths in the canary"
+    ],
+    "stopConditions": [
+     "a public type exposes the supplier",
+     "a semantic name lacks provenance or an adapter",
+     "named and decorative accessibility contracts diverge",
+     "Global Search retains an ungoverned supplier path",
+     "support evidence increments DS-IMP-090 or DS-IMP-091 completion"
+    ]
+   }
+  },
+  {
+   "id": "WO-CRA-17",
+   "title": "Icon supplier decision and semantic asset facades",
+   "lane": "craft",
+   "order": 17,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06",
+    "WO-CRA-16"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-090",
+    "DS-IMP-091"
+   ],
+   "phase": "2B",
+   "notes": "Final authority for DS-IMP-090 and DS-IMP-091. WO-CRA-16 is only a Phase-0 Semantic Icon v2 and BitHire Global Search support milestone; this WO remains phase-locked until the owner opens Phase 2B. Fleet supplier migration (DS-IMP-092) and vertical recipes/signature glyphs (DS-IMP-093) remain separate authorities.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "iconography-system",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-bithire"
+    ],
+    "rollback": "Retain the prior certified supplier adapter and one-minor DS compatibility aliases while reverting an affected facade or asset class independently.",
+    "disable": "Disable one supplier or asset-class adapter to its certified fallback without conflating functional icons, brand/provider marks and feature pictograms.",
+    "telemetry": [
+     "supplier license and internal-distribution decision evidence",
+     "hermetic build network access",
+     "SSR, RSC and hydration results",
+     "one-icon and per-entry bundle retention",
+     "semantic, brand, cloud and pictogram accessibility coverage",
+     "public supplier leakage and provenance coverage"
+    ],
+    "stopConditions": [
+     "written internal-distribution rights are absent at the decision deadline",
+     "a build depends on a private registry network call",
+     "public types or packed entries expose a supplier",
+     "functional icons, marks and pictograms share an ambiguous asset contract",
+     "SSR, RTL, forced-colors or accessible naming fails",
+     "an uncertified optical variant ships"
+    ]
+   }
   }
  ],
  "traceability": {
@@ -4568,19 +4678,15 @@
     },
     {
      "id": "DS-IMP-090",
-     "disposition": "deferred",
-     "owner": "design-system-program",
-     "targetPhase": "2B",
-     "reviewBy": "2026-08-31",
-     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+     "disposition": "execute",
+     "authority": "WO-CRA-17",
+     "phase": "2B"
     },
     {
      "id": "DS-IMP-091",
-     "disposition": "deferred",
-     "owner": "design-system-program",
-     "targetPhase": "2B",
-     "reviewBy": "2026-08-31",
-     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+     "disposition": "execute",
+     "authority": "WO-CRA-17",
+     "phase": "2B"
     },
     {
      "id": "DS-IMP-092",
