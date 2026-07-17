@@ -4259,6 +4259,587 @@
         "isIconName"
       ]
     },
+    "./icons/corpus": {
+      "exports": [
+        "BITHIRE_ICON_NAMES",
+        "FOUNDATION_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "GENERATED_ICON_NAMES"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "BITHIRE_ICON_NAMES",
+        "FOUNDATION_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "GENERATED_ICON_NAMES"
+      ]
+    },
+    "./icons/foundation": {
+      "exports": [
+        "ActionAddIcon",
+        "ActionArchiveIcon",
+        "ActionAttachIcon",
+        "ActionCloseIcon",
+        "ActionConcealIcon",
+        "ActionConfirmIcon",
+        "ActionCopyIcon",
+        "ActionDeleteIcon",
+        "ActionDownloadIcon",
+        "ActionEditIcon",
+        "ActionFilterIcon",
+        "ActionOpenExternalIcon",
+        "ActionPauseIcon",
+        "ActionPlayIcon",
+        "ActionPrintIcon",
+        "ActionRedoIcon",
+        "ActionRefreshIcon",
+        "ActionRetryIcon",
+        "ActionRevealIcon",
+        "ActionSaveIcon",
+        "ActionSearchIcon",
+        "ActionShareIcon",
+        "ActionSortIcon",
+        "ActionStopIcon",
+        "ActionUndoIcon",
+        "ActionUploadIcon",
+        "ActionZoomInIcon",
+        "ActionZoomOutIcon",
+        "AiAssistantIcon",
+        "AiComputeIcon",
+        "AiGenerateIcon",
+        "AiReasoningIcon",
+        "AiSparklesIcon",
+        "AiToolIcon",
+        "AuthPasskeyIcon",
+        "AuthPasswordIcon",
+        "AuthSsoIcon",
+        "CommunicationCallIcon",
+        "CommunicationEmailIcon",
+        "CommunicationInboxIcon",
+        "CommunicationMessageIcon",
+        "CommunicationNotificationIcon",
+        "CommunicationSendIcon",
+        "CommunicationVoiceIcon",
+        "ConnectivityNetworkIcon",
+        "ContentBookmarkIcon",
+        "ContentCodeIcon",
+        "ContentDocumentIcon",
+        "ContentFileIcon",
+        "ContentFolderIcon",
+        "ContentImageIcon",
+        "ContentLinkIcon",
+        "ContentVideoIcon",
+        "DataChartIcon",
+        "DataDatabaseIcon",
+        "DataGaugeIcon",
+        "DataLineChartIcon",
+        "DataPieChartIcon",
+        "DataReportIcon",
+        "DataScatterPlotIcon",
+        "DataTableIcon",
+        "DataTrendDownIcon",
+        "DataTrendIcon",
+        "DeviceCameraIcon",
+        "DeviceDesktopIcon",
+        "DeviceMicrophoneIcon",
+        "DeviceMobileIcon",
+        "DeviceTabletIcon",
+        "EntityGroupIcon",
+        "EntityOrganizationIcon",
+        "EntityPersonIcon",
+        "EntityTagIcon",
+        "EntityTaskIcon",
+        "FOUNDATION_ICON_COMPONENTS",
+        "FOUNDATION_ICON_NAMES",
+        "FeedbackEmptyIcon",
+        "FeedbackHelpIcon",
+        "FeedbackTipIcon",
+        "FoundationIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "LayoutCardsIcon",
+        "LayoutColumnsIcon",
+        "LayoutGridIcon",
+        "LayoutHierarchyIcon",
+        "LayoutListIcon",
+        "LayoutSidebarStartIcon",
+        "LayoutTabsIcon",
+        "LocationGlobalIcon",
+        "LocationPlaceIcon",
+        "NavigationBackIcon",
+        "NavigationCollapseIcon",
+        "NavigationDownIcon",
+        "NavigationExpandIcon",
+        "NavigationForwardIcon",
+        "NavigationHomeIcon",
+        "NavigationMenuIcon",
+        "NavigationMoreIcon",
+        "NavigationProfileIcon",
+        "NavigationRouteIcon",
+        "NavigationSettingsIcon",
+        "NavigationUpIcon",
+        "StatusBlockedIcon",
+        "StatusDraftIcon",
+        "StatusErrorIcon",
+        "StatusInfoIcon",
+        "StatusLiveIcon",
+        "StatusLoadingIcon",
+        "StatusOfflineIcon",
+        "StatusPausedIcon",
+        "StatusPendingIcon",
+        "StatusScheduledIcon",
+        "StatusSecureIcon",
+        "StatusSuccessIcon",
+        "StatusSyncedIcon",
+        "StatusVerifiedIcon",
+        "StatusWarningIcon",
+        "SystemAutomationIcon",
+        "SystemCommandIcon",
+        "SystemIntegrationIcon",
+        "SystemWorkflowIcon",
+        "TimeDateIcon",
+        "TimeDeadlineIcon",
+        "TimeScheduleIcon",
+        "TimeTimestampIcon",
+        "isFoundationIconName",
+        "resolveFoundationIcon"
+      ],
+      "symbols": {
+        "ActionAddIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionArchiveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionAttachIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionCloseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionConcealIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionConfirmIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionCopyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionDeleteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionDownloadIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionEditIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionFilterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionOpenExternalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionPauseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionPlayIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionPrintIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRedoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRefreshIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRetryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRevealIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionSaveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionSearchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionShareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionSortIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionStopIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionUndoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionUploadIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionZoomInIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionZoomOutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiAssistantIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiComputeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiGenerateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiReasoningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiSparklesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiToolIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AuthPasskeyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AuthPasswordIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AuthSsoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationCallIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationEmailIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationInboxIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationMessageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationNotificationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationSendIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationVoiceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ConnectivityNetworkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentBookmarkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentCodeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentDocumentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentFileIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentFolderIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentImageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentLinkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentVideoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataDatabaseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataGaugeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataLineChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataPieChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataReportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataScatterPlotIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTableIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTrendDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTrendIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceCameraIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceDesktopIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceMicrophoneIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceMobileIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceTabletIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityGroupIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityOrganizationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityPersonIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityTagIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityTaskIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FeedbackEmptyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FeedbackHelpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FeedbackTipIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FOUNDATION_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "FoundationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isFoundationIconName": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutCardsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutColumnsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutGridIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutHierarchyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutListIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutSidebarStartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutTabsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LocationGlobalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LocationPlaceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationBackIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationCollapseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationExpandIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationForwardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationHomeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationMenuIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationMoreIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationProfileIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationRouteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationSettingsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationUpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "resolveFoundationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusBlockedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusDraftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusErrorIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusInfoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusLiveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusLoadingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusOfflineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPausedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPendingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusScheduledIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusSecureIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusSuccessIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusSyncedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusVerifiedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusWarningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemAutomationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemCommandIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemIntegrationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemWorkflowIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeDateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeDeadlineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeScheduleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeTimestampIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "FOUNDATION_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA"
+      ]
+    },
+    "./icons/bithire": {
+      "exports": [
+        "BITHIRE_ICON_COMPONENTS",
+        "BITHIRE_ICON_NAMES",
+        "BithireCandidateIcon",
+        "BithireEvidenceIcon",
+        "BithireIcon",
+        "BithireInterviewIcon",
+        "BithireJobIcon",
+        "BithireOfferIcon",
+        "BithirePipelineIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "isBithireIconName",
+        "resolveBithireIcon"
+      ],
+      "symbols": {
+        "BITHIRE_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "BithireCandidateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireEvidenceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireInterviewIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireJobIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireOfferIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithirePipelineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isBithireIconName": [
+          "@phosphor-icons/react"
+        ],
+        "resolveBithireIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "BITHIRE_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA"
+      ]
+    },
     "./marks": {
       "exports": [
         "BRAND_MARK_NAMES",
@@ -4304,6 +4885,23 @@
         "isCloudProvider",
         "isCloudService",
         "isMarkVariant"
+      ]
+    },
+    "./pictograms": {
+      "exports": [
+        "FEATURE_PICTOGRAM_CORPUS",
+        "FEATURE_PICTOGRAM_NAMES",
+        "FEATURE_PICTOGRAM_PROVENANCE",
+        "FeaturePictogram",
+        "isFeaturePictogramName"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "FEATURE_PICTOGRAM_CORPUS",
+        "FEATURE_PICTOGRAM_NAMES",
+        "FEATURE_PICTOGRAM_PROVENANCE",
+        "FeaturePictogram",
+        "isFeaturePictogramName"
       ]
     },
     "./charts": {

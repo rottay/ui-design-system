@@ -4187,9 +4187,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 15 || runtimeFixtures.require.length !== 14) {
+    if (runtimeFixtures.import.length !== 18 || runtimeFixtures.require.length !== 17) {
       throw new Error(
-        `packed runtime condition inventory drifted; expected 15 import + 14 require, found ` +
+        `packed runtime condition inventory drifted; expected 18 import + 17 require, found ` +
         `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
       );
     }
@@ -4324,8 +4324,15 @@ export function auditApps({ requireApps = false } = {}) {
 async function runCli() {
   const command = process.argv[2] ?? 'check';
   const requireApps = process.argv.includes('--require-apps');
-  if (!['check', 'static', 'apps', 'pack'].includes(command)) {
-    throw new Error(`unknown command ${command}; expected check, static, apps, or pack`);
+  if (!['check', 'static', 'apps', 'pack', 'contract'].includes(command)) {
+    throw new Error(`unknown command ${command}; expected check, static, apps, pack, or contract`);
+  }
+
+  if (command === 'contract') {
+    const contract = deriveSupplierContract();
+    writeFileSync(supplierContractPath, `${JSON.stringify(contract, null, 2)}\n`, 'utf8');
+    console.log(`dependency-honesty contract: synced ${Object.keys(contract.entrypoints).length} entrypoints`);
+    return;
   }
 
   const output = {};

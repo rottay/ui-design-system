@@ -63,10 +63,13 @@
     "roadmap:commercial:check": "node scripts/roadmap-commercial-status.mjs check",
     "cra12:check": "node packages/core/scripts/cra-12-motion-governance.mjs",
     "dependency:honesty": "pnpm run cra12:check && node scripts/dependency-honesty.mjs check --require-apps",
+    "dependency:contract:sync": "node scripts/dependency-honesty.mjs contract",
     "dependency:honesty:apps": "node scripts/dependency-honesty.mjs apps --require-apps",
     "dependency:honesty:test": "node --test scripts/dependency-honesty.test.mjs",
     "effects:provenance": "node scripts/effect-registry-audit.mjs",
-    "effects:provenance:test": "node --test scripts/effect-registry-audit.test.mjs"
+    "effects:provenance:test": "node --test scripts/effect-registry-audit.test.mjs",
+    "icons:generate": "pnpm --filter @rottay/design-system run icons:generate",
+    "icons:check": "pnpm --filter @rottay/design-system run icons:check"
   },
   "packageManager": "pnpm@9.15.9",
   "engines": {

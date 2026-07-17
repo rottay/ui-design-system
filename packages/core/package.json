@@ -30,6 +30,21 @@
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
     },
+    "./icons/corpus": {
+      "types": "./dist/icons-corpus.d.ts",
+      "import": "./dist/icons-corpus.js",
+      "require": "./dist/icons-corpus.cjs"
+    },
+    "./icons/foundation": {
+      "types": "./dist/icons-foundation.d.ts",
+      "import": "./dist/icons-foundation.js",
+      "require": "./dist/icons-foundation.cjs"
+    },
+    "./icons/bithire": {
+      "types": "./dist/icons-bithire.d.ts",
+      "import": "./dist/icons-bithire.js",
+      "require": "./dist/icons-bithire.cjs"
+    },
     "./marks": {
       "types": "./dist/marks.d.ts",
       "import": "./dist/marks.js",
@@ -157,6 +172,9 @@
   ],
   "scripts": {
     "dev": "node scripts/dev.mjs",
+    "icons:generate": "node scripts/generate-semantic-icons.mjs",
+    "icons:check": "node scripts/generate-semantic-icons.mjs --check",
+    "prebuild": "pnpm run icons:check",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css",
     "postbuild": "pnpm run cra14:check",
     "build:modern-css": "postcss src/tokens/css/engines/modern/compiled.css -o dist/modern-engine.css",
@@ -171,6 +189,7 @@
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build && node scripts/check-storybook-budget.mjs",
+    "pretypecheck": "pnpm run icons:check",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
@@ -195,6 +214,9 @@
   "releaseSync": {
     "sourceEntrypoints": {
       "./icons": "icon-entry.ts",
+      "./icons/corpus": "icon-corpus-entry.ts",
+      "./icons/foundation": "icon-foundation-entry.ts",
+      "./icons/bithire": "icon-bithire-entry.ts",
       "./marks": "mark-entry.ts",
       "./pictograms": "pictogram-entry.ts",
       "./charts": "chart-entry.ts",
