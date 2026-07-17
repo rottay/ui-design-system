@@ -120,6 +120,7 @@ export function TortureSurface({
   fixture,
   rtl,
   engine = 'modern',
+  ground,
   children,
 }: {
   fixture: TortureFixture;
@@ -131,6 +132,12 @@ export function TortureSurface({
    * which is the spec's own falsifiable test for whether modern has a signature.
    */
   engine?: ProbeEngine;
+  /**
+   * Optional capture-axis override. The fixture remains the sole owner of the
+   * tenant config; this only asks ThemeProvider to paint its light or dark
+   * presentation so probes can audit both modes without inventing a tenant.
+   */
+  ground?: 'dark' | 'light';
   children: ReactNode;
 }) {
   const tenantConfig = tortureTenantConfig(fixture);
@@ -156,7 +163,7 @@ export function TortureSurface({
   return (
     <DesignSystemProvider
       forceEngine={engine}
-      forceTheme={surfaceGroundFor(fixture)}
+      forceTheme={ground ?? surfaceGroundFor(fixture)}
       tenantConfig={tenantConfig}
       locale={rtl ? 'ar' : 'en'}
       // No `vertical` prop for ANY fixture, including rottay: a vertical
