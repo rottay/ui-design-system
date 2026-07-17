@@ -1,92 +1,30 @@
-import type { IconRole } from '..';
+import {
+  GENERATED_ICON_NAMES,
+  getGeneratedIconMetadata,
+  isGeneratedIconName,
+  type GeneratedIconMetadata,
+  type GeneratedIconName,
+} from '../../semantic/corpus/generated';
 
-/**
- * Fixed v3 semantic corpus. Names describe product meaning, never supplier glyphs.
- * Additions require an explicit corpus/version review; aliases do not belong here.
- */
-export const ICON_NAMES = [
-  'action.add',
-  'action.edit',
-  'action.delete',
-  'action.copy',
-  'action.search',
-  'action.filter',
-  'action.close',
-  'action.confirm',
-  'action.retry',
-  'action.play',
-  'action.reveal',
-  'action.conceal',
-  'navigation.home',
-  'navigation.back',
-  'navigation.forward',
-  'navigation.expand',
-  'navigation.menu',
-  'navigation.settings',
-  'navigation.profile',
-  'navigation.route',
-  'status.success',
-  'status.warning',
-  'status.error',
-  'status.info',
-  'status.loading',
-  'status.secure',
-  'status.live',
-  'communication.email',
-  'communication.message',
-  'communication.notification',
-  'communication.voice',
-  'communication.call',
-  'communication.inbox',
-  'auth.password',
-  'auth.passkey',
-  'auth.sso',
-  'data.chart',
-  'data.table',
-  'data.gauge',
-  'data.trend',
-  'ai.assistant',
-  'ai.reasoning',
-  'ai.sparkles',
-  'ai.tool',
-  'bithire.candidate',
-  'bithire.interview',
-  'bithire.pipeline',
-  'bithire.evidence',
-  'bithire.job',
-  'bithire.offer',
-] as const;
+/** Canonical semantic names, generated from the governed corpus manifest. */
+export const ICON_NAMES = GENERATED_ICON_NAMES;
 
-export type IconName = (typeof ICON_NAMES)[number];
+/** Maturity is metadata: every governed stable or candidate name is valid. */
+export type IconName = GeneratedIconName;
 
-export interface IconCorpusEntry {
+export interface IconCorpusEntry extends GeneratedIconMetadata {
+  /** Compatibility alias for the generated metadata `id`. */
   readonly name: IconName;
-  readonly role: IconRole;
-  /** Directional glyphs use CSS logical direction and never inspect document. */
-  readonly autoMirror: boolean;
-}
-
-const ICON_NAME_SET: ReadonlySet<string> = new Set(ICON_NAMES);
-const AUTO_MIRRORED_NAMES: ReadonlySet<IconName> = new Set([
-  'navigation.back',
-  'navigation.forward',
-]);
-
-function roleForName(name: IconName): IconRole {
-  if (name.startsWith('navigation.')) return 'navigation';
-  if (name.startsWith('status.')) return 'status';
-  if (name.startsWith('data.') || name.startsWith('ai.') || name.startsWith('bithire.')) {
-    return 'feature';
-  }
-  return 'control';
+  /** Compatibility alias for the generated metadata `defaultRole`. */
+  readonly role: GeneratedIconMetadata['defaultRole'];
 }
 
 /** Public, supplier-free corpus metadata for app registries and canaries. */
 export const ICON_CORPUS: readonly IconCorpusEntry[] = Object.freeze(
-  ICON_NAMES.map((name) => Object.freeze({
-    name,
-    role: roleForName(name),
-    autoMirror: AUTO_MIRRORED_NAMES.has(name),
+  ICON_NAMES.map((name) => getGeneratedIconMetadata(name)).map((metadata) => Object.freeze({
+    ...metadata,
+    name: metadata.id,
+    role: metadata.defaultRole,
   })),
 );
 
@@ -96,7 +34,7 @@ const CORPUS_BY_NAME = new Map<IconName, IconCorpusEntry>(
 
 /** Fail-closed guard for untyped JavaScript, persisted config, and host input. */
 export function isIconName(value: unknown): value is IconName {
-  return typeof value === 'string' && ICON_NAME_SET.has(value);
+  return isGeneratedIconName(value);
 }
 
 export function getIconCorpusEntry(name: IconName): IconCorpusEntry {

@@ -565,6 +565,31 @@ ${exports}
 `;
 }
 
+function generateFacadeMapModule() {
+  const packImports = ICON_PACKS
+    .map((pack) => `import { ${packConstantName(pack)}_ICON_COMPONENTS } from '../packs/${pack}';`)
+    .join('\n');
+  const packSpreads = ICON_PACKS
+    .map((pack) => `  ...${packConstantName(pack)}_ICON_COMPONENTS,`)
+    .join('\n');
+  return `${GENERATED_HEADER}import type { SemanticIconComponent } from '../../../../runtime/semantic/create-icon';
+${packImports}
+import type { GeneratedIconName } from '../../../../foundation/semantic/corpus/generated';
+
+/** Exhaustive runtime map behind the canonical Icon facade. */
+export const GENERATED_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
+${packSpreads}
+} as const satisfies Record<GeneratedIconName, SemanticIconComponent>);
+
+export function resolveGeneratedIcon(value: unknown): SemanticIconComponent | undefined {
+  return typeof value === 'string'
+    && Object.prototype.hasOwnProperty.call(GENERATED_ICON_COMPONENTS, value)
+    ? GENERATED_ICON_COMPONENTS[value as GeneratedIconName]
+    : undefined;
+}
+`;
+}
+
 function manifestFingerprint(corpus, adapter) {
   return createHash('sha256')
     .update(JSON.stringify({ corpus, adapter }))
@@ -584,6 +609,7 @@ export function buildGeneratedFiles(corpus, adapter) {
   for (const pack of ICON_PACKS) {
     files.set(`packs/${pack}.tsx`, generatePackModule(pack, corpus.entries.filter((entry) => entry.pack === pack)));
   }
+  files.set('facade-map/index.tsx', generateFacadeMapModule());
   files.set('packs/index.ts', `${GENERATED_HEADER}${ICON_PACKS.map((pack) => `export * from './${pack}';`).join('\n')}\n`);
   files.set(
     'index.ts',

@@ -78,27 +78,26 @@ test('Phosphor 2.1.10 adapter is ordered, exhaustive, and locally resolvable', a
   assert.equal(new Set(adapter.entries.map(({ exportName }) => exportName)).size, 263);
 });
 
-test('stable adapter entries preserve the current 50-name compatibility mapping', async () => {
-  const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
-  const adapter = validateAdapterManifest(await readJson(ADAPTER_PATH), corpus);
-  const source = await readFile(resolve(ICON_OWNER_ROOT, 'runtime/adapters/phosphor-ssr/index.tsx'), 'utf8');
-  const importsByExport = new Map(
-    [...source.matchAll(/^import \{ (\w+) \} from '([^']+)';$/gmu)]
-      .map((match) => [match[1], match[2]]),
-  );
-  const mappingSource = source.match(/const PHOSPHOR_GLYPHS = \{([\s\S]*?)\n\} as const/u)?.[1] ?? '';
-  const currentMapping = new Map(
-    [...mappingSource.matchAll(/^  '([^']+)': (\w+),$/gmu)]
-      .map((match) => [match[1], { exportName: match[2], module: importsByExport.get(match[2]) }]),
-  );
-  const stableEntries = adapter.entries.filter(({ id }) => EXPECTED_COMPAT_V3_IDS.includes(id));
-  assert.equal(currentMapping.size, 50);
-  assert.equal(stableEntries.length, 50);
-  for (const entry of stableEntries) {
-    assert.deepEqual(currentMapping.get(entry.id), {
-      exportName: entry.exportName,
-      module: entry.module,
-    });
+test('generated facade and role adapters derive exhaustively from the corpus manifests', async () => {
+  const { corpus, adapter } = await loadAndValidateManifests();
+  const files = buildGeneratedFiles(corpus, adapter);
+  const facade = files.get('facade-map/index.tsx');
+
+  assert.match(facade, /satisfies Record<GeneratedIconName, SemanticIconComponent>/u);
+  for (const pack of Object.keys(ICON_PACK_COUNTS)) {
+    assert.match(facade, new RegExp(`\\.\\.\\.${pack.toUpperCase()}_ICON_COMPONENTS`, 'u'));
+  }
+  assert.doesNotMatch(facade, /@phosphor|window|document|navigator/iu);
+
+  for (const [index, corpusEntry] of corpus.entries.entries()) {
+    const adapterEntry = adapter.entries[index];
+    const roleSource = files.get(`roles/${roleFileName(corpusEntry.id)}`);
+    assert.ok(
+      roleSource.includes(
+        `import { ${adapterEntry.exportName} as SsrGlyph } from ${JSON.stringify(adapterEntry.module)};`,
+      ),
+      corpusEntry.id,
+    );
   }
 });
 
@@ -107,7 +106,7 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
   const first = buildGeneratedFiles(corpus, adapter);
   const second = buildGeneratedFiles(structuredClone(corpus), structuredClone(adapter));
   assert.deepEqual([...first], [...second]);
-  assert.equal(first.size, 272);
+  assert.equal(first.size, 273);
   assert.equal([...first.keys()].filter((path) => path.startsWith('roles/')).length, 263);
   assert.match(
     first.get('roles/action-add.ts'),
@@ -133,6 +132,7 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
   assert.match(first.get('packs/operations.tsx'), /export const OperationsIcon = \/\* @__PURE__ \*\/ forwardRef/u);
   assert.doesNotMatch(first.get('packs/operations.tsx'), /"identity\.|"analytics\.|Phosphor|@phosphor/u);
   assert.match(first.get('phosphor-adapter.ts'), /packageVersion: "2\.1\.10"/u);
+  assert.match(first.get('facade-map/index.tsx'), /resolveGeneratedIcon/u);
   assert.doesNotMatch(first.get('index.ts'), /phosphor|supplier/iu);
 });
 
@@ -148,6 +148,7 @@ test('generated public source and declarations expose only supplier-free compone
     files.get('packs/identity.tsx'),
     files.get('packs/intelligence.tsx'),
     files.get('packs/operations.tsx'),
+    files.get('facade-map/index.tsx'),
     await readFile(resolve(ICON_OWNER_ROOT, 'runtime/semantic/create-icon/index.tsx'), 'utf8'),
   ];
   for (const source of publicSources) {
@@ -177,6 +178,7 @@ test('generated public source and declarations expose only supplier-free compone
         '--skipLibCheck',
         '--strict',
         resolve(ICON_OWNER_ROOT, 'presentation/semantic/generated/index.ts'),
+        resolve(ICON_OWNER_ROOT, 'presentation/semantic-icon/index.tsx'),
       ],
       { cwd: CORE_ROOT, encoding: 'utf8', stdio: 'pipe' },
     );
@@ -217,6 +219,34 @@ test('a named pack import tree-shakes to one exact supplier glyph', () => {
   assert.deepEqual(supplierModules, ['@phosphor-icons/react/dist/ssr/ShieldWarning']);
   assert.match(bundle, /data-icon-name/u);
   assert.doesNotMatch(bundle, /IdentityDirectoryIcon|IDENTITY_ICON_COMPONENTS/u);
+});
+
+test('the canonical Icon facade reaches all 263 roles through SSR-only supplier entries', () => {
+  const bundle = execFileSync(
+    resolve(CORE_ROOT, 'node_modules/.bin/esbuild'),
+    [
+      '--bundle',
+      '--format=esm',
+      '--platform=node',
+      '--loader=ts',
+      '--sourcefile=semantic-icon-facade-fixture.ts',
+      '--external:react',
+      '--external:react/jsx-runtime',
+      '--external:@phosphor-icons/react/*',
+    ],
+    {
+      cwd: CORE_ROOT,
+      encoding: 'utf8',
+      input: 'import { Icon } from "./src/entrypoints/icons/index.ts"; console.log(Icon);',
+      stdio: ['pipe', 'pipe', 'pipe'],
+    },
+  );
+  const supplierModules = [...bundle.matchAll(/@phosphor-icons\/react\/dist\/ssr\/[A-Za-z0-9]+/gu)]
+    .map((match) => match[0]);
+
+  assert.equal(supplierModules.length, 263);
+  assert.equal(new Set(supplierModules).size, 263);
+  assert.doesNotMatch(bundle, /@phosphor-icons\/react\/dist\/(?!ssr\/)/u);
 });
 
 test('closed schemas reject drift, duplicates, and adapter-order mismatches', async () => {

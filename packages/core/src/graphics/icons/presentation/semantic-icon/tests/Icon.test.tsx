@@ -13,127 +13,71 @@ import { MailboxIcon } from '@phosphor-icons/react/dist/ssr/Mailbox';
 import { PulseIcon } from '@phosphor-icons/react/dist/ssr/Pulse';
 import { render, screen } from '@testing-library/react';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
 import { ICON_CORPUS, ICON_NAMES, isIconName } from '../../../foundation/contracts/registry';
+import type { IconName } from '../../../foundation/contracts/registry';
 import { ICON_PROVENANCE } from '../../../foundation/contracts/provenance';
 import type { IconProps } from '../../../foundation/contracts/registry/semantic';
+import {
+  GENERATED_ICON_CORPUS_VERSION,
+  GENERATED_ICON_NAMES,
+  getGeneratedIconMetadata,
+  type GeneratedIconName,
+} from '../../../foundation/semantic/corpus/generated';
 import { Icon } from '..';
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const EXPECTED_NAMES = [
-  'action.add',
-  'action.edit',
-  'action.delete',
-  'action.copy',
-  'action.search',
-  'action.filter',
-  'action.close',
-  'action.confirm',
-  'action.retry',
-  'action.play',
-  'action.reveal',
-  'action.conceal',
-  'navigation.home',
-  'navigation.back',
-  'navigation.forward',
-  'navigation.expand',
-  'navigation.menu',
-  'navigation.settings',
-  'navigation.profile',
-  'navigation.route',
-  'status.success',
-  'status.warning',
-  'status.error',
-  'status.info',
-  'status.loading',
-  'status.secure',
-  'status.live',
-  'communication.email',
-  'communication.message',
-  'communication.notification',
-  'communication.voice',
-  'communication.call',
-  'communication.inbox',
-  'auth.password',
-  'auth.passkey',
-  'auth.sso',
-  'data.chart',
-  'data.table',
-  'data.gauge',
-  'data.trend',
-  'ai.assistant',
-  'ai.reasoning',
-  'ai.sparkles',
-  'ai.tool',
-  'bithire.candidate',
-  'bithire.interview',
-  'bithire.pipeline',
-  'bithire.evidence',
-  'bithire.job',
-  'bithire.offer',
-] as const;
-
 function svgChildren(markup: string): string {
   return markup.replace(/^<svg[^>]*>|<\/svg>$/g, '');
 }
 
 describe('semantic Icon corpus', () => {
-  it('publishes the fixed, unique 50-name v3 corpus', () => {
-    expect(ICON_NAMES).toEqual(EXPECTED_NAMES);
-    expect(ICON_NAMES).toHaveLength(50);
-    expect(new Set(ICON_NAMES)).toHaveProperty('size', 50);
-    expect(ICON_CORPUS.map(({ name }) => name)).toEqual(EXPECTED_NAMES);
-    expect(ICON_CORPUS).toHaveLength(50);
-    expect(
-      ICON_CORPUS.filter(
-        ({ name }) =>
-          name === 'navigation.route' || name === 'bithire.job' || name === 'bithire.offer',
-      ),
-    ).toEqual([
-      { name: 'navigation.route', role: 'navigation', autoMirror: false },
-      { name: 'bithire.job', role: 'feature', autoMirror: false },
-      { name: 'bithire.offer', role: 'feature', autoMirror: false },
-    ]);
-    expect(
-      ICON_CORPUS.filter(({ name }) =>
-        [
-          'action.reveal',
-          'action.conceal',
-          'auth.password',
-          'auth.passkey',
-          'auth.sso',
-          'communication.inbox',
-          'status.live',
-        ].includes(name),
-      ),
-    ).toEqual([
-      { name: 'action.reveal', role: 'control', autoMirror: false },
-      { name: 'action.conceal', role: 'control', autoMirror: false },
-      { name: 'status.live', role: 'status', autoMirror: false },
-      { name: 'communication.inbox', role: 'control', autoMirror: false },
-      { name: 'auth.password', role: 'control', autoMirror: false },
-      { name: 'auth.passkey', role: 'control', autoMirror: false },
-      { name: 'auth.sso', role: 'control', autoMirror: false },
-    ]);
+  it('publishes the exact generated 263-name corpus as the canonical truth', () => {
+    expect(ICON_NAMES).toBe(GENERATED_ICON_NAMES);
+    expect(ICON_NAMES).toHaveLength(263);
+    expect(new Set(ICON_NAMES)).toHaveProperty('size', 263);
+    expect(ICON_CORPUS.map(({ name }) => name)).toEqual(GENERATED_ICON_NAMES);
+    expect(ICON_CORPUS).toHaveLength(263);
+    expect(ICON_CORPUS.filter(({ status }) => status === 'stable')).toHaveLength(50);
+    expect(ICON_CORPUS.filter(({ status }) => status === 'candidate')).toHaveLength(213);
+
+    for (const entry of ICON_CORPUS) {
+      const metadata = getGeneratedIconMetadata(entry.name);
+      expect(entry.id).toBe(metadata.id);
+      expect(entry.name).toBe(metadata.id);
+      expect(entry.role).toBe(metadata.defaultRole);
+      expect(entry.status).toBe(metadata.status);
+      expect(entry.autoMirror).toBe(metadata.autoMirror);
+    }
+  });
+
+  it('uses maturity as metadata without narrowing IconName validity', () => {
+    expectTypeOf<IconName>().toEqualTypeOf<GeneratedIconName>();
+    const candidateProps = {
+      name: 'security.alert',
+      decorative: true,
+    } satisfies IconProps;
+    const candidate = ICON_CORPUS.find(({ name }) => name === candidateProps.name);
+
+    expect(candidate?.status).toBe('candidate');
+    expect(isIconName(candidateProps.name)).toBe(true);
   });
 
   it('guards unknown runtime names fail-closed', () => {
     expect(isIconName('bithire.evidence')).toBe(true);
+    expect(isIconName('security.alert')).toBe(true);
     expect(isIconName('lucide.Search')).toBe(false);
     expect(isIconName(null)).toBe(false);
   });
 
-  it('renders every registered glyph through the SSR-safe adapter', () => {
-    const html = renderToStaticMarkup(
-      <>{ICON_NAMES.map((name) => <Icon key={name} name={name} decorative />)}</>,
-    );
-
-    expect((html.match(/<svg/g) ?? [])).toHaveLength(50);
+  it('server-renders every one of the 263 canonical names without a null adapter', () => {
     for (const name of ICON_NAMES) {
+      const html = renderToStaticMarkup(<Icon name={name} decorative />);
+      expect(html, name).toContain('<svg');
       expect(html).toContain(`data-icon-name="${name}"`);
     }
   });
@@ -172,7 +116,7 @@ describe('semantic Icon corpus', () => {
 
   it('records pinned supplier provenance without exposing supplier props', () => {
     expect(ICON_PROVENANCE).toEqual({
-      corpusVersion: 3,
+      corpusVersion: GENERATED_ICON_CORPUS_VERSION,
       supplier: 'Phosphor Icons',
       packageName: '@phosphor-icons/react',
       packageVersion: '2.1.10',
