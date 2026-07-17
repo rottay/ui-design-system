@@ -89,6 +89,9 @@ const ADVANCED_DOCUMENT: TenantThemeDocumentV1 = {
           rowBgHover: '#FBF3E7',
           rowBgSelected: 'var(--ds-tint-12)',
           headerFontWeight: 700,
+          headerLetterSpacing: '0.04em',
+          headerTextTransform: 'none',
+          headerBlockSize: '42px',
         },
         cardComponent: {
           bg: '#FFFEFB',
@@ -124,10 +127,10 @@ describe('TenantThemeConfig v1 server contract', () => {
 
   it('publishes immutable schema/document drift sentinels', () => {
     expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toBe(
-      'sha256-4ec96946ab6c9297cb3bc1db6278b85076c21f198a38c6b7ac138d9441c3db40',
+      'sha256-1b8934a4200c3c1bbf2a50a01748329d5d683d813d54a20cca4bdd0ff76f91d4',
     );
     expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).toBe(
-      'sha256-46709bfc286d0dd326dc7732af12b76ba48fc80db0773937dbe30862611329ac',
+      'sha256-fffd883a0b1e644ae6844a02d0e9a80625d4e342a39d788060ab1c9e13f29700',
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.documents.simple)).toBe(true);
@@ -499,6 +502,9 @@ describe('deterministic artifact compilation and isolation', () => {
       '--ds-font-family-display': "'Fraunces', Georgia, 'Times New Roman', serif",
       '--ds-card-bg': '#FFFEFB',
       '--ds-table-header-bg': '#FFFFFF',
+      '--ds-table-header-letter-spacing': '0.04em',
+      '--ds-table-header-text-transform': 'none',
+      '--ds-table-header-block-size': '42px',
       '--ds-effect-intensity': '0.45',
     });
     expect(management.presentationProfile).toBe('editorial-ledger');

@@ -398,6 +398,9 @@ export function chromeToVariables(chrome: BrandChrome | undefined): Record<strin
     if (t.headerColor) vars['--ds-table-header-color'] = t.headerColor;
     if (t.headerFontWeight != null) vars['--ds-table-header-font-weight'] = String(t.headerFontWeight);
     if (t.headerFontSize) vars['--ds-table-header-font-size'] = t.headerFontSize;
+    if (t.headerLetterSpacing) vars['--ds-table-header-letter-spacing'] = t.headerLetterSpacing;
+    if (t.headerTextTransform) vars['--ds-table-header-text-transform'] = t.headerTextTransform;
+    if (t.headerBlockSize) vars['--ds-table-header-block-size'] = t.headerBlockSize;
     if (t.headerBorder) vars['--ds-table-header-border'] = t.headerBorder;
     if (t.headerShadow) vars['--ds-table-header-shadow'] = t.headerShadow;
     if (t.rowBg) vars['--ds-table-row-bg'] = t.rowBg;

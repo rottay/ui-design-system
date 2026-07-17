@@ -49,31 +49,31 @@ const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms
 const DENSITY_STYLES = {
   compact: {
     th: {
-      padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)',
-      fontSize: 'var(--ds-font-size-xs)',
+      padding: 'var(--ds-table-cell-padding, var(--ds-density-cell-padding, 0.5rem 0.75rem))',
+      fontSize: 'var(--ds-table-header-font-size, var(--ds-font-size-xs))',
     } as React.CSSProperties,
     td: {
-      padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)',
+      padding: 'var(--ds-table-cell-padding, var(--ds-density-cell-padding, 0.5rem 0.75rem))',
       fontSize: 'var(--ds-font-size-xs)',
     } as React.CSSProperties,
   },
   comfortable: {
     th: {
-      padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)',
-      fontSize: 'var(--ds-font-size-xs)',
+      padding: 'var(--ds-table-cell-padding, var(--ds-density-cell-padding, 0.875rem 1rem))',
+      fontSize: 'var(--ds-table-header-font-size, var(--ds-font-size-xs))',
     } as React.CSSProperties,
     td: {
-      padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)',
+      padding: 'var(--ds-table-cell-padding, var(--ds-density-cell-padding, 0.875rem 1rem))',
       fontSize: 'var(--ds-font-size-sm)',
     } as React.CSSProperties,
   },
   spacious: {
     th: {
-      padding: '1rem 1.25rem',
-      fontSize: 'var(--ds-font-size-sm)',
+      padding: 'var(--ds-table-cell-padding, 1rem 1.25rem)',
+      fontSize: 'var(--ds-table-header-font-size, var(--ds-font-size-sm))',
     } as React.CSSProperties,
     td: {
-      padding: '1rem 1.25rem',
+      padding: 'var(--ds-table-cell-padding, 1rem 1.25rem)',
       fontSize: 'var(--ds-font-size-base)',
     } as React.CSSProperties,
   },
@@ -126,9 +126,10 @@ const styles = {
   } as React.CSSProperties,
   th: {
     textAlign: 'left' as const,
-    fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
-    textTransform: 'var(--ds-typography-label-transform, uppercase)' as unknown as React.CSSProperties['textTransform'],
-    letterSpacing: 'var(--ds-typography-heading-letter-spacing, 0.05em)',
+    height: 'var(--ds-table-header-block-size, auto)',
+    fontWeight: 'var(--ds-table-header-font-weight, 600)' as unknown as number,
+    textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as unknown as React.CSSProperties['textTransform'],
+    letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
     whiteSpace: 'nowrap' as const,
     userSelect: 'none' as const,
     position: 'relative' as const,

@@ -266,7 +266,8 @@ const chrome = object({
   table: object({
     ...visualFields([
       'bg', 'border', 'radius', 'headerBg', 'headerBgHover', 'headerColor', 'headerFontSize',
-      'headerBorder', 'headerShadow', 'rowBg', 'rowBgHover', 'rowBgStriped', 'rowBgSelected',
+      'headerLetterSpacing', 'headerTextTransform', 'headerBlockSize', 'headerBorder',
+      'headerShadow', 'rowBg', 'rowBgHover', 'rowBgStriped', 'rowBgSelected',
       'rowBgExpanded', 'rowBorder', 'rowHoverShadow', 'cellPadding', 'cellFontSize',
       'cellColor', 'filterRowBg', 'filterFocusShadow', 'resizeBg', 'resizeBgHover',
       'reorderBg', 'actionBg', 'actionBorder', 'sheen', 'pageButtonHoverShadow',

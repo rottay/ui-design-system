@@ -274,8 +274,11 @@ describe('DataTable data-part contract (mobile branch)', () => {
       expect(els.length).toBeGreaterThanOrEqual(2);
       return els;
     });
-    const bulkRoot = container.querySelector('[data-part="mobile-bulk-actions"]');
-    expect(bulkRoot).not.toBeNull();
+    const bulkRoot = await waitFor(() => {
+      const element = container.querySelector('[data-part="mobile-bulk-actions"]');
+      expect(element).not.toBeNull();
+      return element;
+    });
     expect(bulkRoot?.className).toContain('ds-pattern-data-table');
     expect(bulkRoot?.className).toContain('ds-data-table--mobile');
     expect(Array.from(scoped)).toContain(bulkRoot);

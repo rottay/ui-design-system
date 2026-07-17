@@ -84,15 +84,15 @@ describe('AppShell responsive contract', () => {
       'calc(var(--ds-shell-sidebar-width, 296px) + var(--ds-shell-safe-area-left))',
     );
     expect(root.style.getPropertyValue('--ds-shell-header-height')).toBe(
-      'var(--ds-shell-header-block-size, 64px)',
+      'var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px))',
     );
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
-      'calc(var(--ds-shell-header-block-size, 64px) + var(--ds-shell-safe-area-top))',
+      'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px)) + var(--ds-shell-safe-area-top))',
     );
     expect(
       logo.style.getPropertyValue('--ds-shell-resolved-sidebar-header-block-size'),
     ).toBe(
-      'var(--ds-shell-sidebar-header-block-size, 104px)',
+      'var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, 104px))',
     );
     expect(logo.style.height).toBe(
       'var(--ds-shell-resolved-sidebar-header-block-size)',
@@ -158,7 +158,7 @@ describe('AppShell responsive contract', () => {
       bottomInset,
     );
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
-      'calc(var(--ds-shell-header-block-size, 64px) + var(--ds-shell-safe-area-top))',
+      'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px)) + var(--ds-shell-safe-area-top))',
     );
     expect(mainArea.style.paddingBlockEnd).toBe(
       'var(--ds-shell-bottom-inset)',
@@ -242,7 +242,7 @@ describe('AppShell responsive contract', () => {
         '--ds-shell-resolved-sidebar-header-min-block-size',
       ),
     ).toBe(
-      'max(var(--ds-shell-sidebar-header-block-size, 32px), 44px)',
+      'max(var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, 32px)), 44px)',
     );
     expect(drawerHeader.style.minHeight).toBe(
       'var(--ds-shell-resolved-sidebar-header-min-block-size)',
@@ -320,7 +320,7 @@ describe('AppShell responsive contract', () => {
       'calc(var(--ds-shell-sidebar-width, 320px) + var(--ds-shell-safe-area-left))',
     );
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
-      'calc(var(--ds-shell-header-block-size, 68px) + var(--ds-shell-safe-area-top))',
+      'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 68px)) + var(--ds-shell-safe-area-top))',
     );
     expect(screen.getByTestId('shell-geometry')).toHaveTextContent('320:76:68');
   });

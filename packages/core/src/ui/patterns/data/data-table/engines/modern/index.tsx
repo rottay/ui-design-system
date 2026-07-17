@@ -56,9 +56,9 @@ function resolveEditableConfig<T>(editable: boolean | EditableConfig<T> | undefi
  * legacy mode and keeps its original value.
  */
 const DENSITY_PADDING_MAP = {
-  compact: 'var(--ds-table-padding-compact, var(--ds-density-cell-padding, 0.5rem 0.75rem))',
-  comfortable: 'var(--ds-table-padding-comfortable, var(--ds-density-cell-padding, 0.875rem 1rem))',
-  spacious: 'var(--ds-table-padding-spacious, 16px 16px)',
+  compact: 'var(--ds-table-cell-padding, var(--ds-table-padding-compact, var(--ds-density-cell-padding, 0.5rem 0.75rem)))',
+  comfortable: 'var(--ds-table-cell-padding, var(--ds-table-padding-comfortable, var(--ds-density-cell-padding, 0.875rem 1rem)))',
+  spacious: 'var(--ds-table-cell-padding, var(--ds-table-padding-spacious, 16px 16px))',
 } as const;
 
 const LEADING_DATA_COLUMN_PADDING_MAP = {
@@ -1047,10 +1047,11 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
                         minWidth: resolvedSelectionColumnWidth,
                         maxWidth: resolvedSelectionColumnWidth,
                         boxSizing: 'border-box',
-                        fontWeight: 500,
-                        fontSize: 12,
-                        letterSpacing: '0.05em',
-                        textTransform: 'uppercase' as const,
+                        height: 'var(--ds-table-header-block-size, auto)',
+                        fontWeight: 'var(--ds-table-header-font-weight, 500)',
+                        fontSize: 'var(--ds-table-header-font-size, 12px)',
+                        letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
+                        textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as React.CSSProperties['textTransform'],
                         verticalAlign: 'middle',
                         textAlign: 'left',
                       }}
@@ -1098,10 +1099,11 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
                           maxWidth: col.maxWidth,
                           textAlign: col.align,
                           padding: isLeadingDataColumn && selectable ? leadingDataColumnPadding : densityPadding,
-                          fontWeight: 500,
-                          fontSize: 11,
-                          letterSpacing: '0.05em',
-                          textTransform: 'uppercase' as const,
+                          height: 'var(--ds-table-header-block-size, auto)',
+                          fontWeight: 'var(--ds-table-header-font-weight, 500)',
+                          fontSize: 'var(--ds-table-header-font-size, 11px)',
+                          letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
+                          textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as React.CSSProperties['textTransform'],
                           position: (pinnedStyle.position as any) || (resizable ? 'relative' : undefined),
                           left: pinnedStyle.left as any,
                           right: pinnedStyle.right as any,
@@ -1300,10 +1302,11 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
                         position: 'sticky',
                         right: 0,
                         zIndex: 2,
-                        fontWeight: 500,
-                        fontSize: 12,
-                        letterSpacing: '0.05em',
-                        textTransform: 'uppercase' as const,
+                        height: 'var(--ds-table-header-block-size, auto)',
+                        fontWeight: 'var(--ds-table-header-font-weight, 500)',
+                        fontSize: 'var(--ds-table-header-font-size, 12px)',
+                        letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
+                        textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as React.CSSProperties['textTransform'],
                       }}
                     >
                       Actions

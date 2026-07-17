@@ -176,8 +176,10 @@ export function AppShell({
 
   const sidebarInlineSize = `var(--ds-shell-sidebar-width, ${sidebarWidth}px)`;
   const sidebarCollapsedInlineSize = `var(--ds-shell-sidebar-collapsed-width, ${sidebarCollapsedWidth}px)`;
-  const headerBlockSize = `var(--ds-shell-header-block-size, ${headerHeight}px)`;
-  const sidebarHeaderBlockSize = `var(--ds-shell-sidebar-header-block-size, ${sidebarHeaderHeight}px)`;
+  const headerBlockSize =
+    `var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, ${headerHeight}px))`;
+  const sidebarHeaderBlockSize =
+    `var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, ${sidebarHeaderHeight}px))`;
   const activeSidebarInlineSize = collapsed
     ? sidebarCollapsedInlineSize
     : sidebarInlineSize;
@@ -279,8 +281,8 @@ export function AppShell({
             overflowY: 'auto',
             overflowX: 'hidden',
             padding: (!isDrawer && collapsed)
-              ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
-              : 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px)',
+              ? 'var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px))'
+              : 'var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px))',
             scrollPaddingBlockEnd: 'calc(var(--ds-spacing-6, 24px) + 76px)',
           }}
         >

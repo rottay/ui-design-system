@@ -455,6 +455,9 @@ export interface BrandTableChrome {
   headerColor?: string;
   headerFontWeight?: string | number;
   headerFontSize?: string;
+  headerLetterSpacing?: string;
+  headerTextTransform?: string;
+  headerBlockSize?: string;
   headerBorder?: string;
   headerShadow?: string;
   /** Rows */

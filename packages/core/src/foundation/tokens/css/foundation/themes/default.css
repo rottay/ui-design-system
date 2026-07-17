@@ -1624,6 +1624,9 @@
   --ds-table-header-color: #525252;
   --ds-table-header-font-weight: 500;
   --ds-table-header-font-size: 0.8125rem;
+  --ds-table-header-letter-spacing: var(--ds-text-eyebrow-letter-spacing);
+  --ds-table-header-text-transform: var(--ds-text-eyebrow-transform);
+  --ds-table-header-block-size: auto;
 
   /* Table Row */
   --ds-table-row-bg: #ffffff;
