@@ -14,7 +14,7 @@ import {
 } from '..';
 
 const PATTERNS_CSS = readFileSync(
-  join(__dirname, '../../../../../../../../../foundation/tokens/css/presentation/components/patterns.css'),
+  join(__dirname, '../../../../../../../../../../foundation/tokens/css/presentation/components/patterns.css'),
   'utf8',
 );
 

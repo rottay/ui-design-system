@@ -61,9 +61,11 @@ export const themanagementmiamiBrandTheme: BrandTheme = {
     primaryColor: '#0F766E',
     secondaryColor: '#8C6D46',
     accentColor: '#B44F3C',
-    darkPrimaryColor: '#0F766E',
-    darkSecondaryColor: '#8C6D46',
-    darkAccentColor: '#B44F3C',
+    // Same Art Deco palette, lifted for AA text/non-text contrast on the
+    // canonical dark canvas instead of reusing the light-ground seeds.
+    darkPrimaryColor: '#4FB3AA',
+    darkSecondaryColor: '#D0AE78',
+    darkAccentColor: '#D97864',
     backgroundColor: '#FBF6EC',
     successColor: '#3F6F2A',
     warningColor: '#8A6B00',

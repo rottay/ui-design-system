@@ -171,11 +171,19 @@ const STYLES = `
   .cra17-kicker,
   .cra17-section-eyebrow,
   .cra17-axis-label {
-    color: var(--ds-color-primary);
     font-size: 11px;
     font-weight: 750;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+
+  .cra17-kicker,
+  .cra17-axis-label {
+    color: color-mix(
+      in srgb,
+      var(--ds-color-primary) 55%,
+      var(--ds-color-text-primary)
+    );
   }
 
   .cra17-title,
@@ -244,11 +252,13 @@ const STYLES = `
 
   .cra17-sections {
     display: grid;
+    min-width: 0;
     gap: 22px;
     margin-top: 22px;
   }
 
   .cra17-section {
+    min-width: 0;
     overflow: clip;
     border: 1px solid var(--ds-color-border);
     border-radius: var(--ds-radius-xl, 20px);
@@ -280,7 +290,13 @@ const STYLES = `
     gap: 5px;
   }
 
-  .cra17-section-eyebrow { color: var(--cra17-accent); }
+  .cra17-section-eyebrow {
+    color: color-mix(
+      in srgb,
+      var(--cra17-accent) 55%,
+      var(--ds-color-text-primary)
+    );
+  }
   .cra17-section-title { font-size: 20px; letter-spacing: -0.02em; }
 
   .cra17-count {
@@ -293,6 +309,9 @@ const STYLES = `
   }
 
   .cra17-matrix {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     overflow-x: auto;
   }
 
