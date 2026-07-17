@@ -144,6 +144,11 @@ export {
   type LegacyCollapseSize,
   COLLAPSE_DEFAULTS,
 } from './contracts';
+export { useCollapseTokens } from './runtime/tokens';
+export type {
+  UseCollapseTokensOptions,
+  UseCollapseTokensResult,
+} from './runtime/tokens';
 
 const CollapseBase = createEngineComponent<CollapseProps>('Collapse', {
   classic: () => import('./engines/classic').then(m => ({ default: m.Collapse })),

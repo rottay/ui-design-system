@@ -7,3 +7,4 @@ export * from './form';
 export * from './detail-form';
 export * from './guided-draft-form';
 export * from './wizard';
+export * from './wizard/onboarding';

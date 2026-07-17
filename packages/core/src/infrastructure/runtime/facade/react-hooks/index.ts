@@ -10,9 +10,8 @@
  *
  * 1. **Core-integrated hooks** (used by DS components internally):
  *    `useTokens`/`useColorTokens`/etc. (token pipeline), `useBreakpoints`/
- *    `useMediaQuery`/`useResponsiveValue` (responsive), `useCollapseTokens`
- *    (component tokens). These hooks are real infrastructure consumed by DS
- *    primitives, patterns, and structures.
+ *    `useMediaQuery`/`useResponsiveValue` (responsive). These hooks are real
+ *    infrastructure consumed by DS primitives, patterns, and structures.
  *
  * 2. **App-facing utilities** (exported for app consumption, zero DS-internal
  *    consumers): a11y, dnd, state, form, search, routing, data, ai,
@@ -188,15 +187,6 @@ export type {
   UseBreakpointsResult,
   ResponsiveValueConfig,
 } from '../../responsive';
-
-// ============================================================================
-// Component token hooks -- component-specific token resolution
-// ============================================================================
-export { useCollapseTokens } from '../../../../ui/primitives/layout/Collapse/runtime/tokens';
-export type {
-  UseCollapseTokensOptions,
-  UseCollapseTokensResult,
-} from '../../../../ui/primitives/layout/Collapse/runtime/tokens';
 
 // ============================================================================
 // Accessibility hooks -- keyboard navigation and screen reader support

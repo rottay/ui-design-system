@@ -102,8 +102,15 @@ export { Splitter } from './Splitter';
 export type { SplitterProps, SplitterPanelProps } from './Splitter';
 export { SPLITTER_DEFAULTS } from './Splitter';
 
-export { Collapse } from './Collapse';
-export type { CollapseProps, CollapsePanelProps, CollapseSize, LegacyCollapseSize } from './Collapse';
+export { Collapse, useCollapseTokens } from './Collapse';
+export type {
+  CollapseProps,
+  CollapsePanelProps,
+  CollapseSize,
+  LegacyCollapseSize,
+  UseCollapseTokensOptions,
+  UseCollapseTokensResult,
+} from './Collapse';
 export { COLLAPSE_DEFAULTS } from './Collapse';
 
 // AspectRatio

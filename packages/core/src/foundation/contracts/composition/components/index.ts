@@ -9,15 +9,10 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode } from 'react';
+import type { WithChildren } from '../../kernel/common';
 
 // Re-export from common (single source of truth).
 export type { BaseComponentProps } from '../../kernel/common';
 
-/**
- * Base props for components that accept children
- * Note: the lower-level sibling shape is `WithChildren` in `kernel/common`.
- */
-export interface WithChildrenProps {
-  children?: ReactNode;
-}
+/** Backwards-compatible public name for the canonical children contract. */
+export type WithChildrenProps = WithChildren;
