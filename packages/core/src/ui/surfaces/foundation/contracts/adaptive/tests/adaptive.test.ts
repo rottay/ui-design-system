@@ -36,4 +36,27 @@ describe('adaptive surface posture resolution', () => {
     expect(resolvePosture(config, 'tablet').pane).toBe('sheet');
     expect(resolvePosture(config, 'phone').pane).toBe('route');
   });
+
+  it('cascades bounded card-grid columns across breakpoints', () => {
+    const config: AdaptiveConfig = {
+      desktop: { collection: 'cards', gridColumns: 3 },
+      tablet: { gridColumns: 2 },
+      phone: { gridColumns: 1 },
+    };
+
+    expect(resolvePosture(config, 'desktop').gridColumns).toBe(3);
+    expect(resolvePosture(config, 'tablet').gridColumns).toBe(2);
+    expect(resolvePosture(config, 'phone').gridColumns).toBe(1);
+  });
+
+  it.each([-1, 0, 1.5, 7, Number.NaN, Number.POSITIVE_INFINITY])(
+    'fails closed for an invalid card-grid column count (%s)',
+    (gridColumns) => {
+      const config: AdaptiveConfig = {
+        desktop: { collection: 'cards', gridColumns },
+      };
+
+      expect(resolvePosture(config, 'desktop')).toEqual({ collection: 'cards' });
+    },
+  );
 });

@@ -48,6 +48,11 @@ export type NavPosture = 'tabs' | 'dropdown' | 'pills' | 'accordion';
 export interface SurfacePosture {
   /** Data collection posture. */
   collection?: CollectionPosture;
+  /**
+   * Fixed column count used when the resolved collection posture is `cards`.
+   * Values outside the bounded 1..6 integer range fail closed at resolution.
+   */
+  gridColumns?: number;
   /** Form section navigation layout. */
   formLayout?: FormSectionLayout;
   /** Supporting pane (sidebar, preview rail) behavior. */
@@ -108,15 +113,32 @@ export function resolvePosture(
   const tablet = { ...desktop, ...config.tablet };
   const phone = { ...tablet, ...config.phone };
 
-  switch (breakpoint) {
-    case 'phone':
-      return phone;
-    case 'tablet':
-      return tablet;
-    case 'desktop':
-    default:
-      return desktop;
+  const resolved = (() => {
+    switch (breakpoint) {
+      case 'phone':
+        return phone;
+      case 'tablet':
+        return tablet;
+      case 'desktop':
+      default:
+        return desktop;
+    }
+  })();
+
+  if (resolved.gridColumns === undefined) return resolved;
+
+  if (
+    typeof resolved.gridColumns === 'number'
+    && Number.isInteger(resolved.gridColumns)
+    && resolved.gridColumns >= 1
+    && resolved.gridColumns <= 6
+  ) {
+    return resolved;
   }
+
+  const normalized = { ...resolved };
+  delete normalized.gridColumns;
+  return normalized;
 }
 
 /**

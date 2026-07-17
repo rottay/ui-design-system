@@ -43,6 +43,8 @@ import { Text } from '../../../../../../primitives/display/Typography';
 export interface CollectionRenderDispatchProps<T extends object> {
   viewMode: CollectionViewMode | string;
   viewModes?: CollectionViewModeConfigs<T>;
+  /** Resolved adaptive posture override. Applied only while rendering cards. */
+  cardColumnsOverride?: number;
   data: T[];
   columns: ColumnDef<T>[];
   rowKey: keyof T | ((row: T) => string);
@@ -629,6 +631,7 @@ export function CollectionRenderDispatch<T extends object>(
     rowHref,
     rowActivationLabel,
     focusEnabled,
+    cardColumnsOverride,
   } = props;
 
   const createCardContext = (
@@ -864,7 +867,7 @@ export function CollectionRenderDispatch<T extends object>(
         </Box>
       );
     }
-    const cardColumns = viewModes?.cards?.columns;
+    const cardColumns = cardColumnsOverride ?? viewModes?.cards?.columns;
     const explicitColumnCount = typeof cardColumns === 'number' ? cardColumns : undefined;
     const hasLoneFinalCard = Boolean(
       explicitColumnCount &&

@@ -1,5 +1,14 @@
 # @rottay/design-system
 
+## 2.19.33
+
+### Patch Changes
+
+- Complete the adaptive card-grid posture contract with bounded, cascading
+  `gridColumns` overrides. Collection workspaces now honor tablet and phone
+  column counts in cards mode while preserving configured or automatic card
+  columns everywhere the posture does not override them.
+
 ## 2.19.32
 
 ### Patch Changes

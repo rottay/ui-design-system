@@ -17,8 +17,8 @@
     ]
   },
   "summary": {
-    "adaptiveFields": 78,
-    "adaptiveFieldsWithProductiveConsumers": 78,
+    "adaptiveFields": 79,
+    "adaptiveFieldsWithProductiveConsumers": 79,
     "typeOnlyAdaptiveFields": 0,
     "configFactories": 14,
     "liveConfigFactories": 14,
@@ -35,15 +35,15 @@
         "path": "desktop",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 85,
+          "line": 90,
           "column": 3,
-          "offsetStart": 3235,
-          "offsetEnd": 3242
+          "offsetStart": 3427,
+          "offsetEnd": 3434
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 107,
+            "line": 112,
             "column": 26,
             "role": "read"
           },
@@ -86,6 +86,24 @@
             "line": 30,
             "column": 7,
             "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 42,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 56,
+            "column": 9,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.grid-columns.test.tsx",
+            "line": 120,
+            "column": 5,
+            "role": "write"
           }
         ],
         "status": "productive-consumer"
@@ -97,15 +115,15 @@
         "path": "phone",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 87,
+          "line": 92,
           "column": 3,
-          "offsetStart": 3290,
-          "offsetEnd": 3295
+          "offsetStart": 3482,
+          "offsetEnd": 3487
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 109,
+            "line": 114,
             "column": 40,
             "role": "read"
           },
@@ -136,6 +154,18 @@
             "line": 32,
             "column": 7,
             "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 44,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.grid-columns.test.tsx",
+            "line": 135,
+            "column": 5,
+            "role": "write"
           }
         ],
         "status": "productive-consumer"
@@ -147,15 +177,15 @@
         "path": "tablet",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 86,
+          "line": 91,
           "column": 3,
-          "offsetStart": 3263,
-          "offsetEnd": 3269
+          "offsetStart": 3455,
+          "offsetEnd": 3461
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 108,
+            "line": 113,
             "column": 42,
             "role": "read"
           },
@@ -190,6 +220,12 @@
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
             "line": 31,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 43,
             "column": 7,
             "role": "write"
           }
@@ -2008,10 +2044,10 @@
         "path": "actionBar",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 56,
+          "line": 61,
           "column": 3,
-          "offsetStart": 2166,
-          "offsetEnd": 2175
+          "offsetStart": 2358,
+          "offsetEnd": 2367
         },
         "productiveConsumers": [
           {
@@ -2022,7 +2058,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2688,
+            "line": 2690,
             "column": 16,
             "role": "read"
           }
@@ -2076,10 +2112,10 @@
         "path": "compactHeader",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 60,
+          "line": 65,
           "column": 3,
-          "offsetStart": 2310,
-          "offsetEnd": 2323
+          "offsetStart": 2502,
+          "offsetEnd": 2515
         },
         "productiveConsumers": [
           {
@@ -2096,7 +2132,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2064,
+            "line": 2065,
             "column": 28,
             "role": "read"
           }
@@ -2113,10 +2149,10 @@
         "path": "filters",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 58,
+          "line": 63,
           "column": 3,
-          "offsetStart": 2228,
-          "offsetEnd": 2235
+          "offsetStart": 2420,
+          "offsetEnd": 2427
         },
         "productiveConsumers": [
           {
@@ -2144,10 +2180,10 @@
         "path": "formLayout",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 52,
+          "line": 57,
           "column": 3,
-          "offsetStart": 2018,
-          "offsetEnd": 2028
+          "offsetStart": 2210,
+          "offsetEnd": 2220
         },
         "productiveConsumers": [
           {
@@ -2169,16 +2205,102 @@
         "status": "productive-consumer"
       },
       {
+        "id": "SurfacePosture.gridColumns",
+        "owner": "SurfacePosture",
+        "field": "gridColumns",
+        "path": "gridColumns",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 55,
+          "column": 3,
+          "offsetStart": 2145,
+          "offsetEnd": 2156
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 128,
+            "column": 16,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 131,
+            "column": 21,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 132,
+            "column": 34,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 133,
+            "column": 17,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 134,
+            "column": 17,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 140,
+            "column": 21,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1929,
+            "column": 44,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 2568,
+            "column": 44,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 47,
+            "column": 46,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 48,
+            "column": 45,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 49,
+            "column": 44,
+            "role": "read"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
         "id": "SurfacePosture.pane",
         "owner": "SurfacePosture",
         "field": "pane",
         "path": "pane",
         "declaration": {
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 54,
+          "line": 59,
           "column": 3,
-          "offsetStart": 2111,
-          "offsetEnd": 2115
+          "offsetStart": 2303,
+          "offsetEnd": 2307
         },
         "productiveConsumers": [
           {

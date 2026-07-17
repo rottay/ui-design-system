@@ -1926,6 +1926,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
+              cardColumnsOverride={posture.gridColumns}
               data={displayData}
               columns={effectiveColumns}
               rowKey={rowKey}
@@ -2564,6 +2565,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
+              cardColumnsOverride={posture.gridColumns}
               data={displayData}
               columns={effectiveColumns}
               rowKey={rowKey}
