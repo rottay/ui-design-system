@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { useTokens } from '..';
 import type { TenantConfig } from '@/foundation/contracts';
+import { getKnownTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 
 const TOKEN_TEST_TENANT: TenantConfig = {
   slug: 'token-test',
@@ -34,6 +35,18 @@ function TokenConsumer(): React.ReactElement {
       <span data-testid="secondary-color">{tokens.colors.secondary}</span>
       <span data-testid="card-density">{tokens.personality.card.paddingDensity}</span>
     </div>
+  );
+}
+
+function EvntoAxes({ testId }: { testId: string }): React.ReactElement {
+  const tokens = useTokens();
+  return (
+    <pre data-testid={testId}>{JSON.stringify({
+      densitySpacing: tokens.spacing,
+      radius: tokens.borderRadius,
+      depth: tokens.shadows,
+      motion: tokens.personality.animation,
+    })}</pre>
   );
 }
 
@@ -73,5 +86,33 @@ describe('useTokens product profile resolution', () => {
     expect(screen.getByTestId('primary-color')).toHaveTextContent('#991b1b');
     expect(screen.getByTestId('secondary-color')).toHaveTextContent('#7c3aed');
     expect(screen.getByTestId('card-density')).toHaveTextContent('compact');
+  });
+
+  it('resolves identical structural and motion axes for bundled and custom Evnto', () => {
+    const bundled = getKnownTenantConfig('evnto');
+    if (!bundled) throw new Error('Missing bundled Evnto tenant');
+    const custom: TenantConfig = {
+      slug: 'custom-evnto',
+      name: 'Custom Evnto',
+      theme: 'light',
+      plan: 'starter',
+      features: [],
+      vertical: 'evnto',
+      branding: { companyName: 'Custom Evnto' },
+    };
+
+    render(
+      <>
+        <DesignSystemProvider tenantConfig={bundled} vertical="evnto" skipCssLoading>
+          <EvntoAxes testId="bundled-evnto-axes" />
+        </DesignSystemProvider>
+        <DesignSystemProvider tenantConfig={custom} vertical="evnto" skipCssLoading>
+          <EvntoAxes testId="custom-evnto-axes" />
+        </DesignSystemProvider>
+      </>,
+    );
+
+    expect(screen.getByTestId('custom-evnto-axes').textContent)
+      .toBe(screen.getByTestId('bundled-evnto-axes').textContent);
   });
 });

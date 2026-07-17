@@ -1,8 +1,8 @@
 /**
  * Evnto first-party vertical theme.
  *
- * Premium wallet/fintech experience. White-first, black text, rounded,
- * fluid, safe, modern. Smooth reassuring transitions, soft spring.
+ * Event marquee experience. White-first, high-contrast, rounded, fluid,
+ * safe, modern. Expressive entrances without routine bounce.
  *
  * Design: Minimal light-first. Black primary on white canvas.
  * Warm beige/sand accents. Largest border radius of all brands.
@@ -13,6 +13,10 @@
  */
 
 import type { BrandTheme } from '../../../../../contracts/composition/tenants/themes';
+import {
+  EVNTO_CANONICAL_MOTION,
+  EVNTO_CANONICAL_SURFACES,
+} from '@/foundation/presets/policy/experience-baselines/evnto';
 
 export const evntoBrandTheme: BrandTheme = {
   id: 'evnto',
@@ -56,39 +60,9 @@ export const evntoBrandTheme: BrandTheme = {
     },
   },
 
-  surfaces: {
-    densityScale: 1.125,
-    borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px' },
-    shadows: {
-      sm: '0 1px 3px rgba(0, 0, 0, 0.04)',
-      md: '0 4px 12px rgba(0, 0, 0, 0.06)',
-      lg: '0 8px 24px rgba(0, 0, 0, 0.08)',
-      xl: '0 16px 48px rgba(0, 0, 0, 0.1)',
-    },
-    glass: { blur: 'none', background: 'none', border: 'none' },
-    gradients: { primary: 'none', surface: 'none', mesh: 'none' },
-    overlays: {
-      light: 'rgba(0, 0, 0, 0.01)',
-      medium: 'rgba(0, 0, 0, 0.03)',
-      heavy: 'rgba(0, 0, 0, 0.06)',
-    },
-  },
+  surfaces: EVNTO_CANONICAL_SURFACES,
 
-  motion: {
-    intensity: 1.5,
-    entrance: 'bounce',
-    entranceDuration: 500,
-    hoverLift: 4,
-    hoverScale: 1.03,
-    useSpring: true,
-    springTension: 200,
-    springFriction: 18,
-    staggerDelay: 80,
-    staggerMax: 600,
-    pulseSpeed: 'fast',
-    skeletonStyle: 'wave',
-    countUpEnabled: true,
-  },
+  motion: EVNTO_CANONICAL_MOTION,
 
   charts: {
     animateOnMount: true,

@@ -8,7 +8,7 @@ import {
   deepMergeTokenOverrides,
   compileBrandTheme,
 } from '../index';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { bithireBrandTheme, evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { generateTenantCss } from '@/infrastructure/compilers/runtime/tenant-css/visual-config';
 import type { TenantConfig } from '@/foundation/contracts';
 
@@ -546,7 +546,7 @@ describe('parity: static generator with brandTheme', () => {
   });
 
   it('vertical baseline layers before brandTheme in static generator', () => {
-    // evnto vertical has: slideUp entrance, intensity 1.2, spacious density,
+    // evnto vertical has the canonical slideUp entrance and spacious density,
     // borderRadius sm:10px. The bithire brandTheme overrides most of these.
     // The generator should resolve vertical -> brandTheme -> tenant.
     const configWithVertical: TenantConfig = {
@@ -557,7 +557,7 @@ describe('parity: static generator with brandTheme', () => {
       plan: 'pro',
       features: [],
       branding: { companyName: 'Test' },
-      vertical: 'evnto', // evnto vertical has slideUp, intensity 1.2, spacious
+      vertical: 'evnto',
       brandTheme: {
         id: 'partial-brand',
         name: 'Partial Brand',
@@ -568,10 +568,10 @@ describe('parity: static generator with brandTheme', () => {
     const css = generateTenantCss(configWithVertical, { includeDarkSelector: false });
     // Vertical personality should be present (brandTheme has no motion/charts/chrome)
     expect(css).toContain('--ds-personality-animation-entrance: slideUp'); // from evnto vertical
-    expect(css).toContain('--ds-personality-animation-intensity: 1.2'); // from evnto vertical
+    expect(css).toContain('--ds-personality-animation-intensity: 1.5'); // from evnto canon
     expect(css).toContain('--ds-personality-card-padding-density: spacious'); // from evnto vertical
     // Vertical tokenOverrides should be present
-    expect(css).toContain('--ds-density-scale: 1.05'); // from evnto vertical
+    expect(css).toContain('--ds-density-scale: 1.125'); // from evnto canon
     // Palette from brandTheme
     expect(css).toContain('--ds-color-primary-500');
   });
@@ -585,7 +585,7 @@ describe('parity: static generator with brandTheme', () => {
       plan: 'pro',
       features: [],
       branding: { companyName: 'Test' },
-      vertical: 'evnto', // evnto vertical: bounce, intensity 1.5
+      vertical: 'evnto', // evnto vertical: slideUp, intensity 1.5
       brandTheme: bithireBrandTheme, // bithire: fade, intensity 0.55
     };
     const css = generateTenantCss(configWithBoth, { includeDarkSelector: false });
@@ -598,10 +598,9 @@ describe('parity: static generator with brandTheme', () => {
   });
 
   it('legacy path resolves vertical + profile (no brandTheme)', () => {
-    // evnto vertical has: bounce, intensity 1.5, densityScale 1.125
+    // evnto vertical has: slideUp, intensity 1.5, densityScale 1.125
     // evnto vertical.defaultProductProfile = 'events.organizer'
-    // events.organizer profile has: slideUp, intensity 1.05, densityScale 1.05
-    // In the legacy merge chain (vertical -> profile -> tenant), profile wins.
+    // events.organizer derives the same structural/motion baseline.
     const legacyWithVertical: TenantConfig = {
       slug: 'legacy-vertical',
       name: 'Legacy Vertical',
@@ -613,14 +612,58 @@ describe('parity: static generator with brandTheme', () => {
       vertical: 'evnto',
     };
     const css = generateTenantCss(legacyWithVertical, { includeDarkSelector: false });
-    // Profile personality wins over vertical (events.organizer overrides evnto)
-    expect(css).toContain('--ds-personality-animation-entrance: slideUp'); // profile wins
-    expect(css).toContain('--ds-personality-animation-intensity: 1.05'); // profile wins
+    expect(css).toContain('--ds-personality-animation-entrance: slideUp');
+    expect(css).toContain('--ds-personality-animation-intensity: 1.5');
     expect(css).toContain('--ds-personality-card-padding-density: spacious'); // both have spacious
-    // Profile tokenOverrides win over vertical
-    expect(css).toContain('--ds-density-scale: 1.05'); // profile wins over vertical 1.125
+    expect(css).toContain('--ds-density-scale: 1.125');
     // Profile borderRadius applied
     expect(css).toContain('--ds-radius-sm: 10px'); // from events.organizer
+    expect(css).toContain('--ds-radius-lg: 18px');
+    expect(css).toContain('--ds-radius-xl: 24px');
+    expect(css).not.toContain('--ds-radius-lg: 20px');
+    expect(css).not.toContain('--ds-radius-xl: 28px');
+  });
+
+  it('keeps bundled and custom Evnto equal on density, radius, depth and motion', () => {
+    const base = {
+      name: 'Evnto parity',
+      engine: 'modern' as const,
+      theme: 'base',
+      plan: 'pro' as const,
+      features: [],
+      branding: { companyName: 'Evnto parity' },
+      vertical: 'evnto',
+    };
+    const bundled = generateTenantCss({
+      ...base,
+      slug: 'evnto-bundled',
+      brandTheme: evntoBrandTheme,
+    }, { includeDarkSelector: false });
+    const custom = generateTenantCss({
+      ...base,
+      slug: 'evnto-custom',
+    }, { includeDarkSelector: false });
+    const axes = [
+      '--ds-density-scale',
+      '--ds-radius-sm', '--ds-radius-md', '--ds-radius-lg', '--ds-radius-xl',
+      '--ds-shadow-sm', '--ds-shadow-md', '--ds-shadow-lg', '--ds-shadow-xl',
+      '--ds-personality-animation-intensity',
+      '--ds-personality-animation-entrance',
+      '--ds-personality-animation-entrance-duration',
+      '--ds-personality-animation-hover-lift',
+      '--ds-personality-animation-hover-scale',
+      '--ds-personality-animation-use-spring',
+      '--ds-personality-animation-spring-tension',
+      '--ds-personality-animation-spring-friction',
+      '--ds-personality-animation-stagger-delay',
+      '--ds-personality-animation-stagger-max',
+    ];
+    const valueOf = (css: string, token: string) =>
+      css.match(new RegExp(`${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}: ([^;]+);`))?.[1];
+
+    for (const token of axes) {
+      expect(valueOf(custom, token), token).toBe(valueOf(bundled, token));
+    }
   });
 
   it('tenant overrides win over profile in legacy path', () => {

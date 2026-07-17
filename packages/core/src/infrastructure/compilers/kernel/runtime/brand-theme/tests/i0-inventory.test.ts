@@ -10,13 +10,57 @@
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
-import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import {
+  rottayBrandTheme,
+  bithireBrandTheme,
+  evntoBrandTheme,
+} from '@/foundation/tokens/ts/presentation/brand-themes';
+import {
+  EVNTO_CANONICAL_MOTION,
+  EVNTO_CANONICAL_SURFACES,
+} from '@/foundation/presets/policy/experience-baselines/evnto';
+import { PRODUCT_PROFILES } from '@/foundation/presets/product-profiles';
+import { VERTICAL_REGISTRY } from '@/foundation/presets/verticals';
 import { generateTenantCss } from '@/infrastructure/compilers/runtime/tenant-css/visual-config';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 const DIST = resolve(process.cwd(), 'dist');
 const CSS_SRC = resolve(process.cwd(), 'src/foundation/tokens/css');
 const PKG_JSON = JSON.parse(readFileSync(resolve(process.cwd(), 'package.json'), 'utf-8'));
+
+describe('Evnto canonical visual axes', () => {
+  const productProfile = PRODUCT_PROFILES['events.organizer'];
+  const vertical = VERTICAL_REGISTRY.evnto;
+
+  it('shares one exact immutable source across brand, profile, and vertical registries', () => {
+    expect(evntoBrandTheme.surfaces).toBe(EVNTO_CANONICAL_SURFACES);
+    expect(productProfile?.personality.animation).toBe(EVNTO_CANONICAL_MOTION);
+    expect(vertical?.personality.animation).toBe(EVNTO_CANONICAL_MOTION);
+    expect(productProfile?.tokenOverrides?.borderRadius).toBe(EVNTO_CANONICAL_SURFACES.borderRadius);
+    expect(vertical?.tokenOverrides?.borderRadius).toBe(EVNTO_CANONICAL_SURFACES.borderRadius);
+    expect(productProfile?.tokenOverrides?.shadows).toBe(EVNTO_CANONICAL_SURFACES.shadows);
+    expect(vertical?.tokenOverrides?.shadows).toBe(EVNTO_CANONICAL_SURFACES.shadows);
+
+    expect(Object.isFrozen(EVNTO_CANONICAL_SURFACES)).toBe(true);
+    expect(Object.isFrozen(EVNTO_CANONICAL_SURFACES.borderRadius)).toBe(true);
+    expect(Object.isFrozen(EVNTO_CANONICAL_SURFACES.shadows)).toBe(true);
+    expect(Object.isFrozen(EVNTO_CANONICAL_SURFACES.glass)).toBe(true);
+    expect(Object.isFrozen(EVNTO_CANONICAL_SURFACES.gradients)).toBe(true);
+    expect(Object.isFrozen(EVNTO_CANONICAL_SURFACES.overlays)).toBe(true);
+    expect(Object.isFrozen(EVNTO_CANONICAL_MOTION)).toBe(true);
+  });
+
+  it('rejects mutations without contaminating any resolution path', () => {
+    expect(Reflect.set(EVNTO_CANONICAL_SURFACES.borderRadius, 'md', '999px')).toBe(false);
+    expect(Reflect.set(EVNTO_CANONICAL_MOTION, 'entranceDuration', 999)).toBe(false);
+
+    expect(evntoBrandTheme.surfaces?.borderRadius?.md).toBe('14px');
+    expect(productProfile?.tokenOverrides?.borderRadius?.md).toBe('14px');
+    expect(vertical?.tokenOverrides?.borderRadius?.md).toBe('14px');
+    expect(productProfile?.personality.animation?.entranceDuration).toBe(350);
+    expect(vertical?.personality.animation?.entranceDuration).toBe(350);
+  });
+});
 
 // ══════════════════════════════════════════════════════════
 // SECTION 1: Public CSS Export Surface (driven from package.json)
@@ -549,6 +593,11 @@ describe('H3 contract: evnto', () => {
   checkMotion(evntoBrandTheme, 'evnto');
   checkCharts(evntoBrandTheme, 'evnto');
   checkSidebar(evntoBrandTheme, 'evnto');
+
+  it('uses the canonical marquee entrance without routine bounce', () => {
+    expect(evntoBrandTheme.motion?.entrance).toBe('slideUp');
+    expect(evntoBrandTheme.motion?.entranceDuration).toBe(350);
+  });
 
   describe('evnto surfaces (filled I6)', () => {
     it('densityScale', () => expect(evntoBrandTheme.surfaces?.densityScale).toBe(1.125));

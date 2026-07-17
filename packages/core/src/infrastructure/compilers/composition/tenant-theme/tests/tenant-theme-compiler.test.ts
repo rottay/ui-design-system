@@ -107,6 +107,7 @@ const ADVANCED_DOCUMENT: TenantThemeDocumentV1 = {
 };
 
 const BITHIRE_TEST_ENVELOPE = getTenantThemeVerticalEnvelope('bithire')!;
+const EVNTO_TEST_ENVELOPE = getTenantThemeVerticalEnvelope('evnto')!;
 
 const hydrate = (
   document: TenantThemeDocumentV1 = SIMPLE_DOCUMENT,
@@ -163,6 +164,44 @@ describe('TenantThemeConfig v1 server contract', () => {
     expect(Object.isFrozen(TENANT_THEME_VERTICAL_ENVELOPES_V1)).toBe(true);
     expect(Object.isFrozen(BITHIRE_TEST_ENVELOPE.advanced?.chromeFamilies)).toBe(true);
     expect(getTenantThemeVerticalEnvelope('unknown')).toBeUndefined();
+  });
+
+  it('owns a bounded Evnto envelope and rejects vertical identity widening', () => {
+    expect(EVNTO_TEST_ENVELOPE).toMatchObject({
+      schemaVersion: 1,
+      verticalKey: 'evnto',
+      allowedModes: ['simple', 'advanced'],
+      advanced: { allowTokenOverrides: true },
+      ranges: {
+        densityScale: { min: 0.85, max: 1.15 },
+        effectIntensity: { min: 0, max: 0.75 },
+        motionIntensity: { min: 0, max: 0.8 },
+        motionDurationScale: { min: 0.75, max: 1.35 },
+      },
+    } satisfies Partial<TenantThemeVerticalEnvelopeV1>);
+    expect(EVNTO_TEST_ENVELOPE.advanced?.chromeFamilies).toEqual(
+      BITHIRE_TEST_ENVELOPE.advanced?.chromeFamilies,
+    );
+    expect(Object.isFrozen(EVNTO_TEST_ENVELOPE)).toBe(true);
+    expect(Object.isFrozen(EVNTO_TEST_ENVELOPE.ranges)).toBe(true);
+
+    const evntoIdentity: TenantThemeConfigIdentityV1 = {
+      ...IDENTITY,
+      tenantId: 'tenant_evnto',
+      slug: 'acme-events',
+      verticalKey: 'evnto',
+    };
+    const config = hydrateTenantThemeConfig(SIMPLE_DOCUMENT, evntoIdentity);
+    const artifact = compileTenantThemeConfig(config, {
+      verticalEnvelope: EVNTO_TEST_ENVELOPE,
+    });
+
+    expect(artifact.verticalKey).toBe('evnto');
+    expect(artifact.scopes.combinedSelector).toContain('[data-vertical="evnto"]');
+    expect(artifact.verticalEnvelopeDigest).toMatch(/^sha256-[a-f0-9]{64}$/);
+    expect(() => compileTenantThemeConfig(config, {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    })).toThrow(TenantThemeValidationError);
   });
 
   it('keeps row identity out of the persisted document and hydrates from trusted columns', () => {

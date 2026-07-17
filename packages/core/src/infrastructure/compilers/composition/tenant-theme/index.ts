@@ -67,6 +67,23 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
       motionDurationScale: { min: 0.75, max: 1.35 },
     },
   },
+  evnto: {
+    schemaVersion: TENANT_THEME_SCHEMA_VERSION,
+    verticalKey: 'evnto',
+    allowedModes: ['simple', 'advanced'],
+    advanced: {
+      chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
+      allowTokenOverrides: true,
+    },
+    ranges: {
+      // Capability limits, not defaults. The static Evnto vertical remains the
+      // owner of engine, product profile, component anatomy and motion topology.
+      densityScale: { min: 0.85, max: 1.15 },
+      effectIntensity: { min: 0, max: 0.75 },
+      motionIntensity: { min: 0, max: 0.8 },
+      motionDurationScale: { min: 0.75, max: 1.35 },
+    },
+  },
 } as const satisfies Readonly<Record<string, TenantThemeVerticalEnvelopeV1>>);
 
 /** Resolve a trusted code-owned envelope; unknown verticals fail closed. */

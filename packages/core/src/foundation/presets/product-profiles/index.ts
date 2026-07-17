@@ -22,6 +22,10 @@
  */
 
 import type { ProductProfile, ProductProfileKey } from '@/foundation/contracts/composition/tenants/product-profiles';
+import {
+  EVNTO_CANONICAL_MOTION,
+  EVNTO_CANONICAL_SURFACES,
+} from '@/foundation/presets/policy/experience-baselines/evnto';
 
 /**
  * A neutral fallback used when no explicit product profile is provided.
@@ -95,21 +99,7 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
     label: 'Events Organizer',
     description: 'An expressive profile for event operations, discovery, and live-status collections.',
     personality: {
-      animation: {
-        intensity: 1.05,
-        staggerDelay: 55,
-        staggerMax: 320,
-        entrance: 'slideUp',
-        entranceDuration: 280,
-        hoverLift: 3,
-        hoverScale: 1.015,
-        useSpring: true,
-        springTension: 200,
-        springFriction: 20,
-        pulseSpeed: 'fast',
-        skeletonStyle: 'shimmer',
-        countUpEnabled: true,
-      },
+      animation: EVNTO_CANONICAL_MOTION,
       chart: {
         animateOnMount: true,
         mountDuration: 950,
@@ -140,17 +130,9 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
       },
     },
     tokenOverrides: {
-      densityScale: 1.05,
-      borderRadius: {
-        sm: '10px',
-        md: '14px',
-        lg: '20px',
-        xl: '28px',
-      },
-      shadows: {
-        md: '0 16px 48px rgba(17, 24, 39, 0.12)',
-        lg: '0 24px 64px rgba(17, 24, 39, 0.16)',
-      },
+      densityScale: EVNTO_CANONICAL_SURFACES.densityScale,
+      borderRadius: EVNTO_CANONICAL_SURFACES.borderRadius,
+      shadows: EVNTO_CANONICAL_SURFACES.shadows,
     },
     surfaceDefaults: {
       listView: 'table',

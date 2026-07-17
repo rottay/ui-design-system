@@ -26,6 +26,10 @@
 
 import type { VerticalKey } from '@/foundation/contracts/kernel/verticals';
 import type { VerticalPreset } from '@/foundation/contracts/composition/tenants';
+import {
+  EVNTO_CANONICAL_MOTION,
+  EVNTO_CANONICAL_SURFACES,
+} from '@/foundation/presets/policy/experience-baselines/evnto';
 
 /**
  * Registry of all known vertical presets.
@@ -52,21 +56,7 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
     motionProfile: 'expressive',
     density: 'comfortable',
     personality: {
-      animation: {
-        intensity: 1.2,
-        staggerDelay: 65,
-        staggerMax: 450,
-        entrance: 'slideUp',
-        entranceDuration: 350,
-        hoverLift: 3,
-        hoverScale: 1.02,
-        useSpring: true,
-        springTension: 200,
-        springFriction: 18,
-        pulseSpeed: 'fast',
-        skeletonStyle: 'wave',
-        countUpEnabled: true,
-      },
+      animation: EVNTO_CANONICAL_MOTION,
       chart: {
         animateOnMount: true,
         mountDuration: 1000,
@@ -97,13 +87,9 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
       },
     },
     tokenOverrides: {
-      densityScale: 1.05,
-      borderRadius: {
-        sm: '10px',
-        md: '14px',
-        lg: '18px',
-        xl: '24px',
-      },
+      densityScale: EVNTO_CANONICAL_SURFACES.densityScale,
+      borderRadius: EVNTO_CANONICAL_SURFACES.borderRadius,
+      shadows: EVNTO_CANONICAL_SURFACES.shadows,
     },
     defaultProductProfile: 'events.organizer',
     features: ['events', 'ticketing', 'check-in', 'analytics'],
