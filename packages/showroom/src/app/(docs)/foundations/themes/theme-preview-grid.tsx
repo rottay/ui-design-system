@@ -17,7 +17,7 @@ import {
   getShowroomVerticalKey,
   type ShowroomTheme,
   useShowroom,
-} from '@/composition/components/showroom-context';
+} from '@/components/showroom-context';
 
 interface TenantTheme {
   slug: ShowroomTheme;

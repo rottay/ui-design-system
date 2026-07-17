@@ -1,11 +1,11 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import {
   DocsMetricTile,
   DocsPanel,
   SectionDivider,
-} from '@/composition/components/showroom-ui';
+} from '@/components/showroom-ui';
 import {
   Badge,
   Box,
@@ -21,9 +21,9 @@ import {
   SparklesIcon,
   ZapIcon,
 } from '@rottay/design-system/icons';
-import { CodeBlock } from '@/composition/components/playground';
+import { CodeBlock } from '@/components/playground';
 import { FoundationTopRail } from '../foundation-top-rail';
-import { DocsCompactList, DocsSectionHeader } from '@/composition/components/docs/editorial-chrome';
+import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial-chrome';
 
 interface TokenCategory {
   title: string;

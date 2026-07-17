@@ -1,7 +1,7 @@
 'use client';
 
 import { use } from 'react';
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { ChevronLeftIcon } from '@rottay/design-system/icons';
 import {

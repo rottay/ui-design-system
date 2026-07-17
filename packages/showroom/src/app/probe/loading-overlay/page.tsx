@@ -9,7 +9,7 @@ import {
   TortureSurface,
   type ProbeEngine,
   type TortureFixture,
-} from '@/composition/components/torture-surface';
+} from '@/components/torture-surface';
 
 function readFixture(value: string | null): TortureFixture {
   return value === 'bithire' ? 'bithire' : 'rottay';

@@ -1,16 +1,16 @@
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import { charts } from '@/data/registry/charts';
 import { icons } from '@/data/registry/icons';
 import { patterns } from '@/data/registry/patterns';
 import { primitives } from '@/data/registry/primitives';
 import { structures } from '@/data/registry/structures';
 import { surfaces } from '@/data/registry/surfaces';
-import { EngineSignaturesSection } from '@/composition/components/landing/engine-signatures-section';
-import { MarketingHero } from '@/composition/components/landing/marketing-hero';
-import ValueProofSection from '@/composition/components/landing/value-proof-section';
-import { BrandShiftSection } from '@/composition/components/landing/brand-shift-section';
+import { EngineSignaturesSection } from '@/components/landing/engine-signatures-section';
+import { MarketingHero } from '@/components/landing/marketing-hero';
+import ValueProofSection from '@/components/landing/value-proof-section';
+import { BrandShiftSection } from '@/components/landing/brand-shift-section';
 import { ArrowUpRight } from 'lucide-react';
 import { ArrowRightIcon } from '@rottay/design-system/icons';
 

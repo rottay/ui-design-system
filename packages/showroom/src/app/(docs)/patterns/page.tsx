@@ -1,6 +1,6 @@
-import { ShowroomLink as Link } from "@/composition/components/showroom-link";
-import { Badge, Box, Card, Flex, Stack, Text } from "@/composition/components/showroom-ui";
-import { SHOWROOM_SURFACES } from "@/composition/components/playground/surface-tokens";
+import { ShowroomLink as Link } from "@/components/showroom-link";
+import { Badge, Box, Card, Flex, Stack, Text } from "@/components/showroom-ui";
+import { SHOWROOM_SURFACES } from "@/components/playground/surface-tokens";
 import {
   patternGroups,
   patterns,
@@ -110,6 +110,16 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     tint: "var(--ds-color-neutral-100)",
     accent: "var(--ds-color-text-primary, #111827)",
     icon: <ScanSearchIcon size={20} />,
+  },
+  feedback: {
+    promise: "Adapt feedback flows to the device without changing their intent.",
+    description:
+      "Feedback patterns package responsive modal, drawer, and sheet posture so confirmation and interruption stay coherent.",
+    bestFor: "Responsive overlays, confirmations, guided interruptions",
+    pairedSurfaces: ["FormSurface", "DetailSurface", "CommandCenterSurface"],
+    tint: "var(--ds-color-error-50)",
+    accent: "var(--ds-color-error-700)",
+    icon: <MessageSquareIcon size={20} />,
   },
   misc: {
     promise: "House specialised product modules that still deserve reuse.",

@@ -12,7 +12,7 @@ import {
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
 import * as AllIcons from '@rottay/design-system/icons';
-import { CodeBlock } from '@/composition/components/playground';
+import { CodeBlock } from '@/components/playground';
 import {
   iconCategories,
   icons as curatedIcons,

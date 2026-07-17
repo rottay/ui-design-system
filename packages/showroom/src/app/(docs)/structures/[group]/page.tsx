@@ -1,9 +1,9 @@
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import {
   DocsMetricTile,
   DocsPanel,
   SectionDivider,
-} from '@/composition/components/showroom-ui';
+} from '@/components/showroom-ui';
 import { notFound } from 'next/navigation';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
@@ -55,6 +55,17 @@ const GROUP_PROFILES: Record<
     evaluate: ['reassurance', 'status clarity', 'handoff back to content'],
     patterns: ['empty states', 'result states', 'skeletons'],
     surfaces: ['all surfaces', 'async workflows', 'mutation-heavy screens'],
+  },
+  shell: {
+    summary:
+      'Shell structures keep persistent navigation reachable and distinct from page content across compact viewports.',
+    evaluate: ['active destination clarity', 'thumb reach', 'safe-area posture'],
+    patterns: ['command palettes', 'workspace switchers', 'status filters'],
+    surfaces: [
+      'CollectionWorkspaceSurface',
+      'CommandCenterSurface',
+      'RecordWorkbenchSurface',
+    ],
   },
 };
 

@@ -3,7 +3,7 @@
 import { Suspense, useMemo, cloneElement, isValidElement, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Text } from '@rottay/design-system';
-import { TenantPaletteSurface, getResponsiveSpec, type SurfaceTenant } from '@/composition/components/state-gallery';
+import { TenantPaletteSurface, getResponsiveSpec, type SurfaceTenant } from '@/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // Container-axis probe (WO-ARC-08 checkpoint 1 -- capture harness)

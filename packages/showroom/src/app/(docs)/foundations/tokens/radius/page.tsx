@@ -1,6 +1,6 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import {
   Badge,
   Box,
@@ -11,8 +11,8 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { CodeBlock } from '@/composition/components/playground';
-import { useShowroom } from '@/composition/components/showroom-context';
+import { CodeBlock } from '@/components/playground';
+import { useShowroom } from '@/components/showroom-context';
 
 const RADIUS_STEPS = ['none', 'sm', 'md', 'lg', 'xl', 'full'] as const;
 

@@ -13,8 +13,8 @@ import {
   getKnownTenantConfig,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { CodeBlock } from '@/composition/components/playground';
-import { getShowroomVerticalKey, useShowroom } from '@/composition/components/showroom-context';
+import { CodeBlock } from '@/components/playground';
+import { getShowroomVerticalKey, useShowroom } from '@/components/showroom-context';
 import { FoundationTopRail } from '../foundation-top-rail';
 
 type EngineName = 'classic' | 'modern' | 'rustic';

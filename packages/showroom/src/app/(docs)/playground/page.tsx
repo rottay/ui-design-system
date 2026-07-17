@@ -1,8 +1,8 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
-import { ComponentPreview, EngineComparison } from '@/composition/components/playground';
-import { useShowroomRuntime } from '@/composition/components/showroom-context';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ComponentPreview, EngineComparison } from '@/components/playground';
+import { useShowroomRuntime } from '@/components/showroom-context';
 import {
   Badge,
   Box,

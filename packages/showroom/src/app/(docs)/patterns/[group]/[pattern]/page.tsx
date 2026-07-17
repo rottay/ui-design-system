@@ -1,16 +1,16 @@
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
   CodeBlock,
   PropTable,
   type PropDefinition,
-} from '@/composition/components/playground';
+} from '@/components/playground';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/composition/components/playground/surface-tokens';
-import { formatShowroomLabel } from '@/composition/components/layout/config';
+} from '@/components/playground/surface-tokens';
+import { formatShowroomLabel } from '@/components/layout/config';
 import {
   patterns,
   patternsByGroup,
@@ -86,6 +86,13 @@ const GROUP_GUIDANCE: Record<
       'CommandCenterSurface',
       'RecordWorkbenchSurface',
     ],
+  },
+  feedback: {
+    promise:
+      'Feedback patterns should adapt interruption and confirmation posture without changing the task contract.',
+    evaluate: ['responsive posture', 'dismissal clarity', 'focus continuity'],
+    structures: ['LoadingOverlay', 'ActionDock', 'MobileHeader'],
+    surfaces: ['FormSurface', 'DetailSurface', 'CommandCenterSurface'],
   },
   misc: {
     promise:
@@ -476,6 +483,36 @@ function getPlaceholderProps(entry: PatternEntry): PropDefinition[] {
         type: 'string',
         required: false,
         description: 'Optional keyboard hint rendered with the navigation affordance.',
+      },
+    ],
+    feedback: [
+      {
+        name: 'open',
+        type: 'boolean',
+        required: true,
+        description: 'Controls whether the feedback overlay is visible.',
+      },
+      {
+        name: 'mode',
+        type: '"auto" | "modal" | "drawer" | "sheet"',
+        defaultValue: '"auto"',
+        required: false,
+        description:
+          'Selects automatic responsive posture or a forced container.',
+      },
+      {
+        name: 'onClose',
+        type: '() => void',
+        required: false,
+        description:
+          'Handles dismissal from escape, backdrop, or the active container.',
+      },
+      {
+        name: 'children',
+        type: 'ReactNode',
+        required: true,
+        description:
+          'Feedback content rendered inside the resolved overlay posture.',
       },
     ],
     misc: [

@@ -1,9 +1,9 @@
 "use client";
 
-import { useShowroomRuntime } from "@/composition/components/showroom-context";
-import { EventDashboardDemo } from "@/composition/components/demos/evnto/event-dashboard";
-import { TicketBuilderDemo } from "@/composition/components/demos/evnto/ticket-builder";
-import { VenueLayoutDemo } from "@/composition/components/demos/evnto/venue-layout";
+import { useShowroomRuntime } from "@/components/showroom-context";
+import { EventDashboardDemo } from "@/components/demos/evnto/event-dashboard";
+import { TicketBuilderDemo } from "@/components/demos/evnto/ticket-builder";
+import { VenueLayoutDemo } from "@/components/demos/evnto/venue-layout";
 import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
 import {
   ActivityIcon,

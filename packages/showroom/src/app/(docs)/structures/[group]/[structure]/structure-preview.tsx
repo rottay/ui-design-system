@@ -15,7 +15,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/composition/components/playground/surface-tokens';
+} from '@/components/playground/surface-tokens';
 import { structures } from '@/data/registry';
 import type { StructureGroup } from '@/data/registry';
 import { STRUCTURE_PREVIEWS } from './structure-preview-fixtures';
@@ -283,7 +283,7 @@ function renderGenericStructurePreview(entry: {
                       : 'var(--ds-color-bg-secondary)',
                   }}
                 />
-                <Text size="xs" weight={index === 0 ? 'semibold' : 'regular'}>
+                <Text size="xs" weight={index === 0 ? 'semibold' : 'normal'}>
                   {label}
                 </Text>
               </Stack>

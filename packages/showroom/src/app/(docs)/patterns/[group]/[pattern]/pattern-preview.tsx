@@ -5,7 +5,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/composition/components/playground/surface-tokens';
+} from '@/components/playground/surface-tokens';
 import { patterns } from '@/data/registry';
 import type { PatternGroup } from '@/data/registry';
 import { renderPatternPreview } from './pattern-preview-fixtures';
@@ -42,6 +42,11 @@ const GROUP_META: Record<
   navigation: {
     label: 'Navigation pattern',
     note: 'Check discoverability, mode switching, and whether overlay patterns are rendered through the active runtime rather than mocked locally.',
+    minHeight: 220,
+  },
+  feedback: {
+    label: 'Feedback pattern',
+    note: 'Check responsive posture, focus continuity, and whether dismissal stays clear across modal, drawer, and sheet containers.',
     minHeight: 220,
   },
   misc: {

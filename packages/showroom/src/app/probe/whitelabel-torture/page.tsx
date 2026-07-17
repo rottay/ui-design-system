@@ -232,9 +232,9 @@ import {
 } from '@rottay/design-system';
 import type { ActivityItem, KeyMetric, StatItem, FilterPillConfig } from '@rottay/design-system';
 import { TagIcon } from '@rottay/design-system/icons';
-import { StateGallery, FLAGSHIP_SLUGS } from '@/composition/components/state-gallery';
-import { TortureSurface, TORTURE_FIXTURES, type TortureFixture, type ProbeEngine } from '@/composition/components/torture-surface';
-import { SurfacesLongTailFixture } from '@/composition/components/surfaces-long-tail-fixture';
+import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
+import { TortureSurface, TORTURE_FIXTURES, type TortureFixture, type ProbeEngine } from '@/components/torture-surface';
+import { SurfacesLongTailFixture } from '@/components/surfaces-long-tail-fixture';
 
 // ---------------------------------------------------------------------------
 // Whitelabel torture probe (WO-GAT-03 hostile-tenant whitelabel proof)

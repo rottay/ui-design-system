@@ -1,4 +1,4 @@
-import type { ShowroomEngine, ShowroomTheme } from '@/composition/components/showroom-context';
+import type { ShowroomEngine, ShowroomTheme } from '@/components/showroom-context';
 
 export interface PreviewOption<T extends string> {
   key: T;

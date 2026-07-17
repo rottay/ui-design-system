@@ -1,5 +1,5 @@
 import { ArrowUpRight } from 'lucide-react';
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 
 const SHIFT_DIMENSIONS = [
   {

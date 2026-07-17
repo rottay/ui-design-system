@@ -1,5 +1,5 @@
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
-import { Badge, Box, Card, Flex, Stack, Text } from '@/composition/components/showroom-ui';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
 import {
   structureGroups,
   structures,
@@ -75,6 +75,20 @@ const STRUCTURE_EDITORIAL: Record<StructureGroup, StructureEditorial> = {
     tint: 'var(--ds-color-error-50)',
     accent: 'var(--ds-color-error-700)',
     icon: <LoaderCircleIcon size={20} />,
+  },
+  shell: {
+    role: 'Persistent mobile navigation, active destination, badges, and safe-area framing.',
+    description:
+      'Shell structures keep global navigation reachable without competing with page-level content.',
+    bestFor: 'Mobile application shells and compact workspaces',
+    pairings: [
+      'CommandPalette',
+      'WorkspaceSwitcher',
+      'CollectionWorkspaceSurface',
+    ],
+    tint: 'var(--ds-color-primary-50)',
+    accent: 'var(--ds-color-primary-700)',
+    icon: <LayoutTemplateIcon size={20} />,
   },
 };
 

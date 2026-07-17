@@ -8,7 +8,7 @@ import {
   isShowroomEngine,
   isShowroomTenant,
   readShowroomRuntimeOverride,
-} from '@/composition/components/showroom-runtime-query';
+} from '@/components/showroom-runtime-query';
 
 type ShowroomLinkProps = ComponentProps<typeof Link>;
 const ENGINE_STORAGE_KEY = 'rottay-showroom-engine';

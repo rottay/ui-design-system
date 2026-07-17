@@ -11,7 +11,7 @@ import {
   type EntityAdapter,
   type ListSurfaceConfig,
 } from '@rottay/design-system';
-import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/composition/components/state-gallery';
+import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // View-transition evidence surface (WO-CRA-08 list-to-detail seam capture)

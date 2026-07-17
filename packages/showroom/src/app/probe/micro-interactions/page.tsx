@@ -17,7 +17,7 @@ import {
   ToastProvider,
   useToast,
 } from '@rottay/design-system';
-import { TortureSurface, type TortureFixture } from '@/composition/components/torture-surface';
+import { TortureSurface, type TortureFixture } from '@/components/torture-surface';
 
 // ---------------------------------------------------------------------------
 // Micro-interaction catalog probe (WO-CRA-07 sighted proof)

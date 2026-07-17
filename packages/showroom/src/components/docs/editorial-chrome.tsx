@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
-import { Box, Card, Flex, Stack, Text } from '@/composition/components/showroom-ui';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
 
 type Tone = 'default' | 'accent' | 'success' | 'warning';
 

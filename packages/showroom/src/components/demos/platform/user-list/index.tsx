@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useShowroomRuntime } from '@/composition/components/showroom-context';
+import { useShowroomRuntime } from '@/components/showroom-context';
 import {
   Avatar,
   Badge,

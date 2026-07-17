@@ -1,5 +1,5 @@
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
-import { Badge, Box, Card, Flex, Stack, Text } from '@/composition/components/showroom-ui';
+import { ShowroomLink as Link } from '@/components/showroom-link';
+import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
 import { iconCategories } from '@/data/registry/icons';
 import {
   BracesIcon,

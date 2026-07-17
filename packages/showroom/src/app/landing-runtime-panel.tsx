@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import { Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 
 const panelBorder = '1px solid var(--landing-border, rgba(36, 30, 24, 0.12))';

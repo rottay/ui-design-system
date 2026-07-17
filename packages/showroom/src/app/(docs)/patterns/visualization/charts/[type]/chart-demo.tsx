@@ -23,12 +23,12 @@ import {
 } from '@rottay/design-system';
 import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
 import { charts } from '@/data/registry';
-import { useShowroomRuntime } from '@/composition/components/showroom-context';
+import { useShowroomRuntime } from '@/components/showroom-context';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/composition/components/playground/surface-tokens';
+} from '@/components/playground/surface-tokens';
 
 const PREVIEW_OVERLAY =
   'radial-gradient(circle at top right, color-mix(in srgb, var(--ds-color-primary-500) 16%, transparent), transparent 28%), radial-gradient(circle at left bottom, color-mix(in srgb, var(--ds-color-success-500) 8%, transparent), transparent 34%)';

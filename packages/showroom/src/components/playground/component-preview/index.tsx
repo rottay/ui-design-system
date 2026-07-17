@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { Badge, Box, Button, Flex, Stack, Text, useTokens } from '@rottay/design-system';
-import { useShowroomRuntime } from '@/composition/components/showroom-context';
+import { useShowroomRuntime } from '@/components/showroom-context';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,

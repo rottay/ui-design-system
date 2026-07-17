@@ -3,7 +3,7 @@
 import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Card, ScrollReveal, Stack, Text } from '@rottay/design-system';
-import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/composition/components/state-gallery';
+import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // Scroll-reveal evidence surface (WO-CRA-08 scroll-driven reveal capture)

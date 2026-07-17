@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Box, Flex, Text } from "@/composition/components/showroom-ui";
+import { Box, Flex, Text } from "@/components/showroom-ui";
 import { CheckCircleIcon } from "@rottay/design-system/icons";
-import { useShowroomRuntime } from "@/composition/components/showroom-context";
+import { useShowroomRuntime } from "@/components/showroom-context";
 import {
   ENGINE_OPTIONS,
   getPreviewOption,

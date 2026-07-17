@@ -6,7 +6,7 @@ import {
   getKnownTenantConfig,
   type ProductProfileKey,
 } from '@rottay/design-system';
-import { getShowroomVerticalKey } from '@/composition/components/showroom-context';
+import { getShowroomVerticalKey } from '@/components/showroom-context';
 import { ShowroomShell } from './shell';
 
 export function DocsProviderShell({

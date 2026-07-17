@@ -65,7 +65,7 @@ import {
   ToolCallCard,
   TypingIndicator,
 } from '@rottay/design-system';
-import PlatformUserListDemo from '@/composition/components/demos/platform/user-list';
+import PlatformUserListDemo from '@/components/demos/platform/user-list';
 
 export const SINGLE_RUNTIME_PATTERN_SLUGS = new Set([
   'command-palette',

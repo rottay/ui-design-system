@@ -1,9 +1,9 @@
 "use client";
 
-import { ShowroomLink as Link } from "@/composition/components/showroom-link";
-import { Box, Flex, Text } from "@/composition/components/showroom-ui";
+import { ShowroomLink as Link } from "@/components/showroom-link";
+import { Box, Flex, Text } from "@/components/showroom-ui";
 import { ExternalLinkIcon } from "@rottay/design-system/icons";
-import { useShowroomRuntime } from "@/composition/components/showroom-context";
+import { useShowroomRuntime } from "@/components/showroom-context";
 import { DOC_COUNTS, ENGINE_OPTIONS, getPreviewOption } from "../runtime-options";
 
 const FOOTER_LINKS = [

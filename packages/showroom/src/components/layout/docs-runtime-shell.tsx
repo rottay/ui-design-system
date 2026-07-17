@@ -5,7 +5,7 @@ import {
   getShowroomProductProfileKey,
   ShowroomProvider,
   useShowroom,
-} from '@/composition/components/showroom-context';
+} from '@/components/showroom-context';
 import { DocsProviderShell } from './docs-provider-shell';
 
 function DocsRuntimeInner({ children }: { children: ReactNode }) {

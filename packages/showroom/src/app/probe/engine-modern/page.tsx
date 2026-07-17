@@ -10,7 +10,7 @@ import {
   FLAGSHIP_SLUGS,
   RESPONSIVE_SLUGS,
   type SurfaceTenant,
-} from '@/composition/components/state-gallery';
+} from '@/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // Modern engine evidence surface (stable capture target for WO-ENG-11)

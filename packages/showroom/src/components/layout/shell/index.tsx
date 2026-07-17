@@ -13,14 +13,14 @@ import {
   useTokens,
 } from "@rottay/design-system";
 import { SearchIcon } from "@rottay/design-system/icons";
-import { RuntimeFingerprint } from "@/composition/components/runtime/runtime-fingerprint";
-import { ShowroomLink as Link } from "@/composition/components/showroom-link";
+import { RuntimeFingerprint } from "@/components/runtime/runtime-fingerprint";
+import { ShowroomLink as Link } from "@/components/showroom-link";
 import {
   useShowroom,
   useShowroomRuntime,
   type ShowroomEngine,
   type ShowroomTheme,
-} from "@/composition/components/showroom-context";
+} from "@/components/showroom-context";
 import {
   countSectionEntries,
   getSectionMeta,

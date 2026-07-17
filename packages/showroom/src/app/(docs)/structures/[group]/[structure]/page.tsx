@@ -1,4 +1,4 @@
-import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/showroom-link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
   structures,
@@ -6,13 +6,13 @@ import {
   type StructureEntry,
   type StructureGroup,
 } from '@/data/registry';
-import { CodeBlock, EngineComparison } from '@/composition/components/playground';
+import { CodeBlock, EngineComparison } from '@/components/playground';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/composition/components/playground/surface-tokens';
-import { formatShowroomLabel } from '@/composition/components/layout/config';
+} from '@/components/playground/surface-tokens';
+import { formatShowroomLabel } from '@/components/layout/config';
 import { StructurePreview } from './structure-preview';
 
 const HERO_OVERLAY =
@@ -61,6 +61,17 @@ const GROUP_GUIDANCE: Record<
     evaluate: ['waiting clarity', 'message tone', 'return to task'],
     patterns: ['empty states', 'result states', 'skeletons'],
     surfaces: ['all surfaces', 'loading-heavy flows', 'save-confirm loops'],
+  },
+  shell: {
+    promise:
+      'Shell structures keep persistent navigation reachable and distinct from page content across compact viewports.',
+    evaluate: ['active destination clarity', 'thumb reach', 'safe-area posture'],
+    patterns: ['command palettes', 'workspace switchers', 'status filters'],
+    surfaces: [
+      'CollectionWorkspaceSurface',
+      'CommandCenterSurface',
+      'RecordWorkbenchSurface',
+    ],
   },
 };
 
