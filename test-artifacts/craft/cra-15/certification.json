@@ -3,7 +3,7 @@
   "workOrder": "WO-CRA-15",
   "sourceId": "DS-IMP-106",
   "scope": "ParticleField plus governed Canvas and WebGL lifecycle hardening",
-  "package": "@rottay/design-system@2.19.32",
+  "package": "@rottay/design-system@2.19.33",
   "sourceFingerprint": "4cff0d787ff871a167c80c46818bd772bc84fe97dbe24a44feacf43f6e64218c",
   "governance": {
     "sharedContinuousRuntimeBudget": 1,
