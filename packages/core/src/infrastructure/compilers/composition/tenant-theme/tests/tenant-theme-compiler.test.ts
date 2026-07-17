@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
+import { TENANT_PRESENTATION_PROFILE_IDS } from '@/foundation/contracts/composition/tenants/themes';
 import type {
   TenantThemeConfigIdentityV1,
   TenantThemeDocumentV1,
@@ -123,19 +124,29 @@ describe('TenantThemeConfig v1 server contract', () => {
 
   it('publishes immutable schema/document drift sentinels', () => {
     expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toBe(
-      'sha256-5fd9955bb737c574118043c15d70575be8daea96aa8104bc9005a8067b4fb304',
+      'sha256-4ec96946ab6c9297cb3bc1db6278b85076c21f198a38c6b7ac138d9441c3db40',
     );
     expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).toBe(
-      'sha256-9c4c5ee91ebb5a2a5f64afeeecf6e038ae9b4acba0a6149eaa2b89a6300f0211',
+      'sha256-46709bfc286d0dd326dc7732af12b76ba48fc80db0773937dbe30862611329ac',
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.documents.simple)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.limits)).toBe(true);
-    expect(TENANT_THEME_COMPILER_VERSION).toBe('tenant-theme-compiler@2');
+    expect(TENANT_THEME_COMPILER_VERSION).toBe('tenant-theme-compiler@3');
+    expect(TENANT_PRESENTATION_PROFILE_IDS).toEqual([
+      'editorial-ledger',
+      'ambient-command',
+    ]);
     expect(TENANT_THEME_CONFIG_V1_SCHEMA.limits).toMatchObject({
       maxCompiledVariables: 512,
       maxCompiledVariableBytes: 90_112,
     });
+    expect(TENANT_THEME_CONFIG_V1_SCHEMA.scopeAttributes).toEqual([
+      'data-ds-root',
+      'data-vertical',
+      'data-tenant',
+      'data-ds-presentation-profile',
+    ]);
     expect(() => {
       (TENANT_THEME_CONFIG_V1_SCHEMA.limits as { maxDepth: number }).maxDepth = 999;
     }).toThrow(TypeError);
@@ -146,6 +157,10 @@ describe('TenantThemeConfig v1 server contract', () => {
       schemaVersion: 1,
       verticalKey: 'bithire',
       allowedModes: ['simple', 'advanced'],
+      presentationProfiles: {
+        default: 'editorial-ledger',
+        allowed: ['editorial-ledger', 'ambient-command'],
+      },
       advanced: {
         chromeFamilies: [
           'sidebar', 'layout', 'shell', 'toolbar', 'filterPill', 'breadcrumb', 'search',
@@ -162,6 +177,8 @@ describe('TenantThemeConfig v1 server contract', () => {
       },
     } satisfies TenantThemeVerticalEnvelopeV1);
     expect(Object.isFrozen(TENANT_THEME_VERTICAL_ENVELOPES_V1)).toBe(true);
+    expect(Object.isFrozen(BITHIRE_TEST_ENVELOPE.presentationProfiles)).toBe(true);
+    expect(Object.isFrozen(BITHIRE_TEST_ENVELOPE.presentationProfiles.allowed)).toBe(true);
     expect(Object.isFrozen(BITHIRE_TEST_ENVELOPE.advanced?.chromeFamilies)).toBe(true);
     expect(getTenantThemeVerticalEnvelope('unknown')).toBeUndefined();
   });
@@ -171,6 +188,10 @@ describe('TenantThemeConfig v1 server contract', () => {
       schemaVersion: 1,
       verticalKey: 'evnto',
       allowedModes: ['simple', 'advanced'],
+      presentationProfiles: {
+        default: 'editorial-ledger',
+        allowed: ['editorial-ledger'],
+      },
       advanced: { allowTokenOverrides: true },
       ranges: {
         densityScale: { min: 0.85, max: 1.15 },
@@ -197,6 +218,7 @@ describe('TenantThemeConfig v1 server contract', () => {
     });
 
     expect(artifact.verticalKey).toBe('evnto');
+    expect(artifact.presentationProfile).toBe('editorial-ledger');
     expect(artifact.scopes.combinedSelector).toContain('[data-vertical="evnto"]');
     expect(artifact.verticalEnvelopeDigest).toMatch(/^sha256-[a-f0-9]{64}$/);
     expect(() => compileTenantThemeConfig(config, {
@@ -211,6 +233,62 @@ describe('TenantThemeConfig v1 server contract', () => {
       issues: [{ code: 'unknown_key', path: '$.tenantId' }],
     });
     expect(hydrate()).toMatchObject({ ...IDENTITY, mode: 'simple' });
+  });
+
+  it('resolves the code-owned default and allows only vertical-authorized presentation profiles', () => {
+    const defaultArtifact = compileTenantThemeConfig(hydrate());
+    const ambientDocument: TenantThemeDocumentV1 = {
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: {
+        ...SIMPLE_DOCUMENT.appearance,
+        presentationProfile: 'ambient-command',
+      },
+    };
+    const ambientArtifact = compileTenantThemeConfig(hydrate(ambientDocument));
+    const ambientAdvancedDocument = structuredClone(ADVANCED_DOCUMENT);
+    if (ambientAdvancedDocument.mode !== 'advanced') throw new Error('Expected Advanced fixture');
+    ambientAdvancedDocument.visualFoundation.general = {
+      ...ambientAdvancedDocument.visualFoundation.general,
+      presentationProfile: 'ambient-command',
+    };
+    const ambientAdvancedArtifact = compileTenantThemeConfig(
+      hydrate(ambientAdvancedDocument),
+      { verticalEnvelope: BITHIRE_TEST_ENVELOPE },
+    );
+
+    expect(defaultArtifact.presentationProfile).toBe('editorial-ledger');
+    expect(ambientArtifact.presentationProfile).toBe('ambient-command');
+    expect(ambientAdvancedArtifact.presentationProfile).toBe('ambient-command');
+    expect(ambientArtifact.variables).toEqual(defaultArtifact.variables);
+    expect(ambientArtifact.digest).not.toBe(defaultArtifact.digest);
+    expect(tenantThemeArtifactRootAttributes(ambientArtifact)).toMatchObject({
+      'data-ds-presentation-profile': 'ambient-command',
+    });
+
+    const evntoIdentity: TenantThemeConfigIdentityV1 = {
+      ...IDENTITY,
+      tenantId: 'tenant_evnto_ambient',
+      slug: 'ambient-events',
+      verticalKey: 'evnto',
+    };
+    expect(() => compileTenantThemeConfig(
+      hydrateTenantThemeConfig(ambientDocument, evntoIdentity),
+      { verticalEnvelope: EVNTO_TEST_ENVELOPE },
+    )).toThrow(/not enabled by this vertical/i);
+
+    const unknown = validateTenantThemeDocument({
+      schemaVersion: 1,
+      mode: 'simple',
+      appearance: { presentationProfile: 'tenant-authored-css' },
+    });
+    expect(unknown.success).toBe(false);
+    if (!unknown.success) {
+      expect(unknown.issues).toContainEqual(expect.objectContaining({
+        code: 'invalid_value',
+        path: '$.appearance.presentationProfile',
+      }));
+    }
   });
 
   it('fails closed when trusted row identity disagrees with request/directory identity', () => {
@@ -336,6 +414,7 @@ describe('deterministic artifact compilation and isolation', () => {
       'data-ds-root': '',
       'data-vertical': 'bithire',
       'data-tenant': 'themanagementmiami',
+      'data-ds-presentation-profile': 'editorial-ledger',
     });
   });
 
@@ -422,6 +501,7 @@ describe('deterministic artifact compilation and isolation', () => {
       '--ds-table-header-bg': '#FFFFFF',
       '--ds-effect-intensity': '0.45',
     });
+    expect(management.presentationProfile).toBe('editorial-ledger');
     expect(management.verticalEnvelopeDigest).toMatch(/^sha256-/);
   });
 });
@@ -614,6 +694,24 @@ describe('closed schema and hostile input rejection', () => {
         allowedModes: ['advanced', 'advanced'],
       },
     })).toThrow(/unique non-empty/i);
+    expect(() => compileTenantThemeConfig(config, {
+      verticalEnvelope: {
+        ...BITHIRE_TEST_ENVELOPE,
+        presentationProfiles: {
+          default: 'ambient-command',
+          allowed: ['editorial-ledger'],
+        },
+      },
+    })).toThrow(/default presentation profile must be allowed/i);
+    expect(() => compileTenantThemeConfig(config, {
+      verticalEnvelope: {
+        ...BITHIRE_TEST_ENVELOPE,
+        presentationProfiles: {
+          default: 'editorial-ledger',
+          allowed: ['editorial-ledger', 'unknown-profile'],
+        },
+      } as unknown as TenantThemeVerticalEnvelopeV1,
+    })).toThrow(/known presentation profiles/i);
   });
 
   it('parses into a detached canonical value rather than retaining tainted references', () => {

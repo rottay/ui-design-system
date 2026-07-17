@@ -53,11 +53,12 @@ Rottay or another customer's styling.
 
 ## Customization Contract
 
-`TenantThemeDocument` schema v1 compiled by `tenant-theme-compiler@2` is the
+`TenantThemeDocument` schema v1 compiled by `tenant-theme-compiler@3` is the
 only write contract for tenant customization.
 
 - General fields expose bounded palette, typography, shape, density, motion,
-  elevation and navigation dials.
+  elevation and navigation dials, plus one code-owned presentation profile
+  allowlisted by the trusted vertical envelope.
 - Advanced fields expose only allowlisted visual values across DS chrome
   families and allowlisted reference/override tokens.
 - Chart tenants may choose the bounded category palette; renderer, data
@@ -68,9 +69,10 @@ only write contract for tenant customization.
   size. Unknown keys, schema/compiler drift, invalid contrast and duplicate
   chart colors are rejected before publication.
 
-Tenants cannot change component topology, permissions, glyph semantics,
-responsive information hierarchy, chart renderer, spatial lifecycle, motion
-topology or accessibility behavior.
+Tenants cannot author component topology, permissions, glyph semantics,
+responsive rules, chart renderers, spatial lifecycle, motion topology or
+accessibility behavior. A presentation-profile selection chooses only a
+reviewed code-owned posture; it does not open any of those authoring channels.
 
 ## Publication and Concurrency
 

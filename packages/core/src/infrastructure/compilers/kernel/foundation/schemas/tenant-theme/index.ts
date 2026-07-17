@@ -7,6 +7,7 @@
  */
 
 import { MOTION_DIAL_BOUNDS } from '@/foundation/contracts/runtime/motion';
+import { TENANT_PRESENTATION_PROFILE_IDS } from '@/foundation/contracts/composition/tenants/themes';
 import {
   TENANT_THEME_OVERRIDE_TOKENS_V1,
   TENANT_THEME_REFERENCE_TOKENS_V1,
@@ -46,6 +47,7 @@ const FONT_WEIGHT = number({ min: 1, max: 1000 });
 const OPACITY = number({ min: 0, max: 1 });
 
 const general = object({
+  presentationProfile: enumeration(...TENANT_PRESENTATION_PROFILE_IDS),
   palette: object({
     primary: COLOR,
     secondary: COLOR,
@@ -380,7 +382,12 @@ export const TENANT_THEME_CONFIG_V1_SCHEMA = deepFreeze({
       ['schemaVersion', 'tenantId', 'slug', 'verticalKey', 'rowVersion', 'mode', 'visualFoundation'],
     ),
   }),
-  scopeAttributes: Object.freeze(['data-ds-root', 'data-vertical', 'data-tenant']),
+  scopeAttributes: Object.freeze([
+    'data-ds-root',
+    'data-vertical',
+    'data-tenant',
+    'data-ds-presentation-profile',
+  ]),
   forbiddenCapabilities: Object.freeze([
     'rawCss',
     'selectors',

@@ -25,6 +25,7 @@ import type {
   BrandTabsChrome,
   BrandToolbarChrome,
   TenantAppearanceGeneral,
+  TenantPresentationProfileId,
 } from '..';
 
 /** The only TenantThemeConfig schema accepted by this release. */
@@ -273,6 +274,11 @@ export interface TenantThemeVerticalEnvelopeV1 {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
   verticalKey: string;
   allowedModes: readonly ('simple' | 'advanced')[];
+  /** Code-owned profile policy; tenant JSONB may select but never define it. */
+  presentationProfiles: {
+    default: TenantPresentationProfileId;
+    allowed: readonly TenantPresentationProfileId[];
+  };
   advanced?: {
     chromeFamilies: readonly TenantThemeChromeFamilyV1[];
     allowTokenOverrides: boolean;
@@ -337,7 +343,11 @@ export interface NormalizedTenantThemeAppearanceV1 {
 }
 
 export interface TenantThemeScopeDescriptor {
-  attribute: 'data-ds-root' | 'data-vertical' | 'data-tenant';
+  attribute:
+    | 'data-ds-root'
+    | 'data-vertical'
+    | 'data-tenant'
+    | 'data-ds-presentation-profile';
   value?: string;
   selector: string;
 }
@@ -355,6 +365,7 @@ export interface TenantThemeRootAttributesV1 {
   'data-ds-root': '';
   'data-vertical': string;
   'data-tenant': string;
+  'data-ds-presentation-profile': TenantPresentationProfileId;
 }
 
 /** Immutable, cacheable compiler output consumed by SSR and hydration. */
@@ -365,6 +376,8 @@ export interface TenantThemeArtifactV1 {
   verticalKey: string;
   rowVersion: number;
   compilerVersion: string;
+  /** Fully resolved code-owned profile, including the vertical default. */
+  presentationProfile: TenantPresentationProfileId;
   /** Digest of the vertical policy applied during compilation, when present. */
   verticalEnvelopeDigest?: string;
   /** `sha256-<hex>` over the canonical artifact source. */

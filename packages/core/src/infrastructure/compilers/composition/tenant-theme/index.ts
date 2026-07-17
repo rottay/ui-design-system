@@ -6,7 +6,11 @@
  * the browser hydration boundary.
  */
 
-import type { TenantAppearance } from '@/foundation/contracts/composition/tenants/themes';
+import {
+  TENANT_PRESENTATION_PROFILE_IDS,
+  type TenantAppearance,
+  type TenantPresentationProfileId,
+} from '@/foundation/contracts/composition/tenants/themes';
 import { contrastRatio } from '@/foundation/kernel/accessibility/branding-contrast';
 import type {
   NormalizedTenantThemeAppearanceV1,
@@ -36,7 +40,7 @@ import { appearanceToVariables } from '../../kernel/runtime/appearance';
 export { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../kernel/foundation/schemas/tenant-theme';
 export type { TenantThemeSchemaNode } from '../../kernel/foundation/schemas/tenant-theme';
 
-export const TENANT_THEME_COMPILER_VERSION = 'tenant-theme-compiler@2' as const;
+export const TENANT_THEME_COMPILER_VERSION = 'tenant-theme-compiler@3' as const;
 
 function deepFreezeTenantThemeValue<T>(value: T): Readonly<T> {
   if (value !== null && typeof value === 'object') {
@@ -56,6 +60,10 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
     schemaVersion: TENANT_THEME_SCHEMA_VERSION,
     verticalKey: 'bithire',
     allowedModes: ['simple', 'advanced'],
+    presentationProfiles: {
+      default: 'editorial-ledger',
+      allowed: ['editorial-ledger', 'ambient-command'],
+    },
     advanced: {
       chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
       allowTokenOverrides: true,
@@ -71,6 +79,10 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
     schemaVersion: TENANT_THEME_SCHEMA_VERSION,
     verticalKey: 'evnto',
     allowedModes: ['simple', 'advanced'],
+    presentationProfiles: {
+      default: 'editorial-ledger',
+      allowed: ['editorial-ledger'],
+    },
     advanced: {
       chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
       allowTokenOverrides: true,
@@ -648,15 +660,24 @@ export function validateTenantThemeAgainstVerticalEnvelope(
   envelope: TenantThemeVerticalEnvelopeV1 | undefined,
 ): TenantThemeValidationIssue[] {
   if (!envelope) {
-    return config.mode === 'advanced'
-      ? [{ code: 'invalid_value', path: '$.verticalKey', message: 'Advanced mode requires a vertical policy envelope' }]
-      : [];
+    return [{
+      code: 'invalid_value',
+      path: '$.verticalKey',
+      message: 'Tenant theme compilation requires a vertical policy envelope',
+    }];
   }
   const issues: TenantThemeValidationIssue[] = [];
   if (!isPlainObject(envelope)) {
     return [{ code: 'invalid_type', path: '$.verticalEnvelope', message: 'Expected a code-owned vertical envelope object' }];
   }
-  const allowedEnvelopeKeys = new Set(['schemaVersion', 'verticalKey', 'allowedModes', 'advanced', 'ranges']);
+  const allowedEnvelopeKeys = new Set([
+    'schemaVersion',
+    'verticalKey',
+    'allowedModes',
+    'presentationProfiles',
+    'advanced',
+    'ranges',
+  ]);
   for (const key of Object.keys(envelope)) {
     if (!allowedEnvelopeKeys.has(key)) {
       issues.push({ code: 'unknown_key', path: `$.verticalEnvelope.${key}`, message: 'Unknown vertical envelope field' });
@@ -677,6 +698,52 @@ export function validateTenantThemeAgainstVerticalEnvelope(
     issues.push({ code: 'invalid_value', path: '$.verticalEnvelope.allowedModes', message: 'Expected a unique non-empty simple/advanced mode list' });
   } else if (!envelope.allowedModes.includes(config.mode)) {
     issues.push({ code: 'invalid_value', path: '$.mode', message: `Mode ${config.mode} is not enabled by this vertical` });
+  }
+
+  const knownPresentationProfiles = new Set<string>(TENANT_PRESENTATION_PROFILE_IDS);
+  const presentationProfiles = envelope.presentationProfiles;
+  if (!isPlainObject(presentationProfiles)) {
+    issues.push({
+      code: 'invalid_type',
+      path: '$.verticalEnvelope.presentationProfiles',
+      message: 'Expected a code-owned presentation profile policy',
+    });
+  } else {
+    for (const key of Object.keys(presentationProfiles)) {
+      if (key !== 'default' && key !== 'allowed') {
+        issues.push({
+          code: 'unknown_key',
+          path: `$.verticalEnvelope.presentationProfiles.${key}`,
+          message: 'Unknown presentation profile policy field',
+        });
+      }
+    }
+    if (typeof presentationProfiles.default !== 'string'
+      || !knownPresentationProfiles.has(presentationProfiles.default)) {
+      issues.push({
+        code: 'invalid_value',
+        path: '$.verticalEnvelope.presentationProfiles.default',
+        message: 'Unknown default presentation profile',
+      });
+    }
+    if (!Array.isArray(presentationProfiles.allowed)
+      || presentationProfiles.allowed.length === 0
+      || presentationProfiles.allowed.some(
+        (profile) => typeof profile !== 'string' || !knownPresentationProfiles.has(profile),
+      )
+      || new Set(presentationProfiles.allowed).size !== presentationProfiles.allowed.length) {
+      issues.push({
+        code: 'invalid_value',
+        path: '$.verticalEnvelope.presentationProfiles.allowed',
+        message: 'Expected a unique non-empty list of known presentation profiles',
+      });
+    } else if (!presentationProfiles.allowed.includes(presentationProfiles.default)) {
+      issues.push({
+        code: 'invalid_value',
+        path: '$.verticalEnvelope.presentationProfiles.default',
+        message: 'Default presentation profile must be allowed by this vertical',
+      });
+    }
   }
 
   const knownChromeFamilies = new Set<string>(TENANT_THEME_CHROME_FAMILIES_V1);
@@ -734,6 +801,17 @@ export function validateTenantThemeAgainstVerticalEnvelope(
   if (issues.length > 0) return issues;
 
   const general = config.mode === 'simple' ? config.appearance : config.visualFoundation.general;
+  const requestedPresentationProfile = general?.presentationProfile;
+  if (requestedPresentationProfile !== undefined
+    && !envelope.presentationProfiles.allowed.includes(requestedPresentationProfile)) {
+    issues.push({
+      code: 'invalid_value',
+      path: config.mode === 'simple'
+        ? '$.appearance.presentationProfile'
+        : '$.visualFoundation.general.presentationProfile',
+      message: `Presentation profile ${requestedPresentationProfile} is not enabled by this vertical`,
+    });
+  }
   const ranges = envelope.ranges;
   const rangedValues = [
     ['motion.intensity', general?.motion?.intensity, ranges?.motionIntensity],
@@ -784,6 +862,16 @@ function normalizeAppearance(config: TenantThemeConfigV1): NormalizedTenantTheme
   });
 }
 
+function resolvePresentationProfile(
+  config: TenantThemeConfigV1,
+  envelope: TenantThemeVerticalEnvelopeV1,
+): TenantPresentationProfileId {
+  const general = config.mode === 'simple'
+    ? config.appearance
+    : config.visualFoundation.general;
+  return general?.presentationProfile ?? envelope.presentationProfiles.default;
+}
+
 function buildScopes(config: TenantThemeConfigV1): TenantThemeArtifactV1['scopes'] {
   const rootSelector = ':where([data-ds-root])';
   const verticalSelector = `:where([data-ds-root][data-vertical="${config.verticalKey}"])`;
@@ -804,12 +892,13 @@ function buildScopes(config: TenantThemeConfigV1): TenantThemeArtifactV1['scopes
 
 /** Server-safe attribute projection for the provider-owned SSR root. */
 export function tenantThemeArtifactRootAttributes(
-  artifact: Pick<TenantThemeArtifactV1, 'slug' | 'verticalKey'>,
+  artifact: Pick<TenantThemeArtifactV1, 'slug' | 'verticalKey' | 'presentationProfile'>,
 ): TenantThemeRootAttributesV1 {
   return {
     'data-ds-root': '',
     'data-vertical': artifact.verticalKey,
     'data-tenant': artifact.slug,
+    'data-ds-presentation-profile': artifact.presentationProfile,
   };
 }
 
@@ -917,10 +1006,23 @@ export function compileTenantThemeConfig(
   options: CompileTenantThemeConfigOptions = {},
 ): TenantThemeArtifactV1 {
   const config = parseTenantThemeConfig(input);
-  const envelopeIssues = validateTenantThemeAgainstVerticalEnvelope(config, options.verticalEnvelope);
+  // Simple v1 documents remain source-compatible: their trusted vertical
+  // resolves the code-owned profile default even when the caller omits the
+  // envelope option. Advanced mode keeps its existing explicit-policy gate.
+  const verticalEnvelope = options.verticalEnvelope
+    ?? (config.mode === 'simple' ? getTenantThemeVerticalEnvelope(config.verticalKey) : undefined);
+  const envelopeIssues = validateTenantThemeAgainstVerticalEnvelope(config, verticalEnvelope);
   if (envelopeIssues.length > 0) throw new TenantThemeValidationError(envelopeIssues);
+  if (!verticalEnvelope) {
+    throw new TenantThemeValidationError([{
+      code: 'invalid_value',
+      path: '$.verticalKey',
+      message: 'No code-owned vertical presentation profile policy is registered',
+    }]);
+  }
 
   const normalizedAppearance = normalizeAppearance(config);
+  const presentationProfile = resolvePresentationProfile(config, verticalEnvelope);
   const variables = sortedVariables(appearanceToVariables(normalizedAppearance as TenantAppearance));
   const chartCategoryIssues = validateCompiledChartCategories(normalizedAppearance, variables);
   if (chartCategoryIssues.length > 0) throw new TenantThemeValidationError(chartCategoryIssues);
@@ -951,9 +1053,9 @@ export function compileTenantThemeConfig(
   }
 
   const scopes = buildScopes(config);
-  const verticalEnvelopeDigest = options.verticalEnvelope
-    ? `sha256-${sha256TenantThemeValue(canonicalizeTenantThemeValue(options.verticalEnvelope))}`
-    : undefined;
+  const verticalEnvelopeDigest = `sha256-${sha256TenantThemeValue(
+    canonicalizeTenantThemeValue(verticalEnvelope),
+  )}`;
   const digestSource = {
     schemaVersion: TENANT_THEME_SCHEMA_VERSION,
     compilerVersion: TENANT_THEME_COMPILER_VERSION,
@@ -961,6 +1063,7 @@ export function compileTenantThemeConfig(
     slug: config.slug,
     verticalKey: config.verticalKey,
     rowVersion: config.rowVersion,
+    presentationProfile,
     normalizedAppearance,
     variables,
     scopes,
@@ -975,7 +1078,8 @@ export function compileTenantThemeConfig(
     verticalKey: config.verticalKey,
     rowVersion: config.rowVersion,
     compilerVersion: TENANT_THEME_COMPILER_VERSION,
-    ...(verticalEnvelopeDigest ? { verticalEnvelopeDigest } : {}),
+    presentationProfile,
+    verticalEnvelopeDigest,
     digest,
     normalizedAppearance,
     variables,

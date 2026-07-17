@@ -15,6 +15,10 @@
   Watermark and chart raster work; and add real-browser Particle and Spatial
   lifecycle evidence for desktop, mobile, reduced-motion, save-data and context
   failure paths.
+- Add code-owned `editorial-ledger` and `ambient-command` presentation profiles
+  to the DB-backed tenant-theme contract. Tenants may select an allowed recipe,
+  while layout code, raw CSS, icon glyphs and motion recipes remain governed by
+  the vertical; SSR now exposes the resolved profile as a root attribute.
 
 ## 2.19.28
 
