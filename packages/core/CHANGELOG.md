@@ -1,5 +1,14 @@
 # @rottay/design-system
 
+## 2.19.34
+
+### Patch Changes
+
+- Let code-owned presentation profiles govern collection-workspace density
+  through `--ds-collection-workspace-density-scale`, while preserving each
+  adaptive preset as the fallback and avoiding tenant branches or cascade
+  overrides.
+
 ## 2.19.33
 
 ### Patch Changes
