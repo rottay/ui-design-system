@@ -1,13 +1,13 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.19.30",
+  "version": "2.19.31",
   "description": "Multi-tenant, multi-engine design system with token-driven skins and white-label runtime theming",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "rottay-ds-supplier-honesty": "./consumer/ds-supplier-honesty.mjs"
+    "rottay-ds-supplier-honesty": "consumer/ds-supplier-honesty.mjs"
   },
   "sideEffects": [
     "*.css",
