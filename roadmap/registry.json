@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-07-16",
+ "updated": "2026-07-17",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2513,7 +2513,7 @@
    "lane": "craft",
    "order": 16,
    "size": "S",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -2550,8 +2550,8 @@
    ],
    "claimedBy": "codex-icon-canary",
    "claimedAt": "2026-07-16",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-07-17",
+   "evidence": "Bounded canary certification is recorded in test-artifacts/craft/cra-16/certification.json. Published registry package @rottay/design-system@2.19.28 at d609b519 provides the fixed 50-name v3 public corpus, deterministic 263-role generated catalog, pinned Phosphor 2.1.10 adapter and BrandMark facade. DS semantic/mark SSR coverage is green at 33/33, generator adversarial coverage at 8/8, and icons:check proves 263 roles/272 files current. BitHire a7d7d8a40 pins and installs exact 2.19.28; its four focused architecture suites are green at 21/21, typecheck and installed-canonical supplier honesty are green with zero direct suppliers. The AST guards fail closed on aliases, dynamic supplier imports and Icon/BrandMark/CloudServiceMark/FeaturePictogram conflation. This support milestone does not complete DS-IMP-090/091, the supplier decision, four-facade family, fleet migration or vertical recipes.",
    "execution": {
     "decisionOwner": "iconography-system",
     "touchedRepos": [

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-17T06:46:22Z",
+  "workOrder": "WO-CRA-16",
+  "scope": "Bounded BitHire Global Search and Auth/Login semantic-asset canaries",
+  "completionEffect": "none",
+  "finalAuthority": "WO-CRA-17",
+  "designSystem": {
+    "commit": "d609b519b33ecae53eaa7f67c0dbfea5cdc3a6d2",
+    "package": "@rottay/design-system@2.19.28",
+    "registryResolved": true,
+    "publicSemanticNames": 50,
+    "generatedCorpusRoles": 263,
+    "adapter": "@phosphor-icons/react@2.1.10"
+  },
+  "bithire": {
+    "commit": "a7d7d8a4015763d2a1fcfab309ebcd81dfdf39b5",
+    "manifestVersion": "2.19.28",
+    "installedVersion": "2.19.28",
+    "canaries": [
+      "Global Search uses Icon and IconName from @rottay/design-system/icons",
+      "Auth/Login functional assets use Icon from @rottay/design-system/icons",
+      "OAuth provider identity uses BrandMark from @rottay/design-system/marks"
+    ]
+  },
+  "validation": {
+    "designSystemUnit": "33/33",
+    "generatorAdversarial": "8/8",
+    "semanticGeneration": "263 roles, 272 files, deterministic and current",
+    "bithireArchitecture": "21/21 across semantic assets, supplier boundary, landing and chart projection",
+    "bithireTypecheck": "green",
+    "bithireSupplierContract": "installed-canonical with zero direct suppliers",
+    "diffCheck": "green"
+  },
+  "boundedClaims": {
+    "supplierDecisionComplete": false,
+    "fourFacadeFamilyComplete": false,
+    "fleetMigrationComplete": false,
+    "verticalRecipesComplete": false,
+    "dsImp090Complete": false,
+    "dsImp091Complete": false
+  }
+}
