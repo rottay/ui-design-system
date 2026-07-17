@@ -148,6 +148,7 @@
         "EXAMPLE_SKIN_PACK",
         "EditHeader",
         "EditorSurface",
+        "EffectRuntimeProvider",
         "Empty",
         "EmptyStateSurface",
         "EngineContext",
@@ -2317,6 +2318,7 @@
         "DSErrorBoundary",
         "ENGINE_REGISTRY",
         "EXAMPLE_SKIN_PACK",
+        "EffectRuntimeProvider",
         "EngineContext",
         "EngineErrorBoundary",
         "EngineProvider",
@@ -4161,11 +4163,16 @@
     },
     "./icons/full": {
       "exports": [
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
         "ICON_CORPUS",
         "ICON_NAMES",
         "ICON_PROVENANCE",
         "Icon",
         "getIconCorpusEntry",
+        "installGraphicAssetRuntimeControl",
         "isIconName"
       ],
       "symbols": {
@@ -4174,10 +4181,15 @@
         ]
       },
       "supplierFreeExports": [
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
         "ICON_CORPUS",
         "ICON_NAMES",
         "ICON_PROVENANCE",
         "getIconCorpusEntry",
+        "installGraphicAssetRuntimeControl",
         "isIconName"
       ]
     },
@@ -4186,6 +4198,11 @@
         "BITHIRE_PRESET_ICON_COMPONENTS",
         "BITHIRE_PRESET_ICON_NAMES",
         "BitHireIconPreset",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl",
         "isBitHirePresetIconName",
         "resolveBitHirePresetIcon"
       ],
@@ -4206,7 +4223,13 @@
           "@phosphor-icons/react"
         ]
       },
-      "supplierFreeExports": []
+      "supplierFreeExports": [
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl"
+      ]
     },
     "./icons/corpus": {
       "exports": [
@@ -5486,10 +5509,15 @@
         "BRAND_MARK_PROVENANCE",
         "BRAND_MARK_VARIANTS",
         "BrandMark",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
         "MARK_CATALOG_SOURCE",
         "MARK_RENDERER_SOURCE",
         "MARK_TRADEMARK_NOTICE",
         "MARK_VARIANTS",
+        "installGraphicAssetRuntimeControl",
         "isBrandMarkName",
         "isMarkVariant"
       ],
@@ -5502,10 +5530,15 @@
         "BRAND_MARK_NAMES",
         "BRAND_MARK_PROVENANCE",
         "BRAND_MARK_VARIANTS",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
         "MARK_CATALOG_SOURCE",
         "MARK_RENDERER_SOURCE",
         "MARK_TRADEMARK_NOTICE",
         "MARK_VARIANTS",
+        "installGraphicAssetRuntimeControl",
         "isBrandMarkName",
         "isMarkVariant"
       ]
@@ -5516,9 +5549,14 @@
         "CLOUD_SERVICES",
         "CLOUD_SERVICE_MARK_PROVENANCE",
         "CloudServiceMark",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
         "MARK_CATALOG_SOURCE",
         "MARK_RENDERER_SOURCE",
         "MARK_TRADEMARK_NOTICE",
+        "installGraphicAssetRuntimeControl",
         "isCloudProvider",
         "isCloudService"
       ],
@@ -5531,9 +5569,14 @@
         "CLOUD_PROVIDERS",
         "CLOUD_SERVICES",
         "CLOUD_SERVICE_MARK_PROVENANCE",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
         "MARK_CATALOG_SOURCE",
         "MARK_RENDERER_SOURCE",
         "MARK_TRADEMARK_NOTICE",
+        "installGraphicAssetRuntimeControl",
         "isCloudProvider",
         "isCloudService"
       ]
@@ -5544,6 +5587,11 @@
         "FEATURE_PICTOGRAM_NAMES",
         "FEATURE_PICTOGRAM_PROVENANCE",
         "FeaturePictogram",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl",
         "isFeaturePictogramName"
       ],
       "symbols": {},
@@ -5552,6 +5600,11 @@
         "FEATURE_PICTOGRAM_NAMES",
         "FEATURE_PICTOGRAM_PROVENANCE",
         "FeaturePictogram",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl",
         "isFeaturePictogramName"
       ]
     },

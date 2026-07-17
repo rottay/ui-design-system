@@ -31,7 +31,7 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | EffectRegistry all-export fixture | < 5.5 KB gzipped (4,829 B measured + >10%; ESM/CJS/types supplier-neutral) |
 | Spatial host entry (`dist/spatial.js` / `.cjs`) | < 400/400 B raw (296/356 B measured + >10%) |
 | Spatial specification entry (`dist/spatial-spec.js` / `.cjs`) | < 800/800 B raw (688/724 B measured + >10%) |
-| Spatial host all-export fixture | < 6.9 KB gzipped (6,215 B measured + >10%; React is the only external) |
+| Spatial host all-export fixture | < 7.8 KB gzipped (7,064 B measured + >10%; includes the supplier-neutral shared continuous-runtime governor, React is the only external) |
 | Spatial specification all-export fixture | < 1.3 KB gzipped (1,097 B measured + >10%; no external/browser runtime) |
 | Named Bar renderer | < 12.1 KB gzipped (10,934 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
 | Named Line renderer | < 12.8 KB gzipped (11,603 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
@@ -190,7 +190,7 @@ unrelated code.
 
 The canonical-tree 2.19.28 release-candidate build on 2026-07-17 measured the
 host facades at 296/356 B raw, the specification facades at 688/724 B raw, the
-host all-export fixture at 6,215 B gzip and the specification fixture at 1,097 B
+host all-export fixture at 7,064 B gzip and the specification fixture at 1,097 B
 gzip. The single `SPATIAL_BASELINE_BYTES` object records those exact values;
 `deriveSpatialBudget()` creates every ceiling as measured +10%, rounded up to
 the next 100 B. Re-measure all six together when the public boundary changes;

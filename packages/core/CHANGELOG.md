@@ -1,5 +1,21 @@
 # @rottay/design-system
 
+## 2.19.32
+
+### Patch Changes
+
+- Add exact per-role, BitHire preset, full-corpus, brand-mark and cloud-mark
+  entrypoints with supplier-free declarations and measured ESM/CJS retention.
+- Govern the four public graphic-asset facades with independent class/provider
+  controls, immutable diagnostics, deterministic SSR/hydration and CJS-safe
+  mark adapters.
+- Certify ParticleField through a DS-owned provider/instance boundary and share
+  one continuous runtime budget across Particle and Spatial Canvas/WebGL work.
+- Replace decorative QR approximations with a standards encoder; bound QR,
+  Watermark and chart raster work; and add real-browser Particle and Spatial
+  lifecycle evidence for desktop, mobile, reduced-motion, save-data and context
+  failure paths.
+
 ## 2.19.28
 
 ### Patch Changes

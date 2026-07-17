@@ -38,17 +38,17 @@ import { Writable } from 'node:stream';
 /**
  * SPATIAL BASELINE INJECTION POINT (six exact byte measurements).
  *
- * Exact measurements from the canonical-tree 2.19.28 release-candidate build
- * on 2026-07-17. The facade-only raw deltas are the longer canonical module
- * owners emitted by preserveModules; the bundled runtime fixtures are stable.
- * Ceilings are derived as measured +10%, rounded up to 100 B.
+ * Exact measurements from the canonical-tree 2.19.32 release-candidate build
+ * on 2026-07-17. The host measurement includes the supplier-neutral governor
+ * shared by Particle and Spatial; the facade-only raw deltas remain canonical
+ * preserveModules paths. Ceilings are measured +10%, rounded up to 100 B.
  */
 const SPATIAL_BASELINE_BYTES = Object.freeze({
   spatialEsmRaw: 296,
   spatialCjsRaw: 356,
   spatialSpecEsmRaw: 688,
   spatialSpecCjsRaw: 724,
-  spatialHostFixtureGzip: 6_215,
+  spatialHostFixtureGzip: 7_064,
   spatialSpecFixtureGzip: 1_097,
 });
 
@@ -1567,6 +1567,7 @@ const SPATIAL_SPEC_ARTIFACT_FRAGMENTS = Object.freeze([
 const SPATIAL_HOST_BRIDGE_ARTIFACT_FRAGMENTS = Object.freeze([
   '/foundation/contracts/runtime/motion/',
   '/foundation/contracts/kernel/verticals/',
+  '/infrastructure/runtime/foundation/graphics/continuous-runtime-governor/',
   '/infrastructure/runtime/foundation/motion/composition/react/preference/',
   '/infrastructure/runtime/foundation/motion/runtime/browser/environment/',
   '/infrastructure/runtime/foundation/motion/policy/',

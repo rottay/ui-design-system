@@ -27877,6 +27877,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .rottay-watermark--modern[data-part='root'] > [data-part='pattern'] {
   background-repeat: repeat;
+  background-position: var(--ds-watermark-offset);
 }
 
 /**
