@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "notice": {
+    "path": "THIRD_PARTY_NOTICES.md",
+    "sha256": "70796232ae6aeb44d1e19652827d15d05a6e3816c47182abbaa9ccd1639d0149"
+  },
+  "runtimePackageAllowlist": [
+    "@rottay/design-system",
+    "motion",
+    "react"
+  ],
+  "providers": [
+    {
+      "id": "phosphor-icons-react",
+      "packageName": "@phosphor-icons/react",
+      "version": "2.1.10",
+      "license": "MIT",
+      "source": "https://github.com/phosphor-icons/react",
+      "licenseFile": "licenses/phosphor-icons-react-LICENSE",
+      "licenseSha256": "6918b72504641180600cbbd4a86b0dfa9dfccf788775694325b71b9a029f6eb4",
+      "usage": "bundled-semantic-icons"
+    },
+    {
+      "id": "lucide-react",
+      "packageName": "lucide-react",
+      "version": "0.563.0",
+      "license": "ISC",
+      "source": "https://github.com/lucide-icons/lucide/tree/main/packages/lucide-react",
+      "licenseFile": "licenses/lucide-react-LICENSE",
+      "licenseSha256": "668dcc52803480e0a026b31140a4cae668772663cd764e5991d252eef03f98db",
+      "usage": "external-compatibility-icons"
+    },
+    {
+      "id": "thesvg-react",
+      "packageName": "@thesvg/react",
+      "version": "3.2.7",
+      "license": "MIT",
+      "source": "https://github.com/glincker/thesvg/tree/main/packages/react",
+      "licenseFile": "licenses/thesvg-LICENSE",
+      "licenseSha256": "7a679e60d78db32455aea3b4613d2d3f3bec929edf8cbb608ccc40b37c663aed",
+      "usage": "external-mark-renderer"
+    },
+    {
+      "id": "thesvg-catalog",
+      "packageName": "thesvg",
+      "version": "3.2.6",
+      "license": "MIT",
+      "source": "https://github.com/glincker/thesvg/tree/main/packages/thesvg",
+      "licenseFile": "licenses/thesvg-LICENSE",
+      "licenseSha256": "7a679e60d78db32455aea3b4613d2d3f3bec929edf8cbb608ccc40b37c663aed",
+      "usage": "provenance-catalog-only"
+    }
+  ],
+  "assetClasses": {
+    "functionalIcon": {
+      "provider": "@phosphor-icons/react",
+      "registryPath": "src/graphics/icons/foundation/semantic/adapters/phosphor-2.1.10.json",
+      "registrySha256": "e806df07c4647ad72b83d926b99516e7fd11a4558ce05323a113c15680cd47df",
+      "expectedEntries": 263
+    },
+    "brandMark": [
+      {
+        "name": "openai",
+        "module": "@thesvg/react/openai",
+        "slug": "openai",
+        "title": "OpenAI",
+        "license": "MIT",
+        "sourceUrl": "https://openai.com/",
+        "sourceSha256": "98afc4f550f16b75d8b800a6c66e17cece3b8394a5ed57488eacd4986cd211a4"
+      },
+      {
+        "name": "anthropic",
+        "module": "@thesvg/react/anthropic",
+        "slug": "anthropic",
+        "title": "Anthropic",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://www.anthropic.com/",
+        "sourceSha256": "76394efab1632d46476c317fe70973cfac6dd4bed62acc74c9fba1a4a47c6f3c"
+      },
+      {
+        "name": "github",
+        "module": "@thesvg/react/github",
+        "slug": "github",
+        "title": "GitHub",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://github.com/",
+        "sourceSha256": "6918dddedfa8e78fc96c4526c03e8a735c4686bc3d0484eacf1e528f40cce3dc"
+      },
+      {
+        "name": "google",
+        "module": "@thesvg/react/google",
+        "slug": "google",
+        "title": "Google",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://www.google.com/",
+        "sourceSha256": "37c3b97ee2c493268c6ccebb3a473c2f281ba28c7987b421f4642a70cf7ad0a3"
+      },
+      {
+        "name": "linkedin",
+        "module": "@thesvg/react/linkedin",
+        "slug": "linkedin",
+        "title": "LinkedIn",
+        "license": "MIT",
+        "sourceUrl": "https://www.linkedin.com/",
+        "sourceSha256": "95cc66403b2d004bb7980e98df81d1160dfafcbc5eefd54e128f547a5302649f"
+      },
+      {
+        "name": "instagram",
+        "module": "@thesvg/react/instagram",
+        "slug": "instagram",
+        "title": "Instagram",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://www.instagram.com/",
+        "sourceSha256": "7cd3dce2d19ef0c270b2722368e1d9b86888e27c7c214c8c479ecdd266baff78"
+      },
+      {
+        "name": "x",
+        "module": "@thesvg/react/x",
+        "slug": "x",
+        "title": "X",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://x.com",
+        "sourceSha256": "5a3483e3ad3fd7588125eca979ecf5e8089aa68f937da88429daeabbd293ac36"
+      },
+      {
+        "name": "chrome",
+        "module": "@thesvg/react/google-chrome",
+        "slug": "google-chrome",
+        "title": "Google Chrome",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://www.google.com/chrome",
+        "sourceSha256": "574b5aff45e3f098cda23d8c50b9a94450d7ccc197b5f48c95c2f011232ad5a1"
+      }
+    ],
+    "cloudServiceMark": [
+      {
+        "provider": "aws",
+        "service": "lambda",
+        "module": "@thesvg/react/aws-aws-lambda",
+        "slug": "aws-aws-lambda",
+        "title": "AWS Lambda",
+        "author": "Amazon Web Services, Inc.",
+        "license": "CC-BY-ND-2.0",
+        "sourceUrl": "https://aws.amazon.com/lambda/",
+        "sourceSha256": "d4c47174be594e0d7c8ab5d30af4f8d0af4502dc1c597757e3904f97faa3c09c",
+        "modified": false,
+        "derivativesAllowed": false,
+        "renderingPolicy": "pinned-upstream-component-existing-optical-variants-only",
+        "trademarkGuidance": "https://aws.amazon.com/trademark-guidelines/"
+      },
+      {
+        "provider": "aws",
+        "service": "bedrock",
+        "module": "@thesvg/react/aws-amazon-bedrock",
+        "slug": "aws-amazon-bedrock",
+        "title": "Amazon Bedrock",
+        "author": "Amazon Web Services, Inc.",
+        "license": "CC-BY-ND-2.0",
+        "sourceUrl": "https://aws.amazon.com/bedrock/",
+        "sourceSha256": "5746d4d9e6fed3b3ec35feaba8fe5291dfd0742a8e50ae4f174df178d10ec21b",
+        "modified": false,
+        "derivativesAllowed": false,
+        "renderingPolicy": "pinned-upstream-component-existing-optical-variants-only",
+        "trademarkGuidance": "https://aws.amazon.com/trademark-guidelines/"
+      },
+      {
+        "provider": "aws",
+        "service": "s3",
+        "module": "@thesvg/react/aws-amazon-simple-storage-service",
+        "slug": "aws-amazon-simple-storage-service",
+        "title": "Amazon Simple Storage Service",
+        "author": "Amazon Web Services, Inc.",
+        "license": "CC-BY-ND-2.0",
+        "sourceUrl": "https://aws.amazon.com/simple-storage-service/",
+        "sourceSha256": "b501c12ffbee87b4eb37a7444a9512217545e915adb74da1823428a4d048d413",
+        "modified": false,
+        "derivativesAllowed": false,
+        "renderingPolicy": "pinned-upstream-component-existing-optical-variants-only",
+        "trademarkGuidance": "https://aws.amazon.com/trademark-guidelines/"
+      },
+      {
+        "provider": "aws",
+        "service": "rds",
+        "module": "@thesvg/react/aws-amazon-rds",
+        "slug": "aws-amazon-rds",
+        "title": "Amazon RDS",
+        "author": "Amazon Web Services, Inc.",
+        "license": "CC-BY-ND-2.0",
+        "sourceUrl": "https://aws.amazon.com/rds/",
+        "sourceSha256": "dbcdad9732a74dfdc76004e47d8fd80524037eff62528868669033a22dabb3ba",
+        "modified": false,
+        "derivativesAllowed": false,
+        "renderingPolicy": "pinned-upstream-component-existing-optical-variants-only",
+        "trademarkGuidance": "https://aws.amazon.com/trademark-guidelines/"
+      }
+    ],
+    "featurePictogram": {
+      "source": "rottay-original",
+      "license": "LicenseRef-Rottay-Original-Product-Asset-1.0",
+      "rightsHolder": "Rottay",
+      "distribution": "internal-and-bundled-product",
+      "artworkPath": "src/graphics/pictograms/presentation/feature-pictogram/artwork/index.tsx",
+      "artworkSha256": "6ace1914e3b0a27d0b6a65dbef3b9c69d706869009868706c144dbae62db996e",
+      "entries": [
+        "ai-assistant",
+        "analytics-insight",
+        "candidate-evidence",
+        "empty-search",
+        "event-moment",
+        "secure-access",
+        "team-collaboration",
+        "workflow-automation"
+      ]
+    }
+  }
+}
