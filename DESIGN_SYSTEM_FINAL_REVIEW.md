@@ -1,5 +1,12 @@
 # DESIGN SYSTEM - FINAL REVIEW & RECOMMENDATIONS
 
+> [!WARNING]
+> Auditoría histórica de `0.2.0`. Sus conteos, engines y paths se preservan como
+> evidencia; no son instrucciones vigentes. Ver
+> [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),
+> [`packages/core/docs/TAXONOMY.generated.md`](packages/core/docs/TAXONOMY.generated.md)
+> y [`roadmap/`](roadmap/).
+
 **Fecha:** 2025-12-24
 **Versión Auditada:** 0.2.0
 **Estado:** En restructuración activa
@@ -2229,7 +2236,7 @@ export const BaseAvatar = forwardRef<HTMLSpanElement, AvatarProps>(
 ### 5.5 Hook useMediaQuery
 
 ```typescript
-// /packages/core/src/hooks/useMediaQuery/index.ts
+// /packages/core/src/composition/hooks/useMediaQuery/index.ts
 
 import { useState, useEffect, useCallback } from 'react';
 
@@ -2370,7 +2377,7 @@ export function useBreakpoints() {
 ### 6.2 Avatar Tokens Completo
 
 ```css
-/* /packages/tokens/src/components/avatar.css */
+/* /packages/tokens/src/composition/components/avatar.css */
 
 :root {
   /* ═══════════════════════════════════════════════════════════════
@@ -4824,7 +4831,7 @@ export { useFeatures, useHasFeature, useFeatureContext } from './features';
 ### Estructura final (con compound/)
 
 ```
-/packages/core/src/components/primitives/display/Avatar/
+/packages/core/src/ui/primitives/display/Avatar/
 ├── types/
 │   └── index.ts           ← AvatarProps, AvatarGroupProps, AvatarBadgeProps, etc.
 ├── base/
@@ -4876,7 +4883,7 @@ Referencia: Sección "Implementación Detallada por Archivo" en Opción C arriba
 
 ### Theme CSS requerido
 
-Crear `/packages/tokens/src/components/avatar.css` con:
+Crear `/packages/tokens/src/composition/components/avatar.css` con:
 - Variables de tamaño: `--avatar-{size}-size`, `--avatar-{size}-font-size`
 - Variables de forma: `--avatar-{shape}-radius`
 - Variables de variante: `--avatar-{variant}-bg`, `--avatar-{variant}-color`
@@ -4911,16 +4918,16 @@ Crear `/packages/tokens/src/components/avatar.css` con:
 ### Archivos a modificar
 
 1. Renombrar directorio:
-   - `/packages/core/src/components/composed/` → `/packages/core/src/components/custom/`
+   - `/packages/core/src/ui/composed/` → `/packages/core/src/ui/custom/`
 
 2. Actualizar imports en:
-   - `/packages/core/src/components/index.ts`
+   - `/packages/core/src/ui/index.ts`
    - `/packages/core/src/index.ts`
    - Cualquier archivo que importe de `composed/`
 
 3. Actualizar barrel exports:
 
-   `/packages/core/src/components/index.ts`:
+   `/packages/core/src/ui/index.ts`:
    ```typescript
    // ANTES
    export * from './composed';
@@ -5014,7 +5021,7 @@ grep -r "composed" packages/core/*.json
 - [ ] Todos: Mismo comportamiento, diferente implementación
 
 ### CSS Tokens
-- [ ] Agregar tokens en /packages/tokens/src/components/{component}.css
+- [ ] Agregar tokens en /packages/tokens/src/composition/components/{component}.css
 - [ ] Definir tokens para cada tamaño
 - [ ] Definir tokens para cada variante
 - [ ] Definir tokens para estados (hover, active, focus, disabled)
@@ -5280,7 +5287,7 @@ export const ICON_SIZE_MAP: Record<string, number> = {
 ### 17.3 Componente Base de Icono
 
 ```typescript
-// /packages/icons/src/components/BaseIcon/index.tsx
+// /packages/icons/src/composition/components/BaseIcon/index.tsx
 'use client';
 
 import React, { forwardRef } from 'react';
@@ -5339,7 +5346,7 @@ BaseIcon.displayName = 'BaseIcon';
 ### 17.4 Ejemplo de Icono Generado
 
 ```typescript
-// /packages/icons/src/components/UserIcon/index.tsx
+// /packages/icons/src/composition/components/UserIcon/index.tsx
 'use client';
 
 import React, { forwardRef } from 'react';

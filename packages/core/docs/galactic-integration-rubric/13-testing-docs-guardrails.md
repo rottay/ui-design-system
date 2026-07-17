@@ -30,7 +30,7 @@ The problem is not absence of scaffolding. It is synchronization drift.
 
 ### Runtime appearance tests
 
-- `ui-design-system/packages/core/src/compilers/appearance/tests/appearance-runtime.test.tsx`
+- `ui-design-system/packages/core/src/infrastructure/compilers/runtime/appearance/tests/appearance-runtime.test.tsx`
 
 ## Weak Today
 

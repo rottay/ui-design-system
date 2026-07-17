@@ -95,11 +95,11 @@ function normalizePath(value) {
 
 const scheduleCssBuild = debounce(runCssBuild, 150);
 
-const cssWatcher = watch(resolve(root, 'src/tokens/css'), { recursive: true }, () => {
+const cssWatcher = watch(resolve(root, 'src/foundation/tokens/css'), { recursive: true }, () => {
   scheduleCssBuild();
 });
 
-const modernEngineWatcher = watch(resolve(root, 'src/components'), { recursive: true }, (_eventType, filename) => {
+const modernEngineWatcher = watch(resolve(root, 'src/ui'), { recursive: true }, (_eventType, filename) => {
   const normalized = normalizePath(String(filename || ''));
   if (!normalized) return;
 

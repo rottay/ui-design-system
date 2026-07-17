@@ -1,0 +1,152 @@
+/**
+ * MetricsChart skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-chart.css — single DOM tree under
+ * every engine. Scope root carries the single class `ds-metrics-chart`, repeated
+ * to buy the "two root classes" budget. Values are the shared `metrics/tokens.ts`
+ * constants, transcribed verbatim (see metrics-minimal.css header).
+ *
+ * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1)
+ * (incl. the meter-track `transparent` border); non-border paint (0,3,0); `Text`
+ * colour (0,5,0). Icons carry their own `data-part`.
+ *
+ * STATE: `data-positive`. Chart keeps the 3-tone treatment (icon colour is a
+ * static accent here, but the progress-percent text renders WARNING on a negative
+ * metric while the meter fill still renders ERROR — preserve both). HOVER was
+ * React `isHovered` (deleted), transcribed to `[data-part='metric-row']:hover …`;
+ * the row's `<style>` `:hover` stays suppressed by the rest rules.
+ */
+
+/* panel chrome -------------------------------------------------------------- */
+
+.ds-metrics-chart.ds-metrics-chart[data-part='root'] {
+  background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
+  border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
+}
+.ds-metrics-chart.ds-metrics-chart[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='panel-icon-box'] {
+  background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='panel-icon-box'][data-part='panel-icon-box'] {
+  border: 1px solid var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='panel-icon'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='live-badge'] {
+  background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='live-badge'][data-part='live-badge'] {
+  border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='live-dot'] {
+  border-radius: 50%;
+  background: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+  color: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+
+/* per-row shell ------------------------------------------------------------- */
+
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'] {
+  background: var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))));
+  border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
+  box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-part='metric-row'] {
+  border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
+}
+
+/* accent bar — trend meter fill, hover widens 3px -> 4px -------------------- */
+
+.ds-metrics-chart.ds-metrics-chart [data-part='accent-bar'] {
+  width: 3px;
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover [data-part='accent-bar'] {
+  width: 4px;
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='accent-bar'] {
+  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='accent-bar'] {
+  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
+}
+
+/* row icon box — static bg/border/colour ------------------------------------ */
+
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'] {
+  background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'][data-part='metric-icon-box'] {
+  border: 1px solid var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-icon'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+/* label + trend + change ---------------------------------------------------- */
+
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+  color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+}
+
+/* big value — rest colour, hover swaps to the accent ------------------------ */
+
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+/* meter track + fill -------------------------------------------------------- */
+
+.ds-metrics-chart.ds-metrics-chart [data-part='meter-track'] {
+  background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
+  border-radius: 999px;
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='meter-track'][data-part='meter-track'] {
+  border: 1px solid var(--ds-metric-card-meter-track-border, transparent);
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='meter-fill'] {
+  border-radius: 999px;
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
+}
+
+/* progress row — label static, percent 3-tone (success / warning) ----------- */
+
+.ds-metrics-chart.ds-metrics-chart [data-part='progress-label'][data-part='progress-label'][data-part='progress-label'] {
+  color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='progress-percent'][data-part='progress-percent'][data-part='progress-percent'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='progress-percent'][data-part='progress-percent'][data-part='progress-percent'] {
+  color: var(--ds-metric-card-trend-color-warning, var(--ds-color-warning));
+}

@@ -14,7 +14,7 @@ Read these docs first:
 - packages/core/docs/modern-customization-audit/04-wave-plan.md
 
 Goal:
-Make the Modern engine genuinely maximum-customizable from contract -> runtime -> tokens/css -> rendered primitive.
+Make the Modern engine genuinely maximum-customizable from contract -> runtime -> foundation/tokens/css -> rendered primitive.
 
 Important truths from the audit:
 1. The implemented premium source today is brandTheme, not appearance.general / appearance.advanced.

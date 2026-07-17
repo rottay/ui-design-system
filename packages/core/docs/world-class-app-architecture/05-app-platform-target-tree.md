@@ -173,5 +173,5 @@ These are platform-wide supporting capabilities:
 
 - `src/surfaces/*` screens move into the matching feature `screens/`
 - `src/actions/*` move into the owning feature or `core/`
-- `src/components/_shared/layouts` becomes `vertical/shell`
+- `src/composition/components/_shared/layouts` becomes `vertical/shell`
 - remaining app-owned shared tables/forms/feedback become `ui/`

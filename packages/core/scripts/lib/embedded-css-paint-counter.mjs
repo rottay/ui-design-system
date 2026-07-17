@@ -29,13 +29,13 @@ const CSS_PAINT_EXEMPT = new Set(["border-collapse", "border-spacing"]);
 const CERTIFIED_DATA_CSS_IMPORTS = new Map([
   [
     "generateResponsiveCSS",
-    "src/components/primitives/layout/shared/responsive-props",
+    "src/infrastructure/runtime/responsive/runtime/style-properties",
   ],
   [
     "generateResponsiveGridCSS",
-    "src/components/primitives/layout/Grid/shared/responsive",
+    "src/ui/primitives/layout/Grid/runtime/responsive",
   ],
-  ["generateTenantCss", "src/runtime/tenant/storage/static/generator"],
+  ["generateTenantCss", "src/infrastructure/runtime/tenant"],
 ]);
 const CORE_PACKAGE_ROOT = realpathSync(
   resolve(dirname(fileURLToPath(import.meta.url)), "../..")
@@ -1124,9 +1124,10 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
       return false;
     }
     if (!isInsideCorePackage(canonicalFile)) return false;
-    const resolvedSource = canonicalModulePath(
-      resolve(dirname(canonicalFile), binding.importSource)
-    );
+    const importSource = binding.importSource.startsWith("@/")
+      ? resolve(CORE_PACKAGE_ROOT, "src", binding.importSource.slice(2))
+      : resolve(dirname(canonicalFile), binding.importSource);
+    const resolvedSource = canonicalModulePath(importSource);
     const certifiedSource = canonicalModulePath(
       resolve(CORE_PACKAGE_ROOT, certifiedPath)
     );

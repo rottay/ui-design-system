@@ -14,7 +14,7 @@ import {
   type BrandTheme,
 } from '@rottay/design-system';
 
-import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
+import { FLAGSHIP_SPECS, StateGallery } from '@/composition/components/state-gallery';
 
 // The flagship set (button, input, select, card, badge, table, tabs, modal) is
 // the live evidence the preview renders under each ground.

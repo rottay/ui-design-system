@@ -110,17 +110,17 @@ it controls both paint and pointer interception.
 ## 5. Skin ownership and wiring
 
 Engine-split CalendarView, MapView, KanbanBoard, Timeline and TreeView own separate modern and
-rustic skin files under `tokens/css/engines/{modern,rustic}/skin/`. Their filenames must identify
+rustic skin files under `foundation/tokens/css/runtime/engines/{modern,rustic}/skin/`. Their filenames must identify
 the pattern and avoid colliding with the primitive `calendar.css`, `timeline.css` and `tree.css`.
 
 Charts and their shared foundation own component-scoped, unlayered files under
-`tokens/css/components/skin/`. Separate files/batches are preferred over one monolithic chart skin
+`foundation/tokens/css/presentation/components/skin/`. Separate files/batches are preferred over one monolithic chart skin
 so a chart can evolve without creating accidental cross-chart vocabulary.
 
 The orchestrator alone wires new skins append-only into both canonical entrypoints:
 
-- `packages/core/src/tokens/css/foundation/base.css`;
-- `packages/core/src/tokens/css/entrypoints/styles.css`.
+- `packages/core/src/foundation/tokens/css/facade/entrypoints/base.css`;
+- `packages/core/src/foundation/tokens/css/facade/entrypoints/styles.css`.
 
 After wiring, regenerate every tracked tenant/vertical artifact and bundle. A skin is not complete
 if it only appears in source or in one entrypoint.

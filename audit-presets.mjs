@@ -5,7 +5,7 @@
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, relative } from 'path';
 
-const BASE = './packages/core/src/components/custom';
+const BASE = './packages/core/src/composition/components/custom';
 
 // Recursively find all bh-*/presets/*/index.tsx files
 function findPresets(dir) {

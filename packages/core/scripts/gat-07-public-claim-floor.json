@@ -22,8 +22,8 @@
         "decision": "external-import census, then component-owned replacement or removal"
       },
       "definitionFiles": [
-        "src/contracts/extensions/index.ts",
-        "src/contracts/engine/index.ts"
+        "src/foundation/contracts/kernel/tokens/extensions/index.ts",
+        "src/foundation/contracts/runtime/engine/index.ts"
       ],
       "requiredAssertions": {
         "staticallyResolvedExtensionRuntimeReferences": 0,
@@ -53,9 +53,9 @@
         "decision": "wire each field with runtime and visual evidence or remove it"
       },
       "definitionFiles": [
-        "src/components/surfaces/foundation/types.ts",
-        "src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts",
-        "src/components/surfaces/index.ts"
+        "src/ui/surfaces/foundation/contracts/index.ts",
+        "src/ui/surfaces/runtime/profile-defaults/overrides/index.ts",
+        "src/ui/surfaces/index.ts"
       ],
       "requiredAssertions": {
         "profileOverrideDeclarations": 33,

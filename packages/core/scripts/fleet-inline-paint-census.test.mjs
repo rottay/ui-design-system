@@ -19,7 +19,7 @@ import {
 import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
 
 const COMPONENTS_DIR = fileURLToPath(
-  new URL("../src/components/", import.meta.url)
+  new URL("../src/ui/", import.meta.url)
 );
 
 function write(root, path) {
@@ -37,8 +37,9 @@ test("fleet census enumerates zero files but excludes classic, catalog noise, an
     write(componentsDir, "surfaces/pages/example.test.tsx");
     write(componentsDir, "surfaces/pages/example.stories.tsx");
     write(componentsDir, "patterns/data/Example.types.ts");
-    write(componentsDir, "patterns/data/engines/classic.tsx");
-    write(componentsDir, "patterns/data/classic/index.tsx");
+    write(componentsDir, "patterns/data/example/contracts/index.ts");
+    write(componentsDir, "patterns/data/example/engines/classic/index.tsx");
+    write(componentsDir, "patterns/data/example/classic/index.tsx");
     // Historical census law keeps these named helpers even though actual
     // `.stories.*`, `.test.*`, and `/test(s)/` catalog files are excluded.
     write(componentsDir, "surfaces/foundation/common/story-helpers.tsx");
@@ -187,11 +188,11 @@ test(
   () => {
     const liveFeed = join(
       COMPONENTS_DIR,
-      "patterns/communication/live-feed/engines/modern.tsx"
+      "patterns/communication/live-feed/engines/modern/index.tsx"
     );
     const tooltip = join(
       COMPONENTS_DIR,
-      "primitives/display/Tooltip/engines/rustic.tsx"
+      "primitives/display/Tooltip/engines/rustic/index.tsx"
     );
     const previousCwd = process.cwd();
     process.chdir(tmpdir());
@@ -211,13 +212,13 @@ test(
     }
 
     const unregisteredExport = `
-    import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
+    import { TOOLTIP_DEFAULTS } from '../../contracts';
     const node = <div style={TOOLTIP_DEFAULTS} />;
   `;
     assert.equal(countArc09PaintInFile(unregisteredExport, tooltip), 1);
 
     const certifiedProducerMutation = `
-    import { PLACEMENT_MAP } from '../Tooltip.types';
+    import { PLACEMENT_MAP } from '../../contracts';
     PLACEMENT_MAP.top.backgroundColor = 'red';
     PLACEMENT_MAP[getPlacement()][getPaintProperty()] = 'blue';
     const node = <div style={PLACEMENT_MAP.top} />;
@@ -231,12 +232,12 @@ test(
 test("certified style producers expose every transparent style input", () => {
   const toolbar = join(
     COMPONENTS_DIR,
-    "patterns/data/list-toolbar/engines/modern.tsx"
+    "patterns/data/list-toolbar/engines/modern/index.tsx"
   );
-  const card = join(COMPONENTS_DIR, "primitives/display/Card/Card.tsx");
+  const card = join(COMPONENTS_DIR, "primitives/display/Card/index.tsx");
   const stack = join(
     COMPONENTS_DIR,
-    "primitives/layout/Stack/engines/modern.tsx"
+    "primitives/layout/Stack/engines/modern/index.tsx"
   );
 
   assert.equal(
@@ -265,7 +266,7 @@ test("certified style producers expose every transparent style input", () => {
   assert.equal(
     countArc09PaintInFile(
       `
-      import { buildStackStyles } from '../../shared/responsive-helpers.js';
+      import { buildStackStyles } from '../../runtime/responsive';
       const color = 'red';
       const props = { style: { color } };
       const node = <div style={buildStackStyles(props)} />;
@@ -499,11 +500,11 @@ test("counter fails closed on malformed source instead of certifying zero", () =
 
 test("counter pins the productive recovered residuals", () => {
   const cases = new Map([
-    ["primitives/layout/Box/engines/modern.tsx", 8],
-    ["primitives/layout/Box/engines/rustic.tsx", 8],
+    ["primitives/layout/Box/engines/modern/index.tsx", 8],
+    ["primitives/layout/Box/engines/rustic/index.tsx", 8],
     ["primitives/inputs/Input/compound/Group/index.tsx", 0],
-    ["surfaces/foundation/personality-helpers.tsx", 0],
-    ["primitives/display/Card/engines/rustic.tsx", 1],
+    ["surfaces/runtime/profile-defaults/personality/index.tsx", 0],
+    ["primitives/display/Card/engines/rustic/index.tsx", 1],
   ]);
   for (const [relativePath, expected] of cases) {
     const file = join(COMPONENTS_DIR, relativePath);

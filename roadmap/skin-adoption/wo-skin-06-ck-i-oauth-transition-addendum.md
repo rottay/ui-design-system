@@ -16,14 +16,14 @@ provider mark changed.
 
 Migration scope:
 
-- `packages/core/src/components/surfaces/pages/experience/oauth-transition/index.tsx`
-- `packages/core/src/components/surfaces/pages/experience/oauth-transition/styles/index.ts` (removed)
-- `packages/core/src/tokens/css/components/skin/oauth-transition.css` (byte-exact destination)
-- `packages/core/src/components/surfaces/pages/experience/oauth-transition/provider-icons/index.tsx`
-- `packages/core/src/components/surfaces/pages/experience/oauth-transition/config/index.ts`
-- `packages/core/src/components/surfaces/pages/experience/oauth-transition/types/index.ts`
-- `packages/core/src/tokens/css/foundation/base.css`
-- `packages/core/src/tokens/css/entrypoints/styles.css`
+- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/index.tsx`
+- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/styles/index.ts` (removed)
+- `packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css` (byte-exact destination)
+- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx`
+- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/runtime/config/index.ts`
+- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/foundation/contracts/index.ts`
+- `packages/core/src/foundation/tokens/css/facade/entrypoints/base.css`
+- `packages/core/src/foundation/tokens/css/facade/entrypoints/styles.css`
 - the focused unit contract, production showroom fixture/spec and this addendum
 
 The accepted CSS census is **287 paint declarations**, formerly inside `oauthTransitionStyles` and now
@@ -104,7 +104,7 @@ become an accepted baseline.
 
 ## Migration result
 
-- `styles/index.ts` was moved to `tokens/css/components/skin/oauth-transition.css`; removing only the
+- `styles/index.ts` was moved to `foundation/tokens/css/presentation/components/skin/oauth-transition.css`; removing only the
   TypeScript template wrapper preserved **53,076 bytes, 2,226 split-lines and SHA-256
   `9af44d8087a899dc9434b06f6c2970328204b16f55d718c83a86e0d64deea697`** exactly.
 - `OAuthTransitionScreen` no longer imports the string or renders `<style>`.

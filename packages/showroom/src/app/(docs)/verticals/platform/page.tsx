@@ -1,9 +1,9 @@
 "use client";
 
-import { useShowroomRuntime } from "@/components/showroom-context";
-import PlatformDashboardDemo from "@/components/demos/platform/dashboard";
-import PlatformTenantFormDemo from "@/components/demos/platform/tenant-form";
-import PlatformUserListDemo from "@/components/demos/platform/user-list";
+import { useShowroomRuntime } from "@/composition/components/showroom-context";
+import PlatformDashboardDemo from "@/composition/components/demos/platform/dashboard";
+import PlatformTenantFormDemo from "@/composition/components/demos/platform/tenant-form";
+import PlatformUserListDemo from "@/composition/components/demos/platform/user-list";
 import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
 import {
   BellIcon,

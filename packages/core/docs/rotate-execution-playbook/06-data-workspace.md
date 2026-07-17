@@ -15,9 +15,9 @@
 ## Key Files
 
 - [users/workspace-config.tsx](/Users/daniel/Developer/Rottay/app-platform/src/surfaces/users/workspace-config.tsx)
-- [entity-table-workspace/index.tsx](/Users/daniel/Developer/Rottay/app-platform/src/components/_shared/tables/entity-table-workspace/index.tsx)
-- [SearchCommandBar](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx)
-- [DataTable modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern.tsx)
+- [entity-table-workspace/index.tsx](/Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/tables/entity-table-workspace/index.tsx)
+- [SearchCommandBar](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx)
+- [DataTable modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx)
 
 ## Required Changes
 

@@ -91,8 +91,10 @@ import "@rottay/design-system/styles.css";
 ```
 
 Use the matching `@rottay/design-system/styles/<vertical>` export in a vertical application when
-appropriate. `DesignSystemProvider` still injects runtime tenant variables through
-`SystemCssVariablesBridge`, but it does not replace the static stylesheet.
+appropriate. Provider-owned vertical/preview modes can emit runtime variables,
+but they do not replace the static stylesheet. A published customer tenant uses
+the separate server-compiled artifact flow documented under
+[Tenant Configuration](#tenant-configuration).
 
 ### 4. Wrap your application
 
@@ -167,14 +169,22 @@ export default function RootLayout({
 
 The design system declares the following peer dependencies:
 
-| Package             | Version                | Required By          |
-| ------------------- | ---------------------- | -------------------- |
-| `react`             | `^18.0.0 \|\| ^19.0.0` | All components       |
-| `react-dom`         | `^18.0.0 \|\| ^19.0.0` | All components       |
-| `antd`              | `^5.21.0`              | Classic engine       |
-| `@ant-design/icons` | `^5.5.0`               | Classic engine icons |
+| Package | Version | Reached by |
+|---|---|---|
+| `react` | `^18.0.0 \|\| ^19.0.0` | React API |
+| `react-dom` | `^18.0.0 \|\| ^19.0.0` | React DOM/portals |
+| `antd` | `^5.21.0` | Classic engine |
+| `@ant-design/icons` | `^5.5.0` | Classic engine icons |
+| `@phosphor-icons/react` | `>=2.1.10 <3.0.0` | Default semantic icons |
+| `lucide-react` | `>=0.545.0 <1.0.0` | Compatibility icon catalog only |
+| `@thesvg/react` | `3.2.7` (optional) | Brand/cloud marks |
+| `d3` | `^7.9.0` | Chart families |
+| `motion` | `12.42.2` | Motion primitives/effects |
+| `typescript` | `^5.7.0` (optional) | ESLint/plugin tooling |
 
-If you only use the `modern` or `rustic` engine, `antd` and `@ant-design/icons` are still declared as peers but are not imported at runtime (the classic engine lazy-loads them). You can safely install them without bundle impact, or suppress the peer warning if you are certain you will never use the classic engine.
+Supplier requirements are usage-based. Run
+`pnpm exec rottay-ds-supplier-honesty` in the consuming app rather than
+guessing from this complete package-level list.
 
 ---
 
@@ -253,7 +263,7 @@ The design system ships three stable engines and one pluggable engine:
 | Engine    | Library              | Character                            |
 | --------- | -------------------- | ------------------------------------ |
 | `classic` | Ant Design           | Enterprise, structured, corporate    |
-| `modern`  | DaisyUI/Tailwind     | Contemporary, rounded, glass effects |
+| `modern`  | Rottay token skins   | Responsive, expressive, adaptive     |
 | `rustic`  | Vanilla HTML/CSS     | Minimal, spacious, understated       |
 | `custom`  | Pack-scoped registry | Your own implementation              |
 
@@ -283,9 +293,41 @@ Engines are code-split. Only the active engine downloads when a component first 
 
 ## Tenant Configuration
 
-Tenant configuration controls branding, engine selection, locale, features, personality tokens, and token overrides.
+Tenant context carries identity, locale, features, motion and component-pack
+information. Visual authority has two distinct classes:
 
-### Inline tenant config
+- code-owned vertical baselines (`rottay`, `bithire`, `evnto`) are static-first;
+- published customer tenants are DB-owned and arrive as one validated,
+  server-compiled SSR artifact.
+
+The hostname selects customer identity only. It never selects a checked-in CSS
+file, component branch or engine. A DB-provided engine value is ignored;
+rendering ownership stays with the code-owned vertical.
+
+### Published customer tenant (production)
+
+The server loads the published `TenantThemeDocument`, validates its closed
+schema and vertical envelope, compiles/caches the immutable artifact and embeds
+that exact CSS plus canonical config during SSR. Hydration uses
+`visualAuthority="compiled-artifact"`:
+
+```tsx
+<style id="tenant-theme-artifact">{compiledTenantCss}</style>
+<DesignSystemProvider
+  tenantConfig={canonicalTenantConfig}
+  visualAuthority="compiled-artifact"
+>
+  <App />
+</DesignSystemProvider>
+```
+
+Browser components never query the DB, and the provider emits no competing
+tenant variables, personality bridge or chrome stylesheet in this mode.
+
+### Inline tenant config (development/compatibility)
+
+Inline visual fields remain useful in tests, Storybook, local demos and
+explicit editors. They are not the production customer write contract:
 
 ```tsx
 import { DesignSystemProvider } from "@rottay/design-system";
@@ -314,9 +356,12 @@ function App() {
 }
 ```
 
-### Dynamic tenant resolution
+### Dynamic tenant resolution (compatibility/local)
 
-Instead of passing an inline config, pass a `tenantSlug` and the DS resolves it from its registry (memory cache, localStorage, known registry, static files, remote API, then default fallback):
+The six-stage resolver (memory cache, localStorage, known registry, static
+files, remote API, identity-safe fallback) remains available for local,
+preview and compatibility consumers. It is not the productive customer visual
+authority chain:
 
 ```tsx
 <DesignSystemProvider
@@ -328,9 +373,10 @@ Instead of passing an inline config, pass a `tenantSlug` and the DS resolves it 
 </DesignSystemProvider>
 ```
 
-### Runtime overrides
+### Runtime overrides (preview/editor only)
 
-Product teams can tune tenant branding without forking the DS:
+Explicit preview tooling can exercise compatibility overrides without forking
+the DS. Do not use this path to bypass a published customer artifact:
 
 ```tsx
 <DesignSystemProvider
@@ -346,7 +392,9 @@ Product teams can tune tenant branding without forking the DS:
 
 ### Product profiles
 
-Product profiles sit between engine defaults and tenant overrides, tuning animation intensity, density, chart style, and more:
+Product profiles are UX posture presets within a vertical. When a canonical
+BrandTheme or compiled customer artifact is present, only `surfaceDefaults`
+participate; profiles do not override visual identity:
 
 ```tsx
 <DesignSystemProvider tenantConfig={tenant} productProfile="events.organizer">
@@ -379,7 +427,10 @@ const tenant: TenantConfig = {
 };
 ```
 
-The DS generates full dark-mode CSS including inverted backgrounds, text, borders, shadows, and adjusted brand color scales. It also respects `@media (prefers-color-scheme: dark)` when no explicit theme is set.
+Code-owned vertical/provider modes resolve dark-mode CSS including backgrounds,
+text, borders, shadows and adjusted brand scales. Published customer output is
+compiled on the server from its bounded document and hydrated as the exact
+artifact. System preference is respected when no explicit theme is set.
 
 ### CSS custom properties
 
@@ -396,11 +447,9 @@ All design tokens use the `--ds-*` prefix. You can use them in your own styleshe
 
 ### Token resolution chain
 
-Tokens resolve through a four-layer pipeline (lowest to highest priority):
-
-1. **Engine defaults** -- Classic uses 4px radii, Modern uses 12px, Rustic uses 2px
-2. **Product profile overrides** -- UX preset within a vertical
-3. **Tenant overrides** -- customer-specific structural tweaks
+Provider-owned compatibility tokens resolve through engine defaults, vertical
+overrides and either BrandTheme or legacy profile/tenant inputs. A productive
+customer artifact is already compiled and is not re-merged by the client.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full token and personality merge chains.
 
@@ -461,7 +510,10 @@ The `DesignSystemProvider` shows `null` while resolving tenant configuration asy
 
 - You have a valid `tenantConfig` or `tenantSlug`
 - The `onError` callback is wired so you can see resolution failures
-- If using `tenantSlug`, the tenant exists in the registry or is reachable via the remote API
+- If using the compatibility `tenantSlug` resolver, the tenant exists in its
+  registry/static/API chain
+- In a published customer route, SSR mounted the compiled artifact and passed
+  its canonical `tenantConfig` with `visualAuthority="compiled-artifact"`
 
 ### "useEngineContext must be used within an EngineProvider"
 
@@ -489,7 +541,15 @@ Use the builder functions (`createListSurfaceConfig`, `createDashboardSurfaceCon
 
 ### Supplier dependency errors
 
-`antd`, `@ant-design/icons`, `motion`, `lucide-react`, and `d3` are runtime suppliers exposed as design-system peers. A consuming app must declare every supplier reached by the DS symbols it imports. Motion primitives require the pinned `motion@12.42.2` package; `framer-motion` remains an implementation dependency owned transitively by Motion and must not be declared directly. Run the packaged honesty gate to identify the exact declarations required by that app:
+Runtime suppliers are capability-specific: Classic controls reach `antd` and
+`@ant-design/icons`; the default semantic icon facade reaches
+`@phosphor-icons/react`; compatibility icon exports may reach `lucide-react`;
+brand marks may reach the optional `@thesvg/react`; charts reach `d3`; and
+motion capability reaches `motion`. A consuming app declares only the
+suppliers reached by the DS symbols it imports. Motion requires the pinned
+`motion@12.42.2` package; `framer-motion` remains an implementation dependency
+owned transitively by Motion and must not be declared directly. Run the
+packaged honesty gate for the exact declarations required by that app:
 
 ```bash
 pnpm exec rottay-ds-supplier-honesty
@@ -511,7 +571,10 @@ Import the CSS stylesheet in your application entry:
 import "@rottay/design-system/styles.css";
 ```
 
-The `SystemCssVariablesBridge` component inside the provider handles runtime personality tokens, but the base token layer (colors, spacing, typography) comes from the CSS file.
+In provider-owned modes, `SystemCssVariablesBridge` handles runtime personality
+tokens; the base layer still comes from the CSS file. In
+`compiled-artifact` mode the server artifact is authoritative and the provider
+does not emit a competing bridge.
 
 ---
 

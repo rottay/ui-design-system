@@ -1,0 +1,94 @@
+/**
+ * @fileoverview Stack Classic Engine - Rottay Design System
+ * @description Classic (Ant Design) implementation of the Stack component.
+ *
+ * @module Stack/Engines/Classic
+ * @category Layout
+ * @package @rottay/design-system
+ */
+
+'use client';
+
+import React, { forwardRef, useId, type ElementType, type Ref } from 'react';
+import type { StackProps, StackDirection } from '../../contracts';
+import { STACK_DEFAULTS } from '../../contracts';
+import {
+  generateResponsiveCSS,
+  scalarOrDefault,
+} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import {
+  collectStackResponsiveEntries,
+  renderStackChildren,
+  buildStackStyles,
+} from '../../runtime/responsive';
+
+/**
+ * Classic (Titan) engine implementation of the Stack component.
+ */
+const TitanStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
+  const {
+    as: Component = STACK_DEFAULTS.as,
+    direction,
+    divider,
+    className = '',
+    children,
+    spacing: _spacing,
+    gap: _gap,
+    align: _align,
+    justify: _justify,
+    wrap: _wrap,
+    reverse: _reverse,
+    fullWidth: _fullWidth,
+    fullHeight: _fullHeight,
+    style: _style,
+    engine: _engine,
+    // StackProps extends HTMLAttributes: the remaining keys are real DOM
+    // attributes (data-*, aria-*, id, handlers) and must reach the element.
+    ...htmlAttributes
+  } = props;
+
+  const scalarDirection = scalarOrDefault<StackDirection>(direction, 'vertical');
+  const computedStyle = buildStackStyles(props);
+  const renderedChildren = renderStackChildren(children, divider, scalarDirection);
+
+  // Responsive CSS generation
+  const reactId = useId();
+  const responsiveEntries = collectStackResponsiveEntries(props);
+  const needsResponsiveCSS = responsiveEntries.length > 0;
+
+  const elementId = needsResponsiveCSS ? `stack-${reactId.replace(/:/g, '')}` : '';
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
+
+  const classNames = [
+    'rottay-stack',
+    'rottay-stack--classic',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const ElementType = Component as ElementType;
+
+  return (
+    <>
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
+      {React.createElement(
+        ElementType,
+        {
+          ...htmlAttributes,
+          ref: ref as Ref<HTMLElement>,
+          className: classNames,
+          style: computedStyle,
+          ...(responsive ? responsive.attrs : {}),
+        },
+        renderedChildren
+      )}
+    </>
+  );
+});
+
+TitanStack.displayName = 'ClassicStack';
+
+export default TitanStack;

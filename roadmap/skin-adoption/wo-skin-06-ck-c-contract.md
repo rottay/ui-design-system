@@ -4,11 +4,11 @@
 
 This contract was drafted by a peer agent and adjudicated by the orchestrator. The four
 load-bearing NEW findings were DRILLED against source and all four hold:
-- **Trap 5** — `searchInputStyle()` is called by BOTH `list-toolbar/engines/modern.tsx:1039,1140`
+- **Trap 5** — `searchInputStyle()` is called by BOTH `list-toolbar/engines/modern/index.tsx:1039,1140`
   (in scope) AND `classic.tsx:531,768` (out of scope). Confirmed shared. `tokens.ts` stays out of
   scope; its counter floor stays at 5 permanently. RULING: ACCEPTED.
 - **Scope-class convention** — `ds-structure ds-<comp>` is the LIVE SHIPPED convention (verified in
-  `tokens/css/components/skin/field-filters-panel.css:30,34` and the `className=` sites on
+  `foundation/tokens/css/presentation/components/skin/field-filters-panel.css:30,34` and the `className=` sites on
   `field-filters-panel/index.tsx:79`, `headers/collection/index.tsx:167`). The shipped CSS already
   uses `[data-part='root'][data-part='root']` (data-part ×2) for the border floor — the exact P-48
   mechanic §4 asserts. RULING: ACCEPTED, not invented.
@@ -130,7 +130,7 @@ as directional, not exhaustive.
 
 **2. A real trap the inventory never mentions — `list-toolbar/tokens.ts`'s `searchInputStyle()`
 crosses the classic/modern boundary.** I grepped every call site of the exported helper:
-`list-toolbar/engines/modern.tsx:1039,1140` (in scope) **and** `list-toolbar/engines/classic.tsx:531,768`
+`list-toolbar/engines/modern/index.tsx:1039,1140` (in scope) **and** `list-toolbar/engines/classic/index.tsx:531,768`
 (out of scope, AntD wrapper, must not be touched). The function is shared. Its 5 counted sites in
 `tokens.ts` (the STATIC `background/borderColor/color/boxShadow/borderRadius` object, lines ~63-67)
 cannot be deleted or hollowed out — classic still calls it at runtime and needs a real inline style
@@ -142,16 +142,16 @@ inventory's — please scrutinize it specifically; if I've misjudged the blast r
 `tokens.ts`, the whole Unit C1 design changes.**
 
 **3. Exact imperative-write counts I extracted (grep `\.style\.` per file), for your spot-check:**
-- `patterns/data/saved-views/engines/rustic.tsx` — 10, all `(e.currentTarget as HTMLButtonElement).style.background =`, lines 339, 343, 369, 373, 405, 410, 446, 450, 521, 525. Matches inventory.
-- `patterns/data/saved-views/engines/modern.tsx` — 4, `e.currentTarget.style.borderColor =` / `.style.boxShadow =` (no cast), lines 54, 55, 60, 61. Matches inventory's channel description. **Does not cleanly matter to the inventory's own site-count arithmetic — see item 4.**
-- `patterns/data/list-toolbar/engines/modern.tsx` — 2, `event.currentTarget.style.boxShadow =` (no cast), lines 407, 410. Matches inventory; reconciles cleanly (87+2=89=counter).
+- `patterns/data/saved-views/engines/rustic/index.tsx` — 10, all `(e.currentTarget as HTMLButtonElement).style.background =`, lines 339, 343, 369, 373, 405, 410, 446, 450, 521, 525. Matches inventory.
+- `patterns/data/saved-views/engines/modern/index.tsx` — 4, `e.currentTarget.style.borderColor =` / `.style.boxShadow =` (no cast), lines 54, 55, 60, 61. Matches inventory's channel description. **Does not cleanly matter to the inventory's own site-count arithmetic — see item 4.**
+- `patterns/data/list-toolbar/engines/modern/index.tsx` — 2, `event.currentTarget.style.boxShadow =` (no cast), lines 407, 410. Matches inventory; reconciles cleanly (87+2=89=counter).
 - `structures/workspace/export-button/index.tsx` — 4, `(e.currentTarget as HTMLElement).style.background =` (cast), lines 331, 335, 338, 342. Matches inventory; counter does **not** credit these (22+4=26 real, per inventory's own flag).
 - `patterns/data/status-filter-pills/index.tsx` — 6, `event.currentTarget.style.background/borderColor/boxShadow =` (no cast), lines 108, 109, 114, 115, 119, 122. Matches inventory; reconciles cleanly (14+6=20=counter).
-- `patterns/data/saved-views/engines/classic.tsx` — 2, not verified by me (out of scope, inventory doesn't detail it either). 10+4+2+4+6+2 = 28, matching the inventory's checkpoint-wide total exactly.
+- `patterns/data/saved-views/engines/classic/index.tsx` — 2, not verified by me (out of scope, inventory doesn't detail it either). 10+4+2+4+6+2 = 28, matching the inventory's checkpoint-wide total exactly.
 
 **4. A counter-unreliability instance the inventory's §0 doesn't name.** §0 names exactly one
 inconsistent pair (rustic's 10 cast writes credited, export-button's 4 cast writes not credited).
-I found a **third, non-cast case**: `saved-views/engines/modern.tsx` is reported as "35 sites —
+I found a **third, non-cast case**: `saved-views/engines/modern/index.tsx` is reported as "35 sites —
 reconciled 32 object-literal keys + a residual gap of ~3 not fully attributed" — that arithmetic
 (32+~3=35) never mentions where the file's 4 imperative writes (item 3 above) land in it. Either
 they're inside the unattributed "~3" (meaning ~1 of 4 got silently absorbed and the file is really
@@ -169,7 +169,7 @@ distinct gradient recipes feeding it (`index.tsx:610` 14%/16% against surface-ca
 `:612` 7%/12%, `:613` a neutral 94%white-6%/88%+12% rest state), and the same 3-way shape repeats
 at the "Action row" (`:927,928` mirrors `:612,613` almost exactly but I did not diff them
 byte-for-byte). Unit C3's agent must transcribe all three branches, not two — flagged in §3 Trap 1.
-Separately: `saved-views/engines/rustic.tsx:317` references
+Separately: `saved-views/engines/rustic/index.tsx:317` references
 `boxShadow: 'var(--ds-saved-views-menu-shadow, var(--ds-shadow-lg))'` — a custom property that is
 **never set anywhere in the codebase** (grep-confirmed), so it always resolves to the fallback
 today. Two readings: a copy-paste naming mistake (this file is `saved-views`, not
@@ -184,7 +184,7 @@ CK-F/CK-B/CK-D in one important way: **CK-C is 100% greenfield on scope classes 
 `data-part` (every `className=` hit in all 12 files is a consumer passthrough, never a first-party
 scope class — CK-F had 5 partial pre-existing `ds-pattern-<comp> ds-engine-<engine>` classes to
 build on; CK-C has zero). I grepped already-shipped `structures/` skins
-(`tokens/css/components/skin/field-filters-panel.css`, and the shipped `className=` sites in
+(`foundation/tokens/css/presentation/components/skin/field-filters-panel.css`, and the shipped `className=` sites in
 `structures/headers/{collection,detail}/index.tsx`, `structures/workspace/{field-filters-panel,
 selection-preview-rail}/index.tsx`) and confirmed the **live, shipped** convention for the
 `structures/` tier is a **two-class root**, `ds-structure ds-<comp>` (e.g. `.ds-structure
@@ -197,7 +197,7 @@ currently shipped, this whole anatomy section needs a find-replace, not a rethin
 (two classes, (0,2,0)) is confirmed live; only the exact prefix could be wrong.
 
 **7. Scope-class name freedom — grep-verified, not guessed.** I grepped the full `components/` +
-`tokens/css/` tree for every class name this contract proposes to mint
+`foundation/tokens/css/` tree for every class name this contract proposes to mint
 (`ds-column-menu`, `ds-column-menu-panel`, `ds-saved-views-menu`, `ds-saved-views-menu-panel`,
 `ds-export-button`, `ds-export-button-panel`, `ds-search-command-bar`, `ds-active-filters-bar`,
 `ds-scope-switcher`, `ds-view-mode-switcher`, `ds-table-toolbar`, `ds-pattern-list-toolbar`,
@@ -232,12 +232,12 @@ with a real portal-scoping precedent). The inventory is normative for *what* pai
 contract is normative for *how* it moves. Where they disagree, the inventory's site tables win on
 facts and this contract wins on method.
 
-Scope: `packages/core/src/components/structures/workspace/` (8 components, 8 files) +
-`packages/core/src/components/patterns/data/{list-toolbar,saved-views,status-filter-pills}/`
+Scope: `packages/core/src/ui/structures/workspace/` (8 components, 8 files) +
+`packages/core/src/ui/patterns/data/{list-toolbar,saved-views,status-filter-pills}/`
 (3 components, 5 files including `list-toolbar/tokens.ts`) — **466 counted sites, ~470 real once
 the counter-blind imperative writes are added, 11 components, 18 files.** `list-toolbar/engines/
-classic.tsx` and `saved-views/engines/classic.tsx` (both AntD-wrapped, 0 counted sites) are **out
-of scope and must not be touched.** `list-toolbar/engines/rustic.tsx` is a 9-line re-export of
+classic.tsx` and `saved-views/engines/classic/index.tsx` (both AntD-wrapped, 0 counted sites) are **out
+of scope and must not be touched.** `list-toolbar/engines/rustic/index.tsx` is a 9-line re-export of
 `classic` — there is no distinct rustic implementation to migrate for that component.
 
 ---
@@ -303,7 +303,7 @@ count. `tokens.ts` (list-toolbar's vocabulary source) is **not assigned to any u
 DRAFTER NOTE 2 and the Unit C1 note below; its 5 sites are out of this checkpoint's scope.
 
 - **Unit C1 — the vocabulary core: `list-toolbar` + `status-filter-pills`** (94 + 20 = 114 sites,
-  3 files: `list-toolbar/engines/modern.tsx`, `list-toolbar/tokens.ts` [**read-only reference, not
+  3 files: `list-toolbar/engines/modern/index.tsx`, `list-toolbar/tokens.ts` [**read-only reference, not
   migrated** — see below], `status-filter-pills/index.tsx`). Skins: `engines/modern/skin/
   list-toolbar.css`, `components/skin/status-filter-pills.css` (2 files). This is the lowest
   divergence-risk unit — both components already agree with the canonical vocabulary — but it owns
@@ -373,9 +373,9 @@ pre-step mints the scope class from nothing, per component.
 | `table-toolbar` | structures/workspace, engine-agnostic | `ds-structure ds-table-toolbar` | (0,2,0) |
 | `search-command-bar` | structures/workspace, engine-agnostic | `ds-structure ds-search-command-bar` | (0,2,0) |
 
-All 14 names above are grep-verified free across `components/` and `tokens/css/` (DRAFTER NOTE 7).
+All 14 names above are grep-verified free across `components/` and `foundation/tokens/css/` (DRAFTER NOTE 7).
 `ds-structure ds-<comp>` is the **live, shipped** convention for the `structures/` tier (confirmed
-in `tokens/css/components/skin/field-filters-panel.css` and the `className=` sites on
+in `foundation/tokens/css/presentation/components/skin/field-filters-panel.css` and the `className=` sites on
 `structures/headers/{collection,detail}/index.tsx`) — not invented for this checkpoint. `list-toolbar`'s
 rustic is **not stamped** (no distinct file exists); if a real rustic implementation is ever added,
 it must carry `ds-pattern-list-toolbar ds-engine-rustic` to match its siblings.
@@ -470,7 +470,7 @@ the actual branch count: `index.tsx:610` (drag-target-active, 14%/16% against su
 `linear-gradient` values feeding the same background channel; `:927-928` repeats a near-identical
 shape for the Action row. Unit C3 must transcribe all three branches verbatim, verified against the
 live file, not against the summary table. Separately (same unit, different file):
-`saved-views/engines/rustic.tsx:317` sets `boxShadow: 'var(--ds-saved-views-menu-shadow,
+`saved-views/engines/rustic/index.tsx:317` sets `boxShadow: 'var(--ds-saved-views-menu-shadow,
 var(--ds-shadow-lg))'` — a custom property that is **never set anywhere in this codebase** (its
 name doesn't even match its own component; it says "saved-views-menu," not "saved-views"). Carry
 the **full fallback expression verbatim** into the skin (`var(--ds-saved-views-menu-shadow,
@@ -527,7 +527,7 @@ apply the SAME mechanic to all three, not improvise per-file.
 
 **Trap 5 — `list-toolbar/tokens.ts`'s `searchInputStyle()` is a shared helper consumed by both the
 in-scope modern engine and the out-of-scope classic engine; it must not be edited.** Grep-confirmed
-call sites: `list-toolbar/engines/modern.tsx:1039,1140` (in scope) and `list-toolbar/engines/
+call sites: `list-toolbar/engines/modern/index.tsx:1039,1140` (in scope) and `list-toolbar/engines/
 classic.tsx:531,768` (out of scope, AntD-wrapped, "must not be touched" per this checkpoint's own
 scope line). The function's 5 sites (`tokens.ts:63-67`) return a fully STATIC style object
 (`background`/`borderColor`/`color`/`boxShadow`/`borderRadius`) that classic still needs as real
@@ -584,7 +584,7 @@ the file (caught twice already in this program). Write "background and filter," 
 
 | File | Keyframe(s) | Action |
 |---|---|---|
-| `saved-views/engines/modern.tsx:259` | `ds-views-spin` | Already `ds`-prefixed and fleet-unique (grep-confirmed zero other references). Move verbatim into `engines/modern/skin/saved-views.css`, drop the unguarded per-render `<style>` tag, update the `animation` reference. No rename — but see DRAFTER NOTE 8 (borderline case, doesn't fully spell the component name). |
+| `saved-views/engines/modern/index.tsx:259` | `ds-views-spin` | Already `ds`-prefixed and fleet-unique (grep-confirmed zero other references). Move verbatim into `engines/modern/skin/saved-views.css`, drop the unguarded per-render `<style>` tag, update the `animation` reference. No rename — but see DRAFTER NOTE 8 (borderline case, doesn't fully spell the component name). |
 | `structures/workspace/export-button/index.tsx:376` | `ds-export-toast-fade` | Already correctly namespaced, fleet-unique. Move into `components/skin/export-button.css`; drop the `<style>` tag, unconditionally injected today regardless of `copiedFeedback` state — this checkpoint's clearest example of that pattern, not gated on the state that needs it, same disposition regardless. |
 | `structures/workspace/search-command-bar/index.tsx:397,402` | `workspaceCommandPulse`, `workspaceCommandSpin` | **NOT `ds`-prefixed — real rename required**, unlike every other keyframe in this checkpoint. Rename to `ds-search-command-bar-pulse` and `ds-search-command-bar-spin`; update both the `<style>` block's `@keyframes` names AND the two `animation:` references (`:629` for the pulse, `:113` for the spin) to match. Move into `components/skin/search-command-bar.css`; drop the `<style>` tag (currently injected unconditionally on every render, not gated on any voice state). |
 
@@ -602,7 +602,7 @@ CK-C is **CERTIFIED byte-exact** at migration commit `f0046708`:
 - 12 ownership-scoped skins are wired through both canonical entrypoints and all five generated
   vertical bundles. `skins.parseErrors`, `skins.unwired`, `skins.exemptionsBreached` and
   `skins.deadParts` are all exactly 0.
-- Counted paint moved from 466 to 8: `list-toolbar/engines/modern.tsx` retains the three adjudicated
+- Counted paint moved from 466 to 8: `list-toolbar/engines/modern/index.tsx` retains the three adjudicated
   P-88 sites and `list-toolbar/tokens.ts` retains five shared classic/modern sites; every other CK-C
   source file is exactly 0. All 26 in-scope imperative paint writes were removed. The two classic
   saved-views writes remain out of scope.
@@ -638,7 +638,7 @@ cross-unit file dependency.
 
 ## 7. What this checkpoint does NOT do
 
-- Does not touch `list-toolbar/engines/classic.tsx` or `saved-views/engines/classic.tsx` (0 sites
+- Does not touch `list-toolbar/engines/classic/index.tsx` or `saved-views/engines/classic/index.tsx` (0 sites
   each, AntD-wrapped, out of scope).
 - Does not edit `list-toolbar/tokens.ts` — its `searchInputStyle()` stays intact for classic's
   sake; its counter floor stays at 5 permanently, by design (Trap 5).

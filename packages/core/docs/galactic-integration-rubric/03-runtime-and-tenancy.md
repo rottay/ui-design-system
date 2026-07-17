@@ -12,11 +12,11 @@ The main drift is not inside the DS core. It is at the app boundary, especially 
 
 ## What Is Strong
 
-- `ui-design-system/packages/core/src/runtime/bootstrap/DesignSystemProvider.tsx`
-- `ui-design-system/packages/core/src/runtime/theming/ThemeProvider.tsx`
-- `ui-design-system/packages/core/src/runtime/tenant/storage/index.ts`
-- `ui-design-system/packages/core/src/runtime/tenant/registry/index.ts`
-- `ui-design-system/packages/core/src/hooks/tokens/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/bootstrap/composition/react/provider/index.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/store/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/theming/composition/react/tokens/index.ts`
 
 The DS already has:
 
@@ -35,8 +35,8 @@ Main evidence:
 
 - `app-platform/src/app/(dashboard)/layout.tsx`
 - `app-platform/src/app/(auth)/layout.tsx`
-- `app-platform/src/components/providers/dashboard-providers/index.tsx`
-- `app-platform/src/components/providers/tenant-provider/index.tsx`
+- `app-platform/src/composition/components/providers/dashboard-providers/index.tsx`
+- `app-platform/src/composition/components/providers/tenant-provider/index.tsx`
 
 This means the intended rule exists, but the app still pays DB latency and complexity for bundled first-party tenants.
 

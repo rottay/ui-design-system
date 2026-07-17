@@ -363,7 +363,7 @@
   /* ========================================================================
      MICRO-TYPOGRAPHY (WO-CRA-01)
      Numeric alignment, line wrapping, and optical sizing. The utility classes
-     below and the TS mirror (tokens/ts/base/typography.ts) consume these so no
+     below and the TS mirror (foundation/tokens/ts/foundation/base/typography/index.ts) consume these so no
      consumer re-invents the values inline.
      ======================================================================== */
   --ds-numeric-tabular: tabular-nums;
@@ -2081,7 +2081,7 @@
 
   /* Select Base. The surface derives from the tenant's control surface; a white
      literal here painted every un-customized select white, including on this
-     file's own dark ground. See `tokens/css/components/select.css`. */
+     file's own dark ground. See `foundation/tokens/css/presentation/components/select.css`. */
   --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, #ffffff));
   --ds-select-bg-disabled: #fafafa;
   --ds-select-color: #171717;
@@ -15525,7 +15525,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 /**
  * FieldFiltersPanel skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/field-filters-panel.css — the structures/
+ * Home: foundation/tokens/css/presentation/components/skin/field-filters-panel.css — the structures/
  * shared-file home of the WO-ARC-09 contract; no --modern/--rustic
  * discriminator because the component renders one DOM under every engine.
  *
@@ -15960,7 +15960,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 /**
  * SelectionPreviewRail skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/selection-preview-rail.css — the second
+ * Home: foundation/tokens/css/presentation/components/skin/selection-preview-rail.css — the second
  * consumer of the structures/ shared-file home after field-filters-panel.css;
  * no --modern/--rustic discriminator because the component renders one DOM
  * under every engine.
@@ -18959,7 +18959,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * RadioGroup skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/radio-group.css -- the compound renders one
+ * Home: foundation/tokens/css/presentation/components/skin/radio-group.css -- the compound renders one
  * DOM under every engine, so there is no --modern/--rustic discriminator.
  *
  * SCOPE ROOT is `.rottay-radio-group[data-part='root']`, carrying
@@ -19017,7 +19017,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * CheckboxGroup skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/checkbox-group.css -- the compound renders
+ * Home: foundation/tokens/css/presentation/components/skin/checkbox-group.css -- the compound renders
  * one DOM under every engine, so there is no --modern/--rustic discriminator.
  *
  * SCOPE ROOT is `.rottay-checkbox-group[data-part='root']`. Each option stamps
@@ -19090,7 +19090,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * VoiceInputButton skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/voice-input-button.css -- this component has
+ * Home: foundation/tokens/css/presentation/components/skin/voice-input-button.css -- this component has
  * no engine split (one `index.tsx` renders under every engine).
  *
  * SCOPE ROOT is `.ds-voice-input-button[data-part='root']` (a `<button>`),
@@ -32034,7 +32034,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.
  * The element sets NO background at rest, so a `:hover`-only rule is byte-exact:
  * at rest it falls through to transparent, exactly as before. Nothing else in
- * `tokens/css/` competes for that element's background.
+ * `foundation/tokens/css/` competes for that element's background.
  *
  * Values transcribed verbatim from `engines/modern.tsx`.
  */
@@ -36963,7 +36963,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * DetailHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/detail-header.css — DetailHeader renders one DOM
+ * Home: foundation/tokens/css/presentation/components/skin/detail-header.css — DetailHeader renders one DOM
  * tree under every engine (no engines/ split), so it has a single skin.
  *
  * SCOPE ROOT carries `ds-structure ds-detail-header` + `data-part='root'`.
@@ -37204,7 +37204,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * EditHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/edit-header.css — EditHeader renders one DOM
+ * Home: foundation/tokens/css/presentation/components/skin/edit-header.css — EditHeader renders one DOM
  * tree under every engine (no engines/ split), so it has a single skin.
  *
  * SCOPE ROOT is the header's outer element, which carries the pair
@@ -37423,7 +37423,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * FormHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/form-header.css — FormHeader renders one DOM
+ * Home: foundation/tokens/css/presentation/components/skin/form-header.css — FormHeader renders one DOM
  * tree under every engine (no engines/ split), so it has a single skin.
  *
  * SCOPE ROOT carries `ds-structure ds-form-header` + `data-part='root'`.
@@ -37509,7 +37509,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * CollectionHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/collection-header.css — CollectionHeader renders
+ * Home: foundation/tokens/css/presentation/components/skin/collection-header.css — CollectionHeader renders
  * one DOM tree under every engine (no engines/ split), so it has a single skin.
  *
  * SCOPE ROOT carries `ds-structure ds-collection-header` + `data-part='root'` +
@@ -37725,7 +37725,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * DashboardHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/dashboard-header.css — DashboardHeader renders
+ * Home: foundation/tokens/css/presentation/components/skin/dashboard-header.css — DashboardHeader renders
  * one DOM tree under every engine (no engines/ split), so it has a single skin.
  *
  * SCOPE ROOT is the header's outer element, which carries the pair
@@ -37844,7 +37844,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * ActivityTicker skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/activity-ticker.css — ActivityTicker renders
+ * Home: foundation/tokens/css/presentation/components/skin/activity-ticker.css — ActivityTicker renders
  * one DOM tree under every engine (no engines/ split), so it has a single skin.
  *
  * SCOPE ROOT carries the single class `ds-activity-ticker` + `data-part='root'`.
@@ -38016,7 +38016,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * ActivityTimeline skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/activity-timeline.css — single DOM tree under
+ * Home: foundation/tokens/css/presentation/components/skin/activity-timeline.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-activity-timeline`;
  * the kit's "two root classes" budget is bought by REPEATING it.
  *
@@ -38182,7 +38182,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * ActivityCompact skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/activity-compact.css — single DOM tree under
+ * Home: foundation/tokens/css/presentation/components/skin/activity-compact.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-activity-compact`,
  * repeated to buy the kit's "two root classes" budget.
  *
@@ -38341,7 +38341,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * ActivityCards skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/activity-cards.css — single DOM tree under
+ * Home: foundation/tokens/css/presentation/components/skin/activity-cards.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-activity-cards`,
  * repeated to buy the "two root classes" budget.
  *
@@ -38738,7 +38738,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * MetricsMinimal skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/metrics-minimal.css — single DOM tree under
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-minimal.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-metrics-minimal`,
  * repeated to buy the "two root classes" budget.
  *
@@ -38910,7 +38910,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * MetricsCards skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/metrics-cards.css — single DOM tree under
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-cards.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-metrics-cards`, repeated
  * to buy the "two root classes" budget. Values are the shared `metrics/tokens.ts`
  * constants, transcribed verbatim (see metrics-minimal.css header).
@@ -39057,7 +39057,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * MetricsChart skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/metrics-chart.css — single DOM tree under
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-chart.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-metrics-chart`, repeated
  * to buy the "two root classes" budget. Values are the shared `metrics/tokens.ts`
  * constants, transcribed verbatim (see metrics-minimal.css header).
@@ -39210,7 +39210,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * MetricsRows skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/metrics-rows.css — single DOM tree under
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-rows.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-metrics-rows`, repeated
  * to buy the "two root classes" budget. Values are the shared `metrics/tokens.ts`
  * constants, transcribed verbatim (see metrics-minimal.css header).
@@ -39590,7 +39590,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * StatsHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/stats-header.css — StatsHeader composes DS
+ * Home: foundation/tokens/css/presentation/components/skin/stats-header.css — StatsHeader composes DS
  * primitives into one DOM tree under every engine. Scope root carries the single
  * class `ds-stats-header`, repeated to buy the "two root classes" budget.
  *
@@ -39741,7 +39741,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * DataTerminalCard skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/data-terminal-card.css. The component renders
+ * Home: foundation/tokens/css/presentation/components/skin/data-terminal-card.css. The component renders
  * one DOM tree under every engine (no engines/ split), so it has a single skin
  * covering BOTH of its scope classes: `ds-data-terminal-card` (the four variant
  * bodies CommandCard/HUDCard/CircuitCard/MatrixCard, selected by `data-variant`
@@ -40405,7 +40405,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * Assistant skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/assistant.css. The kit has no engine split
+ * Home: foundation/tokens/css/presentation/components/skin/assistant.css. The kit has no engine split
  * and no single root: eight independently-exported sub-components
  * (AssistantStatusBadge, StreamingText, TypingIndicator, ToolCallCard,
  * AssistantStatusIndicator, PreviewDiffCard, ConfirmActionCard, MessageBubble),
@@ -40598,7 +40598,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * Presence skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: tokens/css/components/skin/presence.css. Three independently-exported
+ * Home: foundation/tokens/css/presentation/components/skin/presence.css. Three independently-exported
  * sub-components (PresenceBar, PresenceTypingIndicator, LiveCursor), each its
  * own scope island carrying `ds-presence-<export>` on its own root plus
  * `data-part` on every painted descendant.
@@ -48279,6 +48279,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   fill: var(--ds-chart-cell-color, var(--ds-color-primary));
 }
 
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point'] {
+  fill: var(--ds-chart-mark-color, var(--ds-color-primary));
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer'] [data-part='pie-slice'] {
   fill: var(--ds-chart-mark-color, var(--ds-color-primary));
   stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
@@ -48287,52 +48295,72 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='0'] {
+  [data-part='pie-slice-mark'][data-series-index='0'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='0'] {
   --ds-chart-mark-color: var(--ds-chart-series-1, var(--ds-color-primary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='1'] {
+  [data-part='pie-slice-mark'][data-series-index='1'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='1'] {
   --ds-chart-mark-color: var(--ds-chart-series-2, var(--ds-color-secondary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='2'] {
+  [data-part='pie-slice-mark'][data-series-index='2'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='2'] {
   --ds-chart-mark-color: var(--ds-chart-series-3, var(--ds-color-success));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='3'] {
+  [data-part='pie-slice-mark'][data-series-index='3'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='3'] {
   --ds-chart-mark-color: var(--ds-chart-series-4, var(--ds-color-warning));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='4'] {
+  [data-part='pie-slice-mark'][data-series-index='4'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='4'] {
   --ds-chart-mark-color: var(--ds-chart-series-5, var(--ds-color-info));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='5'] {
+  [data-part='pie-slice-mark'][data-series-index='5'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='5'] {
   --ds-chart-mark-color: var(--ds-chart-series-6, var(--ds-color-primary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='6'] {
+  [data-part='pie-slice-mark'][data-series-index='6'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='6'] {
   --ds-chart-mark-color: var(--ds-chart-series-7, var(--ds-color-secondary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='7'] {
+  [data-part='pie-slice-mark'][data-series-index='7'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='7'] {
   --ds-chart-mark-color: var(--ds-chart-series-8, var(--ds-color-success));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='8'] {
+  [data-part='pie-slice-mark'][data-series-index='8'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='8'] {
   --ds-chart-mark-color: var(--ds-chart-series-9, var(--ds-color-warning));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
-  [data-part='pie-slice-mark'][data-series-index='9'] {
+  [data-part='pie-slice-mark'][data-series-index='9'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='9'] {
   --ds-chart-mark-color: var(--ds-chart-series-10, var(--ds-color-info));
 }
 
@@ -48359,6 +48387,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='cell'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='scatter-point-mark'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='pie-slice-mark'] {
   transition: opacity var(--ds-motion-duration-fast) ease,
     filter var(--ds-motion-duration-fast) ease;
@@ -48374,6 +48404,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   cursor: default;
   fill: transparent;
   stroke: transparent;
+  pointer-events: all;
 }
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction='select']
@@ -48507,12 +48538,24 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   stroke-width: 2.5;
 }
 
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer'][data-chart-marks='human-rounded']
+  [data-part='scatter-point'] {
+  stroke-width: 2.5;
+}
+
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer'][data-chart-marks='technical-sharp']
+  [data-part='scatter-point'] {
+  stroke-width: 1;
+}
+
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='bar-mark']:hover,
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='point']:hover,
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='cell']:hover,
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='scatter-point-mark']:hover,
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='pie-slice-mark']:hover {
   opacity: 0.82;
@@ -48570,6 +48613,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='bar-mark'],
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point'],
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='scatter-point-mark'],
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='pie-slice-mark'] {
     transition: none;
   }
@@ -48602,6 +48646,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer'] [data-part='bar'],
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'] [data-part='point'],
   .ds-chart-renderer-heatmap.ds-chart-renderer-heatmap[data-part='chart-renderer'] [data-part='cell'],
+  .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer'] [data-part='scatter-point'],
   .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer'] [data-part='pie-slice'] {
     fill: CanvasText;
     stroke: Canvas;
@@ -48612,6 +48657,20 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     [data-part='pie-center-label'] {
     fill: CanvasText;
     forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+    [data-part='scatter-point-mark'][data-series-index='1'] [data-part='scatter-point'],
+  .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+    [data-part='scatter-point-mark'][data-series-index='3'] [data-part='scatter-point'],
+  .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+    [data-part='scatter-point-mark'][data-series-index='5'] [data-part='scatter-point'],
+  .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+    [data-part='scatter-point-mark'][data-series-index='7'] [data-part='scatter-point'],
+  .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+    [data-part='scatter-point-mark'][data-series-index='9'] [data-part='scatter-point'] {
+    fill: Canvas;
+    stroke: CanvasText;
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'] [data-part='area'] {
@@ -51094,7 +51153,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   /* Fallback only: a tenant BrandTheme with spring physics (springTension +
      springFriction, useSpring !== false) overrides these with a generated
      `linear()` curve scoped to its own [data-tenant] selector (see
-     compilers/brand-theme's setMotionVariables / brandThemeToTokenOverrides).
+     infrastructure/compilers/kernel/runtime/brand-theme's setMotionVariables / brandThemeToTokenOverrides).
      A tenant that declares no spring keeps this cubic-bezier approximation. */
   --ds-motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ds-motion-spring-gentle: cubic-bezier(0.25, 1.25, 0.5, 1);
@@ -52134,7 +52193,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
      default); 0 = flat (no gradient/glass/glow). Every effect multiplies its
      alpha/length by this, so intensity 0 collapses each effect to none while
      keeping valid CSS (blur(0px), transparent stops, 0-alpha shadow).
-     Emitted per tenant by compilers/brand-theme from surfaces.effectIntensity.
+     Emitted per tenant by infrastructure/compilers/kernel/runtime/brand-theme from surfaces.effectIntensity.
      ======================================================================== */
   --ds-effect-intensity: 1;
 
@@ -58286,8 +58345,8 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  *
  * This file is a BUILD OUTPUT assembled from two authored sources; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   1. tokens/ts/brand-themes/platform/rottay.ts (compiled via compileBrandTheme)
- *   2. tokens/css/artifacts/rottay/_source/extension.css (declared extension)
+ *   1. foundation/tokens/ts/presentation/brand-themes/platform/index.ts (compiled via compileBrandTheme)
+ *   2. foundation/tokens/css/facade/artifacts/rottay/_source/extension.css (declared extension)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */

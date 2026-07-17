@@ -15,8 +15,8 @@
 ## Important Files
 
 - [app-platform/layout.tsx](/Users/daniel/Developer/Rottay/app-platform/src/app/layout.tsx)
-- [app-platform/dashboard-providers](/Users/daniel/Developer/Rottay/app-platform/src/components/providers/dashboard-providers/index.tsx)
-- [app-platform/tenant-provider](/Users/daniel/Developer/Rottay/app-platform/src/components/providers/tenant-provider/index.tsx)
+- [app-platform/dashboard-providers](/Users/daniel/Developer/Rottay/app-platform/src/composition/components/providers/dashboard-providers/index.tsx)
+- [app-platform/tenant-provider](/Users/daniel/Developer/Rottay/app-platform/src/composition/components/providers/tenant-provider/index.tsx)
 - [app-evnto/layout.tsx](/Users/daniel/Developer/Rottay/app-evnto/src/app/layout.tsx)
 - [app-evnto/providers/index.tsx](/Users/daniel/Developer/Rottay/app-evnto/src/providers/index.tsx)
 - [app-bithire/layout.tsx](/Users/daniel/Developer/Rottay/app-bithire/src/app/layout.tsx)

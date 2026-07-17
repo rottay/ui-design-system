@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/composition/components/showroom-link";
 import { usePathname } from "next/navigation";
-import { Box, Flex, Text } from "@/components/showroom-ui";
+import { Box, Flex, Text } from "@/composition/components/showroom-ui";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -16,7 +16,7 @@ import { navigation, type NavItem } from "@/data/navigation";
 import {
   useShowroom,
   useShowroomRuntime,
-} from "@/components/showroom-context";
+} from "@/composition/components/showroom-context";
 import {
   countSectionEntries,
   getRoutePresentation,

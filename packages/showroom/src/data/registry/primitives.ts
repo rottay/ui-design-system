@@ -128,16 +128,13 @@ const layout: PrimitiveEntry[] = [
 // ---------------------------------------------------------------------------
 
 const navigation: PrimitiveEntry[] = [
-  { slug: 'action-dock', name: 'ActionDock', category: 'navigation', description: 'Floating action dock for primary page actions', engines: allEngines },
   { slug: 'affix', name: 'Affix', category: 'navigation', description: 'Sticky element that pins on scroll', engines: allEngines },
   { slug: 'anchor', name: 'Anchor', category: 'navigation', description: 'In-page navigation linking to sections', engines: allEngines },
   { slug: 'back-top', name: 'BackTop', category: 'navigation', description: 'Scroll-to-top floating button', engines: allEngines },
-  { slug: 'bottom-tab-bar', name: 'BottomTabBar', category: 'navigation', description: 'Mobile bottom navigation bar', engines: allEngines },
   { slug: 'breadcrumb', name: 'Breadcrumb', category: 'navigation', description: 'Hierarchical path navigation trail', engines: allEngines },
   { slug: 'float-button', name: 'FloatButton', category: 'navigation', description: 'Floating action button with optional expansion', engines: allEngines },
   { slug: 'link', name: 'Link', category: 'navigation', description: 'Styled anchor with router integration', engines: allEngines },
   { slug: 'menu', name: 'Menu', category: 'navigation', description: 'Vertical or horizontal navigation menu', engines: allEngines },
-  { slug: 'mobile-header', name: 'MobileHeader', category: 'navigation', description: 'Compact header for mobile viewports', engines: allEngines },
   { slug: 'pagination', name: 'Pagination', category: 'navigation', description: 'Page navigation with size options', engines: allEngines },
   { slug: 'segmented', name: 'Segmented', category: 'navigation', description: 'Segmented control for switching views', engines: allEngines },
   { slug: 'stepper', name: 'Stepper', category: 'navigation', description: 'Compact step indicator for mobile flows', engines: allEngines },
@@ -150,7 +147,6 @@ const navigation: PrimitiveEntry[] = [
 // ---------------------------------------------------------------------------
 
 const overlay: PrimitiveEntry[] = [
-  { slug: 'adaptive-overlay', name: 'AdaptiveOverlay', category: 'overlay', description: 'Responsive overlay that adapts to viewport size', engines: allEngines },
   { slug: 'alert-dialog', name: 'AlertDialog', category: 'overlay', description: 'Modal dialog requiring user acknowledgement', engines: allEngines },
   { slug: 'confirm-dialog', name: 'ConfirmDialog', category: 'overlay', description: 'Confirmation dialog with accept/cancel actions', engines: allEngines },
   { slug: 'context-menu', name: 'ContextMenu', category: 'overlay', description: 'Right-click context menu with actions', engines: allEngines },

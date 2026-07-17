@@ -1,16 +1,16 @@
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/composition/components/showroom-link";
 import {
   DocsMetricTile,
   DocsPanel,
   SectionDivider,
-} from "@/components/showroom-ui";
+} from "@/composition/components/showroom-ui";
 import { notFound } from "next/navigation";
 import { Badge, Box, Card, Flex, Stack, Text } from "@rottay/design-system";
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from "@/components/playground/surface-tokens";
+} from "@/composition/components/playground/surface-tokens";
 import {
   charts,
   patternGroups,

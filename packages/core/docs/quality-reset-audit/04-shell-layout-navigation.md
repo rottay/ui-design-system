@@ -12,17 +12,17 @@ The shell is too app-owned and too visually cautious.
 
 1. `app-platform` still owns major shell geometry.
    Evidence:
-   - `app-platform/src/components/_shared/layouts/app-layout/index.tsx`
-   - `app-platform/src/components/_shared/layouts/app-layout/shell-metrics.ts`
+   - `app-platform/src/composition/components/_shared/layouts/app-layout/index.tsx`
+   - `app-platform/src/composition/components/_shared/layouts/app-layout/shell-metrics.ts`
 
 2. The sidebar is competent but not iconic.
    Evidence:
-   - `app-platform/src/components/_shared/layouts/app-layout/sidebar/index.tsx`
-   - `ui-design-system/packages/core/src/components/primitives/navigation/Menu/engines/modern.tsx`
+   - `app-platform/src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx`
+   - `ui-design-system/packages/core/src/ui/primitives/navigation/Menu/engines/modern/index.tsx`
 
 3. The topbar is structurally weak.
    Evidence:
-   - `app-platform/src/components/_shared/layouts/app-layout/topbar/index.tsx`
+   - `app-platform/src/composition/components/_shared/layouts/app-layout/topbar/index.tsx`
 
 4. The page shell spacing cadence is inconsistent.
    Evidence:

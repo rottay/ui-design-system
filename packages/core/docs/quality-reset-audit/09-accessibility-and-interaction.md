@@ -13,19 +13,19 @@
 
 1. Table sorting is mouse-first.
    Evidence:
-   - `ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern.tsx`
+   - `ui-design-system/packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx`
 
 2. Row click flows are mouse-first.
    Evidence:
-   - `ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern.tsx`
+   - `ui-design-system/packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx`
 
 3. `ShortcutsOverlay` still lacks true modal focus behavior.
    Evidence:
-   - `ui-design-system/packages/core/src/components/patterns/navigation/shortcuts-overlay/engines/modern.tsx`
+   - `ui-design-system/packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx`
 
 4. Dense dark controls are often too small and too muted.
    Evidence:
-   - `ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx`
+   - `ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx`
 
 ## Product Impact
 

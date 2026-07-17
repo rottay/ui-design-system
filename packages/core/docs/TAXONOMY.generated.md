@@ -3,7 +3,7 @@
 
 # Component Taxonomy Reference
 
-Generated on 2026-04-09.
+Generated on 2026-07-17.
 
 ## Primitives
 
@@ -14,11 +14,13 @@ Generated on 2026-04-09.
 | `display/` | 19 (Avatar, Badge, Calendar, Callout, Card, ...) |
 | `feedback/` | 11 (Alert, Drawer, Message, Modal, Notification, ...) |
 | `inputs/` | 25 (AutoComplete, Button, Cascader, Checkbox, ColorPicker, ...) |
-| `layout/` | 16 (AspectRatio, Box, Collapse, Container, Divider, ...) |
-| `navigation/` | 15 (ActionDock, Affix, Anchor, BackTop, BottomTabBar, ...) |
-| `overlay/` | 12 (AdaptiveOverlay, AlertDialog, ConfirmDialog, ContextMenu, Dropdown, ...) |
+| `layout/` | 13 (AspectRatio, Box, Collapse, Container, Divider, ...) |
+| `navigation/` | 13 (Affix, Anchor, BackTop, Breadcrumb, FloatButton, ...) |
+| `overlay/` | 11 (AlertDialog, ConfirmDialog, ContextMenu, Dropdown, HoverCard, ...) |
 
-**Total**: 6 categories containing 98 primitive components.
+**Total**: 6 categories containing 92 primitive components.
+
+Tier support: `runtime/`.
 
 ## Structures
 
@@ -26,8 +28,8 @@ Generated on 2026-04-09.
 
 ### dashboard/
 
-- `dashboard/dashboard-insights/`
 - `dashboard/data-terminal-card/`
+- `dashboard/insights/`
 - `dashboard/stats-header/`
 
 ### feedback/
@@ -37,99 +39,173 @@ Generated on 2026-04-09.
 ### headers/
 
 - `headers/collection/`
+- `headers/dashboard/`
 - `headers/detail/`
 - `headers/edit/`
 - `headers/form/`
+- `headers/mobile-header/`
 
 ### record/
 
+- `record/content/`
+- `record/edit-fields/`
 - `record/form-sections/`
-- `record/record/`
+
+### shell/
+
+- `shell/bottom-tab-bar/`
+
+Support: `shell/contracts/`.
 
 ### workspace/
 
+- `workspace/action-dock/`
 - `workspace/active-filters-bar/`
 - `workspace/column-menu/`
+- `workspace/connected-command-palette/`
+- `workspace/export-button/`
 - `workspace/field-filters-panel/`
 - `workspace/saved-views-menu/`
 - `workspace/scope-switcher/`
-- `workspace/search-command-bar/`
 - `workspace/selection-preview-rail/`
 - `workspace/table-toolbar/`
+- `workspace/view-mode-switcher/`
 
 ## Patterns
 
-> Engine-agnostic task-level compositions
+> Reusable task-level compositions; a pattern may be engine-backed
+
+### commerce/
+
+- `commerce/pricing-table/`
+
+### commercial/
+
+- `commercial/` (layered owner: `foundation/` -> `runtime/` -> `presentation/`)
 
 ### communication/
 
-- `communication/activity-log`
-- `communication/assistant`
-- `communication/comment-thread`
-- `communication/live-feed`
-- `communication/notification-center`
+- `communication/activity-log/`
+- `communication/assistant/`
+- `communication/comment-thread/`
+- `communication/live-feed/`
+- `communication/notification-center/`
+- `communication/presence/`
+
+### customization/
+
+- `customization/brand-studio/`
+- `customization/branding-preview-sandbox/`
+- `customization/tenant-preview/`
+- `customization/token-inspector/`
 
 ### data/
 
-- `data/bulk-select-toggle`
-- `data/column-settings`
-- `data/data-table`
-- `data/detail-panel`
-- `data/list-toolbar`
-- `data/saved-views`
-- `data/stats-grid`
-- `data/status-filter-pills`
-- `data/table-checkbox-styles`
+- `data/bulk-select-toggle/`
+- `data/cell-renderers/`
+- `data/column-settings/`
+- `data/data-table/`
+- `data/detail-panel/`
+- `data/file-manager/`
+- `data/gallery-view/`
+- `data/grid-view/`
+- `data/list-toolbar/`
+- `data/saved-views/`
+- `data/stats-grid/`
+- `data/status-filter-pills/`
+- `data/table-checkbox-styles/`
+
+### feedback/
+
+- `feedback/adaptive-overlay/`
+- `feedback/empty-state/`
 
 ### forms/
 
-- `forms/filter-builder`
-- `forms/filter-panel`
-- `forms/form-builder`
-- `forms/invoice-template`
-- `forms/step-wizard`
+- `forms/filter-builder/`
+- `forms/filter-panel/`
+- `forms/form-builder/`
+- `forms/invoice-template/`
+- `forms/step-wizard/`
 
-### foundation/
+### foundation/ (support owner)
 
-- `foundation/domain-kits.ts`
+- `foundation/engine-styles/`
 - `foundation/header-actions/`
-- `foundation/hooks/`
-- `foundation/types.ts`
+- `foundation/motion/`
+- `foundation/recipes/`
 
-### misc/
+### identity/
 
-- `misc/cockpit-header`
-- `misc/empty-state`
-- `misc/file-manager`
-- `misc/page-shell`
-- `misc/pricing-table`
-- `misc/tenant-preview`
-- `misc/user-profile-card`
-- `misc/workbench-header`
+- `identity/profile/`
 
 ### navigation/
 
-- `navigation/command-palette`
-- `navigation/environment-toggle`
-- `navigation/shortcuts-overlay`
-- `navigation/workspace-switcher`
+- `navigation/command-palette/`
+- `navigation/environment-toggle/`
+- `navigation/locale-switcher/`
+- `navigation/shortcuts-overlay/`
+- `navigation/workspace-switcher/`
+
+### runtime/ (support owner)
+
+- `runtime/filtering/`
+- `runtime/forms/`
+- `runtime/kanban/`
+- `runtime/pulse/`
+- `runtime/recipes/`
+
+### shell/
+
+- `shell/cockpit-header/`
+- `shell/page-shell/`
+- `shell/workbench-header/`
+
+### tooling/ (support owner)
+
+- `tooling/storybook/`
 
 ### visualization/
 
-- `visualization/calendar-view`
-- `visualization/charts`
-- `visualization/kanban-board`
-- `visualization/map-view`
-- `visualization/timeline`
-- `visualization/tree-view`
+- `visualization/calendar-view/`
+- `visualization/charts/`
+- `visualization/kanban-board/`
+- `visualization/map-view/`
+- `visualization/timeline/`
+- `visualization/tree-view/`
 
 ### workflow/
 
-- `workflow/approval-inbox`
-- `workflow/approval-workflow`
-- `workflow/moderation-gallery`
-- `workflow/operational-ledger`
-- `workflow/shift-matrix`
+- `workflow/approval-inbox/`
+- `workflow/approval-workflow/`
+- `workflow/moderation-gallery/`
+- `workflow/operational-ledger/`
+- `workflow/shift-matrix/`
+
+## Chart Families
+
+> D3-backed implementations owned by `patterns/visualization/charts/families/`
+
+- `visualization/charts/families/area-chart/`
+- `visualization/charts/families/bar-chart/`
+- `visualization/charts/families/bullet/`
+- `visualization/charts/families/calendar-heatmap/`
+- `visualization/charts/families/funnel-chart/`
+- `visualization/charts/families/gantt-chart/`
+- `visualization/charts/families/gauge/`
+- `visualization/charts/families/heatmap/`
+- `visualization/charts/families/histogram/`
+- `visualization/charts/families/line-chart/`
+- `visualization/charts/families/network-graph/`
+- `visualization/charts/families/pie-chart/`
+- `visualization/charts/families/radar-chart/`
+- `visualization/charts/families/sankey/`
+- `visualization/charts/families/scatter/`
+- `visualization/charts/families/sparkline/`
+- `visualization/charts/families/treemap/`
+- `visualization/charts/families/waterfall/`
+
+**Total**: 18 chart families.
 
 ## Surfaces
 
@@ -137,83 +213,81 @@ Generated on 2026-04-09.
 
 ### foundation/
 
-- `foundation/SurfaceErrorBoundary.tsx`
-- `foundation/builders.test.ts`
-- `foundation/builders.ts`
 - `foundation/common/`
 - `foundation/contracts/`
-- `foundation/helpers.ts`
-- `foundation/hooks/`
-- `foundation/i18n.ts`
-- `foundation/personality-helpers.tsx`
-- `foundation/profile-defaults.ts`
-- `foundation/responsive.ts`
-- `foundation/shared.tsx`
 - `foundation/states/`
-- `foundation/types.ts`
 
-### layout/
+### runtime/
 
-- `layout/header/`
-- `layout/page-shell/`
-- `layout/sidebar/`
+- `runtime/adaptive-posture/`
+- `runtime/builders/`
+- `runtime/collection-workspace/`
+- `runtime/error-boundary/`
+- `runtime/helpers/`
+- `runtime/profile-defaults/`
+- `runtime/responsive/`
 
-### pages/
+### composition/layout/
+
+- `composition/layout/collection-shell/`
+- `composition/layout/page-shell/`
+- `composition/layout/sidebar/`
+
+### presentation/pages/
 
 **admin/**
 
-- `pages/admin/audit/`
-- `pages/admin/billing/`
-- `pages/admin/file-browser/`
-- `pages/admin/import-export/`
-- `pages/admin/integration/`
-- `pages/admin/profile/`
-- `pages/admin/settings/`
-- `pages/admin/team/`
+- `presentation/pages/admin/audit/`
+- `presentation/pages/admin/billing/`
+- `presentation/pages/admin/file-browser/`
+- `presentation/pages/admin/import-export/`
+- `presentation/pages/admin/profile/`
+- `presentation/pages/admin/settings/`
+- `presentation/pages/admin/team/`
 
 **data/**
 
-- `pages/data/compare/`
-- `pages/data/dashboard/`
-- `pages/data/detail/`
-- `pages/data/list/`
-- `pages/data/report/`
-- `pages/data/search/`
-- `pages/data/visualization/`
+- `presentation/pages/data/compare/`
+- `presentation/pages/data/dashboard/`
+- `presentation/pages/data/detail/`
+- `presentation/pages/data/list/`
+- `presentation/pages/data/report/`
+- `presentation/pages/data/search/`
+- `presentation/pages/data/visualization/`
 
 **experience/**
 
-- `pages/experience/auth/`
-- `pages/experience/chat/`
-- `pages/experience/editor/`
-- `pages/experience/empty-state/`
-- `pages/experience/marketing/`
-- `pages/experience/media/`
-- `pages/experience/notification/`
-- `pages/experience/onboarding/`
-- `pages/experience/pricing/`
+- `presentation/pages/experience/auth/`
+- `presentation/pages/experience/chat/`
+- `presentation/pages/experience/editor/`
+- `presentation/pages/experience/empty-state/`
+- `presentation/pages/experience/marketing/`
+- `presentation/pages/experience/media/`
+- `presentation/pages/experience/notification/`
+- `presentation/pages/experience/oauth-transition/`
+- `presentation/pages/experience/pricing/`
 
 **forms/**
 
-- `pages/forms/detail-form/`
-- `pages/forms/form/`
-- `pages/forms/guided-draft-form/`
-- `pages/forms/wizard/`
+- `presentation/pages/forms/detail-form/`
+- `presentation/pages/forms/form/`
+- `presentation/pages/forms/guided-draft-form/`
+- `presentation/pages/forms/wizard/`
 
 **operations/**
 
-- `pages/operations/activity/`
-- `pages/operations/kanban/`
-- `pages/operations/operational/`
-- `pages/operations/scheduler/`
+- `presentation/pages/operations/activity/`
+- `presentation/pages/operations/kanban/`
+- `presentation/pages/operations/operational/`
+- `presentation/pages/operations/scheduler/`
 
 **workspace/**
 
-- `pages/workspace/collection-workspace/`
-- `pages/workspace/command-center/`
-- `pages/workspace/decision-inbox/`
-- `pages/workspace/record-workbench/`
+- `presentation/pages/workspace/collection-workspace/`
+- `presentation/pages/workspace/command-center/`
+- `presentation/pages/workspace/decision-inbox/`
+- `presentation/pages/workspace/record-workbench/`
 
 ---
 
-**Summary**: 6 primitive categories (98 components), 99 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (92 components), 115 families across structures/patterns/surfaces.

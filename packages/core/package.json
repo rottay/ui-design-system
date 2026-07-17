@@ -1,7 +1,7 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.19.27",
-  "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
+  "version": "2.19.28",
+  "description": "Multi-tenant, multi-engine design system with token-driven skins and white-label runtime theming",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -192,9 +192,10 @@
     "prebuild": "pnpm run icons:check",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css",
     "postbuild": "pnpm run cra14:check",
-    "build:modern-css": "postcss src/tokens/css/engines/modern/compiled.css -o dist/modern-engine.css",
+    "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled.css -o dist/modern-engine.css",
     "build:commercial-css": "node scripts/build-commercial-css.mjs",
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
+    "engine-audit:relocate-paths": "node scripts/relocate-engine-token-baseline.mjs",
     "cra14:check": "node scripts/cra-14-public-barrel-gate.mjs",
     "gat07:check": "node scripts/gat-07-exact-proof.mjs --check-artifact",
     "gat07:write": "node scripts/gat-07-exact-proof.mjs --write",
@@ -221,30 +222,35 @@
     "effects:provenance": "node ../../scripts/effect-registry-audit.mjs",
     "lint": "pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/build-vertical-css.mjs --check",
     "lint:artifacts": "node scripts/build-vertical-artifacts.mjs --check",
-    "lint:folders": "node scripts/lint-folder-index.mjs",
+    "lint:folders": "node scripts/lint-folder-index.mjs && node scripts/core-structure-audit.mjs --check",
+    "structure:check": "node scripts/core-structure-audit.mjs --check",
+    "structure:report": "node scripts/core-structure-audit.mjs --report",
     "lint:integration": "node scripts/audit-integration.mjs",
     "lint:vertical": "node scripts/audit-vertical-compliance.mjs",
     "docs:taxonomy": "node scripts/generate-taxonomy.mjs"
   },
   "releaseSync": {
     "sourceEntrypoints": {
-      "./icons": "icon-entry.ts",
-      "./icons/corpus": "icon-corpus-entry.ts",
-      "./icons/foundation": "icon-foundation-entry.ts",
-      "./icons/bithire": "icon-bithire-entry.ts",
-      "./icons/identity": "icon-identity-entry.ts",
-      "./icons/intelligence": "icon-intelligence-entry.ts",
-      "./icons/operations": "icon-operations-entry.ts",
-      "./marks": "mark-entry.ts",
-      "./pictograms": "pictogram-entry.ts",
-      "./charts": "chart-entry.ts",
-      "./charts/spec": "chart-spec-entry.ts",
-      "./charts/access": "chart-access-entry.ts",
-      "./charts/renderers": "chart-renderers-entry.ts",
-      "./motion": "motion-entry.ts",
-      "./effects": "effects-entry.ts",
-      "./spatial": "spatial-entry.ts",
-      "./spatial/spec": "spatial-spec-entry.ts"
+      "./server": "entrypoints/server/index.ts",
+      "./icons": "entrypoints/icons/index.ts",
+      "./icons/corpus": "entrypoints/icons/corpus/index.ts",
+      "./icons/foundation": "entrypoints/icons/foundation/index.ts",
+      "./icons/bithire": "entrypoints/icons/bithire/index.ts",
+      "./icons/identity": "entrypoints/icons/identity/index.ts",
+      "./icons/intelligence": "entrypoints/icons/intelligence/index.ts",
+      "./icons/operations": "entrypoints/icons/operations/index.ts",
+      "./marks": "entrypoints/graphics/marks/index.ts",
+      "./pictograms": "entrypoints/graphics/pictograms/index.ts",
+      "./charts": "entrypoints/charts/index.ts",
+      "./charts/spec": "entrypoints/charts/spec/index.ts",
+      "./charts/access": "entrypoints/charts/access/index.ts",
+      "./charts/renderers": "entrypoints/charts/renderers/index.ts",
+      "./motion": "entrypoints/graphics/motion/index.ts",
+      "./effects": "entrypoints/graphics/effects/index.ts",
+      "./spatial": "entrypoints/graphics/spatial/index.ts",
+      "./spatial/spec": "entrypoints/graphics/spatial/spec/index.ts",
+      "./eslint": "entrypoints/eslint/index.ts",
+      "./commercial": "entrypoints/commercial/index.ts"
     },
     "gateCommands": {
       "test:unit": [
@@ -256,11 +262,11 @@
             "run",
             "--project",
             "unit",
-            "src/_internal",
-            "src/hooks",
-            "src/motion",
-            "src/runtime",
-            "src/tokens"
+            "src/foundation/kernel",
+            "src/tooling/testing",
+            "src/graphics/motion",
+            "src/infrastructure/runtime",
+            "src/foundation/tokens"
           ]
         },
         {
@@ -271,7 +277,7 @@
             "run",
             "--project",
             "unit",
-            "src/components/patterns"
+            "src/ui/patterns"
           ]
         },
         {
@@ -282,22 +288,21 @@
             "run",
             "--project",
             "unit",
-            "src/components/primitives"
+            "src/ui/primitives"
           ]
         },
         {
-          "label": "unit surfaces/foundation-layout",
+          "label": "unit surfaces/foundation-runtime-composition",
           "pnpm": [
             "exec",
             "vitest",
             "run",
             "--project",
             "unit",
-            "src/components/surfaces/foundation/common/tests/builders.test.ts",
-            "src/components/surfaces/foundation/common/tests/helpers.test.ts",
-            "src/components/surfaces/foundation/tests/builders.test.ts",
-            "src/components/surfaces/layout/header/tests/HeaderSurface.test.tsx",
-            "src/components/surfaces/layout/sidebar/tests/SidebarSurface.test.tsx"
+            "src/ui/surfaces/foundation",
+            "src/ui/surfaces/runtime",
+            "src/ui/surfaces/composition",
+            "src/ui/surfaces/tests"
           ]
         },
         {
@@ -308,7 +313,7 @@
             "run",
             "--project",
             "unit",
-            "src/components/surfaces/pages/admin"
+            "src/ui/surfaces/presentation/pages/admin"
           ]
         },
         {
@@ -319,7 +324,7 @@
             "run",
             "--project",
             "unit",
-            "src/components/surfaces/pages/data"
+            "src/ui/surfaces/presentation/pages/data"
           ]
         },
         {
@@ -330,7 +335,7 @@
             "run",
             "--project",
             "unit",
-            "src/components/surfaces/pages/experience"
+            "src/ui/surfaces/presentation/pages/experience"
           ]
         },
         {
@@ -341,7 +346,7 @@
             "run",
             "--project",
             "unit",
-            "src/components/surfaces/pages/forms"
+            "src/ui/surfaces/presentation/pages/forms"
           ]
         },
         {
@@ -352,7 +357,7 @@
             "run",
             "--project",
             "unit",
-            "src/components/surfaces/pages/operations"
+            "src/ui/surfaces/presentation/pages/operations"
           ]
         },
         {
@@ -363,7 +368,7 @@
             "run",
             "--project",
             "unit",
-            "src/components/surfaces/pages/workspace"
+            "src/ui/surfaces/presentation/pages/workspace"
           ]
         }
       ]
@@ -442,7 +447,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rottay/design-system.git"
+    "url": "git+https://github.com/rottay/ui-design-system.git"
   },
   "keywords": [
     "design-system",

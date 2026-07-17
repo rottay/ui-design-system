@@ -36,15 +36,17 @@ import { Writable } from 'node:stream';
 /**
  * SPATIAL BASELINE INJECTION POINT (six exact byte measurements).
  *
- * Exact measurements from the cohesive 2.19.20 producer build on 2026-07-16.
+ * Exact measurements from the canonical-tree 2.19.28 release-candidate build
+ * on 2026-07-17. The facade-only raw deltas are the longer canonical module
+ * owners emitted by preserveModules; the bundled runtime fixtures are stable.
  * Ceilings are derived as measured +10%, rounded up to 100 B.
  */
 const SPATIAL_BASELINE_BYTES = Object.freeze({
-  spatialEsmRaw: 257,
-  spatialCjsRaw: 317,
-  spatialSpecEsmRaw: 573,
-  spatialSpecCjsRaw: 609,
-  spatialHostFixtureGzip: 6_216,
+  spatialEsmRaw: 296,
+  spatialCjsRaw: 356,
+  spatialSpecEsmRaw: 688,
+  spatialSpecCjsRaw: 724,
+  spatialHostFixtureGzip: 6_215,
   spatialSpecFixtureGzip: 1_097,
 });
 
@@ -73,10 +75,11 @@ const BUDGET = {
   'dist/icons.cjs': 150_000,
   'dist/marks.js': 100_000,
   'dist/marks.cjs': 100_000,
-  // Measured from the VIZ-03D cohesive build on 2026-07-16: 443/495 B after
-  // adding ChartInsightSummary. Both ceilings retain >10% headroom.
-  'dist/charts.js': 500,
-  'dist/charts.cjs': 600,
+  // Measured from the canonical-hierarchy producer build on 2026-07-17:
+  // 517/569 B. The raw delta is declarative preserveModules import paths, not
+  // retained runtime. Ceilings are measured +10%, rounded up to 100 B.
+  'dist/charts.js': 600,
+  'dist/charts.cjs': 700,
   // VIZ-03A cohesive-build measurements: 607/643 B. These ceilings retain
   // >10% headroom and round upward to the next 100 B.
   'dist/chart-spec.js': 700,
@@ -85,14 +88,16 @@ const BUDGET = {
   // >10% headroom and round upward to the next 100 B.
   'dist/chart-access.js': 800,
   'dist/chart-access.cjs': 800,
-  // VIZ-03 renderer-facade measurements: 615/659 B after the pure datum-key
-  // helper was added. Runtime costs are governed independently below.
-  'dist/chart-renderers.js': 850,
-  'dist/chart-renderers.cjs': 900,
-  // Measured 2026-07-16: 922/930 B. Each ceiling keeps >10% headroom
-  // and rounds upward to the next 100 B.
-  'dist/motion.js': 1_100,
-  'dist/motion.cjs': 1_100,
+  // Canonical-hierarchy producer measurements: 1,038/1,066 B after adding the
+  // governed Scatter renderer. The facade imports leaves directly; named gzip
+  // and isolation costs remain governed independently below. Ceilings are
+  // measured +10%, rounded up to 100 B.
+  'dist/chart-renderers.js': 1_200,
+  'dist/chart-renderers.cjs': 1_200,
+  // Measured 2026-07-17 after the canonical-tree relocation: 1,139/1,147 B.
+  // Each ceiling keeps >10% headroom and rounds upward to the next 100 B.
+  'dist/motion.js': 1_300,
+  'dist/motion.cjs': 1_300,
   // Measured 2026-07-16: 652/676 B. Each ceiling keeps >10% headroom
   // and rounds upward to the next 100 B.
   'dist/effects.js': 800,
@@ -210,15 +215,15 @@ function collectFiles(dir, predicate, results = []) {
  *    a top-level export.
  */
 const COMPONENT_ENTRIES = {
-  Button: 'src/components/primitives/inputs/Button/index.ts',
-  Input: 'src/components/primitives/inputs/Input/index.ts',
-  Select: 'src/components/primitives/inputs/Select/index.ts',
-  Card: 'src/components/primitives/display/Card/index.ts',
-  Badge: 'src/components/primitives/display/Badge/index.ts',
-  Table: 'src/components/primitives/display/Table/index.ts',
-  Tabs: 'src/components/primitives/navigation/Tabs/index.ts',
-  Modal: 'src/components/primitives/feedback/Modal/index.ts',
-  PatternDataTable: 'src/components/patterns/data/data-table/index.ts',
+  Button: 'src/ui/primitives/inputs/Button/index.ts',
+  Input: 'src/ui/primitives/inputs/Input/index.ts',
+  Select: 'src/ui/primitives/inputs/Select/index.ts',
+  Card: 'src/ui/primitives/display/Card/index.tsx',
+  Badge: 'src/ui/primitives/display/Badge/index.tsx',
+  Table: 'src/ui/primitives/display/Table/index.tsx',
+  Tabs: 'src/ui/primitives/navigation/Tabs/index.tsx',
+  Modal: 'src/ui/primitives/feedback/Modal/index.tsx',
+  PatternDataTable: 'src/ui/patterns/data/data-table/index.ts',
 };
 
 /**
@@ -252,6 +257,16 @@ const COMPONENT_BUDGET = {
   Modal: 10_000,
   PatternDataTable: 67_000,
 };
+
+/**
+ * A component leaf may use the prepared skin-pack application seam, but it
+ * must never retain a compiler. Brand-theme compilation belongs to explicit
+ * registration/application APIs, not every engine-aware component bundle.
+ */
+const COMPONENT_COMPILER_ISOLATION_PROBES = new Set(['Tabs']);
+const COMPONENT_FORBIDDEN_MODULE_FRAGMENTS = [
+  '/infrastructure/compilers/',
+];
 
 /** Same externals list as `vite.config.ts`'s `rollupOptions.external` -- keeps the per-component
  * measurement honest to what the published package actually externalizes (peer deps + other
@@ -287,15 +302,15 @@ const COMPONENT_BUNDLE_EXTERNALS = [
 async function buildComponentBundle(entryRelPath, outDir) {
   const { build } = await import('vite');
   const react = (await import('@vitejs/plugin-react')).default;
-  await build({
+  const result = await build({
     configFile: false,
     logLevel: 'silent',
     root: ROOT,
     resolve: {
       alias: {
         '@': join(ROOT, 'src'),
-        '@types': join(ROOT, 'src', 'contracts'),
-        '@components': join(ROOT, 'src', 'components'),
+        '@types': join(ROOT, 'src', 'foundation', 'contracts'),
+        '@ui': join(ROOT, 'src', 'ui'),
       },
     },
     plugins: [react()],
@@ -320,6 +335,14 @@ async function buildComponentBundle(entryRelPath, outDir) {
     esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
     logLevel: 'silent',
   });
+
+  return new Set(
+    (Array.isArray(result) ? result : [result])
+      .flatMap((buildResult) => buildResult.output ?? [])
+      .filter((output) => output.type === 'chunk')
+      .flatMap((chunk) => Object.keys(chunk.modules))
+      .map((moduleId) => moduleId.replaceAll('\\', '/').split('?')[0])
+  );
 }
 
 /** Run the `--components` mode: build + gzip-measure every `COMPONENT_ENTRIES` entry, compare
@@ -333,8 +356,9 @@ async function runComponentBudgets() {
 
   for (const [name, entryRelPath] of Object.entries(COMPONENT_ENTRIES)) {
     const outDir = join(outRoot, name);
+    let componentModules;
     try {
-      await buildComponentBundle(entryRelPath, outDir);
+      componentModules = await buildComponentBundle(entryRelPath, outDir);
     } catch (err) {
       failures++;
       rows.push({ file: name, raw: '-', gz: '-', limit: '-', usage: '-', status: 'BUILD FAIL' });
@@ -351,14 +375,32 @@ async function runComponentBudgets() {
     }
     const limit = COMPONENT_BUDGET[name];
     const overBudget = limit !== undefined && gz > limit;
-    if (overBudget) failures++;
+    const forbiddenModules = COMPONENT_COMPILER_ISOLATION_PROBES.has(name)
+      ? [...componentModules].filter((moduleId) => (
+          COMPONENT_FORBIDDEN_MODULE_FRAGMENTS.some((fragment) => moduleId.includes(fragment))
+        ))
+      : [];
+    const isolationFailure = forbiddenModules.length > 0;
+    if (overBudget || isolationFailure) failures++;
+    if (isolationFailure) {
+      console.error(
+        `\x1b[31m${name} retained forbidden compiler modules:\n` +
+        `${forbiddenModules.map((moduleId) => `  - ${moduleId}`).join('\n')}\x1b[0m`
+      );
+    }
     rows.push({
       file: name,
       raw: formatBytes(raw),
       gz: formatBytes(gz),
       limit: limit !== undefined ? formatBytes(limit) : '-',
       usage: limit !== undefined ? `${pct(gz, limit)}%` : '-',
-      status: limit === undefined ? 'NO BUDGET' : overBudget ? 'FAIL' : 'PASS',
+      status: isolationFailure
+        ? 'ISOLATION FAIL'
+        : limit === undefined
+          ? 'NO BUDGET'
+          : overBudget
+            ? 'FAIL'
+            : 'PASS',
     });
   }
 
@@ -376,7 +418,7 @@ async function runComponentBudgets() {
   console.log(cols.map((c) => '-'.repeat(widths[c])).join('-+-'));
   for (const row of rows) {
     const line = cols.map((c) => pad(row[c], widths[c])).join(' | ');
-    if (row.status === 'FAIL' || row.status === 'BUILD FAIL') console.log(`\x1b[31m${line}\x1b[0m`);
+    if (row.status.endsWith('FAIL')) console.log(`\x1b[31m${line}\x1b[0m`);
     else if (row.status === 'PASS') console.log(`\x1b[32m${line}\x1b[0m`);
     else console.log(line);
   }
@@ -412,6 +454,9 @@ const CHART_RENDERER_BUDGET = {
   SvgLineRenderer: 12_800,
   SvgHeatMapRenderer: 10_700,
   SvgPieRenderer: 9_700,
+  // Provisional source-family ceiling. Replace with a measured public-facade
+  // baseline before release; the >10% rule remains mandatory.
+  SvgScatterRenderer: 11_500,
 };
 
 // Measured provisionally from the current source entry on 2026-07-16 at
@@ -421,19 +466,30 @@ const CHART_RENDERER_UTILITY_BUDGET = {
   createSvgLineDatumKey: 200,
 };
 
-// Measured 16,572 B gzip in the cohesive Pie producer build. The combined
+// Measured 16,572 B gzip in the cohesive Pie producer build. Scatter extends
+// the same shared interaction/insight path; this provisional ceiling must be
+// rebaselined from the built five-renderer facade before release. The combined
 // fixture proves that shared interaction/insight infrastructure is deduplicated
-// instead of paying the four isolated costs additively; the ceiling retains >10% headroom.
-const CHART_RENDERER_SUITE_BUDGET = 18_300;
+// instead of paying isolated costs additively.
+const CHART_RENDERER_SUITE_BUDGET = 20_500;
 
 const CHART_RENDERER_ENTRY = join(ROOT, 'dist', 'chart-renderers.js');
-const CHART_RENDERER_SOURCE_DIR = '/components/patterns/visualization/charts/kernel/renderers/';
-const CHART_GEOMETRY_MODULE = `${CHART_RENDERER_SOURCE_DIR}ChartGeometry.js`;
+const CHART_RENDERER_SOURCE_DIR = '/ui/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/';
+const CHART_RENDERER_MODULES = Object.freeze({
+  SvgBarRenderer: `${CHART_RENDERER_SOURCE_DIR}bar/index.js`,
+  SvgHeatMapRenderer: `${CHART_RENDERER_SOURCE_DIR}heat-map/index.js`,
+  SvgLineRenderer: `${CHART_RENDERER_SOURCE_DIR}line/index.js`,
+  SvgPieRenderer: `${CHART_RENDERER_SOURCE_DIR}pie/index.js`,
+  SvgScatterRenderer: `${CHART_RENDERER_SOURCE_DIR}scatter/index.js`,
+});
+const CHART_LINE_DATUM_KEY_MODULE = `${CHART_RENDERER_SOURCE_DIR}line/datum-key/index.js`;
+const CHART_GEOMETRY_MODULE = '/ui/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.js';
 const CHART_RENDERER_BUILDERS = {
   SvgBarRenderer: 'buildSvgBarGeometry',
   SvgLineRenderer: 'buildSvgLineGeometry',
   SvgHeatMapRenderer: 'buildSvgHeatMapGeometry',
   SvgPieRenderer: 'buildSvgPieGeometry',
+  SvgScatterRenderer: 'buildSvgScatterGeometry',
 };
 const CHART_RENDERER_EXTERNALS = [
   'react',
@@ -491,8 +547,8 @@ async function buildChartRendererExports(exportNames) {
     resolve: {
       alias: {
         '@': join(ROOT, 'src'),
-        '@types': join(ROOT, 'src', 'contracts'),
-        '@components': join(ROOT, 'src', 'components'),
+        '@types': join(ROOT, 'src', 'foundation', 'contracts'),
+        '@ui': join(ROOT, 'src', 'ui'),
       },
     },
     plugins: [
@@ -610,11 +666,11 @@ async function runChartRendererBudgets() {
     const limit = CHART_RENDERER_BUDGET[rendererName];
     try {
       const result = await buildNamedChartRenderer(rendererName);
-      const selectedSuffix = `${CHART_RENDERER_SOURCE_DIR}${rendererName}.js`;
+      const selectedSuffix = CHART_RENDERER_MODULES[rendererName];
       const siblings = rendererNames
         .filter((candidate) => candidate !== rendererName)
         .filter((candidate) => [...result.modules.keys()].some((moduleId) => (
-          moduleId.endsWith(`${CHART_RENDERER_SOURCE_DIR}${candidate}.js`)
+          moduleId.endsWith(CHART_RENDERER_MODULES[candidate])
         )));
       const selectedRetained = [...result.modules.keys()].some((moduleId) => moduleId.endsWith(selectedSuffix));
       const expectedBuilder = CHART_RENDERER_BUILDERS[rendererName];
@@ -665,7 +721,7 @@ async function runChartRendererBudgets() {
     try {
       const result = await buildNamedChartRenderer(utilityName);
       const definingModule = [...result.modules.entries()].find(([moduleId]) => (
-        moduleId.endsWith(`${CHART_RENDERER_SOURCE_DIR}SvgLineDatumKey.js`)
+        moduleId.endsWith(CHART_LINE_DATUM_KEY_MODULE)
       ))?.[1];
       const d3External = [...result.imports].some((specifier) => isExternalFamily(specifier, 'd3'));
       const isolationErrors = [];
@@ -701,7 +757,7 @@ async function runChartRendererBudgets() {
     const result = await buildChartRendererExports(rendererNames);
     const retainedRenderers = rendererNames.filter((rendererName) => (
       [...result.modules.keys()].some((moduleId) => (
-        moduleId.endsWith(`${CHART_RENDERER_SOURCE_DIR}${rendererName}.js`)
+        moduleId.endsWith(CHART_RENDERER_MODULES[rendererName])
       ))
     ));
     const geometryDetails = [...result.modules.entries()]
@@ -767,8 +823,8 @@ const MOTION_FIXTURE_EXPORTS = Object.freeze({
   provider: Object.freeze(['MotionProvider']),
 });
 
-// Measured 2026-07-16 through the built public facade: pure policy 1,822 B
-// gzip and provider 2,076 B gzip. Each ceiling adds 10% and rounds upward.
+// Measured 2026-07-17 through the built public facade: pure policy 1,822 B
+// gzip and provider 2,077 B gzip. Each ceiling adds 10% and rounds upward.
 const MOTION_FIXTURE_BUDGET = Object.freeze({
   policy: 2_100,
   provider: 2_300,
@@ -992,7 +1048,7 @@ const EFFECTS_EXTERNALS = [
 const CHART_SPEC_ENTRY = join(ROOT, 'dist', 'chart-spec.js');
 const CHART_SPEC_CJS_ENTRY = join(ROOT, 'dist', 'chart-spec.cjs');
 const CHART_SPEC_TYPES_ENTRY = join(ROOT, 'dist', 'chart-spec.d.ts');
-const CHART_SPEC_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'chart-spec-entry.d.ts');
+const CHART_SPEC_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'entrypoints', 'charts', 'spec', 'index.d.ts');
 const CHART_SPEC_FIXTURE_EXPORTS = Object.freeze([
   'CHART_GRAMMARS',
   'CHART_GRAMMAR_IDS',
@@ -1007,7 +1063,7 @@ const CHART_SPEC_FIXTURE_EXPORTS = Object.freeze([
 // The cohesive producer build on 2026-07-16 retained every public value at
 // 1,787 B gzip. This ceiling keeps >20% headroom.
 const CHART_SPEC_FIXTURE_BUDGET = 2_200;
-const CHART_SPEC_ARTIFACT_FRAGMENT = '/components/patterns/visualization/charts/kernel/spec/';
+const CHART_SPEC_ARTIFACT_FRAGMENT = '/ui/patterns/visualization/charts/runtime/chart-engine/foundation/spec/';
 const BROWSER_RUNTIME_PATTERN = /\b(?:window|document|navigator|localStorage|sessionStorage|fetch|requestAnimationFrame|cancelAnimationFrame|matchMedia|ResizeObserver|IntersectionObserver|MutationObserver|HTMLElement|HTMLCanvasElement|SVGElement|OffscreenCanvas|WebGLRenderingContext|WebGL2RenderingContext|GPUDevice|GPUCanvasContext)\b/;
 const DOM_DECLARATION_PATTERN = /\b(?:Window|Document|Navigator|Storage|HTMLElement|HTMLCanvasElement|SVGElement|ResizeObserver|IntersectionObserver|MutationObserver|OffscreenCanvas|WebGLRenderingContext|WebGL2RenderingContext|GPUDevice|GPUCanvasContext)\b/;
 const SPATIAL_BROWSER_RUNTIME_PATTERN = /\b(?:window|document|navigator|localStorage|sessionStorage|indexedDB|location|history|screen|fetch|requestAnimationFrame|cancelAnimationFrame|matchMedia|ResizeObserver|IntersectionObserver|MutationObserver|Worker|SharedWorker|ServiceWorker|WebSocket|EventSource|BroadcastChannel|HTMLElement|HTMLCanvasElement|SVGElement|OffscreenCanvas|WebGLRenderingContext|WebGL2RenderingContext|GPUDevice|GPUCanvasContext)\b/;
@@ -1017,7 +1073,7 @@ const BROWSER_DECLARATION_LIB_PATTERN = /^(?:dom(?:\..+)?|webworker(?:\..+)?|scr
 const CHART_ACCESS_ENTRY = join(ROOT, 'dist', 'chart-access.js');
 const CHART_ACCESS_CJS_ENTRY = join(ROOT, 'dist', 'chart-access.cjs');
 const CHART_ACCESS_TYPES_ENTRY = join(ROOT, 'dist', 'chart-access.d.ts');
-const CHART_ACCESS_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'chart-access-entry.d.ts');
+const CHART_ACCESS_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'entrypoints', 'charts', 'access', 'index.d.ts');
 const CHART_ACCESS_FIXTURE_EXPORTS = Object.freeze([
   'CHART_DATA_ACCESS_CSV_MIME_TYPE',
   'CHART_DATA_ACCESS_PAGE_SIZE_MAX',
@@ -1035,7 +1091,11 @@ const CHART_ACCESS_PURE_EXPORTS = Object.freeze([
 // exports 791 B gzip. The ceilings retain >15% and >25% headroom.
 const CHART_ACCESS_FIXTURE_BUDGET = 2_800;
 const CHART_ACCESS_PURE_BUDGET = 1_000;
-const CHART_ACCESS_ARTIFACT_FRAGMENT = '/components/patterns/visualization/charts/kernel/access/';
+const CHART_ACCESS_ARTIFACT_FRAGMENTS = Object.freeze([
+  '/ui/patterns/visualization/charts/runtime/chart-engine/foundation/access/',
+  '/ui/patterns/visualization/charts/runtime/chart-engine/presentation/react/access/',
+]);
+const CHART_ACCESS_COMPONENT_MODULE = '/ui/patterns/visualization/charts/runtime/chart-engine/presentation/react/access/index.js';
 
 // ---------------------------------------------------------------------------
 // Spatial policy/host facade isolation gate (SPATIAL-01)
@@ -1044,11 +1104,11 @@ const CHART_ACCESS_ARTIFACT_FRAGMENT = '/components/patterns/visualization/chart
 const SPATIAL_ENTRY = join(ROOT, 'dist', 'spatial.js');
 const SPATIAL_CJS_ENTRY = join(ROOT, 'dist', 'spatial.cjs');
 const SPATIAL_TYPES_ENTRY = join(ROOT, 'dist', 'spatial.d.ts');
-const SPATIAL_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'spatial-entry.d.ts');
+const SPATIAL_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'entrypoints', 'graphics', 'spatial', 'index.d.ts');
 const SPATIAL_SPEC_ENTRY = join(ROOT, 'dist', 'spatial-spec.js');
 const SPATIAL_SPEC_CJS_ENTRY = join(ROOT, 'dist', 'spatial-spec.cjs');
 const SPATIAL_SPEC_TYPES_ENTRY = join(ROOT, 'dist', 'spatial-spec.d.ts');
-const SPATIAL_SPEC_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'spatial-spec-entry.d.ts');
+const SPATIAL_SPEC_SOURCE_TYPES_ENTRY = join(ROOT, 'dist', 'entrypoints', 'graphics', 'spatial', 'spec', 'index.d.ts');
 
 const SPATIAL_HOST_FIXTURE_EXPORTS = Object.freeze([
   'SPATIAL_SCENE_MODULE_VERSION',
@@ -1064,20 +1124,29 @@ const SPATIAL_SPEC_FIXTURE_EXPORTS = Object.freeze([
 ]);
 
 const SPATIAL_SPEC_ARTIFACT_FRAGMENTS = Object.freeze([
-  '/contracts/spatial/',
-  '/runtime/spatial/',
+  '/foundation/contracts/kernel/spatial/',
+  '/infrastructure/runtime/spatial/index.',
+  '/infrastructure/runtime/spatial/facade/index.',
+  '/infrastructure/runtime/spatial/foundation/quality/index.',
+  '/infrastructure/runtime/spatial/foundation/validation/index.',
+  '/infrastructure/runtime/spatial/runtime/resolution/index.',
 ]);
 // SpatialExperience consumes the supplier-neutral motion policy hook directly.
 // Keep this allowlist finite so MotionProvider, recipes and renderer adapters
 // cannot enter the host closure while the external Motion package stays banned.
 const SPATIAL_HOST_BRIDGE_ARTIFACT_FRAGMENTS = Object.freeze([
-  '/contracts/motion/',
-  '/contracts/verticals/',
-  '/runtime/motion/MotionPreference.',
-  '/runtime/motion/motion-environment-store.',
-  '/runtime/motion/policy.',
-  '/runtime/motion/reduced-motion-store.',
-  '/runtime/spatial-react/',
+  '/foundation/contracts/runtime/motion/',
+  '/foundation/contracts/kernel/verticals/',
+  '/infrastructure/runtime/foundation/motion/composition/react/preference/',
+  '/infrastructure/runtime/foundation/motion/runtime/browser/environment/',
+  '/infrastructure/runtime/foundation/motion/policy/',
+  '/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion/',
+  '/infrastructure/runtime/spatial/composition/react/',
+  '/infrastructure/runtime/spatial/facade/react/index.',
+  '/infrastructure/runtime/spatial/presentation/experience/index.',
+  '/infrastructure/runtime/spatial/presentation/experience/error-boundary/index.',
+  '/infrastructure/runtime/spatial/runtime/browser/capability/webgl2/index.',
+  '/infrastructure/runtime/spatial/runtime/browser/context-lease/index.',
 ]);
 const SPATIAL_ASSET_MODULE_PATTERN = /\.(?:avif|bmp|css|eot|gif|glb|gltf|ico|jpe?g|less|mp3|mp4|ogg|otf|png|sass|scss|svg|ttf|wav|wasm|webm|webp|woff2?)$/i;
 const SPATIAL_INLINE_ASSET_PATTERN = /\bdata:(?:application\/wasm|audio\/|font\/|image\/|model\/|video\/)/i;
@@ -1097,7 +1166,7 @@ function isChartAccessArtifact(file) {
     || normalized === CHART_ACCESS_CJS_ENTRY.replaceAll('\\', '/')
     || normalized === CHART_ACCESS_TYPES_ENTRY.replaceAll('\\', '/')
     || normalized === CHART_ACCESS_SOURCE_TYPES_ENTRY.replaceAll('\\', '/')
-    || normalized.includes(CHART_ACCESS_ARTIFACT_FRAGMENT);
+    || CHART_ACCESS_ARTIFACT_FRAGMENTS.some((fragment) => normalized.includes(fragment));
 }
 
 function isSpatialSpecArtifact(file) {
@@ -1953,7 +2022,7 @@ async function runChartAccessFixtureBudgets() {
     if (pure.emittedAssets.length > 0) pureErrors.push('asset emitted');
     if (pure.supplierModules.length > 0) pureErrors.push('supplier module bundled');
     const pureClientModules = [...pure.modules.keys()].filter((moduleId) => (
-      moduleId.endsWith(`${CHART_ACCESS_ARTIFACT_FRAGMENT}ChartDataAccess.js`)
+      moduleId.endsWith(CHART_ACCESS_COMPONENT_MODULE)
     ));
     if (pureClientModules.length > 0) pureErrors.push('client component retained by pure CSV fixture');
 

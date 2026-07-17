@@ -26,7 +26,7 @@ Rehome:
 
 - screen entrypoints -> `features/<family>/<feature>/screens`
 
-### `src/components/`
+### `src/composition/components/`
 
 Split by ownership:
 
@@ -105,7 +105,7 @@ Current:
 - `src/actions/ai-models`
 - `src/actions/ai-providers`
 - `src/surfaces/candidates`
-- `src/components/candidates`
+- `src/composition/components/candidates`
 
 Target:
 

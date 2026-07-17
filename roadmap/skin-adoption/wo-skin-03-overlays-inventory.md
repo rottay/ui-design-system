@@ -2,7 +2,7 @@
 
 Scope: Modal (51 sites, 6 files), Drawer (42, 5), Toast (47, 4), Message (46, 2), Notification (34, 2),
 Result (15, 2) — 6 components, ~21 files, all under
-`packages/core/src/components/primitives/feedback/{Component}/`. File lists/counts from
+`packages/core/src/ui/primitives/feedback/{Component}/`. File lists/counts from
 `roadmap/skin-census.json` batch WO-SKIN-03. Format follows the dropdowns checkpoint precedent
 (`skin02-dropdowns-inventory.md`). Note the census also lists a **separate, unrelated**
 `primitives/overlay/Modal` (batch WO-SKIN-04, 53 sites) — not in scope here; do not conflate.
@@ -185,7 +185,7 @@ Real CSS `animation` (not transition), 4 distinct placement-paired enter/exit ve
 `usePresence`'s `dataState` (open/closed, not raw `open` prop) — keeps the node mounted through
 `dataState:'closed'` until its own `animationend` fires, so **exit is a genuine animation**, not an
 instant unmount (contrast Modal, which has none).
-**Cross-cutting collision**: `tokens/css/runtime/personality.css:473-478` applies a GLOBAL rule to the
+**Cross-cutting collision**: `foundation/tokens/css/runtime/personality.css:473-478` applies a GLOBAL rule to the
 exact static class `.rottay-drawer`: `transition: transform var(--ds-personality-animation-entrance-
 duration, 300ms) cubic-bezier(...)` — runs in parallel with the inline `animation` shorthand, same
 `transform` property, different mechanism (transition vs animation). Inline `animation` wins visually
@@ -302,7 +302,7 @@ is always `'top-right'` but irrelevant since fade short-circuits position logic 
 root always plays `toast-fade-in/out`** regardless of actual position. Only `Container`'s
 `ToastStackItem` inner div (line 251) uses real position-aware `toast-slide-in/out-{dir}` (mode
 defaults `'slide'`). **A third, independent layer exists entirely outside this component's files**:
-`tokens/css/runtime/personality.css:536-544` targets `.rottay-toast-container > *` (every direct child
+`foundation/tokens/css/runtime/personality.css:536-544` targets `.rottay-toast-container > *` (every direct child
 of Container's outer div, i.e. each `ToastStackItem` outer wrapper) with `animation: ds-toast-enter
 ...` — a global BrandTheme rule the Toast source never references. **Net: a Container-rendered toast
 can run 3 simultaneous entrance animations on 3 different nested nodes** (outer wrapper via
@@ -598,7 +598,7 @@ with Modal/Drawer would be actively misleading since none of those regions or be
 
 ## Law 1 — undefined-token shorthand references
 Real violations found (component-scoped tokens referenced in a shorthand/paint property, with zero
-declaration anywhere in `packages/core/src/tokens/`):
+declaration anywhere in `packages/core/src/foundation/tokens/`):
 - **Modal**: `--ds-modal-description-color` (modern), `--ds-modal-cancel-border/-bg/-color`,
   `--ds-modal-ok-bg/-color`, `--ds-modal-btn-radius` (rustic) — all resolve safely via a defined
   fallback, but the modal-specific override point itself is dead (tenants can't target it).

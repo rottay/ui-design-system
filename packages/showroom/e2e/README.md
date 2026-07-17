@@ -132,7 +132,7 @@ under `rottay` — and checked two ways:
 
 The differential can only detect a hardcode where the two themes actually
 differ on that channel, so the fixtures' hostility is itself gated: the unit
-test `packages/core/src/compilers/brand-theme/tests/torture-fixtures.test.ts`
+test `packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/torture-fixtures.test.ts`
 asserts every variable in `TORTURE_PROBE_VARS` compiles to a different value
 under torture than under the matching first-party theme. Weakening a fixture
 turns that test red rather than silently voiding a probe.

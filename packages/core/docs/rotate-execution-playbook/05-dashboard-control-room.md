@@ -25,8 +25,8 @@
 - [dashboard/builder/index.tsx](/Users/daniel/Developer/Rottay/app-platform/src/surfaces/dashboard/builder/index.tsx)
 - [dashboard/global-filter-bar/index.tsx](/Users/daniel/Developer/Rottay/app-platform/src/surfaces/dashboard/global-filter-bar/index.tsx)
 - [dashboard/widget-grid/index.tsx](/Users/daniel/Developer/Rottay/app-platform/src/surfaces/dashboard/widget-grid/index.tsx)
-- [Card modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/display/Card/engines/modern.tsx)
-- [Statistic modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/display/Statistic/engines/modern.tsx)
+- [Card modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx)
+- [Statistic modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx)
 
 ## Required Changes
 

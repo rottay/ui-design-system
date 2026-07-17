@@ -1,0 +1,284 @@
+/**
+ * Base Typography Tokens - Rottay Design System
+ *
+ * Typography scale including font families, sizes, weights, line heights,
+ * and letter spacing for consistent text styling across the system.
+ */
+
+:root {
+  /* ========================================================================
+     FONT FAMILIES
+     Define the typeface stacks for different text purposes
+     ======================================================================== */
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                      'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+                      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+                      'Noto Color Emoji';
+  --ds-font-family-heading: var(--ds-font-family-base);
+  --ds-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
+                      Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ds-font-family-display: var(--ds-font-family-base);
+
+  /* ========================================================================
+     FONT SIZES
+     Type scale from small to 4xl for consistent text sizing
+     ======================================================================== */
+  --ds-font-size-xs: 0.75rem;      /* 12px */
+  --ds-font-size-sm: 0.875rem;     /* 14px */
+  --ds-font-size-base: 1rem;       /* 16px - Base font size */
+  --ds-font-size-md: 1rem;         /* 16px - Alias for base */
+  --ds-font-size-lg: 1.125rem;     /* 18px */
+  --ds-font-size-xl: 1.25rem;      /* 20px */
+  --ds-font-size-2xl: 1.5rem;      /* 24px */
+  --ds-font-size-3xl: 1.875rem;    /* 30px */
+  --ds-font-size-4xl: 2.25rem;     /* 36px */
+  --ds-font-size-5xl: 3rem;        /* 48px */
+  --ds-font-size-6xl: 3.75rem;     /* 60px */
+  --ds-font-size-7xl: 4.5rem;      /* 72px */
+  --ds-font-size-8xl: 6rem;        /* 96px */
+  --ds-font-size-9xl: 8rem;        /* 128px */
+
+  /* ========================================================================
+     HEADING SIZES
+     Predefined sizes for heading elements
+     ======================================================================== */
+  --ds-font-size-h1: var(--ds-font-size-4xl);   /* 36px */
+  --ds-font-size-h2: var(--ds-font-size-3xl);   /* 30px */
+  --ds-font-size-h3: var(--ds-font-size-2xl);   /* 24px */
+  --ds-font-size-h4: var(--ds-font-size-xl);    /* 20px */
+  --ds-font-size-h5: var(--ds-font-size-lg);    /* 18px */
+  --ds-font-size-h6: var(--ds-font-size-base);  /* 16px */
+
+  /* ========================================================================
+     FONT WEIGHTS
+     Weight scale for text emphasis
+     ======================================================================== */
+  --ds-font-weight-thin: 100;
+  --ds-font-weight-extralight: 200;
+  --ds-font-weight-light: 300;
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-extrabold: 800;
+  --ds-font-weight-black: 900;
+
+  /* Semantic aliases */
+  --ds-font-weight-body: var(--ds-font-weight-normal);
+  --ds-font-weight-heading: var(--ds-font-weight-semibold);
+  --ds-font-weight-display: var(--ds-font-weight-bold);
+
+  /* ========================================================================
+     LINE HEIGHTS
+     Vertical spacing for text readability
+     ======================================================================== */
+  --ds-line-height-none: 1;
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-snug: 1.375;
+  --ds-line-height-normal: 1.5;
+  --ds-line-height-relaxed: 1.625;
+  --ds-line-height-loose: 2;
+
+  /* Contextual line heights */
+  --ds-line-height-body: 1.6;                               /* Relaxed for readability */
+  --ds-line-height-heading: 1.2;                            /* Tight for premium headings */
+  --ds-line-height-label: 1.4;                              /* Balanced for labels/metadata */
+  --ds-line-height-display: var(--ds-line-height-none);     /* 1 */
+
+  /* ========================================================================
+     LETTER SPACING
+     Horizontal spacing between characters
+     ======================================================================== */
+  --ds-letter-spacing-tighter: -0.05em;
+  --ds-letter-spacing-tight: -0.025em;
+  --ds-letter-spacing-snug: -0.015em;
+  --ds-letter-spacing-subtle: -0.01em;
+  --ds-letter-spacing-normal: 0;
+  --ds-letter-spacing-subtle-wide: 0.01em;
+  --ds-letter-spacing-wide: 0.025em;
+  --ds-letter-spacing-wider: 0.05em;
+  --ds-letter-spacing-widest: 0.1em;
+
+  /* Heading-specific tracking: larger sizes get tighter spacing
+     for the editorial, premium feel (Linear / Vercel / Stripe). */
+  --ds-letter-spacing-h1: -0.025em;
+  --ds-letter-spacing-h2: -0.02em;
+  --ds-letter-spacing-h3: -0.015em;
+  --ds-letter-spacing-h4: -0.01em;
+  --ds-letter-spacing-h5: 0;
+  --ds-letter-spacing-h6: 0;
+
+  /* ========================================================================
+     TEXT TRANSFORM
+     Common text transformations
+     ======================================================================== */
+  --ds-text-transform-none: none;
+  --ds-text-transform-uppercase: uppercase;
+  --ds-text-transform-lowercase: lowercase;
+  --ds-text-transform-capitalize: capitalize;
+
+  /* ========================================================================
+     TEXT DECORATION
+     Common text decorations
+     ======================================================================== */
+  --ds-text-decoration-none: none;
+  --ds-text-decoration-underline: underline;
+  --ds-text-decoration-line-through: line-through;
+
+  /* ========================================================================
+     COMPOSITE TEXT STYLES
+     Pre-composed text styles for common use cases
+     ======================================================================== */
+
+  /* Display styles */
+  --ds-text-display-1-size: var(--ds-font-size-6xl);
+  --ds-text-display-1-weight: var(--ds-font-weight-bold);
+  --ds-text-display-1-line-height: var(--ds-line-height-none);
+  --ds-text-display-1-letter-spacing: var(--ds-letter-spacing-tight);
+
+  --ds-text-display-2-size: var(--ds-font-size-5xl);
+  --ds-text-display-2-weight: var(--ds-font-weight-bold);
+  --ds-text-display-2-line-height: var(--ds-line-height-none);
+  --ds-text-display-2-letter-spacing: var(--ds-letter-spacing-tight);
+
+  /* Heading styles - Premium typography with tighter tracking at larger sizes */
+  --ds-text-heading-1-size: var(--ds-font-size-h1);
+  --ds-text-heading-1-weight: var(--ds-font-weight-bold);
+  --ds-text-heading-1-line-height: 1.1;
+  --ds-text-heading-1-letter-spacing: var(--ds-letter-spacing-h1);
+
+  --ds-text-heading-2-size: var(--ds-font-size-h2);
+  --ds-text-heading-2-weight: var(--ds-font-weight-bold);
+  --ds-text-heading-2-line-height: 1.15;
+  --ds-text-heading-2-letter-spacing: var(--ds-letter-spacing-h2);
+
+  --ds-text-heading-3-size: var(--ds-font-size-h3);
+  --ds-text-heading-3-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-3-line-height: 1.2;
+  --ds-text-heading-3-letter-spacing: var(--ds-letter-spacing-h3);
+
+  --ds-text-heading-4-size: var(--ds-font-size-h4);
+  --ds-text-heading-4-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-4-line-height: 1.25;
+  --ds-text-heading-4-letter-spacing: var(--ds-letter-spacing-h4);
+
+  --ds-text-heading-5-size: var(--ds-font-size-h5);
+  --ds-text-heading-5-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-5-line-height: 1.3;
+  --ds-text-heading-5-letter-spacing: var(--ds-letter-spacing-h5);
+
+  --ds-text-heading-6-size: var(--ds-font-size-h6);
+  --ds-text-heading-6-weight: var(--ds-font-weight-semibold);
+  --ds-text-heading-6-line-height: 1.4;
+  --ds-text-heading-6-letter-spacing: var(--ds-letter-spacing-h6);
+
+  /* Body styles */
+  --ds-text-body-lg-size: var(--ds-font-size-lg);
+  --ds-text-body-lg-weight: var(--ds-font-weight-normal);
+  --ds-text-body-lg-line-height: var(--ds-line-height-normal);
+
+  --ds-text-body-md-size: var(--ds-font-size-base);
+  --ds-text-body-md-weight: var(--ds-font-weight-normal);
+  --ds-text-body-md-line-height: var(--ds-line-height-normal);
+
+  --ds-text-body-sm-size: var(--ds-font-size-sm);
+  --ds-text-body-sm-weight: var(--ds-font-weight-normal);
+  --ds-text-body-sm-line-height: var(--ds-line-height-normal);
+
+  --ds-text-body-xs-size: var(--ds-font-size-xs);
+  --ds-text-body-xs-weight: var(--ds-font-weight-normal);
+  --ds-text-body-xs-line-height: var(--ds-line-height-normal);
+
+  /* Caption styles */
+  --ds-text-caption-size: var(--ds-font-size-sm);
+  --ds-text-caption-weight: var(--ds-font-weight-normal);
+  --ds-text-caption-line-height: var(--ds-line-height-snug);
+  --ds-text-caption-color: var(--ds-color-neutral-600);
+
+  /* Label styles */
+  --ds-text-label-size: var(--ds-font-size-sm);
+  --ds-text-label-weight: var(--ds-font-weight-medium);
+  --ds-text-label-line-height: var(--ds-line-height-normal);
+  --ds-text-label-letter-spacing: var(--ds-letter-spacing-wide);
+
+  /* Code/Mono styles */
+  --ds-text-code-size: var(--ds-font-size-sm);
+  --ds-text-code-weight: var(--ds-font-weight-normal);
+  --ds-text-code-line-height: var(--ds-line-height-normal);
+  --ds-text-code-family: var(--ds-font-family-mono);
+
+  /* ========================================================================
+     MICRO-TYPOGRAPHY (WO-CRA-01)
+     Numeric alignment, line wrapping, and optical sizing. The utility classes
+     below and the TS mirror (foundation/tokens/ts/foundation/base/typography/index.ts) consume these so no
+     consumer re-invents the values inline.
+     ======================================================================== */
+  --ds-numeric-tabular: tabular-nums;
+  --ds-numeric-proportional: proportional-nums;
+  --ds-font-feature-tabular: "tnum" 1, "lnum" 1;
+  --ds-text-wrap-balance: balance;
+  --ds-text-wrap-pretty: pretty;
+  --ds-hyphens-auto: auto;
+
+  /* ---------------------------------------------------------------------
+   * Fluid type ramp (WO-ARC-05).
+   *
+   * Each fluid step is bounded by two ADJACENT static steps above -- no new
+   * magnitudes enter the system, only the path between two that already exist.
+   * The ramp interpolates linearly between 360px and 1280px, the same widths
+   * the WO-ENG-12 capture law photographs, and hits each bound exactly there.
+   *
+   * The interpolation unit is `cqi`, not `vw`: a design system renders the same
+   * component at rail width, half width and full width inside one viewport, and
+   * a viewport unit cannot tell those apart. Where no ancestor declares
+   * `container-type`, `cqi` resolves against the small viewport, which is the
+   * behaviour a `vw` ramp would have had.
+   *
+   * Opt-in. Nothing consumes these by default; a skin or surface reaches for one
+   * where a static step is cramped at 360px or oversized at 1280px.
+   * ------------------------------------------------------------------------ */
+  --ds-font-size-fluid-sm: clamp(0.75rem, 0.7011rem + 0.2174cqi, 0.875rem);
+  --ds-font-size-fluid-base: clamp(0.875rem, 0.8261rem + 0.2174cqi, 1rem);
+  --ds-font-size-fluid-lg: clamp(1rem, 0.9511rem + 0.2174cqi, 1.125rem);
+  --ds-font-size-fluid-xl: clamp(1.125rem, 1.0761rem + 0.2174cqi, 1.25rem);
+  --ds-font-size-fluid-2xl: clamp(1.25rem, 1.1522rem + 0.4348cqi, 1.5rem);
+  --ds-font-size-fluid-3xl: clamp(1.5rem, 1.3533rem + 0.6522cqi, 1.875rem);
+  --ds-font-size-fluid-4xl: clamp(1.875rem, 1.7283rem + 0.6522cqi, 2.25rem);
+  --ds-font-size-fluid-5xl: clamp(2.25rem, 1.9565rem + 1.3043cqi, 3rem);
+}
+
+/* ==========================================================================
+   MICRO-TYPOGRAPHY UTILITIES (WO-CRA-01)
+   Opt-in classes so data surfaces align digits and prose wraps cleanly. Every
+   property degrades gracefully — it is ignored, never broken, where the engine
+   or font lacks support.
+   ========================================================================== */
+
+/* Optical sizing: tenant variable/optical fonts render at their designed
+   optical size. Harmless on fonts without an optical axis. :where() keeps the
+   specificity at 0 so apps and tenants can still override. */
+:where(html) {
+  font-optical-sizing: auto;
+}
+
+/* Tabular (fixed-advance) figures so numbers align column-to-column in tables
+   and metric tiles instead of jittering with proportional digits. */
+.ds-nums-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: var(--ds-font-feature-tabular);
+}
+
+/* Balanced multi-line headings — even line lengths, no lonely last word. */
+.ds-text-balance {
+  text-wrap: balance;
+}
+
+/* Prettier body wrapping — avoids a single-word final line (orphan). */
+.ds-text-pretty {
+  text-wrap: pretty;
+}
+
+/* Automatic hyphenation for narrow measures (honors the element's lang). */
+.ds-hyphenate {
+  hyphens: auto;
+}

@@ -1,16 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/composition/components/showroom-link";
 import { useRouter } from "next/navigation";
-import { Box, Flex, Stack, Text } from "@/components/showroom-ui";
+import { Box, Flex, Stack, Text } from "@/composition/components/showroom-ui";
 import {
   ArrowUpRightIcon,
   SearchIcon,
   SparklesIcon,
 } from "@rottay/design-system/icons";
-import { applyShowroomRuntimeQuery } from "@/components/showroom-runtime-query";
-import { useShowroom } from "@/components/showroom-context";
+import { applyShowroomRuntimeQuery } from "@/composition/components/showroom-runtime-query";
+import { useShowroom } from "@/composition/components/showroom-context";
 import {
   countSectionEntries,
   getRoutePresentation,

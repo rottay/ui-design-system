@@ -12,8 +12,8 @@ The dashboard tries to feel premium by layering many small visual gestures, but 
 
 - `app-platform/src/surfaces/dashboard/builder/index.tsx`
 - `app-platform/src/surfaces/dashboard/global-filter-bar/index.tsx`
-- `ui-design-system/packages/core/src/components/structures/headers/collection/index.tsx`
-- `ui-design-system/packages/core/src/components/primitives/display/Card/engines/modern.tsx`
+- `ui-design-system/packages/core/src/ui/structures/headers/collection/index.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx`
 
 ## What The Screenshot Reveals
 

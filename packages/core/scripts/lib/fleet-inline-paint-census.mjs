@@ -1,22 +1,22 @@
-import { realpathSync } from "node:fs";
-import { relative, sep } from "node:path";
+import { existsSync, realpathSync } from "node:fs";
+import { join, relative, sep } from "node:path";
 import { collectSourceFiles } from "../runtime-svg-paint-census.mjs";
 
 /** The ARC-09 lane owns these paths completely; fleet must never duplicate them. */
 export const ARC09_INLINE_PAINT_FILES = Object.freeze([
-  "primitives/display/Table/engines/modern.tsx",
-  "primitives/display/Table/engines/rustic.tsx",
+  "primitives/display/Table/engines/modern/index.tsx",
+  "primitives/display/Table/engines/rustic/index.tsx",
   "structures/workspace/field-filters-panel/index.tsx",
-  "patterns/forms/filter-panel/engines/modern.tsx",
-  "patterns/forms/filter-panel/engines/rustic.tsx",
+  "patterns/forms/filter-panel/engines/modern/index.tsx",
+  "patterns/forms/filter-panel/engines/rustic/index.tsx",
   "structures/workspace/selection-preview-rail/index.tsx",
-  "patterns/data/detail-panel/engines/modern.tsx",
-  "patterns/data/detail-panel/engines/rustic.tsx",
-  "patterns/data/data-table/engines/modern.tsx",
-  "patterns/data/data-table/engines/rustic.tsx",
-  "patterns/data/data-table/cell-editors/index.tsx",
-  "patterns/data/data-table/DataTableMobileCards.tsx",
-  "patterns/data/data-table/PatternDataTable.tsx",
+  "patterns/data/detail-panel/engines/modern/index.tsx",
+  "patterns/data/detail-panel/engines/rustic/index.tsx",
+  "patterns/data/data-table/engines/modern/index.tsx",
+  "patterns/data/data-table/engines/rustic/index.tsx",
+  "patterns/data/data-table/engines/modern/cell-editor/index.tsx",
+  "patterns/data/data-table/presentation/table/mobile-cards/index.tsx",
+  "patterns/data/data-table/presentation/table/index.tsx",
 ]);
 
 const ARC09_SET = new Set(ARC09_INLINE_PAINT_FILES);
@@ -33,7 +33,7 @@ const FLEET_TIERS = new Set([
 // lane. Historical `story-helpers.tsx` and `test-utils.tsx` baselines remain in
 // lane because those names do not match the original executable exclusion law.
 const EXCLUDE_RE =
-  /(\/tests?\/|\.test\.|\.stories\.|\.types\.ts$|\/classic\.tsx$|\/engines\/classic\.tsx$|\/classic\/)/;
+  /(\/tests?\/|\/contracts\/|\.test\.|\.stories\.|\.types\.ts$|\/classic\.tsx$|\/engines\/classic\.tsx$|\/classic\/)/;
 
 function normalizedRelativePath(componentsDir, file) {
   return relative(componentsDir, file).split(sep).join("/");
@@ -57,6 +57,16 @@ export function isFleetInlinePaintSourceFile(relativePath) {
  */
 export function collectFleetInlinePaintSourceFiles(componentsDir) {
   const canonicalComponentsDir = realpathSync(componentsDir);
+  const missingArc09Files = ARC09_INLINE_PAINT_FILES.filter(
+    (relativePath) => !existsSync(join(canonicalComponentsDir, relativePath)),
+  );
+  if (missingArc09Files.length > 0) {
+    throw new Error(
+      `fleet census cannot exclude missing ARC-09 sources:\n${missingArc09Files
+        .map((relativePath) => `  - ${relativePath}`)
+        .join("\n")}`,
+    );
+  }
   return collectSourceFiles(canonicalComponentsDir)
     .filter((file) =>
       isFleetInlinePaintSourceFile(

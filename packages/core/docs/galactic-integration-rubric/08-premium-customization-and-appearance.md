@@ -23,11 +23,11 @@ Today, the most live premium customization source is still `brandTheme`.
 
 ### Files
 
-- `ui-design-system/packages/core/src/compilers/brand-theme/index.ts`
-- `ui-design-system/packages/core/src/compilers/appearance/index.ts`
-- `ui-design-system/packages/core/src/compilers/appearance/tests/appearance-runtime.test.tsx`
-- `ui-design-system/packages/core/src/runtime/bootstrap/DesignSystemProvider.tsx`
-- `ui-design-system/packages/core/src/runtime/theming/ThemeProvider.tsx`
+- `ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/compilers/runtime/appearance/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/compilers/runtime/appearance/tests/appearance-runtime.test.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/bootstrap/composition/react/provider/index.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx`
 
 ## Still Partial
 
@@ -39,8 +39,8 @@ Declared, not truly resolved/consumed end to end.
 
 Still not at parity in:
 
-- `ui-design-system/packages/core/src/runtime/tenant/storage/static/generator/index.ts`
-- `ui-design-system/packages/core/src/components/patterns/misc/tenant-preview/engines/modern.tsx`
+- `ui-design-system/packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts`
+- `ui-design-system/packages/core/src/ui/patterns/misc/tenant-preview/engines/modern/index.tsx`
 
 ### `useTokens()` visibility of appearance
 

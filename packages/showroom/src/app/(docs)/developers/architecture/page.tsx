@@ -1,17 +1,17 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
 import { ArrowLeftIcon } from '@rottay/design-system/icons';
-import { CodeBlock } from '@/components/playground';
-import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial-chrome';
+import { CodeBlock } from '@/composition/components/playground';
+import { DocsCompactList, DocsSectionHeader } from '@/composition/components/docs/editorial-chrome';
 
 const TIERS = [
   {
     name: 'Primitives',
     analogy: 'Atomic UI parts',
-    path: 'packages/core/src/components/primitives/',
+    path: 'packages/core/src/composition/components/foundation/primitives/',
     description:
       'Engine-aware leaf components with stable APIs. They solve local UI rendering, spacing, and interaction primitives.',
     examples: 'Button, Input, Card, Modal, Text, Badge, Box, Flex, Stack',
@@ -22,7 +22,7 @@ const TIERS = [
   {
     name: 'Patterns',
     analogy: 'Reusable task widgets',
-    path: 'packages/core/src/components/patterns/',
+    path: 'packages/core/src/composition/components/runtime/patterns/',
     description:
       'Repeatable work units such as tables, builders, kanban, stats, or timeline modules. Patterns should not know the route they live in.',
     examples: 'PatternDataTable, PatternFormBuilder, PatternKanbanBoard, PatternStatsGrid',
@@ -33,7 +33,7 @@ const TIERS = [
   {
     name: 'Structures',
     analogy: 'Page chrome',
-    path: 'packages/core/src/components/structures/',
+    path: 'packages/core/src/composition/components/composition/structures/',
     description:
       'Headers, toolbars, record framing, dashboard scaffolds, and layout context around patterns and content.',
     examples: 'CollectionHeader, SearchCommandBar, TableToolbar, RecordFieldGrid',
@@ -44,7 +44,7 @@ const TIERS = [
   {
     name: 'Surfaces',
     analogy: 'Full-screen recipes',
-    path: 'packages/core/src/components/surfaces/',
+    path: 'packages/core/src/composition/components/public/surfaces/',
     description:
       'Declarative route-level contracts that combine structures, patterns, and primitives into a product-ready screen.',
     examples: 'ListSurface, DashboardSurface, FormSurface, CollectionWorkspaceSurface',

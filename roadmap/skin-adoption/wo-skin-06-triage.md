@@ -49,7 +49,7 @@ The instinct is to ask "does this value mention a runtime identifier?". That que
 17.9% runtime and is **wrong**. The right question is *where the runtime identifier lands*:
 
 ```tsx
-// list-toolbar/engines/modern.tsx:386
+// list-toolbar/engines/modern/index.tsx:386
 background: isActive ? FILTER_PILL_ACTIVE_BG : hovered ? FILTER_PILL_HOVER_BG : FILTER_PILL_BG
 ```
 
@@ -61,13 +61,13 @@ category A, not B. Same shape, three more ways:
 |---|---|---|
 | state ternary | `isOpen ? shell.surface : shell.mutedSurface` — `form-sections/index.tsx:257` | A → `[data-open]` |
 | enum-switch fn | `getToneShell(tone)` — `form-sections/index.tsx:146`, a `switch` over a fixed `FormSectionTone` returning static `color-mix()` strings | A → `[data-tone=…]` |
-| static map index | `STATUS_PILL_STYLES[status.variant]` — `cockpit-header/engines/modern.tsx:193`; `TYPE_CONFIG[item.type]` — `dashboard-insights/activity/timeline/index.tsx:23` | A → `[data-variant=…]` |
+| static map index | `STATUS_PILL_STYLES[status.variant]` — `cockpit-header/engines/modern/index.tsx:193`; `TYPE_CONFIG[item.type]` — `dashboard-insights/activity/timeline/index.tsx:23` | A → `[data-variant=…]` |
 | threshold bucket | `getProgressColor(progress)` — `data-terminal-card/index.tsx:194`, 3-way threshold over `DS.success/warning/error` | A → `[data-band=…]` |
 
 Only when a runtime identifier **reaches the paint value itself** is it B or C:
 
 ```tsx
-// tenant-preview/engines/rustic.tsx:53   ← `base` is the tenant's chosen brand hex
+// tenant-preview/engines/rustic/index.tsx:53   ← `base` is the tenant's chosen brand hex
 { step: 50, color: mixColor(base, '#ffffff', 0.92) }
 ```
 
@@ -128,13 +128,13 @@ as debt that can never reach 0.
 
 | component | sites | why |
 |---|---:|---|
-| `patterns/misc/tenant-preview` (modern + rustic) | 32 | `mixColor(base, …)` builds a 10-step palette from the tenant's chosen brand hex and renders it as swatches — `engines/rustic.tsx:53-62`, `engines/modern.tsx:92-101`. The component's entire purpose is to display an arbitrary color. |
+| `patterns/misc/tenant-preview` (modern + rustic) | 32 | `mixColor(base, …)` builds a 10-step palette from the tenant's chosen brand hex and renders it as swatches — `engines/rustic/index.tsx:53-62`, `engines/modern/index.tsx:92-101`. The component's entire purpose is to display an arbitrary color. |
 | `patterns/visualization/charts/**` per-datum/per-series | 38 | palette cycling by series index and caller-supplied `d.color` — see §3. |
 | `patterns/misc/brand-studio` | 7 | `pickHex(vars, backgroundKeys)` / `isHex(value) ? value : 'transparent'` — `index.tsx:229,387,763`. Renders arbitrary hex swatches. |
 | `patterns/communication/presence` | 3 | `ringColor` / `cursorColor` — per-user identity color on live cursors (`index.tsx:148,181,373`). |
 | `patterns/misc/branding-preview-sandbox` | 2 | `badge.bg` / `badge.color` — `index.tsx:187`. |
 | `patterns/visualization/charts/hooks/use-chart-theme.ts` | 1 | `:291` — CSS var → hex for D3 color math. |
-| `patterns/forms/form-builder/engines/modern.tsx` | 1 | `:279` `String(val)` — renders a user-entered color value. |
+| `patterns/forms/form-builder/engines/modern/index.tsx` | 1 | `:279` `String(val)` — renders a user-entered color value. |
 
 **Proposed exemption name:** `SKIN-EXEMPT-RUNTIME-VALUE` — "the paint value is data supplied at
 runtime (a brand hex, a per-datum color, a per-user identity color); the counter counts it and

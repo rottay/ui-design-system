@@ -3,7 +3,7 @@
 import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Flex, Stack, Text } from '@rottay/design-system';
-import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/components/state-gallery';
+import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/composition/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // Micro-typography evidence surface (WO-CRA-01)

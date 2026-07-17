@@ -6,19 +6,19 @@ exactly, 591 total):
 
 | file | sites |
 |---|---:|
-| `patterns/forms/filter-builder/engines/modern.tsx` | 78 |
-| `patterns/forms/filter-builder/engines/rustic.tsx` | 39 |
-| `patterns/forms/form-builder/engines/modern.tsx` | 55 |
-| `patterns/forms/form-builder/engines/rustic.tsx` | 50 |
-| `patterns/forms/step-wizard/engines/modern.tsx` | 37 |
-| `patterns/forms/step-wizard/engines/rustic.tsx` | 25 |
-| `patterns/forms/invoice-template/engines/modern.tsx` | 20 |
-| `patterns/forms/invoice-template/engines/rustic.tsx` | 28 |
+| `patterns/forms/filter-builder/engines/modern/index.tsx` | 78 |
+| `patterns/forms/filter-builder/engines/rustic/index.tsx` | 39 |
+| `patterns/forms/form-builder/engines/modern/index.tsx` | 55 |
+| `patterns/forms/form-builder/engines/rustic/index.tsx` | 50 |
+| `patterns/forms/step-wizard/engines/modern/index.tsx` | 37 |
+| `patterns/forms/step-wizard/engines/rustic/index.tsx` | 25 |
+| `patterns/forms/invoice-template/engines/modern/index.tsx` | 20 |
+| `patterns/forms/invoice-template/engines/rustic/index.tsx` | 28 |
 | `structures/record/form-sections/index.tsx` | 65 |
 | `structures/record/record/index.tsx` | 34 |
 | `structures/record/edit-fields/index.tsx` | 24 |
-| `patterns/workflow/approval-workflow/engines/modern.tsx` | 40 |
-| `patterns/workflow/approval-workflow/engines/rustic.tsx` | 24 |
+| `patterns/workflow/approval-workflow/engines/modern/index.tsx` | 40 |
+| `patterns/workflow/approval-workflow/engines/rustic/index.tsx` | 24 |
 | `surfaces/pages/forms/guided-draft-form/index.tsx` | 66 |
 | `surfaces/pages/forms/form/index.tsx` | 3 |
 | `surfaces/pages/forms/wizard/index.tsx` | 2 |
@@ -36,7 +36,7 @@ them** — greenfield, same starting state as every prior checkpoint. All
 9 candidate scope classes below (`ds-filter-builder`, `ds-form-builder`,
 `ds-step-wizard`, `ds-invoice-template`, `ds-form-sections`, `ds-record`,
 `ds-edit-fields`, `ds-approval-workflow`, `ds-guided-draft-form`) are
-grep-confirmed FREE in `tokens/css/`.
+grep-confirmed FREE in `foundation/tokens/css/`.
 
 ---
 
@@ -81,10 +81,10 @@ values:
 | `form-sections/index.tsx:120,146,184` | `getToneAccent`/`getToneShell`/`getSectionHeaderPattern` (3 functions, one shared `tone` param) | `default \| editorial \| technical \| governance` | flat `color-mix()` strings per key |
 | `structures/record/record/index.tsx:99-150` | `variantStyles` object literal (not a function) | `default \| editorial \| technical \| governance \| metrics` | **mixed**: some keys are `linear-gradient(...)`, others are flat `color-mix()` |
 | `structures/record/edit-fields/index.tsx:422-433` | `requirementDotColor` / `requirementDefaultCopy` | `required \| recommended \| optional` | flat token per key, single channel (dot `background`) |
-| `patterns/forms/invoice-template/engines/modern.tsx:22-27` | `statusStyles` | `draft \| sent \| paid \| overdue` | `{background: color-mix 15%, color: token}` pairs |
-| `patterns/forms/invoice-template/engines/rustic.tsx:22-27` | `statusColors` | `draft \| sent \| paid \| overdue` | single flat token per key, paired with a **hardcoded `color: '#fff'`** at the call site (line 160) — a pre-existing "no hardcoded colors" violation, record only |
-| `patterns/workflow/approval-workflow/engines/modern.tsx:29-53` | `statusBadgeStyle` / `statusLineStyle` | `pending \| approved \| rejected \| escalated \| skipped` | flat token per key (unscaled: `var(--ds-color-success)`) |
-| `patterns/workflow/approval-workflow/engines/rustic.tsx:29-35` | `statusColors` (bg/text/dot triplet) | same 5 keys | scaled-token triplets (`var(--ds-color-success-50/700/500, #hex)`) |
+| `patterns/forms/invoice-template/engines/modern/index.tsx:22-27` | `statusStyles` | `draft \| sent \| paid \| overdue` | `{background: color-mix 15%, color: token}` pairs |
+| `patterns/forms/invoice-template/engines/rustic/index.tsx:22-27` | `statusColors` | `draft \| sent \| paid \| overdue` | single flat token per key, paired with a **hardcoded `color: '#fff'`** at the call site (line 160) — a pre-existing "no hardcoded colors" violation, record only |
+| `patterns/workflow/approval-workflow/engines/modern/index.tsx:29-53` | `statusBadgeStyle` / `statusLineStyle` | `pending \| approved \| rejected \| escalated \| skipped` | flat token per key (unscaled: `var(--ds-color-success)`) |
+| `patterns/workflow/approval-workflow/engines/rustic/index.tsx:29-35` | `statusColors` (bg/text/dot triplet) | same 5 keys | scaled-token triplets (`var(--ds-color-success-50/700/500, #hex)`) |
 | `surfaces/pages/forms/guided-draft-form/index.tsx:141-146` | `DraftStatusBadge`'s `statusMap` | `unsaved \| saving \| saved \| error` | `{label, color}` pairs |
 
 **Import graph: zero edges between any of these eight maps.** Every one is a
@@ -145,8 +145,8 @@ vocabulary that D2 also uses (it doesn't — see §2). The real seams:
 - **`patterns/_internal/engines/modern/styles.ts`** (the DaisyUI-replacement
   chrome kit: `panelCardStyle`, `cardBodyStyle`, `pillBadgeStyle`,
   `pillBadgeSmStyle`, `spinnerStyle`, etc.) is imported by **both**
-  `invoice-template/engines/modern.tsx` (D1) **and**
-  `approval-workflow/engines/modern.tsx` (D2). This is the one real,
+  `invoice-template/engines/modern/index.tsx` (D1) **and**
+  `approval-workflow/engines/modern/index.tsx` (D2). This is the one real,
   code-shared, cleanly-adopted vocabulary in CK-D (11 fleet-wide importers,
   confirmed by grep; 2 of them are in this checkpoint). It crosses the
   proposed D1/D2 line. Whichever half migrates second should not re-derive
@@ -166,7 +166,7 @@ vocabulary that D2 also uses (it doesn't — see §2). The real seams:
   invoice-template.
 - **Keyframe collisions cut across the proposed line, not along it**: the
   `pulse` keyframe name is injected by `step-wizard` (D1, both engines) and by
-  `approval-workflow/engines/rustic.tsx` (D2) — see §6. If D1 and D2 run as
+  `approval-workflow/engines/rustic/index.tsx` (D2) — see §6. If D1 and D2 run as
   separate batches, whichever runs second must know the first batch's
   keyframe-naming decision for `pulse`, because there are two incompatible
   variants of it already living in this one checkpoint.
@@ -178,7 +178,7 @@ either half starts, not independently per half.
 
 ## 4. Category B / contested-C
 
-**Confirmed B (1 site)** — `patterns/forms/form-builder/engines/modern.tsx:279`,
+**Confirmed B (1 site)** — `patterns/forms/form-builder/engines/modern/index.tsx:279`,
 inside `renderReadOnlyValue`'s `case 'color'`:
 ```tsx
 <span style={{ width: 20, height: 20, borderRadius: 'var(--ds-radius-sm)', background: String(val), border: '1px solid var(--ds-color-border)' }} />
@@ -248,17 +248,17 @@ collision.** All five are loading-skeleton or transition shimmer effects:
 
 | file | keyframe name | content (min-opacity) | counter-blind? |
 |---|---|---|---|
-| `step-wizard/engines/modern.tsx:257` | `pulse` | 0.5 | yes |
-| `step-wizard/engines/rustic.tsx:250` | `pulse` | 0.4 | yes |
-| `form-builder/engines/modern.tsx:641` | `formBuilderPulse` | 0.5 | yes |
-| `form-builder/engines/rustic.tsx:582` | `ds-form-error-in` (transition-in, not a shimmer) | n/a | yes |
-| `approval-workflow/engines/rustic.tsx:209,229` | `pulse` | 0.4 | yes (injected twice, same declaration, both branches) |
+| `step-wizard/engines/modern/index.tsx:257` | `pulse` | 0.5 | yes |
+| `step-wizard/engines/rustic/index.tsx:250` | `pulse` | 0.4 | yes |
+| `form-builder/engines/modern/index.tsx:641` | `formBuilderPulse` | 0.5 | yes |
+| `form-builder/engines/rustic/index.tsx:582` | `ds-form-error-in` (transition-in, not a shimmer) | n/a | yes |
+| `approval-workflow/engines/rustic/index.tsx:209,229` | `pulse` | 0.4 | yes (injected twice, same declaration, both branches) |
 
 **The collision the lane's law warns about (§7.3 of the triage) is live inside
 this one checkpoint, not hypothetical**: the literal global name `pulse` is
-declared with **two different bodies** — `step-wizard/engines/modern.tsx`'s
-version dims to 50% opacity, `step-wizard/engines/rustic.tsx`'s and
-`approval-workflow/engines/rustic.tsx`'s both dim to 40% (the latter two are
+declared with **two different bodies** — `step-wizard/engines/modern/index.tsx`'s
+version dims to 50% opacity, `step-wizard/engines/rustic/index.tsx`'s and
+`approval-workflow/engines/rustic/index.tsx`'s both dim to 40% (the latter two are
 byte-identical to each other, the former is not). Because these are
 runtime-injected via React `<style>` children rather than module-scoped CSS,
 mounting a modern StepWizard and a rustic StepWizard (or ApprovalWorkflow) on
@@ -297,15 +297,15 @@ utility classes (layout/typography only, e.g. `flex items-center gap-2`,
 `text-xl font-bold`, `opacity-50`), DS-primitive-component classes (from
 `Box`/`Flex`/`Card`/etc., which are already-migrated components outside this
 checkpoint's scope), or no className at all. The one exception:
-`step-wizard/engines/modern.tsx:232` stamps `ds-step-wizard-skeleton` (+
+`step-wizard/engines/modern/index.tsx:232` stamps `ds-step-wizard-skeleton` (+
 `__progress`/`__content` children) on its loading state — grep-confirmed **zero
-references anywhere in `tokens/css/`**, a dead BEM-style hook, same shape as
+references anywhere in `foundation/tokens/css/`**, a dead BEM-style hook, same shape as
 Menu's compound classNames in WO-SKIN-04. Harmless today (inline styles cover
 everything), not a precedent to copy.
 
 **DaisyUI coupling: none.** Grepped every file for a bare DaisyUI structural
 class (`btn`, `input-`, `select-`, `steps`, `menu`, etc.) — the closest thing
-found was `filter-builder/engines/modern.tsx:261`'s `sizeClass = compact ?
+found was `filter-builder/engines/modern/index.tsx:261`'s `sizeClass = compact ?
 'input-xs select-xs' : 'input-sm select-sm'`, computed but **never applied to
 any element** (grep-confirmed: `className=` never references `sizeClass`
 anywhere in the file) — dead code, not live coupling. This makes CK-D the
@@ -319,7 +319,7 @@ reference worth tracking against the ratchet since it never renders).
   `step-wizard`'s modern and rustic engines both render numbered-circle +
   connecting-line indicators but with different token conventions (modern:
   flat `var(--ds-color-primary)`; rustic: scaled `var(--ds-color-primary-600)`
-  family — expected engine asymmetry). `form-builder/engines/modern.tsx`
+  family — expected engine asymmetry). `form-builder/engines/modern/index.tsx`
   (lines 826-899, 984-1056) **independently re-implements a near-identical**
   numbered-circle step indicator for its own `layout="steps"` mode (same 32px
   circle, same `isActive || isCompleted` background logic, same boxShadow
@@ -330,19 +330,19 @@ reference worth tracking against the ratchet since it never renders).
   connector line at all) — a genuine cross-engine, cross-component asymmetry
   worth flagging as three independent implementations of "which step am I on."
   Preserve all three as-is; do not reconcile during migration.
-- **`filter-builder/engines/rustic.tsx`'s AND/OR group-logic button** uses a
+- **`filter-builder/engines/rustic/index.tsx`'s AND/OR group-logic button** uses a
   filled-primary-vs-outlined visual distinction with an explicit code comment
   explaining the design intent (filled = stricter AND, outlined = looser OR);
   `engines/modern.tsx`'s equivalent button uses the same conceptual
   distinction but with flatter tokens and no comment — same idea, no shared
   code, consistent with the rest of this checkpoint's zero-cross-file-sharing
   pattern.
-- **`invoice-template/engines/rustic.tsx:160`** hardcodes `color: '#fff'` on
+- **`invoice-template/engines/rustic/index.tsx:160`** hardcodes `color: '#fff'` on
   the status badge (white text assumed to have sufficient contrast against
   any of the four `statusColors` backgrounds) — a literal hex, not a token,
   violating the DS's own no-hardcoded-colors rule. Pre-existing, static, must
   transcribe byte-exact (not fix) during migration.
-- **`invoice-template/engines/modern.tsx`** relies on ~7 Tailwind
+- **`invoice-template/engines/modern/index.tsx`** relies on ~7 Tailwind
   `opacity-*` utility classes (`opacity-50`, `opacity-10`, `opacity-30`,
   `opacity-60`, `opacity-70`) for its watermark/de-emphasis effects;
   `engines/rustic.tsx` achieves the same visual result with inline
@@ -369,7 +369,7 @@ Read all 17 files in full (not sampled). Counted-channel classification used
 the discriminator in `wo-skin-06-triage.md` §2 (condition-position vs.
 value-position; enum-switch functions with all-static leaves resolve to A).
 Cross-checked every proposed scope class and every component name against
-`tokens/css/` via grep for bridge-rule and classname-collision risk (§5, §7).
+`foundation/tokens/css/` via grep for bridge-rule and classname-collision risk (§5, §7).
 Did not re-run the resolver's mechanical site enumeration; site *counts* per
 file are taken from `engine-token-audit.mjs`'s live output (§ header table),
 matched exactly against the brief's numbers before reading began.

@@ -15,10 +15,10 @@
     }
   ],
   "cssRoots": [
-    "packages/core/src/tokens/css/components",
-    "packages/core/src/tokens/css/engines"
+    "packages/core/src/foundation/tokens/css/presentation/components",
+    "packages/core/src/foundation/tokens/css/runtime/engines"
   ],
   "authoredExtensionRoots": [
-    "packages/core/src/tokens/css/artifacts"
+    "packages/core/src/foundation/tokens/css/facade/artifacts"
   ]
 }

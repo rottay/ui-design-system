@@ -13,7 +13,7 @@ import {
   ShortcutProvider,
   ConnectedCommandPalette,
 } from '@rottay/design-system';
-import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/components/state-gallery';
+import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/composition/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // Keyboard-first interaction model evidence surface (WO-CRA-03)

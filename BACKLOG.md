@@ -1,5 +1,11 @@
 # Design System - Backlog
 
+> [!WARNING]
+> Backlog histórico cerrado. La cola operativa vigente vive en
+> [`roadmap/`](roadmap/) y la arquitectura actual en
+> [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Los paths y conteos debajo se
+> preservan sólo como contexto de la migración original.
+
 ## Quick Status
 
 | Area | Progress | Status |
@@ -362,10 +368,10 @@ export const EngineComparison: Story = {
 
 | # | Task | Status |
 |---|------|--------|
-| 1 | Create `tokens/css/base/` structure | done |
-| 2 | Create `tokens/css/components/` structure | done |
-| 3 | Create `tokens/ts/` TypeScript mirrors | done |
-| 4 | Create `tokens/css/tenants/` structure | done |
+| 1 | Create `foundation/tokens/css/foundation/` structure | done |
+| 2 | Create `foundation/tokens/css/presentation/components/` structure | done |
+| 3 | Create `foundation/tokens/ts/` TypeScript mirrors | done |
+| 4 | Create `foundation/tokens/css/facade/artifacts/` structure | done |
 | 5 | Remove hardcoded SIZE_MAP from ~40 files | done (migrated to CSS tokens) |
 | 6 | Remove `/config/tokens/` duplicate | documented (CONFIG_TOKENS_REMOVAL.md) |
 
@@ -427,7 +433,7 @@ npm test             # Run tests
 **Avatar** is the complete reference template:
 
 ```
-packages/core/src/components/primitives/display/Avatar/
+packages/core/src/ui/primitives/display/Avatar/
 ├── base/index.tsx           # Base with CSS variables
 ├── compound/                # Badge, Fallback, Group
 ├── engines/                 # titan, hermes, apollo

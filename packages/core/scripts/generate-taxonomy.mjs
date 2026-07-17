@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * generate-taxonomy.mjs — Walks `src/components/` and emits a generated
+ * generate-taxonomy.mjs — Walks `src/ui/` and emits a generated
  * taxonomy reference file listing every tier and every family.
  *
  * Run: `pnpm docs:taxonomy`
@@ -17,31 +17,57 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const COMPONENTS_ROOT = resolve(__dirname, '../src/components');
+const UI_ROOT = resolve(__dirname, '../src/ui');
 const OUTPUT_PATH = resolve(__dirname, '../docs/TAXONOMY.generated.md');
+const AUXILIARY_DIRECTORIES = new Set([
+  '__tests__',
+  'architecture',
+  'fixtures',
+  'generated',
+  'integration',
+  'shared',
+  'tests',
+]);
+const PRIMITIVE_CATEGORIES = Object.freeze([
+  'display',
+  'feedback',
+  'inputs',
+  'layout',
+  'navigation',
+  'overlay',
+]);
+const PATTERN_SUPPORT_OWNERS = new Set(['foundation', 'runtime', 'tooling']);
+const LAYERED_PATTERN_OWNERS = new Set(['commercial']);
+const STRUCTURE_SUPPORT_OWNERS = new Set(['contracts']);
+const LOCAL_LAYER_ORDER = Object.freeze([
+  'foundation',
+  'kernel',
+  'contracts',
+  'policy',
+  'quality',
+  'spec',
+  'validation',
+  'runtime',
+  'composition',
+  'react',
+  'presentation',
+  'facade',
+  'public',
+]);
+
+function isPublicDirectory(entry) {
+  return entry.isDirectory()
+    && !entry.name.startsWith('_')
+    && !entry.name.startsWith('.')
+    && !AUXILIARY_DIRECTORIES.has(entry.name);
+}
 
 function listDirs(dir) {
   try {
     return readdirSync(dir, { withFileTypes: true })
-      .filter((e) => e.isDirectory() && !e.name.startsWith('_') && !e.name.startsWith('.'))
+      .filter(isPublicDirectory)
       .map((e) => e.name)
       .sort();
-  } catch {
-    return [];
-  }
-}
-
-/** List dirs + public .ts/.tsx files (for foundation/ groups that have flat file exports). */
-function listEntries(dir) {
-  try {
-    const entries = readdirSync(dir, { withFileTypes: true });
-    const dirs = entries
-      .filter((e) => e.isDirectory() && !e.name.startsWith('_') && !e.name.startsWith('.'))
-      .map((e) => e.name + '/');
-    const files = entries
-      .filter((e) => e.isFile() && /\.(ts|tsx)$/.test(e.name) && e.name !== 'index.ts' && e.name !== 'index.tsx')
-      .map((e) => e.name);
-    return [...dirs, ...files].sort();
   } catch {
     return [];
   }
@@ -63,8 +89,9 @@ let totalPrimitiveComponents = 0;
 
 // --- Primitives: categories → components ---
 {
-  const tierDir = join(COMPONENTS_ROOT, 'primitives');
-  const categories = listDirs(tierDir);
+  const tierDir = join(UI_ROOT, 'primitives');
+  const categories = PRIMITIVE_CATEGORIES.filter((category) =>
+    listDirs(tierDir).includes(category));
   lines.push('## Primitives');
   lines.push('');
   lines.push('> Engine-switched leaf components');
@@ -79,94 +106,135 @@ let totalPrimitiveComponents = 0;
   lines.push('');
   lines.push(`**Total**: ${categories.length} categories containing ${totalPrimitiveComponents} primitive components.`);
   lines.push('');
+  const supportOwners = listDirs(tierDir).filter((owner) => !PRIMITIVE_CATEGORIES.includes(owner));
+  if (supportOwners.length > 0) {
+    lines.push(`Tier support: ${supportOwners.map((owner) => `\`${owner}/\``).join(', ')}.`);
+    lines.push('');
+  }
   totalGroups += categories.length;
 }
 
 // --- Structures: groups → families ---
 {
-  const tierDir = join(COMPONENTS_ROOT, 'structures');
+  const tierDir = join(UI_ROOT, 'structures');
   const groups = listDirs(tierDir);
   lines.push('## Structures');
   lines.push('');
   lines.push('> Structural families (headers, toolbars, record panels, metric cards, overlays)');
   lines.push('');
   for (const group of groups) {
-    const families = listDirs(join(tierDir, group));
+    const children = listDirs(join(tierDir, group));
+    const families = children
+      .filter((family) => !STRUCTURE_SUPPORT_OWNERS.has(family));
+    const supportOwners = children
+      .filter((family) => STRUCTURE_SUPPORT_OWNERS.has(family));
     lines.push(`### ${group}/`);
     lines.push('');
     for (const f of families) {
       lines.push(`- \`${group}/${f}/\``);
       totalFamilies++;
     }
-    lines.push('');
-  }
-}
-
-// --- Patterns: groups → families ---
-// foundation/ uses listEntries to capture flat .ts files alongside subdirs.
-// Other groups use listDirs (subdirs = families, flat files are internal).
-{
-  const tierDir = join(COMPONENTS_ROOT, 'patterns');
-  const groups = listDirs(tierDir);
-  lines.push('## Patterns');
-  lines.push('');
-  lines.push('> Engine-agnostic task-level compositions');
-  lines.push('');
-  for (const group of groups) {
-    const isFoundation = group === 'foundation';
-    const items = isFoundation
-      ? listEntries(join(tierDir, group))
-      : listDirs(join(tierDir, group));
-    lines.push(`### ${group}/`);
-    lines.push('');
-    for (const f of items) {
-      lines.push(`- \`${group}/${f}\``);
-      if (!isFoundation) totalFamilies++;
+    if (supportOwners.length > 0) {
+      lines.push('');
+      lines.push(`Support: ${supportOwners.map((owner) => `\`${group}/${owner}/\``).join(', ')}.`);
     }
     lines.push('');
   }
 }
 
-// --- Surfaces: foundation + layout + pages (grouped) ---
+// --- Patterns: product groups → families; explicit support owners separately ---
 {
-  const tierDir = join(COMPONENTS_ROOT, 'surfaces');
+  const tierDir = join(UI_ROOT, 'patterns');
+  const groups = listDirs(tierDir);
+  lines.push('## Patterns');
+  lines.push('');
+  lines.push('> Reusable task-level compositions; a pattern may be engine-backed');
+  lines.push('');
+  for (const group of groups) {
+    const isSupportOwner = PATTERN_SUPPORT_OWNERS.has(group);
+    const items = listDirs(join(tierDir, group));
+    lines.push(`### ${group}/${isSupportOwner ? ' (support owner)' : ''}`);
+    lines.push('');
+    if (LAYERED_PATTERN_OWNERS.has(group)) {
+      const layers = [...items].sort((left, right) =>
+        LOCAL_LAYER_ORDER.indexOf(left) - LOCAL_LAYER_ORDER.indexOf(right));
+      lines.push(`- \`${group}/\` (layered owner: ${layers.map((item) => `\`${item}/\``).join(' -> ')})`);
+      totalFamilies++;
+      lines.push('');
+      continue;
+    }
+    for (const f of items) {
+      lines.push(`- \`${group}/${f}/\``);
+      if (!isSupportOwner) totalFamilies++;
+    }
+    lines.push('');
+  }
+}
+
+// --- Chart catalog: the visualization/charts aggregate owns 18 implementations ---
+{
+  const chartFamilies = listDirs(join(UI_ROOT, 'patterns', 'visualization', 'charts', 'families'));
+  lines.push('## Chart Families');
+  lines.push('');
+  lines.push('> D3-backed implementations owned by `patterns/visualization/charts/families/`');
+  lines.push('');
+  for (const family of chartFamilies) {
+    lines.push(`- \`visualization/charts/families/${family}/\``);
+  }
+  lines.push('');
+  lines.push(`**Total**: ${chartFamilies.length} chart families.`);
+  lines.push('');
+}
+
+// --- Surfaces: foundation -> runtime -> composition -> presentation ---
+{
+  const tierDir = join(UI_ROOT, 'surfaces');
   lines.push('## Surfaces');
   lines.push('');
   lines.push('> Page-level config objects');
   lines.push('');
 
-  // Foundation (uses listEntries to capture flat .ts/.tsx files too)
+  // Foundation
   const foundationDir = join(tierDir, 'foundation');
-  const foundationItems = listEntries(foundationDir);
+  const foundationItems = listDirs(foundationDir);
   lines.push('### foundation/');
   lines.push('');
   for (const f of foundationItems) {
-    lines.push(`- \`foundation/${f}\``);
+    lines.push(`- \`foundation/${f}/\``);
   }
   lines.push('');
 
-  // Layout
-  const layoutDir = join(tierDir, 'layout');
+  const runtimeDir = join(tierDir, 'runtime');
+  const runtimeItems = listDirs(runtimeDir);
+  lines.push('### runtime/');
+  lines.push('');
+  for (const f of runtimeItems) {
+    lines.push(`- \`runtime/${f}/\``);
+  }
+  lines.push('');
+
+  // Composition
+  const layoutDir = join(tierDir, 'composition', 'layout');
   const layoutFamilies = listDirs(layoutDir);
-  lines.push('### layout/');
+  lines.push('### composition/layout/');
   lines.push('');
   for (const f of layoutFamilies) {
-    lines.push(`- \`layout/${f}/\``);
+    lines.push(`- \`composition/layout/${f}/\``);
     totalFamilies++;
   }
   lines.push('');
 
-  // Pages
-  const pagesDir = join(tierDir, 'pages');
+  // Presentation
+  const pagesDir = join(tierDir, 'presentation', 'pages');
   const pageGroups = listDirs(pagesDir);
-  lines.push('### pages/');
+  lines.push('### presentation/pages/');
   lines.push('');
   for (const group of pageGroups) {
     const families = listDirs(join(pagesDir, group));
     lines.push(`**${group}/**`);
     lines.push('');
     for (const f of families) {
-      lines.push(`- \`pages/${group}/${f}/\``);
+      lines.push(`- \`presentation/pages/${group}/${f}/\``);
       totalFamilies++;
     }
     lines.push('');

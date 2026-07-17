@@ -42,9 +42,9 @@ BitHire still hardcodes:
 Key files:
 
 - `src/app/(dashboard)/layout.tsx`
-- `src/components/layout/sidebar/index.tsx`
-- `src/components/layout/header/index.tsx`
-- `src/components/layout/main-content/index.tsx`
+- `src/composition/components/layout/sidebar/index.tsx`
+- `src/composition/components/layout/header/index.tsx`
+- `src/composition/components/layout/main-content/index.tsx`
 
 ### P1. BitHire still has a second parallel shell family
 
@@ -52,10 +52,10 @@ The `components/v2/layout/*` path means BitHire is split inside itself.
 
 Key files:
 
-- `src/components/v2/layout/index.ts`
-- `src/components/v2/layout/v2-page-shell/index.tsx`
-- `src/components/v2/layout/v2-sidebar/index.tsx`
-- `src/components/v2/layout/v2-header/index.tsx`
+- `src/composition/components/v2/layout/index.ts`
+- `src/composition/components/v2/layout/v2-page-shell/index.tsx`
+- `src/composition/components/v2/layout/v2-sidebar/index.tsx`
+- `src/composition/components/v2/layout/v2-header/index.tsx`
 
 ### P1. High-visibility surfaces still bypass DS ownership
 
@@ -67,7 +67,7 @@ Representative examples include:
 
 Examples:
 
-- `src/components/candidates/profile-header/index.tsx`
+- `src/composition/components/candidates/profile-header/index.tsx`
 - `src/surfaces/analytics/quality-of-hire/index.tsx`
 - `src/surfaces/ai-studio/overview/index.tsx`
 - `src/surfaces/interviews/create/index.tsx`

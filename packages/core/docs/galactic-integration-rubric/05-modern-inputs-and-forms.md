@@ -36,7 +36,7 @@ Strong shell discipline, good use of DS variables, and a reasonable path for ten
 
 File:
 
-- `ui-design-system/packages/core/src/components/primitives/inputs/Input/engines/modern.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/inputs/Input/engines/modern/index.tsx`
 
 ### Select
 
@@ -44,7 +44,7 @@ Probably the strongest popup + trigger combination in the set.
 
 File:
 
-- `ui-design-system/packages/core/src/components/primitives/inputs/Select/engines/modern.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/inputs/Select/engines/modern/index.tsx`
 
 ### DatePicker
 
@@ -52,7 +52,7 @@ Among the complex inputs, this one has the richest real token impact.
 
 File:
 
-- `ui-design-system/packages/core/src/components/primitives/inputs/DatePicker/engines/modern.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/inputs/DatePicker/engines/modern/index.tsx`
 
 ## Highest-Impact Gaps
 

@@ -21,9 +21,9 @@
 
 ## Evidence
 
-- `app-platform/src/components/_shared/tables/entity-table-workspace/index.tsx`
-- `ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern.tsx`
-- `ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx`
+- `app-platform/src/composition/components/_shared/tables/entity-table-workspace/index.tsx`
+- `ui-design-system/packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx`
+- `ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx`
 - `app-platform/src/surfaces/users/workspace-config.tsx`
 
 ## UX Truth

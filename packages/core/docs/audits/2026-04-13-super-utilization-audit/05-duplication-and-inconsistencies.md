@@ -20,14 +20,14 @@ In several places, the repo also duplicates the same implementation twice inside
 
 These two page-header implementations are effectively the same component:
 
-- [components/_shared page-header](/Users/daniel/Developer/Rottay/app-bithire/src/components/_shared/layout-parts/page-header/index.tsx)
+- [components/_shared page-header](/Users/daniel/Developer/Rottay/app-bithire/src/composition/components/_shared/layout-parts/page-header/index.tsx)
 - [ui page-header](/Users/daniel/Developer/Rottay/app-bithire/src/ui/layout-parts/page-header/index.tsx)
 
 ### Evnto
 
 These two status-badge implementations are effectively identical:
 
-- [components/_shared status-badge](/Users/daniel/Developer/Rottay/app-evnto/src/components/_shared/data-display/status-badge/index.tsx)
+- [components/_shared status-badge](/Users/daniel/Developer/Rottay/app-evnto/src/composition/components/_shared/data-display/status-badge/index.tsx)
 - [ui status-badge](/Users/daniel/Developer/Rottay/app-evnto/src/ui/data-display/status-badge/index.tsx)
 
 ## Highest-ROI Cross-App Duplications
@@ -42,8 +42,8 @@ Proof:
 
 Centralize toward:
 
-- [ListSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/data/list/index.tsx)
-- [CollectionWorkspaceSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/workspace/collection-workspace/index.tsx)
+- [ListSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx)
+- [CollectionWorkspaceSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx)
 
 ### 2. Page header family
 
@@ -55,8 +55,8 @@ Proof:
 
 Centralize toward:
 
-- [DetailHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/headers/detail/index.tsx)
-- [CockpitHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/misc/cockpit-header/index.ts)
+- [DetailHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/headers/detail/index.tsx)
+- [CockpitHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/misc/cockpit-header/index.ts)
 
 ### 3. Shell-adjacent chrome
 
@@ -92,7 +92,7 @@ Proof:
 
 Centralize toward:
 
-- [CockpitHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/misc/cockpit-header/index.ts)
+- [CockpitHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/misc/cockpit-header/index.ts)
 
 ### 6. Approval / decision inboxes
 
@@ -104,8 +104,8 @@ Proof:
 
 Centralize toward:
 
-- [ApprovalInbox](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/workflow/approval-inbox/index.ts)
-- [DecisionInboxSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/workspace/decision-inbox/index.tsx)
+- [ApprovalInbox](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/workflow/approval-inbox/index.ts)
+- [DecisionInboxSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/decision-inbox/index.tsx)
 
 ### 7. Activity feeds / timelines
 
@@ -117,8 +117,8 @@ Proof:
 
 Centralize toward:
 
-- [ActivitySurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/operations/activity/index.tsx)
-- [ActivityLog](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/communication/activity-log/index.ts)
+- [ActivitySurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/activity/index.tsx)
+- [ActivityLog](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/communication/activity-log/index.ts)
 
 ### 8. Filter bars / pills / scope controls
 

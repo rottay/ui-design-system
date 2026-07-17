@@ -1,0 +1,429 @@
+/**
+ * BitHire first-party vertical theme.
+ *
+ * Trusted recruiting workspace. LinkedIn-adjacent trust (not a clone).
+ * Blue family primary, softer radii, calm expressive motion, calm forms.
+ * Data-dense without looking harsh.
+ *
+ * Design: the Evidence Ledger (docs-engineering/engineering/verticals/
+ * bithire/product/design-language.md) — paper-calm surfaces, editorial
+ * hierarchy, one strong signal per screen, LinkedIn Blue (#3A6FB0).
+ * Light backgrounds, system fonts, 3-level elevation scale. BitHire
+ * intentionally remains clear-mode even if a host shell sets `.dark`.
+ *
+ * The ONE sanctioned multi-hue gradient is the Confidence Meter
+ * (meterFill / commandHomeMeterFill). Every other decoration field is
+ * flat/solid per the design-language §5 forbidden inventory.
+ *
+ * This file is the canonical authored source (theming LAW 1). The CSS
+ * artifact foundation/tokens/css/facade/artifacts/bithire/index.css is a generated snapshot
+ * and is PENDING REGENERATION for these Evidence Ledger deltas (WO-DES-02).
+ */
+
+import type { BrandTheme } from '../../../../../contracts/composition/tenants/themes';
+
+export const bithireBrandTheme: BrandTheme = {
+  id: 'bithire',
+  name: 'BitHire',
+
+  palette: {
+    primaryColor: '#3A6FB0',
+    secondaryColor: '#2F7D5E',
+    accentColor: '#6E9A5E',
+    darkPrimaryColor: '#3A6FB0',
+    darkSecondaryColor: '#2F7D5E',
+    darkAccentColor: '#6E9A5E',
+    backgroundColor: '#F8FBFF',
+    successColor: '#2F7D5E',
+    warningColor: '#D6A04E',
+    errorColor: '#C5504C',
+    infoColor: '#3A6FB0',
+  },
+
+  typography: {
+    fontFamilyBase: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+    fontFamilyHeading: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+    fontFamilyMono: "'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace",
+    fontFamilyDisplay: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+    headingWeightBias: 'heavier',
+    headingLetterSpacing: '-0.01em',
+    labelStyle: 'sentence',
+    letterSpacing: {
+      display: '-0.02em',
+      heading: '-0.01em',
+      body: '0',
+      mono: '0',
+    },
+    lineHeight: {
+      display: 1.1,
+      heading: 1.25,
+      body: 1.6,
+      tight: 1.25,
+      relaxed: 1.75,
+    },
+  },
+
+  surfaces: {
+    densityScale: 0.98,
+    borderRadius: { sm: '6px', md: '8px', lg: '10px', xl: '14px' },
+    // Elevation collapses to 3 levels (design-language §2.4):
+    // level-0 = no shadow, level-1 (resting) = sm, level-2 (overlay) = lg/xl.
+    // md aliases sm; lg and xl alias the level-2 overlay value.
+    shadows: {
+      sm: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      md: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      lg: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
+      xl: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
+    },
+    glass: { blur: 'none', background: 'none', border: 'none' },
+    gradients: { primary: 'none', surface: 'none', mesh: 'none' },
+    // Evidence-Ledger zero-decoration law (engines/modern spec section 5): the
+    // effect-intensity dial is 0, so --ds-effect-intensity collapses the entire
+    // gradient/glass/glow layer to flat product-wide.
+    effectIntensity: 0,
+    overlays: {
+      light: 'rgba(22, 42, 67, 0.02)',
+      medium: 'rgba(22, 42, 67, 0.04)',
+      heavy: 'rgba(22, 42, 67, 0.08)',
+    },
+  },
+
+  motion: {
+    // Expressive-calm (owner direction 2026-07-02-b): raised budget, still calm.
+    intensity: 0.55,
+    entrance: 'fade',
+    entranceDuration: 200,
+    hoverLift: 0,
+    hoverScale: 1.0,
+    useSpring: false,
+    springTension: 170,
+    springFriction: 26,
+    staggerDelay: 30,
+    staggerMax: 200,
+    pulseSpeed: 'slow',
+    skeletonStyle: 'pulse',
+    countUpEnabled: true,
+  },
+
+  charts: {
+    animateOnMount: true,
+    mountDuration: 400,
+    lineStyle: 'sharp',
+    showDots: true,
+    useGradientFill: false,
+    tooltipStyle: 'detailed',
+    // One-blue law (design-language §8.3): chart series draw from the single-hue
+    // primary scale (#3A6FB0). The monochrome scheme is the DS palette that
+    // carries those tonalities; a highlight series still uses the accent/status
+    // tone explicitly at the call site.
+    colorScheme: 'monochrome',
+  },
+
+  chrome: {
+    card: {
+      defaultElevation: 'sm',
+      // Expressive-calm (2026-07-02-b): interactive cards answer hover with
+      // lift-one + tint together.
+      hoverElevation: 'lift-one',
+      showBorder: true,
+      hoverTint: true,
+      paddingDensity: 'compact',
+    },
+    accent: {
+      barPosition: 'left',
+      barThickness: 3,
+      barStyle: 'solid',
+      iconContainerShape: 'circle',
+      badgeShape: 'pill',
+      dividerStyle: 'solid',
+    },
+    sidebar: {
+      bg: '#ffffff',
+      footerBg: '#F8FBFF',
+      border: '#D3DEEA',
+      text: '#162A43',
+      textMuted: '#6B7F95',
+      // Type ramp alignment (design-language §2.1): group headers on the
+      // detail size, items on the body size, active weight on the 400/600/700 ramp.
+      groupFontSize: '0.75rem',
+      groupFontWeight: 600,
+      groupColor: '#6B7F95',
+      groupLetterSpacing: '0.04em',
+      itemFontSize: '0.875rem',
+      itemFontWeight: 400,
+      itemFontWeightActive: 600,
+      itemColor: '#52677E',
+      itemColorActive: '#3A6FB0',
+      itemBgActive: 'var(--ds-tint-8)',
+      itemBgHover: '#F4F8FD',
+      itemPadding: '6px 10px',
+      iconSize: '16px',
+    },
+    layout: {
+      bg: '#FFFFFF',
+      headerBg: 'rgba(255, 255, 255, 0.92)',
+      headerBackdrop: 'blur(8px)',
+      headerBorder: '#D3DEEA',
+      siderBg: '#FFFFFF',
+      siderBorder: '#D3DEEA',
+    },
+    shell: {
+      gridSize: '0px',
+      gridLine: 'transparent',
+      gridOpacity: 0,
+      // The page canvas gradient is the ONE allowed background gradient
+      // (design-language §5 budget item 1).
+      bg: 'linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 58%, #F4F8FD 100%)',
+      border: '#D3DEEA',
+      overlay: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 3.5%, transparent) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%)',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      activeBg: '#EAE9E5',
+      activeGradient: '#EAE9E5',
+      dropdownShadow: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
+      // Decorative shimmers deleted per design-language §5 (skeletons stay
+      // `pulse`; AI-live affordances are the sole shimmer exception and do
+      // not read these tokens).
+      commandFont: "'SF Mono', 'Fira Code', Menlo, monospace",
+      commandLetterSpacing: '0',
+      commandGridSize: '22px',
+      // Blueprint grid overlays retired (design-language §5 / §6.4).
+      commandGridLineSoft: 'transparent',
+      commandGridLine: 'transparent',
+      commandGridLineStrong: 'transparent',
+      commandGridBg: 'none',
+      commandGridBgStrong: 'none',
+      commandGlow: 'none',
+      commandLine: 'none',
+      commandRailBg: '#FFFFFF',
+      commandHomeMaxWidth: '1120px',
+      commandHomeGap: '16px',
+      commandHomePanelGap: '14px',
+      commandHomeGridLine: 'color-mix(in srgb, var(--ds-color-primary) 6%, transparent)',
+      commandHomePanelBorder: '#A9C9EA',
+      commandHomePanelBorderSoft: '#B7D3F2',
+      commandHomePanelShadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      commandHomePanelBg: '#FFFFFF',
+      commandHomePanelBgStrong: '#FFFFFF',
+      commandHomeCompactActionHeight: '202px',
+      commandHomeConsoleMinHeight: 'calc(100vh - 108px)',
+      commandHomeConsolePadding: 'clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px',
+      commandHomeConsoleBg: '#F6FAFE',
+      commandHomeSurfaceBg: '#FFFFFF',
+      commandHomeHeroBg: '#FFFFFF',
+      commandHomeIconBg: 'color-mix(in srgb, #3A6FB0 9%, #FFFFFF)',
+      commandHomeIconBorder: 'color-mix(in srgb, #3A6FB0 32%, #D3DEEA)',
+      commandHomeControlBg: '#FFFFFF',
+      commandHomeControlBorder: '#B7D3F2',
+      commandHomeControlHoverBg: 'color-mix(in srgb, #3A6FB0 7%, #FFFFFF)',
+      commandHomeControlHoverBorder: 'color-mix(in srgb, #3A6FB0 42%, #D3DEEA)',
+      commandHomeMeterBg: 'color-mix(in srgb, #D3DEEA 72%, transparent)',
+      commandHomeMeterFill: 'linear-gradient(90deg, #3A6FB0, #2F7D5E)',
+    },
+    toolbar: {
+      bg: 'color-mix(in srgb, #3A6FB0 4%, #FFFFFF)',
+      border: '#D3DEEA',
+      borderBottom: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
+      color: '#162A43',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.04)',
+      radius: '8px',
+      padding: '0.75rem 1rem',
+      gap: '0.75rem',
+      controlBg: '#ffffff',
+      controlBorder: '#BCCBDC',
+      controlColor: '#162A43',
+      divider: '#DEE8F2',
+    },
+    filterPill: {
+      bg: '#ffffff',
+      border: '#D3DEEA',
+      color: '#52677E',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.03)',
+      frameBorder: 'color-mix(in srgb, #3A6FB0 10%, #D3DEEA)',
+      frameShadow: '0 1px 2px rgba(22, 42, 67, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.5)',
+      hoverBg: 'var(--ds-tint-4)',
+      hoverBorder: 'color-mix(in srgb, #3A6FB0 16%, #D3DEEA)',
+      activeBg: 'var(--ds-tint-8)',
+      activeBorder: 'color-mix(in srgb, #3A6FB0 28%, #D3DEEA)',
+      activeColor: '#3A6FB0',
+      activeShadow: 'inset 0 0 0 1px color-mix(in srgb, #3A6FB0 28%, #D3DEEA), 0 1px 2px rgba(22, 42, 67, 0.05)',
+      focusRing: '0 0 0 3px var(--ds-tint-24)',
+      countBg: '#ffffff',
+      countActiveBg: '#ffffff',
+      countBorder: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
+      countActiveBorder: 'color-mix(in srgb, #3A6FB0 24%, #BCCBDC)',
+      countRing: 'inset 0 0 0 1px color-mix(in srgb, #D3DEEA 82%, transparent)',
+      countActiveRing: 'inset 0 0 0 1px color-mix(in srgb, #3A6FB0 24%, #BCCBDC)',
+    },
+    breadcrumb: {
+      bg: 'color-mix(in srgb, #3A6FB0 4%, #FFFFFF)',
+      border: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
+      color: '#52677E',
+      linkColor: '#3A6FB0',
+      itemColor: '#52677E',
+      colorHover: '#2C5587',
+      colorActive: '#162A43',
+      separatorColor: '#8795A6',
+      // Breadcrumbs sit on the detail step of the type ramp (design-language §2.1).
+      fontSize: '0.75rem',
+      fontWeight: 400,
+      padding: '0.625rem 1rem',
+    },
+    search: {
+      bg: '#ffffff',
+      border: '#D3DEEA',
+      color: '#162A43',
+      shadow: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
+      // Command palette / search modal rides the xl radius step (design-language §2.3).
+      radius: '14px',
+      inputBg: '#ffffff',
+      inputBorder: '#BCCBDC',
+      inputColor: '#162A43',
+      placeholderColor: '#8795A6',
+      iconColor: '#8795A6',
+      clearColor: '#A7B2C0',
+      clearColorHover: '#52677E',
+      resultBg: '#ffffff',
+      resultBgHover: '#F4F8FD',
+      resultBorder: '#DEE8F2',
+      resultShadow: '0 1px 2px rgba(22, 42, 67, 0.04)',
+      resultTitleColor: '#162A43',
+      resultMetaColor: '#6B7F95',
+      categoryColor: '#6B7F95',
+      emptyBg: '#F4F8FD',
+    },
+    controls: {
+      buttonPrimary: { bg: '#3A6FB0', bgHover: '#2C5587', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(22, 42, 67, 0.1)' },
+      buttonSecondary: { bg: 'transparent', bgHover: 'var(--ds-tint-8)', text: '#3A6FB0', color: '#3A6FB0', border: '#3A6FB0' },
+      buttonDefault: { bg: '#FFFFFF', bgHover: '#F4F8FD', text: '#162A43', color: '#162A43', border: '#BCCBDC' },
+      buttonGhost: { bg: 'transparent', bgHover: '#F4F8FD', text: '#52677E', color: '#52677E' },
+      disabled: { opacity: 0.45, bg: '#F8FAFC', text: '#A7B2C0', border: '#E2EAF3', borderColor: '#E2EAF3' },
+      input: {
+        bg: '#ffffff',
+        border: '#BCCBDC',
+        borderHover: '#90A6BE',
+        borderFocus: '#3A6FB0',
+        shadowFocus: '0 0 0 1px #3A6FB0',
+        color: '#162A43',
+        colorPlaceholder: '#8795A6',
+        bgDisabled: '#F8F8F8',
+        colorDisabled: '#A7B2C0',
+        borderDisabled: '#E2EAF3',
+        disabledOpacity: 0.45,
+      },
+    },
+    table: {
+      bg: '#ffffff',
+      border: '#D3DEEA',
+      // Tables/panels ride the lg radius step (design-language §2.3).
+      radius: '10px',
+      headerBg: '#f3f2ef',
+      headerBgHover: 'color-mix(in srgb, #3A6FB0 5%, #F3F2EF)',
+      headerColor: '#52677E',
+      headerFontWeight: 600,
+      headerFontSize: '0.75rem',
+      headerBorder: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
+      headerShadow: 'inset 0 -1px 0 color-mix(in srgb, #D3DEEA 82%, transparent)',
+      rowBg: '#ffffff',
+      rowBgHover: '#F4F8FD',
+      rowBgStriped: '#FAFCFF',
+      rowBgSelected: '#E8F3FF',
+      rowBgExpanded: '#F4F8FD',
+      rowBorder: '#DEE8F2',
+      rowHoverShadow: 'inset 1px 0 0 color-mix(in srgb, var(--ds-color-primary) 34%, transparent)',
+      cellPadding: '0.875rem 1rem',
+      cellFontSize: '0.875rem',
+      cellColor: '#162A43',
+      filterRowBg: '#F4F8FD',
+      filterFocusShadow: '0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 0 8px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)',
+      resizeBg: 'color-mix(in srgb, #3A6FB0 22%, #D3DEEA)',
+      resizeBgHover: '#3A6FB0',
+      reorderBg: 'var(--ds-tint-12)',
+      actionBg: '#FFFFFF',
+      actionBorder: 'color-mix(in srgb, #D3DEEA 70%, transparent)',
+      sheen: 'none',
+      pageButtonHoverShadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      loadingOverlayBg: 'rgba(255, 255, 255, 0.7)',
+    },
+    cardComponent: {
+      padding: '1rem',
+      paddingSm: '0.875rem',
+      paddingMd: '1rem',
+      paddingLg: '1.25rem',
+      paddingXl: '1.5rem',
+      bg: '#ffffff',
+      bgHover: '#F9FBFE',
+      color: '#162A43',
+      colorMuted: '#6B7F95',
+      border: '#D3DEEA',
+      borderColor: '#D3DEEA',
+      // Resting cards sit at elevation level-1 (design-language §2.4).
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      shadowHover: '0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08)',
+      radius: '8px',
+      // Focus ring rides the tint scale at tint-24/3px (design-language §2.5).
+      focusRing: '0 0 0 3px var(--ds-tint-24)',
+      // Expressive-calm keeps the lift-one hover lift (2026-07-02-b).
+      hoverTransform: 'translateY(-1px) scale(1)',
+      headerBorder: '#DEE8F2',
+      headerBorderColor: '#DEE8F2',
+      headerBg: 'color-mix(in srgb, #FFFFFF 82%, #F4F8FD)',
+      headerColor: '#52677E',
+      headerPadding: '1rem',
+      titleColor: '#162A43',
+      titleFontWeight: 600,
+      subtitleColor: '#6B7F95',
+      bodyColor: '#162A43',
+      bodyPadding: '1rem',
+      footerBorder: '#DEE8F2',
+      footerBorderColor: '#DEE8F2',
+      footerBg: '#F8FBFF',
+      footerColor: '#52677E',
+      footerPadding: '1rem',
+      imagePlaceholderBg: '#F4F8FD',
+      imagePlaceholderColor: '#8795A6',
+    },
+    metricCard: {
+      bg: '#FFFFFF',
+      border: 'color-mix(in srgb, #3A6FB0 10%, #D3DEEA)',
+      borderHover: 'color-mix(in srgb, #3A6FB0 24%, #D3DEEA)',
+      selectedBorder: 'color-mix(in srgb, #3A6FB0 58%, #D3DEEA)',
+      // Selected state rides the tint scale at tint-12 (design-language §2.5).
+      selectedRing: '0 0 0 3px var(--ds-tint-12)',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      shadowHover: '0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08)',
+      sheen: 'none',
+      iconBg: 'color-mix(in srgb, #3A6FB0 8%, #FFFFFF)',
+      iconBorder: 'color-mix(in srgb, #3A6FB0 24%, #D3DEEA)',
+      labelColor: '#6B7F95',
+      valueColor: '#162A43',
+      trendColor: '#2F7D5E',
+      meterTrack: 'color-mix(in srgb, #D3DEEA 48%, #F4F8FD)',
+      meterTrackBorder: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
+      // The Confidence Meter — the ONE sanctioned multi-hue gradient (S5).
+      meterFill: 'linear-gradient(90deg, #3A6FB0, #2F7D5E)',
+      // Status meter variants are solid tone colors (design-language §5).
+      meterFillSuccess: '#2F7D5E',
+      meterFillWarning: '#D6A04E',
+      meterFillError: '#C5504C',
+      meterFillNeutral: '#8795A6',
+    },
+    signalCard: {
+      bg: '#ffffff',
+      border: '#D3DEEA',
+      borderHover: 'color-mix(in srgb, #3A6FB0 18%, #D3DEEA)',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      iconBg: 'color-mix(in srgb, #3A6FB0 8%, #FFFFFF)',
+      iconBorder: 'color-mix(in srgb, #3A6FB0 24%, #D3DEEA)',
+      titleColor: '#162A43',
+      bodyColor: '#52677E',
+      badgeBg: 'var(--ds-tint-8)',
+      badgeBorder: 'color-mix(in srgb, #3A6FB0 28%, #D3DEEA)',
+      badgeColor: '#3A6FB0',
+      sectionBg: '#ffffff',
+      sectionAltBg: 'color-mix(in srgb, #3A6FB0 4%, #F4F8FD)',
+      meterTrack: 'color-mix(in srgb, #D3DEEA 48%, #F4F8FD)',
+      meterTrackBorder: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
+      meterFill: 'linear-gradient(90deg, #3A6FB0, #2F7D5E)',
+    },
+  },
+};

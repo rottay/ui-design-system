@@ -13,11 +13,11 @@ That combination reads as decorative noise, not premium authorship.
 
 ## Highest-Impact Targets
 
-- [CollectionHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/headers/collection/index.tsx)
-- [SearchCommandBar](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx)
-- [Card modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/display/Card/engines/modern.tsx)
-- [DataTable modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern.tsx)
-- [Statistic modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/display/Statistic/engines/modern.tsx)
+- [CollectionHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/headers/collection/index.tsx)
+- [SearchCommandBar](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx)
+- [Card modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx)
+- [DataTable modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx)
+- [Statistic modern](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx)
 
 ## Implementation Rules
 

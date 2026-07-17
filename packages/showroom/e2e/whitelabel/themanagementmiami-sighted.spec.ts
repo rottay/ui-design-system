@@ -18,7 +18,7 @@ import { test, type Page } from '@playwright/test';
 // violations and keeps no baseline. The invariant a tenant configuration may
 // never violate -- semantic-color distinguishability -- is asserted
 // mechanically in
-// packages/core/src/compilers/brand-theme/tests/themanagementmiami-invariants.test.ts,
+// packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/themanagementmiami-invariants.test.ts,
 // not here.
 // ---------------------------------------------------------------------------
 

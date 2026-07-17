@@ -62,8 +62,8 @@ The package is extremely deep at the primitive layer. Apps can build almost any 
 
 Proof:
 
-- [primitives inputs index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/inputs/index.ts)
-- [primitives layout index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/layout/index.ts)
+- [primitives inputs index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/inputs/index.ts)
+- [primitives layout index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/layout/index.ts)
 
 ### 2. Pattern and workspace depth
 
@@ -77,8 +77,8 @@ The package already contains a meaningful higher layer for:
 
 Proof:
 
-- [patterns index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/index.ts)
-- [surfaces index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/index.ts)
+- [patterns index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/index.ts)
+- [surfaces index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/index.ts)
 
 ### 3. Runtime/theming/tenant capability
 
@@ -93,9 +93,9 @@ The DS is already carrying infrastructure that many teams would keep outside the
 
 Proof:
 
-- [runtime theming](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/runtime/theming/index.ts)
-- [runtime tenant](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/runtime/tenant/index.ts)
-- [runtime verticals](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/runtime/verticals/index.ts)
+- [runtime theming](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/theming/index.ts)
+- [runtime tenant](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/tenant/index.ts)
+- [runtime verticals](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/verticals/index.ts)
 - [server entrypoint](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/server.ts)
 
 ## What Looks Underused
@@ -108,7 +108,7 @@ The DS exposes a full typed surface/config platform, but the apps still hand-com
 
 Proof:
 
-- [surfaces foundation](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/foundation)
+- [surfaces foundation](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/foundation)
 
 ### 2. Structures
 
@@ -116,7 +116,7 @@ Structures are present and non-trivial, but app adoption still leans much harder
 
 Proof:
 
-- [structures index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/index.ts)
+- [structures index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/index.ts)
 
 ### 3. Motion
 
@@ -124,7 +124,7 @@ Motion exists as a meaningful public layer, but app usage is sparse and often sh
 
 Proof:
 
-- [motion index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/motion/index.ts)
+- [motion index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/graphics/motion/index.ts)
 
 ### 4. Command and responsive infrastructure
 
@@ -138,8 +138,8 @@ These are high leverage, but not heavily used cross-app.
 
 Proof:
 
-- [hooks commands](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/commands/index.ts)
-- [runtime responsive](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/runtime/responsive/index.ts)
+- [hooks commands](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/commands/index.ts)
+- [runtime responsive](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/responsive/index.ts)
 
 ### 5. Brand-theme compiler bridges
 
@@ -147,7 +147,7 @@ The DS appears ready for much deeper tenant/brand automation than the apps curre
 
 Proof:
 
-- [compilers index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/compilers/index.ts)
+- [compilers index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/compilers/index.ts)
 
 ## Bottom Line
 

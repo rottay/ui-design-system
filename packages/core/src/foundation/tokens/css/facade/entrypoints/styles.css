@@ -1,0 +1,515 @@
+/**
+ * Rottay Design System - Full CSS Bundle (all tenants)
+ *
+ * Public entrypoint for @rottay/design-system/styles.
+ * Includes foundation + components + engines + all tenant artifacts + legacy.
+ *
+ * @see ./platform.css  - Base + rottay artifact only
+ * @see ./bithire.css   - Base + bithire artifact only
+ * @see ./evnto.css     - Base + evnto artifact only
+ *
+ * @version 1.0.0
+ */
+
+/* =============================================================================
+   LAYER ORDER DECLARATION
+   Establishes the cascade priority for all design system layers.
+   Consumers can reference these layers to insert overrides at any level.
+   ============================================================================= */
+@layer rottay-reset, rottay-tokens, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive;
+
+/* =============================================================================
+   LAYER 0: ANT DESIGN BASE STYLES (rottay-reset)
+   Required for Ant Design icons (@ant-design/icons) to render correctly.
+   Placed in the lowest-priority layer so DS tokens always override it.
+   ============================================================================= */
+@import 'antd/dist/reset.css' layer(rottay-reset);
+
+/* =============================================================================
+   LAYER 1: DS FOUNDATION + DEFAULT THEME (rottay-tokens)
+   Supplemental semantic aliases and extended scales built on top of the
+   canonical DS token family, plus the default theme values in :root.
+   ============================================================================= */
+@import '../../foundation/base/index.css' layer(rottay-tokens);
+@import '../../foundation/themes/default.css' layer(rottay-tokens);
+
+/* =============================================================================
+   LAYER 2: COMPONENT TOKENS (rottay-components)
+   Component-scoped semantic variables built on top of the canonical theme.
+   NOTE: personality.css is excluded here and placed in its own layer below.
+   ============================================================================= */
+@import '../../presentation/components/avatar.css' layer(rottay-components);
+@import '../../presentation/components/badge.css' layer(rottay-components);
+@import '../../presentation/components/button.css' layer(rottay-components);
+@import '../../presentation/components/input.css' layer(rottay-components);
+@import '../../presentation/components/card.css' layer(rottay-components);
+@import '../../presentation/components/modal.css' layer(rottay-components);
+@import '../../presentation/components/checkbox.css' layer(rottay-components);
+@import '../../presentation/components/radio.css' layer(rottay-components);
+@import '../../presentation/components/select.css' layer(rottay-components);
+@import '../../presentation/components/tag.css' layer(rottay-components);
+@import '../../presentation/components/toggle.css' layer(rottay-components);
+@import '../../presentation/components/icon.css' layer(rottay-components);
+@import '../../presentation/components/semantic-icon.css' layer(rottay-components);
+@import '../../presentation/components/mark.css' layer(rottay-components);
+@import '../../presentation/components/spinner.css' layer(rottay-components);
+@import '../../presentation/components/rate.css' layer(rottay-components);
+@import '../../presentation/components/space.css' layer(rottay-components);
+@import '../../presentation/components/timeline.css' layer(rottay-components);
+@import '../../presentation/components/qrcode.css' layer(rottay-components);
+@import '../../presentation/components/list.css' layer(rottay-components);
+@import '../../presentation/components/collapse.css' layer(rottay-components);
+@import '../../presentation/components/tree.css' layer(rottay-components);
+@import '../../presentation/components/empty.css' layer(rottay-components);
+@import '../../presentation/components/patterns.css' layer(rottay-components);
+
+/* =============================================================================
+   LAYER 3: ENGINE THEMES (rottay-engines)
+   Maps --ds-* tokens to library-specific classes
+   - Classic: Ant Design (.ant-*) mappings
+   - Modern: DaisyUI/Tailwind (.btn, .card, etc.) mappings
+   - Rustic: Vanilla CSS (.ds-*) classes
+   ============================================================================= */
+@import '../../runtime/engines/index.css' layer(rottay-engines);
+
+/* Modern engine skins. DELIBERATELY UNLAYERED: every `rottay-*` layer sorts
+   before Tailwind's own `base` layer, whose preflight resets `button`'s
+   background, radius and border. A layered skin loses to it on layer order,
+   whatever its specificity (measured; see P-47). Unlayered outranks preflight
+   and DaisyUI, and still yields to a consumer's inline `style` prop. */
+@import '../../runtime/engines/modern/skin/button.css';
+@import '../../runtime/engines/rustic/skin/button.css';
+@import '../../runtime/engines/modern/skin/card.css';
+@import '../../runtime/engines/rustic/skin/card.css';
+@import '../../runtime/engines/modern/skin/input.css';
+@import '../../runtime/engines/rustic/skin/input.css';
+@import '../../runtime/engines/modern/skin/badge.css';
+@import '../../runtime/engines/rustic/skin/badge.css';
+@import '../../runtime/engines/modern/skin/table.css';
+@import '../../runtime/engines/rustic/skin/table.css';
+@import '../../presentation/components/skin/field-filters-panel.css';
+@import '../../runtime/engines/modern/skin/filter-panel.css';
+@import '../../runtime/engines/rustic/skin/filter-panel.css';
+@import '../../presentation/components/skin/selection-preview-rail.css';
+@import '../../runtime/engines/modern/skin/detail-panel.css';
+@import '../../runtime/engines/rustic/skin/detail-panel.css';
+@import '../../runtime/engines/modern/skin/data-table.css';
+@import '../../runtime/engines/rustic/skin/data-table.css';
+@import '../../presentation/components/skin/data-table-mobile.css';
+@import '../../presentation/components/skin/data-table-interactions.css';
+@import '../../runtime/engines/modern/skin/form-field.css';
+@import '../../runtime/engines/rustic/skin/form-field.css';
+@import '../../runtime/engines/modern/skin/textarea.css';
+@import '../../runtime/engines/rustic/skin/textarea.css';
+@import '../../runtime/engines/modern/skin/tag-input.css';
+@import '../../runtime/engines/rustic/skin/tag-input.css';
+@import '../../runtime/engines/modern/skin/input-number.css';
+@import '../../runtime/engines/rustic/skin/input-number.css';
+@import '../../runtime/engines/modern/skin/password-input.css';
+@import '../../runtime/engines/rustic/skin/password-input.css';
+@import '../../runtime/engines/modern/skin/switch.css';
+@import '../../runtime/engines/rustic/skin/switch.css';
+@import '../../runtime/engines/modern/skin/toggle.css';
+@import '../../runtime/engines/rustic/skin/toggle.css';
+@import '../../runtime/engines/modern/skin/radio.css';
+@import '../../runtime/engines/rustic/skin/radio.css';
+@import '../../runtime/engines/modern/skin/checkbox.css';
+@import '../../runtime/engines/rustic/skin/checkbox.css';
+@import '../../runtime/engines/modern/skin/slider.css';
+@import '../../runtime/engines/rustic/skin/slider.css';
+@import '../../runtime/engines/modern/skin/otp-input.css';
+@import '../../runtime/engines/rustic/skin/otp-input.css';
+@import '../../runtime/engines/modern/skin/form.css';
+@import '../../runtime/engines/rustic/skin/form.css';
+@import '../../runtime/engines/modern/skin/input-residual.css';
+@import '../../runtime/engines/rustic/skin/input-residual.css';
+@import '../../presentation/components/skin/radio-group.css';
+@import '../../presentation/components/skin/checkbox-group.css';
+@import '../../presentation/components/skin/button-icon.css';
+@import '../../presentation/components/skin/voice-input-button.css';
+@import '../../presentation/components/skin/input-compounds.css';
+@import '../../runtime/engines/modern/skin/upload.css';
+@import '../../runtime/engines/rustic/skin/upload.css';
+@import '../../runtime/engines/modern/skin/transfer.css';
+@import '../../runtime/engines/rustic/skin/transfer.css';
+@import '../../runtime/engines/modern/skin/color-picker.css';
+@import '../../runtime/engines/rustic/skin/color-picker.css';
+@import '../../runtime/engines/modern/skin/time-picker.css';
+@import '../../runtime/engines/rustic/skin/time-picker.css';
+@import '../../runtime/engines/modern/skin/date-picker.css';
+@import '../../runtime/engines/rustic/skin/date-picker.css';
+/* Dropdown family (WO-SKIN-02 checkpoint B). */
+@import '../../runtime/engines/modern/skin/autocomplete.css';
+@import '../../runtime/engines/rustic/skin/autocomplete.css';
+@import '../../runtime/engines/modern/skin/mentions.css';
+@import '../../runtime/engines/rustic/skin/mentions.css';
+@import '../../runtime/engines/modern/skin/select.css';
+@import '../../runtime/engines/rustic/skin/select.css';
+@import '../../presentation/components/skin/select-compounds.css';
+@import '../../presentation/components/skin/form-placeholders.css';
+@import '../../runtime/engines/modern/skin/tree-select.css';
+@import '../../runtime/engines/rustic/skin/tree-select.css';
+@import '../../runtime/engines/modern/skin/cascader.css';
+@import '../../runtime/engines/rustic/skin/cascader.css';
+/* Status family (WO-SKIN-03 checkpoint S). */
+@import '../../runtime/engines/modern/skin/alert.css';
+@import '../../runtime/engines/rustic/skin/alert.css';
+@import '../../runtime/engines/modern/skin/progress.css';
+@import '../../runtime/engines/rustic/skin/progress.css';
+@import '../../presentation/components/skin/progress-compounds.css';
+@import '../../runtime/engines/modern/skin/spinner.css';
+@import '../../runtime/engines/rustic/skin/spinner.css';
+@import '../../runtime/engines/modern/skin/rate.css';
+@import '../../runtime/engines/rustic/skin/rate.css';
+@import '../../runtime/engines/modern/skin/skeleton.css';
+@import '../../runtime/engines/rustic/skin/skeleton.css';
+@import '../../presentation/components/skin/skeleton-compounds.css';
+/* Overlay family (WO-SKIN-03 checkpoint O). */
+@import '../../runtime/engines/modern/skin/modal.css';
+@import '../../runtime/engines/rustic/skin/modal.css';
+@import '../../presentation/components/skin/modal-compounds.css';
+@import '../../runtime/engines/modern/skin/drawer.css';
+@import '../../runtime/engines/rustic/skin/drawer.css';
+@import '../../presentation/components/skin/drawer-compounds.css';
+@import '../../runtime/engines/modern/skin/toast.css';
+@import '../../runtime/engines/rustic/skin/toast.css';
+@import '../../presentation/components/skin/toast-compounds.css';
+@import '../../presentation/components/skin/toast-animation-keyframes.css';
+@import '../../runtime/engines/modern/skin/message.css';
+@import '../../runtime/engines/rustic/skin/message.css';
+@import '../../runtime/engines/modern/skin/notification.css';
+@import '../../runtime/engines/rustic/skin/notification.css';
+@import '../../runtime/engines/modern/skin/result.css';
+@import '../../runtime/engines/rustic/skin/result.css';
+
+/* WO-SKIN-04: the overlay + navigation families paint from unlayered skins. */
+@import '../../runtime/engines/modern/skin/affix.css';
+@import '../../runtime/engines/rustic/skin/affix.css';
+@import '../../runtime/engines/modern/skin/alert-dialog.css';
+@import '../../runtime/engines/rustic/skin/alert-dialog.css';
+@import '../../runtime/engines/modern/skin/anchor.css';
+@import '../../runtime/engines/rustic/skin/anchor.css';
+@import '../../runtime/engines/modern/skin/back-top.css';
+@import '../../runtime/engines/rustic/skin/back-top.css';
+@import '../../runtime/engines/modern/skin/breadcrumb.css';
+@import '../../runtime/engines/rustic/skin/breadcrumb.css';
+@import '../../runtime/engines/modern/skin/confirm-dialog.css';
+@import '../../runtime/engines/rustic/skin/confirm-dialog.css';
+@import '../../runtime/engines/modern/skin/context-menu.css';
+@import '../../runtime/engines/rustic/skin/context-menu.css';
+@import '../../runtime/engines/modern/skin/dropdown.css';
+@import '../../runtime/engines/rustic/skin/dropdown.css';
+@import '../../runtime/engines/modern/skin/float-button.css';
+@import '../../runtime/engines/rustic/skin/float-button.css';
+@import '../../runtime/engines/modern/skin/hover-card.css';
+@import '../../runtime/engines/rustic/skin/hover-card.css';
+@import '../../runtime/engines/modern/skin/link.css';
+@import '../../runtime/engines/rustic/skin/link.css';
+@import '../../runtime/engines/modern/skin/menu.css';
+@import '../../runtime/engines/rustic/skin/menu.css';
+@import '../../runtime/engines/modern/skin/overlay-modal.css';
+@import '../../runtime/engines/rustic/skin/overlay-modal.css';
+@import '../../runtime/engines/modern/skin/pagination.css';
+@import '../../runtime/engines/rustic/skin/pagination.css';
+@import '../../runtime/engines/modern/skin/popconfirm.css';
+@import '../../runtime/engines/rustic/skin/popconfirm.css';
+@import '../../runtime/engines/modern/skin/popover.css';
+@import '../../runtime/engines/rustic/skin/popover.css';
+@import '../../runtime/engines/modern/skin/segmented.css';
+@import '../../runtime/engines/rustic/skin/segmented.css';
+@import '../../runtime/engines/modern/skin/sheet.css';
+@import '../../runtime/engines/rustic/skin/sheet.css';
+@import '../../runtime/engines/modern/skin/stepper.css';
+@import '../../runtime/engines/rustic/skin/stepper.css';
+@import '../../runtime/engines/modern/skin/steps.css';
+@import '../../runtime/engines/rustic/skin/steps.css';
+@import '../../runtime/engines/modern/skin/tabs.css';
+@import '../../runtime/engines/rustic/skin/tabs.css';
+@import '../../runtime/engines/modern/skin/tour.css';
+@import '../../runtime/engines/rustic/skin/tour.css';
+@import '../../runtime/engines/modern/skin/watermark.css';
+@import '../../runtime/engines/rustic/skin/watermark.css';
+@import '../../presentation/components/skin/action-dock.css';
+@import '../../presentation/components/skin/adaptive-overlay.css';
+@import '../../presentation/components/skin/bottom-tab-bar.css';
+@import '../../presentation/components/skin/breadcrumb-compounds.css';
+@import '../../presentation/components/skin/menu-compounds.css';
+@import '../../presentation/components/skin/navigation-static.css';
+@import '../../presentation/components/skin/mobile-header.css';
+@import '../../presentation/components/skin/app-shell.css';
+@import '../../presentation/components/skin/overlay-modal-compounds.css';
+@import '../../presentation/components/skin/stepper-compounds.css';
+
+/* WO-SKIN-05: the display + layout families paint from unlayered skins. */
+@import '../../runtime/engines/modern/skin/avatar.css';
+@import '../../runtime/engines/rustic/skin/avatar.css';
+@import '../../runtime/engines/modern/skin/calendar.css';
+@import '../../runtime/engines/rustic/skin/calendar.css';
+@import '../../runtime/engines/modern/skin/callout.css';
+@import '../../runtime/engines/rustic/skin/callout.css';
+@import '../../runtime/engines/modern/skin/carousel.css';
+@import '../../runtime/engines/rustic/skin/carousel.css';
+@import '../../runtime/engines/modern/skin/collapse.css';
+@import '../../runtime/engines/rustic/skin/collapse.css';
+@import '../../runtime/engines/modern/skin/descriptions.css';
+@import '../../runtime/engines/rustic/skin/descriptions.css';
+@import '../../runtime/engines/modern/skin/divider.css';
+@import '../../runtime/engines/rustic/skin/divider.css';
+@import '../../runtime/engines/modern/skin/empty.css';
+@import '../../runtime/engines/rustic/skin/empty.css';
+@import '../../runtime/engines/modern/skin/image.css';
+@import '../../runtime/engines/rustic/skin/image.css';
+@import '../../runtime/engines/modern/skin/kbd.css';
+@import '../../runtime/engines/rustic/skin/kbd.css';
+@import '../../runtime/engines/modern/skin/layout.css';
+@import '../../runtime/engines/rustic/skin/layout.css';
+@import '../../runtime/engines/modern/skin/list.css';
+@import '../../runtime/engines/rustic/skin/list.css';
+@import '../../runtime/engines/modern/skin/qrcode.css';
+@import '../../runtime/engines/rustic/skin/qrcode.css';
+@import '../../runtime/engines/modern/skin/splitter.css';
+@import '../../runtime/engines/rustic/skin/splitter.css';
+@import '../../runtime/engines/modern/skin/statistic.css';
+@import '../../runtime/engines/rustic/skin/statistic.css';
+@import '../../runtime/engines/modern/skin/tag.css';
+@import '../../runtime/engines/rustic/skin/tag.css';
+@import '../../runtime/engines/modern/skin/timeline.css';
+@import '../../runtime/engines/rustic/skin/timeline.css';
+@import '../../runtime/engines/modern/skin/tooltip.css';
+@import '../../runtime/engines/rustic/skin/tooltip.css';
+@import '../../runtime/engines/modern/skin/tree.css';
+@import '../../runtime/engines/rustic/skin/tree.css';
+@import '../../presentation/components/skin/primitive-motion.css';
+@import '../../presentation/components/skin/scroll-area.css';
+@import '../../runtime/engines/modern/skin/typography.css';
+@import '../../runtime/engines/rustic/skin/typography.css';
+@import '../../runtime/engines/modern/skin/approval-workflow.css';
+@import '../../runtime/engines/rustic/skin/approval-workflow.css';
+@import '../../runtime/engines/modern/skin/filter-builder.css';
+@import '../../runtime/engines/rustic/skin/filter-builder.css';
+@import '../../runtime/engines/modern/skin/form-builder.css';
+@import '../../runtime/engines/rustic/skin/form-builder.css';
+@import '../../runtime/engines/modern/skin/invoice-template.css';
+@import '../../runtime/engines/rustic/skin/invoice-template.css';
+@import '../../runtime/engines/modern/skin/step-wizard.css';
+@import '../../runtime/engines/modern/skin/cockpit-header.css';
+@import '../../runtime/engines/modern/skin/page-shell.css';
+@import '../../runtime/engines/modern/skin/workbench-header.css';
+@import '../../runtime/engines/modern/skin/command-palette.css';
+@import '../../runtime/engines/modern/skin/environment-toggle.css';
+@import '../../runtime/engines/modern/skin/workspace-switcher.css';
+@import '../../runtime/engines/modern/skin/shortcuts-overlay.css';
+@import '../../runtime/engines/modern/skin/locale-switcher.css';
+@import '../../runtime/engines/modern/skin/comment-thread.css';
+@import '../../runtime/engines/modern/skin/notification-center.css';
+@import '../../runtime/engines/modern/skin/activity-log.css';
+@import '../../runtime/engines/modern/skin/live-feed.css';
+@import '../../runtime/engines/rustic/skin/step-wizard.css';
+@import '../../runtime/engines/rustic/skin/page-shell.css';
+@import '../../runtime/engines/rustic/skin/command-palette.css';
+@import '../../runtime/engines/rustic/skin/environment-toggle.css';
+@import '../../runtime/engines/rustic/skin/workspace-switcher.css';
+@import '../../runtime/engines/rustic/skin/shortcuts-overlay.css';
+@import '../../runtime/engines/rustic/skin/locale-switcher.css';
+@import '../../runtime/engines/rustic/skin/comment-thread.css';
+@import '../../runtime/engines/rustic/skin/notification-center.css';
+@import '../../runtime/engines/rustic/skin/activity-log.css';
+@import '../../runtime/engines/rustic/skin/live-feed.css';
+@import '../../presentation/components/skin/avatar-compounds.css';
+@import '../../presentation/components/skin/card-compounds.css';
+@import '../../presentation/components/skin/carousel-compounds.css';
+@import '../../presentation/components/skin/image-compounds.css';
+@import '../../presentation/components/skin/statistic-compounds.css';
+@import '../../presentation/components/skin/tooltip-compounds.css';
+@import '../../presentation/components/skin/detail-form-surface.css';
+@import '../../presentation/components/skin/edit-fields.css';
+@import '../../presentation/components/skin/form-sections.css';
+@import '../../presentation/components/skin/form-surface.css';
+@import '../../presentation/components/skin/guided-draft-form.css';
+@import '../../presentation/components/skin/record.css';
+@import '../../presentation/components/skin/wizard-surface.css';
+@import '../../presentation/components/skin/detail-header.css';
+@import '../../presentation/components/skin/edit-header.css';
+@import '../../presentation/components/skin/form-header.css';
+@import '../../presentation/components/skin/collection-header.css';
+@import '../../presentation/components/skin/dashboard-header.css';
+@import '../../presentation/components/skin/activity-ticker.css';
+@import '../../presentation/components/skin/activity-timeline.css';
+@import '../../presentation/components/skin/activity-compact.css';
+@import '../../presentation/components/skin/activity-cards.css';
+@import '../../presentation/components/skin/dashboard-activity-interactions.css';
+@import '../../presentation/components/skin/metrics-minimal.css';
+@import '../../presentation/components/skin/metrics-cards.css';
+@import '../../presentation/components/skin/metrics-chart.css';
+@import '../../presentation/components/skin/metrics-rows.css';
+@import '../../presentation/components/skin/dashboard-metrics-interactions.css';
+@import '../../presentation/components/skin/stats-header.css';
+@import '../../presentation/components/skin/stats-header-keyframes.css';
+@import '../../presentation/components/skin/data-terminal-card.css';
+@import '../../presentation/components/skin/data-terminal-card-keyframes.css';
+@import '../../presentation/components/skin/assistant.css';
+@import '../../presentation/components/skin/presence.css';
+
+/* WO-SKIN-06 CK-C: workspace chrome paints from unlayered skins. */
+@import '../../runtime/engines/modern/skin/list-toolbar.css';
+@import '../../runtime/engines/modern/skin/saved-views.css';
+@import '../../runtime/engines/rustic/skin/saved-views.css';
+@import '../../presentation/components/skin/active-filters-bar.css';
+@import '../../presentation/components/skin/column-menu.css';
+@import '../../presentation/components/skin/export-button.css';
+@import '../../presentation/components/skin/saved-views-menu.css';
+@import '../../presentation/components/skin/scope-switcher.css';
+@import '../../presentation/components/skin/search-command-bar.css';
+@import '../../presentation/components/skin/status-filter-pills.css';
+@import '../../presentation/components/skin/table-toolbar.css';
+@import '../../presentation/components/skin/view-mode-switcher.css';
+
+/* WO-SKIN-06 CK-H2: misc patterns paint from unlayered skins. */
+@import '../../runtime/engines/modern/skin/file-manager.css';
+@import '../../runtime/engines/rustic/skin/file-manager.css';
+@import '../../runtime/engines/modern/skin/user-profile-card.css';
+@import '../../runtime/engines/rustic/skin/user-profile-card.css';
+@import '../../runtime/engines/modern/skin/pricing-table.css';
+@import '../../runtime/engines/rustic/skin/pricing-table.css';
+@import '../../runtime/engines/modern/skin/empty-state.css';
+@import '../../runtime/engines/rustic/skin/empty-state.css';
+@import '../../presentation/components/skin/token-inspector.css';
+
+/* WO-SKIN-06 CK-I: surfaces long-tail paint from unlayered skins. */
+@import '../../runtime/engines/modern/skin/stats-grid.css';
+@import '../../runtime/engines/rustic/skin/stats-grid.css';
+@import '../../presentation/components/skin/surface-accent-bar.css';
+@import '../../presentation/components/skin/surface-section-card.css';
+@import '../../presentation/components/skin/surface-states.css';
+@import '../../presentation/components/skin/bulk-select-toggle.css';
+@import '../../presentation/components/skin/cell-renderers.css';
+@import '../../presentation/components/skin/gallery-view.css';
+@import '../../presentation/components/skin/grid-view.css';
+@import '../../presentation/components/skin/collection-shell.css';
+@import '../../presentation/components/skin/collection-workspace.css';
+@import '../../presentation/components/skin/collection-workspace-render-dispatch.css';
+@import '../../presentation/components/skin/command-center.css';
+@import '../../presentation/components/skin/decision-inbox.css';
+@import '../../presentation/components/skin/layout-header.css';
+@import '../../presentation/components/skin/layout-sidebar.css';
+@import '../../presentation/components/skin/record-workbench.css';
+@import '../../presentation/components/skin/audit.css';
+@import '../../presentation/components/skin/billing.css';
+@import '../../presentation/components/skin/import-export.css';
+@import '../../presentation/components/skin/integration.css';
+@import '../../presentation/components/skin/profile.css';
+@import '../../presentation/components/skin/settings.css';
+@import '../../presentation/components/skin/team.css';
+@import '../../presentation/components/skin/compare.css';
+@import '../../presentation/components/skin/dashboard.css';
+@import '../../presentation/components/skin/list.css';
+@import '../../presentation/components/skin/report.css';
+@import '../../presentation/components/skin/search.css';
+@import '../../presentation/components/skin/visualization.css';
+@import '../../presentation/components/skin/auth-surface.css';
+@import '../../presentation/components/skin/chat-surface.css';
+@import '../../presentation/components/skin/editor-surface.css';
+@import '../../presentation/components/skin/marketing-surface.css';
+@import '../../presentation/components/skin/media-surface.css';
+@import '../../presentation/components/skin/notification-surface.css';
+@import '../../presentation/components/skin/pricing-surface.css';
+@import '../../presentation/components/skin/activity-surface.css';
+
+/* Hidden-channel recovery: byte-exact component CSS, deliberately unlayered. */
+@import '../../presentation/components/skin/oauth-transition.css';
+@import '../../presentation/components/skin/loading-overlay.css';
+
+/* WO-SKIN-06 CK-H1: tenant and branding previews paint from unlayered skins. */
+@import '../../runtime/engines/modern/skin/tenant-preview.css';
+@import '../../runtime/engines/rustic/skin/tenant-preview.css';
+@import '../../presentation/components/skin/branding-preview-sandbox.css';
+@import '../../presentation/components/skin/brand-studio.css';
+
+/* WO-SKIN-06 CK-E: chart and visualization paint from unlayered skins. */
+@import '../../presentation/components/skin/chart-foundation.css';
+@import '../../presentation/components/skin/chart-area.css';
+@import '../../presentation/components/skin/chart-bar.css';
+@import '../../presentation/components/skin/chart-bullet.css';
+@import '../../presentation/components/skin/chart-calendar-heatmap.css';
+@import '../../presentation/components/skin/chart-gantt.css';
+@import '../../presentation/components/skin/chart-heatmap.css';
+@import '../../presentation/components/skin/chart-line.css';
+@import '../../presentation/components/skin/chart-pie.css';
+@import '../../presentation/components/skin/chart-radar.css';
+@import '../../presentation/components/skin/chart-treemap.css';
+@import '../../presentation/components/skin/chart-waterfall.css';
+@import '../../presentation/components/skin/chart-c.css';
+@import '../../runtime/engines/modern/skin/pattern-calendar-view.css';
+@import '../../runtime/engines/modern/skin/pattern-kanban-board.css';
+@import '../../runtime/engines/modern/skin/pattern-map-view.css';
+@import '../../runtime/engines/modern/skin/pattern-timeline.css';
+@import '../../runtime/engines/modern/skin/pattern-tree-view.css';
+@import '../../runtime/engines/rustic/skin/pattern-calendar-view.css';
+@import '../../runtime/engines/rustic/skin/pattern-kanban-board.css';
+@import '../../runtime/engines/rustic/skin/pattern-map-view.css';
+@import '../../runtime/engines/rustic/skin/pattern-timeline.css';
+@import '../../runtime/engines/rustic/skin/pattern-tree-view.css';
+
+/* =============================================================================
+   LAYER 4: TENANT OVERRIDES (rottay-tenants)
+   First-party tenant variable definitions. These are pure CSS custom property
+   overrides (~200-500 lines each, ~1KB total) - no component selectors.
+   ============================================================================= */
+@import '../artifacts/rottay/index.css' layer(rottay-tenants);
+@import '../artifacts/bithire/index.css' layer(rottay-tenants);
+@import '../artifacts/evnto/index.css' layer(rottay-tenants);
+
+/* =============================================================================
+   LAYER 5: PERSONALITY OVERRIDES (rottay-personality)
+   Cross-engine personality-driven CSS rules that consume personality tokens
+   pushed by SystemCssVariablesBridge. Higher priority than tenants because
+   personality is runtime-resolved per-product and must win over static tenants.
+   ============================================================================= */
+@import '../../runtime/personality.css' layer(rottay-personality);
+
+/* =============================================================================
+   LAYER 6: RESPONSIVE OVERRIDES (rottay-responsive)
+   Media query-based adjustments (web-first design, NOT mobile-first)
+   ============================================================================= */
+@import '../../foundation/responsive/index.css' layer(rottay-responsive);
+
+/* =============================================================================
+   ACCESSIBILITY: TOUCH TARGETS (unlayered)
+   Enforces 44x44px minimum touch targets on coarse pointer devices (WCAG 2.5.5).
+   Kept outside layers so the @media (pointer: coarse) rules always apply
+   regardless of cascade layer ordering.
+   @see https://www.w3.org/WAI/WCAG21/Understanding/target-size.html
+   ============================================================================= */
+@media (pointer: coarse) {
+  button,
+  [role='button'],
+  a,
+  [data-ds-interactive='true'],
+  input[type='checkbox'],
+  input[type='radio'],
+  select,
+  .ant-btn,
+  .ant-select-selector,
+  .ant-tabs-tab,
+  .ant-pagination-item,
+  .ant-tag {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .ant-tabs-tab {
+    padding: 12px 16px !important;
+  }
+
+  .ant-tag {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* =============================================================================
+   ANIMATIONS (unlayered)
+   Transitions and keyframe animations are kept outside layers so @keyframes
+   definitions are always reachable regardless of layer ordering.
+   ============================================================================= */
+@import '../../foundation/animations/index.css';

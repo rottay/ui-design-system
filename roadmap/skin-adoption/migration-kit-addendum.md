@@ -3,8 +3,8 @@
 Read `skin02-migration-kit.md` FIRST (the full method: counter, skin homes, (0,4,0) law,
 state/handler mapping, keyframe rename, byte-exact, comment rules, hard limits, verify+report).
 This addendum layers the checkpoint-C specifics on top. In-repo precedents to copy the idiom
-from: the 31 fields skins just landed under `tokens/css/engines/{modern,rustic}/skin/` +
-`tokens/css/components/skin/` (esp. `tag-input.css`, `input-number.css` `:has()` idiom,
+from: the 31 fields skins just landed under `foundation/tokens/css/runtime/engines/{modern,rustic}/skin/` +
+`foundation/tokens/css/presentation/components/skin/` (esp. `tag-input.css`, `input-number.css` `:has()` idiom,
 `radio.css` fresh per-part, `password-input.css` variant `:not()` chain, `slider.css`
 data-orientation/data-axis, `input-residual.css` compose-without-collision).
 

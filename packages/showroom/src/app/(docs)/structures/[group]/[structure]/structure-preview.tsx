@@ -15,7 +15,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/composition/components/playground/surface-tokens';
 import { structures } from '@/data/registry';
 import type { StructureGroup } from '@/data/registry';
 import { STRUCTURE_PREVIEWS } from './structure-preview-fixtures';
@@ -49,6 +49,11 @@ const GROUP_META: Record<
     note: 'Check how waiting and transition states reassure the user without feeling dead or generic.',
     minHeight: 172,
   },
+  shell: {
+    label: 'Shell structure',
+    note: 'Check whether persistent navigation stays legible, reachable, and distinct from page content.',
+    minHeight: 180,
+  },
 };
 
 const GROUP_ACCENTS: Record<StructureGroup, string> = {
@@ -57,6 +62,7 @@ const GROUP_ACCENTS: Record<StructureGroup, string> = {
   record: '#a78bfa',
   dashboard: '#f59e0b',
   feedback: '#fb7185',
+  shell: '#22d3ee',
 };
 
 function renderGenericStructurePreview(entry: {
@@ -252,6 +258,37 @@ function renderGenericStructurePreview(entry: {
               Waiting state with purpose, not just emptiness.
             </Text>
           </Stack>
+        </Box>
+      );
+    case 'shell':
+      return (
+        <Box
+          style={{
+            padding: '14px 16px',
+            borderRadius: 16,
+            border: '1px solid var(--ds-color-border)',
+            background: 'linear-gradient(180deg, var(--ds-color-bg-secondary) 0%, var(--ds-color-bg-container) 100%)',
+          }}
+        >
+          <Flex align="center" justify="between" gap={10}>
+            {['Home', 'Search', 'Profile'].map((label, index) => (
+              <Stack key={label} spacing={4} align="center" style={{ flex: 1 }}>
+                <Box
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: 8,
+                    background: index === 0
+                      ? 'color-mix(in srgb, var(--ds-color-primary) 22%, transparent)'
+                      : 'var(--ds-color-bg-secondary)',
+                  }}
+                />
+                <Text size="xs" weight={index === 0 ? 'semibold' : 'regular'}>
+                  {label}
+                </Text>
+              </Stack>
+            ))}
+          </Flex>
         </Box>
       );
     default:

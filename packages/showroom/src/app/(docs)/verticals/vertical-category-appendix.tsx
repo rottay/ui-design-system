@@ -1,8 +1,8 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
-import { RuntimeFingerprint } from '@/components/runtime/runtime-fingerprint';
-import { useShowroomRuntime } from '@/components/showroom-context';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
+import { RuntimeFingerprint } from '@/composition/components/runtime/runtime-fingerprint';
+import { useShowroomRuntime } from '@/composition/components/showroom-context';
 import {
   Badge,
   Box,

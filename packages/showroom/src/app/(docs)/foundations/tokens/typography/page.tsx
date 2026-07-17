@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment } from 'react';
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
 import {
   Badge,
   Box,
@@ -11,7 +11,7 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { CodeBlock } from '@/components/playground';
+import { CodeBlock } from '@/composition/components/playground';
 
 const FONT_SIZES = [
   { key: 'xs', label: 'xs', rem: '0.75rem', use: 'Meta, captions, helper text' },

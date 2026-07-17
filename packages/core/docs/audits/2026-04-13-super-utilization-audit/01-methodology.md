@@ -13,9 +13,9 @@ This audit measures three things at once:
 - Design system package:
   - [package.json](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/package.json)
   - [src/index.ts](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/index.ts)
-  - [src/components](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components)
-  - [src/hooks](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks)
-  - [src/runtime](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/runtime)
+  - [src/ui](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui)
+  - [runtime React hook facade](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/facade/react-hooks)
+  - [src/infrastructure/runtime](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime)
 - Product apps:
   - [app-platform/src](/Users/daniel/Developer/Rottay/app-platform/src)
   - [app-bithire/src](/Users/daniel/Developer/Rottay/app-bithire/src)

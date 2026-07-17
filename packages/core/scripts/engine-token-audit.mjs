@@ -26,6 +26,7 @@
  *   node scripts/engine-token-audit.mjs --check    # exit 1 if any counter rose above baseline
  *   node scripts/engine-token-audit.mjs --update-baseline   # tighten existing ceilings only
  *   node scripts/engine-token-audit.mjs --coverage # write the token-coverage report (informational)
+ *   node scripts/engine-token-audit.mjs --current-json # emit current counters for reviewed tooling
  *   node scripts/engine-token-audit.mjs --check --quiet     # concise CI output
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
@@ -53,12 +54,12 @@ import { fileURLToPath } from 'node:url';
 // (the successor to WCAG-2 ratios) used by the `a11y.apcaPairings` counter below. `apca-w3` is a
 // ROOT devDependency (this script resolves it via Node's upward node_modules walk to the repo
 // root, whichever workspace CWD invokes it). This is ADDITIVE gate machinery: it does NOT touch
-// the shipped WCAG validator at src/_internal/a11y/contrast/index.ts (a published /server API).
+// the shipped WCAG validator at src/foundation/kernel/accessibility/branding-contrast/index.ts (a published /server API).
 import { calcAPCA } from 'apca-w3';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..');
-const componentsDir = join(root, 'src/components');
+const componentsDir = join(root, 'src/ui');
 const baselinePath = join(here, 'engine-token-audit.baseline.json');
 const quiet = process.argv.includes('--quiet');
 
@@ -93,7 +94,7 @@ function collectEngineFiles(dir, engineName) {
   return out;
 }
 
-/** Collect every modern-engine component source file (`engines/modern.tsx` or `engines/modern/*.tsx`). */
+/** Collect every modern-engine component source file (`engines/modern/index.tsx`). */
 function modernFiles(dir) {
   return collectEngineFiles(dir, 'modern');
 }
@@ -309,8 +310,8 @@ function countMotionLiterals(files) {
   return { cubicBezier, rawDuration, orphanTokens };
 }
 
-const tokensCssDir = join(root, 'src/tokens/css');
-const artifactsDir = join(tokensCssDir, 'artifacts');
+const tokensCssDir = join(root, 'src/foundation/tokens/css');
+const artifactsDir = join(tokensCssDir, 'facade/artifacts');
 
 /** Recursively collect every `.css` file under a directory. */
 function cssFilesUnder(dir) {
@@ -342,7 +343,10 @@ function luminanceHex(hex) {
  * Target: exactly 1.
  */
 function countShadowScales() {
-  const files = [...cssFilesUnder(join(tokensCssDir, 'foundation')), ...cssFilesUnder(join(tokensCssDir, 'engines'))];
+  const files = [
+    ...cssFilesUnder(join(tokensCssDir, 'foundation')),
+    ...cssFilesUnder(join(tokensCssDir, 'runtime/engines')),
+  ];
   let scales = 0;
   for (const f of files) {
     const t = readFileSync(f, 'utf8');
@@ -400,7 +404,10 @@ function countDarkPureBlackElevations() {
  * file, to avoid flagging a lone component-specific alias. Target: exactly 1.
  */
 function countRadiusScaleDeclarations() {
-  const files = [...cssFilesUnder(join(tokensCssDir, 'foundation')), ...cssFilesUnder(join(tokensCssDir, 'engines'))];
+  const files = [
+    ...cssFilesUnder(join(tokensCssDir, 'foundation')),
+    ...cssFilesUnder(join(tokensCssDir, 'runtime/engines')),
+  ];
   let scales = 0;
   for (const f of files) {
     const t = readFileSync(f, 'utf8');
@@ -524,7 +531,7 @@ function countFallbackParityViolations() {
     for (const entry of readdirSync(dir)) {
       const full = join(dir, entry);
       const rel = full.slice(srcDir.length + 1).replace(/\\/g, '/');
-      if (rel.startsWith('tokens/css/artifacts/') || rel.startsWith('tokens/css/legacy/')) continue;
+      if (rel.startsWith('foundation/tokens/css/facade/artifacts/') || rel.startsWith('foundation/tokens/css/facade/legacy/')) continue;
       if (statSync(full).isDirectory()) {
         walk(full);
         continue;
@@ -637,11 +644,19 @@ function countDarkFocusRingDefects() {
  * contract tokens (press scale, focus ring, elevation), not inline literals.
  */
 const FLAGSHIP_STATE_FILES = [
-  'primitives/inputs/Button/engines/modern.tsx',
-  'primitives/inputs/Input/engines/modern.tsx',
-  'primitives/inputs/Select/engines/modern.tsx',
-  'primitives/navigation/Tabs/engines/modern.tsx',
+  'primitives/inputs/Button/engines/modern/index.tsx',
+  'primitives/inputs/Input/engines/modern/index.tsx',
+  'primitives/inputs/Select/engines/modern/index.tsx',
+  'primitives/navigation/Tabs/engines/modern/index.tsx',
 ];
+
+function requireUiSource(relativePath, owner) {
+  const full = join(componentsDir, relativePath);
+  if (!existsSync(full) || !statSync(full).isFile()) {
+    throw new Error(`${owner} requires canonical UI source: ${relativePath}`);
+  }
+  return full;
+}
 
 /**
  * Count inline per-component interaction-state literals in the flagship modern
@@ -656,8 +671,7 @@ function countInlineStateLiterals() {
     /(?:box-?shadow|boxShadow|outline)\s*:?\s*['"]?[^;'"\n]*(?:rgba?\([^)]*\)|#[0-9a-fA-F]{3,8}\b)/gi;
   let count = 0;
   for (const rel of FLAGSHIP_STATE_FILES) {
-    const full = join(componentsDir, rel);
-    if (!existsSync(full)) continue;
+    const full = requireUiSource(rel, 'inline-state audit');
     const text = readFileSync(full, 'utf8');
     count += (text.match(scaleRe) || []).length;
     count += (text.match(shadowLiteralRe) || []).length;
@@ -698,8 +712,8 @@ function countInlineStateLiterals() {
 function arc09InlinePaintCounters() {
   const out = {};
   for (const rel of ARC09_INLINE_PAINT_FILES) {
-    const full = join(componentsDir, rel);
-    out[`arc09.inlinePaint.${rel}`] = existsSync(full) ? countArc09PaintInFile(readFileSync(full, 'utf8'), full) : 0;
+    const full = requireUiSource(rel, 'ARC-09 inline-paint audit');
+    out[`arc09.inlinePaint.${rel}`] = countArc09PaintInFile(readFileSync(full, 'utf8'), full);
   }
   return out;
 }
@@ -801,7 +815,7 @@ function embeddedCssPaintCounters() {
  * Count render-owned files that CONSUME each sanctioned premium effect family
  * (spec section 5): gradient (surface-tint + accent), glass (overlay backdrops),
  * signal-glow. Stage 1 moved component paint from TSX into unlayered skin CSS,
- * so the consumer set is now src/components + src/motion + source skin files.
+ * so the consumer set is now src/ui + src/graphics/motion + source skin files.
  * Only the source skins are scanned (never their two entrypoint imports or
  * generated bundles), and the helper de-duplicates paths. In CSS, only values
  * of painted declarations count; custom-property definitions/aliases do not.
@@ -811,7 +825,7 @@ function embeddedCssPaintCounters() {
  * family to > 0 sanctioned consumers (enforced as a floor via MIN below).
  */
 function countEffectConsumers() {
-  const roots = [componentsDir, join(root, 'src/motion')];
+  const roots = [componentsDir, join(root, 'src/graphics/motion')];
   const sourceFiles = [];
   function walk(dir) {
     if (!existsSync(dir)) return;
@@ -840,11 +854,11 @@ function countEffectConsumers() {
    render, or it is dead DaisyUI-mapping weight the drain must remove.
    ============================================================================ */
 
-const themeCssPath = join(tokensCssDir, 'engines/modern/theme.css');
+const themeCssPath = join(tokensCssDir, 'runtime/engines/modern/theme.css');
 /** WO-GAT-02: the classic/rustic counterparts of `themeCssPath`, scanned by the same shared
  * `auditEngineTheme()` helper (see below) -- never a second scan implementation. */
-const classicThemeCssPath = join(tokensCssDir, 'engines/classic/theme.css');
-const rusticThemeCssPath = join(tokensCssDir, 'engines/rustic/theme.css');
+const classicThemeCssPath = join(tokensCssDir, 'runtime/engines/classic/theme.css');
+const rusticThemeCssPath = join(tokensCssDir, 'runtime/engines/rustic/theme.css');
 
 /** Split already-unwrapped string content on whitespace and add every
  * class-shaped token to `set`. */
@@ -933,8 +947,8 @@ function collectBraceRanges(text) {
 }
 
 /**
- * The class tokens every modern-engine component (`engines/modern.tsx` /
- * `engines/modern/*.tsx`) actually renders -- the theme.css gate's ground
+ * The class tokens every modern-engine component
+ * (`engines/modern/index.tsx`) actually renders -- the theme.css gate's ground
  * truth for "has a consumer." Scoped extraction, NOT a whole-file string
  * scan: an earlier whole-file version measurably leaked non-class prose
  * into the consumed set (a `// ... "completed" ...` line comment in
@@ -1359,7 +1373,7 @@ const LAYOUT_AXIS_PATTERNS = [
  * Components with a verified-legitimate per-engine layout axis, declared in
  * the component's own contract/types file (spec section 10's "explicitly
  * declares a layout axis as engine-themable" exception) -- format
- * `"<component-dir-relative-to-src/components>:<patternName>"`. Each entry
+ * `"<component-dir-relative-to-src/ui>:<patternName>"`. Each entry
  * here must correspond to a comment in that component's `*.types.ts` (or
  * engine file) recording the same declaration, so the exemption is
  * discoverable from the component contract, not just this script.
@@ -1380,13 +1394,16 @@ const LAYOUT_AXIS_PATTERNS = [
  * of proportion to this narrow gate -- allowlisted instead of over-engineering
  * the regex.
  */
-const LAYOUT_AXIS_EXCEPTIONS = new Set(['primitives/inputs/Toggle:flexDirection']);
+const LAYOUT_AXIS_EXCEPTIONS = new Set([
+  'primitives/inputs/Toggle:flexDirection',
+]);
 
 /**
- * Collect every `engines/{classic,modern,rustic}` triad under `src/components`
- * (flat `engines/classic.tsx` or folder `engines/classic/index.tsx`, same
- * two shapes `modernFiles()` above recognizes), keyed by the component's
- * directory path relative to `componentsDir` (e.g. `patterns/data/stats-grid`).
+ * Collect every `engines/{classic,modern,rustic}` triad under `src/ui`
+ * (folder `engines/classic/index.tsx`, same canonical shape
+ * `modernFiles()` above recognizes), keyed by the component's
+ * directory path relative to `componentsDir` (for example,
+ * `patterns/data/stats-grid`).
  * A component missing any one of the three engine files is skipped -- there
  * is nothing to compare it against.
  */
@@ -1489,7 +1506,7 @@ function countCrossEngineLayoutDivergences() {
    Token-coverage report (WO-GAT-02, proposal P-14): informational visibility into which
    --ds-* tokens each component file consumes vs. what it still hardcodes. NOT a blocking
    gate -- the blocking gates remain the modern-scoped counters above; this report covers ALL
-   engines under packages/core/src/components/ for visibility, reusing the exact same literal-
+   engines under packages/core/src/ui/ for visibility, reusing the exact same literal-
    detection rules (`countMotionLiteralsInText`, `countColorLiteralsInText`) so its numbers can
    never drift from what the blocking counters themselves count.
    ============================================================================ */
@@ -1627,7 +1644,7 @@ function writeCoverageArtifacts(coverage) {
    APCA (Accessible Perceptual Contrast Algorithm) Lc values, and count pairings
    below their threshold as failures. Decrease-only ratchet, like every other
    counter here. This is ADDITIVE to — never a replacement for — the shipped
-   WCAG-2 validator at src/_internal/a11y/contrast/index.ts (a published /server
+   WCAG-2 validator at src/foundation/kernel/accessibility/branding-contrast/index.ts (a published /server
    API). APCA is the perceptually accurate successor: WCAG-2 ratios are known to
    mis-rank contrast (over-rating light-on-dark, under-rating dark-on-light),
    which the P-05 hostile-tenant palettes make actively misleading.
@@ -2025,7 +2042,7 @@ const apca = evaluateApcaPairings();
 /* ============================================================================
    Off-canon vocabulary gate (WO-ARC-01, proposal P-13): the component API
    normalization sweep drives two duplication shapes to zero across every
-   packages/core/src/components/**\/*.types.ts file:
+   packages/core/src/ui/**\/*.types.ts file:
     - an undocumented raw 'small' | 'middle' | 'large' union on a type-alias declaration line
       -- the antd-style spelling a Size-derived canonical type plus a `@deprecated`-marked
       `Legacy*Size` alias replaces (e.g. TreeSelect.types.ts's `TreeSelectSize = Extract<Size,
@@ -2041,7 +2058,7 @@ const apca = evaluateApcaPairings();
    Target: 0 for both. Decrease-only.
    ============================================================================ */
 
-/** Every `.types.ts` file under `packages/core/src/components/**`. */
+/** Every `.types.ts` file under `packages/core/src/ui/**`. */
 function collectTypesFiles(dir) {
   const out = [];
   for (const entry of readdirSync(dir)) {
@@ -2076,7 +2093,7 @@ function precededByDeprecatedTag(lines, declIndex) {
 /**
  * Count undocumented raw `'small' | 'middle' | 'large'` union literals on a `export type <Name>
  * = ...` declaration line, across every `.types.ts` file under
- * packages/core/src/components/**. Scoped to type-alias declaration lines (not e.g. a
+ * packages/core/src/ui/**. Scoped to type-alias declaration lines (not e.g. a
  * `Record<...>` value map like `SPACE_SIZE_MAP`, which legitimately stays keyed by the legacy
  * spelling internally) -- see this gate's module doc for the exemption rule.
  */
@@ -2098,7 +2115,7 @@ function countRawAntdSizeUnions(files) {
 /**
  * Count size-vocabulary type names (any `export type <Name> = ...` where `<Name>` ends in
  * `Size`, e.g. `ButtonSize`, `ModalSize`) DECLARED -- not merely re-exported via `export type {
- * Name }` -- in more than one packages/core/src/components/**\/*.types.ts file. Each name's
+ * Name }` -- in more than one packages/core/src/ui/**\/*.types.ts file. Each name's
  * site count beyond the first is a duplicate (a name declared 3 times contributes 2).
  */
 function countDuplicateSizeVocabDeclarations(files) {
@@ -2154,11 +2171,11 @@ const RESPONSIVE_WIDTH_THRESHOLD_PX = 278;
  */
 const FIXED_WIDTH_EXEMPTIONS = new Set([
   // Popover content: portaled, viewport-anchored, 300 < 360.
-  'src/components/patterns/data/list-toolbar/engines/modern.tsx:300',
+  'src/ui/patterns/data/list-toolbar/engines/modern/index.tsx:300',
   // Hover overlay: portaled, viewport-anchored, 288 < 360.
-  'src/components/primitives/overlay/HoverCard/engines/modern.tsx:288',
+  'src/ui/primitives/overlay/HoverCard/engines/modern/index.tsx:288',
   // Calendar panel: portaled, viewport-anchored, 288 < 360.
-  'src/components/primitives/inputs/DatePicker/engines/modern.tsx:288',
+  'src/ui/primitives/inputs/DatePicker/engines/modern/index.tsx:288',
 ]);
 
 /**
@@ -2344,7 +2361,6 @@ function countCompositorOnlyViolations(fileList) {
  * blocks were drained in this WO and must stay at 0.
  */
 function countHandAuthoredRampHex() {
-  const artifactsDir = join(tokensCssDir, 'artifacts');
   const slugs = ['bithire', 'evnto', 'rottay'];
   const rampDecl =
     /--ds-color-(?:primary|secondary|accent|success|warning|error|info)-(?:50|100|200|300|400|500|600|700|800|900):\s*#[0-9a-fA-F]{3,8}\s*;/g;
@@ -2481,8 +2497,10 @@ if (evasionFixture) {
     inlinePaint: countArc09PaintInFile(fixtureText, fixturePath),
     embeddedCssPaint: countEmbeddedCssPaintInFile(fixtureText, fixturePath),
   };
-  counters['arc09.inlinePaint.primitives/display/Table/engines/modern.tsx'] += evasionProbe.inlinePaint;
-  counters['embeddedCssPaint.primitives/display/Table/engines/modern.tsx'] += evasionProbe.embeddedCssPaint;
+  counters['arc09.inlinePaint.primitives/display/Table/engines/modern/index.tsx'] +=
+    evasionProbe.inlinePaint;
+  counters['embeddedCssPaint.primitives/display/Table/engines/modern/index.tsx'] +=
+    evasionProbe.embeddedCssPaint;
 }
 
 /**
@@ -2530,15 +2548,15 @@ function countSkinParseErrors() {
  * never sees it, the component it was written for ships unpainted, and every
  * other signal stays green (the counter reads the component's TSX, `tsc` does
  * not read CSS, jsdom does not read stylesheets). The two entrypoints are not
- * interchangeable -- `foundation/base.css` is inlined into the per-tenant
- * bundles (dist/platform.css, dist/bithire.css) that the apps actually load,
- * while `entrypoints/styles.css` feeds dist/styles.css. A skin wired into only
+ * interchangeable -- `facade/entrypoints/base.css` is inlined into the
+ * per-tenant bundles (dist/platform.css, dist/bithire.css) that the apps
+ * actually load, while `facade/entrypoints/styles.css` feeds dist/styles.css. A skin wired into only
  * one of them is dark for half the fleet.
  *
  * Exact-0: the first unwired skin fails the build.
  */
 function countUnwiredSkins() {
-  const entrypoints = ['src/tokens/css/foundation/base.css', 'src/tokens/css/entrypoints/styles.css'].map((rel) => ({
+  const entrypoints = ['src/foundation/tokens/css/facade/entrypoints/base.css', 'src/foundation/tokens/css/facade/entrypoints/styles.css'].map((rel) => ({
     rel,
     css: readFileSync(join(root, rel), 'utf8'),
   }));
@@ -2581,8 +2599,8 @@ function collectSkinFiles() {
       else if (entry.isFile() && entry.name.endsWith('.css') && full.includes(`${sep}skin${sep}`)) skins.push(full);
     }
   };
-  walk(join(root, 'src/tokens/css/engines'));
-  walk(join(root, 'src/tokens/css/components/skin'));
+  walk(join(root, 'src/foundation/tokens/css/runtime/engines'));
+  walk(join(root, 'src/foundation/tokens/css/presentation/components/skin'));
   return skins;
 }
 
@@ -2601,9 +2619,9 @@ function countViewportMediaQueriesInSkins() {
       else if (entry.isFile() && entry.name.endsWith('.css') && full.includes(`${sep}skin${sep}`)) skins.push(full);
     }
   };
-  walk(join(root, 'src/tokens/css/engines'));
+  walk(join(root, 'src/foundation/tokens/css/runtime/engines'));
   // WO-ARC-09: the engine-agnostic skin home for structures + shared files.
-  walk(join(root, 'src/tokens/css/components/skin'));
+  walk(join(root, 'src/foundation/tokens/css/presentation/components/skin'));
 
   let count = 0;
   for (const file of skins) {
@@ -2616,7 +2634,9 @@ function countViewportMediaQueriesInSkins() {
   return count;
 }
 
-const mode = process.argv.includes('--check')
+const mode = process.argv.includes('--current-json')
+  ? 'current-json'
+  : process.argv.includes('--check')
   ? 'check'
   : process.argv.includes('--update-baseline')
   ? 'update'
@@ -2691,6 +2711,14 @@ if (mode === 'apca-report') {
     `engine-token-audit — APCA pairings: ${apca.failures} below threshold, ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated`
   );
   process.exit(0);
+}
+
+if (mode === 'current-json') {
+  process.stdout.write(`${JSON.stringify(counters, null, 2)}\n`);
+  // Let Node drain stdout naturally. An immediate process.exit() truncates
+  // piped JSON at the platform's 64 KiB high-water mark, which made the
+  // path-relocation tool parse an incomplete object once the corpus grew.
+  process.exitCode = 0;
 }
 
 if (!quiet) {

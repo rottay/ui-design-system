@@ -16,7 +16,7 @@ import {
   type ShowroomEngine,
   type ShowroomTheme,
   useShowroom,
-} from '@/components/showroom-context';
+} from '@/composition/components/showroom-context';
 import {
   SHOWROOM_SURFACES,
   mixWithSurface,

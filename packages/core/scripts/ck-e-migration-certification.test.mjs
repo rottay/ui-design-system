@@ -10,79 +10,88 @@ import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const sourceRoot = join(packageRoot, 'src/components');
-const cssRoot = join(packageRoot, 'src/tokens/css');
+const sourceRoot = join(packageRoot, 'src/ui');
+const cssRoot = join(packageRoot, 'src/foundation/tokens/css');
 
 const sources = [
   // Non-chart visualization patterns.
-  { slice: 'noncharts', path: 'patterns/visualization/calendar-view/engines/modern.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/calendar-view/engines/rustic.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/kanban-board/engines/modern.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/kanban-board/engines/rustic.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/map-view/engines/modern.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/map-view/engines/rustic.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/timeline/engines/modern.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/timeline/engines/rustic.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/tree-view/engines/modern.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/tree-view/engines/rustic.tsx', inline: 0, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/calendar-view/engines/modern/index.tsx', inline: 1, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/calendar-view/engines/rustic/index.tsx', inline: 1, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/kanban-board/engines/modern/index.tsx', inline: 1, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/kanban-board/engines/rustic/index.tsx', inline: 1, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/map-view/engines/modern/index.tsx', inline: 1, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/map-view/engines/rustic/index.tsx', inline: 1, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/timeline/engines/modern/index.tsx', inline: 0, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/timeline/engines/rustic/index.tsx', inline: 0, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/tree-view/engines/modern/index.tsx', inline: 0, runtimeSvg: 0 },
+  { slice: 'noncharts', path: 'patterns/visualization/tree-view/engines/rustic/index.tsx', inline: 0, runtimeSvg: 0 },
 
   // Charts A+B.
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/area-chart/index.tsx', inline: 2, runtimeSvg: 8 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/bar-chart/index.tsx', inline: 2, runtimeSvg: 6 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/radar-chart/index.tsx', inline: 3, runtimeSvg: 3 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/treemap/index.tsx', inline: 1, runtimeSvg: 1 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/pie-chart/index.tsx', inline: 1, runtimeSvg: 1 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/bullet/index.tsx', inline: 12, runtimeSvg: 6 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/waterfall/index.tsx', inline: 4, runtimeSvg: 2 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/line-chart/index.tsx', inline: 2, runtimeSvg: 5 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/gantt-chart/index.tsx', inline: 0, runtimeSvg: 2 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/heatmap/index.tsx', inline: 0, runtimeSvg: 1 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/calendar-heatmap/index.tsx', inline: 0, runtimeSvg: 1 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/area-chart/index.tsx', inline: 2, runtimeSvg: 8 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/bar-chart/index.tsx', inline: 2, runtimeSvg: 6 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/radar-chart/index.tsx', inline: 2, runtimeSvg: 4 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/treemap/index.tsx', inline: 1, runtimeSvg: 1 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/pie-chart/index.tsx', inline: 1, runtimeSvg: 1 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/bullet/index.tsx', inline: 12, runtimeSvg: 8 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/waterfall/index.tsx', inline: 4, runtimeSvg: 2 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/line-chart/index.tsx', inline: 2, runtimeSvg: 5 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/gantt-chart/index.tsx', inline: 0, runtimeSvg: 2 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/heatmap/index.tsx', inline: 0, runtimeSvg: 1 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/calendar-heatmap/index.tsx', inline: 0, runtimeSvg: 1 },
 
   // Charts C.
-  { slice: 'chartC', path: 'patterns/visualization/charts/histogram/index.tsx', inline: 2, runtimeSvg: 5 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/scatter/index.tsx', inline: 1, runtimeSvg: 2 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/gauge/index.tsx', inline: 1, runtimeSvg: 4 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/sankey/index.tsx', inline: 3, runtimeSvg: 2 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/sparkline/index.tsx', inline: 0, runtimeSvg: 4 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/funnel-chart/index.tsx', inline: 1, runtimeSvg: 2 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/network-graph/index.tsx', inline: 1, runtimeSvg: 1 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/histogram/index.tsx', inline: 2, runtimeSvg: 5 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/scatter/index.tsx', inline: 1, runtimeSvg: 2 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/gauge/index.tsx', inline: 1, runtimeSvg: 4 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/sankey/index.tsx', inline: 3, runtimeSvg: 2 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/sparkline/index.tsx', inline: 0, runtimeSvg: 4 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/funnel-chart/index.tsx', inline: 1, runtimeSvg: 2 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/network-graph/index.tsx', inline: 1, runtimeSvg: 1 },
 
   // Shared chart foundation.
-  { slice: 'foundation', path: 'patterns/visualization/charts/chart-scaffold.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/hooks/use-chart-brush.ts', inline: 0, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/hooks/use-chart-export.ts', inline: 0, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/hooks/use-chart-theme.ts', inline: 4, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/tooltip/index.tsx', inline: 2, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/tooltip/crosshair.ts', inline: 0, runtimeSvg: 1 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/utils/export.ts', inline: 2, runtimeSvg: 4 },
+  { slice: 'foundation', path: 'patterns/visualization/charts/presentation/scaffold/index.tsx', inline: 0, runtimeSvg: 0 },
+  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/interaction/brush/index.ts', inline: 0, runtimeSvg: 0 },
+  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/exporting/composition/react/index.ts', inline: 0, runtimeSvg: 0 },
+  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts', inline: 4, runtimeSvg: 0 },
+  { slice: 'foundation', path: 'patterns/visualization/charts/presentation/tooltip/index.tsx', inline: 2, runtimeSvg: 0 },
+  { slice: 'foundation', path: 'patterns/visualization/charts/presentation/crosshair/index.ts', inline: 0, runtimeSvg: 1 },
+  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/exporting/foundation/file/index.ts', inline: 2, runtimeSvg: 5 },
 ];
 
 const sliceTargets = {
   noncharts: { files: 10, inline: 6, runtimeSvg: 0, combined: 6 },
-  chartsAB: { files: 11, inline: 27, runtimeSvg: 36, combined: 63 },
+  chartsAB: { files: 11, inline: 26, runtimeSvg: 39, combined: 65 },
   chartC: { files: 7, inline: 9, runtimeSvg: 20, combined: 29 },
-  foundation: { files: 7, inline: 8, runtimeSvg: 5, combined: 13 },
+  foundation: { files: 7, inline: 8, runtimeSvg: 6, combined: 14 },
 };
 
 const skins = [
   {
-    path: 'components/skin/chart-foundation.css',
-    anchors: ['.ds-chart-scaffold', '.ds-chart-brush', '.ds-chart-tooltip', '.ds-chart-tooltip-value', '.ds-chart-tooltip-series'],
+    path: 'presentation/components/skin/chart-foundation.css',
+    anchors: [
+      '.ds-chart-scaffold',
+      '.ds-chart-frame',
+      '.ds-chart-data-access',
+      '.ds-chart-renderer',
+      '.ds-chart-brush',
+      '.ds-chart-tooltip',
+      '.ds-chart-tooltip-value',
+      '.ds-chart-tooltip-series',
+    ],
   },
-  { path: 'components/skin/chart-area.css', anchors: ['.ds-chart-area'] },
-  { path: 'components/skin/chart-bar.css', anchors: ['.ds-chart-bar'] },
-  { path: 'components/skin/chart-bullet.css', anchors: ['.ds-chart-bullet'] },
-  { path: 'components/skin/chart-calendar-heatmap.css', anchors: ['.ds-chart-calendar-heatmap'] },
-  { path: 'components/skin/chart-gantt.css', anchors: ['.ds-chart-gantt'] },
-  { path: 'components/skin/chart-heatmap.css', anchors: ['.ds-chart-heatmap'] },
-  { path: 'components/skin/chart-line.css', anchors: ['.ds-chart-line'] },
-  { path: 'components/skin/chart-pie.css', anchors: ['.ds-chart-pie'] },
-  { path: 'components/skin/chart-radar.css', anchors: ['.ds-chart-radar'] },
-  { path: 'components/skin/chart-treemap.css', anchors: ['.ds-chart-treemap'] },
-  { path: 'components/skin/chart-waterfall.css', anchors: ['.ds-chart-waterfall'] },
+  { path: 'presentation/components/skin/chart-area.css', anchors: ['.ds-chart-area'] },
+  { path: 'presentation/components/skin/chart-bar.css', anchors: ['.ds-chart-bar'] },
+  { path: 'presentation/components/skin/chart-bullet.css', anchors: ['.ds-chart-bullet'] },
+  { path: 'presentation/components/skin/chart-calendar-heatmap.css', anchors: ['.ds-chart-calendar-heatmap'] },
+  { path: 'presentation/components/skin/chart-gantt.css', anchors: ['.ds-chart-gantt'] },
+  { path: 'presentation/components/skin/chart-heatmap.css', anchors: ['.ds-chart-heatmap'] },
+  { path: 'presentation/components/skin/chart-line.css', anchors: ['.ds-chart-line'] },
+  { path: 'presentation/components/skin/chart-pie.css', anchors: ['.ds-chart-pie'] },
+  { path: 'presentation/components/skin/chart-radar.css', anchors: ['.ds-chart-radar'] },
+  { path: 'presentation/components/skin/chart-treemap.css', anchors: ['.ds-chart-treemap'] },
+  { path: 'presentation/components/skin/chart-waterfall.css', anchors: ['.ds-chart-waterfall'] },
   {
-    path: 'components/skin/chart-c.css',
+    path: 'presentation/components/skin/chart-c.css',
     anchors: [
       '.ds-chart-histogram',
       '.ds-chart-scatter',
@@ -93,21 +102,21 @@ const skins = [
       '.ds-chart-network-graph',
     ],
   },
-  { path: 'engines/modern/skin/pattern-calendar-view.css', anchors: ['.ds-pattern-calendar-view.ds-engine-modern'] },
-  { path: 'engines/rustic/skin/pattern-calendar-view.css', anchors: ['.ds-pattern-calendar-view.ds-engine-rustic'] },
-  { path: 'engines/modern/skin/pattern-kanban-board.css', anchors: ['.ds-pattern-kanban-board.ds-engine-modern'] },
-  { path: 'engines/rustic/skin/pattern-kanban-board.css', anchors: ['.ds-pattern-kanban-board.ds-engine-rustic'] },
-  { path: 'engines/modern/skin/pattern-map-view.css', anchors: ['.ds-pattern-map-view.ds-engine-modern'] },
-  { path: 'engines/rustic/skin/pattern-map-view.css', anchors: ['.ds-pattern-map-view.ds-engine-rustic'] },
-  { path: 'engines/modern/skin/pattern-timeline.css', anchors: ['.ds-pattern-timeline.ds-engine-modern'] },
-  { path: 'engines/rustic/skin/pattern-timeline.css', anchors: ['.ds-pattern-timeline.ds-engine-rustic'] },
-  { path: 'engines/modern/skin/pattern-tree-view.css', anchors: ['.ds-pattern-tree-view.ds-engine-modern'] },
-  { path: 'engines/rustic/skin/pattern-tree-view.css', anchors: ['.ds-pattern-tree-view.ds-engine-rustic'] },
+  { path: 'runtime/engines/modern/skin/pattern-calendar-view.css', anchors: ['.ds-pattern-calendar-view.ds-engine-modern'] },
+  { path: 'runtime/engines/rustic/skin/pattern-calendar-view.css', anchors: ['.ds-pattern-calendar-view.ds-engine-rustic'] },
+  { path: 'runtime/engines/modern/skin/pattern-kanban-board.css', anchors: ['.ds-pattern-kanban-board.ds-engine-modern'] },
+  { path: 'runtime/engines/rustic/skin/pattern-kanban-board.css', anchors: ['.ds-pattern-kanban-board.ds-engine-rustic'] },
+  { path: 'runtime/engines/modern/skin/pattern-map-view.css', anchors: ['.ds-pattern-map-view.ds-engine-modern'] },
+  { path: 'runtime/engines/rustic/skin/pattern-map-view.css', anchors: ['.ds-pattern-map-view.ds-engine-rustic'] },
+  { path: 'runtime/engines/modern/skin/pattern-timeline.css', anchors: ['.ds-pattern-timeline.ds-engine-modern'] },
+  { path: 'runtime/engines/rustic/skin/pattern-timeline.css', anchors: ['.ds-pattern-timeline.ds-engine-rustic'] },
+  { path: 'runtime/engines/modern/skin/pattern-tree-view.css', anchors: ['.ds-pattern-tree-view.ds-engine-modern'] },
+  { path: 'runtime/engines/rustic/skin/pattern-tree-view.css', anchors: ['.ds-pattern-tree-view.ds-engine-rustic'] },
 ];
 
 const entrypoints = [
-  { name: 'styles.css', path: join(cssRoot, 'entrypoints/styles.css') },
-  { name: 'foundation/base.css', path: join(cssRoot, 'foundation/base.css') },
+  { name: 'styles.css', path: join(cssRoot, 'facade/entrypoints/styles.css') },
+  { name: 'facade/entrypoints/base.css', path: join(cssRoot, 'facade/entrypoints/base.css') },
 ];
 
 function isInsideKeyframes(rule) {
@@ -119,6 +128,18 @@ function isInsideKeyframes(rule) {
 
 function isScopeAnchored(selector, anchors) {
   if (anchors.some((anchor) => selector.startsWith(anchor))) return true;
+
+  // Direction is document context, not paint ownership. Keep the chart scope
+  // as the first owning selector after the zero-specificity RTL/LTR context.
+  const directionalContext = selector.match(
+    /^:where\(\[dir=['"](?:rtl|ltr)['"]\]\)\s+([\s\S]+)$/,
+  );
+  if (
+    directionalContext &&
+    anchors.some((anchor) => directionalContext[1].startsWith(anchor))
+  ) {
+    return true;
+  }
 
   // Static SVG presentation attributes have zero specificity. A byte-exact
   // migration may therefore wrap the complete scoped selector in :where() so
@@ -191,7 +212,7 @@ test('CK-E paint migration holds every per-file, slice, and global post-migratio
   assert.deepEqual(actualSlices, sliceTargets, 'CK-E slice floors drifted');
   assert.deepEqual(
     { inline, runtimeSvg, combined: inline + runtimeSvg, unclassified },
-    { inline: 50, runtimeSvg: 61, combined: 111, unclassified: 0 },
+    { inline: 49, runtimeSvg: 65, combined: 114, unclassified: 0 },
     'CK-E global post-migration target drifted',
   );
 });
@@ -244,7 +265,7 @@ test('both canonical entrypoints import every CK-E skin exactly once and unlayer
     });
 
     for (const skin of skins) {
-      const target = `../${skin.path}`;
+      const target = `../../${skin.path}`;
       const matches = imports.filter((entry) => entry.target === target);
 
       assert.equal(matches.length, 1, `${entrypoint.name} must import ${target} exactly once`);

@@ -5,7 +5,7 @@ Reads on top of `wo-skin-06-ck-f-inventory.md` (the site-by-site truth) and
 exists; this contract is normative for *how* it moves. Where they disagree, the
 inventory's site table wins on facts and this contract wins on method.
 
-Scope: `packages/core/src/components/patterns/communication/` — **271 counted
+Scope: `packages/core/src/ui/patterns/communication/` — **271 counted
 sites** (was 272; the counter's return-type-annotation blind spot at assistant:157
 was fixed in `inline-paint-counter.mjs` between the inventory and the pre-step, so
 assistant's floor is 15, not 16 — a counter fix, not lost paint) across six
@@ -124,7 +124,7 @@ orchestrator** — agents create skin files but do NOT edit `foundation/base.css
 
 Every component in this family is greenfield for `data-part` (grep-confirmed zero
 in all 10 files). The 5 pre-existing `ds-pattern-<name> ds-engine-<engine>` scope
-classes are inert (zero `tokens/css/` references) — a partial head start, not a
+classes are inert (zero `foundation/tokens/css/` references) — a partial head start, not a
 live coupling. The pre-step must, per component:
 
 1. **Stamp/complete the scope class.** Engine-split components carry
@@ -293,7 +293,7 @@ Per unit, in order: (1) **byte-exact** = the component's visual spec passes
 against the committed pre-step baselines (both engines where split), 0 pixels
 over `maxDiffPixelRatio: 0.0005`, stability-re-run; (2) **counter delta
 reconciled by hand** — each agent counts its migrated sites manually and reports
-the delta vs `fleet.inlinePaint.patterns/communication` (remember: shorthand,
+the delta vs `fleet.inlinePaint.runtime/patterns/communication` (remember: shorthand,
 false-positive, and SVG sites do NOT move the counter, so a hand count is the
 only truth — report them explicitly); (3) **no cross-component bleed** = every
 rule scope-anchored (zero bare `[data-part]`), wiring append-only; (4) **no core

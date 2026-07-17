@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rottay.com/schemas/semantic-icon-phosphor-adapter-v1.json",
+  "title": "Rottay semantic icon Phosphor adapter",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "supplier", "packageName", "packageVersion", "rendering", "entries"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "supplier": { "const": "Phosphor" },
+    "packageName": { "const": "@phosphor-icons/react" },
+    "packageVersion": { "const": "2.1.10" },
+    "rendering": { "const": "local-ssr" },
+    "entries": {
+      "type": "array",
+      "minItems": 263,
+      "maxItems": 263,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "module", "exportName"],
+        "properties": {
+          "id": { "type": "string" },
+          "module": { "type": "string", "pattern": "^@phosphor-icons/react/dist/ssr/[A-Z][A-Za-z0-9]*$" },
+          "exportName": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*Icon$" }
+        }
+      }
+    }
+  }
+}

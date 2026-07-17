@@ -1,7 +1,7 @@
 'use client';
 
-import { EngineComparison } from '@/components/playground';
-import { useShowroom } from '@/components/showroom-context';
+import { EngineComparison } from '@/composition/components/playground';
+import { useShowroom } from '@/composition/components/showroom-context';
 import { PatternPreview } from './pattern-preview';
 import { SINGLE_RUNTIME_PATTERN_SLUGS } from './pattern-preview-fixtures';
 

@@ -1,595 +1,204 @@
-# Rottay Design System - Architecture & Pending Work
+# Rottay Design System Architecture
 
-> **Version:** 0.5.0
-> **Last Updated:** 2025-12-28
+This is the current architecture reference for `@rottay/design-system`.
+Component counts and family names are generated in
+[`packages/core/docs/TAXONOMY.generated.md`](../packages/core/docs/TAXONOMY.generated.md);
+the operative work queue lives in [`roadmap/`](../roadmap/). The original 0.5.0
+migration ledger is preserved as
+[`docs/history/ARCHITECTURE-0.5.0.md`](history/ARCHITECTURE-0.5.0.md) and is not
+a current source-path reference.
 
----
+## Source ownership
 
-## Table of Contents
+`packages/core/src` is a dependency and ownership tree, not a flat catalog.
 
-1. [System Architecture](#1-system-architecture)
-2. [Current State](#2-current-state)
-3. [Pending Tasks](#3-pending-tasks)
-4. [Technical Standards](#4-technical-standards)
-5. [Agent Instructions](#5-agent-instructions)
-
----
-
-## 1. System Architecture
-
-### 1.1 Component Structure
-
-```
-/packages/core/src/components/primitives/
-├── display/     17 components
-├── inputs/      20 components
-├── feedback/    11 components
-├── layout/      10 components
-├── navigation/  12 components
-└── overlay/      6 components
-                 ──
-                 76 total (228 engine implementations)
+```text
+src/
+  foundation/       Contracts, kernels, presets, i18n and tokens
+  infrastructure/   Compilers and browser/React runtime orchestration
+  graphics/         Icons, brand marks, pictograms and motion
+  ui/               Primitives -> patterns -> structures -> surfaces
+  tooling/          Declarations, ESLint, examples and test support
+  entrypoints/       Classified package-subpath boundaries
+  index.ts           Package-root facade; the only loose source-root file
 ```
 
-### 1.2 Component Folder Structure - CRÍTICO
+The first five directories are the canonical architectural roots.
+`entrypoints/` is package-boundary support, not a sixth tier. Each subpath is a
+`folder/index.ts` owner that forwards to canonical implementation code.
 
-Cada componente tiene la siguiente estructura. **NO hay carpeta `base/`** - fue eliminada por ser código muerto.
+At the macro level, dependencies flow toward the product edge:
 
-```
-ComponentName/
-├── index.ts           → Factory + exports (createEngineComponent)
-├── types/
-│   └── index.ts       → Props compartidos por todos los engines
-├── compound/          → Layout wrappers (1 sola versión, compartida)
-│   ├── index.ts       → Exports de subcomponentes
-│   └── Group/         → Ej: Button.Group, Avatar.Group
-│       └── index.tsx  → Usa CSS variables var(--ds-*)
-└── engines/           → 3 implementaciones DIFERENTES
-    ├── index.ts       → Barrel export
-    ├── classic/       → Wrapper de Ant Design
-    │   └── index.tsx  → Usa componentes antd
-    ├── modern/        → Wrapper de DaisyUI/Tailwind
-    │   └── index.tsx  → Usa clases .btn, .card, etc.
-    └── rustic/        → CSS puro inline
-        └── index.tsx  → Usa styles con var(--ds-*)
+```text
+foundation -> infrastructure/compilers -> infrastructure/runtime
+foundation + infrastructure + graphics -> ui
+primitives -> patterns -> structures -> surfaces -> consuming app
 ```
 
-> **Note**: a fourth engine `custom` is reserved for white-label tenants that ship a pluggable component pack. It is not in the main engines folder; it is registered at runtime via the engine factory.
+Within a capability, lower branches precede higher branches:
 
-**Flujo de renderizado:**
-
-```
-Usuario: <Avatar size="lg" />
-            ↓
-index.ts: createEngineComponent('Avatar', { classic, modern, rustic })
-            ↓
-factory: useEngineContext() → ¿Qué engine está activo?
-            ↓
-      ┌─────┴─────┬───────────┐
-      ↓           ↓           ↓
-   classic/    modern/     rustic/
-   index.tsx   index.tsx   index.tsx
-      ↓           ↓           ↓
-   <AntAvatar>  <div class=  <div style=
-                "avatar">    "var(--ds-*)">
+```text
+foundation|kernel|contracts|policy|quality|spec|validation
+  -> runtime
+  -> composition|react
+  -> presentation
+  -> facade|public
 ```
 
-**¿Por qué NO hay `base/`?**
+## Physical tree rules
 
-| Antes (incorrecto) | Ahora (correcto) |
-|--------------------|------------------|
-| `base/` = implementación CSS con var() | Rustic = fallback vanilla |
-| Rustic duplicaba base con hardcoded | Rustic usa var(--ds-*) |
-| Código muerto, nunca usado | Sin duplicación |
+- Authored production units use `folder/index.ts` or `folder/index.tsx`.
+- `packages/core/src/index.ts` is the only loose file at the source root.
+- Two or more related units gain a named family directory.
+- A barrel may aggregate child owners but does not share its level with loose
+  authored peers.
+- Tests live in the owning unit's `tests/` branch; cross-owner tests live under
+  explicit `integration/` or `architecture/` owners.
+- Generated files, declarations, fixtures, examples, stories and registered
+  package entrypoints are classified exceptions, not patterns for product code.
+- Generic ownership segments such as `_internal`, `internal`, `misc`, `shared`,
+  `utils` and `hooks` are forbidden. Name the capability instead.
+- Physical moves preserve public exports and package subpaths; private
+  compatibility shims are not left behind.
 
-**compound/ vs engines/:**
+The executable law is:
 
-| Carpeta | Cambia entre engines? | Propósito |
-|---------|----------------------|-----------|
-| `compound/` | ❌ NO | Layout wrappers (Group, Item) |
-| `engines/` | ✅ SÍ | Implementación por librería |
-
-### 1.3 Engine System
-
-| Engine | Library | Files |
-|--------|---------|-------|
-| **classic** | Ant Design 5.21 | 76 components + theme.css (1,707 lines) |
-| **modern** | Tailwind 4.x / DaisyUI | 76 components + theme.css (1,047 lines) |
-| **rustic** | Vanilla CSS | 76 components + theme.css (1,087 lines) |
-| **custom** | Pluggable per-tenant pack | Reserved for white-label tenants; registered at runtime via the engine factory |
-
-### 1.3.1 Vertical Presets
-
-Verticals represent industry-specific configuration bundles. Each Rottay application maps to a vertical that provides a complete set of defaults: engine, personality, density, and surface preferences.
-
-| Vertical | App | Engine | Density | Personality |
-|----------|-----|--------|---------|-------------|
-| **evnto** | app-evnto | modern | spacious | Playful, bounce entrance, spring physics |
-| **bithire** | app-bithire | classic | compact | Formal, fade entrance, data-dense |
-| **platform** | app-platform | classic | comfortable | Neutral, balanced animations |
-
-**Resolution chain (highest to lowest priority):**
-
-```
-DesignSystemProvider props (forceEngine, productProfile)
-  > Tenant config (personality, tokenOverrides)
-    > Vertical preset (personality, engine, defaultProductProfile)
-      > Product profile (personality, tokenOverrides)
-        > Engine defaults
-          > DEFAULT_PERSONALITY
+```bash
+pnpm --filter @rottay/design-system structure:check
 ```
 
-**Runtime visual authority:** `DesignSystemProvider` also exposes an independent,
-mutually exclusive ownership contract. `visualAuthority="provider"` is the
-backward-compatible default and lets `ThemeProvider` load/emit tenant visuals.
-`visualAuthority="compiled-artifact"` means the application has already mounted
-the exact server-compiled tenant artifact. In that mode the complete normalized
-`TenantConfig` still reaches tenant, locale, theme, motion, feature, token-read,
-and component contexts, but the runtime does not load tenant CSS or emit
-branding variables, token overrides, appearance variables, personality bridge
-variables, or generated chrome CSS. This prevents inline specificity from silently overriding the canonical
-artifact; precedence is ownership-based instead of cascade-order-dependent.
+The structure baseline is decrease-only. Never absorb a new finding merely to
+make the gate pass.
 
-**Usage:**
+## UI composition stack
 
-```tsx
-<DesignSystemProvider vertical="evnto" tenantSlug="acme">
-  <App />
-</DesignSystemProvider>
+The four `ui/` tiers have one dependency direction:
+
+1. `primitives/` — engine-switched leaf components.
+2. `patterns/` — reusable task compositions; engine-backed only when rendering
+   genuinely differs by engine.
+3. `structures/` — page chrome and structural families that wrap or accompany
+   patterns.
+4. `surfaces/` — declarative, page-level recipes consumed by applications.
+
+Primitives are grouped into `display`, `feedback`, `inputs`, `layout`,
+`navigation` and `overlay`; tier-wide runtime support remains under the
+explicit `primitives/runtime/` owner.
+
+Patterns use product-facing groups such as `data`, `forms`, `visualization`,
+`communication`, `workflow`, `navigation`, `customization`, `identity`,
+`commerce`, `commercial`, `feedback` and `shell`. Cross-pattern support lives
+under the explicit `foundation`, `runtime` and `tooling` owners.
+
+Structures are grouped into `dashboard`, `feedback`, `headers`, `record`,
+`shell` and `workspace`. Surfaces expose `foundation`, `runtime`,
+`composition/layout` and `presentation/pages` in dependency order.
+
+If a piece requires candidate, company, role, tenant, event or other product
+semantics, it belongs to the consuming application. The DS owns reusable,
+domain-agnostic behavior and presentation contracts.
+
+## Engine model
+
+There are three physical engines:
+
+| Engine | Physical implementation |
+|---|---|
+| `classic` | Ant Design-backed enterprise presentation |
+| `modern` | Rottay-native token/skin presentation |
+| `rustic` | Vanilla React/CSS fallback |
+
+`custom` is a pack-scoped registry identity, not a fourth implementation tree.
+It renders a registered component when available and otherwise delegates to a
+configured physical fallback.
+
+An engine-backed component keeps its stable facade at the component owner and
+may add only the branches it needs:
+
+```text
+Component/
+  index.tsx
+  contracts/index.ts
+  runtime/<capability>/index.ts
+  engines/{classic,modern,rustic}/index.tsx
+  compound/<Part>/index.tsx
+  tests/*.test.tsx
 ```
 
-When a vertical is provided:
-- Its `engine` is used as the default (unless `forceEngine` overrides it)
-- Its `defaultProductProfile` is used when no explicit `productProfile` prop is given
-- Its `personality` is merged into the personality chain between DEFAULT and product profile
+## Tenant and white-label authority
 
-Files:
-- `src/verticals/types.ts` -- VerticalKey, VerticalPreset types
-- `src/verticals/registry.ts` -- VERTICAL_REGISTRY, getVerticalPreset()
-- `src/verticals/index.ts` -- Barrel exports
+There are two authority classes:
 
-### 1.4 Token System (CSS Cascade) - IMPORTANTE
+- Code-owned vertical baselines (`rottay`, `bithire`, `evnto`) are static-first.
+  Their TypeScript `BrandTheme` sources compile into generated CSS artifacts.
+- Published customer tenants are DB-owned. A hostname chooses tenant identity,
+  never a checked-in CSS file or component branch.
 
-**Concepto clave:** Los valores hardcodeados van en `default.css` y `tenants/`. Los engines SOLO usan `var(--ds-*)`.
+The productive customer path is:
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│  CAPA 1: default.css (:root)                                        │
-│  ─────────────────────────────────────────────────────────────────  │
-│  VALORES HARDCODEADOS - El "tema base" universal del design system  │
-│                                                                     │
-│  :root {                                                            │
-│    --ds-button-primary-bg: #0066CC;        ← Valor real             │
-│    --ds-button-primary-bg-hover: #0052A3;  ← Valor real             │
-│    --ds-button-md-radius: 8px;             ← Valor real             │
-│  }                                                                  │
-└─────────────────────────────────────────────────────────────────────┘
-                              ↓ CSS Cascade (herencia)
-
-┌─────────────────────────────────────────────────────────────────────┐
-│  CAPA 2: tenants/rottay/index.css                                   │
-│  ─────────────────────────────────────────────────────────────────  │
-│  OVERRIDES HARDCODEADOS - Solo lo que Rottay quiere DIFERENTE       │
-│                                                                     │
-│  [data-tenant="rottay"] {                                           │
-│    --ds-button-primary-bg: #0a66c2;  ← Rottay usa otro azul         │
-│    --ds-button-md-radius: 9999px;    ← Rottay quiere pills          │
-│    /* Lo que NO está aquí, hereda de default.css */                 │
-│  }                                                                  │
-└─────────────────────────────────────────────────────────────────────┘
-                              ↓ CSS Cascade (mayor especificidad)
-
-┌─────────────────────────────────────────────────────────────────────┐
-│  CAPA 3: engines/classic/theme.css                                  │
-│  ─────────────────────────────────────────────────────────────────  │
-│  MAPEO DINÁMICO - Conecta variables con clases de cada librería     │
-│  ⚠️ NUNCA valores hardcodeados, SOLO var(--ds-*)                    │
-│                                                                     │
-│  html[data-tenant] .ant-btn-primary {                               │
-│    background: var(--ds-button-primary-bg);   ← Variable dinámica   │
-│    border-radius: var(--ds-button-md-radius); ← Variable dinámica   │
-│  }                                                                  │
-│                                                                     │
-│  /* El valor final depende del tenant activo:                       │
-│     - Sin tenant: usa default.css (#0066CC, 8px)                    │
-│     - data-tenant="rottay": usa rottay (#0a66c2, 9999px)            │
-│     - data-tenant="bithire": usa bithire (sus valores)              │
-│  */                                                                 │
-└─────────────────────────────────────────────────────────────────────┘
+```text
+hostname -> canonical tenant identity -> published TenantThemeDocument in DB
+  -> schema/envelope validation -> server compiler/cache
+  -> exact artifact embedded by SSR
+  -> hydration with visualAuthority="compiled-artifact"
 ```
 
-**Ejemplo multi-tenant:**
+Browser components never query the DB. The provider supplies tenant, locale,
+features, motion and component context but emits no competing visual layer in
+`compiled-artifact` mode. The six-stage memory/localStorage/registry/static/API
+resolver remains a compatibility and development config chain; it is not the
+productive visual-authority chain.
 
-```css
-/* default.css - Base universal */
-:root {
-  --ds-button-primary-bg: #0066CC;
-  --ds-button-md-radius: 8px;
-}
+The full contract and failure rules live in
+[`packages/core/docs/TENANT_MODEL.md`](../packages/core/docs/TENANT_MODEL.md).
 
-/* tenants/rottay/index.css - Brand Rottay */
-[data-tenant="rottay"] {
-  --ds-button-primary-bg: #0a66c2;
-  --ds-button-md-radius: 9999px;  /* Pills */
-}
+## Icons and brand assets
 
-/* tenants/bithire/index.css - Brand Bithire */
-[data-tenant="bithire"] {
-  --ds-button-primary-bg: #FF6B00;  /* Naranja */
-  --ds-button-md-radius: 4px;       /* Más cuadrado */
-}
+Functional icons are supplier-independent. Phosphor is the pinned default
+supplier behind the adapter/generator boundary; Lucide is not the default and
+vendor-shaped exports are compatibility-only.
 
-/* engines/classic/theme.css - NO CAMBIA por tenant */
-html[data-tenant] .ant-btn-primary {
-  background: var(--ds-button-primary-bg);  /* Resuelve según tenant */
-  border-radius: var(--ds-button-md-radius);
-}
+Two counts describe distinct contracts:
+
+- the stable `Icon` facade accepts 50 governed compatibility roles;
+- generated semantic packs contain 263 roles across the complete corpus.
+
+Brand and cloud-provider identity uses the separate `marks` API. Pictograms are
+also a distinct asset class. Tenants may provide an approved company logo, but
+cannot replace functional glyph semantics or select an arbitrary supplier.
+
+## Charts and responsive behavior
+
+The chart catalog contains 18 D3-backed families. They are token-aware,
+personality-driven and accessible; chart semantics, renderer choice and
+provenance remain code-owned. Customer tenants may change the bounded category
+palette but not the renderer or data meaning.
+
+Responsive behavior is adaptive, not a request to squeeze the desktop view
+onto a small screen. CSS handles continuous layout changes; responsive runtime
+contracts select a reduced mobile information hierarchy when content or
+interaction must change.
+
+## Public boundaries
+
+The package root exports the primary component/runtime API. Classified
+subpaths expose server utilities, functional icon packs, marks, pictograms,
+charts, motion, effects, spatial contracts, ESLint rules, commercial tooling
+and CSS bundles. Implementation code remains at its canonical owner; subpath
+entrypoints only forward it.
+
+Applications import exactly one full or vertical CSS bundle. A productive
+DB-backed customer additionally mounts the exact server-compiled artifact and
+uses `visualAuthority="compiled-artifact"`.
+
+## Documentation workflow
+
+After a physical UI move, regenerate the inventory only after paths stabilize:
+
+```bash
+pnpm --filter @rottay/design-system docs:taxonomy
 ```
 
-| Archivo | Contiene | Propósito |
-|---------|----------|-----------|
-| `default.css` | Valores hardcodeados | Theme base universal |
-| `tenants/{name}/index.css` | Valores hardcodeados (overrides) | Personalización por marca |
-| `engines/{name}/theme.css` | Solo `var(--ds-*)` | Mapeo a clases de librería |
-
-### 1.5 Tenant Detection Flow
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    DETECTION STRATEGIES                      │
-├─────────────────────────────────────────────────────────────┤
-│ 1. Server Headers    → X-Tenant-ID header (SSR)             │
-│ 2. Subdomain         → acme.app.rottay.com → "acme"         │
-│ 3. Custom Domain API → client.com → API lookup → "acme"     │
-│ 4. Fallback          → "default"                            │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    CONFIG RESOLUTION                         │
-├─────────────────────────────────────────────────────────────┤
-│ 1. Memory Cache      → Fastest                              │
-│ 2. LocalStorage      → 1 hour TTL                           │
-│ 3. Static Files      → /.designsystem/tenants/{slug}/       │
-│ 4. Remote API        → GET {apiEndpoint}/{slug}             │
-│ 5. Default Config    → Fallback                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 1.6 Key Files
-
-| File | Purpose | Lines |
-|------|---------|-------|
-| `tokens/css/themes/default.css` | Central tokens | 1,452 |
-| `tokens/css/engines/classic/theme.css` | Ant Design CSS mapping | 1,707 |
-| `tokens/css/engines/modern/theme.css` | Tailwind CSS mapping | 1,047 |
-| `tokens/css/engines/rustic/theme.css` | Vanilla CSS classes | 1,087 |
-| `tokens/css/tenants/rottay/index.css` | Tenant overrides | 336 |
-| `system/providers/root/index.tsx` | DesignSystemProvider | 192 |
-| `system/providers/tenant/index.tsx` | TenantProvider | 90 |
-| `config/tenants/resolver/index.ts` | Tenant detection | 56 |
-
----
-
-## 2. Current State
-
-### 2.1 What's Working
-
-| Area | Status | Notes |
-|------|--------|-------|
-| CSS Token System | ✅ | default.css + engine themes complete |
-| Component Wrappers | ✅ | 76 components × 3 engines |
-| JSDoc Documentation | ✅ | 390 files documented |
-| Build & Tests | ✅ | 24KB bundle, 2,217 tests passing |
-| Tenant CSS Cascade | ✅ | [data-tenant] selector works |
-
-### 2.2 What's NOT Working
-
-| Area | Status | Problem |
-|------|--------|---------|
-| **Engine Hardcoding** | ❌ | Engines usan valores hardcodeados (#fff, #0066cc) en vez de var(--ds-*) |
-| Classic Engine Depth | ⚠️ | 70-80% are shallow wrappers, not real customizations |
-| Ant Design 5.x API | ❌ | NOT using ConfigProvider/Design Token API |
-| TypeScript Quality | ⚠️ | 18 components use `as any` |
-| Tenant Auto-Detection | ❌ | TODO in DesignSystemProvider not implemented |
-| data-tenant Auto-Set | ❌ | Must be set manually on HTML element |
-| Backend API Docs | ❌ | No documentation for expected API contract |
-
-### 2.3 Cleanup Done
-
-| Date | Change | Impact |
-|------|--------|--------|
-| 2025-12-28 | Eliminadas 60 carpetas `base/` | -60 files, Rustic es el fallback vanilla |
-| 2025-12-28 | Removidos exports de Base* en index.ts | 39 files limpiados |
-| 2025-12-28 | Rustic engines migrados a CSS vars (display/) | 10 components: Calendar, Carousel, Descriptions, Empty, Image, List, QRCode, Statistic, Timeline, Tree |
-| 2025-12-28 | Rustic engines migrados a CSS vars (feedback/) | 11 components: Alert, Drawer, Message, Modal, Notification, Progress, Rate, Result, Skeleton, Spinner, Toast |
-| 2025-12-28 | Rustic engines migrados a CSS vars (navigation/) | 12 components: Menu, Tabs, Breadcrumb, Pagination, Steps, Affix, Anchor, BackTop, FloatButton, Link, Segmented, Stepper |
-| 2025-12-28 | DISPLAY completo: Classic + Modern CSS | 17 components migrados con tokens + CSS variables para multi-tenant |
-| 2025-12-28 | NAVIGATION completo: Classic + Modern CSS | 12 components migrados + Stepper tokens agregados |
-| 2025-12-28 | OVERLAY completo: Classic + Modern CSS | 5 components migrados (Dropdown, Popconfirm, Popover, Tour, Watermark) |
-| 2025-12-28 | FEEDBACK completo: Tokens + Classic CSS + Modern CSS | 11 components: +78 tokens nuevos (Drawer, Message, Notification, Toast), todos los engines usan --ds-* vars |
-
----
-
-## 3. Pending Tasks
-
----
-
-## 4. Component Migration Tracking
-
-> **Objetivo:** Migrar cada componente a customización máxima para Ant Design y Tailwind/DaisyUI, con soporte multi-tenant.
-
-### 4.1 Proceso de Migración por Componente
-
-Para cada componente, seguir estos pasos EN ORDEN:
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│ PASO 1: INVESTIGAR                                                      │
-├────────────────────────────────────────────────────────────────────────┤
-│ • Ant Design: https://ant.design/components/{component}                │
-│   → Ir a pestaña "Design Token" → Ver TODOS los tokens customizables   │
-│                                                                        │
-│ • DaisyUI: https://daisyui.com/components/{component}                  │
-│   → Ver clases CSS y variables disponibles                             │
-└────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌────────────────────────────────────────────────────────────────────────┐
-│ PASO 2: ACTUALIZAR default.css                                         │
-├────────────────────────────────────────────────────────────────────────┤
-│ Por cada propiedad customizable de la librería:                        │
-│ • Agregar --ds-{component}-{property}: {valor};                        │
-│ • Incluir TODOS los estados: hover, focus, active, disabled            │
-│ • Incluir TODAS las variantes: primary, secondary, success, etc.       │
-│ • Incluir TODOS los tamaños: xs, sm, md, lg, xl                        │
-└────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌────────────────────────────────────────────────────────────────────────┐
-│ PASO 3: ACTUALIZAR classic/theme.css                                   │
-├────────────────────────────────────────────────────────────────────────┤
-│ • Mapear CADA token a su clase .ant-{component}                        │
-│ • Usar SOLO var(--ds-*), NUNCA valores hardcodeados                    │
-│ • Cubrir TODOS los estados con selectores CSS                          │
-│ • Selector: html[data-tenant] .ant-{component}                         │
-└────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌────────────────────────────────────────────────────────────────────────┐
-│ PASO 4: ACTUALIZAR modern/theme.css                                    │
-├────────────────────────────────────────────────────────────────────────┤
-│ • Mapear CADA token a su clase DaisyUI/Tailwind                        │
-│ • Usar SOLO var(--ds-*), NUNCA valores hardcodeados                    │
-│ • Mantener paridad visual con classic                                  │
-│ • Selector: [data-tenant] .btn, .card, etc.                            │
-└────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌────────────────────────────────────────────────────────────────────────┐
-│ PASO 5: VERIFICAR MULTI-TENANT                                         │
-├────────────────────────────────────────────────────────────────────────┤
-│ • Probar con data-tenant="rottay" → ¿Aplica los overrides?             │
-│ • Probar sin tenant → ¿Usa default.css?                                │
-│ • Verificar que NO hay valores hardcodeados en engines                 │
-└────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌────────────────────────────────────────────────────────────────────────┐
-│ PASO 6: ACTUALIZAR TRACKING                                            │
-├────────────────────────────────────────────────────────────────────────┤
-│ • Marcar componente como ✅ en la tabla de abajo                        │
-│ • Agregar fecha y notas                                                │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-### 4.2 Migration Status
-
-**Leyenda:**
-- ⬜ PENDING - No iniciado
-- 🔄 IN PROGRESS - En proceso (indicar quién)
-- ✅ COMPLETE - Migración completa y verificada
-
-**Resumen:** 76/76 completados (100%) - INPUTS 20/20 ✅ + DISPLAY 17/17 ✅ + FEEDBACK 11/11 ✅ + NAVIGATION 12/12 ✅ + LAYOUT 10/10 ✅ + OVERLAY 6/6 ✅
-
----
-
-#### INPUTS (20) - Prioridad ALTA ✅ COMPLETADO
-
-| # | Componente | Tokens | Classic CSS | Modern CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Button | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, fixed primitives, added active states |
-| 2 | Input | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +12 tokens (filled, addon, clear), Rustic uses var(--ds-input-*) |
-| 3 | Select | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (status, tag, dropdown), Rustic uses var(--ds-select-*) |
-| 4 | Checkbox | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens (sizes, error, label), Rustic uses var(--ds-checkbox-*) |
-| 5 | Radio | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (sizes, button style), Rustic uses var(--ds-radio-*) |
-| 6 | Switch | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Rustic uses var(--ds-switch-*) |
-| 7 | Slider | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Rustic uses var(--ds-slider-*) |
-| 8 | DatePicker | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Rustic uses var(--ds-datepicker-*) |
-| 9 | TimePicker | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +35 tokens, Classic/Modern time panel styles |
-| 10 | Form | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +7 tokens (item, label, error), Rustic inline styles |
-| 11 | InputNumber | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (controls, addon, affix) |
-| 12 | Textarea | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (sizes, filled, count) |
-| 13 | Upload | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Rustic uses var(--ds-upload-*) |
-| 14 | AutoComplete | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +8 tokens (dropdown, options) |
-| 15 | Cascader | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +8 tokens (menu, item states) |
-| 16 | ColorPicker | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +30 tokens (swatch, palette, slider, presets) |
-| 17 | Mentions | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +7 tokens (dropdown, option, highlight) |
-| 18 | Transfer | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +10 tokens (list, header, item) |
-| 19 | TreeSelect | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +25 tokens (trigger, dropdown, nodes) |
-| 20 | Toggle | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +25 tokens, Classic Switch mapping
-
-#### DISPLAY (17) - Prioridad MEDIA ✅ COMPLETADO
-
-| # | Componente | Tokens | Classic CSS | Modern CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Card | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Engines use var(--ds-card-*) |
-| 2 | Table | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Engines use var(--ds-table-*) |
-| 3 | Avatar | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, engines use var(--ds-*) |
-| 4 | Badge | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +9 tokens, engines use var(--ds-badge-*) |
-| 5 | Tag | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, rustic uses var(--ds-tag-*) |
-| 6 | Tooltip | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +17 tokens, engines rewritten (no base) |
-| 7 | Typography | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | SIZE_MAP uses CSS vars, rustic rewritten |
-| 8 | Calendar | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +22 tokens, all engines use --ds-calendar-* |
-| 9 | Carousel | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +12 tokens, all engines use --ds-carousel-* |
-| 10 | Descriptions | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-descriptions-* |
-| 11 | Empty | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-empty-* |
-| 12 | Image | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +12 tokens, all engines use --ds-image-* |
-| 13 | List | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-list-* |
-| 14 | QRCode | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-qrcode-* |
-| 15 | Statistic | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-statistic-* |
-| 16 | Timeline | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-timeline-* |
-| 17 | Tree | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +14 tokens, all engines use --ds-tree-* |
-
-#### FEEDBACK (11) - Prioridad MEDIA ✅ COMPLETADO
-
-| # | Componente | Tokens | Classic CSS | Modern CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Modal | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-modal-* vars |
-| 2 | Alert | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-alert-* vars with type colors |
-| 3 | Message | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, all engines use --ds-message-* vars |
-| 4 | Notification | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, all engines use --ds-notification-* vars |
-| 5 | Progress | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-progress-* vars |
-| 6 | Skeleton | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-skeleton-* vars |
-| 7 | Spinner | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-spinner-* vars |
-| 8 | Result | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-result-* with status colors |
-| 9 | Rate | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-rate-* vars |
-| 10 | Drawer | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +18 tokens, all engines use --ds-drawer-* vars |
-| 11 | Toast | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +25 tokens, all engines use --ds-toast-* vars |
-
-#### NAVIGATION (12) - Prioridad MEDIA ✅ COMPLETADO
-
-| # | Componente | Tokens | Classic CSS | Modern CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Menu | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-menu-* vars |
-| 2 | Tabs | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-tabs-* vars |
-| 3 | Breadcrumb | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-breadcrumb-* vars |
-| 4 | Pagination | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-pagination-* vars |
-| 5 | Steps | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-steps-* vars |
-| 6 | Affix | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-affix-* vars |
-| 7 | Anchor | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-anchor-* vars |
-| 8 | BackTop | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-back-top-* vars |
-| 9 | FloatButton | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-float-button-* vars |
-| 10 | Link | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-link-* vars |
-| 11 | Segmented | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-segmented-* vars |
-| 12 | Stepper | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +17 tokens, all engines use --ds-stepper-* vars |
-
-#### LAYOUT (10) - Prioridad BAJA ✅ COMPLETADO
-
-| # | Componente | Tokens | Classic CSS | Modern CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Box | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
-| 2 | Collapse | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +5 tokens, all engines use --ds-collapse-* vars |
-| 3 | Container | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +7 tokens, all engines use --ds-container-* vars |
-| 4 | Divider | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +4 tokens, all engines use --ds-divider-* vars |
-| 5 | Flex | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
-| 6 | Grid | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
-| 7 | Layout | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, all engines use --ds-layout-* vars |
-| 8 | Space | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-space-* vars |
-| 9 | Splitter | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +5 tokens, all engines use --ds-splitter-* vars |
-| 10 | Stack | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
-
-#### OVERLAY (6) - Prioridad BAJA ✅ COMPLETADO
-
-| # | Componente | Tokens | Classic CSS | Modern CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Dropdown | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-dropdown-* vars |
-| 2 | Popconfirm | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-popconfirm-* vars |
-| 3 | Popover | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-popover-* vars |
-| 4 | Tour | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-tour-* vars |
-| 5 | Watermark | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-watermark-* vars |
-
----
-
-## 5. Other Pending Tasks
-
-### 5.1 Tenant Auto-Detection (HIGH)
-
-**Problem:** Hay un TODO en DesignSystemProvider que no está implementado.
-
-**Archivo:** `/system/providers/root/index.tsx`
-
-**Código actual:**
-```tsx
-// TODO: Implement actual tenant resolution
-const config = DEFAULT_TENANT_CONFIG;  // ← Siempre usa default!
-```
-
-**Implementación requerida:**
-```tsx
-useEffect(() => {
-  async function detectTenant() {
-    const slug = await resolveTenant();
-    const config = await getTenantConfig(slug);
-    document.documentElement.setAttribute('data-tenant', slug);
-    setTenantConfig(config);
-  }
-  if (!propTenantConfig) detectTenant();
-}, []);
-```
-
-### 5.2 Backend API Documentation (HIGH)
-
-Crear `/docs/BACKEND_API.md` documentando:
-- `GET /api/domains/lookup?domain={hostname}` → `{ slug, found }`
-- `GET /api/tenants/{slug}` → `TenantConfig`
-
-### 5.3 CI/CD (MEDIUM)
-
-- Visual regression testing (Chromatic/Percy)
-- CSS purging para producción
-- Bundle size monitoring
-
----
-
-## 6. Technical Standards
-
-### 6.1 Code Quality
-
-- **TypeScript:** Strict mode, NO `any`
-- **Components:** `forwardRef`, `displayName`, `'use client'`
-- **Props:** Consistent pattern (`size`, `variant`, `disabled`, `className`)
-
-### 6.2 CSS Standards
-
-- **Variables:** `--ds-` prefix required
-- **Naming:** `--ds-{category}-{element}-{variant}-{state}-{property}`
-- **Units:** `rem` for sizing, `px` for borders
-- **Colors:** Variables only, no hardcoded hex en engines
-
----
-
-## 7. Agent Instructions
-
-### Para continuar trabajo:
-
-```
-1. Leer este documento completo
-2. Verificar git status
-3. Correr npm run build
-4. Elegir componente de Section 4.2 (empezar por INPUTS)
-5. Seguir proceso de Section 4.1
-6. Actualizar tracking cuando complete
-```
-
-### Prioridad de Trabajo
-
-```
-1. CRITICAL: Migración de componentes (Section 4)
-   - Empezar por Button como piloto
-   - Seguir con resto de INPUTS
-   - Luego DISPLAY, FEEDBACK, etc.
-
-2. HIGH: Tenant auto-detection (Section 5.1)
-
-3. MEDIUM: CI/CD y calidad (Section 5.3)
-```
-
-### Reference Links
-
-**Ant Design 5.x:**
-- Design Tokens: https://ant.design/docs/react/customize-theme
-- Component Tokens: https://ant.design/components/{component}#design-token
-
-**Tailwind/DaisyUI:**
-- DaisyUI Components: https://daisyui.com/components
-- DaisyUI Themes: https://daisyui.com/docs/themes
-
----
-
-*Document Version: 0.7.0*
-*Last Updated: 2025-12-28*
+Historical audits remain snapshots. Reconcile their findings in current
+roadmaps or canonical docs; do not rewrite the evidence as if it had always
+described the latest tree.

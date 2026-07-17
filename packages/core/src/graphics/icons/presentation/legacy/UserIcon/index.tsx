@@ -1,0 +1,17 @@
+'use client';
+
+/** @fileoverview Single-user silhouette icon. */
+
+import { forwardRef } from 'react';
+import { BaseIcon } from '../../../foundation/contracts/base';
+import type { SvgIconProps as IconProps } from '../../../foundation/contracts';
+
+/** Single user icon, used as the default Avatar fallback when no image is provided. */
+export const UserIcon = forwardRef<SVGSVGElement, IconProps>((props, ref) => (
+  <BaseIcon ref={ref} {...props}>
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </BaseIcon>
+));
+
+UserIcon.displayName = 'UserIcon';

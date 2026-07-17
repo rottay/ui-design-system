@@ -23,7 +23,7 @@ whose children are the real files.
 - `css/artifacts/<slug>/` — per-tenant artifact, has `index.css`
 - `css/legacy/<slug>/` — legacy tenant, has `index.css`
 - `runtime/tenancy/` — existing, has `index.ts`
-- `contracts/` — existing, has `index.ts`
+- `foundation/contracts/` — layered contract owner with a stable `index.ts`
 
 **Grouping folders (organizational, no index required):**
 

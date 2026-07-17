@@ -1,6 +1,6 @@
 # WO-SKIN-04 navigation-family paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/primitives/navigation/`. Same
+All paths relative to `packages/core/src/ui/primitives/navigation/`. Same
 channel scope as the WO-SKIN-02/03 precedents (`skin02-fields-inventory.md`,
 `wo-skin-03-status-inventory.md`): a "site" is an object-literal style key named
 `background*`, `border*`, `outline*`, `color`, `boxShadow`, `textShadow`, `fill`,
@@ -21,7 +21,7 @@ below is greenfield, same starting state as WO-SKIN-03's five status components.
 proposed scope classes below are grep-confirmed FREE unless flagged otherwise.
 
 **Coverage checklist** (from `node scripts/engine-token-audit.mjs | grep
-"fleet.inlinePaint.primitives/navigation"`, 2026-07-13): 34 files, 281 sites by the
+"fleet.inlinePaint.foundation/primitives/navigation"`, 2026-07-13): 34 files, 281 sites by the
 counter's count (the counter is blind to string-embedded `<style>` tag content and
 `.style.x as any =` writes — see per-component notes below for where that blind spot
 hides real paint). `EXAMPLES.tsx` (1 site) is a docs/demo file, not a shipped
@@ -48,7 +48,7 @@ modifier class. The 4 compounds DO carry BEM-style classNames
 `rottay-menu-submenu`, `rottay-menu-submenu--open`, `rottay-menu-submenu--disabled`,
 `rottay-menu-submenu__title`, `rottay-menu-group`, `rottay-menu-group__title`,
 `rottay-menu-divider`, `rottay-menu-divider--dashed`) but **none of those classes are
-referenced anywhere in `tokens/css/`** (grep-confirmed zero hits) — the compounds are
+referenced anywhere in `foundation/tokens/css/`** (grep-confirmed zero hits) — the compounds are
 100% inline-painted today with dead-but-harmless BEM hooks nobody targets. A future
 skin can either stamp `data-part` fresh or key off these existing classes; either way
 nothing currently paints from them.
@@ -159,7 +159,7 @@ No hover/focus paint anywhere in the compounds — `Item`'s hover/focus is handl
 entirely by `onClick`/`onKeyDown` triggering the parent callback, no visual feedback
 state at all (a real gap vs. the root engines, not a migration concern to fix).
 
-### Suppression risk — `tokens/css/engines/modern/theme.css:386-597` (layered `rottay-engines`)
+### Suppression risk — `foundation/tokens/css/runtime/engines/modern/theme.css:386-597` (layered `rottay-engines`)
 
 This file carries a **large pre-existing `.rottay-menu` rule block** (lines 468-597)
 structurally targeting `.rottay-menu li > a`, `.rottay-menu li > button`,
@@ -196,7 +196,7 @@ lose after migration (suppression survives by construction, not a hazard).
    to closely match `getDividerStyle()`'s inline value, suggesting the two were once
    meant to be the same rule and drifted; the inline value is what's live.
 
-`tokens/css/engines/rustic/theme.css` has **zero** `menu`-related selectors (grep
+`foundation/tokens/css/runtime/engines/rustic/theme.css` has **zero** `menu`-related selectors (grep
 confirmed) — rustic Menu is a clean greenfield migration with no legacy layer to
 reconcile against.
 
@@ -236,7 +236,7 @@ Spinner.
 - `.rottay-menu .divider` (theme.css) and all four compounds' BEM classNames
   (`rottay-menu-item`, `rottay-menu-submenu*`, `rottay-menu-group*`,
   `rottay-menu-divider*`) are dead CSS hooks — zero stylesheet references anywhere in
-  `tokens/css/`. Harmless today (inline styles cover everything), but they are not a
+  `foundation/tokens/css/`. Harmless today (inline styles cover everything), but they are not a
   precedent to copy: a future skin should stamp `data-part`, not rely on these names.
 - The imperative `onFocus`/`onBlur` `.style.outline=` writes in both `MenuItemRow` and
   `SubmenuRow` (modern.tsx) are functionally dead, superseded by the injected
@@ -311,7 +311,7 @@ structural classes**, via `getFloatButtonClassName()` (modern.tsx:47-62):
 where `shapeClassName` is `btn-circle` / `rounded-lg` and `typeClassName` is
 `btn-primary` / `btn-ghost bg-base-100`. These are the **same** `.btn`/`.btn-primary`/
 `.btn-ghost` classes the real `Button` primitive consumes from
-`tokens/css/engines/modern/theme.css` — confirmed by the audit script itself, which
+`foundation/tokens/css/runtime/engines/modern/theme.css` — confirmed by the audit script itself, which
 documents `FloatButton`'s `getFloatButtonClassName()` by name as the reason its
 DaisyUI-class scanner needs a `.join(' ')`-aware pass (`engine-token-audit.mjs:877`).
 `daisy.classConsumers: 16` in the current fleet output; FloatButton is one of the
@@ -320,7 +320,7 @@ sixteen (CLAUDE.md's decrease-only ratchet).
 **The suppression check found a real "personality wins today, nothing inline
 contests it" channel** — the same hazard shape the lane's law warns about, here for
 the first time in this batch:
-- `tokens/css/engines/modern/theme.css` carries **two independent `.btn` rule
+- `foundation/tokens/css/runtime/engines/modern/theme.css` carries **two independent `.btn` rule
   blocks** in the same file (lines 103-168 and 999-1049 — a second-emitter pair, pre-
   existing, not caused by FloatButton). Only the **first** block defines
   `[data-tenant] .btn:hover:not(:disabled) { transform: var(--ds-button-hover-transform, translateY(0) scale(1)); }`
@@ -350,8 +350,8 @@ the first time in this batch:
   defining one.
 
 **Rustic has no DaisyUI coupling** — no bare `btn`/`btn-*` class anywhere in
-`engines/rustic.tsx`; `tokens/css/engines/rustic/theme.css` and
-`tokens/css/runtime/personality.css` have zero `floatbutton`/`FloatButton` hits
+`engines/rustic.tsx`; `foundation/tokens/css/runtime/engines/rustic/theme.css` and
+`foundation/tokens/css/runtime/personality.css` have zero `floatbutton`/`FloatButton` hits
 (grep-confirmed) — a clean greenfield migration on the rustic side, same as Menu's
 rustic engine, but for a different reason (rustic never referenced the shared `.btn`
 class family at all).
@@ -492,9 +492,9 @@ block** — rustic Tabs relies on the browser's native default focus ring (no cu
 
 ### Suppression risk
 
-**None found.** `tokens/css/engines/modern/theme.css` and
-`tokens/css/engines/rustic/theme.css` have zero `.tab`/`.tabs`/`[role="tab"]`
-selectors (grep-confirmed). `tokens/css/runtime/personality.css:411-426` carries a
+**None found.** `foundation/tokens/css/runtime/engines/modern/theme.css` and
+`foundation/tokens/css/runtime/engines/rustic/theme.css` have zero `.tab`/`.tabs`/`[role="tab"]`
+selectors (grep-confirmed). `foundation/tokens/css/runtime/personality.css:411-426` carries a
 "TABS PERSONALITY" block, but it targets `.ant-tabs-ink-bar`/`.ant-tabs-tab`
 (classic engine's real Ant Design classnames) and `[data-engine] .ds-tabs-indicator`/
 `[data-engine] .ds-tab` — two hook classnames that **neither modern nor rustic Tabs
@@ -522,7 +522,7 @@ counter-invisible.
 - Modern has hover-state color/background treatment and a compositor-only sliding
   indicator; rustic has neither (no hover, no indicator — rustic's active tab is
   marked by a static `border-bottom`, a completely different visual language for the
-  same `type='line'` concept). This is the widest visual-language gap between engines
+  same `type='line'` concept). This is the widest visual-design gap between engines
   found so far in this family; preserve both, do not reconcile.
 - The responsive-size CSS injector duplicates the same per-instance-`<style>` pattern
   used for the fade-in keyframe, but is layout-only (out of paint scope).
@@ -570,7 +570,7 @@ property, presumably for the native browser progress-adjacent chrome DaisyUI als
 reads) as the one channel that genuinely is inline.
 
 **A second, independent, possibly-redundant mechanism exists in the SAME theme.css
-file this component's classes activate** (`tokens/css/engines/modern/theme.css:641-648`,
+file this component's classes activate** (`foundation/tokens/css/runtime/engines/modern/theme.css:641-648`,
 layered `rottay-engines`):
 ```
 [data-tenant] .steps .step::before { background-color: var(--ds-steps-line-color); }
@@ -582,7 +582,7 @@ with a **completely different token vocabulary** (`--ds-steps-line-color`,
 `--step-color`/`--step-neutral` redirection. **STOP-AND-REPORT, not a fix**: which
 of these two mechanisms actually wins the rendered circle/connector color depends on
 DaisyUI's own internal CSS specificity and rule order for how `.step::after`
-consumes `--step-color` — that internal stylesheet is not part of `tokens/css/` and
+consumes `--step-color` — that internal stylesheet is not part of `foundation/tokens/css/` and
 was not read for this inventory. It is entirely possible the component's
 `accentColor`/`--step-color` redirection is **live but visually irrelevant**,
 fully superseded by this direct `::before`/`::after` override, which would make
@@ -597,7 +597,7 @@ truth may be the CSS-only mechanism, not the TSX.
 `.step::after` — this is the mechanism that swaps the numbered digit for a filled
 dot in progress-dot mode. Confirm this still resolves correctly if a future skin
 ever needs to touch `.step::after`'s `content` property (out of scope here — DaisyUI
-owns it, not `tokens/css/`).
+owns it, not `foundation/tokens/css/`).
 
 ### Paint sites — `engines/rustic.tsx`
 
@@ -630,11 +630,11 @@ worth noting once here since it recurs).
 
 ### Suppression risk
 
-`tokens/css/engines/modern/theme.css:641-648` (documented above) is the one real
+`foundation/tokens/css/runtime/engines/modern/theme.css:641-648` (documented above) is the one real
 suppression-adjacent finding: it doesn't suppress anything inline (nothing inline
 CAN reach a pseudo-element), it potentially **competes with** the component's own
-custom-property redirection for the same visual result. `tokens/css/runtime/personality.css`
-and `tokens/css/engines/rustic/theme.css` have zero `steps`/`step`/`step-primary`
+custom-property redirection for the same visual result. `foundation/tokens/css/runtime/personality.css`
+and `foundation/tokens/css/runtime/engines/rustic/theme.css` have zero `steps`/`step`/`step-primary`
 hits (grep-confirmed) — rustic Steps is a clean greenfield migration.
 
 ### DaisyUI coupling
@@ -681,7 +681,7 @@ carries a **full BEM tree** (`rottay-stepper-step`, `--<status>`, `--active`,
 `--disabled`, `__icon`, `__content`, `__title`, `__subtitle`, `__description`, plus
 a sibling `rottay-stepper-connector`) and `compound/Content` carries
 `rottay-stepper-content`/`--active`. **All of these are dead CSS hooks** — zero
-references anywhere in `tokens/css/` (grep-confirmed), the same shape as Menu's
+references anywhere in `foundation/tokens/css/` (grep-confirmed), the same shape as Menu's
 compound BEM classes.
 
 ### `engines/modern.tsx` — same DaisyUI pattern as Steps, not re-derived in full
@@ -699,7 +699,7 @@ DaisyUI-steps-token-bridge; worth a team flag as duplication, not a migration fi
 | step description | modern 178 | color | STATIC |
 
 **The same "STOP-AND-REPORT" finding from Steps applies identically here, not
-re-derived**: `tokens/css/engines/modern/theme.css:641-648`'s
+re-derived**: `foundation/tokens/css/runtime/engines/modern/theme.css:641-648`'s
 `[data-tenant] .steps .step::before/::after` rules are **generic** (`.steps .step`,
 not scoped to either component) and paint the SAME connector/circle pseudo-elements
 for Stepper's modern engine too, via a possibly-competing mechanism against this
@@ -876,7 +876,7 @@ itself is a small closed STATE-SELECTED set (active vs. not, disabled vs. not).
 
 ### Suppression risk
 
-`tokens/css/runtime/personality.css:587-598` carries a "PAGINATION PERSONALITY"
+`foundation/tokens/css/runtime/personality.css:587-598` carries a "PAGINATION PERSONALITY"
 block targeting `.ant-pagination-item` (classic), `.join .btn` (a DaisyUI pattern
 this component does not use, per the doc-comment finding above), and
 `[data-engine] .ds-pagination-item` (an aspirational hook nobody stamps) — **all
@@ -885,7 +885,7 @@ three selectors are orphaned for modern/rustic Pagination** (grep-confirmed zero
 transition-timing only (`background-color`/`border-color`/`color` transitions, no
 static paint value) and would be a no-op even if it did match. No suppression risk,
 same "aspirational hook" shape already seen in Tabs.
-`tokens/css/engines/modern/theme.css` and `.../rustic/theme.css` have zero
+`foundation/tokens/css/runtime/engines/modern/theme.css` and `.../rustic/theme.css` have zero
 `pagination`-related selectors at all.
 
 ### DaisyUI coupling
@@ -981,10 +981,10 @@ data.
 
 ### Suppression risk
 
-None found. `tokens/css/engines/modern/theme.css` has zero `.join`/`.segmented`
+None found. `foundation/tokens/css/runtime/engines/modern/theme.css` has zero `.join`/`.segmented`
 selectors (grep-confirmed — the `.btn`/`.btn-primary` blocks documented under
 FloatButton do not apply here since Segmented's buttons carry no `btn` class).
-`tokens/css/runtime/personality.css` and `tokens/css/engines/rustic/theme.css` have
+`foundation/tokens/css/runtime/personality.css` and `foundation/tokens/css/runtime/engines/rustic/theme.css` have
 zero `segmented` hits. Clean greenfield migration, no legacy-layer entanglement.
 
 ### DaisyUI coupling
@@ -1092,7 +1092,7 @@ pattern.
 prior second-emitter pair found in this batch (FloatButton's `.btn`, both purely
 suppressed by inline), this one has a LIVE, non-obvious internal tie-break that
 determines what a real user sees today**:
-- **Block 1** (`tokens/css/engines/modern/theme.css:612-635`, "BREADCRUMBS -
+- **Block 1** (`foundation/tokens/css/runtime/engines/modern/theme.css:612-635`, "BREADCRUMBS -
   .breadcrumbs"): `--ds-breadcrumb-*` vocabulary — matches this component's own
   token names. Separator rule: `[data-tenant] .breadcrumbs li + li::before { color:
   var(--ds-breadcrumb-separator-color); }` (adjacent-sibling combinator).
@@ -1115,7 +1115,7 @@ determines what a real user sees today**:
 - **STOP-AND-REPORT, same shape as Steps**: whether the component's own `--bc-color`
   redirection (which neither theme.css block references at all — both set `color`
   directly, not via `--bc-color`) has ANY live effect depends on whether DaisyUI's
-  own compiled stylesheet's `::before` rule (not part of `tokens/css/`, not read for
+  own compiled stylesheet's `::before` rule (not part of `foundation/tokens/css/`, not read for
   this inventory) uses `--bc-color` in a way these two first-party overrides don't
   already out-specificity. Verify empirically before assuming `--bc-color` matters.
 - The `li a` / `li a:hover` declarations in both blocks (620-627, 931-938) are fully
@@ -1205,7 +1205,7 @@ support — not a counted channel, leave untouched.
 
 ### Suppression risk
 
-None — `tokens/css/` has zero `bottomtabbar`/`bottom-tab-bar` hits in any layer.
+None — `foundation/tokens/css/` has zero `bottomtabbar`/`bottom-tab-bar` hits in any layer.
 
 ---
 
@@ -1270,7 +1270,7 @@ as the preferred shape if the team ever wants to consolidate.
 
 ### Suppression risk / DaisyUI coupling / keyframes
 
-None of any kind — `tokens/css/` has zero `anchor` hits across all three layers
+None of any kind — `foundation/tokens/css/` has zero `anchor` hits across all three layers
 (theme.css ×2, personality.css). Fully greenfield. No DaisyUI classes in either
 engine (modern uses Tailwind utility classes only — `sticky`, `top-0`, `flex`,
 `gap-2`, `block`, `py-1`, `px-3`, `text-sm`, `border-l-2` — these are Tailwind
@@ -1291,7 +1291,7 @@ asks about).
 | title text | MobileHeader.tsx 164-173 | color | STATIC |
 
 6 sites (3+2+1). No hover, no keyframes, no DaisyUI classes, no suppression
-(`tokens/css/` has zero `mobile-header`/`mobileheader` hits in any layer). The left/
+(`foundation/tokens/css/` has zero `mobile-header`/`mobileheader` hits in any layer). The left/
 center/right slot wrapper `Box`es carry only layout properties, no counted paint.
 `env(safe-area-inset-top, 0px)` is load-bearing non-paint, same shape as
 BottomTabBar's bottom-inset — leave untouched.
@@ -1320,7 +1320,7 @@ carry forward verbatim into a skin rule keyed on `data-position='bottom' \|
 values, same notched-device pattern as BottomTabBar/MobileHeader.
 
 No hover, no keyframes, no DaisyUI classes, no suppression (zero `action-dock`/
-`actiondock` hits anywhere in `tokens/css/`).
+`actiondock` hits anywhere in `foundation/tokens/css/`).
 
 ---
 
@@ -1342,7 +1342,7 @@ the ONLY divergence is presentation: rustic stamps real classNames
 `transition`) as a tenant-theming surface; modern stamps no first-party class and
 exposes no custom properties, relying on Tailwind's `z-{10,20,30,40,50}` utility
 classes for z-index instead of a token. **`rottay-affix*` classes are dead CSS
-hooks** — grep-confirmed zero references anywhere in `tokens/css/`, same shape as
+hooks** — grep-confirmed zero references anywhere in `foundation/tokens/css/`, same shape as
 every other unreferenced first-party class in this family.
 
 No hover, no keyframes, no DaisyUI classes, no suppression risk (zero `affix` hits
@@ -1404,7 +1404,7 @@ that a skin must preserve since it's not purely vestigial).
 
 ### Suppression risk / keyframes
 
-None found for either engine — `tokens/css/engines/modern/theme.css` has zero
+None found for either engine — `foundation/tokens/css/runtime/engines/modern/theme.css` has zero
 `.link`/`.link-*` selectors (grep-confirmed), so nothing competes with or is
 suppressed by this component's own inline override in the first place; the design
 intent documented in the code (inline wins on purpose) is honored trivially because
@@ -1420,7 +1420,7 @@ there is no competing rule at all today, not because of the unlayered-skin law.
 - **Almost every first-party BEM/utility className this family already stamps is a
   dead CSS hook** — Menu's four compounds, Stepper's `compound/Step`/
   `compound/Content`, Breadcrumb's `compound/Item`, and Affix's rustic engine all
-  carry real classNames with zero references anywhere in `tokens/css/`. A future
+  carry real classNames with zero references anywhere in `foundation/tokens/css/`. A future
   skin can either adopt `data-part` fresh or repurpose these existing names; either
   way, nothing currently paints from them, so there is no suppression risk in
   reusing them.
@@ -1532,4 +1532,3 @@ paint found anywhere in this family (the one JS-timer mechanism,
 `Stepper.Content`'s animation state machine, drives `transform`/`opacity` off a
 `setTimeout`, not off elapsed wall-clock time, and its hazard is duration
 desynchronization, not paint-per-tick).
-

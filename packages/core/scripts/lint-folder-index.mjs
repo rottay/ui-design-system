@@ -27,9 +27,14 @@ import { join, basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const COMPONENTS_ROOT = resolve(__dirname, '../src/components');
+const COMPONENTS_ROOT = resolve(__dirname, '../src/ui');
 
-const CATEGORY_ROOTS = ['primitives', 'patterns', 'structures', 'surfaces'];
+const CATEGORY_ROOTS = [
+  { category: 'primitives', relativeRoot: 'primitives' },
+  { category: 'patterns', relativeRoot: 'patterns' },
+  { category: 'structures', relativeRoot: 'structures' },
+  { category: 'surfaces', relativeRoot: 'surfaces' },
+];
 const FORBIDDEN_PREFIXES = ['premium-', 'workspace-'];
 const SURFACE_PREFIX_OUTSIDE_SURFACES = 'surface-';
 const SHIM_MAX_LINES = 5;
@@ -47,9 +52,8 @@ const ALLOWED_EXCEPTIONS = new Set([
 // These were created by taxonomy grouping. Codex should decide whether
 // to rename them before they can be removed from here.
 const ALLOWED_REPEATED_PARENT = new Set([
-  'structures/dashboard/dashboard-insights',
-  'structures/record/record',
-  // data-table inside data/ group repeats the prefix
+  // `data-table` is a concrete control name, not a duplicated owner such as
+  // `dashboard/dashboard-insights` or `record/record`.
   'patterns/data/data-table',
 ]);
 
@@ -71,16 +75,16 @@ function walkDirs(dir) {
 
 // Rule 1: Forbidden prefixes (recursive — checks the entire subtree, not
 // just the first level under each category root)
-function checkForbiddenPrefixes(dir, relPath, cat) {
+function checkForbiddenPrefixes(dir, relPath, relativeRoot, category) {
   let dirs;
   try { dirs = walkDirs(dir); } catch { return; }
 
   for (const d of dirs) {
-    const qualifiedPath = relPath ? `${relPath}/${d.name}` : `${cat}/${d.name}`;
+    const qualifiedPath = relPath ? `${relPath}/${d.name}` : `${relativeRoot}/${d.name}`;
     if (ALLOWED_EXCEPTIONS.has(qualifiedPath)) {
       // Still recurse into allowed exceptions — the exception covers
       // the folder itself, not its children.
-      checkForbiddenPrefixes(join(dir, d.name), qualifiedPath, cat);
+      checkForbiddenPrefixes(join(dir, d.name), qualifiedPath, relativeRoot, category);
       continue;
     }
 
@@ -93,7 +97,7 @@ function checkForbiddenPrefixes(dir, relPath, cat) {
         });
       }
     }
-    if (cat !== 'surfaces' && d.name.startsWith(SURFACE_PREFIX_OUTSIDE_SURFACES)) {
+    if (category !== 'surfaces' && d.name.startsWith(SURFACE_PREFIX_OUTSIDE_SURFACES)) {
       violations.push({
         rule: 'forbidden-prefix',
         path: qualifiedPath,
@@ -102,11 +106,11 @@ function checkForbiddenPrefixes(dir, relPath, cat) {
     }
 
     // Recurse into children
-    checkForbiddenPrefixes(join(dir, d.name), qualifiedPath, cat);
+    checkForbiddenPrefixes(join(dir, d.name), qualifiedPath, relativeRoot, category);
   }
 }
-for (const cat of CATEGORY_ROOTS) {
-  checkForbiddenPrefixes(join(COMPONENTS_ROOT, cat), '', cat);
+for (const { category, relativeRoot } of CATEGORY_ROOTS) {
+  checkForbiddenPrefixes(join(COMPONENTS_ROOT, relativeRoot), '', relativeRoot, category);
 }
 
 // Rule 2: Repeated parent-child
@@ -129,8 +133,8 @@ function checkRepeatedParent(dir, parentName) {
     }
   } catch { /* dir might not exist */ }
 }
-for (const cat of CATEGORY_ROOTS) {
-  const catDir = join(COMPONENTS_ROOT, cat);
+for (const { relativeRoot } of CATEGORY_ROOTS) {
+  const catDir = join(COMPONENTS_ROOT, relativeRoot);
   try {
     const dirs = walkDirs(catDir);
     for (const d of dirs) {
@@ -140,8 +144,8 @@ for (const cat of CATEGORY_ROOTS) {
 }
 
 // Rule 3: Public-root support files
-for (const cat of CATEGORY_ROOTS) {
-  const catDir = join(COMPONENTS_ROOT, cat);
+for (const { relativeRoot } of CATEGORY_ROOTS) {
+  const catDir = join(COMPONENTS_ROOT, relativeRoot);
   try {
     const entries = readdirSync(catDir, { withFileTypes: true });
     for (const e of entries) {
@@ -160,7 +164,7 @@ for (const cat of CATEGORY_ROOTS) {
 
       violations.push({
         rule: 'public-root-support-file',
-        path: `${cat}/${e.name}`,
+        path: `${relativeRoot}/${e.name}`,
         message: `File "${e.name}" sits at the category root and has ${lines} lines. Support files should live inside _internal/ or _foundation/. If this is a compat shim, keep it under ${SHIM_MAX_LINES} lines.`,
       });
     }
@@ -172,10 +176,11 @@ for (const cat of CATEGORY_ROOTS) {
 
 const SRC_ROOT = resolve(__dirname, '../src');
 
-// 4a. runtime/tenant/ must not have root-level .ts leaf files except index.ts
-//     (personality-presets.ts was moved to presets/ in G3 (now runtime/tenant/presets/))
+// 4a. infrastructure/runtime/tenant/ must not have root-level .ts leaf files
+//     except index.ts (personality presets live under
+//     infrastructure/runtime/tenant/foundation/personality/presets/).
 {
-  const tenancyDir = join(SRC_ROOT, 'runtime/tenant');
+  const tenancyDir = join(SRC_ROOT, 'infrastructure/runtime/tenant');
   try {
     const entries = readdirSync(tenancyDir, { withFileTypes: true });
     for (const e of entries) {
@@ -184,16 +189,16 @@ const SRC_ROOT = resolve(__dirname, '../src');
       if (e.name === 'index.ts') continue;
       violations.push({
         rule: 'tenancy-root-leaf',
-        path: `runtime/tenant/${e.name}`,
-        message: `Leaf file "${e.name}" should live in an owner folder under runtime/tenant/.`,
+        path: `infrastructure/runtime/tenant/${e.name}`,
+        message: `Leaf file "${e.name}" should live in an owner folder under infrastructure/runtime/tenant/.`,
       });
     }
   } catch { /* dir might not exist */ }
 }
 
-// 4b. contracts/ root must only have owner folders, index.ts, and docs
+// 4b. foundation/contracts/ root must only have owner folders, index.ts, and docs
 {
-  const contractsDir = join(SRC_ROOT, 'contracts');
+  const contractsDir = join(SRC_ROOT, 'foundation', 'contracts');
   try {
     const entries = readdirSync(contractsDir, { withFileTypes: true });
     for (const e of entries) {
@@ -201,81 +206,82 @@ const SRC_ROOT = resolve(__dirname, '../src');
       if (e.name === 'index.ts' || e.name === 'README.md') continue;
       violations.push({
         rule: 'contracts-root-file',
-        path: `contracts/${e.name}`,
-        message: `File "${e.name}" should not sit in contracts/ root. Move to _internal/ or a subsystem folder.`,
+        path: `foundation/contracts/${e.name}`,
+        message: `File "${e.name}" should not sit in foundation/contracts/ root. Move it to an owned layer.`,
       });
     }
   } catch { /* dir might not exist */ }
 }
 
-// 4c. tokens/ts/brand-themes/ must exist as the canonical authored source
+// 4c. foundation/tokens/ts/presentation/brand-themes/ is the canonical authored source
 {
-  const brandThemesDir = join(SRC_ROOT, 'tokens/ts/brand-themes');
+  const brandThemesDir = join(SRC_ROOT, 'foundation/tokens/ts/presentation/brand-themes');
   try {
     statSync(brandThemesDir);
   } catch {
     violations.push({
       rule: 'brand-themes-missing',
-      path: 'tokens/ts/brand-themes/',
+      path: 'foundation/tokens/ts/presentation/brand-themes/',
       message: 'Canonical authored premium source directory is missing.',
     });
   }
 }
 
-// 4d. tokens/ts/ must use declarative folder names (I1 taxonomy)
-//     Allowed: base, components, brand-themes, mirrors + internal prefixes
+// 4d. foundation/tokens/ts/ declares the local dependency layers.
 {
-  const tsDir = join(SRC_ROOT, 'tokens/ts');
+  const tsDir = join(SRC_ROOT, 'foundation/tokens/ts');
   try {
     const entries = readdirSync(tsDir, { withFileTypes: true });
-    const allowedTs = ['base', 'components', 'brand-themes', 'mirrors'];
+    const allowedTs = ['foundation', 'runtime', 'presentation', 'facade'];
     for (const e of entries) {
       if (!e.isDirectory()) continue;
       if (e.name.startsWith('_')) continue;
       if (!allowedTs.includes(e.name)) {
         violations.push({
           rule: 'ts-undeclared-folder',
-          path: `tokens/ts/${e.name}`,
-          message: `Folder "${e.name}" is not a recognized role folder. Expected: ${allowedTs.join(', ')}. If this was "tenants/", it was renamed to "mirrors/" in I1.`,
+          path: `foundation/tokens/ts/${e.name}`,
+          message: `Folder "${e.name}" is not a recognized token layer. Expected: ${allowedTs.join(', ')}.`,
         });
       }
     }
-    // brand-themes and mirrors must both exist
-    for (const required of ['brand-themes', 'mirrors']) {
-      if (!entries.some((e) => e.isDirectory() && e.name === required)) {
-        violations.push({
-          rule: `${required}-missing`,
-          path: `tokens/ts/${required}/`,
-          message: `Required directory "${required}" is missing.`,
-        });
-      }
+    const requiredOwners = [
+      ['runtime', 'mirrors'],
+      ['presentation', 'brand-themes'],
+    ];
+    for (const [layer, required] of requiredOwners) {
+      const layerEntries = readdirSync(join(tsDir, layer), { withFileTypes: true });
+      if (layerEntries.some((entry) => entry.isDirectory() && entry.name === required)) continue;
+      violations.push({
+        rule: `${required}-missing`,
+        path: `foundation/tokens/ts/${layer}/${required}/`,
+        message: `Required directory "${required}" is missing.`,
+      });
     }
   } catch { /* dir might not exist */ }
 }
 
-// 4e. tokens/css/ must use declarative folder names (I1 taxonomy)
+// 4e. foundation/tokens/css/ declares the CSS dependency layers.
 {
-  const cssDir = join(SRC_ROOT, 'tokens/css');
+  const cssDir = join(SRC_ROOT, 'foundation/tokens/css');
   try {
     const entries = readdirSync(cssDir, { withFileTypes: true });
     for (const e of entries) {
       if (!e.isDirectory()) continue;
-      // These are the allowed declarative folder names after I1
-      const allowed = ['artifacts', 'legacy', 'foundation', 'entrypoints', 'components', 'engines', 'runtime'];
+      const allowed = ['foundation', 'runtime', 'presentation', 'facade'];
       if (!allowed.includes(e.name) && !e.name.startsWith('_')) {
         violations.push({
           rule: 'css-undeclared-folder',
-          path: `tokens/css/${e.name}`,
-          message: `Folder "${e.name}" is not a recognized role folder. Expected: ${allowed.join(', ')}.`,
+          path: `foundation/tokens/css/${e.name}`,
+          message: `Folder "${e.name}" is not a recognized CSS layer. Expected: ${allowed.join(', ')}.`,
         });
       }
     }
   } catch { /* dir might not exist */ }
 }
 
-// 4f. tokens/css/ root must not have stale CSS files (entrypoints live in entrypoints/)
+// 4f. foundation/tokens/css/ root must not have stale CSS files (entrypoints live in entrypoints/)
 {
-  const cssDir = join(SRC_ROOT, 'tokens/css');
+  const cssDir = join(SRC_ROOT, 'foundation/tokens/css');
   try {
     const entries = readdirSync(cssDir, { withFileTypes: true });
     for (const e of entries) {
@@ -283,8 +289,8 @@ const SRC_ROOT = resolve(__dirname, '../src');
       if (!/\.css$/.test(e.name)) continue;
       violations.push({
         rule: 'css-root-file',
-        path: `tokens/css/${e.name}`,
-        message: `CSS file "${e.name}" should not sit at tokens/css/ root. Entrypoints go in entrypoints/, foundation in foundation/.`,
+        path: `foundation/tokens/css/${e.name}`,
+        message: `CSS file "${e.name}" should not sit at foundation/tokens/css/ root. Entrypoints go in facade/entrypoints/.`,
       });
     }
   } catch { /* dir might not exist */ }

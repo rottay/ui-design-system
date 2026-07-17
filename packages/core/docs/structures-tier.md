@@ -1,6 +1,6 @@
 # Structures Tier
 
-The **structures** tier sits between `patterns` (engine-agnostic task-level
+The **structures** tier sits between `patterns` (reusable task-level
 compositions) and `surfaces` (page-level config objects). It hosts
 structural families: headers, toolbars, record panels, metric cards,
 loading overlays, and similar widgets that wrap or accompany patterns but
@@ -17,18 +17,21 @@ are more specific than primitives.
 
 ## Directory structure
 
-Families are organized into 5 groups under `components/structures/`:
+Families are organized into 6 groups under `packages/core/src/ui/structures/`:
 
 ```
 structures/
   headers/
     collection/           CollectionHeader
+    dashboard/            DashboardHeader
     detail/               DetailHeader
     edit/                 EditHeader
     form/                 FormHeader
+    mobile-header/        MobileHeader
 
   workspace/
-    search-command-bar/   SearchCommandBar
+    connected-command-palette/
+                          ConnectedCommandPalette, SearchCommandBar
     active-filters-bar/   ActiveFiltersBar
     field-filters-panel/  FieldFiltersPanel
     column-menu/          ColumnMenu
@@ -36,14 +39,18 @@ structures/
     selection-preview-rail/ SelectionPreviewRail
     scope-switcher/       ScopeSwitcher
     table-toolbar/        TableToolbar
+    view-mode-switcher/   ViewModeSwitcher
+    export-button/        ExportButton
+    action-dock/          ActionDock
 
   record/
-    record/               RecordSummaryStrip, RecordFieldGrid, RecordField,
+    content/              RecordSummaryStrip, RecordFieldGrid, RecordField,
                           RecordActionBar, RecordPanel
+    edit-fields/          Editable record fields
     form-sections/        FormSections, FormFactsCard
 
   dashboard/
-    dashboard-insights/   MetricsRows, MetricsCards, MetricsMinimal,
+    insights/             MetricsRows, MetricsCards, MetricsMinimal,
                           MetricsChart, ActivityTimeline, ActivityCompact,
                           ActivityCards, ActivityTicker, useVariant
     stats-header/         StatsHeader
@@ -51,16 +58,21 @@ structures/
 
   feedback/
     loading-overlay/      LoadingOverlay
+
+  shell/
+    bottom-tab-bar/       BottomTabBar
+    contracts/            Shared shell contracts
 ```
 
 ## Collection workspace kit (editorial grouping)
 
-The renamed workspace-family components form a coherent kit for building
-collection/list screens. They live under `structures/workspace/` and
-`structures/headers/collection/` and are all available from the package
+The workspace-family components form a coherent kit for building
+collection/list screens. They live under `ui/structures/workspace/` (including
+`connected-command-palette/search-command-bar/`) and
+`ui/structures/headers/collection/` and are all available from the package
 root (`@rottay/design-system`) like every other DS component.
 
-An **editorial barrel** exists at `structures/_kits/collection-workspace/`
+An **editorial barrel** exists at `ui/structures/_kits/collection-workspace/`
 inside the source tree. It is a source-local convenience that documents
 which 8 pieces belong together -- it is **not** re-exported from the
 public API. The canonical consumer import is the package root:

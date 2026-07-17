@@ -35,7 +35,7 @@ Drafted by a peer, adjudicated by the orchestrator. Load-bearing claims DRILLED 
   rules at :433-434 target the handle's children. **RULING: PRESERVE these selectors byte-exact — do
   NOT drop them as dead** (dropping the focus-visible outline is a real behavior change, not byte-exact).
   The genuine, surviving Trap 2 point: the `.ds-resize-handle`/`.ds-resize-handle__bar` rules (:428-431)
-  DO overlap with `data-table/engines/modern.tsx:900-905`'s own resize-handle CSS — keep THAT as the
+  DO overlap with `data-table/engines/modern/index.tsx:900-905`'s own resize-handle CSS — keep THAT as the
   STOP-AND-VERIFY (report the cross-component overlap, let the team decide ownership), but the trap is
   "preserve + report," never "drop dead selectors." Migration agents: transcribe ALL of ENHANCED_CSS
   verbatim into the skin; the only open decision is the `.ds-resize-handle` ownership flag, not deletion.
@@ -75,7 +75,7 @@ surfaces/pages file" (66 sites, 1093 lines, `DraftStatusBadge`/`SectionNav`/vali
 coloring) and groups `form`/`wizard` into its "thin tail" (§8) as `personality-helpers` importers. **I
 re-ran the counter on the inventory's own scope grep and all four `surfaces/pages/forms/**` files
 (`guided-draft-form`, `form`, `wizard`, `detail-form`) show exactly `0` sites.** I did not stop at the
-number — I confirmed why: `tokens/css/components/skin/{guided-draft-form,detail-form-surface,
+number — I confirmed why: `foundation/tokens/css/presentation/components/skin/{guided-draft-form,detail-form-surface,
 wizard-surface}.css` already exist, `guided-draft-form.css`'s own header comment reads **"WO-SKIN-06 /
 CK-D/R"**, `guided-draft-form/index.tsx` already carries 58 `data-part=` stamps and a
 `ds-surface ds-guided-draft-form` root class, and — most conclusively — `wo-skin-06-ck-d-contract.md`
@@ -113,7 +113,7 @@ Its `.ds-collection-preview-rail__resize:hover`/`:focus-visible` selectors targe
 rendered by this same file and must be preserved byte-exact. The remaining rules target
 `.ds-resize-handle`/
 `.ds-resize-handle__bar` (`:432-436`), which **are real and are ALSO independently styled by
-`patterns/data/data-table/engines/modern.tsx:900-905`** with a near-identical `:hover`/`:focus-visible`
+`patterns/data/data-table/engines/modern/index.tsx:900-905`** with a near-identical `:hover`/`:focus-visible`
 rule set for the same classes. When `collection-workspace` renders an internal `PatternDataTable` with
 `enhanced=true`, both injected stylesheets paint the same elements — a real cascade-collision risk
 (whichever `<style>` tag lands later in the DOM wins) that exists TODAY, independent of this migration,
@@ -151,8 +151,8 @@ injections beyond what the inventory's targeted reads covered — confirms the i
 `stats-grid`, `gallery-view`, and `collection-workspace` are the ONLY three files carrying these
 mechanisms** (plus the newly-found `ENHANCED_CSS`, item 3, still inside `collection-workspace`). Spot-
 checked 4 of the 9 files the inventory names as sharing `stats-grid` rustic's bare `@keyframes pulse`
-name — confirmed 2 real hits (`patterns/visualization/tree-view/engines/rustic.tsx`,
-`patterns/communication/live-feed/engines/rustic.tsx`); did not chase all 9, the collision shape is
+name — confirmed 2 real hits (`patterns/visualization/tree-view/engines/rustic/index.tsx`,
+`patterns/communication/live-feed/engines/rustic/index.tsx`); did not chase all 9, the collision shape is
 established.
 
 **7. Judgment calls the orchestrator should bless or override:**
@@ -518,8 +518,8 @@ B/C categories in `skin-exemptions.json`.
 
 | File | Keyframe(s) | Action |
 |---|---|---|
-| `stats-grid/engines/modern.tsx` | `ds-stats-shimmer` (per-mount `<style>` injection) | Already `ds`-prefixed, low collision risk, but still unnamespaced-per-INSTANCE (re-declared every mount, no dedup guard — harmless only because byte-identical). Move to skin, drop the `<style>` tag; no rename needed for the name itself. |
-| `stats-grid/engines/rustic.tsx` | `pulse`, `wave` (per-mount `<style>` injection) | **Trap 4 — bare names, real collision with ≥2 other files.** Rename to `ds-stats-grid-pulse`/`ds-stats-grid-wave`, move to skin, drop the `<style>` tag. |
+| `stats-grid/engines/modern/index.tsx` | `ds-stats-shimmer` (per-mount `<style>` injection) | Already `ds`-prefixed, low collision risk, but still unnamespaced-per-INSTANCE (re-declared every mount, no dedup guard — harmless only because byte-identical). Move to skin, drop the `<style>` tag; no rename needed for the name itself. |
+| `stats-grid/engines/rustic/index.tsx` | `pulse`, `wave` (per-mount `<style>` injection) | **Trap 4 — bare names, real collision with ≥2 other files.** Rename to `ds-stats-grid-pulse`/`ds-stats-grid-wave`, move to skin, drop the `<style>` tag. |
 | `surfaces/foundation/personality-helpers.tsx` | `ds-accent-bar-shimmer` (referenced by name in `animation:`, `barStyle==='animated'`) | **Referenced but never defined anywhere in the repo** (grep-confirmed) — the component's own comment says it "must be defined in the global DS stylesheet" and never was. Any of the 8 consuming surfaces passing `accentBarStyle: 'animated'` renders a static gradient today with no shimmer. This is not this migration's bug to fix silently — carry the `animation:` reference verbatim (byte-exact preserves the current, non-shimmering behavior) and flag the missing keyframe definition as a team decision (define it for real, or remove the dead reference — either is a deliberate visual-behavior change, out of scope here). |
 
 `gallery-view`'s `GALLERY_HOVER_STYLES` and `collection-workspace`'s `PAGE_SIZE_CONTROL_CSS`/

@@ -114,6 +114,8 @@ function scopeFor(repo, path) {
   if (repo === 'ui-design-system' && path.startsWith('packages/showroom/')) return 'showroom';
   if (repo === 'ui-design-system') return 'ds-internal';
   if (path.includes('/showcase/')) return 'showroom';
+  // Consumer repositories keep their own source taxonomy. These paths refer to
+  // app-bithire/app-platform/app-evnto, not to the design-system `src/ui` tier.
   if (path.startsWith('src/components/landing/') || path.startsWith('src/components/marketing/')) return 'marketing';
   return 'product';
 }

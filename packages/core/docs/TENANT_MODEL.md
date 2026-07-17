@@ -12,8 +12,10 @@ Baselines: `rottay`, `bithire`, `evnto`.
 - They define the visual grammar shared by a product vertical: topology,
   component recipes, semantic icon roles, chart renderers, motion posture and
   accessibility behavior.
-- They resolve from `runtime/tenant/registry/` with zero network and have a
-  generated CSS artifact under `tokens/css/artifacts/{slug}/`.
+- They resolve from
+  `infrastructure/runtime/tenant/foundation/configuration/registry/` with zero
+  network and have a
+  generated CSS artifact under `foundation/tokens/css/facade/artifacts/{slug}/`.
 - Use `isBundledTenant(slug)` when a host must distinguish these baselines from
   customer tenants. `isKnownTenant` is registry discovery, not a DB policy.
 - The full `BrandTheme` remains code-owned and is not tenant-editable.
@@ -99,4 +101,4 @@ runtime source.
 - Supplier-contract and packed-artifact gates prove the public runtime matches
   what consumers install.
 
-Last verified: 2026-07-16 (`@rottay/design-system@2.19.25`)
+Last architecture verification: 2026-07-17.

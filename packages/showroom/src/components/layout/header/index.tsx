@@ -1,14 +1,14 @@
 "use client";
 
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/composition/components/showroom-link";
 import { usePathname } from "next/navigation";
-import { Box, Flex, Text } from "@/components/showroom-ui";
+import { Box, Flex, Text } from "@/composition/components/showroom-ui";
 import {
   ChevronRightIcon,
   MenuIcon,
   SearchIcon,
 } from "@rottay/design-system/icons";
-import { useShowroomRuntime } from "@/components/showroom-context";
+import { useShowroomRuntime } from "@/composition/components/showroom-context";
 import { getRoutePresentation } from "../config";
 import {
   DOC_COUNTS,

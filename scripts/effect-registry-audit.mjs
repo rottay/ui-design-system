@@ -13,7 +13,7 @@ const DEFAULT_PROVENANCE_ROOT = resolve(
 );
 const DEFAULT_REGISTRY_SOURCE = resolve(
   REPO_ROOT,
-  'packages/core/src/runtime/effects/registry.ts',
+  'packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts',
 );
 const requireFromCore = createRequire(resolve(REPO_ROOT, 'packages/core/package.json'));
 const ts = requireFromCore('typescript');

@@ -1,12 +1,12 @@
 # Overlay-primitives paint inventory (WO-SKIN-04 checkpoint P)
 
-Scope: `packages/core/src/components/primitives/overlay/**` -- Modal (53 sites across
+Scope: `packages/core/src/ui/primitives/overlay/**` -- Modal (53 sites across
 8 files), Tour (49, 2), ConfirmDialog (42, 2), Popconfirm (41, 2), Sheet (39, 2),
 AlertDialog (24, 2), ContextMenu (23, 2), Popover (22, 2), Dropdown (18, 2), HoverCard
 (10, 2), Watermark (3, 2), AdaptiveOverlay (1, 1) -- 12 components, ~325
 property-level sites (audit-script count; the script has blind spots noted per
 component below, so per-file totals below sometimes exceed it). Counts sourced from
-`node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.primitives/overlay`.
+`node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.foundation/primitives/overlay`.
 Format follows the feedback-overlays precedent (`wo-skin-03-overlays-inventory.md`).
 
 **Naming collision warning, read first**: `primitives/overlay/Modal` is a wholly
@@ -42,7 +42,7 @@ Popconfirm, Popover, Sheet rustic engines, plus both Tour engines directly via
 `primitives/feedback/Modal/compound/{Header,Body,Footer}` (already migrated,
 WO-SKIN-03 checkpoint O) render classes `rottay-modal-header`, `rottay-modal-body`,
 `rottay-modal-footer` and stamp `data-part="header"/"body"/"footer"/"title"`. Their
-skin, `tokens/css/components/skin/modal-compounds.css`, is scoped like this:
+skin, `foundation/tokens/css/presentation/components/skin/modal-compounds.css`, is scoped like this:
 
 ```css
 .rottay-modal-header.rottay-modal-header[data-part='header'][data-part='header'] { border-bottom: var(--ds-modal-header-divider); }
@@ -225,8 +225,8 @@ Footer (1): `borderTop` (`--ds-modal-footer-border`, also unconditional, no
 ## Suppression risk
 Grepped `rottay-modal`, `rottay-overlay`, `rottay-focus-trap`,
 `rottay-modal-close-button`, `rottay-modal-header`, `rottay-modal-body`,
-`rottay-modal-footer` across `tokens/css/runtime/personality.css` and
-`tokens/css/engines/*/theme.css`: **zero hits**. Personality.css does not currently
+`rottay-modal-footer` across `foundation/tokens/css/runtime/personality.css` and
+`foundation/tokens/css/runtime/engines/*/theme.css`: **zero hits**. Personality.css does not currently
 touch anything in this component family (contrast the feedback-family Modal/Drawer/
 Toast precedent, where personality.css was a live second emitter on several
 classnames) -- there is no "personality currently wins" channel to preserve here. The
@@ -436,7 +436,7 @@ personality duration token for an animation that never plays.
 ## Keyframes / animation
 Modern spinner uses `ds-spin`; rustic spinner uses `spin` -- **two different keyframe
 names for the visually-identical loading indicator**, cross-engine naming
-divergence. Both resolve today only because `tokens/css/engines/index.css`
+divergence. Both resolve today only because `foundation/tokens/css/runtime/engines/index.css`
 unconditionally `@import`s **all three** engine `theme.css` files (classic, modern,
 rustic) into every tenant bundle regardless of active engine -- `ds-spin` is
 physically defined in `engines/rustic/theme.css:1052` but consumed by **modern**'s
@@ -835,7 +835,7 @@ Popconfirm (a scroll or resize while open leaves the popover stale).
 
 ## SUPPRESSION RISK -- a DORMANT personality rule this migration could accidentally
 ## wake up
-`tokens/css/runtime/personality.css:581-585`:
+`foundation/tokens/css/runtime/personality.css:581-585`:
 ```css
 .ant-popover, .popover, [data-engine] .ds-popover {
   animation: ds-dropdown-enter var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.16, 1, 0.3, 1);
@@ -960,7 +960,7 @@ ConfirmDialog modern, which looks similar in spirit but uses zero DaisyUI classe
 Those four classnames are live selectors in **two** external files:
 
 ```css
-/* tokens/css/runtime/personality.css:177-188, layer(rottay-personality) */
+/* foundation/tokens/css/runtime/personality.css:177-188, layer(rottay-personality) */
 .ant-modal-mask, .modal-backdrop, [data-engine] .ds-modal-overlay {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -970,7 +970,7 @@ Those four classnames are live selectors in **two** external files:
 }
 ```
 ```css
-/* tokens/css/engines/modern/theme.css:264-279, layer(rottay-engines) */
+/* foundation/tokens/css/runtime/engines/modern/theme.css:264-279, layer(rottay-engines) */
 [data-tenant] .modal-box { background-color: var(--ds-modal-bg); border-radius: var(--ds-modal-radius); box-shadow: var(--ds-modal-shadow); padding: var(--ds-modal-padding); }
 [data-tenant] .modal-backdrop { background-color: var(--ds-modal-overlay-bg); backdrop-filter: var(--ds-modal-overlay-backdrop); }
 [data-tenant] .modal-action { margin-top: var(--ds-modal-footer-padding); gap: var(--ds-modal-footer-gap); }
@@ -1082,8 +1082,8 @@ does the opposite**: it applies real DaisyUI structural classes --
 `rootClassName` composes `dropdown` + placement modifiers (`dropdown-top`,
 `dropdown-end`, `dropdown-start`); `menuClassName` composes `dropdown-content menu`
 (145-151) -- and those exact classnames have **extensive, live styling in
-`tokens/css/engines/modern/theme.css:358-451`**, further modified by
-`tokens/css/runtime/personality.css:605-611`. Concretely, for a plain (non-divider,
+`foundation/tokens/css/runtime/engines/modern/theme.css:358-451`**, further modified by
+`foundation/tokens/css/runtime/personality.css:605-611`. Concretely, for a plain (non-divider,
 non-group, non-danger) menu item row, **Dropdown's own `MenuItem` renders the
 `<button>` with NO `style` prop at all** (`modern.tsx:64-81` -- compare ContextMenu's
 equivalent, which at least sets structural Tailwind classes but still no color/hover).
@@ -1111,7 +1111,7 @@ background-color: var(--ds-color-error-50); }` (engine, unmasked) **is** live --
 danger item's resting color and hover background come from two different sources,
 one inline (masking a live-but-dead engine rule) and one purely external.
 **One caveat**: `--ds-dropdown-item-bg-hover`/`-bg-active`/`-color-active` are only
-defined in the `rottay` tenant artifact (`tokens/css/artifacts/rottay/index.css`), not
+defined in the `rottay` tenant artifact (`foundation/tokens/css/facade/artifacts/rottay/index.css`), not
 in `foundation/themes/default.css`, and the theme.css references carry **no
 fallback** -- a tenant without its own dropdown-item overrides would see these
 properties resolve to nothing (no hover paint at all), a real per-tenant gap worth a

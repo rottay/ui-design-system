@@ -10,7 +10,7 @@ import {
   type BrandTheme,
 } from '@rottay/design-system';
 
-import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
+import { FLAGSHIP_SPECS, StateGallery } from '@/composition/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // Brand Studio capture surface (stable capture target for WO-CRA-05)

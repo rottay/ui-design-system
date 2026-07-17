@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { Badge, Box, Flex, Stack, Text, useTokens } from '@rottay/design-system';
-import { useShowroomRuntime } from '@/components/showroom-context';
+import { useShowroomRuntime } from '@/composition/components/showroom-context';
 
 export interface RuntimeFingerprintProps {
   compact?: boolean;

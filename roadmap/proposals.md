@@ -87,7 +87,7 @@ Effort: S (< 1 day agent work) / M (1-3 days) / L (1-2 weeks) / XL (multi-week p
   premium polish must be re-written twice more or the engines drift apart again. It also makes
   the `custom` engine real: a white-label tenant ships CSS + tokens, not 127 React forks.
 - **Sketch**: define the anatomy contract per component family (parts + states); build the core
-  under `packages/core/src/behavior/`; migrate component-by-component behind
+  under `packages/core/src/foundation/behavior/`; migrate component-by-component behind
   `createEngineComponent` (the factory isolates engines, so migration is per-component and
   invisible to apps); rustic migrates first (smallest skin), modern second (on the ENG-lane
   tokens), classic untouched.
@@ -491,10 +491,10 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 ### P-26 The brand compiler emits two names per table-row channel; two are dead (S — `core lint` is red on main)
 
-- **What** — `compilers/brand-theme/index.ts:768-771` emits `--ds-table-row-bg-hover` AND
+- **What** — `infrastructure/compilers/kernel/runtime/brand-theme/index.ts:768-771` emits `--ds-table-row-bg-hover` AND
   `--ds-table-row-hover-bg`, `--ds-table-row-bg-striped` AND `--ds-table-row-striped-bg`. Every
   component consumes only the `-bg-hover` / `-bg-striped` spelling (4 and 6 references under
-  `src/components/`); the other two have no consumer anywhere in the DS or in app-bithire,
+  `src/ui/`); the other two have no consumer anywhere in the DS or in app-bithire,
   app-platform, or app-evnto.
 - **Why it matters** — `pnpm --filter @rottay/design-system run lint` fails on `audit-integration`
   with two `orphan-premium-var` violations, and has done so since before 2026-07-09 (reproduced
@@ -524,13 +524,13 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 ### P-29 A public symbol with no consumer is debt with green tests (M — the systemic one)
 
 - **What** — Three unrelated defects found in a single session share one shape: a symbol exists, is typed, is passed around, and **nothing reads it**. Every test was green in all three cases.
-  - `--ds-async-spinner-delay` / `--ds-async-skeleton-after` (`tokens/css/foundation/themes/default.css`): defined as tokens; no CSS read them and `useDeferredPending` hardcoded its own numbers, while a comment claimed the hook "mirrors" them. Fixed in WO-CRA-02.
+  - `--ds-async-spinner-delay` / `--ds-async-skeleton-after` (`foundation/tokens/css/foundation/themes/default.css`): defined as tokens; no CSS read them and `useDeferredPending` hardcoded its own numbers, while a comment claimed the hook "mirrors" them. Fixed in WO-CRA-02.
   - `ButtonProps.loadingText`: never destructured in any of the three Button engines, so it leaked onto the DOM as a `loadingtext` attribute and never rendered — while `app-bithire`'s passkey prompt passes it in a live auth flow. Fixed in WO-CRA-02.
   - `BrandCompilerInput.baseTheme`: present in the contract, faithfully passed by callers including `torture-fixtures.test.ts`; `compileBrandTheme` never destructures or reads it. Still open.
   - Adjacent: `--ds-table-row-hover-bg` / `--ds-table-row-striped-bg`, emitted by the compiler and consumed by nothing — the ONLY one of these a gate caught, because `audit-integration.mjs` happens to scan premium chrome vars specifically. Fixed in WO-TOK-04.
 - **Why it matters** — Unit tests prove that what runs, runs. They cannot prove that what is declared is read. Type checking cannot either: an unread prop, an unresolved parameter and an unconsumed token are all perfectly well-typed. This class ships silently, teaches consumers a lie (`loadingText` "works"), and creates two sources of truth that drift.
 - **Shape** — Generalize `scripts/audit-integration.mjs` beyond premium chrome vars into a **consumer census** with three counters, all decrease-only, each with an allowlist whose entries carry a stated reason:
-  1. `--ds-*` tokens defined in `tokens/css/**` with no consumer in `components/**`, `engines/**`, `tokens/css/**`, or a JS token read.
+  1. `--ds-*` tokens defined in `foundation/tokens/css/**` with no consumer in `components/**`, `engines/**`, `foundation/tokens/css/**`, or a JS token read.
   2. Public component props declared in `*.types.ts` that no engine destructures.
   3. Exported contract fields that no implementation reads (start with `compilers/**` inputs).
 - **Gate it bites** — The census must be seeded with a drill, per `roadmap/README.md` rule 3: reintroduce one of the four defects above, watch the counter rise, revert. A counter that has never been red is not a counter.
@@ -574,7 +574,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 ### P-36 The rottay artifact and the rottay BrandTheme disagree about the input surface
 - **Found** — 2026-07-09, during WO-TOK-08.
-- **Evidence** — `tokens/css/artifacts/rottay/index.css:158` hand-writes `--ds-color-bg-input: #0F0F12`. `rottayBrandTheme.chrome.controls.input.bg` is `#131316`, and the compiler now emits that. Same element, same variable, two values one step apart in the surface hierarchy. The artifact wins today because it is declared in the tenant scope and loads later, so no pixel moved (`test:gates` 58/58) — the disagreement is latent, not active.
+- **Evidence** — `foundation/tokens/css/facade/artifacts/rottay/index.css:158` hand-writes `--ds-color-bg-input: #0F0F12`. `rottayBrandTheme.chrome.controls.input.bg` is `#131316`, and the compiler now emits that. Same element, same variable, two values one step apart in the surface hierarchy. The artifact wins today because it is declared in the tenant scope and loads later, so no pixel moved (`test:gates` 58/58) — the disagreement is latent, not active.
 - **Also** — the same artifact declares `--ds-select-bg: #131316` beside `--ds-color-bg-input: #0F0F12`, so within one file the select surface and the input surface disagree too. Measured live: rottay's native select computes `rgb(19,19,22)` while `--ds-surface-control` computes `#0f0f12`.
 - **Why it matters** — `CLAUDE.md` states the `.ts` BrandTheme is the source of truth and the CSS artifact is a generated snapshot. For rottay the artifact is neither generated nor in sync. Whichever value is right, the other is a lie that will be copied by the next tenant someone bootstraps from rottay.
 - **Ask** — decide which is canonical, then either regenerate rottay's artifact from its theme or correct the theme. Do not silently align one to the other; one of the two encodes a deliberate choice and the git history will not say which.
@@ -584,14 +584,14 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 ### P-37 Two card variant tokens are dead, and no gate can see them
 - **Found** — 2026-07-09, while certifying WO-ENG-14. `Card.real-engines.test.tsx` was RED in the working tree and GREEN at the pre-program commit `9d59a97a`. Bisected with `git log -S`: `ad501eca` (WO-ENG-06, "color purity") removed the only consumer of `--ds-card-elevated-shadow-hover` from `Card/engines/modern.tsx` and left the test asserting it. The failure was never attributed because the full suite was not run to completion at the time.
-- **Evidence** — `--ds-card-elevated-shadow-hover` (defined `tokens/css/components/card.css:154`, mirrored `tokens/ts/components/card.ts:131`) and `--ds-card-elevated-shadow` (`card.css:153`) now have ZERO consumers across `packages/core/src` and `packages/showroom/src`. The collapse itself is correct: hover elevation became a personality channel (`--ds-card-shadow-hover`, driven by `CARD_HOVER_ELEVATION_MAP` in `runtime/personality/primitives.ts:170`), which is what WO-ENG-03 set out to do. The tokens are simply orphans now.
-- **Why the gates missed it** — `audit-integration.mjs` has an `orphan-premium-var` check, but it scans variables *emitted by the compilers*. These two are declared in `tokens/css/components/*.css`, a source the orphan check never reads. There is a whole class of DS-declared tokens that no gate can prove are consumed.
-- **Ask** — (a) delete the two dead tokens, or restore them as a real variant channel and decide which layer owns card elevation; (b) extend the orphan check to `tokens/css/components/**`, which is where most of the DS's own tokens live. That is a bigger gate than this WO should grow.
+- **Evidence** — `--ds-card-elevated-shadow-hover` (defined `foundation/tokens/css/presentation/components/card.css:154`, mirrored `foundation/tokens/ts/runtime/components/card/index.ts:131`) and `--ds-card-elevated-shadow` (`card.css:153`) now have ZERO consumers across `packages/core/src` and `packages/showroom/src`. The collapse itself is correct: hover elevation became a personality channel (`--ds-card-shadow-hover`, driven by `CARD_HOVER_ELEVATION_MAP` in `runtime/personality/primitives.ts:170`), which is what WO-ENG-03 set out to do. The tokens are simply orphans now.
+- **Why the gates missed it** — `audit-integration.mjs` has an `orphan-premium-var` check, but it scans variables *emitted by the compilers*. These two are declared in `foundation/tokens/css/presentation/components/*.css`, a source the orphan check never reads. There is a whole class of DS-declared tokens that no gate can prove are consumed.
+- **Ask** — (a) delete the two dead tokens, or restore them as a real variant channel and decide which layer owns card elevation; (b) extend the orphan check to `foundation/tokens/css/presentation/components/**`, which is where most of the DS's own tokens live. That is a bigger gate than this WO should grow.
 - **Status** — OPEN. The stale assertion has been corrected to the shipped contract; the dead tokens are untouched.
 
 ### P-38 There are two Modal component families
 - **Found** — 2026-07-09, while attributing a test failure. **Not a new discovery:** WO-ARC-01's own "Why" section already names both (`primitives/feedback/Modal/Modal.types.ts:215` and `primitives/overlay/Modal/Modal.types.ts:15`, each with its own `engines/`, `compound/` and `tests/`), and its Do-NOT assigns the merge decision to WO-ARC-03. Recorded here so the finding is not lost between lanes, not as an independent find.
-- **Evidence** — `packages/core/src/components/primitives/overlay/Modal/` and `packages/core/src/components/primitives/feedback/Modal/` both exist, both carry a `Modal.types.ts`, and both are engine-switched. The taxonomy in `CLAUDE.md` puts overlays under `overlay/` and feedback under `feedback/`; a Modal cannot be in both.
+- **Evidence** — `packages/core/src/ui/primitives/overlay/Modal/` and `packages/core/src/ui/primitives/feedback/Modal/` both exist, both carry a `Modal.types.ts`, and both are engine-switched. The taxonomy in `CLAUDE.md` puts overlays under `overlay/` and feedback under `feedback/`; a Modal cannot be in both.
 - **Why it matters** — This is the shape of every defect this program has found: one path follows a rule, a duplicated path ignores it, and a gate scans only one. A consumer importing `Modal` gets whichever the barrel exports; a fix applied to one is invisible in the other. The Toast `default` variant and the two chrome compilers were exactly this.
 - **Ask** — Determine which is canonical, whether both are reachable from the public barrel, and whether any app imports the non-canonical one. Then delete or merge. Needs an owner decision because it may be a breaking export change.
 - **Status** — OPEN.
@@ -678,11 +678,11 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **The defect** — the ring is painted in the tenant's primary colour with no contrast guarantee against the surface it is drawn on. `outline-offset: 2px` puts it on the page ground, so the relevant comparison is ring-against-ground, and a tenant whose primary is close to its own ground gets an invisible keyboard affordance. The two engines disagree on the mechanism as well: modern draws an `outline`, rustic draws a low-alpha `box-shadow`, and rustic's alpha (0.12 on bithire) cannot reach 3:1 against anything.
 - **Why the a11y gate is silent** — WO-GAT-04's axe harness has no rule for focus-indicator contrast; no automated axe rule does. The 48 visual baselines never focus a control. Both gates were green while four of six rings were unusable.
 - **Why ARC-07 did not fix it** — ARC-07's own gate is "not one pixel moves". Fixing the ring moves pixels in four of six cells by construction. Repairing it inside a pixel-identical migration would have meant re-recording the very matrix that proves the migration is faithful.
-- **Ask** — one WO. Derive the ring from a contrast-checked token rather than from `--ds-color-primary` directly: pick the tenant's primary when it clears 3:1 against `--ds-color-bg-primary`, otherwise fall back to the ground's own high-contrast ink. Give rustic the same mechanism as modern, or give its `box-shadow` ring an alpha the contrast maths can actually satisfy. The gate already exists: `states.spec.ts` records the ring per tenant per engine, and `_internal/a11y/contrast` already computes the ratio. Ship it with a drill that lowers a tenant's ring contrast and watches the WO's new assertion go red.
+- **Ask** — one WO. Derive the ring from a contrast-checked token rather than from `--ds-color-primary` directly: pick the tenant's primary when it clears 3:1 against `--ds-color-bg-primary`, otherwise fall back to the ground's own high-contrast ink. Give rustic the same mechanism as modern, or give its `box-shadow` ring an alpha the contrast maths can actually satisfy. The gate already exists: `states.spec.ts` records the ring per tenant per engine, and `foundation/internal/kernel/accessibility/branding-contrast` already computes the ratio. Ship it with a drill that lowers a tenant's ring contrast and watches the WO's new assertion go red.
 - **SCOPING, measured 2026-07-10.** This is bigger than a token swap, for three reasons found by tracing it:
   1. **Modern's failure is a fixture, the real failures are rustic.** `--ds-focus-ring-color` = `var(--ds-color-primary)` fails 3:1 only on torture-dark (a test fixture). Every REAL tenant's modern ring passes. The failing real-tenant rings (rottay 1.82:1, bithire 1.31:1) are all the RUSTIC `box-shadow` ring, whose colour is `--ds-button-focus-ring` — a low-alpha tint (α=0.20 on rottay, 0.12 on bithire) that no contrast maths can lift to 3:1 without changing its alpha, i.e. changing what the ring looks like on every tenant. That is a focus-affordance redesign, not a derivation, and it moves baselines by design.
   2. **The compiler seam collides with WO-TOK-02's deferred rottay architecture.** `--ds-focus-ring-color` would be derived in `brandThemeToCssVariables`, which emits the LIGHT block. rottay is dark-surface: its default rendering is the hand-authored extension, and its compiled block is shadowed by that extension (the exact `[data-theme='light']`-scoped asymmetry WO-TOK-02 documented and deferred to WO-ENG-22). So a compiler-emitted ring colour would not even be visible on rottay's default until that selector architecture is resolved — the same blocker, hit from a second direction.
-  3. **The compiler already has the pieces.** `isDarkSurfacePalette`, a resolved `ground`, and a re-exported `apcaContrast` are all in `compilers/brand-theme/index.ts`. The derivation is a ~10-line function; the build gate is a copy of `checkGeneratedRampApca`. The work is not the maths, it is the two blockers above.
+  3. **The compiler already has the pieces.** `isDarkSurfacePalette`, a resolved `ground`, and a re-exported `apcaContrast` are all in `infrastructure/compilers/kernel/runtime/brand-theme/index.ts`. The derivation is a ~10-line function; the build gate is a copy of `checkGeneratedRampApca`. The work is not the maths, it is the two blockers above.
   So this WO must land AFTER (or alongside) WO-ENG-22's rottay artifact-selector fix, and it must make an explicit decision about the rustic ring's appearance. Not a quiet defect fix.
 - **Status** — OPEN, sequenced behind WO-ENG-22, with a design decision on the rustic ring.
 - **Note.** P-52 and P-55 fixed the two members of this family that WERE mechanical (a foreground colour that ignores its ground). P-44's remainder is the part that is genuinely a design change.
@@ -698,9 +698,9 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 ### P-46 The artifact emitter is guarded; its twin is not
 - **Found** — 2026-07-10, while committing WO-TOK-02.
-- **Evidence** — `packages/core/src/tokens/css/artifacts/{bithire,evnto,rottay}/index.css` is generated by `build-vertical-artifacts.mjs`, and `lint:artifacts` (`--check`) regenerates and diffs it, chained into both `lint` and `pretest`. A hand-edit fails the build. `packages/core/styles/{index,modern,platform,rottay,bithire,evnto}.css` is generated by `build-vertical-css.mjs`, is tracked in git, and **nothing regenerates or diffs it**.
+- **Evidence** — `packages/core/src/foundation/tokens/css/facade/artifacts/{bithire,evnto,rottay}/index.css` is generated by `build-vertical-artifacts.mjs`, and `lint:artifacts` (`--check`) regenerates and diffs it, chained into both `lint` and `pretest`. A hand-edit fails the build. `packages/core/styles/{index,modern,platform,rottay,bithire,evnto}.css` is generated by `build-vertical-css.mjs`, is tracked in git, and **nothing regenerates or diffs it**.
 - **What that permitted** — WO-TOK-10 deleted 51 dead selectors from `engines/modern/theme.css` and committed. The generated bundles kept all 51. They were only regenerated as a side effect of a later build, arriving as a 2,187-line deletion in an unrelated working tree. For the interval between, the repo shipped bundles that disagreed with the source they are built from, and every gate was green.
-- **The shape** — this is the same defect the program has now found in `audit-integration` (scanned one emitter of two), in the chrome variables (one compiler honoured a rule, its twin ignored it), and in `ThemeProvider` vs `compilers/brand-theme` (one stamped `'none'`, the other guarded against it). **A rule lives in one emitter and its twin ignores it, while the gate scans only one.**
+- **The shape** — this is the same defect the program has now found in `audit-integration` (scanned one emitter of two), in the chrome variables (one compiler honoured a rule, its twin ignored it), and in `ThemeProvider` vs `infrastructure/compilers/kernel/runtime/brand-theme` (one stamped `'none'`, the other guarded against it). **A rule lives in one emitter and its twin ignores it, while the gate scans only one.**
 - **Ask** — give `build-vertical-css.mjs` the same `--check` mode `build-vertical-artifacts.mjs` has, and chain it into `lint` and `pretest`. Ship it with a drill: hand-edit one byte of `styles/rottay.css` and watch `pnpm lint` reject it.
 - **Status** — OPEN.
 
@@ -758,8 +758,8 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
   ```
   npx vitest run --config vitest.config.ts \
-    src/components/patterns/data/list-toolbar \
-    src/components/surfaces/pages/workspace/collection-workspace
+    src/ui/patterns/data/list-toolbar \
+    src/ui/surfaces/presentation/pages/workspace/collection-workspace
   #  x ListToolbar > renders the compact mobile toolbar through the modern engine  (1808ms)
   #    Unable to find an accessible element with the role "button" and name /create event/i
   #  Tests  1 failed | 40 passed (41)
@@ -767,7 +767,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
   Each file alone passes. Order does not matter, so it is not sequential pollution -- vitest runs the two files in parallel threads, and the failing test spends **1808ms** before giving up. `findByRole`'s default timeout is 1000ms. The button it cannot find lives behind an engine's lazy boundary; under CPU contention the chunk does not resolve inside the window.
 
-  **CORRECTION, same day.** This entry first called the reproducer "deterministic", on two observations out of two. Measured properly under a machine running six agents: **3 failures in 11 runs**. It is a probabilistic race whose failure rate rises with load, not a certainty. Two observations are not a rate. The distinction matters: a fix validated against a reproducer that fires 1 run in 4 has told you almost nothing, and one candidate fix passed that reproducer 15 times in a row while breaking **498 of 795 tests** in `src/components/primitives/display` and doubling that subset's wall time. A race is closed by measuring the class, never by watching the instance.
+  **CORRECTION, same day.** This entry first called the reproducer "deterministic", on two observations out of two. Measured properly under a machine running six agents: **3 failures in 11 runs**. It is a probabilistic race whose failure rate rises with load, not a certainty. Two observations are not a rate. The distinction matters: a fix validated against a reproducer that fires 1 run in 4 has told you almost nothing, and one candidate fix passed that reproducer 15 times in a row while breaking **498 of 795 tests** in `src/ui/primitives/display` and doubling that subset's wall time. A race is closed by measuring the class, never by watching the instance.
 - **The fix is not a longer timeout.** Widening a race window hides it. Make the resolution deterministic -- preload the engine module in the test setup, or render through a resolved component -- so the assertion no longer competes with a scheduler.
 - **Ask** — one WO. Start from the reproducer above. Then sweep every `getBy*` that follows a `rerender` or a preceding `await findBy*` in a `renderSurface`/engine-lazy tree and make it wait. Then, if instances remain, reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
 - **Status** — OPEN.
@@ -850,7 +850,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   computed            : outline-style: none
   ```
 
-  `--ds-input-shadow-focus` is a **box-shadow value**, not a colour: `0 0 0 3px rgba(255,255,255,0.10)` on rottay, `0 0 0 1px #3A6FB0` on bithire, `0 0 0 5px rgba(255,0,170,0.4)` on torture-dark. Substituted into `outline: <width> solid <color>` it makes the declaration invalid at computed-value time, and the browser drops the whole thing. The `var(--ds-focus-ring-color)` fallback never runs, because the custom property IS defined — `tokens/css/components/input.css:121` defines it for every tenant.
+  `--ds-input-shadow-focus` is a **box-shadow value**, not a colour: `0 0 0 3px rgba(255,255,255,0.10)` on rottay, `0 0 0 1px #3A6FB0` on bithire, `0 0 0 5px rgba(255,0,170,0.4)` on torture-dark. Substituted into `outline: <width> solid <color>` it makes the declaration invalid at computed-value time, and the browser drops the whole thing. The `var(--ds-focus-ring-color)` fallback never runs, because the custom property IS defined — `foundation/tokens/css/presentation/components/input.css:121` defines it for every tenant.
 - **What the user actually sees** — a two-layer halo drawn by `box-shadow` from a rule in `@layer rottay-personality` keyed on `:focus-visible`. That rule is correct and is doing the whole job. Text inputs match `:focus-visible` even when focus arrives from a pointer, per the CSS selectors spec, so a click rings them too, which is the right behaviour for a field.
 - **Two smaller consequences** — on focus the element also loses the resting `outline: 2px solid transparent` that `buildShellStyle` sets, because the same declaration is what gets dropped; and the `flushed` variant's `base.outline = 'none'` on focus is a correction to a rule that was never in force.
 - **Why nothing caught it** — no test focuses an Input, and `outline-style: none` is what the element reports at rest too, so a snapshot of the resting state is identical to a snapshot of the broken focused state on this channel.
@@ -891,7 +891,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 ### P-58 The vertical-CSS check verifies its engine input exists, not that it is fresh
 - **Found** — 2026-07-10, by WO-P-46's executor while shipping `build-vertical-css.mjs --check`.
-- **Evidence** — the styles/ bundles have three inputs: `base.css` (a plain source file, no build step), the tenant artifacts (freshness-guaranteed by `build-vertical-artifacts.mjs --check`, which runs immediately before this in `lint`/`pretest`), and `dist/modern-engine.css` (built from `src/tokens/css/engines/modern/compiled.css` via `postcss`, i.e. `build:modern-css`). The new `--check` detects `dist/modern-engine.css`'s **absence** and fails loudly, but cannot detect its **staleness**: edit the modern engine CSS source, forget `build:modern-css`, and `--check` certifies `styles/*.css` as "in sync" against a stale engine bundle.
+- **Evidence** — the styles/ bundles have three inputs: `base.css` (a plain source file, no build step), the tenant artifacts (freshness-guaranteed by `build-vertical-artifacts.mjs --check`, which runs immediately before this in `lint`/`pretest`), and `dist/modern-engine.css` (built from `src/foundation/tokens/css/runtime/engines/modern/compiled.css` via `postcss`, i.e. `build:modern-css`). The new `--check` detects `dist/modern-engine.css`'s **absence** and fails loudly, but cannot detect its **staleness**: edit the modern engine CSS source, forget `build:modern-css`, and `--check` certifies `styles/*.css` as "in sync" against a stale engine bundle.
 - **Why it matters** — it is the one input in the chain with no freshness guard. Same shape as the artifact-vs-source staleness P-46 closed for the styles/ bundles, one level down.
 - **Ask** — give `build:modern-css` a `--check` mode (regenerate `dist/modern-engine.css` in memory, diff against disk) chained before `build-vertical-css --check`, or have `build-vertical-css --check` recompute the engine CSS from source rather than trusting the `dist/` mirror. Drill: edit the modern compiled source, forget the build, watch `--check` catch it.
 - **Status** — OPEN.
@@ -1051,7 +1051,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 ### P-76 The theme.css bridge layer is dead on every border/margin/padding channel — Tailwind's preflight outranks it by LAYER ORDER
 
 - **Context** — Surfaced while a WO-SKIN-05 lead (an "extra line" on Divider) was being REFUTED. The refutation was correct, and its mechanism turned out to be systemic, not local. Adjudicated in a live browser with CDP `CSS.getMatchedStylesForNode` on two independent components (Divider, Collapse), against the production build.
-- **The mechanism** — `tokens/css/entrypoints/styles.css:19` declares the cascade order: `@layer rottay-reset, rottay-tokens, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive;`. Per the cascade spec, **a layer NOT named in that statement sorts AFTER every named one**. Tailwind's `base` layer is not named — and the preflight ships INSIDE the DS bundle itself (`styles/bithire.css` carries 15 `@layer base` blocks and the `*, ::before, ::after { border: 0 solid; margin: 0; padding: 0 }` reset). So preflight outranks EVERY `rottay-*` layer, including `rottay-engines`, where every `theme.css` bridge rule lives — by layer order alone, regardless of specificity.
+- **The mechanism** — `foundation/tokens/css/facade/entrypoints/styles.css:19` declares the cascade order: `@layer rottay-reset, rottay-tokens, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive;`. Per the cascade spec, **a layer NOT named in that statement sorts AFTER every named one**. Tailwind's `base` layer is not named — and the preflight ships INSIDE the DS bundle itself (`styles/bithire.css` carries 15 `@layer base` blocks and the `*, ::before, ::after { border: 0 solid; margin: 0; padding: 0 }` reset). So preflight outranks EVERY `rottay-*` layer, including `rottay-engines`, where every `theme.css` bridge rule lives — by layer order alone, regardless of specificity.
 - **Measured** — CDP on `.rottay-collapse` (modern), matched rules in increasing precedence: (1) `[data-tenant] .rottay-collapse { border-color: var(--ds-collapse-border) }` — the bridge; (2) `*, ::backdrop, ::after, ::before { border: 0 solid; border-*-width: 0px; border-*-color: currentcolor }` — preflight, which BEATS it; (3) the tenant's unlayered `html[data-tenant] * { border-color: var(--ds-color-border) }` floor (P-48), which beats both. Computed result: **`border-top-width: 0px`**. `--ds-collapse-border` is a dead token: a tenant can set it and nothing happens, because the width is already zero.
 - **Blast radius** — declarations sitting on channels preflight resets, per engine `theme.css`: modern 39 border + 45 margin/padding · rustic 58 + 33 · classic 104 + 66. That is the first-party surface a tenant is supposed to theme through, and on these channels it has never worked in any Tailwind-hosting app — which is every app: both `app-bithire` and `app-platform` import the DS bundle, and the preflight is inside it.
 - **Channels that are SAFE (do not over-correct)** — preflight kills `border-WIDTH` (and any shorthand that sets one: `border`, `border-top`, `border-left`) and forces `border-style: solid`; it kills `margin` and `padding` on all sides. It does NOT reset `color`, `background-color`, `box-shadow`, `border-radius`, or **`border-color`** — measured twice (Collapse's border-color resolves to a real token value, and so does its border-radius, from the very same dead rule). `border-color` is therefore live but usually invisible: without a width from somewhere else, it paints nothing. Per engine, live `border-radius`: 26 / 29 / 60.
@@ -1226,10 +1226,10 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Context** — Found by the CK-B/P pre-step, in a layer the CK-B inventory never swept (it checked
   `theme.css` and `personality.css`; this lives in the tenant artifact/token layer).
 - **Evidence** — `--ds-page-shell-subtitle-color` is **declared** in
-  `tokens/css/foundation/themes/default.css:787` (as `var(--ds-color-text-secondary)`) and
+  `foundation/tokens/css/foundation/themes/default.css:787` (as `var(--ds-color-text-secondary)`) and
   **overridden by the rottay tenant** to real hexes: `#A0A0A5` in dark, `#6B6B6B` in light
   (`artifacts/rottay/index.css:905, 2475`). It is **consumed by exactly one file**:
-  `page-shell/engines/classic.tsx:128`. Modern hardcodes `var(--ds-color-text-secondary)`; rustic
+  `page-shell/engines/classic/index.tsx:128`. Modern hardcodes `var(--ds-color-text-secondary)`; rustic
   hardcodes `var(--ds-color-text-muted)`. **No vertical runs the classic engine.** Someone authored a
   brand colour that nothing on screen obeys.
 - **Why it is a migration landmine, not just a curiosity** — the DS's own house style (`CLAUDE.md`,
@@ -1254,7 +1254,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 ### P-83 WorkbenchHeader ships a back button no consumer can ever ask for
 
 - **Context** — Found by the CK-B/P pre-step while trying to pin every BackButton with a baseline.
-- **Evidence** — `workbench-header/engines/modern.tsx:135` defines a complete `BackButton` (32×32,
+- **Evidence** — `workbench-header/engines/modern/index.tsx:135` defines a complete `BackButton` (32×32,
   its own hover/focus recipe, divergent from cockpit's and page-shell's). It is **mounted by
   nothing**, and `WorkbenchHeaderProps` has **no `onBack` field**, so no consumer can trigger one. The
   "three divergent BackButtons" of the CK-B inventory are really **two reachable ones plus one that
@@ -1279,9 +1279,9 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   const with no usages) was dead code. The orchestrator asked the right question — not "who
   references this?" but **"what SHOULD reference this, and does that thing exist?"** — and the answer
   turned out to be a product gap, not dead code.
-- **Evidence** — `form-builder/engines/modern.tsx` has full section machinery: `groupedSections`,
+- **Evidence** — `form-builder/engines/modern/index.tsx` has full section machinery: `groupedSections`,
   `section-divider`, `section-header`, `section-title`, collapse state, measured heights.
-  `form-builder/engines/rustic.tsx` contains the string `section` (any case) **zero times**. It
+  `form-builder/engines/rustic/index.tsx` contains the string `section` (any case) **zero times**. It
   renders one flat field list.
 - **The bug** — a consumer passing `section:` delimiter fields gets a **sectioned form in modern and
   a flat one in rustic, from the same config, with no error and no warning.** The `s.sectionDivider`
@@ -1298,7 +1298,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 - **Context** — Found by the CK-B/P migration. A sixth counter blind spot, adjacent to the
   already-handled `interface X {` / `type X = {` / return-type / destructuring cases.
-- **Evidence** — `cockpit-header/engines/modern.tsx:34` declared
+- **Evidence** — `cockpit-header/engines/modern/index.tsx:34` declared
   `const STATUS_PILL_STYLES: Record<Status, { background: string; color: string; borderColor: string }> = {...}`.
   The `{ background: string; … }` is a TYPE argument inside the `Record<…>` generic — a type body, not
   an object literal. The lexer's type-body detection covers `interface X {`, `type X = {`, `): {`

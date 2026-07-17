@@ -22,16 +22,16 @@ if (!existsSync(packageJsonPath)) fail(`missing package.json under ${packageRoot
 const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 const rootEntry = resolve(packageRoot, packageJson.exports?.['.']?.import ?? 'dist/index.js');
 const platformCss = resolve(packageRoot, 'dist/platform.css');
-const particleFacade = resolve(packageRoot, 'dist/motion/effects/particles/public.js');
+const particleBoundary = resolve(packageRoot, 'dist/graphics/motion/react/presentation/effects/particles/index.js');
 
 if (!existsSync(rootEntry)) fail(`missing built public entry ${rootEntry}`);
 if (!existsSync(platformCss)) fail(`missing consumable CSS ${platformCss}`);
-if (!existsSync(particleFacade)) fail(`missing public ParticleField facade ${particleFacade}`);
+if (!existsSync(particleBoundary)) fail(`missing public ParticleField boundary ${particleBoundary}`);
 if (!readFileSync(platformCss, 'utf8').includes('.ds-collection-shell__static-particle-field')) {
   fail('dist/platform.css does not contain the CRA-14 static fallback selector');
 }
-if (/style\s*:\s*\{/.test(readFileSync(particleFacade, 'utf8'))) {
-  fail('public ParticleField facade adds inline style objects outside the governed census');
+if (/style\s*:\s*\{/.test(readFileSync(particleBoundary, 'utf8'))) {
+  fail('public ParticleField boundary adds inline style objects outside the governed census');
 }
 
 const COLLECTION_ENTRY = '\0cra-14-collection-consumer';
@@ -135,8 +135,8 @@ const collectionEntry = chunks.find((chunk) => chunk.isEntry && chunk.name === '
 const particleApiEntry = chunks.find((chunk) => chunk.isEntry && chunk.name === 'particleApi');
 if (!collectionEntry || !particleApiEntry) fail('consumer entry chunks were not emitted');
 
-const runtimeSuffix = '/motion/effects/particles/index.js';
-const facadeSuffix = '/motion/effects/particles/public.js';
+const runtimeSuffix = '/graphics/motion/react/presentation/effects/particles/runtime/canvas/index.js';
+const boundarySuffix = '/graphics/motion/react/presentation/effects/particles/index.js';
 
 for (const [label, entry] of [
   ['CollectionWorkspace', collectionEntry],
@@ -153,8 +153,8 @@ for (const [label, entry] of [
 }
 
 const particleApiStaticChunks = reachableFrom(particleApiEntry, 'imports');
-if (!particleApiStaticChunks.some((chunk) => containsModule(chunk, facadeSuffix))) {
-  fail('the public ParticleField API no longer resolves through its lazy facade');
+if (!particleApiStaticChunks.some((chunk) => containsModule(chunk, boundarySuffix))) {
+  fail('the public ParticleField API no longer resolves through its lazy boundary');
 }
 
 console.log(

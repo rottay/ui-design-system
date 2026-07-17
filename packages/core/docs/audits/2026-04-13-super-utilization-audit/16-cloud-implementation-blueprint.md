@@ -267,11 +267,11 @@ If Cloud needs a strict order, use this:
 
 Primary likely areas:
 
-- `ui-design-system/packages/core/src/components/structures`
-- `ui-design-system/packages/core/src/components/surfaces`
-- `ui-design-system/packages/core/src/runtime/responsive`
-- `ui-design-system/packages/core/src/runtime/tenant`
-- `ui-design-system/packages/core/src/motion`
+- `ui-design-system/packages/core/src/ui/structures`
+- `ui-design-system/packages/core/src/ui/surfaces`
+- `ui-design-system/packages/core/src/infrastructure/runtime/responsive`
+- `ui-design-system/packages/core/src/infrastructure/runtime/tenant`
+- `ui-design-system/packages/core/src/graphics/motion`
 
 ### Platform
 

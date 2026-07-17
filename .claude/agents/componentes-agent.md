@@ -191,18 +191,17 @@ export const useTheme = () => {
 
 ### 1. Wrapper Simple (Re-export directo)
 ```typescript
-// src/components/Display/Avatar/Avatar.tsx
+// src/ui/primitives/display/Avatar/index.tsx
 export { Avatar } from 'antd';
 ```
 
 ```typescript
-// src/components/Display/Avatar/index.ts
-export { Avatar } from './Avatar';
+// The owner index is the implementation/facade; do not add Avatar/Avatar.tsx.
 ```
 
 ### 2. Wrapper con Props Adicionales
 ```typescript
-// src/components/Navigation/Button/Button.tsx
+// src/ui/primitives/inputs/Button/index.tsx
 import React from 'react';
 import { Button as AntButton, ButtonProps as AntButtonProps } from 'antd';
 
@@ -242,7 +241,7 @@ export const Calendar = <T,>(props: CalendarProps<T>) => {
 
 ### 4. Componentes con Métodos Estáticos
 ```typescript
-// src/components/Feedback/Message/Message.tsx
+// src/ui/primitives/feedback/Message/index.tsx
 export { message as Message } from 'antd';
 ```
 
@@ -280,10 +279,10 @@ Drawer, Popconfirm, Popover, Tooltip
 - ✅ **Index principal**: Exportar todo desde `src/index.ts`
 
 ```typescript
-// src/components/index.ts
-export * from './Display';
-export * from './Feedback';
-export * from './Inputs';
+// src/ui/primitives/index.ts
+export * from './display';
+export * from './feedback';
+export * from './inputs';
 export * from './Layout';
 export * from './Navigation';
 
@@ -318,9 +317,9 @@ import Button from 'antd/es/button';
 
 3. **Crear archivos**
    ```bash
-   mkdir -p packages/core/src/components/Category/ComponentName
-   touch packages/core/src/components/Category/ComponentName/ComponentName.tsx
-   touch packages/core/src/components/Category/ComponentName/index.ts
+   mkdir -p packages/core/src/ui/primitives/category/ComponentName/engines/{classic,modern,rustic}
+   touch packages/core/src/ui/primitives/category/ComponentName/index.tsx
+   touch packages/core/src/ui/primitives/category/ComponentName/engines/{classic,modern,rustic}/index.tsx
    ```
 
 4. **Implementar componente**

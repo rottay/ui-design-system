@@ -1,115 +1,91 @@
-# Engine Code-Splitting Strategy
+# Engine Loading and Module Boundaries
 
-## Current State
+This document describes the current build and loading contract for
+`@rottay/design-system`.
 
-The build produces separate engine entry points via Vite library mode. Engine implementations
-are loaded dynamically through `createEngineComponent` using `import()`. The `package.json`
-already declares subpath exports for `./engines/classic`, `./engines/modern`, and
-`./engines/rustic`. A fourth engine (`custom`) supports pack-scoped component registration
-for white-label scenarios.
+## Public contract
 
-## Entry Points
+Consumers import components from `@rottay/design-system`. There are no public
+`@rottay/design-system/engines/*` subpaths. Engine implementation paths are an
+internal detail and must not appear in application imports.
 
-Consumers only pay for the engine they use:
+The package exposes focused boundaries for server utilities, icon packs,
+marks, pictograms, charts, motion, effects, spatial capability, ESLint rules,
+commercial tooling and CSS. Their source boundaries live under
+`src/entrypoints/`; canonical implementation code stays under
+`foundation/`, `infrastructure/`, `graphics/`, `ui/` or `tooling/`.
 
-- `@rottay/design-system` -- Main entry point. Includes engine routing, providers, hooks, tokens, and the component factory, but no engine implementation code.
-- `@rottay/design-system/engines/classic` -- Ant Design engine implementations.
-- `@rottay/design-system/engines/modern` -- DaisyUI/Tailwind engine implementations.
-- `@rottay/design-system/engines/rustic` -- Vanilla/lightweight engine implementations.
+## Component-level engine loading
 
-## How It Works
+An engine-backed component registers up to three physical loaders:
 
-1. `createEngineComponent` already uses dynamic `import()` to load engine implementations at runtime.
-2. Engine loaders (the functions passed to `createEngineComponent`) would be updated to point at the new dedicated entry points instead of importing from the monolithic bundle.
-3. Only the active engine's code downloads when the component first renders.
-4. Fallback engines lazy-load on demand if the user switches engines at runtime.
-
-### Resolution Flow
-
-```
-App renders <Button>
-  --> createEngineComponent resolves active engine (e.g. "classic")
-  --> dynamic import("@rottay/design-system/engines/classic")
-  --> only classic Button implementation loads
-  --> fallback engine stays unloaded until needed
+```tsx
+createEngineComponent<ButtonProps>('Button', {
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
+});
 ```
 
-## Migration Status
+`createEngineComponent` resolves the active engine and lazy-loads that physical
+implementation. A component does not create a fake forwarding loader for an
+implementation it does not have.
 
-### Phase 1: Add exports to package.json -- DONE
+`custom` is not a fourth physical bundle. It resolves a pack-scoped component
+registration and delegates missing registrations to the configured physical
+fallback (`classic` by default).
 
-Engine subpath exports (`./engines/classic`, `./engines/modern`, `./engines/rustic`) are declared
-in `package.json` and point to built output in `dist/engines/`.
+## Build shape
 
-### Phase 2: Move engine implementations to separate bundles -- DONE
+Vite library mode declares only real package subpaths as top-level entries and
+uses Rollup `preserveModules` for ESM and CJS output. This retains source-module
+boundaries for tree-shaking without inventing public engine entrypoints.
 
-Vite library mode produces separate output chunks for each engine. The main entry keeps only
-the engine routing infrastructure.
-
-### Phase 3: Update createEngineComponent to use new paths -- DONE
-
-Engine loader functions use `import()` from the subpath exports. Unused engines do not ship.
-
-### Phase 4: Deprecate bundled engines in main entry -- PENDING
-
-Remove any residual engine implementation code from the main entry point. Add deprecation
-warnings if any consumer still imports engine components from the root path.
-
-## Bundle Size Reference
-
-| Scenario | Approximate Size (gzipped) |
-|----------|---------------------------|
-| Main entry only (no engine loaded) | ~120 KB |
-| Main + one active engine | ~220 KB |
-| All engines loaded | ~400 KB |
-
-Actual sizes depend on tree-shaking effectiveness and shared dependencies between engines.
-See `PERFORMANCE_BUDGET.md` for enforced CI limits.
-
-## Build Infrastructure
-
-- **Vite library mode** uses multiple entry points via `build.lib.entry` (object form) in `vite.config.ts`.
-- **package.json exports** declares subpath exports for `./tokens`, `./i18n`, `./icons`, and all three engine paths.
-- **Dynamic `import()`** is the loading mechanism in `createEngineComponent`.
-- **No breaking API changes** -- components are always imported from `@rottay/design-system`. Engine loading is an internal detail.
-
-## File Structure After Split
-
-```
+```text
 src/
-  index.ts              # Main entry (providers, hooks, factory, tokens)
-  engines/
-    classic/
-      index.ts          # All Ant Design component implementations
-      Button.tsx
-      Input.tsx
-      ...
-    modern/
-      index.ts          # All DaisyUI component implementations
-      Button.tsx
-      Input.tsx
-      ...
-    rustic/
-      index.ts          # All Vanilla component implementations
-      Button.tsx
-      Input.tsx
-      ...
-dist/
-  index.js              # Main bundle (~120KB)
-  engines/
-    classic.js           # Classic engine (~100KB)
-    classic.d.ts
-    modern.js            # Modern engine (~100KB)
-    modern.d.ts
-    rustic.js             # Rustic engine (~80KB)
-    rustic.d.ts
+  index.ts
+  entrypoints/
+    charts/{access,renderers,spec}/
+    graphics/{effects,marks,motion,pictograms,spatial}/
+    icons/{bithire,corpus,foundation,identity,intelligence,operations}/
+    commercial/
+    eslint/
+    server/
+  ui/<tier>/<group>/<owner>/engines/{classic,modern,rustic}/index.tsx
 ```
 
-## Risks and Mitigations
+CSS is built separately into full, vertical and supplemental modern-engine
+exports. An app imports exactly one full or vertical bundle; `styles/modern`
+is supplemental and is not a standalone component stylesheet.
 
-| Risk | Mitigation |
-|------|------------|
-| Circular dependencies between main and engine entries | Engine entries import only types from main; runtime deps flow one-way (main --> engine) |
-| SSR hydration mismatch from async loading | Engine loader already handles SSR via synchronous fallback; no change needed |
-| Type inference breaks for engine-specific props | Each engine entry re-exports the same component interface types |
-| Consumer confusion about which import to use | Consumers always import from `@rottay/design-system` -- engine loading is internal |
+## Supplier boundaries
+
+React, Ant Design, marks, charts, motion and compatibility suppliers remain
+external according to `vite.config.ts`. The focused semantic icon entry embeds
+its pinned Phosphor SSR glyph corpus to avoid leaking the supplier's packaging
+defect to consumers. The package-root entry cannot reach the focused icon
+entrypoint.
+
+Use `rottay-ds-supplier-honesty` in a consuming app to determine the exact peer
+suppliers reached by its imported DS symbols.
+
+## Runtime flow
+
+```text
+App renders a DS component
+  -> component facade reads the active engine
+  -> custom registration resolves, or a physical loader is selected
+  -> React.lazy imports that component's engine implementation
+  -> error boundary/fallback policy handles a failed loader
+```
+
+Switching engines can load another component implementation on demand. The
+public component type and import remain stable.
+
+## Validation
+
+The authoritative entry list is `vite.config.ts` plus `package.json.exports`.
+Release validation must prove that each declared subpath exists in the packed
+artifact and that no undocumented engine subpath is advertised. Bundle-size
+claims come from the current analyzer output and performance budget, not from
+hard-coded estimates in documentation.

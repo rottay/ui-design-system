@@ -8,8 +8,8 @@ This contract supersedes the stale `237 / 37 runtime / 10 false-positive` headli
 
 | source                               |   start | final floor | migrate |
 | ------------------------------------ | ------: | ----------: | ------: |
-| `tenant-preview/engines/modern.tsx`  |      70 |          22 |      48 |
-| `tenant-preview/engines/rustic.tsx`  |      75 |          14 |      61 |
+| `tenant-preview/engines/modern/index.tsx`  |      70 |          22 |      48 |
+| `tenant-preview/engines/rustic/index.tsx`  |      75 |          14 |      61 |
 | `branding-preview-sandbox/index.tsx` |      54 |           0 |      54 |
 | `brand-studio/index.tsx`             |      36 |           9 |      27 |
 | **CK-H1**                            | **235** |      **45** | **190** |
@@ -22,11 +22,11 @@ not a budget that another site may consume.
 
 Only these product sources and their focused tests/probes are in scope:
 
-- `patterns/misc/tenant-preview/engines/{modern,rustic}.tsx`;
+- `patterns/misc/tenant-preview/engines/{modern,rustic}/index.tsx`;
 - `patterns/misc/branding-preview-sandbox/index.tsx`;
 - `patterns/misc/brand-studio/index.tsx`.
 
-`tenant-preview/engines/classic.tsx` is not migrated. CK-H2 is already certified. Generated tenant
+`tenant-preview/engines/classic/index.tsx` is not migrated. CK-H2 is already certified. Generated tenant
 CSS, the branding compiler, draft-theme data and the preview components' public props are not
 redesigned.
 
@@ -65,10 +65,10 @@ to be globalized or renamed.
 
 | component                | root scope                                             | skin                                                      |
 | ------------------------ | ------------------------------------------------------ | --------------------------------------------------------- |
-| tenant-preview modern    | existing `.ds-pattern-tenant-preview.ds-engine-modern` | `tokens/css/engines/modern/skin/tenant-preview.css`       |
-| tenant-preview rustic    | existing `.ds-pattern-tenant-preview.ds-engine-rustic` | `tokens/css/engines/rustic/skin/tenant-preview.css`       |
-| branding-preview-sandbox | add `.ds-pattern-branding-preview-sandbox`             | `tokens/css/components/skin/branding-preview-sandbox.css` |
-| brand-studio             | add `.ds-pattern-brand-studio`                         | `tokens/css/components/skin/brand-studio.css`             |
+| tenant-preview modern    | existing `.ds-pattern-tenant-preview.ds-engine-modern` | `foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css`       |
+| tenant-preview rustic    | existing `.ds-pattern-tenant-preview.ds-engine-rustic` | `foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css`       |
+| branding-preview-sandbox | add `.ds-pattern-branding-preview-sandbox`             | `foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css` |
+| brand-studio             | add `.ds-pattern-brand-studio`                         | `foundation/tokens/css/presentation/components/skin/brand-studio.css`             |
 
 All skins are unlayered and every rule is anchored to its component scope. There are no bare
 `[data-part]` selectors. The two canonical CSS entrypoints are wired append-only by the orchestrator,

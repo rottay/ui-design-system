@@ -1,0 +1,16 @@
+/**
+ * Platform Vertical CSS (source)
+ *
+ * This source file exists for development/symlink scenarios where dist/
+ * may not be built yet. It includes the tenant-free base + rottay tenant.
+ * It does NOT include the modern engine compiled CSS (Tailwind utilities).
+ *
+ * For production, apps should consume dist/platform.css (via styles/platform
+ * export) which includes everything: base + tenant + modern engine.
+ *
+ * @see base.css - Tenant-free DS foundation
+ * @see ../../../scripts/build-vertical-css.mjs - Dist bundle builder
+ * @version 1.0.0
+ */
+@import './base.css';
+@import '../artifacts/rottay/index.css';

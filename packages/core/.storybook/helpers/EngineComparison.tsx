@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { EngineProvider } from '../../src/runtime/engines';
+import { EngineProvider } from '../../src/infrastructure/runtime/engines';
 import type { EngineName } from '../types/engine';
 import { EngineLabel } from './EngineLabel';
 

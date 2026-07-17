@@ -25,7 +25,7 @@ Key files:
 
 Key file:
 
-- `src/components/_shared/layouts/app-layout/index.tsx`
+- `src/composition/components/_shared/layouts/app-layout/index.tsx`
 
 ## Main architectural gap
 
@@ -69,7 +69,7 @@ Evidence:
 
 Key file:
 
-- `src/components/_shared/tables/entity-table-workspace/index.tsx`
+- `src/composition/components/_shared/tables/entity-table-workspace/index.tsx`
 
 ### P1. Settings/admin is still hybrid
 
@@ -99,9 +99,9 @@ still lives too much in app code.
 
 Key files:
 
-- `src/components/_shared/layouts/app-layout/sidebar/index.tsx`
-- `src/components/_shared/layouts/app-layout/topbar/index.tsx`
-- `src/components/_shared/global-search/index.tsx`
+- `src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx`
+- `src/composition/components/_shared/layouts/app-layout/topbar/index.tsx`
+- `src/composition/components/_shared/global-search/index.tsx`
 
 ### P2. Settings breadth remains too style-heavy
 

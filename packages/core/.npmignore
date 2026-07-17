@@ -1,7 +1,7 @@
 dist/**/*.map
 dist/**/*.d.ts.map
 src/
-!src/tokens/css/
+!src/foundation/tokens/css/
 *.test.*
 *.spec.*
 *.stories.*

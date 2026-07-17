@@ -2,8 +2,8 @@
 
 Scope:
 
-- `src/components/primitives/display/**/engines/modern.tsx`
-- `src/components/primitives/layout/**/engines/modern.tsx`
+- `src/ui/primitives/display/**/engines/modern.tsx`
+- `src/ui/primitives/layout/**/engines/modern.tsx`
 - directly adjacent token/type helpers when they change the effective customization path
 
 ## Main Findings
@@ -17,12 +17,12 @@ through fixed Tailwind/rem tables instead of tenant-driven DS tokens.
 
 Key references:
 
-- `src/components/primitives/layout/Box/engines/modern.tsx:158`
-- `src/components/primitives/layout/Box/Box.types.ts:467`
-- `src/components/primitives/layout/Stack/engines/modern.tsx:24`
-- `src/components/primitives/layout/Grid/engines/modern.tsx:160`
-- `src/components/primitives/layout/Container/engines/modern.tsx:27`
-- `src/components/primitives/layout/Divider/engines/modern.tsx`
+- `src/ui/primitives/layout/Box/engines/modern.tsx:158`
+- `src/ui/primitives/layout/Box/Box.types.ts:467`
+- `src/ui/primitives/layout/Stack/engines/modern.tsx:24`
+- `src/ui/primitives/layout/Grid/engines/modern.tsx:160`
+- `src/ui/primitives/layout/Container/engines/modern.tsx:27`
+- `src/ui/primitives/layout/Divider/engines/modern.tsx`
 
 This is high impact because every higher-level primitive composes these.
 
@@ -45,12 +45,12 @@ Key examples called out during audit:
 
 Representative refs:
 
-- `src/tokens/css/engines/modern/theme.css:1763`
-- `src/components/primitives/display/Calendar/engines/modern.tsx:169`
-- `src/components/primitives/display/Descriptions/engines/modern.tsx:71`
-- `src/components/primitives/display/List/engines/modern.tsx:118`
-- `src/components/primitives/display/Tree/engines/modern.tsx:893`
-- `src/components/primitives/layout/Collapse/engines/modern.tsx:217`
+- `src/foundation/tokens/css/runtime/engines/modern/theme.css:1763`
+- `src/ui/primitives/display/Calendar/engines/modern.tsx:169`
+- `src/ui/primitives/display/Descriptions/engines/modern.tsx:71`
+- `src/ui/primitives/display/List/engines/modern.tsx:118`
+- `src/ui/primitives/display/Tree/engines/modern.tsx:893`
+- `src/ui/primitives/layout/Collapse/engines/modern.tsx:217`
 
 ### 3. Scalar sizes still bypass token maps
 
@@ -66,13 +66,13 @@ Key examples:
 
 Representative refs:
 
-- `src/components/primitives/display/Badge/Badge.types.ts:308`
-- `src/components/primitives/display/Badge/engines/modern.tsx:127`
-- `src/components/primitives/display/Typography/Typography.types.ts:462`
-- `src/components/primitives/display/Typography/engines/modern.tsx:58`
-- `src/components/primitives/display/Image/Image.types.ts:422`
-- `src/components/primitives/display/Image/engines/modern.tsx:20`
-- `src/components/primitives/display/Kbd/engines/modern.tsx:19`
+- `src/ui/primitives/display/Badge/Badge.types.ts:308`
+- `src/ui/primitives/display/Badge/engines/modern.tsx:127`
+- `src/ui/primitives/display/Typography/Typography.types.ts:462`
+- `src/ui/primitives/display/Typography/engines/modern.tsx:58`
+- `src/ui/primitives/display/Image/Image.types.ts:422`
+- `src/ui/primitives/display/Image/engines/modern.tsx:20`
+- `src/ui/primitives/display/Kbd/engines/modern.tsx:19`
 
 ### 4. Some declared props never affect the DOM
 
@@ -85,12 +85,12 @@ Examples:
 
 Representative refs:
 
-- `src/components/primitives/display/Tooltip/Tooltip.types.ts:123`
-- `src/components/primitives/display/Tooltip/engines/modern.tsx:110`
-- `src/components/primitives/layout/Collapse/Collapse.types.ts:81`
-- `src/components/primitives/layout/Collapse/engines/modern.tsx:166`
-- `src/components/primitives/layout/Splitter/Splitter.types.ts:68`
-- `src/components/primitives/layout/Splitter/engines/modern.tsx:59`
+- `src/ui/primitives/display/Tooltip/Tooltip.types.ts:123`
+- `src/ui/primitives/display/Tooltip/engines/modern.tsx:110`
+- `src/ui/primitives/layout/Collapse/Collapse.types.ts:81`
+- `src/ui/primitives/layout/Collapse/engines/modern.tsx:166`
+- `src/ui/primitives/layout/Splitter/Splitter.types.ts:68`
+- `src/ui/primitives/layout/Splitter/engines/modern.tsx:59`
 
 ## Display Primitives
 

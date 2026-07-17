@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
 import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
 import {
   primitiveCategories,
@@ -10,13 +10,13 @@ import type {
   PrimitiveCategory,
   PrimitiveEntry,
 } from '@/data/registry';
-import { CodeBlock, EngineComparison, PropTable } from '@/components/playground';
-import type { PropDefinition } from '@/components/playground';
+import { CodeBlock, EngineComparison, PropTable } from '@/composition/components/playground';
+import type { PropDefinition } from '@/composition/components/playground';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/composition/components/playground/surface-tokens';
 import { LivePreview } from './live-preview';
 
 const CATEGORY_GUIDANCE: Record<

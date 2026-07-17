@@ -12,49 +12,81 @@ packages/
 
 ### Engine Model
 
-Components render through one of four engines selected at runtime via `createEngineComponent()`:
+Components ship three physical engines selected at runtime via `createEngineComponent()`. A
+fourth `custom` identity is resolved through the runtime component-pack registry; it is not a
+fourth implementation copied into every primitive:
 
 | Engine      | Backend            | Use Case             |
 | ----------- | ------------------ | -------------------- |
 | **classic** | Ant Design 5.x     | Enterprise admin UIs |
-| **modern**  | Tailwind + DaisyUI | Consumer-facing apps |
+| **modern**  | Rottay token skins | Responsive premium UI |
 | **rustic**  | Vanilla CSS        | Lightweight fallback |
 | **custom**  | Pluggable          | White-label tenants  |
 
-Each primitive has engine-specific implementations (`engines/{classic,modern,rustic}/index.tsx`).
+Each engine-backed primitive has physical implementations under
+`engines/{classic,modern,rustic}/index.tsx`. `custom` resolves a registered
+component pack and otherwise delegates to its configured physical fallback.
+
+### Source Ownership
+
+`packages/core/src` is an ownership tree:
+
+```text
+src/
+  foundation/       Contracts, kernels, presets, i18n and tokens
+  infrastructure/   Compilers and browser/React runtime orchestration
+  graphics/         Icons, marks, pictograms and motion
+  ui/               Primitives -> patterns -> structures -> surfaces
+  tooling/          ESLint, declarations, examples and test support
+  entrypoints/       Classified package-subpath boundaries
+  index.ts           The only loose source-root file; package-root facade
+```
+
+`entrypoints/` supports package boundaries; it is not a sixth architecture
+tier. Authored production units use `folder/index.ts(x)`, and related units
+gain an explicit family level instead of becoming loose peer files.
 
 ### Component Taxonomy (4 Tiers)
 
 ```
-src/components/
+src/ui/
   primitives/     Leaf components with engine switch
-    display/        19 components (Avatar, Badge, Card, Table, Typography...)
-    inputs/         17 components (Button, Input, Select, DatePicker, Checkbox...)
-    feedback/       7 components (Alert, Message, Modal, Notification...)
-    layout/         7 components (Box, Flex, Grid, Stack, Divider...)
-    navigation/     5 components (Breadcrumb, Menu, Pagination, Steps, Tabs)
-    overlay/        4 components (Drawer, Dropdown, Popover, Tooltip)
+    display/        Avatar, Badge, Card, Table, Typography...
+    inputs/         Button, Input, Select, DatePicker, Checkbox...
+    feedback/       Alert, Message, Modal, Notification...
+    layout/         Box, Flex, Grid, Stack, Divider...
+    navigation/     Breadcrumb, Menu, Pagination, Steps, Tabs...
+    overlay/        Drawer, Dropdown, Popover, Tooltip...
 
-  patterns/         Task-level compositions, engine-agnostic
-    data/           DataTable, DataList, CommandPalette, VirtualList
+  patterns/         Reusable task-level compositions; engine-backed where needed
+    data/           DataTable, list tooling, grid/gallery views
     forms/          FormBuilder, FormWizard, FilterBuilder
-    visualization/  19 chart types (Bar, Line, Area, Pie, Radar, Gantt, Sankey...)
+    visualization/  Charts, calendar, kanban, map, timeline, tree
     communication/  Chat, Notification feeds
-    workflow/       Kanban, Timeline, StepFlow
-    navigation/     CommandBar, TreeNav
-    misc/           StatsGrid, CodeBlock
+    workflow/       Approval workflows, moderation, operational ledger
+    navigation/     Command palette, shortcuts, locale/workspace switchers
+    customization/  Brand studio, tenant preview, token inspection
+    shell/          Generic page/workbench shell patterns
+    foundation/     Pattern contracts and recipes
+    runtime/        Shared filtering, forms, kanban and pulse behavior
 
   structures/       Page chrome that wraps patterns
-    headers/        CollectionHeader, StatsHeader, RecordHeader
-    workspace/      TableToolbar, ColumnMenu, SearchCommandBar, ViewModeSwitcher
-    record/         RecordFieldGrid, RecordPanel
-    dashboard/      MetricCard, ChartCard
-    feedback/       LoadingOverlay, EmptyState, ErrorState
+    headers/        Collection, dashboard, detail, edit, form and mobile headers
+    workspace/      Toolbars, filters, command palette, view controls
+    record/         Record content, edit fields and form sections
+    dashboard/      Insights, stats header and data terminal card
+    feedback/       LoadingOverlay
+    shell/          Reusable application-shell structures
 
   surfaces/         Declarative page-level recipes
-    pages/          ListSurface, DashboardSurface, FormSurface, CollectionWorkspaceSurface
-    layout/         PageShell, HeaderLayout, SidebarLayout
+    foundation/     Contracts and shared support
+    runtime/        Builders, state and adaptive behavior
+    composition/    Layout shells
+    presentation/   Complete page recipes
 ```
+
+The generated, on-disk inventory is
+[`packages/core/docs/TAXONOMY.generated.md`](packages/core/docs/TAXONOMY.generated.md).
 
 ### Branding Model
 
@@ -63,11 +95,17 @@ DS base tokens --> vertical baseline --> BrandTheme --> CSS artifacts
 ```
 
 - **BrandTheme** (~140 CSS variables): palette, typography, surfaces, motion, charts, chrome
-- **First-party brands**: `tokens/ts/brand-themes/{platform,bithire,evnto}.ts`
-- **Tenant customization**: `TenantAppearanceAdvanced` with chrome sections (controls, table, card, modal, tabs, sidebar, layout)
-- Vertical identity is **static-first** (file-defined), tenant branding is **runtime, bounded** (DB-driven)
+- **First-party brands**: `foundation/tokens/ts/presentation/brand-themes/{platform,bithire,evnto}/index.ts`
+- **Tenant customization**: bounded `TenantThemeDocument` publication; the
+  compiler normalizes allowlisted chrome sections (controls, table, card,
+  modal, tabs, sidebar, layout)
+- Vertical identity is **static-first** (file-defined). Published customer
+  tenant branding is **bounded and DB-owned**, then server-compiled into the
+  exact SSR/hydration artifact.
 
-Runtime visual ownership is explicit and mutually exclusive:
+Runtime visual ownership is explicit and mutually exclusive. The productive
+customer path is `compiled-artifact`; `provider` remains useful for bundled
+verticals, previews and compatibility:
 
 - `visualAuthority="provider"` (default) preserves bundled/runtime behavior: the provider may load tenant CSS and emit branding, token, appearance, and generated chrome variables.
 - `visualAuthority="compiled-artifact"` is for applications that already mounted the canonical compiled artifact during SSR. Tenant config still powers tenant, locale, theme, motion, feature, and component context, while the provider emits no competing tenant CSS variables, personality bridge, or chrome stylesheet.
@@ -86,26 +124,43 @@ Do not select `compiled-artifact` without mounting the artifact first: the mode 
 
 ### Icon System
 
-109 curated icons via `createIcon()` wrapping lucide-react.
+The default supplier is Phosphor behind a supplier-independent boundary;
+Lucide is compatibility-only, not the default. Two current counts describe two
+different contracts:
+
+- the stable `Icon` facade accepts 50 governed compatibility roles;
+- generated semantic packs contain 263 roles across foundation, BitHire,
+  identity, intelligence and operations.
+
+Product code must not import a functional icon vendor directly.
 
 ```tsx
-import { SearchIcon, PlusIcon, CheckIcon } from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
+
+<Icon name="action.search" label="Search" />;
+<Icon name="action.add" label="Add" />;
+<Icon name="status.success" label="Success" />;
 ```
 
 ### Chart System
 
-19 D3-backed, engine-agnostic chart types: Bar, Line, Area, Pie, Scatter, Radar, Gauge, Histogram, Funnel, Waterfall, Sankey, Gantt, Sparkline, CalendarHeatMap, HeatMap, TreeMap, NetworkGraph, BulletChart. All theme-aware with personality-driven animations.
+18 D3-backed chart families live under
+`ui/patterns/visualization/charts/families/`: Bar, Line, Area, Pie, Scatter,
+Radar, Gauge, Histogram, Funnel, Waterfall, Sankey, Gantt, Sparkline,
+CalendarHeatMap, HeatMap, TreeMap, NetworkGraph and BulletChart. They are
+engine-agnostic, theme-aware and personality-driven.
 
 ## Package Exports
 
 | Export                                  | Description                                                            |
 | --------------------------------------- | ---------------------------------------------------------------------- |
 | `@rottay/design-system`                 | All components, hooks, utilities                                       |
-| `@rottay/design-system/icons`           | 109 curated icons                                                      |
+| `@rottay/design-system/icons`           | Stable 50-role `Icon` facade plus compatibility/catalog exports        |
+| `@rottay/design-system/icons/{foundation,bithire,identity,intelligence,operations}` | Generated packs; 263 governed roles in total |
 | `@rottay/design-system/marks`           | Governed brand and cloud-provider marks                                |
 | `@rottay/design-system/server`          | Server-only utilities (branding validation)                            |
 | `@rottay/design-system/eslint`          | ESLint rules (no-raw-html, no-hardcoded-colors, no-db-in-components)   |
-| `@rottay/design-system/styles`          | Full bundle: component skins, states, keyframes, tokens, all tenants   |
+| `@rottay/design-system/styles`          | Full bundle: skins, states, keyframes, tokens, code-owned verticals    |
 | `@rottay/design-system/styles/platform` | Platform vertical CSS                                                  |
 | `@rottay/design-system/styles/bithire`  | BitHire vertical CSS                                                   |
 | `@rottay/design-system/styles/evnto`    | Evnto vertical CSS                                                     |
@@ -115,14 +170,14 @@ import { SearchIcon, PlusIcon, CheckIcon } from "@rottay/design-system/icons";
 
 ```tsx
 import { Button, Card, Flex, Text } from "@rottay/design-system";
-import { SearchIcon } from "@rottay/design-system/icons";
+import { Icon } from "@rottay/design-system/icons";
 import "@rottay/design-system/styles";
 
 export default function Example() {
   return (
     <Card>
       <Flex gap="4" align="center">
-        <SearchIcon />
+        <Icon name="action.search" decorative />
         <Text>Search results</Text>
         <Button type="primary">Action</Button>
       </Flex>

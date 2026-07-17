@@ -14,10 +14,10 @@ Rotate currently looks like a polished internal admin tool, not a flagship autho
 
 ## Main Evidence
 
-- `ui-design-system/packages/core/src/components/structures/headers/collection/index.tsx`
-- `ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx`
-- `ui-design-system/packages/core/src/components/primitives/display/Card/engines/modern.tsx`
-- `ui-design-system/packages/core/src/components/primitives/navigation/Menu/engines/modern.tsx`
+- `ui-design-system/packages/core/src/ui/structures/headers/collection/index.tsx`
+- `ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/navigation/Menu/engines/modern/index.tsx`
 
 ## What A 10/10 Visual System Would Do
 

@@ -20,7 +20,7 @@
    "name": "Accent colors in showroom chrome",
    "baseline": "8 rotating section accents (components/layout/config.ts) + radial glows in shell",
    "target": "0 (product windows / color-token page / D3 charts allowlisted)",
-   "measure": "grep non-grayscale color literals over packages/showroom/src/components/layout/** + runtime/** (WO-SHW-02)",
+   "measure": "grep non-grayscale color literals over packages/showroom/src/composition/components/layout/** + runtime/** (WO-SHW-02)",
    "asOf": "2026-07-07"
   },
   {

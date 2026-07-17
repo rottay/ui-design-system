@@ -1,0 +1,171 @@
+/**
+ * ActivityTicker skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/activity-ticker.css — ActivityTicker renders
+ * one DOM tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT carries the single class `ds-activity-ticker` + `data-part='root'`.
+ * The kit's "two root classes" budget is bought here by REPEATING the one class
+ * (`.ds-activity-ticker.ds-activity-ticker` = 0,2,0) since the pre-step minted a
+ * single scope class, not a class pair.
+ *
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): the repeated scope class (0,2,0) + the target `data-part` REPEATED
+ * (0,2,0). Non-border paint wins unlayered at (0,3,0). A `Text` color must beat
+ * the typography skin (0,4,0), so it buys (0,5,0) from the repeated scope class
+ * + the data-part repeated three times.
+ *
+ * ICON COLOR: the Bell / ExternalLink / Chevron / per-item icons carry no
+ * data-part (raw lucide nodes). Their color is painted on the nearest stamped
+ * ancestor Box and inherited through `currentColor` (the dashboard-header
+ * precedent); every Text sibling carries its own (0,5,0) color rule, so none
+ * inherits the icon color by accident.
+ *
+ * STATE: `TYPE_CONFIG[type].gradient` and the `"var(--ds-color-" + type + ...)"`
+ * string-concat sites are STATE-SELECTED over the bounded 5-value
+ * `ActivityItem["type"]` enum, so both become rules keyed on the stamped
+ * `data-type`. `data-active` selects the active pagination dot. The unread-badge
+ * count text is a literal `white` in source and is transcribed verbatim.
+ *
+ * The `<style>` block co-located in the TSX is left intact (entrance/keyframe
+ * animation, scroll chrome, and `:hover` transform/box-shadow that was never
+ * suppressed by an inline paint). Its `:hover` background/border-color rules sit
+ * at (0,2,0) and were already suppressed by the former inline paint; the rest
+ * rules below sit at (0,3,0)/(0,4,0) and preserve that suppression byte-exact.
+ */
+
+/* root + header ------------------------------------------------------------- */
+
+.ds-activity-ticker.ds-activity-ticker[data-part='root'] {
+  background: var(--ds-color-bg-secondary);
+}
+.ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+/* bell box + badge ---------------------------------------------------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='bell-box'] {
+  background: linear-gradient(135deg, var(--ds-color-primary-100), var(--ds-color-secondary-100));
+  color: var(--ds-color-primary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='bell-box'][data-part='bell-box'] {
+  border: 1px solid var(--ds-color-primary-200);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='badge'] {
+  border-radius: 50%;
+  background: var(--ds-color-error);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='badge'][data-part='badge'] {
+  border: 2px solid var(--ds-color-bg-secondary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+  color: white;
+}
+
+/* title + live indicator ---------------------------------------------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='live-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-success);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+  color: var(--ds-color-success);
+}
+
+/* view-all pill ------------------------------------------------------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'] {
+  background: var(--ds-color-primary-100);
+  color: var(--ds-color-primary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'] {
+  border: 1px solid var(--ds-color-primary-200);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='view-all-label'][data-part='view-all-label'][data-part='view-all-label'] {
+  color: var(--ds-color-primary);
+}
+
+/* ticker body --------------------------------------------------------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'] {
+  background: linear-gradient(180deg, var(--ds-color-bg-primary) 0%, var(--ds-color-neutral-50) 100%);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'][data-part='ticker-body'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* current-item icon box — background + border + icon colour keyed on type ---- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='primary'] { background: var(--ds-color-primary-100); color: var(--ds-color-primary); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='info']    { background: var(--ds-color-info-100);    color: var(--ds-color-info); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='warning'] { background: var(--ds-color-warning-100); color: var(--ds-color-warning); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='error']   { background: var(--ds-color-error-100);   color: var(--ds-color-error); }
+
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='success'] { border: 2px solid var(--ds-color-success); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='primary'] { border: 2px solid var(--ds-color-primary); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='info']    { border: 2px solid var(--ds-color-info); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='warning'] { border: 2px solid var(--ds-color-warning); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='error']   { border: 2px solid var(--ds-color-error); }
+
+.ds-activity-ticker.ds-activity-ticker [data-part='item-text'][data-part='item-text'][data-part='item-text'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* current-item type dot — background keyed on type -------------------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'] {
+  border-radius: 50%;
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='success'] { background: var(--ds-color-success); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='primary'] { background: var(--ds-color-primary); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='info']    { background: var(--ds-color-info); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='warning'] { background: var(--ds-color-warning); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='error']   { background: var(--ds-color-error); }
+
+.ds-activity-ticker.ds-activity-ticker [data-part='item-time'][data-part='item-time'][data-part='item-time'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* nav buttons — background + chevron colour; border at (0,4,0) --------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='nav-button'] {
+  background: var(--ds-color-bg-secondary);
+  color: var(--ds-color-text-muted);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='nav-button'][data-part='nav-button'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-counter'][data-part='ticker-counter'][data-part='ticker-counter'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* pagination dots — active gets the type gradient, inactive a flat neutral --- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='false'] {
+  background: var(--ds-color-neutral-200);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='primary'] { background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='info']    { background: linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='error']   { background: linear-gradient(135deg, var(--ds-color-error), var(--ds-color-error-200)); }
+
+/* progress track + fill (fill gradient keyed on current type) --------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-track'] {
+  background: var(--ds-color-bg-tertiary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='primary'] { background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='info']    { background: linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='error']   { background: linear-gradient(135deg, var(--ds-color-error), var(--ds-color-error-200)); }

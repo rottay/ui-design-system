@@ -20,7 +20,7 @@ import {
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const realBadgeSource = join(
   packageRoot,
-  "src/components/primitives/display/Badge/engines/modern.tsx"
+  "src/ui/primitives/display/Badge/engines/modern/index.tsx"
 );
 
 function source(lines) {
@@ -197,7 +197,7 @@ test("unresolved whole-root calls and properties fail closed", () => {
 test("certified runtime-data generators are explicit safe roots", () => {
   const result = analyzeEmbeddedCssPaint(
     source([
-      "import { generateResponsiveCSS } from '../../../layout/shared/responsive-props';",
+      "import { generateResponsiveCSS } from '@/infrastructure/runtime/responsive/runtime/style-properties';",
       "export const Example = ({ entries }) => {",
       "  const responsive = entries.length ? generateResponsiveCSS('x', entries) : null;",
       "  return responsive && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />;",
@@ -220,7 +220,7 @@ test("a trusted producer name imported from another module is not certified", ()
       "  return <style dangerouslySetInnerHTML={{ __html: responsive.css }} />;",
       "};",
     ]),
-    "/repo/packages/core/src/components/primitives/display/Badge/engines/modern.tsx"
+    "/repo/packages/core/src/ui/primitives/display/Badge/engines/modern/index.tsx"
   );
 
   assert.equal(result.classifiedPaint, 0);
@@ -233,7 +233,7 @@ test("a trusted producer path suffix outside the current core package is not cer
   const dir = mkdtempSync(join(tmpdir(), "embedded-css-evil-producer-"));
   const evilModule = join(
     dir,
-    "src/components/primitives/layout/shared/responsive-props.ts"
+    "src/infrastructure/runtime/responsive/runtime/style-properties/index.ts"
   );
   try {
     mkdirSync(dirname(evilModule), { recursive: true });
@@ -273,7 +273,7 @@ test("a local shadow of a certified producer name is analyzed normally", () => {
       "}",
       "export const Example = () => <style>{generateTenantCss()}</style>;",
     ]),
-    "/repo/packages/core/src/components/example.tsx"
+    "/repo/packages/core/src/ui/example.tsx"
   );
 
   assert.equal(result.classifiedPaint, 2);

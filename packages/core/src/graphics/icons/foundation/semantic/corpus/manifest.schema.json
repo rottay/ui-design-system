@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rottay.com/schemas/semantic-icon-corpus-v1.json",
+  "title": "Rottay semantic icon corpus",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "corpusVersion", "expectedCounts", "entries"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "corpusVersion": { "const": 6 },
+    "expectedCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["foundation", "bithire", "identity", "intelligence", "operations", "global"],
+      "properties": {
+        "foundation": { "const": 122 },
+        "bithire": { "const": 6 },
+        "identity": { "const": 45 },
+        "intelligence": { "const": 45 },
+        "operations": { "const": 45 },
+        "global": { "const": 263 }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 263,
+      "maxItems": 263,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "pack", "domain", "intent", "defaultRole", "autoMirror", "status", "since", "componentName"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)+$" },
+          "pack": { "enum": ["foundation", "bithire", "identity", "intelligence", "operations"] },
+          "domain": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
+          "intent": { "type": "string", "minLength": 1 },
+          "defaultRole": { "enum": ["control", "navigation", "feature", "status", "illustration"] },
+          "defaultTone": { "enum": ["default", "muted", "primary", "success", "warning", "error", "info"] },
+          "autoMirror": { "type": "boolean" },
+          "status": { "enum": ["stable", "candidate"] },
+          "since": { "type": "integer", "minimum": 1 },
+          "componentName": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*Icon$" },
+          "review": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

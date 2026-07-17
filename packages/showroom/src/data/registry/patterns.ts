@@ -14,6 +14,7 @@ export type PatternGroup =
   | 'communication'
   | 'workflow'
   | 'navigation'
+  | 'feedback'
   | 'misc';
 
 export interface PatternEntry {
@@ -106,6 +107,14 @@ const navigation: PatternEntry[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Feedback
+// ---------------------------------------------------------------------------
+
+const feedback: PatternEntry[] = [
+  { slug: 'adaptive-overlay', name: 'AdaptiveOverlay', group: 'feedback', description: 'Responsive feedback flow that selects modal, drawer, or sheet posture', engines: allEngines },
+];
+
+// ---------------------------------------------------------------------------
 // Misc
 // ---------------------------------------------------------------------------
 
@@ -133,6 +142,7 @@ export const patterns: PatternEntry[] = [
   ...communication,
   ...workflow,
   ...navigation,
+  ...feedback,
   ...misc,
 ];
 
@@ -143,6 +153,7 @@ export const patternsByGroup: Record<PatternGroup, PatternEntry[]> = {
   communication,
   workflow,
   navigation,
+  feedback,
   misc,
 };
 
@@ -153,5 +164,6 @@ export const patternGroups: { slug: PatternGroup; label: string; count: number }
   { slug: 'communication', label: 'Communication', count: communication.length },
   { slug: 'workflow', label: 'Workflow', count: workflow.length },
   { slug: 'navigation', label: 'Navigation', count: navigation.length },
+  { slug: 'feedback', label: 'Feedback', count: feedback.length },
   { slug: 'misc', label: 'Misc', count: misc.length },
 ];

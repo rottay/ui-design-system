@@ -1,5 +1,25 @@
 # @rottay/design-system
 
+## 2.19.28
+
+### Patch Changes
+
+- Reorganize the authored source into the declarative
+  `foundation / infrastructure / graphics / ui / tooling` architecture, with
+  package entrypoints isolated as boundary support and UI ownership flowing
+  `primitives → patterns → structures → surfaces`.
+- Preserve the public package contract while moving the 18 chart families,
+  chart engine, motion/effects runtime, primitives, patterns and structures into
+  canonical folder/index owners; add fail-closed structural, path and paint
+  gates so the hierarchy cannot silently flatten again.
+- Reconcile generated skins, vertical artifacts, semantic assets and canonical
+  documentation with the new physical tree while preserving DB-backed compiled
+  tenant themes as the production white-label authority.
+- Isolate the lightweight skin-pack application seam from brand-theme
+  compilation and narrow Modal's responsive dependency, restoring all nine
+  flagship component bundles to their existing gzip budgets without widening
+  any ceiling.
+
 ## 2.19.27
 
 ### Patch Changes

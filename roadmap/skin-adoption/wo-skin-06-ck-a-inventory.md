@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-A dashboard-widgets paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/structures/dashboard/`. Same
+All paths relative to `packages/core/src/ui/structures/dashboard/`. Same
 channel scope and STATIC/STATE-SELECTED/RUNTIME discriminator as the triage
 (`wo-skin-06-triage.md` §2) and the WO-SKIN-04 precedent: a "site" is an
 object-literal style key named `background*`, `border*`, `outline*`, `color`,
@@ -12,7 +12,7 @@ object-literal style key named `background*`, `border*`, `outline*`, `color`,
 **Method note**: every site below was located by running an instrumented clone
 of the real lexer (`inline-paint-counter.mjs`, reproduced verbatim with a
 line-number reporter added) against each file, so the totals are byte-exact
-against `node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.structures/dashboard`
+against `node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.composition/structures/dashboard`
 (37/36/34/34/33/29/28/28/149/31 = 439), not hand-counted. Every site was then
 read in source to classify STATIC / STATE-SELECTED / RUNTIME / C-hatch.
 
@@ -208,7 +208,7 @@ file's own co-located `<style>{...}</style>` block (`:hover` rules,
 per-instance `<style>` block targets them by exact string match, so a skin
 migration must either keep the class names or rewrite both the JSX and the
 extracted CSS together. Grep-confirmed zero collision with any existing
-`tokens/css/` selector or any other component's className for every one of:
+`foundation/tokens/css/` selector or any other component's className for every one of:
 `ticker-dot`, `ticker-container`, `ticker-content-v3`, `nav-button`,
 `ticker-progress`, `activity-item-v3`, `activity-compact-item-v3`,
 `activity-card-item-v3`, `live-indicator`, `view-all-link`, `activity-scroll`,
@@ -829,8 +829,8 @@ findable by grepping `var(--ds-`:
 
 ### Bridge rules (P-76 disposition)
 
-**None exist.** Grep-confirmed zero hits in `tokens/css/engines/{modern,rustic,classic}/theme.css`
-and `tokens/css/runtime/personality.css` for any dashboard/activity/ticker/
+**None exist.** Grep-confirmed zero hits in `foundation/tokens/css/runtime/engines/{modern,rustic,classic}/theme.css`
+and `foundation/tokens/css/runtime/personality.css` for any dashboard/activity/ticker/
 metric/stat-card/data-terminal/stats-header selector. This checkpoint has no
 suppression risk to classify dead/live under P-76 — there is simply nothing
 in the layered CSS reaching for any of these components today. Confirmed

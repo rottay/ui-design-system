@@ -1,0 +1,118 @@
+/**
+ * DashboardHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/dashboard-header.css — DashboardHeader renders
+ * one DOM tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT is the header's outer element, which carries the pair
+ * `ds-structure ds-dashboard-header` + `data-part='root'` + `data-compact`
+ * (both the compact and full renders share the class pair and part).
+ *
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED or a real contract
+ * attribute (`data-compact`) for the remaining (0,2,0). Non-border paint wins
+ * unlayered at (0,3,0).
+ *
+ * Text color is a special case: the modern/rustic typography skins paint every
+ * `Text` at `.rottay-typography.rottay-typography--<engine>.rottay-typography--<engine>[data-color='…']`
+ * = (0,4,0), unlayered. A color rule on a composed `Text` must therefore exceed
+ * (0,4,0); it buys (0,5,0) from the two root classes + the target `data-part`
+ * repeated three times. Box/icon color has no such competitor and wins at (0,3,0)
+ * (the icon inherits `currentColor` from the Box the rule paints).
+ *
+ * STATE: `STATUS_COLORS[state]` and the change-direction ternary are
+ * STATE-SELECTED over static tokens, so each becomes a rule keyed on the stamped
+ * `data-state` / `data-direction`. `data-compact` selects between the two header
+ * shells.
+ */
+
+/* status dot — pill background is the status colour at 12% -------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='status-dot'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='connected'] {
+  background: color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='offline'] {
+  background: color-mix(in srgb, var(--ds-color-error) 12%, transparent);
+}
+
+/* status dot glyph — solid status colour ------------------------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
+  border-radius: 50%;
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='connected'] {
+  background: var(--ds-color-success);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='warning'] {
+  background: var(--ds-color-warning);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='offline'] {
+  background: var(--ds-color-error);
+}
+
+/* status dot text — Text, needs (0,5,0) to beat the typography skin ----------- */
+
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='connected'] {
+  color: var(--ds-color-success);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='offline'] {
+  color: var(--ds-color-error);
+}
+
+/* metric chip ---------------------------------------------------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-bg-secondary);
+}
+.ds-structure.ds-dashboard-header [data-part='metric-chip'][data-part='metric-chip'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* metric chip change — Text keyed on direction, (0,5,0) + data-direction ------ */
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='up'] {
+  color: var(--ds-color-success);
+}
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='down'] {
+  color: var(--ds-color-error);
+}
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='flat'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* leading icon (compact + full share data-part='icon') ----------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* header shells — compact vs full, keyed on data-compact --------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='root'][data-compact='true'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+.ds-structure.ds-dashboard-header [data-part='root'][data-compact='false'] {
+  background: var(--ds-color-bg-primary);
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}

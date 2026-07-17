@@ -97,7 +97,7 @@ Each of these was paid for. They are not style preferences.
    about whether the build product is true.
 
 9. **`dist` drops an export no entry reaches.** A build script imported
-   `APCA_BODY_TEXT_MIN_LC` from `dist/_internal/...`. The constant is exported in
+   `APCA_BODY_TEXT_MIN_LC` from a private dist path. The constant is exported in
    the source and Vite tree-shook it out of the bundle, because `_internal` is
    not a package entry. The script failed at run time with a correct source tree
    and a green typecheck. If a script must read a value the library owns, that
@@ -286,9 +286,9 @@ be fixed or deliberately respecified in its own work order.
 ## External co-editors (no-conflict rule)
 
 - app-evnto WO-IDN-06 (`app-evnto/roadmap/identity.md`) edits `packages/core` in this repo:
-  `tokens/ts/brand-themes/evnto.ts`, `tokens/css/artifacts/evnto/**`,
+  `foundation/tokens/ts/presentation/brand-themes/evnto/index.ts`, `foundation/tokens/css/facade/artifacts/evnto/**`,
   `runtime/tenant/storage/static/generator/index.ts`, `scripts/build-vertical-artifacts.mjs`,
-  `src/contracts/verticals/index.ts`. That file set is DISJOINT from every WO-ENG Files list
+  `src/foundation/contracts/kernel/verticals/index.ts`. That file set is DISJOINT from every WO-ENG Files list
   and must stay disjoint — a WO-ENG executor that needs one of those files stops and escalates.
   Because both programs certify with `pnpm test`/`build` in `packages/core`, orchestrators must
   not run a WO-ENG executor and the evnto WO-IDN-06 executor concurrently in the same working

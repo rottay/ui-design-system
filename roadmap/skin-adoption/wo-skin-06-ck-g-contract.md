@@ -149,10 +149,10 @@ claims DaisyUI usage that the code does not have. Do not act on the docstring.
 
 §1 reports a "new blind-spot class": `background: active ? color : 'transparent'`, where a parameter
 is literally named `color`, causing the lexer to read the ternary's own colon as a second key and
-inflate `environment-toggle/engines/rustic.tsx` from 48 to 50.
+inflate `environment-toggle/engines/rustic/index.tsx` from 48 to 50.
 
 **That bug is fixed.** The ternary-colon guard landed on 2026-07-13, and the counter now reports
-`environment-toggle/engines/rustic.tsx: 48` — the true count. Verified by running it. The inventory
+`environment-toggle/engines/rustic/index.tsx: 48` — the true count. Verified by running it. The inventory
 was written against the older counter. **Expect 48, not 50, and do not go looking for a 2-site delta.**
 
 Everything else in the inventory's counter discussion still stands: it remains blind to string

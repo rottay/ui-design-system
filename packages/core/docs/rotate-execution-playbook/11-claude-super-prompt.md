@@ -51,22 +51,22 @@ Execution order:
 Mandatory focus files:
 
 Design System:
-- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/headers/collection/index.tsx
-- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx
-- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/display/Card/engines/modern.tsx
-- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/primitives/display/Statistic/engines/modern.tsx
-- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern.tsx
+- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/headers/collection/index.tsx
+- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx
+- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx
+- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx
+- /Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/data/data-table/engines/modern/index.tsx
 
 App Platform:
-- /Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/index.tsx
-- /Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/shell-metrics.ts
-- /Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/sidebar/index.tsx
-- /Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/topbar/index.tsx
+- /Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/index.tsx
+- /Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/shell-metrics.ts
+- /Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx
+- /Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/topbar/index.tsx
 - /Users/daniel/Developer/Rottay/app-platform/src/surfaces/dashboard/builder/index.tsx
 - /Users/daniel/Developer/Rottay/app-platform/src/surfaces/dashboard/global-filter-bar/index.tsx
 - /Users/daniel/Developer/Rottay/app-platform/src/surfaces/dashboard/widget-grid/index.tsx
 - /Users/daniel/Developer/Rottay/app-platform/src/surfaces/users/workspace-config.tsx
-- /Users/daniel/Developer/Rottay/app-platform/src/components/_shared/tables/entity-table-workspace/index.tsx
+- /Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/tables/entity-table-workspace/index.tsx
 - /Users/daniel/Developer/Rottay/app-platform/src/surfaces/settings/overview.tsx
 - /Users/daniel/Developer/Rottay/app-platform/src/lib/tenancy/branding-to-tenant-config.ts
 - /Users/daniel/Developer/Rottay/app-platform/src/actions/tenancy/workflows/index.ts

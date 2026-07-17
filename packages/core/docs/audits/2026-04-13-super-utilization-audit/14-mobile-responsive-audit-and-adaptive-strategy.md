@@ -24,9 +24,9 @@ The right target is:
 
 Local evidence:
 
-- `ui-design-system/packages/core/src/runtime/responsive/ResponsiveProvider.tsx`
-- `ui-design-system/packages/core/src/runtime/responsive/index.ts`
-- `ui-design-system/packages/core/src/hooks/responsive/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/responsive/presentation/providers/responsive/index.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/responsive/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/responsive/facade/index.ts`
 
 What exists today:
 

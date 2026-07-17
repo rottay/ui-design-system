@@ -182,5 +182,5 @@ This is the company-side admin plane:
 - `src/actions/ai-*` rehome into `features/ai-operations/*/actions`
 - `src/actions/scoring*` merges into `features/ai-operations/match-scoring`
 - `src/surfaces/*` move into matching feature `screens/`
-- domain components move from `src/components/*` into the owning feature
-- `src/components/_shared` converges into `ui/`
+- domain components move from `src/composition/components/*` into the owning feature
+- `src/composition/components/_shared` converges into `ui/`

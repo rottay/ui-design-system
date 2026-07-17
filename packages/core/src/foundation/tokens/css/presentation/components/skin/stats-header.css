@@ -1,0 +1,124 @@
+/**
+ * StatsHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/stats-header.css — StatsHeader composes DS
+ * primitives into one DOM tree under every engine. Scope root carries the single
+ * class `ds-stats-header`, repeated to buy the "two root classes" budget.
+ *
+ * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1);
+ * non-border paint wins at (0,3,0); `Text` colour buys (0,5,0) to beat the
+ * typography skin. Icon colour (the change-indicator's inline svg) is inherited
+ * from the stamped `change-row` Flex via currentColor.
+ *
+ * STATE:
+ *  - `data-accent` (5-value AccentColor) selects the sparkline dot, progress fill
+ *    and card glow — the former `ACCENT_CSS_VAR[accent]` / `accentAtOpacity`.
+ *  - `data-change` (increase/decrease/neutral) selects the change row + value
+ *    colour — the former `CHANGE_COLORS[changeType]`.
+ *  - the stat card's press/hover/rest transform + shadow is a PRIORITY CHAIN
+ *    gated on `isClickable` (pressed only fires for clickable cards), which a
+ *    plain `:active` cannot reproduce. It stays in JS and drives two custom
+ *    properties (`--ds-stats-header-card-transform` / `-shadow`) that this rule
+ *    reads — the paint moves to CSS, the exact gated state logic does not.
+ */
+
+/* card grid + stat card ----------------------------------------------------- */
+
+.ds-stats-header.ds-stats-header [data-part='stat-card'] {
+  background: var(--ds-color-bg-primary);
+  border-radius: 12px;
+  transform: var(--ds-stats-header-card-transform);
+  box-shadow: var(--ds-stats-header-card-shadow);
+}
+.ds-stats-header.ds-stats-header [data-part='stat-card'][data-part='stat-card'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+}
+
+/* stat card text -----------------------------------------------------------  */
+
+.ds-stats-header.ds-stats-header [data-part='stat-label'][data-part='stat-label'][data-part='stat-label'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-stats-header.ds-stats-header [data-part='stat-icon'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-stats-header.ds-stats-header [data-part='stat-prefix'][data-part='stat-prefix'][data-part='stat-prefix'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-stats-header.ds-stats-header [data-part='stat-value'][data-part='stat-value'][data-part='stat-value'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-stats-header.ds-stats-header [data-part='stat-suffix'][data-part='stat-suffix'][data-part='stat-suffix'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-stats-header.ds-stats-header [data-part='stat-insight'][data-part='stat-insight'][data-part='stat-insight'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* card glow — accent at 6% ------------------------------------------------- */
+
+.ds-stats-header.ds-stats-header [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) 6%, transparent), transparent); }
+.ds-stats-header.ds-stats-header [data-part='stat-card'][data-accent='success'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-success) 6%, transparent), transparent); }
+.ds-stats-header.ds-stats-header [data-part='stat-card'][data-accent='warning'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-warning) 6%, transparent), transparent); }
+.ds-stats-header.ds-stats-header [data-part='stat-card'][data-accent='error']   [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-error) 6%, transparent), transparent); }
+.ds-stats-header.ds-stats-header [data-part='stat-card'][data-accent='info']    [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-info) 6%, transparent), transparent); }
+
+/* change indicator — row colour (feeds the svg), value colour, period ------- */
+
+.ds-stats-header.ds-stats-header [data-part='change-row'][data-change='increase'] { color: var(--ds-color-success); }
+.ds-stats-header.ds-stats-header [data-part='change-row'][data-change='decrease'] { color: var(--ds-color-error); }
+.ds-stats-header.ds-stats-header [data-part='change-row'][data-change='neutral']  { color: var(--ds-color-text-muted); }
+
+.ds-stats-header.ds-stats-header [data-part='change-value'][data-part='change-value'][data-change='increase'] { color: var(--ds-color-success); }
+.ds-stats-header.ds-stats-header [data-part='change-value'][data-part='change-value'][data-change='decrease'] { color: var(--ds-color-error); }
+.ds-stats-header.ds-stats-header [data-part='change-value'][data-part='change-value'][data-change='neutral']  { color: var(--ds-color-text-muted); }
+
+.ds-stats-header.ds-stats-header [data-part='change-period'][data-part='change-period'][data-part='change-period'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* sparkline dots — accent ---------------------------------------------------- */
+
+.ds-stats-header.ds-stats-header [data-part='spark-dot'] {
+  border-radius: 50%;
+}
+.ds-stats-header.ds-stats-header [data-part='spark-dot'][data-accent='primary'] { background: var(--ds-color-primary); }
+.ds-stats-header.ds-stats-header [data-part='spark-dot'][data-accent='success'] { background: var(--ds-color-success); }
+.ds-stats-header.ds-stats-header [data-part='spark-dot'][data-accent='warning'] { background: var(--ds-color-warning); }
+.ds-stats-header.ds-stats-header [data-part='spark-dot'][data-accent='error']   { background: var(--ds-color-error); }
+.ds-stats-header.ds-stats-header [data-part='spark-dot'][data-accent='info']    { background: var(--ds-color-info); }
+
+/* progress bar (back-compat) — track static, fill accent -------------------- */
+
+.ds-stats-header.ds-stats-header [data-part='progress-track'] {
+  border-radius: 2px;
+  background: var(--ds-color-bg-secondary);
+}
+.ds-stats-header.ds-stats-header [data-part='progress-fill'] {
+  border-radius: 2px;
+}
+.ds-stats-header.ds-stats-header [data-part='progress-fill'][data-accent='primary'] { background: var(--ds-color-primary); }
+.ds-stats-header.ds-stats-header [data-part='progress-fill'][data-accent='success'] { background: var(--ds-color-success); }
+.ds-stats-header.ds-stats-header [data-part='progress-fill'][data-accent='warning'] { background: var(--ds-color-warning); }
+.ds-stats-header.ds-stats-header [data-part='progress-fill'][data-accent='error']   { background: var(--ds-color-error); }
+.ds-stats-header.ds-stats-header [data-part='progress-fill'][data-accent='info']    { background: var(--ds-color-info); }
+
+/* loading skeleton ---------------------------------------------------------- */
+
+.ds-stats-header.ds-stats-header [data-part='skeleton-bar'] {
+  border-radius: 4px;
+  background: var(--ds-color-bg-secondary);
+}
+.ds-stats-header.ds-stats-header [data-part='skeleton-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-bg-secondary);
+}
+.ds-stats-header.ds-stats-header [data-part='skeleton-card'] {
+  background: var(--ds-color-bg-primary);
+  border-radius: 12px;
+}
+.ds-stats-header.ds-stats-header [data-part='skeleton-card'][data-part='skeleton-card'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+}
+.ds-stats-header.ds-stats-header [data-part='skeleton-glow'] {
+  background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent), transparent);
+}

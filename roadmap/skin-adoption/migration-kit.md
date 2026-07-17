@@ -33,10 +33,10 @@ inline (uncounted) and consume it from a static CSS rule:
 ## Skin home + import wiring
 
 - **Engine-split** component (has `engines/modern.tsx` AND `engines/rustic.tsx`):
-  two files — `src/tokens/css/engines/modern/skin/<kebab>.css` and
-  `src/tokens/css/engines/rustic/skin/<kebab>.css`.
+  two files — `src/foundation/tokens/css/runtime/engines/modern/skin/<kebab>.css` and
+  `src/foundation/tokens/css/runtime/engines/rustic/skin/<kebab>.css`.
 - **Engine-agnostic** file (single render tree — a `compound/*`, or a component with no
-  engine split): one file — `src/tokens/css/components/skin/<kebab>.css`.
+  engine split): one file — `src/foundation/tokens/css/presentation/components/skin/<kebab>.css`.
 
 **Scope-class prefix convention (a pre-step chose the wrong one on CK-G, 2026-07-14).** The DS uses
 TWO scope-class prefixes by TIER, and a skin must anchor on its tier's:
@@ -82,8 +82,8 @@ can't paint these elements at all; and each tenant ships an unlayered
   sees. Reach **(0,5,0)**: two engine-split root classes + the descendant `data-part` **×3**,
   OR one single-class root + `data-part` **×4** (or class + one contract attr + part ×3). Check
   the SOURCE at each `color` site — `<Text …>` vs a raw element — and apply this only to the
-  Text ones. (Shipped precedent: `tokens/css/components/skin/data-terminal-card.css` header;
-  `tokens/css/engines/<engine>/skin/typography.css`.)
+  Text ones. (Shipped precedent: `foundation/tokens/css/presentation/components/skin/data-terminal-card.css` header;
+  `foundation/tokens/css/runtime/engines/<engine>/skin/typography.css`.)
 - A rule keyed via a **descendant** (`[root] [data-part='track']`) already carries the root
   classes; add the descendant `data-part` (and repeat it for borders) to reach the floor.
 - **COUNT THE ACTUAL ROOT CLASSES (a single-class scope needs one MORE data-part repeat).** The
@@ -135,10 +135,10 @@ name; delete the `<style>` tag. Do NOT redefine a globally-loaded keyframe (`spi
 
 ## Precedents to read
 
-- `src/tokens/css/engines/modern/skin/detail-panel.css` — fresh per-part engine skin: header
+- `src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel.css` — fresh per-part engine skin: header
   idiom, (0,4,0) borders via repeated data-part, `:hover`/`:focus` from deleted state,
   renamed keyframe residual.
-- `src/tokens/css/components/skin/field-filters-panel.css` — engine-agnostic single-file
+- `src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css` — engine-agnostic single-file
   home + repeated-data-part border idiom.
 
 ## Hard limits

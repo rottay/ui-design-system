@@ -22,9 +22,9 @@ That matters because the next phase should build on this model instead of reinve
 
 Evidence:
 
-- `ui-design-system/packages/core/src/runtime/tenant/index.ts`
-- `ui-design-system/packages/core/src/runtime/tenant/registry/index.ts`
-- `ui-design-system/packages/core/src/runtime/tenant/storage/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/tenant/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/store/index.ts`
 
 Current DS guarantees:
 

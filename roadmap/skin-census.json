@@ -1,8 +1,8 @@
 {
- "measuredAt": "2026-07-14",
- "fleetFiles": 60,
- "fleetSites": 634,
- "fleetComponents": 30,
+ "measuredAt": "2026-07-17",
+ "fleetFiles": 54,
+ "fleetSites": 196,
+ "fleetComponents": 28,
  "batches": [
   {
    "batch": "WO-SKIN-02",
@@ -27,9 +27,9 @@
   },
   {
    "batch": "WO-SKIN-06",
-   "components": 20,
-   "files": 47,
-   "total": 605,
+   "components": 18,
+   "files": 41,
+   "total": 167,
    "opus": 7
   }
  ],
@@ -37,15 +37,15 @@
   {
    "key": "patterns/visualization",
    "batch": "WO-SKIN-06",
-   "components": 6,
-   "total": 299,
-   "opus": 4
+   "components": 4,
+   "total": 49,
+   "opus": 2
   },
   {
    "key": "patterns/misc",
    "batch": "WO-SKIN-06",
-   "components": 4,
-   "total": 238,
+   "components": 3,
+   "total": 48,
    "opus": 1
   },
   {
@@ -70,10 +70,10 @@
    "opus": 1
   },
   {
-   "key": "surfaces/foundation",
+   "key": "surfaces/runtime",
    "batch": "WO-SKIN-06",
-   "components": 2,
-   "total": 15,
+   "components": 1,
+   "total": 8,
    "opus": 0
   },
   {
@@ -89,6 +89,13 @@
    "components": 3,
    "total": 8,
    "opus": 1
+  },
+  {
+   "key": "surfaces/foundation",
+   "batch": "WO-SKIN-06",
+   "components": 1,
+   "total": 7,
+   "opus": 0
   },
   {
    "key": "primitives/display",
@@ -112,6 +119,13 @@
    "opus": 0
   },
   {
+   "key": "surfaces/presentation",
+   "batch": "WO-SKIN-06",
+   "components": 1,
+   "total": 2,
+   "opus": 1
+  },
+  {
    "key": "primitives/navigation",
    "batch": "WO-SKIN-04",
    "components": 2,
@@ -119,14 +133,14 @@
    "opus": 0
   },
   {
-   "key": "patterns/forms",
+   "key": "structures/dashboard",
    "batch": "WO-SKIN-06",
    "components": 1,
    "total": 1,
-   "opus": 0
+   "opus": 1
   },
   {
-   "key": "surfaces/pages",
+   "key": "patterns/forms",
    "batch": "WO-SKIN-06",
    "components": 1,
    "total": 1,
@@ -135,106 +149,20 @@
  ],
  "components": [
   {
-   "key": "patterns/misc/tenant-preview",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "tenant-preview",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 145,
-   "files": [
-    {
-     "file": "patterns/misc/tenant-preview/engines/rustic.tsx",
-     "count": 75,
-     "traps": []
-    },
-    {
-     "file": "patterns/misc/tenant-preview/engines/modern.tsx",
-     "count": 70,
-     "traps": []
-    }
-   ]
-  },
-  {
    "key": "patterns/visualization/charts",
    "tier": "patterns",
    "group": "visualization",
    "component": "charts",
    "batch": "WO-SKIN-06",
    "modelTier": "opus",
-   "total": 104,
+   "total": 43,
    "files": [
     {
-     "file": "patterns/visualization/charts/bullet/index.tsx",
-     "count": 14,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/hooks/use-chart-brush.ts",
+     "file": "patterns/visualization/charts/families/bullet/index.tsx",
      "count": 12,
-     "traps": []
-    },
-    {
-     "file": "patterns/visualization/charts/tooltip/index.tsx",
-     "count": 11,
-     "traps": []
-    },
-    {
-     "file": "patterns/visualization/charts/bar-chart/index.tsx",
-     "count": 6,
      "traps": [
       "stylePropIntoChild"
      ]
-    },
-    {
-     "file": "patterns/visualization/charts/gauge/index.tsx",
-     "count": 6,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/waterfall/index.tsx",
-     "count": 6,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/histogram/index.tsx",
-     "count": 5,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/radar-chart/index.tsx",
-     "count": 5,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/sankey/index.tsx",
-     "count": 5,
-     "traps": [
-      "stateHover",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/area-chart/index.tsx",
-     "count": 4,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/chart-scaffold.tsx",
-     "count": 4,
-     "traps": []
     },
     {
      "file": "patterns/visualization/charts/hooks/use-chart-theme.ts",
@@ -242,46 +170,59 @@
      "traps": []
     },
     {
-     "file": "patterns/visualization/charts/line-chart/index.tsx",
+     "file": "patterns/visualization/charts/families/waterfall/index.tsx",
      "count": 4,
      "traps": [
       "stylePropIntoChild"
      ]
     },
     {
-     "file": "patterns/visualization/charts/funnel-chart/index.tsx",
+     "file": "patterns/visualization/charts/families/sankey/index.tsx",
      "count": 3,
+     "traps": [
+      "stateHover",
+      "stylePropIntoChild"
+     ]
+    },
+    {
+     "file": "patterns/visualization/charts/families/area-chart/index.tsx",
+     "count": 2,
      "traps": [
       "stylePropIntoChild"
      ]
     },
     {
-     "file": "patterns/visualization/charts/network-graph/index.tsx",
-     "count": 3,
+     "file": "patterns/visualization/charts/families/bar-chart/index.tsx",
+     "count": 2,
      "traps": [
       "stylePropIntoChild"
      ]
     },
     {
-     "file": "patterns/visualization/charts/pie-chart/index.tsx",
-     "count": 3,
+     "file": "patterns/visualization/charts/families/histogram/index.tsx",
+     "count": 2,
      "traps": [
       "stylePropIntoChild"
      ]
     },
     {
-     "file": "patterns/visualization/charts/scatter/index.tsx",
-     "count": 3,
+     "file": "patterns/visualization/charts/families/line-chart/index.tsx",
+     "count": 2,
      "traps": [
       "stylePropIntoChild"
      ]
     },
     {
-     "file": "patterns/visualization/charts/treemap/index.tsx",
-     "count": 3,
+     "file": "patterns/visualization/charts/families/radar-chart/index.tsx",
+     "count": 2,
      "traps": [
       "stylePropIntoChild"
      ]
+    },
+    {
+     "file": "patterns/visualization/charts/tooltip/index.tsx",
+     "count": 2,
+     "traps": []
     },
     {
      "file": "patterns/visualization/charts/utils/export.ts",
@@ -291,158 +232,67 @@
      ]
     },
     {
-     "file": "patterns/visualization/charts/hooks/use-chart-export.ts",
+     "file": "patterns/visualization/charts/families/funnel-chart/index.tsx",
      "count": 1,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/branding-preview-sandbox",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "branding-preview-sandbox",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 54,
-   "files": [
-    {
-     "file": "patterns/misc/branding-preview-sandbox/index.tsx",
-     "count": 54,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/visualization/kanban-board",
-   "tier": "patterns",
-   "group": "visualization",
-   "component": "kanban-board",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 48,
-   "files": [
-    {
-     "file": "patterns/visualization/kanban-board/engines/rustic.tsx",
-     "count": 32,
      "traps": [
-      "imperativePaint",
-      "hoverHandlers"
+      "stylePropIntoChild"
      ]
     },
     {
-     "file": "patterns/visualization/kanban-board/engines/modern.tsx",
-     "count": 16,
+     "file": "patterns/visualization/charts/families/gauge/index.tsx",
+     "count": 1,
      "traps": [
-      "stateHover"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/visualization/calendar-view",
-   "tier": "patterns",
-   "group": "visualization",
-   "component": "calendar-view",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 46,
-   "files": [
-    {
-     "file": "patterns/visualization/calendar-view/engines/modern.tsx",
-     "count": 28,
-     "traps": []
-    },
-    {
-     "file": "patterns/visualization/calendar-view/engines/rustic.tsx",
-     "count": 18,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/visualization/timeline",
-   "tier": "patterns",
-   "group": "visualization",
-   "component": "timeline",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 37,
-   "files": [
-    {
-     "file": "patterns/visualization/timeline/engines/rustic.tsx",
-     "count": 21,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
+      "stylePropIntoChild"
      ]
     },
     {
-     "file": "patterns/visualization/timeline/engines/modern.tsx",
-     "count": 16,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/brand-studio",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "brand-studio",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 36,
-   "files": [
-    {
-     "file": "patterns/misc/brand-studio/index.tsx",
-     "count": 36,
+     "file": "patterns/visualization/charts/families/network-graph/index.tsx",
+     "count": 1,
      "traps": [
-      "textColorProp",
+      "stylePropIntoChild"
+     ]
+    },
+    {
+     "file": "patterns/visualization/charts/families/pie-chart/index.tsx",
+     "count": 1,
+     "traps": [
+      "stylePropIntoChild"
+     ]
+    },
+    {
+     "file": "patterns/visualization/charts/families/scatter/index.tsx",
+     "count": 1,
+     "traps": [
+      "stateHover",
+      "stylePropIntoChild"
+     ]
+    },
+    {
+     "file": "patterns/visualization/charts/families/treemap/index.tsx",
+     "count": 1,
+     "traps": [
       "stylePropIntoChild"
      ]
     }
    ]
   },
   {
-   "key": "patterns/visualization/tree-view",
+   "key": "patterns/misc/tenant-preview",
    "tier": "patterns",
-   "group": "visualization",
-   "component": "tree-view",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 35,
-   "files": [
-    {
-     "file": "patterns/visualization/tree-view/engines/rustic.tsx",
-     "count": 19,
-     "traps": [
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "patterns/visualization/tree-view/engines/modern.tsx",
-     "count": 16,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/visualization/map-view",
-   "tier": "patterns",
-   "group": "visualization",
-   "component": "map-view",
+   "group": "misc",
+   "component": "tenant-preview",
    "batch": "WO-SKIN-06",
    "modelTier": "sonnet",
-   "total": 29,
+   "total": 36,
    "files": [
     {
-     "file": "patterns/visualization/map-view/engines/rustic.tsx",
-     "count": 16,
+     "file": "patterns/misc/tenant-preview/engines/modern/index.tsx",
+     "count": 22,
      "traps": []
     },
     {
-     "file": "patterns/visualization/map-view/engines/modern.tsx",
-     "count": 13,
+     "file": "patterns/misc/tenant-preview/engines/rustic/index.tsx",
+     "count": 14,
      "traps": []
     }
    ]
@@ -489,14 +339,14 @@
    "total": 16,
    "files": [
     {
-     "file": "primitives/layout/Box/engines/modern.tsx",
+     "file": "primitives/layout/Box/engines/modern/index.tsx",
      "count": 8,
      "traps": [
       "hoverHandlers"
      ]
     },
     {
-     "file": "primitives/layout/Box/engines/rustic.tsx",
+     "file": "primitives/layout/Box/engines/rustic/index.tsx",
      "count": 8,
      "traps": [
       "hoverHandlers"
@@ -505,16 +355,34 @@
    ]
   },
   {
-   "key": "surfaces/foundation/SurfaceErrorBoundary.tsx",
+   "key": "patterns/misc/brand-studio",
+   "tier": "patterns",
+   "group": "misc",
+   "component": "brand-studio",
+   "batch": "WO-SKIN-06",
+   "modelTier": "opus",
+   "total": 9,
+   "files": [
+    {
+     "file": "patterns/misc/brand-studio/index.tsx",
+     "count": 9,
+     "traps": [
+      "stylePropIntoChild"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "surfaces/runtime/error-boundary",
    "tier": "surfaces",
-   "group": "foundation",
-   "component": "SurfaceErrorBoundary.tsx",
+   "group": "runtime",
+   "component": "error-boundary",
    "batch": "WO-SKIN-06",
    "modelTier": "sonnet",
    "total": 8,
    "files": [
     {
-     "file": "surfaces/foundation/SurfaceErrorBoundary.tsx",
+     "file": "surfaces/runtime/error-boundary/index.tsx",
      "count": 8,
      "traps": []
     }
@@ -535,7 +403,7 @@
      "traps": []
     },
     {
-     "file": "patterns/data/list-toolbar/engines/modern.tsx",
+     "file": "patterns/data/list-toolbar/engines/modern/index.tsx",
      "count": 3,
      "traps": [
       "stylePropIntoChild"
@@ -553,12 +421,12 @@
    "total": 7,
    "files": [
     {
-     "file": "surfaces/foundation/common/story-helpers.tsx",
+     "file": "surfaces/foundation/common/story-helpers/index.tsx",
      "count": 6,
      "traps": []
     },
     {
-     "file": "surfaces/foundation/common/test-utils.tsx",
+     "file": "surfaces/foundation/common/test-utils/index.tsx",
      "count": 1,
      "traps": []
     }
@@ -574,8 +442,24 @@
    "total": 4,
    "files": [
     {
-     "file": "patterns/communication/notification-center/engines/modern.tsx",
+     "file": "patterns/communication/notification-center/engines/modern/index.tsx",
      "count": 4,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "primitives/inputs/Button",
+   "tier": "primitives",
+   "group": "inputs",
+   "component": "Button",
+   "batch": "WO-SKIN-02",
+   "modelTier": "sonnet",
+   "total": 3,
+   "files": [
+    {
+     "file": "primitives/inputs/Button/compound/Group/index.tsx",
+     "count": 3,
      "traps": []
     }
    ]
@@ -608,23 +492,7 @@
    "total": 3,
    "files": [
     {
-     "file": "patterns/misc/file-manager/engines/modern.tsx",
-     "count": 3,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Button",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Button",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 3,
-   "files": [
-    {
-     "file": "primitives/inputs/Button/compound/Group/index.tsx",
+     "file": "patterns/misc/file-manager/engines/modern/index.tsx",
      "count": 3,
      "traps": []
     }
@@ -640,12 +508,12 @@
    "total": 2,
    "files": [
     {
-     "file": "primitives/display/Avatar/engines/modern.tsx",
+     "file": "primitives/display/Avatar/engines/modern/index.tsx",
      "count": 1,
      "traps": []
     },
     {
-     "file": "primitives/display/Avatar/engines/rustic.tsx",
+     "file": "primitives/display/Avatar/engines/rustic/index.tsx",
      "count": 1,
      "traps": []
     }
@@ -661,46 +529,121 @@
    "total": 2,
    "files": [
     {
-     "file": "primitives/overlay/Watermark/engines/modern.tsx",
+     "file": "primitives/overlay/Watermark/engines/modern/index.tsx",
      "count": 1,
      "traps": []
     },
     {
-     "file": "primitives/overlay/Watermark/engines/rustic.tsx",
+     "file": "primitives/overlay/Watermark/engines/rustic/index.tsx",
      "count": 1,
      "traps": []
     }
    ]
   },
   {
-   "key": "patterns/communication/activity-log",
-   "tier": "patterns",
-   "group": "communication",
-   "component": "activity-log",
+   "key": "surfaces/presentation/pages",
+   "tier": "surfaces",
+   "group": "presentation",
+   "component": "pages",
    "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 1,
+   "modelTier": "opus",
+   "total": 2,
    "files": [
     {
-     "file": "patterns/communication/activity-log/engines/modern.tsx",
+     "file": "surfaces/presentation/pages/operations/kanban/index.tsx",
+     "count": 1,
+     "traps": []
+    },
+    {
+     "file": "surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+     "count": 1,
+     "traps": [
+      "imperativePaint",
+      "stylePropIntoChild"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "patterns/visualization/calendar-view",
+   "tier": "patterns",
+   "group": "visualization",
+   "component": "calendar-view",
+   "batch": "WO-SKIN-06",
+   "modelTier": "sonnet",
+   "total": 2,
+   "files": [
+    {
+     "file": "patterns/visualization/calendar-view/engines/modern/index.tsx",
+     "count": 1,
+     "traps": []
+    },
+    {
+     "file": "patterns/visualization/calendar-view/engines/rustic/index.tsx",
      "count": 1,
      "traps": []
     }
    ]
   },
   {
-   "key": "patterns/forms/form-builder",
+   "key": "patterns/visualization/kanban-board",
    "tier": "patterns",
-   "group": "forms",
-   "component": "form-builder",
+   "group": "visualization",
+   "component": "kanban-board",
+   "batch": "WO-SKIN-06",
+   "modelTier": "opus",
+   "total": 2,
+   "files": [
+    {
+     "file": "patterns/visualization/kanban-board/engines/modern/index.tsx",
+     "count": 1,
+     "traps": [
+      "stateHover"
+     ]
+    },
+    {
+     "file": "patterns/visualization/kanban-board/engines/rustic/index.tsx",
+     "count": 1,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "patterns/visualization/map-view",
+   "tier": "patterns",
+   "group": "visualization",
+   "component": "map-view",
    "batch": "WO-SKIN-06",
    "modelTier": "sonnet",
+   "total": 2,
+   "files": [
+    {
+     "file": "patterns/visualization/map-view/engines/modern/index.tsx",
+     "count": 1,
+     "traps": []
+    },
+    {
+     "file": "patterns/visualization/map-view/engines/rustic/index.tsx",
+     "count": 1,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "structures/dashboard/dashboard-insights",
+   "tier": "structures",
+   "group": "dashboard",
+   "component": "dashboard-insights",
+   "batch": "WO-SKIN-06",
+   "modelTier": "opus",
    "total": 1,
    "files": [
     {
-     "file": "patterns/forms/form-builder/engines/modern.tsx",
+     "file": "structures/dashboard/insights/presentation/metrics/cards/index.tsx",
      "count": 1,
-     "traps": []
+     "traps": [
+      "stylePropIntoChild"
+     ]
     }
    ]
   },
@@ -714,7 +657,7 @@
    "total": 1,
    "files": [
     {
-     "file": "primitives/display/Card/engines/rustic.tsx",
+     "file": "primitives/display/Card/engines/rustic/index.tsx",
      "count": 1,
      "traps": []
     }
@@ -730,7 +673,7 @@
    "total": 1,
    "files": [
     {
-     "file": "primitives/display/Image/engines/modern.tsx",
+     "file": "primitives/display/Image/engines/modern/index.tsx",
      "count": 1,
      "traps": [
       "stateHover"
@@ -748,7 +691,7 @@
    "total": 1,
    "files": [
     {
-     "file": "primitives/display/Tooltip/engines/rustic.tsx",
+     "file": "primitives/display/Tooltip/engines/rustic/index.tsx",
      "count": 1,
      "traps": [
       "hoverHandlers"
@@ -782,7 +725,7 @@
    "total": 1,
    "files": [
     {
-     "file": "primitives/navigation/Tabs/engines/modern.tsx",
+     "file": "primitives/navigation/Tabs/engines/modern/index.tsx",
      "count": 1,
      "traps": []
     }
@@ -805,16 +748,32 @@
    ]
   },
   {
-   "key": "surfaces/pages/operations",
-   "tier": "surfaces",
-   "group": "pages",
-   "component": "operations",
+   "key": "patterns/communication/activity-log",
+   "tier": "patterns",
+   "group": "communication",
+   "component": "activity-log",
    "batch": "WO-SKIN-06",
    "modelTier": "sonnet",
    "total": 1,
    "files": [
     {
-     "file": "surfaces/pages/operations/kanban/index.tsx",
+     "file": "patterns/communication/activity-log/engines/modern/index.tsx",
+     "count": 1,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "patterns/forms/form-builder",
+   "tier": "patterns",
+   "group": "forms",
+   "component": "form-builder",
+   "batch": "WO-SKIN-06",
+   "modelTier": "sonnet",
+   "total": 1,
+   "files": [
+    {
+     "file": "patterns/forms/form-builder/engines/modern/index.tsx",
      "count": 1,
      "traps": []
     }

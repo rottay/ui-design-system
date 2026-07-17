@@ -9,7 +9,10 @@ import { auditEffectProvenance } from './effect-registry-audit.mjs';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const canonicalRoot = resolve(repoRoot, 'packages/core/provenance/effects');
-const canonicalRegistry = resolve(repoRoot, 'packages/core/src/runtime/effects/registry.ts');
+const canonicalRegistry = resolve(
+  repoRoot,
+  'packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts',
+);
 const ciPath = resolve(repoRoot, '.github/workflows/ci.yml');
 const coreManifestPath = resolve(repoRoot, 'packages/core/package.json');
 

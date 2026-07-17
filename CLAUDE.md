@@ -44,17 +44,75 @@ Update the hub `README.md` inventory counts when component totals change.
 
 ## Project Context
 
-- Multi-engine design system with four engines:
+- Multi-engine design system with three built-in physical engines plus a custom registry:
   - **classic** — Ant Design 5.21 wrapper
   - **modern** — the Rottay-native premium skin. A residual DaisyUI class layer survives in
     sixteen engine files; `daisy.classConsumers` is a decrease-only ratchet that lets it shrink
     and never grow (WO-TOK-03 verdict, 2026-07-10)
   - **rustic** — Vanilla CSS fallback
-  - **custom** — Reserved for white-label tenants (pluggable component pack registered at runtime)
-- Components in `packages/core/src/components/`
-- Each component has `engines/{classic,modern,rustic}/index.tsx` siblings selected at runtime via `createEngineComponent()` and the active engine context
+  - **custom** — White-label component packs registered at runtime; not a fourth physical
+    implementation copied into every component owner
+- Components in `packages/core/src/ui/`
+- Engine-backed components may have `engines/{classic,modern,rustic}/index.tsx`
+  siblings selected at runtime via `createEngineComponent()` and the active
+  engine context; do not create fake forwarding engines when one is absent
 - Follow existing component patterns for new additions
 - The canonical engine names are `classic` / `modern` / `rustic` / `custom`. The legacy names `titan` / `hermes` / `apollo` are gone — do not reintroduce them.
+
+## Core source-tree hierarchy (NON-NEGOTIABLE)
+
+`packages/core/src` is an ownership and dependency tree, not a flat file
+catalog. Its physical hierarchy must make architectural importance and
+dependency direction visible.
+
+The five canonical physical roots are `foundation/`, `infrastructure/`,
+`graphics/`, `ui/`, and `tooling/`. `entrypoints/` is a classified
+package-boundary support root, not a sixth architectural tier. Every public
+subpath boundary lives below it as `folder/index.ts`; `src/index.ts` is the only
+file allowed directly at the source root. A top-level `composition/` owner is
+forbidden.
+
+The local dependency order is
+`foundation|kernel|contracts|policy|quality|spec|validation` → `runtime` →
+`composition|react` → `presentation` → `facade|public`. At the macro
+level, `foundation` is lower than the owners that consume it,
+`infrastructure/compilers` is lower than `infrastructure/runtime`, and the UI
+stack is `primitives → patterns → structures → surfaces`.
+
+- Every authored production unit uses `folder/index.ts` or
+  `folder/index.tsx`; free-standing leaf modules are forbidden.
+- A barrel may aggregate child owners, but it must not share its level with
+  authored production peers. The implementations belong in their own folders.
+- Two or more related units form a named family and therefore require another
+  grouping level in the tree.
+- Once an owner declares named layers, every capability—including manifests
+  and generated outputs—must live inside its owning layer; layer folders and
+  unlayered capability folders never coexist as peers.
+- Foundations must be physically above the runtimes and presentations that
+  depend on them. A dependent owner must not sit beside its dependency as an
+  architectural peer.
+- Unit tests live under the owning unit's `tests/` folder. Cross-unit contract
+  tests live under an explicitly named `integration/tests/` or
+  `architecture/tests/` owner; tests never sit beside production modules.
+- Public package entrypoints, generated sources, declarations, fixtures,
+  examples, and stories are explicit classified exceptions. They are not a
+  precedent for authored product code.
+- Physical moves preserve the package's public subpaths and exported API;
+  internal compatibility files must not be left behind merely to keep old
+  private paths alive.
+
+Run `pnpm --filter @rottay/design-system structure:check` for every core tree
+change. The identity baseline is decrease-only: update it only after reviewing
+that all differences are resolved debt caused by an intentional hierarchy
+wave. Never baseline a new finding.
+
+When a physical move changes path-keyed paint counters, first dry-run
+`pnpm --filter @rottay/design-system engine-audit:relocate-paths`; pass explicit
+`--old-root`/`--new-root` for a root migration and add `--write` only after
+reviewing the Git rename inventory. This relocates keys without changing a
+single ceiling. `--adopt-new-zero` may add only newly discovered zero-valued
+path counters and refuses every positive counter; neither mode is permission to
+regenerate paint counts.
 
 ## Ownership rules
 
@@ -67,31 +125,38 @@ This package is the **single source of truth** for reusable, domain-agnostic UI 
 
 ## Component taxonomy (4 tiers)
 
-The design system has 4 single-word tiers under `packages/core/src/components/`:
+The design system has 4 single-word tiers under `packages/core/src/ui/`:
 
 ### primitives/
 Engine-switched leaf components (Button, Input, Card, Modal, Tabs, etc).
-Each primitive has 4 engine implementations: classic, modern, rustic, custom.
+Each engine-switched primitive has three physical implementations: classic, modern, and rustic.
+`custom` resolves a registered component pack and falls back through the engine registry.
 6 categories: display, inputs, feedback, layout, navigation, overlay.
+
+### patterns/
+Task-level compositions that solve generic UI tasks. A pattern may be
+engine-backed when rendering genuinely differs by engine.
+Think: tables, forms, charts, kanban boards, timelines, command palettes.
+Product groups are `commerce/`, `commercial/`, `communication/`,
+`customization/`, `data/`, `feedback/`, `forms/`, `identity/`, `navigation/`,
+`shell/`, `visualization/`, and `workflow/`. `foundation/`, `runtime/`, and
+`tooling/` are explicit support owners; generic `misc/`, `_internal/`, `hooks/`
+and `shared/` owners are forbidden.
+
+**Example:** PatternDataTable, PatternFormBuilder, PatternKanbanBoard, PatternStatsGrid.
 
 ### structures/
 Page-structure families that wrap or accompany patterns to form page chrome.
 Think: headers, toolbars, command bars, record panels, metric cards, loading overlays.
-5 groups: `headers/`, `workspace/`, `record/`, `dashboard/`, `feedback/`.
+6 groups: `headers/`, `workspace/`, `record/`, `dashboard/`, `feedback/`, `shell/`.
 
 **Example:** CollectionHeader, SearchCommandBar, TableToolbar, RecordFieldGrid, StatsHeader, LoadingOverlay.
 
-### patterns/
-Engine-agnostic, task-level compositions that solve generic UI tasks.
-Think: tables, forms, charts, kanban boards, timelines, command palettes.
-7 groups: `data/`, `forms/`, `visualization/`, `communication/`, `workflow/`, `navigation/`, `misc/`.
-Plus `foundation/` (shared types, hooks, header-actions) and `_internal/` (truly private).
-
-**Example:** PatternDataTable, PatternFormBuilder, PatternKanbanBoard, PatternStatsGrid.
-
 ### surfaces/
 Page-level config objects that describe a whole screen declaratively.
-3 tiers: `foundation/` (types, builders, helpers), `layout/` (page-shell, header, sidebar), `pages/` (6 domain groups).
+Dependency branches: `foundation/` (contracts/support), `runtime/`
+(builders/state/adaptive behavior), `composition/layout/` (shells), and
+`presentation/pages/` (complete page recipes).
 
 **Example:** ListSurface, DashboardSurface, FormSurface, CollectionWorkspaceSurface.
 
@@ -122,8 +187,9 @@ Page-level config objects that describe a whole screen declaratively.
 
 ## Premium white-label model (BrandTheme)
 
-The canonical premium visual source of truth is **BrandTheme** (`contracts/themes/`).
-First-party brand sources live in `tokens/ts/brand-themes/`.
+The canonical premium visual source of truth for a code-owned vertical is
+**BrandTheme** under `foundation/contracts/composition/tenants/themes/`.
+First-party brand sources live in `foundation/tokens/ts/presentation/brand-themes/`.
 
 Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated artifacts`
 
@@ -144,19 +210,31 @@ Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated art
 
 ### Key rules
 
-- `TenantConfig.brandTheme` is the canonical field. Legacy `personality`/`tokenOverrides` fields are deprecated compat.
+- `TenantConfig.brandTheme` remains the code-owned/compat field. New customer
+  writes publish a bounded `TenantThemeDocument` to the canonical tenancy DB;
+  legacy `branding`, `personality`, `appearance`, and `tokenOverrides` fields
+  are compatibility inputs only.
 - Product profile is **not** part of the visual merge when brandTheme is present -- only `surfaceDefaults` survives.
-- First-party tenant CSS files (`tokens/css/artifacts/`) are **generated snapshots**, not the source of truth. The `.ts` BrandTheme files are the source.
+- First-party tenant CSS files (`foundation/tokens/css/facade/artifacts/`) are **generated snapshots**, not the source of truth. The `.ts` BrandTheme files are the source.
+- Production customer styling is compiled on the server and embedded for SSR.
+  The client hydrates the exact artifact with
+  `visualAuthority="compiled-artifact"`; browser components do not query the
+  DB and the provider must not emit a competing visual layer.
 - Domain-specific tokens (`--ds-ticket-*`, `--ds-event-*`) belong in consuming apps, not DS core.
-- The brand compiler (`compilers/brand-theme/`) converts BrandTheme to CSS vars and personality tokens.
-- First-party tenant artifacts (`tokens/css/artifacts/{bithire,evnto,rottay}/index.css`) are build products assembled from the BrandTheme `.ts` file plus a declared `_source/extension.css`. Regenerate with `pnpm -C packages/core build:vertical-css`; hand-edits fail `lint:artifacts` (chained into `pretest` and `lint`).
+- The brand compiler (`packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/`)
+  converts BrandTheme to CSS vars and personality tokens.
+- First-party tenant artifacts (`foundation/tokens/css/facade/artifacts/{bithire,evnto,rottay}/index.css`) are build products assembled from the BrandTheme `.ts` file plus a declared `_source/extension.css`. Regenerate with `pnpm -C packages/core build:vertical-css`; hand-edits fail `lint:artifacts` (chained into `pretest` and `lint`).
 
 ## Icon system (semantic facade + compatibility catalog)
 
-New product code uses the supplier-independent `Icon` facade backed by the
-fixed semantic registry. Phosphor is confined to `src/icons/adapters/`; apps
+New product code uses supplier-independent semantic roles. The stable default
+`Icon` facade currently accepts the governed 50-role compatibility corpus;
+generated pack entrypoints expose the broader 263-role corpus. Do not conflate
+those two contracts. Phosphor is the pinned default supplier and is confined to
+the icon adapter/generator boundary under `packages/core/src/graphics/icons/`; apps
 MUST NOT import Phosphor, Lucide, Ant icons, or another functional supplier
-directly. The existing Lucide-shaped named catalog remains temporary compat.
+directly. Lucide is not the default supplier; the existing Lucide-shaped named
+catalog is compatibility-only.
 
 ### Import pattern
 ```tsx
@@ -180,13 +258,16 @@ glyph, role mapping, weight family, or motion recipe.
 - Color via `currentColor` (inherits from parent text, tenant-aware)
 
 ### Adding new icons
-Add a semantic name to `src/icons/semantic/registry.ts`, map it only inside the
-supplier adapter, extend the fixed-corpus tests, and update provenance when the
-supplier/version changes. Do not add a new vendor-shaped alias for product use.
+Add a governed role to
+`packages/core/src/graphics/icons/foundation/semantic/corpus/manifest.json`, map it in the pinned
+adapter manifest, and run `pnpm -C packages/core icons:generate`. Extend the
+corpus tests and update provenance when the supplier/version changes. Do not
+add a new vendor-shaped alias for product use.
 
 Brand and cloud-provider identity is a separate asset class. Product code uses
 `BrandMark` or `CloudServiceMark` from `@rottay/design-system/marks`; the
-pinpoint `@thesvg/react` imports stay inside `src/marks/adapters/`. Never use a
+pinpoint `@thesvg/react` imports stay inside
+`packages/core/src/graphics/brand-marks/runtime/adapters/`. Never use a
 brand mark for an action/navigation concept, never load a remote mark at
 runtime, and never pass supplier types through the public API. A tenant may
 provide its own approved company logo through the tenant-brand contract, but
@@ -194,7 +275,7 @@ cannot select an arbitrary catalog mark or replace functional glyph meaning.
 
 ---
 
-## Chart System (19 types)
+## Chart System (18 types)
 
 All charts are D3-backed, engine-agnostic, token-aware, personality-driven, and accessible.
 
@@ -284,8 +365,9 @@ A standalone Next.js 16 app that serves as the commercial showcase for the desig
 ```bash
 cd packages/showroom
 pnpm install
-pnpm dev          # http://localhost:7001 (Turbopack)
-pnpm build        # Production build (~10s, 265 pages)
+pnpm dev          # http://localhost:7001 (Webpack)
+pnpm dev:turbopack # Optional Turbopack dev server on the same port
+pnpm build        # Production Webpack build
 pnpm typecheck    # TypeScript check
 ```
 
@@ -293,23 +375,23 @@ pnpm typecheck    # TypeScript check
 - **Location**: `ui-design-system/packages/showroom/`
 - **Framework**: Next.js 16 + React 19 + TypeScript + Tailwind (marketing only)
 - **DS dependency**: `workspace:*` (hot-reload, no publish needed)
-- **Bundler**: Turbopack (no --webpack flag needed)
-- **Port**: 3002 (avoids collision with app-platform on 3000)
+- **Bundler**: Webpack by default; `dev:turbopack` is the opt-in development path
+- **Port**: 7001
 - **Deploy target**: showroom.rottay.com (Vercel, separate project)
 
-### Route Tree (265 pages)
+### Route Tree
 ```
 /                          Commercial landing page (Tailwind, marketing exception)
 /foundations/              Tokens, themes, engines, icons
   /tokens/{colors,spacing,typography,radius,shadows,motion}
-  /icons                   109 searchable icons with copy-to-clipboard
+  /icons                   Stable 50-role facade plus generated 263-role packs
   /engines                 Side-by-side engine comparison
   /themes                  3 brand themes with live preview
-/primitives/[category]/[component]   97 primitive pages with live rendering
-/patterns/[group]/[pattern]          47 pattern pages with previews
+/primitives/[category]/[component]   Generated primitive reference pages
+/patterns/[group]/[pattern]          Generated pattern reference pages
   /visualization/charts/[type]       18 chart pages with real D3 rendering
-/structures/[group]/[structure]      21 structure pages
-/surfaces/[group]/[surface]          36 surface pages with composition
+/structures/[group]/[structure]      Generated structure reference pages
+/surfaces/[group]/[surface]          Generated surface reference pages
 /verticals/                          Platform, BitHire, Evnto
   /platform/[category]              Dashboard, user list, tenant form demos
   /bithire/[category]               Pipeline kanban, recruiter dashboard, scorecard
@@ -319,15 +401,16 @@ pnpm typecheck    # TypeScript check
 ```
 
 ### Key Components
-- `src/components/layout/` -- Shell, sidebar, header (with engine/theme switcher), footer, search (Cmd+K)
-- `src/components/playground/` -- Engine switcher, theme switcher, code block, prop table, component preview, engine comparison
-- `src/components/demos/` -- Vertical demo screens (platform/, bithire/, evnto/)
-- `src/components/showroom-context/` -- Global engine/theme state context
-- `src/data/registry/` -- Component registries (primitives, patterns, structures, surfaces, charts, icons)
-- `src/data/navigation.ts` -- Sidebar navigation tree
+- `packages/showroom/src/components/layout/` -- Shell, sidebar, header (with engine/theme switcher), footer, search (Cmd+K)
+- `packages/showroom/src/components/playground/` -- Engine switcher, theme switcher, code block, prop table, component preview, engine comparison
+- `packages/showroom/src/components/demos/` -- Vertical demo screens (platform/, bithire/, evnto/)
+- `packages/showroom/src/components/showroom-context/` -- Global engine/theme state context
+- `packages/showroom/src/data/registry/` -- Component registries (primitives, patterns, structures, surfaces, charts, icons)
+- `packages/showroom/src/data/navigation.ts` -- Sidebar navigation tree
 
 ### Rules
-- Marketing landing page (src/app/page.tsx) uses Tailwind + lucide-react (marketing exception)
+- Marketing landing page (`packages/showroom/src/app/page.tsx`) uses Tailwind +
+  lucide-react as a showroom-only marketing exception
 - ALL other pages use DS components (Box, Flex, Stack, Text, Card, Badge, Button)
 - Icons from @rottay/design-system/icons (not lucide-react)
 - folder/index.tsx pattern for all components
@@ -346,13 +429,18 @@ border: 'var(--ds-input-border, var(--ds-color-border))'
 color: 'var(--ds-card-title-color, var(--ds-color-text-primary))'
 ```
 
-This enables per-component customization via BrandTheme or TenantAppearanceAdvanced without breaking existing code. When the component-specific var is not set, the generic token is used.
+This enables per-component customization through the governed visual compiler
+without breaking existing code. When the component-specific variable is not
+set, the generic token is used.
 
-**Components migrated**: Button (13 variants), Input (15 props), Card (12), Table+PatternDataTable (12+12), Modal (11x2 files), Tabs (7), Radio (4), Checkbox (7).
+Representative migrated families include Button, Input, Card, Table,
+PatternDataTable, Modal, Tabs, Radio and Checkbox.
 
-### TenantAppearanceAdvanced (~140 fields)
+### TenantAppearanceAdvanced (normalized compatibility shape)
 
-DB-driven tenants can customize all chrome sections via `TenantAppearanceAdvanced`:
+`TenantAppearanceAdvanced` is the normalized compiler/compat shape, not the DB
+write contract. `TenantThemeDocument` exposes bounded advanced fields that can
+compile into these chrome sections:
 - `chrome.controls` -- all 10 button variants + full input chrome + disabled + focus
 - `chrome.table` -- header, row, cell, loading overlay
 - `chrome.cardComponent` -- bg, border, shadow, header/body/footer
@@ -363,7 +451,10 @@ DB-driven tenants can customize all chrome sections via `TenantAppearanceAdvance
 - `chrome.shell` -- grid overlay
 - `tokenOverrides` -- raw `--ds-*` vars (max 200)
 
-The appearance compiler (`compilers/appearance/`) converts these to CSS vars injected by ThemeProvider.
+The appearance compiler
+(`packages/core/src/infrastructure/compilers/kernel/runtime/appearance/`)
+converts these to bounded CSS variables. Production DB themes are server
+compiled; provider-side emission is the compatibility/preview path.
 
 ---
 
@@ -376,7 +467,7 @@ to the **Quiet Premium** target. Two artifacts govern this:
   — the canonical Quiet Premium specification (motion contract, dark-aware elevation, interaction-state
   contract, gradient/glass/glow roles, color purity, scale hygiene, theme.css drain, content integrity,
   cross-engine layout, premium signature, and the section 12 metrics ratchet). Read it FULLY before
-  touching the modern engine, tokens, or the `packages/core/src/tokens/css/engines/modern/` tree.
+  touching the modern engine, tokens, or the `packages/core/src/foundation/tokens/css/runtime/engines/modern/` tree.
 - **Operative backlog (the work)**: `roadmap/` holds one lane, `roadmap/engine-modern.md` (11 delegable
   work orders WO-ENG-01..11, each with file-level steps, a blocking acceptance gate, and a ready-to-paste
   delegation prompt). State lives in `roadmap/registry.json`; check status with `pnpm roadmap:status`

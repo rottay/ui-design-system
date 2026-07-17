@@ -85,7 +85,7 @@ app-platform typecheck. lint:folders passes.
 - Update brand-compiler bridge functions for the new types
 - Preserve backward compatibility with existing `brandTheme` field
 
-**Touches:** contracts/themes, contracts/tenants, brand-compiler.
+**Touches:** foundation/contracts/composition/tenants/themes, foundation/contracts/composition/tenants, brand-compiler.
 No visual changes.
 
 **Verification:** DS typecheck + build. app-platform typecheck.
@@ -126,7 +126,7 @@ close rottay-specific parity gaps from H3.
 - Chrome: command-surface sidebar, graphite header, subtle shell
 - Controls: sharper, high-contrast, austere
 
-**Touches:** brand-themes/rottay.ts (authored source). CSS artifacts
+**Touches:** brand-themes/platform/index.ts (authored source). CSS artifacts
 are regenerated outputs — not edited by hand.
 
 **Verification:** DS build. Regression tests confirm full contract
@@ -149,7 +149,7 @@ bithire-specific parity gaps from H3.
 - Chrome: softer radii, trustworthy tables, better sidebar rhythm
 - Controls: refined, calm
 
-**Touches:** brand-themes/bithire.ts (authored source). CSS artifacts
+**Touches:** brand-themes/bithire/index.ts (authored source). CSS artifacts
 are regenerated outputs — not edited by hand.
 
 **Verification:** Same as I4.
@@ -172,7 +172,7 @@ evnto-specific parity gaps from H3.
 - Chrome: largest radii, card-stack, tactile
 - Controls: soft curves, money-state feedback
 
-**Touches:** brand-themes/evnto.ts (authored source). CSS artifacts
+**Touches:** brand-themes/evnto/index.ts (authored source). CSS artifacts
 are regenerated outputs — not edited by hand.
 
 **Verification:** Same as I4.

@@ -8,8 +8,6 @@ import {
   type ReactNode,
 } from 'react';
 import {
-  ActionDock,
-  AdaptiveOverlay,
   Affix,
   Alert,
   AlertDialog,
@@ -19,7 +17,6 @@ import {
   Avatar,
   BackTop,
   Badge,
-  BottomTabBar,
   Box,
   Breadcrumb,
   Button,
@@ -56,7 +53,6 @@ import {
   Menu,
   Mentions,
   MessageProvider,
-  MobileHeader,
   Modal,
   NavLink,
   NotificationProvider,
@@ -110,13 +106,13 @@ import {
   useNotification,
   useToast,
 } from '@rottay/design-system';
-import { RuntimeFingerprint } from '@/components/runtime/runtime-fingerprint';
-import { StateGallery, getFlagshipSpec } from '@/components/state-gallery';
+import { RuntimeFingerprint } from '@/composition/components/runtime/runtime-fingerprint';
+import { StateGallery, getFlagshipSpec } from '@/composition/components/state-gallery';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/composition/components/playground/surface-tokens';
 import { primitives } from '@/data/registry';
 import type {
   PrimitiveCategory,
@@ -606,51 +602,6 @@ function BackTopPreview() {
   );
 }
 
-function BottomTabBarPreview() {
-  const [activeKey, setActiveKey] = useState('home');
-
-  return (
-    <PreviewFrame height={196} width={300}>
-      <Box style={{ padding: 16 }}>
-        <Text size="sm" weight="semibold">
-          Mobile workspace
-        </Text>
-        <Text size="xs" style={{ marginTop: 6, color: 'var(--ds-color-text-secondary)' }}>
-          Tap the tabs to verify active-state behavior.
-        </Text>
-      </Box>
-      <BottomTabBar
-        activeKey={activeKey}
-        onChange={setActiveKey}
-        items={[
-          {
-            key: 'home',
-            label: 'Home',
-            icon: <Text size="xs">H</Text>,
-          },
-          {
-            key: 'search',
-            label: 'Search',
-            icon: <Text size="xs">S</Text>,
-          },
-          {
-            key: 'alerts',
-            label: 'Alerts',
-            icon: <Text size="xs">A</Text>,
-            badge: 3,
-          },
-        ]}
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
-    </PreviewFrame>
-  );
-}
-
 function FloatButtonPreview() {
   const [open, setOpen] = useState(true);
 
@@ -684,25 +635,6 @@ function FloatButtonPreview() {
   );
 }
 
-function MobileHeaderPreview() {
-  return (
-    <PreviewFrame height={148} width={304}>
-      <MobileHeader
-        title="Tenant overview"
-        onBack={() => undefined}
-        rightActions={<Button size="sm" variant="ghost">Edit</Button>}
-        style={{ position: 'relative', top: 'auto', zIndex: 'auto' as any }}
-      >
-        <Box style={{ padding: '10px 16px 16px' }}>
-          <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
-            Sticky-safe mobile header slots remain engine-aware here.
-          </Text>
-        </Box>
-      </MobileHeader>
-    </PreviewFrame>
-  );
-}
-
 function StepperPreview() {
   const [current, setCurrent] = useState(1);
 
@@ -726,71 +658,6 @@ function StepperPreview() {
           Click the real DS stepper to move between stages.
         </Text>
       </SurfaceBlock>
-    </Stack>
-  );
-}
-
-function ActionDockPreview() {
-  return (
-    <PreviewFrame height={208} width={304}>
-      <Box style={{ padding: 16 }}>
-        <Text size="sm" weight="semibold">
-          Review flow
-        </Text>
-        <Text size="xs" style={{ marginTop: 6, color: 'var(--ds-color-text-secondary)' }}>
-          The dock is the real fixed-action primitive, scoped into a bounded frame.
-        </Text>
-      </Box>
-      <ActionDock
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      >
-        <Button variant="default" style={{ flex: 1 }}>
-          Hold
-        </Button>
-        <Button variant="primary" style={{ flex: 1 }}>
-          Approve
-        </Button>
-      </ActionDock>
-    </PreviewFrame>
-  );
-}
-
-function AdaptiveOverlayPreview() {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Stack spacing="sm">
-      <Button variant="primary" onClick={() => setOpen(true)}>
-        Open adaptive overlay
-      </Button>
-      <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
-        The container mode adapts through the actual DS overlay runtime.
-      </Text>
-      <AdaptiveOverlay
-        open={open}
-        onClose={() => setOpen(false)}
-        title="Route policy"
-        footer={
-          <Flex gap={8} justify="end">
-            <Button variant="default" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={() => setOpen(false)}>
-              Apply
-            </Button>
-          </Flex>
-        }
-      >
-        <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          This preview stays truthful by invoking the real adaptive overlay rather
-          than sketching a generic layer.
-        </Text>
-      </AdaptiveOverlay>
     </Stack>
   );
 }
@@ -1676,7 +1543,6 @@ export const COMPONENT_MAP: Record<string, ReactNode> = {
   'toast': <ToastPreview />,
 
   // -- Navigation --
-  'action-dock': <ActionDockPreview />,
   'affix': (
     <Affix offsetTop={0}>
       <Button variant="default">Affixed button</Button>
@@ -1690,7 +1556,6 @@ export const COMPONENT_MAP: Record<string, ReactNode> = {
     </Anchor>
   ),
   'back-top': <BackTopPreview />,
-  'bottom-tab-bar': <BottomTabBarPreview />,
   'breadcrumb': (
     <Breadcrumb
       items={[
@@ -1725,7 +1590,6 @@ export const COMPONENT_MAP: Record<string, ReactNode> = {
       style={{ width: 200 }}
     />
   ),
-  'mobile-header': <MobileHeaderPreview />,
   'pagination': <Pagination total={100} pageSize={10} current={1} />,
   'segmented': (
     <Segmented
@@ -1755,7 +1619,6 @@ export const COMPONENT_MAP: Record<string, ReactNode> = {
   ),
 
   // -- Overlay --
-  'adaptive-overlay': <AdaptiveOverlayPreview />,
   'alert-dialog': <AlertDialogPreview />,
   'confirm-dialog': <ConfirmDialogPreview />,
   'context-menu': (

@@ -1,0 +1,171 @@
+/**
+ * MetricsMinimal skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-minimal.css — single DOM tree under
+ * every engine. Scope root carries the single class `ds-metrics-minimal`,
+ * repeated to buy the "two root classes" budget.
+ *
+ * SHARED VOCABULARY: the values below are the `metrics/tokens.ts` constants,
+ * transcribed verbatim — the one genuinely shared token module in CK-A. The
+ * four metrics variants each get their own skin file but reference the SAME
+ * `var(--ds-metric-card-*, …)` / `var(--ds-signal-card-*, …)` fallback chains,
+ * so the vocabulary stays shared through the custom-property names, not through
+ * a merged selector (each file has a distinct scope class).
+ *
+ * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1)
+ * — including the meter-track's `transparent` border, which the floor would
+ * otherwise recolour; non-border paint wins at (0,3,0); `Text` colour buys
+ * (0,5,0) to beat the typography skin. Icon (`metric-icon`/`trend-icon`/
+ * `metric-chevron`/`panel-icon`) colour is a real `data-part` on each svg, so it
+ * is painted directly (currentColor).
+ *
+ * STATE: `metric.positive` is the row's `data-positive`; the 3-tone icon colour,
+ * the 2-tone trend/change colour and the success/error meter fill all key on it.
+ * HOVER was React `isHovered` (deleted from the TSX), transcribed to
+ * `[data-part='metric-row']:hover …`. The row's `<style>` `:hover` treatment
+ * stays suppressed by the (0,3,0)/(0,4,0) rest rules, as the inline paint did.
+ */
+
+/* panel chrome -------------------------------------------------------------- */
+
+.ds-metrics-minimal.ds-metrics-minimal[data-part='root'] {
+  background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
+  border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
+}
+.ds-metrics-minimal.ds-metrics-minimal[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'] {
+  background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'][data-part='panel-icon-box'] {
+  border: 1px solid var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-signal-card-body-color, var(--ds-color-text-muted));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'] {
+  background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'][data-part='live-badge'] {
+  border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-dot'] {
+  border-radius: 50%;
+  background: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+  color: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+
+/* per-row shell ------------------------------------------------------------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'] {
+  background: var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))));
+  border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
+  box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'] {
+  border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
+}
+
+/* accent bar — success/error meter fill by trend, hover widens 3px -> 4px ---- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='accent-bar'] {
+  width: 3px;
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='accent-bar'] {
+  width: 4px;
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='accent-bar'] {
+  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='accent-bar'] {
+  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
+}
+
+/* row icon box — static bg/border, 3-tone icon colour, hover scale ---------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
+  background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
+  transform: scale(1);
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-icon-box'] {
+  transform: scale(1.05);
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'][data-part='metric-icon-box'] {
+  border: 1px solid var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='metric-icon'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='metric-icon'] {
+  color: var(--ds-metric-card-trend-color-warning, var(--ds-color-warning));
+}
+
+/* label + trend + change — 2-tone trend colour ------------------------------ */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+  color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+}
+
+/* big value — rest colour, hover swaps to the accent ------------------------ */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+/* meter track + fill -------------------------------------------------------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'] {
+  background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
+  border-radius: 999px;
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'][data-part='meter-track'] {
+  border: 1px solid var(--ds-metric-card-meter-track-border, transparent);
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-fill'] {
+  border-radius: 999px;
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
+}
+
+/* chevron — static colour, hover slide-in ----------------------------------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-chevron'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+  opacity: 0;
+  transform: translateX(-8px);
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-chevron'] {
+  opacity: 1;
+  transform: translateX(0);
+}

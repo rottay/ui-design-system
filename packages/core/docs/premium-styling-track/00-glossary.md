@@ -9,9 +9,9 @@ If any other document uses these terms differently, this file wins.
 
 The human-authored source of premium visual identity.
 
-Location: `tokens/ts/brand-themes/`
+Location: `foundation/tokens/ts/presentation/brand-themes/`
 
-Examples: `rottay.ts`, `bithire.ts`, `evnto.ts`
+Examples: `platform/index.ts`, `bithire/index.ts`, `evnto/index.ts`
 
 ### Vertical Theme
 
@@ -50,7 +50,7 @@ Principle: role-gated, validated, previewed, reversible, audited.
 A typed catalog of already-existing CSS variable handles (`var(--ds-*)`).
 Useful for discovery and code ergonomics.
 
-Current location: `tokens/ts/tenants/`
+Current location: `foundation/tokens/ts/runtime/mirrors/`
 
 A mirror is NOT authored premium source.
 
@@ -59,13 +59,13 @@ A mirror is NOT authored premium source.
 A generated or emitted CSS output consumed by runtime or package users.
 Not the primary authored source.
 
-Examples: `tokens/css/tenants/rottay/index.css`, `bithire/index.css`, `evnto/index.css`
+Examples: `foundation/tokens/css/facade/artifacts/rottay/index.css`, `bithire/index.css`, `evnto/index.css`
 
 ### Public Entrypoint
 
 A CSS or JS file that exists because it is part of the public package contract.
 
-Examples: `tokens/css/rottay.css`, `bithire.css`, `evnto.css`,
+Examples: `foundation/tokens/css/facade/entrypoints/platform.css`, `bithire.css`, `evnto.css`,
 `package.json` style exports (`./styles/*`)
 
 ### Compatibility Shim
@@ -78,7 +78,9 @@ Must be named honestly, documented as compatibility, and thin.
 A bundled or shipped tenant that is not part of the canonical first-party
 premium trio and should not distort the core taxonomy story.
 
-Current example: `tokens/css/tenants/themanagementmiami/index.css`
+There is no current checked-in customer tenant example. `themanagementmiami`
+is DB-owned; its TypeScript fixture exists only to prove the runtime compiler
+and must never become an artifact, registry entry, or public bundle.
 
 ## Source-Of-Truth Hierarchy
 

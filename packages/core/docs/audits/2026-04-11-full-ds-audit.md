@@ -19,7 +19,7 @@ Scope: `packages/core/src` — contracts, compilers, runtime, hooks, tokens/CSS,
 |---|------|------|---------|---------|
 | 7 | Tokens/CSS | `modern/theme.css` | 2116-2150 | **Empty bridge references undefined `--ds-empty-icon-size`.** DaisyUI `.empty-*` selectors are dead; bridge `.rottay-empty` is OK but the DaisyUI section wastes CSS. |
 | 8 | Tokens/CSS | `modern/theme.css` | 2213-2272 | **QRCode DaisyUI selectors reference undefined loading/status tokens** (`--ds-qrcode-loading-opacity`, `--ds-qrcode-loading-bg`). Bridge `.rottay-qrcode` is functional. |
-| 9 | Tokens/CSS | Missing files | — | **No `tree.css` or `empty.css` component token files exist.** No `tokens/ts/components/tree.ts` or `empty.ts` TS mirrors either. Blocks type-safe token introspection. |
+| 9 | Tokens/CSS | Missing files | — | **No `tree.css` or `empty.css` component token files exist.** No `foundation/tokens/ts/runtime/components/tree/index.ts` or `empty.ts` TS mirrors either. Blocks type-safe token introspection. |
 | 10 | Contracts | `appearance/index.ts` | 30-34 | **`--ds-radius-button` emitted by BUTTON_STYLE_RADIUS but no Modern primitive reads it.** The Button engine uses `var(--ds-button-md-radius)` not `var(--ds-radius-button)`. Dead emission. |
 | 11 | Contracts | `themes/index.ts` | 275 | **BrandSidebarChrome over-exposed via Appearance Advanced.** Contract accepts full `Partial<BrandSidebarChrome>` (20 fields) but compiler only maps 7 fields. |
 | 12 | Runtime | `SystemCssVariablesBridge.tsx` | 41 | **JSON.stringify(tokens) on every render for change detection.** Performance concern — should use shallow fingerprint like ThemeProvider does. |
@@ -55,8 +55,8 @@ Scope: `packages/core/src` — contracts, compilers, runtime, hooks, tokens/CSS,
 | Area | What was checked | Status |
 |------|-----------------|--------|
 | Merge chain comments | `tenants/index.ts`, `themes/index.ts` | Accurate |
-| Token type exports | `contracts/tokens/` | All consumed, no orphans |
-| Color-math sharing | `compilers/_shared/color-math/` | Dual consumer (ThemeProvider + generator), no drift |
+| Token type exports | `foundation/contracts/kernel/tokens/` | All consumed, no orphans |
+| Color-math sharing | `infrastructure/compilers/kernel/foundation/css/color-math/` | Dual consumer (ThemeProvider + generator), no drift |
 | gridOpacity non-emission | `brand-theme/index.ts` | Intentional, documented |
 | Provider composition order | `DesignSystemProvider.tsx` | Correct sequence |
 | BrandTheme normalization | `DesignSystemProvider.tsx` | Sound logic |
@@ -74,7 +74,7 @@ Scope: `packages/core/src` — contracts, compilers, runtime, hooks, tokens/CSS,
 | Premium track docs | `premium-styling-track/README.md` | 21 waves tracked, all complete |
 | Test imports (5 random) | brand-compiler, commands, appearance-runtime, Box, compat/theme | All valid |
 | Package.json scripts | lint:folders, lint:integration, test | All correct |
-| Stale contract comments | Entire contracts/ | Zero found |
+| Stale contract comments | Entire foundation/contracts/ | Zero found |
 
 ## Recommended Fix Order
 

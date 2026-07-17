@@ -12,11 +12,11 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const commercialDir = resolve(here, "../src/commercial");
-const tokensCss = join(commercialDir, "tokens/commercial-ramp.css");
+const commercialDir = resolve(here, "../src/ui/patterns/commercial");
+const tokensCss = join(commercialDir, "foundation/tokens/commercial-ramp.css");
 const outFile = resolve(here, "../dist/commercial.css");
 
-/** Collect every `*.css` under src/commercial except the ramp tokens (added first). */
+/** Collect every commercial `*.css` except the ramp tokens (added first). */
 function collectComponentCss(dir) {
   const found = [];
   for (const entry of readdirSync(dir).sort()) {

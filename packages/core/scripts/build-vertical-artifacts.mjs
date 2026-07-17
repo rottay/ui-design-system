@@ -1,7 +1,7 @@
 /**
  * Regenerate first-party vertical CSS artifacts from their authored sources.
  *
- * Each artifact (`src/tokens/css/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
+ * Each artifact (`src/foundation/tokens/css/facade/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
  *   index.css = compileBrandTheme(<slug>BrandTheme) + <slug>/_source/extension.css
  *
  * The brand compiler owns the theme variables (palette, typography, surfaces,
@@ -26,16 +26,19 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { compileBrandTheme, isDarkSurfacePalette } from '../dist/compilers/brand-theme/index.js';
-import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../dist/_internal/a11y/contrast/index.js';
+import {
+  compileBrandTheme,
+  isDarkSurfacePalette,
+} from '../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
+import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../dist/foundation/kernel/accessibility/branding-contrast/index.js';
 import {
   renderVerticalArtifact,
   FIRST_PARTY_ARTIFACT_SPECS,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
-} from '../dist/runtime/tenant/storage/static/generator/index.js';
-import { bithireBrandTheme } from '../dist/tokens/ts/brand-themes/bithire/bithire.js';
-import { evntoBrandTheme } from '../dist/tokens/ts/brand-themes/evnto/evnto.js';
-import { rottayBrandTheme } from '../dist/tokens/ts/brand-themes/platform/rottay.js';
+} from '../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
+import { bithireBrandTheme } from '../dist/foundation/tokens/ts/presentation/brand-themes/bithire/index.js';
+import { evntoBrandTheme } from '../dist/foundation/tokens/ts/presentation/brand-themes/evnto/index.js';
+import { rottayBrandTheme } from '../dist/foundation/tokens/ts/presentation/brand-themes/platform/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
@@ -107,8 +110,8 @@ let stale = 0;
 const apcaFailures = [];
 
 for (const { slug, verticalKey, displayName, selector, authoredThemePath, brandTheme } of artifacts) {
-  const artifactPath = resolve(root, `src/tokens/css/artifacts/${slug}/index.css`);
-  const extensionPath = resolve(root, `src/tokens/css/artifacts/${slug}/_source/extension.css`);
+  const artifactPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/index.css`);
+  const extensionPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/_source/extension.css`);
 
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
   apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled.cssVariables));

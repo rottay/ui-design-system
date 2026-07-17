@@ -19,11 +19,11 @@ DS base
 
 - `TenantConfig` declares the implemented merge chain as:
   `DS base -> vertical baseline -> BrandTheme -> branding/tokenOverrides -> Appearance General -> Appearance Advanced -> runtime`
-  in `src/contracts/tenants/index.ts:91-97`.
+  in `src/foundation/contracts/composition/tenants/index.ts`.
 - `TenantAppearance` is wired: DesignSystemProvider resolves `config.appearance`,
   ThemeProvider injects vars, useTokens reads density from `appearance.general`.
 - `TenantAppearanceGeneral` / `TenantAppearanceAdvanced` are defined in
-  `src/contracts/themes/index.ts` and compiled by `src/compilers/appearance/index.ts`.
+  `src/foundation/contracts/composition/tenants/themes/index.ts` and compiled by `src/infrastructure/compilers/runtime/appearance/index.ts`.
 - The brand-theme compiler operates on `BrandTheme`; the appearance compiler
   operates on `TenantAppearance`. Both feed into the same runtime pipeline.
 
@@ -34,11 +34,11 @@ DS base
 - Sync path when `propTenantConfig` is provided
 - Async path when only `tenantSlug` is provided
 
-See `src/runtime/bootstrap/DesignSystemProvider.tsx:347-385`.
+See `src/infrastructure/runtime/bootstrap/composition/react/provider/index.tsx`.
 
 After resolving tenant config, it normalizes `brandTheme` into legacy-compatible `branding`
 and `tokenOverrides` before rendering providers. See
-`src/runtime/bootstrap/DesignSystemProvider.tsx:387-406`.
+`src/infrastructure/runtime/bootstrap/composition/react/provider/index.tsx`.
 
 This means downstream consumers do not need to understand `brandTheme` directly to get
 effective color and structural values. They can still read the normalized `branding` and
@@ -53,16 +53,16 @@ effective color and structural values. They can still read the normalized `brand
 - Legacy path:
   `engine -> vertical.tokenOverrides -> profile.tokenOverrides -> tenant.tokenOverrides`
 
-See `src/hooks/tokens/index.ts:166-175` and `src/hooks/tokens/index.ts:207-273`.
+See `src/infrastructure/runtime/theming/composition/react/tokens/index.ts`.
 
 For personality, the BrandTheme path is:
 
 `DEFAULT -> vertical.personality -> brandTheme -> tenant.personality`
 
-See `src/hooks/tokens/index.ts:276-306`.
+See `src/infrastructure/runtime/theming/composition/react/tokens/index.ts`.
 
 Branding colors also prefer `brandTheme.palette` over `config.branding`, which keeps
-`useTokens()` aligned with `ThemeProvider`. See `src/hooks/tokens/index.ts:308-312`.
+`useTokens()` aligned with `ThemeProvider`. See `src/infrastructure/runtime/theming/composition/react/tokens/index.ts`.
 
 ## What Reaches Modern
 
@@ -70,7 +70,7 @@ Modern receives customization through three main channels:
 
 1. CSS variables from tenant/theme artifacts and runtime injection
 2. Normalized `branding` / `tokenOverrides`
-3. Engine-local bridges in `src/tokens/css/engines/modern/theme.css`
+3. Engine-local bridges in `src/foundation/tokens/css/runtime/engines/modern/theme.css`
 
 That bridge file maps many DS variables into DaisyUI/Tailwind-facing classes such as:
 
@@ -98,7 +98,7 @@ brandTheme / tokenOverrides
 
 `TenantAppearance` is now part of the implemented merge chain.
 
-- `DesignSystemProvider` resolves `config.appearance` via `compilers/appearance/`
+- `DesignSystemProvider` resolves `config.appearance` via `infrastructure/compilers/runtime/appearance/`
 - `ThemeProvider` injects appearance CSS vars inline (after branding/tokenOverrides)
 - `useTokens()` reads `appearance.general.density` as a JS factor on spacing
 - `backgroundMode` feeds theme resolution (wins over default `'base'`, loses to explicit `light`/`dark`/`auto`)

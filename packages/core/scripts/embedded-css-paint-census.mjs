@@ -26,7 +26,7 @@ export function runEmbeddedCssPaintCensus(args = process.argv.slice(2)) {
 
   const paths = args.filter((arg) => !arg.startsWith("--"));
   const productionOnly = paths.length === 0;
-  if (productionOnly) paths.push(join(packageRoot, "src/components"));
+  if (productionOnly) paths.push(join(packageRoot, "src/ui"));
   const files = paths.flatMap((path) =>
     collectSourceFiles(path, { productionOnly })
   );

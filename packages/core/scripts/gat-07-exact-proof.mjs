@@ -47,7 +47,7 @@ const WORKSPACE_ROOT = resolve(UI_ROOT, '..');
 const DOCS_ROOT = resolve(
   process.env.DOCS_ENGINEERING_ROOT || join(WORKSPACE_ROOT, 'docs-engineering'),
 );
-const COMPONENTS = join(CORE_ROOT, 'src/components');
+const COMPONENTS = join(CORE_ROOT, 'src/ui');
 const CLAIM_FLOOR_PATH = join(HERE, 'gat-07-public-claim-floor.json');
 const CLAIM_DOC_ALLOWLIST_PATH = join(HERE, 'gat-07-doc-claim-allowlist.json');
 const DOCUMENTATION_SEAL_PATH = join(HERE, 'gat-07-documentation-seal.json');
@@ -72,9 +72,9 @@ const REQUIREMENTS_REVISION = '969205380fd24eb45947bf3748db5a6cacd798f8';
 const PRODUCTION_SOURCE_RE = /\.(?:ts|tsx)$/;
 const SOURCE_EXCLUDE_RE = /(?:^|\/)(?:tests?|__tests__|stories)(?:\/|$)|\.(?:test|spec|stories)\./;
 const SKIN_DIRS = [
-  join(CORE_ROOT, 'src/tokens/css/engines/modern/skin'),
-  join(CORE_ROOT, 'src/tokens/css/engines/rustic/skin'),
-  join(CORE_ROOT, 'src/tokens/css/components/skin'),
+  join(CORE_ROOT, 'src/foundation/tokens/css/runtime/engines/modern/skin'),
+  join(CORE_ROOT, 'src/foundation/tokens/css/runtime/engines/rustic/skin'),
+  join(CORE_ROOT, 'src/foundation/tokens/css/presentation/components/skin'),
 ];
 
 const CANONICAL_DOC_MARKERS = Object.freeze({
@@ -140,7 +140,10 @@ const EXPECTED_CLAIM_FLOOR = Object.freeze({
       targetPhase: '2A',
       decision: 'external-import census, then component-owned replacement or removal',
     },
-    definitionFiles: ['src/contracts/extensions/index.ts', 'src/contracts/engine/index.ts'],
+    definitionFiles: [
+      'src/foundation/contracts/kernel/tokens/extensions/index.ts',
+      'src/foundation/contracts/runtime/engine/index.ts',
+    ],
     requiredAssertions: {
       staticallyResolvedExtensionRuntimeReferences: 0,
       staticallyResolvedExtensionHelperReferences: 0,
@@ -161,9 +164,9 @@ const EXPECTED_CLAIM_FLOOR = Object.freeze({
       decision: 'wire each field with runtime and visual evidence or remove it',
     },
     definitionFiles: [
-      'src/components/surfaces/foundation/types.ts',
-      'src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts',
-      'src/components/surfaces/index.ts',
+      'src/ui/surfaces/foundation/contracts/index.ts',
+      'src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
+      'src/ui/surfaces/index.ts',
     ],
     requiredAssertions: {
       profileOverrideDeclarations: 33,
@@ -363,8 +366,14 @@ function literalEquals(state, value) {
 }
 
 function measureVerticals() {
-  const verticalPath = join(CORE_ROOT, 'src/runtime/verticals/registry.ts');
-  const tenantPath = join(CORE_ROOT, 'src/runtime/tenant/registry/index.ts');
+  const verticalPath = join(
+    CORE_ROOT,
+    'src/foundation/presets/verticals/index.ts',
+  );
+  const tenantPath = join(
+    CORE_ROOT,
+    'src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts',
+  );
   const verticalResult = extractRegistryFactsFromText(
     read(verticalPath), workspacePath(verticalPath), 'VERTICAL_REGISTRY', ['engine', 'density', 'defaultProductProfile'],
   );
@@ -584,7 +593,7 @@ function measureDataParts() {
   return {
     evidence: {
       classification: 'STATIC-CANONICAL-SOURCE-EVIDENCE',
-      disclaimer: 'Deterministic source evidence from finite intrinsic JSX, canonical Box/Text forwarders, or the canonical helper; not runtime route/mount or anatomy-completeness proof.',
+      disclaimer: 'Deterministic source evidence from finite intrinsic JSX, audited canonical DOM forwarders, or the canonical helper; not runtime route/mount or anatomy-completeness proof.',
       acceptedSinkKinds: ['intrinsic-dom', 'canonical-forwarder', 'canonical-helper'],
       documentation: { path: workspacePath(DATA_PART_DOC), sha256: sha256(read(DATA_PART_DOC)) },
       documentedEntries: evidence.length,

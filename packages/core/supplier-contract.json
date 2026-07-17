@@ -359,6 +359,8 @@
         "RATE_DEFAULTS",
         "RATE_SIZE_MAP",
         "RATIO_PRESETS",
+        "RESPONSIVE_BREAKPOINTS",
+        "RESPONSIVE_BREAKPOINT_ORDER",
         "RadarChart",
         "Radio",
         "RadioGroup",
@@ -546,6 +548,8 @@
         "brandThemeToTenantAppearanceAdvanced",
         "brandThemeToTokenOverrides",
         "buildHideMediaQuery",
+        "buildMinWidthQuery",
+        "buildRangeQuery",
         "buildShowMediaQuery",
         "buildTenantSelector",
         "buildViewModes",
@@ -665,6 +669,7 @@
         "getTenantConfig",
         "getTenantThemeVerticalEnvelope",
         "getThicknessValue",
+        "getUnresolvedTenantConfig",
         "getVerticalPreset",
         "hasCustomComponent",
         "hydrateTenantThemeConfig",
@@ -915,8 +920,7 @@
         ],
         "AppShell": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "AreaChart": [
           "antd",
@@ -959,8 +963,7 @@
           "antd"
         ],
         "Badge": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "BarChart": [
           "antd",
@@ -975,8 +978,7 @@
           "motion"
         ],
         "BottomTabBar": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Breadcrumb": [
           "antd"
@@ -997,8 +999,7 @@
           "motion"
         ],
         "Button": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Calendar": [
           "antd"
@@ -1009,8 +1010,7 @@
           "motion"
         ],
         "Card": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Carousel": [
           "antd"
@@ -1065,8 +1065,7 @@
         ],
         "CommandCenterSurface": [
           "@ant-design/icons",
-          "antd",
-          "motion"
+          "antd"
         ],
         "CompareSurface": [
           "@ant-design/icons",
@@ -1091,9 +1090,7 @@
           "motion"
         ],
         "CopyToCheck": [
-          "antd",
-          "lucide-react",
-          "motion"
+          "lucide-react"
         ],
         "CountUp": [
           "antd",
@@ -1171,8 +1168,7 @@
           "motion"
         ],
         "Divider": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Drawer": [
           "antd",
@@ -1292,20 +1288,13 @@
           "lucide-react",
           "motion"
         ],
-        "HamburgerToX": [
-          "antd",
-          "motion"
-        ],
         "HeaderSurface": [
-          "@ant-design/icons",
           "antd",
-          "d3",
           "lucide-react",
           "motion"
         ],
         "Heading": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "HeatMap": [
           "antd",
@@ -1481,12 +1470,10 @@
           "motion"
         ],
         "MobileHeader": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Modal": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "MoreFieldsToggle": [
           "antd",
@@ -1509,8 +1496,7 @@
           "motion"
         ],
         "normalizeSurfaceDensity": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "notification": [
           "antd"
@@ -1522,13 +1508,6 @@
           "antd"
         ],
         "NotificationSurface": [
-          "@ant-design/icons",
-          "antd",
-          "d3",
-          "lucide-react",
-          "motion"
-        ],
-        "OnboardingSurface": [
           "@ant-design/icons",
           "antd",
           "d3",
@@ -1557,8 +1536,7 @@
           "antd"
         ],
         "Paragraph": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Parallax": [
           "motion"
@@ -1639,8 +1617,7 @@
           "lucide-react"
         ],
         "PatternFormBuilder": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "PatternGalleryView": [
           "antd",
@@ -1713,8 +1690,7 @@
         ],
         "PatternStatsGrid": [
           "@ant-design/icons",
-          "antd",
-          "motion"
+          "antd"
         ],
         "PatternStepWizard": [
           "antd"
@@ -1838,8 +1814,7 @@
           "motion"
         ],
         "RecordWorkbenchSurface": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "ReportSurface": [
           "@ant-design/icons",
@@ -1849,8 +1824,7 @@
           "motion"
         ],
         "resolveListCardMinWidth": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "resolveSharedHeaderActionIcon": [
           "lucide-react"
@@ -1862,8 +1836,7 @@
           "lucide-react"
         ],
         "resolveSurfaceTabsType": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Result": [
           "antd"
@@ -1946,8 +1919,7 @@
           "motion"
         ],
         "Skeleton": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "SlideIn": [
           "antd",
@@ -1971,6 +1943,7 @@
           "antd"
         ],
         "Spotlight": [
+          "antd",
           "motion"
         ],
         "StaggerChildren": [
@@ -2102,8 +2075,7 @@
           "antd"
         ],
         "Tag": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "TagInput": [
           "antd"
@@ -2116,8 +2088,7 @@
           "motion"
         ],
         "Text": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Textarea": [
           "antd"
@@ -2174,8 +2145,7 @@
           "motion"
         ],
         "Typography": [
-          "antd",
-          "motion"
+          "antd"
         ],
         "Upload": [
           "antd"
@@ -2183,17 +2153,8 @@
         "useAccentTokens": [
           "antd"
         ],
-        "useAdaptivePosture": [
-          "motion"
-        ],
-        "useBreakpoints": [
-          "motion"
-        ],
         "useCardTokens": [
           "antd"
-        ],
-        "useChartCompact": [
-          "motion"
         ],
         "useChartPersonality": [
           "antd",
@@ -2239,8 +2200,7 @@
         ],
         "useShellContext": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "useSmoothCounter": [
           "motion"
@@ -2249,20 +2209,7 @@
           "antd"
         ],
         "useSurfaceProfileDefaults": [
-          "antd",
-          "motion"
-        ],
-        "useSurfaceProfileDefaultsWithOverrides": [
-          "antd",
-          "motion"
-        ],
-        "useSurfaceQuery": [
-          "motion"
-        ],
-        "useSurfaceState": [
-          "antd",
-          "lucide-react",
-          "motion"
+          "antd"
         ],
         "useTokens": [
           "antd"
@@ -2428,6 +2375,7 @@
         "Grid",
         "GridItem",
         "HOVERCARD_DEFAULTS",
+        "HamburgerToX",
         "Hide",
         "I18nContext",
         "I18nProvider",
@@ -2465,6 +2413,7 @@
         "OTPINPUT_DEFAULTS",
         "OTPInput",
         "OVERLAY_MODAL_DEFAULTS",
+        "OnboardingSurface",
         "Overlay",
         "PASSWORD_INPUT_DEFAULTS",
         "POPCONFIRM_DEFAULTS",
@@ -2479,6 +2428,8 @@
         "RATE_DEFAULTS",
         "RATE_SIZE_MAP",
         "RATIO_PRESETS",
+        "RESPONSIVE_BREAKPOINTS",
+        "RESPONSIVE_BREAKPOINT_ORDER",
         "RadioGroup",
         "ResponsiveContext",
         "ResponsiveProvider",
@@ -2569,6 +2520,8 @@
         "brandThemeToTenantAppearanceAdvanced",
         "brandThemeToTokenOverrides",
         "buildHideMediaQuery",
+        "buildMinWidthQuery",
+        "buildRangeQuery",
         "buildShowMediaQuery",
         "buildTenantSelector",
         "canonicalizeTenantThemeValue",
@@ -2685,6 +2638,7 @@
         "getTenantConfig",
         "getTenantThemeVerticalEnvelope",
         "getThicknessValue",
+        "getUnresolvedTenantConfig",
         "getVerticalPreset",
         "hasCustomComponent",
         "hydrateTenantThemeConfig",
@@ -2759,9 +2713,12 @@
         "triggerDownload",
         "unregisterCustomComponent",
         "unregisterSkinPack",
+        "useAdaptivePosture",
         "useAriaAnnounce",
         "useAutoSave",
+        "useBreakpoints",
         "useChartBrush",
+        "useChartCompact",
         "useChartDimensions",
         "useChartExport",
         "useChartTooltip",
@@ -2820,6 +2777,9 @@
         "useShortcutScope",
         "useSortableList",
         "useStreamingText",
+        "useSurfaceProfileDefaultsWithOverrides",
+        "useSurfaceQuery",
+        "useSurfaceState",
         "useTableExport",
         "useTenant",
         "useTenantBranding",
@@ -4320,6 +4280,7 @@
         "AiReasoningIcon",
         "AiSparklesIcon",
         "AiToolIcon",
+        "AppearanceThemeIcon",
         "AuthPasskeyIcon",
         "AuthPasswordIcon",
         "AuthSsoIcon",
@@ -4331,6 +4292,7 @@
         "CommunicationSendIcon",
         "CommunicationVoiceIcon",
         "ConnectivityNetworkIcon",
+        "ConnectivityWebIcon",
         "ContentBookmarkIcon",
         "ContentCodeIcon",
         "ContentDocumentIcon",
@@ -4517,6 +4479,9 @@
         "AiToolIcon": [
           "@phosphor-icons/react"
         ],
+        "AppearanceThemeIcon": [
+          "@phosphor-icons/react"
+        ],
         "AuthPasskeyIcon": [
           "@phosphor-icons/react"
         ],
@@ -4548,6 +4513,9 @@
           "@phosphor-icons/react"
         ],
         "ConnectivityNetworkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ConnectivityWebIcon": [
           "@phosphor-icons/react"
         ],
         "ContentBookmarkIcon": [
@@ -5603,6 +5571,7 @@
         "SvgHeatMapRenderer",
         "SvgLineRenderer",
         "SvgPieRenderer",
+        "SvgScatterRenderer",
         "createSvgLineDatumKey"
       ],
       "symbols": {
@@ -5616,6 +5585,9 @@
           "d3"
         ],
         "SvgPieRenderer": [
+          "d3"
+        ],
+        "SvgScatterRenderer": [
           "d3"
         ]
       },
@@ -5744,15 +5716,19 @@
       ],
       "symbols": {
         "AsciiDiagram": [
+          "antd",
           "motion"
         ],
         "MonoStat": [
+          "antd",
           "motion"
         ],
         "TerminalBlock": [
+          "antd",
           "motion"
         ],
         "Typewriter": [
+          "antd",
           "motion"
         ]
       },

@@ -47,8 +47,8 @@ build is a singleton — never run two concurrently.
   notices (the counter reads TSX, `tsc` does not read CSS, jsdom does not read
   stylesheets). Gate: `skins.parseErrors`, exact-0.
 - A skin that is written but never **imported** paints nothing, just as silently.
-  Wire every new skin into BOTH `tokens/css/foundation/base.css` (which feeds the
-  per-tenant bundles the apps load) and `tokens/css/entrypoints/styles.css`.
+  Wire every new skin into BOTH `foundation/tokens/css/facade/entrypoints/base.css` (which feeds the
+  per-tenant bundles the apps load) and `foundation/tokens/css/facade/entrypoints/styles.css`.
 - `data-part` is a shared **vocabulary**, not an identifier. Any selector — skin,
   test probe, or tenant CSS — must be anchored to the component's scope class.
 - Scope classes must be grep-verified free tokens, across CSS *and* CSS-in-JS.

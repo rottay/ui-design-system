@@ -143,7 +143,7 @@ jobs:
       # (it does not need `dist/`, which only Build produces) and is the only slot
       # in this workflow where the staleness check can actually see anything.
       - name: Artifact staleness (before Build regenerates them)
-        run: pnpm --filter @rottay/design-system exec vitest run src/tokens/__tests__/first-party-artifacts-generated.test.ts
+        run: pnpm --filter @rottay/design-system exec vitest run src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts
 
       # The package postbuild hook runs the WO-CRA-14 public-barrel/chunk gate
       # against the exact dist artifacts produced immediately above it.

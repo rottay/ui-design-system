@@ -34,7 +34,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
-const srcCss = resolve(root, 'src/tokens/css');
+const srcCss = resolve(root, 'src/foundation/tokens/css');
 const dist = resolve(root, 'dist');
 const styles = resolve(root, 'styles');
 const check = process.argv.includes('--check');
@@ -119,15 +119,15 @@ if (!check) {
 }
 
 // Read tenant-free base CSS and resolve its imports
-const baseCssPath = resolve(srcCss, 'foundation/base.css');
+const baseCssPath = resolve(srcCss, 'facade/entrypoints/base.css');
 let baseCss = readFile(baseCssPath);
 baseCss = resolveImports(baseCss, dirname(baseCssPath));
 
 // Vertical definitions: name -> tenant CSS artifact file
 const verticals = [
-  { name: 'platform', tenantFile: 'artifacts/rottay/index.css' },
-  { name: 'bithire', tenantFile: 'artifacts/bithire/index.css' },
-  { name: 'evnto',   tenantFile: 'artifacts/evnto/index.css' },
+  { name: 'platform', tenantFile: 'facade/artifacts/rottay/index.css' },
+  { name: 'bithire', tenantFile: 'facade/artifacts/bithire/index.css' },
+  { name: 'evnto',   tenantFile: 'facade/artifacts/evnto/index.css' },
 ];
 
 if (!check) {
@@ -204,9 +204,9 @@ if (!check) console.log('Building dist/styles.css ...');
 
 // Concatenate all tenant artifact CSS (replaces the removed tenants/index.css barrel)
 const allTenantsCss = [
-  'artifacts/rottay/index.css',
-  'artifacts/bithire/index.css',
-  'artifacts/evnto/index.css',
+  'facade/artifacts/rottay/index.css',
+  'facade/artifacts/bithire/index.css',
+  'facade/artifacts/evnto/index.css',
 ].map((f) => {
   const p = resolve(srcCss, f);
   return readFile(p);

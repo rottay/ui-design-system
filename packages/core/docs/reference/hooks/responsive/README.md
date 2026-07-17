@@ -374,6 +374,6 @@ const { isMobile, isDesktop }: UseBreakpointsResult = useBreakpoints();
 
 ## Related
 
-- Hooks: `packages/core/src/hooks/`
-- Theming: `packages/core/src/runtime/theming/`
-- Design Tokens: `packages/core/src/tokens/`
+- Public React hook facade: `packages/core/src/infrastructure/runtime/facade/react-hooks/`
+- Theming: `packages/core/src/infrastructure/runtime/theming/`
+- Design Tokens: `packages/core/src/foundation/tokens/`

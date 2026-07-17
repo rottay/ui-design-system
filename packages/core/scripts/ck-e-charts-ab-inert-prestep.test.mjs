@@ -11,8 +11,8 @@ import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const chartsRoot = join(packageRoot, 'src/components/patterns/visualization/charts');
-const skinsRoot = join(packageRoot, 'src/tokens/css/components/skin');
+const chartsRoot = join(packageRoot, 'src/ui/patterns/visualization/charts/families');
+const skinsRoot = join(packageRoot, 'src/foundation/tokens/css/presentation/components/skin');
 
 const CHARTS = {
   area: {
@@ -21,7 +21,7 @@ const CHARTS = {
     scope: 'ds-chart-area',
     start: [4, 16],
     floor: [2, 8],
-    topology: 'c25b2cdb2f3a06d1c0ac3ef4cb358310ca0e7f62fdcb7ea1b76e0c44a0cc58b9',
+    topology: 'b76e34d168107004b4cdb768a1e1e545e75e16a2529503a95d65c924470881d2',
     parts: ['legend-swatch', 'legend-label', 'plot-area', 'grid-line', 'axis-tick-label', 'area', 'series-line', 'interaction-overlay', 'axis-label', 'axis-domain', 'axis-tick'],
   },
   bar: {
@@ -38,8 +38,8 @@ const CHARTS = {
     skin: 'chart-radar.css',
     scope: 'ds-chart-radar',
     start: [5, 7],
-    floor: [3, 3],
-    topology: 'd0111a9fbafd36dc8138463bedd6311c542c529bf8a3370ceacff76e64ecbf63',
+    floor: [2, 4],
+    topology: '9e56a6918b13774d076a74b865cc45e6f1dba3b0970a9ea5e522758c067ce979',
     parts: ['legend-swatch', 'legend-label', 'plot-area', 'grid-level', 'axis-line', 'axis-label', 'series-area', 'series-point'],
   },
   treemap: {
@@ -57,7 +57,7 @@ const CHARTS = {
     scope: 'ds-chart-pie',
     start: [3, 3],
     floor: [1, 1],
-    topology: '4019a20df50ffa1e683ea300743ecb4196f7e90b3240c2a1a3c52c24f743d772',
+    topology: 'a6a946d433b82ac038dc72687cc640dccd21b34aca90099a8fa9d5cf284b9961',
     parts: ['legend-swatch', 'legend-label', 'plot-area', 'slice', 'slice-surface', 'slice-label'],
   },
   bullet: {
@@ -65,8 +65,8 @@ const CHARTS = {
     skin: 'chart-bullet.css',
     scope: 'ds-chart-bullet',
     start: [14, 10],
-    floor: [12, 6],
-    topology: 'd59c2dd6a0074e28066ab02e89da2262466f776dfc78871ca5a56dd5983d8dda',
+    floor: [12, 8],
+    topology: '2af51df936edc7e5cc0a2bc371c627694ebd1eea4f574793a3c4b55836bff4c3',
     parts: ['legend-swatch', 'legend-label', 'item', 'range-band', 'value-bar', 'target-marker', 'item-label', 'value-label'],
   },
   waterfall: {
@@ -160,7 +160,7 @@ function renderAnatomy(text, path) {
   return anatomy.join('\n');
 }
 
-test('CK-E chart slices A+B reach their exact 28 + 35 Stage-1 floors', () => {
+test('CK-E chart slices A+B reach their exact 26 + 39 Stage-1 floors', () => {
   const totals = { inline: 0, runtime: 0 };
 
   for (const [name, chart] of Object.entries(CHARTS)) {
@@ -176,7 +176,7 @@ test('CK-E chart slices A+B reach their exact 28 + 35 Stage-1 floors', () => {
     totals.runtime += runtime.count;
   }
 
-  assert.deepEqual(totals, { inline: 27, runtime: 36 });
+  assert.deepEqual(totals, { inline: 26, runtime: 39 });
 });
 
 test('CK-E chart slices A+B expose every planned scope and anatomy hook', () => {
@@ -250,8 +250,8 @@ test('CK-E chart slices A+B reconcile the planned Stage-1 boundaries exactly', (
   const floors = Object.values(CHARTS).reduce((total, chart) => total + chart.floor[0] + chart.floor[1], 0);
 
   assert.equal(starts, 159);
-  assert.equal(floors, 63);
-  assert.equal(starts - floors, 96);
+  assert.equal(floors, 65);
+  assert.equal(starts - floors, 94);
 
   const chartA = ['area', 'bar', 'radar', 'treemap', 'pie'];
   const chartB = ['bullet', 'waterfall', 'line', 'gantt', 'heatmap', 'calendarHeatmap'];
@@ -261,5 +261,5 @@ test('CK-E chart slices A+B reconcile the planned Stage-1 boundaries exactly', (
   }, 0);
 
   assert.equal(migrate(chartA), 52);
-  assert.equal(migrate(chartB), 44);
+  assert.equal(migrate(chartB), 42);
 });

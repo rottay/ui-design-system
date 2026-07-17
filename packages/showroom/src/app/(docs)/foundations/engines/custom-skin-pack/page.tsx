@@ -17,8 +17,8 @@ import {
   EXAMPLE_SKIN_PACK,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { CodeBlock } from '@/components/playground';
-import { getShowroomVerticalKey, useShowroom } from '@/components/showroom-context';
+import { CodeBlock } from '@/composition/components/playground';
+import { getShowroomVerticalKey, useShowroom } from '@/composition/components/showroom-context';
 import { FoundationTopRail } from '../../foundation-top-rail';
 
 // Registration happens once, at module load — exactly the "call this at

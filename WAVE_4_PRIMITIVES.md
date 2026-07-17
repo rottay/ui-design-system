@@ -1,5 +1,12 @@
 # Wave 4 - Primitivos Faltantes
 
+> [!WARNING]
+> Snapshot histórico de la migración inicial. Los nombres de engines, conteos y
+> paths se preservan como evidencia y no describen el árbol vigente. Para la
+> arquitectura actual usar [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) y para
+> el inventario generado usar
+> [`packages/core/docs/TAXONOMY.generated.md`](packages/core/docs/TAXONOMY.generated.md).
+
 ## Resumen Ejecutivo
 
 | Métrica | Valor |
@@ -116,7 +123,7 @@ ComponentName/
 | 3 | **Statistic** | Media | ✅ Completado | Titan, Hermes, Apollo + Countdown |
 | 4 | **QRCode** | Baja | ✅ Completado | Titan, Hermes, Apollo - Canvas pattern |
 
-**Path:** `src/components/primitives/display/`
+**Path:** `src/composition/components/foundation/primitives/display/`
 
 ---
 
@@ -128,7 +135,7 @@ ComponentName/
 | 3 | **Timeline** | Media | ✅ Completado | Titan, Hermes, Apollo + Item |
 | 4 | **Tree** | Media | ✅ Completado | Titan, Hermes, Apollo + TreeNode |
 
-**Path:** `src/components/primitives/display/`
+**Path:** `src/composition/components/foundation/primitives/display/`
 
 ---
 
@@ -140,7 +147,7 @@ ComponentName/
 | 3 | **Empty** | Alta | ✅ Completado | Titan, Hermes, Apollo |
 | 4 | **Comment** | Baja | ⏭️ Skipped | Deprecated en Ant Design v5 |
 
-**Path:** `src/components/primitives/display/`
+**Path:** `src/composition/components/foundation/primitives/display/`
 
 ---
 
@@ -152,7 +159,7 @@ ComponentName/
 | 3 | **Result** | Media | ✅ Completado | 7 status types |
 | 4 | **Rate** | Media | ✅ Completado | Half-star, keyboard |
 
-**Path:** `src/components/primitives/feedback/`
+**Path:** `src/composition/components/foundation/primitives/feedback/`
 
 **Exports disponibles:**
 ```typescript
@@ -216,7 +223,7 @@ notificationApi.success({
 | 3 | **ColorPicker** | Media | ✅ Completado | WAVE 4 - Presets, formats |
 | 4 | **Slider** | Media | ✅ Completado | WAVE 4 - Range, marks |
 
-**Path:** `src/components/primitives/inputs/`
+**Path:** `src/composition/components/foundation/primitives/inputs/`
 
 ---
 
@@ -228,7 +235,7 @@ notificationApi.success({
 | 3 | **TreeSelect** | Media | ✅ Completado | WAVE 4 - Tree data, checkable |
 | 4 | **Mentions** | Baja | ✅ Completado | WAVE 4 - @mention popup |
 
-**Path:** `src/components/primitives/inputs/`
+**Path:** `src/composition/components/foundation/primitives/inputs/`
 
 ---
 
@@ -240,7 +247,7 @@ notificationApi.success({
 | 3 | **Switch** | Alta | ✅ Completado | ⚠️ TS warnings |
 | 4 | **Transfer** | Media | ✅ Completado | WAVE 4 - Dual list |
 
-**Path:** `src/components/primitives/inputs/`
+**Path:** `src/composition/components/foundation/primitives/inputs/`
 
 **Nota:** Form incluye compound components:
 - `Form.Item` - Campo de formulario
@@ -255,7 +262,7 @@ notificationApi.success({
 |---|------------|-----------|--------|-------|
 | 1 | **Upload** | Alta | ✅ Completado | Titan, Hermes, Apollo + Dragger |
 
-**Path:** `src/components/primitives/inputs/`
+**Path:** `src/composition/components/foundation/primitives/inputs/`
 
 ---
 
@@ -269,7 +276,7 @@ notificationApi.success({
 | 5 | **Splitter** | Media | ✅ Completado | WAVE 5 + Panel |
 | 6 | **Collapse** | Media | ✅ Completado | WAVE 5 + Panel |
 
-**Path:** `src/components/primitives/layout/`
+**Path:** `src/composition/components/foundation/primitives/layout/`
 
 ---
 
@@ -283,7 +290,7 @@ notificationApi.success({
 | 5 | **Segmented** | Media | ✅ Completado | WAVE 5 - Toggle options |
 | 6 | **BackTop** | Baja | ✅ Completado | WAVE 5 - Scroll to top |
 
-**Path:** `src/components/primitives/navigation/`
+**Path:** `src/composition/components/foundation/primitives/navigation/`
 
 ---
 
@@ -296,7 +303,7 @@ notificationApi.success({
 | 4 | **Tour** | Media | ✅ Completado | WAVE 4 - Guided tours, spotlight |
 | 5 | **Watermark** | Baja | ✅ Completado | WAVE 4 - Canvas watermarks |
 
-**Path:** `src/components/primitives/overlay/`
+**Path:** `src/composition/components/foundation/primitives/overlay/`
 
 ---
 
@@ -380,7 +387,7 @@ Estos son problemas de compatibilidad de tipos con Ant Design que no afectan la 
 
 ## Referencias
 
-- **Template:** `/packages/core/src/components/primitives/display/Avatar/`
+- **Template:** `/packages/core/src/ui/primitives/display/Avatar/`
 - **Engine Factory:** `/packages/core/src/system/engines/factory/index.tsx`
 - **Ant Design:** https://ant.design/components/overview
 - **DaisyUI:** https://daisyui.com/components/

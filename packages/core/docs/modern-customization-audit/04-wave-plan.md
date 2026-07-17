@@ -41,7 +41,7 @@ Eliminate "bridge exists but renderer never emits it".
 - `display/QRCode`
 - `display/Tree`
 - `layout/Collapse`
-- `tokens/css/engines/modern/theme.css`
+- `foundation/tokens/css/runtime/engines/modern/theme.css`
 
 ### Acceptance
 
@@ -132,11 +132,11 @@ Wire the new DB-safe customization model into the actual runtime.
 
 ### Focus
 
-- `contracts/themes`
-- `contracts/tenants`
+- `foundation/contracts/composition/tenants/themes`
+- `foundation/contracts/composition/tenants`
 - `runtime/bootstrap/DesignSystemProvider`
 - `hooks/tokens`
-- `compilers/brand-theme`
+- `infrastructure/compilers/kernel/runtime/brand-theme`
 - any runtime normalization layer needed for `appearance.general` / `appearance.advanced`
 
 ### Acceptance

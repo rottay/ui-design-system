@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
 import {
   Badge,
   Box,
@@ -13,8 +13,8 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { CodeBlock } from '@/components/playground';
-import { useShowroom } from '@/components/showroom-context';
+import { CodeBlock } from '@/composition/components/playground';
+import { useShowroom } from '@/composition/components/showroom-context';
 
 function TransitionDemo({
   label,

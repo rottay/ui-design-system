@@ -12,10 +12,10 @@ import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const SOURCES = {
-  modern: join(packageRoot, 'src/components/patterns/misc/tenant-preview/engines/modern.tsx'),
-  rustic: join(packageRoot, 'src/components/patterns/misc/tenant-preview/engines/rustic.tsx'),
-  sandbox: join(packageRoot, 'src/components/patterns/misc/branding-preview-sandbox/index.tsx'),
-  studio: join(packageRoot, 'src/components/patterns/misc/brand-studio/index.tsx'),
+  modern: join(packageRoot, 'src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx'),
+  rustic: join(packageRoot, 'src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx'),
+  sandbox: join(packageRoot, 'src/ui/patterns/customization/branding-preview-sandbox/index.tsx'),
+  studio: join(packageRoot, 'src/ui/patterns/customization/brand-studio/index.tsx'),
 };
 
 const POST_MIGRATION_PAINT_COUNTS = {

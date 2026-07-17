@@ -12,7 +12,7 @@ The Feedback primitives provide three essential components for user feedback:
 
 All components support three rendering engines:
 - **Classic** (Ant Design) - Enterprise-grade components
-- **Modern** (DaisyUI) - Lightweight Tailwind-based components
+- **Modern** (Rottay-native) - Token/skin-driven responsive components
 - **Rustic** (Pure CSS) - Zero-dependency implementations
 
 ## Installation
@@ -172,7 +172,7 @@ import { EngineProvider } from '@rottay/design-system';
 - Built-in accessibility
 - ~300KB bundle impact
 
-### Modern (DaisyUI)
+### Modern (Rottay-native)
 
 **Best for:** Modern web apps, Tailwind projects
 
@@ -180,7 +180,7 @@ import { EngineProvider } from '@rottay/design-system';
 import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="modern">
-  <Alert type="success" message="Using DaisyUI" />
+  <Alert type="success" message="Using the modern engine" />
 </EngineProvider>
 ```
 

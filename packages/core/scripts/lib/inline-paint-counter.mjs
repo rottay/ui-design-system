@@ -121,10 +121,10 @@ const SVG_CREATE_ELEMENT_TAGS = new Set([
  * helper in another file remains opaque and therefore fails closed.
  *
  * Component-owned paint producers are normally enumerated at their defining
- * module. `Tooltip.types/PLACEMENT_MAP` is the narrow exception: its placement
+ * module. `Tooltip/contracts/PLACEMENT_MAP` is the narrow exception: its placement
  * transforms are overwritten later in the only productive consumer before the
  * style reaches React. The two lower-layer producers (`runtime/personality`
- * and `tokens/ts/base/density`) return only non-paint/custom-property values.
+ * and `foundation/tokens/ts/foundation/base/density`) return only non-paint/custom-property values.
  * Every entry is still verified to exist and export the exact symbol.
  */
 const ownedStyle = (transparentArgs = []) => ({
@@ -135,7 +135,7 @@ const ownedStyle = (transparentArgs = []) => ({
 
 const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
   [
-    "components/patterns/_internal/engines/modern/styles",
+    "ui/patterns/foundation/engine-styles/modern/index",
     new Map(
       [
         "cardBodyStyle",
@@ -149,15 +149,15 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ),
   ],
   [
-    "components/patterns/data/list-toolbar/tokens",
+    "ui/patterns/data/list-toolbar/foundation/tokens/index",
     new Map([["searchInputStyle", ownedStyle([{ index: 0, mode: "style" }])]]),
   ],
   [
-    "components/primitives/feedback/Toast/utils/animations",
+    "ui/primitives/feedback/Toast/runtime/animation/index",
     new Map([["getToastAnimationStyle", ownedStyle()]]),
   ],
   [
-    "components/primitives/display/Tooltip/Tooltip.types",
+    "ui/primitives/display/Tooltip/contracts/index",
     new Map([
       [
         "PLACEMENT_MAP",
@@ -168,7 +168,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
           expectedPaintCount: 4,
           consumers: new Map([
             [
-              "components/primitives/display/Tooltip/engines/rustic",
+              "ui/primitives/display/Tooltip/engines/rustic/index",
               new Set(["transform"]),
             ],
           ]),
@@ -177,13 +177,13 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
-    "components/primitives/layout/shared/responsive-helpers",
+    "ui/primitives/layout/Stack/runtime/responsive/index",
     new Map([
       ["buildStackStyles", ownedStyle([{ index: 0, mode: "propBag" }])],
     ]),
   ],
   [
-    "runtime/personality/primitives",
+    "foundation/tokens/ts/runtime/personality/index",
     new Map([
       [
         "mergePersonalityStyle",
@@ -254,7 +254,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
-    "tokens/ts/base/density",
+    "foundation/tokens/ts/foundation/base/density/index",
     new Map([
       [
         "resolveDensityStyleVars",
@@ -268,7 +268,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
-    "behavior/index",
+    "foundation/behavior/index",
     new Map([
       [
         "partAttributes",
@@ -291,7 +291,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
-    "components/primitives/layout/shared/responsive-props",
+    "infrastructure/runtime/responsive/runtime/style-properties/index",
     new Map([
       [
         "generateResponsiveCSS",

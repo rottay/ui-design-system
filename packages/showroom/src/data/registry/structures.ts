@@ -12,7 +12,8 @@ export type StructureGroup =
   | 'workspace'
   | 'record'
   | 'dashboard'
-  | 'feedback';
+  | 'feedback'
+  | 'shell';
 
 export interface StructureEntry {
   slug: string;
@@ -29,6 +30,7 @@ const allEngines: EngineName[] = ['classic', 'modern', 'rustic'];
 // ---------------------------------------------------------------------------
 
 const headers: StructureEntry[] = [
+  { slug: 'mobile-header', name: 'MobileHeader', group: 'headers', description: 'Compact page header adapted to mobile navigation and actions', engines: allEngines },
   { slug: 'collection-header', name: 'CollectionHeader', group: 'headers', description: 'Header for collection/list pages with title, count, and actions', engines: allEngines },
   { slug: 'dashboard-header', name: 'DashboardHeader', group: 'headers', description: 'Header for dashboard pages with date range and refresh', engines: allEngines },
   { slug: 'detail-header', name: 'DetailHeader', group: 'headers', description: 'Header for detail/record pages with breadcrumb and status', engines: allEngines },
@@ -41,6 +43,7 @@ const headers: StructureEntry[] = [
 // ---------------------------------------------------------------------------
 
 const workspace: StructureEntry[] = [
+  { slug: 'action-dock', name: 'ActionDock', group: 'workspace', description: 'Responsive workspace dock for persistent primary actions', engines: allEngines },
   { slug: 'active-filters-bar', name: 'ActiveFiltersBar', group: 'workspace', description: 'Horizontal bar displaying active filter chips with clear action', engines: allEngines },
   { slug: 'column-menu', name: 'ColumnMenu', group: 'workspace', description: 'Column visibility, pinning, width, and group configuration menu', engines: allEngines },
   { slug: 'export-button', name: 'ExportButton', group: 'workspace', description: 'Export data to CSV, JSON, or clipboard', engines: allEngines },
@@ -82,6 +85,14 @@ const feedback: StructureEntry[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Shell
+// ---------------------------------------------------------------------------
+
+const shell: StructureEntry[] = [
+  { slug: 'bottom-tab-bar', name: 'BottomTabBar', group: 'shell', description: 'Mobile shell navigation bar with active, icon, badge, and label states', engines: allEngines },
+];
+
+// ---------------------------------------------------------------------------
 // Aggregate
 // ---------------------------------------------------------------------------
 
@@ -91,6 +102,7 @@ export const structures: StructureEntry[] = [
   ...record,
   ...dashboard,
   ...feedback,
+  ...shell,
 ];
 
 export const structuresByGroup: Record<StructureGroup, StructureEntry[]> = {
@@ -99,6 +111,7 @@ export const structuresByGroup: Record<StructureGroup, StructureEntry[]> = {
   record,
   dashboard,
   feedback,
+  shell,
 };
 
 export const structureGroups: { slug: StructureGroup; label: string; count: number }[] = [
@@ -107,4 +120,5 @@ export const structureGroups: { slug: StructureGroup; label: string; count: numb
   { slug: 'record', label: 'Record', count: record.length },
   { slug: 'dashboard', label: 'Dashboard', count: dashboard.length },
   { slug: 'feedback', label: 'Feedback', count: feedback.length },
+  { slug: 'shell', label: 'Shell', count: shell.length },
 ];

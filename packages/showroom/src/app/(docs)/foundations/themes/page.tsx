@@ -1,5 +1,5 @@
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
-import { CodeBlock } from '@/components/playground';
+import { CodeBlock } from '@/composition/components/playground';
 import { ThemePreviewGridDeferred } from './theme-preview-grid-deferred';
 import { FoundationTopRail } from '../foundation-top-rail';
 

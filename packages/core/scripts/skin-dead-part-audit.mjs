@@ -45,11 +45,11 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SRC = join(HERE, '../src');
-const COMPONENTS = join(SRC, 'components');
+const COMPONENTS = join(SRC, 'ui');
 const SKIN_DIRS = [
-  'tokens/css/engines/modern/skin',
-  'tokens/css/engines/rustic/skin',
-  'tokens/css/components/skin',
+  'foundation/tokens/css/runtime/engines/modern/skin',
+  'foundation/tokens/css/runtime/engines/rustic/skin',
+  'foundation/tokens/css/presentation/components/skin',
 ];
 
 /** Every literal `data-part` a single TS/TSX source stamps. */

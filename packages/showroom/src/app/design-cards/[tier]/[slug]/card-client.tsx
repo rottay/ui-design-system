@@ -17,7 +17,7 @@ import {
 import {
   getShowroomProductProfileKey,
   getShowroomVerticalKey,
-} from '@/components/showroom-context';
+} from '@/composition/components/showroom-context';
 import { COMPONENT_MAP } from '@/app/(docs)/primitives/[category]/[component]/live-preview';
 import { renderPatternPreview } from '@/app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures';
 import { STRUCTURE_PREVIEWS } from '@/app/(docs)/structures/[group]/[structure]/structure-preview-fixtures';

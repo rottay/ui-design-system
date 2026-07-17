@@ -14,12 +14,12 @@
 
 ## Evidence
 
-- `app-platform/src/components/_shared/layouts/app-layout/index.tsx`
-- `app-platform/src/components/_shared/layouts/app-layout/sidebar/index.tsx`
-- `app-platform/src/components/_shared/layouts/app-layout/topbar/index.tsx`
-- `app-platform/src/components/_shared/tables/entity-table-workspace/index.tsx`
-- `ui-design-system/packages/core/src/components/structures/headers/collection/index.tsx`
-- `ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx`
+- `app-platform/src/composition/components/_shared/layouts/app-layout/index.tsx`
+- `app-platform/src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx`
+- `app-platform/src/composition/components/_shared/layouts/app-layout/topbar/index.tsx`
+- `app-platform/src/composition/components/_shared/tables/entity-table-workspace/index.tsx`
+- `ui-design-system/packages/core/src/ui/structures/headers/collection/index.tsx`
+- `ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx`
 
 ## Important Distinction
 

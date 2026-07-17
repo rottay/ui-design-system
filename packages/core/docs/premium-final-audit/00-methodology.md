@@ -63,8 +63,8 @@ Dirty worktree:
 
 Observed uncommitted files in `app-platform`:
 
-- `src/components/_shared/layouts/app-layout/index.tsx`
-- `src/components/_shared/layouts/app-layout/sidebar/index.tsx`
+- `src/composition/components/_shared/layouts/app-layout/index.tsx`
+- `src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx`
 - `src/lib/tenancy/branding-to-tenant-config.ts`
 
 This matters because the audit reflects the most current state you are actually working with, not just the last commit boundary.

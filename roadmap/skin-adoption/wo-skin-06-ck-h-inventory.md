@@ -1,23 +1,23 @@
 # WO-SKIN-06 checkpoint CK-H inventory (read-only) — brand-preview + misc
 
 Scope: the 13 files named in the CK-H row of `wo-skin-06-triage.md` §6, verified
-against `node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.patterns/misc`
+against `node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/misc`
 (counts match exactly, 453 total):
 
 | file | sites | half |
 |---|---:|---|
-| `patterns/misc/tenant-preview/engines/modern.tsx` | 71 | H1 |
-| `patterns/misc/tenant-preview/engines/rustic.tsx` | 76 | H1 |
+| `patterns/misc/tenant-preview/engines/modern/index.tsx` | 71 | H1 |
+| `patterns/misc/tenant-preview/engines/rustic/index.tsx` | 76 | H1 |
 | `patterns/misc/branding-preview-sandbox/index.tsx` | 54 | H1 |
 | `patterns/misc/brand-studio/index.tsx` | 36 | H1 |
-| `patterns/misc/file-manager/engines/modern.tsx` | 35 | H2 |
-| `patterns/misc/file-manager/engines/rustic.tsx` | 29 | H2 |
-| `patterns/misc/user-profile-card/engines/modern.tsx` | 30 | H2 |
-| `patterns/misc/user-profile-card/engines/rustic.tsx` | 28 | H2 |
-| `patterns/misc/pricing-table/engines/modern.tsx` | 22 | H2 |
-| `patterns/misc/pricing-table/engines/rustic.tsx` | 31 | H2 |
-| `patterns/misc/empty-state/engines/modern.tsx` | 11 | H2 |
-| `patterns/misc/empty-state/engines/rustic.tsx` | 10 | H2 |
+| `patterns/misc/file-manager/engines/modern/index.tsx` | 35 | H2 |
+| `patterns/misc/file-manager/engines/rustic/index.tsx` | 29 | H2 |
+| `patterns/misc/user-profile-card/engines/modern/index.tsx` | 30 | H2 |
+| `patterns/misc/user-profile-card/engines/rustic/index.tsx` | 28 | H2 |
+| `patterns/misc/pricing-table/engines/modern/index.tsx` | 22 | H2 |
+| `patterns/misc/pricing-table/engines/rustic/index.tsx` | 31 | H2 |
+| `patterns/misc/empty-state/engines/modern/index.tsx` | 11 | H2 |
+| `patterns/misc/empty-state/engines/rustic/index.tsx` | 10 | H2 |
 | `patterns/misc/token-inspector/index.tsx` | 20 | H2 |
 
 **H1 = 237 sites, 4 files (tenant-preview ×2 engines, branding-preview-sandbox,
@@ -38,7 +38,7 @@ discriminator are the ones defined in `wo-skin-04-navigation-inventory.md` and
 them** — greenfield. All 8 candidate scope classes (`ds-tenant-preview`,
 `ds-branding-preview-sandbox`, `ds-brand-studio`, `ds-file-manager`,
 `ds-user-profile-card`, `ds-pricing-table`, `ds-empty-state`,
-`ds-token-inspector`) are grep-confirmed FREE in `tokens/css/`.
+`ds-token-inspector`) are grep-confirmed FREE in `foundation/tokens/css/`.
 
 ---
 
@@ -320,9 +320,9 @@ same clean result CK-D found for its cluster.
 **Two real, non-component-named findings worth flagging, both in
 file-manager modern only:**
 
-1. **`file-manager/engines/modern.tsx:237`** renders a folder-name link as
+1. **`file-manager/engines/modern/index.tsx:237`** renders a folder-name link as
    `<a className="link link-hover cursor-pointer">` with **no inline color at
-   all**. `tokens/css/engines/modern/theme.css:753-763` carries a real,
+   all**. `foundation/tokens/css/runtime/engines/modern/theme.css:753-763` carries a real,
    layered `[data-tenant] a.link { color: var(--ds-link-color); ... }` rule
    (plus `:hover`/`:active` variants). Per P-76, `color` is a **LIVE**
    channel (not one preflight kills). Nothing inline contests it, so **this
@@ -334,13 +334,13 @@ file-manager modern only:**
    color does not come from anywhere in `file-manager`'s own source and must
    decide whether to inherit it (leave `a.link` on the element) or explicitly
    re-declare it in the new skin.
-2. **`file-manager/engines/modern.tsx:211`** toggles a bare `className="active"`
+2. **`file-manager/engines/modern/index.tsx:211`** toggles a bare `className="active"`
    on the selected table row (`<tr className={... ? 'active' : ''}>`, code
    comment: "DaisyUI 'active' class highlights the selected row background").
-   **`tokens/css/` has zero `tr.active` or table-row `.active` rules of any
+   **`foundation/tokens/css/` has zero `tr.active` or table-row `.active` rules of any
    kind** — this component's selected-row highlight, if it renders at all,
    comes entirely from DaisyUI's own compiled base stylesheet, which is
-   outside `tokens/css/` and was not read for this inventory. This is the
+   outside `foundation/tokens/css/` and was not read for this inventory. This is the
    same "STOP-AND-REPORT" shape WO-SKIN-04 found for Steps' pseudo-element
    connector lines: **not verifiable as live or dead from this codebase
    alone**, and not a counted site (no style prop), so a byte-exact migration
@@ -395,8 +395,8 @@ grep for actual imports, not inferred from similar-looking code.
 
 - **`patterns/_internal/engines/modern/styles.ts`** (`panelCardStyle`,
   `pillBadgeSmStyle`, `spinnerStyle`) is genuinely imported by
-  `user-profile-card/engines/modern.tsx` **and**
-  `pricing-table/engines/modern.tsx` — both real, both use the same names for
+  `user-profile-card/engines/modern/index.tsx` **and**
+  `pricing-table/engines/modern/index.tsx` — both real, both use the same names for
   the same values. This is the same module CK-D confirmed as a legitimate,
   cross-checkpoint-adopted shared kit (11 fleet-wide importers; CK-D's
   `invoice-template`/`approval-workflow` were 2 of them). CK-H adds 2 more
@@ -430,7 +430,7 @@ elements, but only on their MODERN engine:**
 `ds-pattern-<component> ds-engine-modern` is stamped on the root of
 `tenant-preview`, `file-manager`, `user-profile-card`, `pricing-table`, and
 `empty-state` — modern engines only. **Grep-confirmed zero references to any
-`ds-pattern-*` class anywhere in `tokens/css/`** — same dead-BEM-hook shape
+`ds-pattern-*` class anywhere in `foundation/tokens/css/`** — same dead-BEM-hook shape
 WO-SKIN-04 found for Menu's compound classNames: a real, consistent naming
 convention that nothing currently targets.
 
@@ -508,7 +508,7 @@ every file in this report reproduces the counter's number on the nose, not
 approximately. Every B-site citation was traced to its runtime source
 (`creationConfig.primaryColor`, a form field's live `value`, etc.) by reading
 the defining scope, not inferred from the property name. Bridge-rule and
-scope-class-collision checks used grep against `tokens/css/` for all 8
+scope-class-collision checks used grep against `foundation/tokens/css/` for all 8
 component names plus the two non-component-named findings in §7.
 
 ---
@@ -541,7 +541,7 @@ component names plus the two non-component-named findings in §7.
    pattern so the next inventory doesn't re-derive it from scratch.
 3. **Two file-manager paint mechanisms have no CSS source anywhere in this
    codebase** (§7): the `tr.active` selected-row highlight and (less
-   severely, since it does have a live `tokens/css/` source) the `a.link`
+   severely, since it does have a live `foundation/tokens/css/` source) the `a.link`
    folder-name color. Both are reached through a bare DaisyUI class with zero
    inline contest — invisible to the WO-06 census as sites, but real paint a
    migration must not silently drop. The `tr.active` case is the more

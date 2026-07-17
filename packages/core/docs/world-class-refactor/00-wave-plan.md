@@ -6,7 +6,7 @@ Create `vertical/` and `features/` structure. Move shell to vertical.
 Create VerticalManifest contract in DS.
 
 ### 1a. DS: Create VerticalManifest contract
-- New file: `contracts/verticals/index.ts`
+- New file: `foundation/contracts/kernel/verticals/index.ts`
 - Define `VerticalManifest` interface
 - Export from DS barrel
 

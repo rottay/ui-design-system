@@ -7,9 +7,34 @@ import { fileURLToPath } from 'node:url';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const CORE_ROOT = resolve(dirname(SCRIPT_PATH), '..');
-const CORPUS_PATH = resolve(CORE_ROOT, 'src/icons/semantic/corpus/manifest.json');
-const ADAPTER_PATH = resolve(CORE_ROOT, 'src/icons/semantic/adapters/phosphor-2.1.10.json');
-const GENERATED_ROOT = resolve(CORE_ROOT, 'src/icons/semantic/generated');
+const ICON_OWNER_ROOT = resolve(CORE_ROOT, 'src/graphics/icons');
+const CORPUS_PATH = resolve(
+  ICON_OWNER_ROOT,
+  'foundation/semantic/corpus/manifest.json',
+);
+const ADAPTER_PATH = resolve(
+  ICON_OWNER_ROOT,
+  'foundation/semantic/adapters/phosphor-2.1.10.json',
+);
+const GENERATED_CORPUS_ROOT = resolve(
+  ICON_OWNER_ROOT,
+  'foundation/semantic/corpus/generated',
+);
+const GENERATED_ADAPTER_ROOT = resolve(
+  ICON_OWNER_ROOT,
+  'runtime/semantic/generated/phosphor-adapter',
+);
+const GENERATED_PRESENTATION_ROOT = resolve(
+  ICON_OWNER_ROOT,
+  'presentation/semantic/generated',
+);
+const LEGACY_GENERATED_ROOT = resolve(ICON_OWNER_ROOT, 'semantic/generated');
+const GENERATED_SCAN_ROOTS = Object.freeze([
+  GENERATED_CORPUS_ROOT,
+  resolve(ICON_OWNER_ROOT, 'runtime/semantic/generated'),
+  GENERATED_PRESENTATION_ROOT,
+  LEGACY_GENERATED_ROOT,
+]);
 const PHOSPHOR_ROOT = resolve(CORE_ROOT, 'node_modules/@phosphor-icons/react');
 const PHOSPHOR_SSR_ROOT = resolve(PHOSPHOR_ROOT, 'dist/ssr');
 
@@ -69,7 +94,7 @@ export const EXPECTED_COMPAT_V3_IDS = Object.freeze([
 const VALID_ROLES = new Set(['control', 'navigation', 'feature', 'status', 'illustration']);
 const VALID_TONES = new Set(['default', 'muted', 'primary', 'success', 'warning', 'error', 'info']);
 export const ICON_PACK_COUNTS = Object.freeze({
-  foundation: 120,
+  foundation: 122,
   bithire: 6,
   identity: 45,
   intelligence: 45,
@@ -154,7 +179,7 @@ export function validateCorpusManifest(manifest) {
   requiredKeys(manifest, ['schemaVersion', 'corpusVersion', 'expectedCounts', 'entries'], 'corpus', errors);
 
   if (manifest.schemaVersion !== 1) errors.push('corpus.schemaVersion must equal 1');
-  if (manifest.corpusVersion !== 5) errors.push('corpus.corpusVersion must equal 5');
+  if (manifest.corpusVersion !== 6) errors.push('corpus.corpusVersion must equal 6');
 
   const countKeys = new Set([...ICON_PACKS, 'global']);
   if (exactKeys(manifest.expectedCounts, countKeys, 'corpus.expectedCounts', errors)) {
@@ -216,7 +241,7 @@ export function validateCorpusManifest(manifest) {
     if (typeof entry.autoMirror !== 'boolean') errors.push(`${path}.autoMirror must be boolean`);
     if (!VALID_STATUSES.has(entry.status)) errors.push(`${path}.status must be stable or candidate`);
     if (!Number.isInteger(entry.since) || entry.since < 1 || entry.since > manifest.corpusVersion) errors.push(`${path}.since must be an integer within the corpus version`);
-    if (entry.status === 'candidate' && ![4, 5].includes(entry.since)) errors.push(`${path} candidate entries must have since 4 or 5`);
+    if (entry.status === 'candidate' && ![4, 5, 6].includes(entry.since)) errors.push(`${path} candidate entries must have since 4, 5, or 6`);
     if (entry.status === 'stable' && entry.since > 3) errors.push(`${path} stable entries cannot have since greater than 3`);
     if (typeof entry.componentName !== 'string' || !COMPONENT_PATTERN.test(entry.componentName)) errors.push(`${path}.componentName is invalid`);
     if (typeof entry.id === 'string' && entry.componentName !== componentNameForId(entry.id)) errors.push(`${path}.componentName must be derived deterministically from its ID`);
@@ -232,6 +257,9 @@ export function validateCorpusManifest(manifest) {
     if (Object.hasOwn(PACK_DOMAINS, entry.pack) && (entry.status !== 'candidate' || entry.since !== 5)) {
       errors.push(`${path} version 5 shared-pack entries must be candidates with since 5`);
     }
+    if (entry.since === 6 && entry.pack !== 'foundation') {
+      errors.push(`${path} version 6 additions must belong to the foundation pack`);
+    }
   }
 
   const ids = manifest.entries.map((entry) => entry.id);
@@ -246,7 +274,7 @@ export function validateCorpusManifest(manifest) {
     if (actual !== count) errors.push(`${pack} pack must contain ${count} entries; received ${actual}`);
   }
   if (!sameArray(stableIds, EXPECTED_COMPAT_V3_IDS)) errors.push('stable entries must preserve the exact ordered 50-name v3 compatibility corpus');
-  if (candidateCount !== 211) errors.push(`candidate set must contain 211 entries; received ${candidateCount}`);
+  if (candidateCount !== 213) errors.push(`candidate set must contain 213 entries; received ${candidateCount}`);
   if (fingerprint(manifest.entries.slice(0, V4_PREFIX_COUNT)) !== V4_CORPUS_PREFIX_FINGERPRINT) {
     errors.push('the exact ordered 126-role v4 corpus prefix must remain unchanged');
   }
@@ -377,7 +405,7 @@ function generateCorpusModule(corpus) {
     .map((pack) => `export type ${packTypeName(pack)} = (typeof ${packConstantName(pack)}_ICON_NAMES)[number];`)
     .join('\n');
   const packUnion = ICON_PACKS.map((pack) => JSON.stringify(pack)).join(' | ');
-  return `${GENERATED_HEADER}import type { IconRole, IconTone } from '../types';
+  return `${GENERATED_HEADER}import type { IconRole, IconTone } from '../../../contracts';
 
 export const GENERATED_ICON_CORPUS_VERSION = ${corpus.corpusVersion} as const;
 
@@ -429,7 +457,7 @@ function generateAdapterModule(adapter, fingerprint) {
   const entries = adapter.entries
     .map((entry) => `  { id: ${JSON.stringify(entry.id)}, module: ${JSON.stringify(entry.module)}, exportName: ${JSON.stringify(entry.exportName)} },`)
     .join('\n');
-  return `${GENERATED_HEADER}import type { GeneratedIconName } from './corpus';
+  return `${GENERATED_HEADER}import type { GeneratedIconName } from '../../../../foundation/semantic/corpus/generated';
 
 export const GENERATED_PHOSPHOR_PROVENANCE = Object.freeze({
   supplier: ${JSON.stringify(adapter.supplier)},
@@ -471,7 +499,7 @@ function generateRoleModule(corpusEntry, adapterEntry) {
   definitionFields.push(`autoMirror: ${corpusEntry.autoMirror}`);
   return `${GENERATED_HEADER}import { ${adapterEntry.exportName} as SsrGlyph } from ${JSON.stringify(adapterEntry.module)};
 
-import { createSemanticIcon } from '../../runtime/create-semantic-icon';
+import { createSemanticIcon } from '../../../../runtime/semantic/create-icon';
 
 /** ${corpusEntry.id}: ${corpusEntry.intent} */
 export const ${corpusEntry.componentName} = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
@@ -504,9 +532,9 @@ function generatePackModule(pack, corpusEntries) {
   const dynamicPropsName = `${dynamicComponentName}Props`;
   const exports = corpusEntries.map((entry) => `  ${entry.componentName},`).join('\n');
   return `${GENERATED_HEADER}import { forwardRef } from 'react';
-import type { SemanticIconComponent, SemanticIconProps } from '../../runtime/create-semantic-icon';
+import type { SemanticIconComponent, SemanticIconProps } from '../../../../runtime/semantic/create-icon';
 ${imports}
-import type { ${typeName} } from '../corpus';
+import type { ${typeName} } from '../../../../foundation/semantic/corpus/generated';
 
 export type ${dynamicPropsName} = SemanticIconProps & {
   readonly name: ${typeName};
@@ -557,8 +585,19 @@ export function buildGeneratedFiles(corpus, adapter) {
     files.set(`packs/${pack}.tsx`, generatePackModule(pack, corpus.entries.filter((entry) => entry.pack === pack)));
   }
   files.set('packs/index.ts', `${GENERATED_HEADER}${ICON_PACKS.map((pack) => `export * from './${pack}';`).join('\n')}\n`);
-  files.set('index.ts', `${GENERATED_HEADER}export * from './corpus';\nexport * from './packs';\n`);
+  files.set(
+    'index.ts',
+    `${GENERATED_HEADER}export * from '../../../foundation/semantic/corpus/generated';\nexport * from './packs';\n`,
+  );
   return files;
+}
+
+function generatedOutputPath(logicalPath) {
+  if (logicalPath === 'corpus.ts') return resolve(GENERATED_CORPUS_ROOT, 'index.ts');
+  if (logicalPath === 'phosphor-adapter.ts') {
+    return resolve(GENERATED_ADAPTER_ROOT, 'index.ts');
+  }
+  return resolve(GENERATED_PRESENTATION_ROOT, logicalPath);
 }
 
 async function listFiles(root, current = root) {
@@ -581,26 +620,38 @@ async function listFiles(root, current = root) {
 export async function checkGeneratedFiles(files) {
   const issues = [];
   const expectedPaths = [...files.keys()].sort();
-  const actualPaths = await listFiles(GENERATED_ROOT);
   for (const path of expectedPaths) {
     try {
-      const actual = await readFile(resolve(GENERATED_ROOT, path), 'utf8');
+      const actual = await readFile(generatedOutputPath(path), 'utf8');
       if (actual !== files.get(path)) issues.push(`stale generated file: ${path}`);
     } catch (error) {
       if (error.code === 'ENOENT') issues.push(`missing generated file: ${path}`);
       else throw error;
     }
   }
-  for (const path of actualPaths) {
-    if (!files.has(path)) issues.push(`unexpected generated file: ${path}`);
+
+  const expectedPhysicalPaths = new Set(
+    expectedPaths.map((path) => generatedOutputPath(path)),
+  );
+  for (const root of GENERATED_SCAN_ROOTS) {
+    for (const path of await listFiles(root)) {
+      const physicalPath = resolve(root, path);
+      if (!expectedPhysicalPaths.has(physicalPath)) {
+        issues.push(
+          `unexpected generated file: ${relative(ICON_OWNER_ROOT, physicalPath).split(sep).join('/')}`,
+        );
+      }
+    }
   }
   return issues;
 }
 
 export async function writeGeneratedFiles(files) {
-  await rm(GENERATED_ROOT, { recursive: true, force: true });
+  for (const root of GENERATED_SCAN_ROOTS) {
+    await rm(root, { recursive: true, force: true });
+  }
   for (const path of [...files.keys()].sort()) {
-    const target = resolve(GENERATED_ROOT, path);
+    const target = generatedOutputPath(path);
     await mkdir(dirname(target), { recursive: true });
     await writeFile(target, files.get(path), 'utf8');
   }

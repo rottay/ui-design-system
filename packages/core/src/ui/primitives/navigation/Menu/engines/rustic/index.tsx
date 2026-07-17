@@ -1,0 +1,584 @@
+/**
+ * @fileoverview Menu Rustic Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Menu component with
+ * comprehensive keyboard navigation. Part of the Rottay Design System's
+ * multi-engine architecture.
+ *
+ * @remarks
+ * The Rustic engine provides a zero-dependency implementation of the Menu
+ * component with:
+ * - Pure HTML/CSS rendering (no UI framework dependencies)
+ * - Full keyboard navigation (Arrow keys, Enter, Space, Home, End, Escape)
+ * - WCAG 2.1 AA compliant accessibility
+ * - Focus management with visual indicators
+ * - Controlled and uncontrolled state support
+ * - CSS variable-based theming
+ *
+ * This implementation is ideal for:
+ * - Maximum accessibility requirements
+ * - Custom styling without framework constraints
+ * - Minimal bundle size requirements
+ * - Server-side rendering optimization
+ *
+ * @example
+ * ```tsx
+ * import { Menu } from '@rottay/design-system';
+ *
+ * // Use Rustic engine explicitly
+ * <Menu
+ *   engine="rustic"
+ *   items={menuItems}
+ *   mode="vertical"
+ *   theme="light"
+ * />
+ *
+ * // Or via EngineProvider
+ * <EngineProvider engine="rustic">
+ *   <Menu items={menuItems} mode="inline" />
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link MenuProps} for prop documentation
+ * @see {@link Menu} for main component
+ *
+ * @module Menu/Engines/Rustic
+ * @category Navigation
+ * @package @rottay/design-system
+ */
+
+'use client';
+
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import type { CSSProperties, KeyboardEvent } from 'react';
+import type { MenuProps, MenuItem as MenuItemInterface, MenuSelectInfo, MenuClickInfo } from '../../contracts';
+import { MENU_DEFAULTS } from '../../contracts';
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Gets all focusable menu item keys from the items array.
+ *
+ * @description
+ * Recursively traverses the menu structure to collect keys of all
+ * focusable items (non-divider, non-disabled items).
+ *
+ * @param items - Array of menu item configurations
+ * @returns Array of focusable item keys
+ *
+ * @internal
+ */
+function getFocusableKeys(items: MenuItemInterface[]): string[] {
+  const keys: string[] = [];
+
+  items.forEach((item) => {
+    // Dividers are visual-only, so they should never receive focus
+    if (item.type === 'divider') return;
+    // Disabled items are excluded from the tab order per WCAG guidance
+    if (item.disabled) return;
+
+    if (item.children && item.children.length > 0) {
+      // Submenu toggles are themselves focusable (they act as buttons),
+      // and their children are also traversable via arrow keys
+      keys.push(item.key);
+      keys.push(...getFocusableKeys(item.children));
+    } else if (item.type !== 'group') {
+      // Regular interactive item
+      keys.push(item.key);
+    } else if (item.children) {
+      // Groups are non-interactive headings, but their children are focusable
+      keys.push(...getFocusableKeys(item.children));
+    }
+  });
+
+  return keys;
+}
+
+/**
+ * Renders Rustic menu items recursively.
+ *
+ * @description
+ * Transforms the menu items array into accessible HTML elements
+ * with focus management and keyboard navigation support.
+ *
+ * @param items - Array of menu item configurations
+ * @param onItemClick - Click handler for menu items
+ * @param selectedKeys - Currently selected item keys
+ * @param focusedKey - Currently focused item key
+ * @param openKeys - Currently open submenu keys
+ * @param onSubmenuToggle - Handler for submenu toggle
+ * @param inlineIndent - Indentation size for nested items
+ * @param level - Current nesting level
+ * @returns Rendered Rustic menu item nodes
+ *
+ * @internal
+ */
+function renderRusticMenuItems(
+  items: MenuItemInterface[],
+  onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void,
+  selectedKeys: string[],
+  focusedKey: string | null,
+  openKeys: string[],
+  onSubmenuToggle: (key: string) => void,
+  inlineIndent: number,
+  level: number = 0
+): React.ReactNode {
+  return items.map((item) => {
+    // Indentation scales with nesting depth to visually convey hierarchy.
+    // Level 0 items have no extra padding; each deeper level adds inlineIndent px.
+    const paddingLeft = level > 0 ? level * inlineIndent : undefined;
+
+    // Dividers use role="separator" for screen reader semantics and
+    // CSS variables for consistent theming across tenants
+    if (item.type === 'divider') {
+      return (
+        <li
+          key={item.key}
+          role="separator"
+          data-part="divider"
+            style={{
+              height: '1px',
+              margin: '8px 0',
+            }}
+        />
+      );
+    }
+
+    // Handle group type
+    if (item.type === 'group') {
+      return (
+        <li key={item.key} data-part="group" role="presentation">
+          <div
+            data-part="group-label"
+            style={{
+              padding: '8px 16px 4px',
+              fontSize: '12px',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              paddingLeft: paddingLeft ? `${paddingLeft}px` : undefined,
+            }}
+          >
+            {item.title || item.label}
+          </div>
+          {item.children && (
+            <ul role="group" data-part="panel" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {renderRusticMenuItems(
+                item.children,
+                onItemClick,
+                selectedKeys,
+                focusedKey,
+                openKeys,
+                onSubmenuToggle,
+                inlineIndent,
+                level + 1
+              )}
+            </ul>
+          )}
+        </li>
+      );
+    }
+
+    // Handle submenu (item with children)
+    if (item.children && item.children.length > 0) {
+      const isOpen = openKeys.includes(item.key);
+      const isFocused = focusedKey === item.key;
+
+      return (
+        <li key={item.key} role="presentation">
+          {/* Submenu title bar */}
+          <div
+            role="button"
+            data-part="trigger"
+            data-open={isOpen}
+            data-disabled={item.disabled || undefined}
+            data-focused={isFocused || undefined}
+            tabIndex={item.disabled ? -1 : 0}
+            aria-expanded={isOpen}
+            aria-haspopup="true"
+            aria-disabled={item.disabled}
+            data-key={item.key}
+            onClick={() => {
+              if (!item.disabled) {
+                onSubmenuToggle(item.key);
+              }
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              paddingLeft: paddingLeft ? `${paddingLeft}px` : undefined,
+              minHeight: '40px',
+              cursor: item.disabled ? 'not-allowed' : 'pointer',
+              opacity: item.disabled ? 0.5 : 1,
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {item.icon && <span data-part="icon">{item.icon}</span>}
+            <span data-part="label" style={{ flex: 1 }}>{item.label}</span>
+            {/* Expand icon with rotation */}
+            <svg
+              data-part="arrow-icon"
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              style={{
+                transition: 'transform 0.2s ease',
+              }}
+            >
+              <path
+                d="M2.5 4.5L6 8L9.5 4.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          {/* Nested content */}
+          <ul
+            role="menu"
+            data-part="panel"
+            aria-hidden={!isOpen}
+            style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              height: isOpen ? 'auto' : 0,
+              overflow: 'hidden',
+              transition: 'height 0.2s ease',
+            }}
+          >
+            {renderRusticMenuItems(
+              item.children,
+              onItemClick,
+              selectedKeys,
+              focusedKey,
+              openKeys,
+              onSubmenuToggle,
+              inlineIndent,
+              level + 1
+            )}
+          </ul>
+        </li>
+      );
+    }
+
+    // Regular leaf item. The color cascade is: danger > selected > default,
+    // ensuring destructive actions are always visually prominent regardless
+    // of selection state
+    const isSelected = selectedKeys.includes(item.key);
+    const isFocused = focusedKey === item.key;
+
+    return (
+      <li key={item.key} role="presentation">
+        <div
+          role="menuitem"
+          data-part="item"
+          data-selected={isSelected}
+          data-disabled={item.disabled || undefined}
+          data-tone={item.danger ? 'danger' : undefined}
+          data-focused={isFocused || undefined}
+          tabIndex={item.disabled ? -1 : 0}
+          aria-disabled={item.disabled}
+          data-key={item.key}
+          onClick={(e) => {
+            if (!item.disabled) {
+              onItemClick(item.key, [item.key], e as React.MouseEvent<HTMLElement>);
+            }
+          }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            paddingLeft: paddingLeft ? `${paddingLeft}px` : undefined,
+            minHeight: '40px',
+            cursor: item.disabled ? 'not-allowed' : 'pointer',
+            opacity: item.disabled ? 0.5 : 1,
+            transition: 'all 0.2s ease',
+          }}
+        >
+          {item.icon && <span data-part="icon">{item.icon}</span>}
+          <span data-part="label">{item.label}</span>
+        </div>
+      </li>
+    );
+  });
+}
+
+// ============================================================================
+// RusticMenu Component
+// ============================================================================
+
+/**
+ * Pure HTML/CSS implementation of the Menu component.
+ *
+ * @description
+ * Renders the Menu component without external UI framework dependencies,
+ * providing maximum accessibility and customization potential.
+ *
+ * @remarks
+ * - Zero external dependencies
+ * - Full keyboard navigation support:
+ *   - ArrowUp/ArrowDown: Navigate between items
+ *   - Home/End: Jump to first/last item
+ *   - Enter/Space: Select item or toggle submenu
+ *   - Escape: Clear focus
+ * - WCAG 2.1 AA compliant
+ * - CSS variable-based theming
+ * - Focus management with visual indicators
+ *
+ * @param props - {@link MenuProps}
+ * @returns Rendered Rustic Menu component
+ *
+ * @example
+ * ```tsx
+ * <RusticMenu
+ *   items={menuItems}
+ *   mode="vertical"
+ *   selectedKeys={['home']}
+ *   onSelect={handleSelect}
+ * />
+ * ```
+ */
+export default function RusticMenu(props: MenuProps): React.ReactElement {
+  const {
+    items = [],
+    mode = MENU_DEFAULTS.mode,
+    selectedKeys: controlledSelectedKeys,
+    defaultSelectedKeys = [],
+    openKeys: controlledOpenKeys,
+    defaultOpenKeys = [],
+    multiple = MENU_DEFAULTS.multiple,
+    selectable = MENU_DEFAULTS.selectable,
+    inlineCollapsed = MENU_DEFAULTS.inlineCollapsed,
+    onSelect,
+    onClick,
+    onOpenChange,
+    inlineIndent = MENU_DEFAULTS.inlineIndent,
+    theme = MENU_DEFAULTS.theme,
+    children,
+    className = '',
+    style,
+  } = props;
+
+  // ========================================================================
+  // Refs
+  // ========================================================================
+
+  /** Reference to the menu container for focus management */
+  const menuRef = useRef<HTMLUListElement>(null);
+
+  // ========================================================================
+  // State Management
+  // ========================================================================
+
+  /** Internal state for uncontrolled selection mode */
+  const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(defaultSelectedKeys);
+
+  /** Internal state for uncontrolled open keys mode */
+  const [internalOpenKeys, setInternalOpenKeys] = useState<string[]>(defaultOpenKeys);
+
+  /** Currently focused item key for keyboard navigation */
+  const [focusedKey, setFocusedKey] = useState<string | null>(null);
+
+  /** Use controlled or uncontrolled state */
+  const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
+  const openKeys = controlledOpenKeys ?? internalOpenKeys;
+
+  /** Get all focusable keys for keyboard navigation */
+  const focusableKeys = items ? getFocusableKeys(items) : [];
+
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
+
+  /**
+   * Handles submenu toggle.
+   * Expands or collapses a submenu.
+   */
+  const handleSubmenuToggle = useCallback(
+    (key: string) => {
+      const newOpenKeys = openKeys.includes(key)
+        ? openKeys.filter((k) => k !== key)
+        : [...openKeys, key];
+
+      if (controlledOpenKeys === undefined) {
+        setInternalOpenKeys(newOpenKeys);
+      }
+
+      onOpenChange?.(newOpenKeys);
+    },
+    [openKeys, controlledOpenKeys, onOpenChange]
+  );
+
+  /**
+   * Handles menu item click events.
+   * Manages selection state and triggers callbacks.
+   */
+  const handleItemClick = useCallback(
+    (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => {
+      // Call onClick callback
+      const clickInfo: MenuClickInfo = {
+        key,
+        keyPath,
+        domEvent: e,
+      };
+      onClick?.(clickInfo);
+
+      // Handle selection if selectable
+      if (selectable) {
+        let newSelectedKeys: string[];
+
+        if (multiple) {
+          // Toggle selection in multiple mode
+          newSelectedKeys = selectedKeys.includes(key)
+            ? selectedKeys.filter((k) => k !== key)
+            : [...selectedKeys, key];
+        } else {
+          // Single selection
+          newSelectedKeys = [key];
+        }
+
+        if (controlledSelectedKeys === undefined) {
+          setInternalSelectedKeys(newSelectedKeys);
+        }
+
+        const selectInfo: MenuSelectInfo = {
+          key,
+          selectedKeys: newSelectedKeys,
+          keyPath,
+        };
+        onSelect?.(selectInfo);
+      }
+    },
+    [selectedKeys, multiple, selectable, controlledSelectedKeys, onClick, onSelect]
+  );
+
+  /**
+   * Handles keyboard navigation.
+   * Supports Arrow keys, Home, End, Enter, Space, and Escape.
+   */
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLUListElement>) => {
+      if (focusableKeys.length === 0) return;
+
+      const currentIndex = focusedKey ? focusableKeys.indexOf(focusedKey) : -1;
+      let nextIndex = currentIndex;
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          nextIndex = currentIndex < focusableKeys.length - 1 ? currentIndex + 1 : 0;
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          nextIndex = currentIndex > 0 ? currentIndex - 1 : focusableKeys.length - 1;
+          break;
+        case 'Home':
+          e.preventDefault();
+          nextIndex = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          nextIndex = focusableKeys.length - 1;
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          if (focusedKey) {
+            const item = items.find((i) => i.key === focusedKey);
+            if (item?.children) {
+              handleSubmenuToggle(focusedKey);
+            } else {
+              handleItemClick(focusedKey, [focusedKey], e as unknown as React.MouseEvent<HTMLElement>);
+            }
+          }
+          return;
+        case 'Escape':
+          setFocusedKey(null);
+          return;
+        default:
+          return;
+      }
+
+      if (nextIndex !== currentIndex && focusableKeys[nextIndex]) {
+        setFocusedKey(focusableKeys[nextIndex]);
+      }
+    },
+    [focusedKey, focusableKeys, items, handleSubmenuToggle, handleItemClick]
+  );
+
+  // ========================================================================
+  // Effects
+  // ========================================================================
+
+  /**
+   * Focus management effect.
+   * Focuses the DOM element when focusedKey changes.
+   */
+  useEffect(() => {
+    if (focusedKey && menuRef.current) {
+      const element = menuRef.current.querySelector(`[data-key="${focusedKey}"]`) as HTMLElement;
+      element?.focus();
+    }
+  }, [focusedKey]);
+
+  // ========================================================================
+  // Styles
+  // ========================================================================
+
+  /**
+   * Menu container styles with CSS variables for theming.
+   */
+  const menuStyle: CSSProperties = {
+    listStyle: 'none',
+    padding: '4px',
+    margin: 0,
+    display: mode === 'horizontal' ? 'flex' : 'block',
+    flexDirection: mode === 'horizontal' ? 'row' : undefined,
+    width: inlineCollapsed && mode === 'inline' ? 'var(--ds-menu-collapsed-width, 80px)' : undefined,
+    ...style,
+  };
+
+  // ========================================================================
+  // Render
+  // ========================================================================
+
+  return (
+    <ul
+      ref={menuRef}
+      className={`rottay-menu rottay-menu--rustic rottay-menu--${mode} rottay-menu--${theme} ${className}`}
+      style={menuStyle}
+      role="menu"
+      data-part="root"
+      aria-orientation={mode === 'horizontal' ? 'horizontal' : 'vertical'}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      onFocus={() => {
+        // Auto-focus the first focusable item when the menu container gains focus.
+        // This follows WAI-ARIA menu pattern: focus moves into the menu on Tab.
+        if (!focusedKey && focusableKeys.length > 0) {
+          setFocusedKey(focusableKeys[0]);
+        }
+      }}
+      onBlur={(e) => {
+        // Only clear focus when focus actually leaves the menu entirely.
+        // `relatedTarget` check prevents clearing when focus moves between items.
+        if (!menuRef.current?.contains(e.relatedTarget as Node)) {
+          setFocusedKey(null);
+        }
+      }}
+    >
+      {items && items.length > 0
+        ? renderRusticMenuItems(items, handleItemClick, selectedKeys, focusedKey, openKeys, handleSubmenuToggle, inlineIndent)
+        : children}
+    </ul>
+  );
+}
+
+RusticMenu.displayName = 'RusticMenu';

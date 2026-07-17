@@ -12,8 +12,8 @@ import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const chartsRoot = join(packageRoot, 'src/components/patterns/visualization/charts');
-const skinPath = join(packageRoot, 'src/tokens/css/components/skin/chart-c.css');
+const chartsRoot = join(packageRoot, 'src/ui/patterns/visualization/charts/families');
+const skinPath = join(packageRoot, 'src/foundation/tokens/css/presentation/components/skin/chart-c.css');
 
 const CHARTS = {
   histogram: {
@@ -45,7 +45,7 @@ const CHARTS = {
     scope: 'ds-chart-sankey',
     start: [5, 6],
     floor: [3, 2],
-    topology: '8d78313782922662881b00ad3c9e98f37741315e69f82e9df8a72dc0b1f074aa',
+    topology: 'afc73715c1e9364de62506f0ba85bd752e768d6cc66e3bf9f8da8aae5e57920c',
     parts: ['plot-area', 'links', 'link', 'link-label', 'nodes', 'node', 'node-mark', 'node-label', 'legend'],
   },
   sparkline: {
@@ -61,7 +61,7 @@ const CHARTS = {
     scope: 'ds-chart-funnel',
     start: [3, 6],
     floor: [1, 2],
-    topology: 'c724f10b2f95823112abbf332ddd50c092fb446bcc27972cab500476ffeafef8',
+    topology: 'a45c53f3bb8f91bb40b4c262baf31d566db52893f36e1104d843678e80d82cec',
     parts: ['legend', 'legend-swatch', 'plot-area', 'segment', 'segment-label', 'segment-value', 'conversion-label'],
   },
   network: {
@@ -69,7 +69,7 @@ const CHARTS = {
     scope: 'ds-chart-network-graph',
     start: [3, 5],
     floor: [1, 1],
-    topology: '702cef4fd53762711bc70105e4f08aed887809533bd9054cac8b769f173a40c5',
+    topology: '7aeeccd8b58da9fb9e71ce617cba45a4c97b2777fa5b996751094eee3003c898',
     parts: ['definitions', 'edge-marker', 'edge-marker-path', 'edge', 'node', 'node-mark', 'node-label', 'legend'],
   },
 };
@@ -202,22 +202,26 @@ test('CK-E chart slice C preserves the three adversarial cascade/runtime contrac
   assert.doesNotMatch(histogram, /rightAxis\.select\('\.domain'\)\.style\('stroke', cumulativeColor\)/);
 
   const gauge = source(CHARTS.gauge);
-  assert.match(gauge, /color: string;/);
-  assert.doesNotMatch(gauge, /color\?: string;/);
+  const publicSegmentContract = gauge.slice(
+    gauge.indexOf('export interface GaugeSegment'),
+    gauge.indexOf('/** Props for the {@link GaugeChart} component.'),
+  );
+  assert.match(publicSegmentContract, /color: string;/);
+  assert.doesNotMatch(publicSegmentContract, /color\?: string;/);
   assert.match(gauge, /segments: providedSegments,/);
   assert.match(gauge, /const usesDefaultSegments = providedSegments === undefined;/);
-  assert.match(gauge, /providedSegments \?\? DEFAULT_SEGMENTS;/);
+  assert.match(gauge, /providedSegments \?\? defaultSegments\(rangeMin, rangeMax\)/);
   assert.match(gauge, /data-color-source=\{usesDefaultSegments \? 'default' : 'custom'\}/);
   assert.match(gauge, /\.attr\('data-color-source', usesDefaultSegments \? 'default' : 'custom'\)/);
   assert.match(gauge, /\.attr\('fill', usesDefaultSegments \? null : \(seg\.color \?\? null\)\)/);
-  assert.match(gauge, /backgroundColor: usesDefaultSegments \? DEFAULT_SEGMENT_COLORS\[index\] : seg\.color/);
+  assert.match(gauge, /backgroundColor: usesDefaultSegments \? DEFAULT_SEGMENT_COLORS\[seg\.toneIndex\] : seg\.color/);
   assert.doesNotMatch(gauge, /seg\.color\s*\?(?!\?)/);
   const defaultSegmentBlock = gauge.slice(
-    gauge.indexOf('const DEFAULT_SEGMENTS:'),
+    gauge.indexOf('function defaultSegments('),
     gauge.indexOf('const DEFAULT_SEGMENT_TONES')
   );
   assert.equal(
-    defaultSegmentBlock.match(/\{ from: \d+, to: \d+, label: '[^']+' \}/g)?.length,
+    defaultSegmentBlock.match(/label: '(?:Low|Medium|High)'/g)?.length,
     3
   );
   assert.doesNotMatch(defaultSegmentBlock, /color:/);

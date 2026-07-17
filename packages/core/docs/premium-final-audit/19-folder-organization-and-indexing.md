@@ -23,7 +23,7 @@ Examples from the audit pass:
 
 - `app-bithire/src/actions` has `43` top-level subfolders
 - `app-platform/src/actions` has `15` top-level subfolders
-- `app-evnto/src/components` has `14` top-level subfolders
+- `app-evnto/src/composition/components` has `14` top-level subfolders
 
 That does not mean “group everything blindly”.
 

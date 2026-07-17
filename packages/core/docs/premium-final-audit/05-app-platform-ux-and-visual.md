@@ -72,13 +72,13 @@ Dashboard:
 
 Workspace:
 
-- `src/components/_shared/tables/entity-table-workspace/index.tsx`
+- `src/composition/components/_shared/tables/entity-table-workspace/index.tsx`
 
 Shell feel:
 
-- `src/components/_shared/layouts/app-layout/sidebar/index.tsx`
-- `src/components/_shared/layouts/app-layout/topbar/index.tsx`
-- `src/components/_shared/global-search/index.tsx`
+- `src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx`
+- `src/composition/components/_shared/layouts/app-layout/topbar/index.tsx`
+- `src/composition/components/_shared/global-search/index.tsx`
 
 ## Strongest visible area
 

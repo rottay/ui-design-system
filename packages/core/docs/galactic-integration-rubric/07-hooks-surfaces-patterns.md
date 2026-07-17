@@ -20,12 +20,12 @@ These are actually wired into DS runtime, DS surfaces/patterns, or app hosts.
 
 ### Evidence
 
-- `ui-design-system/packages/core/src/hooks/tokens/index.ts`
-- `ui-design-system/packages/core/src/runtime/bootstrap/SystemCssVariablesBridge.tsx`
-- `ui-design-system/packages/core/src/components/surfaces/foundation/states/index.tsx`
-- `ui-design-system/packages/core/src/components/patterns/data/data-table/PatternDataTable.tsx`
-- `ui-design-system/packages/core/src/components/structures/dashboard/stats-header/StatsHeader.tsx`
-- `ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/theming/composition/react/tokens/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx`
+- `ui-design-system/packages/core/src/ui/surfaces/runtime/helpers/states/index.tsx`
+- `ui-design-system/packages/core/src/ui/patterns/data/data-table/PatternDataTable.tsx`
+- `ui-design-system/packages/core/src/ui/structures/dashboard/stats-header/StatsHeader.tsx`
+- `ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx`
 
 ## Weakest Hook Families
 
@@ -35,7 +35,7 @@ The registry is mounted and the bridge exists, but the product host still does n
 
 Main issue:
 
-- `app-platform/src/components/_shared/tables/entity-table-workspace/index.tsx` still mounts `SearchCommandBar` without real `commands`
+- `app-platform/src/composition/components/_shared/tables/entity-table-workspace/index.tsx` still mounts `SearchCommandBar` without real `commands`
 
 ### Data / routing / state
 

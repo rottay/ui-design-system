@@ -1,0 +1,138 @@
+/**
+ * Modern FilterBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-filter-builder
+ * ds-engine-modern` + `data-part='root'`. Both roots -- the tree and the loading
+ * early-return -- carry the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED, or + a contract attribute already on the element
+ * (`data-logic`, `:not([data-root])`) -- a `:not()` carries the specificity of its
+ * argument. Non-border paint wins unlayered at (0,3,0).
+ *
+ * TWO RUNTIME CONSTRAINTS, both load-bearing:
+ *
+ * 1. `value-input` is stamped on SIX controls, and the boolean one is a bare
+ *    `<input type="checkbox">` that carries NO paint at all -- it renders with the
+ *    UA's native checkbox chrome. Every input rule below is therefore gated
+ *    `:not([data-field-type='boolean'])`. Without the gate the skin would paint a
+ *    border, background and radius onto a native checkbox that never had them.
+ *
+ * 2. The nested-group tint is gated `:not([data-root])`. The root group carries
+ *    `data-root='true'` and is deliberately chrome-less (it must sit invisibly in
+ *    any parent layout); only nested groups get the left-border accent and inset
+ *    fill. The border WIDTH comes from the Tailwind `border-l-[3px]` utility on the
+ *    same element and stays there -- utilities sort after preflight, so it survives;
+ *    this skin owns the COLOUR channel formerly carried by runtime paint.
+ *
+ * The `add-filter-option` hover below replaces an imperative
+ * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.
+ * The element sets NO background at rest, so a `:hover`-only rule is byte-exact:
+ * at rest it falls through to transparent, exactly as before. Nothing else in
+ * `foundation/tokens/css/` competes for that element's background.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- rule row: the logic keyword column, and the "and" between a range's two
+        inputs (both are plain text elements with a literal inline colour -- no
+        `Text` prop map, nothing to resolve). ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-logic-label'],
+.ds-pattern-filter-builder.ds-engine-modern [data-part='range-separator'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- the three native controls share one chrome. The boolean value-input is a
+        native checkbox and is excluded -- see constraint 1 in the header. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='value-input'][data-part='value-input']:not([data-field-type='boolean']),
+.ds-pattern-filter-builder.ds-engine-modern [data-part='field-select'][data-part='field-select'],
+.ds-pattern-filter-builder.ds-engine-modern [data-part='operator-select'][data-part='operator-select'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+  background: transparent;
+  color: inherit;
+}
+
+/* ---- remove buttons (rule + group carry the same literal) ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='remove-button'][data-part='remove-button'] {
+  background: transparent;
+  color: var(--ds-color-error);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- nested group: left-accent colour + inset fill. Root group is chrome-less
+        -- see constraint 2 in the header. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='group']:not([data-root]) {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  background: var(--ds-surface-inset);
+}
+
+/* ---- AND/OR logic toggle: filled for the stricter AND, outlined for OR ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'][data-logic='and'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'][data-logic='or'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- add-rule / add-group: dashed, to stay subordinate to the rows ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-rule-button'][data-part='add-rule-button'],
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-group-button'][data-part='add-group-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px dashed var(--ds-color-border);
+}
+
+/* ---- add-filter trigger + its dropdown ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-trigger'][data-part='add-filter-trigger'] {
+  background: var(--ds-color-bg-elevated, transparent);
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][data-part='add-filter-dropdown'] {
+  background: var(--ds-color-bg-elevated);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option']:hover {
+  background: var(--ds-color-bg-secondary);
+}
+
+/* ---- clear-all ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='clear-button'][data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- loading spinner. `animation` stays inline on `ds-spin`, a real shared
+        keyframe defined once in rustic's theme.css -- not a per-mount injection,
+        so there is nothing to namespace here. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}

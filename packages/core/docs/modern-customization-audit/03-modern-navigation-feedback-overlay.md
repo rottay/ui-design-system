@@ -2,9 +2,9 @@
 
 Scope:
 
-- `src/components/primitives/navigation/**/engines/modern.tsx`
-- `src/components/primitives/feedback/**/engines/modern.tsx`
-- `src/components/primitives/overlay/**/engines/modern.tsx`
+- `src/ui/primitives/navigation/**/engines/modern.tsx`
+- `src/ui/primitives/feedback/**/engines/modern.tsx`
+- `src/ui/primitives/overlay/**/engines/modern.tsx`
 - directly adjacent helpers when they materially change runtime customization
 
 ## Main Findings
@@ -104,9 +104,9 @@ tokenized contract exposed in the adjacent types.
 
 Refs:
 
-- `src/components/primitives/navigation/Link/engines/modern.tsx:70`
-- `src/components/primitives/navigation/Link/engines/modern.tsx:163`
-- `src/components/primitives/navigation/Link/Link.types.ts:255`
+- `src/ui/primitives/navigation/Link/engines/modern.tsx:70`
+- `src/ui/primitives/navigation/Link/engines/modern.tsx:163`
+- `src/ui/primitives/navigation/Link/Link.types.ts:255`
 
 ### `Stepper` bypasses the tokenized compound path
 
@@ -114,9 +114,9 @@ Modern `Stepper` flattens `Stepper.Step` children and skips the tokenized compou
 
 Refs:
 
-- `src/components/primitives/navigation/Stepper/engines/modern.tsx:122`
-- `src/components/primitives/navigation/Stepper/engines/modern.tsx:245-266`
-- `src/components/primitives/navigation/Stepper/compound/Step/index.tsx:205`
+- `src/ui/primitives/navigation/Stepper/engines/modern.tsx:122`
+- `src/ui/primitives/navigation/Stepper/engines/modern.tsx:245-266`
+- `src/ui/primitives/navigation/Stepper/compound/Step/index.tsx:205`
 
 ### `Progress` is still mostly library-driven
 
@@ -124,10 +124,10 @@ The control still depends on Daisy progress classes and hardcoded circle sizing.
 
 Refs:
 
-- `src/components/primitives/feedback/Progress/engines/modern.tsx:83`
-- `src/components/primitives/feedback/Progress/engines/modern.tsx:158`
-- `src/components/primitives/feedback/Progress/engines/modern.tsx:167`
-- `src/components/primitives/feedback/Progress/engines/modern.tsx:192`
+- `src/ui/primitives/feedback/Progress/engines/modern.tsx:83`
+- `src/ui/primitives/feedback/Progress/engines/modern.tsx:158`
+- `src/ui/primitives/feedback/Progress/engines/modern.tsx:167`
+- `src/ui/primitives/feedback/Progress/engines/modern.tsx:192`
 
 ### `Skeleton` still misses real personality-driven rendering
 
@@ -135,11 +135,11 @@ The wrapper sees personality defaults, but the Modern engine remains mostly Dais
 
 Refs:
 
-- `src/components/primitives/feedback/Skeleton/Skeleton.tsx:64-79`
-- `src/components/primitives/feedback/Skeleton/engines/modern.tsx:163`
-- `src/components/primitives/feedback/Skeleton/engines/modern.tsx:166`
-- `src/components/primitives/feedback/Skeleton/engines/modern.tsx:194`
-- `src/components/primitives/feedback/Skeleton/engines/modern.tsx:205`
+- `src/ui/primitives/feedback/Skeleton/Skeleton.tsx:64-79`
+- `src/ui/primitives/feedback/Skeleton/engines/modern.tsx:163`
+- `src/ui/primitives/feedback/Skeleton/engines/modern.tsx:166`
+- `src/ui/primitives/feedback/Skeleton/engines/modern.tsx:194`
+- `src/ui/primitives/feedback/Skeleton/engines/modern.tsx:205`
 
 ### `Spinner` ignores its own size token contract
 
@@ -147,9 +147,9 @@ Modern reads DS colors, but still uses local hardcoded sizes instead of the toke
 
 Refs:
 
-- `src/components/primitives/feedback/Spinner/engines/modern.tsx:44`
-- `src/components/primitives/feedback/Spinner/engines/modern.tsx:105`
-- `src/components/primitives/feedback/Spinner/Spinner.types.ts:142`
+- `src/ui/primitives/feedback/Spinner/engines/modern.tsx:44`
+- `src/ui/primitives/feedback/Spinner/engines/modern.tsx:105`
+- `src/ui/primitives/feedback/Spinner/Spinner.types.ts:142`
 
 ## What To Fix First In This Category
 

@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-F (communication family) paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/patterns/communication/`. Same
+All paths relative to `packages/core/src/ui/patterns/communication/`. Same
 channel scope and classification legend as the WO-SKIN-02/03/04 precedents
 (`skin02-fields-inventory.md`, `wo-skin-03-status-inventory.md`,
 `wo-skin-04-navigation-inventory.md`): a "site" is an object-literal style key
@@ -25,7 +25,7 @@ WO-SKIN-04 for the boundary case this diverges from, by design, for internal
 consistency).
 
 **Coverage checklist** (`node scripts/engine-token-audit.mjs | grep
-"fleet.inlinePaint.patterns/communication"`, 2026-07-13): 10 files, **272**
+"fleet.inlinePaint.runtime/patterns/communication"`, 2026-07-13): 10 files, **272**
 sites by the counter's count. `EXAMPLES`/`.stories.tsx`/`tests/` files are
 excluded from the family total (docs/test files, not shipped components).
 `engines/classic.tsx` wraps Ant Design directly in all four engine-split
@@ -96,7 +96,7 @@ a value a migration must PRESERVE per-engine, per-component.
 ds-engine-<engine>` scope-class convention, but **rustic has none at all**
 (no first-party class anywhere in rustic.tsx, only the consumer's
 `className`). Grep-confirmed **zero** references to
-`ds-pattern-comment-thread` anywhere in `tokens/css/` — the existing classes
+`ds-pattern-comment-thread` anywhere in `foundation/tokens/css/` — the existing classes
 are inert today, a head start for a future skin on 2 of 3 engines, not a
 live coupling. No `data-part` anywhere.
 
@@ -168,7 +168,7 @@ names; do not consolidate onto one during migration.
 **Anatomy today**: root carries `ds-pattern-notification-center
 ds-engine-modern` (modern.tsx:116) and `ds-pattern-notification-center
 ds-engine-classic` (classic.tsx:225) — same partial convention as
-comment-thread. **Rustic has no scope class.** Zero `tokens/css/` references
+comment-thread. **Rustic has no scope class.** Zero `foundation/tokens/css/` references
 to either class (inert). No `data-part` anywhere.
 
 **Paint sites — `engines/modern.tsx`** (38 sites):
@@ -234,7 +234,7 @@ named token) vs `var(--ds-color-primary-50, var(--ds-color-bg-muted))`
 vocabulary**: `classic.tsx` references `--ds-notification-center-unread-bg`,
 `--ds-notification-center-unread-dot`, `--ds-notification-center-message-color`,
 `--ds-notification-center-timestamp-color` (4 uses, classic.tsx) — none of
-these four custom properties are declared **anywhere** in `tokens/css/`
+these four custom properties are declared **anywhere** in `foundation/tokens/css/`
 (grep-confirmed zero hits). Same shape as P-73 (`--ds-steps-line-color`): a
 component-scoped theming hatch that looks real, is referenced with a
 fallback, and always resolves to its fallback because nothing ever sets it.
@@ -392,7 +392,7 @@ genuinely-consumed component-scoped token family, but only rustic uses it.**
 `-new-color`, `-badge-bg`, `-badge-color`, `-empty-color`,
 `-load-more-color`, `-skeleton-bg`), each with a sensible `--ds-color-*`
 default, and both first-party tenant artifacts
-(`tokens/css/artifacts/rottay/index.css` and its `_source/extension.css`)
+(`foundation/tokens/css/facade/artifacts/rottay/index.css` and its `_source/extension.css`)
 override all 11 with concrete hex values for light and dark. This is a real,
 adopted, per-tenant-overridable theming surface — unlike the
 `--ds-notification-center-*` phantom tokens above. **But only
@@ -536,7 +536,7 @@ modern and rustic engines *also* disagree with each other:
 | activity-log: action→color classification | 5-category switch (create/update/delete/view/**system**), verb sets include `changed`/`archived`/`read`/`accessed` | 4-branch if-chain, **no system/default-warning category**, narrower verb sets | **DIVERGED in LOGIC, not just value** — the same activity string can land in different categories per engine; not resolvable by a skin alone |
 | live-feed: component-scoped theming hatch (`--ds-live-feed-*`, 11 tokens, real & tenant-overridden) | not referenced (uses the generic DS-wide DaisyUI-replacement helper instead) | fully adopted, 11 of 11 | **ASYMMETRIC ADOPTION** — the one real theming surface in this family is reachable through 1 of 3 engines |
 | assistant / notification / presence: semantic tone naming | assistant: `{success, warning, danger, info}` → matching `--ds-color-*` | notification modern: `{info,success,warning,error}`; notification rustic: `info`→primary (odd one out) | **Coincidental convergence on 3 of 4, not shared code** — no import relationship; each vocabulary was authored independently and happens to reach for the same obvious token names |
-| notification-center: classic's own vocabulary | `--ds-notification-center-{unread-bg,unread-dot,message-color,timestamp-color}` | n/a | **Orphaned** — 4 tokens referenced, 0 declared anywhere in `tokens/css/`, always resolve to fallback (same shape as P-73) |
+| notification-center: classic's own vocabulary | `--ds-notification-center-{unread-bg,unread-dot,message-color,timestamp-color}` | n/a | **Orphaned** — 4 tokens referenced, 0 declared anywhere in `foundation/tokens/css/`, always resolve to fallback (same shape as P-73) |
 
 **None of these are safe to unify inside this migration.** Each divergent
 pair must land as two separate values in two separate skin selectors
@@ -551,8 +551,8 @@ migration regardless of how obviously "the same idea" the two recipes are.
 ## 3. Bridge rules (theme.css / personality.css) — DEAD/LIVE disposition per P-76
 
 **No `theme.css` or `personality.css` rule targets any of this family's
-component classes.** Grep across `tokens/css/engines/{modern,rustic,classic}/
-theme.css` and `tokens/css/runtime/personality.css` for
+component classes.** Grep across `foundation/tokens/css/runtime/engines/{modern,rustic,classic}/
+theme.css` and `foundation/tokens/css/runtime/personality.css` for
 `comment-thread`/`notification-center`/`activity-log`/`live-feed`/`presence`/
 `assistant` (and the bare nouns `comment`/`notification`/`activity`/`feed`)
 returns exactly two families of hits, both **unrelated** to this checkpoint's
@@ -562,7 +562,7 @@ components:
   (`classic/theme.css:1190-1233`, `personality.css:533-544`) — this is Ant
   Design's **global toast/message API** (`notification.open()`), a
   completely separate first-party feedback primitive. Confirmed by reading
-  `notification-center/engines/classic.tsx`: it imports AntD's `Popover` +
+  `notification-center/engines/classic/index.tsx`: it imports AntD's `Popover` +
   `List`, never an AntD `Notification`/toast component, and never renders
   `.ant-notification-notice` or `.ds-notification` anywhere. **No coupling,
   not suppression, not dead-but-relevant — just a same-sounding name for a
@@ -574,7 +574,7 @@ components:
   (`components/patterns.css:1438`) — the word "assistant" here is an OpenAI-
   style **chat-role modifier** (`assistant`/`user` message alignment), for a
   `command-home`/`ai-chat` message-bubble component. Grep-confirmed **zero**
-  files in `src/components/` render `ds-command-home-message` or
+  files in `src/ui/` render `ds-command-home-message` or
   `ds-ai-chat-message` — this selector is orphaned DS-wide, not just
   unrelated to our `patterns/communication/assistant`. No collision risk for
   a future `assistant` skin (the class names don't overlap: `ds-assistant-*`
@@ -616,7 +616,7 @@ keyframe is not a redundant duplicate of the global one — it is a genuinely
 different, deliberately-different value, and a migration that treats it as
 "obviously the same, just delete it" will move pixels.**
 
-- The global `@keyframes pulse` (`tokens/css/foundation/animations/
+- The global `@keyframes pulse` (`foundation/tokens/css/foundation/animations/
   keyframes.css:352-357`) animates opacity **1 → 0.5 → 1**.
 - live-feed/rustic's local `@keyframes pulse` (rustic.tsx:160, 175) animates
   opacity **1 → 0.4 → 1** — a different minimum.
@@ -624,9 +624,9 @@ different, deliberately-different value, and a migration that treats it as
   `pulse` (verbatim byte-for-byte string) is independently re-declared, via
   the exact same unguarded-inline-`<style>`-tag mechanism, in at least 5
   other DS files outside this family: `patterns/visualization/tree-view/
-  engines/rustic.tsx`, `patterns/forms/step-wizard/engines/rustic.tsx`,
-  `patterns/workflow/approval-workflow/engines/rustic.tsx` (×2 sites), and
-  `patterns/data/stats-grid/engines/rustic.tsx`. `step-wizard`'s **modern**
+  engines/rustic.tsx`, `patterns/forms/step-wizard/engines/rustic/index.tsx`,
+  `patterns/workflow/approval-workflow/engines/rustic/index.tsx` (×2 sites), and
+  `patterns/data/stats-grid/engines/rustic/index.tsx`. `step-wizard`'s **modern**
   engine, by contrast, redeclares `pulse` at `1 → 0.5 → 1` — matching the
   global value exactly, a harmless duplicate.
 - Because `@keyframes` are not subject to cascade-layer precedence — the
@@ -692,7 +692,7 @@ non-interactive by design).
   from every rustic engine in the family (4 of 4) and from live-feed's
   classic engine (the only classic engine in the family without it). None of
   the 5 existing instances are referenced by any stylesheet today
-  (grep-confirmed zero hits in `tokens/css/`) — a future skin gets a partial
+  (grep-confirmed zero hits in `foundation/tokens/css/`) — a future skin gets a partial
   head start on naming, not a live coupling to worry about breaking.
 - **`--ds-notification-center-*` (4 tokens) and `--ds-steps-line-color`-shaped
   phantoms recur here too**: declared nowhere, referenced with a fallback

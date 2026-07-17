@@ -5,9 +5,9 @@
  *
  * Detects:
  * 1. Premium chrome CSS variables emitted by the brand compiler that have
- *    no non-test reader in engines/, components/, or surfaces/.
+ *    no non-test reader in engines/, ui/, or surfaces/.
  * 2. Duplicate local `useCountUp` implementations that should use the
- *    canonical `useSmoothCounter` from motion/hooks/.
+ *    canonical `useSmoothCounter` from motion/react/runtime/.
  * 3. Debug console.log/console.debug calls in runtime/ core files.
  *
  * Exit 0 = all checks passed.
@@ -17,7 +17,7 @@
  * Hook: `"lint:integration": "node scripts/audit-integration.mjs"`
  */
 
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -58,9 +58,9 @@ function relPath(abs) {
 // Rule 1: Premium chrome vars without non-test consumers
 // ============================================================================
 
-// Chrome vars have one canonical emitter (compilers/_shared/chrome-variables,
+// Chrome vars have one canonical emitter (compilers/kernel/foundation/css/chrome-variables,
 // scanned whole -- the entire file IS the chrome channel) plus the two
-// compilers that call it (compilers/brand-theme, compilers/appearance -- each
+// compilers that call it (kernel/runtime/brand-theme, runtime/appearance -- each
 // scanned only within its chrome-handling function, so a stray
 // vars['--ds-...'] assignment added directly to either compiler, bypassing
 // the shared module, is caught too). This is a LIST, not one file: a var
@@ -69,11 +69,11 @@ function relPath(abs) {
 // surface vars are foundational theme output and out of scope for this rule.
 const CHROME_EMITTERS = [
   {
-    path: join(SRC_ROOT, 'compilers/_shared/chrome-variables/index.ts'),
+    path: join(SRC_ROOT, 'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts'),
     extract: (source) => source,
   },
   {
-    path: join(SRC_ROOT, 'compilers/brand-theme/index.ts'),
+    path: join(SRC_ROOT, 'infrastructure/compilers/kernel/runtime/brand-theme/index.ts'),
     extract: (source) => {
       const start = source.indexOf('export function brandThemeToChromeVariables');
       const end = source.indexOf('export const compileBrandTheme', start);
@@ -81,7 +81,7 @@ const CHROME_EMITTERS = [
     },
   },
   {
-    path: join(SRC_ROOT, 'compilers/appearance/index.ts'),
+    path: join(SRC_ROOT, 'infrastructure/compilers/kernel/runtime/appearance/index.ts'),
     extract: (source) => {
       const start = source.indexOf('export function appearanceAdvancedToVariables');
       const end = source.indexOf('// ── Combined', start);
@@ -98,6 +98,14 @@ const directVarPattern = /['"`](--ds-(?:sidebar|layout|shell|page-shell|button-d
 // every emitter producing an orphan var, not just "the compiler".
 const emittedVars = new Map();
 for (const emitter of CHROME_EMITTERS) {
+  if (!existsSync(emitter.path)) {
+    violations.push({
+      rule: 'canonical-source-missing',
+      path: relPath(emitter.path),
+      message: 'Required premium-chrome emitter is missing; integration coverage cannot be certified.',
+    });
+    continue;
+  }
   const scoped = emitter.extract(readSafe(emitter.path));
   if (!scoped) continue;
 
@@ -120,13 +128,14 @@ const KNOWN_ALIASES = new Set([
 ]);
 
 if (emittedVars.size > 0) {
-  // Search for consumers in engines/, components/, surfaces/ (excluding test files)
+  // Search for consumers in engines/, ui/, and token CSS
+  // (excluding test files).
   const consumerDirs = [
-    join(SRC_ROOT, 'tokens/css/engines'),
-    join(SRC_ROOT, 'components'),
-    join(SRC_ROOT, 'tokens/css/components'),
-    join(SRC_ROOT, 'tokens/css/runtime'),
-    join(SRC_ROOT, 'tokens/css/foundation'),
+    join(SRC_ROOT, 'foundation/tokens/css/runtime/engines'),
+    join(SRC_ROOT, 'ui'),
+    join(SRC_ROOT, 'foundation/tokens/css/presentation/components'),
+    join(SRC_ROOT, 'foundation/tokens/css/runtime'),
+    join(SRC_ROOT, 'foundation/tokens/css/foundation'),
   ];
 
   const consumerFiles = [];
@@ -148,7 +157,7 @@ if (emittedVars.size > 0) {
       violations.push({
         rule: 'orphan-premium-var',
         path: [...emitterPaths].join(', '),
-        message: `Premium chrome var "${varName}" is emitted but has no non-test consumer in engines/components/surfaces/token CSS.`,
+        message: `Premium chrome var "${varName}" is emitted but has no non-test consumer in engines/ui/surfaces/token CSS.`,
       });
     }
   }
@@ -158,7 +167,7 @@ if (emittedVars.size > 0) {
 // Rule 2: Duplicate local useCountUp implementations
 // ============================================================================
 
-const componentFiles = walkFiles(join(SRC_ROOT, 'components'), /\.tsx?$/);
+const componentFiles = walkFiles(join(SRC_ROOT, 'ui'), /\.tsx?$/);
 for (const file of componentFiles) {
   if (file.includes('.test.') || file.includes('.spec.') || file.includes('.stories.')) continue;
 
@@ -170,7 +179,7 @@ for (const file of componentFiles) {
     violations.push({
       rule: 'duplicate-use-count-up',
       path: relPath(file),
-      message: 'Local useCountUp implementation found. Use the canonical useSmoothCounter from motion/hooks/ instead.',
+      message: 'Local useCountUp implementation found. Use the canonical useSmoothCounter from motion/react/runtime/ instead.',
     });
   }
 }
@@ -179,7 +188,7 @@ for (const file of componentFiles) {
 // Rule 3: Debug console logging in runtime core
 // ============================================================================
 
-const runtimeFiles = walkFiles(join(SRC_ROOT, 'runtime'), /\.tsx?$/);
+const runtimeFiles = walkFiles(join(SRC_ROOT, 'infrastructure/runtime'), /\.tsx?$/);
 for (const file of runtimeFiles) {
   if (file.includes('.test.') || file.includes('.spec.') || file.includes('.stories.')) continue;
 
@@ -212,7 +221,7 @@ for (const file of runtimeFiles) {
 // Rule 4: Stale "not yet wired" comments in contracts
 // ============================================================================
 
-const contractFiles = walkFiles(join(SRC_ROOT, 'contracts'), /\.ts$/);
+const contractFiles = walkFiles(join(SRC_ROOT, 'foundation', 'contracts'), /\.ts$/);
 for (const file of contractFiles) {
   const content = readSafe(file);
   const lines = content.split('\n');
@@ -234,7 +243,7 @@ for (const file of contractFiles) {
 // For the corresponding modern engine file, count references.
 // Flag if a component has >15 defined tokens but the modern engine references <3.
 
-const COMPONENT_TOKEN_DIR = join(SRC_ROOT, 'tokens', 'css', 'components');
+const COMPONENT_TOKEN_DIR = join(SRC_ROOT, 'foundation/tokens/css/presentation/components');
 const componentTokenFiles = walkFiles(COMPONENT_TOKEN_DIR, /\.css$/).filter(
   (f) => !f.endsWith('index.css')
 );
@@ -262,7 +271,15 @@ for (const tokenFile of componentTokenFiles) {
   let modernContent = '';
   let modernPath = '';
   for (const category of primitiveDirs) {
-    const candidate = join(SRC_ROOT, 'components', 'primitives', category, pascalName, 'engines', 'modern.tsx');
+    const candidate = join(
+      SRC_ROOT,
+      'ui/primitives',
+      category,
+      pascalName,
+      'engines',
+      'modern',
+      'index.tsx',
+    );
     const content = readSafe(candidate);
     if (content) {
       modernContent = content;
@@ -275,10 +292,14 @@ for (const tokenFile of componentTokenFiles) {
 
   // A modern engine is its component AND its skin stylesheet, when it has one.
   // WO-ARC-07 moves a component's paint out of an inline `style={}` object into
-  // `tokens/css/engines/modern/skin/<name>.css`; the tokens are consumed there,
+  // `foundation/tokens/css/runtime/engines/modern/skin/<name>.css`; the tokens are consumed there,
   // by the same engine, and a rule that reads only the .tsx would report zero
   // consumption for a component that consumes every one of them.
-  const skinPath = join(SRC_ROOT, 'tokens', 'css', 'engines', 'modern', 'skin', `${baseName}.css`);
+  const skinPath = join(
+    SRC_ROOT,
+    'foundation/tokens/css/runtime/engines/modern/skin',
+    `${baseName}.css`,
+  );
   const skinContent = readSafe(skinPath) ?? '';
 
   const countRefs = (text) => (text.match(new RegExp(tokenPrefix, 'g')) ?? []).length;
@@ -299,17 +320,21 @@ for (const tokenFile of componentTokenFiles) {
 // ============================================================================
 // Rule 6: Personality variable duplication guard
 // ============================================================================
-// resolvePartialPersonalityCssVariables (runtime/personality/primitives.ts) is
+// resolvePartialPersonalityCssVariables
+// (foundation/tokens/ts/runtime/personality/index.ts) is
 // the single canonical source of personality-derived CSS variable names.
 // resolvePersonalityCssVariables (the runtime bridge) and personalityVariables
-// (the static tenant generator, runtime/tenant/storage/static/generator) both
+// (the tenant visual compiler, infrastructure/compilers/runtime/tenant-css/visual-config) both
 // delegate to it rather than each declaring these keys by hand. A literal
 // '--ds-...' key reappearing directly inside the generator's function, or the
 // delegation call disappearing, is the WO-TOK-09 defect regenerating: a third
 // hand-written copy the gate would otherwise not see.
 
-const PERSONALITY_CANONICAL_PATH = join(SRC_ROOT, 'runtime/personality/primitives.ts');
-const PERSONALITY_GENERATOR_PATH = join(SRC_ROOT, 'runtime/tenant/storage/static/generator/index.ts');
+const PERSONALITY_CANONICAL_PATH = join(
+  SRC_ROOT,
+  'foundation/tokens/ts/runtime/personality/index.ts',
+);
+const PERSONALITY_GENERATOR_PATH = join(SRC_ROOT, 'infrastructure/compilers/runtime/tenant-css/visual-config/index.ts');
 const PERSONALITY_DELEGATION_CALL = 'resolvePartialPersonalityCssVariables(';
 
 function extractDsObjectKeysFrom(text) {

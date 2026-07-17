@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { DesignSystemProvider, getKnownTenantConfig } from '@rottay/design-system';
-import { getShowroomVerticalKey, type ShowroomTenant } from '@/components/showroom-context';
+import { getShowroomVerticalKey, type ShowroomTenant } from '@/composition/components/showroom-context';
 
 // ---------------------------------------------------------------------------
 // Tenant palette surface

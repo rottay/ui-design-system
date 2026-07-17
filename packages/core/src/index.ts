@@ -10,50 +10,60 @@
 // ============================================
 // CORE (Engines, Providers, Types, Errors)
 // ============================================
-export * from './runtime/engines';
-export { ThemeProvider, ThemeContext } from './runtime/theming';
-export type { ThemeProviderProps, VisualAuthority, ThemeConfig, ThemeContextValue } from './runtime/theming';
-export * from './runtime/features';
-export * from './runtime/bootstrap';
-export * from './contracts';
+export * from './infrastructure/runtime/engines';
+export { ThemeProvider, ThemeContext } from './infrastructure/runtime/theming';
+export type { ThemeProviderProps, VisualAuthority, ThemeConfig, ThemeContextValue } from './infrastructure/runtime/theming';
+export * from './infrastructure/runtime/features';
+export * from './infrastructure/runtime/bootstrap';
+export * from './foundation/contracts';
 
 // ============================================
-// ERROR HANDLING (public API, hosted in _internal for structural clarity)
+// ERROR HANDLING
 // ============================================
-export { ErrorHandler } from './_internal/errors';
-export { useErrorHandler } from './_internal/errors';
-export { ErrorCategory, ErrorSeverity } from './_internal/errors';
-export type { DSError, DSErrorInput, ErrorSubscriber, UseErrorHandlerOptions, UseErrorHandlerReturn } from './_internal/errors';
+export { ErrorHandler } from './infrastructure/runtime/error-handling/runtime/handler';
+export { useErrorHandler } from './infrastructure/runtime/error-handling/composition/react/use-error-handler';
+export { ErrorCategory, ErrorSeverity } from './foundation/contracts/runtime/errors';
+export type { DSError, DSErrorInput, ErrorSubscriber } from './foundation/contracts/runtime/errors';
+export type {
+  UseErrorHandlerOptions,
+  UseErrorHandlerReturn,
+} from './infrastructure/runtime/error-handling/composition/react/use-error-handler';
 
 // ============================================
 // PROVIDERS (ResponsiveProvider, etc.)
 // ============================================
-export * from './runtime/responsive';
-export { MotionProvider } from './runtime/motion';
-export type { MotionProviderProps } from './runtime/motion';
+export * from './infrastructure/runtime/responsive';
+export { MotionProvider } from './infrastructure/runtime/motion';
+export type { MotionProviderProps } from './infrastructure/runtime/motion';
 
 // ============================================
 // NAVIGATION (framework-agnostic Link adapter)
 // ============================================
-export * from './runtime/adapters/navigation';
+export * from './infrastructure/runtime/adapters/presentation/react/navigation';
 
 // ============================================
 // FOCUS MODE (framework-agnostic focus-state adapter)
 // ============================================
-export * from './runtime/adapters/focus-mode';
+export * from './infrastructure/runtime/adapters/presentation/react/focus-mode';
 
 // ============================================
-// HOOKS (promoted from core/hooks/)
+// REACT HOOKS (stable runtime facade)
 // ============================================
-export * from './hooks';
+export * from './infrastructure/runtime/facade';
 
 // ============================================
-// UTILS (public helpers, hosted in _internal for structural clarity)
+// UTILS
 // ============================================
-export { createSubComponent, createCompoundComponent } from './_internal/utils';
-export type { PolymorphicProps } from './_internal/utils';
-export { warnInDev, warnOnceInDev, errorInDev } from './_internal/utils';
-export { arePropsEqual, createPropsComparator } from './_internal/utils';
+export {
+  createSubComponent,
+  createCompoundComponent,
+} from './infrastructure/runtime/adapters/presentation/react/compound-components';
+export type { PolymorphicProps } from './infrastructure/runtime/adapters/presentation/react/compound-components';
+export { warnInDev, warnOnceInDev, errorInDev } from './infrastructure/runtime/foundation/diagnostics/development-logging';
+export {
+  arePropsEqual,
+  createPropsComparator,
+} from './foundation/kernel/performance';
 
 // ============================================
 // ICONS
@@ -74,41 +84,41 @@ export { arePropsEqual, createPropsComparator } from './_internal/utils';
 // ============================================
 // TENANCY (schema, registry, resolver, storage, CSS generation)
 // ============================================
-export * from './runtime/tenant';
+export * from './infrastructure/runtime/tenant';
 
 // ============================================
 // PRODUCT PROFILES (registry, provider, hooks)
 // ============================================
-export * from './runtime/product-profiles';
+export * from './infrastructure/runtime/product-profiles';
 
 // ============================================
 // VERTICALS (presets, registry, types)
 // ============================================
-export * from './runtime/verticals';
+export * from './infrastructure/runtime/verticals';
 
 // ============================================
 // COMPILERS (brand-theme bridge, shared color math)
 // ============================================
-export * from './compilers';
+export * from './infrastructure/compilers';
 
 // ============================================
 // BRAND THEMES (first-party authored BrandTheme sources)
 // ============================================
 // Consumers (and the in-app artifact drift test) resolve the canonical vertical
 // BrandTheme from here; the CSS artifact is a generated projection of these.
-export { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './tokens/ts/brand-themes';
+export { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './foundation/tokens/ts/presentation/brand-themes';
 /**
  * @deprecated Explicit migration/regression fixture only. Runtime customer
  * themes are supplied from the tenancy DB and are never auto-registered here.
  */
-export { themanagementmiamiBrandTheme } from './tokens/ts/brand-themes';
+export { themanagementmiamiBrandTheme } from './foundation/tokens/ts/presentation/brand-themes';
 // Whitelabel proof fixtures (WO-GAT-03) — never product tenants — consumed by the showroom probe surface.
-export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './tokens/ts/brand-themes';
+export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './foundation/tokens/ts/presentation/brand-themes';
 
 // ============================================
 // I18N (locales, provider, hooks)
 // ============================================
-export * from './i18n';
+export * from './infrastructure/runtime/i18n';
 
 // ============================================
 // MOTION (animations, effects, hooks)
@@ -117,12 +127,9 @@ export * from './i18n';
 // package entry also emits `dist/motion.d.ts`; a bare `./motion` declaration
 // re-export would resolve to that file after packing and shadow the
 // `dist/motion/index.d.ts` directory barrel.
-export * from './motion/index';
+export * from './graphics/motion';
 
 // ============================================
 // COMPONENTS
 // ============================================
-export * from './components/primitives';
-export * from './components/patterns';
-export * from './components/structures';
-export * from './components/surfaces';
+export * from './ui';

@@ -115,12 +115,12 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
 - **Steps** —
   1. Grayscale ramp tokens (spec section 2): define the commercial ramp ONCE — ~12 perceptually-even steps
      anchored at `#000000`, `#0A0A0C` (the flagship dark), … `#FFFFFF` — as `--ds-commercial-gray-*` CSS
-     variables in a dedicated `packages/core/src/commercial/tokens/commercial-ramp.css`, and mirror atomic
-     references in a TS token file (`packages/core/src/commercial/tokens/index.ts`) so styled/TS consumers use
+     variables in a dedicated `packages/core/src/ui/patterns/commercial/foundation/tokens/commercial-ramp.css`, and mirror atomic
+     references in a TS token file (`packages/core/src/ui/patterns/commercial/foundation/tokens/index.ts`) so styled/TS consumers use
      tokens, not string literals. Ship the CSS through a `./commercial.css` style export wired exactly like
      `./styles/modern` (a build step + a `package.json` `exports` entry) so a consumer imports the kit's tokens
      alongside its components.
-  2. Build the kit components under `packages/core/src/commercial/` (one folder per component with an
+  2. Build the kit components under `packages/core/src/ui/patterns/commercial/` (one folder per component with an
      `index.tsx` entrypoint + co-located CSS/types, per the DS folder law): `AsciiFrame` (box-drawing corner-
      and-rule framing, `┌─┐│└┘├┤┬┴┼`, double-line `╔═╗` for highest emphasis); `AsciiDiagram` (data-driven —
      takes a node/edge model and renders a box-drawing + arrow diagram, with a one-shot typewriter/decode
@@ -150,7 +150,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   6. Cross-repo note: record in the WO's progress log and in `roadmap/README.md` (Downstream waiters) that
      app-platform WO-COM-01 is BLOCKED-ON-EXTERNAL on this WO's RELEASE (not its merge) — the notify-the-
      platform-orchestrator step fires when the release train ships the kit version.
-- **Files** — `packages/core/src/commercial/**` (component folders + `tokens/`), `packages/core/src/commercial.ts`
+- **Files** — `packages/core/src/ui/patterns/commercial/**` (component folders + `tokens/`), `packages/core/src/commercial.ts`
   (new subpath entry), `packages/core/vite.config.ts` (lib entry), `packages/core/package.json` (`exports` +
   the `./commercial.css` style export + any build script mirroring `build:modern-css`),
   `docs-engineering/engineering/design-system/` (catalog doc UPDATE — the ONLY docs-engineering write this
@@ -160,7 +160,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   (add a unit test that every kit component renders, that decorative ASCII is `aria-hidden` with a text
   alternative, and that a reveal collapses to visible under a mocked reduced-motion preference); a temporary
   showroom import of `@rottay/design-system/commercial` typechecks and renders each component; a grep over
-  `packages/core/src/commercial/**` proves ZERO non-grayscale color literals except inside `ProductWindow`
+  `packages/core/src/ui/patterns/commercial/**` proves ZERO non-grayscale color literals except inside `ProductWindow`
   (which frames content color) and zero domain nouns (tenant/candidate/role/company/interview/event); sighted
   capture of a kit inventory page in `test-artifacts/showroom/shw-01/` under both tenant palettes.
 - **Do NOT** — Do not add ANY product/domain semantics to the kit (no tenant/candidate/role/company/
@@ -172,7 +172,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the shared commercial
   kit at `@rottay/design-system/commercial` per spec section 8 of
   `../../docs-engineering/engineering/design-system/commercial-surfaces/README.md` (read sections 1-9 + 8
-  first). Under `packages/core/src/commercial/` build monochrome-only, domain-agnostic components (one folder
+  first). Under `packages/core/src/ui/patterns/commercial/` build monochrome-only, domain-agnostic components (one folder
   each, `index.tsx` + co-located CSS/types): grayscale ramp tokens (~12 perceptually-even steps anchored at
   `#000000`/`#0A0A0C`/`#FFFFFF` as `--ds-commercial-gray-*` in `tokens/commercial-ramp.css` + a TS mirror),
   `AsciiFrame`, `AsciiDiagram` (data-driven node/edge model, one-shot typewriter/decode reveal on scroll),
@@ -207,25 +207,25 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   The prospect never feels they left the cover at the first click.
 - **Why** — Audit top offenders #1/#2/#4 and section 3.2 (the largest gap). "The single most damaging fact
   is that the front door and the rooms behind it look like they were designed by two different companies."
-  Verified: `packages/showroom/src/components/layout/config.ts` carries nine accent hex literals — the eight
+  Verified: `packages/showroom/src/composition/components/layout/config.ts` carries nine accent hex literals — the eight
   audited section accents (`foundations #0f766e`, `primitives #2563eb`, `patterns #7c3aed`,
   `structures #ea580c`, `surfaces #0891b2`, `verticals #4f46e5`, `playground #d97706`, `developers #475569`)
-  plus a base `#0f172a` (config.ts:26-74). `packages/showroom/src/components/layout/shell/index.tsx` layers a
+  plus a base `#0f172a` (config.ts:26-74). `packages/showroom/src/composition/components/layout/shell/index.tsx` layers a
   three-glow `shellBackdrop` (`radial-gradient` primary @90% 2%, secondary @8% 0%, info @50% 100%, L877-885),
   a sidebar radial glow (L445), section-accent gradient panels (L203/739/805/973), and a `backdropFilter:
   blur(18px)` glass canvas (L1012) — directly against the monochrome brief. The runtime readout
-  (`packages/showroom/src/components/runtime/runtime-fingerprint.tsx`) is printed up to four times per page
+  (`packages/showroom/src/composition/components/runtime/runtime-fingerprint.tsx`) is printed up to four times per page
   (sidebar launchpad + header pill row + sidebar footer + the primitive live-preview card — audit 3.2), and
-  the header (`packages/showroom/src/components/layout/header/index.tsx`) renders breadcrumb → H1 →
+  the header (`packages/showroom/src/composition/components/layout/header/index.tsx`) renders breadcrumb → H1 →
   "runtime editorial reference" title, printing the page name two-to-three times ("Foundations Foundations").
   `framer-motion ^12.38.0` is in `packages/showroom/package.json` and imported in 0 files (verified).
 - **Depends on** — WO-SHW-01 (the chrome is rebuilt on the kit + the grayscale ramp).
 - **Steps** —
-  1. Kill the accents: in `packages/showroom/src/components/layout/config.ts`, remove the per-section accent
+  1. Kill the accents: in `packages/showroom/src/composition/components/layout/config.ts`, remove the per-section accent
      hex; section identity comes from weight, type, mono numbering (`[01]`…), and a single ink tone — never a
      rotating hue (spec section 2). Sweep every consumer of the removed `accent` field (shell/header/sidebar)
      so nothing references a deleted color.
-  2. Kill the glows + glass in `packages/showroom/src/components/layout/shell/index.tsx`: delete the
+  2. Kill the glows + glass in `packages/showroom/src/composition/components/layout/shell/index.tsx`: delete the
      three-glow `shellBackdrop` (L877-885) and the sidebar radial (L445); replace the glass canvas
      (`backdropFilter: blur(18px)`, L1012) and the stacked accent gradient panels (L203/739/805/973) with the
      landing's language — paper/ink neutrals from the ramp, hairline borders (WO-SHW-01 `AsciiFrame`/
@@ -233,12 +233,12 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
      backdrop. Border segmentation does the compartmentalizing that gradients do today.
   3. Extend the landing's editorial rhythm into the whole browse chrome: the serif display for page titles,
      the masthead/eyebrow treatment, the dot/numbered section labels — reusing the landing's proven look
-     (`src/app/page.tsx` + `src/components/landing/*`) via the kit so it is no longer page-local CSS.
+     (`src/app/page.tsx` + `src/composition/components/landing/*`) via the kit so it is no longer page-local CSS.
   4. Dedupe the runtime readout to ONE placement: pick a single deliberate home (a compact header slot or an
      on-demand disclosure) and delete the other three usages of
-     `packages/showroom/src/components/runtime/runtime-fingerprint.tsx` (sidebar launchpad, sidebar footer,
+     `packages/showroom/src/composition/components/runtime/runtime-fingerprint.tsx` (sidebar launchpad, sidebar footer,
      live-preview card).
-  5. Kill title triplication in `packages/showroom/src/components/layout/header/index.tsx`: the page name
+  5. Kill title triplication in `packages/showroom/src/composition/components/layout/header/index.tsx`: the page name
      appears once (keep one of breadcrumb-tail / H1 / editorial-title, not all three). Reclaim the first
      viewport for content — the header band is genuinely thin.
   6. Record the framer-motion decision: remove `framer-motion` from `packages/showroom/package.json`
@@ -246,14 +246,14 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
      WO-SHW-01 kit reveals, and WO-CRA-08's View-Transitions work; the dep is used in 0 files), OR, if
      deliberately adopted, wire it to a specific sanctioned motion and document why. Write the decision into
      the WO progress log either way.
-- **Files** — `packages/showroom/src/components/layout/config.ts`,
-  `packages/showroom/src/components/layout/shell/index.tsx`,
-  `packages/showroom/src/components/layout/header/index.tsx`,
-  `packages/showroom/src/components/layout/sidebar/**`,
-  `packages/showroom/src/components/runtime/runtime-fingerprint.tsx` (single-home + remove redundant callers),
-  `packages/showroom/src/components/landing/**` (extract the editorial language into shared use via the kit),
+- **Files** — `packages/showroom/src/composition/components/layout/config.ts`,
+  `packages/showroom/src/composition/components/layout/shell/index.tsx`,
+  `packages/showroom/src/composition/components/layout/header/index.tsx`,
+  `packages/showroom/src/composition/components/layout/sidebar/**`,
+  `packages/showroom/src/composition/components/runtime/runtime-fingerprint.tsx` (single-home + remove redundant callers),
+  `packages/showroom/src/composition/components/landing/**` (extract the editorial language into shared use via the kit),
   `packages/showroom/package.json` (framer-motion decision).
-- **Acceptance gate** — A grep over the showroom chrome (`src/components/layout/**`, `src/components/runtime/**`)
+- **Acceptance gate** — A grep over the showroom chrome (`src/composition/components/layout/**`, `src/composition/components/runtime/**`)
   proves zero non-grayscale color literals in chrome (product windows / the color-token page / D3 charts
   allowlisted); the runtime readout renders exactly once per page; each page name renders once (no
   "Foundations Foundations"); `packages/showroom/package.json` has no `framer-motion` unless a documented
@@ -269,16 +269,16 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, carry the landing's monochrome
   editorial brand into the docs chrome per audit offenders #1/#2/#4 + spec sections 1-2/5. Depends on
   WO-SHW-01 (build on the kit + `--ds-commercial-gray-*` ramp). (1) In
-  `packages/showroom/src/components/layout/config.ts` delete the eight section accent hex (config.ts:26-74) +
+  `packages/showroom/src/composition/components/layout/config.ts` delete the eight section accent hex (config.ts:26-74) +
   the base `#0f172a`; section identity from weight/type/mono-numbering/one ink tone; fix every consumer of the
-  removed `accent`. (2) In `packages/showroom/src/components/layout/shell/index.tsx` delete the three-glow
+  removed `accent`. (2) In `packages/showroom/src/composition/components/layout/shell/index.tsx` delete the three-glow
   `shellBackdrop` (L877-885), the sidebar radial (L445), the glass canvas `backdropFilter: blur(18px)`
   (L1012), and the accent gradient panels (L203/739/805/973); replace with paper/ink neutrals, hairline
   borders (WO-SHW-01 `AsciiFrame`/`SectionFrame`), and a whisper-contrast graph-paper `TextureBackdrop`.
   (3) Extend the landing's editorial rhythm (serif titles, masthead/eyebrow, numbered labels — from
-  `src/app/page.tsx` + `src/components/landing/*`) across the whole chrome via the kit. (4) Dedupe the runtime
-  readout (`src/components/runtime/runtime-fingerprint.tsx`) to ONE placement; delete the other three callers.
-  (5) In `src/components/layout/header/index.tsx` kill the breadcrumb→H1→editorial-title triplication (name
+  `src/app/page.tsx` + `src/composition/components/landing/*`) across the whole chrome via the kit. (4) Dedupe the runtime
+  readout (`src/composition/components/runtime/runtime-fingerprint.tsx`) to ONE placement; delete the other three callers.
+  (5) In `src/composition/components/layout/header/index.tsx` kill the breadcrumb→H1→editorial-title triplication (name
   once). (6) Decide framer-motion: DROP it from `packages/showroom/package.json` (0 files use it; spec motion
   is CSS + View Transitions) or document a deliberate adoption — log the decision. Gate: grep proves zero
   non-grayscale chrome literals (product windows / color-token page / D3 allowlisted); one readout + one title
@@ -300,7 +300,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   (`Avatar`, `Badge`…) — nothing is rendered until you drill into a detail page. "A prospect sees paragraphs
   and chip lists, never a rendered Button/Table/Card." The essay is thoughtful architecture documentation; it
   does not sell (audit IA problem #1: one middle-ground template serves neither prospect nor developer). The
-  raw material already exists: `packages/showroom/src/components/live-component-showcase/index.tsx`
+  raw material already exists: `packages/showroom/src/composition/components/live-component-showcase/index.tsx`
   (`LiveComponentShowcase`) renders real components, and WO-ENG-02 delivers the real per-component variant +
   state galleries this WO arranges into the blueprint grid. Index entrypoints verified at
   `packages/showroom/src/app/(docs)/{foundations,primitives,patterns,structures,surfaces}/page.tsx`, driven by
@@ -327,7 +327,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   `packages/showroom/src/app/(docs)/patterns/page.tsx`,
   `packages/showroom/src/app/(docs)/structures/page.tsx`,
   `packages/showroom/src/app/(docs)/surfaces/page.tsx`,
-  `packages/showroom/src/components/live-component-showcase/**`,
+  `packages/showroom/src/composition/components/live-component-showcase/**`,
   `packages/showroom/src/app/(docs)/primitives/[category]/[component]/live-preview.tsx` (drop `CATEGORY_ACCENTS`),
   `packages/showroom/src/data/registry/**` (read).
 - **Acceptance gate** — All five index pages render LIVE components above the fold (zero index pages showing
@@ -346,7 +346,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   ORDERING LAW: never run concurrently with WO-ENG-02 in the same tree; whichever lands second re-verifies the
   galleries. (1) On each of `packages/showroom/src/app/(docs)/{foundations,primitives,patterns,structures,
   surfaces}/page.tsx`, lead with a dense monochrome blueprint grid of LIVE components (reuse
-  `src/components/live-component-showcase/index.tsx` + the WO-ENG-02 galleries, framed with WO-SHW-01
+  `src/composition/components/live-component-showcase/index.tsx` + the WO-ENG-02 galleries, framed with WO-SHW-01
   `AsciiFrame`/`SectionFrame`/`CropMarks`, driven from `src/data/registry/`). (2) Collapse the essay (metrics
   snapshot / "how to read" / "browse by job" / escalation guide) into a secondary "architecture notes"
   disclosure. (3) Remove the browse-layer chromatic tints (`CATEGORY_ACCENTS` in
@@ -457,7 +457,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
 - **Why** — Spec section 10.3 ("Two paths: a cinematic guided TOUR mode for prospects… vs the developer
   registry path") + section 7 (the three doors). Audit top offender #5 + section 3.4 + IA problems #1/#3:
   "The strongest commercial proof is the least discoverable" — the real product screens
-  (`packages/showroom/src/components/demos/{platform,bithire,evnto}/`: a live Operations dashboard 128 /
+  (`packages/showroom/src/composition/components/demos/{platform,bithire,evnto}/`: a live Operations dashboard 128 /
   3,842 / 14 flags / 99.97%, recruiter cockpit, pipeline kanban, interview scorecard) live only at
   `/verticals/*`, "sandwiched between a heavy essay header and a long 'Category routes' registry tail"
   (`packages/showroom/src/app/(docs)/verticals/vertical-category-appendix.tsx`,
@@ -475,7 +475,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   2. Developer path: keep Cmd+K (the audited strength) as the lookup spine and wire the prop playgrounds /
      instant-copy TSX on the blueprint sheets; the two paths are explicitly separate entrances, not one
      middle-ground template.
-  3. Promote the proof: un-bury `packages/showroom/src/components/demos/{platform,bithire,evnto}/` — strip the
+  3. Promote the proof: un-bury `packages/showroom/src/composition/components/demos/{platform,bithire,evnto}/` — strip the
      essay header + the "Category routes" registry tail
      (`packages/showroom/src/app/(docs)/verticals/vertical-category-appendix.tsx`,
      `vertical-showcase-shell.tsx`, `page.tsx`) so each vertical opens directly on the product moments; add a
@@ -494,11 +494,11 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   `packages/showroom/src/app/(docs)/verticals/vertical-showcase-shell.tsx`,
   `packages/showroom/src/app/(docs)/verticals/vertical-category-appendix.tsx`,
   `packages/showroom/src/app/(docs)/verticals/{platform,bithire,evnto}/[category]/page.tsx`,
-  `packages/showroom/src/components/demos/**` (promote, frame in `ProductWindow`),
-  `packages/showroom/src/app/page.tsx` + `packages/showroom/src/components/landing/**` (landing proof hook +
+  `packages/showroom/src/composition/components/demos/**` (promote, frame in `ProductWindow`),
+  `packages/showroom/src/app/page.tsx` + `packages/showroom/src/composition/components/landing/**` (landing proof hook +
   "In production" entry), a tour-mode component/route under `packages/showroom/src/app/(docs)/**`, a shared
-  three-doors footer under `packages/showroom/src/components/layout/**`,
-  `packages/showroom/src/components/layout/{search,header}/**` (keep Cmd+K as the developer spine).
+  three-doors footer under `packages/showroom/src/composition/components/layout/**`,
+  `packages/showroom/src/composition/components/layout/{search,header}/**` (keep Cmd+K as the developer spine).
 - **Acceptance gate** — `pnpm --filter @rottay/showroom run typecheck` + `run build` green; the tour runs
   through six skippable stops (and collapses to a static chapter list under reduced motion); the vertical
   product moments open directly (no essay header / no registry-tail sandwich) and are reachable from the
@@ -519,7 +519,7 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   architecture stops), View-Transition/scroll choreography between stops, keyboard skip, collapsing to a
   static chapter list under `prefers-reduced-motion`. (2) Developer path: keep Cmd+K as the lookup spine +
   wire prop playgrounds/instant-copy TSX on the sheets — two explicitly separate entrances. (3) Promote the
-  proof: un-bury `packages/showroom/src/components/demos/{platform,bithire,evnto}/`; strip the essay header +
+  proof: un-bury `packages/showroom/src/composition/components/demos/{platform,bithire,evnto}/`; strip the essay header +
   "Category routes" tail (`src/app/(docs)/verticals/vertical-category-appendix.tsx`, `vertical-showcase-shell.
   tsx`, `page.tsx`) so each vertical opens on the product moments; add a landing hook + a top-level
   "In production" entry; render the screens inside WO-SHW-01 `ProductWindow` frames. (4) Three-doors footer
@@ -573,23 +573,23 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   1. Dimension lines (the flagship): a "blueprint mode" toggle on any demo that overlays real measurement lines
      — spacing, radii, hit areas — drawn from the LIVE component and labeled with the actual `--ds-*` token name
      and its resolved value (read via `getComputedStyle`), deepening the WO-SHW-04 token x-ray; a showroom
-     overlay component under `packages/showroom/src/components/blueprint/dimension-lines/**`, monochrome,
+     overlay component under `packages/showroom/src/composition/components/blueprint/dimension-lines/**`, monochrome,
      `prefers-reduced-motion`-aware.
   2. Keyboard-map diagrams: each blueprint sheet includes an ASCII keyboard-flow diagram
      (tab/enter/escape/arrows) generated from the component's real behavior, on the kit `AsciiDiagram`, with a
-     real text description (`packages/showroom/src/components/blueprint/keyboard-map/**`).
+     real text description (`packages/showroom/src/composition/components/blueprint/keyboard-map/**`).
   3. Shareable playground state + part-number jumps: serialize prop configurations into the URL (send a
      configured component to a colleague) in the playground/prop-table surfaces; teach Cmd+K to jump to a sheet
-     by part number (`RT-XXX-NNN`) — `packages/showroom/src/components/layout/search/**` + the playground
+     by part number (`RT-XXX-NNN`) — `packages/showroom/src/composition/components/layout/search/**` + the playground
      components.
   4. Compare drawer: pin two or three components/variants side by side
-     (`packages/showroom/src/components/compare-drawer/**`), monochrome chrome, the live components as framed
+     (`packages/showroom/src/composition/components/compare-drawer/**`), monochrome chrome, the live components as framed
      product windows.
   5. Personality dials, showroom-wide: promote the WO-SHW-04 tenant-lens BrandTheme dials (motion/density
      personality) to a showroom-wide control in the showroom context
-     (`packages/showroom/src/components/showroom-context/**`) so the WHOLE showroom responds in real time.
+     (`packages/showroom/src/composition/components/showroom-context/**`) so the WHOLE showroom responds in real time.
   6. Coverage wall: the honest engines x components matrix with per-cell test count, an axe-verified a11y badge,
-     and bundle size (`packages/showroom/src/components/coverage-wall/**`), fed by a generated data file
+     and bundle size (`packages/showroom/src/composition/components/coverage-wall/**`), fed by a generated data file
      (`scripts/generate-coverage-wall.mjs` writing a checked-in JSON) — no faked cells.
   7. Theme export: the theme builder (`packages/showroom/src/app/(docs)/playground/theme-builder/**`) exports
      the current BrandTheme as TS and as DTCG JSON — walk out with your brand in a file.
@@ -597,9 +597,9 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
      component through its states in sequence on hover (one cycle, then rest); instant/static under
      `prefers-reduced-motion`.
   9. Terminal changelog: DS releases as a typed terminal feed on the kit `TerminalBlock`
-     (`packages/showroom/src/components/terminal-changelog/**`), fed by a real changelog source.
+     (`packages/showroom/src/composition/components/terminal-changelog/**`), fed by a real changelog source.
   10. Teaching hero: the landing's spotlight component (`packages/showroom/src/app/page.tsx` +
-     `src/components/landing/**`) narrates its own interactions ("you just triggered `--ds-motion-fast` /
+     `src/composition/components/landing/**`) narrates its own interactions ("you just triggered `--ds-motion-fast` /
      ease-out") — the token system teaching itself.
   11. 11.0 baseline: in-brand monochrome ASCII-framed OG cards (`packages/showroom/src/app/opengraph-image.tsx`
      + per-route), an ASCII-art 404 (`packages/showroom/src/app/not-found.tsx`), print stylesheets for the
@@ -611,17 +611,17 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   13. Sighted before/after gallery at 1280 + 360 under both tenant palettes (a dark-surface tenant + a
      light-surface tenant); owner approves the signature moments (blueprint dimension lines, showroom-wide
      personality dials, the coverage wall, the teaching hero) at the target 10/10.
-- **Files** — `packages/showroom/src/components/blueprint/{dimension-lines,keyboard-map}/**` (new),
-  `packages/showroom/src/components/compare-drawer/**` (new),
-  `packages/showroom/src/components/coverage-wall/**` (new),
-  `packages/showroom/src/components/terminal-changelog/**` (new),
-  `packages/showroom/src/components/showroom-context/**` (showroom-wide personality dials),
-  `packages/showroom/src/components/live-component-showcase/**` (hover state-cycles),
-  `packages/showroom/src/components/layout/search/**` (part-number Cmd+K jumps),
+- **Files** — `packages/showroom/src/composition/components/blueprint/{dimension-lines,keyboard-map}/**` (new),
+  `packages/showroom/src/composition/components/compare-drawer/**` (new),
+  `packages/showroom/src/composition/components/coverage-wall/**` (new),
+  `packages/showroom/src/composition/components/terminal-changelog/**` (new),
+  `packages/showroom/src/composition/components/showroom-context/**` (showroom-wide personality dials),
+  `packages/showroom/src/composition/components/live-component-showcase/**` (hover state-cycles),
+  `packages/showroom/src/composition/components/layout/search/**` (part-number Cmd+K jumps),
   `packages/showroom/src/app/(docs)/primitives/[category]/[component]/**` + the pattern/structure/surface detail
   pages (blueprint-mode + keyboard-map on the sheets),
   `packages/showroom/src/app/(docs)/playground/theme-builder/**` (TS + DTCG export),
-  `packages/showroom/src/app/page.tsx` + `src/components/landing/**` (teaching hero),
+  `packages/showroom/src/app/page.tsx` + `src/composition/components/landing/**` (teaching hero),
   `packages/showroom/src/app/{opengraph-image.tsx,not-found.tsx}` + the blueprint print CSS, a privacy-friendly
   analytics seam under `packages/showroom/src/**`, `scripts/generate-coverage-wall.mjs` (+ its checked-in JSON),
   `packages/showroom/src/data/registry/**` (read — part numbers, token lists, coverage data).
@@ -651,19 +651,19 @@ WO-SHW-05 close (blueprint spec-sheets, the lenses, and the tour/promotion/doors
   edits `packages/showroom` broadly — never run concurrently with WO-ENG-02 in the same tree; re-verify its
   galleries + the WO-SHW-04 lenses still render. (1) Blueprint mode (the flagship): a toggle drawing real
   dimension lines on any demo — spacing, radii, hit areas — labeled with the actual `--ds-*` token + resolved
-  value (`getComputedStyle`), deepening the token x-ray (`src/components/blueprint/dimension-lines/**`). (2)
+  value (`getComputedStyle`), deepening the token x-ray (`src/composition/components/blueprint/dimension-lines/**`). (2)
   ASCII keyboard-map diagrams per sheet from real tab/enter/escape/arrow behavior on the kit `AsciiDiagram`
-  (`src/components/blueprint/keyboard-map/**`). (3) Serialize prop config into shareable playground URLs +
-  part-number (`RT-XXX-NNN`) Cmd+K jumps (`src/components/layout/search/**` + playground). (4) A compare drawer
-  pinning 2-3 components/variants (`src/components/compare-drawer/**`). (5) Showroom-wide BrandTheme personality
-  dials (motion/density) in `src/components/showroom-context/**` — the WHOLE showroom responds. (6) A coverage
+  (`src/composition/components/blueprint/keyboard-map/**`). (3) Serialize prop config into shareable playground URLs +
+  part-number (`RT-XXX-NNN`) Cmd+K jumps (`src/composition/components/layout/search/**` + playground). (4) A compare drawer
+  pinning 2-3 components/variants (`src/composition/components/compare-drawer/**`). (5) Showroom-wide BrandTheme personality
+  dials (motion/density) in `src/composition/components/showroom-context/**` — the WHOLE showroom responds. (6) A coverage
   wall (engines x components; per-cell test count, axe a11y badge, bundle size) from a generated checked-in JSON
-  (`scripts/generate-coverage-wall.mjs`) — no faked cells (`src/components/coverage-wall/**`). (7) Theme builder
+  (`scripts/generate-coverage-wall.mjs`) — no faked cells (`src/composition/components/coverage-wall/**`). (7) Theme builder
   exports BrandTheme TS + DTCG JSON (`src/app/(docs)/playground/theme-builder/**`). (8) Gallery hover
   state-cycles (one cycle then rest; static under reduced motion) via `live-component-showcase/**`. (9) A
-  terminal changelog of DS releases on `TerminalBlock` (`src/components/terminal-changelog/**`). (10) A teaching
+  terminal changelog of DS releases on `TerminalBlock` (`src/composition/components/terminal-changelog/**`). (10) A teaching
   hero: the landing spotlight narrates its own interactions ("you just triggered `--ds-motion-fast`") —
-  `src/app/page.tsx` + `src/components/landing/**`. (11) 11.0 baseline: in-brand mono OG
+  `src/app/page.tsx` + `src/composition/components/landing/**`. (11) 11.0 baseline: in-brand mono OG
   (`src/app/opengraph-image.tsx`), ASCII 404 (`src/app/not-found.tsx`), print stylesheets for the blueprint
   sheets, LCP < 1.5s / CLS = 0 (reserve space, static-generate, subset fonts, lazy-mount), privacy-friendly
   analytics (no PII, no third-party beacon). Gate: `pnpm --filter @rottay/showroom run typecheck` + `run build`

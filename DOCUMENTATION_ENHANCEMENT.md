@@ -1,5 +1,10 @@
 # Documentation Enhancement Tracking
 
+> [!WARNING]
+> Tracker histórico. Las rutas y estados debajo no son el inventario canónico
+> actual. Ver [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) y
+> [`packages/core/docs/TAXONOMY.generated.md`](packages/core/docs/TAXONOMY.generated.md).
+
 ## Overview
 
 This document tracks the progress of enhancing documentation across all components in the Rottay Design System. Each component needs professional-grade JSDoc documentation with:
@@ -13,7 +18,7 @@ This document tracks the progress of enhancing documentation across all componen
 
 ## Reference Standard
 
-Use `packages/core/src/components/primitives/feedback/Drawer/` as the gold standard. All files there are fully documented.
+Use `packages/core/src/ui/primitives/feedback/Drawer/` as the gold standard. All files there are fully documented.
 
 ---
 

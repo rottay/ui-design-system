@@ -51,14 +51,14 @@ Measure the computed value in the browser before writing any rule that touches t
 
 ### N4. Standing decisions
 
-- Skin homes: engine files → `tokens/css/engines/{modern,rustic}/skin/<component>.css`; the
-  compounds (Menu's 4, Stepper's 2, Breadcrumb's Item) → `tokens/css/components/skin/
+- Skin homes: engine files → `foundation/tokens/css/runtime/engines/{modern,rustic}/skin/<component>.css`; the
+  compounds (Menu's 4, Stepper's 2, Breadcrumb's Item) → `foundation/tokens/css/presentation/components/skin/
   <component>-compounds.css`.
 - The DaisyUI structural classes stay (`daisy.classConsumers` is a decrease-only ratchet, not
   a target of this batch). Where a DaisyUI class is a personality/theme hook, the same law as
   the feedback batch applies: a border must stay a SHORTHAND, never split into longhands.
 - Almost every first-party compound BEM class in this family is a dead CSS hook (zero
-  references in `tokens/css/`). They may be kept as scope classes — but every scope class must
+  references in `foundation/tokens/css/`). They may be kept as scope classes — but every scope class must
   be grep-verified free across CSS **and** CSS-in-JS (`.ts`/`.tsx`), per the `ds-select` and
   `rottay-progress` collisions.
 - Anchor's engines carry the retired `Hermes`/`Apollo`/`Titan` names in runtime `displayName`

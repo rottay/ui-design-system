@@ -31,8 +31,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      '@types': resolve(__dirname, 'src/contracts'),
-      '@components': resolve(__dirname, 'src/components'),
+      '@types': resolve(__dirname, 'src/foundation/contracts'),
+      '@ui': resolve(__dirname, 'src/ui'),
     },
   },
   build: {
@@ -43,26 +43,26 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
-        server: resolve(__dirname, 'src/server.ts'),
-        icons: resolve(__dirname, 'src/icon-entry.ts'),
-        'icons-corpus': resolve(__dirname, 'src/icon-corpus-entry.ts'),
-        'icons-foundation': resolve(__dirname, 'src/icon-foundation-entry.ts'),
-        'icons-bithire': resolve(__dirname, 'src/icon-bithire-entry.ts'),
-        'icons-identity': resolve(__dirname, 'src/icon-identity-entry.ts'),
-        'icons-intelligence': resolve(__dirname, 'src/icon-intelligence-entry.ts'),
-        'icons-operations': resolve(__dirname, 'src/icon-operations-entry.ts'),
-        marks: resolve(__dirname, 'src/mark-entry.ts'),
-        pictograms: resolve(__dirname, 'src/pictogram-entry.ts'),
-        charts: resolve(__dirname, 'src/chart-entry.ts'),
-        'chart-spec': resolve(__dirname, 'src/chart-spec-entry.ts'),
-        'chart-access': resolve(__dirname, 'src/chart-access-entry.ts'),
-        'chart-renderers': resolve(__dirname, 'src/chart-renderers-entry.ts'),
-        motion: resolve(__dirname, 'src/motion-entry.ts'),
-        effects: resolve(__dirname, 'src/effects-entry.ts'),
-        spatial: resolve(__dirname, 'src/spatial-entry.ts'),
-        'spatial-spec': resolve(__dirname, 'src/spatial-spec-entry.ts'),
-        eslint: resolve(__dirname, 'src/eslint.ts'),
-        commercial: resolve(__dirname, 'src/commercial.ts'),
+        server: resolve(__dirname, 'src/entrypoints/server/index.ts'),
+        icons: resolve(__dirname, 'src/entrypoints/icons/index.ts'),
+        'icons-corpus': resolve(__dirname, 'src/entrypoints/icons/corpus/index.ts'),
+        'icons-foundation': resolve(__dirname, 'src/entrypoints/icons/foundation/index.ts'),
+        'icons-bithire': resolve(__dirname, 'src/entrypoints/icons/bithire/index.ts'),
+        'icons-identity': resolve(__dirname, 'src/entrypoints/icons/identity/index.ts'),
+        'icons-intelligence': resolve(__dirname, 'src/entrypoints/icons/intelligence/index.ts'),
+        'icons-operations': resolve(__dirname, 'src/entrypoints/icons/operations/index.ts'),
+        marks: resolve(__dirname, 'src/entrypoints/graphics/marks/index.ts'),
+        pictograms: resolve(__dirname, 'src/entrypoints/graphics/pictograms/index.ts'),
+        charts: resolve(__dirname, 'src/entrypoints/charts/index.ts'),
+        'chart-spec': resolve(__dirname, 'src/entrypoints/charts/spec/index.ts'),
+        'chart-access': resolve(__dirname, 'src/entrypoints/charts/access/index.ts'),
+        'chart-renderers': resolve(__dirname, 'src/entrypoints/charts/renderers/index.ts'),
+        motion: resolve(__dirname, 'src/entrypoints/graphics/motion/index.ts'),
+        effects: resolve(__dirname, 'src/entrypoints/graphics/effects/index.ts'),
+        spatial: resolve(__dirname, 'src/entrypoints/graphics/spatial/index.ts'),
+        'spatial-spec': resolve(__dirname, 'src/entrypoints/graphics/spatial/spec/index.ts'),
+        eslint: resolve(__dirname, 'src/entrypoints/eslint/index.ts'),
+        commercial: resolve(__dirname, 'src/entrypoints/commercial/index.ts'),
         // Only real package.json exports are listed as entries.
         // Component code is included via the root barrel and
         // preserveModules handles per-file output automatically.
@@ -94,7 +94,7 @@ export default defineConfig({
         // that points at a `.js` file inside a `type: module` package, which
         // breaks packed CJS consumers. Keeping the supplier inside the focused
         // entry avoids exposing that upstream packaging defect while the root
-        // entry remains supplier-free because it cannot reach icon-entry.ts.
+        // entry remains supplier-free because it cannot reach the focused icon entrypoint.
         /^lucide-react\/.*/,
         /^d3-.*/,
         /^motion\/.*/,

@@ -20,8 +20,15 @@ import {
 } from './generate-semantic-icons.mjs';
 
 const CORE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const CORPUS_PATH = resolve(CORE_ROOT, 'src/icons/semantic/corpus/manifest.json');
-const ADAPTER_PATH = resolve(CORE_ROOT, 'src/icons/semantic/adapters/phosphor-2.1.10.json');
+const ICON_OWNER_ROOT = resolve(CORE_ROOT, 'src/graphics/icons');
+const CORPUS_PATH = resolve(
+  ICON_OWNER_ROOT,
+  'foundation/semantic/corpus/manifest.json',
+);
+const ADAPTER_PATH = resolve(
+  ICON_OWNER_ROOT,
+  'foundation/semantic/adapters/phosphor-2.1.10.json',
+);
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
@@ -38,22 +45,23 @@ async function listFiles(root, current = root) {
   return files;
 }
 
-test('authored corpus is the exact 261-role v5 governed set', async () => {
+test('authored corpus is the exact 263-role v6 governed set', async () => {
   const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
-  assert.equal(corpus.entries.length, 261);
+  assert.equal(corpus.entries.length, 263);
   for (const [pack, count] of Object.entries(ICON_PACK_COUNTS)) {
     assert.equal(corpus.entries.filter((entry) => entry.pack === pack).length, count);
   }
   assert.equal(corpus.entries.filter(({ status }) => status === 'stable').length, 50);
-  assert.equal(corpus.entries.filter(({ status }) => status === 'candidate').length, 211);
+  assert.equal(corpus.entries.filter(({ status }) => status === 'candidate').length, 213);
   assert.equal(corpus.entries.filter(({ since }) => since === 4).length, 76);
   assert.equal(corpus.entries.filter(({ since }) => since === 5).length, 135);
+  assert.equal(corpus.entries.filter(({ since }) => since === 6).length, 2);
   assert.deepEqual(
     corpus.entries.filter(({ status }) => status === 'stable').map(({ id }) => id),
     EXPECTED_COMPAT_V3_IDS,
   );
-  assert.equal(new Set(corpus.entries.map(({ id }) => id)).size, 261);
-  assert.equal(new Set(corpus.entries.map(({ componentName }) => componentName)).size, 261);
+  assert.equal(new Set(corpus.entries.map(({ id }) => id)).size, 263);
+  assert.equal(new Set(corpus.entries.map(({ componentName }) => componentName)).size, 263);
   for (const entry of corpus.entries) {
     assert.equal(entry.componentName, componentNameForId(entry.id));
     assert.equal(roleFileName(entry.id), `${entry.id.replaceAll('.', '-')}.ts`);
@@ -64,16 +72,16 @@ test('Phosphor 2.1.10 adapter is ordered, exhaustive, and locally resolvable', a
   const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
   const adapter = validateAdapterManifest(await readJson(ADAPTER_PATH), corpus);
   const result = await validateLocalPhosphor(adapter);
-  assert.deepEqual(result, { checked: 261, packageVersion: '2.1.10' });
+  assert.deepEqual(result, { checked: 263, packageVersion: '2.1.10' });
   assert.deepEqual(adapter.entries.map(({ id }) => id), corpus.entries.map(({ id }) => id));
-  assert.equal(new Set(adapter.entries.map(({ module }) => module)).size, 261);
-  assert.equal(new Set(adapter.entries.map(({ exportName }) => exportName)).size, 261);
+  assert.equal(new Set(adapter.entries.map(({ module }) => module)).size, 263);
+  assert.equal(new Set(adapter.entries.map(({ exportName }) => exportName)).size, 263);
 });
 
 test('stable adapter entries preserve the current 50-name compatibility mapping', async () => {
   const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
   const adapter = validateAdapterManifest(await readJson(ADAPTER_PATH), corpus);
-  const source = await readFile(resolve(CORE_ROOT, 'src/icons/adapters/phosphor-ssr.tsx'), 'utf8');
+  const source = await readFile(resolve(ICON_OWNER_ROOT, 'runtime/adapters/phosphor-ssr/index.tsx'), 'utf8');
   const importsByExport = new Map(
     [...source.matchAll(/^import \{ (\w+) \} from '([^']+)';$/gmu)]
       .map((match) => [match[1], match[2]]),
@@ -99,8 +107,8 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
   const first = buildGeneratedFiles(corpus, adapter);
   const second = buildGeneratedFiles(structuredClone(corpus), structuredClone(adapter));
   assert.deepEqual([...first], [...second]);
-  assert.equal(first.size, 270);
-  assert.equal([...first.keys()].filter((path) => path.startsWith('roles/')).length, 261);
+  assert.equal(first.size, 272);
+  assert.equal([...first.keys()].filter((path) => path.startsWith('roles/')).length, 263);
   assert.match(
     first.get('roles/action-add.ts'),
     /import \{ PlusIcon as SsrGlyph \} from "@phosphor-icons\/react\/dist\/ssr\/Plus";/u,
@@ -140,7 +148,7 @@ test('generated public source and declarations expose only supplier-free compone
     files.get('packs/identity.tsx'),
     files.get('packs/intelligence.tsx'),
     files.get('packs/operations.tsx'),
-    await readFile(resolve(CORE_ROOT, 'src/icons/semantic/runtime/create-semantic-icon.tsx'), 'utf8'),
+    await readFile(resolve(ICON_OWNER_ROOT, 'runtime/semantic/create-icon/index.tsx'), 'utf8'),
   ];
   for (const source of publicSources) {
     assert.doesNotMatch(source, /@phosphor|Phosphor(?:Icon|IconWeight)|LucideIcon/iu);
@@ -168,13 +176,13 @@ test('generated public source and declarations expose only supplier-free compone
         '--jsx', 'react-jsx',
         '--skipLibCheck',
         '--strict',
-        resolve(CORE_ROOT, 'src/icons/semantic/generated/index.ts'),
+        resolve(ICON_OWNER_ROOT, 'presentation/semantic/generated/index.ts'),
       ],
       { cwd: CORE_ROOT, encoding: 'utf8', stdio: 'pipe' },
     );
-    const declarationFiles = (await listFiles(resolve(declarationRoot, 'icons/semantic')))
+    const declarationFiles = (await listFiles(resolve(declarationRoot, 'graphics/icons')))
       .filter((path) => path.endsWith('.d.ts'));
-    assert.ok(declarationFiles.length >= 269);
+    assert.ok(declarationFiles.length >= 271);
     for (const path of declarationFiles) {
       const declaration = await readFile(path, 'utf8');
       assert.doesNotMatch(declaration, /@phosphor|Phosphor(?:Icon|IconWeight)|LucideIcon/iu, path);
@@ -200,7 +208,7 @@ test('a named pack import tree-shakes to one exact supplier glyph', () => {
     {
       cwd: CORE_ROOT,
       encoding: 'utf8',
-      input: 'import { SecurityAlertIcon } from "./src/icon-identity-entry.ts"; console.log(SecurityAlertIcon);',
+      input: 'import { SecurityAlertIcon } from "./src/entrypoints/icons/identity/index.ts"; console.log(SecurityAlertIcon);',
       stdio: ['pipe', 'pipe', 'pipe'],
     },
   );

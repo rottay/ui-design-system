@@ -1,15 +1,15 @@
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/composition/components/playground/surface-tokens';
 import {
   CodeBlock,
   PropTable,
   type PropDefinition,
-} from '@/components/playground';
+} from '@/composition/components/playground';
 import {
   chartFamilies,
   charts,

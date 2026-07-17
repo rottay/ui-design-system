@@ -1,6 +1,6 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
   AreaChart,
@@ -9,12 +9,12 @@ import {
   PieChart,
   ScatterChart,
 } from '@rottay/design-system';
-import { useShowroomRuntime } from '@/components/showroom-context';
+import { useShowroomRuntime } from '@/composition/components/showroom-context';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/composition/components/playground/surface-tokens';
 
 const CARD_SURFACE = SHOWROOM_SURFACES.surface;
 const PANEL_SURFACE = SHOWROOM_SURFACES.subtle;

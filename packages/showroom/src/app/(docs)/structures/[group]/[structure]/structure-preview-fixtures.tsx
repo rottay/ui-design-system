@@ -3,8 +3,10 @@
 import { useState, type ReactNode } from 'react';
 import {
   ActiveFiltersBar,
+  ActionDock,
   ActivityCompact,
   Badge,
+  BottomTabBar,
   Box,
   Button,
   CollectionHeader,
@@ -25,6 +27,7 @@ import {
   Input,
   LoadingOverlay,
   MetricsMinimal,
+  MobileHeader,
   MoreFieldsToggle,
   RecordActionBar,
   RecordField,
@@ -1278,6 +1281,75 @@ function DashboardInsightsFamilyPreview() {
   );
 }
 
+function MobileHeaderPreview() {
+  return (
+    <Box
+      style={{
+        maxWidth: 420,
+        overflow: 'hidden',
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border-secondary)',
+      }}
+    >
+      <MobileHeader
+        title="Candidate review"
+        onBack={noop}
+        rightActions={<Button size="sm" variant="ghost">Share</Button>}
+      />
+    </Box>
+  );
+}
+
+function ActionDockPreview() {
+  return (
+    <Box
+      style={{
+        maxWidth: 480,
+        padding: 16,
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border-secondary)',
+        background: 'var(--ds-color-bg-secondary)',
+      }}
+    >
+      <Text size="sm" style={{ display: 'block', marginBottom: 16 }}>
+        Review changes before publishing this workspace.
+      </Text>
+      <ActionDock mode="sticky" style={{ position: 'relative' }}>
+        <Button variant="secondary" style={{ flex: 1 }}>Save draft</Button>
+        <Button variant="primary" style={{ flex: 1 }}>Publish</Button>
+      </ActionDock>
+    </Box>
+  );
+}
+
+function BottomTabBarPreview() {
+  const [activeKey, setActiveKey] = useState('workspace');
+
+  return (
+    <Box
+      style={{
+        maxWidth: 420,
+        paddingTop: 48,
+        overflow: 'hidden',
+        borderRadius: 18,
+        border: '1px solid var(--ds-color-border-secondary)',
+        background: 'var(--ds-color-bg-secondary)',
+      }}
+    >
+      <BottomTabBar
+        activeKey={activeKey}
+        onChange={setActiveKey}
+        items={[
+          { key: 'workspace', label: 'Workspace', icon: <Users size={20} /> },
+          { key: 'activity', label: 'Activity', icon: <Activity size={20} />, badge: 3 },
+          { key: 'coverage', label: 'Coverage', icon: <Globe2 size={20} /> },
+        ]}
+        style={{ position: 'relative' }}
+      />
+    </Box>
+  );
+}
+
 function LoadingOverlayPreview() {
   return (
     <Box
@@ -1373,12 +1445,14 @@ function initialVisibleColumns() {
 }
 
 export const STRUCTURE_PREVIEWS: Record<string, ReactNode> = {
+  'mobile-header': <MobileHeaderPreview />,
   'collection-header': <CollectionHeaderPreview />,
   'dashboard-header': <DashboardHeaderPreview />,
   'detail-header': <DetailHeaderPreview />,
   'edit-header': <EditHeaderPreview />,
   'form-header': <FormHeaderPreview />,
   'active-filters-bar': <ActiveFiltersBarPreview />,
+  'action-dock': <ActionDockPreview />,
   'column-menu': <ColumnMenuPreview />,
   'export-button': <ExportButtonPreview />,
   'field-filters-panel': <FieldFiltersPanelPreview />,
@@ -1395,4 +1469,5 @@ export const STRUCTURE_PREVIEWS: Record<string, ReactNode> = {
   'data-terminal-card': <DataTerminalCardPreview />,
   'dashboard-insights': <DashboardInsightsFamilyPreview />,
   'loading-overlay': <LoadingOverlayPreview />,
+  'bottom-tab-bar': <BottomTabBarPreview />,
 };

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "mode": "finding-identity-subset-ratchet",
+    "physicalRoots": [
+      "foundation",
+      "infrastructure",
+      "graphics",
+      "ui",
+      "tooling"
+    ],
+    "classifiedSupportRoots": [
+      "entrypoints"
+    ],
+    "generated": "excluded by generated/ segment or generated-file header",
+    "tests": "must live directly in tests/, __tests__/ or __test__/; a container shared by 2+ productive sibling owners requires an aggregate index.ts(x)",
+    "entrypoints": "derived from Vite/releaseSync plus conventional index.ts; nested entrypoints live only in the classified entrypoints/ support root as folder/index units",
+    "localLayers": "foundation/kernel/contracts/policy/quality/spec/validation < runtime < composition/react < presentation < facade/public; ui/primitives < ui/patterns < ui/structures < ui/surfaces; inside one UI capability foundation/contracts < runtime < engines < presentation < compound",
+    "layerClosure": "an owner with two or more named layers has no unlayered capability peers; UI tier roots and infrastructure/runtime are explicit catalogs with a foundation support branch",
+    "physicalPaths": "directory segments cannot repeat adjacently; the retired generic root owner composition and generic authored owner segments _internal/internal/misc/shared/utils/hooks are forbidden"
+  },
+  "snapshot": {
+    "inventory": {
+      "totalFiles": 2914,
+      "sourceFiles": 2462,
+      "cssFiles": 426,
+      "authoredLeafModules": 0,
+      "productionIndexes": 1461,
+      "barrels": 197,
+      "implementationIndexes": 1264,
+      "ignoredByKind": {
+        "declaration": 1,
+        "entrypoint": 21,
+        "fixture": 3,
+        "generated": 272,
+        "story": 120,
+        "test": 583,
+        "test-support": 1
+      },
+      "rootEntrypoints": [
+        "entrypoints/charts/access/index.ts",
+        "entrypoints/charts/index.ts",
+        "entrypoints/charts/renderers/index.ts",
+        "entrypoints/charts/spec/index.ts",
+        "entrypoints/commercial/index.ts",
+        "entrypoints/eslint/index.ts",
+        "entrypoints/graphics/effects/index.ts",
+        "entrypoints/graphics/marks/index.ts",
+        "entrypoints/graphics/motion/index.ts",
+        "entrypoints/graphics/pictograms/index.ts",
+        "entrypoints/graphics/spatial/index.ts",
+        "entrypoints/graphics/spatial/spec/index.ts",
+        "entrypoints/icons/bithire/index.ts",
+        "entrypoints/icons/corpus/index.ts",
+        "entrypoints/icons/foundation/index.ts",
+        "entrypoints/icons/identity/index.ts",
+        "entrypoints/icons/index.ts",
+        "entrypoints/icons/intelligence/index.ts",
+        "entrypoints/icons/operations/index.ts",
+        "entrypoints/server/index.ts",
+        "index.ts"
+      ],
+      "findingsByRule": {},
+      "findingsByTopLevelScope": {}
+    },
+    "findings": {}
+  }
+}

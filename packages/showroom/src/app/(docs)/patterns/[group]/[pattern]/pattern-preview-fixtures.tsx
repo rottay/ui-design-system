@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import {
+  AdaptiveOverlay,
   AssistantStatusBadge,
   AssistantStatusIndicator,
   Avatar,
@@ -64,7 +65,7 @@ import {
   ToolCallCard,
   TypingIndicator,
 } from '@rottay/design-system';
-import PlatformUserListDemo from '@/components/demos/platform/user-list';
+import PlatformUserListDemo from '@/composition/components/demos/platform/user-list';
 
 export const SINGLE_RUNTIME_PATTERN_SLUGS = new Set([
   'command-palette',
@@ -1037,7 +1038,38 @@ function ShortcutsOverlayPreview() {
   );
 }
 
+function AdaptiveOverlayPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Stack spacing={12}>
+      <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+        The same feedback flow resolves to a modal, drawer, or bottom sheet for the active device class.
+      </Text>
+      <Button variant="primary" onClick={() => setOpen(true)}>
+        Open adaptive review
+      </Button>
+      <AdaptiveOverlay
+        open={open}
+        onOpenChange={setOpen}
+        title="Review workspace changes"
+        footer={(
+          <Flex gap={8} justify="end">
+            <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => setOpen(false)}>Confirm</Button>
+          </Flex>
+        )}
+      >
+        <Text size="sm">
+          Content and actions stay consistent while the overlay posture adapts to the viewport.
+        </Text>
+      </AdaptiveOverlay>
+    </Stack>
+  );
+}
+
 const PATTERN_PREVIEWS: Record<string, ReactNode> = {
+  'adaptive-overlay': <AdaptiveOverlayPreview />,
   'activity-log': (
     <PatternActivityLog
       activities={[

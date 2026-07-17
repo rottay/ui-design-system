@@ -1,6 +1,6 @@
 # WO-SKIN-06 checkpoint CK-C — workspace-chrome paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/`. Same channel scope as the
+All paths relative to `packages/core/src/ui/`. Same channel scope as the
 WO-SKIN-02/03/04/05 precedents (`wo-skin-04-navigation-inventory.md`): a "site" is an
 object-literal style key named `background*`, `border*`, `outline*`, `color`,
 `boxShadow`, `textShadow`, `fill`, `stroke`, `accentColor`, `filter`, `backdropFilter`,
@@ -56,7 +56,7 @@ PADDING/GAP/CONTROL_BG/CONTROL_BORDER/CONTROL_COLOR/DIVIDER`, twenty
 `FILTER_PILL_*` variables (bg/border/color/shadow/frame/hover/active/focus-ring/count
 variants), eleven `SEARCH_*` variables plus a `searchInputStyle()` helper, and
 `MOTION_FAST`/`EASE_OUT`/`TRANSITION`. **Of the 11 components in this checkpoint,
-exactly two import it**: `list-toolbar/engines/{modern,classic}.tsx` (the file that
+exactly two import it**: `list-toolbar/engines/{modern,classic}/index.tsx` (the file that
 defines the tokens, naturally) and `patterns/data/status-filter-pills/index.tsx`. The
 other nine — including `structures/workspace/saved-views-menu` and
 `patterns/data/saved-views` (both literal siblings of `list-toolbar`'s filter-pill
@@ -67,9 +67,9 @@ strings, and in most cases zero shared vocabulary with EACH OTHER either.**
 
 | file | imports `list-toolbar/tokens.ts`? | own pill/active-state recipe | vs. canonical `FILTER_PILL_ACTIVE_BG` (`color-mix(in srgb, var(--ds-color-primary) 8%, transparent)`) |
 |---|---|---|---|
-| `patterns/data/list-toolbar/engines/modern.tsx` | **yes** (defines it) | uses tokens directly | — reference implementation |
-| `patterns/data/list-toolbar/engines/classic.tsx` | **yes** | uses tokens directly | — reference implementation (excluded from the census by construction, per the WO-06 triage's stated method; noted in the list-toolbar section below, not separately detailed) |
-| `patterns/data/list-toolbar/engines/rustic.tsx` | n/a | **re-exports `classic`** — no distinct rustic implementation exists for this component | — |
+| `patterns/data/list-toolbar/engines/modern/index.tsx` | **yes** (defines it) | uses tokens directly | — reference implementation |
+| `patterns/data/list-toolbar/engines/classic/index.tsx` | **yes** | uses tokens directly | — reference implementation (excluded from the census by construction, per the WO-06 triage's stated method; noted in the list-toolbar section below, not separately detailed) |
+| `patterns/data/list-toolbar/engines/rustic/index.tsx` | n/a | **re-exports `classic`** — no distinct rustic implementation exists for this component | — |
 | `patterns/data/status-filter-pills/index.tsx` | **yes**, all 17 `FILTER_PILL_*`/`TRANSITION` names | uses tokens directly | — reference implementation |
 | `structures/workspace/search-command-bar/index.tsx` | no | voice-status badges: own `color-mix(in srgb, var(--ds-color-error) 8%, transparent)` etc., no pill concept | zero overlap — this is the checkpoint's closest-by-name sibling to `list-toolbar`'s own search input, and the two never converged |
 | `structures/workspace/active-filters-bar/index.tsx` | no | chip: `linear-gradient(180deg, color-mix(…primary 8%…), color-mix(…primary 5%…))`, border `color-mix(…primary 20%…)` | different shape entirely — a two-stop gradient, not a flat tint; canonical has no gradient variant |
@@ -79,9 +79,9 @@ strings, and in most cases zero shared vocabulary with EACH OTHER either.**
 | `structures/workspace/view-mode-switcher/index.tsx` | no | active button: `color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card))` | **identical formula to scope-switcher's gradient's dark stop** (14%/`surface-card`) — these two components independently arrived at (or copy-pasted) the same divergent recipe, distinct from both the canonical token and from each other's siblings in this table |
 | `structures/workspace/table-toolbar/index.tsx` | no | no pill/active-state concept at all (search + slots + divider only) | not comparable |
 | `structures/workspace/export-button/index.tsx` | no | no pill; dropdown item hover: flat `var(--ds-color-bg-hover, color-mix(…primary 5%, transparent))` | closest in SHAPE to canonical (flat tint, `transparent` base) but a different token name and a different percentage (5% vs 8%) |
-| `patterns/data/saved-views/engines/modern.tsx` | no | active pill: **solid** `background: var(--ds-color-primary)` with `color: var(--ds-color-primary-foreground)` | architecturally different, not just numerically — a solid high-contrast fill, not a translucent tint. Not reconcilable with `FILTER_PILL_ACTIVE_BG` by adjusting a percentage; it is a different design language (filled chip vs. tinted pill) |
-| `patterns/data/saved-views/engines/rustic.tsx` | no | active tab: `border-bottom: 2px solid var(--ds-color-primary)` (tab-underline, no background/color change on the label except a color swap) | not a pill at all — a browser-tab underline metaphor. Also diverges from its OWN modern sibling (see §3) |
-| `patterns/data/saved-views/engines/classic.tsx` | no | same tab-underline shape as rustic (`borderBottom`/`borderLeft` ternaries) | excluded from the census by construction, noted for completeness |
+| `patterns/data/saved-views/engines/modern/index.tsx` | no | active pill: **solid** `background: var(--ds-color-primary)` with `color: var(--ds-color-primary-foreground)` | architecturally different, not just numerically — a solid high-contrast fill, not a translucent tint. Not reconcilable with `FILTER_PILL_ACTIVE_BG` by adjusting a percentage; it is a different design language (filled chip vs. tinted pill) |
+| `patterns/data/saved-views/engines/rustic/index.tsx` | no | active tab: `border-bottom: 2px solid var(--ds-color-primary)` (tab-underline, no background/color change on the label except a color swap) | not a pill at all — a browser-tab underline metaphor. Also diverges from its OWN modern sibling (see §3) |
+| `patterns/data/saved-views/engines/classic/index.tsx` | no | same tab-underline shape as rustic (`borderBottom`/`borderLeft` ternaries) | excluded from the census by construction, noted for completeness |
 
 **Read of this table**: the "shared vocabulary" is real and well-designed, but adoption
 is 2-of-11 (list-toolbar owns it, status-filter-pills is the one genuine external
@@ -117,7 +117,7 @@ CK-C total (this report, counter + confirmed
 The exact broader total is presented as a range rather than a single number because
 this report's own reconciliation (per-component "Paint sites" sections above) found
 the mechanical counter's relationship to imperative writes inconsistent: it appears
-to credit them in some files (`saved-views/engines/rustic.tsx`: 46 object-literal
+to credit them in some files (`saved-views/engines/rustic/index.tsx`: 46 object-literal
 keys + 10 imperative writes = 56, matching the counter exactly) and not others
 (`structures/workspace/export-button/index.tsx`: 22 object-literal keys + 4
 imperative writes the counter's own reported total does not reflect). This was not
@@ -147,12 +147,12 @@ STATE-SELECTED, that must be deleted and folded into a `:hover`/`:focus`/
 
 | file | imperative sites | channels |
 |---|---:|---|
-| `patterns/data/saved-views/engines/rustic.tsx` | 10 | `background` (5 hover pairs on menu items + create button) |
-| `patterns/data/saved-views/engines/modern.tsx` | 4 | `borderColor`+`boxShadow` (2 focus/blur pairs, shared `inputFocusHandler`/`inputBlurStyleHandler`) |
-| `patterns/data/list-toolbar/engines/modern.tsx` | 2 | `boxShadow` (FilterButton's onFocus/onBlur, focus-ring compose) |
+| `patterns/data/saved-views/engines/rustic/index.tsx` | 10 | `background` (5 hover pairs on menu items + create button) |
+| `patterns/data/saved-views/engines/modern/index.tsx` | 4 | `borderColor`+`boxShadow` (2 focus/blur pairs, shared `inputFocusHandler`/`inputBlurStyleHandler`) |
+| `patterns/data/list-toolbar/engines/modern/index.tsx` | 2 | `boxShadow` (FilterButton's onFocus/onBlur, focus-ring compose) |
 | `structures/workspace/export-button/index.tsx` | 4 | `background` (2 hover pairs: dropdown-item hover + focus, both write the same channel) |
 | `patterns/data/status-filter-pills/index.tsx` | 6 | `background`+`borderColor` (hover pair) + `boxShadow` (focus/blur pair) |
-| `patterns/data/saved-views/engines/classic.tsx` | 2 (not detailed; excluded from census) | — |
+| `patterns/data/saved-views/engines/classic/index.tsx` | 2 (not detailed; excluded from census) | — |
 
 All of these are hover/focus state expressed as direct DOM mutation because the
 components render bare `<button>`/`<div>` elements with no CSS stylesheet backing

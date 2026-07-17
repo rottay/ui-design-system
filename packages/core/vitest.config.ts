@@ -25,7 +25,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    setupFiles: './src/_internal/testing/test-setup.ts',
+    setupFiles: './src/tooling/testing/setup/index.ts',
     css: true,
     pool: 'forks',
     // Each fork loads React + Ant Design + engine tree (~1-2 GB per worker).
@@ -55,7 +55,7 @@ export default defineConfig({
       },
       exclude: [
         'node_modules/',
-        'src/_internal/testing/test-setup.ts',
+        'src/tooling/testing/setup/index.ts',
         '**/*.stories.tsx',
         '**/*.d.ts',
         '**/*.md',

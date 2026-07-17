@@ -1,13 +1,13 @@
 import type { Preview } from '@storybook/react-vite'
-import { ThemeProvider } from '../src/runtime/theming';
-import { EngineProvider } from '../src/runtime/engines';
+import { ThemeProvider } from '../src/infrastructure/runtime/theming';
+import { EngineProvider } from '../src/infrastructure/runtime/engines';
 import type { EngineName } from '../src/contracts/engine';
 import React from 'react';
 
 // Import tenant CSS files
-import '../src/tokens/css/foundation/themes/default.css';
-import '../src/tokens/css/artifacts/rottay/index.css';
-import '../src/tokens/css/artifacts/bithire/index.css';
+import '../src/foundation/tokens/css/foundation/themes/default.css';
+import '../src/foundation/tokens/css/facade/artifacts/rottay/index.css';
+import '../src/foundation/tokens/css/facade/artifacts/bithire/index.css';
 
 // Storybook preview styles
 import './preview-styles.css';

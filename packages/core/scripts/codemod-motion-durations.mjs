@@ -14,7 +14,7 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const componentsDir = resolve(here, "../src/components");
+const componentsDir = resolve(here, "../src/ui");
 
 /** Nearest canon token for a duration in milliseconds. */
 function canonForMs(ms) {

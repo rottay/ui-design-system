@@ -1,9 +1,9 @@
 "use client";
 
-import { useShowroomRuntime } from "@/components/showroom-context";
-import { PipelineKanbanDemo } from "@/components/demos/bithire/pipeline-kanban";
-import { RecruiterDashboardDemo } from "@/components/demos/bithire/recruiter-dashboard";
-import { ScorecardDemo } from "@/components/demos/bithire/scorecard";
+import { useShowroomRuntime } from "@/composition/components/showroom-context";
+import { PipelineKanbanDemo } from "@/composition/components/demos/bithire/pipeline-kanban";
+import { RecruiterDashboardDemo } from "@/composition/components/demos/bithire/recruiter-dashboard";
+import { ScorecardDemo } from "@/composition/components/demos/bithire/scorecard";
 import { VerticalShowcaseShell, type VerticalCategoryCard } from "../vertical-showcase-shell";
 import {
   BarChart3Icon,

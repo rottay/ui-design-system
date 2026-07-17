@@ -46,13 +46,13 @@ R9 depends on R8.
 | # | Check | File | Pass Criteria |
 |---|-------|------|---------------|
 | 1 | TENANT_MODEL.md canonical | `docs/TENANT_MODEL.md` | Two tenant classes, merge chain, removed fields documented |
-| 2 | BrandTheme contract stable | `contracts/themes/index.ts` | No TODO/FIXME for structural changes |
-| 3 | TenantAppearance matches TENANT_MODEL | `contracts/themes/index.ts` | Removed/narrowed fields match doc table exactly |
-| 4 | Rottay brand theme exports cleanly | `tokens/ts/brand-themes/rottay.ts` | All BrandTheme fields populated |
+| 2 | BrandTheme contract stable | `foundation/contracts/composition/tenants/themes/index.ts` | No TODO/FIXME for structural changes |
+| 3 | TenantAppearance matches TENANT_MODEL | `foundation/contracts/composition/tenants/themes/index.ts` | Removed/narrowed fields match doc table exactly |
+| 4 | Rottay brand theme exports cleanly | `foundation/tokens/ts/presentation/brand-themes/platform/index.ts` | All BrandTheme fields populated |
 | 5 | 4 bundled tenants listed | Brand-themes index + TENANT_MODEL | rottay, bithire, evnto have themes; themanagementmiami documented as missing |
 | 6 | North-star visual direction locked | Verbal/doc | Dark-first, low-gloss, hierarchy through weight not decoration |
-| 7 | Card token surface stable | `tokens/css/components/card.css` | 90+ tokens, no pending removal |
-| 8 | Statistic tokens in Rottay artifact | `tokens/css/artifacts/rottay/index.css` | `--ds-statistic-title-color`, `--ds-statistic-value-color` etc. defined |
+| 7 | Card token surface stable | `foundation/tokens/css/presentation/components/card.css` | 90+ tokens, no pending removal |
+| 8 | Statistic tokens in Rottay artifact | `foundation/tokens/css/facade/artifacts/rottay/index.css` | `--ds-statistic-title-color`, `--ds-statistic-value-color` etc. defined |
 
 **Repos:** ui-design-system only.
 **Estimated effort:** 1 hour.
@@ -78,7 +78,7 @@ Changes:
 - Apply same fixes to Countdown component (same bypass pattern)
 - Fix `CSS_VARS` in `Statistic.types.ts` to use `--ds-statistic-*` prefix (currently `--statistic-*`)
 
-**Also:** Create `tokens/css/components/statistic.css` declaring the full surface (currently tokens only in artifact files). Import from `components/index.css`.
+**Also:** Create `foundation/tokens/css/presentation/components/statistic.css` declaring the full surface (currently tokens only in artifact files). Import from `components/index.css`.
 
 ~40 lines across 3 files.
 
@@ -136,7 +136,7 @@ Changes:
 
 ### R1-P5: Update Rottay Brand Theme (Low complexity)
 
-**File:** `tokens/ts/brand-themes/rottay.ts`
+**File:** `foundation/tokens/ts/presentation/brand-themes/platform/index.ts`
 
 Changes:
 - Remove `chrome.shell.gridSize`/`gridLine`/`gridOpacity` (structures no longer consume grids)
@@ -293,7 +293,7 @@ Current state: **zero keyboard navigation**.
 
 ### Changes
 
-**DataTable.Modern** (`patterns/data/data-table/engines/modern.tsx`):
+**DataTable.Modern** (`patterns/data/data-table/engines/modern/index.tsx`):
 - Add `aria-sort` to sortable `<th>` (ascending/descending/none)
 - Add `tabIndex={0}`, `role="columnheader"`, `onKeyDown` (Enter/Space to sort) to sortable headers
 - Add `role="grid"` to table, arrow-key row navigation, Enter for row activation
@@ -485,7 +485,7 @@ The DS pipeline is **already fully wired**: `appearance.general` -> `appearanceT
 
 | Wave | File |
 |------|------|
-| R1 | `tokens/css/components/statistic.css` |
+| R1 | `foundation/tokens/css/presentation/components/statistic.css` |
 | R2 | `components/structures/shell/index.ts` |
 | R2 | `components/structures/shell/types/index.ts` |
 | R2 | `components/structures/shell/app-shell/index.tsx` |
@@ -502,9 +502,9 @@ The DS pipeline is **already fully wired**: `appearance.general` -> `appearanceT
 | R3 | `structures/dashboard/signal-card/index.tsx` |
 | R7 | Shared `brandingToTenantConfig` utility in DS/server |
 | R7 | Shared `TenantBranding` interface in DS/server |
-| R8 | `_internal/testing/system/tests/host-tenancy-boundary.test.ts` |
-| R8 | `_internal/testing/system/tests/token-fidelity.test.ts` |
-| R8 | `_internal/testing/system/tests/modern-appearance-behavior.test.tsx` |
+| R8 | `tooling/testing/system/tests/host-tenancy-boundary.test.ts` |
+| R8 | `tooling/testing/system/tests/token-fidelity.test.ts` |
+| R8 | `tooling/testing/system/tests/modern-appearance-behavior.test.tsx` |
 | R8 | `scripts/audit-shell-ownership.mjs` |
 | R9 | `docs/quality-reset-audit/17-r9-rescore-results.md` |
 
@@ -513,7 +513,7 @@ The DS pipeline is **already fully wired**: `appearance.general` -> `appearanceT
 | Wave | File |
 |------|------|
 | R5 | `app-platform/src/actions/tenancy/appearance/index.ts` |
-| R2 | `app-platform/src/components/_shared/layouts/app-layout/shell-config/index.ts` |
+| R2 | `app-platform/src/composition/components/_shared/layouts/app-layout/shell-config/index.ts` |
 
 ### Modified Files (DS) — Key Only
 
@@ -524,12 +524,12 @@ The DS pipeline is **already fully wired**: `appearance.general` -> `appearanceT
 | R1 | `headers/collection/index.tsx` | Remove 3 overlays, tokenize, simplify |
 | R1 | `search-command-bar/index.tsx` | Remove 2 overlays, simplify |
 | R1 | `Card/engines/modern.tsx` | Wire --ds-card-* tokens to VARIANT_STYLES |
-| R1 | `brand-themes/rottay.ts` | Remove grid config, add surfaces |
+| R1 | `brand-themes/platform/index.ts` | Remove grid config, add surfaces |
 | R2 | `structures/index.ts` | Add shell export |
-| R2 | `contracts/themes/index.ts` | Extend BrandChrome with shellGeometry |
-| R2 | `tokens/css/foundation/themes/default.css` | Add --ds-shell-* geometry tokens |
-| R2 | `tokens/css/artifacts/{rottay,bithire,evnto}/index.css` | Add --ds-shell-* values |
-| R4 | `data-table/engines/modern.tsx` | Keyboard nav, aria-sort, primaryColumn |
+| R2 | `foundation/contracts/composition/tenants/themes/index.ts` | Extend BrandChrome with shellGeometry |
+| R2 | `foundation/tokens/css/foundation/themes/default.css` | Add --ds-shell-* geometry tokens |
+| R2 | `foundation/tokens/css/facade/artifacts/{rottay,bithire,evnto}/index.css` | Add --ds-shell-* values |
+| R4 | `data-table/engines/modern/index.tsx` | Keyboard nav, aria-sort, primaryColumn |
 | R4 | `DataTable.types.ts` | Add primaryColumn, cellEmphasis |
 | R4 | `search-command-bar/index.tsx` | Add operatorPresets |
 | R7 | `runtime/tenant/resolution/resolve-request-tenant.ts` | Add createAppTenantResolver |

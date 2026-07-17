@@ -21,7 +21,7 @@ Recruiter, hiring manager, and executive views are a natural fit for DS saved-vi
 Proof:
 
 - [BitHire saved-views](/Users/daniel/Developer/Rottay/app-bithire/src/ui/tables/saved-views/index.tsx)
-- [DS SavedViewsMenu](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/workspace/saved-views-menu/index.tsx)
+- [DS SavedViewsMenu](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/workspace/saved-views-menu/index.tsx)
 
 ### 3. Hiring workbench for record pages
 
@@ -33,7 +33,7 @@ Proof:
 - [interview detail](/Users/daniel/Developer/Rottay/app-bithire/src/features/interviews/screens/detail/index.tsx)
 - [offer detail](/Users/daniel/Developer/Rottay/app-bithire/src/features/offers/screens/detail/index.tsx)
 - [application detail](/Users/daniel/Developer/Rottay/app-bithire/src/features/applications/screens/detail/index.tsx)
-- [RecordWorkbenchSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/workspace/record-workbench/index.tsx)
+- [RecordWorkbenchSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/record-workbench/index.tsx)
 
 ### 4. Offer approvals as a real decision inbox
 
@@ -42,7 +42,7 @@ This is one of the clearest current wins.
 Proof:
 
 - [approval center](/Users/daniel/Developer/Rottay/app-bithire/src/features/offers/screens/approval-center/index.tsx)
-- [DecisionInboxSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/workspace/decision-inbox/index.tsx)
+- [DecisionInboxSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/decision-inbox/index.tsx)
 
 ### 5. Drag/drop pipeline instead of read-only analytic board
 
@@ -51,7 +51,7 @@ The pipeline wants to be operational, not just descriptive.
 Proof:
 
 - [visual pipeline](/Users/daniel/Developer/Rottay/app-bithire/src/features/pipeline/screens/visual/index.tsx)
-- [KanbanSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/operations/kanban/index.tsx)
+- [KanbanSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/kanban/index.tsx)
 
 ### 6. Federated recruiting search with preview rails
 
@@ -61,7 +61,7 @@ Proof:
 
 - [header](/Users/daniel/Developer/Rottay/app-bithire/src/vertical/shell/header/index.tsx)
 - [global-search](/Users/daniel/Developer/Rottay/app-bithire/src/ui/search/global-search/index.tsx)
-- [SearchSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/data/search/index.tsx)
+- [SearchSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/search/index.tsx)
 
 ### 7. Reusable evaluation/compare surface
 
@@ -70,7 +70,7 @@ Candidate comparison should grow into a broader evaluation capability.
 Proof:
 
 - [candidate compare](/Users/daniel/Developer/Rottay/app-bithire/src/features/candidates/screens/compare/index.tsx)
-- [CompareSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/data/compare/index.tsx)
+- [CompareSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/compare/index.tsx)
 
 ### 8. Unified activity, notes, alerts, and audit history
 
@@ -81,7 +81,7 @@ Proof:
 - [activity screen](/Users/daniel/Developer/Rottay/app-bithire/src/features/activity/screens/screen/index.tsx)
 - [application timeline](/Users/daniel/Developer/Rottay/app-bithire/src/features/applications/components/applications/application-timeline/index.tsx)
 - [application notes](/Users/daniel/Developer/Rottay/app-bithire/src/features/applications/components/applications/application-notes/index.tsx)
-- [NotificationCenter](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/communication/notification-center/index.ts)
+- [NotificationCenter](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/communication/notification-center/index.ts)
 
 ### 9. Recruiter scheduling workspace
 
@@ -91,7 +91,7 @@ Proof:
 
 - [my interviews](/Users/daniel/Developer/Rottay/app-bithire/src/features/my-interviews/screens/screen/index.tsx)
 - [today schedule](/Users/daniel/Developer/Rottay/app-bithire/src/features/dashboard/components/dashboard/command-center/today-schedule/today-schedule.tsx)
-- [SchedulerSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/operations/scheduler/index.tsx)
+- [SchedulerSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx)
 
 ### 10. Normalize command-center chrome into DS-driven dashboards
 
@@ -101,7 +101,7 @@ Proof:
 
 - [command-header component](/Users/daniel/Developer/Rottay/app-bithire/src/vertical/shell/command-header-component/index.tsx)
 - [dashboard content](/Users/daniel/Developer/Rottay/app-bithire/src/app/(dashboard)/dashboard/content/index.tsx)
-- [CommandCenterSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/workspace/command-center/index.tsx)
+- [CommandCenterSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/command-center/index.tsx)
 
 ### 11. Shared hiring intake/create workbench
 
@@ -122,7 +122,7 @@ Proof:
 
 - [dashboard content](/Users/daniel/Developer/Rottay/app-bithire/src/app/(dashboard)/dashboard/content/index.tsx)
 - [analytics trend chart](/Users/daniel/Developer/Rottay/app-bithire/src/features/analytics/components/analytics/trend-chart/index.tsx)
-- [DS chart catalog](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/visualization/charts/index.ts)
+- [DS chart catalog](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/visualization/charts/index.ts)
 
 ## Best Sequence
 

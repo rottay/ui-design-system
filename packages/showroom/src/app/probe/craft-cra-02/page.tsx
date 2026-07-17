@@ -14,7 +14,7 @@ import {
   Toast,
   useDeferredPending,
 } from '@rottay/design-system';
-import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/components/state-gallery';
+import { TenantPaletteSurface, surfaceLabelFor, type SurfaceTenant } from '@/composition/components/state-gallery';
 
 // ---------------------------------------------------------------------------
 // Instant-feel choreography evidence surface (WO-CRA-02)

@@ -6,10 +6,10 @@ The shell is still app-owned.
 
 Evidence:
 
-- [AppLayout](/Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/index.tsx)
-- [shell-metrics.ts](/Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/shell-metrics.ts)
-- [AppSidebar](/Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/sidebar/index.tsx)
-- [AppTopbar](/Users/daniel/Developer/Rottay/app-platform/src/components/_shared/layouts/app-layout/topbar/index.tsx)
+- [AppLayout](/Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/index.tsx)
+- [shell-metrics.ts](/Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/shell-metrics.ts)
+- [AppSidebar](/Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx)
+- [AppTopbar](/Users/daniel/Developer/Rottay/app-platform/src/composition/components/_shared/layouts/app-layout/topbar/index.tsx)
 
 ## Decision
 

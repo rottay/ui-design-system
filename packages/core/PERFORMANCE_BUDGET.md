@@ -8,24 +8,24 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 |--------|-------|
 | Main bundle (`dist/index.js`) | < 150 KB gzipped |
 | Main CJS bundle (`dist/index.cjs`) | < 150 KB gzipped |
-| Per-engine chunk | < 80 KB gzipped |
+| Flagship component bundle | Component-specific gzip ceilings in `scripts/analyze-bundle.mjs`; each fixture deliberately inlines all three physical engines |
 | Icons bundle (`dist/icons.js`) | < 40 KB gzipped |
 | Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
-| Charts experience entry (`dist/charts.js` / `.cjs`) | < 500/600 B raw (443/495 B measured in the VIZ-03 producer build) |
+| Charts experience entry (`dist/charts.js` / `.cjs`) | < 600/700 B raw (517/569 B measured; canonical preserveModules paths, runtime governed separately) |
 | Chart specification entry (`dist/chart-spec.js` / `.cjs`) | < 700/800 B raw (607/643 B measured) |
 | Chart specification all-export fixture | < 2.2 KB gzipped (1,787 B measured + >20%; ESM/CJS/types supplier/browser-neutral) |
 | Chart data-access entry (`dist/chart-access.js` / `.cjs`) | < 800 B raw each (651/695 B measured) |
 | Chart data-access all-export fixture | < 2.8 KB gzipped (2,380 B measured; access-only and React external) |
 | Chart data-access pure CSV fixture | < 1 KB gzipped (791 B measured; import-free and client component absent) |
-| Chart renderers entry (`dist/chart-renderers.js` / `.cjs`) | < 850/900 B raw (755/791 B measured; runtime governed separately) |
-| Semantic motion entry (`dist/motion.js`) | < 1.1 KB raw (922 B measured; React and Motion external) |
+| Chart renderers entry (`dist/chart-renderers.js` / `.cjs`) | < 1.2/1.2 KB raw (1,038/1,066 B measured; five renderers plus datum-key facade, runtime governed separately) |
+| Semantic motion entry (`dist/motion.js` / `.cjs`) | < 1.3 KB raw each (1,139/1,147 B measured; React and Motion external) |
 | Pure motion policy fixture | < 2.1 KB gzipped (1,822 B measured + >10%; no React/Motion retained) |
-| Motion provider fixture | < 2.3 KB gzipped (2,076 B measured + >10%; React/Motion external) |
+| Motion provider fixture | < 2.3 KB gzipped (2,077 B measured + >10%; React/Motion external) |
 | EffectRegistry entry (`dist/effects.js` / `.cjs`) | < 800 B raw each (652/676 B measured + >10%) |
 | EffectRegistry all-export fixture | < 5.5 KB gzipped (4,829 B measured + >10%; ESM/CJS/types supplier-neutral) |
-| Spatial host entry (`dist/spatial.js` / `.cjs`) | < 300/400 B raw (257/317 B measured + >10%) |
-| Spatial specification entry (`dist/spatial-spec.js` / `.cjs`) | < 700/700 B raw (573/609 B measured + >10%) |
-| Spatial host all-export fixture | < 6.9 KB gzipped (6,216 B measured + >10%; React is the only external) |
+| Spatial host entry (`dist/spatial.js` / `.cjs`) | < 400/400 B raw (296/356 B measured + >10%) |
+| Spatial specification entry (`dist/spatial-spec.js` / `.cjs`) | < 800/800 B raw (688/724 B measured + >10%) |
+| Spatial host all-export fixture | < 6.9 KB gzipped (6,215 B measured + >10%; React is the only external) |
 | Spatial specification all-export fixture | < 1.3 KB gzipped (1,097 B measured + >10%; no external/browser runtime) |
 | Named Bar renderer | < 12.1 KB gzipped (10,934 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
 | Named Line renderer | < 12.8 KB gzipped (11,603 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
@@ -36,6 +36,11 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Tokens bundle (`dist/tokens.js`) | < 20 KB gzipped |
 | i18n bundle (`dist/i18n.js`) | < 20 KB gzipped |
 | Aggregate JS package footprint | < 9.1 MB raw (8,194,345 B measured + >10%; 261-role semantic corpus, ESM + CJS; consumer routes remain independently gated) |
+
+The aggregate baseline records the exact 261-role corpus that was present when
+it was measured on 2026-07-16. The governed corpus now contains 263 roles; rerun
+the analyzer before changing that ceiling rather than presenting the historical
+measurement as a current role count.
 
 ## CSS Budget
 
@@ -66,22 +71,22 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/icons.cjs` | 150 KB |
 | `dist/marks.js` | 100 KB |
 | `dist/marks.cjs` | 100 KB |
-| `dist/charts.js` | 500 B (443 B measured + >10%) |
-| `dist/charts.cjs` | 600 B (495 B measured + >10%) |
+| `dist/charts.js` | 600 B (517 B measured +10%, rounded up to 100 B) |
+| `dist/charts.cjs` | 700 B (569 B measured +10%, rounded up to 100 B) |
 | `dist/chart-spec.js` | 700 B (607 B measured + >10%) |
 | `dist/chart-spec.cjs` | 800 B (643 B measured + >10%) |
 | `dist/chart-access.js` | 800 B (651 B measured + >10%) |
 | `dist/chart-access.cjs` | 800 B (695 B measured + >10%) |
-| `dist/chart-renderers.js` | 850 B (755 B measured + >10%) |
-| `dist/chart-renderers.cjs` | 900 B (791 B measured + >10%) |
-| `dist/motion.js` | 1.1 KB (922 B measured + >10%) |
-| `dist/motion.cjs` | 1.1 KB (930 B measured + >10%) |
+| `dist/chart-renderers.js` | 1.2 KB (1,038 B measured +10%, rounded up to 100 B) |
+| `dist/chart-renderers.cjs` | 1.2 KB (1,066 B measured +10%, rounded up to 100 B) |
+| `dist/motion.js` | 1,300 B (1,139 B measured + >10%) |
+| `dist/motion.cjs` | 1,300 B (1,147 B measured + >10%) |
 | `dist/effects.js` | 800 B (652 B measured + >10%) |
 | `dist/effects.cjs` | 800 B (676 B measured + >10%) |
-| `dist/spatial.js` | 300 B (257 B measured + >10%) |
-| `dist/spatial.cjs` | 400 B (317 B measured + >10%) |
-| `dist/spatial-spec.js` | 700 B (573 B measured + >10%) |
-| `dist/spatial-spec.cjs` | 700 B (609 B measured + >10%) |
+| `dist/spatial.js` | 400 B (296 B measured + >10%) |
+| `dist/spatial.cjs` | 400 B (356 B measured + >10%) |
+| `dist/spatial-spec.js` | 800 B (688 B measured + >10%) |
+| `dist/spatial-spec.cjs` | 800 B (724 B measured + >10%) |
 | `dist/tokens.js` | 80 KB |
 | `dist/tokens.cjs` | 80 KB |
 | `dist/i18n.js` | 80 KB |
@@ -140,7 +145,8 @@ the same cohesive producer build on 2026-07-16. Re-measure through the focused
 gate before changing them; never widen a ceiling only to silence CI.
 
 The MOT-01 raw ESM/CJS facade and isolated policy/provider fixtures were measured from the same
-2.19.17 producer build on 2026-07-16. The isolation gate is part of every normal analysis.
+canonical-tree 2.19.28 release-candidate build on 2026-07-17. The isolation gate is part of every
+normal analysis.
 
 The EFX-01A raw ESM/CJS facade and all-export fixture were measured from the same cohesive
 2.19.17 producer build on 2026-07-16. Its gate proves ESM, CJS and declaration closure purity;
@@ -153,10 +159,10 @@ unrelated code.
 
 ## Spatial Baseline
 
-The cohesive 2.19.20 producer build on 2026-07-16 measured the host facades at
-257/317 B raw, the specification facades at 573/609 B raw, the host all-export
-fixture at 6,216 B gzip and the specification fixture at 1,097 B gzip. The
-single `SPATIAL_BASELINE_BYTES` object records those exact values;
+The canonical-tree 2.19.28 release-candidate build on 2026-07-17 measured the
+host facades at 296/356 B raw, the specification facades at 688/724 B raw, the
+host all-export fixture at 6,215 B gzip and the specification fixture at 1,097 B
+gzip. The single `SPATIAL_BASELINE_BYTES` object records those exact values;
 `deriveSpatialBudget()` creates every ceiling as measured +10%, rounded up to
 the next 100 B. Re-measure all six together when the public boundary changes;
 never replace exact baselines with rounded limits.

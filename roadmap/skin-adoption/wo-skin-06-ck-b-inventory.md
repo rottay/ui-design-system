@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-B header-family paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/`. Same channel scope as the
+All paths relative to `packages/core/src/ui/`. Same channel scope as the
 WO-SKIN-02/03/04 precedents: a "site" is an object-literal style key named
 `background*`, `border*`, `outline*`, `color`, `boxShadow`, `textShadow`, `fill`,
 `stroke`, `accentColor`, `filter`, `backdropFilter`, `WebkitBackdropFilter`, or
@@ -24,10 +24,10 @@ structures/headers/edit/index.tsx                             48
 structures/headers/collection/index.tsx                       48
 structures/headers/form/index.tsx                              36
 structures/headers/dashboard/index.tsx                         14
-patterns/misc/cockpit-header/engines/modern.tsx                48
-patterns/misc/page-shell/engines/modern.tsx                    28
-patterns/misc/page-shell/engines/rustic.tsx                    17
-patterns/misc/workbench-header/engines/modern.tsx               44
+patterns/misc/cockpit-header/engines/modern/index.tsx                48
+patterns/misc/page-shell/engines/modern/index.tsx                    28
+patterns/misc/page-shell/engines/rustic/index.tsx                    17
+patterns/misc/workbench-header/engines/modern/index.tsx               44
                                                         ─────────
 TOTAL                                                          334   9 files
 ```
@@ -38,7 +38,7 @@ greenfield, same starting state as WO-SKIN-03/04's precedents.
 
 **`classic.tsx` exists for all three `patterns/misc` components (cockpit-header,
 page-shell, workbench-header) and is NOT in the counter's output above — but it is
-not empty.** Grep-verified: `cockpit-header/engines/classic.tsx` has real inline
+not empty.** Grep-verified: `cockpit-header/engines/classic/index.tsx` has real inline
 paint (`background: 'var(--ds-color-bg-primary)'`, `color: 'var(--ds-color-text-muted)'`,
 etc. at lines 73, 122, 129, 141…). It reads as 0 sites only because **the WO-06 census
 excludes `classic` by construction** (triage doc §9, "Method": `classic` excluded from
@@ -173,13 +173,13 @@ concept, independently reimplemented, values that agree on some axes and diverge
 others:
 
 - **BackButton — three independent implementations, no two byte-identical.**
-  `cockpit-header/engines/modern.tsx:133-183`: 34×34px, HAS a visible border on
+  `cockpit-header/engines/modern/index.tsx:133-183`: 34×34px, HAS a visible border on
   hover/focus (`1px solid var(--ds-color-border)` vs `transparent`), highlighted
-  background is `--ds-color-neutral-50`. `page-shell/engines/modern.tsx:172-231`:
+  background is `--ds-color-neutral-50`. `page-shell/engines/modern/index.tsx:172-231`:
   padding-sized (not fixed square), border is **always `'none'`** (no border
   treatment at all), highlighted background is `--ds-color-neutral-100` (one step
   darker than cockpit's), and it optionally renders a text label next to the icon
-  (cockpit/workbench are icon-only). `workbench-header/engines/modern.tsx:135-185`:
+  (cockpit/workbench are icon-only). `workbench-header/engines/modern/index.tsx:135-185`:
   32×32px (not 34), border always `'none'`, highlighted background
   `--ds-color-neutral-100` (matches page-shell, not cockpit). Net: page-shell and
   workbench-header agree on "no border, neutral-100" but disagree on sizing/label;
@@ -210,7 +210,7 @@ others:
 
 ### 1e. Unique to `cockpit-header`, not duplicated anywhere in this cluster
 
-`STATUS_PILL_STYLES` (`cockpit-header/engines/modern.tsx:32-61`) — the exact
+`STATUS_PILL_STYLES` (`cockpit-header/engines/modern/index.tsx:32-61`) — the exact
 "static map index" example the triage doc cites by name (§2 of the triage: `cockpit-
 header/engines/modern.tsx:193` `STATUS_PILL_STYLES[status.variant]`). A 5-way
 (`success | warning | error | info | default`) map to `{background, color,
@@ -365,16 +365,16 @@ No `data-part`, no first-party className; uses semantic `role`/`aria-label` only
 **RUNTIME**: none — `metric.value`/`metric.label` are consumer data but they render as
 *text content*, never as a paint value. **Imperative writes**: none. **Keyframes**:
 `animation: 'pulse 2s infinite'` (line 107) references the GLOBAL `@keyframes pulse`
-defined in `tokens/css/foundation/animations/keyframes.css:352` — grep-confirmed live,
+defined in `foundation/tokens/css/foundation/animations/keyframes.css:352` — grep-confirmed live,
 not dangling. No local `@keyframes` in this file. This is the smallest, simplest file
 in the whole cluster: no archetype system, no tone map, its own tiny independent
 `STATUS_COLORS` map unrelated to `STATUS_PILL_STYLES` (§1e) or `getVariantTone` (§1a).
 
-### 2.6 `patterns/misc/cockpit-header/engines/modern.tsx` (48 sites)
+### 2.6 `patterns/misc/cockpit-header/engines/modern/index.tsx` (48 sites)
 
 Real anatomy: `className={\`ds-pattern-cockpit-header ds-engine-modern ${className ?? ''}\`}`
 on both the loading and main render roots (lines 262, 364) — grep-confirmed FREE (zero
-hits anywhere in `tokens/css/`), a real, already-present scope-class hook a skin can
+hits anywhere in `foundation/tokens/css/`), a real, already-present scope-class hook a skin can
 key off directly.
 
 | Part | Lines | Channels | Class |
@@ -396,7 +396,7 @@ boxShadow values — correctly STATE-SELECTED, not RUNTIME, by the "where does t
 identifier land" test: the scroll position itself never reaches a paint value, it
 only picks between two fixed ones.
 
-### 2.7 `patterns/misc/page-shell/engines/modern.tsx` (28 sites) + `engines/rustic.tsx` (17 sites)
+### 2.7 `patterns/misc/page-shell/engines/modern/index.tsx` (28 sites) + `engines/rustic/index.tsx` (17 sites)
 
 **Modern** anatomy: `ds-pattern-page-shell`, `ds-pattern-page-shell--loading`,
 `ds-pattern-page-shell__loading-skeleton`, `ds-engine-modern` — all grep-confirmed
@@ -444,7 +444,7 @@ never change color on hover at all. This is the widest engine gap found in this
 cluster (matches the shape WO-SKIN-04 called out for Tabs modern-vs-rustic);
 preserve, do not invent a rustic hover to "fix" the asymmetry.
 
-### 2.8 `patterns/misc/workbench-header/engines/modern.tsx` (44 sites)
+### 2.8 `patterns/misc/workbench-header/engines/modern/index.tsx` (44 sites)
 
 Real anatomy: `ds-pattern-workbench-header ds-engine-modern` — grep-confirmed FREE.
 
@@ -485,8 +485,8 @@ everywhere in `structures/headers`.
 
 ## 4. Bridge rules (theme.css / personality.css) — clean, with one real nuance
 
-**No selector in `tokens/css/engines/{modern,rustic,classic}/theme.css` or
-`tokens/css/runtime/personality.css` targets any of these 9 components' own markup.**
+**No selector in `foundation/tokens/css/runtime/engines/{modern,rustic,classic}/theme.css` or
+`foundation/tokens/css/runtime/personality.css` targets any of these 9 components' own markup.**
 Grep swept both component-name strings (`detail-header`, `edit-header`, `collection-
 header`, `form-header`, `dashboard-header`, `cockpit-header`, `page-shell`,
 `workbench-header`) and generic structural terms (`header`, `breadcrumb`, `eyebrow`)
@@ -513,7 +513,7 @@ migration hazard.
 Two adjacent findings that are **not** DS bridge rules but are easy to mistake for
 one, both traced to ground and ruled out:
 
-- `tokens/css/artifacts/bithire/_source/extension.css:1997` defines
+- `foundation/tokens/css/facade/artifacts/bithire/_source/extension.css:1997` defines
   `html[data-tenant='bithire'] :where(.rt-collection-preview__decision-cockpit-header)`.
   **This is not our `patterns/misc/cockpit-header` component.** `.rt-collection-
   preview__decision-cockpit-header` is a BEM-scoped class inside bithire's own
@@ -521,7 +521,7 @@ one, both traced to ground and ruled out:
   named independently of this DS pattern — pure naming coincidence, zero live
   coupling, confirmed by reading the surrounding block (it styles an app-owned
   preview card, not this pattern's DOM).
-- `tokens/css/artifacts/bithire/_source/extension.css:3585-3637` defines several
+- `foundation/tokens/css/facade/artifacts/bithire/_source/extension.css:3585-3637` defines several
   `html[data-tenant="bithire"] :where([data-bithire-detail-edit-panel="true"])
   :where([data-bithire-detail-edit-header="true"])` rules with `!important` on
   `margin`, `padding`, and `border-bottom`. Per P-76, margin/padding are normally
@@ -567,7 +567,7 @@ tag anywhere in the 9-file cluster (grep-confirmed: `structures/headers/*` and a
 finding in the whole cluster is the *absence* of any local `@keyframes` — every
 `animation: 'pulse …'` reference (`dashboard`, `cockpit-header`, `workbench-header`)
 points at the single pre-existing GLOBAL `@keyframes pulse` in
-`tokens/css/foundation/animations/keyframes.css:352`, confirmed live, not dangling.
+`foundation/tokens/css/foundation/animations/keyframes.css:352`, confirmed live, not dangling.
 Two things about the `.back-button`/`.breadcrumb-link` block specifically: (1) it is
 NOT scoped/namespaced (no `id`/attribute selector uniqueness), so two `EditHeader`
 instances on one page emit two byte-identical, harmless-but-duplicate rule blocks —
@@ -587,7 +587,7 @@ this whole checkpoint.
 ## 6. Engine asymmetries, dead code, pre-existing defects (record only)
 
 - **`--ds-collection-header-display-color` / `--ds-collection-header-display-shade`
-  (`collection/index.tsx:115-116`) are defined nowhere in `tokens/css/`** (grep-
+  (`collection/index.tsx:115-116`) are defined nowhere in `foundation/tokens/css/`** (grep-
   confirmed zero hits as a CSS custom-property declaration anywhere in the tree —
   only consumed, never set). Same shape as the triage CORRECTION's `--ds-steps-line-
   color` finding (P-73): the fallback (`var(--ds-color-primary)` /

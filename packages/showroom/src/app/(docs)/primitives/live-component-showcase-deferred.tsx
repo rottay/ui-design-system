@@ -5,20 +5,20 @@ import {
   DesignSystemProvider,
   getKnownTenantConfig,
 } from '@rottay/design-system';
-import { Box, Card, Stack, Text } from '@/components/showroom-ui';
+import { Box, Card, Stack, Text } from '@/composition/components/showroom-ui';
 import {
   getShowroomProductProfileKey,
   getShowroomVerticalKey,
   useShowroom,
-} from '@/components/showroom-context';
+} from '@/composition/components/showroom-context';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
-} from '@/components/playground/surface-tokens';
+} from '@/composition/components/playground/surface-tokens';
 
 const LiveComponentShowcase = dynamic(
   () =>
-    import('@/components/live-component-showcase').then(
+    import('@/composition/components/live-component-showcase').then(
       (module) => module.LiveComponentShowcase
     ),
   {

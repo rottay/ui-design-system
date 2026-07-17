@@ -14,9 +14,9 @@ Score: `7.4/10`
 
 The best evidence is in:
 
-- `src/runtime/bootstrap/DesignSystemProvider.tsx`
-- `src/runtime/tenant/storage/static/generator/index.ts`
-- `src/compilers/appearance/tests/appearance-runtime.test.tsx`
+- `src/infrastructure/runtime/bootstrap/composition/react/provider/index.tsx`
+- `src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts`
+- `src/infrastructure/compilers/runtime/appearance/tests/appearance-runtime.test.tsx`
 
 ### The client bridge that used to break `appearance` is fixed
 
@@ -41,7 +41,7 @@ That means DB tenants can still first-paint in a smaller/older visual contract b
 
 Relevant file:
 
-- `src/hooks/tenant/branding/useTenantBranding/index.ts`
+- `src/infrastructure/runtime/tenant/composition/react/branding/index.ts`
 
 ### P1. Preview and authoring are still on the wrong conceptual model
 
@@ -56,8 +56,8 @@ rather than a canonical `appearance.general` / bounded `appearance.advanced` aut
 
 Relevant files:
 
-- `src/components/patterns/misc/tenant-preview/TenantPreview.types.ts`
-- `src/runtime/tenant/authoring/create-tenant.ts`
+- `src/ui/patterns/misc/tenant-preview/TenantPreview.types.ts`
+- `src/infrastructure/runtime/tenant/runtime/authoring/configuration/index.ts`
 
 ### P1. `TenantPreview` still cheats
 
@@ -74,7 +74,7 @@ That means the preview is not a trustworthy proxy for the actual system it is pr
 
 Relevant file:
 
-- `src/components/patterns/misc/tenant-preview/engines/modern.tsx`
+- `src/ui/patterns/misc/tenant-preview/engines/modern/index.tsx`
 
 ### P1. `AppShell` mobile drawer is not yet modal-grade
 
@@ -87,7 +87,7 @@ The mobile drawer opens a fixed `aside` with a backdrop, but it still lacks:
 
 Relevant file:
 
-- `src/components/structures/shell/index.tsx`
+- `src/ui/structures/shell/index.tsx`
 
 ### P2. `Descriptions.Modern` is still hybrid
 
@@ -101,7 +101,7 @@ instead of letting a clean Descriptions-specific surface drive the renderer.
 
 Relevant file:
 
-- `src/components/primitives/display/Descriptions/engines/modern.tsx`
+- `src/ui/primitives/display/Descriptions/engines/modern.tsx`
 
 ### P2. `DataTable` still has a mouse-only advanced interaction
 
@@ -113,7 +113,7 @@ Column reorder still depends on a grip with:
 
 Relevant file:
 
-- `src/components/patterns/data/data-table/engines/modern.tsx`
+- `src/ui/patterns/data/data-table/engines/modern/index.tsx`
 
 ### P2. Guardrails are still below sign-off strength
 
@@ -125,8 +125,8 @@ Current guardrails are useful, but too shallow:
 
 Relevant files:
 
-- `src/_internal/testing/system/tests/token-fidelity.test.ts`
-- `src/_internal/testing/system/tests/host-tenancy-boundary.test.ts`
+- `src/tooling/testing/system/tests/token-fidelity.test.ts`
+- `src/tooling/testing/system/tests/host-tenancy-boundary.test.ts`
 - `scripts/audit-integration.mjs`
 
 ### P2. Some rubric docs still encode old truth
@@ -147,4 +147,3 @@ It is now:
 - good enough to support serious product work
 - much more honest than before
 - still short of premium-final because preview/authoring truth, first paint, shell hardening, and behavior guardrails are not fully closed
-

@@ -11,8 +11,8 @@ import {
   Text,
 } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { CodeBlock } from '@/components/playground';
-import { useShowroom } from '@/components/showroom-context';
+import { CodeBlock } from '@/composition/components/playground';
+import { useShowroom } from '@/composition/components/showroom-context';
 import { FoundationTopRail } from '../../foundation-top-rail';
 
 const COLOR_SCALES = [

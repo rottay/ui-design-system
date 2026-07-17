@@ -23,11 +23,11 @@ Why it matters:
 
 DS proof:
 
-- [collection contract](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/foundation/contracts/collection.ts)
-- [useCollectionWorkspace](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/foundation/hooks/useCollectionWorkspace.ts)
-- [CollectionWorkspaceSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/workspace/collection-workspace/index.tsx)
-- [SavedViewsMenu](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/workspace/saved-views-menu/index.tsx)
-- [SearchCommandBar](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/workspace/search-command-bar/index.tsx)
+- [collection contract](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts)
+- [useCollectionWorkspace](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/runtime/hooks/collection-workspace/index.ts)
+- [CollectionWorkspaceSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx)
+- [SavedViewsMenu](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/workspace/saved-views-menu/index.tsx)
+- [SearchCommandBar](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/workspace/search-command-bar/index.tsx)
 
 App proof:
 
@@ -44,10 +44,10 @@ Why it matters:
 
 DS proof:
 
-- [useAutoSave](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/form/auto-save/index.ts)
-- [useDraftSave](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/form/draft-save/index.ts)
-- [useFormDiff](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/form/form-diff/index.ts)
-- [GuidedDraftFormSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/forms/guided-draft-form/index.tsx)
+- [useAutoSave](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/forms/auto-save/index.ts)
+- [useDraftSave](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/forms/draft-save/index.ts)
+- [useFormDiff](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/forms/form-diff/index.ts)
+- [GuidedDraftFormSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/guided-draft-form/index.tsx)
 
 App proof:
 
@@ -63,10 +63,10 @@ Why it matters:
 
 DS proof:
 
-- [search hooks](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/search/index.ts)
-- [shortcuts hooks](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/shortcuts/index.ts)
-- [PatternCommandPalette](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/navigation/command-palette/index.ts)
-- [PatternShortcutsOverlay](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/patterns/navigation/shortcuts-overlay/index.ts)
+- [search hooks](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/navigation/search/index.ts)
+- [shortcuts hooks](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/interaction/shortcuts/index.ts)
+- [PatternCommandPalette](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/navigation/command-palette/index.ts)
+- [PatternShortcutsOverlay](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/patterns/navigation/shortcuts-overlay/index.ts)
 
 App proof:
 
@@ -83,8 +83,8 @@ Why it matters:
 
 DS proof:
 
-- [useTableExport](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/data/table-export/index.ts)
-- [data hooks barrel](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/hooks/data/index.ts)
+- [useTableExport](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/data/runtime/table-export/index.ts)
+- [data hooks barrel](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/infrastructure/runtime/application/data/index.ts)
 
 App proof:
 
@@ -98,10 +98,10 @@ Why it matters:
 
 DS proof:
 
-- [ListSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/data/list/index.tsx)
-- [DetailSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/data/detail/index.tsx)
-- [FormSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/forms/form/index.tsx)
-- [DashboardSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/surfaces/pages/data/dashboard/index.tsx)
+- [ListSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx)
+- [DetailSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/detail/index.tsx)
+- [FormSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/form/index.tsx)
+- [DashboardSurface](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx)
 
 App proof:
 
@@ -118,9 +118,9 @@ Why it matters:
 
 DS proof:
 
-- [FormHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/headers/form/index.tsx)
-- [DetailHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/headers/detail/index.tsx)
-- [FormSections](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/components/structures/record/form-sections/index.tsx)
+- [FormHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/headers/form/index.tsx)
+- [DetailHeader](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/headers/detail/index.tsx)
+- [FormSections](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/ui/structures/record/form-sections/index.tsx)
 
 ### 7. Motion
 
@@ -130,7 +130,7 @@ Why it matters:
 
 Proof:
 
-- [motion index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/motion/index.ts)
+- [motion index](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/graphics/motion/index.ts)
 
 ### 8. Icons entrypoint
 
@@ -141,7 +141,7 @@ Why it matters:
 
 Proof:
 
-- [icons entrypoint](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/icons.ts)
+- [icons entrypoint](/Users/daniel/Developer/Rottay/ui-design-system/packages/core/src/icon-entry.ts)
 
 ## Bottom Line
 

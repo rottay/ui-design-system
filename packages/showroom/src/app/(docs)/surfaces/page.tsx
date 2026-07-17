@@ -1,16 +1,16 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/composition/components/showroom-link';
 import { Box, Card, Badge, Flex, Stack, Text } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { formatShowroomLabel } from '@/components/layout/config';
+import { formatShowroomLabel } from '@/composition/components/layout/config';
 import {
   surfaceGroups,
   surfaces,
   surfacesByGroup,
   type SurfaceGroup,
 } from '@/data/registry';
-import { CodeBlock } from '@/components/playground';
+import { CodeBlock } from '@/composition/components/playground';
 import {
   ActivityIcon,
   BarChart3Icon,

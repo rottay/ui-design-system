@@ -19,7 +19,11 @@ export const ENGINE_TOKEN_MINIMUM = Object.freeze({
   'effects.gradientConsumers': 1,
   'effects.glassConsumers': 1,
   'effects.glowConsumers': 1,
-  'fleet.inlinePaint.filesScanned': 784,
+  // Recalibrated after the reviewed 2026-07-17 source-tree consolidation:
+  // six compatibility leaves were folded into canonical folder/index homes.
+  // The structure gate independently prevents authored leaves from escaping
+  // the scanner, so this remains a fail-closed coverage floor.
+  'fleet.inlinePaint.filesScanned': 778,
   'runtimeSvgPaint.filesScanned': 1062,
   'embeddedCssPaint.filesScanned': 1062,
 });

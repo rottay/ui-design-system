@@ -31,7 +31,7 @@ The three apps do not consume their vertical layers with the same depth.
 
 ### What is weak
 
-- Direct downstream reads of `PLATFORM_PROFILE`, `SHELL_RECIPE`, or `useRouteMeta` in `src/features`, `src/ui`, and `src/components/_shared` are effectively `0`.
+- Direct downstream reads of `PLATFORM_PROFILE`, `SHELL_RECIPE`, or `useRouteMeta` in `src/features`, `src/ui`, and `src/composition/components/_shared` are effectively `0`.
 - Vertical logic is centralized in the shell, but most product UI still styles itself locally.
 - In the operational subset:
   - vertical users: `48` files, about `9.2%`
@@ -60,7 +60,7 @@ Platform is the strongest vertical implementation, but the vertical layer is gov
 
 ### Counts
 
-- In `src/components + src/features + src/ui`, only `38` files import any `@/vertical/*`.
+- In `src/composition/components + src/features + src/ui`, only `38` files import any `@/vertical/*`.
 - Breakdown:
   - `@/vertical/shell/command-header`: `30` files
   - `@/vertical/shell/form-header`: `5`
@@ -96,7 +96,7 @@ BitHire has a real vertical shell, but the rest of the product mostly uses DS pr
 - Route meta is overdeclared and underconsumed:
   - `16` feature route-meta constants
   - only `5` patterns registered in [vertical/routes](/Users/daniel/Developer/Rottay/app-evnto/src/vertical/routes/index.ts)
-- A lot of shell/navigation logic is duplicated between `src/ui` and `src/components/_shared`.
+- A lot of shell/navigation logic is duplicated between `src/ui` and `src/composition/components/_shared`.
 
 ### Counts
 
@@ -106,11 +106,11 @@ BitHire has a real vertical shell, but the rest of the product mostly uses DS pr
   - `1` in `src/core`
   - `1` in `src/app`
   - `0` in `src/ui`
-  - `0` in `src/components/_shared`
-- Inline-style-heavy files in `src/features`, `src/ui`, and `src/components/_shared`: `222`
+  - `0` in `src/composition/components/_shared`
+- Inline-style-heavy files in `src/features`, `src/ui`, and `src/composition/components/_shared`: `222`
 - Shared-layer duplication:
   - `src/ui`: `36` files
-  - `src/components/_shared`: `36` files
+  - `src/composition/components/_shared`: `36` files
 
 ### Read
 

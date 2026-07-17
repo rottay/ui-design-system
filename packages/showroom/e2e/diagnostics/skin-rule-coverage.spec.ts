@@ -33,7 +33,7 @@ import postcss from 'postcss';
 // ---------------------------------------------------------------------------
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_CSS = join(HERE, '../../../core/src/tokens/css');
+const CORE_CSS = join(HERE, '../../../core/src/foundation/tokens/css');
 const SKIN_DIRS = [
   ['modern', join(CORE_CSS, 'engines/modern/skin')],
   ['rustic', join(CORE_CSS, 'engines/rustic/skin')],

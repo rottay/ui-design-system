@@ -1,6 +1,6 @@
 'use client';
 
-import { useShowroomRuntime } from '@/components/showroom-context';
+import { useShowroomRuntime } from '@/composition/components/showroom-context';
 import {
   Avatar,
   Badge,

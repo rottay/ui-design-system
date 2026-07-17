@@ -13,7 +13,7 @@ Key files:
 
 - `src/providers/index.tsx`
 - `src/lib/tenancy/get-tenant-branding.ts`
-- `src/components/_shared/tables/data-table/index.tsx`
+- `src/composition/components/_shared/tables/data-table/index.tsx`
 
 ## Main problem
 
@@ -41,10 +41,10 @@ Evnto still manually coordinates:
 Key files:
 
 - `src/app/(dashboard)/layout.tsx`
-- `src/components/_shared/layout/sidebar/index.tsx`
-- `src/components/_shared/layout/header/index.tsx`
-- `src/components/_shared/layout/breadcrumb-bar/index.tsx`
-- `src/components/_shared/layout/main-content/index.tsx`
+- `src/composition/components/_shared/layout/sidebar/index.tsx`
+- `src/composition/components/_shared/layout/header/index.tsx`
+- `src/composition/components/_shared/layout/breadcrumb-bar/index.tsx`
+- `src/composition/components/_shared/layout/main-content/index.tsx`
 
 ### P1. Search and notification remain custom app surfaces
 
@@ -55,8 +55,8 @@ Evnto still builds major shell interactions locally:
 
 Key files:
 
-- `src/components/_shared/search/global-search/index.tsx`
-- `src/components/_shared/layout/notification-center/index.tsx`
+- `src/composition/components/_shared/search/global-search/index.tsx`
+- `src/composition/components/_shared/layout/notification-center/index.tsx`
 
 ### P2. Local feedback/widget layer still exists
 
@@ -68,9 +68,9 @@ There are still app-owned systems for:
 
 Key files:
 
-- `src/components/_shared/feedback/confirm-dialog/index.tsx`
-- `src/components/dashboard/widget-wrapper/index.tsx`
-- `src/components/dashboard/widget-empty-state/index.tsx`
+- `src/composition/components/_shared/feedback/confirm-dialog/index.tsx`
+- `src/composition/components/dashboard/widget-wrapper/index.tsx`
+- `src/composition/components/dashboard/widget-empty-state/index.tsx`
 
 ### P2. Host CSS still compensates for engine behavior
 

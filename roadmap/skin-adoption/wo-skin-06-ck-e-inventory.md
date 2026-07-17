@@ -1,6 +1,6 @@
 # WO-SKIN-06 checkpoint CK-E (visualization) paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/patterns/visualization/`. Same
+All paths relative to `packages/core/src/ui/patterns/visualization/`. Same
 channel scope as WO-SKIN-02/03/04/06 precedents: a "site" is an object-literal style
 key named `background*`, `border*`, `outline*`, `color`, `boxShadow`, `textShadow`,
 `fill`, `stroke`, `accentColor`, `filter`, `backdropFilter`, `WebkitBackdropFilter`, or
@@ -15,13 +15,13 @@ hatch).
 **Read this before anything else: the site counts below are a snapshot, not a
 constant.** This is a shared, multi-agent session. `line-chart/index.tsx` measured 6
 sites at the top of this task and 4 by the time it was read in full; `use-chart-brush.ts`
-measured 12 then 11; `kanban-board/engines/rustic.tsx` and `map-view/engines/rustic.tsx`
+measured 12 then 11; `kanban-board/engines/rustic/index.tsx` and `map-view/engines/rustic/index.tsx`
 each differ by exactly 1 between a live `engine-token-audit.mjs` run and this document's
 own line-by-line grep of the same file taken minutes apart. None of this changes any
 file's A/B/C composition — every discrepancy found was traced to either a genuine
 concurrent edit elsewhere in this session or (once, for `line-chart`) a stale figure
 from the very first census grep of this task. **Re-run
-`node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.patterns/visualization`
+`node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/visualization`
 before a migration contract is cut from this document.** The counts quoted per file
 below are this inventory's own verified re-derivation (grep + manual bracket-count
 against the file actually read), not a single frozen census pull.
@@ -291,7 +291,7 @@ weakest possible mechanism, beaten by any CSS including a layered rule) and thei
 TEXT / VALUE LABELS via `.style()` (style-painted — the strongest mechanism, beaten by
 nothing but `!important`). This is consistent within a file and does not vary by
 branch. **The consequence for migration**: since the census/bridge grep (§4) confirms
-ZERO existing CSS anywhere in `tokens/css/` targets any chart selector, there is
+ZERO existing CSS anywhere in `foundation/tokens/css/` targets any chart selector, there is
 nothing today that an `.attr()`-painted mark is silently losing to — but the mechanism
 still matters going forward: an unlayered skin rule targeting a data-mark element must
 account for the fact that the current `.attr('fill', ...)` call, if left in place
@@ -361,7 +361,7 @@ utility classes, real CSS already).
 
 ### Suppression risk
 
-None. `tokens/css/` has zero `kanban` selectors anywhere (grep-confirmed) — fully
+None. `foundation/tokens/css/` has zero `kanban` selectors anywhere (grep-confirmed) — fully
 greenfield, no legacy layer to reconcile.
 
 ### Cross-family dependency (record, not a CK-E defect)
@@ -412,7 +412,7 @@ on the last column to avoid a double border) + `borderBottom` (A-static) + `back
 ### Interaction paint, keyframes, suppression
 
 No hover paint in either engine. No keyframes, no injected `<style>` tags. Zero
-`tokens/css/` selectors target calendar-view — greenfield, suppression-risk-free.
+`foundation/tokens/css/` selectors target calendar-view — greenfield, suppression-risk-free.
 
 ---
 
@@ -452,7 +452,7 @@ size args (A-static ×2).
 
 ### Suppression risk
 
-None (`tokens/css/` has zero tree-view selectors).
+None (`foundation/tokens/css/` has zero tree-view selectors).
 
 ---
 
@@ -490,7 +490,7 @@ Marker label `color` (A-static). Coordinates `color` (A-static).
 
 ### Suppression risk
 
-None (`tokens/css/` has zero map-view selectors).
+None (`foundation/tokens/css/` has zero map-view selectors).
 
 ---
 
@@ -536,7 +536,7 @@ claim below was checked against actual imports/values, not inferred from house s
 
 ## 8. Bridge rules — dead/live disposition
 
-**`tokens/css/engines/{modern,rustic}/theme.css` and `tokens/css/runtime/personality.css`
+**`foundation/tokens/css/runtime/engines/{modern,rustic}/theme.css` and `foundation/tokens/css/runtime/personality.css`
 carry ZERO selectors for any of `kanban`, `calendar`, `chart`, `treemap`, `sankey`,
 `gauge`, `bullet`, `funnel`, `waterfall`, `histogram`, `network-graph`, `radar`,
 `tree-view`, `map-view`** — grep-confirmed across both engine theme files and the
@@ -547,7 +547,7 @@ accidentally kill.
 **One exception, found by grepping for the BARE (unprefixed) class family instead of
 a first-party name — a real, live, cross-component bridge collision:**
 
-`tokens/css/engines/modern/theme.css:787-794`:
+`foundation/tokens/css/runtime/engines/modern/theme.css:787-794`:
 ```css
 [data-tenant] .timeline::before {
   background-color: var(--ds-timeline-line-color);
@@ -568,13 +568,13 @@ already migrated, scoped under `.rottay-timeline.rottay-timeline--modern[data-pa
 — **but `patterns/visualization/timeline`'s modern engine (this checkpoint's
 component) independently renders the exact same bare DaisyUI classes**
 (`<ul className="timeline timeline-vertical">`, `className="timeline-start"` /
-`"timeline-end"` / `"timeline-middle"`, confirmed at `timeline/engines/modern.tsx`
+`"timeline-end"` / `"timeline-middle"`, confirmed at `timeline/engines/modern/index.tsx`
 lines 94, 102, 114, 143) with **no scope class of its own that would exclude it** —
 `patterns/visualization/timeline`'s root only carries `ds-pattern-timeline
 ds-engine-modern`, which this rule doesn't reference and doesn't need to.
 
 **Consequence: this bridge rule is the live, sole source of the timeline item text
-color today, for the wrong component.** `timeline/engines/modern.tsx` sets no inline
+color today, for the wrong component.** `timeline/engines/modern/index.tsx` sets no inline
 `color` anywhere on the `.timeline-start`/`.timeline-end` divs or their `<time>`/text
 children — the timestamp, username, title, and description all render at
 `var(--ds-text-primary)` purely because this bare selector matches them, not because
@@ -613,12 +613,12 @@ channel).
 
 ## 10. Keyframes / per-instance `<style>` tags — one real collision found
 
-**`tree-view/engines/rustic.tsx:230`** injects, on every mount of the loading state:
+**`tree-view/engines/rustic/index.tsx:230`** injects, on every mount of the loading state:
 ```js
 <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
 ```
 
-`tokens/css/foundation/animations/keyframes.css:352` **already declares a global
+`foundation/tokens/css/foundation/animations/keyframes.css:352` **already declares a global
 `@keyframes pulse`** — with a DIFFERENT value: `50% { opacity: 0.5; }`, not `0.4`. Per
 CSS keyframe resolution, a later-parsed `@keyframes pulse` declaration overrides the
 earlier one by name, document-wide, regardless of selector scope or source order
@@ -640,7 +640,7 @@ injected, unfixed, by (all outside CK-E, record only, do not action here):
 `patterns/forms/step-wizard` (both engines), `patterns/workflow/approval-workflow`
 (rustic, twice in the same file), `patterns/communication/live-feed` (rustic, twice),
 `patterns/data/stats-grid` (rustic). **This is a systemic, cross-checkpoint defect**,
-not a CK-E-specific one, but CK-E's instance (`tree-view/engines/rustic.tsx:230`) is
+not a CK-E-specific one, but CK-E's instance (`tree-view/engines/rustic/index.tsx:230`) is
 real and in-scope: a migration of tree-view should rename this keyframe to
 `ds-tree-view-pulse` (or fold it into a shared, already-namespaced pulse token if one
 gets established) as part of moving it into the skin, per the same law
@@ -648,7 +648,7 @@ gets established) as part of moving it into the skin, per the same law
 
 **No other collision found.** `ds-spin` (consumed via inline `animation:` on the
 loading spinners in `timeline`/`map-view`/`calendar-view` modern engines) is an
-existing, correctly-namespaced global keyframe (`tokens/css/engines/rustic/theme.css:1052`)
+existing, correctly-namespaced global keyframe (`foundation/tokens/css/runtime/engines/rustic/theme.css:1052`)
 — not a new collision, this is the CORRECT pattern tree-view's `pulse` should have
 followed. No chart file injects any `<style>` tag or `@keyframes` at all (§2).
 
@@ -699,7 +699,7 @@ followed. No chart file injects any `<style>` tag or `@keyframes` at all (§2).
   and WO-SKIN-04's whole navigation family. `ds-pattern-timeline`/`ds-engine-{modern,
   rustic,classic}` (stamped by `patterns/visualization/timeline` only, all three
   engines) are the one exception — real classNames, but grep-confirmed dead (zero
-  `tokens/css/` references to `ds-pattern-timeline` specifically), a hook for a future
+  `foundation/tokens/css/` references to `ds-pattern-timeline` specifically), a hook for a future
   skin to key off, not a live mechanism today.
 
 ---
@@ -752,7 +752,7 @@ never gets migrated, so treat every line below as load-bearing):
 - `map-view`'s marker color dot (`marker.color`, both engines — no fallback token,
   see §11).
 
-**The three C (custom-property hatch) sites** are all in `timeline/engines/rustic.tsx`
+**The three C (custom-property hatch) sites** are all in `timeline/engines/rustic/index.tsx`
 (§ established in the earlier per-family scan, not re-derived line-by-line in this
 document since Timeline's inventory was completed and cross-checked before the rest of
 this checkpoint): the dot fill, its matching box-shadow ring, and the custom-dot

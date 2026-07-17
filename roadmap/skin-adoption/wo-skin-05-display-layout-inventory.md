@@ -1,6 +1,6 @@
 # WO-SKIN-05 display+layout-family paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/primitives/{display,layout}/`.
+All paths relative to `packages/core/src/ui/primitives/{display,layout}/`.
 Same channel scope as the WO-SKIN-02/03/04 precedents: a "site" is an
 object-literal style key named `background*`, `border*`, `outline*`, `color`,
 `boxShadow`, `textShadow`, `fill`, `stroke`, `accentColor`, `filter`,
@@ -16,7 +16,7 @@ WHERE the runtime identifier lands, not whether one is mentioned —
 
 **Table is excluded** (already migrated, WO-ARC-09). **Coverage checklist**
 (from `node scripts/engine-token-audit.mjs | grep -E
-"fleet.inlinePaint.primitives/(display|layout)"`, 2026-07-13): 23 components,
+"fleet.inlinePaint.foundation/primitives/(display|layout)"`, 2026-07-13): 23 components,
 54 files, 624 sites (Display: Calendar 76, Tree 51, Card 48, Avatar 38, Tag 35,
 Image 35, Tooltip 34, Badge 33, QRCode 33, List 31, Timeline 28, Carousel 28,
 Statistic 24, Callout 20, Descriptions 16, Typography 14, Kbd 10, Empty 4 — 558
@@ -32,12 +32,12 @@ Compounds (all engine-agnostic): `compound/Image` (15), `compound/Header` (3),
 
 ### This is the batch's first "already has a shipped skin" component
 
-Both `tokens/css/engines/modern/skin/card.css` and
-`tokens/css/engines/rustic/skin/card.css` exist today and are wired in — Card's
+Both `foundation/tokens/css/runtime/engines/modern/skin/card.css` and
+`foundation/tokens/css/runtime/engines/rustic/skin/card.css` exist today and are wired in — Card's
 **root chrome** (background, border, box-shadow, radius, hover lift, focus
 ring, the 5 color tones) was migrated under **WO-ARC-07**, predating this
 inventory. Both engine files carry an explicit code comment saying so:
-modern.tsx:187-189 — *"Paint lives in `tokens/css/engines/modern/skin/card.css`,
+modern.tsx:187-189 — *"Paint lives in `foundation/tokens/css/runtime/engines/modern/skin/card.css`,
 keyed on the `data-*` contract stamped on the root below. Only a caller's own
 `style` prop stays inline."* Root anatomy: `{...partAttributes('root',
 interaction)}` from the shared `behavior/anatomy.ts` contract (same mechanism
@@ -124,13 +124,13 @@ helper — see Engine asymmetries below).
 `rottay-card-footer`/`-footer-actions`, `rottay-card-image`/`-image-loading`/
 `-image-overlay` classNames — a **different naming generation** than the
 migrated root (`rottay-` prefix throughout, never `ds-`) — **all confirmed dead
-CSS hooks** (zero references anywhere in `tokens/css/`, grep-verified). No
+CSS hooks** (zero references anywhere in `foundation/tokens/css/`, grep-verified). No
 `data-part` on any compound.
 
 ### Suppression risk — the batch's first real classname-collision investigation (item 5)
 
 `.ds-card` (modern's bare root class) and `.rottay-card` (rustic's) are BOTH
-referenced elsewhere in `tokens/css/`, but almost every hit is a **token
+referenced elsewhere in `foundation/tokens/css/`, but almost every hit is a **token
 reference** (`var(--ds-card-shadow)`, `var(--ds-card-bg)` used as a *fallback
 value* inside some other component's own rule — Select/DatePicker/TimePicker/
 Cascader/TreeSelect dropdown shadows, Toast's background/color), **not a
@@ -138,7 +138,7 @@ classname selector** — no real collision there.
 
 **Two real classname-selector hits, both fully suppressed, one worth a naming
 flag**:
-1. `tokens/css/engines/rustic/theme.css:495-511` — a **legacy, layered**
+1. `foundation/tokens/css/runtime/engines/rustic/theme.css:495-511` — a **legacy, layered**
    `.ds-card { background-color; border; border-radius; box-shadow;
    transition; }` plus `.ds-card--hoverable:hover` and `.ds-card__header`.
    Despite living in the *rustic* theme file, this selector is bare `.ds-card`
@@ -148,7 +148,7 @@ flag**:
    post-ARC-07) — suppression survives by construction, not a live hazard, but
    a real naming trap for the next person who reads "rustic theme" and assumes
    it only affects the rustic engine.
-2. `tokens/css/runtime/personality.css:19-41` — `[data-engine] .ds-card { ... }`
+2. `foundation/tokens/css/runtime/personality.css:19-41` — `[data-engine] .ds-card { ... }`
    and `[data-engine] .ds-card:hover { ...transform: translateY(0)
    scale(1))...background-color: var(--ds-card-bg-hover)... }`. Also layered,
    also suppressed. Worth flagging because the HOVER MECHANIC IT DESCRIBES NO
@@ -159,7 +159,7 @@ flag**:
    personality.css has drifted from the real WO-ARC-07 design and would mislead
    anyone reading it as documentation.
 3. A **tenant-specific** legacy override:
-   `tokens/css/legacy/themanagementmiami/index.css:217-240` —
+   `foundation/tokens/css/facade/legacy/themanagementmiami/index.css:217-240` —
    `html[data-tenant='themanagementmiami'] .rottay-card`/`:hover`/
    `.rottay-card-body` — targets rustic's root (real collision surface, tenant-
    scoped) and a `.rottay-card-body` class that doesn't exist anywhere in this
@@ -204,7 +204,7 @@ Root landing: `engines/modern.tsx` (21), `engines/rustic.tsx` (12).
 
 ### The prior migration here is much narrower than Card's
 
-Both `tokens/css/engines/{modern,rustic}/skin/badge.css` exist (P-43 follow-up)
+Both `foundation/tokens/css/runtime/engines/{modern,rustic}/skin/badge.css` exist (P-43 follow-up)
 but each is **four lines of real CSS** covering exactly one channel:
 `transform` (the position-offset custom-property composed with a hover-lift).
 The header comments are explicit about why: `transform` needed to be
@@ -259,7 +259,7 @@ is string content).
 
 ### Suppression risk
 
-`tokens/css/runtime/personality.css:46-51,215-220` carries a "BADGE PERSONALITY"
+`foundation/tokens/css/runtime/personality.css:46-51,215-220` carries a "BADGE PERSONALITY"
 block targeting `.ant-badge .ant-badge-count` (classic), bare `.badge`
 (DaisyUI, unrelated consumer), and `[data-engine] .ds-badge`/`:hover` — **none
 of these selectors match this component's actual classnames**
@@ -305,7 +305,7 @@ coupling asymmetry between engines found in this batch so far.
 
 ### STOP-AND-REPORT: a live, uncontested layered rule caps modern Avatar at 40×40px regardless of the `size` prop
 
-`tokens/css/engines/modern/theme.css` carries **two separate `.avatar` blocks**
+`foundation/tokens/css/runtime/engines/modern/theme.css` carries **two separate `.avatar` blocks**
 (a second-emitter pair, same shape as FloatButton's `.btn`/Breadcrumb's
 `.breadcrumbs`):
 1. Lines 292-298, `[data-tenant] .avatar > div { background-color:
@@ -378,7 +378,7 @@ STATIC/STATE-SELECTED on `status`) and `compound/Group` (Avatar.Group, 3 sites:
 child-overlap `border` STATIC, surplus-badge `backgroundColor`+`color`
 STATIC) both carry `rottay-avatar-badge*`/`rottay-avatar-group*`/
 `rottay-avatar-surplus` classNames — **all confirmed dead CSS hooks**, zero
-references anywhere in `tokens/css/`, same pattern as every other
+references anywhere in `foundation/tokens/css/`, same pattern as every other
 compound in this program to date.
 
 ### Suppression risk summary
@@ -451,7 +451,7 @@ Both engines already call `{...partAttributes('root', interaction)}` from the
 shared `behavior/anatomy.ts` contract (`useInteractionState()`) — the SAME
 mechanism Card/Button/Input use — so `data-part="root"` and the
 `data-state~='hovered'` token list already reach the DOM. **No skin file
-exists yet** (`image.css` absent from both `tokens/css/engines/*/skin/`) — so
+exists yet** (`image.css` absent from both `foundation/tokens/css/runtime/engines/*/skin/`) — so
 unlike Card/Badge, Image's pre-step landed but its migration has not started.
 Modern additionally leans on Tailwind utility classes for most of its
 structure (radius, opacity-fade transitions, cursor) — only
@@ -497,7 +497,7 @@ Record for the team, not a paint concern.
 
 `compound/Fallback` and `compound/Skeleton` are both `forwardRef` leaf
 components with no `data-part`, no first-party classNames referenced anywhere
-in `tokens/css/` — standalone-usable pieces (per their own doc comments,
+in `foundation/tokens/css/` — standalone-usable pieces (per their own doc comments,
 "Can be used standalone or as part of the Image component") that are not
 actually wired into either root engine's render (same "documented composition
 API, never consumed by the parent" shape found in Breadcrumb.Item/
@@ -599,7 +599,7 @@ otherwise (no `data-part`).
 
 ### Suppression risk — a real, live "bridge" rule, not orphaned
 
-`tokens/css/engines/modern/theme.css:852-869`, explicitly labeled `/* Bridge:
+`foundation/tokens/css/runtime/engines/modern/theme.css:852-869`, explicitly labeled `/* Bridge:
 .rottay-qrcode (modern engine) */`, is layered and targets the SAME
 classnames/tokens the component's own inline styles use
 (`border-radius`/`border-color`/`background-color` via the identical
@@ -652,7 +652,7 @@ channel, correctly out of migration scope entirely.
 fragile)**: rustic injects its own `@keyframes spin { from{rotate(0deg)}
 to{rotate(360deg)} }` (rustic.tsx:225-231) — **byte-identical** to the real
 global `@keyframes spin` already defined in
-`tokens/css/foundation/animations/keyframes.css:230-237`. No visible bug
+`foundation/tokens/css/foundation/animations/keyframes.css:230-237`. No visible bug
 today (values match), but it is a genuine unnamespaced redefinition of a
 global name, unguarded per-mount, the same shape as every other duplicate-
 keyframe finding in this program — if the global definition is ever tuned,
@@ -977,10 +977,10 @@ No `data-part` on any of the four.
 
 ### Item 5 finding: `rottay-link` is a live reservation from WO-SKIN-04, not a dead name
 
-Grep against every skin folder (`tokens/css/engines/*/skin/*.css`,
-`tokens/css/components/skin/*.css`) for `rottay-heading`/`rottay-text`/
+Grep against every skin folder (`foundation/tokens/css/runtime/engines/*/skin/*.css`,
+`foundation/tokens/css/presentation/components/skin/*.css`) for `rottay-heading`/`rottay-text`/
 `rottay-paragraph`/`rottay-link` returns hits only in
-`tokens/css/engines/{modern,rustic}/skin/link.css` — but reading those files
+`foundation/tokens/css/runtime/engines/{modern,rustic}/skin/link.css` — but reading those files
 shows the match is **not** a collision. Both are navigation's already-shipped
 `Link` skin (WO-SKIN-04 checkpoint N, `primitives/navigation/Link`, exported
 as `NavLink`), and both files' header comments explicitly document why their
@@ -1001,7 +1001,7 @@ first place, and forecloses ever giving navigation's scope a plainer name
 later. Modern's Link stamps no first-party classname at all (Tailwind
 utilities only), so this reservation is rustic-only. `rottay-heading`,
 `rottay-text`, `rottay-paragraph` (rustic's other three) are grep-confirmed
-free — zero hits anywhere in `tokens/css/`.
+free — zero hits anywhere in `foundation/tokens/css/`.
 
 ### Paint sites — `engines/modern.tsx` (10)
 
@@ -1134,7 +1134,7 @@ nothing to find missing.
 
 ### Live, uncontested bridge rule on the root — both engines share it
 
-`tokens/css/engines/modern/theme.css:834-846`, `/* Bridge: .rottay-empty
+`foundation/tokens/css/runtime/engines/modern/theme.css:834-846`, `/* Bridge: .rottay-empty
 (modern engine) */`, `[data-tenant] .rottay-empty { display:flex;
 flex-direction:column; align-items:center; justify-content:center; padding:
 var(--ds-empty-padding); color: var(--ds-text-secondary); }` plus
@@ -1200,7 +1200,7 @@ confirms only Tailwind layout utilities — `flex`, `flex-col`, `items-center`
 - `rottay-empty__footer` also has a live, uncontested `margin-top: 0.5rem`
   bridge rule — not a paint channel, noted only for completeness.
 - No shipped-skin collision: grep-confirmed zero hits for `rottay-empty` in
-  any `tokens/css/engines/*/skin/*.css` or `tokens/css/components/skin/*.css`.
+  any `foundation/tokens/css/runtime/engines/*/skin/*.css` or `foundation/tokens/css/presentation/components/skin/*.css`.
 
 ## Tree (51 sites, 3 files) — the batch's richest architecture: a live two-layer hover system (CSS on the wrapper, JS on the row), real DaisyUI checkbox coupling, and modern's own row uses the SAME imperative-hover workaround rustic's header comment says only inline-styles engines need
 
@@ -1216,7 +1216,7 @@ Breadcrumb.Item/Stepper.Step/Image's compounds/Carousel's Item.
 
 ### Finding 1: a live, uncontested two-layer hover system — CSS paints the WRAPPER, JS paints the ROW, and they can be visible at the same time
 
-`tokens/css/engines/modern/theme.css:815-828`, `/* Bridge: .rottay-tree
+`foundation/tokens/css/runtime/engines/modern/theme.css:815-828`, `/* Bridge: .rottay-tree
 (modern engine) */`:
 ```
 [data-tenant] .rottay-tree { background-color: var(--ds-tree-bg); }
@@ -1282,7 +1282,7 @@ byproduct).
 
 Both engines' checkbox input carries genuine DaisyUI classes: modern uses
 `checkbox checkbox-sm checkbox-primary` (+ `checkbox-indeterminate` when
-half-checked, modern.tsx:416-421); `tokens/css/engines/modern/theme.css:
+half-checked, modern.tsx:416-421); `foundation/tokens/css/runtime/engines/modern/theme.css:
 209-233` has a real, matching `.checkbox` block (`width`/`height`/
 `border-color`/`border-radius`/`:hover`/`:checked`/`:focus-visible`) that
 genuinely styles this input — unlike most of this batch's DaisyUI findings,
@@ -1342,7 +1342,7 @@ Tree's is namespaced AND guarded).
 
 ### Finding 4: rustic's `borderLeft` shorthand usage is safe, same reasoning as Callout's rustic — no personality rule reaches `rottay-tree`/`rottay-tree-node` on the rustic side
 
-Grep-confirmed: `tokens/css/engines/rustic/theme.css` and `personality.css`
+Grep-confirmed: `foundation/tokens/css/runtime/engines/rustic/theme.css` and `personality.css`
 carry zero rules targeting `rottay-tree`, `rottay-tree-node`, or any
 tree-specific classname on the rustic path (the modern bridge above is
 modern-only — rustic's root/row carry no matching selector anywhere).
@@ -1358,8 +1358,8 @@ channel on this engine.
   significant live-uncontested finding (a two-layer hover system, not a
   simple single-channel win).
 - **No collision** with any shipped skin: grep-confirmed zero hits for
-  `rottay-tree` in any `tokens/css/engines/*/skin/*.css` or
-  `tokens/css/components/skin/*.css`.
+  `rottay-tree` in any `foundation/tokens/css/runtime/engines/*/skin/*.css` or
+  `foundation/tokens/css/presentation/components/skin/*.css`.
 - Checkbox styling (both engines) is real, intended, non-orphaned DaisyUI/
   inline coupling — not a suppression hazard, record only.
 
@@ -1735,7 +1735,7 @@ that (it currently has none to anchor to).
 
 ### Suppression risk: a real, live bridge rule — but every uncontested channel is currently INVISIBLE, not a defect
 
-`tokens/css/engines/modern/theme.css:654-671`, `/* Bridge: .rottay-collapse
+`foundation/tokens/css/runtime/engines/modern/theme.css:654-671`, `/* Bridge: .rottay-collapse
 (modern engine) */`:
 ```
 [data-tenant] .rottay-collapse { border-color; border-radius; }
@@ -1822,8 +1822,8 @@ injection than modern's for the same underlying need.
 - No DaisyUI classes in either engine (modern's own header comment states
   "No DaisyUI classes" explicitly, confirmed true).
 - No shipped-skin collision: grep-confirmed zero hits for any
-  `rottay-collapse*` name in `tokens/css/engines/*/skin/*.css` or
-  `tokens/css/components/skin/*.css`.
+  `rottay-collapse*` name in `foundation/tokens/css/runtime/engines/*/skin/*.css` or
+  `foundation/tokens/css/presentation/components/skin/*.css`.
 
 ### Engine asymmetries, dead code, pre-existing defects (record only)
 
@@ -1854,7 +1854,7 @@ text-<pos>]`) — the SAME first word, different vocabularies layered onto it.
 
 ### CHECKED LIVE, REFUTED: no extra border renders on the with-text divider — Tailwind's own preflight zeroes the bridge's border-width before it ever reaches the component
 
-`tokens/css/engines/modern/theme.css` carries a second-emitter pair for
+`foundation/tokens/css/runtime/engines/modern/theme.css` carries a second-emitter pair for
 `.divider` (lines 340-352 early / 876-894 late, the same shape as
 FloatButton's `.btn`/Avatar's `.avatar`), and the late block's
 `.divider-horizontal { border-top: var(--ds-divider-width) solid
@@ -1866,7 +1866,7 @@ live, uncontested hazard — **measured in a real browser (production build,
 CDP `CSS.getMatchedStylesForNode`, a plain-divider control to prove the
 harness itself was sound) and refuted**: the root's computed
 `border-top-width` (horizontal) / `border-left-width` (vertical) is `0px`,
-both orientations. `tokens/css/entrypoints/styles.css:19` declares `@layer
+both orientations. `foundation/tokens/css/facade/entrypoints/styles.css:19` declares `@layer
 rottay-reset, rottay-tokens, rottay-components, rottay-engines,
 rottay-tenants, rottay-personality, rottay-responsive;` — theme.css's
 bridge rules live in `rottay-engines`. Tailwind's own preflight
@@ -2002,8 +2002,8 @@ Layout. No DaisyUI classes in either engine.
 
 Of the 23 components in this inventory, only **three** have any pre-existing
 skin footprint at all (checked against every file under
-`tokens/css/engines/{modern,rustic}/skin/*.css` and
-`tokens/css/components/skin/*.css`):
+`foundation/tokens/css/runtime/engines/{modern,rustic}/skin/*.css` and
+`foundation/tokens/css/presentation/components/skin/*.css`):
 
 1. **Card** — root chrome already migrated under WO-ARC-07
    (`engines/{modern,rustic}/skin/card.css`), predating this inventory. No
@@ -2011,7 +2011,7 @@ skin footprint at all (checked against every file under
    remainder (header/footer/image/loading), and the shipped skin's own scope
    (`.ds-card.ds-card--modern[data-part='root']` / `rottay-card
    rottay-card--rustic`) is untouched here. A real NAMING trap exists
-   (rustic's `tokens/css/engines/rustic/theme.css:495-511` bare `.ds-card`
+   (rustic's `foundation/tokens/css/runtime/engines/rustic/theme.css:495-511` bare `.ds-card`
    targets MODERN's root despite living in the "rustic" file) but it is not
    a skin collision.
 2. **Badge** — a narrow, existing `transform`-only skin

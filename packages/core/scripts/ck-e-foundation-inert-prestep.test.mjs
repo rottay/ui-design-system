@@ -11,23 +11,23 @@ import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const chartsRoot = join(packageRoot, 'src/components/patterns/visualization/charts');
-const cssRoot = join(packageRoot, 'src/tokens/css');
+const chartsRoot = join(packageRoot, 'src/ui/patterns/visualization/charts');
+const cssRoot = join(packageRoot, 'src/foundation/tokens/css');
 const exemptionsPath = resolve(packageRoot, '../..', 'roadmap/skin-exemptions.json');
-const foundationSkinPath = join(cssRoot, 'components/skin/chart-foundation.css');
+const foundationSkinPath = join(cssRoot, 'presentation/components/skin/chart-foundation.css');
 const entrypointPaths = [
-  join(cssRoot, 'foundation/base.css'),
-  join(cssRoot, 'entrypoints/styles.css'),
+  join(cssRoot, 'facade/entrypoints/base.css'),
+  join(cssRoot, 'facade/entrypoints/styles.css'),
 ];
 
 const FILES = {
-  scaffold: { path: 'chart-scaffold.tsx', start: [4, 0], floor: [0, 0], topology: 'bb0a9fc043ee1fab3c8f7fbafc690cb4a64436967f233ddfb38feee0f9bce2f5' },
-  brush: { path: 'hooks/use-chart-brush.ts', start: [12, 0], floor: [0, 0], topology: 'ff3639d218c5fb49579fc315d595ce11fb8e7a3acb0018eda6f2cef6c980f12a' },
-  exportHook: { path: 'hooks/use-chart-export.ts', start: [1, 0], floor: [0, 0], topology: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
-  theme: { path: 'hooks/use-chart-theme.ts', start: [4, 0], floor: [4, 0], topology: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
-  tooltip: { path: 'tooltip/index.tsx', start: [11, 0], floor: [2, 0], topology: '89be9e4d95bd9c886ebf76bf2439ddd86c1fc368aa8d63a1dc72a7daaff6f6e0' },
-  crosshair: { path: 'tooltip/crosshair.ts', start: [0, 4], floor: [0, 1], topology: '13e42bf71b21e37452b3e4d30b6238efc2cc86410b1c47b40b0a642739e4a7be' },
-  exporter: { path: 'utils/export.ts', start: [2, 5], floor: [2, 5], topology: '9f02066a213d04963aa441dcf4805feceb85887f55e8a88f572a03bed73b5f8a' },
+  scaffold: { path: 'presentation/scaffold/index.tsx', start: [4, 0], floor: [0, 0], topology: 'bb0a9fc043ee1fab3c8f7fbafc690cb4a64436967f233ddfb38feee0f9bce2f5' },
+  brush: { path: 'runtime/interaction/brush/index.ts', start: [12, 0], floor: [0, 0], topology: 'ff3639d218c5fb49579fc315d595ce11fb8e7a3acb0018eda6f2cef6c980f12a' },
+  exportHook: { path: 'runtime/exporting/composition/react/index.ts', start: [1, 0], floor: [0, 0], topology: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
+  theme: { path: 'runtime/theming/presentation/react/color-theme/index.ts', start: [4, 0], floor: [4, 0], topology: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
+  tooltip: { path: 'presentation/tooltip/index.tsx', start: [11, 0], floor: [2, 0], topology: '89be9e4d95bd9c886ebf76bf2439ddd86c1fc368aa8d63a1dc72a7daaff6f6e0' },
+  crosshair: { path: 'presentation/crosshair/index.ts', start: [0, 4], floor: [0, 1], topology: '13e42bf71b21e37452b3e4d30b6238efc2cc86410b1c47b40b0a642739e4a7be' },
+  exporter: { path: 'runtime/exporting/foundation/file/index.ts', start: [2, 5], floor: [2, 5], topology: '9f02066a213d04963aa441dcf4805feceb85887f55e8a88f572a03bed73b5f8a' },
 };
 
 function pathFor(entry) {
@@ -137,13 +137,13 @@ test('CK-E foundation floors pin theme data, tooltip swatches, crosshair data an
   const exemptions = JSON.parse(readFileSync(exemptionsPath, 'utf8'));
   const runtime = exemptions['SKIN-EXEMPT-RUNTIME-VALUE'].files;
   const notPaint = exemptions['SKIN-EXEMPT-NOT-PAINT'].files;
-  assert.equal(notPaint['patterns/visualization/charts/hooks/use-chart-theme.ts'].floor, 4);
-  assert.equal(runtime['patterns/visualization/charts/tooltip/index.tsx'].floor, 2);
-  assert.equal(runtime['patterns/visualization/charts/tooltip/crosshair.ts'].runtimeSvgFloor, 1);
+  assert.equal(notPaint['patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts'].floor, 4);
+  assert.equal(runtime['patterns/visualization/charts/presentation/tooltip/index.tsx'].floor, 2);
+  assert.equal(runtime['patterns/visualization/charts/presentation/crosshair/index.ts'].runtimeSvgFloor, 1);
   assert.deepEqual(
     {
-      inline: runtime['patterns/visualization/charts/utils/export.ts'].floor,
-      runtime: runtime['patterns/visualization/charts/utils/export.ts'].runtimeSvgFloor,
+      inline: runtime['patterns/visualization/charts/runtime/exporting/foundation/file/index.ts'].floor,
+      runtime: runtime['patterns/visualization/charts/runtime/exporting/foundation/file/index.ts'].runtimeSvgFloor,
     },
     { inline: 2, runtime: 5 }
   );
@@ -188,7 +188,10 @@ test('CK-E foundation skin owns every migrated paint and is wired through both e
     assert.ok(skin.includes(declaration), `foundation skin lacks ${declaration}`);
   }
   for (const entrypointPath of entrypointPaths) {
-    assert.match(readFileSync(entrypointPath, 'utf8'), /@import '\.\.\/components\/skin\/chart-foundation\.css';/);
+    assert.match(
+      readFileSync(entrypointPath, 'utf8'),
+      /@import '\.\.\/\.\.\/presentation\/components\/skin\/chart-foundation\.css';/,
+    );
   }
 });
 
@@ -200,18 +203,18 @@ test('CK-E foundation preserves its pre-step React, D3 and DOM element anatomy',
   }
 });
 
-test('CK-E globally reconciles 478 measured sites to the exact 111-site Stage-1 boundary', () => {
+test('CK-E globally reconciles 478 measured sites to the exact 114-site Stage-1 boundary', () => {
   const start = {
     inline: 195 + 45 + 25 + 34,
     runtime: 0 + 114 + 57 + 8,
   };
   const floor = {
-    inline: 6 + 27 + 9 + 8,
-    runtime: 0 + 36 + 20 + 5,
+    inline: 6 + 26 + 9 + 8,
+    runtime: 0 + 39 + 20 + 6,
   };
   assert.deepEqual(start, { inline: 299, runtime: 179 });
-  assert.deepEqual(floor, { inline: 50, runtime: 61 });
+  assert.deepEqual(floor, { inline: 49, runtime: 65 });
   assert.equal(start.inline + start.runtime, 478);
-  assert.equal(floor.inline + floor.runtime, 111);
-  assert.equal(start.inline + start.runtime - floor.inline - floor.runtime, 367);
+  assert.equal(floor.inline + floor.runtime, 114);
+  assert.equal(start.inline + start.runtime - floor.inline - floor.runtime, 364);
 });

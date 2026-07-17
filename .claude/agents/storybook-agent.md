@@ -80,7 +80,7 @@ export const AllVariants: Story = {
 - ❌ NO olvidar el `export default meta`
 
 ### 6. Ubicación de Archivos
-- Stories van junto al componente: `src/components/Category/Component/Component.stories.tsx`
+- Stories van junto al owner: `src/ui/primitives/{category}/{Component}/{Component}.stories.tsx`
 - Configuración en `.storybook/main.ts` y `.storybook/preview.tsx`
 
 ### 7. Workflow

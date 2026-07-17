@@ -2,7 +2,7 @@
 
 Scope:
 
-- `src/components/primitives/inputs/**/engines/modern.tsx`
+- `src/ui/primitives/inputs/**/engines/modern.tsx`
 - directly adjacent token/type/utils files when they alter runtime customization
 
 ## Category Summary
@@ -59,17 +59,17 @@ APIs directly. Their DS integration is almost entirely raw `var(--ds-*)`.
 Examples:
 
 - `Button` size maps vs runtime shell:
-  `src/components/primitives/inputs/Button/Button.types.ts:334`
-  vs `src/components/primitives/inputs/Button/engines/modern.tsx:128`
+  `src/ui/primitives/inputs/Button/Button.types.ts:334`
+  vs `src/ui/primitives/inputs/Button/engines/modern.tsx:128`
 - `Input` size maps vs runtime shell:
-  `src/components/primitives/inputs/Input/Input.types.ts:290`
-  vs `src/components/primitives/inputs/Input/engines/modern.tsx:45`
+  `src/ui/primitives/inputs/Input/Input.types.ts:290`
+  vs `src/ui/primitives/inputs/Input/engines/modern.tsx:45`
 - `Select` size/density maps vs runtime shell:
-  `src/components/primitives/inputs/Select/Select.types.ts:294`
-  vs `src/components/primitives/inputs/Select/engines/modern.tsx:57`
+  `src/ui/primitives/inputs/Select/Select.types.ts:294`
+  vs `src/ui/primitives/inputs/Select/engines/modern.tsx:57`
 - `Toggle` token maps are redefined locally instead of reused:
-  `src/components/primitives/inputs/Toggle/Toggle.types.ts:99`
-  vs `src/components/primitives/inputs/Toggle/engines/modern.tsx:22`
+  `src/ui/primitives/inputs/Toggle/Toggle.types.ts:99`
+  vs `src/ui/primitives/inputs/Toggle/engines/modern.tsx:22`
 
 This is a major parity problem because the contracts already look customizable, but the
 Modern renderer is not consistently honoring them.
@@ -79,15 +79,15 @@ Modern renderer is not consistently honoring them.
 Examples:
 
 - `AutoComplete` option rows:
-  `src/components/primitives/inputs/AutoComplete/engines/modern.tsx:223`
+  `src/ui/primitives/inputs/AutoComplete/engines/modern.tsx:223`
 - `Mentions` option rows:
-  `src/components/primitives/inputs/Mentions/engines/modern.tsx:270`
+  `src/ui/primitives/inputs/Mentions/engines/modern.tsx:270`
 - `Cascader` rows and popup shell:
-  `src/components/primitives/inputs/Cascader/engines/modern.tsx:359`
-  and `src/components/primitives/inputs/Cascader/engines/modern.tsx:440`
+  `src/ui/primitives/inputs/Cascader/engines/modern.tsx:359`
+  and `src/ui/primitives/inputs/Cascader/engines/modern.tsx:440`
 - `TreeSelect` rows and popup/search behavior:
-  `src/components/primitives/inputs/TreeSelect/engines/modern.tsx:223`
-  and `src/components/primitives/inputs/TreeSelect/engines/modern.tsx:582`
+  `src/ui/primitives/inputs/TreeSelect/engines/modern.tsx:223`
+  and `src/ui/primitives/inputs/TreeSelect/engines/modern.tsx:582`
 
 These are visually important surfaces, but they still depend on utility classes or local values.
 
@@ -96,11 +96,11 @@ These are visually important surfaces, but they still depend on utility classes 
 Examples:
 
 - `ColorPicker` native color input:
-  `src/components/primitives/inputs/ColorPicker/engines/modern.tsx:190`
+  `src/ui/primitives/inputs/ColorPicker/engines/modern.tsx:190`
 - `Slider` still depends on Daisy `range-*` classes and hardcoded white handles:
-  `src/components/primitives/inputs/Slider/engines/modern.tsx:184`
-  `src/components/primitives/inputs/Slider/engines/modern.tsx:205`
-  `src/components/primitives/inputs/Slider/engines/modern.tsx:265`
+  `src/ui/primitives/inputs/Slider/engines/modern.tsx:184`
+  `src/ui/primitives/inputs/Slider/engines/modern.tsx:205`
+  `src/ui/primitives/inputs/Slider/engines/modern.tsx:265`
 
 If the goal is maximum per-tenant styling, these controls need more DS-owned rendering.
 
@@ -109,13 +109,13 @@ If the goal is maximum per-tenant styling, these controls need more DS-owned ren
 Examples:
 
 - Preview backdrop:
-  `src/components/primitives/inputs/Upload/engines/modern.tsx:105`
+  `src/ui/primitives/inputs/Upload/engines/modern.tsx:105`
 - Picture-card overlay / fallback:
-  `src/components/primitives/inputs/Upload/engines/modern.tsx:208`
+  `src/ui/primitives/inputs/Upload/engines/modern.tsx:208`
 - Trigger card:
-  `src/components/primitives/inputs/Upload/engines/modern.tsx:464`
+  `src/ui/primitives/inputs/Upload/engines/modern.tsx:464`
 - Dragger hover state:
-  `src/components/primitives/inputs/Upload/engines/modern.tsx:644`
+  `src/ui/primitives/inputs/Upload/engines/modern.tsx:644`
 
 This makes `Upload` one of the weakest inputs for true tenant styling parity.
 
@@ -124,11 +124,11 @@ This makes `Upload` one of the weakest inputs for true tenant styling parity.
 Examples:
 
 - `Checkbox` accepts a richer color/radius contract but Modern ignores it:
-  `src/components/primitives/inputs/Checkbox/Checkbox.types.ts:319`
-  vs `src/components/primitives/inputs/Checkbox/engines/modern.tsx:95`
+  `src/ui/primitives/inputs/Checkbox/Checkbox.types.ts:319`
+  vs `src/ui/primitives/inputs/Checkbox/engines/modern.tsx:95`
 - `DatePicker` / `TimePicker` expose more style/icon/popup control than Modern actually honors:
-  `src/components/primitives/inputs/DatePicker/DatePicker.types.ts:148`
-  `src/components/primitives/inputs/TimePicker/TimePicker.types.ts:81`
+  `src/ui/primitives/inputs/DatePicker/DatePicker.types.ts:148`
+  `src/ui/primitives/inputs/TimePicker/TimePicker.types.ts:81`
 
 ## Strong Coverage Worth Preserving
 

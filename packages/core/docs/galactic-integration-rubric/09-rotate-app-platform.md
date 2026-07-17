@@ -36,8 +36,8 @@ But it also shows where the host still bypasses or narrows the DS story.
 
 Both auth and dashboard route through `DesignSystemProvider` with roughly the same inputs:
 
-- `app-platform/src/components/providers/dashboard-providers/index.tsx`
-- `app-platform/src/components/providers/tenant-provider/index.tsx`
+- `app-platform/src/composition/components/providers/dashboard-providers/index.tsx`
+- `app-platform/src/composition/components/providers/tenant-provider/index.tsx`
 
 ### Visible DS variable consumption
 
@@ -49,7 +49,7 @@ The sidebar shell and related host chrome visibly consume:
 Files:
 
 - `app-platform/src/app/globals.css`
-- `app-platform/src/components/_shared/layouts/app-layout/sidebar/index.tsx`
+- `app-platform/src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx`
 
 ## What The Host Still Gets Wrong
 

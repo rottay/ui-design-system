@@ -42,12 +42,12 @@ Execute in this order. After each wave, produce a STOP report.
 
 Verify these 8 checks pass:
 1. `docs/TENANT_MODEL.md` is canonical (two tenant classes, merge chain, narrowed fields)
-2. `contracts/themes/index.ts` BrandTheme contract is stable (no TODO for structural changes)
+2. `foundation/contracts/composition/tenants/themes/index.ts` BrandTheme contract is stable (no TODO for structural changes)
 3. TenantAppearance narrowed fields match TENANT_MODEL doc
-4. `tokens/ts/brand-themes/rottay.ts` exports cleanly
+4. `foundation/tokens/ts/presentation/brand-themes/platform/index.ts` exports cleanly
 5. 4 bundled tenants listed; 3 have brand themes
 6. North-star: dark-first, low-gloss, hierarchy through weight not decoration
-7. `tokens/css/components/card.css` has 90+ stable tokens
+7. `foundation/tokens/css/presentation/components/card.css` has 90+ stable tokens
 8. Rottay artifact defines `--ds-statistic-{title,value,prefix,suffix}-color`
 
 ### R1 — Rotate Visual Direction Reset (DS only)
@@ -61,7 +61,7 @@ Priority order:
 - Add prefix/suffix color tokens
 - Apply same to Countdown component
 - Fix CSS_VARS in Statistic.types.ts (`--statistic-*` -> `--ds-statistic-*`)
-- Create `tokens/css/components/statistic.css` with full surface
+- Create `foundation/tokens/css/presentation/components/statistic.css` with full surface
 
 **R1-P2: Simplify CollectionHeader** (~115 lines, 1 file)
 - DELETE grid overlay (lines ~108-121)

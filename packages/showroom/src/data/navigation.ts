@@ -145,16 +145,13 @@ const primitives: NavSection = {
       label: 'Navigation',
       path: '/primitives/navigation',
       children: [
-        { slug: 'action-dock', label: 'ActionDock', path: '/primitives/navigation/action-dock' },
         { slug: 'affix', label: 'Affix', path: '/primitives/navigation/affix' },
         { slug: 'anchor', label: 'Anchor', path: '/primitives/navigation/anchor' },
         { slug: 'back-top', label: 'BackTop', path: '/primitives/navigation/back-top' },
-        { slug: 'bottom-tab-bar', label: 'BottomTabBar', path: '/primitives/navigation/bottom-tab-bar' },
         { slug: 'breadcrumb', label: 'Breadcrumb', path: '/primitives/navigation/breadcrumb' },
         { slug: 'float-button', label: 'FloatButton', path: '/primitives/navigation/float-button' },
         { slug: 'link', label: 'Link', path: '/primitives/navigation/link' },
         { slug: 'menu', label: 'Menu', path: '/primitives/navigation/menu' },
-        { slug: 'mobile-header', label: 'MobileHeader', path: '/primitives/navigation/mobile-header' },
         { slug: 'pagination', label: 'Pagination', path: '/primitives/navigation/pagination' },
         { slug: 'segmented', label: 'Segmented', path: '/primitives/navigation/segmented' },
         { slug: 'stepper', label: 'Stepper', path: '/primitives/navigation/stepper' },
@@ -167,7 +164,6 @@ const primitives: NavSection = {
       label: 'Overlay',
       path: '/primitives/overlay',
       children: [
-        { slug: 'adaptive-overlay', label: 'AdaptiveOverlay', path: '/primitives/overlay/adaptive-overlay' },
         { slug: 'alert-dialog', label: 'AlertDialog', path: '/primitives/overlay/alert-dialog' },
         { slug: 'confirm-dialog', label: 'ConfirmDialog', path: '/primitives/overlay/confirm-dialog' },
         { slug: 'context-menu', label: 'ContextMenu', path: '/primitives/overlay/context-menu' },
@@ -249,6 +245,14 @@ const patterns: NavSection = {
       ],
     },
     {
+      slug: 'feedback',
+      label: 'Feedback',
+      path: '/patterns/feedback',
+      children: [
+        { slug: 'adaptive-overlay', label: 'AdaptiveOverlay', path: '/patterns/feedback/adaptive-overlay' },
+      ],
+    },
+    {
       slug: 'workflow',
       label: 'Workflow',
       path: '/patterns/workflow',
@@ -305,6 +309,7 @@ const structuresNav: NavSection = {
       label: 'Headers',
       path: '/structures/headers',
       children: [
+        { slug: 'mobile-header', label: 'MobileHeader', path: '/structures/headers/mobile-header' },
         { slug: 'collection-header', label: 'CollectionHeader', path: '/structures/headers/collection-header' },
         { slug: 'dashboard-header', label: 'DashboardHeader', path: '/structures/headers/dashboard-header' },
         { slug: 'detail-header', label: 'DetailHeader', path: '/structures/headers/detail-header' },
@@ -317,6 +322,7 @@ const structuresNav: NavSection = {
       label: 'Workspace',
       path: '/structures/workspace',
       children: [
+        { slug: 'action-dock', label: 'ActionDock', path: '/structures/workspace/action-dock' },
         { slug: 'active-filters-bar', label: 'ActiveFiltersBar', path: '/structures/workspace/active-filters-bar' },
         { slug: 'column-menu', label: 'ColumnMenu', path: '/structures/workspace/column-menu' },
         { slug: 'export-button', label: 'ExportButton', path: '/structures/workspace/export-button' },
@@ -327,6 +333,14 @@ const structuresNav: NavSection = {
         { slug: 'selection-preview-rail', label: 'SelectionPreviewRail', path: '/structures/workspace/selection-preview-rail' },
         { slug: 'table-toolbar', label: 'TableToolbar', path: '/structures/workspace/table-toolbar' },
         { slug: 'view-mode-switcher', label: 'ViewModeSwitcher', path: '/structures/workspace/view-mode-switcher' },
+      ],
+    },
+    {
+      slug: 'shell',
+      label: 'Shell',
+      path: '/structures/shell',
+      children: [
+        { slug: 'bottom-tab-bar', label: 'BottomTabBar', path: '/structures/shell/bottom-tab-bar' },
       ],
     },
     {

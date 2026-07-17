@@ -15,7 +15,7 @@ pnpm dev          # http://localhost:7001
 |--------|-------------|
 | `pnpm dev` | Dev server on port 7001 (webpack) |
 | `pnpm dev:turbopack` | Experimental Turbopack dev server |
-| `pnpm build` | Production build (~10s, 265 static pages) |
+| `pnpm build` | Production Webpack build |
 | `pnpm start` | Production server |
 | `pnpm typecheck` | TypeScript type check |
 | `pnpm lint` | ESLint |
@@ -30,10 +30,10 @@ src/
     page.tsx              Landing page (Tailwind, marketing exception)
     (docs)/               Documentation shell
       foundations/         Tokens, themes, engines, icons
-      primitives/          105 component pages with live rendering
-      patterns/            56 pattern + 28 chart pages
-      structures/          28 structure pages
-      surfaces/            44 surface pages
+      primitives/          Generated component pages with live rendering
+      patterns/            Generated pattern and chart pages
+      structures/          Generated structure pages
+      surfaces/            Generated surface pages
       verticals/           Platform, BitHire, Evnto demos
       playground/          Interactive sandbox + theme builder
       developers/          Getting started, architecture deep-dive
@@ -56,10 +56,10 @@ Uses `@rottay/design-system` as a `workspace:*` dependency:
 
 ## Features
 
-- 105 live primitive previews with engine comparison (Classic/Modern/Rustic)
-- 56 pattern pages with interactive demos
-- 19 chart types rendered with real D3 + sample data
-- 109 searchable icons with copy-to-clipboard
+- Live primitive previews with engine comparison (Classic/Modern/Rustic)
+- Pattern pages with interactive demos
+- 18 chart families rendered with real D3 + sample data
+- Stable 50-role `Icon` facade plus the generated 263-role pack corpus
 - 6 token explorer pages (colors, spacing, typography, radius, shadows, motion)
 - 9 vertical demo screens (Platform, BitHire, Evnto)
 - Global Cmd+K search across all registries

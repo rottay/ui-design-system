@@ -4,15 +4,15 @@ import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
-import { generateResponsiveGridCSS } from '../src/components/primitives/layout/Grid/shared/responsive';
-import { generateResponsiveCSS } from '../src/components/primitives/layout/shared/responsive-props';
-import type { TenantConfig } from '../src/contracts';
-import { generateTenantCss } from '../src/runtime/tenant/storage/static/generator';
+import { generateResponsiveGridCSS } from '../src/ui/primitives/layout/Grid/runtime/responsive';
+import { generateResponsiveCSS } from '../src/infrastructure/runtime/responsive/runtime/style-properties';
+import type { TenantConfig } from '../src/foundation/contracts';
+import { generateTenantCss } from '../src/infrastructure/compilers/runtime/tenant-css/visual-config';
 import { isEmbeddedCssPaintProperty } from './lib/embedded-css-paint-counter.mjs';
 import { collectSourceFiles } from './runtime-svg-paint-census.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const componentsDir = resolve(packageRoot, 'src/components');
+const componentsDir = resolve(packageRoot, 'src/ui');
 
 function collectResponsivePropertyMap(): string[] {
   const properties: string[] = [];

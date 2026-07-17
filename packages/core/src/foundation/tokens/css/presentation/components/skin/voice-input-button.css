@@ -1,0 +1,67 @@
+/**
+ * VoiceInputButton skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/voice-input-button.css -- this component has
+ * no engine split (one `index.tsx` renders under every engine).
+ *
+ * SCOPE ROOT is `.ds-voice-input-button[data-part='root']` (a `<button>`),
+ * carrying `data-status`, `data-active`, `data-error`, `data-blocked`, plus
+ * `data-variant` ('ghost'|'filled') added for this migration. All paint lives on
+ * the root: the border reproduces the `borderColor` chain (error > active >
+ * default), the background the `bgColor` chain (ghost transparent; filled by
+ * state), the text the `textColor` chain.
+ *
+ * The two per-mount `<style>` keyframes are moved here renamed
+ * `ds-voice-input-button-pulse` / `-spin`; the inline `animation` references the
+ * new names, and `-spin` no longer shadows the global `spin`.
+ *
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
+ * (0,3,1); with only ONE root class, the border rules reach (0,4,0) via a
+ * thrice-repeated `[data-part='root']` (base) or twice plus a state attribute.
+ * Non-border paint wins unlayered at (0,2,0)+.
+ */
+
+.ds-voice-input-button[data-part='root'] {
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ds-color-text-muted);
+}
+
+/* border color: default (base) > active > error (error wins the tie, last). */
+.ds-voice-input-button[data-part='root'][data-part='root'][data-part='root'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+}
+.ds-voice-input-button[data-part='root'][data-part='root'][data-active='true'] {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 44%, transparent);
+}
+.ds-voice-input-button[data-part='root'][data-part='root'][data-error='true'] {
+  border-color: color-mix(in srgb, var(--ds-color-error) 36%, transparent);
+}
+
+/* background: only the filled variant tints; state overrides in error>active order. */
+.ds-voice-input-button[data-part='root'][data-variant='filled'] {
+  background: color-mix(in srgb, var(--ds-surface-card) 85%, var(--ds-color-bg-primary) 15%);
+}
+.ds-voice-input-button[data-part='root'][data-variant='filled'][data-active='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card));
+}
+.ds-voice-input-button[data-part='root'][data-variant='filled'][data-error='true'] {
+  background: color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-surface-card));
+}
+
+/* text color */
+.ds-voice-input-button[data-part='root'][data-active='true'] {
+  color: var(--ds-color-primary);
+}
+.ds-voice-input-button[data-part='root'][data-error='true'] {
+  color: var(--ds-color-error);
+}
+
+@keyframes ds-voice-input-button-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 22%, transparent); }
+  70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
+}
+@keyframes ds-voice-input-button-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

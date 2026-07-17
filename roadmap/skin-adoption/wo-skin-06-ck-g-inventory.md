@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-G navigation-pattern paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/patterns/navigation/`. Same
+All paths relative to `packages/core/src/ui/patterns/navigation/`. Same
 channel scope and classification legend as the WO-SKIN-04/wo-skin-06-triage
 precedents: a "site" is an object-literal style key named `background*`,
 `border*`, `outline*`, `color`, `boxShadow`, `textShadow`, `fill`, `stroke`,
@@ -13,7 +13,7 @@ CSS rule on a pseudo-class or `data-*`), **RUNTIME** (computed at render time,
 must stay inline), **HATCH** (a runtime value that reaches the paint channel
 but can be handed to CSS via a `--ds-*` custom property, rule stays in the
 skin). Site counts below are machine-verified against
-`node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.patterns/navigation`,
+`node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/navigation`,
 which reproduces the checkpoint's total exactly: **279 sites, 10 files** (the 5
 `classic.tsx` engines wrap Ant Design directly — `Modal`, `Dropdown`,
 `Popover`, `Avatar`/`Badge` — and carry 0 counted sites each; not detailed
@@ -31,7 +31,7 @@ locale-switcher        modern  6  rustic 14   = 20
 
 **Zero `data-part` anywhere in this family** (grep-confirmed) and **no skin CSS
 file exists yet for any of these 5 components** (grep-confirmed across
-`tokens/css/components/skin/`, `tokens/css/engines/{modern,rustic}/skin/`, and
+`foundation/tokens/css/presentation/components/skin/`, `foundation/tokens/css/runtime/engines/{modern,rustic}/skin/`, and
 every `theme.css`/`personality.css`) — every component below is greenfield,
 same starting state as WO-SKIN-03/04's precedent components.
 
@@ -107,7 +107,7 @@ Per the triage's discriminator (§2 of `wo-skin-06-triage.md`): `env.color` /
 RUNTIME-that-must-stay-inline, because the *rule* is static (`background:
 var(--ds-envtoggle-accent)`) and only the *value* is per-instance
 (`style={{'--ds-envtoggle-accent': env.color}}`). `--ds-envtoggle-accent` is
-grep-confirmed **free** (zero hits anywhere in `tokens/css/` or the
+grep-confirmed **free** (zero hits anywhere in `foundation/tokens/css/` or the
 component tree) — safe to claim as the hatch property name.
 
 **modern.tsx — 12 hatch sites**:
@@ -176,7 +176,7 @@ static corner-radius strings, position drives selection, not color).
    (rustic.tsx:41) is invoked with `animate=true` only for the banner dot
    (rustic.tsx:349). `@keyframes ds-pulse` does not exist anywhere in the
    repo (grep-confirmed; the only similar name is the unrelated
-   `ds-pulse-changed-flash` in `tokens/css/foundation/animations/transitions.css`).
+   `ds-pulse-changed-flash` in `foundation/tokens/css/foundation/animations/transitions.css`).
    The browser silently drops the invalid `animation-name` — **the rustic
    banner dot is static, never pulses**, a pre-existing defect. Compare
    modern's banner dot (modern.tsx:214-217), which uses Tailwind's real
@@ -196,7 +196,7 @@ color : 'transparent'`, where the local parameter is literally named
 own separator colon (`active ? color :`) sits immediately after the
 identifier `color` — so the lexer misreads the ternary's TRUE-branch value as
 a second object key named `color` on the same line. **This inflates
-`environment-toggle/engines/rustic.tsx`'s reported count by exactly 2** (line
+`environment-toggle/engines/rustic/index.tsx`'s reported count by exactly 2** (line
 100 and line 115): the file reports 50, but only **48 are real paint keys**.
 Verified by direct line-level replay of the counter's exact algorithm
 (`scripts/lib/inline-paint-counter.mjs`), not by inspection alone. This
@@ -213,8 +213,8 @@ not fixing here.
 
 ### Suppression risk, DaisyUI coupling, keyframes
 
-**None.** `tokens/css/engines/{modern,rustic}/theme.css` and
-`tokens/css/runtime/personality.css` have zero hits for
+**None.** `foundation/tokens/css/runtime/engines/{modern,rustic}/theme.css` and
+`foundation/tokens/css/runtime/personality.css` have zero hits for
 `environment-toggle`/`envtoggle`/`env-toggle` (grep-confirmed). Zero bare
 DaisyUI structural classNames in either engine. The only keyframe reference
 (`ds-pulse`) is dead per the trap above, not a real animation to preserve or
@@ -312,8 +312,8 @@ scope to on either engine and must add one fresh.
 ### Token-vocabulary split within ONE component — the sharpest version of the "existence is not adoption" lesson found in CK-G
 
 `--ds-command-palette-*` **is** a real, declared, tenant-themeable namespace
-(`tokens/css/foundation/themes/default.css:1944-1951`, with real per-tenant
-overrides in `tokens/css/artifacts/rottay/_source/extension.css` for both
+(`foundation/tokens/css/foundation/themes/default.css:1944-1951`, with real per-tenant
+overrides in `foundation/tokens/css/facade/artifacts/rottay/_source/extension.css` for both
 light and dark). **Rustic honors it fully** — 18 `var(--ds-command-palette-*,
 fallback)` reads across the file (backdrop, bg, shadow, border,
 group-color, empty-color, shortcut-border/bg/shadow, item-active-bg/border,

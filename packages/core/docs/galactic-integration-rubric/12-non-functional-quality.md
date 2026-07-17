@@ -24,7 +24,7 @@
 
 Main file:
 
-- `ui-design-system/packages/core/src/runtime/bootstrap/SystemCssVariablesBridge.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx`
 
 ## Accessibility
 
@@ -39,8 +39,8 @@ Main file:
 
 Files:
 
-- `ui-design-system/packages/core/src/components/patterns/navigation/command-palette/engines/modern.tsx`
-- `ui-design-system/packages/core/src/components/patterns/navigation/shortcuts-overlay/engines/modern.tsx`
+- `ui-design-system/packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx`
+- `ui-design-system/packages/core/src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx`
 
 ## Resilience
 
@@ -48,7 +48,7 @@ The DS runtime fallback ladder is one of the strongest parts of the architecture
 
 Main file:
 
-- `ui-design-system/packages/core/src/runtime/tenant/storage/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/store/index.ts`
 
 The main weakness is not fallback coverage. It is observability:
 
@@ -71,7 +71,7 @@ Main files:
 
 - `app-platform/src/lib/tenancy/get-tenant-branding.ts`
 - `app-platform/src/lib/tenancy/branding-to-tenant-config.ts`
-- `ui-design-system/packages/core/src/runtime/theming/ThemeProvider.tsx`
+- `ui-design-system/packages/core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx`
 
 ## Recommended Waves
 

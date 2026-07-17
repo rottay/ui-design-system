@@ -30,10 +30,10 @@
     /* Path aliases */
     "paths": {
       "@/*": ["./src/*"],
-      "@types/*": ["./src/contracts/*"],
-      "@components/*": ["./src/components/*"]
+      "@types/*": ["./src/foundation/contracts/*"],
+      "@ui/*": ["./src/ui/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "src/testing/**/*", "src/_internal/testing/**/*"]
+  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "src/testing/**/*", "src/tooling/testing/**/*"]
 }

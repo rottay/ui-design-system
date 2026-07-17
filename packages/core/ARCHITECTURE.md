@@ -20,28 +20,32 @@ tenant branding, vertical preset, and product profile.
 Layer 4: App             Config-driven pages composed from surfaces
 Layer 3: Surfaces        Page-level config objects (presentation/behavior/visual)
 Layer 2.5: Structures        Page chrome: headers, toolbars, record panels, overlays
-Layer 2: Patterns        Engine-agnostic compositions (tables, forms, charts, ...)
+Layer 2: Patterns        Reusable task compositions (tables, forms, charts, ...)
 Layer 1: Primitives      Engine-switched leaf components across 6 categories
 ```
 
 > Counts of individual primitives, patterns, structures pieces, and surfaces
 > are intentionally omitted here. Past iterations of this doc went stale
 > almost immediately. The authoritative source is the on-disk tree under
-> `packages/core/src/components/`. A generated taxonomy reference is on the
-> roadmap (audit 2026-04-08, feature backlog).
+> `packages/core/src/ui/`. The generated inventory lives at
+> `packages/core/docs/TAXONOMY.generated.md` and is refreshed with
+> `pnpm docs:taxonomy`.
 
 Each layer only depends on the layer below it:
 
 - **Primitives** are engine-switched leaf components (Button, Input, Card,
-  etc.). Each primitive has four engine implementations (Classic, Modern,
-  Rustic, Custom).
+  etc.). Each primitive may provide up to three physical implementations
+  (Classic, Modern, Rustic). `custom` is registry-backed resolution: it uses a
+  tenant pack override when one is registered and otherwise falls back to a
+  configured physical engine.
 - **Patterns** compose primitives into reusable, task-level UI compositions
-  (DataTable, FormBuilder, StatsGrid, KanbanBoard, ...). They are
-  engine-agnostic and stay generic — they know nothing about tenants,
-  candidates, roles, etc.
+  (DataTable, FormBuilder, StatsGrid, KanbanBoard, ...). A pattern may be
+  engine-backed when its rendering genuinely differs by engine, or engine-free
+  when one implementation is sufficient. In either case it stays domain-free:
+  it knows nothing about candidates, roles, companies, or events.
 - **Structures** is a middle tier introduced in the 2026-04-08 audit
-  cleanup. It hosts structural families organized into 5 groups
-  (`headers/`, `workspace/`, `record/`, `dashboard/`, `feedback/`) that
+  cleanup. It hosts structural families organized into 6 groups
+  (`headers/`, `workspace/`, `record/`, `dashboard/`, `feedback/`, `shell/`) that
   are too specific for `patterns/` but too reusable for `surfaces/`:
   detail/edit/form headers, command bars, record field grids, metric
   cards, loading overlays. Structures families compose patterns and
@@ -49,11 +53,13 @@ Each layer only depends on the layer below it:
   screens directly.
 - **Surfaces** are declarative config objects that describe an entire
   page (ListSurface, DashboardSurface, FormSurface, etc.). Surfaces
-  are organized into `foundation/` (types, builders, helpers, hooks),
-  `layout/` (page-shell, header, sidebar), and `pages/` (6 domain
-  groups: data, forms, workspace, operations, admin, experience).
-  They wire patterns and structures to data and permissions without
-  owning rendering logic.
+  are organized by dependency direction into `foundation/` (contracts and
+  shared support), `runtime/` (builders, hooks, state, responsive resolution,
+  and error handling), `composition/` (page chrome and layout shells), and
+  `presentation/` (6 groups of complete page recipes: data, forms, workspace,
+  operations, admin, and experience).
+  They wire patterns and structures to data and permissions. Contracts and
+  state stay declarative; React page renderers live only in `presentation/`.
 - **App** is the consuming application layer. Apps pass surface configs and
   domain adapters; the DS handles everything else.
 
@@ -73,14 +79,18 @@ Each layer only depends on the layer below it:
 
 ## 2. Engine System
 
-### The Four Engines
+### Three Physical Engines and Custom Resolution
 
-| Engine   | Backing Library   | Character                      |
-|----------|-------------------|--------------------------------|
-| Classic  | Ant Design        | Enterprise, structured, formal |
-| Modern   | DaisyUI/Tailwind  | Consumer, playful, rounded     |
-| Rustic   | Vanilla HTML/CSS  | Minimal, lightweight, raw      |
-| Custom   | Pack-scoped       | White-label, tenant-specific   |
+| Physical engine | Backing library  | Character                      |
+|-----------------|------------------|--------------------------------|
+| Classic         | Ant Design       | Enterprise, structured, formal |
+| Modern          | Rottay token skins (Tailwind/Daisy compatible) | Responsive, expressive, adaptive |
+| Rustic          | Vanilla HTML/CSS | Minimal, lightweight, raw      |
+
+`custom` is not a fourth physical implementation tree. It is a pack-scoped
+component registry used for exceptional white-label overrides. When the active
+pack does not register a component, resolution continues through the configured
+`fallbackEngine` (`classic` by default).
 
 ### How `createEngineComponent` Works
 
@@ -98,8 +108,41 @@ The factory returns a `ForwardRefExoticComponent` that:
 
 1. Reads the active engine from `EngineProvider` context
 2. Optionally accepts an `engine` prop for per-component override
-3. Resolves the correct lazy-loaded implementation
-4. Wraps in `Suspense` + `EngineErrorBoundary`
+3. Resolves a pack registration when the selected engine is `custom`
+4. Falls back to one of the three physical engine loaders when needed
+5. Wraps lazy physical implementations in `Suspense` + `EngineErrorBoundary`
+
+### Primitive Owner Shape
+
+The primitive name is the owner; its main facade is the owner `index`, not a
+second `Component/Component.tsx` wrapper or an extra `component/` directory.
+Optional branches are added only when the capability exists:
+
+```text
+Button/
+  index.tsx
+  contracts/index.ts
+  runtime/<capability>/index.ts
+  engines/
+    classic/index.tsx
+    modern/index.tsx
+    rustic/index.tsx
+  compound/<Part>/index.tsx
+  tests/*.test.tsx
+```
+
+The internal direction is `contracts → runtime → engines → compound`; a later
+branch may consume an earlier one. A missing physical implementation is handled
+by the engine registry/fallback and is not represented by a fake re-exporting
+engine file.
+
+Cross-category overlay infrastructure lives once under
+`ui/primitives/runtime/overlay/{portal,backdrop,focus-management,dialog-attributes}`.
+Responsive primitives form the explicit
+`ui/primitives/layout/responsive/{show,hide,slot}` family. Page-scale
+composites do not remain in primitives: `ActionDock`, `BottomTabBar` and
+`MobileHeader` belong to structures, while `AdaptiveOverlay` belongs to
+patterns/feedback.
 
 ### Engine Selection Flow
 
@@ -108,9 +151,9 @@ DesignSystemProvider
   │
   ├─ forceEngine prop?  ──── YES ─→ use that engine
   │
-  ├─ tenantConfig.engine? ── YES ─→ use that engine
-  │
   ├─ vertical.engine? ────── YES ─→ use that engine
+  │
+  ├─ bundled tenant engine?  YES ─→ use the first-party pin
   │
   └─ fallback ─────────────────────→ 'classic'
           │
@@ -120,11 +163,17 @@ DesignSystemProvider
           v
     createEngineComponent reads context
           │
-          v
-    React.lazy loads the correct implementation
+          ├─ custom + registered component ─→ render pack component
+          │
+          └─ physical or custom fallback ───→ React.lazy loads
+                                               classic / modern / rustic
 ```
 
-### Custom Engine: Pack-Scoped Registry
+An engine value arriving from a DB-managed tenant is intentionally ignored.
+Vertical identity is static-first; tenants can change branding, tokens and
+bounded appearance without changing which product engine owns rendering.
+
+### Custom Resolution: Pack-Scoped Registry
 
 The Custom engine supports **pack-scoped component registration** for
 multi-tenant white-label scenarios:
@@ -151,7 +200,12 @@ Design tokens flow through a multi-layer pipeline. The chain depends on
 whether the tenant has a `brandTheme` (the canonical premium model) or
 uses the legacy scattered fields.
 
-### BrandTheme Path (preferred)
+The chains below describe provider-owned code verticals and compatibility
+inputs. A published customer tenant instead arrives as one validated,
+server-compiled artifact; `visualAuthority="compiled-artifact"` prevents the
+provider from recomputing or emitting a competing visual layer.
+
+### BrandTheme Path (code-owned verticals)
 
 When `config.brandTheme` exists, the merge chain is:
 
@@ -189,19 +243,22 @@ accidentally wipe out the vertical's `chart` personality.
 ### Color Tokens
 
 Colors use CSS custom properties (`var(--ds-color-primary-500)`) rather than
-resolved values. Actual color values live in tenant CSS files and can be
-swapped at runtime without re-rendering the React tree.
+resolved values. Code-owned vertical values ship in generated artifacts;
+published customer values come from a bounded server-compiled DB artifact.
+Both paths expose the same variable contract to components.
 
 ---
 
 ## 4. Tenant System
 
-### Resolution Chain
+### Compatibility Resolution Chain
 
-Tenant resolution follows a six-level fallback chain. The DS must render
-predictably in every environment (local dev, preview deploys, production, CI).
+The legacy/config resolver follows a six-level fallback chain so the DS can
+render predictably in local development, previews and compatibility consumers.
+This is an identity/config lookup chain, not the productive source of visual
+authority for a published customer tenant.
 
-```
+```text
 getTenantConfig(slug)
   │
   ├─ 1. Memory cache (Map)          Instant, populated by prior calls
@@ -215,8 +272,23 @@ getTenantConfig(slug)
   │
   ├─ 5. Remote API                  Platform-managed tenants in the database
   │
-  └─ 6. Default config (rottay)     Absolute safety net, never throws
+  └─ 6. Identity-safe generic config for the requested slug
+                                      Absolute safety net, never aliases a brand
 ```
+
+Published customer tenants use a separate productive path:
+
+```text
+hostname -> tenant identity -> canonical tenancy DB publication
+  -> validate TenantThemeDocument + vertical envelope
+  -> server compile/cache immutable artifact
+  -> SSR embeds exact CSS and canonical config
+  -> hydration uses visualAuthority="compiled-artifact"
+```
+
+Browser components never query the DB. A cache/fetch failure preserves the
+requested identity and fails closed; it must not fall through to another
+brand. `docs/TENANT_MODEL.md` is authoritative for this split.
 
 ### TenantConfig Structure
 
@@ -224,31 +296,32 @@ A TenantConfig carries:
 
 - `slug` -- unique identifier
 - `name` -- display name
-- `engine` -- preferred rendering engine
+- `engine` -- optional first-party/bundled pin; ignored for DB-managed tenants
 - `theme` -- theme variant (base, dark, etc.)
 - `plan` -- subscription tier
 - `features` -- enabled feature flags
-- `branding` -- colors, logo, company name
-- `tokenOverrides` -- structural token overrides (borderRadius, shadows, etc.)
-- `personality` -- personality token overrides
+- `brandTheme` -- code-owned/compat premium theme
+- `branding`, `appearance`, `tokenOverrides`, `personality` -- legacy visual
+  compatibility fields, not the customer DB write contract
 - `componentPack` -- custom engine pack identifier
 - `vertical` -- vertical preset key
 - `locale` / `fallbackLocale` -- i18n defaults
 - `customTranslations` -- per-tenant translation overrides
 
+Published customer writes use `TenantThemeDocument`; the server normalizes its
+allowlisted fields into the runtime config plus compiled CSS artifact.
+
 ### How Branding Flows Through
 
-```
-TenantConfig.branding
-  │
-  ├─→ ThemeProvider          Sets data-tenant attribute on root element
-  │                          Loads tenant CSS (or skips if app bundles it)
-  │
-  ├─→ useTokens()            colors.primary reads branding.primaryColor
-  │                          colors.secondary reads branding.secondaryColor
-  │
-  └─→ CSS cascade            [data-tenant="acme"] selector overrides
-                             --ds-color-* variables
+```text
+Code-owned vertical:
+  BrandTheme source -> compiler/build -> checked-in generated artifact
+    -> provider/bundle mounts the vertical CSS contract
+
+Published customer tenant:
+  TenantThemeDocument in DB -> server compiler/cache -> SSR style artifact
+    -> DesignSystemProvider visualAuthority="compiled-artifact"
+    -> provider supplies context but emits no competing visual CSS
 ```
 
 ### Tenant Override Merging
@@ -273,9 +346,9 @@ flags into a single preset.
 
 | Vertical   | Engine  | Density     | Character                          |
 |------------|---------|-------------|------------------------------------|
-| `evnto`    | modern  | spacious    | Playful, bounce entrance, spring   |
-| `bithire`  | classic | compact     | Formal, fade entrance, data-dense  |
-| `platform` | classic | comfortable | Neutral, balanced, operational     |
+| `evnto`    | modern | comfortable | Playful, bounce entrance, spring   |
+| `bithire`  | modern | comfortable | Editorial, calm, people-first      |
+| `platform` | modern | compact     | Neutral, balanced, operational     |
 
 ### How Verticals Participate
 
@@ -328,29 +401,60 @@ Primitives (engine-switched leaf components)
   └─ overlay/       Modal, Dropdown, Popover, Sheet, ContextMenu,
                     AlertDialog, ConfirmDialog, HoverCard, Tour, ...
 
-Patterns (engine-agnostic compositions)
+Patterns (reusable task compositions; engine-backed where needed)
   │
-  ├─ data/              data-table, detail-panel, list-toolbar, stats-grid, ...
-  ├─ forms/             form-builder, filter-builder, filter-panel, step-wizard, ...
-  ├─ visualization/     charts, calendar-view, map-view, timeline, tree-view, kanban-board
-  ├─ communication/     assistant, comment-thread, notification-center, live-feed, activity-log
-  ├─ workflow/          approval-inbox, approval-workflow, operational-ledger, ...
-  ├─ navigation/        command-palette, shortcuts-overlay, environment-toggle, workspace-switcher
-  ├─ misc/              tenant-preview, user-profile-card, file-manager, pricing-table, ...
-  └─ _internal/         hooks, types, header-actions, common, domain-kits, engines
+  ├─ product groups/    commerce, commercial, communication, customization,
+  │                     data, feedback, forms, identity, navigation, shell,
+  │                     visualization, workflow
+  └─ support owners/    foundation, runtime, tooling
+
+Structures (page chrome and structural families)
+  │
+  ├─ headers/           collection, dashboard, detail, edit, form, mobile-header
+  ├─ workspace/         search, filters, toolbars, palette and view controls
+  ├─ record/            content, edit-fields, form-sections
+  ├─ dashboard/         insights, stats-header, data-terminal-card
+  ├─ feedback/          loading-overlay
+  └─ shell/             reusable application-shell structures
 
 Surfaces (page-level config objects)
   │
-  ├─ foundation/        Types, builders, helpers, hooks, contracts, states
-  ├─ layout/            Page shells, headers, sidebars
-  └─ pages/
-      ├─ data/          list, dashboard, detail, compare, report, search, visualization
-      ├─ forms/         form, detail-form, guided-draft-form, wizard
-      ├─ workspace/     collection-workspace, record-workbench, command-center, decision-inbox
-      ├─ operations/    activity, kanban, scheduler, operational
-      ├─ admin/         settings, audit, billing, profile, team, integration, import-export, file-browser
-      └─ experience/    auth, marketing, onboarding, chat, notification, pricing, empty-state, media, editor
+  ├─ foundation/        Contracts and shared support
+  ├─ runtime/           Builders, helpers, hooks, state, responsive defaults, error boundary
+  ├─ composition/layout/ Page shells, headers, sidebars
+  └─ presentation/pages/
+      ├─ data/           list, dashboard, detail, compare, report, search, visualization
+      ├─ forms/          form, detail-form, guided-draft-form, wizard
+      ├─ workspace/      collection-workspace, record-workbench, command-center, decision-inbox
+      ├─ operations/     activity, kanban, scheduler, operational
+      ├─ admin/          settings, audit, billing, profile, team, integration, import-export, file-browser
+      └─ experience/     auth, marketing, onboarding, chat, notification, pricing, empty-state, media, editor
 ```
+
+### Chart Owner Shape
+
+The 18 chart implementations live under
+`ui/patterns/visualization/charts/families/`. Cross-family chart capability is
+layered explicitly:
+
+```text
+charts/
+  contracts/compactness/
+  families/<chart>/
+  foundation/{geometry,palettes}/
+  presentation/{crosshair,scaffold,tooltip}/
+  runtime/
+    chart-engine/{foundation,runtime,presentation}/
+    exporting/{foundation,composition}/
+    foundation/css-color-resolution/
+    interaction/{brush,tooltip-state}/
+    responsive/compact-mode/
+    theming/{composition,presentation}/
+```
+
+Package subpaths such as `./charts/spec`, `./charts/access` and
+`./charts/renderers` forward through `src/entrypoints/charts/`; they do not
+create peer implementation trees.
 
 ---
 
@@ -465,8 +569,8 @@ The CSS rules target all three engines simultaneously:
 ### SystemCssVariablesBridge
 
 The bridge is a zero-visual React component rendered inside `DesignSystemProvider`
-that synchronizes JS-resolved personality tokens into CSS custom properties on
-`document.documentElement`:
+that synchronizes provider-owned JS personality tokens into CSS custom properties
+on `document.documentElement`:
 
 ```
 useTokens() resolves personality
@@ -476,8 +580,10 @@ useTokens() resolves personality
 
 Variables are cleaned up on unmount for test isolation and tenant switching.
 
-Without this bridge, CSS keyframes, pseudo-elements, and non-React styling
-paths would fall out of sync when personality tokens change at runtime.
+Without this bridge, provider-owned CSS keyframes, pseudo-elements, and
+non-React styling paths would fall out of sync when personality tokens change
+at runtime. In productive `compiled-artifact` mode, the server artifact is the
+visual authority and the provider does not emit a competing personality layer.
 
 ---
 
@@ -534,110 +640,80 @@ All design system tokens use the `--ds-*` prefix:
    for color changes.
 ```
 
-Tenant CSS files only override values that differ from the default theme.
-This keeps tenant stylesheets small and maintainable.
+First-party artifacts combine compiled BrandTheme variables with an explicitly
+delimited, mechanically scoped extension. DB-managed tenants use the bounded
+server compiler; they do not receive arbitrary selector authority.
 
 ---
 
 ## 10. Directory Structure
 
+The canonical macro tree is ownership-based. Implementation code belongs to
+one of five architecture roots. `entrypoints/` is a classified package-boundary
+support root, not a sixth tier; `src/index.ts` is the only loose source-root
+file.
+
 ```
 packages/core/src/
+├── foundation/
+│   ├── behavior/           Headless behavior kernels and narrow React adapters
+│   ├── contracts/          Public and internal TypeScript contracts
+│   ├── i18n/               React-free catalogs, formatting and resolution
+│   ├── kernel/             Supplier-neutral shared kernels
+│   ├── presets/            Code-owned vertical and product-profile presets
+│   └── tokens/             TS tokens and authored/generated CSS
 │
-├── bootstrap/              Root provider composition
-│   ├── DesignSystemProvider.tsx   Composes all providers
-│   └── SystemCssVariablesBridge.tsx  JS tokens → CSS vars sync
+├── infrastructure/
+│   ├── compilers/          Brand, appearance and tenant artifact compilers
+│   └── runtime/
+│       ├── adapters/       Framework/presentation integration adapters
+│       ├── bootstrap/      Root provider composition
+│       ├── engines/        Provider, resolution and component factory
+│       │   └── runtime/customization/component-registry/
+│       │                    Pack-scoped custom registry and fallback
+│       ├── features/       Feature flag runtime
+│       ├── i18n/           React provider and consumer hooks
+│       ├── motion/         Runtime motion policy/provider
+│       ├── personality/    Personality resolution
+│       ├── product-profiles/
+│       ├── responsive/
+│       ├── spatial/
+│       ├── tenant/         Tenant resolution and storage
+│       ├── theming/
+│       └── verticals/
 │
-├── engines/                Multi-engine infrastructure
-│   ├── factory.tsx         createEngineComponent (lazy + Suspense)
-│   ├── custom.ts           Pack-scoped custom component registry
-│   ├── EngineProvider.tsx   Engine context provider
-│   └── boundary.tsx        EngineErrorBoundary
+├── graphics/
+│   ├── brand-marks/
+│   ├── icons/
+│   ├── motion/
+│   └── pictograms/
 │
-├── tenancy/                Multi-tenant infrastructure
-│   ├── storage/            Resolution chain (cache/registry/static/remote)
-│   │   ├── index.ts        getTenantConfig (6-level fallback)
-│   │   ├── static.ts       Static file loader
-│   │   └── remote.ts       Remote API fetcher
-│   ├── registry/           Known tenant configs (bundled)
-│   ├── defaults.ts         Default tenant fallback
-│   └── TenantProvider.tsx  Tenant context provider
+├── ui/
+│   ├── primitives/         Tier 1: engine-switched leaf components
+│   ├── patterns/           Tier 2: reusable task-level compositions
+│   ├── structures/         Tier 2.5: page chrome and structural families
+│   └── surfaces/           Tier 3: page-level recipes
 │
-├── verticals/              Industry vertical presets
-│   ├── types.ts            VerticalPreset, VerticalKey
-│   └── registry.ts         Built-in presets (evnto, bithire, platform)
+├── tooling/
+│   ├── declarations/
+│   ├── eslint/
+│   ├── examples/
+│   └── testing/
 │
-├── product-profiles/       UX presets within verticals
-│   ├── registry.ts         Profile definitions
-│   └── ProductProfileProvider.tsx  Profile context
+├── entrypoints/            Package-boundary support (folder/index only)
+│   ├── charts/{access,renderers,spec}/
+│   ├── graphics/{effects,marks,motion,pictograms,spatial}/
+│   ├── icons/{bithire,corpus,foundation,identity,intelligence,operations}/
+│   ├── commercial/
+│   ├── eslint/
+│   └── server/
 │
-├── personality/            Personality token system
-│   ├── defaults.ts         DEFAULT_PERSONALITY baseline
-│   └── primitives.ts       resolvePersonalityCssVariables
-│
-├── hooks/                  Design system hooks
-│   └── tokens/             Token resolution pipeline
-│       ├── index.ts        useTokens (4-layer merge)
-│       ├── engine-tokens.ts  Per-engine token definitions
-│       ├── personality-defaults.ts  Re-export of defaults
-│       └── sub-hooks.ts    Granular slice hooks
-│
-├── theming/                Theme management
-├── features/               Feature flag provider
-├── i18n/                   Internationalization
-├── contracts/              TypeScript interfaces and type definitions
-├── errors/                 Error types and boundaries
-├── icons/                  Icon system
-├── motion/                 Animation utilities
-├── testing/                Test fixtures and helpers
-├── utils/                  Shared utilities
-│
-├── tokens/                 CSS token system
-│   └── css/
-│       ├── index.css       Main entry (7 @layer declarations)
-│       ├── base/           Foundation tokens (spacing, borders, etc.)
-│       ├── themes/         Default theme values
-│       ├── components/     Component-scoped CSS variables
-│       ├── engines/        Engine-specific theme mappings
-│       ├── tenants/        Per-tenant CSS overrides
-│       │   ├── rottay/     Rottay brand
-│       │   ├── bithire/    BitHire brand
-│       │   └── evnto/      Evnto brand
-│       ├── animations/     Keyframes and transitions
-│       └── responsive/     Web-first media query overrides
-│
-└── components/
-    ├── primitives/         Tier 1: Engine-switched leaf components
-    │   ├── display/        Avatar, Badge, Card, Table, Tag, ...
-    │   ├── inputs/         Button, Input, Select, DatePicker, Form, ...
-    │   ├── feedback/       Alert, Modal, Spinner, Toast, Notification, ...
-    │   ├── layout/         Box, Flex, Grid, Stack, Container, ...
-    │   ├── navigation/     Tabs, Menu, Breadcrumb, Pagination, Steps, ...
-    │   └── overlay/        Dropdown, Popover, Sheet, ContextMenu, ...
-    │
-    ├── structures/         Tier 2.5: Structural families
-    │   ├── headers/        collection, detail, edit, form
-    │   ├── workspace/      search-command-bar, active-filters-bar, ...
-    │   ├── record/         record, form-sections
-    │   ├── dashboard/      dashboard-insights, stats-header, data-terminal-card
-    │   └── feedback/       loading-overlay
-    │
-    ├── patterns/           Tier 2: Compositions (engine-agnostic)
-    │   ├── data/           data-table, detail-panel, list-toolbar, stats-grid, ...
-    │   ├── forms/          form-builder, filter-builder, filter-panel, ...
-    │   ├── visualization/  charts, calendar-view, map-view, timeline, ...
-    │   ├── communication/  assistant, comment-thread, notification-center, ...
-    │   ├── workflow/       approval-inbox, approval-workflow, ...
-    │   ├── navigation/     command-palette, shortcuts-overlay, ...
-    │   ├── misc/           tenant-preview, user-profile-card, ...
-    │   └── _internal/      hooks, types, header-actions, engines
-    │
-    └── surfaces/           Tier 3: Page-level config objects
-        ├── foundation/     Types, builders, helpers, hooks, contracts, states
-        ├── layout/         page-shell, header, sidebar
-        └── pages/          6 domain groups: data, forms, workspace,
-                            operations, admin, experience
+└── index.ts                Root public facade; only loose src file
 ```
+
+The physical engine implementations live below component owners as
+`engines/{classic,modern,rustic}/`. The `custom` path lives in the infrastructure
+registry shown above; it does not add `engines/custom/` copies across the UI.
 
 > See `docs/TAXONOMY.generated.md` (run `pnpm docs:taxonomy`) for the
 > authoritative, auto-generated inventory of every tier, group, and family.
@@ -646,8 +722,9 @@ packages/core/src/
 
 ## Key Design Decisions
 
-1. **Engine as a code-split boundary** -- Each engine implementation is a
-   separate dynamic import. Apps only load the engine they use.
+1. **Physical engine as a code-split boundary** -- Classic, modern and rustic
+   implementations are separate dynamic imports. `custom` resolves a registered
+   pack component or delegates to its configured physical fallback.
 
 2. **CSS variables over JS theming** -- Colors use CSS custom properties so
    tenant switches do not trigger React re-renders. Only structural/personality
@@ -658,14 +735,16 @@ packages/core/src/
    bridged to CSS. This keeps personality runtime-dynamic without static
    CSS duplication per tenant.
 
-4. **Six-level tenant resolution** -- The DS renders predictably in every
-   environment. Each level adds resilience: bundled registry for CI, static
-   files for previews, remote API for production, memory/localStorage caches
-   for performance.
+4. **Resolver compatibility is separate from visual authority** -- The
+   six-level resolver keeps local/preview/legacy config lookup resilient.
+   Published customer visuals remain DB-owned, server-compiled and hydrated as
+   one immutable artifact; the compatibility fallback chain never selects a
+   different customer's styling.
 
-5. **Pack-scoped custom engine** -- Custom component registrations are isolated
-   per pack so different tenants can use different white-label implementations
-   in the same runtime without cross-contamination.
+5. **Pack-scoped custom registry** -- Custom component registrations are
+   isolated per pack so different tenants can use different white-label
+   implementations in the same runtime without cross-contamination; missing
+   registrations delegate to a physical fallback engine.
 
 6. **Surface three-section pattern** -- Separating presentation/behavior/visual
    keeps surface configs readable and allows partial overrides. The permission

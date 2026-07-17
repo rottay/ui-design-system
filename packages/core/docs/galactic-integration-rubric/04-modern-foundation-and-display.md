@@ -20,10 +20,10 @@ Why they score well:
 
 Key files:
 
-- `ui-design-system/packages/core/src/components/primitives/layout/Box/engines/modern.tsx`
-- `ui-design-system/packages/core/src/components/primitives/layout/Stack/engines/modern.tsx`
-- `ui-design-system/packages/core/src/components/primitives/layout/Grid/engines/modern.tsx`
-- `ui-design-system/packages/core/src/components/primitives/layout/Container/engines/modern.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/layout/Box/engines/modern/index.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx`
+- `ui-design-system/packages/core/src/ui/primitives/layout/Container/engines/modern/index.tsx`
 
 ## Display Verdict
 

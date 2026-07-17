@@ -1,6 +1,6 @@
 # WO-SKIN-03 status-family paint inventory (read-only)
 
-All paths relative to `packages/core/src/components/primitives/feedback/`. Same
+All paths relative to `packages/core/src/ui/primitives/feedback/`. Same
 channel scope and class legend as the WO-SKIN-02 precedent (`skin02-fields-inventory.md`):
 STATIC / CONDITIONAL / IMPERATIVE / REACT-STATE-HOVER. No component in this batch
 carries `data-part` anywhere (grep-confirmed) and no skin CSS file exists yet for any
@@ -41,9 +41,9 @@ Root landing: `engines/modern.tsx` (DaisyUI `skeleton` class, no local keyframe)
 3. **All 8 compound files**: share one `shimmerStyle` object (`animation:
    'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite'`) that
    references the GLOBAL keyframe `@keyframes skeleton-loading` in
-   `tokens/css/foundation/animations/keyframes.css:395` (background-position
+   `foundation/tokens/css/foundation/animations/keyframes.css:395` (background-position
    `-200% → 200%`) — no local injection, correctly reuses the shared definition.
-4. **Orphaned**: `tokens/css/engines/rustic/theme.css:1013-1020` defines `.ds-skeleton
+4. **Orphaned**: `foundation/tokens/css/runtime/engines/rustic/theme.css:1013-1020` defines `.ds-skeleton
    { animation: ds-skeleton-pulse ... }` with its own `@keyframes ds-skeleton-pulse`
    bottoming at opacity **0.5** — but neither `engines/rustic.tsx` nor any compound file
    ever applies the `ds-skeleton` (or `.ds-skeleton--*`) class. **This is the exact
@@ -98,7 +98,7 @@ var(--ds-color-info) 10%, transparent)` — always resolves (base color tokens a
 DS-foundational). Rustic's `TYPE_STYLES` use a THREE-level fallback
 (`--ds-alert-info-bg → --ds-color-info-bg → `, no third literal) where
 `--ds-alert-info-*` is defined ONLY inside the `rottay` vertical's generated artifacts
-(`tokens/css/artifacts/rottay/index.css`), not in `foundation/themes/default.css`. Any
+(`foundation/tokens/css/facade/artifacts/rottay/index.css`), not in `foundation/themes/default.css`. Any
 tenant not on the rottay artifact silently falls to `--ds-color-info-bg`/`-border`/
 `-700`, which ARE grep-confirmed defined at the artifact layer too but NOT in the base
 default theme — meaning Alert's rustic engine has no first-party-default color at all
@@ -186,7 +186,7 @@ the one component whose entire purpose IS spinning — is simply the newest entr
 an already-large duplicate-keyframe family, not a novel defect.
 
 **Token gaps**: `--ds-spinner-duration` (rustic, bare name) is undefined — the real
-token is `--ds-spinner-animation-duration` (`tokens/css/components/spinner.css:40`);
+token is `--ds-spinner-animation-duration` (`foundation/tokens/css/presentation/components/spinner.css:40`);
 falls to hardcoded `0.8s`. `--ds-spinner-label-size`/`-label-color` (rustic) are also
 undefined, fall to `0.875rem`/`inherit`. Separately (not a gap, a **value conflict**):
 `--ds-spinner-{sm,md,lg,xl}-size` is defined TWICE with different values —
@@ -242,7 +242,7 @@ different mechanisms per engine, not just a value difference**:
 
 **Token layering (not a gap — a dead-vocabulary layer, matching the Rate second-emitter
 pattern)**: both engines correctly read `--ds-rate-active-color`/`-inactive-color`/
-`-focus-ring-color`, all defined in `tokens/css/components/rate.css`. But a SEPARATE,
+`-focus-ring-color`, all defined in `foundation/tokens/css/presentation/components/rate.css`. But a SEPARATE,
 never-consumed vocabulary also exists — `foundation/themes/default.css` and the rottay
 artifacts define `--ds-rate-color`/`-color-active`/`-color-hover` (note the inverted
 word order vs `-active-color`) — neither engine file ever reads these three. Same shape

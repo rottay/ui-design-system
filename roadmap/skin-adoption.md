@@ -24,7 +24,7 @@ classic untouched; caller className/style semantics unchanged.
 
 ### WO-SKIN-01 Fleet census + paint-counter machinery extension
 - **Outcome** — The exact migratable surface is measured, not guessed: a census script/pass lists
-  every component under `packages/core/src/components/` with counted inline paint (same property-
+  every component under `packages/core/src/ui/` with counted inline paint (same property-
   name classes as `arc09.inlinePaint`), per file, engine-split vs agnostic, with its trap classes
   (imperative/useState state paint, Text color sites, child-primitive style landings, keyframes,
   portals). `engine-token-audit.mjs` gains the full fleet file list with per-file decrease-only

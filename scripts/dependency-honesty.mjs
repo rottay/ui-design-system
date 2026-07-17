@@ -90,6 +90,7 @@ function runtimeCompilerOptions(ts, files = []) {
       const parsed = ts.parseJsonConfigFileContent(loaded.config, ts.sys, dirname(configPath));
       if (parsed.options.baseUrl !== undefined) options.baseUrl = parsed.options.baseUrl;
       if (parsed.options.paths !== undefined) options.paths = parsed.options.paths;
+      if (parsed.options.pathsBasePath !== undefined) options.pathsBasePath = parsed.options.pathsBasePath;
       if (parsed.options.rootDirs !== undefined) options.rootDirs = parsed.options.rootDirs;
     }
   }
@@ -1565,10 +1566,10 @@ function resolveSourceModule(fromFile, specifier, root = sourceRoot) {
     base = resolve(dirname(fromFile), specifier);
   } else if (specifier.startsWith('@/')) {
     base = resolve(root, specifier.slice(2));
-  } else if (specifier === '@components' || specifier.startsWith('@components/')) {
-    base = resolve(root, 'components', specifier.slice('@components'.length + 1));
+  } else if (specifier === '@ui' || specifier.startsWith('@ui/')) {
+    base = resolve(root, 'ui', specifier.slice('@ui'.length + 1));
   } else if (specifier === '@types' || specifier.startsWith('@types/')) {
-    base = resolve(root, 'contracts', specifier.slice('@types'.length + 1));
+    base = resolve(root, 'foundation', 'contracts', specifier.slice('@types'.length + 1));
   } else {
     return null;
   }
@@ -3266,7 +3267,7 @@ export function assertPackedBuildPrerequisite(root = coreRoot) {
       // projections after Vite, then build-vertical-css consumes them. They
       // are outputs of the same build, not authored inputs that can stale the
       // JS/d.ts entries generated earlier in the pipeline.
-      !/\/src\/tokens\/css\/artifacts\/[^/]+\/index\.css$/.test(normalizePath(path))
+      !/\/src\/foundation\/tokens\/css\/facade\/artifacts\/[^/]+\/index\.css$/.test(normalizePath(path))
     )),
     ...[
       'package.json',
@@ -3848,6 +3849,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  SvgHeatMapRenderer,\n` +
       `  SvgLineRenderer,\n` +
       `  SvgPieRenderer,\n` +
+      `  SvgScatterRenderer,\n` +
       `  type ChartActionInteraction,\n` +
       `  type ChartActiveDatum,\n` +
       `  type ChartExploreInteraction,\n` +
@@ -3871,6 +3873,9 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  type SvgLineXValue,\n` +
       `  type SvgPieDatum,\n` +
       `  type SvgPieRendererProps,\n` +
+      `  type SvgScatterDatum,\n` +
+      `  type SvgScatterRendererProps,\n` +
+      `  type SvgScatterVariant,\n` +
       `} from ${JSON.stringify(`${packedManifest.name}/charts/renderers`)};\n` +
       `import {\n` +
       `  MOTION_DIAL_BOUNDS,\n` +
@@ -4022,6 +4027,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       `const linePoint: SvgLinePoint = { id: 'point', x: lineX, value: 1 };\n` +
       `const lineSeries: readonly SvgLineSeries[] = [{ id: 'line', label: 'Line', points: [linePoint] }];\n` +
       `const pieData: readonly SvgPieDatum[] = [{ id: 'slice', label: 'Slice', value: 1 }];\n` +
+      `const scatterData: readonly SvgScatterDatum[] = [{ id: 'scatter', label: 'Scatter', x: 1, y: 2, size: 3 }];\n` +
       `const lineInteractionDatum: SvgLineInteractionDatum = { series: { id: 'line', label: 'Line' }, point: linePoint };\n` +
       `const lineDatumKey = createSvgLineDatumKey(lineInteractionDatum.series.id, lineInteractionDatum.point.id);\n` +
       `const chartInteractionMeta: ChartInteractionMeta = { input: 'keyboard', reason: 'focus' };\n` +
@@ -4036,11 +4042,13 @@ export async function auditPackedArtifact(root = coreRoot) {
       `const packedChartInteractionTypes = null as unknown as PackedChartInteractionTypes;\n` +
       `const lineCurve: SvgLineCurve = 'smooth';\n` +
       `const lineXType: SvgLineXType = 'category';\n` +
+      `const scatterVariant: SvgScatterVariant = 'bubble';\n` +
       `const barProps = { ariaLabel: 'Bar', data: barData, insets: rendererInsets } satisfies SvgBarRendererProps;\n` +
       `const heatProps = { ariaLabel: 'Heat', data: heatData, insets: rendererInsets } satisfies SvgHeatMapRendererProps;\n` +
       `const lineProps = { ariaLabel: 'Line', series: lineSeries, curve: lineCurve, xType: lineXType, insets: rendererInsets } satisfies SvgLineRendererProps;\n` +
       `const pieProps = { ariaLabel: 'Pie', data: pieData, variant: 'donut', insets: rendererInsets } satisfies SvgPieRendererProps;\n` +
-      `const rendererComponents = [SvgBarRenderer, SvgHeatMapRenderer, SvgLineRenderer, SvgPieRenderer];\n` +
+      `const scatterProps = { ariaLabel: 'Scatter', data: scatterData, variant: scatterVariant, insets: rendererInsets } satisfies SvgScatterRendererProps;\n` +
+      `const rendererComponents = [SvgBarRenderer, SvgHeatMapRenderer, SvgLineRenderer, SvgPieRenderer, SvgScatterRenderer];\n` +
       `const motionDial = { intensity: 0.4, durationScale: 1, ambient: 'off' } satisfies TenantMotionDial;\n` +
       `const motionInput = { profile: 'calm', tenantDial: motionDial, reduce: false, pointer: 'fine', power: 'normal', visible: true } satisfies MotionPolicyInput;\n` +
       `const motionPolicy: MotionPolicy = resolveMotionPolicy(motionInput);\n` +
@@ -4080,7 +4088,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       `type PackedSpatialTypes = [SpatialBackend, SpatialCapability, SpatialContextState, SpatialInteraction, SpatialLiveMode, SpatialPointer, SpatialPower, SpatialPowerPreference, SpatialPurpose, SpatialQuality, SpatialResolutionReason];\n` +
       `const packedSpatialTypes = null as unknown as PackedSpatialTypes;\n` +
       `const spatialValues = [SPATIAL_QUALITY_BUDGETS, SPATIAL_SCENE_MODULE_VERSION, SpatialExperience, isSpatialSceneModule(spatialContract), spatialBudget, spatialDowngrade, spatialPerformance, spatialEvent];\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, pieProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, effectResolution, packedEffectTypes, effectValues, spatialProps, packedSpatialTypes, spatialValues);\n',
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, pieProps, scatterProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, effectResolution, packedEffectTypes, effectValues, spatialProps, packedSpatialTypes, spatialValues);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {

@@ -8,7 +8,7 @@ Drafted by a peer, adjudicated by the orchestrator. Load-bearing claims DRILLED 
   `patterns/misc/*`. The `surfaces/pages/experience/empty-state` dir is a DIFFERENT component (a
   surface) and is correctly NOT in scope. H1 (tenant-preview ×2 + branding-preview-sandbox +
   brand-studio, 237, runtime-color) stays deferred. RULING: ACCEPTED.
-- **P-78 is a real, shipped law** — verified in `tokens/css/engines/modern/skin/invoice-template.css:23,29-30`
+- **P-78 is a real, shipped law** — verified in `foundation/tokens/css/runtime/engines/modern/skin/invoice-template.css:23,29-30`
   ("lifting box-shadow (root) and background/color (badge) hands nothing back to the spread (P-78)").
   The shared `patterns/_internal/engines/modern/styles.ts` module is NEVER migrated (permanent counter
   entry); only the LOCAL keys layered AFTER the shared spread move to CSS, gated on the spread not
@@ -29,7 +29,7 @@ Judgment-call rulings:
    per-element `data-part` vocabulary by READING each file (there is no site-by-site table to copy),
    then proves the two invariants as usual.
 3. **file-manager DaisyUI STOP-AND-VERIFY** (a `tr.active` DaisyUI class with no matching
-   `tokens/css` rule; a folder-link color reached only via a live personality-layer rule through a
+   `foundation/tokens/css` rule; a folder-link color reached only via a live personality-layer rule through a
    bare DaisyUI class) — ACCEPTED as a real STOP-AND-VERIFY: confirm empirically (production build,
    computed-style) what actually paints these today BEFORE writing the skin, and preserve THAT.
 4. **token-inspector: preserve hardcoded hex byte-exact, do NOT tokenize** (it is an inspector whose
@@ -135,13 +135,13 @@ assumed-sharing trap and notes `user-profile-card` and `pricing-table` modern en
 fleet-wide importers — but doesn't say what a migration should DO about it. I grepped all 11 importers
 and found **6 already have shipped skins**: `environment-toggle`, `command-palette`,
 `workspace-switcher`, `invoice-template`, `approval-workflow`, `locale-switcher` (all under
-`tokens/css/engines/{modern,rustic}/skin/`). Read `modern/skin/invoice-template.css` in full — it
+`foundation/tokens/css/runtime/engines/{modern,rustic}/skin/`). Read `modern/skin/invoice-template.css` in full — it
 documents the exact law needed here, cites it as **P-78**, and I re-derived why it's safe by reading
 `_internal/engines/modern/styles.ts` itself (98 lines, 8 exports: `popupPanelStyle`, `menuListStyle`,
 `menuItemStyle`, `panelCardStyle`, `pillBadgeStyle`, `pillBadgeSmStyle`, `inlineActionGroupStyle`,
 `spinnerStyle`, `cardBodyStyle`, `menuSectionTitleStyle`). **The module itself is never migrated by
 any checkpoint** — its own 18 counted sites live under its own counter entry
-(`fleet.inlinePaint.patterns/_internal/engines/modern/styles.ts: 18`, confirmed), permanently separate
+(`fleet.inlinePaint.runtime/patterns/_internal/engines/modern/styles.ts: 18`, confirmed), permanently separate
 from every consumer's total. Full mechanics in Trap 1 below. This means H2's 111 sites in
 `user-profile-card` + `pricing-table` do **not** include the shared module's own keys at all — they
 were already excluded from the counter before I ever looked, which simplifies this checkpoint
@@ -150,7 +150,7 @@ considerably compared to what I expected going in.
 **4. Independently checked H2 for the three counter-blind-spot shapes the team-lead named — two false
 alarms, one real (but harmless) finding, zero of the interface-member-annotation shape H1 has.**
 - Bare shorthand (`color,`/`background,`/`border,` with no colon): grep hit `user-profile-card/
-  engines/modern.tsx:152` (`fill,` ×2) and `pricing-table/engines/rustic.tsx:70-71` (`color,`/`border,`).
+  engines/modern.tsx:152` (`fill,` ×2) and `pricing-table/engines/rustic/index.tsx:70-71` (`color,`/`border,`).
   Both are **false alarms** — the first is inside a plain-English JSX comment ("primary fill, danger ->
   error fill"), the second is my own grep matching text **inside** `var(--ds-button-primary-color, ...)`
   fallback-syntax string literals, not actual JS object shorthand. Read both in context to confirm;
@@ -159,7 +159,7 @@ alarms, one real (but harmless) finding, zero of the interface-member-annotation
   (grep-confirmed). H1's `buildPaletteSteps` shape (triage §7.5's interface-member blind spot) does
   not recur in H2 at all.
 - SVG `fill=`/`stroke=` bare JSX attributes: **real, found in 2 files** —
-  `file-manager/engines/modern.tsx:174,178,224,230,294,298` and `empty-state/engines/modern.tsx:75`.
+  `file-manager/engines/modern/index.tsx:174,178,224,230,294,298` and `empty-state/engines/modern/index.tsx:75`.
   Read every one in context: all are literal `fill="none"`, `stroke="currentColor"`, or
   `fill="currentColor"` — **100% STATIC, none runtime** (unlike CK-F's presence trap, where the SVG
   attrs carried genuine per-user runtime color). Per CK-F's own established rule ("moving a static SVG
@@ -167,7 +167,7 @@ alarms, one real (but harmless) finding, zero of the interface-member-annotation
   these stay exactly where they are; a byte-exact migration doesn't touch them. See Trap 4.
 
 **5. A new discovery not in the inventory: a dead, pre-existing `--ds-empty-state-*` token surface
-that `empty-state`'s own TSX never consumes.** `tokens/css/components/patterns.css:291-302` defines
+that `empty-state`'s own TSX never consumes.** `foundation/tokens/css/presentation/components/patterns.css:291-302` defines
 `--ds-empty-state-bg`, `--ds-empty-state-border`, `--ds-empty-state-icon-bg`,
 `--ds-empty-state-icon-border` (plus `--ds-empty-*` short aliases pointing at them). Grep-confirmed:
 **nothing in `patterns/misc/empty-state/` references any of these**, and nothing else in the codebase
@@ -207,8 +207,8 @@ Trap 5 (informational only, not blocking).
 
 **7. Scope-class freedom — grep-verified.** All 5 candidate `ds-pattern-<comp>` names
 (`file-manager`, `user-profile-card`, `pricing-table`, `empty-state`, `token-inspector`) return **zero**
-hits anywhere under `tokens/css/` (confirmed both as a class prefix search and narrowed to the
-`tokens/css/` subtree specifically) — the modern-only stamps are exactly as dead as the inventory's
+hits anywhere under `foundation/tokens/css/` (confirmed both as a class prefix search and narrowed to the
+`foundation/tokens/css/` subtree specifically) — the modern-only stamps are exactly as dead as the inventory's
 §10 claims. One near-miss: `ds-empty-state` as a bare substring hits `patterns.css`'s
 `--ds-empty-state-*` custom-property *names* (item 5) — not a class collision, just the same string
 appearing in an unrelated token name; the class itself is free.
@@ -220,7 +220,7 @@ truth for H2) and `migration-kit.md` + `migration-kit-addendum.md` (the mechanic
 normative for *what* paint exists; this contract is normative for *how* it moves. Where they
 disagree, the inventory wins on facts and this contract wins on method.
 
-Scope: `packages/core/src/components/patterns/misc/{file-manager,user-profile-card,pricing-table,
+Scope: `packages/core/src/ui/patterns/misc/{file-manager,user-profile-card,pricing-table,
 empty-state,token-inspector}/` — **216 counted sites, 5 components, 9 files, confirmed exactly 100%
 category A** (0 B, 0 C, 0 N — the cleanest result of any checkpoint in this program to date). Every
 `{file-manager,user-profile-card,pricing-table,empty-state}/engines/classic.tsx` (AntD-wrapped, 0
@@ -242,7 +242,7 @@ other checkpoint. There is nothing here shaped like CK-C's `FILTER_PILL_*`/`save
 problem. **The one governing law for this checkpoint instead concerns the module TWO of its nine files
 import from outside the checkpoint entirely:**
 
-`user-profile-card/engines/modern.tsx` and `pricing-table/engines/modern.tsx` both import
+`user-profile-card/engines/modern/index.tsx` and `pricing-table/engines/modern/index.tsx` both import
 `panelCardStyle`/`pillBadgeSmStyle`/`spinnerStyle` from `patterns/_internal/engines/modern/styles.ts`
 — a module shared with 9 other consumers fleet-wide (6 of which already have shipped skins; see
 DRAFTER NOTE 3). **`_internal/engines/modern/styles.ts` is never migrated, by this checkpoint or any
@@ -301,7 +301,7 @@ edit `foundation/base.css` or `entrypoints/styles.css`.
 **H2 has a partial head start on scope classes, the same shape CK-F had — not CK-C's full greenfield.**
 Zero `data-part` anywhere (confirmed, all 9 files). But 4 of 5 components already carry
 `ds-pattern-<comp> ds-engine-modern` on their modern root (dead — grep-confirmed zero references
-anywhere in `tokens/css/` — but real and consistent, not to be re-minted). The gap is symmetrical
+anywhere in `foundation/tokens/css/` — but real and consistent, not to be re-minted). The gap is symmetrical
 across all 4: **rustic carries nothing.** `token-inspector` carries nothing on either "side" (it has
 no engine split).
 
@@ -319,7 +319,7 @@ no engine split).
 | `empty-state` (rustic) | patterns/misc, engine-split | `ds-pattern-empty-state ds-engine-rustic` | (0,2,0) | **must be added** |
 | `token-inspector` | patterns/misc, engine-agnostic, single root | `ds-pattern-token-inspector` | (0,1,0) | **must be added** (greenfield, no engine split) |
 
-All 5 names grep-verified free across `tokens/css/` (DRAFTER NOTE 7). Adding the missing rustic stamps
+All 5 names grep-verified free across `foundation/tokens/css/` (DRAFTER NOTE 7). Adding the missing rustic stamps
 is purely additive (a new className, nothing removed) — not a byte-exact hazard by itself, but it must
 still pass the pre-step's two invariants (below) like every other change in this program.
 
@@ -367,10 +367,10 @@ stamping, and stability-pass them before any unit starts writing CSS.
 
 **Trap 1 — `patterns/_internal/engines/modern/styles.ts` is a fleet-shared module; its own keys never
 move, and only the LOCAL keys layered after its spread are this checkpoint's paint.** Confirmed call
-sites: `user-profile-card/engines/modern.tsx:74,113` (`{ ...panelCardStyle, boxShadow: 'var(--ds-
+sites: `user-profile-card/engines/modern/index.tsx:74,113` (`{ ...panelCardStyle, boxShadow: 'var(--ds-
 elevation-1)', ...style }`), `:76` (`style={spinnerStyle(24)}`, no local override), `:136,144`
 (`{ ...pillBadgeSmStyle, background: '...', color: '...' }` / `{ ...pillBadgeSmStyle,
-...statusBadgeStyles[user.status] }`); `pricing-table/engines/modern.tsx:65` (`style={spinnerStyle(24)}`,
+...statusBadgeStyles[user.status] }`); `pricing-table/engines/modern/index.tsx:65` (`style={spinnerStyle(24)}`,
 no local override), `:86,107` (`{ ...pillBadgeSmStyle, background: '...', color: '...' }`). **Before
 deleting any local key from a merged object literal, check P-78: does the shared spread ALSO define
 that same property?** If yes, deleting the local override un-hides the shared value — which is STILL
@@ -380,7 +380,7 @@ here — `panelCardStyle` defines `background`/`border`/`borderRadius`, never `b
 `pillBadgeSmStyle` defines layout/typography keys, never `background`/`color`), it is safe: delete
 only the local literal key(s) from the JSX object, leave the `...sharedSpread` untouched, and write the
 CSS rule for exactly those local keys. This is not a novel resolution — it is the **already-shipped**
-pattern from `tokens/css/engines/modern/skin/invoice-template.css` (WO-SKIN-06 checkpoint CK-D/F), which
+pattern from `foundation/tokens/css/runtime/engines/modern/skin/invoice-template.css` (WO-SKIN-06 checkpoint CK-D/F), which
 names this exact law P-78 in its own header comment; read it before writing either skin in Unit H2-1.
 `_internal/engines/modern/styles.ts` itself is not touched by this checkpoint, full stop — its counter
 reading (18) is permanent, fleet-wide infrastructure debt, not this checkpoint's to carry.
@@ -388,13 +388,13 @@ reading (18) is permanent, fleet-wide infrastructure debt, not this checkpoint's
 **Trap 2 — `file-manager` modern has two paint mechanisms with no traceable, confirmable CSS source in
 this codebase; STOP-AND-VERIFY before touching either.** (1) `engines/modern.tsx:211` toggles a bare
 `className={selectedItems.includes(item.id) ? 'active' : ''}` on the selected
-table row — grep-confirmed **zero** `tr.active` or table-row `.active` rule anywhere in `tokens/css/`.
+table row — grep-confirmed **zero** `tr.active` or table-row `.active` rule anywhere in `foundation/tokens/css/`.
 If this renders anything today, it comes entirely from DaisyUI's own compiled base stylesheet (outside
-`tokens/css/`, not read for this inventory or this contract). Do not assume it's dead OR assume it's
+`foundation/tokens/css/`, not read for this inventory or this contract). Do not assume it's dead OR assume it's
 live — get an empirical computed-style read on the production build before deciding whether the new
 skin needs to reproduce a selected-row background at all. (2) `engines/modern.tsx:236-237` renders the
 folder-name link as `<a className="link link-hover cursor-pointer">` with **no inline color** — but
-`tokens/css/engines/modern/theme.css:753-763` carries a real, live, LAYERED `[data-tenant] a.link {
+`foundation/tokens/css/runtime/engines/modern/theme.css:753-763` carries a real, live, LAYERED `[data-tenant] a.link {
 color: var(--ds-link-color); ... }` rule (`color` is a channel P-76's preflight never kills). This is
 the FloatButton-shaped hazard from WO-SKIN-04: today's folder-link color comes entirely from a bare
 DaisyUI class reaching a personality-layer rule, never from anything `file-manager` owns. A skin
@@ -418,7 +418,7 @@ don't fix it.
 **Trap 4 — counter-invisible SVG presentation attributes exist in this checkpoint, and all of them are
 STATIC — stay inline, do not move to a CSS `fill:`/`stroke:` rule.** Found in `file-manager/engines/
 modern.tsx:174,178,224,230,294,298` (`fill="none"`, `stroke="currentColor"`, `fill="currentColor"`) and
-`empty-state/engines/modern.tsx:75` (`fill="none"`, `stroke="currentColor"`). Every one is a literal
+`empty-state/engines/modern/index.tsx:75` (`fill="none"`, `stroke="currentColor"`). Every one is a literal
 JSX attribute, none bound to a variable — unlike CK-F's presence trap (where the SVG attrs carried
 genuine per-user runtime color and had to stay inline for a RUNTIME reason), these are static and
 counter-invisible simply because they're bare attributes, not object-literal style keys. Per the
@@ -426,7 +426,7 @@ established rule from that trap: moving a static SVG presentation attribute into
 is a channel change (attribute → stylesheet), not a byte-exact no-op — leave every one of them exactly
 where it is. They do not count toward either file's counter floor and never will; do not chase them.
 
-**Trap 5 — a dead, pre-existing `--ds-empty-state-*` custom-property surface exists in `tokens/css/
+**Trap 5 — a dead, pre-existing `--ds-empty-state-*` custom-property surface exists in `foundation/tokens/css/
 components/patterns.css:291-302`, and `empty-state`'s own TSX never references any of it.**
 `--ds-empty-state-bg`, `--ds-empty-state-border`, `--ds-empty-state-icon-bg`,
 `--ds-empty-state-icon-border` (plus `--ds-empty-*` short aliases) are defined once and grep-confirmed
@@ -477,8 +477,8 @@ safe to carry over verbatim as-is:
 
 | File | Reference | Source | Action |
 |---|---|---|---|
-| `file-manager/engines/modern.tsx`, `empty-state/engines/modern.tsx` | `animation: 'ds-spin var(--ds-motion-glacial) linear infinite'` (hand-rolled local spinner style, own `border`/`borderTopColor` keys) | `ds-spin` keyframe defined once in `engines/rustic/theme.css:1052`, cross-engine-shared, not duplicated here | Migrate the `border`/`borderTopColor` keys as normal counted paint (`data-part='spinner'`); keep the `animation:` value exactly as written — it is a reference to an existing global name, not an injection, nothing to rename. |
-| `user-profile-card/engines/modern.tsx`, `pricing-table/engines/modern.tsx` | `style={spinnerStyle(24)}` (entirely from the shared `_internal` module) | Resolves to the shared module's own `spin` keyframe reference (`spinnerStyle()`'s own `animation:` property, defined in `_internal/engines/modern/styles.ts`, never this checkpoint's file) | Nothing to do — this call site contributes zero paint to either consuming file (see Trap 1); do not touch it. |
+| `file-manager/engines/modern/index.tsx`, `empty-state/engines/modern/index.tsx` | `animation: 'ds-spin var(--ds-motion-glacial) linear infinite'` (hand-rolled local spinner style, own `border`/`borderTopColor` keys) | `ds-spin` keyframe defined once in `engines/rustic/theme.css:1052`, cross-engine-shared, not duplicated here | Migrate the `border`/`borderTopColor` keys as normal counted paint (`data-part='spinner'`); keep the `animation:` value exactly as written — it is a reference to an existing global name, not an injection, nothing to rename. |
+| `user-profile-card/engines/modern/index.tsx`, `pricing-table/engines/modern/index.tsx` | `style={spinnerStyle(24)}` (entirely from the shared `_internal` module) | Resolves to the shared module's own `spin` keyframe reference (`spinnerStyle()`'s own `animation:` property, defined in `_internal/engines/modern/styles.ts`, never this checkpoint's file) | Nothing to do — this call site contributes zero paint to either consuming file (see Trap 1); do not touch it. |
 
 The `ds-spin`/`spin` naming split between these two pairs is not a defect — it is the same
 already-documented split CK-D found (`ds-spin` cross-engine-shared via `theme.css`; `spin` reached

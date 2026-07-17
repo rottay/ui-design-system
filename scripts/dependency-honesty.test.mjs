@@ -2,10 +2,11 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, utimesSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { basename, resolve } from 'node:path';
+import { basename, dirname, relative, resolve } from 'node:path';
 import test from 'node:test';
 
 import {
+  analyzeRuntimeModuleEdges,
   auditAppSupplierManifest,
   auditCoreDependencyGraph,
   auditPlatformExecutableClosure,
@@ -40,6 +41,42 @@ import {
 function imports(entries) {
   return new Map(entries.map(([name, file = `src/${name}.tsx`]) => [name, [file]]));
 }
+
+test('runtime edge analysis resolves tsconfig path aliases before judging computed data access', () => {
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-runtime-paths-'));
+  try {
+    const sourceRoot = resolve(fixtureRoot, 'src');
+    const consumerPath = resolve(sourceRoot, 'consumer.ts');
+    mkdirSync(sourceRoot, { recursive: true });
+    writeFileSync(resolve(fixtureRoot, 'tsconfig.json'), JSON.stringify({
+      compilerOptions: {
+        module: 'ESNext',
+        moduleResolution: 'Bundler',
+        paths: { '@/*': ['./src/*'] },
+        strict: true,
+      },
+      include: ['src'],
+    }));
+    writeFileSync(
+      resolve(sourceRoot, 'record.ts'),
+      'export function makeRecord(): Record<string, string> { return {}; }\n',
+    );
+    const source =
+      "import { makeRecord } from '@/record';\n" +
+      'const values = makeRecord();\n' +
+      'export const read = (key: string) => values[key];\n';
+    writeFileSync(consumerPath, source);
+    const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+
+    assert.deepEqual(
+      analyzeRuntimeModuleEdges(source, consumerPath, requireFromCore('typescript')).edges
+        .map(({ specifier }) => specifier),
+      ['@/record'],
+    );
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
 
 test('module parsing ignores type-only imports but keeps static, dynamic, and require edges', () => {
   assert.deepEqual(
@@ -863,6 +900,8 @@ test('chart-renderer runtime contract includes the public datum-key utility', ()
     'SvgBarRenderer',
     'SvgHeatMapRenderer',
     'SvgLineRenderer',
+    'SvgPieRenderer',
+    'SvgScatterRenderer',
     'createSvgLineDatumKey',
   ];
   const definition = loadSupplierContract().entrypoints['./charts/renderers'];
@@ -872,6 +911,8 @@ test('chart-renderer runtime contract includes the public datum-key utility', ()
       SvgBarRenderer: ['d3'],
       SvgHeatMapRenderer: ['d3'],
       SvgLineRenderer: ['d3'],
+      SvgPieRenderer: ['d3'],
+      SvgScatterRenderer: ['d3'],
     },
     supplierFreeExports: ['createSvgLineDatumKey'],
   });
@@ -911,7 +952,7 @@ test('root, motion, and effects cannot reach spatial or a Three supplier', () =>
     ['.', './motion', './effects', './spatial', './spatial/spec']
       .map((subpath) => [subpath, traceSourceEntry(entries.get(subpath), sourceRoot)]),
   );
-  const isSpatialPath = (path) => /\/(?:contracts\/spatial|runtime\/spatial(?:-react)?)(?:\/|$)|\/spatial(?:-spec)?-entry\./.test(
+  const isSpatialPath = (path) => /\/(?:foundation\/contracts\/kernel\/spatial|infrastructure\/runtime\/spatial|entrypoints\/graphics\/spatial)(?:\/|$)/.test(
     path.replaceAll('\\', '/'),
   );
 
@@ -1396,7 +1437,19 @@ test('packed-artifact prerequisite rejects missing and stale build outputs', () 
       requiredTargets: 1,
     });
 
+    const generatedArtifact = resolve(
+      fixtureRoot,
+      'src/foundation/tokens/css/facade/artifacts/bithire/index.css',
+    );
+    mkdirSync(dirname(generatedArtifact), { recursive: true });
+    writeFileSync(generatedArtifact, ':root { --ds-generated: true; }\n');
     const future = new Date(Date.now() + 5_000);
+    utimesSync(generatedArtifact, future, future);
+    assert.deepEqual(assertPackedBuildPrerequisite(fixtureRoot), {
+      builtTargets: 1,
+      requiredTargets: 1,
+    });
+
     utimesSync(resolve(fixtureRoot, 'src/index.ts'), future, future);
     assert.throws(
       () => assertPackedBuildPrerequisite(fixtureRoot),
@@ -1415,32 +1468,27 @@ test('packed-artifact prerequisite rejects missing and stale build outputs', () 
 
 test('live core graph has no false optional or zero-importer peer', () => {
   const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
-  assert.equal(basename(collectSourceEntrypoints(manifest).get('./icons')), 'icon-entry.ts');
-  assert.equal(basename(collectSourceEntrypoints(manifest).get('./charts')), 'chart-entry.ts');
-  assert.equal(
-    basename(collectSourceEntrypoints(manifest).get('./charts/spec')),
-    'chart-spec-entry.ts',
-  );
-  assert.equal(
-    basename(collectSourceEntrypoints(manifest).get('./charts/access')),
-    'chart-access-entry.ts',
-  );
-  assert.equal(
-    basename(collectSourceEntrypoints(manifest).get('./charts/renderers')),
-    'chart-renderers-entry.ts',
-  );
-  assert.equal(basename(collectSourceEntrypoints(manifest).get('./motion')), 'motion-entry.ts');
-  assert.equal(basename(collectSourceEntrypoints(manifest).get('./effects')), 'effects-entry.ts');
-  assert.equal(basename(collectSourceEntrypoints(manifest).get('./spatial')), 'spatial-entry.ts');
-  assert.equal(
-    basename(collectSourceEntrypoints(manifest).get('./spatial/spec')),
-    'spatial-spec-entry.ts',
-  );
+  const sourceRoot = resolve(coreRoot, 'src');
+  const sourceEntrypoints = collectSourceEntrypoints(manifest);
+  const entrypointPath = (subpath) => relative(sourceRoot, sourceEntrypoints.get(subpath))
+    .replaceAll('\\', '/');
+  assert.equal(entrypointPath('./icons'), 'entrypoints/icons/index.ts');
+  assert.equal(entrypointPath('./charts'), 'entrypoints/charts/index.ts');
+  assert.equal(entrypointPath('./charts/spec'), 'entrypoints/charts/spec/index.ts');
+  assert.equal(entrypointPath('./charts/access'), 'entrypoints/charts/access/index.ts');
+  assert.equal(entrypointPath('./charts/renderers'), 'entrypoints/charts/renderers/index.ts');
+  assert.equal(entrypointPath('./motion'), 'entrypoints/graphics/motion/index.ts');
+  assert.equal(entrypointPath('./effects'), 'entrypoints/graphics/effects/index.ts');
+  assert.equal(entrypointPath('./spatial'), 'entrypoints/graphics/spatial/index.ts');
+  assert.equal(entrypointPath('./spatial/spec'), 'entrypoints/graphics/spatial/spec/index.ts');
   const graph = auditCoreDependencyGraph();
   assert.deepEqual(graph.errors, []);
+  // The governed corpus emits one supplier-isolated module per semantic role
+  // (263) plus the bounded 50-role facade adapter. Only two of those modules
+  // are reachable through components exported by the root entrypoint.
   assert.deepEqual(graph.report['@phosphor-icons/react'], {
-    productionImporters: 1,
-    rootReachableImporters: 0,
+    productionImporters: 264,
+    rootReachableImporters: 2,
   });
   assert.deepEqual(graph.report.three, {
     productionImporters: 0,

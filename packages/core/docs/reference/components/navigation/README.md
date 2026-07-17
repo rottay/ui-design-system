@@ -19,25 +19,25 @@ Tab navigation with multiple styles.
 **Example:**
 ```tsx
 import { Tabs } from '@rottay/design-system';
-import { Home, User, Settings } from 'lucide-react';
+import { Icon } from '@rottay/design-system/icons';
 
 const items = [
   {
     key: 'home',
     label: 'Home',
-    icon: <Home size={16} />,
+    icon: <Icon name="navigation.home" size="sm" decorative />,
     children: <div>Home content</div>,
   },
   {
     key: 'profile',
     label: 'Profile',
-    icon: <User size={16} />,
+    icon: <Icon name="entity.person" size="sm" decorative />,
     children: <div>Profile content</div>,
   },
   {
     key: 'settings',
     label: 'Settings',
-    icon: <Settings size={16} />,
+    icon: <Icon name="navigation.settings" size="sm" decorative />,
     children: <div>Settings content</div>,
     disabled: true,
   },
@@ -57,13 +57,13 @@ Breadcrumb navigation for hierarchical pages.
 **Example:**
 ```tsx
 import { Breadcrumb } from '@rottay/design-system';
-import { Home, ChevronRight } from 'lucide-react';
+import { Icon } from '@rottay/design-system/icons';
 
 const items = [
   {
     key: 'home',
     label: 'Home',
-    icon: <Home size={14} />,
+    icon: <Icon name="navigation.home" size="sm" decorative />,
     href: '/',
   },
   {
@@ -84,7 +84,7 @@ const items = [
 
 <Breadcrumb
   items={items}
-  separator={<ChevronRight size={12} />}
+  separator={<Icon name="navigation.forward" size="xs" decorative />}
   maxItems={4}
 />
 ```
@@ -134,7 +134,7 @@ function DataList() {
 Each component has three implementations:
 
 1. **Classic** (Ant Design) - Full-featured with enterprise UI
-2. **Modern** (DaisyUI) - Lightweight with Tailwind CSS classes
+2. **Modern** (Rottay-native) - Token/skin-driven responsive presentation
 3. **Rustic** (Pure HTML/CSS) - Zero dependencies with CSS variables
 
 ## Engine Selection
@@ -166,23 +166,23 @@ All components support:
 
 ```
 navigation/
-├── tabs/
-│   ├── core/index.ts       # Interface & defaults
-│   ├── classic/index.tsx   # Ant Design implementation
-│   ├── modern/index.tsx    # DaisyUI implementation
-│   ├── rustic/index.tsx    # Pure HTML/CSS implementation
-│   └── index.ts            # Router
-├── breadcrumb/
-│   ├── core/index.ts
-│   ├── classic/index.tsx
-│   ├── modern/index.tsx
-│   ├── rustic/index.tsx
-│   └── index.ts
-├── pagination/
-│   ├── core/index.ts
-│   ├── classic/index.tsx
-│   ├── modern/index.tsx
-│   ├── rustic/index.tsx
-│   └── index.ts
-└── index.ts                # Barrel exports
+├── Tabs/
+│   ├── index.tsx           # Stable component facade
+│   ├── contracts/index.ts
+│   ├── engines/{classic,modern,rustic}/index.tsx
+│   ├── compound/TabPane/index.tsx
+│   └── tests/
+├── Breadcrumb/
+│   ├── index.tsx
+│   ├── contracts/index.ts
+│   ├── engines/{classic,modern,rustic}/index.tsx
+│   ├── compound/Item/index.tsx
+│   └── tests/
+├── Pagination/
+│   ├── index.tsx
+│   ├── contracts/index.ts
+│   ├── engines/{classic,modern,rustic}/index.tsx
+│   ├── compound/index.ts
+│   └── tests/
+└── index.ts                # Category barrel
 ```

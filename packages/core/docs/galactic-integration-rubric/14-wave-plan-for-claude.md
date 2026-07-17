@@ -61,8 +61,8 @@ Primary files:
 - `app-platform/src/lib/tenancy/get-tenant-branding.ts`
 - `app-platform/src/lib/tenancy/branding-to-tenant-config.ts`
 - `app-platform/src/surfaces/settings/overview.tsx`
-- `ui-design-system/packages/core/src/contracts/tenants/index.ts`
-- `ui-design-system/packages/core/src/contracts/themes/index.ts`
+- `ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts`
+- `ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/index.ts`
 
 Acceptance:
 
@@ -82,9 +82,9 @@ Make `appearance` behave consistently in:
 
 Primary files:
 
-- `ui-design-system/packages/core/src/runtime/tenant/storage/static/generator/index.ts`
-- `ui-design-system/packages/core/src/components/patterns/misc/tenant-preview/engines/modern.tsx`
-- `ui-design-system/packages/core/src/compilers/appearance/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts`
+- `ui-design-system/packages/core/src/ui/patterns/misc/tenant-preview/engines/modern/index.tsx`
+- `ui-design-system/packages/core/src/infrastructure/compilers/runtime/appearance/index.ts`
 
 Acceptance:
 
@@ -105,7 +105,7 @@ Primary files:
 - `Statistic/engines/modern.tsx`
 - `Descriptions/engines/modern.tsx`
 - `QRCode/engines/modern.tsx`
-- `tokens/css/engines/modern/theme.css`
+- `foundation/tokens/css/runtime/engines/modern/theme.css`
 
 Acceptance:
 
@@ -143,8 +143,8 @@ Bring overlay-like patterns and key navigation primitives up to modal-quality se
 
 Primary files:
 
-- `command-palette/engines/modern.tsx`
-- `shortcuts-overlay/engines/modern.tsx`
+- `command-palette/engines/modern/index.tsx`
+- `shortcuts-overlay/engines/modern/index.tsx`
 - `Link/engines/modern.tsx`
 - `Breadcrumb/engines/modern.tsx`
 - `Tabs/engines/modern.tsx`
@@ -165,7 +165,7 @@ Move more visible Rotate shell styling from app-owned CSS and local geometry int
 Primary files:
 
 - `app-platform/src/app/globals.css`
-- `app-platform/src/components/_shared/layouts/app-layout/sidebar/index.tsx`
+- `app-platform/src/composition/components/_shared/layouts/app-layout/sidebar/index.tsx`
 - DS shell/sidebar/pattern token consumers as needed
 
 Acceptance:
@@ -181,7 +181,7 @@ Stop carrying a confusing middle state where many hook families are exported but
 
 Primary files:
 
-- `ui-design-system/packages/core/src/hooks/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/facade/react-hooks/index.ts`
 - command/search/data/routing/state/notifications/dnd/ai hook barrels
 - app-platform host consumers
 

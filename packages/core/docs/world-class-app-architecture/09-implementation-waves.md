@@ -58,8 +58,8 @@ This is the key wave for removing the root `actions/` forest.
 
 Move:
 
-- `src/components/<domain>` -> owning feature `components/`
-- `src/components/_shared/*` -> `ui/*` or DS
+- `src/composition/components/<domain>` -> owning feature `components/`
+- `src/composition/components/_shared/*` -> `ui/*` or DS
 
 ## Wave 7. Delete compat layers and dead roots
 

@@ -338,7 +338,7 @@ test('paint scanners close bound/call/apply and style children/spread aliases', 
 test('G1-G7 structured analyzers fail closed on opaque claims and noncanonical evidence', () => {
   const claimFacts = analyzeClaimSourceRecords([
     {
-      path: '/repo/src/contracts/extensions/index.ts',
+      path: '/repo/src/foundation/contracts/kernel/tokens/extensions/index.ts',
       kind: 'core',
       text: `export interface ExtensionHelpers<T> { resolve(value: T): T }`,
     },
@@ -350,17 +350,17 @@ test('G1-G7 structured analyzers fail closed on opaque claims and noncanonical e
     {
       path: '/repo/src/runtime/helper.ts',
       kind: 'core',
-      text: `import { ExtensionHelpers as Helpers } from '../contracts/extensions'; export const implementation = Helpers;`,
+      text: `import { ExtensionHelpers as Helpers } from '../foundation/contracts/kernel/tokens/extensions'; export const implementation = Helpers;`,
     },
     {
-      path: '/repo/src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts',
+      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
       kind: 'core',
       text: `export function useSurfaceProfileDefaultsWithOverrides(value: unknown) { return value; } export const selfProbe = () => useSurfaceProfileDefaultsWithOverrides({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/demo.tsx',
+      path: '/repo/src/ui/surfaces/pages/demo.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useOverrides } from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; export const Demo = () => useOverrides({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useOverrides } from '../runtime/profile-defaults/overrides'; export const Demo = () => useOverrides({});`,
     },
     {
       path: '/repo/packages/showroom/src/demo.tsx',
@@ -443,7 +443,7 @@ test('G1-G7 structured analyzers fail closed on opaque claims and noncanonical e
 });
 
 test('G1 typed claim references resolve named/default/namespace/reexports without scope-name false positives', () => {
-  const hookPath = '/repo/src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts';
+  const hookPath = '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts';
   const records = [
     {
       path: hookPath,
@@ -451,48 +451,48 @@ test('G1 typed claim references resolve named/default/namespace/reexports withou
       text: `export function useSurfaceProfileDefaultsWithOverrides(value: unknown) { return value; }`,
     },
     {
-      path: '/repo/src/components/surfaces/foundation/types.ts',
+      path: '/repo/src/ui/surfaces/foundation/contracts/index.ts',
       kind: 'core',
       text: `export interface SurfaceVisualOverrides { density?: string } export interface VisualOptions { profileOverrides?: SurfaceVisualOverrides }`,
     },
     {
-      path: '/repo/src/components/surfaces/foundation/hooks/named.ts',
+      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/named.ts',
       kind: 'core',
-      text: `export { useSurfaceProfileDefaultsWithOverrides as useProfile } from './useSurfaceProfileDefaultsWithOverrides';`,
+      text: `export { useSurfaceProfileDefaultsWithOverrides as useProfile } from './index';`,
     },
     {
-      path: '/repo/src/components/surfaces/foundation/hooks/default.ts',
+      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/default.ts',
       kind: 'core',
-      text: `export { useSurfaceProfileDefaultsWithOverrides as default } from './useSurfaceProfileDefaultsWithOverrides';`,
+      text: `export { useSurfaceProfileDefaultsWithOverrides as default } from './index';`,
     },
     {
-      path: '/repo/src/components/surfaces/foundation/hooks/star.ts',
+      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/star.ts',
       kind: 'core',
-      text: `export * from './useSurfaceProfileDefaultsWithOverrides';`,
+      text: `export * from './index';`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/named.tsx', kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; export const Demo = () => invoke({});`,
+      path: '/repo/src/ui/surfaces/pages/named.tsx', kind: 'core',
+      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../runtime/profile-defaults/overrides'; export const Demo = () => invoke({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/default.tsx', kind: 'core',
-      text: `import invoke from '../foundation/hooks/default'; export const Demo = () => invoke({});`,
+      path: '/repo/src/ui/surfaces/pages/default.tsx', kind: 'core',
+      text: `import invoke from '../runtime/profile-defaults/overrides/default'; export const Demo = () => invoke({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/namespace.tsx', kind: 'core',
-      text: `import * as Hooks from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; export const Demo = () => Hooks.useSurfaceProfileDefaultsWithOverrides({});`,
+      path: '/repo/src/ui/surfaces/pages/namespace.tsx', kind: 'core',
+      text: `import * as Hooks from '../runtime/profile-defaults/overrides'; export const Demo = () => Hooks.useSurfaceProfileDefaultsWithOverrides({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/reexport.tsx', kind: 'core',
-      text: `import { useProfile } from '../foundation/hooks/named'; export const Demo = () => useProfile({});`,
+      path: '/repo/src/ui/surfaces/pages/reexport.tsx', kind: 'core',
+      text: `import { useProfile } from '../runtime/profile-defaults/overrides/named'; export const Demo = () => useProfile({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/star.tsx', kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../foundation/hooks/star'; export const Demo = () => invoke({});`,
+      path: '/repo/src/ui/surfaces/pages/star.tsx', kind: 'core',
+      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../runtime/profile-defaults/overrides/star'; export const Demo = () => invoke({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/scope-shadow.tsx', kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; export const outer = () => invoke({}); export function inner() { const invoke = () => null; return invoke(); }`,
+      path: '/repo/src/ui/surfaces/pages/scope-shadow.tsx', kind: 'core',
+      text: `import { useSurfaceProfileDefaultsWithOverrides as invoke } from '../runtime/profile-defaults/overrides'; export const outer = () => invoke({}); export function inner() { const invoke = () => null; return invoke(); }`,
     },
   ];
   const facts = analyzeClaimSourceRecords(records)['surface-profile-overrides'];
@@ -501,62 +501,62 @@ test('G1 typed claim references resolve named/default/namespace/reexports withou
   assert.equal(facts.unsupportedGovernedReferences, 0);
   assert.equal(facts.registeredExecutableEvidence, 0);
   assert.deepEqual(facts.staticallyResolvedSurfaceHookCallFiles, [
-    '/repo/src/components/surfaces/pages/default.tsx',
-    '/repo/src/components/surfaces/pages/named.tsx',
-    '/repo/src/components/surfaces/pages/namespace.tsx',
-    '/repo/src/components/surfaces/pages/reexport.tsx',
-    '/repo/src/components/surfaces/pages/scope-shadow.tsx',
-    '/repo/src/components/surfaces/pages/star.tsx',
+    '/repo/src/ui/surfaces/pages/default.tsx',
+    '/repo/src/ui/surfaces/pages/named.tsx',
+    '/repo/src/ui/surfaces/pages/namespace.tsx',
+    '/repo/src/ui/surfaces/pages/reexport.tsx',
+    '/repo/src/ui/surfaces/pages/scope-shadow.tsx',
+    '/repo/src/ui/surfaces/pages/star.tsx',
   ]);
 });
 
 test('G2 claim census keeps opaque transports and computed access out of direct evidence', () => {
   const records = [
     {
-      path: '/repo/src/contracts/extensions/index.ts',
+      path: '/repo/src/foundation/contracts/kernel/tokens/extensions/index.ts',
       kind: 'core',
       text: `export interface ComponentExtensions { slot?: unknown } export interface ExtensionHelpers<T> { resolve(value: T): T }`,
     },
     {
-      path: '/repo/src/contracts/engine/index.ts',
+      path: '/repo/src/foundation/contracts/runtime/engine/index.ts',
       kind: 'core',
-      text: `import type { ComponentExtensions } from '../extensions'; export interface EngineAwareProps { extensions?: ComponentExtensions }`,
+      text: `import type { ComponentExtensions } from '../../kernel/tokens/extensions'; export interface EngineAwareProps { extensions?: ComponentExtensions }`,
     },
     {
-      path: '/repo/src/components/surfaces/foundation/types.ts',
+      path: '/repo/src/ui/surfaces/foundation/contracts/index.ts',
       kind: 'core',
       text: `export interface SurfaceVisualOverrides { density?: string } export interface VisualOptions { profileOverrides?: SurfaceVisualOverrides }`,
     },
     {
-      path: '/repo/src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts',
+      path: '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
       kind: 'core',
       text: `export function useSurfaceProfileDefaultsWithOverrides(value: unknown) { return value; } export const selfProbe = () => useSurfaceProfileDefaultsWithOverrides({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/direct.tsx',
+      path: '/repo/src/ui/surfaces/pages/direct.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; export const Demo = () => useProfile({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; export const Demo = () => useProfile({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/container.tsx',
+      path: '/repo/src/ui/surfaces/pages/container.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; const hooks = [useProfile]; export const Demo = () => hooks[0]({});`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; const hooks = [useProfile]; export const Demo = () => hooks[0]({});`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/helper.tsx',
+      path: '/repo/src/ui/surfaces/pages/helper.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; const forward = (value: unknown) => value; export const opaque = forward(useProfile);`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; const forward = (value: unknown) => value; export const opaque = forward(useProfile);`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/wrappers.tsx',
+      path: '/repo/src/ui/surfaces/pages/wrappers.tsx',
       kind: 'core',
-      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../foundation/hooks/useSurfaceProfileDefaultsWithOverrides'; export const opaque = [useProfile.call(null, {}), Reflect.apply(useProfile, null, [{}]), useProfile.bind(null)];`,
+      text: `import { useSurfaceProfileDefaultsWithOverrides as useProfile } from '../runtime/profile-defaults/overrides'; export const opaque = [useProfile.call(null, {}), Reflect.apply(useProfile, null, [{}]), useProfile.bind(null)];`,
     },
     {
       path: '/repo/src/runtime/extensions-direct.ts',
       kind: 'core',
       text: `
-        import type { EngineAwareProps } from '../contracts/engine';
+        import type { EngineAwareProps } from '../foundation/contracts/runtime/engine';
         const extensions = {};
         export const assigned: EngineAwareProps = { extensions };
         export const quoted: EngineAwareProps = { 'extensions': {} };
@@ -569,7 +569,7 @@ test('G2 claim census keeps opaque transports and computed access out of direct 
     {
       path: '/repo/src/runtime/extensions-mapped.ts',
       kind: 'core',
-      text: `import type { EngineAwareProps } from '../contracts/engine'; type Selected = Pick<EngineAwareProps, 'extensions'>; export const read = (props: Selected) => props.extensions;`,
+      text: `import type { EngineAwareProps } from '../foundation/contracts/runtime/engine'; type Selected = Pick<EngineAwareProps, 'extensions'>; export const read = (props: Selected) => props.extensions;`,
     },
     {
       path: '/repo/src/runtime/extensions-computed.ts',
@@ -577,14 +577,14 @@ test('G2 claim census keeps opaque transports and computed access out of direct 
       text: `export const read = (props: any) => [props['extensions'], Reflect.get(props, 'extensions')];`,
     },
     {
-      path: '/repo/src/components/surfaces/pages/name-only-fakes.tsx',
+      path: '/repo/src/ui/surfaces/pages/name-only-fakes.tsx',
       kind: 'core',
       text: `import { useSurfaceProfileDefaultsWithOverrides as external } from 'untracked-package'; const fake = { useSurfaceProfileDefaultsWithOverrides() {} }; export const Demo = () => [external({}), fake.useSurfaceProfileDefaultsWithOverrides()];`,
     },
     {
       path: '/repo/packages/showroom/src/profile.tsx',
       kind: 'showroom',
-      text: `import type { VisualOptions } from '../../../src/components/surfaces/foundation/types'; export const read = (visual: VisualOptions) => visual.profileOverrides; const fake = { profileOverrides: true }; export const ignored = fake.profileOverrides;`,
+      text: `import type { VisualOptions } from '../../../src/ui/surfaces/foundation/contracts'; export const read = (visual: VisualOptions) => visual.profileOverrides; const fake = { profileOverrides: true }; export const ignored = fake.profileOverrides;`,
     },
   ];
   const forward = analyzeClaimSourceRecords(records);
@@ -604,8 +604,8 @@ test('G2 claim census keeps opaque transports and computed access out of direct 
   assert.equal(surfaces.staticallyResolvedPotentialConsumers, 6);
   assert.equal(surfaces.unsupportedGovernedReferences, 5);
   assert.deepEqual(surfaces.staticallyResolvedSurfaceHookCallFiles, [
-    '/repo/src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts',
-    '/repo/src/components/surfaces/pages/direct.tsx',
+    '/repo/src/ui/surfaces/pages/direct.tsx',
+    '/repo/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
   ]);
   assert.equal(surfaces.potentialConsumers.some(({ path }) => path.endsWith('name-only-fakes.tsx')), false);
 });
@@ -706,11 +706,14 @@ test('G6 registry proof is a strict authored-initializer projection', () => {
 
 test('G7 data-part evidence accepts only canonical static sinks', () => {
   const result = collectDataPartStampsFromText(`
-    import { Box, Text } from '../primitives';
+    import { Box, Stack, Text } from '../primitives';
+    import { Box as AliasBox } from '@/ui/primitives/layout/Box';
+    import { Stack as AliasStack } from '@/ui/primitives/layout/Stack';
+    import { Text as AliasText } from '@/ui/primitives/display/Typography';
     import React from 'react';
     import type { Box as TypeBox } from '../primitives';
-    import { Box as ExternalBox } from '/evil/src/components/primitives';
-    import { stampDataPart } from '../../runtime/data-part';
+    import { Box as ExternalBox } from '/evil/src/ui/primitives';
+    import { stampDataPart } from '../../infrastructure/runtime/dom/foundation/data-part';
     import { SearchIcon } from '@phosphor-icons/react';
     const Fake = (_props: { 'data-part'?: string }) => null;
     export function Probe(node: Element, dynamic: string, condition: boolean) {
@@ -736,7 +739,11 @@ test('G7 data-part evidence accepts only canonical static sinks', () => {
         <div data-part="root" />
         <span data-part={condition ? 'one' : 'two'} />
         <Box data-part="box" />
+        <Stack data-part="stack" />
         <Text data-part="text" />
+        <AliasBox data-part="alias-box" />
+        <AliasStack data-part="alias-stack" />
+        <AliasText data-part="alias-text" />
         <Fake data-part="fake" />
         <SearchIcon data-part="icon" />
         <TypeBox data-part="type-only" />
@@ -747,9 +754,9 @@ test('G7 data-part evidence accepts only canonical static sinks', () => {
         <div {...unknown} />
       </>;
     }
-  `, '/repo/src/components/structures/demo.tsx');
+  `, '/repo/src/ui/structures/demo.tsx');
   assert.deepEqual([...new Set(result.stamps.map(({ part }) => part))].sort(), [
-    'box', 'helper', 'one', 'root', 'text', 'two',
+    'alias-box', 'alias-stack', 'alias-text', 'box', 'helper', 'one', 'root', 'stack', 'text', 'two',
   ]);
   assert.deepEqual([...new Set(result.stamps.map(({ sinkKind }) => sinkKind))].sort(), [
     'canonical-forwarder', 'canonical-helper', 'intrinsic-dom',
@@ -774,7 +781,7 @@ test('G7 data-part evidence accepts only canonical static sinks', () => {
       const opaque = makeProps('data-part');
       return <><div data-part="root" /><div {...known} /><div {...props} /><div {...opaque} /></>;
     };
-  `, '/repo/src/components/structures/unrelated.tsx');
+  `, '/repo/src/ui/structures/unrelated.tsx');
   assert.deepEqual(unrelatedSpread.unresolved, []);
   assert.equal(evaluateDataPartUnresolved(unrelatedSpread.unresolved).ok, true);
 });
@@ -1069,7 +1076,7 @@ test('all reviewed paint evasion classes turn the production audit red', async (
         assert.match(output, /WO-GAT-07 evasion fixture result/);
         assert.match(
           output,
-          /arc09\.inlinePaint\.primitives\/display\/Table\/engines\/modern\.tsx|embeddedCssPaint\.primitives\/display\/Table\/engines\/modern\.tsx/,
+          /arc09\.inlinePaint\.primitives\/display\/Table\/engines\/modern\/index\.tsx|embeddedCssPaint\.primitives\/display\/Table\/engines\/modern\/index\.tsx/,
         );
       });
     }

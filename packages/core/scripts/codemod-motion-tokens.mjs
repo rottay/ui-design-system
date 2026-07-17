@@ -16,7 +16,7 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const componentsDir = resolve(here, "../src/components");
+const componentsDir = resolve(here, "../src/ui");
 
 /** Orphan / engine-local motion names -> canon names. */
 const NAME_MAP = {

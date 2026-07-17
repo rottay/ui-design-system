@@ -41,7 +41,7 @@ import { test, expect, type Page } from '@playwright/test';
 //
 // The differential in (1) can only detect a hardcode on a channel where the two
 // themes actually DISAGREE. That precondition is not assumed, it is gated: the
-// unit test packages/core/src/compilers/brand-theme/tests/torture-fixtures.test.ts
+// unit test packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/torture-fixtures.test.ts
 // asserts every variable in TORTURE_PROBE_VARS compiles to a different value
 // under a torture fixture than under the matching first-party theme. Weakening a
 // fixture turns that test red instead of silently voiding a probe here.

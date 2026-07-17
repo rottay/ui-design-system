@@ -7,8 +7,8 @@ import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const CORE_SRC = fileURLToPath(new URL('../src/', import.meta.url));
-const COMPONENTS = join(CORE_SRC, 'components');
-const CSS = join(CORE_SRC, 'tokens/css');
+const COMPONENTS = join(CORE_SRC, 'ui');
+const CSS = join(CORE_SRC, 'foundation/tokens/css');
 
 function component(relativePath) {
   const file = join(COMPONENTS, relativePath);
@@ -32,7 +32,7 @@ test('the twenty runtime paint sites keep their exact property identity', () => 
   ];
 
   for (const engine of ['modern', 'rustic']) {
-    const box = component(`primitives/layout/Box/engines/${engine}.tsx`);
+    const box = component(`primitives/layout/Box/engines/${engine}/index.tsx`);
     assert.equal(countArc09PaintInFile(box.source, box.file), 8, engine);
     const assignments = [
       ...box.source.matchAll(
@@ -42,25 +42,26 @@ test('the twenty runtime paint sites keep their exact property identity', () => 
     assert.deepEqual(assignments, boxProperties, engine);
   }
 
-  const card = component('primitives/display/Card/engines/rustic.tsx');
+  const card = component('primitives/display/Card/engines/rustic/index.tsx');
   assert.equal(countArc09PaintInFile(card.source, card.file), 1);
   assert.match(card.source, /\.\.\.\(backgroundColor \? \{ backgroundColor \} : \{\}\)/);
 
-  const overlay = component('primitives/overlay/Modal/utils/Overlay.tsx');
+  const overlay = component('primitives/runtime/overlay/backdrop/index.tsx');
   assert.equal(countArc09PaintInFile(overlay.source, overlay.file), 1);
   assert.match(overlay.source, /const overlayStyle: React\.CSSProperties = \{[\s\S]*?\n\s*backgroundColor,/);
 
-  const chartExport = component('patterns/visualization/charts/utils/export.ts');
+  const chartExport = component('patterns/visualization/charts/runtime/exporting/foundation/file/index.ts');
   assert.equal(countArc09PaintInFile(chartExport.source, chartExport.file), 2);
   assert.equal((chartExport.source.match(/\.style\.setProperty\(prop, value\)/g) ?? []).length, 2);
   const runtimeSvg = analyzeRuntimeSvgPaint(chartExport.source, chartExport.file);
-  assert.equal(runtimeSvg.count, 4);
-  assert.equal(runtimeSvg.classifiedPaint, 4);
+  assert.equal(runtimeSvg.count, 5);
+  assert.equal(runtimeSvg.classifiedPaint, 5);
   assert.equal(runtimeSvg.unclassified, 0);
   assert.deepEqual(runtimeSvg.unclassifiedSites, []);
   assert.deepEqual(
     runtimeSvg.sites.map(({ kind, property }) => ({ kind, property })),
     [
+      { kind: 'dom-set-attribute', property: 'computed-paint-copy' },
       { kind: 'dom-set-attribute', property: 'fill' },
       { kind: 'dom-set-attribute', property: 'computed-paint-copy' },
       { kind: 'dom-set-attribute', property: 'computed-paint-copy' },
@@ -74,7 +75,7 @@ test('the fourteen static sites live in wired skins with byte-exact values', () 
   assert.equal(countArc09PaintInFile(group.source, group.file), 0);
   assert.doesNotMatch(group.source, /childStyle\.border(?:Top|Bottom)/);
   assert.match(group.source, /data-compact=\{compact \? 'true' : 'false'\}/);
-  const inputCss = stylesheet('components/skin/input-compounds.css');
+  const inputCss = stylesheet('presentation/components/skin/input-compounds.css');
   assert.equal((inputCss.match(/border-(?:top|bottom)-(?:left|right)-radius: 0 !important;/g) ?? []).length, 8);
 
   const radiusValues = new Map([
@@ -95,13 +96,13 @@ test('the fourteen static sites live in wired skins with byte-exact values', () 
     ['2xl', '0 25px 50px -12px rgba(0, 0, 0, 0.25)'],
   ]);
   for (const engine of ['modern', 'rustic']) {
-    const box = component(`primitives/layout/Box/engines/${engine}.tsx`);
+    const box = component(`primitives/layout/Box/engines/${engine}/index.tsx`);
     assert.equal(countArc09PaintInFile(box.source, box.file), 8, engine);
     assert.doesNotMatch(box.source, /style\.(?:borderRadius|boxShadow)\s*=/);
     assert.match(box.source, /const radiusValue = props\.borderRadius \|\| props\.rounded;/);
     assert.match(box.source, /'data-radius': !callerOwnsRadius && radiusValue && radiusValue !== 'none'/);
     assert.match(box.source, /'data-shadow': !callerOwnsShadow && props\.shadow && props\.shadow !== 'none'/);
-    const boxCss = stylesheet(`engines/${engine}/skin/layout.css`);
+    const boxCss = stylesheet(`runtime/engines/${engine}/skin/layout.css`);
     const normalizedBoxCss = boxCss.replace(/\s+/g, ' ');
     for (const [token, value] of radiusValues) {
       assert.ok(
@@ -126,15 +127,15 @@ test('the fourteen static sites live in wired skins with byte-exact values', () 
   assert.doesNotMatch(toast.source, /base\.transform\s*=/);
   assert.match(toast.source, /data-center-transform=\{usesStaticCenterTransform \? 'true' : undefined\}/);
   assert.match(
-    stylesheet('components/skin/toast-compounds.css'),
+    stylesheet('presentation/components/skin/toast-compounds.css'),
     /\[data-placement='top-center'\]\[data-center-transform='true'\],[\s\S]*?\[data-placement='bottom-center'\]\[data-center-transform='true'\][\s\S]*?transform: translateX\(-50%\);/
   );
 
-  const accent = component('surfaces/foundation/personality-helpers.tsx');
+  const accent = component('surfaces/runtime/profile-defaults/personality/index.tsx');
   assert.equal(countArc09PaintInFile(accent.source, accent.file), 0);
   assert.doesNotMatch(accent.source, /baseStyle\.backgroundSize\s*=/);
   assert.match(
-    stylesheet('components/skin/surface-accent-bar.css'),
+    stylesheet('presentation/components/skin/surface-accent-bar.css'),
     /\[data-style='animated'\][^{]*\{[^}]*background-size: 200% 100%;/
   );
 });

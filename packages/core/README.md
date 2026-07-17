@@ -11,11 +11,11 @@ Internal multi-tenant, multi-engine React component library powering all Rottay 
 ## Features
 
 - **Primitives** -- engine-switched leaf components across 6 categories (display, inputs, feedback, layout, navigation, overlay)
-- **Patterns** -- engine-agnostic task-level compositions (DataTable, FormBuilder, Charts, KanbanBoard, etc.)
+- **Patterns** -- reusable task-level compositions, engine-backed only when rendering genuinely differs (DataTable, FormBuilder, Charts, KanbanBoard, etc.)
 - **Structures** -- structures families that sit between patterns and surfaces (detail/edit/form headers, table toolbars, record panels, metric cards, loading overlays, ...)
 - **Surfaces** -- declarative page-level configs (ListSurface, DashboardSurface, FormSurface, etc.)
-- **Engines** -- Classic (Ant Design), Modern (DaisyUI/Tailwind), Rustic (Vanilla HTML/CSS), and Custom (white-label pack-scoped)
-- **Multi-tenant theming** -- CSS custom properties with 6-level tenant resolution
+- **Engines** -- three physical engines: Classic (Ant Design), Modern (Rottay token skins), Rustic (Vanilla HTML/CSS); Custom is a pack-scoped registry identity
+- **Multi-tenant theming** -- static-first code verticals plus DB-owned, server-compiled customer artifacts
 - **Personality system** -- per-vertical animation, typography, chart, and card tuning
 - **i18n** -- 5 locales (en, es, pt, fr, ar) with RTL support
 - **Code-split engines** -- only the active engine loads; others lazy-load on demand
@@ -75,9 +75,10 @@ function App() {
 ```
 
 Import exactly one public stylesheet entrypoint before rendering components. Applications may use
-the full `styles.css` bundle shown above or the matching `styles/<vertical>` export. Runtime
-providers supply tenant variables, but component skins, interaction states and keyframes live in
-the stylesheet.
+the full `styles.css` bundle shown above or the matching `styles/<vertical>` export. Provider-owned
+vertical/preview modes may emit runtime variables; a published customer tenant instead mounts the
+exact server-compiled artifact and hydrates with `visualAuthority="compiled-artifact"`.
+Component skins, interaction states and keyframes live in the stylesheet.
 
 ## Documentation
 
@@ -96,7 +97,8 @@ the stylesheet.
 | --------------------------------------- | ------------------------------------------------ |
 | `@rottay/design-system`                 | Components, providers, hooks                     |
 | `@rottay/design-system/server`          | Server-side utilities                            |
-| `@rottay/design-system/icons`           | Icon system                                      |
+| `@rottay/design-system/icons`           | Stable 50-role semantic facade + compatibility  |
+| `@rottay/design-system/icons/{foundation,bithire,identity,intelligence,operations}` | Generated packs (263 roles total) |
 | `@rottay/design-system/marks`           | Governed brand and cloud-provider marks          |
 | `@rottay/design-system/charts`          | Focused chart components                         |
 | `@rottay/design-system/charts/spec`     | Server-safe visualization contracts              |
@@ -106,7 +108,7 @@ the stylesheet.
 | `@rottay/design-system/effects`         | Supplier-neutral effect governance               |
 | `@rottay/design-system/spatial`         | Optional React spatial lifecycle host            |
 | `@rottay/design-system/spatial/spec`    | Server-safe spatial policy and module contract   |
-| `@rottay/design-system/styles.css`      | Full CSS bundle (all tenants, for dev/Storybook) |
+| `@rottay/design-system/styles.css`      | Full CSS bundle (code-owned verticals/dev)       |
 | `@rottay/design-system/styles/platform` | CSS bundle for Platform app (rottay tenant)      |
 | `@rottay/design-system/styles/bithire`  | CSS bundle for BitHire app                       |
 | `@rottay/design-system/styles/evnto`    | CSS bundle for Evnto app                         |

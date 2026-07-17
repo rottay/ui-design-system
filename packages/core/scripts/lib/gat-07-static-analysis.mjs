@@ -262,19 +262,19 @@ export function analyzeClaimSourceRecords(records) {
     {
       claimId: 'component-extensions',
       name: 'ComponentExtensions',
-      pathSuffix: '/src/contracts/extensions/index.ts',
+      pathSuffix: '/src/foundation/contracts/kernel/tokens/extensions/index.ts',
       role: 'claim-type',
     },
     {
       claimId: 'component-extensions',
       name: 'ExtensionHelpers',
-      pathSuffix: '/src/contracts/extensions/index.ts',
+      pathSuffix: '/src/foundation/contracts/kernel/tokens/extensions/index.ts',
       role: 'extension-helper',
     },
     {
       claimId: 'component-extensions',
       name: 'extensions',
-      pathSuffix: '/src/contracts/engine/index.ts',
+      pathSuffix: '/src/foundation/contracts/runtime/engine/index.ts',
       role: 'extension-runtime-field',
       acceptsDeclaration: (declaration) =>
         ts.isPropertySignature(declaration) &&
@@ -283,19 +283,19 @@ export function analyzeClaimSourceRecords(records) {
     {
       claimId: 'surface-profile-overrides',
       name: 'SurfaceVisualOverrides',
-      pathSuffix: '/src/components/surfaces/foundation/types.ts',
+      pathSuffix: '/src/ui/surfaces/foundation/contracts/index.ts',
       role: 'claim-type',
     },
     {
       claimId: 'surface-profile-overrides',
       name: 'useSurfaceProfileDefaultsWithOverrides',
-      pathSuffix: '/src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts',
+      pathSuffix: '/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
       role: 'surface-hook',
     },
     {
       claimId: 'surface-profile-overrides',
       name: 'profileOverrides',
-      pathSuffix: '/src/components/surfaces/foundation/types.ts',
+      pathSuffix: '/src/ui/surfaces/foundation/contracts/index.ts',
       role: 'surface-runtime-field',
       acceptsDeclaration: (declaration, source) =>
         ts.isPropertySignature(declaration) && declaration.type?.getText(source).includes('SurfaceVisualOverrides'),
@@ -441,13 +441,13 @@ export function analyzeClaimSourceRecords(records) {
     const record = recordByFile.get(source.fileName);
     if (!record) continue;
     const normalized = record.path.replaceAll('\\', '/');
-    const isExtensionDefinition = normalized.endsWith('/src/contracts/extensions/index.ts');
-    const isEngineDefinition = normalized.endsWith('/src/contracts/engine/index.ts');
-    const isSurfaceTypes = normalized.endsWith('/src/components/surfaces/foundation/types.ts');
+    const isExtensionDefinition = normalized.endsWith('/src/foundation/contracts/kernel/tokens/extensions/index.ts');
+    const isEngineDefinition = normalized.endsWith('/src/foundation/contracts/runtime/engine/index.ts');
+    const isSurfaceTypes = normalized.endsWith('/src/ui/surfaces/foundation/contracts/index.ts');
     const isSurfaceDefinition =
       isSurfaceTypes ||
-      normalized.endsWith('/src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts') ||
-      normalized.endsWith('/src/components/surfaces/index.ts');
+      normalized.endsWith('/src/ui/surfaces/runtime/profile-defaults/overrides/index.ts') ||
+      normalized.endsWith('/src/ui/surfaces/index.ts');
     if (isExtensionDefinition || isEngineDefinition) extensionDeprecations += countDeprecated(record.text);
     if (isSurfaceDefinition) profileDeprecations += countDeprecated(record.text);
 
@@ -509,7 +509,7 @@ export function analyzeClaimSourceRecords(records) {
           if (spec.role === 'extension-helper') extensionHelperFiles.add(record.path);
           if (
             spec.role === 'surface-hook' && directCall &&
-            record.kind === 'core' && normalized.includes('/src/components/surfaces/')
+            record.kind === 'core' && normalized.includes('/src/ui/surfaces/')
           ) {
             hookCallFiles.add(record.path);
           }
@@ -1064,24 +1064,42 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
     return Boolean(sourcePackageRoot) && suffixes.some((suffix) => resolved === `${sourcePackageRoot}${suffix}`);
   }
 
+  function canonicalSourceOrAliasModule(resolved, suffixes) {
+    return canonicalSourceModule(resolved, suffixes) ||
+      suffixes.some((suffix) => resolved === suffix.replace(/^\/src/, '@'));
+  }
+
   function canonicalForwarder(tagName) {
     if (!ts.isIdentifier(tagName)) return null;
     const binding = uniqueBinding(bindings, tagName.text);
-    if (binding?.kind !== 'import' || binding.typeOnly || !['Box', 'Text'].includes(binding.importedName)) return null;
+    const exactModuleSuffixes = {
+      Box: [
+        '/src/ui/primitives/layout',
+        '/src/ui/primitives/layout/index',
+        '/src/ui/primitives/layout/Box',
+      ],
+      Stack: [
+        '/src/ui/primitives/layout',
+        '/src/ui/primitives/layout/index',
+        '/src/ui/primitives/layout/Stack',
+      ],
+      Text: [
+        '/src/ui/primitives/display',
+        '/src/ui/primitives/display/index',
+        '/src/ui/primitives/display/Typography',
+      ],
+    };
+    if (
+      binding?.kind !== 'import' || binding.typeOnly ||
+      !Object.hasOwn(exactModuleSuffixes, binding.importedName)
+    ) return null;
     const resolved = resolvedImportPath(binding.importSource ?? '');
-    const commonBarrel = resolved === '@rottay/design-system' || resolved === '@/components/primitives' ||
-      canonicalSourceModule(resolved, ['/src/components/primitives', '/src/components/primitives/index']);
-    const exactModule = binding.importedName === 'Box'
-      ? canonicalSourceModule(resolved, [
-          '/src/components/primitives/layout',
-          '/src/components/primitives/layout/index',
-          '/src/components/primitives/layout/Box',
-        ])
-      : canonicalSourceModule(resolved, [
-          '/src/components/primitives/display',
-          '/src/components/primitives/display/index',
-          '/src/components/primitives/display/Typography',
-        ]);
+    const commonBarrel = resolved === '@rottay/design-system' || resolved === '@/ui/primitives' ||
+      canonicalSourceModule(resolved, ['/src/ui/primitives', '/src/ui/primitives/index']);
+    const exactModule = canonicalSourceOrAliasModule(
+      resolved,
+      exactModuleSuffixes[binding.importedName],
+    );
     if (!commonBarrel && !exactModule) return null;
     return {
       canonicalComponent: binding.importedName,
@@ -1113,7 +1131,10 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx') {
     const binding = uniqueBinding(bindings, callee.text);
     if (
       binding?.kind !== 'import' || binding.typeOnly || binding.importedName !== 'stampDataPart' ||
-      !canonicalSourceModule(resolvedImportPath(binding.importSource ?? ''), ['/src/runtime/data-part'])
+      !canonicalSourceModule(
+        resolvedImportPath(binding.importSource ?? ''),
+        ['/src/infrastructure/runtime/dom/foundation/data-part'],
+      )
     ) {
       return null;
     }

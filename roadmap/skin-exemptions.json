@@ -17,36 +17,40 @@
   "SKIN-EXEMPT-RUNTIME-VALUE": {
     "$why": "The paint value is supplied at runtime: a tenant's chosen brand hex, caller-owned visual prop, per-datum chart colour, per-user identity colour, or a fidelity-preserving copy of live document paint. Static skin CSS cannot author those values.",
     "files": {
-      "primitives/layout/Box/engines/modern.tsx": {
+      "primitives/layout/Box/engines/modern/index.tsx": {
         "floor": 8,
         "why": "Box forwards the caller's free-form background/backgroundColor, border width/color/style, transform and color props. The two authored radius/shadow defaults migrate; these eight caller values must retain inline precedence."
       },
-      "primitives/layout/Box/engines/rustic.tsx": {
+      "primitives/layout/Box/engines/rustic/index.tsx": {
         "floor": 8,
         "why": "Rustic Box has the same eight caller-owned paint channels as modern. They are the public primitive contract, not tenant chrome a static skin can choose."
       },
-      "primitives/display/Card/engines/rustic.tsx": {
+      "primitives/layout/Collapse/runtime/tokens/index.ts": {
+        "floor": 1,
+        "why": "useCollapseTokens merges the caller-owned style escape hatch after generated CSS custom properties. The opaque consumer paint bag must retain inline precedence; the runtime does not author a fixed visual value that a skin could replace."
+      },
+      "primitives/display/Card/engines/rustic/index.tsx": {
         "floor": 1,
         "why": "The caller-supplied backgroundColor shorthand is intentionally forwarded into Card's style object; external CSS would change caller precedence."
       },
-      "primitives/overlay/Modal/utils/Overlay.tsx": {
+      "primitives/runtime/overlay/backdrop/index.tsx": {
         "floor": 1,
         "why": "Overlay backgroundColor is the caller-provided backdrop colour. The value is arbitrary at runtime and must continue to win inline."
       },
-      "patterns/visualization/charts/utils/export.ts": {
+      "patterns/visualization/charts/runtime/exporting/foundation/file/index.ts": {
         "floor": 2,
         "runtimeSvgFloor": 5,
         "why": "The exporter copies runtime-computed paint into two CSSStyleDeclaration paths and five SVG presentation-attribute paths, including variable-backed attributes already present on the clone. It preserves rendered chart fidelity for export; a static skin cannot know the property/value pairs."
       },
-      "patterns/misc/tenant-preview/engines/modern.tsx": {
+      "patterns/customization/tenant-preview/engines/modern/index.tsx": {
         "floor": 22,
         "why": "buildPaletteSteps() mixes a 10-step palette from the tenant's chosen hex (mixColor(base, '#fff'|'#000', ratio)), then renders it as swatches, buttons and badges."
       },
-      "patterns/misc/tenant-preview/engines/rustic.tsx": {
+      "patterns/customization/tenant-preview/engines/rustic/index.tsx": {
         "floor": 14,
         "why": "The same 10 palette steps, plus 4 render sites. NOTE: rustic's Button/Input/Badge sections use generic DS scale tokens instead of the tenant's actual colour -- a real cross-engine inconsistency, filed separately, not something the migration may 'fix'."
       },
-      "patterns/misc/brand-studio/index.tsx": {
+      "patterns/customization/brand-studio/index.tsx": {
         "floor": 1,
         "why": "index.tsx:387 -- background: isHex(value) ? value : 'transparent', the live swatch of the field the admin is typing into."
       },
@@ -55,129 +59,129 @@
         "runtimeSvgFloor": 1,
         "why": "Per-user identity colours (ringColor/cursorColor) that stay runtime-authored: the avatar ring border, avatar-initials colour, and LiveCursor name-badge background are 3 inline-counter sites; the LiveCursor SVG `fill={cursorColor}` is 1 intrinsic-SVG JSX site protected separately by runtimeSvgFloor. Together these are the 4 true-runtime sites recorded by CK-F, without letting either measurement channel substitute for the other."
       },
-      "patterns/visualization/charts/bar-chart/index.tsx": {
+      "patterns/visualization/charts/families/bar-chart/index.tsx": {
         "floor": 2,
         "runtimeSvgFloor": 6,
         "why": "Two legend swatches and six D3 bar/gradient paint sinks consume caller- or datum-derived series colours. Both channels retain exact independent floors."
       },
-      "patterns/visualization/charts/line-chart/index.tsx": {
+      "patterns/visualization/charts/families/line-chart/index.tsx": {
         "floor": 2,
         "runtimeSvgFloor": 5,
         "why": "Legend/tooltip value objects retain two runtime colour sites; five D3 line, area-gradient and dot sinks paint the same caller-derived series colours."
       },
-      "patterns/visualization/charts/area-chart/index.tsx": {
+      "patterns/visualization/charts/families/area-chart/index.tsx": {
         "floor": 2,
         "runtimeSvgFloor": 8,
         "why": "Legend/tooltip value objects retain two runtime colour sites; eight D3 area, gradient, line and dot sinks consume caller-derived series colours."
       },
-      "patterns/visualization/charts/radar-chart/index.tsx": {
+      "patterns/visualization/charts/families/radar-chart/index.tsx": {
         "floor": 2,
         "runtimeSvgFloor": 4,
         "why": "Two inline series-colour value sites (the default series colour and legend swatch) and four D3 polygon, emphasis and point sinks consume runtime palette or caller-supplied series colours."
       },
-      "patterns/visualization/charts/scatter/index.tsx": {
+      "patterns/visualization/charts/families/scatter/index.tsx": {
         "floor": 1,
         "runtimeSvgFloor": 2,
         "why": "The legend swatch and two D3 point paint sinks consume per-datum or caller-palette colours."
       },
-      "patterns/visualization/charts/pie-chart/index.tsx": {
+      "patterns/visualization/charts/families/pie-chart/index.tsx": {
         "floor": 1,
         "runtimeSvgFloor": 1,
         "why": "The legend swatch and D3 slice fill consume per-datum or caller-palette colours."
       },
-      "patterns/visualization/charts/treemap/index.tsx": {
+      "patterns/visualization/charts/families/treemap/index.tsx": {
         "floor": 1,
         "runtimeSvgFloor": 1,
         "why": "The legend swatch and D3 tile fill consume the caller-supplied palette."
       },
-      "patterns/visualization/charts/funnel-chart/index.tsx": {
+      "patterns/visualization/charts/families/funnel-chart/index.tsx": {
         "floor": 1,
         "runtimeSvgFloor": 2,
         "why": "The legend swatch and two D3 segment paint sinks consume per-datum or caller-palette colours."
       },
-      "patterns/visualization/charts/waterfall/index.tsx": {
+      "patterns/visualization/charts/families/waterfall/index.tsx": {
         "floor": 4,
         "runtimeSvgFloor": 2,
         "why": "Four legend value/swatch sites and two D3 bar paint sinks consume the caller-overridable increase, decrease and total colours."
       },
-      "patterns/visualization/charts/histogram/index.tsx": {
+      "patterns/visualization/charts/families/histogram/index.tsx": {
         "floor": 2,
         "runtimeSvgFloor": 5,
         "why": "Two legend swatches and five D3 bar, cumulative-line and point sinks consume caller-overridable colours."
       },
-      "patterns/visualization/charts/gauge/index.tsx": {
+      "patterns/visualization/charts/families/gauge/index.tsx": {
         "floor": 1,
         "runtimeSvgFloor": 4,
         "why": "The legend swatch consumes caller-supplied segment colour; four D3 sinks retain segment and caller-overridable needle paint."
       },
-      "patterns/visualization/charts/bullet/index.tsx": {
+      "patterns/visualization/charts/families/bullet/index.tsx": {
         "floor": 12,
         "runtimeSvgFloor": 8,
         "why": "Twelve value-object and legend sites plus eight D3 range/value/target sinks across the horizontal and vertical render paths trace to caller-overridable range, value and target colours."
       },
-      "patterns/visualization/charts/sankey/index.tsx": {
+      "patterns/visualization/charts/families/sankey/index.tsx": {
         "floor": 3,
         "runtimeSvgFloor": 2,
         "why": "Three node/link value-object and legend sites plus two D3 node/link sinks consume caller- or graph-derived colours."
       },
-      "patterns/visualization/charts/network-graph/index.tsx": {
+      "patterns/visualization/charts/families/network-graph/index.tsx": {
         "floor": 1,
         "runtimeSvgFloor": 1,
         "why": "The legend swatch and D3 node fill consume caller palette, group or per-node colours."
       },
-      "patterns/visualization/charts/calendar-heatmap/index.tsx": {
+      "patterns/visualization/charts/families/calendar-heatmap/index.tsx": {
         "runtimeSvgFloor": 1,
         "why": "The D3 day-cell fill is a runtime scale output derived from chart data and the caller-visible colour range."
       },
-      "patterns/visualization/charts/gantt-chart/index.tsx": {
+      "patterns/visualization/charts/families/gantt-chart/index.tsx": {
         "runtimeSvgFloor": 2,
         "why": "The D3 task-duration and task-progress fills consume each task's caller-derived colour."
       },
-      "patterns/visualization/charts/heatmap/index.tsx": {
+      "patterns/visualization/charts/families/heatmap/index.tsx": {
         "runtimeSvgFloor": 1,
         "why": "The D3 cell fill is a runtime scale output derived from chart data and the caller-visible colour range."
       },
-      "patterns/visualization/charts/sparkline/index.tsx": {
+      "patterns/visualization/charts/families/sparkline/index.tsx": {
         "runtimeSvgFloor": 4,
         "why": "Four intrinsic-SVG paint attributes consume caller-overridable line, area and point colours."
       },
-      "patterns/visualization/charts/tooltip/index.tsx": {
+      "patterns/visualization/charts/presentation/tooltip/index.tsx": {
         "floor": 2,
-        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE \u00d75, SWATCH_STYLE \u00d71, label colors \u00d73) are all static tokens."
+        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE ×5, SWATCH_STYLE ×1, label colors ×3) are all static tokens."
       },
-      "patterns/visualization/charts/tooltip/crosshair.ts": {
+      "patterns/visualization/charts/presentation/crosshair/index.ts": {
         "runtimeSvgFloor": 1,
         "why": "The crosshair dot's `.attr('fill', (d) => d.color)` paints the per-datum colour supplied to the D3 overlay. CK-E's direct inventory identifies this exact B-runtime setter; runtimeSvgFloor protects it in the AST channel."
       },
-      "patterns/visualization/kanban-board/engines/modern.tsx": {
+      "patterns/visualization/kanban-board/engines/modern/index.tsx": {
         "floor": 1,
         "why": "Column header `borderTop: column.color ? \\`3px solid ${column.color}\\` : undefined` -- per-column caller-supplied accent color, no enum."
       },
-      "patterns/visualization/kanban-board/engines/rustic.tsx": {
+      "patterns/visualization/kanban-board/engines/rustic/index.tsx": {
         "floor": 1,
         "why": "Same shape as modern: column header `borderTop`, keyed on the caller-supplied `column.color`."
       },
-      "patterns/visualization/calendar-view/engines/modern.tsx": {
+      "patterns/visualization/calendar-view/engines/modern/index.tsx": {
         "floor": 1,
         "why": "Event chip `background: ev.color ?? 'var(--ds-color-primary)'` -- per-event caller-supplied color."
       },
-      "patterns/visualization/calendar-view/engines/rustic.tsx": {
+      "patterns/visualization/calendar-view/engines/rustic/index.tsx": {
         "floor": 1,
         "why": "Same shape as modern: event chip `background`, keyed on the caller-supplied `ev.color`."
       },
-      "patterns/visualization/map-view/engines/modern.tsx": {
+      "patterns/visualization/map-view/engines/modern/index.tsx": {
         "floor": 1,
         "why": "Marker color dot `background: marker.color`, conditionally rendered only when `marker.color` is present -- per-marker caller-supplied color with NO fallback token at all (pre-existing gap, not migration-caused; every other per-item color in this checkpoint has a `?? var(--ds-*)` default, this one does not)."
       },
-      "patterns/visualization/map-view/engines/rustic.tsx": {
+      "patterns/visualization/map-view/engines/rustic/index.tsx": {
         "floor": 1,
         "why": "Same shape as modern: marker color dot `background: marker.color`, same no-fallback gap."
       },
-      "patterns/forms/form-builder/engines/modern.tsx": {
+      "patterns/forms/form-builder/engines/modern/index.tsx": {
         "floor": 1,
-        "why": "form-builder/engines/modern.tsx:282 -- the color field's read-only swatch paints `background: String(val)`, the hex the USER PICKED in that field. A value computed from data; no token set can hold it. No rustic twin (rustic renders no swatch)."
+        "why": "form-builder/engines/modern/index.tsx:282 -- the color field's read-only swatch paints `background: String(val)`, the hex the USER PICKED in that field. A value computed from data; no token set can hold it. No rustic twin (rustic renders no swatch)."
       },
-      "surfaces/pages/experience/oauth-transition/provider-icons/index.tsx": {
+      "surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx": {
         "runtimeSvgFloor": 9,
         "why": "Nine intrinsic-SVG JSX paint attributes encode the canonical Google, LinkedIn and Microsoft provider marks. These colours are external brand identity, not tenant chrome; tokenizing them would make a skin incorrectly recolour the providers. The AST census measures exactly 9 authored paint sites in this file."
       }
@@ -196,7 +200,7 @@
   "SKIN-EXEMPT-CRASH-SAFE-FALLBACK": {
     "$why": "Paint that must render when the theming provider itself has crashed. It cannot depend on a token, a skin, or anything the failure might have taken down.",
     "files": {
-      "surfaces/foundation/SurfaceErrorBoundary.tsx": {
+      "surfaces/runtime/error-boundary/index.tsx": {
         "floor": 8,
         "why": "Hardcoded hex values, deliberately. The component's own comment says it must render even when the theme provider crashes -- a token would resolve to nothing in exactly the situation this component exists for."
       }
@@ -205,16 +209,16 @@
   "SKIN-EXEMPT-NOT-PAINT": {
     "$why": "Paint-shaped property names on objects that never reach a DOM style prop. Not A, not B: migrating them is a category error -- no CSS selector can hold a TypeScript mutation.",
     "files": {
-      "patterns/misc/brand-studio/index.tsx": {
+      "patterns/customization/brand-studio/index.tsx": {
         "floor": 8,
         "why": "BrandTheme DRAFT mutations (ctl.buttonPrimary = { ..., color: v }) and a hostile-theme test fixture. The admin's keystroke is written into a theme object, not painted. Lines 229, 323, 328, 763, 765, 767, 769, 775.",
         "$note": "This file appears in two exemption families; its total floor is the SUM (1 runtime-value + 8 not-paint = 9)."
       },
-      "surfaces/pages/operations/kanban/index.tsx": {
+      "surfaces/presentation/pages/operations/kanban/index.tsx": {
         "floor": 1,
         "why": "`color: col.color` builds the KanbanColumnDef passed to PatternKanbanBoard; it is domain-data forwarding, not a DOM style object. No CSS selector can replace this TypeScript value without changing the public column contract."
       },
-      "patterns/visualization/charts/hooks/use-chart-theme.ts": {
+      "patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts": {
         "floor": 4,
         "why": "The four `background` keys build ChartTheme surface data returned by the hook. They never enter a React style object or DOM sink; treating them as CSS paint would be a category error."
       }

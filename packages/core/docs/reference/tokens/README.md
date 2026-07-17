@@ -37,44 +37,35 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 ## 📁 Structure
 
 ```
-/tokens/
+foundation/tokens/
 ├── css/
-│   ├── foundation/            # Authored source: base + themes + animations + responsive
+│   ├── foundation/            # Authored base, themes, animations, responsive
 │   │   ├── base/              # Foundational tokens (colors, spacing, typography, etc.)
 │   │   ├── themes/            # Default theme + dark mode
 │   │   ├── animations/        # Keyframes, transitions, premium motion
-│   │   ├── responsive/        # Breakpoint-specific overrides
-│   │   └── base.css           # Tenant-free foundation import
-│   ├── components/            # Per-component CSS variables
-│   ├── engines/               # Engine-specific bridging (classic/modern/rustic)
-│   ├── artifacts/             # Generated snapshots: per-tenant CSS
-│   │   ├── rottay/index.css
-│   │   ├── bithire/index.css
-│   │   └── evnto/index.css
-│   ├── entrypoints/           # Public package export sources
-│   │   ├── styles.css         # -> ./styles (full bundle)
-│   │   ├── platform.css       # -> ./styles/platform
-│   │   ├── bithire.css        # -> ./styles/bithire
-│   │   └── evnto.css          # -> ./styles/evnto
-│   └── legacy/                # Non-first-party bundled content
-│       └── themanagementmiami/index.css
+│   │   └── responsive/        # Breakpoint-specific overrides
+│   ├── runtime/
+│   │   ├── engines/           # classic/modern/rustic bridges
+│   │   └── personality.css    # Provider-owned personality bridge
+│   ├── presentation/
+│   │   └── components/        # Component variables and governed skins
+│   └── facade/
+│       ├── artifacts/         # Generated code-owned vertical snapshots
+│       │   ├── rottay/index.css
+│       │   ├── bithire/index.css
+│       │   └── evnto/index.css
+│       └── entrypoints/       # Public styles and vertical bundles
 │
 ├── ts/
-│   ├── base/                  # Foundational TS token values
-│   ├── components/            # Per-component token objects
-│   ├── brand-themes/          # CANONICAL authored premium sources
-│   │   ├── rottay.ts
-│   │   ├── bithire.ts
-│   │   ├── evnto.ts
-│   │   └── index.ts
-│   ├── mirrors/               # Reference mirrors (typed var(--ds-*) catalogs)
-│   │   ├── rottay.ts
-│   │   └── index.ts
-│   └── index.ts               # Aggregator
-├── compat/
-│   └── typography-scale.ts    # @deprecated Geist-based scale
-├── index.ts                   # Main entry point
-└── README.md                  # (moved to docs/reference/tokens/)
+│   ├── foundation/base/       # Foundational TypeScript values
+│   ├── runtime/
+│   │   ├── components/        # Per-component token objects
+│   │   ├── mirrors/           # Typed var(--ds-*) reference mirrors
+│   │   └── personality/       # Personality resolution
+│   ├── presentation/brand-themes/
+│   │                           # Canonical code-owned vertical sources
+│   └── facade/compat/         # Deprecated compatibility exports
+└── index.ts                   # Internal token aggregation facade
 ```
 
 ## 🚀 Usage
@@ -129,7 +120,7 @@ profile, vertical preset, tenant overrides) so the values it returns reflect
 the active runtime configuration.
 
 > **Internal note.** The `colors`, `spacing`, `buttonTokens`, ... value
-> objects under `src/tokens/ts/` are package-internal. They are not exported
+> objects under `src/foundation/tokens/ts/` are package-internal. They are not exported
 > from the package root and should not be imported by consumers. If you need
 > a value object outside React (test fixtures, codegen, build tooling),
 > open a request — we will export the specific shape from a real public
@@ -193,7 +184,7 @@ const MyComponent = () => (
 
 ### Base Tokens
 
-#### Colors (`themes/default.css` + `tenants/*.css`)
+#### Colors (`css/foundation/themes/default.css` + generated `css/facade/artifacts/*/index.css`)
 
 - **Primary**: Canonical primary palette (9 shades)
 - **Secondary**: Canonical secondary palette (9 shades)
@@ -208,7 +199,7 @@ var(--ds-color-neutral-700)    /* neutral scale */
 var(--ds-color-alpha-black-50) /* rgba(0, 0, 0, 0.5) */
 ```
 
-#### Spacing (`base/spacing.css`)
+#### Spacing (`css/foundation/base/spacing.css`)
 
 4px grid system with semantic names:
 
@@ -218,7 +209,7 @@ var(--ds-spacing-md)     /* 24px - alias for spacing-6 */
 var(--ds-spacing-gutter) /* 16px - layout spacing */
 ```
 
-#### Typography (`base/typography.css`)
+#### Typography (`css/foundation/base/typography.css`)
 
 Font families, sizes, weights, and line heights:
 
@@ -229,7 +220,7 @@ var(--ds-font-weight-medium)  /* 500 */
 var(--ds-line-height-normal)  /* 1.5 */
 ```
 
-#### Shadows (`base/shadows.css`)
+#### Shadows (`css/foundation/base/shadows.css`)
 
 Elevation scale from xs to 3xl:
 
@@ -239,7 +230,7 @@ var(--ds-shadow-primary-md)
 var(--ds-shadow-focus-ring)
 ```
 
-#### Borders (`base/borders.css`)
+#### Borders (`css/foundation/base/borders.css`)
 
 Border widths, radii, and styles:
 
@@ -249,7 +240,7 @@ var(--ds-border-default)      /* 1px solid neutral-200 */
 var(--ds-border-color-focus)
 ```
 
-#### Z-Index (`base/z-index.css`)
+#### Z-Index (`css/foundation/base/z-index.css`)
 
 Layering system for stacking:
 
@@ -261,7 +252,7 @@ var(--ds-z-index-dropdown)    /* 1000 */
 
 ### Component Tokens
 
-#### Avatar (`components/avatar.css`)
+#### Avatar (`css/presentation/components/avatar.css`)
 
 - 7 sizes (xs to 3xl)
 - 3 shapes (circle, square, rounded)
@@ -269,21 +260,21 @@ var(--ds-z-index-dropdown)    /* 1000 */
 - Status indicators
 - Group settings
 
-#### Button (`components/button.css`)
+#### Button (`css/presentation/components/button.css`)
 
 - 5 sizes (xs to xl)
 - 8 variants (primary, secondary, default, ghost, dashed, text, link)
 - Semantic variants (success, warning, error)
 - Icon button settings
 
-#### Input (`components/input.css`)
+#### Input (`css/presentation/components/input.css`)
 
 - 3 sizes (sm, md, lg)
 - State variants (success, warning, error)
 - Addons and affixes
 - Helper text and validation
 
-#### Card (`components/card.css`)
+#### Card (`css/presentation/components/card.css`)
 
 - 4 padding sizes
 - 5 shadow elevations
@@ -291,7 +282,7 @@ var(--ds-z-index-dropdown)    /* 1000 */
 - Media/image settings
 - Interactive states
 
-#### Modal (`components/modal.css`)
+#### Modal (`css/presentation/components/modal.css`)
 
 - 6 width sizes
 - Overlay/backdrop settings
@@ -301,7 +292,7 @@ var(--ds-z-index-dropdown)    /* 1000 */
 
 ### Animation Tokens
 
-#### Transitions (`animations/transitions.css`)
+#### Transitions (`css/foundation/animations/transitions.css`)
 
 Durations, easing functions, and property-specific transitions:
 
@@ -312,7 +303,7 @@ var(--transition-fade)
 var(--transition-button)
 ```
 
-#### Keyframes (`animations/keyframes.css`)
+#### Keyframes (`css/foundation/animations/keyframes.css`)
 
 Reusable @keyframes for common animations:
 
@@ -334,7 +325,7 @@ Automatic adjustments for different screen sizes:
 
 ### Tenant Tokens
 
-#### Rottay Tenant (`artifacts/rottay/`)
+#### Rottay vertical (`css/facade/artifacts/rottay/`)
 
 Default tenant with Rottay-specific customizations:
 
@@ -427,23 +418,26 @@ Tokens automatically adjust based on:
 ### Authoring Flow (canonical)
 
 New tenant visual identity is authored as a `BrandTheme` object in
-`tokens/ts/brand-themes/`. The CSS in `tokens/css/artifacts/` is a
+`foundation/tokens/ts/presentation/brand-themes/`. The CSS in `foundation/tokens/css/facade/artifacts/` is a
 **generated output** from that authored source — do not hand-edit
 artifact CSS as the primary authoring path.
 
 ```
-1. Author a BrandTheme in tokens/ts/brand-themes/<tenant>.ts
+1. Author a first-party BrandTheme in foundation/tokens/ts/presentation/brand-themes/<vertical>/index.ts
 2. The brand compiler + generator produce CSS artifacts
-3. CSS artifacts in tokens/css/artifacts/<tenant>/ are outputs
+3. CSS artifacts in foundation/tokens/css/facade/artifacts/<tenant>/ are outputs
 ```
 
-For DB-backed tenants, the same BrandTheme shape is stored in the
-database and compiled at runtime by DesignSystemProvider.
+For published customer tenants, Platform writes the bounded
+`TenantThemeDocument` contract to the canonical tenancy DB. The server validates
+and compiles an immutable artifact, SSR embeds it, and the client hydrates with
+`visualAuthority="compiled-artifact"`. Browser components and
+`DesignSystemProvider` do not query the DB or compile a competing visual layer.
 
-> **Note:** The legacy workflow of hand-authoring CSS directly in
-> `tokens/css/artifacts/` is deprecated. Existing first-party CSS
-> files are generated snapshots that will converge with the shared
-> pipeline as the brand compiler matures (see Wave I4-I6).
+> **Note:** Never hand-author CSS directly in
+> `foundation/tokens/css/facade/artifacts/`. Every first-party artifact is a
+> generated build product; DB-backed customer tenants are server-compiled from
+> their published document and do not receive checked-in artifacts.
 
 ## 🤝 Contributing
 
@@ -458,7 +452,7 @@ When adding new tokens:
 ### Example: Adding a New Component
 
 ```css
-/* components/new-component.css */
+/* foundation/tokens/css/presentation/components/new-component.css */
 /**
  * NewComponent Tokens - Rottay Design System
  *
@@ -493,6 +487,4 @@ MIT License - See LICENSE file for details
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: 2025-12-25
 **Maintained by**: Rottay Design Team

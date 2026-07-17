@@ -6,33 +6,48 @@ consuming apps, runtime providers, and the brand compiler all agree on.
 ## Structure
 
 ```
-contracts/
-  common/           # Shared primitives: Size, Variant, BaseComponentProps, mixins
-  components/       # Backward compat: WithChildrenProps, BaseComponentProps re-export
-  engine/           # EngineName, EngineAwareProps, EngineConfig, EngineCapabilities
-  themes/           # ThemeConfig, ThemeContextValue, BrandTheme, BrandCompiler
-  tenants/          # TenantConfig, TenantBranding, TenantTokenOverrides
-  tokens/           # DesignTokens, PersonalityTokens, SurfaceTokens, MotionTokens
-  product-profiles/ # ProductProfile, ProductProfileKey
-  extensions/       # Reserved type-only extension sketch (16 categories; no runtime resolver)
-  index.ts          # Barrel re-exporting all contracts
+foundation/contracts/
+  kernel/
+    common/           # Shared primitives and component mixins
+    engine-identity/  # Supplier-neutral engine names
+    product-profile-identity/ # Stable product-profile keys
+    responsive/       # Breakpoint and adaptive-value contracts
+    spatial/          # Data-only spatial scene vocabulary
+    tokens/           # DesignTokens, personality and extension contracts
+    verticals/        # Vertical and motion-profile vocabulary
+  runtime/
+    components/       # Cross-component runtime contracts
+    effects/          # Effect policy contracts
+    engine/           # Engine-aware runtime contracts
+    errors/           # Runtime error vocabulary
+    motion/           # Motion policy contracts
+  composition/
+    components/       # Backward-compatible component base types
+    tenants/          # Tenant, product-profile and theme contracts
+  index.ts            # Stable package-root aggregation surface
 ```
 
 ## Key Types
 
-### BrandTheme (canonical premium visual source)
+### BrandTheme (code-owned premium visual source)
 
 The single source of truth for premium visual identity. Merge precedence:
 DS base -> vertical baseline -> BrandTheme -> generated artifacts.
 
+Published customer writes use the bounded `TenantThemeDocument` schema stored
+in the canonical tenancy DB. They are validated and server-compiled into the
+exact SSR/hydration artifact; `BrandTheme` is not an unrestricted DB write
+contract.
+
 Categories: palette, typography, surfaces, motion, charts, chrome, engineBridge.
 
-### TenantConfig (white-label root)
+### TenantConfig (runtime/compat root)
 
 Flat JSON-serializable tenant configuration. Holds identity (slug, name, plan,
-features, locale, logos) plus an optional inline `brandTheme` object.
-Backward-compatible `branding`, `personality`, and `tokenOverrides`
-fields remain for existing consumers.
+features, locale, logos) plus compatibility visual fields. Published customer
+visual authority comes from a compiled `TenantThemeDocument` artifact;
+backward-compatible `brandTheme`, `branding`, `personality`, `appearance` and
+`tokenOverrides` fields remain readable at compatibility boundaries.
 
 ### DesignTokens (resolved token graph)
 

@@ -1,0 +1,524 @@
+/**
+ * @fileoverview Rate Rustic Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Rate component.
+ * Zero-dependency engine with maximum accessibility and customization.
+ *
+ * @remarks
+ * **Engine Overview:**
+ * Rustic is the vanilla engine in the Rottay Design System, built with
+ * pure HTML and CSS. It provides:
+ * - Zero external dependencies
+ * - Maximum accessibility compliance
+ * - Per-instance values exposed through skin-consumed custom properties
+ * - Smallest possible bundle footprint
+ * - Works in any React environment
+ *
+ * **When to Use Rustic:**
+ * - When minimizing bundle size is critical
+ * - Projects without Ant Design or Tailwind
+ * - When you need maximum styling control
+ * - Accessibility-focused applications
+ * - Server-side rendering optimization
+ *
+ * **Multi-Tenant Theming:**
+ * Rustic rates expose values to the unlayered skin through:
+ * - Direct prop values (activeColor, inactiveColor)
+ * - CSS variables defined in tenant themes
+ * - Style prop for complete override
+ *
+ * **Accessibility Features:**
+ * - Full ARIA radiogroup semantics
+ * - Keyboard navigation (Arrow keys, Home, End, Enter, Space)
+ * - Focus management with visible indicators
+ * - Screen reader announcements
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Rate } from '@rottay/design-system';
+ *
+ * <Rate engine="rustic" defaultValue={3} />
+ * ```
+ *
+ * @example Custom Styling
+ * ```tsx
+ * <Rate
+ *   engine="rustic"
+ *   defaultValue={3}
+ *   activeColor="#ff6b6b"
+ *   inactiveColor="#e0e0e0"
+ *   size="lg"
+ * />
+ * ```
+ *
+ * @example Accessible Usage
+ * ```tsx
+ * <Rate
+ *   engine="rustic"
+ *   defaultValue={3}
+ *   tooltips={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}
+ *   aria-labelledby="rating-label"
+ * />
+ * ```
+ *
+ * @see {@link RateProps} - Component props interface
+ * @see {@link ClassicRate} - Ant Design alternative
+ * @see {@link ModernRate} - DaisyUI alternative
+ * @module Rate/Engines/Rustic
+ * @category Feedback
+ * @package @rottay/design-system
+ */
+
+'use client';
+
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import type { RateProps, RateCharacterProps } from '../../contracts';
+import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../../contracts';
+
+// ============================================================================
+// Styles Factory
+// ============================================================================
+
+/**
+ * Create inline layout styles for the Rustic Rate component.
+ * Star fill/active/inactive color is runtime (skin hatch), so it is not
+ * computed here — see the render for the --ds-rate-star-* hatches.
+ *
+ * @internal
+ * @param size - The size preset to use
+ * @returns Object containing all style definitions
+ */
+const createStyles = (
+  size: keyof typeof RATE_SIZE_MAP
+) => {
+  const sizeValue = RATE_SIZE_MAP[size];
+
+  return {
+    /** Container styles */
+    container: {
+      display: 'inline-flex',
+      gap: 'var(--ds-rate-gap, 0.25rem)',
+      alignItems: 'center',
+    } as React.CSSProperties,
+
+    /** Star element styles. Border-radius, the runtime fill color, the hover
+     *  scale and the focus outline are painted by the unlayered rustic Rate
+     *  skin (keyed on data-part='star', :hover, [data-focused] and the
+     *  --ds-rate-star-* hatches); only layout/cursor/transition stay inline. */
+    star: {
+      /** Base star styles */
+      base: {
+        cursor: 'pointer',
+        transition: 'transform 0.15s ease, color 0.15s ease',
+        position: 'relative' as const,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: sizeValue,
+        height: sizeValue,
+        lineHeight: 1,
+        userSelect: 'none' as const,
+      },
+      /** Disabled state styles */
+      disabled: {
+        cursor: 'not-allowed',
+        opacity: 0.5,
+      },
+      /** Read-only state styles */
+      readOnly: {
+        cursor: 'default',
+      },
+    },
+
+    /** Half star overlay styles */
+    halfStar: {
+      position: 'absolute' as const,
+      left: 0,
+      top: 0,
+      width: '50%',
+      height: '100%',
+      overflow: 'hidden',
+    },
+
+    /** Half star click area styles */
+    halfClickArea: {
+      position: 'absolute' as const,
+      left: 0,
+      top: 0,
+      width: '50%',
+      height: '100%',
+      zIndex: 1,
+    },
+
+    /** Hidden input styles */
+    input: {
+      position: 'absolute' as const,
+      opacity: 0,
+      width: 0,
+      height: 0,
+      pointerEvents: 'none' as const,
+    },
+  };
+};
+
+// ============================================================================
+// Component
+// ============================================================================
+
+/**
+ * Rustic Engine implementation of the Rate component.
+ *
+ * @description
+ * Pure HTML/CSS implementation providing a zero-dependency rating component.
+ * Maximum accessibility and customization with minimal bundle impact.
+ *
+ * @remarks
+ * **Key Features:**
+ * - No external CSS or component libraries
+ * - Paint and interaction states owned by the unlayered rustic skin
+ * - Full keyboard navigation support
+ * - ARIA radiogroup semantics
+ * - Half-star support via overlay technique
+ *
+ * **Implementation Notes:**
+ * - Uses span elements for stars (semantic role="radio")
+ * - Custom SVG for star icon
+ * - Focus management with visible outline
+ * - Data attributes for testing and styling hooks
+ *
+ * **Data Attributes:**
+ * - `data-testid="rate"`: Container test ID
+ * - `data-index`: Star index (0-based)
+ * - `data-filled`: Whether star is filled
+ * - `data-half`: Whether star is half-filled
+ *
+ * @param props - {@link RateProps}
+ * @param ref - Forwarded ref to the container div
+ * @returns The rendered vanilla HTML/CSS Rate component
+ *
+ * @example
+ * ```tsx
+ * <RusticRate
+ *   defaultValue={3}
+ *   allowHalf
+ *   count={5}
+ *   activeColor="#facc15"
+ *   inactiveColor="#d1d5db"
+ *   onChange={(value) => console.log('Selected:', value)}
+ * />
+ * ```
+ */
+export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
+  (props: RateProps, ref) => {
+    // -------------------------------------------------------------------------
+    // Props Destructuring
+    // -------------------------------------------------------------------------
+
+    const {
+      value,
+      defaultValue = RATE_DEFAULTS.defaultValue,
+      count = RATE_DEFAULTS.count,
+      allowHalf = RATE_DEFAULTS.allowHalf,
+      allowClear = RATE_DEFAULTS.allowClear,
+      disabled = RATE_DEFAULTS.disabled,
+      readOnly = RATE_DEFAULTS.readOnly,
+      onChange,
+      onHoverChange,
+      character,
+      className = '',
+      style,
+      tooltips,
+      autoFocus,
+      keyboard = RATE_DEFAULTS.keyboard,
+      size = RATE_DEFAULTS.size,
+      activeColor,
+      inactiveColor,
+      direction = RATE_DEFAULTS.direction,
+      // Omit engine prop
+      engine: _engine,
+      ...restProps
+    } = props;
+
+    // -------------------------------------------------------------------------
+    // Styles
+    // -------------------------------------------------------------------------
+
+    const styles = createStyles(size);
+
+    // -------------------------------------------------------------------------
+    // State Management
+    // -------------------------------------------------------------------------
+
+    // Controlled vs uncontrolled pattern: the parent decides ownership
+    // by passing (or omitting) the `value` prop
+    const isControlled = value !== undefined;
+    const [internalValue, setInternalValue] = useState(defaultValue);
+    const [hoverValue, setHoverValue] = useState<number | null>(null);
+    const [focusIndex, setFocusIndex] = useState<number | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    // displayValue prefers hoverValue so the visual feedback updates
+    // immediately on mouseover before the user commits a selection
+    const currentValue = isControlled ? value : internalValue;
+    const displayValue = hoverValue !== null ? hoverValue : currentValue;
+    const isInteractive = !disabled && !readOnly;
+
+    // -------------------------------------------------------------------------
+    // Effects
+    // -------------------------------------------------------------------------
+
+    /**
+     * Auto focus on mount if requested.
+     */
+    useEffect(() => {
+      if (autoFocus && containerRef.current) {
+        containerRef.current.focus();
+      }
+    }, [autoFocus]);
+
+    // -------------------------------------------------------------------------
+    // Event Handlers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Handle click on a star.
+     */
+    const handleClick = useCallback((starValue: number) => {
+      if (!isInteractive) return;
+
+      let newValue = starValue;
+
+      // Allow clearing if clicking on current value
+      if (allowClear && starValue === currentValue) {
+        newValue = 0;
+      }
+
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+      onChange?.(newValue);
+    }, [isInteractive, allowClear, currentValue, isControlled, onChange]);
+
+    /**
+     * Handle mouse enter on a star.
+     */
+    const handleMouseEnter = useCallback((starValue: number) => {
+      if (!isInteractive) return;
+      setHoverValue(starValue);
+      onHoverChange?.(starValue);
+    }, [isInteractive, onHoverChange]);
+
+    /**
+     * Handle mouse leave from container.
+     */
+    const handleMouseLeave = useCallback(() => {
+      if (!isInteractive) return;
+      setHoverValue(null);
+      onHoverChange?.(0);
+    }, [isInteractive, onHoverChange]);
+
+    /**
+     * Handle keyboard navigation.
+     */
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+      if (!keyboard || !isInteractive) return;
+
+      let newValue = currentValue || 0;
+      const step = allowHalf ? 0.5 : 1;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowUp':
+          e.preventDefault();
+          newValue = Math.min(count, newValue + step);
+          break;
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          e.preventDefault();
+          newValue = Math.max(0, newValue - step);
+          break;
+        case 'Home':
+          e.preventDefault();
+          newValue = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          newValue = count;
+          break;
+        case ' ':
+        case 'Enter':
+          e.preventDefault();
+          if (focusIndex !== null) {
+            handleClick(focusIndex);
+            return;
+          }
+          break;
+        default:
+          return;
+      }
+
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+      onChange?.(newValue);
+    }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange, focusIndex, handleClick]);
+
+    // -------------------------------------------------------------------------
+    // Render Helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Render custom or default character.
+     */
+    const renderCharacter = (index: number) => {
+      if (typeof character === 'function') {
+        return character({ index, value: displayValue || 0 } as RateCharacterProps);
+      }
+      if (character) {
+        return character;
+      }
+      // Default star SVG
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          style={{ width: '100%', height: '100%' }}
+        >
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      );
+    };
+
+    // -------------------------------------------------------------------------
+    // Render Stars
+    // -------------------------------------------------------------------------
+
+    const stars = Array.from({ length: count }, (_, index) => {
+      const starIndex = index + 1;
+      const isFilled = (displayValue || 0) >= starIndex;
+      const isHalfFilled = allowHalf && (displayValue || 0) >= starIndex - 0.5 && (displayValue || 0) < starIndex;
+      const isFocused = focusIndex === starIndex;
+
+      // Per-star fill color is runtime (follows displayValue, hover included);
+      // it rides the --ds-rate-star-fill hatch the unlayered skin consumes.
+      // Hover scale (:hover, gated on interactive), the focus outline
+      // ([data-focused]) and border-radius are skin rules, not inline paint.
+      const starStyle = {
+        ...styles.star.base,
+        ...(disabled ? styles.star.disabled : {}),
+        ...(readOnly ? styles.star.readOnly : {}),
+        '--ds-rate-star-fill': isFilled || isHalfFilled
+          ? (activeColor || 'var(--ds-rate-active-color, #facc15)')
+          : (inactiveColor || 'var(--ds-rate-inactive-color, #d1d5db)'),
+      } as React.CSSProperties;
+
+      return (
+        <span
+          key={index}
+          data-part="star"
+          data-state={isFilled && !isHalfFilled ? 'full' : isHalfFilled ? 'half' : 'empty'}
+          data-focused={isFocused ? 'true' : undefined}
+          style={starStyle}
+          title={tooltips?.[index]}
+          onMouseEnter={() => handleMouseEnter(starIndex)}
+          onMouseLeave={handleMouseLeave}
+          onClick={() => handleClick(starIndex)}
+          role="radio"
+          aria-checked={isFilled}
+          aria-label={tooltips?.[index] || `${starIndex} star${starIndex > 1 ? 's' : ''}`}
+          // posinset/setsize inform screen readers of the star's position
+          // within the group, enabling "star 3 of 5" announcements
+          aria-posinset={starIndex}
+          aria-setsize={count}
+          data-index={index}
+          data-filled={isFilled}
+          data-half={isHalfFilled}
+        >
+          {/* Half star click area */}
+          {allowHalf && (
+            <span
+              style={styles.halfClickArea}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+                handleMouseEnter(starIndex - 0.5);
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick(starIndex - 0.5);
+              }}
+            />
+          )}
+          {/* Render star with half support */}
+          {isHalfFilled ? (
+            <span style={{ position: 'relative', display: 'inline-flex', width: '100%', height: '100%' }}>
+              {/* Background (inactive) star: constant inactive color via the
+                  track marker; --ds-rate-star-inactive is stamped on the root. */}
+              <span className="rottay-rate-star-track" style={{ position: 'absolute', inset: 0 }}>
+                {renderCharacter(index)}
+              </span>
+              {/* Foreground (active) half star inherits the star's active fill. */}
+              <span style={styles.halfStar}>
+                {renderCharacter(index)}
+              </span>
+            </span>
+          ) : (
+            renderCharacter(index)
+          )}
+        </span>
+      );
+    });
+
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
+
+    return (
+      <div
+        // Merge forwarded ref with internal ref so autoFocus and keyboard
+        // navigation logic can access the container DOM node
+        ref={(node) => {
+          if (typeof ref === 'function') {
+            ref(node);
+          } else if (ref) {
+            ref.current = node;
+          }
+          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }}
+        data-part="root"
+        className={`rottay-rate rottay-rate--${size} rottay-rate--rustic ${disabled ? 'rottay-rate--disabled' : ''} ${readOnly ? 'rottay-rate--readonly' : ''} ${className}`}
+        style={{
+          ...styles.container,
+          direction,
+          ...style,
+          // Constant active/inactive colors ride the root: the focus outline
+          // reads --ds-rate-star-active, the half background reads
+          // --ds-rate-star-inactive via the track marker.
+          ...({
+            '--ds-rate-star-active': activeColor || 'var(--ds-rate-active-color, #facc15)',
+            '--ds-rate-star-inactive': inactiveColor || 'var(--ds-rate-inactive-color, #d1d5db)',
+          } as React.CSSProperties),
+        }}
+        role="radiogroup"
+        aria-label="Rating"
+        aria-disabled={disabled}
+        aria-readonly={readOnly}
+        aria-valuenow={currentValue}
+        aria-valuemin={0}
+        aria-valuemax={count}
+        tabIndex={isInteractive ? 0 : -1}
+        onKeyDown={handleKeyDown}
+        onMouseLeave={handleMouseLeave}
+        onFocus={() => setFocusIndex(Math.ceil(currentValue || 0.5))}
+        onBlur={() => setFocusIndex(null)}
+        data-testid="rate"
+        {...restProps}
+      >
+        {stars}
+      </div>
+    );
+  }
+);
+
+// Set display name for React DevTools debugging
+Rate.displayName = 'Rate.Rustic';
+
+export default Rate;

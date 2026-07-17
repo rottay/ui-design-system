@@ -28,12 +28,12 @@ It is unfinished and split across two stories.
 ## Evidence
 
 - `ui-design-system/packages/core/docs/TENANT_MODEL.md`
-- `ui-design-system/packages/core/src/contracts/themes/index.ts`
-- `ui-design-system/packages/core/src/runtime/bootstrap/DesignSystemProvider.tsx`
+- `ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/index.ts`
+- `ui-design-system/packages/core/src/infrastructure/runtime/bootstrap/composition/react/provider/index.tsx`
 - `app-platform/src/lib/tenancy/branding-to-tenant-config.ts`
 - `app-platform/src/surfaces/settings/overview.tsx`
-- `app-platform/src/components/providers/dashboard-providers/index.tsx`
-- `app-platform/src/components/providers/tenant-provider/index.tsx`
+- `app-platform/src/composition/components/providers/dashboard-providers/index.tsx`
+- `app-platform/src/composition/components/providers/tenant-provider/index.tsx`
 
 ## Main Gaps
 

@@ -1,37 +1,46 @@
 #!/usr/bin/env node
-// WO-SKIN-01 — fleet census: every component file under src/components with
+// WO-SKIN-01 — fleet census: every component file under src/ui with
 // counted inline paint, measured by the SAME lexer the arc09.inlinePaint
 // ratchet uses (imported, never duplicated). Classic engines are excluded by
 // construction (AntD owns its paint); tests/stories/types are not shipped
 // render code. Output: a JSON artifact (machine, feeds the counter baseline
 // extension) and a markdown table (human, feeds the batch plans).
-import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const COMPONENTS = join(ROOT, 'src/components');
+const COMPONENTS = join(ROOT, 'src/ui');
 
 const EXCLUDE_RE =
-  /(\/tests?\/|\.test\.|\.stories\.|\.types\.ts$|\/classic\.tsx$|\/engines\/classic\.tsx$|\/classic\/)/;
+  /(\/tests?\/|\/contracts\/|\.test\.|\.stories\.|\.types\.ts$|\/classic\.tsx$|\/engines\/classic\.tsx$|\/classic\/)/;
 
 /** Files the ARC-09 ratchet already owns (all at 0) — done, not fleet work. */
 const DONE = new Set([
-  'primitives/display/Table/engines/modern.tsx',
-  'primitives/display/Table/engines/rustic.tsx',
+  'primitives/display/Table/engines/modern/index.tsx',
+  'primitives/display/Table/engines/rustic/index.tsx',
   'structures/workspace/field-filters-panel/index.tsx',
-  'patterns/forms/filter-panel/engines/modern.tsx',
-  'patterns/forms/filter-panel/engines/rustic.tsx',
+  'patterns/forms/filter-panel/engines/modern/index.tsx',
+  'patterns/forms/filter-panel/engines/rustic/index.tsx',
   'structures/workspace/selection-preview-rail/index.tsx',
-  'patterns/data/detail-panel/engines/modern.tsx',
-  'patterns/data/detail-panel/engines/rustic.tsx',
-  'patterns/data/data-table/engines/modern.tsx',
-  'patterns/data/data-table/engines/rustic.tsx',
-  'patterns/data/data-table/cell-editors/index.tsx',
-  'patterns/data/data-table/DataTableMobileCards.tsx',
-  'patterns/data/data-table/PatternDataTable.tsx',
+  'patterns/data/detail-panel/engines/modern/index.tsx',
+  'patterns/data/detail-panel/engines/rustic/index.tsx',
+  'patterns/data/data-table/engines/modern/index.tsx',
+  'patterns/data/data-table/engines/rustic/index.tsx',
+  'patterns/data/data-table/engines/modern/cell-editor/index.tsx',
+  'patterns/data/data-table/presentation/table/mobile-cards/index.tsx',
+  'patterns/data/data-table/presentation/table/index.tsx',
 ]);
+
+const missingDoneFiles = [...DONE].filter((relativePath) => !existsSync(join(COMPONENTS, relativePath)));
+if (missingDoneFiles.length > 0) {
+  throw new Error(
+    `skin census cannot classify missing ARC-09 sources:\n${missingDoneFiles
+      .map((relativePath) => `  - ${relativePath}`)
+      .join('\n')}`,
+  );
+}
 
 function* walk(dir) {
   for (const name of readdirSync(dir)) {
@@ -41,8 +50,8 @@ function* walk(dir) {
   }
 }
 
-/** tier / group / component from a repo-relative path like
- *  primitives/inputs/Select/engines/modern.tsx */
+/** tier / group / component from a UI-root-relative path like
+ *  primitives/inputs/Select/engines/modern/index.tsx */
 function identify(rel) {
   const parts = rel.split('/');
   const tier = parts[0];

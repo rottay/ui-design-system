@@ -1,0 +1,36 @@
+/** Supplier-neutral, non-React expressive-effect governance kernel. */
+export {
+  EFFECT_DEFINITIONS,
+  EFFECT_REGISTRY,
+  EFFECT_REGISTRY_VERSION,
+  EFFECT_RESEARCH_PROVENANCE,
+  getEffectDefinition,
+  isEffectDefinition,
+  isEffectId,
+  resolveEffect,
+} from '../../../infrastructure/runtime/effects';
+export { EFFECT_IDS } from '../../../foundation/contracts/runtime/effects';
+export type {
+  EffectAdmission,
+  EffectAriaStrategy,
+  EffectBudget,
+  EffectDefinition,
+  EffectEngine,
+  EffectFallbackDefinition,
+  EffectId,
+  EffectLoop,
+  EffectObservedRuntime,
+  EffectProvenance,
+  EffectPurpose,
+  EffectRenderer,
+  EffectResolution,
+  EffectResolutionMode,
+  EffectResolutionReason,
+  EffectRuntimeContext,
+  EffectTier,
+  EffectVertical,
+  MeasuredEffectBudget,
+  ReferencedEffectProvenance,
+  UnmeasuredEffectBudget,
+  VerifiedEffectProvenance,
+} from '../../../foundation/contracts/runtime/effects';
