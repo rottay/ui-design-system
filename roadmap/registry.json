@@ -2209,7 +2209,7 @@
    "lane": "craft",
    "order": 11,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2227,10 +2227,10 @@
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null,
+   "claimedBy": "codex-orchestrator",
+   "claimedAt": "2026-07-17",
+   "doneAt": "2026-07-17",
+   "evidence": "Implemented adaptive contract truth in 00fe6145 and released @rottay/design-system@2.19.30 via 7648a869. The strict AST census reports 78/78 adaptive fields with productive renderer evidence, 0 type-only fields, 14/14 live factories, 0 dead factories and 0 analysis errors; all 7 adversarial census drills pass. Responsive behavior is certified for Header, Chat (virtual keyboard/safe-area), Media, Scheduler (deterministic locale/timezone and invalid dates), Kanban and Visualization/chart legends. Validation: TypeScript clean; 46 unit + 13 integration focused tests; core structure audit files=2920/findings=0; dependency-honesty static and packed-tarball gates green; packed consumer resolves 31 exports, 22 ESM and 21 CJS conditions. Registry latest verifies 2.19.30.",
    "execution": {
     "decisionOwner": "adaptive-experience",
     "touchedRepos": [
