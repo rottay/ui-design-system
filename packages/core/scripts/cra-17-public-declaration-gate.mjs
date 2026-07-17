@@ -21,7 +21,12 @@ const ts = require('typescript');
 
 export const CRA17_PUBLIC_ASSET_SUBPATHS = Object.freeze([
   './icons',
+  './icons/full',
+  './icons/presets/bithire',
+  './icons/roles/action-add',
   './marks',
+  './marks/brand',
+  './marks/cloud',
   './pictograms',
 ]);
 
@@ -158,8 +163,23 @@ function rootsFromManifest(packageRoot, subpaths) {
   const roots = {};
   const errors = [];
   for (const subpath of subpaths) {
-    const definition = manifest.exports?.[subpath];
-    const targets = [...new Set(collectTypesTargets(definition))];
+    let definition = manifest.exports?.[subpath];
+    let wildcardReplacement = null;
+    if (!definition) {
+      for (const [pattern, candidate] of Object.entries(manifest.exports ?? {})) {
+        const wildcardIndex = pattern.indexOf('*');
+        if (wildcardIndex < 0 || pattern.indexOf('*', wildcardIndex + 1) >= 0) continue;
+        const prefix = pattern.slice(0, wildcardIndex);
+        const suffix = pattern.slice(wildcardIndex + 1);
+        if (!subpath.startsWith(prefix) || !subpath.endsWith(suffix)) continue;
+        wildcardReplacement = subpath.slice(prefix.length, subpath.length - suffix.length);
+        definition = candidate;
+        break;
+      }
+    }
+    const targets = [...new Set(collectTypesTargets(definition).map((target) => (
+      wildcardReplacement === null ? target : target.replaceAll('*', wildcardReplacement)
+    )))];
     if (targets.length === 0) {
       errors.push(`${subpath} has no packed types export`);
       continue;

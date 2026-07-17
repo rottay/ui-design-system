@@ -4159,6 +4159,55 @@
         "isIconName"
       ]
     },
+    "./icons/full": {
+      "exports": [
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
+        "Icon",
+        "getIconCorpusEntry",
+        "isIconName"
+      ],
+      "symbols": {
+        "Icon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
+        "getIconCorpusEntry",
+        "isIconName"
+      ]
+    },
+    "./icons/presets/bithire": {
+      "exports": [
+        "BITHIRE_PRESET_ICON_COMPONENTS",
+        "BITHIRE_PRESET_ICON_NAMES",
+        "BitHireIconPreset",
+        "isBitHirePresetIconName",
+        "resolveBitHirePresetIcon"
+      ],
+      "symbols": {
+        "BITHIRE_PRESET_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "BITHIRE_PRESET_ICON_NAMES": [
+          "@phosphor-icons/react"
+        ],
+        "BitHireIconPreset": [
+          "@phosphor-icons/react"
+        ],
+        "isBitHirePresetIconName": [
+          "@phosphor-icons/react"
+        ],
+        "resolveBitHirePresetIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": []
+    },
     "./icons/corpus": {
       "exports": [
         "BITHIRE_ICON_NAMES",
@@ -5429,6 +5478,64 @@
         "isCloudProvider",
         "isCloudService",
         "isMarkVariant"
+      ]
+    },
+    "./marks/brand": {
+      "exports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "BrandMark",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "isBrandMarkName",
+        "isMarkVariant"
+      ],
+      "symbols": {
+        "BrandMark": [
+          "@thesvg/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "isBrandMarkName",
+        "isMarkVariant"
+      ]
+    },
+    "./marks/cloud": {
+      "exports": [
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "CloudServiceMark",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "isCloudProvider",
+        "isCloudService"
+      ],
+      "symbols": {
+        "CloudServiceMark": [
+          "@thesvg/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "isCloudProvider",
+        "isCloudService"
       ]
     },
     "./pictograms": {

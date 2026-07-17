@@ -16,6 +16,7 @@ import {
   roleFileName,
   validateAdapterManifest,
   validateCorpusManifest,
+  validateIconPresetManifest,
   validateLocalPhosphor,
 } from './generate-semantic-icons.mjs';
 
@@ -28,6 +29,10 @@ const CORPUS_PATH = resolve(
 const ADAPTER_PATH = resolve(
   ICON_OWNER_ROOT,
   'foundation/semantic/adapters/phosphor-2.1.10.json',
+);
+const BITHIRE_PRESET_PATH = resolve(
+  ICON_OWNER_ROOT,
+  'foundation/semantic/presets/bithire/manifest.json',
 );
 
 async function readJson(path) {
@@ -78,9 +83,28 @@ test('Phosphor 2.1.10 adapter is ordered, exhaustive, and locally resolvable', a
   assert.equal(new Set(adapter.entries.map(({ exportName }) => exportName)).size, 263);
 });
 
+test('BitHire preset is the exact bounded productive Icon inventory', async () => {
+  const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
+  const preset = validateIconPresetManifest(await readJson(BITHIRE_PRESET_PATH), corpus);
+  assert.equal(preset.names.length, 46);
+  assert.equal(new Set(preset.names).size, 46);
+  assert.deepEqual(preset.names, [...preset.names].sort());
+  assert.deepEqual(
+    preset.names.filter((name) => name.startsWith('bithire.')),
+    [
+      'bithire.candidate',
+      'bithire.evidence',
+      'bithire.interview',
+      'bithire.job',
+      'bithire.offer',
+      'bithire.pipeline',
+    ],
+  );
+});
+
 test('generated facade and role adapters derive exhaustively from the corpus manifests', async () => {
-  const { corpus, adapter } = await loadAndValidateManifests();
-  const files = buildGeneratedFiles(corpus, adapter);
+  const { corpus, adapter, bithirePreset } = await loadAndValidateManifests();
+  const files = buildGeneratedFiles(corpus, adapter, bithirePreset);
   const facade = files.get('facade-map/index.tsx');
 
   assert.match(facade, /satisfies Record<GeneratedIconName, SemanticIconComponent>/u);
@@ -102,11 +126,15 @@ test('generated facade and role adapters derive exhaustively from the corpus man
 });
 
 test('generation is deterministic and emits bounded per-role and pack outputs', async () => {
-  const { corpus, adapter } = await loadAndValidateManifests();
-  const first = buildGeneratedFiles(corpus, adapter);
-  const second = buildGeneratedFiles(structuredClone(corpus), structuredClone(adapter));
+  const { corpus, adapter, bithirePreset } = await loadAndValidateManifests();
+  const first = buildGeneratedFiles(corpus, adapter, bithirePreset);
+  const second = buildGeneratedFiles(
+    structuredClone(corpus),
+    structuredClone(adapter),
+    structuredClone(bithirePreset),
+  );
   assert.deepEqual([...first], [...second]);
-  assert.equal(first.size, 273);
+  assert.equal(first.size, 274);
   assert.equal([...first.keys()].filter((path) => path.startsWith('roles/')).length, 263);
   assert.match(
     first.get('roles/action-add.ts'),
@@ -133,12 +161,15 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
   assert.doesNotMatch(first.get('packs/operations.tsx'), /"identity\.|"analytics\.|Phosphor|@phosphor/u);
   assert.match(first.get('phosphor-adapter.ts'), /packageVersion: "2\.1\.10"/u);
   assert.match(first.get('facade-map/index.tsx'), /resolveGeneratedIcon/u);
+  assert.match(first.get('presets/bithire/index.tsx'), /export const BitHireIconPreset/u);
+  assert.match(first.get('presets/bithire/index.tsx'), /"bithire\.candidate": BithireCandidateIcon/u);
+  assert.doesNotMatch(first.get('presets/bithire/index.tsx'), /"action\.add"|Phosphor|@phosphor/u);
   assert.doesNotMatch(first.get('index.ts'), /phosphor|supplier/iu);
 });
 
 test('generated public source and declarations expose only supplier-free component types', async () => {
-  const { corpus, adapter } = await loadAndValidateManifests();
-  const files = buildGeneratedFiles(corpus, adapter);
+  const { corpus, adapter, bithirePreset } = await loadAndValidateManifests();
+  const files = buildGeneratedFiles(corpus, adapter, bithirePreset);
   const publicSources = [
     files.get('index.ts'),
     files.get('corpus.ts'),
@@ -148,6 +179,7 @@ test('generated public source and declarations expose only supplier-free compone
     files.get('packs/identity.tsx'),
     files.get('packs/intelligence.tsx'),
     files.get('packs/operations.tsx'),
+    files.get('presets/bithire/index.tsx'),
     files.get('facade-map/index.tsx'),
     await readFile(resolve(ICON_OWNER_ROOT, 'runtime/semantic/create-icon/index.tsx'), 'utf8'),
   ];
@@ -178,13 +210,14 @@ test('generated public source and declarations expose only supplier-free compone
         '--skipLibCheck',
         '--strict',
         resolve(ICON_OWNER_ROOT, 'presentation/semantic/generated/index.ts'),
+        resolve(ICON_OWNER_ROOT, 'presentation/semantic/generated/presets/bithire/index.tsx'),
         resolve(ICON_OWNER_ROOT, 'presentation/semantic-icon/index.tsx'),
       ],
       { cwd: CORE_ROOT, encoding: 'utf8', stdio: 'pipe' },
     );
     const declarationFiles = (await listFiles(resolve(declarationRoot, 'graphics/icons')))
       .filter((path) => path.endsWith('.d.ts'));
-    assert.ok(declarationFiles.length >= 271);
+    assert.ok(declarationFiles.length >= 272);
     for (const path of declarationFiles) {
       const declaration = await readFile(path, 'utf8');
       assert.doesNotMatch(declaration, /@phosphor|Phosphor(?:Icon|IconWeight)|LucideIcon/iu, path);
@@ -249,6 +282,33 @@ test('the canonical Icon facade reaches all 263 roles through SSR-only supplier 
   assert.doesNotMatch(bundle, /@phosphor-icons\/react\/dist\/(?!ssr\/)/u);
 });
 
+test('BitHire preset retains only its 46 selected supplier glyphs', () => {
+  const bundle = execFileSync(
+    resolve(CORE_ROOT, 'node_modules/.bin/esbuild'),
+    [
+      '--bundle',
+      '--format=esm',
+      '--platform=node',
+      '--loader=ts',
+      '--sourcefile=bithire-icon-preset-fixture.ts',
+      '--external:react',
+      '--external:react/jsx-runtime',
+      '--external:@phosphor-icons/react/*',
+    ],
+    {
+      cwd: CORE_ROOT,
+      encoding: 'utf8',
+      input: 'import { BitHireIconPreset } from "./src/entrypoints/icons/presets/bithire/index.ts"; console.log(BitHireIconPreset);',
+      stdio: ['pipe', 'pipe', 'pipe'],
+    },
+  );
+  const supplierModules = [...bundle.matchAll(/@phosphor-icons\/react\/dist\/ssr\/[A-Za-z0-9]+/gu)]
+    .map((match) => match[0]);
+  assert.equal(supplierModules.length, 46);
+  assert.equal(new Set(supplierModules).size, 46);
+  assert.doesNotMatch(bundle, /ActionAddIcon|IDENTITY_ICON_COMPONENTS|OPERATIONS_ICON_COMPONENTS/u);
+});
+
 test('closed schemas reject drift, duplicates, and adapter-order mismatches', async () => {
   const corpus = await readJson(CORPUS_PATH);
   const adapter = await readJson(ADAPTER_PATH);
@@ -276,6 +336,9 @@ test('closed schemas reject drift, duplicates, and adapter-order mismatches', as
 });
 
 test('--check oracle sees no stale or unexpected generated files', async () => {
-  const { corpus, adapter } = await loadAndValidateManifests();
-  assert.deepEqual(await checkGeneratedFiles(buildGeneratedFiles(corpus, adapter)), []);
+  const { corpus, adapter, bithirePreset } = await loadAndValidateManifests();
+  assert.deepEqual(
+    await checkGeneratedFiles(buildGeneratedFiles(corpus, adapter, bithirePreset)),
+    [],
+  );
 });

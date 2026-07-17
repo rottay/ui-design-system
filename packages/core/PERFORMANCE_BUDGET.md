@@ -11,6 +11,12 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Flagship component bundle | Component-specific gzip ceilings in `scripts/analyze-bundle.mjs`; each fixture deliberately inlines all three physical engines |
 | Icons bundle (`dist/icons.js`) | < 40 KB gzipped |
 | Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
+| Named semantic role consumer closure | < 40 KB gzipped in ESM and CJS; renderer supplier included, React external |
+| BitHire selected `Icon` preset closure | < 40 KB gzipped in ESM and CJS; exact productive 46-role inventory, renderer supplier included, React external |
+| Explicit full-corpus `Icon` compatibility closure | < 203/226 KB gzip ESM/CJS compatibility ratchet (184,033/204,761 B measured +10%, rounded upward); all 263 roles, never presented as a route-sized < 40 KB payload |
+| `BrandMark` consumer closure | < 30 KB gzipped in ESM and CJS; renderer supplier included, React external |
+| `CloudServiceMark` consumer closure | < 30 KB gzipped in ESM and CJS; renderer supplier included, React external |
+| `FeaturePictogram` consumer closure | < 4 KB gzipped in ESM and CJS; React external |
 | Charts experience entry (`dist/charts.js` / `.cjs`) | < 600/700 B raw (517/569 B measured; canonical preserveModules paths, runtime governed separately) |
 | Chart specification entry (`dist/chart-spec.js` / `.cjs`) | < 700/800 B raw (607/643 B measured) |
 | Chart specification all-export fixture | < 2.2 KB gzipped (1,787 B measured + >20%; ESM/CJS/types supplier/browser-neutral) |
@@ -137,8 +143,31 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    references; the spec denies DOM, WebWorker and ScriptHost declaration libraries. The gate
    also enforces the four raw facade ceilings. `node scripts/analyze-bundle.mjs --spatial` runs
    only this focused gate.
-9. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
-10. The report is printed as a table in the console.
+9. The WO-CRA-17 semantic-asset retention gate selects a generated role subpath, the exact
+   46-role BitHire preset, the explicit full-corpus compatibility facade, focused `BrandMark` and
+   `CloudServiceMark` entries, and `FeaturePictogram`. For ESM it records the tree-shaken inline
+   bundle; for CJS it walks the complete executable static `require()` closure. Both formats
+   include resolvable renderer suppliers and keep only React external. Route boundaries retain
+   the existing 40/30/4 KB ceilings; the complete 263-role facade has a separate measured +10%
+   compatibility ratchet. Raw, gzip, retained-module IDs and group counts are written
+   deterministically to `test-artifacts/craft/cra-17/bundle-retention.json`.
+   `node scripts/analyze-bundle.mjs --asset-retention` runs only this focused gate.
+10. CI runs the analyzer after the build step; any size, isolation or externalization failure exits non-zero.
+11. The report is printed as a table in the console.
+
+## Semantic Asset Retention Decision
+
+The 40 KB icon and 30 KB mark ceilings are payload contracts, not top-level
+preserveModules file-size checks. They are enforced on generated per-role
+ESM/CJS subpaths, the exact 46-role BitHire preset, and separate brand/cloud
+entries. The exhaustive synchronous 263-role registry remains available at
+`./icons/full` and is always measured, but is explicitly not represented as a
+route-sized payload. Its independent ESM/CJS compatibility ratchet is derived
+from the exact 184,033/204,761 B gzip baseline with 10% headroom and protects
+against silent full-corpus growth without widening the route budget. This
+preserves every semantic role without hiding the compatibility cost. The
+historical `./icons` facade remains a one-minor compatibility alias while
+consumers migrate to role or preset boundaries.
 
 The VIZ-03 raw ESM/CJS entries and named-renderer bundles were measured from
 the same cohesive producer build on 2026-07-16. Re-measure through the focused

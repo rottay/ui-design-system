@@ -30,6 +30,21 @@
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs"
     },
+    "./icons/full": {
+      "types": "./dist/icons-full.d.ts",
+      "import": "./dist/icons-full.js",
+      "require": "./dist/icons-full.cjs"
+    },
+    "./icons/presets/bithire": {
+      "types": "./dist/icons-preset-bithire.d.ts",
+      "import": "./dist/icons-preset-bithire.js",
+      "require": "./dist/icons-preset-bithire.cjs"
+    },
+    "./icons/roles/*": {
+      "types": "./dist/graphics/icons/presentation/semantic/generated/roles/*.d.ts",
+      "import": "./dist/graphics/icons/presentation/semantic/generated/roles/*.js",
+      "require": "./dist/graphics/icons/presentation/semantic/generated/roles/*.cjs"
+    },
     "./icons/corpus": {
       "types": "./dist/icons-corpus.d.ts",
       "import": "./dist/icons-corpus.js",
@@ -64,6 +79,16 @@
       "types": "./dist/marks.d.ts",
       "import": "./dist/marks.js",
       "require": "./dist/marks.cjs"
+    },
+    "./marks/brand": {
+      "types": "./dist/marks-brand.d.ts",
+      "import": "./dist/marks-brand.js",
+      "require": "./dist/marks-brand.cjs"
+    },
+    "./marks/cloud": {
+      "types": "./dist/marks-cloud.d.ts",
+      "import": "./dist/marks-cloud.js",
+      "require": "./dist/marks-cloud.cjs"
     },
     "./pictograms": {
       "types": "./dist/pictograms.d.ts",
@@ -181,6 +206,8 @@
     "dist/evnto.css",
     "supplier-contract.json",
     "consumer/ds-supplier-honesty.mjs",
+    "THIRD_PARTY_NOTICES.md",
+    "provenance/graphics/**",
     "styles/**/*.css",
     "!dist/**/*.d.ts.map",
     "README.md"
@@ -189,7 +216,8 @@
     "dev": "node scripts/dev.mjs",
     "icons:generate": "node scripts/generate-semantic-icons.mjs",
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
-    "prebuild": "pnpm run icons:check",
+    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check",
+    "prepack": "pnpm run cra17:licenses && pnpm run cra17:declarations",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css",
     "postbuild": "pnpm run cra14:check",
     "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled.css -o dist/modern-engine.css",
@@ -197,6 +225,8 @@
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
     "engine-audit:relocate-paths": "node scripts/relocate-engine-token-baseline.mjs",
     "cra14:check": "node scripts/cra-14-public-barrel-gate.mjs",
+    "cra17:licenses": "node scripts/cra-17-packaging-license-gate.mjs",
+    "cra17:declarations": "node scripts/cra-17-public-declaration-gate.mjs",
     "cra11:generate": "node scripts/cra-11-adaptive-contract-census.mjs",
     "cra11:check": "node scripts/cra-11-adaptive-contract-census.mjs --check",
     "cra11:gate": "node scripts/cra-11-adaptive-contract-census.mjs --check --require-clean",
@@ -204,7 +234,7 @@
     "gat07:check": "node scripts/gat-07-exact-proof.mjs --check-artifact",
     "gat07:write": "node scripts/gat-07-exact-proof.mjs --write",
     "test:scripts": "node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
-    "pretest": "pnpm run effects:provenance && node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check",
+    "pretest": "pnpm run cra17:licenses && pnpm run effects:provenance && node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",
@@ -223,8 +253,9 @@
     "analyze:chart-access": "node scripts/analyze-bundle.mjs --chart-access",
     "analyze:chart-spec": "node scripts/analyze-bundle.mjs --chart-spec",
     "analyze:effects": "node scripts/analyze-bundle.mjs --effects",
+    "analyze:asset-retention": "node scripts/analyze-bundle.mjs --asset-retention",
     "effects:provenance": "node ../../scripts/effect-registry-audit.mjs",
-    "lint": "pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/build-vertical-css.mjs --check",
+    "lint": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/build-vertical-css.mjs --check",
     "lint:artifacts": "node scripts/build-vertical-artifacts.mjs --check",
     "lint:folders": "node scripts/lint-folder-index.mjs && node --test scripts/core-owner-boundaries.test.mjs && node scripts/core-structure-audit.mjs --check",
     "structure:check": "node --test scripts/core-owner-boundaries.test.mjs && node scripts/core-structure-audit.mjs --check",
@@ -237,6 +268,8 @@
     "sourceEntrypoints": {
       "./server": "entrypoints/server/index.ts",
       "./icons": "entrypoints/icons/index.ts",
+      "./icons/full": "entrypoints/icons/full/index.ts",
+      "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",
       "./icons/corpus": "entrypoints/icons/corpus/index.ts",
       "./icons/foundation": "entrypoints/icons/foundation/index.ts",
       "./icons/bithire": "entrypoints/icons/bithire/index.ts",
@@ -244,6 +277,8 @@
       "./icons/intelligence": "entrypoints/icons/intelligence/index.ts",
       "./icons/operations": "entrypoints/icons/operations/index.ts",
       "./marks": "entrypoints/graphics/marks/index.ts",
+      "./marks/brand": "entrypoints/graphics/marks/brand/index.ts",
+      "./marks/cloud": "entrypoints/graphics/marks/cloud/index.ts",
       "./pictograms": "entrypoints/graphics/pictograms/index.ts",
       "./charts": "entrypoints/charts/index.ts",
       "./charts/spec": "entrypoints/charts/spec/index.ts",

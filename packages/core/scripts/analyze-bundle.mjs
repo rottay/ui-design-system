@@ -14,6 +14,7 @@
  *   node scripts/analyze-bundle.mjs --chart-spec  # server-safe chart contract purity/budget only
  *   node scripts/analyze-bundle.mjs --effects  # EffectRegistry purity/budget only
  *   node scripts/analyze-bundle.mjs --spatial  # Spatial spec/host purity and isolation only
+ *   node scripts/analyze-bundle.mjs --asset-retention  # semantic asset closure budgets only
  *
  * Exit codes:
  *   0 - all files within budget
@@ -21,7 +22,8 @@
  */
 
 import { execSync } from 'node:child_process';
-import { readFileSync, readdirSync, statSync, existsSync, rmSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, existsSync, rmSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createGzip, gzipSync } from 'node:zlib';
@@ -430,6 +432,434 @@ async function runComponentBudgets() {
     console.log('\x1b[32mAll components within budget.\x1b[0m\n');
   }
   return failures > 0 ? 1 : 0;
+}
+
+// ---------------------------------------------------------------------------
+// Semantic asset retention budgets (WO-CRA-17)
+// ---------------------------------------------------------------------------
+
+/**
+ * The top-level `dist/icons.js`/`dist/marks.js` file sizes are preserveModules
+ * barrels, not consumer payloads. This gate selects one public facade export,
+ * bundles its complete ESM closure with renderer suppliers included, and walks
+ * the complete executable CJS `require()` closure. React remains external in
+ * both formats because it is an application singleton peer.
+ *
+ * The existing route budgets remain authoritative. The exhaustive synchronous
+ * registry is measured through the explicit `./icons/full` compatibility
+ * boundary and has its own measured +10% regression ratchet; that larger
+ * envelope is never represented as the route-sized 40 KB icon budget.
+ */
+const FULL_CORPUS_COMPATIBILITY_BASELINE_BYTES = Object.freeze({
+  esm: 184_033,
+  cjs: 204_761,
+});
+
+function deriveAssetRetentionCompatibilityBudget(measuredBytes) {
+  return Math.ceil((measuredBytes * 1.1) / 1_000) * 1_000;
+}
+
+const ASSET_RETENTION_BUDGET = Object.freeze({
+  namedSemanticRole: 40_000,
+  bithirePreset: 40_000,
+  dynamicIconFull: Object.freeze({
+    esm: deriveAssetRetentionCompatibilityBudget(FULL_CORPUS_COMPATIBILITY_BASELINE_BYTES.esm),
+    cjs: deriveAssetRetentionCompatibilityBudget(FULL_CORPUS_COMPATIBILITY_BASELINE_BYTES.cjs),
+  }),
+  brandMark: 30_000,
+  cloudServiceMark: 30_000,
+  featurePictogram: 4_000,
+});
+
+const SEMANTIC_ICON_MANIFEST = JSON.parse(readFileSync(join(
+  ROOT,
+  'src',
+  'graphics',
+  'icons',
+  'foundation',
+  'semantic',
+  'corpus',
+  'manifest.json',
+), 'utf8'));
+const SEMANTIC_ROLE_COUNT = SEMANTIC_ICON_MANIFEST.entries.length;
+if (SEMANTIC_ICON_MANIFEST.expectedCounts?.global !== SEMANTIC_ROLE_COUNT) {
+  throw new Error(
+    `semantic icon manifest count drift: expected ${SEMANTIC_ICON_MANIFEST.expectedCounts?.global}, ` +
+    `found ${SEMANTIC_ROLE_COUNT}`,
+  );
+}
+
+const ASSET_RETENTION_FIXTURES = Object.freeze({
+  namedSemanticRole: Object.freeze({
+    label: 'ActionAddIcon (named role)',
+    entryEsm: 'dist/graphics/icons/presentation/semantic/generated/roles/action-add.js',
+    entryCjs: 'dist/graphics/icons/presentation/semantic/generated/roles/action-add.cjs',
+    exportName: 'ActionAddIcon',
+    publicSubpath: './icons/roles/action-add',
+    budgetClass: 'route-payload',
+  }),
+  bithirePreset: Object.freeze({
+    label: 'BitHireIconPreset (46 selected roles)',
+    entryEsm: 'dist/icons-preset-bithire.js',
+    entryCjs: 'dist/icons-preset-bithire.cjs',
+    exportName: 'BitHireIconPreset',
+    publicSubpath: './icons/presets/bithire',
+    budgetClass: 'route-payload',
+  }),
+  dynamicIconFull: Object.freeze({
+    label: `Icon (explicit full ${SEMANTIC_ROLE_COUNT}-role compatibility)`,
+    entryEsm: 'dist/icons-full.js',
+    entryCjs: 'dist/icons-full.cjs',
+    exportName: 'Icon',
+    publicSubpath: './icons/full',
+    budgetClass: 'full-corpus-compatibility-ratchet',
+  }),
+  brandMark: Object.freeze({
+    label: 'BrandMark',
+    entryEsm: 'dist/marks-brand.js',
+    entryCjs: 'dist/marks-brand.cjs',
+    exportName: 'BrandMark',
+    publicSubpath: './marks/brand',
+    budgetClass: 'route-payload',
+  }),
+  cloudServiceMark: Object.freeze({
+    label: 'CloudServiceMark',
+    entryEsm: 'dist/marks-cloud.js',
+    entryCjs: 'dist/marks-cloud.cjs',
+    exportName: 'CloudServiceMark',
+    publicSubpath: './marks/cloud',
+    budgetClass: 'route-payload',
+  }),
+  featurePictogram: Object.freeze({
+    label: 'FeaturePictogram',
+    entryEsm: 'dist/pictograms.js',
+    entryCjs: 'dist/pictograms.cjs',
+    exportName: 'FeaturePictogram',
+    publicSubpath: './pictograms',
+    budgetClass: 'route-payload',
+  }),
+});
+
+const ASSET_RETENTION_ARTIFACT = resolve(
+  ROOT,
+  '..',
+  '..',
+  'test-artifacts',
+  'craft',
+  'cra-17',
+  'bundle-retention.json',
+);
+
+const REACT_EXTERNALS = ['react', /^react\//];
+
+function normalizeRetentionModuleId(moduleId) {
+  const normalized = normalizedModuleId(moduleId);
+  const nodeModulesMarker = '/node_modules/';
+  const nodeModulesIndex = normalized.lastIndexOf(nodeModulesMarker);
+  if (nodeModulesIndex >= 0) {
+    return `node_modules/${normalized.slice(nodeModulesIndex + nodeModulesMarker.length)}`;
+  }
+  if (normalized === ROOT) return '.';
+  if (normalized.startsWith(`${ROOT}/`)) return relative(ROOT, normalized).replaceAll('\\', '/');
+  return normalized;
+}
+
+function summarizeRetentionModules(moduleIds) {
+  const retainedModuleIds = [...new Set(moduleIds.map(normalizeRetentionModuleId))].sort();
+  const groups = {
+    firstParty: 0,
+    phosphor: 0,
+    theSvg: 0,
+    lucideCompatibility: 0,
+    otherThirdParty: 0,
+  };
+  for (const moduleId of retainedModuleIds) {
+    if (moduleId.startsWith('node_modules/@phosphor-icons/')) groups.phosphor += 1;
+    else if (moduleId.startsWith('node_modules/@thesvg/')) groups.theSvg += 1;
+    else if (moduleId.startsWith('node_modules/lucide-react/')) groups.lucideCompatibility += 1;
+    else if (moduleId.startsWith('node_modules/')) groups.otherThirdParty += 1;
+    else groups.firstParty += 1;
+  }
+  return { count: retainedModuleIds.length, groups, retainedModuleIds };
+}
+
+async function buildAssetRetentionEsmFixture(fixtureName, fixture) {
+  const entry = join(ROOT, fixture.entryEsm);
+  if (!existsSync(entry)) {
+    throw new Error(`${fixture.entryEsm} is missing; build the package before measuring retention`);
+  }
+  const { build } = await import('vite');
+  const virtualId = `virtual:cra-17-asset-retention:${fixtureName}`;
+  const resolvedVirtualId = `\0${virtualId}`;
+  const result = await build({
+    configFile: false,
+    logLevel: 'silent',
+    root: ROOT,
+    plugins: [{
+      name: 'cra-17-asset-retention-entry',
+      resolveId(id) {
+        return id === virtualId ? resolvedVirtualId : null;
+      },
+      load(id) {
+        if (id !== resolvedVirtualId) return null;
+        return (
+          `import { ${fixture.exportName} } from ${JSON.stringify(entry)};\n` +
+          `export { ${fixture.exportName} };\n`
+        );
+      },
+    }],
+    build: {
+      write: false,
+      minify: 'esbuild',
+      target: 'esnext',
+      reportCompressedSize: false,
+      rollupOptions: {
+        input: virtualId,
+        preserveEntrySignatures: 'strict',
+        external: REACT_EXTERNALS,
+        output: {
+          format: 'es',
+          inlineDynamicImports: true,
+          entryFileNames: 'bundle.js',
+        },
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          warn(warning);
+        },
+      },
+    },
+    esbuild: { treeShaking: true, minifyIdentifiers: true, minifySyntax: true },
+  });
+
+  const outputs = (Array.isArray(result) ? result : [result])
+    .flatMap((buildResult) => buildResult.output ?? []);
+  const chunks = outputs.filter((output) => output.type === 'chunk');
+  if (chunks.length !== 1 || !chunks[0].isEntry) {
+    throw new Error(`expected one inline ESM entry chunk; found ${chunks.length}`);
+  }
+  const code = chunks[0].code;
+  const retained = renderedModules(chunks);
+  return {
+    measurement: 'tree-shaken inline ESM bundle; React external; renderer suppliers included',
+    rawBytes: Buffer.byteLength(code),
+    gzipBytes: gzipSync(code, { level: 9 }).byteLength,
+    externalImports: [...new Set(chunks.flatMap((chunk) => chunk.imports))].sort(),
+    ...summarizeRetentionModules([...retained.keys()]),
+  };
+}
+
+function extractStaticCjsRequires(source) {
+  const specifiers = [];
+  const pattern = /\brequire\((?:"([^"]+)"|'([^']+)')\)/g;
+  for (const match of source.matchAll(pattern)) specifiers.push(match[1] ?? match[2]);
+  return specifiers;
+}
+
+function resolveCjsRetentionEdge(fromFile, specifier) {
+  if (specifier === 'react' || specifier.startsWith('react/')) return null;
+  let resolvedPath;
+  if (specifier.startsWith('.')) {
+    resolvedPath = resolve(dirname(fromFile), specifier);
+    if (!existsSync(resolvedPath) && existsSync(`${resolvedPath}.cjs`)) resolvedPath += '.cjs';
+  } else {
+    resolvedPath = createRequire(fromFile).resolve(specifier);
+  }
+  if (!existsSync(resolvedPath)) throw new Error(`${fromFile} -> ${specifier} did not resolve`);
+  if (resolvedPath.endsWith('.json') || resolvedPath.endsWith('.node')) return null;
+  return resolvedPath;
+}
+
+function walkAssetRetentionCjsClosure(entryRelPath) {
+  const entry = join(ROOT, entryRelPath);
+  if (!existsSync(entry)) {
+    throw new Error(`${entryRelPath} is missing; build the package before measuring retention`);
+  }
+  const seen = new Set();
+  const externalImports = new Set();
+  const pending = [entry];
+  while (pending.length > 0) {
+    const file = pending.pop();
+    if (seen.has(file)) continue;
+    seen.add(file);
+    const source = readFileSync(file, 'utf8');
+    for (const specifier of extractStaticCjsRequires(source)) {
+      if (specifier === 'react' || specifier.startsWith('react/')) {
+        externalImports.add(specifier);
+        continue;
+      }
+      const target = resolveCjsRetentionEdge(file, specifier);
+      if (target) pending.push(target);
+      else externalImports.add(specifier);
+    }
+  }
+
+  const files = [...seen].sort((left, right) => (
+    normalizeRetentionModuleId(left).localeCompare(normalizeRetentionModuleId(right))
+  ));
+  const sources = files.map((file) => readFileSync(file));
+  const concatenated = Buffer.concat(
+    sources.flatMap((source, index) => index === 0 ? [source] : [Buffer.from('\n'), source]),
+  );
+  return {
+    measurement: 'static executable CJS require closure; React external; resolvable suppliers included',
+    rawBytes: files.reduce((total, file) => total + statSync(file).size, 0),
+    gzipBytes: gzipSync(concatenated, { level: 9 }).byteLength,
+    externalImports: [...externalImports].sort(),
+    ...summarizeRetentionModules(files),
+  };
+}
+
+function printAssetRetentionRows(rows) {
+  const columns = ['fixture', 'format', 'raw', 'gzip', 'modules', 'budget', 'status'];
+  const headers = {
+    fixture: 'Facade selection',
+    format: 'Format',
+    raw: 'Raw closure',
+    gzip: 'Gzip closure',
+    modules: 'Modules',
+    budget: 'Budget (gzip)',
+    status: 'Status',
+  };
+  const widths = Object.fromEntries(columns.map((column) => [column, headers[column].length]));
+  for (const row of rows) {
+    for (const column of columns) widths[column] = Math.max(widths[column], String(row[column]).length);
+  }
+  const padded = (value, width) => String(value).padEnd(width);
+  console.log(columns.map((column) => padded(headers[column], widths[column])).join(' | '));
+  console.log(columns.map((column) => '-'.repeat(widths[column])).join('-+-'));
+  for (const row of rows) {
+    const line = columns.map((column) => padded(row[column], widths[column])).join(' | ');
+    if (row.status === 'PASS') console.log(`\x1b[32m${line}\x1b[0m`);
+    else console.log(`\x1b[31m${line}\x1b[0m`);
+  }
+  console.log('');
+}
+
+async function runAssetRetentionBudgets() {
+  console.log('\n--- Semantic asset retention budgets (WO-CRA-17) ---\n');
+  const rows = [];
+  const measurements = {};
+  let failures = 0;
+
+  for (const [fixtureName, fixture] of Object.entries(ASSET_RETENTION_FIXTURES)) {
+    const budgetDefinition = ASSET_RETENTION_BUDGET[fixtureName];
+    const fixtureMeasurements = {};
+    for (const format of ['esm', 'cjs']) {
+      const budgetBytes = typeof budgetDefinition === 'number'
+        ? budgetDefinition
+        : budgetDefinition[format];
+      try {
+        const measurement = format === 'esm'
+          ? await buildAssetRetentionEsmFixture(fixtureName, fixture)
+          : walkAssetRetentionCjsClosure(fixture.entryCjs);
+        const passed = measurement.gzipBytes <= budgetBytes;
+        if (!passed) failures += 1;
+        fixtureMeasurements[format] = {
+          ...measurement,
+          budgetGzipBytes: budgetBytes,
+          budgetClass: fixture.budgetClass,
+          enforced: true,
+          passed,
+        };
+        rows.push({
+          fixture: fixture.label,
+          format: format.toUpperCase(),
+          raw: `${formatBytes(measurement.rawBytes)} (${measurement.rawBytes} B)`,
+          gzip: `${formatBytes(measurement.gzipBytes)} (${measurement.gzipBytes} B)`,
+          modules: measurement.count,
+          budget: formatBytes(budgetBytes),
+          status: passed ? 'PASS' : 'FAIL',
+        });
+      } catch (error) {
+        failures += 1;
+        fixtureMeasurements[format] = {
+          budgetGzipBytes: budgetBytes,
+          passed: false,
+          error: error instanceof Error ? error.message : String(error),
+        };
+        rows.push({
+          fixture: fixture.label,
+          format: format.toUpperCase(),
+          raw: '-',
+          gzip: '-',
+          modules: '-',
+          budget: formatBytes(budgetBytes),
+          status: 'BUILD FAIL',
+        });
+      }
+    }
+    measurements[fixtureName] = {
+      label: fixture.label,
+      publicSubpath: fixture.publicSubpath,
+      selectedExport: fixture.exportName,
+      budgetClass: fixture.budgetClass,
+      esmEntry: fixture.entryEsm,
+      cjsEntry: fixture.entryCjs,
+      formats: fixtureMeasurements,
+    };
+  }
+
+  const artifact = {
+    schemaVersion: 1,
+    workOrder: 'WO-CRA-17',
+    producer: '@rottay/design-system',
+    producerVersion: JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version,
+    reproducibility: {
+      command: 'pnpm analyze:asset-retention',
+      requiresExistingDist: true,
+      gzipLevel: 9,
+      timestampOmitted: true,
+      pathsNormalized: true,
+    },
+    budgetPolicy: {
+      semanticRoleCount: SEMANTIC_ROLE_COUNT,
+      iconsGzipBytes: 40_000,
+      marksGzipBytes: 30_000,
+      featurePictogramGzipBytes: 4_000,
+      fullCorpusCompatibilityHasRouteBudget: false,
+      fullCorpusCompatibilityMeasured: true,
+      fullCorpusCompatibilityBaselineGzipBytes: FULL_CORPUS_COMPATIBILITY_BASELINE_BYTES,
+      fullCorpusCompatibilityRatchetGzipBytes: ASSET_RETENTION_BUDGET.dynamicIconFull,
+      reactExternal: true,
+      rendererSuppliersIncluded: true,
+      formatsEnforcedIndependently: true,
+    },
+    summary: {
+      passed: failures === 0,
+      failingFormatFixtures: failures,
+      decisionRequired: failures > 0,
+      decision: failures > 0
+        ? 'Keep the gate red until every route-sized role, preset, and asset-class subpath meets its existing public payload budget.'
+        : null,
+    },
+    architectureDecision: {
+      implemented: [
+        'Generated per-role ESM/CJS subpaths prevent a named semantic role from executing an entire pack barrel.',
+        'The SSR-safe BitHire preset contains the exact 46-role productive application inventory.',
+        'The exhaustive synchronous registry is explicit at ./icons/full and uses a separate measured regression ratchet without pretending to be a sub-40-KB route payload.',
+        'Brand and cloud CJS public entrypoints are split so neither asset class executes the other adapter.',
+      ],
+      constraints: [
+        'Do not remove any of the governed semantic roles.',
+        'Do not widen the 40-KB icon or 30-KB mark ceiling to silence this gate.',
+        'Preserve supplier-free public props, SSR output, hydration and one-minor compatibility aliases.',
+      ],
+    },
+    fixtures: measurements,
+  };
+  writeFileSync(ASSET_RETENTION_ARTIFACT, `${JSON.stringify(artifact, null, 2)}\n`);
+
+  printAssetRetentionRows(rows);
+  console.log(`Evidence: ${relative(ROOT, ASSET_RETENTION_ARTIFACT)}\n`);
+  if (failures > 0) {
+    console.error(
+      `\x1b[31m${failures} semantic asset format fixture(s) exceed the existing payload budgets. ` +
+      'The budgets were not widened.\x1b[0m\n',
+    );
+  } else {
+    console.log('\x1b[32mAll semantic asset closures are within budget.\x1b[0m\n');
+  }
+  return failures;
 }
 
 // ---------------------------------------------------------------------------
@@ -2399,6 +2829,11 @@ async function runSpatialFixtureBudgets() {
   }
 }
 
+if (process.argv.includes('--asset-retention')) {
+  const failures = await runAssetRetentionBudgets();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
 if (process.argv.includes('--chart-renderers')) {
   const failures = await runChartRendererBudgets();
   process.exit(failures > 0 ? 1 : 0);
@@ -2570,6 +3005,7 @@ failures += await runChartSpecFixtureBudget();
 failures += await runMotionFixtureBudgets();
 failures += await runEffectsFixtureBudget();
 failures += await runSpatialFixtureBudgets();
+failures += await runAssetRetentionBudgets();
 
 // ---------------------------------------------------------------------------
 // Report

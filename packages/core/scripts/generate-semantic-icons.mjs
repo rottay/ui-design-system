@@ -16,6 +16,10 @@ const ADAPTER_PATH = resolve(
   ICON_OWNER_ROOT,
   'foundation/semantic/adapters/phosphor-2.1.10.json',
 );
+const BITHIRE_PRESET_PATH = resolve(
+  ICON_OWNER_ROOT,
+  'foundation/semantic/presets/bithire/manifest.json',
+);
 const GENERATED_CORPUS_ROOT = resolve(
   ICON_OWNER_ROOT,
   'foundation/semantic/corpus/generated',
@@ -326,6 +330,55 @@ export function validateAdapterManifest(adapter, corpus) {
   return adapter;
 }
 
+export function validateIconPresetManifest(preset, corpus) {
+  const errors = [];
+  const rootKeys = new Set([
+    'schemaVersion',
+    'id',
+    'corpusVersion',
+    'expectedCount',
+    'sourceInventory',
+    'names',
+  ]);
+  if (!exactKeys(preset, rootKeys, 'preset', errors)) {
+    throwValidation('Icon preset manifest', errors);
+  }
+  requiredKeys(preset, [...rootKeys], 'preset', errors);
+  if (preset.schemaVersion !== 1) errors.push('preset.schemaVersion must equal 1');
+  if (preset.id !== 'bithire') errors.push('preset.id must equal bithire');
+  if (preset.corpusVersion !== corpus.corpusVersion) {
+    errors.push(`preset.corpusVersion must equal corpus version ${corpus.corpusVersion}`);
+  }
+  if (!Number.isInteger(preset.expectedCount) || preset.expectedCount <= 0) {
+    errors.push('preset.expectedCount must be a positive integer');
+  }
+  if (
+    preset.sourceInventory !==
+    'app-bithire/tests/architecture/_shared/icon-facade-inventory'
+  ) {
+    errors.push('preset.sourceInventory must identify the productive BitHire inventory');
+  }
+  if (!Array.isArray(preset.names)) {
+    errors.push('preset.names must be an array');
+    throwValidation('Icon preset manifest', errors);
+  }
+  if (preset.names.length !== preset.expectedCount) {
+    errors.push(`preset.names must contain ${preset.expectedCount} names; received ${preset.names.length}`);
+  }
+  if (!unique(preset.names)) errors.push('preset.names must be unique');
+  if (!sameArray(preset.names, [...preset.names].sort())) {
+    errors.push('preset.names must be sorted for deterministic review');
+  }
+  const corpusNames = new Set(corpus.entries.map((entry) => entry.id));
+  for (const [index, name] of preset.names.entries()) {
+    if (typeof name !== 'string' || !corpusNames.has(name)) {
+      errors.push(`preset.names[${index}] is not a governed semantic role`);
+    }
+  }
+  throwValidation('Icon preset manifest', errors);
+  return preset;
+}
+
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
 }
@@ -363,11 +416,16 @@ export async function validateLocalPhosphor(adapter) {
 }
 
 export async function loadAndValidateManifests() {
-  const [corpus, adapter] = await Promise.all([readJson(CORPUS_PATH), readJson(ADAPTER_PATH)]);
+  const [corpus, adapter, bithirePreset] = await Promise.all([
+    readJson(CORPUS_PATH),
+    readJson(ADAPTER_PATH),
+    readJson(BITHIRE_PRESET_PATH),
+  ]);
   validateCorpusManifest(corpus);
   validateAdapterManifest(adapter, corpus);
+  validateIconPresetManifest(bithirePreset, corpus);
   const supplier = await validateLocalPhosphor(adapter);
-  return { corpus, adapter, supplier };
+  return { corpus, adapter, bithirePreset, supplier };
 }
 
 function formatStringArray(values) {
@@ -590,13 +648,58 @@ export function resolveGeneratedIcon(value: unknown): SemanticIconComponent | un
 `;
 }
 
+function generateBitHirePresetModule(preset, corpus) {
+  const corpusById = new Map(corpus.entries.map((entry) => [entry.id, entry]));
+  const entries = preset.names.map((name) => corpusById.get(name));
+  const imports = entries
+    .map((entry) => `import { ${entry.componentName} } from '../../roles/${roleFileName(entry.id).slice(0, -3)}';`)
+    .join('\n');
+  const names = formatStringArray(preset.names);
+  const mappings = entries
+    .map((entry) => `  ${JSON.stringify(entry.id)}: ${entry.componentName},`)
+    .join('\n');
+  return `${GENERATED_HEADER}import { forwardRef } from 'react';
+import type { SemanticIconComponent, SemanticIconProps } from '../../../../../runtime/semantic/create-icon';
+${imports}
+
+export const BITHIRE_PRESET_ICON_NAMES = [
+${names}
+] as const;
+
+export type BitHirePresetIconName = (typeof BITHIRE_PRESET_ICON_NAMES)[number];
+export type BitHireIconPresetProps = SemanticIconProps & {
+  readonly name: BitHirePresetIconName;
+};
+
+export const BITHIRE_PRESET_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
+${mappings}
+} as const satisfies Record<BitHirePresetIconName, SemanticIconComponent>);
+
+export function isBitHirePresetIconName(value: unknown): value is BitHirePresetIconName {
+  return typeof value === 'string'
+    && Object.prototype.hasOwnProperty.call(BITHIRE_PRESET_ICON_COMPONENTS, value);
+}
+
+export function resolveBitHirePresetIcon(value: unknown): SemanticIconComponent | undefined {
+  return isBitHirePresetIconName(value) ? BITHIRE_PRESET_ICON_COMPONENTS[value] : undefined;
+}
+
+export const BitHireIconPreset = /* @__PURE__ */ forwardRef<SVGSVGElement, BitHireIconPresetProps>(
+  function BitHireIconPreset({ name, ...props }, ref) {
+    const Component = resolveBitHirePresetIcon(name);
+    return Component ? <Component ref={ref} {...props} /> : null;
+  },
+);
+`;
+}
+
 function manifestFingerprint(corpus, adapter) {
   return createHash('sha256')
     .update(JSON.stringify({ corpus, adapter }))
     .digest('hex');
 }
 
-export function buildGeneratedFiles(corpus, adapter) {
+export function buildGeneratedFiles(corpus, adapter, bithirePreset) {
   const files = new Map();
   const adapterById = new Map(adapter.entries.map((entry) => [entry.id, entry]));
   const fingerprint = manifestFingerprint(corpus, adapter);
@@ -610,6 +713,10 @@ export function buildGeneratedFiles(corpus, adapter) {
     files.set(`packs/${pack}.tsx`, generatePackModule(pack, corpus.entries.filter((entry) => entry.pack === pack)));
   }
   files.set('facade-map/index.tsx', generateFacadeMapModule());
+  files.set(
+    'presets/bithire/index.tsx',
+    generateBitHirePresetModule(bithirePreset, corpus),
+  );
   files.set('packs/index.ts', `${GENERATED_HEADER}${ICON_PACKS.map((pack) => `export * from './${pack}';`).join('\n')}\n`);
   files.set(
     'index.ts',
@@ -696,8 +803,8 @@ async function main() {
 
   await access(CORPUS_PATH);
   await access(ADAPTER_PATH);
-  const { corpus, adapter, supplier } = await loadAndValidateManifests();
-  const files = buildGeneratedFiles(corpus, adapter);
+  const { corpus, adapter, bithirePreset, supplier } = await loadAndValidateManifests();
+  const files = buildGeneratedFiles(corpus, adapter, bithirePreset);
 
   if (args.includes('--check')) {
     const issues = await checkGeneratedFiles(files);
