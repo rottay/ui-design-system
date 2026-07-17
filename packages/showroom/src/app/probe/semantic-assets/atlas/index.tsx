@@ -26,14 +26,19 @@ import {
 import { TortureSurface } from '../../../../components/torture-surface';
 import {
   CRA17_ASSET_SIZES,
+  CRA17_CANONICAL_ICON_NAMES,
+  CRA17_CORPORA,
   CRA17_DIRECTIONS,
+  CRA17_ENGINES,
   CRA17_PICTOGRAM_SIZES,
   CRA17_TENANTS,
   CRA17_THEMES,
   cra17ProbeHref,
   resolveCra17Axes,
   type Cra17Axes,
+  type Cra17Corpus,
   type Cra17Direction,
+  type Cra17Engine,
   type Cra17Tenant,
   type Cra17Theme,
 } from '../fixtures';
@@ -55,19 +60,24 @@ const TENANT_LABELS: Readonly<Record<Cra17Tenant, string>> = {
   themanagementmiami: 'The Management',
 };
 
-const ICON_ENTRIES: readonly AssetEntry[] = ICON_NAMES.map((name: IconName) => ({
-  key: name,
-  label: name,
-  render: (size) => (
-    <Icon
-      name={name}
-      size={size}
-      tone="primary"
-      mirrored="auto"
-      decorative
-    />
-  ),
-}));
+function iconEntries(names: readonly IconName[]): readonly AssetEntry[] {
+  return names.map((name) => ({
+    key: name,
+    label: name,
+    render: (size) => (
+      <Icon
+        name={name}
+        size={size}
+        tone="primary"
+        mirrored="auto"
+        decorative
+      />
+    ),
+  }));
+}
+
+const ALL_ICON_ENTRIES = iconEntries(ICON_NAMES);
+const CANONICAL_ICON_ENTRIES = iconEntries(CRA17_CANONICAL_ICON_NAMES);
 
 function brandEntries(theme: Cra17Theme): readonly AssetEntry[] {
   return BRAND_MARK_NAMES.map((name: BrandMarkName) => ({
@@ -77,7 +87,9 @@ function brandEntries(theme: Cra17Theme): readonly AssetEntry[] {
       <BrandMark
         name={name}
         size={size}
-        variant={theme === 'dark' ? 'light' : 'dark'}
+        // The supplier variants are named for their intended ground: `dark`
+        // contains the light artwork that remains legible on a dark surface.
+        variant={theme}
         decorative
       />
     ),
@@ -210,7 +222,7 @@ const STYLES = `
 
   .cra17-controls {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 8px;
   }
@@ -377,6 +389,17 @@ const STYLES = `
     .cra17-atlas { padding: 12px; }
     .cra17-controls { grid-template-columns: 1fr 1fr; }
     .cra17-section-header { align-items: start; flex-direction: column; }
+    .cra17-matrix { overflow-x: visible; }
+    .cra17-matrix-row {
+      grid-template-columns: minmax(126px, 1.7fr) repeat(4, minmax(42px, 1fr));
+      min-width: 0;
+    }
+    .cra17-name {
+      padding: 9px 10px;
+      font-size: 10px;
+    }
+    .cra17-size-label,
+    .cra17-cell { padding: 8px 4px; }
   }
 
   @media (forced-colors: active) {
@@ -444,6 +467,24 @@ function AxisControls({ axes }: { axes: Cra17Axes }) {
         <div className="cra17-axis-options">
           {CRA17_THEMES.map((theme: Cra17Theme) =>
             axisLink(axes, { theme }, theme, axes.theme === theme),
+          )}
+        </div>
+      </div>
+
+      <div className="cra17-axis" data-cra17-control="engine">
+        <p className="cra17-axis-label">Engine</p>
+        <div className="cra17-axis-options">
+          {CRA17_ENGINES.map((engine: Cra17Engine) =>
+            axisLink(axes, { engine }, engine, axes.engine === engine),
+          )}
+        </div>
+      </div>
+
+      <div className="cra17-axis" data-cra17-control="corpus">
+        <p className="cra17-axis-label">Corpus</p>
+        <div className="cra17-axis-options">
+          {CRA17_CORPORA.map((corpus: Cra17Corpus) =>
+            axisLink(axes, { corpus }, corpus, axes.corpus === corpus),
           )}
         </div>
       </div>
@@ -537,7 +578,7 @@ function AssetSection({
                 className="cra17-cell"
                 key={size}
                 data-cra17-asset-size={size}
-                data-cra17-capture-key={`${axes.tenant}:${axes.theme}:${axes.direction}:${assetClass}:${entry.key}:${size}`}
+                data-cra17-capture-key={`${axes.tenant}:${axes.engine}:${axes.theme}:${axes.direction}:${assetClass}:${entry.key}:${size}`}
                 data-cra17-forced-colors-target={
                   axes.forcedColorsAudit ? 'requested' : 'ready'
                 }
@@ -559,9 +600,13 @@ function SemanticAssetAtlasContent() {
     [searchParams],
   );
   const brands = useMemo(() => brandEntries(axes.theme), [axes.theme]);
+  const icons = axes.corpus === 'canonical'
+    ? CANONICAL_ICON_ENTRIES
+    : ALL_ICON_ENTRIES;
 
   return (
     <TortureSurface
+      engine={axes.engine}
       fixture={axes.tenant}
       ground={axes.theme}
       rtl={axes.direction === 'rtl'}
@@ -571,13 +616,16 @@ function SemanticAssetAtlasContent() {
         data-cra17-probe="semantic-assets"
         data-cra17-ready="true"
         data-cra17-tenant={axes.tenant}
+        data-cra17-engine={axes.engine}
         data-cra17-theme={axes.theme}
+        data-cra17-corpus={axes.corpus}
         data-cra17-direction={axes.direction}
         data-cra17-forced-colors-hook="media-query-ready"
         data-cra17-forced-colors-audit={
           axes.forcedColorsAudit ? 'requested' : 'ready'
         }
-        data-cra17-icon-count={ICON_NAMES.length}
+        data-cra17-icon-count={icons.length}
+        data-cra17-role-cell-count={icons.length * CRA17_ASSET_SIZES.length}
         data-cra17-brand-mark-count={BRAND_MARK_NAMES.length}
         data-cra17-cloud-mark-count={CLOUD_PROVIDERS.length * CLOUD_SERVICES.length}
         data-cra17-feature-pictogram-count={FEATURE_PICTOGRAM_NAMES.length}
@@ -599,7 +647,7 @@ function SemanticAssetAtlasContent() {
           <div className="cra17-sections">
             <AssetSection
               assetClass="icon"
-              entries={ICON_ENTRIES}
+              entries={icons}
               sizes={CRA17_ASSET_SIZES}
               axes={axes}
               sizeContract="12|16|20|24"
