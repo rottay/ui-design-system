@@ -2159,7 +2159,7 @@
    "lane": "engine-modern",
    "order": 23,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2175,8 +2175,8 @@
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "codex-eng23",
+   "claimedAt": "2026-07-17",
    "doneAt": null,
    "evidence": null,
    "execution": {

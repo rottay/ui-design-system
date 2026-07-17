@@ -6,7 +6,7 @@
 
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
-| [engine-modern](./engine-modern.md) | 22 | 0 | 1 | 23 |
+| [engine-modern](./engine-modern.md) | 22 | 1 | 0 | 23 |
 | [craft](./craft.md) | 13 | 1 | 3 | 17 |
 | [gates](./gates.md) | 8 | 0 | 1 | 9 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
@@ -19,7 +19,7 @@
 
 | Source IDs done | Source IDs in progress | Source IDs todo | Execute authorities done/total | Deferred | Absorbed | Routed | Rejected |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 16 | 1 | 6 | 7/13 | 97 | 6 | 2 | 0 |
+| 16 | 2 | 5 | 7/13 | 97 | 6 | 2 | 0 |
 
 ## Support milestones — partial evidence, no source completion effect
 
@@ -34,13 +34,13 @@
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
 | WO-ARC-11 | Superadmin presentation bypass | codex-arc11 | 2026-07-15 | 2026-07-15 14:50 — The app-resolved presentation contract now preserves explicit field, tab and individual-action anatomy through collection and detail load failures (DS 4fc07796), with Bithire Agent Roster registrations landed in 68119289f. Published @rottay/design-system 2.19.3 (release 336bd5ea) is pinned by Bithire 220ef765b. Focused DS coverage is green at 57/57, core TypeScript and the 2.19.3 build are green, and the focused Bithire suite remains green at 3/3. Authorization and data access remain app/server-owned; the DS only renders final all/resolved presentation decisions. |
+| WO-ENG-23 | Evnto certified theme source | codex-eng23 | 2026-07-17 | (no entries — log via `progress`) |
 | WO-CRA-14 | ParticleField Stage-A quarantine | codex-cra14 | 2026-07-14 | 2026-07-15 01:00 — Independent technical GO after adversarial correction: Platform 35a2dcf7 rejects spoofed resolver provenance and hostile loaders (53/53), DS runtime/barrel/CSS gates are green. Integration remains blocked: app-platform is pinned to registry DS 2.17.0, producing exactly five particleField TS2353 errors and the old static ParticleField path; keep WO in-progress until consolidated publish and repin. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-ENG-23 | Evnto certified theme source | M | engine-modern | ds-improvements |
 
 ## Blocked (dependencies or phase claim lock)
 
