@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-07-17",
+  "workOrder": "WO-CRA-17",
+  "statusEffect": "none",
+  "sourceItemsClosed": [],
+  "decision": {
+    "state": "final-fallback-at-deadline",
+    "selectedSupplier": {
+      "name": "Phosphor Icons",
+      "packageName": "@phosphor-icons/react",
+      "version": "2.1.10",
+      "license": "MIT"
+    },
+    "notSelectedAtDeadline": {
+      "name": "Hugeicons Pro",
+      "packageInstalled": false,
+      "packageDeclaredInProducerManifestsOrLockfile": false,
+      "writtenAuthorizationVerifiable": false,
+      "unverifiedRequiredRights": [
+        "seat-model",
+        "vendoring-or-approved-mirroring",
+        "internal-private-package-distribution",
+        "internal-application-bundle-distribution",
+        "hermetic-ci-and-build-agents"
+      ]
+    },
+    "visualSuperiorityClaim": false,
+    "decisionBasis": [
+      "Hugeicons Pro is not installed or declared at the deadline",
+      "No verifiable written seats, vendoring, or internal-distribution authorization exists in accessible evidence",
+      "Phosphor 2.1.10 is locally pinned behind the supplier-free semantic adapter under MIT",
+      "The fallback avoids a private-registry dependency"
+    ]
+  },
+  "networkBoundary": {
+    "host": "npm.hugeicons.com",
+    "hugeiconsInstallAuthOrBuildCommandsRun": 0,
+    "observedCallsDuringThisDecision": 0,
+    "historicalPacketCaptureAvailable": false,
+    "claimBoundary": "Process observation for this decision only"
+  },
+  "canonicalCorpus": {
+    "roleCount": 40,
+    "categories": [
+      {
+        "id": "action",
+        "count": 6,
+        "roles": [
+          "action.add",
+          "action.edit",
+          "action.delete",
+          "action.save",
+          "action.search",
+          "action.filter"
+        ]
+      },
+      {
+        "id": "navigation",
+        "count": 5,
+        "roles": [
+          "navigation.home",
+          "navigation.back",
+          "navigation.forward",
+          "navigation.menu",
+          "navigation.more"
+        ]
+      },
+      {
+        "id": "status",
+        "count": 5,
+        "roles": [
+          "status.success",
+          "status.warning",
+          "status.error",
+          "status.loading",
+          "status.pending"
+        ]
+      },
+      {
+        "id": "communication",
+        "count": 4,
+        "roles": [
+          "communication.email",
+          "communication.message",
+          "communication.notification",
+          "communication.send"
+        ]
+      },
+      {
+        "id": "authentication",
+        "count": 4,
+        "roles": [
+          "access.login",
+          "auth.password",
+          "auth.passkey",
+          "auth.sso"
+        ]
+      },
+      {
+        "id": "data",
+        "count": 5,
+        "roles": [
+          "data.chart",
+          "data.table",
+          "data.database",
+          "data.report",
+          "data.trend"
+        ]
+      },
+      {
+        "id": "ai",
+        "count": 5,
+        "roles": [
+          "ai.assistant",
+          "ai.agent",
+          "ai.tool",
+          "ai.guardrail",
+          "ai.recommendation"
+        ]
+      },
+      {
+        "id": "bithire",
+        "count": 6,
+        "roles": [
+          "bithire.candidate",
+          "bithire.interview",
+          "bithire.pipeline",
+          "bithire.evidence",
+          "bithire.job",
+          "bithire.offer"
+        ]
+      }
+    ]
+  },
+  "requiredMatrix": {
+    "sizesPx": [
+      12,
+      16,
+      20,
+      24
+    ],
+    "engines": [
+      "classic",
+      "modern",
+      "rustic"
+    ],
+    "colorSchemes": [
+      "light",
+      "dark"
+    ],
+    "formFactors": [
+      "mobile"
+    ],
+    "brandContexts": [
+      {
+        "id": "bithire",
+        "label": "BitHire"
+      },
+      {
+        "id": "the-management",
+        "label": "The Management"
+      }
+    ],
+    "requiredRoleCells": 1920,
+    "recordedSightedResults": 0,
+    "status": "pending-capture-and-human-review"
+  },
+  "evidence": {
+    "proven": [
+      {
+        "id": "phosphor-package-license",
+        "kind": "local-package-inspection",
+        "result": "@phosphor-icons/react 2.1.10 identifies MIT",
+        "paths": [
+          "packages/core/package.json",
+          "pnpm-lock.yaml"
+        ]
+      },
+      {
+        "id": "offline-adapter",
+        "kind": "source-inspection",
+        "result": "Pinned local SSR adapter with exact module and export pairs",
+        "paths": [
+          "packages/core/src/graphics/icons/foundation/semantic/adapters/phosphor-2.1.10.json"
+        ]
+      },
+      {
+        "id": "canonical-corpus-membership",
+        "kind": "deterministic-static-check",
+        "result": "40/40 unique roles exist exactly once in the corpus and adapter",
+        "paths": [
+          "packages/core/src/graphics/icons/foundation/semantic/corpus/manifest.json",
+          "packages/core/src/graphics/icons/foundation/semantic/adapters/phosphor-2.1.10.json"
+        ]
+      },
+      {
+        "id": "cra16-bounded-canary",
+        "kind": "inherited-certification",
+        "result": "33/33 DS semantic and mark SSR checks, 8/8 generator adversarial checks, deterministic 263-role generation, and 21/21 BitHire architecture checks",
+        "paths": [
+          "test-artifacts/craft/cra-16/certification.json"
+        ]
+      },
+      {
+        "id": "hugeicons-deadline-eligibility",
+        "kind": "workspace-manifest-lock-install-and-evidence-scan",
+        "result": "No installed or declared Hugeicons Pro package and no verifiable written rights artifact"
+      },
+      {
+        "id": "hugeicons-network-boundary",
+        "kind": "decision-process-observation",
+        "result": "0 install/auth/build commands and 0 observed npm.hugeicons.com calls during this decision"
+      }
+    ],
+    "pending": [
+      "1920-cell capture atlas and sighted review",
+      "12/16/20/24px optical quality and distinctness",
+      "classic/modern/rustic, light/dark, mobile, BitHire/The Management visual results",
+      "RTL and forced-colors matrix",
+      "complete RSC and hydration matrix",
+      "four-facade accessible renderer and asset-class separation certification",
+      "measured one-icon bundle, per-entry retention, and tree-shaking",
+      "comparative Hugeicons visual results, intentionally unavailable while the candidate is unlicensed and uninstalled"
+    ]
+  },
+  "rollback": {
+    "safeSupplier": "@phosphor-icons/react@2.1.10",
+    "retainCompatibilityAliasesForOneMinor": true,
+    "certifiedProducerFallback": {
+      "commit": "d609b519b33ecae53eaa7f67c0dbfea5cdc3a6d2",
+      "package": "@rottay/design-system@2.19.28"
+    },
+    "rules": [
+      "Disable a supplier or asset-class adapter independently",
+      "Do not change public semantic IDs during rollback",
+      "Do not conflate Icon, BrandMark, CloudServiceMark, and FeaturePictogram",
+      "Do not add a Hugeicons private-registry dependency as rollback"
+    ]
+  },
+  "reopenHugeiconsDecision": {
+    "mode": "all-required",
+    "criteria": [
+      "Written verifiable authorization covers seats, package/source access, vendoring or approved mirroring, internal distribution, and hermetic CI/build agents",
+      "A version-pinned package installs and builds offline with zero npm.hugeicons.com calls and no public supplier leakage",
+      "The same exact 40-role matrix is captured and sighted for both candidates",
+      "SSR, RSC, hydration, accessibility, provenance, tree-shaking, and measured bundle evidence meets or exceeds the Phosphor boundary",
+      "The owner explicitly accepts the license, visual, and migration tradeoff"
+    ]
+  },
+  "claimBoundaries": {
+    "supplierDecisionRecorded": true,
+    "visualMatrixComplete": false,
+    "fourFacadeFamilyComplete": false,
+    "workOrderComplete": false,
+    "dsImp090Complete": false,
+    "dsImp091Complete": false
+  }
+}
