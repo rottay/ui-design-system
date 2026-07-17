@@ -463,6 +463,7 @@
         "Switch",
         "SystemCssVariablesBridge",
         "TAGINPUT_DEFAULTS",
+        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
@@ -2444,6 +2445,7 @@
         "StepperStep",
         "SurfaceErrorBoundary",
         "TAGINPUT_DEFAULTS",
+        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
@@ -2743,6 +2745,7 @@
     "./server": {
       "exports": [
         "DEFAULT_TENANT_SLUG",
+        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
@@ -2779,6 +2782,7 @@
       "symbols": {},
       "supplierFreeExports": [
         "DEFAULT_TENANT_SLUG",
+        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
