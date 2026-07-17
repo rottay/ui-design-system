@@ -5,7 +5,7 @@ import { InfoIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Info";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.info: Indicate non-critical informational context. */
-export const StatusInfoIcon = createSemanticIcon(SsrGlyph, {
+export const StatusInfoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.info",
   componentName: "StatusInfoIcon",
   defaultRole: "status",

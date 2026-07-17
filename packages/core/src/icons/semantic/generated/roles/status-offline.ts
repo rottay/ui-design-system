@@ -5,7 +5,7 @@ import { WifiSlashIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/WifiSl
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.offline: Indicate that network connectivity is unavailable. */
-export const StatusOfflineIcon = createSemanticIcon(SsrGlyph, {
+export const StatusOfflineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.offline",
   componentName: "StatusOfflineIcon",
   defaultRole: "status",

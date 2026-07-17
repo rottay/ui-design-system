@@ -5,7 +5,7 @@ import { XCircleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/XCircle"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.error: Indicate failure or an invalid condition. */
-export const StatusErrorIcon = createSemanticIcon(SsrGlyph, {
+export const StatusErrorIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.error",
   componentName: "StatusErrorIcon",
   defaultRole: "status",

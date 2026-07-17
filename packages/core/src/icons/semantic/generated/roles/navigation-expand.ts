@@ -5,7 +5,7 @@ import { ArrowsOutSimpleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.expand: Expand or enlarge the current region or surface. */
-export const NavigationExpandIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationExpandIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.expand",
   componentName: "NavigationExpandIcon",
   defaultRole: "navigation",

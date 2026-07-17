@@ -5,7 +5,7 @@ import { SparkleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Sparkle"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** ai.sparkles: Mark AI-enhanced content or capability. */
-export const AiSparklesIcon = createSemanticIcon(SsrGlyph, {
+export const AiSparklesIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.sparkles",
   componentName: "AiSparklesIcon",
   defaultRole: "feature",

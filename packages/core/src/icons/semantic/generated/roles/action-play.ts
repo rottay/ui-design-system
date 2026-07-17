@@ -5,7 +5,7 @@ import { PlayIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Play";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.play: Begin or resume media or a runnable process. */
-export const ActionPlayIcon = createSemanticIcon(SsrGlyph, {
+export const ActionPlayIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.play",
   componentName: "ActionPlayIcon",
   defaultRole: "control",

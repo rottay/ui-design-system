@@ -5,7 +5,7 @@ import { NetworkIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Network"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** connectivity.network: Represent a connected network topology. */
-export const ConnectivityNetworkIcon = createSemanticIcon(SsrGlyph, {
+export const ConnectivityNetworkIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "connectivity.network",
   componentName: "ConnectivityNetworkIcon",
   defaultRole: "feature",

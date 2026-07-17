@@ -5,7 +5,7 @@ import { PaperPlaneTiltIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/P
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** communication.send: Send a message or payload to its intended recipient. */
-export const CommunicationSendIcon = createSemanticIcon(SsrGlyph, {
+export const CommunicationSendIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.send",
   componentName: "CommunicationSendIcon",
   defaultRole: "control",

@@ -5,7 +5,7 @@ import { ArrowsClockwiseIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.refresh: Reload or synchronize the current view. */
-export const ActionRefreshIcon = createSemanticIcon(SsrGlyph, {
+export const ActionRefreshIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.refresh",
   componentName: "ActionRefreshIcon",
   defaultRole: "control",

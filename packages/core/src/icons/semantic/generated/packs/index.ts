@@ -2,3 +2,6 @@
 
 export * from './foundation';
 export * from './bithire';
+export * from './identity';
+export * from './intelligence';
+export * from './operations';

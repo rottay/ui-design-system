@@ -5,7 +5,7 @@ import { KanbanIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Kanban";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** bithire.pipeline: Represent the BitHire recruiting pipeline. */
-export const BithirePipelineIcon = createSemanticIcon(SsrGlyph, {
+export const BithirePipelineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "bithire.pipeline",
   componentName: "BithirePipelineIcon",
   defaultRole: "feature",

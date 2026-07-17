@@ -5,7 +5,7 @@ import { EyeIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Eye";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.reveal: Expose content or a value that is currently hidden. */
-export const ActionRevealIcon = createSemanticIcon(SsrGlyph, {
+export const ActionRevealIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.reveal",
   componentName: "ActionRevealIcon",
   defaultRole: "control",

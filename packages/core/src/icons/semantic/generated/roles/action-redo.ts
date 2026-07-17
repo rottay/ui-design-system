@@ -5,7 +5,7 @@ import { ArrowUUpRightIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Ar
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.redo: Reapply the most recently undone change. */
-export const ActionRedoIcon = createSemanticIcon(SsrGlyph, {
+export const ActionRedoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.redo",
   componentName: "ActionRedoIcon",
   defaultRole: "control",

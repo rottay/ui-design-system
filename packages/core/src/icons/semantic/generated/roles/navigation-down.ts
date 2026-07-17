@@ -5,7 +5,7 @@ import { ArrowDownIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/ArrowD
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.down: Navigate to a spatially lower destination or level. */
-export const NavigationDownIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationDownIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.down",
   componentName: "NavigationDownIcon",
   defaultRole: "navigation",

@@ -5,7 +5,7 @@ import { PencilSimpleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Pen
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.edit: Modify an existing item. */
-export const ActionEditIcon = createSemanticIcon(SsrGlyph, {
+export const ActionEditIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.edit",
   componentName: "ActionEditIcon",
   defaultRole: "control",

@@ -5,7 +5,7 @@ import { ImageIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Image";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** content.image: Represent still-image content. */
-export const ContentImageIcon = createSemanticIcon(SsrGlyph, {
+export const ContentImageIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.image",
   componentName: "ContentImageIcon",
   defaultRole: "feature",

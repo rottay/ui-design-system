@@ -5,7 +5,7 @@ import { CpuIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Cpu";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** ai.compute: Represent AI or model computation and inference capacity. */
-export const AiComputeIcon = createSemanticIcon(SsrGlyph, {
+export const AiComputeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.compute",
   componentName: "AiComputeIcon",
   defaultRole: "feature",

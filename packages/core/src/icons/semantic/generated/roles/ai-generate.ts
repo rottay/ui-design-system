@@ -5,7 +5,7 @@ import { MagicWandIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/MagicW
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** ai.generate: Invoke or represent AI-generated output. */
-export const AiGenerateIcon = createSemanticIcon(SsrGlyph, {
+export const AiGenerateIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.generate",
   componentName: "AiGenerateIcon",
   defaultRole: "feature",

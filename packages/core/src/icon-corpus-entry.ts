@@ -11,6 +11,9 @@ export {
   GENERATED_ICON_CORPUS_VERSION,
   GENERATED_ICON_METADATA,
   GENERATED_ICON_NAMES,
+  IDENTITY_ICON_NAMES,
+  INTELLIGENCE_ICON_NAMES,
+  OPERATIONS_ICON_NAMES,
 } from './icons/semantic/generated/corpus';
 export type {
   BithireIconName,
@@ -19,4 +22,7 @@ export type {
   GeneratedIconName,
   GeneratedIconPack,
   GeneratedIconStatus,
+  IdentityIconName,
+  IntelligenceIconName,
+  OperationsIconName,
 } from './icons/semantic/generated/corpus';

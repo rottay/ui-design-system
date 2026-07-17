@@ -5,7 +5,7 @@ import { FloppyDiskIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Flopp
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.save: Persist the current changes. */
-export const ActionSaveIcon = createSemanticIcon(SsrGlyph, {
+export const ActionSaveIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.save",
   componentName: "ActionSaveIcon",
   defaultRole: "control",

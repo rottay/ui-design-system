@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.search: Find content using a query. */
-export const ActionSearchIcon = createSemanticIcon(SsrGlyph, {
+export const ActionSearchIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.search",
   componentName: "ActionSearchIcon",
   defaultRole: "control",

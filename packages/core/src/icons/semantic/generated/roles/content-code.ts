@@ -5,7 +5,7 @@ import { FileCodeIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/FileCod
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** content.code: Represent source-code or machine-readable code content. */
-export const ContentCodeIcon = createSemanticIcon(SsrGlyph, {
+export const ContentCodeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.code",
   componentName: "ContentCodeIcon",
   defaultRole: "feature",

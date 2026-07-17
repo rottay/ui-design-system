@@ -5,7 +5,7 @@ import { ProhibitIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Prohibi
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.blocked: Indicate progress prevented by policy, dependency, or prerequisite. */
-export const StatusBlockedIcon = createSemanticIcon(SsrGlyph, {
+export const StatusBlockedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.blocked",
   componentName: "StatusBlockedIcon",
   defaultRole: "status",

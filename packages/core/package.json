@@ -45,6 +45,21 @@
       "import": "./dist/icons-bithire.js",
       "require": "./dist/icons-bithire.cjs"
     },
+    "./icons/identity": {
+      "types": "./dist/icons-identity.d.ts",
+      "import": "./dist/icons-identity.js",
+      "require": "./dist/icons-identity.cjs"
+    },
+    "./icons/intelligence": {
+      "types": "./dist/icons-intelligence.d.ts",
+      "import": "./dist/icons-intelligence.js",
+      "require": "./dist/icons-intelligence.cjs"
+    },
+    "./icons/operations": {
+      "types": "./dist/icons-operations.d.ts",
+      "import": "./dist/icons-operations.js",
+      "require": "./dist/icons-operations.cjs"
+    },
     "./marks": {
       "types": "./dist/marks.d.ts",
       "import": "./dist/marks.js",
@@ -217,6 +232,9 @@
       "./icons/corpus": "icon-corpus-entry.ts",
       "./icons/foundation": "icon-foundation-entry.ts",
       "./icons/bithire": "icon-bithire-entry.ts",
+      "./icons/identity": "icon-identity-entry.ts",
+      "./icons/intelligence": "icon-intelligence-entry.ts",
+      "./icons/operations": "icon-operations-entry.ts",
       "./marks": "mark-entry.ts",
       "./pictograms": "pictogram-entry.ts",
       "./charts": "chart-entry.ts",

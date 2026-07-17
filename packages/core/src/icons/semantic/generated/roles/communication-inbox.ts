@@ -5,7 +5,7 @@ import { MailboxIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Mailbox"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** communication.inbox: Open or represent incoming messages. */
-export const CommunicationInboxIcon = createSemanticIcon(SsrGlyph, {
+export const CommunicationInboxIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.inbox",
   componentName: "CommunicationInboxIcon",
   defaultRole: "control",

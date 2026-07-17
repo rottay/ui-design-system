@@ -5,7 +5,7 @@ import { StopIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Stop";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.stop: End an active process without implying failure. */
-export const ActionStopIcon = createSemanticIcon(SsrGlyph, {
+export const ActionStopIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.stop",
   componentName: "ActionStopIcon",
   defaultRole: "control",

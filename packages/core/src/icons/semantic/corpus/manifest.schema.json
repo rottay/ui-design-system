@@ -8,28 +8,31 @@
   "properties": {
     "$schema": { "type": "string" },
     "schemaVersion": { "const": 1 },
-    "corpusVersion": { "type": "integer", "minimum": 1 },
+    "corpusVersion": { "const": 5 },
     "expectedCounts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["foundation", "bithire", "global"],
+      "required": ["foundation", "bithire", "identity", "intelligence", "operations", "global"],
       "properties": {
         "foundation": { "const": 120 },
         "bithire": { "const": 6 },
-        "global": { "const": 126 }
+        "identity": { "const": 45 },
+        "intelligence": { "const": 45 },
+        "operations": { "const": 45 },
+        "global": { "const": 261 }
       }
     },
     "entries": {
       "type": "array",
-      "minItems": 126,
-      "maxItems": 126,
+      "minItems": 261,
+      "maxItems": 261,
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": ["id", "pack", "domain", "intent", "defaultRole", "autoMirror", "status", "since", "componentName"],
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)+$" },
-          "pack": { "enum": ["foundation", "bithire"] },
+          "pack": { "enum": ["foundation", "bithire", "identity", "intelligence", "operations"] },
           "domain": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
           "intent": { "type": "string", "minLength": 1 },
           "defaultRole": { "enum": ["control", "navigation", "feature", "status", "illustration"] },

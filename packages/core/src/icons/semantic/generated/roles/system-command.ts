@@ -5,7 +5,7 @@ import { TerminalWindowIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/T
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** system.command: Represent a command-line or execution console. */
-export const SystemCommandIcon = createSemanticIcon(SsrGlyph, {
+export const SystemCommandIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.command",
   componentName: "SystemCommandIcon",
   defaultRole: "feature",

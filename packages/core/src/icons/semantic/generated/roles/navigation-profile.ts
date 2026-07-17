@@ -5,7 +5,7 @@ import { UserCircleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/UserC
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.profile: Navigate to the current person or account profile. */
-export const NavigationProfileIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationProfileIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.profile",
   componentName: "NavigationProfileIcon",
   defaultRole: "navigation",

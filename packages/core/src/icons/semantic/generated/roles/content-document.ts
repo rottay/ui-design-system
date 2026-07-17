@@ -5,7 +5,7 @@ import { FileTextIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/FileTex
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** content.document: Represent a readable text document. */
-export const ContentDocumentIcon = createSemanticIcon(SsrGlyph, {
+export const ContentDocumentIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.document",
   componentName: "ContentDocumentIcon",
   defaultRole: "feature",

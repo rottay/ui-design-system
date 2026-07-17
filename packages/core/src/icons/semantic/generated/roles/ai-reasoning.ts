@@ -5,7 +5,7 @@ import { BrainIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Brain";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** ai.reasoning: Represent AI reasoning or inference. */
-export const AiReasoningIcon = createSemanticIcon(SsrGlyph, {
+export const AiReasoningIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.reasoning",
   componentName: "AiReasoningIcon",
   defaultRole: "feature",

@@ -5,7 +5,7 @@ import { ListBulletsIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/List
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** layout.list: Display a collection as a linear list. */
-export const LayoutListIcon = createSemanticIcon(SsrGlyph, {
+export const LayoutListIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.list",
   componentName: "LayoutListIcon",
   defaultRole: "control",

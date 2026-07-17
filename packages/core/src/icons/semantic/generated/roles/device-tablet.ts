@@ -5,7 +5,7 @@ import { DeviceTabletIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Dev
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** device.tablet: Represent a tablet environment. */
-export const DeviceTabletIcon = createSemanticIcon(SsrGlyph, {
+export const DeviceTabletIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.tablet",
   componentName: "DeviceTabletIcon",
   defaultRole: "feature",

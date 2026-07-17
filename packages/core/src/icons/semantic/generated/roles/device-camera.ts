@@ -5,7 +5,7 @@ import { CameraIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Camera";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** device.camera: Represent an image or video capture device. */
-export const DeviceCameraIcon = createSemanticIcon(SsrGlyph, {
+export const DeviceCameraIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.camera",
   componentName: "DeviceCameraIcon",
   defaultRole: "feature",

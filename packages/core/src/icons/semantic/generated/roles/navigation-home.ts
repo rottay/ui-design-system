@@ -5,7 +5,7 @@ import { HouseIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/House";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.home: Navigate to the primary home destination. */
-export const NavigationHomeIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationHomeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.home",
   componentName: "NavigationHomeIcon",
   defaultRole: "navigation",

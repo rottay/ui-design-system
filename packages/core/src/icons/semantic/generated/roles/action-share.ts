@@ -5,7 +5,7 @@ import { ShareNetworkIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Sha
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.share: Share content with a destination or audience. */
-export const ActionShareIcon = createSemanticIcon(SsrGlyph, {
+export const ActionShareIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.share",
   componentName: "ActionShareIcon",
   defaultRole: "control",

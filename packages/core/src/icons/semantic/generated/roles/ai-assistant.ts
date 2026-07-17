@@ -5,7 +5,7 @@ import { RobotIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Robot";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** ai.assistant: Represent an AI assistant or agent. */
-export const AiAssistantIcon = createSemanticIcon(SsrGlyph, {
+export const AiAssistantIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.assistant",
   componentName: "AiAssistantIcon",
   defaultRole: "feature",

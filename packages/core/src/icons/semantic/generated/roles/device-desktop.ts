@@ -5,7 +5,7 @@ import { DesktopIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Desktop"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** device.desktop: Represent a desktop-computer environment. */
-export const DeviceDesktopIcon = createSemanticIcon(SsrGlyph, {
+export const DeviceDesktopIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.desktop",
   componentName: "DeviceDesktopIcon",
   defaultRole: "feature",

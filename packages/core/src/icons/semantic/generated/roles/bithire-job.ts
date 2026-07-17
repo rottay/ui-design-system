@@ -5,7 +5,7 @@ import { BriefcaseIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Briefc
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** bithire.job: Represent a BitHire job or requisition. */
-export const BithireJobIcon = createSemanticIcon(SsrGlyph, {
+export const BithireJobIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "bithire.job",
   componentName: "BithireJobIcon",
   defaultRole: "feature",

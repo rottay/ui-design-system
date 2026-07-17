@@ -5,7 +5,7 @@ import { PaperclipIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Paperc
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.attach: Attach a file or resource. */
-export const ActionAttachIcon = createSemanticIcon(SsrGlyph, {
+export const ActionAttachIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.attach",
   componentName: "ActionAttachIcon",
   defaultRole: "control",

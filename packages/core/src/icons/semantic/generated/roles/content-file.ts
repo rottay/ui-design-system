@@ -5,7 +5,7 @@ import { FileIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/File";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** content.file: Represent a generic file when its subtype is unknown. */
-export const ContentFileIcon = createSemanticIcon(SsrGlyph, {
+export const ContentFileIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.file",
   componentName: "ContentFileIcon",
   defaultRole: "feature",

@@ -5,7 +5,7 @@ import { MagnifyingGlassPlusIcon as SsrGlyph } from "@phosphor-icons/react/dist/
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.zoom-in: Increase the magnification of the current view. */
-export const ActionZoomInIcon = createSemanticIcon(SsrGlyph, {
+export const ActionZoomInIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.zoom-in",
   componentName: "ActionZoomInIcon",
   defaultRole: "control",

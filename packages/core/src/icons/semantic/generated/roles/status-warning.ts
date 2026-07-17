@@ -5,7 +5,7 @@ import { WarningIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Warning"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.warning: Indicate a condition that may require attention. */
-export const StatusWarningIcon = createSemanticIcon(SsrGlyph, {
+export const StatusWarningIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.warning",
   componentName: "StatusWarningIcon",
   defaultRole: "status",

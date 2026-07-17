@@ -5,7 +5,7 @@ import { SealCheckIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/SealCh
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.verified: Indicate that a claim, identity, or artifact has been verified. */
-export const StatusVerifiedIcon = createSemanticIcon(SsrGlyph, {
+export const StatusVerifiedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.verified",
   componentName: "StatusVerifiedIcon",
   defaultRole: "status",

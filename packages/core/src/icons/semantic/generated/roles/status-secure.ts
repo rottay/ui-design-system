@@ -5,7 +5,7 @@ import { ShieldCheckIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Shie
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.secure: Indicate a protected or trusted security state. */
-export const StatusSecureIcon = createSemanticIcon(SsrGlyph, {
+export const StatusSecureIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.secure",
   componentName: "StatusSecureIcon",
   defaultRole: "status",

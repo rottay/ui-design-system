@@ -5,7 +5,7 @@ import { CopyIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Copy";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.copy: Copy selected content or a value to the clipboard. */
-export const ActionCopyIcon = createSemanticIcon(SsrGlyph, {
+export const ActionCopyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.copy",
   componentName: "ActionCopyIcon",
   defaultRole: "control",

@@ -5,7 +5,7 @@ import { QuestionIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Questio
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** feedback.help: Open contextual help or guidance. */
-export const FeedbackHelpIcon = createSemanticIcon(SsrGlyph, {
+export const FeedbackHelpIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "feedback.help",
   componentName: "FeedbackHelpIcon",
   defaultRole: "control",

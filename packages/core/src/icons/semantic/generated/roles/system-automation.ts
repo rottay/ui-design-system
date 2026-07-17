@@ -5,7 +5,7 @@ import { CircuitryIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Circui
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** system.automation: Represent rule-driven automated processing. */
-export const SystemAutomationIcon = createSemanticIcon(SsrGlyph, {
+export const SystemAutomationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.automation",
   componentName: "SystemAutomationIcon",
   defaultRole: "feature",

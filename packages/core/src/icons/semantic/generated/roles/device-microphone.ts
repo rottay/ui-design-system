@@ -5,7 +5,7 @@ import { MicrophoneIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Micro
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** device.microphone: Represent an audio-input device. */
-export const DeviceMicrophoneIcon = createSemanticIcon(SsrGlyph, {
+export const DeviceMicrophoneIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.microphone",
   componentName: "DeviceMicrophoneIcon",
   defaultRole: "feature",

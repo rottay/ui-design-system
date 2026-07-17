@@ -5,7 +5,7 @@ import { EyeSlashIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/EyeSlas
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.conceal: Hide content or a value that is currently visible. */
-export const ActionConcealIcon = createSemanticIcon(SsrGlyph, {
+export const ActionConcealIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.conceal",
   componentName: "ActionConcealIcon",
   defaultRole: "control",

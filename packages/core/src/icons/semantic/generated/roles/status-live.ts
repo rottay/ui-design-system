@@ -5,7 +5,7 @@ import { PulseIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Pulse";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.live: Indicate activity occurring now. */
-export const StatusLiveIcon = createSemanticIcon(SsrGlyph, {
+export const StatusLiveIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.live",
   componentName: "StatusLiveIcon",
   defaultRole: "status",

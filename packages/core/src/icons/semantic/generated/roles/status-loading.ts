@@ -5,7 +5,7 @@ import { SpinnerGapIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Spinn
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.loading: Indicate an operation awaiting completion. */
-export const StatusLoadingIcon = createSemanticIcon(SsrGlyph, {
+export const StatusLoadingIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.loading",
   componentName: "StatusLoadingIcon",
   defaultRole: "status",

@@ -14,8 +14,8 @@
     "rendering": { "const": "local-ssr" },
     "entries": {
       "type": "array",
-      "minItems": 126,
-      "maxItems": 126,
+      "minItems": 261,
+      "maxItems": 261,
       "items": {
         "type": "object",
         "additionalProperties": false,

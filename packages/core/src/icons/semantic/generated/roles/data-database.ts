@@ -5,7 +5,7 @@ import { DatabaseIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Databas
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.database: Represent a persisted structured data store. */
-export const DataDatabaseIcon = createSemanticIcon(SsrGlyph, {
+export const DataDatabaseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.database",
   componentName: "DataDatabaseIcon",
   defaultRole: "feature",

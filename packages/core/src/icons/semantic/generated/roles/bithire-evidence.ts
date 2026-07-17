@@ -5,7 +5,7 @@ import { FileMagnifyingGlassIcon as SsrGlyph } from "@phosphor-icons/react/dist/
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** bithire.evidence: Represent evidence supporting a candidate evaluation. */
-export const BithireEvidenceIcon = createSemanticIcon(SsrGlyph, {
+export const BithireEvidenceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "bithire.evidence",
   componentName: "BithireEvidenceIcon",
   defaultRole: "feature",

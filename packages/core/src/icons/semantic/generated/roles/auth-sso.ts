@@ -5,7 +5,7 @@ import { KeyIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Key";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** auth.sso: Represent a single-sign-on authentication path. */
-export const AuthSsoIcon = createSemanticIcon(SsrGlyph, {
+export const AuthSsoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "auth.sso",
   componentName: "AuthSsoIcon",
   defaultRole: "control",

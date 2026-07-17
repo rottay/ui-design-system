@@ -10,6 +10,9 @@ import {
   StatusSuccessIcon,
 } from '../../generated/packs/foundation';
 import { BithireIcon } from '../../generated/packs/bithire';
+import { IdentityIcon } from '../../generated/packs/identity';
+import { IntelligenceIcon } from '../../generated/packs/intelligence';
+import { OperationsIcon } from '../../generated/packs/operations';
 
 describe('generated semantic icon runtime', () => {
   it('server-renders named and decorative roles through the same explicit a11y contract', () => {
@@ -85,12 +88,21 @@ describe('generated semantic icon runtime', () => {
     expect(screen.getByTestId('direction')).toHaveAttribute('transform', 'scale(-1, 1)');
   });
 
-  it('renders through bounded foundation and BitHire dynamic components and rejects unknown names', () => {
+  it('renders through bounded dynamic pack components and rejects cross-pack names', () => {
     const foundation = renderToStaticMarkup(
       <FoundationIcon name="action.add" label="Add" />,
     );
     const bithire = renderToStaticMarkup(
       <BithireIcon name="bithire.candidate" label="Candidate" />,
+    );
+    const identity = renderToStaticMarkup(
+      <IdentityIcon name="security.alert" label="Security alert" />,
+    );
+    const intelligence = renderToStaticMarkup(
+      <IntelligenceIcon name="ai.agent" label="AI agent" />,
+    );
+    const operations = renderToStaticMarkup(
+      <OperationsIcon name="workflow.branch" label="Workflow branch" />,
     );
     const unknown = renderToStaticMarkup(
       React.createElement(FoundationIcon, { name: 'bithire.candidate', decorative: true }),
@@ -98,6 +110,9 @@ describe('generated semantic icon runtime', () => {
 
     expect(foundation).toContain('data-icon-name="action.add"');
     expect(bithire).toContain('data-icon-name="bithire.candidate"');
+    expect(identity).toContain('data-icon-name="security.alert"');
+    expect(intelligence).toContain('data-icon-name="ai.agent"');
+    expect(operations).toContain('data-icon-name="workflow.branch"');
     expect(unknown).toBe('');
   });
 });

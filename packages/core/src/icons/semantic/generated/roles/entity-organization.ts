@@ -5,7 +5,7 @@ import { BuildingsIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Buildi
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** entity.organization: Represent an organization or company. */
-export const EntityOrganizationIcon = createSemanticIcon(SsrGlyph, {
+export const EntityOrganizationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.organization",
   componentName: "EntityOrganizationIcon",
   defaultRole: "feature",

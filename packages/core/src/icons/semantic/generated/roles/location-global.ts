@@ -5,7 +5,7 @@ import { GlobeIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Globe";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** location.global: Represent global or worldwide scope. */
-export const LocationGlobalIcon = createSemanticIcon(SsrGlyph, {
+export const LocationGlobalIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "location.global",
   componentName: "LocationGlobalIcon",
   defaultRole: "feature",

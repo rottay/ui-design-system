@@ -5,7 +5,7 @@ import { ChartBarIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/ChartBa
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.chart: Represent a generic chart when its subtype is unknown. */
-export const DataChartIcon = createSemanticIcon(SsrGlyph, {
+export const DataChartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.chart",
   componentName: "DataChartIcon",
   defaultRole: "feature",

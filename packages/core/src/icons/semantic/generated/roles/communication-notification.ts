@@ -5,7 +5,7 @@ import { BellIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Bell";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** communication.notification: Represent a user-facing notification or alert. */
-export const CommunicationNotificationIcon = createSemanticIcon(SsrGlyph, {
+export const CommunicationNotificationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.notification",
   componentName: "CommunicationNotificationIcon",
   defaultRole: "control",

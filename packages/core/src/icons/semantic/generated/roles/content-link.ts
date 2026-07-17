@@ -5,7 +5,7 @@ import { LinkIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Link";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** content.link: Represent a hyperlink or linked resource. */
-export const ContentLinkIcon = createSemanticIcon(SsrGlyph, {
+export const ContentLinkIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.link",
   componentName: "ContentLinkIcon",
   defaultRole: "feature",

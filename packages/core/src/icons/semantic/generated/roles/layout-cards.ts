@@ -5,7 +5,7 @@ import { CardsIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Cards";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** layout.cards: Display a collection as cards. */
-export const LayoutCardsIcon = createSemanticIcon(SsrGlyph, {
+export const LayoutCardsIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.cards",
   componentName: "LayoutCardsIcon",
   defaultRole: "control",

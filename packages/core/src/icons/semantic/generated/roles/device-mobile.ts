@@ -5,7 +5,7 @@ import { DeviceMobileIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Dev
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** device.mobile: Represent a mobile-phone environment. */
-export const DeviceMobileIcon = createSemanticIcon(SsrGlyph, {
+export const DeviceMobileIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "device.mobile",
   componentName: "DeviceMobileIcon",
   defaultRole: "feature",

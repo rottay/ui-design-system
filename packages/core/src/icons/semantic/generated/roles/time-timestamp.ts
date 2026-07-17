@@ -5,7 +5,7 @@ import { ClockIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Clock";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** time.timestamp: Represent a recorded point in time. */
-export const TimeTimestampIcon = createSemanticIcon(SsrGlyph, {
+export const TimeTimestampIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.timestamp",
   componentName: "TimeTimestampIcon",
   defaultRole: "feature",

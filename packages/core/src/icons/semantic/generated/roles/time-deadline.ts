@@ -5,7 +5,7 @@ import { ClockCountdownIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/C
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** time.deadline: Represent a due time or deadline. */
-export const TimeDeadlineIcon = createSemanticIcon(SsrGlyph, {
+export const TimeDeadlineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.deadline",
   componentName: "TimeDeadlineIcon",
   defaultRole: "feature",

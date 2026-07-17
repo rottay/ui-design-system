@@ -5,7 +5,7 @@ import { CalendarDotIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Cale
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.scheduled: Indicate assignment to a future date or time. */
-export const StatusScheduledIcon = createSemanticIcon(SsrGlyph, {
+export const StatusScheduledIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.scheduled",
   componentName: "StatusScheduledIcon",
   defaultRole: "status",

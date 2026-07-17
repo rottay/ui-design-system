@@ -5,7 +5,7 @@ import { LockIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Lock";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** auth.password: Represent password-based authentication. */
-export const AuthPasswordIcon = createSemanticIcon(SsrGlyph, {
+export const AuthPasswordIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "auth.password",
   componentName: "AuthPasswordIcon",
   defaultRole: "control",

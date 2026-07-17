@@ -5,7 +5,7 @@ import { PresentationChartIcon as SsrGlyph } from "@phosphor-icons/react/dist/ss
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.report: Represent an analytical report or presentation. */
-export const DataReportIcon = createSemanticIcon(SsrGlyph, {
+export const DataReportIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.report",
   componentName: "DataReportIcon",
   defaultRole: "feature",

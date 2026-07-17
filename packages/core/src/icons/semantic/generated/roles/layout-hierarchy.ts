@@ -5,7 +5,7 @@ import { TreeStructureIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Tr
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** layout.hierarchy: Represent a parent-child hierarchy. */
-export const LayoutHierarchyIcon = createSemanticIcon(SsrGlyph, {
+export const LayoutHierarchyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.hierarchy",
   componentName: "LayoutHierarchyIcon",
   defaultRole: "control",

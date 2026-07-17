@@ -5,7 +5,7 @@ import { GridFourIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/GridFou
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** layout.grid: Display a collection using a grid. */
-export const LayoutGridIcon = createSemanticIcon(SsrGlyph, {
+export const LayoutGridIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.grid",
   componentName: "LayoutGridIcon",
   defaultRole: "control",

@@ -5,7 +5,7 @@ import { DownloadSimpleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/D
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.download: Download content to the local device. */
-export const ActionDownloadIcon = createSemanticIcon(SsrGlyph, {
+export const ActionDownloadIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.download",
   componentName: "ActionDownloadIcon",
   defaultRole: "control",

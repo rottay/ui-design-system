@@ -5,7 +5,7 @@ import { XIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/X";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.close: Dismiss the current surface without deleting its subject. */
-export const ActionCloseIcon = createSemanticIcon(SsrGlyph, {
+export const ActionCloseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.close",
   componentName: "ActionCloseIcon",
   defaultRole: "control",

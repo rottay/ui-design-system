@@ -5,7 +5,7 @@ import { NotePencilIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/NoteP
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.draft: Indicate saved content awaiting publication or finalization. */
-export const StatusDraftIcon = createSemanticIcon(SsrGlyph, {
+export const StatusDraftIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.draft",
   componentName: "StatusDraftIcon",
   defaultRole: "status",

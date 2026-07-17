@@ -128,7 +128,7 @@ export type FoundationIconProps = SemanticIconProps & {
   readonly name: FoundationIconName;
 };
 
-export const FOUNDATION_ICON_COMPONENTS = Object.freeze({
+export const FOUNDATION_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
   "action.add": ActionAddIcon,
   "action.edit": ActionEditIcon,
   "action.delete": ActionDeleteIcon,
@@ -251,24 +251,20 @@ export const FOUNDATION_ICON_COMPONENTS = Object.freeze({
   "entity.tag": EntityTagIcon,
 } as const satisfies Record<FoundationIconName, SemanticIconComponent>);
 
-const FOUNDATION_ICON_NAME_SET: ReadonlySet<string> = new Set(Object.keys(FOUNDATION_ICON_COMPONENTS));
-
 export function isFoundationIconName(value: unknown): value is FoundationIconName {
-  return typeof value === 'string' && FOUNDATION_ICON_NAME_SET.has(value);
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(FOUNDATION_ICON_COMPONENTS, value);
 }
 
 export function resolveFoundationIcon(value: unknown): SemanticIconComponent | undefined {
   return isFoundationIconName(value) ? FOUNDATION_ICON_COMPONENTS[value] : undefined;
 }
 
-export const FoundationIcon = forwardRef<SVGSVGElement, FoundationIconProps>(
+export const FoundationIcon = /* @__PURE__ */ forwardRef<SVGSVGElement, FoundationIconProps>(
   function FoundationIcon({ name, ...props }, ref) {
     const Component = resolveFoundationIcon(name);
     return Component ? <Component ref={ref} {...props} /> : null;
   },
 );
-
-FoundationIcon.displayName = 'FoundationIcon';
 
 export {
   ActionAddIcon,

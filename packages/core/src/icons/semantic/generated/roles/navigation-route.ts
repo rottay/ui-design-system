@@ -5,7 +5,7 @@ import { CompassIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Compass"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.route: Navigate through or discover a route or destination. */
-export const NavigationRouteIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationRouteIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.route",
   componentName: "NavigationRouteIcon",
   defaultRole: "navigation",

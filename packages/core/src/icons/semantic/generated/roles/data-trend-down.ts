@@ -5,7 +5,7 @@ import { TrendDownIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/TrendD
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.trend-down: Indicate a decreasing data trend. */
-export const DataTrendDownIcon = createSemanticIcon(SsrGlyph, {
+export const DataTrendDownIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.trend-down",
   componentName: "DataTrendDownIcon",
   defaultRole: "feature",

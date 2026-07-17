@@ -5,7 +5,7 @@ import { FunnelIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Funnel";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.filter: Constrain a collection using criteria. */
-export const ActionFilterIcon = createSemanticIcon(SsrGlyph, {
+export const ActionFilterIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.filter",
   componentName: "ActionFilterIcon",
   defaultRole: "control",

@@ -5,7 +5,7 @@ import { UploadSimpleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Upl
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.upload: Upload local content to the current service. */
-export const ActionUploadIcon = createSemanticIcon(SsrGlyph, {
+export const ActionUploadIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.upload",
   componentName: "ActionUploadIcon",
   defaultRole: "control",

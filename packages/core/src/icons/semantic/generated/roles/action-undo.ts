@@ -5,7 +5,7 @@ import { ArrowUUpLeftIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Arr
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.undo: Reverse the most recent reversible change. */
-export const ActionUndoIcon = createSemanticIcon(SsrGlyph, {
+export const ActionUndoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.undo",
   componentName: "ActionUndoIcon",
   defaultRole: "control",

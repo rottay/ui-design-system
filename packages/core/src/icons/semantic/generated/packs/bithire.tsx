@@ -14,7 +14,7 @@ export type BithireIconProps = SemanticIconProps & {
   readonly name: BithireIconName;
 };
 
-export const BITHIRE_ICON_COMPONENTS = Object.freeze({
+export const BITHIRE_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
   "bithire.candidate": BithireCandidateIcon,
   "bithire.interview": BithireInterviewIcon,
   "bithire.pipeline": BithirePipelineIcon,
@@ -23,24 +23,20 @@ export const BITHIRE_ICON_COMPONENTS = Object.freeze({
   "bithire.offer": BithireOfferIcon,
 } as const satisfies Record<BithireIconName, SemanticIconComponent>);
 
-const BITHIRE_ICON_NAME_SET: ReadonlySet<string> = new Set(Object.keys(BITHIRE_ICON_COMPONENTS));
-
 export function isBithireIconName(value: unknown): value is BithireIconName {
-  return typeof value === 'string' && BITHIRE_ICON_NAME_SET.has(value);
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(BITHIRE_ICON_COMPONENTS, value);
 }
 
 export function resolveBithireIcon(value: unknown): SemanticIconComponent | undefined {
   return isBithireIconName(value) ? BITHIRE_ICON_COMPONENTS[value] : undefined;
 }
 
-export const BithireIcon = forwardRef<SVGSVGElement, BithireIconProps>(
+export const BithireIcon = /* @__PURE__ */ forwardRef<SVGSVGElement, BithireIconProps>(
   function BithireIcon({ name, ...props }, ref) {
     const Component = resolveBithireIcon(name);
     return Component ? <Component ref={ref} {...props} /> : null;
   },
 );
-
-BithireIcon.displayName = 'BithireIcon';
 
 export {
   BithireCandidateIcon,

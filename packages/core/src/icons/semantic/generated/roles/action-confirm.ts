@@ -5,7 +5,7 @@ import { CheckIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Check";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.confirm: Accept or commit the current choice. */
-export const ActionConfirmIcon = createSemanticIcon(SsrGlyph, {
+export const ActionConfirmIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.confirm",
   componentName: "ActionConfirmIcon",
   defaultRole: "control",

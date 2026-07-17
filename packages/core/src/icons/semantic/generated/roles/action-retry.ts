@@ -5,7 +5,7 @@ import { ArrowClockwiseIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/A
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.retry: Run a failed operation again. */
-export const ActionRetryIcon = createSemanticIcon(SsrGlyph, {
+export const ActionRetryIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.retry",
   componentName: "ActionRetryIcon",
   defaultRole: "control",

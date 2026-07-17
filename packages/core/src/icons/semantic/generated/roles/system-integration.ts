@@ -5,7 +5,7 @@ import { PlugsConnectedIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/P
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** system.integration: Represent a connected external or internal integration. */
-export const SystemIntegrationIcon = createSemanticIcon(SsrGlyph, {
+export const SystemIntegrationIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.integration",
   componentName: "SystemIntegrationIcon",
   defaultRole: "feature",

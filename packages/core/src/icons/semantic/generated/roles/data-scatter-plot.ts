@@ -5,7 +5,7 @@ import { ChartScatterIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Cha
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.scatter-plot: Represent a scatter or correlation visualization. */
-export const DataScatterPlotIcon = createSemanticIcon(SsrGlyph, {
+export const DataScatterPlotIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.scatter-plot",
   componentName: "DataScatterPlotIcon",
   defaultRole: "feature",

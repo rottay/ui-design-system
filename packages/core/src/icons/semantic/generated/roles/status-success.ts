@@ -5,7 +5,7 @@ import { CheckCircleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Chec
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.success: Indicate successful completion. */
-export const StatusSuccessIcon = createSemanticIcon(SsrGlyph, {
+export const StatusSuccessIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.success",
   componentName: "StatusSuccessIcon",
   defaultRole: "status",

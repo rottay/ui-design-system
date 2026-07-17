@@ -5,7 +5,7 @@ import { WaveformIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Wavefor
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** communication.voice: Represent voice or waveform-based communication. */
-export const CommunicationVoiceIcon = createSemanticIcon(SsrGlyph, {
+export const CommunicationVoiceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.voice",
   componentName: "CommunicationVoiceIcon",
   defaultRole: "control",

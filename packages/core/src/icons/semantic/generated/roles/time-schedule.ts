@@ -5,7 +5,7 @@ import { CalendarDotsIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Cal
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** time.schedule: Represent a schedule or set of dated appointments. */
-export const TimeScheduleIcon = createSemanticIcon(SsrGlyph, {
+export const TimeScheduleIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "time.schedule",
   componentName: "TimeScheduleIcon",
   defaultRole: "feature",

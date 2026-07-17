@@ -5,7 +5,7 @@ import { HourglassMediumIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.pending: Indicate an accepted operation that has not completed. */
-export const StatusPendingIcon = createSemanticIcon(SsrGlyph, {
+export const StatusPendingIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.pending",
   componentName: "StatusPendingIcon",
   defaultRole: "status",

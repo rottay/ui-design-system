@@ -5,7 +5,7 @@ import { TableIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Table";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.table: Represent tabular data. */
-export const DataTableIcon = createSemanticIcon(SsrGlyph, {
+export const DataTableIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.table",
   componentName: "DataTableIcon",
   defaultRole: "feature",

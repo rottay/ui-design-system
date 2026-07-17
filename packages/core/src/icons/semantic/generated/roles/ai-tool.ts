@@ -5,7 +5,7 @@ import { WrenchIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Wrench";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** ai.tool: Represent a tool available to an AI system. */
-export const AiToolIcon = createSemanticIcon(SsrGlyph, {
+export const AiToolIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "ai.tool",
   componentName: "AiToolIcon",
   defaultRole: "feature",

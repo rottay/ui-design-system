@@ -5,7 +5,7 @@ import { PauseCircleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Paus
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.paused: Indicate a suspended and resumable state. */
-export const StatusPausedIcon = createSemanticIcon(SsrGlyph, {
+export const StatusPausedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.paused",
   componentName: "StatusPausedIcon",
   defaultRole: "status",

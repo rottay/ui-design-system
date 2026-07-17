@@ -5,7 +5,7 @@ import { TabsIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Tabs";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** layout.tabs: Present sibling content regions as tabs. */
-export const LayoutTabsIcon = createSemanticIcon(SsrGlyph, {
+export const LayoutTabsIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.tabs",
   componentName: "LayoutTabsIcon",
   defaultRole: "control",

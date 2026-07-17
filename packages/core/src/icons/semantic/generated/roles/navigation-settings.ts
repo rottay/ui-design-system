@@ -5,7 +5,7 @@ import { GearIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Gear";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.settings: Navigate to settings or configuration. */
-export const NavigationSettingsIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationSettingsIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.settings",
   componentName: "NavigationSettingsIcon",
   defaultRole: "navigation",

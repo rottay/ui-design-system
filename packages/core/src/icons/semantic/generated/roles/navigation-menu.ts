@@ -5,7 +5,7 @@ import { ListIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/List";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.menu: Reveal the application navigation menu. */
-export const NavigationMenuIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationMenuIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.menu",
   componentName: "NavigationMenuIcon",
   defaultRole: "navigation",

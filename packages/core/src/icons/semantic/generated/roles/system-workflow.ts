@@ -5,7 +5,7 @@ import { FlowArrowIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/FlowAr
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** system.workflow: Represent an orchestrated sequence of steps. */
-export const SystemWorkflowIcon = createSemanticIcon(SsrGlyph, {
+export const SystemWorkflowIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "system.workflow",
   componentName: "SystemWorkflowIcon",
   defaultRole: "feature",

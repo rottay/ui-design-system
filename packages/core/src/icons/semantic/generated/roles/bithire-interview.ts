@@ -5,7 +5,7 @@ import { CalendarCheckIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Ca
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** bithire.interview: Represent a BitHire interview. */
-export const BithireInterviewIcon = createSemanticIcon(SsrGlyph, {
+export const BithireInterviewIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "bithire.interview",
   componentName: "BithireInterviewIcon",
   defaultRole: "feature",

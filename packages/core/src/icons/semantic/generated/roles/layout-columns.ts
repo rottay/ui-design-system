@@ -5,7 +5,7 @@ import { ColumnsIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Columns"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** layout.columns: Arrange content regions in columns. */
-export const LayoutColumnsIcon = createSemanticIcon(SsrGlyph, {
+export const LayoutColumnsIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.columns",
   componentName: "LayoutColumnsIcon",
   defaultRole: "control",

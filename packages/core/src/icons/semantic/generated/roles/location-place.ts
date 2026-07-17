@@ -5,7 +5,7 @@ import { MapPinIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/MapPin";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** location.place: Represent a physical or mapped place. */
-export const LocationPlaceIcon = createSemanticIcon(SsrGlyph, {
+export const LocationPlaceIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "location.place",
   componentName: "LocationPlaceIcon",
   defaultRole: "feature",

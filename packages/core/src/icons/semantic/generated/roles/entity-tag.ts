@@ -5,7 +5,7 @@ import { TagIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Tag";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** entity.tag: Represent a classification tag or label. */
-export const EntityTagIcon = createSemanticIcon(SsrGlyph, {
+export const EntityTagIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.tag",
   componentName: "EntityTagIcon",
   defaultRole: "feature",

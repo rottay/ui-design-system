@@ -5,7 +5,7 @@ import { DotsThreeIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/DotsTh
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.more: Reveal additional destinations or choices. */
-export const NavigationMoreIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationMoreIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.more",
   componentName: "NavigationMoreIcon",
   defaultRole: "navigation",

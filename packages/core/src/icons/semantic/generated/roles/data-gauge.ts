@@ -5,7 +5,7 @@ import { GaugeIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Gauge";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.gauge: Represent a measured level or gauge. */
-export const DataGaugeIcon = createSemanticIcon(SsrGlyph, {
+export const DataGaugeIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.gauge",
   componentName: "DataGaugeIcon",
   defaultRole: "feature",

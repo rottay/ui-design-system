@@ -5,7 +5,7 @@ import { UserIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/User";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** entity.person: Represent one generic person or account subject. */
-export const EntityPersonIcon = createSemanticIcon(SsrGlyph, {
+export const EntityPersonIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.person",
   componentName: "EntityPersonIcon",
   defaultRole: "feature",

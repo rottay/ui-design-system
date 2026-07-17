@@ -5,7 +5,7 @@ import { ArrowsDownUpIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Arr
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.sort: Change collection ordering without specifying a direction. */
-export const ActionSortIcon = createSemanticIcon(SsrGlyph, {
+export const ActionSortIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.sort",
   componentName: "ActionSortIcon",
   defaultRole: "control",

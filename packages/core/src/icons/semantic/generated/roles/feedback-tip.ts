@@ -5,7 +5,7 @@ import { LightbulbIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Lightb
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** feedback.tip: Indicate an optional suggestion or piece of guidance. */
-export const FeedbackTipIcon = createSemanticIcon(SsrGlyph, {
+export const FeedbackTipIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "feedback.tip",
   componentName: "FeedbackTipIcon",
   defaultRole: "status",

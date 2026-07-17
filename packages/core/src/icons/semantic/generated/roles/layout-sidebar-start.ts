@@ -5,7 +5,7 @@ import { SidebarIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Sidebar"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** layout.sidebar-start: Display or select a primary logical-start sidebar layout. */
-export const LayoutSidebarStartIcon = createSemanticIcon(SsrGlyph, {
+export const LayoutSidebarStartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "layout.sidebar-start",
   componentName: "LayoutSidebarStartIcon",
   defaultRole: "control",

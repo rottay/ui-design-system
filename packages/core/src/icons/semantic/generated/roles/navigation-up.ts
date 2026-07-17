@@ -5,7 +5,7 @@ import { ArrowUpIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/ArrowUp"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.up: Navigate to a spatially higher destination or level. */
-export const NavigationUpIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationUpIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.up",
   componentName: "NavigationUpIcon",
   defaultRole: "navigation",

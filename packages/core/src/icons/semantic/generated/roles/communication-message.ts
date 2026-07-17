@@ -5,7 +5,7 @@ import { ChatCircleDotsIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/C
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** communication.message: Represent a conversational message. */
-export const CommunicationMessageIcon = createSemanticIcon(SsrGlyph, {
+export const CommunicationMessageIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.message",
   componentName: "CommunicationMessageIcon",
   defaultRole: "control",

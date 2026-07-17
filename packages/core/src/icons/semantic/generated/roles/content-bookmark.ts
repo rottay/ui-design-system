@@ -5,7 +5,7 @@ import { BookmarkSimpleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/B
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** content.bookmark: Represent a saved or bookmarked resource. */
-export const ContentBookmarkIcon = createSemanticIcon(SsrGlyph, {
+export const ContentBookmarkIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.bookmark",
   componentName: "ContentBookmarkIcon",
   defaultRole: "feature",

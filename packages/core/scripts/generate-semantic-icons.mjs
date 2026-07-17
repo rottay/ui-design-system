@@ -68,7 +68,24 @@ export const EXPECTED_COMPAT_V3_IDS = Object.freeze([
 
 const VALID_ROLES = new Set(['control', 'navigation', 'feature', 'status', 'illustration']);
 const VALID_TONES = new Set(['default', 'muted', 'primary', 'success', 'warning', 'error', 'info']);
-const VALID_PACKS = new Set(['foundation', 'bithire']);
+export const ICON_PACK_COUNTS = Object.freeze({
+  foundation: 120,
+  bithire: 6,
+  identity: 45,
+  intelligence: 45,
+  operations: 45,
+});
+export const ICON_PACKS = Object.freeze(Object.keys(ICON_PACK_COUNTS));
+const VALID_PACKS = new Set(ICON_PACKS);
+const EXPECTED_GLOBAL_COUNT = Object.values(ICON_PACK_COUNTS).reduce((total, count) => total + count, 0);
+const V4_PREFIX_COUNT = 126;
+const V4_CORPUS_PREFIX_FINGERPRINT = '3bf16410b53b8fc734c1f1464a89379feb600824b58ce69cdf91f41012c1c738';
+const V4_ADAPTER_PREFIX_FINGERPRINT = '8306765c719c3b0b4c88e2ec49e7dbdcd56a940922bb047cca000c4a55d18e07';
+const PACK_DOMAINS = Object.freeze({
+  identity: new Set(['identity', 'security', 'access', 'compliance', 'privacy']),
+  intelligence: new Set(['analytics', 'data', 'ai']),
+  operations: new Set(['billing', 'commerce', 'workflow', 'operations']),
+});
 const VALID_STATUSES = new Set(['stable', 'candidate']);
 const ID_PATTERN = /^[a-z][a-z0-9]*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)+$/u;
 const COMPONENT_PATTERN = /^[A-Z][A-Za-z0-9]*Icon$/u;
@@ -88,6 +105,10 @@ function sameArray(left, right) {
 
 function unique(values) {
   return new Set(values).size === values.length;
+}
+
+function fingerprint(value) {
+  return createHash('sha256').update(JSON.stringify(value)).digest('hex');
 }
 
 function exactKeys(value, allowedKeys, path, errors) {
@@ -133,21 +154,28 @@ export function validateCorpusManifest(manifest) {
   requiredKeys(manifest, ['schemaVersion', 'corpusVersion', 'expectedCounts', 'entries'], 'corpus', errors);
 
   if (manifest.schemaVersion !== 1) errors.push('corpus.schemaVersion must equal 1');
-  if (manifest.corpusVersion !== 4) errors.push('corpus.corpusVersion must equal 4');
+  if (manifest.corpusVersion !== 5) errors.push('corpus.corpusVersion must equal 5');
 
-  const countKeys = new Set(['foundation', 'bithire', 'global']);
+  const countKeys = new Set([...ICON_PACKS, 'global']);
   if (exactKeys(manifest.expectedCounts, countKeys, 'corpus.expectedCounts', errors)) {
-    requiredKeys(manifest.expectedCounts, ['foundation', 'bithire', 'global'], 'corpus.expectedCounts', errors);
-    if (manifest.expectedCounts.foundation !== 120) errors.push('corpus.expectedCounts.foundation must equal 120');
-    if (manifest.expectedCounts.bithire !== 6) errors.push('corpus.expectedCounts.bithire must equal 6');
-    if (manifest.expectedCounts.global !== 126) errors.push('corpus.expectedCounts.global must equal 126');
+    requiredKeys(manifest.expectedCounts, [...ICON_PACKS, 'global'], 'corpus.expectedCounts', errors);
+    for (const [pack, count] of Object.entries(ICON_PACK_COUNTS)) {
+      if (manifest.expectedCounts[pack] !== count) {
+        errors.push(`corpus.expectedCounts.${pack} must equal ${count}`);
+      }
+    }
+    if (manifest.expectedCounts.global !== EXPECTED_GLOBAL_COUNT) {
+      errors.push(`corpus.expectedCounts.global must equal ${EXPECTED_GLOBAL_COUNT}`);
+    }
   }
 
   if (!Array.isArray(manifest.entries)) {
     errors.push('corpus.entries must be an array');
     throwValidation('Corpus manifest', errors);
   }
-  if (manifest.entries.length !== 126) errors.push(`corpus.entries must contain 126 entries; received ${manifest.entries.length}`);
+  if (manifest.entries.length !== EXPECTED_GLOBAL_COUNT) {
+    errors.push(`corpus.entries must contain ${EXPECTED_GLOBAL_COUNT} entries; received ${manifest.entries.length}`);
+  }
 
   const entryKeys = new Set([
     'id',
@@ -180,7 +208,7 @@ export function validateCorpusManifest(manifest) {
     requiredKeys(entry, requiredEntryKeys, path, errors);
 
     if (typeof entry.id !== 'string' || !ID_PATTERN.test(entry.id)) errors.push(`${path}.id is not a valid semantic ID`);
-    if (!VALID_PACKS.has(entry.pack)) errors.push(`${path}.pack must be foundation or bithire`);
+    if (!VALID_PACKS.has(entry.pack)) errors.push(`${path}.pack is not a governed icon pack`);
     if (typeof entry.domain !== 'string' || entry.domain !== entry.id?.split('.')[0]) errors.push(`${path}.domain must equal the ID namespace`);
     if (typeof entry.intent !== 'string' || entry.intent.trim().length === 0) errors.push(`${path}.intent must be a non-empty string`);
     if (!VALID_ROLES.has(entry.defaultRole)) errors.push(`${path}.defaultRole is not supported`);
@@ -188,13 +216,22 @@ export function validateCorpusManifest(manifest) {
     if (typeof entry.autoMirror !== 'boolean') errors.push(`${path}.autoMirror must be boolean`);
     if (!VALID_STATUSES.has(entry.status)) errors.push(`${path}.status must be stable or candidate`);
     if (!Number.isInteger(entry.since) || entry.since < 1 || entry.since > manifest.corpusVersion) errors.push(`${path}.since must be an integer within the corpus version`);
-    if (entry.status === 'candidate' && entry.since !== 4) errors.push(`${path} candidate entries must have since 4`);
+    if (entry.status === 'candidate' && ![4, 5].includes(entry.since)) errors.push(`${path} candidate entries must have since 4 or 5`);
     if (entry.status === 'stable' && entry.since > 3) errors.push(`${path} stable entries cannot have since greater than 3`);
     if (typeof entry.componentName !== 'string' || !COMPONENT_PATTERN.test(entry.componentName)) errors.push(`${path}.componentName is invalid`);
     if (typeof entry.id === 'string' && entry.componentName !== componentNameForId(entry.id)) errors.push(`${path}.componentName must be derived deterministically from its ID`);
     if (Object.hasOwn(entry, 'review') && (typeof entry.review !== 'string' || entry.review.trim().length === 0)) errors.push(`${path}.review must be a non-empty string when present`);
     if (entry.pack === 'bithire' && entry.domain !== 'bithire') errors.push(`${path} BitHire entries must use the bithire domain`);
     if (entry.pack === 'foundation' && entry.domain === 'bithire') errors.push(`${path} foundation entries cannot use the bithire domain`);
+    if (Object.hasOwn(PACK_DOMAINS, entry.pack) && !PACK_DOMAINS[entry.pack].has(entry.domain)) {
+      errors.push(`${path}.${entry.pack} does not govern the ${entry.domain} domain`);
+    }
+    if (entry.since === 5 && !Object.hasOwn(PACK_DOMAINS, entry.pack)) {
+      errors.push(`${path} version 5 candidates must belong to a version 5 shared pack`);
+    }
+    if (Object.hasOwn(PACK_DOMAINS, entry.pack) && (entry.status !== 'candidate' || entry.since !== 5)) {
+      errors.push(`${path} version 5 shared-pack entries must be candidates with since 5`);
+    }
   }
 
   const ids = manifest.entries.map((entry) => entry.id);
@@ -202,14 +239,17 @@ export function validateCorpusManifest(manifest) {
   if (!unique(ids)) errors.push('corpus entry IDs must be unique');
   if (!unique(componentNames)) errors.push('corpus component names must be unique');
 
-  const foundationCount = manifest.entries.filter((entry) => entry.pack === 'foundation').length;
-  const bithireCount = manifest.entries.filter((entry) => entry.pack === 'bithire').length;
   const stableIds = manifest.entries.filter((entry) => entry.status === 'stable').map((entry) => entry.id);
   const candidateCount = manifest.entries.filter((entry) => entry.status === 'candidate').length;
-  if (foundationCount !== 120) errors.push(`foundation pack must contain 120 entries; received ${foundationCount}`);
-  if (bithireCount !== 6) errors.push(`bithire pack must contain 6 entries; received ${bithireCount}`);
+  for (const [pack, count] of Object.entries(ICON_PACK_COUNTS)) {
+    const actual = manifest.entries.filter((entry) => entry.pack === pack).length;
+    if (actual !== count) errors.push(`${pack} pack must contain ${count} entries; received ${actual}`);
+  }
   if (!sameArray(stableIds, EXPECTED_COMPAT_V3_IDS)) errors.push('stable entries must preserve the exact ordered 50-name v3 compatibility corpus');
-  if (candidateCount !== 76) errors.push(`candidate set must contain 76 entries; received ${candidateCount}`);
+  if (candidateCount !== 211) errors.push(`candidate set must contain 211 entries; received ${candidateCount}`);
+  if (fingerprint(manifest.entries.slice(0, V4_PREFIX_COUNT)) !== V4_CORPUS_PREFIX_FINGERPRINT) {
+    errors.push('the exact ordered 126-role v4 corpus prefix must remain unchanged');
+  }
 
   throwValidation('Corpus manifest', errors);
   return manifest;
@@ -249,8 +289,11 @@ export function validateAdapterManifest(adapter, corpus) {
   const modules = adapter.entries.map((entry) => entry.module);
   const exports = adapter.entries.map((entry) => entry.exportName);
   if (!unique(ids)) errors.push('adapter IDs must be unique');
-  if (!unique(modules)) errors.push('first-batch adapter modules must be one-to-one and unique');
-  if (!unique(exports)) errors.push('first-batch adapter exports must be one-to-one and unique');
+  if (!unique(modules)) errors.push('adapter modules must be one-to-one and unique');
+  if (!unique(exports)) errors.push('adapter exports must be one-to-one and unique');
+  if (fingerprint(adapter.entries.slice(0, V4_PREFIX_COUNT)) !== V4_ADAPTER_PREFIX_FINGERPRINT) {
+    errors.push('the exact ordered 126-role v4 adapter prefix must remain unchanged');
+  }
   throwValidation('Phosphor adapter manifest', errors);
   return adapter;
 }
@@ -323,29 +366,30 @@ function formatCorpusEntry(entry) {
 }
 
 function generateCorpusModule(corpus) {
-  const foundation = corpus.entries.filter((entry) => entry.pack === 'foundation');
-  const bithire = corpus.entries.filter((entry) => entry.pack === 'bithire');
+  const packNameConstants = ICON_PACKS.map((pack) => {
+    const entries = corpus.entries.filter((entry) => entry.pack === pack);
+    return `export const ${packConstantName(pack)}_ICON_NAMES = [\n${formatStringArray(entries.map((entry) => entry.id))}\n] as const;`;
+  }).join('\n\n');
+  const generatedNames = ICON_PACKS
+    .map((pack) => `  ...${packConstantName(pack)}_ICON_NAMES,`)
+    .join('\n');
+  const packNameTypes = ICON_PACKS
+    .map((pack) => `export type ${packTypeName(pack)} = (typeof ${packConstantName(pack)}_ICON_NAMES)[number];`)
+    .join('\n');
+  const packUnion = ICON_PACKS.map((pack) => JSON.stringify(pack)).join(' | ');
   return `${GENERATED_HEADER}import type { IconRole, IconTone } from '../types';
 
 export const GENERATED_ICON_CORPUS_VERSION = ${corpus.corpusVersion} as const;
 
-export const FOUNDATION_ICON_NAMES = [
-${formatStringArray(foundation.map((entry) => entry.id))}
-] as const;
-
-export const BITHIRE_ICON_NAMES = [
-${formatStringArray(bithire.map((entry) => entry.id))}
-] as const;
+${packNameConstants}
 
 export const GENERATED_ICON_NAMES = [
-  ...FOUNDATION_ICON_NAMES,
-  ...BITHIRE_ICON_NAMES,
+${generatedNames}
 ] as const;
 
-export type FoundationIconName = (typeof FOUNDATION_ICON_NAMES)[number];
-export type BithireIconName = (typeof BITHIRE_ICON_NAMES)[number];
+${packNameTypes}
 export type GeneratedIconName = (typeof GENERATED_ICON_NAMES)[number];
-export type GeneratedIconPack = 'foundation' | 'bithire';
+export type GeneratedIconPack = ${packUnion};
 export type GeneratedIconStatus = 'stable' | 'candidate';
 
 export interface GeneratedIconMetadata {
@@ -430,7 +474,7 @@ function generateRoleModule(corpusEntry, adapterEntry) {
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** ${corpusEntry.id}: ${corpusEntry.intent} */
-export const ${corpusEntry.componentName} = createSemanticIcon(SsrGlyph, {
+export const ${corpusEntry.componentName} = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   ${definitionFields.join(',\n  ')},
 });
 `;
@@ -468,28 +512,24 @@ export type ${dynamicPropsName} = SemanticIconProps & {
   readonly name: ${typeName};
 };
 
-export const ${constant}_ICON_COMPONENTS = Object.freeze({
+export const ${constant}_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
 ${mappings}
 } as const satisfies Record<${typeName}, SemanticIconComponent>);
 
-const ${constant}_ICON_NAME_SET: ReadonlySet<string> = new Set(Object.keys(${constant}_ICON_COMPONENTS));
-
 export function ${guardName}(value: unknown): value is ${typeName} {
-  return typeof value === 'string' && ${constant}_ICON_NAME_SET.has(value);
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(${constant}_ICON_COMPONENTS, value);
 }
 
 export function ${resolverName}(value: unknown): SemanticIconComponent | undefined {
   return ${guardName}(value) ? ${constant}_ICON_COMPONENTS[value] : undefined;
 }
 
-export const ${dynamicComponentName} = forwardRef<SVGSVGElement, ${dynamicPropsName}>(
+export const ${dynamicComponentName} = /* @__PURE__ */ forwardRef<SVGSVGElement, ${dynamicPropsName}>(
   function ${dynamicComponentName}({ name, ...props }, ref) {
     const Component = ${resolverName}(name);
     return Component ? <Component ref={ref} {...props} /> : null;
   },
 );
-
-${dynamicComponentName}.displayName = '${dynamicComponentName}';
 
 export {
 ${exports}
@@ -513,10 +553,10 @@ export function buildGeneratedFiles(corpus, adapter) {
   for (const entry of corpus.entries) {
     files.set(`roles/${roleFileName(entry.id)}`, generateRoleModule(entry, adapterById.get(entry.id)));
   }
-  for (const pack of ['foundation', 'bithire']) {
+  for (const pack of ICON_PACKS) {
     files.set(`packs/${pack}.tsx`, generatePackModule(pack, corpus.entries.filter((entry) => entry.pack === pack)));
   }
-  files.set('packs/index.ts', `${GENERATED_HEADER}export * from './foundation';\nexport * from './bithire';\n`);
+  files.set('packs/index.ts', `${GENERATED_HEADER}${ICON_PACKS.map((pack) => `export * from './${pack}';`).join('\n')}\n`);
   files.set('index.ts', `${GENERATED_HEADER}export * from './corpus';\nexport * from './packs';\n`);
   return files;
 }

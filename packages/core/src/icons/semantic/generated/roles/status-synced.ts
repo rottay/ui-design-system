@@ -5,7 +5,7 @@ import { CloudCheckIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Cloud
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** status.synced: Indicate synchronized local and remote state. */
-export const StatusSyncedIcon = createSemanticIcon(SsrGlyph, {
+export const StatusSyncedIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "status.synced",
   componentName: "StatusSyncedIcon",
   defaultRole: "status",

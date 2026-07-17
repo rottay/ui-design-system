@@ -5,7 +5,7 @@ import { CheckSquareIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Chec
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** entity.task: Represent a task or work item. */
-export const EntityTaskIcon = createSemanticIcon(SsrGlyph, {
+export const EntityTaskIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "entity.task",
   componentName: "EntityTaskIcon",
   defaultRole: "feature",

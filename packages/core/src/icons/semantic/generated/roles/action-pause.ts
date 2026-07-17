@@ -5,7 +5,7 @@ import { PauseIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Pause";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.pause: Temporarily suspend an active process. */
-export const ActionPauseIcon = createSemanticIcon(SsrGlyph, {
+export const ActionPauseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.pause",
   componentName: "ActionPauseIcon",
   defaultRole: "control",

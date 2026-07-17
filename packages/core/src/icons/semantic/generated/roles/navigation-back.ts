@@ -5,7 +5,7 @@ import { ArrowLeftIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/ArrowL
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.back: Navigate to the logically previous destination. */
-export const NavigationBackIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationBackIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.back",
   componentName: "NavigationBackIcon",
   defaultRole: "navigation",

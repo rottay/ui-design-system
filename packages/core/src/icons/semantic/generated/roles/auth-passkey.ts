@@ -5,7 +5,7 @@ import { FingerprintIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Fing
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** auth.passkey: Represent passkey or biometric-backed authentication. */
-export const AuthPasskeyIcon = createSemanticIcon(SsrGlyph, {
+export const AuthPasskeyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "auth.passkey",
   componentName: "AuthPasskeyIcon",
   defaultRole: "control",

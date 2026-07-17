@@ -5,7 +5,7 @@ import { ArrowsInSimpleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/A
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** navigation.collapse: Collapse an expanded navigation region or surface. */
-export const NavigationCollapseIcon = createSemanticIcon(SsrGlyph, {
+export const NavigationCollapseIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "navigation.collapse",
   componentName: "NavigationCollapseIcon",
   defaultRole: "navigation",

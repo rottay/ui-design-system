@@ -5,7 +5,7 @@ import { EmptyIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Empty";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** feedback.empty: Indicate that a surface contains no content. */
-export const FeedbackEmptyIcon = createSemanticIcon(SsrGlyph, {
+export const FeedbackEmptyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "feedback.empty",
   componentName: "FeedbackEmptyIcon",
   defaultRole: "status",

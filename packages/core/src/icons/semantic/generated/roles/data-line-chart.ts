@@ -5,7 +5,7 @@ import { ChartLineIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/ChartL
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.line-chart: Represent a line-series visualization. */
-export const DataLineChartIcon = createSemanticIcon(SsrGlyph, {
+export const DataLineChartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.line-chart",
   componentName: "DataLineChartIcon",
   defaultRole: "feature",

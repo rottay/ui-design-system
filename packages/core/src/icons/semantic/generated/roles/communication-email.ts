@@ -5,7 +5,7 @@ import { EnvelopeSimpleIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/E
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** communication.email: Represent email communication. */
-export const CommunicationEmailIcon = createSemanticIcon(SsrGlyph, {
+export const CommunicationEmailIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "communication.email",
   componentName: "CommunicationEmailIcon",
   defaultRole: "control",

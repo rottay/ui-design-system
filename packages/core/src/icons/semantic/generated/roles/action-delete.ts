@@ -5,7 +5,7 @@ import { TrashIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Trash";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.delete: Permanently remove an item. */
-export const ActionDeleteIcon = createSemanticIcon(SsrGlyph, {
+export const ActionDeleteIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.delete",
   componentName: "ActionDeleteIcon",
   defaultRole: "control",

@@ -5,7 +5,7 @@ import { ChartPieSliceIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Ch
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** data.pie-chart: Represent a part-to-whole or pie visualization. */
-export const DataPieChartIcon = createSemanticIcon(SsrGlyph, {
+export const DataPieChartIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.pie-chart",
   componentName: "DataPieChartIcon",
   defaultRole: "feature",

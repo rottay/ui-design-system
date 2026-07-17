@@ -5,7 +5,7 @@ import { VideoIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Video";
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** content.video: Represent video content independently of playback action. */
-export const ContentVideoIcon = createSemanticIcon(SsrGlyph, {
+export const ContentVideoIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "content.video",
   componentName: "ContentVideoIcon",
   defaultRole: "feature",

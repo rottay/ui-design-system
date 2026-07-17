@@ -5,7 +5,7 @@ import { PrinterIcon as SsrGlyph } from "@phosphor-icons/react/dist/ssr/Printer"
 import { createSemanticIcon } from '../../runtime/create-semantic-icon';
 
 /** action.print: Open the print workflow. */
-export const ActionPrintIcon = createSemanticIcon(SsrGlyph, {
+export const ActionPrintIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "action.print",
   componentName: "ActionPrintIcon",
   defaultRole: "control",
