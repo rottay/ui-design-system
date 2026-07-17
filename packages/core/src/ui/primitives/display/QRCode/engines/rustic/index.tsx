@@ -1,8 +1,9 @@
 /**
- * @fileoverview Rustic (pure HTML/CSS/Canvas) engine for the QRCode display primitive.
- * Zero-dependency implementation with full ARIA roles/labels. Chrome is painted by
+ * @fileoverview Rustic HTML/CSS chrome for the QRCode display primitive.
+ * The shared QR runtime owns standards-compliant Canvas/SVG encoding and accessible
+ * naming. Chrome is painted by
  * `foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css`, keyed on the `data-part`/`data-status`/
- * `data-bordered` contract stamped below; the canvas bitmap and a caller's own
+ * `data-bordered` contract stamped below; the encoded symbol and a caller's own
  * `style` stay in this file.
  *
  * @example
@@ -13,68 +14,27 @@
 
 'use client';
 
-import React, { useEffect, useRef, useMemo } from 'react';
-import { arrayValueAt } from '@/foundation/kernel/collections';
+import React, { useRef } from 'react';
 import type { QRCodeProps } from '../../contracts';
 import { QRCODE_DEFAULTS } from '../../contracts';
+import { EncodedQRCodeSymbol } from '../../runtime/encoded-symbol';
 
 /**
- * Creates a deterministic boolean grid from a string hash, then stamps three
- * finder patterns in the corners to visually resemble a real QR code.
- * This is a visual placeholder -- real QR encoding requires a dedicated library.
- */
-function generatePattern(value: string, gridSize: number): boolean[][] {
-  // Build a simple hash from the input string (djb2-like)
-  const pattern: boolean[][] = [];
-  let hash = 0;
-  for (let i = 0; i < value.length; i++) {
-    hash = ((hash << 5) - hash) + value.charCodeAt(i);
-    hash = hash & hash;
-  }
-
-  // Fill the grid using the Knuth multiplicative hash for pseudo-random distribution
-  for (let i = 0; i < gridSize; i++) {
-    pattern[i] = [];
-    for (let j = 0; j < gridSize; j++) {
-      const seed = (hash + i * gridSize + j) * 2654435761;
-      pattern[i][j] = (seed & 0xFF) > 127;
-    }
-  }
-
-  // Stamp the three 7x7 finder patterns that make QR codes recognizable
-  const addFinderPattern = (startX: number, startY: number) => {
-    for (let i = 0; i < 7; i++) {
-      for (let j = 0; j < 7; j++) {
-        const isOuter = i === 0 || i === 6 || j === 0 || j === 6;
-        const isInner = i >= 2 && i <= 4 && j >= 2 && j <= 4;
-        if (startX + i < gridSize && startY + j < gridSize) {
-          pattern[startX + i][startY + j] = isOuter || isInner;
-        }
-      }
-    }
-  };
-
-  addFinderPattern(0, 0);
-  addFinderPattern(0, gridSize - 7);
-  addFinderPattern(gridSize - 7, 0);
-
-  return pattern;
-}
-
-/**
- * Rustic QRCode engine. Draws the pattern on a `<canvas>` with full ARIA
- * labelling, centers an optional icon, and overlays status indicators with
+ * Rustic QRCode engine. Renders the shared encoded symbol with full ARIA
+ * labelling and overlays status indicators with
  * role="status" / role="alert" for accessibility.
  *
  * @param props - DS QRCodeProps (value, size, colors, status, icon, etc.).
- * @returns A container with canvas, icon, and status overlay.
+ * @returns A container with an encoded symbol and status overlay.
  */
 export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
   const {
     value,
+    type = QRCODE_DEFAULTS.type,
     size = QRCODE_DEFAULTS.size,
     color = QRCODE_DEFAULTS.color,
     bgColor = QRCODE_DEFAULTS.bgColor,
+    errorLevel = QRCODE_DEFAULTS.errorLevel,
     status = QRCODE_DEFAULTS.status,
     bordered = QRCODE_DEFAULTS.bordered,
     icon,
@@ -84,37 +44,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     style,
   } = props;
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  // 25x25 matches QR version 2 dimensions for a realistic appearance
-  const gridSize = 25;
-  const pattern = useMemo(() => generatePattern(value || '', gridSize), [value]);
-
-  // Re-paint the canvas whenever value, size, or colors change
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const cellSize = size / gridSize;
-
-    // Draw background
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, size, size);
-
-    // Draw QR modules
-    ctx.fillStyle = color;
-    for (let i = 0; i < gridSize; i++) {
-      const row = arrayValueAt(pattern, i);
-      if (!row) continue;
-      for (let j = 0; j < gridSize; j++) {
-        if (arrayValueAt(row, j)) {
-          ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-        }
-      }
-    }
-  }, [value, size, color, bgColor, pattern]);
+  const paintOwnerRef = useRef<HTMLDivElement>(null);
 
   // bordered still owns the padding; its frame and fill are painted by qrcode.css,
   // which keys on the data-bordered stamp below
@@ -141,7 +71,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     gap: '8px',
   };
 
-  // Absolutely centered over the canvas so the icon stays readable
+  // Absolutely centered over the matrix space reserved by the QR encoder.
   const iconWrapperStyle: React.CSSProperties = {
     position: 'absolute',
     top: '50%',
@@ -217,15 +147,17 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
       data-status={status}
       data-bordered={bordered ? 'true' : undefined}
     >
-      <div style={{ position: 'relative', width: size, height: size }} data-part="canvas-wrapper">
-        <canvas
-          ref={canvasRef}
-          width={size}
-          height={size}
-          style={{ display: 'block' }}
-          aria-label={`QR code for: ${value}`}
-          role="img"
-          data-part="canvas"
+      <div ref={paintOwnerRef} style={{ position: 'relative', width: size, height: size }} data-part="canvas-wrapper">
+        <EncodedQRCodeSymbol
+          ownerRef={paintOwnerRef}
+          value={value}
+          type={type}
+          size={size}
+          color={color}
+          bgColor={bgColor}
+          errorLevel={errorLevel}
+          icon={status === 'active' ? icon : undefined}
+          iconSize={iconSize}
         />
         {icon && status === 'active' && (
           <div data-part="icon" style={iconWrapperStyle}>

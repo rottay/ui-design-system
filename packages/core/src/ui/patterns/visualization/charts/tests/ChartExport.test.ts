@@ -1,6 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { exportChart } from '../../../../../index';
+import {
+  CHART_PNG_RASTER_BUDGET,
+  resolvePngRasterPlan,
+} from '../runtime/exporting/foundation/file';
 
 function chartSvg(): SVGSVGElement {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -44,6 +48,7 @@ function installRasterStubs() {
     scale: vi.fn(() => events.push('scale')),
     drawImage: vi.fn(() => events.push('drawImage')),
   };
+  let rasterCanvas: HTMLCanvasElement | null = null;
 
   class ImmediateImage {
     crossOrigin = '';
@@ -59,11 +64,12 @@ function installRasterStubs() {
   vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
     context as unknown as CanvasRenderingContext2D,
   );
-  vi.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation((callback) => {
+  vi.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation(function (callback) {
+    rasterCanvas = this;
     callback(new Blob(['png'], { type: 'image/png' }));
   });
 
-  return { events, context };
+  return { events, context, rasterCanvas: () => rasterCanvas };
 }
 
 afterEach(() => {
@@ -95,6 +101,39 @@ describe('chart export paint fidelity', () => {
     });
 
     expect(context.fillStyle).toBe('#123456');
+  });
+
+  it('caps scale, dimensions and total pixels before allocating a PNG canvas', async () => {
+    installDownloadStubs();
+    const raster = installRasterStubs();
+    const svg = chartSvg();
+    svg.setAttribute('width', '20000');
+    svg.setAttribute('height', '10000');
+
+    await exportChart(svg, { format: 'png', scale: 999, filename: 'bounded' });
+
+    const canvas = raster.rasterCanvas();
+    expect(canvas).not.toBeNull();
+    expect(canvas!.width).toBeLessThanOrEqual(CHART_PNG_RASTER_BUDGET.maxDimension);
+    expect(canvas!.height).toBeLessThanOrEqual(CHART_PNG_RASTER_BUDGET.maxDimension);
+    expect(canvas!.width * canvas!.height).toBeLessThanOrEqual(
+      CHART_PNG_RASTER_BUDGET.maxPixels,
+    );
+  });
+
+  it('normalizes non-finite or non-positive raster requests without NaN allocations', () => {
+    expect(resolvePngRasterPlan({ width: Infinity, height: Number.NaN }, -5)).toEqual({
+      scale: 2,
+      pixelWidth: 1600,
+      pixelHeight: 1200,
+      pixelCount: 1_920_000,
+    });
+    expect(resolvePngRasterPlan({ width: 120, height: 60 }, 999)).toEqual({
+      scale: 4,
+      pixelWidth: 480,
+      pixelHeight: 240,
+      pixelCount: 115_200,
+    });
   });
 
   it('copies stylesheet-owned SVG paint into standalone export attributes', async () => {

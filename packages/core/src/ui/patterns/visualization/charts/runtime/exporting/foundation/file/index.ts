@@ -22,13 +22,23 @@ import { resolveCssColor } from '@/ui/patterns/visualization/charts/runtime/foun
 export interface ChartExportOptions {
   /** Export format */
   format: 'png' | 'svg';
-  /** Scale factor for PNG (default: 2 for retina quality) */
+  /** Scale factor for PNG (default: 2; bounded to 0.25–4 plus raster budgets) */
   scale?: number;
   /** Background color (default: transparent for SVG, white for PNG) */
   backgroundColor?: string;
   /** Filename without extension */
   filename?: string;
 }
+
+/** Hard allocation ceiling for functional chart raster export. */
+export const CHART_PNG_RASTER_BUDGET = Object.freeze({
+  maxScale: 4,
+  maxDimension: 8_192,
+  maxPixels: 16_777_216,
+});
+
+const DEFAULT_PNG_SCALE = 2;
+const MIN_PNG_SCALE = 0.25;
 
 // ---------------------------------------------------------------------------
 // Internal helpers
@@ -296,21 +306,97 @@ function getSvgDimensions(svg: SVGSVGElement): { width: number; height: number }
   if (attrWidth && attrHeight) {
     const w = parseFloat(attrWidth);
     const h = parseFloat(attrHeight);
-    if (!isNaN(w) && !isNaN(h) && w > 0 && h > 0) return { width: w, height: h };
+    if (Number.isFinite(w) && Number.isFinite(h) && w > 0 && h > 0) {
+      return { width: w, height: h };
+    }
   }
 
   // Try viewBox
   const viewBox = svg.getAttribute('viewBox');
   if (viewBox) {
     const parts = viewBox.split(/\s+/).map(Number);
-    if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {
+    if (
+      parts.length === 4
+      && Number.isFinite(parts[2])
+      && Number.isFinite(parts[3])
+      && parts[2] > 0
+      && parts[3] > 0
+    ) {
       return { width: parts[2], height: parts[3] };
     }
   }
 
   // Fallback to bounding rect
   const rect = svg.getBoundingClientRect();
-  return { width: rect.width || 800, height: rect.height || 600 };
+  return {
+    width: Number.isFinite(rect.width) && rect.width > 0 ? rect.width : 800,
+    height: Number.isFinite(rect.height) && rect.height > 0 ? rect.height : 600,
+  };
+}
+
+interface PngRasterPlan {
+  scale: number;
+  pixelWidth: number;
+  pixelHeight: number;
+  pixelCount: number;
+}
+
+/**
+ * Clamp scale and total raster allocation while preserving the source aspect
+ * ratio. The pixel budget is authoritative even when both dimensions are
+ * individually below their ceilings.
+ */
+export function resolvePngRasterPlan(
+  dimensions: { width: number; height: number },
+  requestedScale: number | undefined,
+): PngRasterPlan {
+  const sourceWidth = Number.isFinite(dimensions.width) && dimensions.width > 0
+    ? Math.min(dimensions.width, Number.MAX_SAFE_INTEGER / CHART_PNG_RASTER_BUDGET.maxScale)
+    : 800;
+  const sourceHeight = Number.isFinite(dimensions.height) && dimensions.height > 0
+    ? Math.min(dimensions.height, Number.MAX_SAFE_INTEGER / CHART_PNG_RASTER_BUDGET.maxScale)
+    : 600;
+  const scale = Number.isFinite(requestedScale) && (requestedScale as number) > 0
+    ? Math.min(
+      CHART_PNG_RASTER_BUDGET.maxScale,
+      Math.max(MIN_PNG_SCALE, requestedScale as number),
+    )
+    : DEFAULT_PNG_SCALE;
+  const requestedWidth = sourceWidth * scale;
+  const requestedHeight = sourceHeight * scale;
+  const dimensionReduction = Math.min(
+    1,
+    CHART_PNG_RASTER_BUDGET.maxDimension / requestedWidth,
+    CHART_PNG_RASTER_BUDGET.maxDimension / requestedHeight,
+  );
+  const pixelReduction = Math.min(
+    1,
+    Math.sqrt(
+      CHART_PNG_RASTER_BUDGET.maxPixels / (requestedWidth * requestedHeight),
+    ),
+  );
+  const reduction = Math.min(dimensionReduction, pixelReduction);
+  const pixelWidth = Math.max(
+    1,
+    Math.min(
+      CHART_PNG_RASTER_BUDGET.maxDimension,
+      Math.floor(requestedWidth * reduction),
+    ),
+  );
+  const pixelHeight = Math.max(
+    1,
+    Math.min(
+      CHART_PNG_RASTER_BUDGET.maxDimension,
+      Math.floor(requestedHeight * reduction),
+    ),
+  );
+
+  return {
+    scale,
+    pixelWidth,
+    pixelHeight,
+    pixelCount: pixelWidth * pixelHeight,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -350,7 +436,6 @@ async function exportAsPng(
   svgElement: SVGSVGElement,
   options: ChartExportOptions,
 ): Promise<void> {
-  const scale = options.scale ?? 2;
   const bgColor = resolveCssColor(
     options.backgroundColor ?? '#ffffff',
     svgElement,
@@ -359,10 +444,16 @@ async function exportAsPng(
 
   const clone = prepareSvgClone(svgElement);
   const dims = getSvgDimensions(svgElement);
+  const raster = resolvePngRasterPlan(dims, options.scale);
 
-  // Set explicit dimensions on the clone for consistent rasterisation
-  clone.setAttribute('width', String(dims.width));
-  clone.setAttribute('height', String(dims.height));
+  // Bound the browser image decoder as well as the destination Canvas. A
+  // synthesized viewBox preserves charts that originally used only width and
+  // height attributes when the raster must be scaled down.
+  if (!clone.hasAttribute('viewBox')) {
+    clone.setAttribute('viewBox', `0 0 ${dims.width} ${dims.height}`);
+  }
+  clone.setAttribute('width', String(raster.pixelWidth));
+  clone.setAttribute('height', String(raster.pixelHeight));
 
   const svgString = serializeSvg(clone);
 
@@ -380,8 +471,8 @@ async function exportAsPng(
 
   // Draw to canvas at the desired scale
   const canvas = document.createElement('canvas');
-  canvas.width = dims.width * scale;
-  canvas.height = dims.height * scale;
+  canvas.width = raster.pixelWidth;
+  canvas.height = raster.pixelHeight;
 
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas 2D context not available');
@@ -392,8 +483,7 @@ async function exportAsPng(
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  ctx.scale(scale, scale);
-  ctx.drawImage(img, 0, 0, dims.width, dims.height);
+  ctx.drawImage(img, 0, 0, raster.pixelWidth, raster.pixelHeight);
 
   // Convert canvas to blob and trigger download
   await new Promise<void>((resolve, reject) => {

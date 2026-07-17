@@ -17,4 +17,5 @@
 
 .rottay-watermark--modern[data-part='root'] > [data-part='pattern'] {
   background-repeat: repeat;
+  background-position: var(--ds-watermark-offset);
 }

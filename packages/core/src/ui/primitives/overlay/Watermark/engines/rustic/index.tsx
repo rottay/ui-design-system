@@ -43,9 +43,10 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import type { WatermarkProps } from '../../contracts';
 import { WATERMARK_DEFAULTS } from '../../contracts';
+import { useWatermarkCanvasPattern } from '../../runtime/canvas-pattern';
 
 /**
  * Rustic engine implementation of Watermark using vanilla HTML/CSS.
@@ -85,59 +86,15 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
       style,
     } = props;
 
-    const [backgroundImage, setBackgroundImage] = useState<string>('');
-
-    // Generate a repeating watermark tile on an off-screen canvas each time
-    // visual parameters change. The tile is exported as a data URL and applied
-    // as a CSS background-image on the overlay div.
-    useEffect(() => {
-      // SSR guard -- canvas API is only available in the browser
-      if (typeof document === 'undefined') return;
-
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      // Scale by devicePixelRatio so the watermark stays crisp on retina displays
-      const ratio = window.devicePixelRatio || 1;
-      const canvasWidth = (width + gap![0]) * ratio;
-      const canvasHeight = (height + gap![1]) * ratio;
-
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
-
-      // Center the origin then rotate so the watermark text/image is drawn at an angle
-      ctx.translate(canvasWidth / 2, canvasHeight / 2);
-      ctx.rotate((rotate! * Math.PI) / 180);
-
-      if (image) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => {
-          ctx.drawImage(img, -width / 2, -height / 2, width, height);
-          setBackgroundImage(`url(${canvas.toDataURL()})`);
-        };
-        img.src = image;
-      } else if (content) {
-        // Merge user-provided font overrides with defaults for consistent fallback
-        const mergedFont = { ...WATERMARK_DEFAULTS.font, ...font };
-        ctx.font = `${mergedFont.fontStyle} ${mergedFont.fontWeight} ${mergedFont.fontSize! * ratio}px ${mergedFont.fontFamily}`;
-        ctx.fillStyle = mergedFont.color!;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        // Support multi-line watermarks when content is an array of strings
-        const lines = Array.isArray(content) ? content : [content];
-        const lineHeight = mergedFont.fontSize! * 1.5 * ratio;
-        const startY = -((lines.length - 1) * lineHeight) / 2;
-
-        lines.forEach((line, index) => {
-          ctx.fillText(line, 0, startY + index * lineHeight);
-        });
-
-        setBackgroundImage(`url(${canvas.toDataURL()})`);
-      }
-    }, [content, image, width, height, rotate, gap, font]);
+    const { backgroundImage, backgroundSize, patternRef } = useWatermarkCanvasPattern({
+      content,
+      image,
+      width,
+      height,
+      rotate,
+      gap,
+      font,
+    });
 
     return (
       <div
@@ -153,7 +110,9 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
         {/* Non-interactive overlay renders the repeating watermark pattern via CSS background.
             backgroundPosition uses the offset prop for fine-grained initial placement. */}
         <div
+          ref={patternRef}
           data-part="pattern"
+          aria-hidden="true"
           style={{
             position: 'absolute',
             inset: 0,
@@ -161,6 +120,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
             // A canvas-rasterised data URL: there is no static value to lift into
             // CSS, so it stays JS-bound (object shorthand, invisible to the counter).
             backgroundImage,
+            backgroundSize,
             // `offset` is a free px pair, so the position cannot be enumerated in
             // CSS; the skin reads this custom property (not a paint key).
             ['--ds-watermark-offset' as any]: `${offset![0]}px ${offset![1]}px`,
