@@ -15,10 +15,8 @@ import type { ParticleFieldFocalArea, ParticleFieldProps } from '@/graphics/moti
 import { useMotionPolicy } from '@/infrastructure/runtime/motion';
 import { isParticleAnimationEligible } from '@/graphics/motion/foundation/particles/eligibility';
 import {
-  acquireParticleAnimationLease,
   createParticleRandom,
   normalizeParticleRuntimeConfig,
-  releaseParticleAnimationLease,
   resolveBoundedParticleCount,
   resolveConcreteParticleColor,
   resolveParticleCanvasMetrics,
@@ -26,6 +24,10 @@ import {
   stableParticleSeed,
 } from '@/graphics/motion/foundation/particles/config';
 import { useParticleInView } from '../foundation/visibility';
+import {
+  acquireParticleAnimationLease,
+  releaseParticleAnimationLease,
+} from './governance/animation-lease';
 
 interface ParticleState {
   x: number;

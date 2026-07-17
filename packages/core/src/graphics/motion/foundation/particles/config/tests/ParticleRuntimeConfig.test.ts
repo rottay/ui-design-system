@@ -2,12 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   PARTICLE_RUNTIME_LIMITS,
-  acquireParticleAnimationLease,
   createParticleRandom,
-  getParticleAnimationLeaseCount,
   normalizeParticleRuntimeConfig,
-  releaseParticleAnimationLease,
-  resetParticleAnimationLeaseForTests,
   resolveBoundedParticleCount,
   resolveConcreteParticleColor,
   resolveParticleCanvasMetrics,
@@ -17,7 +13,6 @@ import {
 import { installInheritedCustomPropertyModel } from './support/inherited-custom-properties';
 
 afterEach(() => {
-  resetParticleAnimationLeaseForTests();
   document.body.replaceChildren();
   vi.restoreAllMocks();
 });
@@ -135,26 +130,5 @@ describe('ParticleField color boundary', () => {
     expect(resolveConcreteParticleColor('var(--particle-cycle-a)', field))
       .toBe('rgba(255, 255, 255, 0.88)');
     expect(field.querySelector('span')).toBeNull();
-  });
-});
-
-describe('ParticleField global RAF lease', () => {
-  it('promotes the queued field when the active owner releases', () => {
-    const first = Symbol('first');
-    const second = Symbol('second');
-    let promoted = false;
-
-    expect(acquireParticleAnimationLease(first, vi.fn())).toBe(true);
-    expect(acquireParticleAnimationLease(second, () => {
-      promoted = acquireParticleAnimationLease(second, vi.fn());
-    })).toBe(false);
-    expect(getParticleAnimationLeaseCount()).toBe(1);
-
-    releaseParticleAnimationLease(first);
-    expect(promoted).toBe(true);
-    expect(getParticleAnimationLeaseCount()).toBe(1);
-
-    releaseParticleAnimationLease(second);
-    expect(getParticleAnimationLeaseCount()).toBe(0);
   });
 });

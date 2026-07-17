@@ -27,11 +27,9 @@ vi.mock('@/infrastructure/runtime/motion', () => ({
 
 import { ParticleField } from '../index';
 import { ParticleFieldLoadingFallback } from '../../..';
-import {
-  PARTICLE_RUNTIME_LIMITS,
-  resetParticleAnimationLeaseForTests,
-} from '@/graphics/motion/foundation/particles/config';
+import { PARTICLE_RUNTIME_LIMITS } from '@/graphics/motion/foundation/particles/config';
 import { installInheritedCustomPropertyModel } from '@/graphics/motion/foundation/particles/config/tests/support/inherited-custom-properties';
+import { resetParticleAnimationLeaseForTests } from '../governance/animation-lease';
 
 interface MockIntersectionObserverInstance {
   callback: IntersectionObserverCallback;
