@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "workOrder": "WO-CRA-15",
+  "sourceId": "DS-IMP-106",
+  "scope": "ParticleField plus governed Canvas and WebGL lifecycle hardening",
+  "package": "@rottay/design-system@2.19.31",
+  "sourceFingerprint": "4cff0d787ff871a167c80c46818bd772bc84fe97dbe24a44feacf43f6e64218c",
+  "governance": {
+    "sharedContinuousRuntimeBudget": 1,
+    "decorative2dBudget": 1,
+    "immersiveSpatialBudget": 1,
+    "runtimeControl": "provider-and-instance",
+    "certifiedEffects": 1,
+    "governedCanvasSinks": 6
+  },
+  "allocationBudgets": {
+    "particle": {
+      "maxDpr": 2,
+      "maxParticles": 1200,
+      "maxPixels": 4194304
+    },
+    "watermark": {
+      "maxDpr": 2,
+      "maxDimension": 2048,
+      "maxPixels": 4194304
+    },
+    "chartPng": {
+      "maxScale": 4,
+      "maxDimension": 8192,
+      "maxPixels": 16777216
+    },
+    "particleBundleGzipBytes": 16384
+  },
+  "requiredBrowserEvidence": [
+    "particle: provider color isolation, sole lease, viewport handoff, context recovery, reduced/coarse fallback",
+    "spatial: sole context, viewport handoff, bounded backing store, context retry, reduced/coarse/save-data/unsupported fallback"
+  ],
+  "intentionallyDeferred": [
+    "WebGPU admission",
+    "Three/R3F scene supplier adoption",
+    "Evento adoption",
+    "general app-platform adoption"
+  ]
+}
