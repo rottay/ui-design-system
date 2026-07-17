@@ -71,8 +71,27 @@ import { WorkspaceShell } from '../../../../composition/layout/collection-shell'
 import { CollectionRenderDispatch } from './render-dispatch';
 import { CollectionFilterDropdown } from './filter-dropdown';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../../foundation/contracts/adaptive/collection';
-import { resolveDensityStyleVars, normalizeDensityMode } from '../../../../../../foundation/tokens/ts/foundation/base/density';
+import {
+  DENSITY_PRESETS,
+  resolveDensityStyleVars,
+  normalizeDensityMode,
+} from '../../../../../../foundation/tokens/ts/foundation/base/density';
 import type { DensityMode } from '../../../../../../foundation/tokens/ts/foundation/base/density';
+
+const COLLECTION_WORKSPACE_DENSITY_SCALE_HOOK = '--ds-collection-workspace-density-scale';
+
+/**
+ * Keeps the mode preset as the stable fallback while allowing a presentation
+ * profile to govern workspace scale through the CSS cascade. The profile hook
+ * is intentionally separate from the effective `--ds-density-scale` output so
+ * the inline surface contract never shadows its own inherited input.
+ */
+function resolveCollectionWorkspaceDensityStyleVars(mode: DensityMode): React.CSSProperties {
+  return {
+    ...resolveDensityStyleVars(mode),
+    '--ds-density-scale': `var(${COLLECTION_WORKSPACE_DENSITY_SCALE_HOOK}, ${DENSITY_PRESETS[mode].scale})`,
+  } as React.CSSProperties;
+}
 
 function collectionColumnCapabilityId<T>(column: ColumnDef<T>): string {
   const fieldId = (column as ColumnDef<T> & { fieldId?: string }).fieldId;
@@ -114,6 +133,9 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
    * surface emits `--ds-density-cell-padding` / `--ds-density-card-padding` /
    * `--ds-density-scale` on its root and threads the mode to the inner table,
    * so density derives declaratively from each capability's style contract.
+   * Presentation profiles may govern the effective scale through
+   * `--ds-collection-workspace-density-scale`; when absent, the selected mode's
+   * canonical scale remains the fallback.
    *
    * A runtime `controls.density` switcher (`WorkspaceDensityConfig`), when
    * enabled and given a value, still overrides this baseline.
@@ -780,7 +802,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   // surface root so the inner table + embedded cards derive cell/card padding
   // from the token cascade.
   const density: DensityKey = controls?.density?.value ?? densityMode;
-  const densityStyleVars = resolveDensityStyleVars(normalizeDensityMode(density));
+  const densityStyleVars = resolveCollectionWorkspaceDensityStyleVars(
+    normalizeDensityMode(density),
+  );
   const compact = density === 'compact';
   const enhanced = presentation?.enhancedInteractions ?? false;
   const resolvedChrome = resolveCollectionWorkspaceChrome(surfaceMode, chrome);
