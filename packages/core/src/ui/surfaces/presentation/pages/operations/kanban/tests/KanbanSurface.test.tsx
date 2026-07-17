@@ -1,12 +1,15 @@
 /** @fileoverview KanbanSurface tests -- column rendering, card display, and filters. */
 
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { KanbanSurface } from '..';
 import type { KanbanSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import {
+  renderSurface,
+  RESOLVED_PHONE_TEST_CONTEXT,
+} from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<KanbanSurfaceConfig>): KanbanSurfaceConfig {
   return {
@@ -67,5 +70,32 @@ describe('KanbanSurface', () => {
     renderSurface(<KanbanSurface config={config} />);
 
     expect(await screen.findByText('No items')).toBeInTheDocument();
+  });
+
+  it('pages bounded lane groups and stacks each group on phone', async () => {
+    renderSurface(
+      <KanbanSurface
+        config={buildConfig({
+          visual: {
+            mobileColumnsLimit: 1,
+            stackColumnsOnMobile: true,
+          },
+        })}
+      />,
+      { responsiveContext: RESOLVED_PHONE_TEST_CONTEXT }
+    );
+
+    expect(await screen.findByRole('status')).toHaveTextContent('Lanes 1–1 of 3');
+    expect(screen.getByText('To Do')).toBeInTheDocument();
+    expect(screen.queryByText('In Progress')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Next kanban lanes' }));
+    expect(await screen.findByText('In Progress')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(document.querySelector('[data-part="responsive-board"]')).toHaveAttribute(
+        'data-mobile-stack',
+        'true'
+      );
+      expect(screen.getByRole('status')).toHaveTextContent('Lanes 2–2 of 3');
+    });
   });
 });

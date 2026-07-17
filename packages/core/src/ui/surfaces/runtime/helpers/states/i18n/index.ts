@@ -35,12 +35,14 @@ import { useTranslation } from '@/infrastructure/runtime/i18n';
  */
 export function useSurfaceTranslations(): {
   tSurface: (key: string, params?: Record<string, string | number>) => string;
+  locale: string;
 } {
-  const { t } = useTranslation('components');
+  const { t, locale } = useTranslation('components');
 
   // Prefix every key with `surfaces.` so surface components only need to
   // provide the relative key path (e.g., 'list.noResults').
   return {
     tSurface: (key, params) => t(`surfaces.${key}`, params),
+    locale,
   };
 }

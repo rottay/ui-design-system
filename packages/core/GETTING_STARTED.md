@@ -214,7 +214,7 @@ function Welcome() {
 Surfaces are page-level shells that handle chrome, loading, filtering, tables, and more. The simplest example is `ListSurface`.
 
 ```tsx
-import { ListSurface, createListSurfaceConfig } from "@rottay/design-system";
+import { ListSurface, type ListSurfaceConfig } from "@rottay/design-system";
 
 interface UserView {
   id: string;
@@ -222,7 +222,7 @@ interface UserView {
   email: string;
 }
 
-const config = createListSurfaceConfig<UserView>({
+const config = {
   visual: {
     defaultView: "table",
     allowViewSwitch: true,
@@ -245,14 +245,16 @@ const config = createListSurfaceConfig<UserView>({
       onClick: () => {},
     },
   },
-});
+} satisfies ListSurfaceConfig<UserView>;
 
 function UsersPage() {
   return <ListSurface config={config} data={users} loading={false} />;
 }
 ```
 
-Builder functions like `createListSurfaceConfig` are identity functions that exist purely for TypeScript inference.
+Use `satisfies` with the exported surface contract when a surface has no
+productive construction helper. Builders are kept only where an application
+runtime calls them and their defaults have a rendered effect.
 
 ---
 
@@ -531,7 +533,10 @@ The DS imports Ant components via `createEngineComponent` with lazy loading, so 
 
 ### TypeScript errors on surface config
 
-Use the builder functions (`createListSurfaceConfig`, `createDashboardSurfaceConfig`, etc.) to get full type inference. They are identity functions with zero runtime cost.
+Use `satisfies SurfaceNameConfig` for direct surface configuration. The public
+`createAuthSurfaceConfig`, `createFormSurfaceConfig`, and
+`createMarketingSurfaceConfig` builders remain available where their
+construction boundary has productive callers.
 
 ### Bundle size is larger than expected
 

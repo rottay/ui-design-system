@@ -428,7 +428,6 @@ export interface CollectionBehaviorConfig<T> {
 
 /** Responsive behavior configuration. */
 export interface WorkspaceResponsiveConfig {
-  stackOnMobile?: boolean;
   mobileBreakpoint?: number;
   mobileView?: string;
 }

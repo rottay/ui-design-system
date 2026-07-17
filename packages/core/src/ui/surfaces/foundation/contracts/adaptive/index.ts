@@ -56,14 +56,8 @@ export interface SurfacePosture {
   actionBar?: ActionBarPosture;
   /** Filter presentation. */
   filters?: FilterPosture;
-  /** In-surface navigation. */
-  nav?: NavPosture;
   /** Whether the header collapses to compact mode. */
   compactHeader?: boolean;
-  /** Number of grid columns (for dashboards, card grids). */
-  gridColumns?: number;
-  /** Custom flags for app-specific posture decisions. */
-  custom?: Record<string, unknown>;
 }
 
 // ---------------------------------------------------------------------------

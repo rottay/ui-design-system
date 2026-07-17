@@ -408,6 +408,8 @@
 @import '../../presentation/components/skin/visualization.css';
 @import '../../presentation/components/skin/auth-surface.css';
 @import '../../presentation/components/skin/chat-surface.css';
+@import '../../presentation/components/skin/kanban-surface.css';
+@import '../../presentation/components/skin/scheduler-surface.css';
 @import '../../presentation/components/skin/editor-surface.css';
 @import '../../presentation/components/skin/marketing-surface.css';
 @import '../../presentation/components/skin/media-surface.css';

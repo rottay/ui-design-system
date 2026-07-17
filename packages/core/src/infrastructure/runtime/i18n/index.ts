@@ -41,6 +41,7 @@ export {
   formatNumber,
   formatPercent,
   formatRelativeTime,
+  formatTime,
 } from '@/foundation/i18n/runtime/formatting';
 export { LOCALE_CONFIGS } from '@/foundation/i18n/runtime/catalog/configuration';
 export { ar, en, es, fr, pt } from '@/foundation/i18n/runtime/catalog/translations';

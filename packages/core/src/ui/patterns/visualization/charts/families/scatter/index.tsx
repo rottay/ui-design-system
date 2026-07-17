@@ -213,12 +213,12 @@ export const ScatterChart = memo(function ScatterChart({
 
   // Collect unique colors for a legend when points have explicit colors
   const legendNode = legend ? (
-    <div data-part="legend" data-variant={bubble ? 'bubble' : 'scatter'} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" data-variant={bubble ? 'bubble' : 'scatter'} style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
       {finiteData
         .filter((d) => d.label)
         .slice(0, 10) // Limit legend to 10 items to avoid clutter
         .map((d, i) => (
-          <div key={d.label ?? i} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <div key={d.label ?? i} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
             <span
               data-part="legend-swatch"
               style={{

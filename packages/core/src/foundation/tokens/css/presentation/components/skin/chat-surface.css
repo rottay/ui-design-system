@@ -7,3 +7,22 @@
 .ds-surface.ds-chat.ds-chat--accented .ds-chat__composer-input.ds-chat__composer-input.ds-chat__composer-input[data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
   border-color: var(--ds-color-primary);
 }
+
+.ds-surface.ds-chat .ds-chat__composer[data-part='composer'][data-mobile-sticky='true'] {
+  position: sticky;
+  z-index: var(--ds-z-sticky);
+  inset-block-end: calc(
+    var(
+        --ds-shell-bottom-inset,
+        var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))
+      ) +
+      var(--ds-virtual-keyboard-inset, 0px)
+  );
+  padding-block-end: var(--ds-space-xs);
+  background: var(--ds-color-bg-primary);
+}
+
+.ds-surface.ds-chat
+  .ds-chat__composer[data-part='composer'][data-mobile-sticky='true'][data-keyboard-open='true'] {
+  inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
+}

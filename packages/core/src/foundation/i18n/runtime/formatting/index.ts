@@ -7,4 +7,5 @@ export {
   formatNumber,
   formatPercent,
   formatRelativeTime,
+  formatTime,
 } from './intl';

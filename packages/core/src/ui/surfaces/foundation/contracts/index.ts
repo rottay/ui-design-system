@@ -876,15 +876,9 @@ export interface WizardSurfaceVisualConfig {
   allowSkip?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /**
-   * Use a compact step counter on mobile. Raw configs opt in explicitly;
-   * `createWizardSurfaceConfig()` defaults this to `true`.
-   */
+  /** Use a compact step counter on mobile. */
   compactStepsOnMobile?: boolean;
-  /**
-   * Keep wizard navigation and draft/cancel actions visible on mobile.
-   * Raw configs opt in explicitly; `createWizardSurfaceConfig()` defaults this to `true`.
-   */
+  /** Keep wizard navigation and draft/cancel actions visible on mobile. */
   mobileActionsSticky?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
@@ -1025,8 +1019,6 @@ export interface SidebarSurfaceVisualConfig {
   bordered?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Automatically collapse the sidebar on mobile viewports. */
-  collapseOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -1091,8 +1083,6 @@ export interface DetailFormSurfaceVisualConfig {
   columns?: number;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Hide the aside/summary panel on mobile to focus on the form. */
-  hideAsideOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -1232,8 +1222,6 @@ export interface SearchSurfaceVisualConfig {
   minQueryLength?: number;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Keep the search input sticky at the top on mobile. */
-  stickySearchOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -1307,10 +1295,6 @@ export interface EditorSurfaceVisualConfig {
   previewWidth?: number | string;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Completely hide the toolbar on mobile. */
-  hideToolbarOnMobile?: boolean;
-  /** Use a compact single-row toolbar on mobile. */
-  compactToolbarOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -1674,6 +1658,8 @@ export interface SchedulerSurfaceVisualConfig {
 /** Presentation slots for scheduler chrome, event rendering, and sidebar. */
 export interface SchedulerSurfacePresentationConfig {
   chrome: SurfacePageChrome;
+  /** IANA timezone used by deterministic agenda formatting. Defaults to UTC. */
+  timeZone?: string;
   /** Leading toolbar content (e.g., date navigation arrows). */
   toolbarStart?: ReactNode;
   /** Trailing toolbar content (e.g., view mode switcher). */
@@ -1756,10 +1742,6 @@ export interface CompareSurfaceVisualConfig {
   maxWidth?: number | string;
   /** Render the comparison in compact mode (smaller cells, tighter spacing). */
   compact?: boolean;
-  /** Stack comparison columns vertically on mobile. */
-  stackOnMobile?: boolean;
-  /** Maximum number of items to compare side-by-side on mobile. */
-  mobileCompareLimit?: number;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -1811,8 +1793,6 @@ export interface AuthSurfaceVisualConfig {
   heroPosition?: 'start' | 'end';
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Use a compact form layout on mobile (reduce spacing and padding). */
-  compactFormOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -1923,8 +1903,6 @@ export interface OnboardingSurfaceVisualConfig {
   allowSkip?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Hide the hero illustration on mobile to save vertical space. */
-  hideIllustrationOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -1971,10 +1949,6 @@ export interface OnboardingSurfaceConfig {
 /** Visual config for empty-state surfaces. */
 export interface EmptyStateSurfaceVisualConfig {
   maxWidth?: number | string;
-  /** Reduce padding and font sizes on mobile viewports. */
-  compactOnMobile?: boolean;
-  /** Hide the illustration graphic on mobile. Set to false to keep it visible. */
-  hideIllustrationOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2022,8 +1996,6 @@ export interface SettingsSurfaceVisualConfig {
   centeredTabs?: boolean;
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
-  /** Collapse the settings sidebar navigation on mobile. */
-  collapseSidebarOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2111,10 +2083,6 @@ export interface AuditSurfaceVisualConfig {
   density?: 'compact' | 'comfortable';
   /** Constrain table height and enable vertical scrolling. */
   maxHeight?: string;
-  /** Stack audit sections vertically on mobile. */
-  stackOnMobile?: boolean;
-  /** Use compact audit entries on mobile (fewer visible columns). */
-  compactEntriesOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2203,10 +2171,6 @@ export interface BillingPaymentMethod {
 export interface BillingSurfaceVisualConfig {
   /** 'tabs' groups plan/usage/invoices into tabs; 'sections' stacks them vertically. */
   layout?: 'tabs' | 'sections';
-  /** Stack billing sections vertically on mobile. */
-  stackOnMobile?: boolean;
-  /** Collapse the billing sidebar on mobile. */
-  collapseSidebarOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2275,10 +2239,6 @@ export interface ProfileField {
 export interface ProfileSurfaceVisualConfig {
   /** 'sidebar' shows section nav on the side; 'stacked' renders all sections vertically. */
   layout?: 'sidebar' | 'stacked';
-  /** Stack profile sections vertically on mobile. */
-  stackOnMobile?: boolean;
-  /** Collapse the profile sidebar navigation on mobile. */
-  collapseSidebarOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2353,10 +2313,6 @@ export interface NotificationPreference {
 export interface NotificationSurfaceVisualConfig {
   /** 'tabs' separates feed and preferences into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
-  /** Stack notification sections vertically on mobile. */
-  stackOnMobile?: boolean;
-  /** Use compact notification items on mobile (smaller avatars, shorter text). */
-  compactItemsOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2450,8 +2406,6 @@ export interface ImportExportHistoryEntry {
 /** Visual configuration for import/export surfaces. */
 export interface ImportExportSurfaceVisualConfig {
   maxWidth?: number | string;
-  /** Stack import/export sections vertically on mobile. */
-  stackOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2541,10 +2495,6 @@ export interface ReportSurfaceVisualConfig {
   /** 'sidebar-filters' places filters in a side panel; 'top-filters' stacks them above the report. */
   layout?: 'sidebar-filters' | 'top-filters';
   maxWidth?: number | string;
-  /** Stack filter and report sections vertically on mobile. */
-  stackSectionsOnMobile?: boolean;
-  /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
-  compactChartsOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2619,10 +2569,6 @@ export interface TeamRole {
 export interface TeamSurfaceVisualConfig {
   maxWidth?: number | string;
   layout?: 'table' | 'cards';
-  /** Stack team member views vertically on mobile. */
-  stackOnMobile?: boolean;
-  /** Default view mode on mobile ('cards' or 'table'). */
-  mobileDefaultView?: 'cards' | 'table';
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2705,10 +2651,6 @@ export interface IntegrationSurfaceVisualConfig {
   maxWidth?: number | string;
   /** 'tabs' separates keys/webhooks/apps into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
-  /** Stack integration sections vertically on mobile. */
-  stackOnMobile?: boolean;
-  /** Use compact card rendering for integration items on mobile. */
-  compactCardsOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2869,10 +2811,6 @@ export interface ActivitySurfaceFilter {
 /** Visual configuration for activity feed surfaces. */
 export interface ActivitySurfaceVisualConfig {
   maxWidth?: number | string;
-  /** Use compact entry rendering (smaller avatars, tighter spacing) on mobile. */
-  compactEntriesOnMobile?: boolean;
-  /** Stack activity feed layout vertically on mobile. */
-  stackOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -2947,10 +2885,6 @@ export interface FileBrowserSurfaceVisualConfig {
   maxWidth?: number | string;
   /** 'grid' shows thumbnails; 'list' shows a detailed table. */
   viewMode?: 'grid' | 'list';
-  /** Default view mode on mobile. Overrides `viewMode` on small screens. */
-  mobileView?: 'grid' | 'list';
-  /** Stack file browser layout vertically on mobile (breadcrumb + list). */
-  stackOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
@@ -3033,10 +2967,6 @@ export interface PricingSurfaceFeature {
 /** Visual configuration for pricing surfaces. */
 export interface PricingSurfaceVisualConfig {
   maxWidth?: number | string;
-  /** Stack pricing plans vertically on mobile instead of side-by-side. */
-  stackOnMobile?: boolean;
-  /** Use compact column rendering on mobile (reduced feature rows, smaller text). */
-  compactColumnsOnMobile?: boolean;
 
   /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;

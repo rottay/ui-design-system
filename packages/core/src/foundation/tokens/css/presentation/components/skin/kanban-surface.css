@@ -1,0 +1,13 @@
+.ds-surface.ds-kanban
+  .ds-kanban__board[data-part='responsive-board'][data-mobile-stack='true']
+  [data-part='board'] {
+  flex-direction: column;
+  overflow-x: clip;
+}
+
+.ds-surface.ds-kanban
+  .ds-kanban__board[data-part='responsive-board'][data-mobile-stack='true']
+  [data-part='column'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+}

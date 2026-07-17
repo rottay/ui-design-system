@@ -5,7 +5,10 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { ChatSurface } from '..';
 import type { ChatSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import {
+  renderSurface,
+  RESOLVED_PHONE_TEST_CONTEXT,
+} from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<ChatSurfaceConfig>): ChatSurfaceConfig {
   return {
@@ -167,5 +170,44 @@ describe('ChatSurface', () => {
     const localizedSendButton = screen.getByText('Enviar').closest('button');
     if (!localizedSendButton) throw new Error('Enviar button not found');
     expect(localizedSendButton).toBeDisabled();
+  });
+
+  it('projects transcript-first phone posture with a sticky composer', async () => {
+    const config = buildConfig({
+      visual: {
+        hideListOnMobile: true,
+        stickyInputOnMobile: true,
+      },
+      presentation: {
+        chrome: { title: 'Copilot Chat' },
+        sidebar: <div>Conversation list</div>,
+      },
+    });
+
+    renderSurface(<ChatSurface config={config} />, {
+      responsiveContext: {
+        ...RESOLVED_PHONE_TEST_CONTEXT,
+        virtualKeyboardInset: 276,
+        isVirtualKeyboardOpen: true,
+      },
+    });
+
+    expect(screen.getByText('Hello there')).toBeInTheDocument();
+    expect(document.querySelector('.ds-chat')).toHaveAttribute('data-mobile-sidebar', 'hidden');
+    expect(document.querySelector('[data-part="composer"]')).toHaveAttribute(
+      'data-mobile-sticky',
+      'true'
+    );
+    expect(document.querySelector('[data-part="composer"]')).toHaveAttribute(
+      'data-keyboard-open',
+      'true'
+    );
+    expect(
+      (document.querySelector('[data-part="composer"]') as HTMLElement).style.getPropertyValue(
+        '--ds-virtual-keyboard-inset'
+      )
+    ).toBe('276px');
+    expect(screen.queryByText('Conversation list')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Send' })).toBeInTheDocument();
   });
 });

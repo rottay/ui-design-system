@@ -1,0 +1,3099 @@
+{
+  "schemaVersion": 2,
+  "generatedBy": "packages/core/scripts/cra-11-adaptive-contract-census.mjs",
+  "source": "typescript-ast-productive-source-census",
+  "scope": {
+    "adaptiveDeclarations": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts",
+    "adaptiveConsumers": "ui-design-system/packages/core/src (complete ui/surfaces plus AST-selected adaptive references; types/builders/tests/artifacts excluded from productive consumers)",
+    "consumerEvidence": [
+      "declaration-identity property reads through aliases/destructuring and ES2020 collection callbacks",
+      "typed object transport through productive local call summaries, including multi-hop forwarding"
+    ],
+    "factoryRepositories": [
+      "ui-design-system",
+      "app-bithire",
+      "app-platform",
+      "app-evnto"
+    ]
+  },
+  "summary": {
+    "adaptiveFields": 78,
+    "adaptiveFieldsWithProductiveConsumers": 78,
+    "typeOnlyAdaptiveFields": 0,
+    "configFactories": 14,
+    "liveConfigFactories": 14,
+    "deadConfigFactories": 0,
+    "analysisErrors": 0
+  },
+  "adaptiveContract": {
+    "typeOnlyFields": [],
+    "fields": [
+      {
+        "id": "AdaptiveConfig.desktop",
+        "owner": "AdaptiveConfig",
+        "field": "desktop",
+        "path": "desktop",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 85,
+          "column": 3,
+          "offsetStart": 3235,
+          "offsetEnd": 3242
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 107,
+            "column": 26,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+            "line": 496,
+            "column": 38,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 776,
+            "column": 38,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/adaptive-posture/index.ts",
+            "line": 47,
+            "column": 26,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 9,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 19,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 30,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "AdaptiveConfig.phone",
+        "owner": "AdaptiveConfig",
+        "field": "phone",
+        "path": "phone",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 87,
+          "column": 3,
+          "offsetStart": 3290,
+          "offsetEnd": 3295
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 109,
+            "column": 40,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+            "line": 496,
+            "column": 38,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 776,
+            "column": 38,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/adaptive-posture/index.ts",
+            "line": 47,
+            "column": 26,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 32,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "AdaptiveConfig.tablet",
+        "owner": "AdaptiveConfig",
+        "field": "tablet",
+        "path": "tablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 86,
+          "column": 3,
+          "offsetStart": 3263,
+          "offsetEnd": 3269
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 108,
+            "column": 42,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+            "line": 496,
+            "column": 38,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 776,
+            "column": 38,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/adaptive-posture/index.ts",
+            "line": 47,
+            "column": 26,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 20,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 31,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "AuthSurfacePresentationConfig.mobileHero",
+        "owner": "AuthSurfacePresentationConfig",
+        "field": "mobileHero",
+        "path": "mobileHero",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1813,
+          "column": 3,
+          "offsetStart": 74188,
+          "offsetEnd": 74198
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/auth/index.tsx",
+            "line": 31,
+            "column": 37,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/auth/index.tsx",
+            "line": 32,
+            "column": 29,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/auth/tests/AuthSurface.mobile.test.tsx",
+            "line": 41,
+            "column": 25,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 90,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "AuthSurfaceVisualConfig.stackOnMobile",
+        "owner": "AuthSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1794,
+          "column": 3,
+          "offsetStart": 73382,
+          "offsetEnd": 73395
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/auth/index.tsx",
+            "line": 21,
+            "column": 64,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/index.ts",
+            "line": 25,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceResponsive.stories.tsx",
+            "line": 66,
+            "column": 36,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/tests/mobile-defaults.test.ts",
+            "line": 54,
+            "column": 49,
+            "role": "read"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "AuthSurfaceVisualConfig.stackOnTablet",
+        "owner": "AuthSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1795,
+          "column": 3,
+          "offsetStart": 73409,
+          "offsetEnd": 73422
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/auth/index.tsx",
+            "line": 21,
+            "column": 64,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceResponsive.stories.tsx",
+            "line": 66,
+            "column": 57,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "ChatSurfaceVisualConfig.hideListOnMobile",
+        "owner": "ChatSurfaceVisualConfig",
+        "field": "hideListOnMobile",
+        "path": "hideListOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1581,
+          "column": 3,
+          "offsetStart": 64788,
+          "offsetEnd": 64804
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx",
+            "line": 133,
+            "column": 39,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "ChatSurfaceVisualConfig.stackOnMobile",
+        "owner": "ChatSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1578,
+          "column": 3,
+          "offsetStart": 64679,
+          "offsetEnd": 64692
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx",
+            "line": 128,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceInternationalization.stories.tsx",
+            "line": 55,
+            "column": 19,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "ChatSurfaceVisualConfig.stackOnTablet",
+        "owner": "ChatSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1579,
+          "column": 3,
+          "offsetStart": 64706,
+          "offsetEnd": 64719
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx",
+            "line": 128,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "ChatSurfaceVisualConfig.stickyInputOnMobile",
+        "owner": "ChatSurfaceVisualConfig",
+        "field": "stickyInputOnMobile",
+        "path": "stickyInputOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1583,
+          "column": 3,
+          "offsetStart": 64891,
+          "offsetEnd": 64910
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx",
+            "line": 134,
+            "column": 58,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DashboardSurfaceSection.hideOnMobile",
+        "owner": "DashboardSurfaceSection",
+        "field": "hideOnMobile",
+        "path": "hideOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 566,
+          "column": 3,
+          "offsetStart": 22351,
+          "offsetEnd": 22363
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 56,
+            "column": 48,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 56,
+            "column": 48,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/tests/DashboardSurface.test.tsx",
+            "line": 120,
+            "column": 17,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DashboardSurfaceSection.mobilePriority",
+        "owner": "DashboardSurfaceSection",
+        "field": "mobilePriority",
+        "path": "mobilePriority",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 564,
+          "column": 3,
+          "offsetStart": 22247,
+          "offsetEnd": 22261
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 62,
+            "column": 20,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 62,
+            "column": 72,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 62,
+            "column": 20,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 62,
+            "column": 72,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/tests/DashboardSurface.test.tsx",
+            "line": 108,
+            "column": 17,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/tests/DashboardSurface.test.tsx",
+            "line": 114,
+            "column": 17,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DashboardSurfaceSection.mobileSpan",
+        "owner": "DashboardSurfaceSection",
+        "field": "mobileSpan",
+        "path": "mobileSpan",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 568,
+          "column": 3,
+          "offsetStart": 22463,
+          "offsetEnd": 22473
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 174,
+            "column": 33,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 195,
+            "column": 41,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DashboardSurfaceVisualConfig.mobileSectionsColumns",
+        "owner": "DashboardSurfaceVisualConfig",
+        "field": "mobileSectionsColumns",
+        "path": "mobileSectionsColumns",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 580,
+          "column": 3,
+          "offsetStart": 22986,
+          "offsetEnd": 23007
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 77,
+            "column": 26,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DashboardSurfaceVisualConfig.mobileStatsLimit",
+        "owner": "DashboardSurfaceVisualConfig",
+        "field": "mobileStatsLimit",
+        "path": "mobileStatsLimit",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 576,
+          "column": 3,
+          "offsetStart": 22772,
+          "offsetEnd": 22788
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 64,
+            "column": 43,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 65,
+            "column": 60,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/tests/DashboardSurface.test.tsx",
+            "line": 96,
+            "column": 13,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DashboardSurfaceVisualConfig.stackSectionsOnMobile",
+        "owner": "DashboardSurfaceVisualConfig",
+        "field": "stackSectionsOnMobile",
+        "path": "stackSectionsOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 582,
+          "column": 3,
+          "offsetStart": 23101,
+          "offsetEnd": 23122
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 74,
+            "column": 31,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
+            "line": 171,
+            "column": 45,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/tests/DashboardSurface.test.tsx",
+            "line": 97,
+            "column": 13,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DetailFormSurfaceVisualConfig.stackOnMobile",
+        "owner": "DetailFormSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1084,
+          "column": 3,
+          "offsetStart": 44353,
+          "offsetEnd": 44366
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/detail-form/index.tsx",
+            "line": 35,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/structures/record/tests/RecordBatch.contract.test.tsx",
+            "line": 551,
+            "column": 19,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DetailFormSurfaceVisualConfig.stackOnTablet",
+        "owner": "DetailFormSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1085,
+          "column": 3,
+          "offsetStart": 44380,
+          "offsetEnd": 44393
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/detail-form/index.tsx",
+            "line": 35,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/structures/record/tests/RecordBatch.contract.test.tsx",
+            "line": 551,
+            "column": 41,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "DetailSurfaceVisualConfig.collapseSidebarOnMobile",
+        "owner": "DetailSurfaceVisualConfig",
+        "field": "collapseSidebarOnMobile",
+        "path": "collapseSidebarOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 703,
+          "column": 3,
+          "offsetStart": 28639,
+          "offsetEnd": 28662
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/detail/index.tsx",
+            "line": 180,
+            "column": 52,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 172,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "EditorSurfaceVisualConfig.stackOnMobile",
+        "owner": "EditorSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1296,
+          "column": 3,
+          "offsetStart": 52888,
+          "offsetEnd": 52901
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/editor/index.tsx",
+            "line": 33,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "EditorSurfaceVisualConfig.stackOnTablet",
+        "owner": "EditorSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1297,
+          "column": 3,
+          "offsetStart": 52915,
+          "offsetEnd": 52928
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/editor/index.tsx",
+            "line": 33,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "FormSurfaceVisualConfig.hideAsideOnMobile",
+        "owner": "FormSurfaceVisualConfig",
+        "field": "hideAsideOnMobile",
+        "path": "hideAsideOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 750,
+          "column": 3,
+          "offsetStart": 30466,
+          "offsetEnd": 30483
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/form/index.tsx",
+            "line": 65,
+            "column": 80,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/index.ts",
+            "line": 41,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/tests/mobile-defaults.test.ts",
+            "line": 22,
+            "column": 26,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/tests/mobile-defaults.test.ts",
+            "line": 38,
+            "column": 26,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 144,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "FormSurfaceVisualConfig.mobileActionsSticky",
+        "owner": "FormSurfaceVisualConfig",
+        "field": "mobileActionsSticky",
+        "path": "mobileActionsSticky",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 752,
+          "column": 3,
+          "offsetStart": 30579,
+          "offsetEnd": 30598
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/form/index.tsx",
+            "line": 79,
+            "column": 82,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/index.ts",
+            "line": 42,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/form/tests/FormSurface.test.tsx",
+            "line": 70,
+            "column": 13,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/form/tests/FormSurface.test.tsx",
+            "line": 151,
+            "column": 19,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/tests/mobile-defaults.test.ts",
+            "line": 23,
+            "column": 26,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/tests/mobile-defaults.test.ts",
+            "line": 39,
+            "column": 26,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 143,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "FormSurfaceVisualConfig.stackOnMobile",
+        "owner": "FormSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 746,
+          "column": 3,
+          "offsetStart": 30262,
+          "offsetEnd": 30275
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/form/index.tsx",
+            "line": 42,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "FormSurfaceVisualConfig.stackOnTablet",
+        "owner": "FormSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 748,
+          "column": 3,
+          "offsetStart": 30357,
+          "offsetEnd": 30370
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/form/index.tsx",
+            "line": 42,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "HeaderSurfaceVisualConfig.compactOnMobile",
+        "owner": "HeaderSurfaceVisualConfig",
+        "field": "compactOnMobile",
+        "path": "compactOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 956,
+          "column": 3,
+          "offsetStart": 39485,
+          "offsetEnd": 39500
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/composition/layout/page-shell/header/index.tsx",
+            "line": 48,
+            "column": 57,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "HeaderSurfaceVisualConfig.hideSecondaryActionsOnMobile",
+        "owner": "HeaderSurfaceVisualConfig",
+        "field": "hideSecondaryActionsOnMobile",
+        "path": "hideSecondaryActionsOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 958,
+          "column": 3,
+          "offsetStart": 39589,
+          "offsetEnd": 39617
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/composition/layout/page-shell/header/index.tsx",
+            "line": 43,
+            "column": 37,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/composition/layout/page-shell/header/index.tsx",
+            "line": 55,
+            "column": 42,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/composition/layout/page-shell/header/index.tsx",
+            "line": 76,
+            "column": 43,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "KanbanSurfaceVisualConfig.mobileColumnsLimit",
+        "owner": "KanbanSurfaceVisualConfig",
+        "field": "mobileColumnsLimit",
+        "path": "mobileColumnsLimit",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 2737,
+          "column": 3,
+          "offsetStart": 107947,
+          "offsetEnd": 107965
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/kanban/index.tsx",
+            "line": 56,
+            "column": 30,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "KanbanSurfaceVisualConfig.stackColumnsOnMobile",
+        "owner": "KanbanSurfaceVisualConfig",
+        "field": "stackColumnsOnMobile",
+        "path": "stackColumnsOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 2739,
+          "column": 3,
+          "offsetStart": 108052,
+          "offsetEnd": 108072
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/kanban/index.tsx",
+            "line": 71,
+            "column": 62,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "ListSurfaceVisualConfig.hideViewSwitchOnMobile",
+        "owner": "ListSurfaceVisualConfig",
+        "field": "hideViewSwitchOnMobile",
+        "path": "hideViewSwitchOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 402,
+          "column": 3,
+          "offsetStart": 14506,
+          "offsetEnd": 14528
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx",
+            "line": 312,
+            "column": 33,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/tests/ListSurface.integration.test.tsx",
+            "line": 55,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 103,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "ListSurfaceVisualConfig.mobileDefaultView",
+        "owner": "ListSurfaceVisualConfig",
+        "field": "mobileDefaultView",
+        "path": "mobileDefaultView",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 398,
+          "column": 3,
+          "offsetStart": 14262,
+          "offsetEnd": 14279
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx",
+            "line": 276,
+            "column": 44,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/tests/ListSurface.integration.test.tsx",
+            "line": 53,
+            "column": 7,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 102,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "ListSurfaceVisualConfig.mobileFiltersLayout",
+        "owner": "ListSurfaceVisualConfig",
+        "field": "mobileFiltersLayout",
+        "path": "mobileFiltersLayout",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 412,
+          "column": 3,
+          "offsetStart": 15003,
+          "offsetEnd": 15022
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx",
+            "line": 453,
+            "column": 49,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx",
+            "line": 473,
+            "column": 51,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 104,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "MarketingSurfacePresentationConfig.mobileHero",
+        "owner": "MarketingSurfacePresentationConfig",
+        "field": "mobileHero",
+        "path": "mobileHero",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1874,
+          "column": 3,
+          "offsetStart": 76444,
+          "offsetEnd": 76454
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/marketing/index.tsx",
+            "line": 26,
+            "column": 37,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/marketing/index.tsx",
+            "line": 27,
+            "column": 29,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 63,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "MarketingSurfacePresentationConfig.mobileSupporting",
+        "owner": "MarketingSurfacePresentationConfig",
+        "field": "mobileSupporting",
+        "path": "mobileSupporting",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1872,
+          "column": 3,
+          "offsetStart": 76392,
+          "offsetEnd": 76408
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/marketing/index.tsx",
+            "line": 30,
+            "column": 37,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/marketing/index.tsx",
+            "line": 31,
+            "column": 29,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 65,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "MarketingSurfaceVisualConfig.stackOnMobile",
+        "owner": "MarketingSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1852,
+          "column": 3,
+          "offsetStart": 75784,
+          "offsetEnd": 75797
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/marketing/index.tsx",
+            "line": 23,
+            "column": 64,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/index.ts",
+            "line": 59,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/tests/mobile-defaults.test.ts",
+            "line": 55,
+            "column": 59,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 55,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "MarketingSurfaceVisualConfig.stackOnTablet",
+        "owner": "MarketingSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1853,
+          "column": 3,
+          "offsetStart": 75811,
+          "offsetEnd": 75824
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/marketing/index.tsx",
+            "line": 23,
+            "column": 64,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "MediaSurfaceVisualConfig.mobileColumnsLimit",
+        "owner": "MediaSurfaceVisualConfig",
+        "field": "mobileColumnsLimit",
+        "path": "mobileColumnsLimit",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1492,
+          "column": 3,
+          "offsetStart": 60917,
+          "offsetEnd": 60935
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/media/index.tsx",
+            "line": 116,
+            "column": 44,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "MediaSurfaceVisualConfig.stackOnMobile",
+        "owner": "MediaSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1489,
+          "column": 3,
+          "offsetStart": 60809,
+          "offsetEnd": 60822
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/media/index.tsx",
+            "line": 71,
+            "column": 55,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "MediaSurfaceVisualConfig.stackOnTablet",
+        "owner": "MediaSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1490,
+          "column": 3,
+          "offsetStart": 60836,
+          "offsetEnd": 60849
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/experience/media/index.tsx",
+            "line": 71,
+            "column": 55,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OnboardingSurfaceVisualConfig.stackOnMobile",
+        "owner": "OnboardingSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1904,
+          "column": 3,
+          "offsetStart": 77537,
+          "offsetEnd": 77550
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/onboarding/index.tsx",
+            "line": 42,
+            "column": 36,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceCatalog.stories.tsx",
+            "line": 303,
+            "column": 41,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/onboarding/tests/OnboardingSurface.test.tsx",
+            "line": 16,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OnboardingSurfaceVisualConfig.stackOnTablet",
+        "owner": "OnboardingSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1905,
+          "column": 3,
+          "offsetStart": 77564,
+          "offsetEnd": 77577
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/onboarding/index.tsx",
+            "line": 43,
+            "column": 36,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.hideSecondaryPanelOnMobile",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "hideSecondaryPanelOnMobile",
+        "path": "hideSecondaryPanelOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1402,
+          "column": 3,
+          "offsetStart": 57348,
+          "offsetEnd": 57374
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 101,
+            "column": 33,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 198,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.mobileFeedPosition",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "mobileFeedPosition",
+        "path": "mobileFeedPosition",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1400,
+          "column": 3,
+          "offsetStart": 57212,
+          "offsetEnd": 57230
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 114,
+            "column": 50,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 197,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.mobileQueuePosition",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "mobileQueuePosition",
+        "path": "mobileQueuePosition",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1398,
+          "column": 3,
+          "offsetStart": 57086,
+          "offsetEnd": 57105
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 113,
+            "column": 51,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 196,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.mobileSectionsColumns",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "mobileSectionsColumns",
+        "path": "mobileSectionsColumns",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1390,
+          "column": 3,
+          "offsetStart": 56753,
+          "offsetEnd": 56774
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 68,
+            "column": 26,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.mobileStatsLimit",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "mobileStatsLimit",
+        "path": "mobileStatsLimit",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1396,
+          "column": 3,
+          "offsetStart": 56981,
+          "offsetEnd": 56997
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 52,
+            "column": 43,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 53,
+            "column": 60,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 200,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.stackOnMobile",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1393,
+          "column": 3,
+          "offsetStart": 56871,
+          "offsetEnd": 56884
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 31,
+            "column": 55,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.stackOnTablet",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1394,
+          "column": 3,
+          "offsetStart": 56898,
+          "offsetEnd": 56911
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 31,
+            "column": 55,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "OperationalSurfaceVisualConfig.stackSectionsOnMobile",
+        "owner": "OperationalSurfaceVisualConfig",
+        "field": "stackSectionsOnMobile",
+        "path": "stackSectionsOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1404,
+          "column": 3,
+          "offsetStart": 57484,
+          "offsetEnd": 57505
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 65,
+            "column": 31,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/operational/index.tsx",
+            "line": 192,
+            "column": 53,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/tests/SurfaceResponsiveEngines.integration.test.tsx",
+            "line": 199,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SchedulerSurfaceVisualConfig.hideTimelineOnMobile",
+        "owner": "SchedulerSurfaceVisualConfig",
+        "field": "hideTimelineOnMobile",
+        "path": "hideTimelineOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1652,
+          "column": 3,
+          "offsetStart": 67972,
+          "offsetEnd": 67992
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx",
+            "line": 48,
+            "column": 39,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SchedulerSurfaceVisualConfig.mobileView",
+        "owner": "SchedulerSurfaceVisualConfig",
+        "field": "mobileView",
+        "path": "mobileView",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1650,
+          "column": 3,
+          "offsetStart": 67876,
+          "offsetEnd": 67886
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx",
+            "line": 51,
+            "column": 37,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SchedulerSurfaceVisualConfig.stackOnMobile",
+        "owner": "SchedulerSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1647,
+          "column": 3,
+          "offsetStart": 67731,
+          "offsetEnd": 67744
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx",
+            "line": 44,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SchedulerSurfaceVisualConfig.stackOnTablet",
+        "owner": "SchedulerSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1648,
+          "column": 3,
+          "offsetStart": 67758,
+          "offsetEnd": 67771
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx",
+            "line": 44,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SearchSurfaceVisualConfig.stackOnMobile",
+        "owner": "SearchSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1223,
+          "column": 3,
+          "offsetStart": 49623,
+          "offsetEnd": 49636
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/search/index.tsx",
+            "line": 100,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceInternationalization.stories.tsx",
+            "line": 29,
+            "column": 55,
+            "role": "write"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceResponsive.stories.tsx",
+            "line": 29,
+            "column": 76,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SearchSurfaceVisualConfig.stackOnTablet",
+        "owner": "SearchSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1224,
+          "column": 3,
+          "offsetStart": 49650,
+          "offsetEnd": 49663
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/search/index.tsx",
+            "line": 100,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceResponsive.stories.tsx",
+            "line": 29,
+            "column": 97,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SettingsSurfaceVisualConfig.stackOnMobile",
+        "owner": "SettingsSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1997,
+          "column": 3,
+          "offsetStart": 81130,
+          "offsetEnd": 81143
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/admin/settings/index.tsx",
+            "line": 49,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SettingsSurfaceVisualConfig.stackOnTablet",
+        "owner": "SettingsSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1998,
+          "column": 3,
+          "offsetStart": 81157,
+          "offsetEnd": 81170
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/admin/settings/index.tsx",
+            "line": 49,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SidebarSurfaceVisualConfig.stackOnMobile",
+        "owner": "SidebarSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1020,
+          "column": 3,
+          "offsetStart": 41977,
+          "offsetEnd": 41990
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/composition/layout/sidebar/index.tsx",
+            "line": 23,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceResponsive.stories.tsx",
+            "line": 49,
+            "column": 38,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SidebarSurfaceVisualConfig.stackOnTablet",
+        "owner": "SidebarSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1021,
+          "column": 3,
+          "offsetStart": 42004,
+          "offsetEnd": 42017
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/composition/layout/sidebar/index.tsx",
+            "line": 23,
+            "column": 54,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceResponsive.stories.tsx",
+            "line": 49,
+            "column": 59,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SurfacePosture.actionBar",
+        "owner": "SurfacePosture",
+        "field": "actionBar",
+        "path": "actionBar",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 56,
+          "column": 3,
+          "offsetStart": 2166,
+          "offsetEnd": 2175
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 873,
+            "column": 46,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 2688,
+            "column": 16,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SurfacePosture.collection",
+        "owner": "SurfacePosture",
+        "field": "collection",
+        "path": "collection",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 50,
+          "column": 3,
+          "offsetStart": 1943,
+          "offsetEnd": 1953
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 887,
+            "column": 17,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 888,
+            "column": 22,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 891,
+            "column": 15,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SurfacePosture.compactHeader",
+        "owner": "SurfacePosture",
+        "field": "compactHeader",
+        "path": "compactHeader",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 60,
+          "column": 3,
+          "offsetStart": 2310,
+          "offsetEnd": 2323
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 875,
+            "column": 13,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 893,
+            "column": 39,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 2064,
+            "column": 28,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SurfacePosture.filters",
+        "owner": "SurfacePosture",
+        "field": "filters",
+        "path": "filters",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 58,
+          "column": 3,
+          "offsetStart": 2228,
+          "offsetEnd": 2235
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 866,
+            "column": 27,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 869,
+            "column": 27,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SurfacePosture.formLayout",
+        "owner": "SurfacePosture",
+        "field": "formLayout",
+        "path": "formLayout",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 52,
+          "column": 3,
+          "offsetStart": 2018,
+          "offsetEnd": 2028
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+            "line": 505,
+            "column": 54,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
+            "line": 506,
+            "column": 30,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "SurfacePosture.pane",
+        "owner": "SurfacePosture",
+        "field": "pane",
+        "path": "pane",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
+          "line": 54,
+          "column": 3,
+          "offsetStart": 2111,
+          "offsetEnd": 2115
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 906,
+            "column": 31,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1361,
+            "column": 41,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1362,
+            "column": 45,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1405,
+            "column": 15,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1413,
+            "column": 39,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1414,
+            "column": 43,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1424,
+            "column": 56,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 12,
+            "column": 46,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 13,
+            "column": 45,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 14,
+            "column": 44,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 23,
+            "column": 46,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 24,
+            "column": 45,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 25,
+            "column": 44,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 35,
+            "column": 46,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 36,
+            "column": 45,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
+            "line": 37,
+            "column": 44,
+            "role": "read"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "VisualizationSurfaceVisualConfig.compactChartsOnMobile",
+        "owner": "VisualizationSurfaceVisualConfig",
+        "field": "compactChartsOnMobile",
+        "path": "compactChartsOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1148,
+          "column": 3,
+          "offsetStart": 46794,
+          "offsetEnd": 46815
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/visualization/index.tsx",
+            "line": 37,
+            "column": 19,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "VisualizationSurfaceVisualConfig.stackOnMobile",
+        "owner": "VisualizationSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1145,
+          "column": 3,
+          "offsetStart": 46658,
+          "offsetEnd": 46671
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/visualization/index.tsx",
+            "line": 33,
+            "column": 55,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/common/SurfaceProfiles.stories.tsx",
+            "line": 41,
+            "column": 19,
+            "role": "write"
+          }
+        ],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "VisualizationSurfaceVisualConfig.stackOnTablet",
+        "owner": "VisualizationSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 1146,
+          "column": 3,
+          "offsetStart": 46685,
+          "offsetEnd": 46698
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/visualization/index.tsx",
+            "line": 33,
+            "column": 55,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WizardSurfaceVisualConfig.compactStepsOnMobile",
+        "owner": "WizardSurfaceVisualConfig",
+        "field": "compactStepsOnMobile",
+        "path": "compactStepsOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 880,
+          "column": 3,
+          "offsetStart": 36147,
+          "offsetEnd": 36167
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/index.tsx",
+            "line": 356,
+            "column": 62,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WizardSurfaceVisualConfig.mobileActionsSticky",
+        "owner": "WizardSurfaceVisualConfig",
+        "field": "mobileActionsSticky",
+        "path": "mobileActionsSticky",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 882,
+          "column": 3,
+          "offsetStart": 36257,
+          "offsetEnd": 36276
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/index.tsx",
+            "line": 360,
+            "column": 60,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WizardSurfaceVisualConfig.stackOnMobile",
+        "owner": "WizardSurfaceVisualConfig",
+        "field": "stackOnMobile",
+        "path": "stackOnMobile",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 877,
+          "column": 3,
+          "offsetStart": 36046,
+          "offsetEnd": 36059
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/index.tsx",
+            "line": 118,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/onboarding/index.tsx",
+            "line": 42,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WizardSurfaceVisualConfig.stackOnTablet",
+        "owner": "WizardSurfaceVisualConfig",
+        "field": "stackOnTablet",
+        "path": "stackOnTablet",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
+          "line": 878,
+          "column": 3,
+          "offsetStart": 36073,
+          "offsetEnd": 36086
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/index.tsx",
+            "line": 118,
+            "column": 85,
+            "role": "transport-read"
+          }
+        ],
+        "productiveProducers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/forms/wizard/onboarding/index.tsx",
+            "line": 43,
+            "column": 7,
+            "role": "write"
+          }
+        ],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WorkspacePreviewRailConfig.mobileNavigation",
+        "owner": "WorkspacePreviewRailConfig",
+        "field": "mobileNavigation",
+        "path": "mobileNavigation",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+          "line": 349,
+          "column": 3,
+          "offsetStart": 12337,
+          "offsetEnd": 12353
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1360,
+            "column": 48,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1399,
+            "column": 30,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1412,
+            "column": 46,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1424,
+            "column": 30,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WorkspacePreviewRailConfig.mobileNavigation.enabled",
+        "owner": "WorkspacePreviewRailConfig",
+        "field": "enabled",
+        "path": "mobileNavigation.enabled",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+          "line": 351,
+          "column": 5,
+          "offsetStart": 12417,
+          "offsetEnd": 12424
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1362,
+            "column": 77,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1363,
+            "column": 48,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1414,
+            "column": 75,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1417,
+            "column": 21,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WorkspacePreviewRailConfig.mobileNavigation.href",
+        "owner": "WorkspacePreviewRailConfig",
+        "field": "href",
+        "path": "mobileNavigation.href",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+          "line": 353,
+          "column": 5,
+          "offsetStart": 12549,
+          "offsetEnd": 12553
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1368,
+            "column": 49,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1369,
+            "column": 44,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1418,
+            "column": 21,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1423,
+            "column": 22,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WorkspacePreviewRailConfig.mobileNavigation.onClick",
+        "owner": "WorkspacePreviewRailConfig",
+        "field": "onClick",
+        "path": "mobileNavigation.onClick",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+          "line": 355,
+          "column": 5,
+          "offsetStart": 12646,
+          "offsetEnd": 12653
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1372,
+            "column": 49,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 1373,
+            "column": 21,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WorkspaceResponsiveConfig.mobileBreakpoint",
+        "owner": "WorkspaceResponsiveConfig",
+        "field": "mobileBreakpoint",
+        "path": "mobileBreakpoint",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+          "line": 431,
+          "column": 3,
+          "offsetStart": 15597,
+          "offsetEnd": 15613
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 767,
+            "column": 44,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/decision-inbox/index.tsx",
+            "line": 253,
+            "column": 44,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/collection-workspace/index.ts",
+            "line": 85,
+            "column": 41,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      },
+      {
+        "id": "WorkspaceResponsiveConfig.mobileView",
+        "owner": "WorkspaceResponsiveConfig",
+        "field": "mobileView",
+        "path": "mobileView",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+          "line": 432,
+          "column": 3,
+          "offsetStart": 15626,
+          "offsetEnd": 15636
+        },
+        "productiveConsumers": [
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+            "line": 767,
+            "column": 44,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/decision-inbox/index.tsx",
+            "line": 253,
+            "column": 44,
+            "role": "transport-read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/collection-workspace/index.ts",
+            "line": 150,
+            "column": 54,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/collection-workspace/index.ts",
+            "line": 151,
+            "column": 45,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/collection-workspace/index.ts",
+            "line": 154,
+            "column": 95,
+            "role": "read"
+          }
+        ],
+        "productiveProducers": [],
+        "builderDefaults": [],
+        "testOnly": [],
+        "status": "productive-consumer"
+      }
+    ]
+  },
+  "configFactories": {
+    "deadFactories": [],
+    "repositories": [
+      {
+        "repository": "ui-design-system",
+        "total": 4,
+        "live": 4,
+        "dead": 0
+      },
+      {
+        "repository": "app-bithire",
+        "total": 1,
+        "live": 1,
+        "dead": 0
+      },
+      {
+        "repository": "app-platform",
+        "total": 0,
+        "live": 0,
+        "dead": 0
+      },
+      {
+        "repository": "app-evnto",
+        "total": 9,
+        "live": 9,
+        "dead": 0
+      }
+    ],
+    "factories": [
+      {
+        "id": "app-bithire:src/features/settings/operations/actions/integrations/webhook-configs/index.ts:createWebhookConfig",
+        "repository": "app-bithire",
+        "name": "createWebhookConfig",
+        "localName": "createWebhookConfig",
+        "declaration": {
+          "source": "app-bithire/src/features/settings/operations/actions/integrations/webhook-configs/index.ts",
+          "line": 84,
+          "column": 14
+        },
+        "productiveCallers": [
+          {
+            "source": "app-bithire/src/features/settings/surface/screens/workflows/ai/studio/webhook-create/index.tsx",
+            "line": 120,
+            "column": 13,
+            "repository": "app-bithire"
+          },
+          {
+            "source": "app-bithire/src/features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
+            "line": 679,
+            "column": 29,
+            "repository": "app-bithire"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/admin/settings/screens/general/config.ts:createSettingsConfig",
+        "repository": "app-evnto",
+        "name": "createSettingsConfig",
+        "localName": "createSettingsConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/admin/settings/screens/general/config.ts",
+          "line": 26,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/admin/settings/screens/general/index.tsx",
+            "line": 237,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/commerce/bar/actions/price-config/index.ts:createPriceConfig",
+        "repository": "app-evnto",
+        "name": "createPriceConfig",
+        "localName": "createPriceConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/commerce/bar/actions/price-config/index.ts",
+          "line": 124,
+          "column": 14
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/commerce/products/screens/pricing/index.tsx",
+            "line": 233,
+            "column": 15,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/commerce/bar/screens/dashboard/config.ts:createBarDashboardConfig",
+        "repository": "app-evnto",
+        "name": "createBarDashboardConfig",
+        "localName": "createBarDashboardConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/commerce/bar/screens/dashboard/config.ts",
+          "line": 27,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/commerce/bar/screens/dashboard/index.tsx",
+            "line": 583,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/commerce/inventory/screens/dashboard/config.ts:createInventoryDashboardConfig",
+        "repository": "app-evnto",
+        "name": "createInventoryDashboardConfig",
+        "localName": "createInventoryDashboardConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/commerce/inventory/screens/dashboard/config.ts",
+          "line": 27,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/commerce/inventory/screens/dashboard/index.tsx",
+            "line": 493,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/commerce/products/screens/detail/config.ts:createProductDetailConfig",
+        "repository": "app-evnto",
+        "name": "createProductDetailConfig",
+        "localName": "createProductDetailConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/commerce/products/screens/detail/config.ts",
+          "line": 37,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/commerce/products/screens/detail/index.tsx",
+            "line": 242,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/events/events/screens/control-room/config.ts:createControlRoomConfig",
+        "repository": "app-evnto",
+        "name": "createControlRoomConfig",
+        "localName": "createControlRoomConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/events/events/screens/control-room/config.ts",
+          "line": 40,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/events/events/screens/control-room/index.tsx",
+            "line": 1102,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/events/scheduling/screens/calendar/config.ts:createSchedulingCalendarConfig",
+        "repository": "app-evnto",
+        "name": "createSchedulingCalendarConfig",
+        "localName": "createSchedulingCalendarConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/events/scheduling/screens/calendar/config.ts",
+          "line": 33,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/events/scheduling/screens/calendar/index.tsx",
+            "line": 534,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/venue/staff/screens/command/config.ts:createStaffCommandConfig",
+        "repository": "app-evnto",
+        "name": "createStaffCommandConfig",
+        "localName": "createStaffCommandConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/venue/staff/screens/command/config.ts",
+          "line": 27,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/venue/staff/screens/command/index.tsx",
+            "line": 804,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "app-evnto:src/features/venue/staff/screens/detail/config.ts:createStaffDetailConfig",
+        "repository": "app-evnto",
+        "name": "createStaffDetailConfig",
+        "localName": "createStaffDetailConfig",
+        "declaration": {
+          "source": "app-evnto/src/features/venue/staff/screens/detail/config.ts",
+          "line": 41,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/venue/staff/screens/detail/index.tsx",
+            "line": 889,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "ui-design-system:src/infrastructure/runtime/tenant/runtime/authoring/configuration/index.ts:createTenantConfig",
+        "repository": "ui-design-system",
+        "name": "createTenantConfig",
+        "localName": "createTenantConfig",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/authoring/configuration/index.ts",
+          "line": 82,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/composition/react/authoring/use-create-tenant/index.ts",
+            "line": 62,
+            "column": 14,
+            "repository": "ui-design-system"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "line": 100,
+            "column": 11,
+            "repository": "ui-design-system"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+            "line": 131,
+            "column": 38,
+            "repository": "ui-design-system"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx",
+            "line": 94,
+            "column": 38,
+            "repository": "ui-design-system"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "ui-design-system:src/ui/surfaces/runtime/builders/index.ts:createAuthSurfaceConfig",
+        "repository": "ui-design-system",
+        "name": "createAuthSurfaceConfig",
+        "localName": "createAuthSurfaceConfig",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/index.ts",
+          "line": 19,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/components/marketing/auth-shell/index.tsx",
+            "line": 18,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "ui-design-system:src/ui/surfaces/runtime/builders/index.ts:createFormSurfaceConfig",
+        "repository": "ui-design-system",
+        "name": "createFormSurfaceConfig",
+        "localName": "createFormSurfaceConfig",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/index.ts",
+          "line": 34,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/features/events/artists/screens/create/index.tsx",
+            "line": 140,
+            "column": 18,
+            "repository": "app-evnto"
+          },
+          {
+            "source": "app-evnto/src/features/venue/venues/screens/create/index.tsx",
+            "line": 240,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      },
+      {
+        "id": "ui-design-system:src/ui/surfaces/runtime/builders/index.ts:createMarketingSurfaceConfig",
+        "repository": "ui-design-system",
+        "name": "createMarketingSurfaceConfig",
+        "localName": "createMarketingSurfaceConfig",
+        "declaration": {
+          "source": "ui-design-system/packages/core/src/ui/surfaces/runtime/builders/index.ts",
+          "line": 53,
+          "column": 17
+        },
+        "productiveCallers": [
+          {
+            "source": "app-evnto/src/components/marketing/platform-page/index.tsx",
+            "line": 164,
+            "column": 18,
+            "repository": "app-evnto"
+          },
+          {
+            "source": "app-evnto/src/components/marketing/roles-page/index.tsx",
+            "line": 222,
+            "column": 18,
+            "repository": "app-evnto"
+          }
+        ],
+        "factoryCallers": [],
+        "status": "live"
+      }
+    ]
+  },
+  "analysisErrors": [],
+  "acceptance": {
+    "zeroTypeOnlyAdaptiveFields": true,
+    "zeroDeadConfigFactories": true,
+    "zeroAnalysisErrors": true,
+    "pass": true
+  }
+}

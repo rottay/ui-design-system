@@ -9,11 +9,24 @@ import {
   formatNumber,
   formatPercent,
   formatRelativeTime,
+  formatTime,
 } from '..';
 
 describe('i18n formatters', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it('formats time with an explicit locale and timezone', () => {
+    const date = new Date('2026-03-13T12:34:00Z');
+
+    expect(formatTime(date, 'en-US', { timeZone: 'UTC' })).toBe(
+      new Intl.DateTimeFormat('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'UTC',
+      }).format(date)
+    );
   });
 
   it('formats dates, numbers, currency, percent and file sizes with the requested locale', () => {

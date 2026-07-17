@@ -9,7 +9,16 @@ describe('Grid integration', () => {
     const { Grid } = await import('..');
 
     renderWithEngine(
-      <Grid engine={engine} columns={{ xs: 1, md: 3 }} gap="md" data-testid="grid">
+      <Grid
+        engine={engine}
+        columns={{ xs: 1, md: 3 }}
+        gap="md"
+        data-testid="grid"
+        data-part="root"
+        data-mobile-view="list"
+        data-component="caller-value"
+        aria-describedby="grid-description"
+      >
         <Grid.Item>One</Grid.Item>
         <Grid.Item span={2}>Two</Grid.Item>
       </Grid>,
@@ -18,6 +27,10 @@ describe('Grid integration', () => {
 
     const grid = await screen.findByTestId('grid', undefined, { timeout: 10000 });
     expect(grid).toBeInTheDocument();
+    expect(grid).toHaveAttribute('data-part', 'root');
+    expect(grid).toHaveAttribute('data-mobile-view', 'list');
+    expect(grid).toHaveAttribute('aria-describedby', 'grid-description');
+    expect(grid).toHaveAttribute('data-component', 'grid');
     expect(screen.getByText('One')).toBeInTheDocument();
     expect(screen.getByText('Two')).toBeInTheDocument();
   }, 15000);

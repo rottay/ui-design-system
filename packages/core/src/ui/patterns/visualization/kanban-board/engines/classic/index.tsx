@@ -108,6 +108,8 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
   if (loading) {
     return (
       <div
+        data-part="root"
+        data-loading="true"
         className={className}
         style={{
           display: 'flex',
@@ -123,9 +125,10 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
   }
 
   return (
-    <div className={className} style={style}>
-      {toolbar && <div style={{ marginBottom: 16 }}>{toolbar}</div>}
+    <div data-part="root" data-loading="false" className={className} style={style}>
+      {toolbar && <div data-part="toolbar" style={{ marginBottom: 16 }}>{toolbar}</div>}
       <div
+        data-part="board"
         style={{
           display: 'flex',
           gap: columnGap,
@@ -138,9 +141,14 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
           // turns red to signal that further additions should be reconsidered.
           const isOverLimit =
             column.limit !== undefined && column.items.length >= column.limit;
+          const isDropping = dropTarget?.columnId === column.id;
 
           return (
             <div
+              data-part="column"
+              data-collapsed={Boolean(column.collapsed)}
+              data-over-limit={isOverLimit}
+              data-dropping={isDropping}
               key={column.id}
               style={{
                 minWidth: columnMinWidth,
@@ -152,6 +160,7 @@ export default function ClassicKanbanBoard<T>(props: KanbanBoardProps<T>) {
               {/* Column header -- uses a colored top border as a quick visual
                   lane identifier (e.g. red for "Blocked", green for "Done"). */}
               <Card
+                data-part="column-header"
                 size="small"
                 style={{
                   marginBottom: 8,

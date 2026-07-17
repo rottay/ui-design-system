@@ -102,6 +102,10 @@ export type Alignment = 'start' | 'center' | 'end';
  * redefinitions across component-specific prop files.
  */
 export interface BaseComponentProps {
+  /** Arbitrary semantic state hooks forwarded to the rendered DOM element. */
+  [dataAttribute: `data-${string}`]: string | number | boolean | undefined;
+  /** Arbitrary ARIA relationships/states forwarded to the rendered DOM element. */
+  [ariaAttribute: `aria-${string}`]: string | number | boolean | undefined;
   /** Additional CSS class name */
   className?: string;
   /** Additional inline styles */

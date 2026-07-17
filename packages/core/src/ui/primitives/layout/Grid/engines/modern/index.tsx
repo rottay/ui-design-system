@@ -52,6 +52,7 @@ import {
   isResponsiveGridValue,
   type ResponsiveGridTemplateValue,
 } from '../../runtime/responsive';
+import { extractSemanticDOMAttributes } from '../../runtime/dom-attributes';
 
 /**
  * Converts a semantic gap token or raw pixel number into a CSS-compatible string.
@@ -187,8 +188,6 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
       columns,
       rows,
       id,
-      'aria-label': ariaLabel,
-      'data-testid': dataTestId,
     } = props;
 
     const reactId = useId();
@@ -234,6 +233,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
 
     const ElementType = Component as ElementType;
     const renderedChildren = React.Children.toArray(children);
+    const semanticAttributes = extractSemanticDOMAttributes(props);
 
     return (
       <>
@@ -245,8 +245,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>(
             className: `rottay-grid rottay-grid--modern ${tailwindClasses} ${className}`.trim(),
             style: computedStyle,
             id,
-            'aria-label': ariaLabel,
-            'data-testid': dataTestId,
+            ...semanticAttributes,
             'data-component': 'grid',
             'data-grid-id': needsResponsiveCSS ? gridId : undefined,
           },
@@ -278,6 +277,7 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>(
       span,
       colSpan,
       rowSpan,
+      id,
     } = props;
 
     const computedStyle = buildGridItemStyles(props);
@@ -292,6 +292,7 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>(
 
     const ElementType = Component as ElementType;
     const renderedChildren = React.Children.toArray(children);
+    const semanticAttributes = extractSemanticDOMAttributes(props);
 
     return React.createElement(
       ElementType,
@@ -299,6 +300,8 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>(
         ref: ref as Ref<HTMLElement>,
         className: `rottay-grid-item rottay-grid-item--modern ${spanClasses} ${className}`.trim(),
         style: computedStyle,
+        id,
+        ...semanticAttributes,
         'data-component': 'grid-item',
       },
       renderedChildren

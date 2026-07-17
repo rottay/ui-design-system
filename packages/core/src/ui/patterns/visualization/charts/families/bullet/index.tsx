@@ -235,7 +235,7 @@ export const BulletChart = memo(function BulletChart({
 
   // Legend node
   const legendNode = legend && canRender ? (
-    <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
       {[
         { label: 'Poor', color: resolvedRangeColors[0] },
         { label: 'Satisfactory', color: resolvedRangeColors[1] },
@@ -243,7 +243,7 @@ export const BulletChart = memo(function BulletChart({
         { label: 'Actual', color: valueColor },
         { label: 'Target', color: targetColor },
       ].map((item) => (
-        <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+        <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
           <span data-part="legend-swatch" data-variant={item.label === 'Target' ? 'target' : 'range'} style={{
             width: item.label === 'Target' ? 2 : 12,
             height: 12,

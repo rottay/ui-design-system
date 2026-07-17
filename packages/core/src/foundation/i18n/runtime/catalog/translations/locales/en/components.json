@@ -227,7 +227,17 @@
     },
     "scheduler": {
       "empty_title": "No scheduled events",
-      "empty_description": "Populate the scheduler with events to render the calendar."
+      "empty_description": "Populate the scheduler with events to render the calendar.",
+      "all_day": "All day",
+      "invalid_time": "Time unavailable",
+      "invalid_events": "Events with an invalid start time: {count}"
+    },
+    "kanban": {
+      "previous": "Previous",
+      "next": "Next",
+      "previous_lanes": "Previous kanban lanes",
+      "next_lanes": "Next kanban lanes",
+      "lane_range": "Lanes {start}–{end} of {total}"
     },
     "operational": {
       "empty_title": "No operational modules configured",

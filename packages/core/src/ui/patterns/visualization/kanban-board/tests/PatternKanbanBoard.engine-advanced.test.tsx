@@ -99,6 +99,12 @@ describe('PatternKanbanBoard advanced engine coverage', () => {
     expect(screen.getByText('Doing')).toBeInTheDocument();
     expect(screen.getByText('Done')).toBeInTheDocument();
     expect(screen.getByText('Nothing here')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="root"]')).toHaveAttribute(
+      'data-loading',
+      'false'
+    );
+    expect(container.querySelector('[data-part="board"]')).not.toBeNull();
+    expect(container.querySelectorAll('[data-part="column"]')).toHaveLength(3);
 
     fireEvent.click(screen.getByText('Task A'));
     expect(onItemClick).toHaveBeenCalledWith(

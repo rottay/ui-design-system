@@ -31,8 +31,6 @@ export interface SheetProps extends EngineAwareProps {
   title?: ReactNode;
   /** Footer actions. Rendered outside the scrollable body. */
   footer?: ReactNode;
-  /** Optional snap points for bottom sheet (percentage heights, e.g. [0.25, 0.5, 1]) */
-  snapPoints?: number[];
   /** Whether to show the drag handle (bottom sheet only) */
   showHandle?: boolean;
   /** Whether to show overlay backdrop */

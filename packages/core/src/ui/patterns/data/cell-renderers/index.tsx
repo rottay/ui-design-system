@@ -12,7 +12,7 @@
  * ```tsx
  * import { cellRenderers } from '@rottay/design-system';
  *
- * const config = createListSurfaceConfig({
+ * const config = {
  *   presentation: {
  *     renderCell: {
  *       'user.name': (_, row) => cellRenderers.avatarName(row.name, row.email),
@@ -21,7 +21,7 @@
  *       'user.createdAt': (v) => cellRenderers.date(v as string),
  *     },
  *   },
- * });
+ * } satisfies ListSurfaceConfig<UserView>;
  * ```
  *
  * @module CellRenderers

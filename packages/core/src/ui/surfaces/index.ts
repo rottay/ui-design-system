@@ -14,9 +14,9 @@
  * @example
  * ```ts
  * import {
- *   createListSurfaceConfig,
- *   ListSurface,
- *   type ListSurfaceConfig,
+ *   createFormSurfaceConfig,
+ *   FormSurface,
+ *   type FormSurfaceConfig,
  * } from '@rottay/design-system';
  * ```
  */

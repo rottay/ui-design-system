@@ -40,6 +40,7 @@ import type { ChatSurfaceConfig, ChatSurfaceMessage } from '../../../../foundati
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
 import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
+import { useResponsive } from '@/infrastructure/runtime/responsive';
 
 /** Default transcript renderer used when consumers do not provide a custom message slot. */
 function DefaultMessage({
@@ -124,7 +125,13 @@ export function ChatSurface({
 }: ChatSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaults();
-  const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
+  const { virtualKeyboardInset, isVirtualKeyboardOpen } = useResponsive();
+  const resolvedMobile = isMobile && hasResolvedViewport;
+  const showSidebar =
+    !!config.presentation.sidebar &&
+    !(resolvedMobile && config.visual.hideListOnMobile === true);
+  const stickyComposer = resolvedMobile && config.visual.stickyInputOnMobile === true;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // The composer supports both controlled (app owns draft state) and
   // uncontrolled (surface owns draft state) modes. When `config.behavior.draft`
@@ -176,11 +183,13 @@ export function ChatSurface({
   // content is provided, it collapses to a single column.
   const chatContent = (
     <Grid
-      className={`ds-surface ds-chat ds-chat--${config.presentation.sidebar && !shouldStack ? 'split' : 'stacked'} ds-chat--${profileDefaults.accentPosition !== 'none' ? 'accented' : 'plain'}${loading ? ' ds-chat--loading' : ''}`}
-      columns={config.presentation.sidebar && !shouldStack ? 12 : 1}
+      className={`ds-surface ds-chat ds-chat--${showSidebar && !shouldStack ? 'split' : 'stacked'} ds-chat--${profileDefaults.accentPosition !== 'none' ? 'accented' : 'plain'}${loading ? ' ds-chat--loading' : ''}`}
+      data-mobile-sidebar={showSidebar ? 'visible' : 'hidden'}
+      data-mobile-composer={stickyComposer ? 'sticky' : 'inline'}
+      columns={showSidebar && !shouldStack ? 12 : 1}
       gap={sectionSpacing}
     >
-      <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
+      <Grid.Item span={showSidebar && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
           {config.presentation.headerContent}
 
@@ -245,36 +254,48 @@ export function ChatSurface({
             )}
           </SurfaceSectionCard>
 
-          <SurfaceSectionCard title={tSurface('chat.composer_title')}>
-            <Stack spacing="md">
-              {/* When a personality accent bar is active, the composer gets a
-                  matching primary border to visually tie it to the accent
-                  theme. Without an accent, the default border is used. */}
-              <Textarea
-                className="ds-chat__composer-input"
-                value={draft}
-                onChange={(nextValue) => setDraft(nextValue)}
-                placeholder={config.presentation.composerPlaceholder ?? tSurface('chat.placeholder')}
-                rows={config.visual.composerRows ?? 4}
-                disabled={config.behavior.sending}
-              />
-              <Button
-                className="ds-chat__send-button"
-                variant="primary"
-                onClick={() => void handleSend()}
-                loading={config.behavior.sending}
-                disabled={!draft.trim() || config.behavior.sending}
-              >
-                {config.behavior.sendLabel ?? tSurface('chat.send')}
-              </Button>
-            </Stack>
-          </SurfaceSectionCard>
+          <Box
+            className="ds-chat__composer"
+            data-part="composer"
+            data-mobile-sticky={stickyComposer ? 'true' : 'false'}
+            data-keyboard-open={isVirtualKeyboardOpen ? 'true' : 'false'}
+            style={
+              {
+                '--ds-virtual-keyboard-inset': `${Math.max(0, virtualKeyboardInset)}px`,
+              } as React.CSSProperties
+            }
+          >
+            <SurfaceSectionCard title={tSurface('chat.composer_title')}>
+              <Stack spacing="md">
+                {/* When a personality accent bar is active, the composer gets a
+                    matching primary border to visually tie it to the accent
+                    theme. Without an accent, the default border is used. */}
+                <Textarea
+                  className="ds-chat__composer-input"
+                  value={draft}
+                  onChange={(nextValue) => setDraft(nextValue)}
+                  placeholder={config.presentation.composerPlaceholder ?? tSurface('chat.placeholder')}
+                  rows={config.visual.composerRows ?? 4}
+                  disabled={config.behavior.sending}
+                />
+                <Button
+                  className="ds-chat__send-button"
+                  variant="primary"
+                  onClick={() => void handleSend()}
+                  loading={config.behavior.sending}
+                  disabled={!draft.trim() || config.behavior.sending}
+                >
+                  {config.behavior.sendLabel ?? tSurface('chat.send')}
+                </Button>
+              </Stack>
+            </SurfaceSectionCard>
+          </Box>
 
           {config.presentation.footer}
         </Stack>
       </Grid.Item>
 
-      {config.presentation.sidebar && (
+      {showSidebar && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
           <Card className="ds-chat__sidebar" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.sidebar}</Card.Body>

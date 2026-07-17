@@ -7,6 +7,10 @@ import React, { Suspense, type ReactElement } from 'react';
 import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../../../../foundation/contracts';
+import {
+  ResponsiveContext,
+  type ResponsiveContextValue,
+} from '../../../../../infrastructure/runtime/responsive';
 
 const SURFACE_TEST_TENANT: TenantConfig = {
   slug: 'surface-test',
@@ -30,7 +34,26 @@ export interface RenderSurfaceOptions extends Omit<RenderOptions, 'wrapper'> {
   productProfile?: ProductProfileKey;
   /** Override the engine used for rendering. Defaults to 'rustic'. */
   engine?: EngineName;
+  /** Deterministic responsive snapshot for behavior fixtures. */
+  responsiveContext?: ResponsiveContextValue;
 }
+
+export const RESOLVED_PHONE_TEST_CONTEXT: ResponsiveContextValue = {
+  hasResolvedViewport: true,
+  deviceClass: 'phone',
+  activeBreakpoint: 'xs',
+  isPhone: true,
+  isTablet: false,
+  isDesktop: false,
+  pointer: 'coarse',
+  orientation: 'portrait',
+  prefersReducedMotion: true,
+  isPhoneOrTablet: true,
+  isTabletOrDesktop: false,
+  isTouchDevice: true,
+  virtualKeyboardInset: 0,
+  isVirtualKeyboardOpen: false,
+};
 
 /**
  * Surface tests should run through the real provider stack so they exercise the
@@ -47,10 +70,17 @@ export function renderSurface(
     tenantOverrides,
     productProfile = 'generic.default',
     engine = 'rustic',
+    responsiveContext,
     ...renderOptions
   } = options;
 
-  return render(
+  const content = responsiveContext ? (
+    <ResponsiveContext.Provider value={responsiveContext}>{ui}</ResponsiveContext.Provider>
+  ) : (
+    ui
+  );
+
+  const providerTree = (
     <DesignSystemProvider
       tenantConfig={tenantConfig}
       tenantOverrides={tenantOverrides}
@@ -58,8 +88,20 @@ export function renderSurface(
       forceEngine={engine}
       skipCssLoading
     >
-      <Suspense fallback={<div data-testid="surface-loading">Loading...</div>}>{ui}</Suspense>
-    </DesignSystemProvider>,
+      <Suspense fallback={<div data-testid="surface-loading">Loading...</div>}>
+        {content}
+      </Suspense>
+    </DesignSystemProvider>
+  );
+
+  return render(
+    responsiveContext ? (
+      <ResponsiveContext.Provider value={responsiveContext}>
+        {providerTree}
+      </ResponsiveContext.Provider>
+    ) : (
+      providerTree
+    ),
     renderOptions
   );
 }

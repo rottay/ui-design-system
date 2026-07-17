@@ -3,9 +3,14 @@
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import visualizationSkinCss from '@/foundation/tokens/css/presentation/components/skin/visualization.css?raw';
+import { Histogram, LineChart } from '../../../../../../patterns/visualization/charts';
 import { VisualizationSurface } from '..';
 import type { VisualizationSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import {
+  renderSurface,
+  RESOLVED_PHONE_TEST_CONTEXT,
+} from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<VisualizationSurfaceConfig>): VisualizationSurfaceConfig {
   return {
@@ -143,5 +148,103 @@ describe('VisualizationSurface', () => {
     );
 
     expect(await screen.findByText('Bring your own visualization state')).toBeInTheDocument();
+  });
+
+  it('projects compact legend variables into chart families after phone resolution', async () => {
+    renderSurface(
+      <VisualizationSurface
+        config={buildConfig({
+          visual: { compactChartsOnMobile: true },
+          behavior: {
+            views: [
+              {
+                key: 'chart',
+                label: 'Chart',
+                content: (
+                  <>
+                    <LineChart
+                      series={[
+                        {
+                          name: 'Revenue',
+                          data: [
+                            { x: 'Jan', y: 10 },
+                            { x: 'Feb', y: 20 },
+                          ],
+                        },
+                      ]}
+                      width={320}
+                      height={240}
+                      responsive={false}
+                      animate={false}
+                      legend
+                    />
+                    <Histogram
+                      values={[1, 2, 2, 3, 4]}
+                      width={320}
+                      height={240}
+                      responsive={false}
+                      animate={false}
+                      legend
+                    />
+                  </>
+                ),
+              },
+            ],
+          },
+        })}
+      />,
+      { responsiveContext: RESOLVED_PHONE_TEST_CONTEXT }
+    );
+
+    await waitFor(() => {
+      expect(document.querySelector('.ds-chart-line')).not.toBeNull();
+      expect(document.querySelector('.ds-chart-histogram')).not.toBeNull();
+      expect(document.querySelector('[data-part="visualization-view"]')).toHaveAttribute(
+        'data-chart-density',
+        'compact'
+      );
+    }, { timeout: 3000 });
+
+    const compactView = document.querySelector<HTMLElement>(
+      '[data-part="visualization-view"][data-chart-density="compact"]'
+    );
+    const lineLegend = compactView?.querySelector<HTMLElement>(
+      '.ds-chart-line [data-part="legend"]'
+    );
+    const histogramLegend = compactView?.querySelector<HTMLElement>(
+      '.ds-chart-histogram [data-part="legend"]'
+    );
+
+    expect(lineLegend).not.toBeNull();
+    expect(histogramLegend).not.toBeNull();
+    if (!lineLegend || !histogramLegend) {
+      throw new Error('Expected compact line and histogram legends');
+    }
+
+    expect(visualizationSkinCss).toContain(
+      '--ds-chart-legend-gap: var(--ds-spacing-2);'
+    );
+    expect(visualizationSkinCss).toContain(
+      '--ds-chart-legend-margin-top: var(--ds-spacing-2);'
+    );
+    expect(visualizationSkinCss).toContain(
+      '--ds-chart-legend-item-gap: var(--ds-spacing-1);'
+    );
+    expect(visualizationSkinCss).toContain(
+      '--ds-chart-legend-font-size: var(--ds-font-size-xs);'
+    );
+
+    for (const legend of [lineLegend, histogramLegend]) {
+      expect(legend.style.gap).toBe('var(--ds-chart-legend-gap, 16px)');
+      expect(getComputedStyle(legend).gap).toBe('var(--ds-chart-legend-gap, 16px)');
+
+      const item = legend.querySelector<HTMLElement>('[data-part="legend-item"]');
+      expect(item).not.toBeNull();
+      if (!item) {
+        throw new Error('Expected compact legend item');
+      }
+      expect(item.style.gap).toBe('var(--ds-chart-legend-item-gap, 6px)');
+      expect(getComputedStyle(item).gap).toBe('var(--ds-chart-legend-item-gap, 6px)');
+    }
   });
 });

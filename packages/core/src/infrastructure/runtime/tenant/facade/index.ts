@@ -55,7 +55,6 @@ export {
   isValidBranding,
   isValidPlan,
   isValidEngineName,
-  createTenantConfig as createTenantSchemaConfig,
 } from '../foundation/validation';
 
 // ── Defaults ──

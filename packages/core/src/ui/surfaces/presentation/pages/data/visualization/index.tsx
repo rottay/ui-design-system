@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { Card, Grid, Stack, Tabs, Text } from '../../../../../primitives';
+import { Box, Card, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import { PatternStatsGrid } from '../../../../../patterns';
 import { filterSurfaceTabbedViews } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
@@ -31,6 +31,10 @@ export function VisualizationSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { tSurface } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
+  const compactMobileCharts =
+    responsiveLayout.isMobile &&
+    responsiveLayout.hasResolvedViewport &&
+    config.visual.compactChartsOnMobile === true;
   // Views use app-resolved access so hidden chart types never appear
   // in the tab bar (e.g. financial charts hidden from non-admin users).
   const visibleViews = filterSurfaceTabbedViews(config.behavior.views, config.access);
@@ -97,7 +101,13 @@ export function VisualizationSurface({
                               {view.description}
                             </Text>
                           )}
-                          {view.content}
+                          <Box
+                            className="ds-visualization__view"
+                            data-part="visualization-view"
+                            data-chart-density={compactMobileCharts ? 'compact' : 'default'}
+                          >
+                            {view.content}
+                          </Box>
                         </Stack>
                       ),
                     }))}

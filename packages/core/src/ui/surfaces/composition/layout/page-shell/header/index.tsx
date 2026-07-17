@@ -8,10 +8,11 @@
 
 import React from 'react';
 import { Box, Stack, Tabs, Text } from '../../../../../primitives';
-import { filterSurfaceTabbedViews } from '../../../../runtime/helpers';
+import { filterSurfaceActions, filterSurfaceTabbedViews } from '../../../../runtime/helpers';
 import type { HeaderSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '..';
 import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../runtime/helpers/rendering';
 
 export interface HeaderSurfaceProps {
@@ -24,6 +25,8 @@ export function HeaderSurface({
   loading = false,
 }: HeaderSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
+  const { isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout();
+  const resolvedMobile = isMobile && hasResolvedViewport;
   // Tabs use app-resolved access so hidden tabs never appear in the
   // navigation, avoiding confusing "access denied" states.
   const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs ?? [], config.access);
@@ -34,14 +37,24 @@ export function HeaderSurface({
       ? config.behavior.activeTab
       : visibleTabs[0]?.key;
   const isControlledTabState = config.behavior.activeTab !== undefined;
+  const visibleActions = filterSurfaceActions(config.behavior.actions, config.access);
+  const mobilePrimaryActions = visibleActions.filter((action) => action.variant === 'primary');
+  const renderedActions =
+    resolvedMobile && config.visual.hideSecondaryActionsOnMobile
+      ? mobilePrimaryActions.length > 0
+        ? mobilePrimaryActions
+        : visibleActions.slice(0, 1)
+      : visibleActions;
+  const mobileCompact = resolvedMobile && config.visual.compactOnMobile === true;
 
   // actionsStart allows apps to inject custom UI (e.g. search or status
   // indicators) before the standard action buttons. Both slots live inside
   // a Stack so they share consistent spacing.
   const actionsNode = (
     <Stack spacing="sm">
-      {config.presentation.actionsStart}
-      <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
+      {!(resolvedMobile && config.visual.hideSecondaryActionsOnMobile) &&
+        config.presentation.actionsStart}
+      <SurfaceActionBar actions={renderedActions} />
     </Stack>
   );
 
@@ -58,7 +71,11 @@ export function HeaderSurface({
         className="ds-surface ds-header"
         data-part="root"
         data-loading={loading ? 'true' : 'false'}
-        spacing="lg"
+        data-mobile-compact={mobileCompact ? 'true' : 'false'}
+        data-mobile-actions={
+          resolvedMobile && config.visual.hideSecondaryActionsOnMobile ? 'primary-only' : 'all'
+        }
+        spacing={mobileCompact ? 'sm' : 'lg'}
       >
         {config.presentation.description && (
           <Text

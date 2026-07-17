@@ -1,15 +1,12 @@
 /**
  * @fileoverview Tenant system unit tests covering schema validation
- * (isValidTenantConfig, createTenantConfig), default config generation
+ * (isValidTenantConfig), default config generation
  * (getDefaultTenantConfig), and all three resolver strategies (subdomain,
  * domain, header).
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import {
-  isValidTenantConfig,
-  createTenantConfig,
-} from '../../../../infrastructure/runtime/tenant/foundation/validation';
+import { isValidTenantConfig } from '../../../../infrastructure/runtime/tenant/foundation/validation';
 import { getDefaultTenantConfig } from '../../../../infrastructure/runtime/tenant/foundation/configuration/defaults';
 import { resolveFromSubdomain } from '../../../../infrastructure/runtime/tenant/runtime/resolution/subdomain';
 import {
@@ -80,37 +77,6 @@ describe('Tenant Schema', () => {
         branding: { companyName: 'Test' },
       };
       expect(isValidTenantConfig(config)).toBe(false);
-    });
-  });
-
-  describe('createTenantConfig', () => {
-    it('should create config with defaults', () => {
-      const config = createTenantConfig({
-        slug: 'test',
-        name: 'Test Company',
-      });
-
-      expect(config.slug).toBe('test');
-      expect(config.name).toBe('Test Company');
-      // A materialized tenant holds NO engine opinion. One that silently claims
-      // `classic` outranks the vertical that declares `modern` (WO-ENG-17).
-      expect(config.engine).toBeUndefined();
-      expect(config.theme).toBe('base'); // default theme is 'base'
-      expect(config.plan).toBe('starter');
-      expect(config.features).toEqual([]);
-      expect(config.branding.companyName).toBe('Test Company');
-    });
-
-    it('should allow overriding defaults', () => {
-      const config = createTenantConfig({
-        slug: 'acme',
-        name: 'Acme',
-        engine: 'modern',
-        plan: 'enterprise',
-      });
-
-      expect(config.engine).toBe('modern');
-      expect(config.plan).toBe('enterprise');
     });
   });
 });

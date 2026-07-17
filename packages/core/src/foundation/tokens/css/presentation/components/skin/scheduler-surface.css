@@ -1,0 +1,42 @@
+.ds-surface.ds-scheduler .ds-scheduler__agenda[data-part='mobile-agenda'] {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--ds-space-sm);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.ds-surface.ds-scheduler
+  .ds-scheduler__data-warning[data-part='invalid-events-warning'] {
+  margin: 0 0 var(--ds-space-sm);
+  color: var(--ds-color-warning);
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-surface.ds-scheduler
+  .ds-scheduler__agenda-event[data-part='agenda-event'] {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, auto) minmax(0, 1fr);
+  align-items: center;
+  inline-size: 100%;
+  min-block-size: var(--ds-touch-target-min, 44px);
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm);
+  color: var(--ds-color-text-primary);
+  text-align: start;
+  background: var(--ds-color-bg-secondary);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+  cursor: pointer;
+}
+
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}

@@ -3,3 +3,22 @@
 .ds-surface.ds-visualization .ds-visualization__muted-text[data-part='muted-text'][data-part='muted-text'] {
   color: var(--ds-color-text-muted);
 }
+
+.ds-surface.ds-visualization
+  .ds-visualization__view[data-part='visualization-view'][data-chart-density='compact']
+  [data-part='chart-renderer']
+  [data-part='axis-tick-label'],
+.ds-surface.ds-visualization
+  .ds-visualization__view[data-part='visualization-view'][data-chart-density='compact']
+  [data-part='chart-renderer']
+  [data-part='value-label'] {
+  font-size: var(--ds-font-size-xs);
+}
+
+.ds-surface.ds-visualization
+  .ds-visualization__view[data-part='visualization-view'][data-chart-density='compact'] {
+  --ds-chart-legend-gap: var(--ds-spacing-2);
+  --ds-chart-legend-margin-top: var(--ds-spacing-2);
+  --ds-chart-legend-item-gap: var(--ds-spacing-1);
+  --ds-chart-legend-font-size: var(--ds-font-size-xs);
+}

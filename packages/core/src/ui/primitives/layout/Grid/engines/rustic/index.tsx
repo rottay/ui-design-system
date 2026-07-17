@@ -58,6 +58,7 @@ import {
   isResponsiveGridValue,
   type ResponsiveGridTemplateValue,
 } from '../../runtime/responsive';
+import { extractSemanticDOMAttributes } from '../../runtime/dom-attributes';
 
 /**
  * Converts a semantic gap token or raw pixel number into a CSS-compatible string.
@@ -182,8 +183,6 @@ const RusticGrid = forwardRef<HTMLElement, GridProps>(
       columns,
       rows,
       id,
-      'aria-label': ariaLabel,
-      'data-testid': dataTestId,
     } = props;
 
     // SSR-safe unique ID for scoping responsive media-query CSS
@@ -204,6 +203,7 @@ const RusticGrid = forwardRef<HTMLElement, GridProps>(
       : null;
 
     const ElementType = Component as ElementType;
+    const semanticAttributes = extractSemanticDOMAttributes(props);
 
     return (
       <>
@@ -215,8 +215,7 @@ const RusticGrid = forwardRef<HTMLElement, GridProps>(
             className: `rottay-grid rottay-grid--rustic ${className}`.trim(),
             style: computedStyle,
             id,
-            'aria-label': ariaLabel,
-            'data-testid': dataTestId,
+            ...semanticAttributes,
             'data-component': 'grid',
             'data-grid-id': needsResponsiveCSS ? gridId : undefined,
           },
@@ -245,11 +244,13 @@ const RusticGridItem = forwardRef<HTMLElement, GridItemProps>(
       as: Component = GRID_ITEM_DEFAULTS.as,
       className = '',
       children,
+      id,
     } = props;
 
     const computedStyle = buildGridItemStyles(props);
 
     const ElementType = Component as ElementType;
+    const semanticAttributes = extractSemanticDOMAttributes(props);
 
     return React.createElement(
       ElementType,
@@ -257,6 +258,8 @@ const RusticGridItem = forwardRef<HTMLElement, GridItemProps>(
         ref: ref as Ref<HTMLElement>,
         className: `rottay-grid-item rottay-grid-item--rustic ${className}`.trim(),
         style: computedStyle,
+        id,
+        ...semanticAttributes,
         'data-component': 'grid-item',
       },
       children

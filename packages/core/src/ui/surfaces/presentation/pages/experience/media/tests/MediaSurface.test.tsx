@@ -5,7 +5,10 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { MediaSurface } from '..';
 import type { MediaSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import {
+  renderSurface,
+  RESOLVED_PHONE_TEST_CONTEXT,
+} from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<MediaSurfaceConfig>): MediaSurfaceConfig {
   return {
@@ -149,5 +152,23 @@ describe('MediaSurface', () => {
     );
 
     expect(await screen.findByText('Bring your own media state')).toBeInTheDocument();
+  });
+
+  it('honors the bounded mobile gallery column projection', async () => {
+    renderSurface(
+      <MediaSurface
+        config={buildConfig({
+          visual: {
+            layout: 'gallery',
+            columns: 4,
+            mobileColumnsLimit: 2,
+          },
+        })}
+      />,
+      { responsiveContext: RESOLVED_PHONE_TEST_CONTEXT }
+    );
+
+    expect(screen.getAllByText('Main Stage Hero').length).toBeGreaterThanOrEqual(1);
+    expect(document.querySelector('.ds-media')).toHaveAttribute('data-mobile-columns', '2');
   });
 });

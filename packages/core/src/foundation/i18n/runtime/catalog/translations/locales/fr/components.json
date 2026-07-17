@@ -175,7 +175,17 @@
     },
     "scheduler": {
       "empty_title": "Aucun evenement planifie",
-      "empty_description": "Ajoutez des evenements pour afficher le calendrier."
+      "empty_description": "Ajoutez des evenements pour afficher le calendrier.",
+      "all_day": "Toute la journée",
+      "invalid_time": "Heure indisponible",
+      "invalid_events": "Événements avec une heure de début invalide : {count}"
+    },
+    "kanban": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "previous_lanes": "Colonnes kanban précédentes",
+      "next_lanes": "Colonnes kanban suivantes",
+      "lane_range": "Colonnes {start}–{end} sur {total}"
     },
     "operational": {
       "empty_title": "Aucun module operationnel configure",

@@ -43,6 +43,29 @@ export function formatDate(
 }
 
 /**
+ * Formats a time with an explicit locale and caller-owned timezone.
+ *
+ * Supplying the timezone is intentional: server and browser defaults can
+ * differ, which otherwise creates hydration drift in schedule UIs.
+ */
+export function formatTime(
+  date: Date,
+  locale: string,
+  options?: Intl.DateTimeFormatOptions
+): string {
+  try {
+    return new Intl.DateTimeFormat(locale, {
+      hour: '2-digit',
+      minute: '2-digit',
+      ...options,
+    }).format(date);
+  } catch (error) {
+    reportFormattingError('Error formatting time:', error);
+    return date.toISOString().slice(11, 16);
+  }
+}
+
+/**
  * Formats a number using `Intl.NumberFormat` with locale-specific grouping and decimals.
  *
  * @param value   - Numeric value

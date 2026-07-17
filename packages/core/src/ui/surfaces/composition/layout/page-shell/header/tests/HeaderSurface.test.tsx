@@ -5,7 +5,10 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { HeaderSurface } from '..';
 import type { HeaderSurfaceConfig } from '../../../../../foundation/contracts';
-import { renderSurface } from '../../../../../foundation/common/test-utils';
+import {
+  renderSurface,
+  RESOLVED_PHONE_TEST_CONTEXT,
+} from '../../../../../foundation/common/test-utils';
 
 function buildConfig(overrides?: Partial<HeaderSurfaceConfig>): HeaderSurfaceConfig {
   return {
@@ -121,5 +124,41 @@ describe('HeaderSurface', () => {
     expect(screen.queryByText('Activity')).not.toBeInTheDocument();
     expect(await screen.findByText('Invite')).toBeInTheDocument();
     expect(screen.queryByText('Danger zone')).not.toBeInTheDocument();
+  });
+
+  it('keeps one primary action and compacts body chrome on a resolved phone', async () => {
+    const config = buildConfig({
+      visual: {
+        compactOnMobile: true,
+        hideSecondaryActionsOnMobile: true,
+      },
+      presentation: {
+        chrome: { title: 'Workspace' },
+        description: 'Manage workspace-level content and controls.',
+        actionsStart: <div>Secondary status control</div>,
+      },
+      behavior: {
+        actions: [
+          { id: 'export', label: 'Export', variant: 'secondary', onClick: vi.fn() },
+          { id: 'invite', label: 'Invite', variant: 'primary', onClick: vi.fn() },
+        ],
+        tabs: [],
+      },
+    });
+
+    renderSurface(<HeaderSurface config={config} />, {
+      responsiveContext: RESOLVED_PHONE_TEST_CONTEXT,
+    });
+
+    expect(await screen.findByRole('button', { name: 'Invite' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Export' })).not.toBeInTheDocument();
+    expect(screen.queryByText('Secondary status control')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(document.querySelector('.ds-header')).toHaveAttribute('data-mobile-compact', 'true');
+      expect(document.querySelector('.ds-header')).toHaveAttribute(
+        'data-mobile-actions',
+        'primary-only'
+      );
+    });
   });
 });

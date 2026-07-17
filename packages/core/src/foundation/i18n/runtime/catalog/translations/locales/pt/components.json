@@ -175,7 +175,17 @@
     },
     "scheduler": {
       "empty_title": "Nenhum evento agendado",
-      "empty_description": "Preencha o agendador com eventos para renderizar o calendario."
+      "empty_description": "Preencha o agendador com eventos para renderizar o calendario.",
+      "all_day": "O dia todo",
+      "invalid_time": "Horário indisponível",
+      "invalid_events": "Eventos com horário de início inválido: {count}"
+    },
+    "kanban": {
+      "previous": "Anterior",
+      "next": "Próximo",
+      "previous_lanes": "Colunas kanban anteriores",
+      "next_lanes": "Próximas colunas kanban",
+      "lane_range": "Colunas {start}–{end} de {total}"
     },
     "operational": {
       "empty_title": "Nenhum modulo operacional configurado",

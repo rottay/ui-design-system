@@ -69,6 +69,7 @@ export function MediaSurface({
 }: MediaSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
+  const resolvedMobile = responsiveLayout.isMobile && responsiveLayout.hasResolvedViewport;
   // Selection supports controlled (app owns selectedItemId) and uncontrolled
   // (surface auto-selects first item) modes. Auto-selection on mount ensures
   // the details rail has something to show immediately.
@@ -99,8 +100,10 @@ export function MediaSurface({
   // Details rail shows when there is a selected item AND either a custom
   // detail renderer exists or the layout explicitly requests it. Without
   // either condition, the gallery takes full width.
-  const showDetailsRail =
-    !!selectedItem && (config.presentation.renderDetails || config.visual.layout === 'detail');
+  const resolvedLayout =
+    config.visual.layout ??
+    (config.presentation.renderDetails || config.presentation.renderPreview ? 'detail' : 'gallery');
+  const showDetailsRail = !!selectedItem && resolvedLayout === 'detail';
   // Gallery column count scales down responsively: desktop uses the configured
   // count, tablet caps at 2 to prevent cramped thumbnails, mobile always
   // collapses to a single column.
@@ -108,7 +111,10 @@ export function MediaSurface({
     responsiveLayout,
     config.visual.columns ?? 3,
     Math.min(config.visual.columns ?? 3, 2),
-    1
+    Math.min(
+      config.visual.columns ?? 3,
+      Math.max(1, Math.floor(config.visual.mobileColumnsLimit ?? 1))
+    )
   );
 
   const setSelectedItem = (item: MediaSurfaceItem): void => {
@@ -140,6 +146,8 @@ export function MediaSurface({
       ) : (
         <Grid
           className={`ds-surface ds-media ds-media--${showDetailsRail && !shouldStack ? 'split' : 'stacked'}${loading ? ' ds-media--loading' : ''}`}
+          data-layout={resolvedLayout}
+          data-mobile-columns={resolvedMobile ? galleryColumns : undefined}
           columns={showDetailsRail && !shouldStack ? 12 : 1}
           gap="lg"
         >

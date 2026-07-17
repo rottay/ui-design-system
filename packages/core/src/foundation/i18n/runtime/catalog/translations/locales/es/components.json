@@ -227,7 +227,17 @@
     },
     "scheduler": {
       "empty_title": "No hay eventos programados",
-      "empty_description": "Carga eventos para renderizar el calendario."
+      "empty_description": "Carga eventos para renderizar el calendario.",
+      "all_day": "Todo el día",
+      "invalid_time": "Hora no disponible",
+      "invalid_events": "Eventos con hora de inicio inválida: {count}"
+    },
+    "kanban": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "previous_lanes": "Carriles kanban anteriores",
+      "next_lanes": "Carriles kanban siguientes",
+      "lane_range": "Carriles {start}–{end} de {total}"
     },
     "operational": {
       "empty_title": "No hay modulos operativos configurados",

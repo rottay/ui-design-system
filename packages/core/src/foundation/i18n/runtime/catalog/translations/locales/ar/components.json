@@ -175,7 +175,17 @@
     },
     "scheduler": {
       "empty_title": "لا توجد أحداث مجدولة",
-      "empty_description": "املأ الجدولة بالأحداث لعرض التقويم."
+      "empty_description": "املأ الجدولة بالأحداث لعرض التقويم.",
+      "all_day": "طوال اليوم",
+      "invalid_time": "الوقت غير متاح",
+      "invalid_events": "أحداث بوقت بدء غير صالح: {count}"
+    },
+    "kanban": {
+      "previous": "السابق",
+      "next": "التالي",
+      "previous_lanes": "مسارات كانبان السابقة",
+      "next_lanes": "مسارات كانبان التالية",
+      "lane_range": "المسارات {start}–{end} من {total}"
     },
     "operational": {
       "empty_title": "لا توجد وحدات تشغيلية مُعدّة",
