@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.19.29",
+  "version": "2.19.30",
   "description": "Multi-tenant, multi-engine design system with token-driven skins and white-label runtime theming",
   "type": "module",
   "main": "./dist/index.cjs",

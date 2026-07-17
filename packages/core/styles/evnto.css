@@ -44420,6 +44420,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-muted);
 }
 
+.ds-surface.ds-header[data-mobile-compact='true'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-header[data-mobile-compact='true']
+  .ds-header__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-snug);
+}
+
 /** SidebarSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
 
 .ds-surface.ds-sidebar[data-bordered='false'] > .ds-sidebar__panel.ds-sidebar__panel[data-part='root'] {
@@ -44653,6 +44663,25 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-muted);
 }
 
+.ds-surface.ds-visualization
+  .ds-visualization__view[data-part='visualization-view'][data-chart-density='compact']
+  [data-part='chart-renderer']
+  [data-part='axis-tick-label'],
+.ds-surface.ds-visualization
+  .ds-visualization__view[data-part='visualization-view'][data-chart-density='compact']
+  [data-part='chart-renderer']
+  [data-part='value-label'] {
+  font-size: var(--ds-font-size-xs);
+}
+
+.ds-surface.ds-visualization
+  .ds-visualization__view[data-part='visualization-view'][data-chart-density='compact'] {
+  --ds-chart-legend-gap: var(--ds-spacing-2);
+  --ds-chart-legend-margin-top: var(--ds-spacing-2);
+  --ds-chart-legend-item-gap: var(--ds-spacing-1);
+  --ds-chart-legend-font-size: var(--ds-font-size-xs);
+}
+
 /**
  * AuthSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
  * unlayered. Text selectors clear Typography's (0,4,0) color floor.
@@ -44674,6 +44703,82 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-surface.ds-chat.ds-chat--accented .ds-chat__composer-input.ds-chat__composer-input.ds-chat__composer-input[data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
   border-color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-chat .ds-chat__composer[data-part='composer'][data-mobile-sticky='true'] {
+  position: sticky;
+  z-index: var(--ds-z-sticky);
+  inset-block-end: calc(
+    var(
+        --ds-shell-bottom-inset,
+        var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))
+      ) +
+      var(--ds-virtual-keyboard-inset, 0px)
+  );
+  padding-block-end: var(--ds-space-xs);
+  background: var(--ds-color-bg-primary);
+}
+
+.ds-surface.ds-chat
+  .ds-chat__composer[data-part='composer'][data-mobile-sticky='true'][data-keyboard-open='true'] {
+  inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
+}
+
+.ds-surface.ds-kanban
+  .ds-kanban__board[data-part='responsive-board'][data-mobile-stack='true']
+  [data-part='board'] {
+  flex-direction: column;
+  overflow-x: clip;
+}
+
+.ds-surface.ds-kanban
+  .ds-kanban__board[data-part='responsive-board'][data-mobile-stack='true']
+  [data-part='column'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-scheduler .ds-scheduler__agenda[data-part='mobile-agenda'] {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--ds-space-sm);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.ds-surface.ds-scheduler
+  .ds-scheduler__data-warning[data-part='invalid-events-warning'] {
+  margin: 0 0 var(--ds-space-sm);
+  color: var(--ds-color-warning);
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-surface.ds-scheduler
+  .ds-scheduler__agenda-event[data-part='agenda-event'] {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, auto) minmax(0, 1fr);
+  align-items: center;
+  inline-size: 100%;
+  min-block-size: var(--ds-touch-target-min, 44px);
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm);
+  color: var(--ds-color-text-primary);
+  text-align: start;
+  background: var(--ds-color-bg-secondary);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+  cursor: pointer;
+}
+
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 /**
