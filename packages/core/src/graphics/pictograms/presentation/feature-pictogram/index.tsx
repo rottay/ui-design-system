@@ -86,8 +86,10 @@ export const FeaturePictogram = forwardRef<
       style={{ color: TONE_COLORS[resolvedTone], ...style }}
       data-testid={testId}
       data-part="feature-pictogram"
+      data-asset-class="feature-pictogram"
       data-pictogram-name={name}
       data-pictogram-tone={resolvedTone}
+      data-pictogram-directional="false"
       data-pictogram-source="rottay-original"
     >
       {isLabeled ? <title>{accessibility.label}</title> : null}

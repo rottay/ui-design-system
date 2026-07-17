@@ -1,0 +1,22 @@
+/**
+ * FeaturePictogram presentation contract.
+ *
+ * Pictograms are explanatory 32–96px artwork, never functional controls or
+ * identity marks. Geometry remains local SVG while finish follows tenant
+ * color tokens and the user's contrast preferences.
+ */
+
+.rottay-feature-pictogram {
+  display: inline-block;
+  flex: none;
+  overflow: visible;
+  vertical-align: middle;
+  color: var(--ds-color-primary, currentColor);
+}
+
+@media (forced-colors: active) {
+  .rottay-feature-pictogram {
+    color: CanvasText !important;
+    forced-color-adjust: auto;
+  }
+}

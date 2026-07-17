@@ -126,7 +126,10 @@ export type FeaturePictogramProps = FeaturePictogramVisualProps &
 export interface FeaturePictogramProvenance {
   readonly name: FeaturePictogramName;
   readonly source: 'rottay-original';
-  readonly license: 'Rottay internal product asset';
+  readonly license: 'LicenseRef-Rottay-Original-Product-Asset-1.0';
+  readonly rightsHolder: 'Rottay';
+  readonly distribution: 'internal-and-bundled-product';
+  readonly supplier: null;
   readonly rendering: 'local-svg-ssr';
   readonly viewBox: '0 0 96 96';
   readonly authoredVersion: 1;

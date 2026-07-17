@@ -13,7 +13,10 @@ export const FEATURE_PICTOGRAM_PROVENANCE: Readonly<
       Object.freeze({
         name,
         source: "rottay-original",
-        license: "Rottay internal product asset",
+        license: "LicenseRef-Rottay-Original-Product-Asset-1.0",
+        rightsHolder: "Rottay",
+        distribution: "internal-and-bundled-product",
+        supplier: null,
         rendering: "local-svg-ssr",
         viewBox: "0 0 96 96",
         authoredVersion: 1,

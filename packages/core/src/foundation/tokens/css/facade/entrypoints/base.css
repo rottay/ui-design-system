@@ -45,6 +45,7 @@
 @import '../../presentation/components/icon.css' layer(rottay-components);
 @import '../../presentation/components/semantic-icon.css' layer(rottay-components);
 @import '../../presentation/components/mark.css' layer(rottay-components);
+@import '../../presentation/components/feature-pictogram.css' layer(rottay-components);
 @import '../../presentation/components/spinner.css' layer(rottay-components);
 @import '../../presentation/components/rate.css' layer(rottay-components);
 @import '../../presentation/components/space.css' layer(rottay-components);
