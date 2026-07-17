@@ -155,7 +155,7 @@ engine-agnostic, theme-aware and personality-driven.
 | Export                                  | Description                                                            |
 | --------------------------------------- | ---------------------------------------------------------------------- |
 | `@rottay/design-system`                 | All components, hooks, utilities                                       |
-| `@rottay/design-system/icons`           | Stable 50-role `Icon` facade plus compatibility/catalog exports        |
+| `@rottay/design-system/icons`           | Canonical 263-role `Icon` facade plus compatibility/catalog exports    |
 | `@rottay/design-system/icons/{foundation,bithire,identity,intelligence,operations}` | Generated packs; 263 governed roles in total |
 | `@rottay/design-system/marks`           | Governed brand and cloud-provider marks                                |
 | `@rottay/design-system/server`          | Server-only utilities (branding validation)                            |
