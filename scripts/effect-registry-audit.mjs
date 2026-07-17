@@ -53,6 +53,57 @@ const EXPECTED_SOURCES = Object.freeze({
   }),
 });
 
+const AUTHORIZED_CERTIFIED_SOURCES = Object.freeze({
+  'rottay-ui-design-system': Object.freeze({
+    repository: 'https://github.com/rottay/ui-design-system',
+    revision: '8015fabaf5fccca7c38c663971b9da2cce8843ab',
+    licenseId: 'MIT',
+    licenseSha256: '44576d15c34e9b97b6ccc17352b96ddee2d85ff22dcea7e30ab63e05cd5b27e3',
+    licensePathAtRevision: 'LICENSE',
+    adoptionBoundary: 'first-party-source',
+  }),
+});
+
+const EXPECTED_LEDGER_SOURCES = Object.freeze({
+  ...EXPECTED_SOURCES,
+  ...AUTHORIZED_CERTIFIED_SOURCES,
+});
+
+const AUTHORIZED_CERTIFICATION = Object.freeze({
+  id: 'particle-field',
+  tier: 'lab',
+  observed: Object.freeze({
+    renderer: 'canvas2d',
+    loop: 'while-live',
+    lazy: true,
+  }),
+  pauseWhenOffscreen: true,
+  pauseWhenPageHidden: true,
+  runtimeControl: 'provider-and-instance',
+  telemetry: Object.freeze([
+    'ds.effect.resolution',
+    'ds.effect.transition',
+    'particle-field.raf-state',
+  ]),
+  provenance: Object.freeze({
+    verification: 'verified',
+    usage: 'source',
+    repository: 'https://github.com/rottay/ui-design-system',
+    revision: '8015fabaf5fccca7c38c663971b9da2cce8843ab',
+    licensePathAtRevision: 'LICENSE',
+    licenseId: 'MIT',
+    licenseSha256: '44576d15c34e9b97b6ccc17352b96ddee2d85ff22dcea7e30ab63e05cd5b27e3',
+    sourceCopied: false,
+  }),
+  budget: Object.freeze({
+    status: 'measured',
+    bundleBudgetGzipBytes: 16_384,
+    maxLayers: 1,
+    maxContinuousLoops: 1,
+    evidence: 'packages/core/scripts/analyze-bundle.mjs --effects',
+  }),
+});
+
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
 }
@@ -94,6 +145,16 @@ function staticValue(node) {
   if (value.kind === ts.SyntaxKind.TrueKeyword) return true;
   if (value.kind === ts.SyntaxKind.FalseKeyword) return false;
   if (ts.isNumericLiteral(value)) return Number(value.text);
+  if (ts.isObjectLiteralExpression(value)) return staticObject(value);
+  if (ts.isArrayLiteralExpression(value)) {
+    const result = [];
+    for (const element of value.elements) {
+      const item = staticValue(element);
+      if (item === undefined) return undefined;
+      result.push(item);
+    }
+    return result;
+  }
   return undefined;
 }
 
@@ -186,14 +247,81 @@ function auditRegistrySource(errors, registrySourcePath) {
     }
   }
 
-  // EFX-01A deliberately admits no certified definitions. Any future
-  // promotion must first extend this audit with an authorized-source ledger;
-  // a regex-valid invented hash can never silently become release evidence.
   const certified = (definitions ?? []).filter((definition) => definition.admission === 'certified');
-  if (certified.length > 0) {
+  if (certified.length !== 1) {
+    errors.push(`registry must contain exactly one certified definition; found ${certified.length}`);
+  }
+  const unauthorized = certified.filter(({ id }) => id !== AUTHORIZED_CERTIFICATION.id);
+  if (unauthorized.length > 0) {
     errors.push(
-      `certified definitions require an audited authorized-source ledger: ${certified.map(({ id }) => id).join(', ')}`,
+      `certified definitions require an audited authorized-source ledger: ${unauthorized.map(({ id }) => id).join(', ')}`,
     );
+  }
+
+  const authorized = certified.find(({ id }) => id === AUTHORIZED_CERTIFICATION.id);
+  if (!authorized) {
+    errors.push(`registry must retain the authorized ${AUTHORIZED_CERTIFICATION.id} certification`);
+  } else {
+    for (const field of ['tier', 'pauseWhenOffscreen', 'pauseWhenPageHidden']) {
+      if (authorized[field] !== AUTHORIZED_CERTIFICATION[field]) {
+        errors.push(
+          `registry ${authorized.id}.${field} drifted; expected ${AUTHORIZED_CERTIFICATION[field]}, found ${String(authorized[field])}`,
+        );
+      }
+    }
+    if (JSON.stringify(authorized.observed) !== JSON.stringify(AUTHORIZED_CERTIFICATION.observed)) {
+      errors.push(`registry ${authorized.id}.observed runtime drifted`);
+    }
+    if (JSON.stringify(authorized.telemetry) !== JSON.stringify(AUTHORIZED_CERTIFICATION.telemetry)) {
+      errors.push(`registry ${authorized.id}.telemetry contract drifted`);
+    }
+    if (authorized.runtimeControl !== AUTHORIZED_CERTIFICATION.runtimeControl) {
+      errors.push(
+        `registry ${authorized.id}.runtimeControl drifted; expected ${AUTHORIZED_CERTIFICATION.runtimeControl}, found ${String(authorized.runtimeControl)}`,
+      );
+    }
+    if (Object.hasOwn(authorized, 'killSwitch')) {
+      errors.push(`registry ${authorized.id} must not restore an app-specific killSwitch`);
+    }
+
+    const provenance = authorized.provenance;
+    if (!Array.isArray(provenance) || provenance.length !== 1) {
+      errors.push(`registry ${authorized.id}.provenance must contain exactly one authorized source`);
+    } else {
+      const source = provenance[0];
+      const expected = AUTHORIZED_CERTIFICATION.provenance;
+      if (
+        !source
+        || JSON.stringify(stableKeys(source)) !== JSON.stringify(stableKeys(expected))
+      ) {
+        errors.push(`registry ${authorized.id}.provenance shape drifted`);
+      } else {
+        for (const [field, expectedValue] of Object.entries(expected)) {
+          if (source[field] !== expectedValue) {
+            errors.push(
+              `registry ${authorized.id}.provenance.${field} drifted; expected ${expectedValue}, found ${String(source[field])}`,
+            );
+          }
+        }
+      }
+    }
+
+    const budget = authorized.budget;
+    const expectedBudget = AUTHORIZED_CERTIFICATION.budget;
+    if (
+      !budget
+      || JSON.stringify(stableKeys(budget)) !== JSON.stringify(stableKeys(expectedBudget))
+    ) {
+      errors.push(`registry ${authorized.id}.budget shape drifted`);
+    } else {
+      for (const [field, expectedValue] of Object.entries(expectedBudget)) {
+        if (budget[field] !== expectedValue) {
+          errors.push(
+            `registry ${authorized.id}.budget.${field} drifted; expected ${expectedValue}, found ${String(budget[field])}`,
+          );
+        }
+      }
+    }
   }
 
   return {
@@ -219,7 +347,7 @@ export function auditEffectProvenance(
   }
 
   const sources = ledger.sources ?? {};
-  const expectedIds = stableKeys(EXPECTED_SOURCES);
+  const expectedIds = stableKeys(EXPECTED_LEDGER_SOURCES);
   const actualIds = stableKeys(sources);
   if (JSON.stringify(actualIds) !== JSON.stringify(expectedIds)) {
     errors.push(
@@ -228,7 +356,7 @@ export function auditEffectProvenance(
   }
 
   const referencedLicenses = new Set();
-  for (const [sourceId, expected] of Object.entries(EXPECTED_SOURCES)) {
+  for (const [sourceId, expected] of Object.entries(EXPECTED_LEDGER_SOURCES)) {
     const source = sources[sourceId];
     if (!source || typeof source !== 'object') continue;
 

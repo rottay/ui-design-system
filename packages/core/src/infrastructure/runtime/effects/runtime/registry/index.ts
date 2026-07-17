@@ -20,7 +20,7 @@ const UNMEASURED_BUDGET = {
 } as const;
 
 /** Versioned independently from package releases for manifest consumers. */
-export const EFFECT_REGISTRY_VERSION = 1 as const;
+export const EFFECT_REGISTRY_VERSION = 2 as const;
 
 function sourceProvenance(path: string): NonEmptyReadonlyArray<EffectProvenance> {
   return [
@@ -250,26 +250,46 @@ const DEFINITIONS = [
   },
   {
     id: 'particle-field',
-    admission: 'quarantined',
-    quarantineReason: 'Canvas2D lifecycle, provider color, DPR/count, suspension and context recovery are not certified.',
-    rollback: 'Keep every Platform ai-field route on its labelled CSS-only Stage-A fallback.',
+    admission: 'certified',
+    certificationEvidence: [
+      'packages/core/src/graphics/motion/react/presentation/effects/particles/runtime/canvas/tests/ParticleField.test.tsx',
+      'packages/core/src/graphics/motion/react/presentation/effects/particles/tests/PublicParticleFieldGate.test.tsx',
+      'packages/showroom/e2e/responsive/particle-runtime.spec.ts',
+    ],
     tier: 'lab',
     purpose: 'ambient',
     observed: { renderer: 'canvas2d', loop: 'while-live', lazy: true },
     owner: 'visualization-runtime',
     telemetry: [
-      'live-particle-field-mount-count',
-      'particle-field-lazy-chunk-presence',
-      'particle-field-raf-suspension',
+      'ds.effect.resolution',
+      'ds.effect.transition',
+      'particle-field.raf-state',
     ],
-    killSwitch: 'app-platform:PARTICLE_FIELD_ROUTE_KILL_SWITCHES',
-    provenance: sourceProvenance('packages/core/src/graphics/motion/react/presentation/effects/particles/runtime/canvas/index.tsx'),
+    runtimeControl: 'provider-and-instance',
+    provenance: [
+      {
+        verification: 'verified',
+        usage: 'source',
+        repository: 'https://github.com/rottay/ui-design-system',
+        revision: '8015fabaf5fccca7c38c663971b9da2cce8843ab',
+        licensePathAtRevision: 'LICENSE',
+        licenseId: 'MIT',
+        licenseSha256: '44576d15c34e9b97b6ccc17352b96ddee2d85ff22dcea7e30ab63e05cd5b27e3',
+        sourceCopied: false,
+      },
+    ],
     fallback: {
-      static: 'Render the route-owned labelled CSS atmospheric field.',
-      touch: 'Use the labelled CSS field without Canvas or RAF.',
+      static: 'Preserve stable host content without Canvas or RAF.',
+      touch: 'Preserve the same stable host content without Canvas or RAF.',
       reducedMotion: 'static-alternative',
     },
-    budget: UNMEASURED_BUDGET,
+    budget: {
+      status: 'measured',
+      bundleBudgetGzipBytes: 16_384,
+      maxLayers: 1,
+      maxContinuousLoops: 1,
+      evidence: 'packages/core/scripts/analyze-bundle.mjs --effects',
+    },
     pauseWhenOffscreen: true,
     pauseWhenPageHidden: true,
     ariaStrategy: 'decorative-hidden',

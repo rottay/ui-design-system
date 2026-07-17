@@ -17,3 +17,5 @@ export { Aurora } from './aurora';
 export { ParticleField, Particles } from './particles';
 export { NoiseTexture } from './noise-texture';
 export { GridPattern } from './grid-pattern';
+export { EffectRuntimeProvider } from '@/infrastructure/runtime/effects/composition/react/provider';
+export type { EffectRuntimeProviderProps } from '@/infrastructure/runtime/effects/composition/react/provider';

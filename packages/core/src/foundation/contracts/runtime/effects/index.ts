@@ -137,7 +137,12 @@ export interface LabEffectMetadata {
   readonly tier: 'lab';
   readonly owner: string;
   readonly telemetry: NonEmptyReadonlyArray<string>;
-  readonly killSwitch: string;
+  /**
+   * Runtime authority stays inside the DS. A provider can disable a complete
+   * subtree and an individual component prop can disable one instance; neither
+   * control is derived from tenant data.
+   */
+  readonly runtimeControl: 'provider-and-instance';
 }
 
 export type EffectTierMetadata =
@@ -225,6 +230,8 @@ export type EffectDefinition =
   | CertifiedEffectDefinition;
 
 export interface EffectRuntimeContext {
+  /** Explicit DS/provider + component-instance control; missing fails closed. */
+  readonly effectEnabled?: boolean;
   readonly reducedMotion?: boolean;
   readonly pointer?: 'coarse' | 'fine';
   readonly power?: 'constrained' | 'normal';
@@ -235,8 +242,6 @@ export interface EffectRuntimeContext {
   readonly allowAmbientMotion?: boolean;
   readonly allowContinuousMotion?: boolean;
   readonly continuousSlotAvailable?: boolean;
-  /** Lab runtimes require their exact registry-owned switch to be enabled. */
-  readonly enabledKillSwitches?: readonly string[];
 }
 
 export type EffectResolutionMode = 'unavailable' | 'static' | 'active';
@@ -246,7 +251,7 @@ export type EffectResolutionReason =
   | 'invalid-definition'
   | 'candidate-not-certified'
   | 'quarantined'
-  | 'lab-kill-switch-closed'
+  | 'effect-disabled'
   | 'reduced-motion'
   | 'coarse-pointer'
   | 'constrained-power'
@@ -265,3 +270,34 @@ export interface EffectResolution {
   readonly fallback: string | null;
   readonly definition: EffectDefinition | null;
 }
+
+export interface EffectTelemetryState {
+  readonly mode: EffectResolutionMode;
+  readonly reason: EffectResolutionReason;
+}
+
+/** Emitted once when a mounted effect obtains its first governed resolution. */
+export interface EffectResolutionTelemetryEvent {
+  readonly schemaVersion: 1;
+  readonly name: 'ds.effect.resolution';
+  readonly effectId: EffectId;
+  readonly current: EffectTelemetryState;
+}
+
+/** Emitted only when a mounted effect changes governed mode or reason. */
+export interface EffectTransitionTelemetryEvent {
+  readonly schemaVersion: 1;
+  readonly name: 'ds.effect.transition';
+  readonly effectId: EffectId;
+  readonly previous: EffectTelemetryState;
+  readonly current: EffectTelemetryState;
+}
+
+export type EffectRuntimeTelemetryEvent =
+  | EffectResolutionTelemetryEvent
+  | EffectTransitionTelemetryEvent;
+
+/** Telemetry is observational and must never acquire runtime authority. */
+export type EffectRuntimeTelemetryListener = (
+  event: EffectRuntimeTelemetryEvent,
+) => void;

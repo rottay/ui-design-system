@@ -65,6 +65,15 @@
  */
 
 import { CSSProperties, ReactNode } from "react";
+import type { EffectRuntimeTelemetryListener } from '@/foundation/contracts/runtime/effects';
+
+export type {
+  EffectResolutionTelemetryEvent,
+  EffectRuntimeTelemetryEvent,
+  EffectRuntimeTelemetryListener,
+  EffectTelemetryState,
+  EffectTransitionTelemetryEvent,
+} from '@/foundation/contracts/runtime/effects';
 
 /**
  * The presence data-state contract: `'open'` while a node should be at its
@@ -393,6 +402,13 @@ export interface ParticleFieldFocalArea {
 
 /** Rich animated point cloud / particle field rendered behind content. */
 export interface ParticleFieldProps {
+  /**
+   * Per-instance DS runtime switch. `false` always selects the static fallback;
+   * `true` cannot override a disabled ancestor EffectRuntimeProvider.
+   */
+  enabled?: boolean;
+  /** Observes the initial resolution and subsequent governed transitions. */
+  onTelemetry?: EffectRuntimeTelemetryListener;
   /** Explicit particle count override. */
   count?: number;
   /** Particle fill color (CSS color value). */

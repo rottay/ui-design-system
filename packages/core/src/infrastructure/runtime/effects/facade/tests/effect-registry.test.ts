@@ -12,6 +12,7 @@ import { resolveEffect, resolveEffectDefinition } from '../../runtime/registry/r
 import { isEffectDefinition, isEffectId } from '../../foundation/validation';
 
 const SAFE_CONTEXT = Object.freeze({
+  effectEnabled: true,
   reducedMotion: false,
   pointer: 'fine' as const,
   power: 'normal' as const,
@@ -24,13 +25,12 @@ const SAFE_CONTEXT = Object.freeze({
   continuousSlotAvailable: true,
 });
 
-// Real, pinned provenance for this repository's own MIT-licensed source. It is
-// used only to exercise certification; no external research source is promoted.
+// Real, pinned provenance for this repository's own MIT-licensed source.
 const AUTHORIZED_SOURCE = Object.freeze({
   verification: 'verified' as const,
   usage: 'source' as const,
   repository: 'https://github.com/rottay/ui-design-system',
-  revision: '3eaac217ccd4f26b59269ca92637b7f9a453c47e',
+  revision: '8015fabaf5fccca7c38c663971b9da2cce8843ab',
   licensePathAtRevision: 'LICENSE',
   licenseId: 'MIT',
   licenseSha256: '44576d15c34e9b97b6ccc17352b96ddee2d85ff22dcea7e30ab63e05cd5b27e3',
@@ -86,7 +86,7 @@ function expectDeeplyFrozen(value: unknown, seen = new Set<unknown>()): void {
 
 describe('EffectRegistry closed inventory', () => {
   it('contains exactly eleven canonical capabilities and treats Particles as no ID', () => {
-    expect(EFFECT_REGISTRY_VERSION).toBe(1);
+    expect(EFFECT_REGISTRY_VERSION).toBe(2);
     expect(EFFECT_IDS).toEqual([
       'aurora',
       'glass-card',
@@ -113,12 +113,14 @@ describe('EffectRegistry closed inventory', () => {
     expectDeeplyFrozen(EFFECT_RESEARCH_PROVENANCE);
   });
 
-  it('records target tier separately from honest observed pending runtime', () => {
+  it('keeps ten candidates pending and certifies only the governed ParticleField', () => {
     expect(EFFECT_DEFINITIONS.filter(({ tier }) => tier === 'product')).toHaveLength(5);
     expect(EFFECT_DEFINITIONS.filter(({ tier }) => tier === 'expressive')).toHaveLength(5);
     expect(EFFECT_DEFINITIONS.filter(({ tier }) => tier === 'lab')).toHaveLength(1);
     expect(EFFECT_DEFINITIONS.filter(({ admission }) => admission === 'candidate')).toHaveLength(10);
-    expect(EFFECT_REGISTRY['particle-field'].admission).toBe('quarantined');
+    expect(EFFECT_DEFINITIONS.filter(({ admission }) => admission === 'certified')).toHaveLength(1);
+    expect(EFFECT_DEFINITIONS.filter(({ admission }) => admission === 'quarantined')).toHaveLength(0);
+    expect(EFFECT_REGISTRY['particle-field'].admission).toBe('certified');
 
     for (const id of ['aurora', 'glow-effect', 'gradient-background', 'grid-pattern', 'shimmer-text'] as const) {
       const definition = EFFECT_REGISTRY[id];
@@ -132,17 +134,31 @@ describe('EffectRegistry closed inventory', () => {
     }
   });
 
-  it('keeps lab ownership, telemetry, kill switch and decorative canvas semantics explicit', () => {
+  it('pins the sole lab certification, source, budgets and DS-owned control', () => {
     const particle = EFFECT_REGISTRY['particle-field'];
     expect(particle).toMatchObject({
-      admission: 'quarantined',
+      admission: 'certified',
       tier: 'lab',
       owner: 'visualization-runtime',
-      killSwitch: 'app-platform:PARTICLE_FIELD_ROUTE_KILL_SWITCHES',
+      runtimeControl: 'provider-and-instance',
       ariaStrategy: 'decorative-hidden',
       observed: { renderer: 'canvas2d', loop: 'while-live', lazy: true },
+      budget: {
+        status: 'measured',
+        bundleBudgetGzipBytes: 16_384,
+        maxLayers: 1,
+        maxContinuousLoops: 1,
+      },
     });
-    if (particle.tier === 'lab') expect(particle.telemetry).toHaveLength(3);
+    expect(particle.provenance).toEqual([AUTHORIZED_SOURCE]);
+    if (particle.tier === 'lab') {
+      expect(particle.telemetry).toEqual([
+        'ds.effect.resolution',
+        'ds.effect.transition',
+        'particle-field.raf-state',
+      ]);
+      expect(particle).not.toHaveProperty('killSwitch');
+    }
   });
 
   it('pins factual research revisions, SPDX/LicenseRef IDs and license hashes as reference-only', () => {
@@ -219,6 +235,9 @@ describe('EffectDefinition certification laws', () => {
     expect(isEffectDefinition(lab)).toBe(true);
     const { owner: _owner, ...labWithoutOwner } = lab;
     expect(isEffectDefinition(labWithoutOwner)).toBe(false);
+    const { runtimeControl: _control, ...labWithoutControl } = lab;
+    expect(isEffectDefinition(labWithoutControl)).toBe(false);
+    expect(isEffectDefinition({ ...lab, killSwitch: 'app-platform:legacy' })).toBe(false);
   });
 
   it('requires certified source provenance and rejects restricted reference material', () => {
@@ -295,17 +314,20 @@ describe('EffectDefinition certification laws', () => {
 });
 
 describe('fail-closed effect resolution', () => {
-  it('never activates candidates, quarantined effects, unknown IDs or aliases', () => {
-    for (const definition of EFFECT_DEFINITIONS) {
+  it('never activates candidates, unknown IDs or aliases and admits only ParticleField', () => {
+    for (const definition of EFFECT_DEFINITIONS.filter(({ admission }) => admission === 'candidate')) {
       expect(resolveEffect(definition.id, SAFE_CONTEXT)).toMatchObject({
         id: definition.id,
         mode: 'static',
-        reason: definition.admission === 'candidate'
-          ? 'candidate-not-certified'
-          : 'quarantined',
+        reason: 'candidate-not-certified',
         fallback: definition.fallback.static,
       });
     }
+    expect(resolveEffect('particle-field', SAFE_CONTEXT)).toMatchObject({
+      mode: 'active',
+      reason: 'eligible',
+      fallback: null,
+    });
     expect(resolveEffect('missing')).toEqual({
       id: null,
       mode: 'unavailable',
@@ -325,7 +347,7 @@ describe('fail-closed effect resolution', () => {
     });
     expect(resolveEffectDefinition(product)).toMatchObject({
       mode: 'static',
-      reason: 'reduced-motion',
+      reason: 'effect-disabled',
     });
   });
 
@@ -338,6 +360,7 @@ describe('fail-closed effect resolution', () => {
     expect(resolveEffectDefinition(ambient, SAFE_CONTEXT).mode).toBe('active');
 
     const cases = [
+      [{ effectEnabled: false }, 'effect-disabled'],
       [{ reducedMotion: true }, 'reduced-motion'],
       [{ pointer: 'coarse' }, 'coarse-pointer'],
       [{ power: 'constrained' }, 'constrained-power'],
@@ -366,13 +389,13 @@ describe('fail-closed effect resolution', () => {
     }).reason).toBe('continuous-disabled');
   });
 
-  it('requires a lab definition exact registry-owned switch', () => {
+  it('uses the generic explicit DS control instead of an app-specific switch', () => {
     const lab = certifiedFixture('particle-field');
-    expect(resolveEffectDefinition(lab, SAFE_CONTEXT).reason).toBe('lab-kill-switch-closed');
+    expect(resolveEffectDefinition(lab, SAFE_CONTEXT).mode).toBe('active');
     expect(resolveEffectDefinition(lab, {
       ...SAFE_CONTEXT,
-      enabledKillSwitches: ['wrong-switch'],
-    }).reason).toBe('lab-kill-switch-closed');
+      effectEnabled: false,
+    }).reason).toBe('effect-disabled');
     expect(resolveEffectDefinition(lab, {
       ...SAFE_CONTEXT,
       enabledKillSwitches: ['app-platform:PARTICLE_FIELD_ROUTE_KILL_SWITCHES'],

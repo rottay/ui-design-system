@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { EffectRuntimeProvider } from '@/infrastructure/runtime/effects/composition/react/provider';
+
 const gate = vi.hoisted(() => ({
   moduleRequests: 0,
   policy: {
@@ -67,13 +69,13 @@ afterEach(() => {
 
 describe('public ParticleField lazy admission', () => {
   it.each([
-    ['offscreen', false, {}],
-    ['reduced', true, { reduce: true }],
-    ['coarse', true, { pointer: 'coarse' as const }],
-    ['save-data/constrained', true, { power: 'constrained' as const }],
-    ['hidden', true, { visible: false }],
-    ['ambient opt-out', true, { allowAmbientMotion: false }],
-  ] as const)('does not request the canvas module when %s', async (_name, visible, override) => {
+    ['offscreen', false, {}, 'offscreen'],
+    ['reduced', true, { reduce: true }, 'reduced-motion'],
+    ['coarse', true, { pointer: 'coarse' as const }, 'coarse-pointer'],
+    ['save-data/constrained', true, { power: 'constrained' as const }, 'constrained-power'],
+    ['hidden', true, { visible: false }, 'page-hidden'],
+    ['ambient opt-out', true, { allowAmbientMotion: false }, 'ambient-disabled'],
+  ] as const)('does not request the canvas module when %s', async (_name, visible, override, reason) => {
     gate.visible = visible;
     gate.policy = { ...gate.policy, ...override };
 
@@ -88,6 +90,8 @@ describe('public ParticleField lazy admission', () => {
       );
     });
     expect(gate.moduleRequests).toBe(0);
+    expect(container.firstElementChild).toHaveAttribute('data-effect-mode', 'static');
+    expect(container.firstElementChild).toHaveAttribute('data-effect-reason', reason);
     expect(screen.getByText('Stable product content')).toBeVisible();
   });
 
@@ -101,6 +105,36 @@ describe('public ParticleField lazy admission', () => {
         'static',
       );
     });
+    expect(gate.moduleRequests).toBe(0);
+    expect(container.firstElementChild).toHaveAttribute('data-effect-reason', 'inactive');
+  });
+
+  it('keeps the static fallback under global and per-instance DS controls', async () => {
+    gate.visible = true;
+    const { container, rerender } = render(
+      <EffectRuntimeProvider enabled={false}>
+        <ParticleField><span>Static content</span></ParticleField>
+      </EffectRuntimeProvider>,
+    );
+
+    await waitFor(() => {
+      expect(container.firstElementChild).toHaveAttribute(
+        'data-effect-reason',
+        'effect-disabled',
+      );
+    });
+    expect(gate.moduleRequests).toBe(0);
+    expect(screen.getByText('Static content')).toBeVisible();
+
+    rerender(
+      <EffectRuntimeProvider enabled>
+        <ParticleField enabled={false}><span>Static content</span></ParticleField>
+      </EffectRuntimeProvider>,
+    );
+    expect(container.firstElementChild).toHaveAttribute(
+      'data-effect-reason',
+      'effect-disabled',
+    );
     expect(gate.moduleRequests).toBe(0);
   });
 
@@ -116,6 +150,41 @@ describe('public ParticleField lazy admission', () => {
       'data-particle-field-runtime',
       'loading',
     );
+    expect(container.firstElementChild).toHaveAttribute('data-effect-mode', 'active');
+    expect(container.firstElementChild).toHaveAttribute('data-effect-reason', 'eligible');
     expect(screen.getByText('Stable product content')).toBeVisible();
+  });
+
+  it('emits one frozen resolution followed by stable transition telemetry', async () => {
+    gate.visible = true;
+    const onTelemetry = vi.fn();
+    const { container, rerender } = render(
+      <ParticleField enabled={false} onTelemetry={onTelemetry} />,
+    );
+
+    await waitFor(() => expect(onTelemetry).toHaveBeenCalledTimes(1));
+    expect(onTelemetry.mock.calls[0]?.[0]).toEqual({
+      schemaVersion: 1,
+      name: 'ds.effect.resolution',
+      effectId: 'particle-field',
+      current: { mode: 'static', reason: 'effect-disabled' },
+    });
+
+    rerender(<ParticleField enabled onTelemetry={onTelemetry} />);
+    await waitFor(() => expect(onTelemetry).toHaveBeenCalledTimes(2));
+    expect(onTelemetry.mock.calls[1]?.[0]).toEqual({
+      schemaVersion: 1,
+      name: 'ds.effect.transition',
+      effectId: 'particle-field',
+      previous: { mode: 'static', reason: 'effect-disabled' },
+      current: { mode: 'active', reason: 'eligible' },
+    });
+    expect(Object.isFrozen(onTelemetry.mock.calls[1]?.[0])).toBe(true);
+    expect(Object.isFrozen(onTelemetry.mock.calls[1]?.[0].previous)).toBe(true);
+    expect(Object.isFrozen(onTelemetry.mock.calls[1]?.[0].current)).toBe(true);
+    expect(container.firstElementChild).toHaveAttribute('data-effect-mode', 'active');
+
+    rerender(<ParticleField enabled onTelemetry={onTelemetry} />);
+    await waitFor(() => expect(onTelemetry).toHaveBeenCalledTimes(2));
   });
 });

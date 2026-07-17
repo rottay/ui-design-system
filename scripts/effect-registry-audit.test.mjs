@@ -44,14 +44,14 @@ function withRegistryFixture(run) {
   }
 }
 
-test('canonical effect research provenance is exact and copy-free', () => {
+test('canonical effect provenance authorizes only the pinned first-party ParticleField source', () => {
   assert.deepEqual(auditEffectProvenance(), {
     schemaVersion: 1,
-    sources: 4,
-    archivedLicenses: 4,
+    sources: 5,
+    archivedLicenses: 5,
     sourceCopied: 0,
     registrySources: 4,
-    certifiedDefinitions: 0,
+    certifiedDefinitions: 1,
   });
 });
 
@@ -122,6 +122,55 @@ test('a future certified definition requires an audited authorized-source ledger
     assert.throws(
       () => auditEffectProvenance(canonicalRoot, registryPath),
       /certified definitions require an audited authorized-source ledger: aurora/,
+    );
+  });
+});
+
+test('the ParticleField certification cannot drift from its exact source, budget or DS control', () => {
+  withRegistryFixture((registryPath) => {
+    const source = readFileSync(registryPath, 'utf8').replace(
+      '8015fabaf5fccca7c38c663971b9da2cce8843ab',
+      '0'.repeat(40),
+    );
+    writeFileSync(registryPath, source);
+    assert.throws(
+      () => auditEffectProvenance(canonicalRoot, registryPath),
+      /particle-field\.provenance\.revision drifted/,
+    );
+  });
+
+  withRegistryFixture((registryPath) => {
+    const source = readFileSync(registryPath, 'utf8').replace(
+      'bundleBudgetGzipBytes: 16_384',
+      'bundleBudgetGzipBytes: 16_385',
+    );
+    writeFileSync(registryPath, source);
+    assert.throws(
+      () => auditEffectProvenance(canonicalRoot, registryPath),
+      /particle-field\.budget\.bundleBudgetGzipBytes drifted/,
+    );
+  });
+
+  withRegistryFixture((registryPath) => {
+    const source = readFileSync(registryPath, 'utf8').replace(
+      "runtimeControl: 'provider-and-instance',",
+      "runtimeControl: 'provider-and-instance',\n    killSwitch: 'app-platform:legacy',",
+    );
+    writeFileSync(registryPath, source);
+    assert.throws(
+      () => auditEffectProvenance(canonicalRoot, registryPath),
+      /must not restore an app-specific killSwitch/,
+    );
+  });
+});
+
+test('the first-party archived license is byte-exact', () => {
+  withFixture((root) => {
+    const license = resolve(root, 'licenses/rottay-ui-design-system-LICENSE');
+    writeFileSync(license, `${readFileSync(license, 'utf8')}tampered\n`);
+    assert.throws(
+      () => auditEffectProvenance(root),
+      /rottay-ui-design-system license hash drifted/,
     );
   });
 });

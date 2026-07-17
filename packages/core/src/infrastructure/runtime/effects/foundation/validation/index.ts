@@ -149,19 +149,30 @@ export function isEffectDefinition(value: unknown): value is EffectDefinition {
 
     if (value.tier === 'product') {
       if (!PRODUCT_PURPOSES.has(String(value.purpose))) return false;
-      if (hasOwn(value, 'owner') || hasOwn(value, 'telemetry') || hasOwn(value, 'killSwitch')) {
+      if (
+        hasOwn(value, 'owner')
+        || hasOwn(value, 'telemetry')
+        || hasOwn(value, 'runtimeControl')
+        || hasOwn(value, 'killSwitch')
+      ) {
         return false;
       }
     } else if (value.tier === 'expressive') {
       // Pending inventory records observed gaps honestly. Lazy/lightweight laws
       // become blocking only when admission changes to certified.
-      if (hasOwn(value, 'owner') || hasOwn(value, 'telemetry') || hasOwn(value, 'killSwitch')) {
+      if (
+        hasOwn(value, 'owner')
+        || hasOwn(value, 'telemetry')
+        || hasOwn(value, 'runtimeControl')
+        || hasOwn(value, 'killSwitch')
+      ) {
         return false;
       }
     } else if (value.tier === 'lab') {
       if (!isNonEmptyString(value.owner)) return false;
       if (!isUniqueStringArray(value.telemetry)) return false;
-      if (!isNonEmptyString(value.killSwitch)) return false;
+      if (value.runtimeControl !== 'provider-and-instance') return false;
+      if (hasOwn(value, 'killSwitch')) return false;
     } else {
       return false;
     }

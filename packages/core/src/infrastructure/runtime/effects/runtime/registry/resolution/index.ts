@@ -9,6 +9,7 @@ import { getEffectDefinition } from '..';
 import { isEffectDefinition, isEffectId } from '../../../foundation/validation';
 
 interface NormalizedRuntimeContext {
+  readonly effectEnabled: boolean;
   readonly reducedMotion: boolean;
   readonly pointer: 'coarse' | 'fine';
   readonly power: 'constrained' | 'normal';
@@ -19,7 +20,6 @@ interface NormalizedRuntimeContext {
   readonly allowAmbientMotion: boolean;
   readonly allowContinuousMotion: boolean;
   readonly continuousSlotAvailable: boolean;
-  readonly enabledKillSwitches: ReadonlySet<string>;
 }
 
 const UNKNOWN_EFFECT = Object.freeze<EffectResolution>({
@@ -35,15 +35,9 @@ function readContext(context: unknown): NormalizedRuntimeContext {
     const candidate = typeof context === 'object' && context !== null
       ? context as Record<string, unknown>
       : Object.create(null) as Record<string, unknown>;
-    const switches = new Set<string>();
-
-    if (Array.isArray(candidate.enabledKillSwitches)) {
-      for (const value of candidate.enabledKillSwitches) {
-        if (typeof value === 'string') switches.add(value);
-      }
-    }
 
     return {
+      effectEnabled: candidate.effectEnabled === true,
       reducedMotion: candidate.reducedMotion !== false,
       pointer: candidate.pointer === 'fine' ? 'fine' : 'coarse',
       power: candidate.power === 'normal' ? 'normal' : 'constrained',
@@ -54,10 +48,10 @@ function readContext(context: unknown): NormalizedRuntimeContext {
       allowAmbientMotion: candidate.allowAmbientMotion === true,
       allowContinuousMotion: candidate.allowContinuousMotion === true,
       continuousSlotAvailable: candidate.continuousSlotAvailable === true,
-      enabledKillSwitches: switches,
     };
   } catch {
     return {
+      effectEnabled: false,
       reducedMotion: true,
       pointer: 'coarse',
       power: 'constrained',
@@ -68,7 +62,6 @@ function readContext(context: unknown): NormalizedRuntimeContext {
       allowAmbientMotion: false,
       allowContinuousMotion: false,
       continuousSlotAvailable: false,
-      enabledKillSwitches: new Set(),
     };
   }
 }
@@ -125,12 +118,7 @@ export function resolveEffectDefinition(
 
   const runtime = readContext(context);
 
-  if (
-    definition.tier === 'lab'
-    && !runtime.enabledKillSwitches.has(definition.killSwitch)
-  ) {
-    return result(definition, 'static', 'lab-kill-switch-closed');
-  }
+  if (!runtime.effectEnabled) return result(definition, 'static', 'effect-disabled');
   if (runtime.reducedMotion) return result(definition, 'static', 'reduced-motion');
   if (runtime.pointer === 'coarse') return result(definition, 'static', 'coarse-pointer');
   if (runtime.power === 'constrained') return result(definition, 'static', 'constrained-power');

@@ -10,6 +10,7 @@
 import {
   lazy,
   Suspense,
+  useEffect,
   useRef,
   type CSSProperties,
   type ReactNode,
@@ -17,6 +18,13 @@ import {
 } from 'react';
 
 import { useMotionPolicy } from '@/infrastructure/runtime/motion';
+import {
+  useEffectRuntimeControl,
+} from '@/infrastructure/runtime/effects/composition/react/provider';
+import { resolveEffect } from '@/infrastructure/runtime/effects';
+import type {
+  EffectTelemetryState,
+} from '@/foundation/contracts/runtime/effects';
 import type { ParticleFieldProps } from '@/graphics/motion/foundation/contracts';
 import {
   hasPotentialParticles,
@@ -46,6 +54,7 @@ interface ParticleFieldShellProps {
   className?: string;
   effect?: ReactNode;
   ownerRef?: RefObject<HTMLDivElement | null>;
+  resolution?: EffectTelemetryState;
   runtime: 'loading' | 'static';
   style?: CSSProperties;
 }
@@ -55,6 +64,7 @@ function ParticleFieldShell({
   className,
   effect,
   ownerRef,
+  resolution,
   runtime,
   style,
 }: ParticleFieldShellProps) {
@@ -68,6 +78,9 @@ function ParticleFieldShell({
     <div
       ref={ownerRef}
       className={className}
+      data-effect-id={resolution ? 'particle-field' : undefined}
+      data-effect-mode={resolution?.mode}
+      data-effect-reason={resolution?.reason}
       data-particle-field-policy={runtime === 'static' ? 'blocked' : 'eligible'}
       data-particle-field-raf="none"
       data-particle-field-runtime={runtime}
@@ -104,17 +117,64 @@ export function ParticleFieldLoadingFallback({
 /** Backward-compatible public component; canvas remains an eligible-only opt-in. */
 export function ParticleField(props: ParticleFieldProps) {
   const ownerRef = useRef<HTMLDivElement>(null);
+  const previousTelemetryStateRef = useRef<EffectTelemetryState | null>(null);
   const motionPolicy = useMotionPolicy();
   const inView = useParticleInView(ownerRef, '200px');
-  const eligible =
-    isParticleAnimationEligible(inView, motionPolicy)
-    && hasPotentialParticles(props.count, props.opacity);
   const {
     children,
     className,
+    enabled,
+    onTelemetry,
     style,
     ...effectProps
   } = props;
+  const runtimeControl = useEffectRuntimeControl(enabled, onTelemetry);
+  const hasParticles = hasPotentialParticles(props.count, props.opacity);
+  const resolution = resolveEffect('particle-field', {
+    effectEnabled: runtimeControl.enabled,
+    reducedMotion: motionPolicy.reduce,
+    pointer: motionPolicy.pointer,
+    power: motionPolicy.power,
+    pageVisible: motionPolicy.visible,
+    inView,
+    active: hasParticles,
+    userPaused: false,
+    allowAmbientMotion: motionPolicy.allowAmbientMotion,
+    allowContinuousMotion: motionPolicy.maxContinuousLoops === 1,
+    continuousSlotAvailable: motionPolicy.maxContinuousLoops === 1,
+  });
+  const eligible = resolution.mode === 'active'
+    && isParticleAnimationEligible(inView, motionPolicy);
+
+  useEffect(() => {
+    const current = Object.freeze({
+      mode: resolution.mode,
+      reason: resolution.reason,
+    }) satisfies EffectTelemetryState;
+    const previous = previousTelemetryStateRef.current;
+
+    if (previous === null) {
+      runtimeControl.emitTelemetry(Object.freeze({
+        schemaVersion: 1,
+        name: 'ds.effect.resolution',
+        effectId: 'particle-field',
+        current,
+      }));
+    } else if (
+      previous.mode !== current.mode
+      || previous.reason !== current.reason
+    ) {
+      runtimeControl.emitTelemetry(Object.freeze({
+        schemaVersion: 1,
+        name: 'ds.effect.transition',
+        effectId: 'particle-field',
+        previous,
+        current,
+      }));
+    }
+
+    previousTelemetryStateRef.current = current;
+  }, [resolution.mode, resolution.reason, runtimeControl]);
 
   return (
     <ParticleFieldShell
@@ -129,6 +189,7 @@ export function ParticleField(props: ParticleFieldProps) {
         </Suspense>
       ) : null}
       ownerRef={ownerRef}
+      resolution={{ mode: resolution.mode, reason: resolution.reason }}
       runtime={eligible ? 'loading' : 'static'}
       style={style}
     />

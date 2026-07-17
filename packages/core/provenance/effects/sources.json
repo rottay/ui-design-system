@@ -37,6 +37,15 @@
       "licenseSha256": "d0470e1591e3b0f38e13719d20ef872ee68adbc5fa1a843e0a761ef5bdd5cc63",
       "adoptionBoundary": "reference-only",
       "sourceCopied": false
+    },
+    "rottay-ui-design-system": {
+      "repository": "https://github.com/rottay/ui-design-system",
+      "revision": "8015fabaf5fccca7c38c663971b9da2cce8843ab",
+      "licenseFile": "licenses/rottay-ui-design-system-LICENSE",
+      "licenseId": "MIT",
+      "licenseSha256": "44576d15c34e9b97b6ccc17352b96ddee2d85ff22dcea7e30ab63e05cd5b27e3",
+      "adoptionBoundary": "first-party-source",
+      "sourceCopied": false
     }
   }
 }
