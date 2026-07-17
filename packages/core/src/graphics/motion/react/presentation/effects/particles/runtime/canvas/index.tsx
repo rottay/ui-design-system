@@ -457,10 +457,10 @@ export const ParticleField: React.FC<ParticleFieldProps> = (props) => {
 
     const refreshColor = (): void => {
       const nextColor = resolveConcreteParticleColor(config.color, container);
-      if (nextColor === resolvedColor) return;
+      const changed = nextColor !== resolvedColor;
       resolvedColor = nextColor;
       canvas.dataset.particleColor = resolvedColor;
-      draw(simulationTimeMs, 0, false);
+      if (changed) draw(simulationTimeMs, 0, false);
     };
 
     const scheduleFrame = (): void => {
@@ -485,7 +485,7 @@ export const ParticleField: React.FC<ParticleFieldProps> = (props) => {
     };
 
     const requestLease = (): void => {
-      if (disposed || contextLost || !animationEligible || !ctx) {
+      if (disposed || contextLost || !animationEligible) {
         setEvidence(contextLost ? 'context-lost' : 'static');
         return;
       }
@@ -495,6 +495,22 @@ export const ParticleField: React.FC<ParticleFieldProps> = (props) => {
         setEvidence('lease-waiting');
         return;
       }
+
+      if (!ctx) {
+        try {
+          ctx = canvas.getContext('2d');
+        } catch {
+          ctx = null;
+        }
+        if (!ctx) {
+          releaseLease();
+          setEvidence('no-context');
+          return;
+        }
+        ensureResizeMonitoring();
+        resize(true);
+      }
+
       lastTimestamp = null;
       setEvidence('active');
       scheduleFrame();
@@ -615,19 +631,16 @@ export const ParticleField: React.FC<ParticleFieldProps> = (props) => {
       contextLost = true;
       releaseLease();
       ctx = null;
+      particlesRef.current = [];
+      canvas.dataset.particleCount = '0';
+      canvas.dataset.particleDpr = '0';
+      canvas.dataset.particlePixels = '0';
       setEvidence('context-lost');
     };
 
     const onContextRestored = (): void => {
       if (disposed) return;
       contextLost = false;
-      ctx = canvas.getContext('2d');
-      if (!ctx) {
-        setEvidence('no-context');
-        return;
-      }
-      ensureResizeMonitoring();
-      resize(true);
       if (animationEligible) requestLease();
       else setEvidence('static');
     };
@@ -635,26 +648,28 @@ export const ParticleField: React.FC<ParticleFieldProps> = (props) => {
     canvas.addEventListener('contextlost', onContextLost);
     canvas.addEventListener('contextrestored', onContextRestored);
     ensureThemeMonitoring();
-    ctx = canvas.getContext('2d');
-    if (!ctx) {
-      setEvidence('no-context');
-    } else {
-      ensureResizeMonitoring();
-      resize(true);
-      if (animationEligible) requestLease();
-      else setEvidence('static');
-    }
+    refreshColor();
+    if (animationEligible) requestLease();
+    else setEvidence('static');
 
     return () => {
       if (disposed) return;
-      releaseLease();
       disposed = true;
+      cancelFrame();
       resizeObserver?.disconnect();
       themeObserver?.disconnect();
       removeResizeFallback?.();
       canvas.removeEventListener('contextlost', onContextLost);
       canvas.removeEventListener('contextrestored', onContextRestored);
       particlesRef.current = [];
+      ctx = null;
+      canvas.width = 1;
+      canvas.height = 1;
+      canvas.dataset.particleCount = '0';
+      canvas.dataset.particleDpr = '0';
+      canvas.dataset.particlePixels = '0';
+      releaseParticleAnimationLease(leaseOwner);
+      leaseOwned = false;
     };
   }, [animationEligible, config]);
 

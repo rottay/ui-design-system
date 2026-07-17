@@ -95,6 +95,7 @@ describe('ParticleField allocation budgets', () => {
     expect(metrics.pixelHeight).toBeLessThanOrEqual(PARTICLE_RUNTIME_LIMITS.maxCanvasDimension);
     expect(metrics.pixelCount).toBeLessThanOrEqual(PARTICLE_RUNTIME_LIMITS.maxCanvasPixels);
     expect(count).toBeLessThanOrEqual(PARTICLE_RUNTIME_LIMITS.maxParticles);
+    expect(PARTICLE_RUNTIME_LIMITS.maxActiveCanvasContexts).toBe(1);
   });
 
   it('clamps frame stalls and produces stable seeded random sequences', () => {

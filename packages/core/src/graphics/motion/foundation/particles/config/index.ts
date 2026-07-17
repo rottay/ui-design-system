@@ -5,6 +5,7 @@ import type {
 import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
 
 export const PARTICLE_RUNTIME_LIMITS = Object.freeze({
+  maxActiveCanvasContexts: 1,
   maxParticles: 1200,
   maxDevicePixelRatio: 2,
   maxCanvasPixels: 4_194_304,
@@ -448,7 +449,7 @@ type LeaseAvailableCallback = () => void;
 let activeAnimationLease: LeaseOwner | null = null;
 const animationLeaseWaiters = new Map<LeaseOwner, LeaseAvailableCallback>();
 
-/** Global decorative budget: only one ParticleField may own an RAF chain. */
+/** Global decorative budget: only one ParticleField may own a canvas context and RAF chain. */
 export function acquireParticleAnimationLease(
   owner: LeaseOwner,
   onAvailable: LeaseAvailableCallback,

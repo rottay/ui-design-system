@@ -225,6 +225,7 @@ describe('ParticleField governed runtime', () => {
       expect(fieldRoot(container)).toHaveAttribute('data-particle-field-policy', 'blocked');
     });
     expect(requestFrame).not.toHaveBeenCalled();
+    expect(HTMLCanvasElement.prototype.getContext).not.toHaveBeenCalled();
   });
 
   it('emits bounded allocation/color evidence and preserves accessible content', async () => {
@@ -274,11 +275,12 @@ describe('ParticleField governed runtime', () => {
     expect(requestFrame).not.toHaveBeenCalled();
   });
 
-  it('grants one global RAF lease and promotes the waiting mount on release', async () => {
+  it('grants one global context/RAF lease and promotes the unallocated waiter on release', async () => {
     const first = render(<ParticleField className="first" />);
     await waitFor(() => {
       expect(fieldRoot(first.container)).toHaveAttribute('data-particle-field-runtime', 'active');
     });
+    const firstCanvas = first.container.querySelector('canvas');
     const second = render(<ParticleField className="second" />);
     await waitFor(() => {
       expect(fieldRoot(second.container)).toHaveAttribute(
@@ -286,15 +288,54 @@ describe('ParticleField governed runtime', () => {
         'lease-waiting',
       );
     });
+    const getContext = vi.mocked(HTMLCanvasElement.prototype.getContext);
+    const secondCanvas = second.container.querySelector('canvas');
+    expect(PARTICLE_RUNTIME_LIMITS.maxActiveCanvasContexts).toBe(1);
+    expect(getContext).toHaveBeenCalledTimes(1);
+    expect(secondCanvas).toHaveAttribute('data-particle-count', '0');
+    expect(secondCanvas).toHaveAttribute('data-particle-dpr', '0');
+    expect(secondCanvas).toHaveAttribute('data-particle-pixels', '0');
     expect(requestFrame).toHaveBeenCalledTimes(1);
 
     first.unmount();
 
+    expect(firstCanvas).toHaveAttribute('width', '1');
+    expect(firstCanvas).toHaveAttribute('height', '1');
+    expect(firstCanvas).toHaveAttribute('data-particle-count', '0');
+    expect(firstCanvas).toHaveAttribute('data-particle-pixels', '0');
+
     await waitFor(() => {
       expect(fieldRoot(second.container)).toHaveAttribute('data-particle-field-runtime', 'active');
     });
+    expect(getContext).toHaveBeenCalledTimes(2);
+    expect(Number(secondCanvas?.dataset.particleCount)).toBeGreaterThan(0);
     expect(requestFrame).toHaveBeenCalledTimes(2);
     expect(cancelFrame).toHaveBeenCalledTimes(1);
+  });
+
+  it('releases the runtime lease when context acquisition fails and preserves fallback content', async () => {
+    const getContext = vi.mocked(HTMLCanvasElement.prototype.getContext);
+    getContext.mockReturnValueOnce(null).mockReturnValue(context);
+
+    const unavailable = render(
+      <ParticleField><span>Static meaning</span></ParticleField>,
+    );
+    await waitFor(() => {
+      expect(fieldRoot(unavailable.container)).toHaveAttribute(
+        'data-particle-field-runtime',
+        'no-context',
+      );
+    });
+    expect(fieldRoot(unavailable.container)).toHaveAttribute('data-particle-field-raf', 'none');
+    expect(unavailable.container.querySelector('canvas')).toHaveAttribute('data-particle-count', '0');
+    expect(screen.getByText('Static meaning')).toBeVisible();
+
+    const successor = render(<ParticleField />);
+    await waitFor(() => {
+      expect(fieldRoot(successor.container)).toHaveAttribute('data-particle-field-runtime', 'active');
+    });
+    expect(getContext).toHaveBeenCalledTimes(2);
+    expect(requestFrame).toHaveBeenCalledTimes(1);
   });
 
   it('cancels on context loss, restores deterministically, and cleans every source once', async () => {
@@ -331,7 +372,6 @@ describe('ParticleField governed runtime', () => {
   });
 
   it('uses ResizeObserver without a duplicate window listener or same-size allocation', () => {
-    intersectionVisible = false;
     const addEventListener = vi.spyOn(window, 'addEventListener');
     render(<ParticleField />);
     const transformCalls = vi.mocked(context.setTransform).mock.calls.length;
