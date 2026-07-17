@@ -11,17 +11,13 @@
 
 import {
   useId,
-  useMemo,
   type CSSProperties,
   type ReactNode,
 } from 'react';
 
 import { useResponsive } from '@/runtime/responsive';
 import { useResolvedChartPersonality } from '@/runtime/personality';
-import {
-  resolveChartSeriesVariables,
-  useResolvedChartGrammar,
-} from './grammar';
+import { useResolvedChartGrammar } from './grammar';
 import {
   resolveChartProjection,
   type ChartDeviceClass,
@@ -129,13 +125,6 @@ export function ChartFrame(props: ChartFrameProps): React.ReactElement {
   const frameClassName = ['ds-chart-frame', className].filter(Boolean).join(' ');
   const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   const colorScheme = chartPersonality.colorScheme ?? 'default';
-  const frameStyle = useMemo<CSSProperties>(
-    () => ({
-      ...resolveChartSeriesVariables(colorScheme),
-      ...style,
-    }),
-    [colorScheme, style],
-  );
 
   return (
     <section
@@ -160,7 +149,7 @@ export function ChartFrame(props: ChartFrameProps): React.ReactElement {
       aria-labelledby={titleId}
       aria-describedby={describedBy}
       aria-busy={state === 'loading' ? true : undefined}
-      style={frameStyle}
+      style={style}
     >
       <header data-part="header">
         <div data-part="copy">

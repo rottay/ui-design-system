@@ -463,6 +463,79 @@
   }
 }
 
+/* VIZ-03 — bounded chart schemes resolve through provider-scoped category
+ * channels in CSS. Caller-owned inline variables can still override a series,
+ * while the runtime only stamps the semantic scheme identifier. */
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='default'] {
+  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-default-1, #0f766e));
+  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-default-2, #8c6d46));
+  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-default-3, #b24d3a));
+  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-default-4, #296f68));
+  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-default-5, #735838));
+  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-default-6, #963f31));
+  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-default-7, #3d756f));
+  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-default-8, #7d6140));
+  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-default-9, #a04435));
+  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-default-10, #5e5a52));
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessible'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='accessible'] {
+  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-accessible-1, #2f6b9a));
+  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-accessible-2, #a23b72));
+  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-accessible-3, #1f7a55));
+  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-accessible-4, #9a5700));
+  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-accessible-5, #355cb5));
+  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-accessible-6, #7a4595));
+  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-accessible-7, #5f6368));
+  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-accessible-8, #006d77));
+  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-accessible-9, #9b4a5a));
+  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-accessible-10, #4d6a00));
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrome'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='monochrome'] {
+  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-monochrome-1, #2c5587));
+  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-monochrome-2, #3a6fb0));
+  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-monochrome-3, #21528b));
+  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-monochrome-4, #4b78ad));
+  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-monochrome-5, #315f97));
+  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-monochrome-6, #103968));
+  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-monochrome-7, #526f91));
+  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-monochrome-8, #37699f));
+  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-monochrome-9, #274b77));
+  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-monochrome-10, #5a789a));
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='pastel'] {
+  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-pastel-1, #527aa3));
+  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-pastel-2, #9b557a));
+  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-pastel-3, #3d8065));
+  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-pastel-4, #9a652b));
+  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-pastel-5, #5c6fb0));
+  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-pastel-6, #80628f));
+  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-pastel-7, #686868));
+  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-pastel-8, #3b777c));
+  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-pastel-9, #95606a));
+  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-pastel-10, #62752e));
+}
+
+.ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='vibrant'] {
+  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-vibrant-1, #006b63));
+  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-vibrant-2, #a12b68));
+  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-vibrant-3, #007a4d));
+  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-vibrant-4, #a65000));
+  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-vibrant-5, #244fc0));
+  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-vibrant-6, #702a91));
+  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-vibrant-7, #4e545b));
+  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-vibrant-8, #00727b));
+  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-vibrant-9, #a3364f));
+  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-vibrant-10, #486900));
+}
+
 /* VIZ-02 — React-owned SVG renderer anatomy. D3 computes geometry only; all
  * visible nodes stay in React so updates cannot erase semantics or focus. */
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] {
@@ -541,12 +614,87 @@
   fill: var(--ds-chart-cell-color, var(--ds-color-primary));
 }
 
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer'] [data-part='pie-slice'] {
+  fill: var(--ds-chart-mark-color, var(--ds-color-primary));
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='0'] {
+  --ds-chart-mark-color: var(--ds-chart-series-1, var(--ds-color-primary));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='1'] {
+  --ds-chart-mark-color: var(--ds-chart-series-2, var(--ds-color-secondary));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='2'] {
+  --ds-chart-mark-color: var(--ds-chart-series-3, var(--ds-color-success));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='3'] {
+  --ds-chart-mark-color: var(--ds-chart-series-4, var(--ds-color-warning));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='4'] {
+  --ds-chart-mark-color: var(--ds-chart-series-5, var(--ds-color-info));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='5'] {
+  --ds-chart-mark-color: var(--ds-chart-series-6, var(--ds-color-primary));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='6'] {
+  --ds-chart-mark-color: var(--ds-chart-series-7, var(--ds-color-secondary));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='7'] {
+  --ds-chart-mark-color: var(--ds-chart-series-8, var(--ds-color-success));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='8'] {
+  --ds-chart-mark-color: var(--ds-chart-series-9, var(--ds-color-warning));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='9'] {
+  --ds-chart-mark-color: var(--ds-chart-series-10, var(--ds-color-info));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-center-label'] {
+  fill: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-center-label'] tspan + tspan {
+  fill: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='bar-mark'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='point'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
-  [data-part='cell'] {
+  [data-part='cell'],
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='pie-slice-mark'] {
   transition: opacity var(--ds-motion-duration-fast) ease,
     filter var(--ds-motion-duration-fast) ease;
 }
@@ -559,6 +707,8 @@
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']
   [data-part='interaction-target'] {
   cursor: default;
+  fill: transparent;
+  stroke: transparent;
 }
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction='select']
@@ -697,7 +847,9 @@
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='point']:hover,
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
-  [data-part='cell']:hover {
+  [data-part='cell']:hover,
+.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
+  [data-part='pie-slice-mark']:hover {
   opacity: 0.82;
 }
 
@@ -752,7 +904,8 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='bar-mark'],
   .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='point'],
-  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell'] {
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='cell'],
+  .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] [data-part='pie-slice-mark'] {
     transition: none;
   }
 
@@ -783,9 +936,16 @@
 
   .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer'] [data-part='bar'],
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer'] [data-part='point'],
-  .ds-chart-renderer-heatmap.ds-chart-renderer-heatmap[data-part='chart-renderer'] [data-part='cell'] {
+  .ds-chart-renderer-heatmap.ds-chart-renderer-heatmap[data-part='chart-renderer'] [data-part='cell'],
+  .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer'] [data-part='pie-slice'] {
     fill: CanvasText;
     stroke: Canvas;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+    [data-part='pie-center-label'] {
+    fill: CanvasText;
     forced-color-adjust: auto;
   }
 

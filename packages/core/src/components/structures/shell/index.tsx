@@ -40,6 +40,8 @@ import type {
 } from './types';
 import { SHELL_DEFAULTS } from './types';
 import { useBreakpoints } from '../../../hooks/responsive/useBreakpoints';
+import { ActionCloseIcon } from '../../../icons/semantic/generated/roles/action-close';
+import { NavigationMenuIcon } from '../../../icons/semantic/generated/roles/navigation-menu';
 import { Sheet } from '../../primitives/overlay/Sheet';
 
 // Re-export types for barrel consumers
@@ -237,19 +239,7 @@ export function AppShell({
               cursor: 'pointer',
             }}
           >
-            <svg
-              aria-hidden="true"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 6 6 18M6 6l12 12" />
-            </svg>
+            <ActionCloseIcon decorative size={20} />
           </button>
         </div>
       )}
@@ -469,18 +459,7 @@ export function AppShell({
                     padding: 0,
                   }}
                 >
-                  <svg
-                    aria-hidden="true"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  >
-                    <path d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
+                  <NavigationMenuIcon decorative size={22} />
                 </button>
               )}
               <div data-part="header-left" style={{ flex: 1, minWidth: 0 }}>{header?.left}</div>

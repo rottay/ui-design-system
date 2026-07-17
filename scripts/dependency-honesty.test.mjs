@@ -960,8 +960,8 @@ test('runtime export inventory includes the public CLI import and every CJS cond
     entry.subpath === './supplier-honesty-cli' && entry.mode === 'import' && entry.target.endsWith('.mjs')
   )));
   const fixtures = runtimeExportFixtures(manifest);
-  assert.equal(fixtures.import.length, 15);
-  assert.equal(fixtures.require.length, 14);
+  assert.equal(fixtures.import.length, 22);
+  assert.equal(fixtures.require.length, 21);
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/supplier-honesty-cli')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts')));
@@ -971,6 +971,10 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/access')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts/renderers')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/renderers')));
+  for (const iconPack of ['bithire', 'corpus', 'foundation', 'identity', 'intelligence', 'operations']) {
+    assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith(`/icons/${iconPack}`)));
+    assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith(`/icons/${iconPack}`)));
+  }
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/motion')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/motion')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/effects')));

@@ -4,6 +4,7 @@ import {
   buildSvgBarGeometry,
   buildSvgHeatMapGeometry,
   buildSvgLineGeometry,
+  buildSvgPieGeometry,
 } from '../ChartGeometry';
 
 describe('React-owned chart geometry', () => {
@@ -28,6 +29,62 @@ describe('React-owned chart geometry', () => {
     expect((loss?.y ?? 0) + (loss?.height ?? 0)).toBeGreaterThan(geometry.baseline);
     expect(gain?.y).toBeLessThan(geometry.baseline);
     expect((gain?.y ?? 0) + (gain?.height ?? 0)).toBe(geometry.baseline);
+  });
+
+  it('builds deterministic pie and donut geometry from positive parts only', () => {
+    const options = {
+      width: 360,
+      height: 320,
+      innerRadiusRatio: 0.58,
+      data: [
+        { id: 'north', label: 'North', value: 30 },
+        { id: 'south', label: 'South', value: 70 },
+        { id: 'zero', label: 'Zero', value: 0 },
+        { id: 'invalid', label: 'Invalid', value: Number.NaN },
+      ],
+    };
+
+    const first = buildSvgPieGeometry(options);
+    const second = buildSvgPieGeometry(options);
+
+    expect(first).toEqual(second);
+    expect(first.total).toBe(100);
+    expect(first.slices.map((slice) => slice.id)).toEqual(['north', 'south']);
+    expect(first.slices.reduce((sum, slice) => sum + slice.percentage, 0)).toBe(1);
+    expect(first.slices.every((slice) => slice.path.startsWith('M'))).toBe(true);
+    expect(first.innerRadius).toBeGreaterThan(0);
+    expect(first.innerRadius).toBeLessThan(first.outerRadius);
+    expect(first.slices.every((slice) => (
+      slice.centroidX >= first.plot.x
+      && slice.centroidX <= first.plot.x + first.plot.width
+      && slice.centroidY >= first.plot.y
+      && slice.centroidY <= first.plot.y + first.plot.height
+    ))).toBe(true);
+  });
+
+  it('rejects dishonest pie values and treats a zero total as empty', () => {
+    expect(() => buildSvgPieGeometry({
+      width: 320,
+      height: 320,
+      data: [{ id: 'loss', label: 'Loss', value: -1 }],
+    })).toThrowError('[ChartGeometry] Pie datum loss has a negative value (-1).');
+
+    expect(() => buildSvgPieGeometry({
+      width: 320,
+      height: 320,
+      data: [
+        { id: 'duplicate', label: 'First', value: 1 },
+        { id: 'duplicate', label: 'Second', value: 2 },
+      ],
+    })).toThrowError('[ChartGeometry] Duplicate pie datum id: duplicate.');
+
+    const empty = buildSvgPieGeometry({
+      width: 320,
+      height: 320,
+      data: [{ id: 'zero', label: 'Zero', value: 0 }],
+    });
+    expect(empty.total).toBe(0);
+    expect(empty.slices).toHaveLength(0);
   });
 
   it('builds deterministic series paths without retaining invalid points', () => {
@@ -140,7 +197,7 @@ describe('React-owned chart geometry', () => {
 
     expect(geometry.cells).toHaveLength(1);
     expect(geometry.cells[0]?.id).toBe('inside');
-    expect(geometry.cells[0]?.cellColor).toBe('rgb(0, 114, 178)');
+    expect(geometry.cells[0]?.cellColor).toBe('rgb(47, 107, 154)');
   });
 
   it('honors explicit empty domains and rejects duplicate semantic coordinates', () => {

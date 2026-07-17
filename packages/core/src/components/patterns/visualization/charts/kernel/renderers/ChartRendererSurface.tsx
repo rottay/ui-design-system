@@ -2,17 +2,13 @@
 
 import {
   useId,
-  useMemo,
   type CSSProperties,
   type ReactNode,
   type RefObject,
 } from 'react';
 
 import { useResolvedChartPersonality } from '@/runtime/personality';
-import {
-  resolveChartSeriesVariables,
-  useResolvedChartGrammar,
-} from '../grammar';
+import { useResolvedChartGrammar } from '../grammar';
 import type {
   ChartInteractionMode,
 } from '../interaction/ChartInteraction';
@@ -77,13 +73,6 @@ export function ChartRendererSurface({
   const chartPersonality = useResolvedChartPersonality();
   const colorScheme = chartPersonality.colorScheme ?? 'default';
   const surfaceClassName = ['ds-chart-renderer', className].filter(Boolean).join(' ');
-  const surfaceStyle = useMemo<CSSProperties>(
-    () => ({
-      ...resolveChartSeriesVariables(colorScheme),
-      ...style,
-    }),
-    [colorScheme, style],
-  );
   const interactive = interactionMode !== 'static';
   const hasTooltip = tooltip !== null && tooltip !== undefined && tooltip !== false;
   const tooltipXPercent = tooltipAnchor && width > 0
@@ -120,7 +109,7 @@ export function ChartRendererSurface({
       data-chart-show-dots={chartPersonality.showDots ? 'true' : 'false'}
       data-chart-gradient-fill={chartPersonality.useGradientFill ? 'true' : 'false'}
       data-chart-tooltip-style={chartPersonality.tooltipStyle}
-      style={surfaceStyle}
+      style={style}
     >
       <svg
         data-part="chart-svg"

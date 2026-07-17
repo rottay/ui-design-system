@@ -70,7 +70,7 @@ export interface ChartActionInteraction<TDatum> extends ChartInteractiveCommon<T
 }
 
 /**
- * Public interaction contract shared by Bar, Line and HeatMap renderers.
+ * Public interaction contract shared by Bar, Line, HeatMap and Pie renderers.
  *
  * Bar and HeatMap parameterize `TDatum` with their public datum type. Line
  * uses a renderer-owned context containing both the series and point, which

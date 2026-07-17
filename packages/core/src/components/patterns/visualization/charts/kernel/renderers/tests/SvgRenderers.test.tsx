@@ -10,6 +10,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { TenantConfig } from '@/contracts';
 import { DesignSystemProvider } from '@/runtime/bootstrap';
 import { ChartFrame } from '../../ChartFrame';
+import { resolveChartSeriesVariables } from '../../grammar';
 import { SvgBarRenderer } from '../SvgBarRenderer';
 import { SvgHeatMapRenderer } from '../SvgHeatMapRenderer';
 import { createSvgLineDatumKey } from '../SvgLineDatumKey';
@@ -74,6 +75,15 @@ afterEach(() => {
 });
 
 describe('React-owned SVG renderers', () => {
+  it('keeps every bounded palette mapped to the same provider-scoped CSS channels', () => {
+    for (const scheme of ['default', 'accessible', 'monochrome', 'pastel', 'vibrant'] as const) {
+      expect(CHART_FOUNDATION_CSS).toContain(`data-chart-color-scheme='${scheme}'`);
+      for (const [name, value] of Object.entries(resolveChartSeriesVariables(scheme))) {
+        expect(CHART_FOUNDATION_CSS).toContain(`${name}: ${value};`);
+      }
+    }
+  });
+
   it('mounts as the declared full renderer inside ChartFrame', () => {
     render(
       <ChartFrame

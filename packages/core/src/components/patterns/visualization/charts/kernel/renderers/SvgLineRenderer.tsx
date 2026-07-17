@@ -101,26 +101,23 @@ export function SvgLineRenderer({
         .sort((left, right) => left - right)
         .map((position, column) => [position, column] as const),
     );
+    const sourceSeriesById = new Map(
+      series.map((currentSeries) => [currentSeries.id, currentSeries]),
+    );
 
-    return geometry.series.flatMap((currentSeries, row) =>
-      currentSeries.points.map((point, column) => {
+    return geometry.series.flatMap((currentSeries, row) => {
+      const sourceSeries = sourceSeriesById.get(currentSeries.id);
+      const sourcePointsById = new Map(
+        sourceSeries?.points.map((point) => [point.id, point]) ?? [],
+      );
+      return currentSeries.points.map((point, column) => {
         const key = createSvgLineDatumKey(currentSeries.id, point.id);
         const label = point.ariaLabel
           ?? `${currentSeries.label}, ${point.xLabel ?? point.x}: ${point.valueLabel ?? point.value}`;
+        const sourcePoint = sourcePointsById.get(point.id);
         const datum: SvgLineInteractionDatum = {
-          series: {
-            id: currentSeries.id,
-            label: currentSeries.label,
-            ...(currentSeries.seriesColor === undefined ? {} : { color: currentSeries.seriesColor }),
-          },
-          point: {
-            id: point.id,
-            x: point.x,
-            value: point.value,
-            ...(point.xLabel === undefined ? {} : { xLabel: point.xLabel }),
-            ...(point.valueLabel === undefined ? {} : { valueLabel: point.valueLabel }),
-            ...(point.ariaLabel === undefined ? {} : { ariaLabel: point.ariaLabel }),
-          },
+          series: sourceSeries ?? currentSeries,
+          point: sourcePoint ?? point,
         };
         return {
           key,
@@ -131,8 +128,9 @@ export function SvgLineRenderer({
           row,
           column: visualColumns.get(point.xPosition) ?? column,
         };
-      }));
-  }, [geometry.series]);
+      });
+    });
+  }, [geometry.series, series]);
   const insightCoordinates = useMemo(() => {
     const points = geometry.series.flatMap((currentSeries) => currentSeries.points);
     const numericX = (value: string | number): number | null => {
@@ -311,7 +309,12 @@ export function SvgLineRenderer({
                     data-part="line-point-mark"
                     data-datum-id={point.id}
                     data-series-id={currentSeries.id}
-                    {...datumProps}
+                    data-chart-datum-key={datumProps['data-chart-datum-key']}
+                    data-active={datumProps['data-active']}
+                    data-focused={datumProps['data-focused']}
+                    data-hovered={datumProps['data-hovered']}
+                    data-pinned={datumProps['data-pinned']}
+                    tabIndex={datumProps.tabIndex}
                     role={actionable ? 'button' : 'img'}
                     aria-label={markLabel}
                     aria-describedby={datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false ? tooltipId : undefined}
@@ -321,7 +324,6 @@ export function SvgLineRenderer({
                       cx={point.xPosition}
                       cy={point.yPosition}
                       r={12}
-                      fill="transparent"
                       pointerEvents="all"
                       aria-hidden="true"
                     />

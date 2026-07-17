@@ -244,7 +244,12 @@ export function SvgHeatMapRenderer({
                 key={cell.id}
                 data-part="heatmap-cell-mark"
                 data-datum-id={cell.id}
-                {...datumProps}
+                data-chart-datum-key={datumProps['data-chart-datum-key']}
+                data-active={datumProps['data-active']}
+                data-focused={datumProps['data-focused']}
+                data-hovered={datumProps['data-hovered']}
+                data-pinned={datumProps['data-pinned']}
+                tabIndex={datumProps.tabIndex}
                 role={actionable ? 'button' : 'img'}
                 aria-label={markLabel}
                 aria-describedby={datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false ? tooltipId : undefined}
@@ -256,7 +261,6 @@ export function SvgHeatMapRenderer({
                   y={hitY}
                   width={hitWidth}
                   height={hitHeight}
-                  fill="transparent"
                   pointerEvents="all"
                   aria-hidden="true"
                 />

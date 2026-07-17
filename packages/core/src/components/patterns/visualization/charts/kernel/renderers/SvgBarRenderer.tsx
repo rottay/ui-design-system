@@ -75,25 +75,21 @@ export function SvgBarRenderer({
     [bandPadding, data, geometryWidth, height, insets, maxTicks, orientation],
   );
   const interactionItems = useMemo(
-    () => geometry.bars.map((bar) => {
-      const label = bar.ariaLabel ?? `${bar.category}: ${bar.valueLabel ?? bar.value}`;
-      const datum: SvgBarDatum = {
-        id: bar.id,
-        category: bar.category,
-        value: bar.value,
-        ...(bar.valueLabel === undefined ? {} : { valueLabel: bar.valueLabel }),
-        ...(bar.ariaLabel === undefined ? {} : { ariaLabel: bar.ariaLabel }),
-        ...(bar.color === undefined ? {} : { color: bar.color }),
-      };
-      return {
-        key: bar.id,
-        label,
-        datum,
-        x: bar.x + bar.width / 2,
-        y: bar.y + bar.height / 2,
-      };
-    }),
-    [geometry.bars],
+    () => {
+      const sourceById = new Map(data.map((datum) => [datum.id, datum]));
+      return geometry.bars.map((bar) => {
+        const label = bar.ariaLabel ?? `${bar.category}: ${bar.valueLabel ?? bar.value}`;
+        const datum: SvgBarDatum = sourceById.get(bar.id) ?? bar;
+        return {
+          key: bar.id,
+          label,
+          datum,
+          x: bar.x + bar.width / 2,
+          y: bar.y + bar.height / 2,
+        };
+      });
+    },
+    [data, geometry.bars],
   );
   const insightCoordinates = useMemo(() => {
     const valueAxis = geometry.orientation === 'vertical' ? 'y' : 'x';
@@ -254,7 +250,12 @@ export function SvgBarRenderer({
               data-part="bar-mark"
               data-datum-id={bar.id}
               data-mark-index={barIndex % 5}
-              {...datumProps}
+              data-chart-datum-key={datumProps['data-chart-datum-key']}
+              data-active={datumProps['data-active']}
+              data-focused={datumProps['data-focused']}
+              data-hovered={datumProps['data-hovered']}
+              data-pinned={datumProps['data-pinned']}
+              tabIndex={datumProps.tabIndex}
               role={interactive ? actionable ? 'button' : 'img' : undefined}
               aria-label={markLabel}
               aria-describedby={datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false ? tooltipId : undefined}
@@ -269,7 +270,6 @@ export function SvgBarRenderer({
                     y={hitY}
                     width={hitWidth}
                     height={hitHeight}
-                    fill="transparent"
                     pointerEvents="all"
                     aria-hidden="true"
                   />

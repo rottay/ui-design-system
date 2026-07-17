@@ -87,8 +87,8 @@ const BUDGET = {
   'dist/chart-access.cjs': 800,
   // VIZ-03 renderer-facade measurements: 615/659 B after the pure datum-key
   // helper was added. Runtime costs are governed independently below.
-  'dist/chart-renderers.js': 700,
-  'dist/chart-renderers.cjs': 800,
+  'dist/chart-renderers.js': 850,
+  'dist/chart-renderers.cjs': 900,
   // Measured 2026-07-16: 922/930 B. Each ceiling keeps >10% headroom
   // and rounds upward to the next 100 B.
   'dist/motion.js': 1_100,
@@ -111,9 +111,10 @@ const BUDGET = {
  * This acts as a catch-all for preserveModules chunks that don't have an
  * individual entry in BUDGET.
  */
-// Measured 2026-07-16 after preserveModules emits both ESM and CJS:
-// 7,302,508 B. This is package footprint, not a consumer-route payload.
-const TOTAL_JS_BUDGET = 8_100_000; // measured +10%, rounded upward to 100 KB
+// Measured 2026-07-16 after the governed corpus reached 261 semantic roles and
+// preserveModules emitted both ESM and CJS: 8,194,345 B. This is package
+// footprint, not a consumer-route payload; named icon/render gates govern routes.
+const TOTAL_JS_BUDGET = 9_100_000; // measured +10%, rounded upward to 100 KB
 
 /**
  * Maximum gzip size for every top-level CSS artifact exposed by package
@@ -407,9 +408,10 @@ async function runComponentBudgets() {
  * adds at least 10% headroom and rounds upward to the next 100 B.
  */
 const CHART_RENDERER_BUDGET = {
-  SvgBarRenderer: 12_600,
-  SvgLineRenderer: 13_400,
-  SvgHeatMapRenderer: 11_200,
+  SvgBarRenderer: 12_100,
+  SvgLineRenderer: 12_800,
+  SvgHeatMapRenderer: 10_700,
+  SvgPieRenderer: 9_700,
 };
 
 // Measured provisionally from the current source entry on 2026-07-16 at
@@ -419,10 +421,10 @@ const CHART_RENDERER_UTILITY_BUDGET = {
   createSvgLineDatumKey: 200,
 };
 
-// Measured 15,647 B gzip in the same build. The combined fixture proves that
-// shared interaction/insight infrastructure is deduplicated instead of paying
-// the three isolated costs additively; the ceiling retains >10% headroom.
-const CHART_RENDERER_SUITE_BUDGET = 17_300;
+// Measured 16,572 B gzip in the cohesive Pie producer build. The combined
+// fixture proves that shared interaction/insight infrastructure is deduplicated
+// instead of paying the four isolated costs additively; the ceiling retains >10% headroom.
+const CHART_RENDERER_SUITE_BUDGET = 18_300;
 
 const CHART_RENDERER_ENTRY = join(ROOT, 'dist', 'chart-renderers.js');
 const CHART_RENDERER_SOURCE_DIR = '/components/patterns/visualization/charts/kernel/renderers/';
@@ -431,6 +433,7 @@ const CHART_RENDERER_BUILDERS = {
   SvgBarRenderer: 'buildSvgBarGeometry',
   SvgLineRenderer: 'buildSvgLineGeometry',
   SvgHeatMapRenderer: 'buildSvgHeatMapGeometry',
+  SvgPieRenderer: 'buildSvgPieGeometry',
 };
 const CHART_RENDERER_EXTERNALS = [
   'react',

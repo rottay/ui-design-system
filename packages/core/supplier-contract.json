@@ -914,6 +914,7 @@
           "antd"
         ],
         "AppShell": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
@@ -2237,6 +2238,7 @@
           "motion"
         ],
         "useShellContext": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
@@ -4265,7 +4267,10 @@
         "FOUNDATION_ICON_NAMES",
         "GENERATED_ICON_CORPUS_VERSION",
         "GENERATED_ICON_METADATA",
-        "GENERATED_ICON_NAMES"
+        "GENERATED_ICON_NAMES",
+        "IDENTITY_ICON_NAMES",
+        "INTELLIGENCE_ICON_NAMES",
+        "OPERATIONS_ICON_NAMES"
       ],
       "symbols": {},
       "supplierFreeExports": [
@@ -4273,7 +4278,10 @@
         "FOUNDATION_ICON_NAMES",
         "GENERATED_ICON_CORPUS_VERSION",
         "GENERATED_ICON_METADATA",
-        "GENERATED_ICON_NAMES"
+        "GENERATED_ICON_NAMES",
+        "IDENTITY_ICON_NAMES",
+        "INTELLIGENCE_ICON_NAMES",
+        "OPERATIONS_ICON_NAMES"
       ]
     },
     "./icons/foundation": {
@@ -4840,6 +4848,636 @@
         "GENERATED_ICON_METADATA"
       ]
     },
+    "./icons/identity": {
+      "exports": [
+        "AccessAdminIcon",
+        "AccessApiKeyIcon",
+        "AccessDeniedIcon",
+        "AccessGrantedIcon",
+        "AccessKeyIcon",
+        "AccessLoginIcon",
+        "AccessLogoutIcon",
+        "AccessPermissionIcon",
+        "AccessPolicyIcon",
+        "AccessRoleIcon",
+        "ComplianceAuditIcon",
+        "ComplianceBreachIcon",
+        "ComplianceCaseIcon",
+        "ComplianceCertificationIcon",
+        "ComplianceConsentIcon",
+        "ComplianceControlIcon",
+        "ComplianceEvidenceIcon",
+        "ComplianceRegulationIcon",
+        "ComplianceRetentionIcon",
+        "ComplianceReviewIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "IDENTITY_ICON_COMPONENTS",
+        "IDENTITY_ICON_NAMES",
+        "IdentityBadgeIcon",
+        "IdentityCredentialRotationIcon",
+        "IdentityDirectoryIcon",
+        "IdentityFederationIcon",
+        "IdentityIcon",
+        "IdentityImpersonationIcon",
+        "IdentityOrganizationSwitchIcon",
+        "IdentityProvisioningIcon",
+        "IdentityServiceAccountIcon",
+        "IdentitySessionIcon",
+        "IdentityTrustIcon",
+        "PrivacyDataIcon",
+        "PrivacyDeleteRequestIcon",
+        "PrivacyMaskedIcon",
+        "PrivacyRequestIcon",
+        "PrivacyVisibilityIcon",
+        "SecurityAlertIcon",
+        "SecurityDisabledIcon",
+        "SecurityEncryptionIcon",
+        "SecurityIncidentIcon",
+        "SecurityMonitoringIcon",
+        "SecurityPerimeterIcon",
+        "SecurityProtectionIcon",
+        "SecurityScanIcon",
+        "SecuritySecretIcon",
+        "SecurityThreatIcon",
+        "isIdentityIconName",
+        "resolveIdentityIcon"
+      ],
+      "symbols": {
+        "AccessAdminIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessApiKeyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessDeniedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessGrantedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessKeyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessLoginIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessLogoutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessPermissionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessPolicyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessRoleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceAuditIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceBreachIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceCaseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceCertificationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceConsentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceControlIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceEvidenceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceRegulationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceRetentionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceReviewIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IDENTITY_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityBadgeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityCredentialRotationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityDirectoryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityFederationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityImpersonationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityOrganizationSwitchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityProvisioningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityServiceAccountIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentitySessionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityTrustIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isIdentityIconName": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyDataIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyDeleteRequestIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyMaskedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyRequestIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyVisibilityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "resolveIdentityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityAlertIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityDisabledIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityEncryptionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityIncidentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityMonitoringIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityPerimeterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityProtectionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityScanIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecuritySecretIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityThreatIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "IDENTITY_ICON_NAMES"
+      ]
+    },
+    "./icons/intelligence": {
+      "exports": [
+        "AiAgentIcon",
+        "AiAnomalyIcon",
+        "AiEmbeddingIcon",
+        "AiEvaluationIcon",
+        "AiExperimentIcon",
+        "AiFeedbackIcon",
+        "AiGuardrailIcon",
+        "AiModelIcon",
+        "AiPredictionIcon",
+        "AiPromptIcon",
+        "AiRecommendationIcon",
+        "AiResponseIcon",
+        "AiSpeechIcon",
+        "AiTrainingIcon",
+        "AiVisionIcon",
+        "AnalyticsActivityIcon",
+        "AnalyticsAreaIcon",
+        "AnalyticsBarIcon",
+        "AnalyticsCohortIcon",
+        "AnalyticsCompareIcon",
+        "AnalyticsDashboardIcon",
+        "AnalyticsForecastIcon",
+        "AnalyticsFunnelIcon",
+        "AnalyticsHeatmapIcon",
+        "AnalyticsKpiIcon",
+        "AnalyticsRadarIcon",
+        "AnalyticsRealtimeIcon",
+        "AnalyticsSegmentIcon",
+        "AnalyticsTimelineIcon",
+        "AnalyticsWaterfallIcon",
+        "DataClusterIcon",
+        "DataExportIcon",
+        "DataImportIcon",
+        "DataLineageIcon",
+        "DataModelIcon",
+        "DataObservabilityIcon",
+        "DataPipelineIcon",
+        "DataQualityIcon",
+        "DataQueryIcon",
+        "DataRelationshipIcon",
+        "DataSchemaIcon",
+        "DataStreamIcon",
+        "DataSyncIcon",
+        "DataTransformIcon",
+        "DataWarehouseIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "INTELLIGENCE_ICON_COMPONENTS",
+        "INTELLIGENCE_ICON_NAMES",
+        "IntelligenceIcon",
+        "isIntelligenceIconName",
+        "resolveIntelligenceIcon"
+      ],
+      "symbols": {
+        "AiAgentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiAnomalyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiEmbeddingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiEvaluationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiExperimentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiFeedbackIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiGuardrailIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiModelIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiPredictionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiPromptIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiRecommendationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiResponseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiSpeechIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiTrainingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiVisionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsActivityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsAreaIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsBarIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsCohortIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsCompareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsDashboardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsForecastIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsFunnelIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsHeatmapIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsKpiIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsRadarIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsRealtimeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsSegmentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsTimelineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsWaterfallIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataClusterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataExportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataImportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataLineageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataModelIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataObservabilityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataPipelineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataQualityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataQueryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataRelationshipIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataSchemaIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataStreamIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataSyncIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTransformIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataWarehouseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "INTELLIGENCE_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "IntelligenceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isIntelligenceIconName": [
+          "@phosphor-icons/react"
+        ],
+        "resolveIntelligenceIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "INTELLIGENCE_ICON_NAMES"
+      ]
+    },
+    "./icons/operations": {
+      "exports": [
+        "BillingCreditCardIcon",
+        "BillingCurrencyIcon",
+        "BillingDiscountIcon",
+        "BillingInvoiceIcon",
+        "BillingPaymentIcon",
+        "BillingReceiptIcon",
+        "BillingRefundIcon",
+        "BillingSubscriptionIcon",
+        "BillingTaxIcon",
+        "BillingWalletIcon",
+        "CommerceCartIcon",
+        "CommerceCatalogIcon",
+        "CommerceCheckoutIcon",
+        "CommerceDeliveryIcon",
+        "CommerceInventoryIcon",
+        "CommerceOrderIcon",
+        "CommercePricingIcon",
+        "CommerceProductIcon",
+        "CommerceShippingIcon",
+        "CommerceStorefrontIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "OPERATIONS_ICON_COMPONENTS",
+        "OPERATIONS_ICON_NAMES",
+        "OperationsCloudIcon",
+        "OperationsDashboardIcon",
+        "OperationsDeploymentIcon",
+        "OperationsHealthIcon",
+        "OperationsIcon",
+        "OperationsIncidentIcon",
+        "OperationsMaintenanceIcon",
+        "OperationsMonitoringIcon",
+        "OperationsServerIcon",
+        "OperationsSupportIcon",
+        "OperationsTargetIcon",
+        "WorkflowApprovalIcon",
+        "WorkflowAssignmentIcon",
+        "WorkflowBranchIcon",
+        "WorkflowConditionIcon",
+        "WorkflowDelayIcon",
+        "WorkflowLoopIcon",
+        "WorkflowMergeIcon",
+        "WorkflowQueueIcon",
+        "WorkflowRejectionIcon",
+        "WorkflowRolloutIcon",
+        "WorkflowStepIcon",
+        "WorkflowTemplateIcon",
+        "WorkflowTriggerIcon",
+        "WorkflowVersionIcon",
+        "WorkflowWebhookIcon",
+        "isOperationsIconName",
+        "resolveOperationsIcon"
+      ],
+      "symbols": {
+        "BillingCreditCardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingCurrencyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingDiscountIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingInvoiceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingPaymentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingReceiptIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingRefundIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingSubscriptionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingTaxIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingWalletIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceCartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceCatalogIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceCheckoutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceDeliveryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceInventoryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceOrderIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommercePricingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceProductIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceShippingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceStorefrontIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isOperationsIconName": [
+          "@phosphor-icons/react"
+        ],
+        "OPERATIONS_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsCloudIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsDashboardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsDeploymentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsHealthIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsIncidentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsMaintenanceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsMonitoringIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsServerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsSupportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsTargetIcon": [
+          "@phosphor-icons/react"
+        ],
+        "resolveOperationsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowApprovalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowAssignmentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowBranchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowConditionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowDelayIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowLoopIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowMergeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowQueueIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowRejectionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowRolloutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowStepIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowTemplateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowTriggerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowVersionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowWebhookIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "OPERATIONS_ICON_NAMES"
+      ]
+    },
     "./marks": {
       "exports": [
         "BRAND_MARK_NAMES",
@@ -4964,6 +5602,7 @@
         "SvgBarRenderer",
         "SvgHeatMapRenderer",
         "SvgLineRenderer",
+        "SvgPieRenderer",
         "createSvgLineDatumKey"
       ],
       "symbols": {
@@ -4974,6 +5613,9 @@
           "d3"
         ],
         "SvgLineRenderer": [
+          "d3"
+        ],
+        "SvgPieRenderer": [
           "d3"
         ]
       },

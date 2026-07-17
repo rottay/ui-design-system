@@ -17,7 +17,7 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Chart data-access entry (`dist/chart-access.js` / `.cjs`) | < 800 B raw each (651/695 B measured) |
 | Chart data-access all-export fixture | < 2.8 KB gzipped (2,380 B measured; access-only and React external) |
 | Chart data-access pure CSV fixture | < 1 KB gzipped (791 B measured; import-free and client component absent) |
-| Chart renderers entry (`dist/chart-renderers.js` / `.cjs`) | < 700/800 B raw (615/659 B measured; runtime governed separately) |
+| Chart renderers entry (`dist/chart-renderers.js` / `.cjs`) | < 850/900 B raw (755/791 B measured; runtime governed separately) |
 | Semantic motion entry (`dist/motion.js`) | < 1.1 KB raw (922 B measured; React and Motion external) |
 | Pure motion policy fixture | < 2.1 KB gzipped (1,822 B measured + >10%; no React/Motion retained) |
 | Motion provider fixture | < 2.3 KB gzipped (2,076 B measured + >10%; React/Motion external) |
@@ -27,14 +27,15 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Spatial specification entry (`dist/spatial-spec.js` / `.cjs`) | < 700/700 B raw (573/609 B measured + >10%) |
 | Spatial host all-export fixture | < 6.9 KB gzipped (6,216 B measured + >10%; React is the only external) |
 | Spatial specification all-export fixture | < 1.3 KB gzipped (1,097 B measured + >10%; no external/browser runtime) |
-| Named Bar renderer | < 12.6 KB gzipped (11,427 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
-| Named Line renderer | < 13.4 KB gzipped (12,099 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
-| Named HeatMap renderer | < 11.2 KB gzipped (10,135 B measured + >10%; accessible interaction runtime, D3/React external) |
-| Deduplicated renderer family | < 17.3 KB gzipped (15,647 B measured + >10%; Bar + Line + HeatMap, shared runtime paid once) |
+| Named Bar renderer | < 12.1 KB gzipped (10,934 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
+| Named Line renderer | < 12.8 KB gzipped (11,603 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
+| Named HeatMap renderer | < 10.7 KB gzipped (9,665 B measured + >10%; accessible interaction runtime, D3/React external) |
+| Named Pie/Donut renderer | < 9.7 KB gzipped (8,748 B measured + >10%; accessible interaction runtime, D3/React external) |
+| Deduplicated renderer family | < 18.3 KB gzipped (16,572 B measured + >10%; Bar + Line + HeatMap + Pie, shared runtime paid once) |
 | Line datum-key utility | < 200 B gzipped (101 B provisional source-entry measurement; import-free) |
 | Tokens bundle (`dist/tokens.js`) | < 20 KB gzipped |
 | i18n bundle (`dist/i18n.js`) | < 20 KB gzipped |
-| Aggregate JS package footprint | < 8.1 MB raw (7,302,508 B measured + >10%; ESM + CJS) |
+| Aggregate JS package footprint | < 9.1 MB raw (8,194,345 B measured + >10%; 261-role semantic corpus, ESM + CJS; consumer routes remain independently gated) |
 
 ## CSS Budget
 
@@ -71,8 +72,8 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/chart-spec.cjs` | 800 B (643 B measured + >10%) |
 | `dist/chart-access.js` | 800 B (651 B measured + >10%) |
 | `dist/chart-access.cjs` | 800 B (695 B measured + >10%) |
-| `dist/chart-renderers.js` | 700 B (615 B measured + >10%) |
-| `dist/chart-renderers.cjs` | 800 B (659 B measured + >10%) |
+| `dist/chart-renderers.js` | 850 B (755 B measured + >10%) |
+| `dist/chart-renderers.cjs` | 900 B (791 B measured + >10%) |
 | `dist/motion.js` | 1.1 KB (922 B measured + >10%) |
 | `dist/motion.cjs` | 1.1 KB (930 B measured + >10%) |
 | `dist/effects.js` | 800 B (652 B measured + >10%) |
@@ -98,11 +99,11 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 ## How It Works
 
 1. `pnpm run analyze` builds the library and checks every entry-point file against its budget.
-2. The same command builds Bar, Line, HeatMap and the line datum-key utility once each through the
+2. The same command builds Bar, Line, HeatMap, Pie/Donut and the line datum-key utility once each through the
    public `charts/renderers` facade. Each in-memory ESM bundle must retain only its selected export,
    keep peers external, and remain below its named gzip budget; the utility must not retain D3. A
    second all-renderer fixture proves the shared accessibility, interaction and insight runtime is
-   deduplicated and bounded instead of charging three isolated costs to a multi-chart route.
+   deduplicated and bounded instead of charging four isolated costs to a multi-chart route.
 3. The semantic motion gate bundles the pure policy and `MotionProvider` separately through the
    public facade. Pure resolution must retain neither React nor Motion; the provider must keep both
    peers external. `node scripts/analyze-bundle.mjs --motion` runs only this focused gate.
