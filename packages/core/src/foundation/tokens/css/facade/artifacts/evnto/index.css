@@ -154,7 +154,7 @@
   --ds-line-height-heading: 1.2;
   --ds-line-height-relaxed: 1.75;
   --ds-line-height-tight: 1.25;
-  --ds-motion-calm: 500ms;
+  --ds-motion-calm: 350ms;
   --ds-motion-deliberate: 320ms;
   --ds-motion-instant: 120ms;
   --ds-motion-spring-gentle: linear(0, 0.1044, 0.2935, 0.4779, 0.6288, 0.7427, 0.8246, 0.8819, 0.9212, 0.9478, 0.9655, 0.9773, 0.9851, 0.9902, 0.9936, 0.9958, 0.9973, 0.9982, 0.9988, 0.9992, 0.9995, 0.9997, 0.9998, 0.9999, 1);
