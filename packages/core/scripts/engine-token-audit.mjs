@@ -1833,15 +1833,22 @@ function apcaTopLevelDecls(body) {
 }
 
 /** True when `selector` is the tenant's ROOT token block for its DEFAULT theme:
- * `html[data-tenant='T']` with only attached qualifiers (`:not(...)`, `.class`,
- * `[data-theme=...]`) and NO descendant/`:where(...)` scoping, and NOT scoped to
- * the OPPOSITE scheme (a non-negated `.dark`/`[data-theme='dark']` for a
- * light-default tenant, or `.light`/`[data-theme='light']` for a dark-default
- * one). The opposite-scheme override block is thereby excluded. */
+ * the historical `html[data-tenant='T']` root or its dual-scope
+ * `:is(html[data-tenant='T'], :where([data-ds-root][data-vertical='V']))`
+ * projection, followed only by attached qualifiers (`:not(...)`, `.class`,
+ * `[data-theme=...]`). Descendant scoping and the OPPOSITE scheme are rejected. */
 function apcaBlockMatchesDefault(selector, tenant, defaultTheme) {
   const compact = selector.replace(/\s+/g, '');
+  const escapedTenant = tenant.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const tenantRoot = `html\\[data-tenant=['"]${escapedTenant}['"]\\]`;
+  const verticalRoot = `:where\\(\\[data-ds-root\\]\\[data-vertical=['"][A-Za-z0-9_-]+['"]\\]\\)`;
+  // Vertical artifacts are dual-scoped: the historical tenant root and an
+  // embeddable vertical root share one :is() rule. The APCA evaluator follows
+  // the tenant branch, but must admit that mechanically equivalent wrapper;
+  // otherwise every artifact silently falls back to foundation colours.
+  const root = `(?:${tenantRoot}|:is\\(${tenantRoot},${verticalRoot}\\))`;
   const rootRe = new RegExp(
-    `^html\\[data-tenant=['"]${tenant}['"]\\](?::not\\([^)]*\\)|\\.[A-Za-z0-9_-]+|\\[data-theme=['"][^'"]*['"]\\])*$`
+    `^${root}(?::not\\([^)]*\\)|\\.[A-Za-z0-9_-]+|\\[data-theme=['"][^'"]*['"]\\])*$`
   );
   if (!rootRe.test(compact)) return false;
   const opp = defaultTheme === 'light' ? 'dark' : 'light';

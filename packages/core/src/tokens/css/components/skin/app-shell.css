@@ -1,0 +1,44 @@
+/**
+ * AppShell paint contract.
+ *
+ * The structure owns responsive geometry inline because it is calculated from
+ * posture and consumer-provided dimensions. Stable paint lives here so tenant
+ * tokens remain authoritative and the same shell DOM can be fully white-labelled.
+ * This file is deliberately unlayered with the rest of the component skins.
+ */
+
+:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  [data-part="navigation-drawer-header"] {
+  border-bottom: 1px solid
+    var(--ds-sidebar-border, var(--ds-color-border-subtle));
+}
+
+:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  [data-part="navigation-close"] {
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+  background: transparent;
+}
+
+.rottay-app-shell [data-part="navigation-trigger"] {
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  [data-part="navigation-close"]:focus-visible,
+:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  [data-part="navigation-trigger"]:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+@media (forced-colors: active) {
+  .rottay-app-shell [data-part="navigation-close"],
+  .rottay-app-shell [data-part="navigation-trigger"],
+  .rottay-app-shell__navigation-drawer [data-part="navigation-close"] {
+    border: 1px solid ButtonText;
+    color: ButtonText;
+    forced-color-adjust: auto;
+  }
+}

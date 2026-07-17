@@ -215,7 +215,6 @@ export function AppShell({
             justifyContent: 'space-between',
             gap: 'var(--ds-spacing-3, 12px)',
             padding: '0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px)',
-            borderBottom: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
             overflow: 'hidden',
           }}
         >
@@ -234,9 +233,6 @@ export function AppShell({
               justifyContent: 'center',
               flexShrink: 0,
               padding: 0,
-              border: 'none',
-              borderRadius: 'var(--ds-radius-md, 8px)',
-              background: 'transparent',
               color: 'var(--ds-color-text-primary)',
               cursor: 'pointer',
             }}
@@ -357,7 +353,8 @@ export function AppShell({
               paddingBlockStart: 'var(--ds-shell-safe-area-top)',
               paddingBlockEnd: 'var(--ds-shell-safe-area-bottom)',
               transition: `width ${transition}`,
-              background: 'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated, #FFFFFF)))',
+              background:
+                'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))',
               borderRight: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
             }}
           >
@@ -392,7 +389,7 @@ export function AppShell({
               paddingBlockEnd: 'env(safe-area-inset-bottom, 0px)',
               paddingInlineStart: 'env(safe-area-inset-left, 0px)',
               background:
-                'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated, #FFFFFF)))',
+                'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))',
               borderRight:
                 '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
               boxShadow: 'var(--ds-elevation-3)',
@@ -466,7 +463,6 @@ export function AppShell({
                     justifyContent: 'center',
                     background: 'transparent',
                     border: 'none',
-                    borderRadius: 'var(--ds-radius-md, 8px)',
                     color: 'var(--ds-color-text-primary)',
                     cursor: 'pointer',
                     marginRight: 'var(--ds-spacing-3, 12px)',
