@@ -14,6 +14,21 @@ The current posture is exposed as `data-posture` on the root and through
 focus containment/restoration, Escape, backdrop dismissal, body scroll lock,
 and dialog semantics stay under one overlay authority.
 
+## Presentation geometry
+
+The typed `geometry` props remain the default and the values exposed through
+`useShellContext()`. A code-owned presentation profile may declaratively replace
+their rendered CSS lengths with:
+
+- `--ds-shell-sidebar-width`
+- `--ds-shell-sidebar-collapsed-width`
+- `--ds-shell-header-block-size`
+- `--ds-shell-sidebar-header-block-size`
+
+The same resolved inputs govern the fixed desktop rail, main-area inset,
+compact Sheet and safe-area-aware headers. Tenant data may select an allowed
+profile, but it must not store arbitrary shell CSS or topology.
+
 ## Insets
 
 The root publishes:

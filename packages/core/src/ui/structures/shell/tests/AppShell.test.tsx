@@ -74,6 +74,32 @@ function getShellRoot(container: HTMLElement): HTMLElement {
 }
 
 describe('AppShell responsive contract', () => {
+  it('publishes default geometry through overridable CSS inputs', () => {
+    const { container } = renderShell(DESKTOP_CONTEXT);
+    const root = getShellRoot(container);
+    const logo = container.querySelector('[data-part="navigation-logo"]') as HTMLElement;
+    const header = container.querySelector('[data-part="header"]') as HTMLElement;
+
+    expect(root.style.getPropertyValue('--ds-shell-inline-start-inset')).toBe(
+      'calc(var(--ds-shell-sidebar-width, 296px) + var(--ds-shell-safe-area-left))',
+    );
+    expect(root.style.getPropertyValue('--ds-shell-header-height')).toBe(
+      'var(--ds-shell-header-block-size, 64px)',
+    );
+    expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
+      'calc(var(--ds-shell-header-block-size, 64px) + var(--ds-shell-safe-area-top))',
+    );
+    expect(
+      logo.style.getPropertyValue('--ds-shell-resolved-sidebar-header-block-size'),
+    ).toBe(
+      'var(--ds-shell-sidebar-header-block-size, 104px)',
+    );
+    expect(logo.style.height).toBe(
+      'var(--ds-shell-resolved-sidebar-header-block-size)',
+    );
+    expect(header.style.height).toBe('var(--ds-shell-top-inset)');
+  });
+
   it('keeps the fixed collapsible sidebar exclusively in desktop posture', () => {
     const { container } = renderShell(DESKTOP_CONTEXT, {
       defaultCollapsed: true,
@@ -90,7 +116,7 @@ describe('AppShell responsive contract', () => {
     expect(root.style.minHeight).toBe('100dvh');
     expect(sidebar).toHaveAccessibleName('Primary navigation');
     expect(root.style.getPropertyValue('--ds-shell-inline-start-inset')).toBe(
-      'calc(80px + var(--ds-shell-safe-area-left))',
+      'calc(var(--ds-shell-sidebar-collapsed-width, 80px) + var(--ds-shell-safe-area-left))',
     );
     expect(sidebar.style.width).toBe('var(--ds-shell-inline-start-inset)');
     expect(mainArea.style.minHeight).toBe('100dvh');
@@ -132,7 +158,7 @@ describe('AppShell responsive contract', () => {
       bottomInset,
     );
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
-      'calc(64px + var(--ds-shell-safe-area-top))',
+      'calc(var(--ds-shell-header-block-size, 64px) + var(--ds-shell-safe-area-top))',
     );
     expect(mainArea.style.paddingBlockEnd).toBe(
       'var(--ds-shell-bottom-inset)',
@@ -178,7 +204,14 @@ describe('AppShell responsive contract', () => {
   });
 
   it('composes compact navigation with the accessible Sheet authority', async () => {
-    const { container } = renderShell(TABLET_CONTEXT);
+    const { container } = renderShell(TABLET_CONTEXT, {
+      collapsed: true,
+      geometry: {
+        sidebarWidth: 312,
+        sidebarCollapsedWidth: 72,
+        sidebarHeaderHeight: 32,
+      },
+    });
     const trigger = screen.getByRole('button', { name: 'Open Primary navigation' });
     trigger.focus();
     fireEvent.click(trigger);
@@ -195,6 +228,25 @@ describe('AppShell responsive contract', () => {
     expect(dialog).toHaveAttribute('aria-modal', 'true');
     expect(dialog).toHaveAttribute('data-placement', 'left');
     expect(dialog.style.boxSizing).toBe('border-box');
+    expect(
+      dialog.style.getPropertyValue('--ds-shell-resolved-drawer-inline-size'),
+    ).toBe(
+      'min(var(--ds-shell-sidebar-width, 312px), 100dvw)',
+    );
+    expect(dialog.style.width).toBe('var(--ds-shell-resolved-drawer-inline-size)');
+    const drawerHeader = dialog.querySelector(
+      '[data-part="navigation-drawer-header"]',
+    ) as HTMLElement;
+    expect(
+      drawerHeader.style.getPropertyValue(
+        '--ds-shell-resolved-sidebar-header-min-block-size',
+      ),
+    ).toBe(
+      'max(var(--ds-shell-sidebar-header-block-size, 32px), 44px)',
+    );
+    expect(drawerHeader.style.minHeight).toBe(
+      'var(--ds-shell-resolved-sidebar-header-min-block-size)',
+    );
     expect(close.style.width).toBe('44px');
     expect(close.style.height).toBe('44px');
     expect(document.body.style.overflow).toBe('hidden');
@@ -230,5 +282,46 @@ describe('AppShell responsive contract', () => {
         screen.getByRole('button', { name: 'phone:true:true' }),
       ).toBeInTheDocument();
     });
+  });
+
+  it('keeps numeric geometry props unchanged in shell context', () => {
+    function GeometryProbe() {
+      const shell = useShellContext();
+      return (
+        <output data-testid="shell-geometry">
+          {shell?.sidebarWidth}:{shell?.sidebarCollapsedWidth}:{shell?.headerHeight}
+        </output>
+      );
+    }
+
+    const style = {
+      '--ds-shell-sidebar-width': '344px',
+      '--ds-shell-sidebar-collapsed-width': '68px',
+      '--ds-shell-header-block-size': '72px',
+      '--ds-shell-sidebar-header-block-size': '88px',
+    } as CSSProperties;
+    const { container } = renderShell(DESKTOP_CONTEXT, {
+      geometry: {
+        sidebarWidth: 320,
+        sidebarCollapsedWidth: 76,
+        headerHeight: 68,
+        sidebarHeaderHeight: 92,
+      },
+      style,
+      children: <GeometryProbe />,
+    });
+    const root = getShellRoot(container);
+
+    expect(root.style.getPropertyValue('--ds-shell-sidebar-width')).toBe('344px');
+    expect(root.style.getPropertyValue('--ds-shell-sidebar-collapsed-width')).toBe('68px');
+    expect(root.style.getPropertyValue('--ds-shell-header-block-size')).toBe('72px');
+    expect(root.style.getPropertyValue('--ds-shell-sidebar-header-block-size')).toBe('88px');
+    expect(root.style.getPropertyValue('--ds-shell-inline-start-inset')).toBe(
+      'calc(var(--ds-shell-sidebar-width, 320px) + var(--ds-shell-safe-area-left))',
+    );
+    expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
+      'calc(var(--ds-shell-header-block-size, 68px) + var(--ds-shell-safe-area-top))',
+    );
+    expect(screen.getByTestId('shell-geometry')).toHaveTextContent('320:76:68');
   });
 });

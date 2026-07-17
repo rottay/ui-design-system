@@ -8,6 +8,10 @@
   `gridColumns` overrides. Collection workspaces now honor tablet and phone
   column counts in cards mode while preserving configured or automatic card
   columns everywhere the posture does not override them.
+- Make `AppShell` geometry presentation-profile aware through four governed CSS
+  inputs for expanded/collapsed sidebar widths and header block sizes. Numeric
+  props remain the typed fallback and context value; desktop, compact Sheet and
+  safe-area calculations now resolve the same declarative recipe.
 
 ## 2.19.32
 

@@ -174,10 +174,16 @@ export function AppShell({
   );
   const navigationLabel = sidebar?.navigationLabel?.trim() || 'Navigation';
 
-  const activeSidebarWidth = sidebar ? (collapsed ? sidebarCollapsedWidth : sidebarWidth) : 0;
+  const sidebarInlineSize = `var(--ds-shell-sidebar-width, ${sidebarWidth}px)`;
+  const sidebarCollapsedInlineSize = `var(--ds-shell-sidebar-collapsed-width, ${sidebarCollapsedWidth}px)`;
+  const headerBlockSize = `var(--ds-shell-header-block-size, ${headerHeight}px)`;
+  const sidebarHeaderBlockSize = `var(--ds-shell-sidebar-header-block-size, ${sidebarHeaderHeight}px)`;
+  const activeSidebarInlineSize = collapsed
+    ? sidebarCollapsedInlineSize
+    : sidebarInlineSize;
   const hasHeader = Boolean(header || (isCompact && sidebar));
   const desktopSidebarInset = sidebar && !isCompact
-    ? `calc(${activeSidebarWidth}px + var(--ds-shell-safe-area-left))`
+    ? `calc(${activeSidebarInlineSize} + var(--ds-shell-safe-area-left))`
     : '0px';
 
   // -- Context value --------------------------------------------------------
@@ -212,7 +218,9 @@ export function AppShell({
         <div
           data-part="navigation-drawer-header"
           style={{
-            minHeight: Math.max(sidebarHeaderHeight, 44),
+            '--ds-shell-resolved-sidebar-header-min-block-size':
+              `max(${sidebarHeaderBlockSize}, 44px)`,
+            minHeight: 'var(--ds-shell-resolved-sidebar-header-min-block-size)',
             flexShrink: 0,
             display: 'flex',
             alignItems: 'center',
@@ -220,7 +228,7 @@ export function AppShell({
             gap: 'var(--ds-spacing-3, 12px)',
             padding: '0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px)',
             overflow: 'hidden',
-          }}
+          } as ShellCustomProperties}
         >
           <div style={{ minWidth: 0, overflow: 'hidden' }}>{sidebar?.logo}</div>
           <button
@@ -249,7 +257,8 @@ export function AppShell({
         <div
           data-part="navigation-logo"
           style={{
-            height: sidebarHeaderHeight,
+            '--ds-shell-resolved-sidebar-header-block-size': sidebarHeaderBlockSize,
+            height: 'var(--ds-shell-resolved-sidebar-header-block-size)',
             flexShrink: 0,
             display: 'flex',
             alignItems: 'center',
@@ -257,7 +266,7 @@ export function AppShell({
             padding: (!isDrawer && collapsed) ? '0' : '0 var(--ds-spacing-5, 20px)',
             borderBottom: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
             overflow: 'hidden',
-          }}
+          } as ShellCustomProperties}
         >
           {sidebar.logo}
         </div>
@@ -302,9 +311,9 @@ export function AppShell({
     '--ds-shell-safe-area-right': 'env(safe-area-inset-right, 0px)',
     '--ds-shell-safe-area-bottom': 'env(safe-area-inset-bottom, 0px)',
     '--ds-shell-safe-area-left': 'env(safe-area-inset-left, 0px)',
-    '--ds-shell-header-height': `${headerHeight}px`,
+    '--ds-shell-header-height': headerBlockSize,
     '--ds-shell-top-inset': hasHeader
-      ? `calc(${headerHeight}px + var(--ds-shell-safe-area-top))`
+      ? `calc(${headerBlockSize} + var(--ds-shell-safe-area-top))`
       : 'var(--ds-shell-safe-area-top)',
     '--ds-shell-bottom-inset': bottomInset,
     '--ds-shell-inline-start-inset': isCompact
@@ -369,7 +378,9 @@ export function AppShell({
             aria-label={navigationLabel}
             surfaceClassName="rottay-app-shell__navigation-drawer"
             surfaceStyle={{
-              width: `min(${sidebarWidth}px, 100dvw)`,
+              '--ds-shell-resolved-drawer-inline-size':
+                `min(${sidebarInlineSize}, 100dvw)`,
+              width: 'var(--ds-shell-resolved-drawer-inline-size)',
               maxWidth: '100dvw',
               height: '100dvh',
               maxHeight: '100dvh',
@@ -385,7 +396,7 @@ export function AppShell({
               borderRight:
                 '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
               boxShadow: 'var(--ds-elevation-3)',
-            }}
+            } as ShellCustomProperties}
             bodyStyle={{
               display: 'flex',
               flexDirection: 'column',
