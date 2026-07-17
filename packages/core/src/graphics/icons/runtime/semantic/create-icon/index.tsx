@@ -42,6 +42,7 @@ interface SsrGlyphProps extends SVGProps<SVGSVGElement> {
   readonly alt?: string;
   readonly 'data-testid'?: string;
   readonly 'data-part'?: string;
+  readonly 'data-asset-class'?: string;
   readonly 'data-icon-name'?: string;
   readonly 'data-icon-role'?: string;
   readonly 'data-icon-state'?: string;
@@ -186,6 +187,7 @@ export function createSemanticIcon(
         aria-hidden={isLabeled ? undefined : true}
         data-testid={testId}
         data-part="icon"
+        data-asset-class="semantic-icon"
         data-icon-name={name}
         data-icon-role={resolvedRole}
         data-icon-state={resolvedState}

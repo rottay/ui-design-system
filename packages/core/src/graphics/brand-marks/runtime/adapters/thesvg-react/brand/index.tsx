@@ -31,6 +31,7 @@ export const TheSvgBrandMarkAdapter = forwardRef<SVGSVGElement, BrandMarkAdapter
     const svgProps = {
       ...sharedSvgProps(props),
       ref,
+      'data-asset-class': 'brand-mark',
       'data-mark-kind': 'brand',
       'data-mark-name': name,
       'data-mark-variant': resolvedVariant,

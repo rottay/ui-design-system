@@ -33,6 +33,7 @@ export const TheSvgCloudServiceMarkAdapter = forwardRef<
   const svgProps = {
     ...sharedSvgProps(props),
     ref,
+    'data-asset-class': 'cloud-service-mark',
     'data-mark-kind': 'cloud-service',
     'data-mark-provider': provider,
     'data-mark-service': service,
