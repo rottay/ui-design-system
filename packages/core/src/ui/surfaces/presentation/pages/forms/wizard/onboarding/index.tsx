@@ -60,7 +60,6 @@ export function OnboardingSurface({
     },
     behavior: config.behavior,
     access: config.access,
-    permissions: config.permissions,
   };
 
   return <WizardSurface config={wizardConfig} loading={loading} error={error} onRetry={onRetry} />;

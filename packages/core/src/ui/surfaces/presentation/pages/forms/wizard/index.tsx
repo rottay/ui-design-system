@@ -46,7 +46,7 @@ function renderWizardStepContent(
 ): React.ReactNode {
   const contentNode = typeof step.content === 'function' ? step.content(context) : step.content;
 
-  const visibleFields = filterSurfaceFields(step.fields ?? [], config.access ?? config.permissions);
+  const visibleFields = filterSurfaceFields(step.fields ?? [], config.access);
 
   /**
    * A wizard step can be:
@@ -237,9 +237,9 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
       ? config.presentation.footer(activeContext)
       : config.presentation.footer;
 
-  const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.access ?? config.permissions);
-  const saveDraftAction = resolveSurfaceAction(config.behavior.saveDraftAction, config.access ?? config.permissions);
-  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access ?? config.permissions);
+  const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.access);
+  const saveDraftAction = resolveSurfaceAction(config.behavior.saveDraftAction, config.access);
+  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access);
 
   const wizardFooter = (
     <Flex gap={8} wrap="wrap" justify="end">

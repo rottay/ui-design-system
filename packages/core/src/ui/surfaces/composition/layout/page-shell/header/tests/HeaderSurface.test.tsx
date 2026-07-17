@@ -39,7 +39,7 @@ function buildConfig(overrides?: Partial<HeaderSurfaceConfig>): HeaderSurfaceCon
       ],
       onTabChange: vi.fn(),
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }
@@ -70,7 +70,7 @@ describe('HeaderSurface', () => {
     expect(await screen.findByText('Activity panel', undefined, { timeout: 15000 })).toBeInTheDocument();
   });
 
-  it('filters tabs and actions through permissions while keeping badges visible', async () => {
+  it('applies final tab and action decisions while keeping badges visible', async () => {
     await import('../../../../../../primitives/inputs/Button/engines/rustic');
 
     const config = buildConfig({
@@ -103,18 +103,14 @@ describe('HeaderSurface', () => {
         ],
         onTabChange: vi.fn(),
       },
-      permissions: {
-        granted: [],
-        tabs: {
-          'workspace.activity': {
-            permission: 'workspace:activity:read',
-          },
-        },
-        actions: {
-          'danger-zone': {
-            permission: 'workspace:danger:read',
-          },
-        },
+      access: {
+        mode: 'resolved',
+        capabilities: [
+          { kind: 'tab', id: 'overview', visible: true },
+          { kind: 'tab', id: 'workspace.activity', visible: false },
+          { kind: 'action', id: 'invite', visible: true },
+          { kind: 'action', id: 'danger-zone', visible: false },
+        ],
       },
     });
 

@@ -48,16 +48,16 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
     onDiscard: dirtyState?.onDiscard,
     onBlocked: dirtyState?.onBlocked,
   });
-  // Fields are permission-filtered before reaching the form builder so
+  // Fields use final app-resolved access before reaching the form builder so
   // restricted fields never appear in the DOM at all.
-  const visibleFields = filterSurfaceFields(config.behavior.fields, config.access ?? config.permissions);
+  const visibleFields = filterSurfaceFields(config.behavior.fields, config.access);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // Label text transform (uppercase, capitalize, sentence) comes from the
   // product personality profile, keeping form labels consistent across
   // every form surface without per-instance configuration.
   const labelTransform = resolveLabelTextTransform(profileDefaults.labelStyle);
-  const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.access ?? config.permissions);
-  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access ?? config.permissions);
+  const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.access);
+  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access);
   const chrome = {
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,

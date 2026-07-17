@@ -58,7 +58,7 @@ function buildConfig(overrides?: Partial<SearchSurfaceConfig>): SearchSurfaceCon
       filterValues: {},
       onFilterChange: vi.fn(),
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }
@@ -97,7 +97,7 @@ describe('SearchSurface', () => {
     );
   });
 
-  it('filters header actions through the shared permission contract', async () => {
+  it('filters header actions through final presentation decisions', async () => {
     const config = buildConfig();
     config.behavior.actions = [
       {
@@ -107,13 +107,9 @@ describe('SearchSurface', () => {
         onClick: vi.fn(),
       },
     ];
-    config.permissions = {
-      granted: [],
-      actions: {
-        'manage-search': {
-          permission: 'search:manage',
-        },
-      },
+    config.access = {
+      mode: 'resolved',
+      capabilities: [{ kind: 'action', id: 'manage-search', visible: false }],
     };
 
     renderSurface(<SearchSurface config={config} />);

@@ -1,0 +1,3515 @@
+{
+  "schemaVersion": 1,
+  "app": "app-platform",
+  "source": "generated-from-productive-typescript",
+  "counts": {
+    "route": 190,
+    "field": 63,
+    "column": 74,
+    "tab": 79,
+    "action": 94
+  },
+  "total": 500,
+  "entries": [
+    {
+      "kind": "action",
+      "id": "activate",
+      "source": "features/identity/users/screens/list.tsx",
+      "line": 2017,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "add-members",
+      "source": "features/identity/users/screens/groups-list.tsx",
+      "line": 1292,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "add-to-group",
+      "source": "features/identity/users/screens/list.tsx",
+      "line": 2033,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "advance",
+      "source": "features/compliance/compliance/screens/gdpr-workspace-config.tsx",
+      "line": 332,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "aml-alerts",
+      "source": "features/compliance/compliance/screens/governance-overview.tsx",
+      "line": 762,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "analytics",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 969,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "analytics",
+      "source": "features/services/notifications/screens/providers.tsx",
+      "line": 1033,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "analytics",
+      "source": "features/services/notifications/screens/providers.tsx",
+      "line": 1047,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "approve",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 765,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "assessments",
+      "source": "features/compliance/compliance/screens/privacy-hub.tsx",
+      "line": 782,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "assign",
+      "source": "features/compliance/compliance/screens/aml-explorer-config.tsx",
+      "line": 487,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "assign",
+      "source": "features/compliance/compliance/screens/kyc-explorer-config.tsx",
+      "line": 497,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "breach-incidents",
+      "source": "features/compliance/compliance/screens/governance-overview.tsx",
+      "line": 776,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "bulk-assign-users",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 1314,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "clone-role",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 963,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "compare",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 975,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "complete",
+      "source": "features/compliance/compliance/screens/dsar-workbench.tsx",
+      "line": 647,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "consent",
+      "source": "features/compliance/compliance/screens/privacy-hub.tsx",
+      "line": 761,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "convert",
+      "source": "features/identity/users/screens/guests.tsx",
+      "line": 1531,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "copy-client-id",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1210,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "create",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1646,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1655,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-group",
+      "source": "features/identity/users/screens/groups-list.tsx",
+      "line": 1270,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-group",
+      "source": "features/identity/users/screens/groups-list.tsx",
+      "line": 1279,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-permission",
+      "source": "features/identity/permissions/screens/perm-list.tsx",
+      "line": 957,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-role",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 947,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-role",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 956,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-user",
+      "source": "components/landing/data/code-examples.ts",
+      "line": 120,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "deactivate",
+      "source": "features/identity/users/screens/list.tsx",
+      "line": 2022,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/compliance/compliance/screens/dsar-workbench.tsx",
+      "line": 666,
+      "column": 10
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 1291,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/identity/permissions/screens/perm-list.tsx",
+      "line": 1225,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/identity/users/screens/groups-list.tsx",
+      "line": 1536,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1208,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 2030,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/organization/tenants/screens/tenant-list.tsx",
+      "line": 1245,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/security/security/screens/sso.tsx",
+      "line": 1130,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "features/services/notifications/screens/templates-list.tsx",
+      "line": 815,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "deletion",
+      "source": "features/compliance/compliance/screens/privacy-hub.tsx",
+      "line": 754,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "dsar",
+      "source": "features/compliance/compliance/screens/privacy-hub.tsx",
+      "line": 747,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "dsar-requests",
+      "source": "features/compliance/compliance/screens/governance-overview.tsx",
+      "line": 769,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "escalate",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 802,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "escalate",
+      "source": "features/compliance/compliance/screens/aml-explorer-config.tsx",
+      "line": 494,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "escalate",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 767,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "escalate",
+      "source": "features/compliance/compliance/screens/kyc-explorer-config.tsx",
+      "line": 504,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "evidence-pack",
+      "source": "features/compliance/compliance/screens/governance-overview.tsx",
+      "line": 783,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/compliance/compliance/screens/dsar-workbench.tsx",
+      "line": 658,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 981,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/permissions/screens/list.tsx",
+      "line": 1297,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/permissions/screens/perm-list.tsx",
+      "line": 976,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/permissions/screens/perm-list.tsx",
+      "line": 1235,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/users/screens/duplicates.tsx",
+      "line": 728,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/users/screens/groups-list.tsx",
+      "line": 1298,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/users/screens/groups-list.tsx",
+      "line": 1543,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/users/screens/guests.tsx",
+      "line": 1537,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/users/screens/list.tsx",
+      "line": 2028,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1668,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 2037,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/organization/tenants/screens/tenant-list.tsx",
+      "line": 1251,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/services/payments/screens/payments-explorer-config.tsx",
+      "line": 448,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "features/services/payments/screens/refunds-explorer-config.tsx",
+      "line": 401,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "export-events",
+      "source": "features/security/security/screens/overview.tsx",
+      "line": 439,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "exports",
+      "source": "features/compliance/compliance/screens/privacy-hub.tsx",
+      "line": 768,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "kyc-queue",
+      "source": "features/compliance/compliance/screens/governance-overview.tsx",
+      "line": 755,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "list-users",
+      "source": "components/landing/data/code-examples.ts",
+      "line": 40,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "mark-sar",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 801,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "mark-sar",
+      "source": "features/compliance/compliance/screens/aml-explorer-config.tsx",
+      "line": 501,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "merge",
+      "source": "features/identity/users/screens/duplicates.tsx",
+      "line": 722,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "open-providers",
+      "source": "features/security/security/screens/overview.tsx",
+      "line": 427,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "open-record",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1206,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "open-roles",
+      "source": "features/identity/permissions/screens/perm-list.tsx",
+      "line": 949,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "open-roles",
+      "source": "features/identity/permissions/screens/perm-list.tsx",
+      "line": 964,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "policies",
+      "source": "features/identity/permissions/screens/perm-list.tsx",
+      "line": 970,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "reassign",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 803,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "reassign",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 768,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "refresh",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1673,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "refresh",
+      "source": "features/services/notifications/screens/providers.tsx",
+      "line": 1027,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "refresh",
+      "source": "features/services/notifications/screens/providers.tsx",
+      "line": 1041,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "request-docs",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 766,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "request-evidence",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 804,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "retention",
+      "source": "features/compliance/compliance/screens/privacy-hub.tsx",
+      "line": 775,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "review",
+      "source": "features/compliance/compliance/screens/kyc-aml-workspace-config.tsx",
+      "line": 347,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "review",
+      "source": "features/compliance/compliance/screens/retention-explorer-config.tsx",
+      "line": 412,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "review-sessions",
+      "source": "features/security/security/screens/overview.tsx",
+      "line": 411,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "review-sessions",
+      "source": "features/security/security/screens/overview.tsx",
+      "line": 420,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "review-stale",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1662,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "review-tokens",
+      "source": "features/security/security/screens/overview.tsx",
+      "line": 433,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "revoke",
+      "source": "features/security/sessions/screens/tabs/sessions/index.tsx",
+      "line": 412,
+      "column": 13
+    },
+    {
+      "kind": "action",
+      "id": "rotate",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1207,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "sync-directory",
+      "source": "features/identity/users/screens/groups-list.tsx",
+      "line": 1286,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "templates",
+      "source": "features/services/notifications/screens/providers.tsx",
+      "line": 1053,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "view-audit",
+      "source": "features/identity/users/screens/service-accounts-list/index.tsx",
+      "line": 1209,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "watchlist",
+      "source": "features/compliance/compliance/screens/governance-overview.tsx",
+      "line": 790,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "withdraw",
+      "source": "features/compliance/compliance/screens/consent-workspace-config.tsx",
+      "line": 325,
+      "column": 9
+    },
+    {
+      "kind": "column",
+      "id": "accessLevel",
+      "source": "features/organization/tenants/screens/detail.tsx",
+      "line": 290,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "action",
+      "source": "features/organization/settings/screens/data-export.tsx",
+      "line": 140,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "actions",
+      "source": "features/identity/users/components/users/table/index.tsx",
+      "line": 290,
+      "column": 42
+    },
+    {
+      "kind": "column",
+      "id": "actions",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 725,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "actions",
+      "source": "features/organization/tenants/screens/companies.tsx",
+      "line": 37,
+      "column": 625
+    },
+    {
+      "kind": "column",
+      "id": "actions",
+      "source": "features/organization/tenants/screens/users.tsx",
+      "line": 43,
+      "column": 772
+    },
+    {
+      "kind": "column",
+      "id": "actions",
+      "source": "features/security/security/components/events-table/index.tsx",
+      "line": 218,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "actions",
+      "source": "features/security/security/components/session-table/index.tsx",
+      "line": 260,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "attributes",
+      "source": "features/organization/settings/screens/attributes.tsx",
+      "line": 173,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "channel",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 70,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "company",
+      "source": "features/identity/users/components/users/table/index.tsx",
+      "line": 227,
+      "column": 9
+    },
+    {
+      "kind": "column",
+      "id": "company",
+      "source": "features/organization/tenants/screens/companies.tsx",
+      "line": 37,
+      "column": 49
+    },
+    {
+      "kind": "column",
+      "id": "createdAt",
+      "source": "features/organization/tenants/screens/companies.tsx",
+      "line": 37,
+      "column": 495
+    },
+    {
+      "kind": "column",
+      "id": "createdAt",
+      "source": "features/security/security/components/session-table/index.tsx",
+      "line": 254,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "current",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 180,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "current",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 241,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "device",
+      "source": "features/identity/profile/screens/security-activity.tsx",
+      "line": 535,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "device",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 617,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "device",
+      "source": "features/security/security/components/session-table/index.tsx",
+      "line": 190,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "direction",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 196,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "direction",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 257,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "dispatchedAt",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 74,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "event",
+      "source": "features/identity/profile/screens/security-activity.tsx",
+      "line": 489,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "expiresAt",
+      "source": "features/organization/settings/screens/data-export.tsx",
+      "line": 134,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "grantedAt",
+      "source": "features/organization/tenants/screens/detail.tsx",
+      "line": 305,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "ip",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 660,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "ipAddress",
+      "source": "features/security/security/components/events-table/index.tsx",
+      "line": 204,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "isPrimary",
+      "source": "features/organization/tenants/screens/detail.tsx",
+      "line": 299,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "key",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 172,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "key",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 233,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "lastActiveAt",
+      "source": "features/security/security/components/session-table/index.tsx",
+      "line": 240,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "lastActivity",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 698,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "lastLogin",
+      "source": "features/identity/users/components/users/table/index.tsx",
+      "line": 281,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "latencyMs",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 75,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "location",
+      "source": "features/identity/profile/screens/security-activity.tsx",
+      "line": 549,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "location",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 682,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "location",
+      "source": "features/security/security/components/events-table/index.tsx",
+      "line": 211,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "location",
+      "source": "features/security/security/components/session-table/index.tsx",
+      "line": 228,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/organization/settings/screens/attributes.tsx",
+      "line": 114,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "notificationId",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 68,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "permissionCount",
+      "source": "features/organization/tenants/screens/detail.tsx",
+      "line": 352,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "priority",
+      "source": "features/organization/settings/screens/attributes.tsx",
+      "line": 151,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "providerName",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 73,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "recipientLabel",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 71,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "requestedAt",
+      "source": "features/organization/settings/screens/data-export.tsx",
+      "line": 108,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "role",
+      "source": "features/organization/tenants/screens/detail.tsx",
+      "line": 317,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "roles",
+      "source": "features/identity/users/components/users/table/index.tsx",
+      "line": 242,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "roles",
+      "source": "features/organization/tenants/screens/users.tsx",
+      "line": 43,
+      "column": 330
+    },
+    {
+      "kind": "column",
+      "id": "select",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 545,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "severity",
+      "source": "features/security/security/components/events-table/index.tsx",
+      "line": 167,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/identity/profile/screens/security-activity.tsx",
+      "line": 524,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/identity/users/components/users/table/index.tsx",
+      "line": 266,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 714,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/organization/settings/screens/attributes.tsx",
+      "line": 189,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/organization/settings/screens/data-export.tsx",
+      "line": 114,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/organization/tenants/screens/companies.tsx",
+      "line": 37,
+      "column": 309
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/organization/tenants/screens/users.tsx",
+      "line": 43,
+      "column": 595
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 72,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "target",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 188,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "target",
+      "source": "features/organization/admin/screens/plan-simulator/overview.tsx",
+      "line": 249,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "templateName",
+      "source": "features/services/notifications/screens/delivery-trace/index.tsx",
+      "line": 69,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "tenant",
+      "source": "features/identity/users/components/users/table/index.tsx",
+      "line": 216,
+      "column": 9
+    },
+    {
+      "kind": "column",
+      "id": "timestamp",
+      "source": "features/identity/profile/screens/security-activity.tsx",
+      "line": 564,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "timestamp",
+      "source": "features/security/security/components/events-table/index.tsx",
+      "line": 156,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "type",
+      "source": "features/organization/settings/screens/attributes.tsx",
+      "line": 143,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "type",
+      "source": "features/security/security/components/events-table/index.tsx",
+      "line": 182,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "user",
+      "source": "features/identity/users/components/users/table/index.tsx",
+      "line": 170,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "user",
+      "source": "features/organization/admin/screens/sessions/overview.tsx",
+      "line": 570,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "user",
+      "source": "features/organization/tenants/screens/detail.tsx",
+      "line": 265,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "user",
+      "source": "features/organization/tenants/screens/users.tsx",
+      "line": 43,
+      "column": 46
+    },
+    {
+      "kind": "column",
+      "id": "user",
+      "source": "features/security/security/components/events-table/index.tsx",
+      "line": 188,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "user",
+      "source": "features/security/security/components/session-table/index.tsx",
+      "line": 214,
+      "column": 11
+    },
+    {
+      "kind": "column",
+      "id": "userCount",
+      "source": "features/organization/tenants/screens/companies.tsx",
+      "line": 37,
+      "column": 247
+    },
+    {
+      "kind": "column",
+      "id": "userCount",
+      "source": "features/organization/tenants/screens/detail.tsx",
+      "line": 340,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "120",
+      "source": "components/landing/overview/terminal-contact/conversation.ts",
+      "line": 27,
+      "column": 66
+    },
+    {
+      "kind": "field",
+      "id": "audit.action",
+      "source": "features/_shared/adapters/audit-event-adapter.ts",
+      "line": 111,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "audit.ip",
+      "source": "features/_shared/adapters/audit-event-adapter.ts",
+      "line": 115,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "audit.resource",
+      "source": "features/_shared/adapters/audit-event-adapter.ts",
+      "line": 113,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "audit.status",
+      "source": "features/_shared/adapters/audit-event-adapter.ts",
+      "line": 114,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "audit.timestamp",
+      "source": "features/_shared/adapters/audit-event-adapter.ts",
+      "line": 110,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "audit.user",
+      "source": "features/_shared/adapters/audit-event-adapter.ts",
+      "line": 112,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "company.created",
+      "source": "features/_shared/adapters/company-adapter.ts",
+      "line": 76,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "company.name",
+      "source": "features/_shared/adapters/company-adapter.ts",
+      "line": 72,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "company.owner",
+      "source": "features/_shared/adapters/company-adapter.ts",
+      "line": 73,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "company.status",
+      "source": "features/_shared/adapters/company-adapter.ts",
+      "line": 75,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "company.users",
+      "source": "features/_shared/adapters/company-adapter.ts",
+      "line": 74,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "consent.date",
+      "source": "features/_shared/adapters/consent-record-adapter.ts",
+      "line": 98,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "consent.purpose",
+      "source": "features/_shared/adapters/consent-record-adapter.ts",
+      "line": 96,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "consent.status",
+      "source": "features/_shared/adapters/consent-record-adapter.ts",
+      "line": 97,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "consent.user",
+      "source": "features/_shared/adapters/consent-record-adapter.ts",
+      "line": 95,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dsar.dueDate",
+      "source": "features/_shared/adapters/dsar-adapter.ts",
+      "line": 96,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dsar.requester",
+      "source": "features/_shared/adapters/dsar-adapter.ts",
+      "line": 94,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dsar.status",
+      "source": "features/_shared/adapters/dsar-adapter.ts",
+      "line": 95,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dsar.type",
+      "source": "features/_shared/adapters/dsar-adapter.ts",
+      "line": 93,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "notificationTemplate.channel",
+      "source": "features/_shared/adapters/notification-template-adapter.ts",
+      "line": 72,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "notificationTemplate.created",
+      "source": "features/_shared/adapters/notification-template-adapter.ts",
+      "line": 75,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "notificationTemplate.name",
+      "source": "features/_shared/adapters/notification-template-adapter.ts",
+      "line": 71,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "notificationTemplate.status",
+      "source": "features/_shared/adapters/notification-template-adapter.ts",
+      "line": 73,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "notificationTemplate.variables",
+      "source": "features/_shared/adapters/notification-template-adapter.ts",
+      "line": 74,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "permission.action",
+      "source": "features/_shared/adapters/permission-adapter.ts",
+      "line": 84,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "permission.created",
+      "source": "features/_shared/adapters/permission-adapter.ts",
+      "line": 86,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "permission.description",
+      "source": "features/_shared/adapters/permission-adapter.ts",
+      "line": 85,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "permission.name",
+      "source": "features/_shared/adapters/permission-adapter.ts",
+      "line": 82,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "permission.resource",
+      "source": "features/_shared/adapters/permission-adapter.ts",
+      "line": 83,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "role.created",
+      "source": "features/_shared/adapters/role-adapter.ts",
+      "line": 66,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "role.name",
+      "source": "features/_shared/adapters/role-adapter.ts",
+      "line": 63,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "role.permissions",
+      "source": "features/_shared/adapters/role-adapter.ts",
+      "line": 64,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "role.users",
+      "source": "features/_shared/adapters/role-adapter.ts",
+      "line": 65,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "searchByCustomField",
+      "source": "features/identity/users/actions/search/index.ts",
+      "line": 275,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "tenant.companyCount",
+      "source": "features/_shared/adapters/tenant-adapter.ts",
+      "line": 82,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "tenant.createdAt",
+      "source": "features/_shared/adapters/tenant-adapter.ts",
+      "line": 83,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "tenant.name",
+      "source": "features/_shared/adapters/tenant-adapter.ts",
+      "line": 77,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "tenant.plan",
+      "source": "features/_shared/adapters/tenant-adapter.ts",
+      "line": 79,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "tenant.slug",
+      "source": "features/_shared/adapters/tenant-adapter.ts",
+      "line": 78,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "tenant.status",
+      "source": "features/_shared/adapters/tenant-adapter.ts",
+      "line": 80,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "tenant.userCount",
+      "source": "features/_shared/adapters/tenant-adapter.ts",
+      "line": 81,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.createdAt",
+      "source": "features/_shared/adapters/user-detail-adapter.ts",
+      "line": 95,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.email",
+      "source": "features/_shared/adapters/user-adapter.ts",
+      "line": 69,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.email",
+      "source": "features/_shared/adapters/user-detail-adapter.ts",
+      "line": 92,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.lastActive",
+      "source": "features/_shared/adapters/user-adapter.ts",
+      "line": 73,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.lastActive",
+      "source": "features/identity/users/screens/detail-view.ts",
+      "line": 75,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.lastLogin",
+      "source": "features/_shared/adapters/user-detail-adapter.ts",
+      "line": 96,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.mfa",
+      "source": "features/identity/users/screens/detail-view.ts",
+      "line": 74,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.name",
+      "source": "features/_shared/adapters/user-adapter.ts",
+      "line": 68,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.name",
+      "source": "features/_shared/adapters/user-detail-adapter.ts",
+      "line": 91,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.role",
+      "source": "features/_shared/adapters/user-adapter.ts",
+      "line": 72,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.role",
+      "source": "features/_shared/adapters/user-detail-adapter.ts",
+      "line": 94,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.status",
+      "source": "features/_shared/adapters/user-adapter.ts",
+      "line": 71,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.status",
+      "source": "features/_shared/adapters/user-detail-adapter.ts",
+      "line": 93,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.tenant",
+      "source": "features/_shared/adapters/user-adapter.ts",
+      "line": 70,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "user.tenantLabel",
+      "source": "features/identity/users/screens/detail-view.ts",
+      "line": 73,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "verification.date",
+      "source": "features/_shared/adapters/verification-adapter.ts",
+      "line": 121,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "verification.documents",
+      "source": "features/_shared/adapters/verification-adapter.ts",
+      "line": 120,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "verification.riskScore",
+      "source": "features/_shared/adapters/verification-adapter.ts",
+      "line": 119,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "verification.status",
+      "source": "features/_shared/adapters/verification-adapter.ts",
+      "line": 118,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "verification.type",
+      "source": "features/_shared/adapters/verification-adapter.ts",
+      "line": 117,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "verification.user",
+      "source": "features/_shared/adapters/verification-adapter.ts",
+      "line": 116,
+      "column": 5
+    },
+    {
+      "kind": "route",
+      "id": "/",
+      "source": "app/(landing)/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin",
+      "source": "app/(dashboard)/admin/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin-units",
+      "source": "app/(dashboard)/admin-units/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin-units/[id]",
+      "source": "app/(dashboard)/admin-units/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/ai-pricing",
+      "source": "app/(dashboard)/admin/ai-pricing/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/ai-pricing/config",
+      "source": "app/(dashboard)/admin/ai-pricing/config/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/ai-pricing/packages",
+      "source": "app/(dashboard)/admin/ai-pricing/packages/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/ai-pricing/rates",
+      "source": "app/(dashboard)/admin/ai-pricing/rates/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/audit-trail",
+      "source": "app/(dashboard)/admin/audit-trail/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/commercial-access",
+      "source": "app/(dashboard)/admin/commercial-access/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/diagnostics",
+      "source": "app/(dashboard)/admin/diagnostics/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/domain-health",
+      "source": "app/(dashboard)/admin/domain-health/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/impersonation/policies",
+      "source": "app/(dashboard)/admin/impersonation/policies/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/plan-simulator",
+      "source": "app/(dashboard)/admin/plan-simulator/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/sessions",
+      "source": "app/(dashboard)/admin/sessions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/admin/sessions/policy",
+      "source": "app/(dashboard)/admin/sessions/policy/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/callback",
+      "source": "app/(auth)/callback/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/companies",
+      "source": "app/(dashboard)/companies/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/companies/[id]",
+      "source": "app/(dashboard)/companies/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/companies/[id]/edit",
+      "source": "app/(dashboard)/companies/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/companies/new",
+      "source": "app/(dashboard)/companies/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance",
+      "source": "app/(dashboard)/compliance/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/aml",
+      "source": "app/(dashboard)/compliance/aml/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/aml/[id]",
+      "source": "app/(dashboard)/compliance/aml/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/audit",
+      "source": "app/(dashboard)/compliance/audit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/audit/[id]",
+      "source": "app/(dashboard)/compliance/audit/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/audit/evidence/[id]",
+      "source": "app/(dashboard)/compliance/audit/evidence/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/breaches",
+      "source": "app/(dashboard)/compliance/breaches/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/breaches/[id]",
+      "source": "app/(dashboard)/compliance/breaches/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/consent",
+      "source": "app/(dashboard)/compliance/consent/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/gdpr",
+      "source": "app/(dashboard)/compliance/gdpr/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/kyc",
+      "source": "app/(dashboard)/compliance/kyc/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/kyc-aml",
+      "source": "app/(dashboard)/compliance/kyc-aml/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/kyc/[id]",
+      "source": "app/(dashboard)/compliance/kyc/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/my-data",
+      "source": "app/(dashboard)/compliance/my-data/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/packs",
+      "source": "app/(dashboard)/compliance/packs/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/privacy",
+      "source": "app/(dashboard)/compliance/privacy/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/privacy/dsar/[id]",
+      "source": "app/(dashboard)/compliance/privacy/dsar/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/compliance/retention",
+      "source": "app/(dashboard)/compliance/retention/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/dashboard",
+      "source": "app/(dashboard)/dashboard/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/docs/[[...mdxPath]]",
+      "source": "app/docs/[[...mdxPath]]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/docs/access/verify",
+      "source": "app/docs/access/verify/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/docs/capabilities",
+      "source": "app/docs/capabilities/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/docs/capabilities/[...publicHandle]",
+      "source": "app/docs/capabilities/[...publicHandle]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/docs/modules",
+      "source": "app/docs/modules/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/docs/modules/[moduleSlug]",
+      "source": "app/docs/modules/[moduleSlug]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/docs/modules/[moduleSlug]/operations/[categorySegment]/[...domainPath]",
+      "source": "app/docs/modules/[moduleSlug]/operations/[categorySegment]/[...domainPath]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags",
+      "source": "app/(dashboard)/feature-flags/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags/[id]",
+      "source": "app/(dashboard)/feature-flags/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags/[id]/edit",
+      "source": "app/(dashboard)/feature-flags/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags/[id]/rules",
+      "source": "app/(dashboard)/feature-flags/[id]/rules/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags/create",
+      "source": "app/(dashboard)/feature-flags/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags/overview",
+      "source": "app/(dashboard)/feature-flags/overview/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags/rollouts",
+      "source": "app/(dashboard)/feature-flags/rollouts/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/feature-flags/usage",
+      "source": "app/(dashboard)/feature-flags/usage/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/features/analytics",
+      "source": "app/(dashboard)/features/analytics/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/forgot-password",
+      "source": "app/(auth)/forgot-password/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/home",
+      "source": "app/(dashboard)/home/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/identity",
+      "source": "app/(dashboard)/identity/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/impersonating",
+      "source": "app/(dashboard)/impersonating/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/impersonation",
+      "source": "app/(dashboard)/impersonation/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/impersonation/history",
+      "source": "app/(dashboard)/impersonation/history/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/impersonation/requests",
+      "source": "app/(dashboard)/impersonation/requests/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/legal/privacy",
+      "source": "app/(dashboard)/legal/privacy/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/legal/terms",
+      "source": "app/(dashboard)/legal/terms/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/login",
+      "source": "app/(auth)/login/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/mfa",
+      "source": "app/(auth)/mfa/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/mfa/setup",
+      "source": "app/(auth)/mfa/setup/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation",
+      "source": "app/(dashboard)/navigation/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/menus",
+      "source": "app/(dashboard)/navigation/menus/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/menus/[id]",
+      "source": "app/(dashboard)/navigation/menus/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/menus/[id]/edit",
+      "source": "app/(dashboard)/navigation/menus/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/menus/create",
+      "source": "app/(dashboard)/navigation/menus/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/policies",
+      "source": "app/(dashboard)/navigation/policies/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/policies/[id]",
+      "source": "app/(dashboard)/navigation/policies/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/policies/[id]/edit",
+      "source": "app/(dashboard)/navigation/policies/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/policies/create",
+      "source": "app/(dashboard)/navigation/policies/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/publish-review",
+      "source": "app/(dashboard)/navigation/publish-review/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/routes",
+      "source": "app/(dashboard)/navigation/routes/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/routes/[id]",
+      "source": "app/(dashboard)/navigation/routes/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/routes/[id]/edit",
+      "source": "app/(dashboard)/navigation/routes/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/routes/create",
+      "source": "app/(dashboard)/navigation/routes/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/navigation/versions",
+      "source": "app/(dashboard)/navigation/versions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications",
+      "source": "app/(dashboard)/notifications/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/analytics",
+      "source": "app/(dashboard)/notifications/analytics/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/delivery-trace",
+      "source": "app/(dashboard)/notifications/delivery-trace/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/inbox",
+      "source": "app/(dashboard)/notifications/inbox/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/providers",
+      "source": "app/(dashboard)/notifications/providers/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/send",
+      "source": "app/(dashboard)/notifications/send/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/templates",
+      "source": "app/(dashboard)/notifications/templates/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/templates/[id]",
+      "source": "app/(dashboard)/notifications/templates/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/templates/[id]/edit",
+      "source": "app/(dashboard)/notifications/templates/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/templates/create",
+      "source": "app/(dashboard)/notifications/templates/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/notifications/webhooks",
+      "source": "app/(dashboard)/notifications/webhooks/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/oauth/callback/[provider]",
+      "source": "app/(auth)/oauth/callback/[provider]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/organization",
+      "source": "app/(dashboard)/organization/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/organization/lifecycle",
+      "source": "app/(dashboard)/organization/lifecycle/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/organization/memberships",
+      "source": "app/(dashboard)/organization/memberships/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/organization/plans-and-limits",
+      "source": "app/(dashboard)/organization/plans-and-limits/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/organization/provisioning",
+      "source": "app/(dashboard)/organization/provisioning/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/payments",
+      "source": "app/(dashboard)/payments/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/payments/[id]",
+      "source": "app/(dashboard)/payments/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/payments/explorer",
+      "source": "app/(dashboard)/payments/explorer/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/payments/refunds",
+      "source": "app/(dashboard)/payments/refunds/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/permissions",
+      "source": "app/(dashboard)/permissions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/permissions/[id]",
+      "source": "app/(dashboard)/permissions/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/permissions/[id]/edit",
+      "source": "app/(dashboard)/permissions/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/permissions/create",
+      "source": "app/(dashboard)/permissions/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/permissions/policies",
+      "source": "app/(dashboard)/permissions/policies/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/platform-services",
+      "source": "app/(dashboard)/platform-services/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/preferences",
+      "source": "app/preferences/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile",
+      "source": "app/(dashboard)/profile/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/edit",
+      "source": "app/(dashboard)/profile/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/privacy/delete",
+      "source": "app/(dashboard)/profile/privacy/delete/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/privacy/export",
+      "source": "app/(dashboard)/profile/privacy/export/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/security",
+      "source": "app/(dashboard)/profile/security/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/security/activity",
+      "source": "app/(dashboard)/profile/security/activity/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/security/devices",
+      "source": "app/(dashboard)/profile/security/devices/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/security/mfa",
+      "source": "app/(dashboard)/profile/security/mfa/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/security/passkeys",
+      "source": "app/(dashboard)/profile/security/passkeys/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/security/password",
+      "source": "app/(dashboard)/profile/security/password/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/security/sessions",
+      "source": "app/(dashboard)/profile/security/sessions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile/sessions",
+      "source": "app/(dashboard)/profile/sessions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/provisioning",
+      "source": "app/(dashboard)/provisioning/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/register",
+      "source": "app/(auth)/register/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/reset-password",
+      "source": "app/(auth)/reset-password/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/roles",
+      "source": "app/(dashboard)/roles/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/roles/[id]",
+      "source": "app/(dashboard)/roles/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/roles/[id]/edit",
+      "source": "app/(dashboard)/roles/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/roles/analytics",
+      "source": "app/(dashboard)/roles/analytics/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/roles/create",
+      "source": "app/(dashboard)/roles/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/sales",
+      "source": "app/(landing)/sales/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/sales/deep",
+      "source": "app/(landing)/sales/deep/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security",
+      "source": "app/(dashboard)/security/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/auth-methods",
+      "source": "app/(dashboard)/security/auth-methods/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/jwt",
+      "source": "app/(dashboard)/security/jwt/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/mfa",
+      "source": "app/(dashboard)/security/mfa/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/oauth-providers",
+      "source": "app/(dashboard)/security/oauth-providers/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/oauth-providers/create",
+      "source": "app/(dashboard)/security/oauth-providers/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/risk",
+      "source": "app/(dashboard)/security/risk/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/sso",
+      "source": "app/(dashboard)/security/sso/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/sso/[id]",
+      "source": "app/(dashboard)/security/sso/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/sso/create",
+      "source": "app/(dashboard)/security/sso/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/security/tokens",
+      "source": "app/(dashboard)/security/tokens/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/service-accounts",
+      "source": "app/(dashboard)/service-accounts/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/service-accounts/[id]",
+      "source": "app/(dashboard)/service-accounts/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/service-accounts/create",
+      "source": "app/(dashboard)/service-accounts/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/sessions",
+      "source": "app/(dashboard)/sessions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings",
+      "source": "app/(dashboard)/settings/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/account",
+      "source": "app/(dashboard)/settings/account/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/api-keys",
+      "source": "app/(dashboard)/settings/api-keys/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/attributes",
+      "source": "app/(dashboard)/settings/attributes/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/billing",
+      "source": "app/(dashboard)/settings/billing/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/data-export",
+      "source": "app/(dashboard)/settings/data-export/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/integrations/scim",
+      "source": "app/(dashboard)/settings/integrations/scim/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/mfa",
+      "source": "app/(dashboard)/settings/mfa/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/notifications",
+      "source": "app/(dashboard)/settings/notifications/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/passkeys",
+      "source": "app/(dashboard)/settings/passkeys/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/privacy",
+      "source": "app/(dashboard)/settings/privacy/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/webhooks",
+      "source": "app/(dashboard)/settings/webhooks/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/whitelabel",
+      "source": "app/(dashboard)/settings/whitelabel/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants",
+      "source": "app/(dashboard)/tenants/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]",
+      "source": "app/(dashboard)/tenants/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]/branding",
+      "source": "app/(dashboard)/tenants/[id]/branding/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]/branding/versions",
+      "source": "app/(dashboard)/tenants/[id]/branding/versions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]/companies",
+      "source": "app/(dashboard)/tenants/[id]/companies/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]/edit",
+      "source": "app/(dashboard)/tenants/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]/features",
+      "source": "app/(dashboard)/tenants/[id]/features/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]/settings",
+      "source": "app/(dashboard)/tenants/[id]/settings/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/[id]/users",
+      "source": "app/(dashboard)/tenants/[id]/users/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/tenants/new",
+      "source": "app/(dashboard)/tenants/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/unsubscribe",
+      "source": "app/unsubscribe/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users",
+      "source": "app/(dashboard)/users/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/[id]",
+      "source": "app/(dashboard)/users/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/[id]/edit",
+      "source": "app/(dashboard)/users/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/create",
+      "source": "app/(dashboard)/users/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/duplicates",
+      "source": "app/(dashboard)/users/duplicates/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/groups",
+      "source": "app/(dashboard)/users/groups/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/groups/[id]",
+      "source": "app/(dashboard)/users/groups/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/groups/[id]/edit",
+      "source": "app/(dashboard)/users/groups/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/groups/create",
+      "source": "app/(dashboard)/users/groups/create/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/users/guests",
+      "source": "app/(dashboard)/users/guests/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/verify-email",
+      "source": "app/(auth)/verify-email/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/web3",
+      "source": "app/(dashboard)/web3/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/web3/analytics",
+      "source": "app/(dashboard)/web3/analytics/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/web3/nfts",
+      "source": "app/(dashboard)/web3/nfts/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/web3/staking",
+      "source": "app/(dashboard)/web3/staking/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/web3/tokens",
+      "source": "app/(dashboard)/web3/tokens/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/web3/transactions",
+      "source": "app/(dashboard)/web3/transactions/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/web3/wallets",
+      "source": "app/(dashboard)/web3/wallets/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "tab",
+      "id": "actions",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 2329
+    },
+    {
+      "kind": "tab",
+      "id": "actions",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 4326
+    },
+    {
+      "kind": "tab",
+      "id": "activity",
+      "source": "features/identity/users/components/users/detail/index.tsx",
+      "line": 649,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "assets",
+      "source": "features/services/web3/screens/web3-overview.tsx",
+      "line": 147,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "backlog",
+      "source": "features/compliance/compliance/screens/audit-evidence-control-plane.tsx",
+      "line": 244,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "branding",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 208,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "cache",
+      "source": "features/services/navigation/screens/versions-cache/index.tsx",
+      "line": 86,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "changes",
+      "source": "features/security/home/screens/home-dashboard.tsx",
+      "line": 878,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/organization/settings/screens/data-export.tsx",
+      "line": 242,
+      "column": 9
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/organization/settings/screens/notifications.tsx",
+      "line": 268,
+      "column": 9
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 255,
+      "column": 318
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/organization/settings/screens/passkeys.tsx",
+      "line": 441,
+      "column": 9
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/organization/settings/screens/privacy.tsx",
+      "line": 260,
+      "column": 9
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/organization/settings/screens/whitelabel.tsx",
+      "line": 62,
+      "column": 24
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/security/security/screens/jwt.tsx",
+      "line": 516,
+      "column": 9
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/security/security/screens/mfa.tsx",
+      "line": 916,
+      "column": 9
+    },
+    {
+      "kind": "tab",
+      "id": "content",
+      "source": "features/security/security/screens/risk.tsx",
+      "line": 1384,
+      "column": 9
+    },
+    {
+      "kind": "tab",
+      "id": "createdAt",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 4016
+    },
+    {
+      "kind": "tab",
+      "id": "documents",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 429,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "domains",
+      "source": "features/organization/admin/screens/diagnostics-console.tsx",
+      "line": 470,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "drift",
+      "source": "features/services/navigation/screens/versions-cache/index.tsx",
+      "line": 87,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "entities",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 439,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "events",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 1849
+    },
+    {
+      "kind": "tab",
+      "id": "evidence",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 440,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "evidence",
+      "source": "features/compliance/compliance/screens/breach-workbench.tsx",
+      "line": 371,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "exceptions",
+      "source": "features/compliance/compliance/screens/evidence-review.tsx",
+      "line": 360,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "exceptions",
+      "source": "features/services/web3/screens/web3-overview.tsx",
+      "line": 148,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "exports",
+      "source": "features/compliance/compliance/screens/audit-evidence-control-plane.tsx",
+      "line": 245,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "exports",
+      "source": "features/compliance/compliance/screens/evidence-review.tsx",
+      "line": 359,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "fulfillment",
+      "source": "features/compliance/compliance/screens/dsar-workbench.tsx",
+      "line": 632,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "general",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 207,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "groups",
+      "source": "features/identity/users/components/users/detail/index.tsx",
+      "line": 642,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "health",
+      "source": "features/security/home/screens/home-dashboard.tsx",
+      "line": 868,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "impact",
+      "source": "features/compliance/compliance/screens/breach-workbench.tsx",
+      "line": 369,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "integrations",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "items",
+      "source": "features/compliance/compliance/screens/evidence-review.tsx",
+      "line": 358,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "lastUsed",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 4156
+    },
+    {
+      "kind": "tab",
+      "id": "name",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 3805
+    },
+    {
+      "kind": "tab",
+      "id": "nft-staking",
+      "source": "features/services/web3/screens/web3-overview.tsx",
+      "line": 149,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "notes",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 432,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "notices",
+      "source": "features/compliance/compliance/screens/breach-workbench.tsx",
+      "line": 370,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "notifications",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 240,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 437,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/compliance/compliance/screens/audit-evidence-control-plane.tsx",
+      "line": 243,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/compliance/compliance/screens/breach-workbench.tsx",
+      "line": 368,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/compliance/compliance/screens/dsar-workbench.tsx",
+      "line": 626,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/compliance/compliance/screens/evidence-review.tsx",
+      "line": 357,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 428,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "pinned",
+      "source": "features/security/home/screens/home-dashboard.tsx",
+      "line": 883,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "prefix",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 3856
+    },
+    {
+      "kind": "tab",
+      "id": "pricing",
+      "source": "features/organization/admin/screens/diagnostics-console.tsx",
+      "line": 480,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "profile",
+      "source": "features/identity/users/components/users/detail/index.tsx",
+      "line": 629,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "readiness",
+      "source": "features/compliance/compliance/screens/audit-evidence-control-plane.tsx",
+      "line": 247,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "recovery",
+      "source": "features/services/navigation/screens/versions-cache/index.tsx",
+      "line": 88,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "request",
+      "source": "features/compliance/docs/components/docs-atlas/contract-explorer/index.tsx",
+      "line": 156,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "response",
+      "source": "features/compliance/docs/components/docs-atlas/contract-explorer/index.tsx",
+      "line": 157,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "restricted",
+      "source": "features/organization/admin/screens/diagnostics-console.tsx",
+      "line": 485,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "reviews",
+      "source": "features/compliance/compliance/screens/audit-evidence-control-plane.tsx",
+      "line": 246,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "roles",
+      "source": "features/identity/users/components/users/detail/index.tsx",
+      "line": 635,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "screening",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 430,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "security",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 239,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "sessions",
+      "source": "features/organization/admin/screens/diagnostics-console.tsx",
+      "line": 465,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "simulations",
+      "source": "features/organization/admin/screens/diagnostics-console.tsx",
+      "line": 475,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "status",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 2131
+    },
+    {
+      "kind": "tab",
+      "id": "ticketing_vip_table_host",
+      "source": "core/database/seed/access/permissions-events-rbac/_data/roles/vip-table-host/index.ts",
+      "line": 36,
+      "column": 61
+    },
+    {
+      "kind": "tab",
+      "id": "ticketing:vip-table-auction",
+      "source": "core/database/seed/access/permissions-events-rbac/_data/feature-flags/ticketing-flags/index.ts",
+      "line": 424,
+      "column": 66
+    },
+    {
+      "kind": "tab",
+      "id": "ticketing:vip-table-management",
+      "source": "core/database/seed/access/permissions-events-rbac/_data/feature-flags/ticketing-flags/index.ts",
+      "line": 409,
+      "column": 69
+    },
+    {
+      "kind": "tab",
+      "id": "timeline",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 441,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "timeline",
+      "source": "features/compliance/compliance/screens/breach-workbench.tsx",
+      "line": 372,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "timeline",
+      "source": "features/compliance/compliance/screens/dsar-workbench.tsx",
+      "line": 638,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "timeline",
+      "source": "features/compliance/compliance/screens/evidence-review.tsx",
+      "line": 361,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "timeline",
+      "source": "features/compliance/compliance/screens/kyc-case-workbench.tsx",
+      "line": 431,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "totp",
+      "source": "features/identity/auth/components/mfa-verify/index.tsx",
+      "line": 135,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "transactions",
+      "source": "features/compliance/compliance/screens/aml-alert-workbench.tsx",
+      "line": 438,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "transactions",
+      "source": "features/services/web3/screens/web3-overview.tsx",
+      "line": 146,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "url",
+      "source": "features/organization/settings/screens/overview.tsx",
+      "line": 241,
+      "column": 1628
+    },
+    {
+      "kind": "tab",
+      "id": "versions",
+      "source": "features/services/navigation/screens/versions-cache/index.tsx",
+      "line": 85,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "wallets",
+      "source": "features/services/web3/screens/web3-overview.tsx",
+      "line": 145,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "work",
+      "source": "features/security/home/screens/home-dashboard.tsx",
+      "line": 863,
+      "column": 5
+    }
+  ]
+}

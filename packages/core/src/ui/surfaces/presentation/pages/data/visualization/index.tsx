@@ -31,10 +31,10 @@ export function VisualizationSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   const { tSurface } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
-  // Views are permission-filtered so restricted chart types never appear
+  // Views use app-resolved access so hidden chart types never appear
   // in the tab bar (e.g. financial charts hidden from non-admin users).
-  const visibleViews = filterSurfaceTabbedViews(config.behavior.views, config.access ?? config.permissions);
-  // If the configured active view was hidden by permissions, fall back to
+  const visibleViews = filterSurfaceTabbedViews(config.behavior.views, config.access);
+  // If the configured active view was hidden by access, fall back to
   // the first visible view to avoid a blank content area.
   const resolvedActiveView =
     visibleViews.some((view) => view.key === config.behavior.activeView)
@@ -51,7 +51,7 @@ export function VisualizationSurface({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />}
+      actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
       loading={loading}
     >
       {visibleViews.length === 0 ? (

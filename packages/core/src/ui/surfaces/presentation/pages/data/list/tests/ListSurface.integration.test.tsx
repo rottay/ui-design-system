@@ -111,16 +111,16 @@ function buildConfig(overrides: Partial<ListSurfaceConfig<RawCandidate>> = {}): 
       ],
       onRowClick,
     },
-    permissions: {
-      granted: ['candidate:view', 'candidate:create'],
-      fields: {
-        'candidate.salary': { permission: 'candidate:salary' },
-      },
-      actions: {
-        view: { permission: 'candidate:view' },
-        restricted: { permission: 'candidate:restricted' },
-        create: { permission: 'candidate:create' },
-      },
+    access: {
+      mode: 'resolved',
+      capabilities: [
+        { kind: 'column', id: 'candidate.name', visible: true },
+        { kind: 'column', id: 'candidate.stage', visible: true },
+        { kind: 'column', id: 'candidate.salary', visible: false },
+        { kind: 'action', id: 'view', visible: true },
+        { kind: 'action', id: 'restricted', visible: false },
+        { kind: 'action', id: 'create', visible: true },
+      ],
     },
     ...overrides,
   };
@@ -131,7 +131,7 @@ const rows: RawCandidate[] = [
 ];
 
 describe('ListSurface integration', () => {
-  it('lets all access bypass legacy filters and visibility callbacks', async () => {
+  it('lets all access bypass final presentation filters and visibility callbacks', async () => {
     const baseConfig = buildConfig();
     const config: ListSurfaceConfig<RawCandidate> = {
       ...baseConfig,
@@ -148,12 +148,6 @@ describe('ListSurface integration', () => {
         ],
       },
     };
-    Object.defineProperty(config, 'permissions', {
-      get: () => {
-        throw new Error('legacy permissions must not be read when access is provided');
-      },
-    });
-
     const { container } = renderSurface(<ListSurface data={rows} adapter={adapter} config={config} />);
 
     expect(await screen.findByText('Salary')).toBeInTheDocument();
@@ -161,7 +155,7 @@ describe('ListSurface integration', () => {
     expect(getButtonByText(container, /callback hidden/i)).toBeInTheDocument();
   });
 
-  it('renders table mode, filters, permission filtering, and primary actions', async () => {
+  it('renders table mode, filters, app-resolved visibility, and primary actions', async () => {
     const config = buildConfig();
     const primaryAction = config.behavior.primaryAction;
 
@@ -228,6 +222,8 @@ describe('ListSurface integration', () => {
     );
 
     expect(await screen.findByText('List exploded')).toBeInTheDocument();
+    expect(screen.getByText('Candidates')).toBeInTheDocument();
+    expect(getButtonByText(errorRender.container, /create candidate/i)).toBeInTheDocument();
 
     fireEvent.click(getButtonByText(errorRender.container, /try again/i));
 

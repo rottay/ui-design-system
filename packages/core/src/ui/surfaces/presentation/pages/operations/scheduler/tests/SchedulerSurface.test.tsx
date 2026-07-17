@@ -26,7 +26,7 @@ function buildConfig(overrides?: Partial<SchedulerSurfaceConfig>): SchedulerSurf
       ],
       onViewChange: vi.fn(),
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }

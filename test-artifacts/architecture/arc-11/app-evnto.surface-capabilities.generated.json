@@ -1,0 +1,4005 @@
+{
+  "schemaVersion": 1,
+  "app": "app-evnto",
+  "source": "generated-from-productive-typescript",
+  "counts": {
+    "route": 99,
+    "field": 172,
+    "column": 71,
+    "tab": 25,
+    "action": 203
+  },
+  "total": 570,
+  "entries": [
+    {
+      "kind": "action",
+      "id": "action.add-product",
+      "source": "ui/command-palette/use-command-items.ts",
+      "line": 44,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "action.add-staff",
+      "source": "ui/command-palette/use-command-items.ts",
+      "line": 43,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "action.create-event",
+      "source": "ui/command-palette/use-command-items.ts",
+      "line": 42,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "analytics",
+      "source": "features/events/dashboard/screens/organizer/index.tsx",
+      "line": 246,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "analytics.export",
+      "source": "features/insights/analytics/screens/consumption/index.tsx",
+      "line": 543,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.export",
+      "source": "features/insights/analytics/screens/main/index.tsx",
+      "line": 420,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.export",
+      "source": "features/insights/analytics/screens/portfolio/index.tsx",
+      "line": 1088,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.export",
+      "source": "features/insights/analytics/screens/profitability-index/index.tsx",
+      "line": 675,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.export",
+      "source": "features/insights/analytics/screens/profitability/index.tsx",
+      "line": 1251,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.open",
+      "source": "features/events/dashboard/screens/organizer/index.tsx",
+      "line": 414,
+      "column": 52
+    },
+    {
+      "kind": "action",
+      "id": "analytics.profitability",
+      "source": "features/finance/finance/screens/workbench/index.tsx",
+      "line": 440,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.read",
+      "source": "features/insights/analytics/screens/consumption/index.tsx",
+      "line": 537,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.read",
+      "source": "features/insights/analytics/screens/portfolio/index.tsx",
+      "line": 1082,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.read",
+      "source": "features/insights/analytics/screens/profitability-index/index.tsx",
+      "line": 663,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "analytics.read",
+      "source": "features/insights/analytics/screens/profitability/index.tsx",
+      "line": 1245,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "approve",
+      "source": "ui/tables/bulk-actions/index.tsx",
+      "line": 273,
+      "column": 12
+    },
+    {
+      "kind": "action",
+      "id": "artist.cancel",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 170,
+      "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "artist.create",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 99,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "artist.create",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 162,
+      "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "artist.create",
+      "source": "features/events/artists/screens/list/index.tsx",
+      "line": 389,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "artist.delete",
+      "source": "features/events/artists/screens/detail/index.tsx",
+      "line": 203,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "artist.delete",
+      "source": "features/events/artists/screens/list/index.tsx",
+      "line": 399,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "artist.edit",
+      "source": "features/events/artists/screens/detail/index.tsx",
+      "line": 198,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "artist.edit",
+      "source": "features/events/artists/screens/list/index.tsx",
+      "line": 394,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "checkIn.read",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 86,
+      "column": 33
+    },
+    {
+      "kind": "action",
+      "id": "checkIn.scan",
+      "source": "features/events/check-in/screens/event/index.tsx",
+      "line": 45,
+      "column": 46
+    },
+    {
+      "kind": "action",
+      "id": "checkIn.scan",
+      "source": "features/events/check-in/screens/main/index.tsx",
+      "line": 48,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "checkIn.scan",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 82,
+      "column": 54
+    },
+    {
+      "kind": "action",
+      "id": "checkIn.undo",
+      "source": "features/events/check-in/screens/event/index.tsx",
+      "line": 46,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "consumption",
+      "source": "features/insights/analytics/screens/main/index.tsx",
+      "line": 609,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "control-room.check-in",
+      "source": "features/events/events/screens/control-room/index.tsx",
+      "line": 1020,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "control-room.finance",
+      "source": "features/events/events/screens/control-room/index.tsx",
+      "line": 1041,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "control-room.live",
+      "source": "features/events/events/screens/control-room/index.tsx",
+      "line": 1027,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "control-room.media",
+      "source": "features/events/events/screens/control-room/index.tsx",
+      "line": 1034,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "control-room.refresh",
+      "source": "features/events/events/screens/control-room/config.ts",
+      "line": 43,
+      "column": 46
+    },
+    {
+      "kind": "action",
+      "id": "create",
+      "source": "features/events/dashboard/screens/organizer/index.tsx",
+      "line": 240,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-workspace",
+      "source": "components/marketing/platform-page/index.tsx",
+      "line": 295,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "create-workspace",
+      "source": "components/marketing/roles-page/index.tsx",
+      "line": 261,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "credential.create",
+      "source": "features/events/credentials/screens/main/index.tsx",
+      "line": 118,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "credential.deactivate",
+      "source": "features/events/credentials/screens/main/index.tsx",
+      "line": 119,
+      "column": 49
+    },
+    {
+      "kind": "action",
+      "id": "customize",
+      "source": "features/events/dashboard/components/dashboard-header/index.tsx",
+      "line": 58,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "dashboard.analytics",
+      "source": "features/events/dashboard/components/organizer-dashboard/index.tsx",
+      "line": 204,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "dashboard.create-event",
+      "source": "features/events/dashboard/components/organizer-dashboard/index.tsx",
+      "line": 197,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "delete",
+      "source": "ui/tables/bulk-actions/index.tsx",
+      "line": 259,
+      "column": 11
+    },
+    {
+      "kind": "action",
+      "id": "edit",
+      "source": "ui/tables/bulk-actions/index.tsx",
+      "line": 285,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "event",
+      "source": "app/(dashboard)/layout.tsx",
+      "line": 43,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "event.cancel",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 70,
+      "column": 53
+    },
+    {
+      "kind": "action",
+      "id": "event.create",
+      "source": "features/events/dashboard/screens/organizer/index.tsx",
+      "line": 404,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "event.create",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 378,
+      "column": 53
+    },
+    {
+      "kind": "action",
+      "id": "event.create",
+      "source": "features/events/events/screens/upsert/index.tsx",
+      "line": 62,
+      "column": 39
+    },
+    {
+      "kind": "action",
+      "id": "event.create",
+      "source": "features/insights/analytics/screens/main/index.tsx",
+      "line": 426,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "event.create",
+      "source": "features/insights/analytics/screens/portfolio/index.tsx",
+      "line": 1100,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "event.create",
+      "source": "features/insights/analytics/screens/profitability-index/index.tsx",
+      "line": 657,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "event.create",
+      "source": "features/venue/venues/screens/detail/index.tsx",
+      "line": 260,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "event.delete",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 58,
+      "column": 53
+    },
+    {
+      "kind": "action",
+      "id": "event.delete",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 396,
+      "column": 53
+    },
+    {
+      "kind": "action",
+      "id": "event.duplicate",
+      "source": "features/events/events/screens/clone/index.tsx",
+      "line": 487,
+      "column": 48
+    },
+    {
+      "kind": "action",
+      "id": "event.duplicate",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 76,
+      "column": 56
+    },
+    {
+      "kind": "action",
+      "id": "event.duplicate",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 390,
+      "column": 56
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 52,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/lineup/index.tsx",
+      "line": 40,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 384,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/live/index.tsx",
+      "line": 70,
+      "column": 52
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/media/index.tsx",
+      "line": 48,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/resale/index.tsx",
+      "line": 84,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/tickets/index.tsx",
+      "line": 197,
+      "column": 52
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/upsert/index.tsx",
+      "line": 61,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "event.edit",
+      "source": "features/events/events/screens/waitlist/index.tsx",
+      "line": 45,
+      "column": 53
+    },
+    {
+      "kind": "action",
+      "id": "event.publish",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 64,
+      "column": 54
+    },
+    {
+      "kind": "action",
+      "id": "event.read",
+      "source": "features/events/events/screens/detail/index.tsx",
+      "line": 46,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "event.read",
+      "source": "features/events/events/screens/lineup/index.tsx",
+      "line": 41,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "event.read",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 371,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "event.read",
+      "source": "features/events/events/screens/tickets/index.tsx",
+      "line": 198,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "event.read",
+      "source": "features/events/events/screens/upsert/index.tsx",
+      "line": 57,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "event.read",
+      "source": "features/insights/analytics/screens/portfolio/index.tsx",
+      "line": 1094,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "export",
+      "source": "ui/tables/bulk-actions/index.tsx",
+      "line": 268,
+      "column": 11
+    },
+    {
+      "kind": "action",
+      "id": "finance.approveExpenses",
+      "source": "features/events/events/screens/finance/index.tsx",
+      "line": 393,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "finance.approveExpenses",
+      "source": "features/finance/finance/screens/workbench/index.tsx",
+      "line": 428,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "finance.viewBudgets",
+      "source": "features/events/events/screens/finance/index.tsx",
+      "line": 387,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "finance.viewBudgets",
+      "source": "features/finance/finance/screens/workbench/index.tsx",
+      "line": 422,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "finance.viewBudgets",
+      "source": "features/insights/analytics/screens/main/index.tsx",
+      "line": 432,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "finance.viewBudgets",
+      "source": "features/insights/analytics/screens/portfolio/index.tsx",
+      "line": 1106,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "finance.viewBudgets",
+      "source": "features/insights/analytics/screens/profitability-index/index.tsx",
+      "line": 669,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "finance.viewBudgets",
+      "source": "features/insights/analytics/screens/profitability/index.tsx",
+      "line": 1257,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "inventory.adjust",
+      "source": "features/commerce/inventory/screens/alerts/index.tsx",
+      "line": 45,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "inventory.adjust",
+      "source": "features/commerce/inventory/screens/dashboard/index.tsx",
+      "line": 448,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "inventory.adjust",
+      "source": "features/commerce/inventory/screens/ledger/index.tsx",
+      "line": 118,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "inventory.adjust",
+      "source": "features/commerce/inventory/screens/locations/index.tsx",
+      "line": 165,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "inventory.adjust",
+      "source": "features/commerce/inventory/screens/movements/index.tsx",
+      "line": 38,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "inventory.adjust",
+      "source": "features/commerce/inventory/screens/stock/index.tsx",
+      "line": 48,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "inventory.create-po",
+      "source": "features/commerce/inventory/screens/dashboard/index.tsx",
+      "line": 457,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "inventory.manage-stock",
+      "source": "features/commerce/inventory/screens/dashboard/index.tsx",
+      "line": 464,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "inventory.transfer",
+      "source": "features/commerce/inventory/screens/stock/index.tsx",
+      "line": 49,
+      "column": 47
+    },
+    {
+      "kind": "action",
+      "id": "margin",
+      "source": "features/insights/analytics/screens/main/index.tsx",
+      "line": 617,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "order.manage",
+      "source": "features/commerce/bar/screens/dashboard/index.tsx",
+      "line": 522,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "order.manage",
+      "source": "features/commerce/bar/screens/order-detail/index.tsx",
+      "line": 282,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "order.manage",
+      "source": "features/commerce/bar/screens/pos-detail/index.tsx",
+      "line": 148,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "order.manage",
+      "source": "features/commerce/bar/screens/pos-detail/index.tsx",
+      "line": 154,
+      "column": 48
+    },
+    {
+      "kind": "action",
+      "id": "order.manage",
+      "source": "features/commerce/bar/screens/pos/index.tsx",
+      "line": 87,
+      "column": 48
+    },
+    {
+      "kind": "action",
+      "id": "payroll.approve",
+      "source": "features/finance/payroll/screens/periods/index.tsx",
+      "line": 339,
+      "column": 46
+    },
+    {
+      "kind": "action",
+      "id": "payroll.create",
+      "source": "features/finance/payroll/screens/periods/index.tsx",
+      "line": 329,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "payroll.process",
+      "source": "features/finance/payroll/screens/periods/index.tsx",
+      "line": 334,
+      "column": 46
+    },
+    {
+      "kind": "action",
+      "id": "payroll.settlementOps",
+      "source": "features/finance/finance/screens/workbench/index.tsx",
+      "line": 434,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "platform-architecture",
+      "source": "components/marketing/roles-page/index.tsx",
+      "line": 267,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "portfolio",
+      "source": "features/insights/analytics/screens/main/index.tsx",
+      "line": 601,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "product",
+      "source": "app/(dashboard)/layout.tsx",
+      "line": 55,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "product.create",
+      "source": "features/commerce/products/screens/categories/index.tsx",
+      "line": 154,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "product.create",
+      "source": "features/commerce/products/screens/combos/index.tsx",
+      "line": 247,
+      "column": 73
+    },
+    {
+      "kind": "action",
+      "id": "product.create",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 269,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "product.create",
+      "source": "features/commerce/products/screens/pricing/index.tsx",
+      "line": 326,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "product.create",
+      "source": "features/commerce/products/screens/recipes/index.tsx",
+      "line": 284,
+      "column": 76
+    },
+    {
+      "kind": "action",
+      "id": "product.delete",
+      "source": "features/commerce/products/screens/combos/index.tsx",
+      "line": 249,
+      "column": 73
+    },
+    {
+      "kind": "action",
+      "id": "product.delete",
+      "source": "features/commerce/products/screens/detail/config.ts",
+      "line": 53,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "product.delete",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 279,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "product.delete",
+      "source": "features/commerce/products/screens/pricing/index.tsx",
+      "line": 328,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "product.delete",
+      "source": "features/commerce/products/screens/recipes/index.tsx",
+      "line": 286,
+      "column": 76
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/bar/screens/dashboard/index.tsx",
+      "line": 527,
+      "column": 53
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/products/screens/categories/index.tsx",
+      "line": 155,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/products/screens/combos/index.tsx",
+      "line": 248,
+      "column": 71
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/products/screens/detail/config.ts",
+      "line": 41,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/products/screens/edit/index.tsx",
+      "line": 42,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 274,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/products/screens/pricing/index.tsx",
+      "line": 327,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "product.edit",
+      "source": "features/commerce/products/screens/recipes/index.tsx",
+      "line": 285,
+      "column": 74
+    },
+    {
+      "kind": "action",
+      "id": "product.toggleAvailability",
+      "source": "features/commerce/products/screens/combos/index.tsx",
+      "line": 250,
+      "column": 73
+    },
+    {
+      "kind": "action",
+      "id": "product.toggleAvailability",
+      "source": "features/commerce/products/screens/detail/config.ts",
+      "line": 47,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "product.toggleAvailability",
+      "source": "features/commerce/products/screens/pricing/index.tsx",
+      "line": 329,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.approve",
+      "source": "features/commerce/purchasing/screens/console/index.tsx",
+      "line": 98,
+      "column": 46
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.approve",
+      "source": "features/commerce/purchasing/screens/detail/index.tsx",
+      "line": 384,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.cancel",
+      "source": "features/commerce/purchasing/screens/detail/index.tsx",
+      "line": 393,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.cancel",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 440,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.create",
+      "source": "features/commerce/purchasing/screens/console/index.tsx",
+      "line": 93,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.create",
+      "source": "features/commerce/purchasing/screens/create/index.tsx",
+      "line": 36,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.create",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 445,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.create",
+      "source": "features/commerce/suppliers/screens/detail/index.tsx",
+      "line": 134,
+      "column": 58
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.send",
+      "source": "features/commerce/purchasing/screens/detail/index.tsx",
+      "line": 387,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "purchaseOrder.send",
+      "source": "features/commerce/purchasing/screens/detail/index.tsx",
+      "line": 390,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "refresh",
+      "source": "features/events/dashboard/components/dashboard-header/index.tsx",
+      "line": 59,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "reject",
+      "source": "ui/tables/bulk-actions/index.tsx",
+      "line": 278,
+      "column": 11
+    },
+    {
+      "kind": "action",
+      "id": "reports",
+      "source": "features/insights/analytics/screens/main/index.tsx",
+      "line": 625,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "schedule",
+      "source": "features/events/dashboard/screens/organizer/index.tsx",
+      "line": 243,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "seasonPass.create",
+      "source": "features/commerce/season-passes/screens/main/index.tsx",
+      "line": 264,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "seasonPass.transfer",
+      "source": "features/commerce/season-passes/screens/main/index.tsx",
+      "line": 265,
+      "column": 47
+    },
+    {
+      "kind": "action",
+      "id": "security.passkey.manage",
+      "source": "features/admin/settings/screens/tabs/security-tab/index.tsx",
+      "line": 379,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "see-role-flows",
+      "source": "components/marketing/platform-page/index.tsx",
+      "line": 289,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "settlement.cancel",
+      "source": "features/finance/payroll/screens/settlements/index.tsx",
+      "line": 301,
+      "column": 55
+    },
+    {
+      "kind": "action",
+      "id": "settlement.create",
+      "source": "features/finance/payroll/screens/settlements/index.tsx",
+      "line": 298,
+      "column": 55
+    },
+    {
+      "kind": "action",
+      "id": "settlement.process",
+      "source": "features/finance/payroll/screens/settlement-ops/index.tsx",
+      "line": 133,
+      "column": 56
+    },
+    {
+      "kind": "action",
+      "id": "settlement.process",
+      "source": "features/finance/payroll/screens/settlement-ops/index.tsx",
+      "line": 138,
+      "column": 56
+    },
+    {
+      "kind": "action",
+      "id": "settlement.process",
+      "source": "features/finance/payroll/screens/settlements/index.tsx",
+      "line": 299,
+      "column": 56
+    },
+    {
+      "kind": "action",
+      "id": "settlement.process",
+      "source": "features/finance/payroll/screens/settlements/index.tsx",
+      "line": 300,
+      "column": 56
+    },
+    {
+      "kind": "action",
+      "id": "shift.create",
+      "source": "features/events/dashboard/screens/organizer/index.tsx",
+      "line": 409,
+      "column": 47
+    },
+    {
+      "kind": "action",
+      "id": "shift.create",
+      "source": "features/events/scheduling/screens/calendar/index.tsx",
+      "line": 191,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "shift.create",
+      "source": "features/events/scheduling/screens/shifts/index.tsx",
+      "line": 157,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "shift.create",
+      "source": "features/venue/staff/screens/command/index.tsx",
+      "line": 521,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "shift.create",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 143,
+      "column": 59
+    },
+    {
+      "kind": "action",
+      "id": "shift.create",
+      "source": "features/venue/staff/screens/schedule/index.tsx",
+      "line": 42,
+      "column": 47
+    },
+    {
+      "kind": "action",
+      "id": "shift.edit",
+      "source": "features/events/scheduling/screens/calendar/index.tsx",
+      "line": 196,
+      "column": 48
+    },
+    {
+      "kind": "action",
+      "id": "staff",
+      "source": "app/(dashboard)/layout.tsx",
+      "line": 49,
+      "column": 3
+    },
+    {
+      "kind": "action",
+      "id": "staff.create",
+      "source": "features/venue/staff/screens/create/index.tsx",
+      "line": 162,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "staff.create",
+      "source": "features/venue/staff/screens/list/index.tsx",
+      "line": 213,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "staff.credentials",
+      "source": "features/venue/staff/screens/command/index.tsx",
+      "line": 528,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "staff.credentials",
+      "source": "features/venue/staff/screens/credentials/index.tsx",
+      "line": 48,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "staff.credentials",
+      "source": "features/venue/staff/screens/detail/config.ts",
+      "line": 62,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "staff.credentials",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 148,
+      "column": 64
+    },
+    {
+      "kind": "action",
+      "id": "staff.delete",
+      "source": "features/venue/staff/screens/detail/config.ts",
+      "line": 70,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "staff.delete",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 133,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "staff.delete",
+      "source": "features/venue/staff/screens/list/index.tsx",
+      "line": 208,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "staff.edit",
+      "source": "features/venue/staff/screens/detail/config.ts",
+      "line": 46,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "staff.edit",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 138,
+      "column": 51
+    },
+    {
+      "kind": "action",
+      "id": "staff.edit",
+      "source": "features/venue/staff/screens/edit/index.tsx",
+      "line": 36,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "staff.edit",
+      "source": "features/venue/staff/screens/list/index.tsx",
+      "line": 218,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "staff.manage-scheduling",
+      "source": "features/venue/staff/screens/command/index.tsx",
+      "line": 763,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "staff.schedule",
+      "source": "features/venue/staff/screens/detail/config.ts",
+      "line": 54,
+      "column": 9
+    },
+    {
+      "kind": "action",
+      "id": "staff.view",
+      "source": "features/events/scheduling/screens/calendar/index.tsx",
+      "line": 206,
+      "column": 48
+    },
+    {
+      "kind": "action",
+      "id": "staff.view-staff",
+      "source": "features/venue/staff/screens/command/index.tsx",
+      "line": 756,
+      "column": 5
+    },
+    {
+      "kind": "action",
+      "id": "staffing.createRequirement",
+      "source": "features/venue/staffing/screens/event-detail/index.tsx",
+      "line": 73,
+      "column": 56
+    },
+    {
+      "kind": "action",
+      "id": "staffing.invite",
+      "source": "features/venue/staffing/screens/event-detail/index.tsx",
+      "line": 74,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "supplier.create",
+      "source": "features/commerce/suppliers/screens/create/index.tsx",
+      "line": 32,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "supplier.create",
+      "source": "features/commerce/suppliers/screens/list/index.tsx",
+      "line": 235,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "supplier.delete",
+      "source": "features/commerce/suppliers/screens/detail/index.tsx",
+      "line": 122,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "supplier.delete",
+      "source": "features/commerce/suppliers/screens/list/index.tsx",
+      "line": 230,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "supplier.edit",
+      "source": "features/commerce/suppliers/screens/detail/index.tsx",
+      "line": 116,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "supplier.edit",
+      "source": "features/commerce/suppliers/screens/edit/index.tsx",
+      "line": 36,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "supplier.setStatus",
+      "source": "features/commerce/suppliers/screens/detail/index.tsx",
+      "line": 128,
+      "column": 48
+    },
+    {
+      "kind": "action",
+      "id": "swap.approve",
+      "source": "features/events/scheduling/screens/shifts/index.tsx",
+      "line": 158,
+      "column": 50
+    },
+    {
+      "kind": "action",
+      "id": "swap.reject",
+      "source": "features/events/scheduling/screens/shifts/index.tsx",
+      "line": 159,
+      "column": 49
+    },
+    {
+      "kind": "action",
+      "id": "team.invite",
+      "source": "features/admin/settings/screens/tabs/team-tab/index.tsx",
+      "line": 453,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "team.view",
+      "source": "features/admin/settings/screens/tabs/team-tab/index.tsx",
+      "line": 446,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "timeEntry.clockIn",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 353,
+      "column": 46
+    },
+    {
+      "kind": "action",
+      "id": "timeEntry.clockOut",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 358,
+      "column": 47
+    },
+    {
+      "kind": "action",
+      "id": "timeEntry.endBreak",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 368,
+      "column": 47
+    },
+    {
+      "kind": "action",
+      "id": "timeEntry.startBreak",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 363,
+      "column": 49
+    },
+    {
+      "kind": "action",
+      "id": "venue.cancel",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 317,
+      "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "venue.create",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 169,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "venue.create",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 309,
+      "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "venue.create",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 560,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "venue.delete",
+      "source": "features/venue/venues/screens/detail/index.tsx",
+      "line": 255,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "venue.delete",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 555,
+      "column": 45
+    },
+    {
+      "kind": "action",
+      "id": "venue.edit",
+      "source": "features/venue/venues/screens/detail/index.tsx",
+      "line": 250,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "venue.edit",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 565,
+      "column": 43
+    },
+    {
+      "kind": "action",
+      "id": "vipTable.deleteDefinition",
+      "source": "features/venue/vip-tables/screens/config/index.tsx",
+      "line": 95,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "vipTable.editDefinition",
+      "source": "features/venue/vip-tables/screens/config/index.tsx",
+      "line": 102,
+      "column": 29
+    },
+    {
+      "kind": "column",
+      "id": "active",
+      "source": "features/venue/vip-tables/screens/workbench/index.tsx",
+      "line": 90,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "address",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 313,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "capacity",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 132,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "capacity",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 327,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "category",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 149,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "checked_in",
+      "source": "features/venue/vip-tables/screens/workbench/index.tsx",
+      "line": 89,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "city",
+      "source": "features/commerce/suppliers/screens/list/index.tsx",
+      "line": 142,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "city",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 320,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "clockInLabel",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 113,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "clockOutLabel",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 121,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "completed",
+      "source": "features/venue/vip-tables/screens/workbench/index.tsx",
+      "line": 91,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "confirmed",
+      "source": "features/venue/vip-tables/screens/workbench/index.tsx",
+      "line": 88,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "contactEmail",
+      "source": "features/commerce/suppliers/screens/list/index.tsx",
+      "line": 116,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "cost",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 127,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "createdAtLabel",
+      "source": "features/commerce/bar/screens/orders/index.tsx",
+      "line": 114,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "currency",
+      "source": "features/finance/payroll/screens/periods/index.tsx",
+      "line": 220,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "customerName",
+      "source": "features/commerce/bar/screens/orders/index.tsx",
+      "line": 99,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "dateLabel",
+      "source": "features/venue/staffing/screens/list/index.tsx",
+      "line": 104,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "dateRangeLabel",
+      "source": "features/finance/payroll/screens/periods/index.tsx",
+      "line": 186,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "durationLabel",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 146,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "expectedDate",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 218,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "fulfillmentRate",
+      "source": "features/venue/staffing/screens/list/index.tsx",
+      "line": 134,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "fullName",
+      "source": "features/venue/staff/screens/list/index.tsx",
+      "line": 78,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "genre",
+      "source": "features/events/artists/screens/list/index.tsx",
+      "line": 234,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "hourlyRateLabel",
+      "source": "features/venue/staff/screens/list/index.tsx",
+      "line": 110,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "itemCount",
+      "source": "features/commerce/bar/screens/orders/index.tsx",
+      "line": 106,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "itemCount",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 170,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 88,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/commerce/season-passes/components/season-pass-list/index.tsx",
+      "line": 71,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/commerce/suppliers/screens/list/index.tsx",
+      "line": 106,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/events/artists/screens/list/index.tsx",
+      "line": 226,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 94,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/venue/staffing/screens/list/index.tsx",
+      "line": 96,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "name",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 303,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "notes",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 153,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "orderDate",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 211,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "orderNumber",
+      "source": "features/commerce/bar/screens/orders/index.tsx",
+      "line": 68,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "orderNumber",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 132,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "ownerName",
+      "source": "features/commerce/season-passes/components/season-pass-list/index.tsx",
+      "line": 122,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "pending",
+      "source": "features/venue/vip-tables/screens/workbench/index.tsx",
+      "line": 87,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "phone",
+      "source": "features/commerce/suppliers/screens/list/index.tsx",
+      "line": 123,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "posName",
+      "source": "features/commerce/bar/screens/orders/index.tsx",
+      "line": 121,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "price",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 107,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "price",
+      "source": "features/commerce/season-passes/components/season-pass-list/index.tsx",
+      "line": 141,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "readiness",
+      "source": "features/events/artists/screens/list/index.tsx",
+      "line": 257,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "readiness",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 347,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "remaining",
+      "source": "features/commerce/season-passes/components/season-pass-list/index.tsx",
+      "line": 169,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "rolesLabel",
+      "source": "features/venue/staff/screens/list/index.tsx",
+      "line": 102,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "schedule",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 117,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/commerce/bar/screens/orders/index.tsx",
+      "line": 76,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/commerce/products/screens/list/index.tsx",
+      "line": 98,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 158,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/commerce/season-passes/components/season-pass-list/index.tsx",
+      "line": 129,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/commerce/suppliers/screens/list/index.tsx",
+      "line": 130,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/events/artists/screens/list/index.tsx",
+      "line": 242,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 104,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/finance/payroll/screens/periods/index.tsx",
+      "line": 194,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/venue/staff/screens/list/index.tsx",
+      "line": 88,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/venue/staffing/screens/list/index.tsx",
+      "line": 158,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/venue/time-tracking/screens/main/index.tsx",
+      "line": 128,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/venue/venues/screens/list/index.tsx",
+      "line": 359,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "supplierName",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 151,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "totalAmountLabel",
+      "source": "features/finance/payroll/screens/periods/index.tsx",
+      "line": 212,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "totalAssigned",
+      "source": "features/venue/staffing/screens/list/index.tsx",
+      "line": 126,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "totalLabel",
+      "source": "features/commerce/bar/screens/orders/index.tsx",
+      "line": 91,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "totalLabel",
+      "source": "features/commerce/purchasing/screens/list/index.tsx",
+      "line": 190,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "totalRequired",
+      "source": "features/venue/staffing/screens/list/index.tsx",
+      "line": 118,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "usage",
+      "source": "features/commerce/season-passes/components/season-pass-list/index.tsx",
+      "line": 190,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "validity",
+      "source": "features/commerce/season-passes/components/season-pass-list/index.tsx",
+      "line": 162,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "venue",
+      "source": "features/events/events/screens/list/index.tsx",
+      "line": 124,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "venue",
+      "source": "features/venue/staffing/screens/list/index.tsx",
+      "line": 111,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "artist.bio",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 48,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "artist.genre",
+      "source": "features/events/artists/screens/_shared/adapter.ts",
+      "line": 86,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "artist.genre",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 41,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "artist.imageUrl",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 55,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "artist.name",
+      "source": "features/events/artists/screens/_shared/adapter.ts",
+      "line": 85,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "artist.name",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 29,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "artist.readiness",
+      "source": "features/events/artists/screens/_shared/adapter.ts",
+      "line": 88,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "artist.socialLinks",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 62,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "artist.socialLinks",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 69,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "artist.status",
+      "source": "features/events/artists/screens/_shared/adapter.ts",
+      "line": 87,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "bar.activeOrders",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 56,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "bar.pendingOrders",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 57,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "bar.preparingOrders",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 58,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "bar.readyOrders",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 59,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "bar.revenue",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 60,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "bar.totalOrders",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 61,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "barSales",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 149,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "checkin.attendee",
+      "source": "features/events/check-in/screens/_shared/adapter.ts",
+      "line": 38,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "checkin.status",
+      "source": "features/events/check-in/screens/_shared/adapter.ts",
+      "line": 41,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "checkin.ticketType",
+      "source": "features/events/check-in/screens/_shared/adapter.ts",
+      "line": 39,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "checkin.time",
+      "source": "features/events/check-in/screens/_shared/adapter.ts",
+      "line": 40,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "credential.status",
+      "source": "features/events/credentials/screens/_shared/adapter.ts",
+      "line": 72,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "credential.type",
+      "source": "features/events/credentials/screens/_shared/adapter.ts",
+      "line": 71,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "credential.validFrom",
+      "source": "features/events/credentials/screens/_shared/adapter.ts",
+      "line": 73,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "credential.validUntil",
+      "source": "features/events/credentials/screens/_shared/adapter.ts",
+      "line": 74,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "credential.zones",
+      "source": "features/events/credentials/screens/_shared/adapter.ts",
+      "line": 75,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dashboard.alerts",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 218,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dashboard.occupied",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 212,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dashboard.revenue",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 213,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "dashboard.totalTables",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 207,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.capacity",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 48,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.capacity",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 103,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.coverImage",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 49,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.description",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 99,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.name",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 44,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.name",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 97,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.schedule",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 46,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.schedule",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 100,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.status",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 45,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.status",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 98,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.ticketTypes",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 104,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.venue",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 47,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.venue",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 101,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "event.venueAddress",
+      "source": "features/events/events/screens/_shared/adapter.ts",
+      "line": 102,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "marketingCost",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 194,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "order.createdAt",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 101,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "order.customer",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 99,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "order.items",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 102,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "order.number",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 96,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "order.pos",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 100,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "order.status",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 97,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "order.total",
+      "source": "features/commerce/bar/screens/_shared/adapter.ts",
+      "line": 98,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "other",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 154,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "pass.name",
+      "source": "features/commerce/season-passes/screens/_shared/adapter.ts",
+      "line": 144,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "pass.owner",
+      "source": "features/commerce/season-passes/screens/_shared/adapter.ts",
+      "line": 145,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "pass.price",
+      "source": "features/commerce/season-passes/screens/_shared/adapter.ts",
+      "line": 146,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "pass.remainingEvents",
+      "source": "features/commerce/season-passes/screens/_shared/adapter.ts",
+      "line": 150,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "pass.status",
+      "source": "features/commerce/season-passes/screens/_shared/adapter.ts",
+      "line": 147,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "pass.usedEvents",
+      "source": "features/commerce/season-passes/screens/_shared/adapter.ts",
+      "line": 149,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "pass.validity",
+      "source": "features/commerce/season-passes/screens/_shared/adapter.ts",
+      "line": 148,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "payroll.currency",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 68,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "payroll.dateRange",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 65,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "payroll.status",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 66,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "payroll.totalAmount",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 67,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.barcode",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 126,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.category",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 62,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.category",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 130,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.cost",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 61,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.cost",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 128,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.cost",
+      "source": "features/commerce/products/screens/detail/index.tsx",
+      "line": 164,
+      "column": 47
+    },
+    {
+      "kind": "field",
+      "id": "product.description",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 124,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.image",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 63,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.name",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 57,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.name",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 122,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.price",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 60,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.price",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 127,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.sku",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 59,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.sku",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 125,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.status",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 58,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.status",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 123,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "product.taxRate",
+      "source": "features/commerce/products/screens/_shared/adapter.ts",
+      "line": 129,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "purchaseOrder.expectedDate",
+      "source": "features/commerce/purchasing/screens/_shared/adapter.ts",
+      "line": 77,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "purchaseOrder.items",
+      "source": "features/commerce/purchasing/screens/_shared/adapter.ts",
+      "line": 74,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "purchaseOrder.orderDate",
+      "source": "features/commerce/purchasing/screens/_shared/adapter.ts",
+      "line": 76,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "purchaseOrder.orderNumber",
+      "source": "features/commerce/purchasing/screens/_shared/adapter.ts",
+      "line": 71,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "purchaseOrder.status",
+      "source": "features/commerce/purchasing/screens/_shared/adapter.ts",
+      "line": 73,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "purchaseOrder.supplier",
+      "source": "features/commerce/purchasing/screens/_shared/adapter.ts",
+      "line": 72,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "purchaseOrder.totalAmount",
+      "source": "features/commerce/purchasing/screens/_shared/adapter.ts",
+      "line": 75,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "resaleFees",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 152,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "reservation.capacity",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 149,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "reservation.deposit",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 154,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "reservation.host",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 148,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "reservation.id",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 146,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "reservation.progress",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 156,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "reservation.spend",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 155,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "reservation.status",
+      "source": "features/venue/vip-tables/screens/_shared/adapter.ts",
+      "line": 147,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "settlement.amount",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 114,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "settlement.amount",
+      "source": "features/finance/payroll/screens/settlement-ops/index.tsx",
+      "line": 143,
+      "column": 49
+    },
+    {
+      "kind": "field",
+      "id": "settlement.amount",
+      "source": "features/finance/payroll/screens/settlements/index.tsx",
+      "line": 302,
+      "column": 49
+    },
+    {
+      "kind": "field",
+      "id": "settlement.eventName",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 117,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "settlement.paymentMethod",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 116,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "settlement.staffName",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 113,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "settlement.status",
+      "source": "features/finance/payroll/screens/_shared/adapter.ts",
+      "line": 115,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.duration",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 79,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.duration",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 119,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.endTime",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 77,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.notes",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 120,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.staffName",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 75,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.staffName",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 116,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.startTime",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 76,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.status",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 78,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.status",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 118,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "shift.timeRange",
+      "source": "features/events/scheduling/screens/_shared/adapter.ts",
+      "line": 117,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "sponsorships",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 151,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.certifications",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 101,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.email",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 46,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.email",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 96,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.name",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 45,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.name",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 95,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.phone",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 47,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.phone",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 97,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.roles",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 49,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.roles",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 99,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.salary",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 50,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.salary",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 102,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.skills",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 100,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.status",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 48,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staff.status",
+      "source": "features/venue/staff/screens/_shared/adapter.ts",
+      "line": 98,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staffCost",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 192,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staffing.assigned",
+      "source": "features/venue/staffing/screens/_shared/adapter.ts",
+      "line": 90,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staffing.date",
+      "source": "features/venue/staffing/screens/_shared/adapter.ts",
+      "line": 87,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staffing.eventName",
+      "source": "features/venue/staffing/screens/_shared/adapter.ts",
+      "line": 86,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staffing.fulfillment",
+      "source": "features/venue/staffing/screens/_shared/adapter.ts",
+      "line": 91,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staffing.required",
+      "source": "features/venue/staffing/screens/_shared/adapter.ts",
+      "line": 89,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "staffing.venue",
+      "source": "features/venue/staffing/screens/_shared/adapter.ts",
+      "line": 88,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.address",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 105,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.city",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 41,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.contactName",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 102,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.email",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 38,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.email",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 103,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.name",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 37,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.name",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 101,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.paymentTerms",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 107,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.phone",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 39,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.phone",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 104,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.status",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 40,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.status",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 106,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "supplier.taxId",
+      "source": "features/commerce/suppliers/screens/_shared/adapter.ts",
+      "line": 108,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "suppliesCost",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 193,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "ticketSales",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 148,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "timeEntry.clockIn",
+      "source": "features/venue/time-tracking/screens/_shared/adapter.ts",
+      "line": 130,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "timeEntry.clockOut",
+      "source": "features/venue/time-tracking/screens/_shared/adapter.ts",
+      "line": 131,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "timeEntry.duration",
+      "source": "features/venue/time-tracking/screens/_shared/adapter.ts",
+      "line": 133,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "timeEntry.notes",
+      "source": "features/venue/time-tracking/screens/_shared/adapter.ts",
+      "line": 134,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "timeEntry.status",
+      "source": "features/venue/time-tracking/screens/_shared/adapter.ts",
+      "line": 132,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "tips",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 153,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "venue.address",
+      "source": "features/venue/venues/screens/_shared/adapter.ts",
+      "line": 133,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "venue.address",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 73,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venue.amenities",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 133,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venue.capacity",
+      "source": "features/venue/venues/screens/_shared/adapter.ts",
+      "line": 135,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "venue.capacity",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 99,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venue.city",
+      "source": "features/venue/venues/screens/_shared/adapter.ts",
+      "line": 134,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "venue.city",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 82,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venue.country",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 89,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venue.name",
+      "source": "features/venue/venues/screens/_shared/adapter.ts",
+      "line": 132,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "venue.name",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 60,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venue.readiness",
+      "source": "features/venue/venues/screens/_shared/adapter.ts",
+      "line": 137,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "venue.status",
+      "source": "features/venue/venues/screens/_shared/adapter.ts",
+      "line": 136,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "venue.status",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 111,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venue.venueType",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 124,
+      "column": 3
+    },
+    {
+      "kind": "field",
+      "id": "venueCost",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 191,
+      "column": 5
+    },
+    {
+      "kind": "field",
+      "id": "vipRevenue",
+      "source": "features/insights/analytics/actions/profitability/index.ts",
+      "line": 150,
+      "column": 5
+    },
+    {
+      "kind": "route",
+      "id": "/",
+      "source": "app/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/analytics",
+      "source": "app/(dashboard)/analytics/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/analytics/consumption",
+      "source": "app/(dashboard)/analytics/consumption/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/analytics/portfolio",
+      "source": "app/(dashboard)/analytics/portfolio/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/analytics/profitability",
+      "source": "app/(dashboard)/analytics/profitability/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/analytics/profitability/[eventId]",
+      "source": "app/(dashboard)/analytics/profitability/[eventId]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/artists",
+      "source": "app/(dashboard)/artists/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/artists/[id]",
+      "source": "app/(dashboard)/artists/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/artists/new",
+      "source": "app/(dashboard)/artists/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/bar",
+      "source": "app/(dashboard)/bar/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/bar/orders",
+      "source": "app/(dashboard)/bar/orders/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/bar/orders/[id]",
+      "source": "app/(dashboard)/bar/orders/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/bar/pos",
+      "source": "app/(dashboard)/bar/pos/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/bar/pos/[id]",
+      "source": "app/(dashboard)/bar/pos/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/callback",
+      "source": "app/(auth)/callback/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/check-in",
+      "source": "app/(dashboard)/check-in/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/check-in/[eventId]",
+      "source": "app/(dashboard)/check-in/[eventId]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/credentials",
+      "source": "app/(dashboard)/credentials/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/dashboard",
+      "source": "app/(dashboard)/dashboard/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events",
+      "source": "app/(dashboard)/events/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]",
+      "source": "app/(dashboard)/events/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/control-room",
+      "source": "app/(dashboard)/events/[id]/control-room/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/dj-report",
+      "source": "app/(dashboard)/events/[id]/dj-report/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/edit",
+      "source": "app/(dashboard)/events/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/finance",
+      "source": "app/(dashboard)/events/[id]/finance/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/lineup",
+      "source": "app/(dashboard)/events/[id]/lineup/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/live",
+      "source": "app/(dashboard)/events/[id]/live/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/media",
+      "source": "app/(dashboard)/events/[id]/media/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/report",
+      "source": "app/(dashboard)/events/[id]/report/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/resale",
+      "source": "app/(dashboard)/events/[id]/resale/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/tickets",
+      "source": "app/(dashboard)/events/[id]/tickets/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/[id]/waitlist",
+      "source": "app/(dashboard)/events/[id]/waitlist/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/clone/[id]",
+      "source": "app/(dashboard)/events/clone/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/events/new",
+      "source": "app/(dashboard)/events/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/finance",
+      "source": "app/(dashboard)/finance/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/forgot-password",
+      "source": "app/(auth)/forgot-password/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/home",
+      "source": "app/(dashboard)/home/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/inventory",
+      "source": "app/(dashboard)/inventory/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/inventory/alerts",
+      "source": "app/(dashboard)/inventory/alerts/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/inventory/ledger",
+      "source": "app/(dashboard)/inventory/ledger/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/inventory/locations",
+      "source": "app/(dashboard)/inventory/locations/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/inventory/movements",
+      "source": "app/(dashboard)/inventory/movements/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/inventory/stock",
+      "source": "app/(dashboard)/inventory/stock/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/login",
+      "source": "app/(auth)/login/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/oauth/redirect",
+      "source": "app/oauth/redirect/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/onboarding",
+      "source": "app/(onboarding)/onboarding/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/payroll",
+      "source": "app/(dashboard)/payroll/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/payroll/settlement-ops",
+      "source": "app/(dashboard)/payroll/settlement-ops/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/payroll/settlements",
+      "source": "app/(dashboard)/payroll/settlements/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/platform",
+      "source": "app/platform/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products",
+      "source": "app/(dashboard)/products/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products/[id]",
+      "source": "app/(dashboard)/products/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products/[id]/edit",
+      "source": "app/(dashboard)/products/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products/categories",
+      "source": "app/(dashboard)/products/categories/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products/combos",
+      "source": "app/(dashboard)/products/combos/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products/new",
+      "source": "app/(dashboard)/products/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products/pricing",
+      "source": "app/(dashboard)/products/pricing/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/products/recipes",
+      "source": "app/(dashboard)/products/recipes/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/profile",
+      "source": "app/(dashboard)/profile/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/purchasing",
+      "source": "app/(dashboard)/purchasing/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/purchasing/[id]",
+      "source": "app/(dashboard)/purchasing/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/purchasing/console",
+      "source": "app/(dashboard)/purchasing/console/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/purchasing/new",
+      "source": "app/(dashboard)/purchasing/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/purchasing/receipts",
+      "source": "app/(dashboard)/purchasing/receipts/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/register",
+      "source": "app/(auth)/register/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/reports",
+      "source": "app/(dashboard)/reports/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/reset-password",
+      "source": "app/(auth)/reset-password/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/roles",
+      "source": "app/roles/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/scheduling",
+      "source": "app/(dashboard)/scheduling/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/scheduling/shifts",
+      "source": "app/(dashboard)/scheduling/shifts/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/season-passes",
+      "source": "app/(dashboard)/season-passes/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings",
+      "source": "app/(dashboard)/settings/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/appearance",
+      "source": "app/(dashboard)/settings/appearance/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/general",
+      "source": "app/(dashboard)/settings/general/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/integrations",
+      "source": "app/(dashboard)/settings/integrations/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/notifications",
+      "source": "app/(dashboard)/settings/notifications/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/payments",
+      "source": "app/(dashboard)/settings/payments/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/security",
+      "source": "app/(dashboard)/settings/security/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/settings/team",
+      "source": "app/(dashboard)/settings/team/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staff",
+      "source": "app/(dashboard)/staff/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staff/[id]",
+      "source": "app/(dashboard)/staff/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staff/[id]/edit",
+      "source": "app/(dashboard)/staff/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staff/[id]/schedule",
+      "source": "app/(dashboard)/staff/[id]/schedule/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staff/command",
+      "source": "app/(dashboard)/staff/command/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staff/new",
+      "source": "app/(dashboard)/staff/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staffing",
+      "source": "app/(dashboard)/staffing/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/staffing/[eventId]",
+      "source": "app/(dashboard)/staffing/[eventId]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/suppliers",
+      "source": "app/(dashboard)/suppliers/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/suppliers/[id]",
+      "source": "app/(dashboard)/suppliers/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/suppliers/[id]/edit",
+      "source": "app/(dashboard)/suppliers/[id]/edit/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/suppliers/new",
+      "source": "app/(dashboard)/suppliers/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/time-tracking",
+      "source": "app/(dashboard)/time-tracking/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/venues",
+      "source": "app/(dashboard)/venues/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/venues/[id]",
+      "source": "app/(dashboard)/venues/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/venues/new",
+      "source": "app/(dashboard)/venues/new/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/vip-tables",
+      "source": "app/(dashboard)/vip-tables/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/vip-tables/config",
+      "source": "app/(dashboard)/vip-tables/config/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/vip-tables/packages",
+      "source": "app/(dashboard)/vip-tables/packages/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/vip-tables/reservations/[id]",
+      "source": "app/(dashboard)/vip-tables/reservations/[id]/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "tab",
+      "id": "activity",
+      "source": "features/commerce/products/screens/detail/index.tsx",
+      "line": 472,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "activity",
+      "source": "features/events/events/components/event-detail/index.tsx",
+      "line": 1233,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "activity",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 926,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "control-room",
+      "source": "app/(dashboard)/events/[id]/layout.tsx",
+      "line": 28,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "details",
+      "source": "features/commerce/products/screens/detail/index.tsx",
+      "line": 250,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "documents",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 921,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "finance",
+      "source": "app/(dashboard)/events/[id]/layout.tsx",
+      "line": 29,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "finance",
+      "source": "features/events/events/components/event-detail/index.tsx",
+      "line": 1214,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "identifiers",
+      "source": "features/commerce/products/screens/detail/index.tsx",
+      "line": 412,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "inventory",
+      "source": "features/commerce/bar/screens/dashboard/index.tsx",
+      "line": 532,
+      "column": 52
+    },
+    {
+      "kind": "tab",
+      "id": "lineup",
+      "source": "app/(dashboard)/events/[id]/layout.tsx",
+      "line": 27,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "lineup",
+      "source": "features/events/events/components/event-detail/index.tsx",
+      "line": 1196,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "app/(dashboard)/events/[id]/layout.tsx",
+      "line": 25,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/events/events/components/event-detail/index.tsx",
+      "line": 1167,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "overview",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 901,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "performance",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 916,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "report",
+      "source": "app/(dashboard)/events/[id]/layout.tsx",
+      "line": 30,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "scanner",
+      "source": "features/events/credentials/screens/main/index.tsx",
+      "line": 120,
+      "column": 50
+    },
+    {
+      "kind": "tab",
+      "id": "schedule",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 911,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "skills",
+      "source": "features/venue/staff/screens/detail/index.tsx",
+      "line": 906,
+      "column": 7
+    },
+    {
+      "kind": "tab",
+      "id": "swaps",
+      "source": "features/events/scheduling/screens/calendar/index.tsx",
+      "line": 201,
+      "column": 48
+    },
+    {
+      "kind": "tab",
+      "id": "swaps",
+      "source": "features/events/scheduling/screens/shifts/index.tsx",
+      "line": 160,
+      "column": 48
+    },
+    {
+      "kind": "tab",
+      "id": "tickets",
+      "source": "app/(dashboard)/events/[id]/layout.tsx",
+      "line": 26,
+      "column": 3
+    },
+    {
+      "kind": "tab",
+      "id": "tickets",
+      "source": "features/events/events/components/event-detail/index.tsx",
+      "line": 1181,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "zones",
+      "source": "features/events/credentials/screens/main/index.tsx",
+      "line": 121,
+      "column": 48
+    }
+  ]
+}

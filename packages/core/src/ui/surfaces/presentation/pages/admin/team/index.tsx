@@ -120,10 +120,10 @@ export function TeamSurface({
       <Button variant="primary" size="sm" onClick={config.behavior.onInvite}>
         <Text>Invite Member</Text>
       </Button>
-      <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />
+      <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
     </Flex>
   ) : (
-    <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />
+    <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
   );
 
   return (

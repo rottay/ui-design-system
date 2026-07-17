@@ -22,12 +22,12 @@ export interface EmptyStateSurfaceProps {
 export function EmptyStateSurface({
   config,
 }: EmptyStateSurfaceProps): React.ReactElement {
-  // Primary and secondary actions are permission-filtered so the empty
-  // state gracefully degrades when the user lacks create permissions.
-  const primaryAction = resolveSurfaceAction(config.behavior.primaryAction, config.access ?? config.permissions);
+  // Primary and secondary actions use final app-resolved visibility so the
+  // state gracefully degrades when the create action is unavailable.
+  const primaryAction = resolveSurfaceAction(config.behavior.primaryAction, config.access);
   const secondaryActions = filterSurfaceActions(
     config.behavior.secondaryAction ? [config.behavior.secondaryAction] : undefined,
-    config.access ?? config.permissions
+    config.access
   );
 
   const content = (
@@ -41,7 +41,7 @@ export function EmptyStateSurface({
       {secondaryActions.length > 0 && (
         <SurfaceActionBar
           actions={secondaryActions}
-          permissions={config.access ?? config.permissions}
+          access={config.access}
           justify="center"
         />
       )}

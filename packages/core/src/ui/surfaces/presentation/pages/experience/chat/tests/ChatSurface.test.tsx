@@ -28,7 +28,7 @@ function buildConfig(overrides?: Partial<ChatSurfaceConfig>): ChatSurfaceConfig 
       ],
       onSend: vi.fn(),
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }

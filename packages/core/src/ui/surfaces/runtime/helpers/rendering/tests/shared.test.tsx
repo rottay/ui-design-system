@@ -1,5 +1,5 @@
 /**
- * @fileoverview Shared surface chrome tests for action a11y and allowlists.
+ * @fileoverview Shared surface chrome tests for action a11y and final visibility.
  */
 
 import { describe, expect, it, vi } from 'vitest';
@@ -34,7 +34,7 @@ vi.mock('@/ui/primitives', () => ({
 }));
 
 describe('SurfaceActionBar', () => {
-  it('renders allowlisted actions with accessible labels and stable action ids', async () => {
+  it('renders app-resolved actions with accessible labels and stable action ids', async () => {
     const { SurfaceActionBar } = await import('..');
     const user = userEvent.setup();
     const onExport = vi.fn();
@@ -46,8 +46,12 @@ describe('SurfaceActionBar', () => {
           { id: 'export', label: 'Export CSV', onClick: onExport },
           { id: 'delete', label: 'Delete', variant: 'danger', onClick: onDelete },
         ]}
-        permissions={{
-          allowedActions: ['export'],
+        access={{
+          mode: 'resolved',
+          capabilities: [
+            { kind: 'action', id: 'export', visible: true },
+            { kind: 'action', id: 'delete', visible: false },
+          ],
         }}
       />
     );

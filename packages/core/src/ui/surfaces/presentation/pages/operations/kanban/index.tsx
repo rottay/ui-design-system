@@ -28,7 +28,7 @@ export function KanbanSurface({
 }: KanbanSurfaceProps): React.ReactElement {
   // Actions render outside the board so they remain accessible even when
   // the board is empty -- this matches the list surface's action placement.
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />;
+  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
   // Active filter count drives the badge on the filter toggle, giving users
   // a quick signal of how many constraints are applied.
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);

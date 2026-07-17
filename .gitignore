@@ -24,6 +24,10 @@ coverage-*/
 # Gate evidence is generated/uploaded by CI except for GAT-07's authoritative,
 # byte-checked semantic proof. Keep every other capture ignored.
 test-artifacts/*
+!test-artifacts/architecture/
+test-artifacts/architecture/*
+!test-artifacts/architecture/arc-11/
+!test-artifacts/architecture/arc-11/*.surface-capabilities.generated.json
 !test-artifacts/gates/
 test-artifacts/gates/*
 !test-artifacts/gates/gat-07/

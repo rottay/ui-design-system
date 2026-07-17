@@ -74,18 +74,16 @@ function buildConfig(overrides?: Partial<DetailSurfaceConfig<WorkspaceView>>): D
         },
       ],
     },
-    permissions: {
-      granted: [],
-      tabs: {
-        'workspace.security': {
-          permission: 'workspace:security:read',
-        },
-      },
-      actions: {
-        archive: {
-          permission: 'workspace:archive',
-        },
-      },
+    access: {
+      mode: 'resolved',
+      capabilities: [
+        { kind: 'field', id: 'workspace.name', visible: true },
+        { kind: 'tab', id: 'overview', visible: true },
+        { kind: 'tab', id: 'activity', visible: true },
+        { kind: 'tab', id: 'workspace.security', visible: false },
+        { kind: 'action', id: 'edit', visible: true },
+        { kind: 'action', id: 'archive', visible: false },
+      ],
     },
     ...overrides,
   };
@@ -101,8 +99,6 @@ describe('DetailSurface', () => {
     const config = buildConfig({ access: { mode: 'all' } });
     if (config.presentation.tabs?.[2]) config.presentation.tabs[2].visible = forbidden;
     if (config.behavior.actions?.[1]) config.behavior.actions[1].visible = forbidden;
-    Object.defineProperty(config, 'permissions', { get: forbidden });
-
     const { container } = renderSurface(
       <DetailSurface
         data={{ id: 'ws-1', name: 'Acme Workspace' }}
@@ -183,7 +179,7 @@ describe('DetailSurface', () => {
           },
         ],
       },
-      permissions: undefined,
+      access: undefined,
     });
 
     renderSurface(
@@ -256,7 +252,7 @@ describe('DetailSurface', () => {
               },
             ],
           },
-          permissions: undefined,
+          access: undefined,
         })}
       />
     );
@@ -299,7 +295,7 @@ describe('DetailSurface', () => {
             activeTab: 'overview',
             actions: [],
           },
-          permissions: undefined,
+          access: undefined,
         })}
       />
     );

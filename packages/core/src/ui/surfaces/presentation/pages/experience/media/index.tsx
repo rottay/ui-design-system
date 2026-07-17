@@ -93,8 +93,8 @@ export function MediaSurface({
   }, [config.behavior.items, selectedId]);
 
   const itemActions = useMemo(() => {
-    return filterSurfaceActions(config.behavior.itemActions, config.access ?? config.permissions, selectedItem);
-  }, [config.behavior.itemActions, config.access ?? config.permissions, selectedItem]);
+    return filterSurfaceActions(config.behavior.itemActions, config.access, selectedItem);
+  }, [config.behavior.itemActions, config.access, selectedItem]);
   const shouldStack = responsiveLayout.shouldStack;
   // Details rail shows when there is a selected item AND either a custom
   // detail renderer exists or the layout explicitly requests it. Without
@@ -127,7 +127,7 @@ export function MediaSurface({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />}
+      actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
       loading={loading}
     >
       {config.behavior.items.length === 0 ? (
@@ -185,7 +185,7 @@ export function MediaSurface({
                     <SurfaceActionBar
                       actions={itemActions}
                       item={selectedItem}
-                      permissions={config.access ?? config.permissions}
+                      access={config.access}
                     />
                   }
                 >

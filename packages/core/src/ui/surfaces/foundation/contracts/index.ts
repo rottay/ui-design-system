@@ -5,7 +5,7 @@
  * - `presentation` -- what the user sees (titles, renderers, custom slots)
  * - `behavior` -- what the surface does (data, actions, callbacks)
  * - `visual` -- how it looks (layout variants, responsive hints, maxWidth)
- * Plus optional `permissions` for field/action/tab gating.
+ * Plus optional app-resolved `access` for final presentation decisions.
  */
 
 import type { ReactNode } from 'react';
@@ -35,7 +35,7 @@ import type { TabsProps } from '../../../primitives/navigation/Tabs';
  * Canonical field metadata published by an adapter.
  *
  * `fieldId` is the important part. It is the stable identifier that lets
- * adapters, permissions, and surface configs talk about the same field.
+ * adapters, final access decisions, and surface configs talk about the same field.
  */
 export interface EntityFieldMeta<TView> {
   key: keyof TView & string;
@@ -102,7 +102,7 @@ export interface SurfacePageChrome {
 /**
  * Declarative action descriptor used across all surfaces.
  *
- * Apps own the actual handlers; surfaces own placement, permissions gating,
+ * Apps own the actual handlers and access decisions; surfaces own placement,
  * and rendering. The generic `TView` parameter lets row-level actions (e.g.,
  * in ListSurface) receive the item they act on, while page-level actions
  * use `void`.
@@ -122,7 +122,7 @@ export interface SurfacePageChrome {
  * ```
  */
 export interface SurfaceAction<TView = void> {
-  /** Stable identifier used for permission gating and test selectors. */
+  /** Stable identifier used for presentation access and test selectors. */
   id: string;
   /** Human-readable label shown in buttons/menus. */
   label: string;
@@ -158,18 +158,11 @@ export interface SurfaceDirtyStateConfig {
 }
 
 /**
- * Permissions are intentionally lightweight.
+ * Legacy app-policy migration bridge.
  *
- * The surface only needs to know whether a field or action is allowed. Apps can
- * provide explicit grants or their own callback if permission logic is more
- * dynamic than a simple string list.
- *
- * The design avoids coupling to any specific RBAC implementation. The `granted`
- * array and per-element rules are the simple path; the `isAllowed` callback is
- * the escape hatch for apps with complex runtime permission logic.
+ * @deprecated Type-only compatibility contract. No DS surface config or
+ * runtime helper accepts, evaluates, or imports this policy shape.
  */
-
-/** A single permission requirement attached to a field, action, or tab. */
 export interface SurfacePermissionRule {
   /** Permission string that must be present in `granted` or pass `isAllowed`. */
   permission: string;
@@ -177,7 +170,10 @@ export interface SurfacePermissionRule {
   reason?: string;
 }
 
-/** Runtime metadata that apps may pass into surface permission callbacks. */
+/**
+ * @deprecated Type-only compatibility contract for app-local policy callbacks.
+ * No DS surface config or runtime helper accepts or reads it.
+ */
 export interface SurfaceRuntimeContext {
   tenantId?: string;
   tenantSlug?: string;
@@ -220,29 +216,26 @@ export type AppResolvedSurfaceAccess =
     };
 
 /**
- * @deprecated Resolve authorization in the app/server and pass
- * `AppResolvedSurfaceAccess` through a surface config's `access` field instead.
- *
- * Surfaces check this config before rendering fields, actions, or tabs. If
- * neither `granted` nor `isAllowed` is provided, everything is allowed by
- * default (open access).
+ * @deprecated Type-only compatibility contract for app-local policy. No DS
+ * surface config or runtime helper accepts or reads it. Resolve authorization
+ * in the app/server and pass `AppResolvedSurfaceAccess` through `access`.
  */
 export interface SurfacePermissionsConfig {
-  /** Flat list of granted permission strings. Surfaces match these against rules. */
+  /** Flat list of grants interpreted only by the owning app. */
   granted?: string[];
-  /** Per-field permission rules, keyed by `fieldId`. */
+  /** App-local field policy, keyed by `fieldId`. */
   fields?: Record<string, SurfacePermissionRule | undefined>;
-  /** Per-action permission rules, keyed by action `id`. */
+  /** App-local action policy, keyed by action `id`. */
   actions?: Record<string, SurfacePermissionRule | undefined>;
-  /** Per-tab permission rules, keyed by tab `key`. */
+  /** App-local tab policy, keyed by tab `key`. */
   tabs?: Record<string, SurfacePermissionRule | undefined>;
-  /** Optional runtime context forwarded to all permission callbacks. */
+  /** Optional app-owned runtime context. */
   runtimeContext?: SurfaceRuntimeContext;
   /** When provided, only these action IDs may render. */
   allowedActions?: string[];
   /** Action IDs that must never render, even if otherwise granted. */
   deniedActions?: string[];
-  /** Dynamic callback for apps needing runtime permission evaluation. */
+  /** App-local dynamic policy callback. */
   isAllowed?: (input: {
     kind: 'field' | 'action' | 'tab';
     id: string;
@@ -251,11 +244,9 @@ export interface SurfacePermissionsConfig {
   }) => boolean;
 
   /**
-   * Row-level permission evaluation. When provided, the surface checks
-   * whether the current user can perform a specific action on a specific row.
+   * App-local row policy callback.
    *
-   * This enables "can edit only own records" patterns without coupling
-   * the DS to any specific RBAC implementation.
+   * Resolve its output before data reaches a DS surface.
    */
   isRowAllowed?: <T>(input: {
     kind: 'action' | 'field';
@@ -273,13 +264,13 @@ export interface SurfacePermissionsConfig {
    * If a user has 'users:delete' granted, they implicitly have 'users:edit'
    * and 'users:view' as well.
    *
-   * Apps opt in by providing a cascadeRules map.
+   * Legacy apps opt in by providing a cascadeRules map.
    * Example: { 'users:delete': ['users:edit', 'users:view'] }
    */
   cascadeRules?: Record<string, string[]>;
 
   /**
-   * Dynamic field-level permissions evaluated per row.
+   * App-local dynamic field policy evaluated per row.
    * When provided, overrides static `fields` rules for the given row.
    *
    * Returns: 'visible' (read-write), 'readonly' (read-only), 'hidden' (not rendered).
@@ -292,8 +283,8 @@ export interface SurfacePermissionsConfig {
   }) => 'visible' | 'readonly' | 'hidden';
 }
 
-/** Internal transition input accepted by surface helpers for one release. */
-export type SurfaceAccessInput = AppResolvedSurfaceAccess | SurfacePermissionsConfig;
+/** The only access input accepted by DS surfaces and presentation helpers. */
+export type SurfaceAccessInput = AppResolvedSurfaceAccess;
 
 /**
  * Shared tabbed view descriptor used by several page-level surfaces.
@@ -311,6 +302,9 @@ export interface SurfaceTabbedView {
   description?: ReactNode;
   disabled?: boolean;
   visible?: boolean | (() => boolean);
+  /** Stable capability ID used by final app-resolved presentation access. Defaults to `key`. */
+  capabilityId?: string;
+  /** @deprecated Use `capabilityId`; retained as a type-only migration alias. */
   permissionId?: string;
 }
 
@@ -328,12 +322,12 @@ export type ListSurfaceView = 'table' | 'cards';
 /**
  * Extended column definition that adds surface-level metadata on top of the
  * pattern-level `ColumnDef`. The `fieldId` ties the column to the adapter's
- * `EntityFieldMeta` and to permission rules, enabling per-field gating.
+ * `EntityFieldMeta` and final field decisions, enabling per-field presentation access.
  *
  * @typeParam TView - The row data shape the column renders against.
  */
 export interface SurfaceColumn<TView> extends ColumnDef<TView> {
-  /** Stable field identifier matching `EntityFieldMeta.fieldId` and permission keys. */
+  /** Stable field identifier matching `EntityFieldMeta.fieldId` and capability IDs. */
   fieldId: string;
   /** When true, this column is omitted in card view but shown in table view. */
   hideInCards?: boolean;
@@ -521,7 +515,7 @@ export interface ListSurfaceBehaviorConfig<TView> {
 
 /**
  * Complete list surface configuration following the standard three-section
- * layout: visual, presentation, behavior, plus optional permissions.
+ * layout: visual, presentation, behavior, plus optional app-resolved access.
  *
  * @typeParam TView - The view-model type for each row/card item.
  */
@@ -531,8 +525,6 @@ export interface ListSurfaceConfig<TView> {
   behavior: ListSurfaceBehaviorConfig<TView>;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
   /**
    * When provided, the surface renders a `PatternListToolbar` above the filter
    * panel and data area. The toolbar handles search, density, view-mode toggle,
@@ -556,7 +548,7 @@ export interface ListSurfaceConfig<TView> {
  * wrapper or a plain container.
  */
 export interface DashboardSurfaceSection {
-  /** Unique key used for React reconciliation and permission gating. */
+  /** Unique key used for React reconciliation and presentation access. */
   key: string;
   title?: ReactNode;
   description?: ReactNode;
@@ -622,8 +614,6 @@ export interface DashboardSurfaceConfig {
   behavior: DashboardSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -637,7 +627,7 @@ export interface DashboardSurfaceConfig {
  * @typeParam TView - The entity view-model providing data to the tab content.
  */
 export interface DetailSurfaceTab<TView> {
-  /** Stable tab key used for routing and permission gating. */
+  /** Stable tab key used for routing and presentation access. */
   key: string;
   label: string;
   icon?: ReactNode;
@@ -646,7 +636,9 @@ export interface DetailSurfaceTab<TView> {
   disabled?: boolean;
   /** Controls tab visibility. Can be static or item-dependent. */
   visible?: boolean | ((item: TView) => boolean);
-  /** Permission key checked against `SurfacePermissionsConfig.tabs`. */
+  /** Stable capability ID used by final app-resolved presentation access. Defaults to `key`. */
+  capabilityId?: string;
+  /** @deprecated Use `capabilityId`; retained as a type-only migration alias. */
   permissionId?: string;
   /** Render function receiving the entity item. Called only when the tab is active. */
   content: (item: TView) => ReactNode;
@@ -725,8 +717,6 @@ export interface DetailSurfaceConfig<TView> {
   behavior: DetailSurfaceBehaviorConfig<TView>;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
   /** Fallback content when no entity is loaded. */
   emptyState?: ReactNode;
 }
@@ -736,11 +726,11 @@ export interface DetailSurfaceConfig<TView> {
 // ---------------------------------------------------------------------------
 
 /**
- * Extended field definition that adds surface-level `fieldId` for permission
- * gating on top of the pattern-level `FieldDef`.
+ * Extended field definition that adds a stable surface-level capability ID on
+ * top of the pattern-level `FieldDef`.
  */
 export interface SurfaceFieldDef extends FieldDef {
-  /** Stable field identifier used for permission checks and adapter mapping. */
+  /** Stable field identifier used for final access decisions and adapter mapping. */
   fieldId?: string;
 }
 
@@ -819,8 +809,6 @@ export interface FormSurfaceConfig {
   behavior: FormSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -957,8 +945,6 @@ export interface WizardSurfaceConfig {
   behavior: WizardSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1013,8 +999,6 @@ export interface HeaderSurfaceConfig {
   behavior: HeaderSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1081,8 +1065,6 @@ export interface SidebarSurfaceConfig {
   behavior: SidebarSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1159,8 +1141,6 @@ export interface DetailFormSurfaceConfig {
   behavior: DetailFormSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1213,8 +1193,6 @@ export interface VisualizationSurfaceConfig {
   behavior: VisualizationSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1309,8 +1287,6 @@ export interface SearchSurfaceConfig {
   behavior: SearchSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1382,8 +1358,6 @@ export interface EditorSurfaceConfig {
   behavior: EditorSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1488,8 +1462,6 @@ export interface OperationalSurfaceConfig<TFeed extends FeedItem = FeedItem> {
   behavior: OperationalSurfaceBehaviorConfig<TFeed>;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1571,8 +1543,6 @@ export interface MediaSurfaceConfig {
   behavior: MediaSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1678,8 +1648,6 @@ export interface ChatSurfaceConfig {
   behavior: ChatSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1744,8 +1712,6 @@ export interface SchedulerSurfaceConfig {
   behavior: SchedulerSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1825,8 +1791,6 @@ export interface CompareSurfaceConfig {
   behavior: CompareSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1888,8 +1852,6 @@ export interface AuthSurfaceConfig {
   behavior: AuthSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1946,8 +1908,6 @@ export interface MarketingSurfaceConfig {
   behavior: MarketingSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -1996,8 +1956,6 @@ export interface OnboardingSurfaceConfig {
   behavior: WizardSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2051,8 +2009,6 @@ export interface EmptyStateSurfaceConfig {
   behavior: EmptyStateSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2104,8 +2060,6 @@ export interface SettingsSurfaceConfig {
   behavior: SettingsSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2194,8 +2148,6 @@ export interface AuditSurfaceConfig {
   behavior: AuditSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2292,8 +2244,6 @@ export interface BillingSurfaceConfig {
   behavior: BillingSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2364,8 +2314,6 @@ export interface ProfileSurfaceConfig {
   behavior: ProfileSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2445,8 +2393,6 @@ export interface NotificationSurfaceConfig {
   behavior: NotificationSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2555,8 +2501,6 @@ export interface ImportExportSurfaceConfig {
   behavior: ImportExportSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2647,8 +2591,6 @@ export interface ReportSurfaceConfig {
   behavior: ReportSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2718,8 +2660,6 @@ export interface TeamSurfaceConfig {
   behavior: TeamSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2810,8 +2750,6 @@ export interface IntegrationSurfaceConfig {
   behavior: IntegrationSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2895,8 +2833,6 @@ export interface KanbanSurfaceConfig {
   behavior: KanbanSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -2974,8 +2910,6 @@ export interface ActivitySurfaceConfig {
   behavior: ActivitySurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -3062,8 +2996,6 @@ export interface FileBrowserSurfaceConfig {
   behavior: FileBrowserSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -3146,8 +3078,6 @@ export interface PricingSurfaceConfig {
   behavior: PricingSurfaceBehaviorConfig;
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
 }
 
 // ---------------------------------------------------------------------------

@@ -257,7 +257,7 @@ export interface ListSurfaceProps<TRaw, TView extends object> {
   onRetry?: () => void | Promise<void>;
 }
 
-/** Full list-page shell with data mapping, permission filtering, and responsive view switching. */
+/** Full list-page shell with data mapping, final access filtering, and responsive view switching. */
 export function ListSurface<TRaw, TView extends object>({
   data,
   adapter,
@@ -295,15 +295,15 @@ export function ListSurface<TRaw, TView extends object>({
   // Permission filtering is memoized because it drives both column visibility
   // and the "no visible columns" edge case detection.
   const permittedColumns = useMemo(() => {
-    return filterSurfaceColumns(config.behavior.columns, config.access ?? config.permissions);
-  }, [config.behavior.columns, config.access ?? config.permissions]);
+    return filterSurfaceColumns(config.behavior.columns, config.access);
+  }, [config.behavior.columns, config.access]);
   const primaryAction = useMemo(() => {
-    return resolveSurfaceAction(config.behavior.primaryAction, config.access ?? config.permissions);
-  }, [config.behavior.primaryAction, config.access ?? config.permissions]);
+    return resolveSurfaceAction(config.behavior.primaryAction, config.access);
+  }, [config.behavior.primaryAction, config.access]);
 
   const rowActions = useMemo(() => {
-    return filterSurfaceActions(config.behavior.rowActions, config.access ?? config.permissions);
-  }, [config.behavior.rowActions, config.access ?? config.permissions]);
+    return filterSurfaceActions(config.behavior.rowActions, config.access);
+  }, [config.behavior.rowActions, config.access]);
 
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);
   const effectiveView = isMobile ? resolvedMobileView : activeView;

@@ -23,11 +23,11 @@ export function PricingSurface({
   config,
   loading = false,
 }: PricingSurfaceProps): React.ReactElement {
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />;
+  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
 
   // Plans and features are re-mapped to strip surface-level metadata before
   // reaching the pricing pattern. This keeps the pattern API stable even if
-  // the surface config adds fields (e.g. analytics tags, permission gates).
+  // the surface config adds fields (e.g. analytics tags, final access decisions).
   const plans = config.behavior.plans.map((p) => ({
     id: p.id,
     name: p.name,

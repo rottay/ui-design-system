@@ -93,7 +93,7 @@ export function MarketingSurface({
       {config.behavior.actions?.length ? (
         <SurfaceActionBar
           actions={config.behavior.actions}
-          permissions={config.access ?? config.permissions}
+          access={config.access}
           justify="start"
           size={isMobile ? 'sm' : 'md'}
         />

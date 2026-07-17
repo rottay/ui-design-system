@@ -48,7 +48,6 @@ import {
 } from '../../../../runtime/collection-workspace';
 import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
 import {
-  isResolvedSurfaceAccess,
   resolveSurfacePermission,
 } from '../../../../runtime/helpers';
 import { PatternDataTable } from '../../../../../patterns/data/data-table';
@@ -750,16 +749,15 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     emptyState,
     adaptive,
     access,
-    permissions,
     capabilityRegistry,
   } = props;
 
-  const surfaceAccess = access ?? permissions;
+  const surfaceAccess = access;
   const capabilityColumns = useMemo(
     () =>
       columns.filter((column) =>
         resolveSurfacePermission(surfaceAccess, {
-          kind: isResolvedSurfaceAccess(surfaceAccess) ? 'column' : 'field',
+          kind: 'column',
           id: collectionColumnCapabilityId(column),
         }),
       ),

@@ -139,7 +139,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={actions} permissions={config.access ?? config.permissions} />}
+      actions={<SurfaceActionBar actions={actions} access={config.access} />}
       loading={loading}
     >
       {!hasContent ? (

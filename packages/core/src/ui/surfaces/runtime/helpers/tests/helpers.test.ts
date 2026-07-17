@@ -148,195 +148,64 @@ describe('normalizeSurfaceError', () => {
     ).toEqual([{ kind: 'action', id: 'edit', label: 'Edit', disabled: true }]);
   });
 
-  it('filters single actions through the same permission rules as action bars', () => {
-    const action = {
-      id: 'delete-record',
-      label: 'Delete record',
-      variant: 'danger' as const,
-      onClick: vi.fn(),
+  it('prefers the presentation-native tab capabilityId over the legacy alias', () => {
+    const access = {
+      mode: 'resolved' as const,
+      capabilities: [{ kind: 'tab' as const, id: 'workspace.audit', visible: true }],
+    };
+    const tab = {
+      key: 'audit',
+      label: 'Audit',
+      capabilityId: 'workspace.audit',
+      permissionId: 'legacy.audit',
     };
 
-    expect(
-      resolveSurfaceAction(action, {
-        granted: [],
-        actions: {
-          'delete-record': {
-            permission: 'records:delete',
-          },
-        },
-      })
-    ).toBeUndefined();
-
-    expect(
-      resolveSurfaceAction(action, {
-        granted: ['records:delete'],
-        actions: {
-          'delete-record': {
-            permission: 'records:delete',
-          },
-        },
-      })
-    ).toEqual(action);
+    expect(filterSurfaceTabbedViews([tab], access)).toEqual([tab]);
   });
 
-  it('filters columns, actions, fields, and tabs through visibility and permission rules', () => {
-    const permissions = {
-      granted: ['records:view', 'records:edit', 'records:tab'],
-      fields: {
-        name: { permission: 'records:view' },
-        cost: { permission: 'records:finance' },
-      },
-      actions: {
-        edit: { permission: 'records:edit' },
-        archive: { permission: 'records:archive' },
-      },
-      tabs: {
-        insights: { permission: 'records:tab' },
-        audits: { permission: 'records:audit' },
-      },
+  it('fails closed for missing final decisions and never evaluates app policy', () => {
+    const access = {
+      mode: 'resolved' as const,
+      capabilities: [
+        { kind: 'column' as const, id: 'name', visible: true },
+        { kind: 'field' as const, id: 'name', visible: true },
+        { kind: 'action' as const, id: 'edit', visible: true },
+        { kind: 'tab' as const, id: 'insights', visible: true },
+      ],
     };
 
-    expect(
-      filterSurfaceColumns(
-        [
-          { key: 'name', fieldId: 'name', title: 'Name' },
-          { key: 'cost', fieldId: 'cost', title: 'Cost' },
-        ],
-        permissions
-      )
-    ).toEqual([{ key: 'name', fieldId: 'name', title: 'Name' }]);
-
-    expect(
-      filterSurfaceActions(
-        [
-          { id: 'edit', label: 'Edit', onClick: vi.fn() },
-          { id: 'archive', label: 'Archive', onClick: vi.fn() },
-          { id: 'hidden', label: 'Hidden', onClick: vi.fn(), visible: () => false },
-        ],
-        permissions,
-        { id: 1 }
-      ).map((action) => action.id)
-    ).toEqual(['edit']);
-
-    expect(
-      filterSurfaceFields(
-        [
-          { name: 'name', fieldId: 'name', label: 'Name' },
-          { name: 'custom', label: 'Custom' },
-        ],
-        permissions
-      ).map((field) => field.name)
-    ).toEqual(['name', 'custom']);
-
-    expect(
-      filterSurfaceTabbedViews(
-        [
-          { key: 'insights', label: 'Insights', badge: '2' },
-          { key: 'audits', label: 'Audits' },
-          { key: 'hidden', label: 'Hidden', visible: () => false },
-        ],
-        permissions
-      ).map((view) => view.key)
-    ).toEqual(['insights']);
-
-    expect(
-      filterDetailSurfaceTabs(
-        [
-          { key: 'insights', label: 'Insights', render: () => null },
-          { key: 'audits', label: 'Audits', render: () => null },
-          { key: 'conditional', label: 'Conditional', visible: (item) => item.enabled, render: () => null },
-        ],
-        permissions,
-        { enabled: true }
-      ).map((tab) => tab.key)
-    ).toEqual(['insights', 'conditional']);
+    expect(filterSurfaceColumns([
+      { key: 'name', fieldId: 'name', title: 'Name' },
+      { key: 'cost', fieldId: 'cost', title: 'Cost' },
+    ], access).map((column) => column.fieldId)).toEqual(['name']);
+    expect(filterSurfaceActions([
+      { id: 'edit', label: 'Edit' },
+      { id: 'archive', label: 'Archive' },
+    ], access).map((action) => action.id)).toEqual(['edit']);
+    expect(filterSurfaceRowActions([
+      { id: 'edit', label: 'Edit' },
+      { id: 'archive', label: 'Archive' },
+    ], access, { id: 'row-1' }, 0).map((action) => action.id)).toEqual(['edit']);
+    expect(filterSurfaceFields([
+      { name: 'name', fieldId: 'name', label: 'Name' },
+      { name: 'cost', fieldId: 'cost', label: 'Cost' },
+    ], access).map((field) => field.name)).toEqual(['name']);
+    expect(filterSurfaceTabbedViews([
+      { key: 'insights', label: 'Insights' },
+      { key: 'audit', label: 'Audit' },
+    ], access).map((tab) => tab.key)).toEqual(['insights']);
+    expect(resolveSurfaceAction({ id: 'archive', label: 'Archive' }, access)).toBeUndefined();
+    expect(resolveSurfacePermission(access, { kind: 'route', id: '/missing' })).toBe(false);
   });
 
-  it('supports callback-based permission resolution', () => {
-    expect(
-      filterSurfaceActions(
-        [{ id: 'edit', label: 'Edit', onClick: vi.fn() }],
-        {
-          isAllowed: ({ id }) => id === 'edit',
-          actions: { edit: { permission: 'records:edit' } },
-        }
-      )
-    ).toHaveLength(1);
-  });
+  it('keeps domain visibility local when no access projection is supplied', () => {
+    const hidden = { id: 'hidden', label: 'Hidden', visible: () => false };
+    const visible = { id: 'visible', label: 'Visible' };
 
-  it('passes runtime context to permission callbacks and honors action allowlists', () => {
-    const runtimeContext = {
-      tenantSlug: 'bithire',
-      userId: 'user-1',
-      role: 'recruiter',
-    };
-    const isAllowed = vi.fn(({ permission, context }) => {
-      return context?.tenantSlug === 'bithire' && permission === 'records:edit';
-    });
-
-    const permissions = {
-      runtimeContext,
-      allowedActions: ['edit'],
-      actions: {
-        edit: { permission: 'records:edit' },
-        delete: { permission: 'records:delete' },
-      },
-      isAllowed,
-    };
-
-    expect(
-      filterSurfaceActions(
-        [
-          { id: 'edit', label: 'Edit' },
-          { id: 'delete', label: 'Delete' },
-          { id: 'export', label: 'Export' },
-        ],
-        permissions
-      ).map((action) => action.id)
-    ).toEqual(['edit']);
-
-    expect(isAllowed).toHaveBeenCalledWith({
-      kind: 'action',
-      id: 'edit',
-      permission: 'records:edit',
-      context: runtimeContext,
-    });
-    expect(resolveSurfacePermission(permissions, { kind: 'action', id: 'export' })).toBe(false);
-  });
-
-  it('passes runtime context to row actions and field access resolvers', () => {
-    const runtimeContext = { userId: 'owner-1' };
-    const row = { id: 'record-1', ownerId: 'owner-1', locked: false };
-    const permissions = {
-      runtimeContext,
-      isRowAllowed: vi.fn(({ id, row: item, context }) => {
-        return id === 'edit' && item.ownerId === context?.userId;
-      }),
-      resolveFieldAccess: vi.fn(({ fieldId, row: item, context }) => {
-        if (fieldId === 'salary' && item.ownerId !== context?.userId) return 'hidden';
-        return 'readonly';
-      }),
-    };
-
-    expect(
-      filterSurfaceRowActions(
-        [
-          { id: 'edit', label: 'Edit' },
-          { id: 'archive', label: 'Archive' },
-        ],
-        permissions,
-        row,
-        0
-      ).map((action) => action.id)
-    ).toEqual(['edit']);
-
-    expect(resolveFieldAccessForRow('salary', permissions, row, 0)).toBe('readonly');
-    expect(permissions.isRowAllowed).toHaveBeenCalledWith(
-      expect.objectContaining({ context: runtimeContext })
-    );
-    expect(permissions.resolveFieldAccess).toHaveBeenCalledWith(
-      expect.objectContaining({ context: runtimeContext })
-    );
+    expect(filterSurfaceActions([hidden, visible], undefined).map((action) => action.id)).toEqual([
+      'visible',
+    ]);
+    expect(resolveFieldAccessForRow('field', undefined, { id: 1 }, 0)).toBe('visible');
   });
 
   it('normalizes surface action variants and utility helpers', () => {

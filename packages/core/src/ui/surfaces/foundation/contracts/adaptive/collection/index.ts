@@ -25,7 +25,6 @@ export type { CollectionViewMode } from '@/foundation/contracts/runtime/componen
 import type {
   AppResolvedSurfaceAccess,
   SurfaceCapabilityRegistration,
-  SurfacePermissionsConfig,
 } from '../..';
 import type { PanePosture } from '..';
 
@@ -519,8 +518,6 @@ export interface WorkspaceActiveFiltersConfig {
 export interface CollectionWorkspaceConfig<T> {
   /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
-  /** @deprecated Use `access`; retained for one compatibility release. */
-  permissions?: SurfacePermissionsConfig;
   /**
    * Data-independent capability declarations that cannot be inferred from
    * columns (for example individual row actions). Used to preserve anatomy

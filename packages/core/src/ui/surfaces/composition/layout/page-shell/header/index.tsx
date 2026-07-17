@@ -24,11 +24,11 @@ export function HeaderSurface({
   loading = false,
 }: HeaderSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaults();
-  // Tabs are permission-filtered so restricted tabs never appear in the
+  // Tabs use app-resolved access so hidden tabs never appear in the
   // navigation, avoiding confusing "access denied" states.
-  const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs ?? [], config.access ?? config.permissions);
+  const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs ?? [], config.access);
   // Fall back to the first visible tab if the requested activeTab was
-  // hidden by permissions or does not exist in the config.
+  // hidden by access or does not exist in the config.
   const resolvedActiveTabKey =
     visibleTabs.some((tab) => tab.key === config.behavior.activeTab)
       ? config.behavior.activeTab
@@ -41,7 +41,7 @@ export function HeaderSurface({
   const actionsNode = (
     <Stack spacing="sm">
       {config.presentation.actionsStart}
-      <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />
+      <SurfaceActionBar actions={config.behavior.actions} access={config.access} />
     </Stack>
   );
 

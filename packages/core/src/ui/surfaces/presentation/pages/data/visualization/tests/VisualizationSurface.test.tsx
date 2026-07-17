@@ -32,7 +32,7 @@ function buildConfig(overrides?: Partial<VisualizationSurfaceConfig>): Visualiza
       ],
       onViewChange: vi.fn(),
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }
@@ -71,13 +71,12 @@ describe('VisualizationSurface', () => {
         ],
         onViewChange: vi.fn(),
       },
-      permissions: {
-        granted: [],
-        tabs: {
-          'analytics.table': {
-            permission: 'analytics:table:read',
-          },
-        },
+      access: {
+        mode: 'resolved',
+        capabilities: [
+          { kind: 'tab', id: 'chart', visible: true },
+          { kind: 'tab', id: 'analytics.table', visible: false },
+        ],
       },
     });
 

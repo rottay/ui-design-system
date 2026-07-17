@@ -27,21 +27,20 @@ function buildConfig(overrides?: Partial<EmptyStateSurfaceConfig>): EmptyStateSu
         onClick: vi.fn(),
       },
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }
 
 describe('EmptyStateSurface', () => {
-  it('routes the primary action and filters the secondary action through permissions', async () => {
+  it('routes the primary action and applies the secondary action decision', async () => {
     const config = buildConfig({
-      permissions: {
-        granted: [],
-        actions: {
-          'import-projects': {
-            permission: 'projects:import',
-          },
-        },
+      access: {
+        mode: 'resolved',
+        capabilities: [
+          { kind: 'action', id: 'create-project', visible: true },
+          { kind: 'action', id: 'import-projects', visible: false },
+        ],
       },
     });
 

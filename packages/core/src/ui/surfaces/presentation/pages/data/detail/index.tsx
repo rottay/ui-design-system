@@ -3,7 +3,7 @@
 /**
  * @fileoverview DetailSurface - Rottay Design System
  * @description Reusable detail-page shell that combines adapter mapping,
- * permission-aware actions, tabs, and sidebar content.
+ * app-resolved actions, tabs, and sidebar content.
  *
  * @remarks
  * The detail surface keeps page-level chrome standardized while allowing apps
@@ -55,7 +55,7 @@ function resolveDetailErrorCapabilities<TRaw, TView>(
   adapter: EntityAdapter<TRaw, TView>,
   config: DetailSurfaceConfig<TView>
 ): SurfaceCapabilityRegistration[] {
-  const access = config.access ?? config.permissions;
+  const access = config.access;
   const includeStaticHidden = isAllSurfaceAccess(access);
   const registrations: SurfaceCapabilityRegistration[] = [
     ...adapter.fields.map((field) => ({
@@ -67,7 +67,7 @@ function resolveDetailErrorCapabilities<TRaw, TView>(
       .filter((tab) => includeStaticHidden || tab.visible !== false)
       .map((tab) => ({
         kind: 'tab' as const,
-        id: tab.permissionId ?? tab.key,
+        id: tab.capabilityId ?? tab.permissionId ?? tab.key,
         label: tab.label,
         disabled: tab.disabled,
       })),
@@ -138,7 +138,7 @@ export function DetailSurface<TRaw, TView>({
 
   // Convert the surface action vocabulary into the narrower detail-panel contract.
   const actions = item
-    ? filterSurfaceActions(config.behavior.actions, config.access ?? config.permissions, item).map((action) => ({
+    ? filterSurfaceActions(config.behavior.actions, config.access, item).map((action) => ({
         key: action.id,
         label: action.label,
         icon: action.icon,
@@ -156,7 +156,7 @@ export function DetailSurface<TRaw, TView>({
 
   // Tabs are filtered after mapping the item so `visible` and `badge` callbacks can inspect real data.
   const visibleTabs = item
-    ? filterDetailSurfaceTabs(config.presentation.tabs, config.access ?? config.permissions, item).map((tab) => ({
+    ? filterDetailSurfaceTabs(config.presentation.tabs, config.access, item).map((tab) => ({
         key: tab.key,
         label: tab.label,
         icon: tab.icon,
@@ -166,7 +166,7 @@ export function DetailSurface<TRaw, TView>({
       }))
     : [];
   // Validate that the configured active tab actually exists in the visible
-  // set. If the active tab was hidden by permissions or visibility rules,
+  // set. If the active tab was hidden by access or visibility rules,
   // fall back to the first visible tab to avoid a blank content area.
   const resolvedActiveTab =
     visibleTabs.some((tab) => tab.key === config.behavior.activeTab)

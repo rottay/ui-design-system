@@ -33,7 +33,7 @@ function buildConfig(overrides?: Partial<SettingsSurfaceConfig>): SettingsSurfac
       ],
       onTabChange: vi.fn(),
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }
@@ -65,7 +65,7 @@ describe('SettingsSurface', () => {
     ).toBeInTheDocument();
   });
 
-  it('filters tabs through permissions and renders tab badges', async () => {
+  it('applies final tab decisions and renders tab badges', async () => {
     const config = buildConfig();
     config.behavior.tabs = [
       {
@@ -81,13 +81,12 @@ describe('SettingsSurface', () => {
         content: <div>Security settings panel</div>,
       },
     ];
-    config.permissions = {
-      granted: [],
-      tabs: {
-        'settings.security': {
-          permission: 'settings:security:read',
-        },
-      },
+    config.access = {
+      mode: 'resolved',
+      capabilities: [
+        { kind: 'tab', id: 'general', visible: true },
+        { kind: 'tab', id: 'settings.security', visible: false },
+      ],
     };
 
     renderSurface(<SettingsSurface config={config} />);

@@ -44,7 +44,7 @@ function buildConfig(overrides?: Partial<MediaSurfaceConfig>): MediaSurfaceConfi
       ],
       onSelectItem: vi.fn(),
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }

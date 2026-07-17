@@ -18,17 +18,17 @@ export interface SurfaceActionBarProps<TView = void> {
   actions?: SurfaceAction<TView>[];
   item?: TView;
   /** Presentation access already resolved by the app/server. */
-  permissions?: SurfaceAccessInput;
+  access?: SurfaceAccessInput;
   justify?: 'start' | 'center' | 'end' | 'between';
   size?: 'sm' | 'md' | 'lg';
   stopPropagation?: boolean;
 }
 
-/** Render a permission-aware action row using the standard DS button contract. */
+/** Render an app-resolved action row using the standard DS button contract. */
 export function SurfaceActionBar<TView>({
   actions,
   item,
-  permissions,
+  access,
   justify = 'end',
   size = 'sm',
   stopPropagation = false,
@@ -36,9 +36,9 @@ export function SurfaceActionBar<TView>({
   /**
    * Filtering lives here on purpose. This component is the one place where the
    * vast majority of page-level actions are rendered, so this is the safest
-   * place to enforce visibility + permission rules consistently.
+   * place to apply final presentation visibility consistently.
    */
-  const visibleActions = filterSurfaceActions(actions, permissions, item);
+  const visibleActions = filterSurfaceActions(actions, access, item);
 
   if (visibleActions.length === 0) {
     return null;

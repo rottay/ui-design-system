@@ -25,7 +25,7 @@ export function ActivitySurface({
 }: ActivitySurfaceProps): React.ReactElement {
   // Actions render outside the timeline so they remain accessible even when
   // the activity log is empty -- consistent with other surface action placements.
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />;
+  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
 
   // Strip surface-specific fields before handing to the pattern. The pattern's
   // activity type is leaner than what the surface config carries, and passing

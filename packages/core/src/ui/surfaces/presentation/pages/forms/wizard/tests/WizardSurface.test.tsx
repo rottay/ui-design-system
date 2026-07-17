@@ -52,7 +52,7 @@ function buildConfig(overrides?: Partial<WizardSurfaceConfig>): WizardSurfaceCon
         onClick: vi.fn(),
       },
     },
-    permissions: undefined,
+    access: undefined,
     ...overrides,
   };
 }
@@ -76,15 +76,14 @@ describe('WizardSurface', () => {
     });
   });
 
-  it('hides the complete action when submitAction is denied by permissions', async () => {
+  it('hides the complete action when the app resolves it hidden', async () => {
     const config = buildConfig({
-      permissions: {
-        granted: [],
-        actions: {
-          'complete-setup': {
-            permission: 'setup:complete',
-          },
-        },
+      access: {
+        mode: 'resolved',
+        capabilities: [
+          { kind: 'field', id: 'region', visible: true },
+          { kind: 'action', id: 'complete-setup', visible: false },
+        ],
       },
     });
 

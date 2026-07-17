@@ -63,7 +63,7 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
 
           <SurfaceActionBar
             actions={config.behavior.actions}
-            permissions={config.access ?? config.permissions}
+            access={config.access}
             justify="start"
           />
           {config.presentation.footer}
