@@ -1,11 +1,11 @@
 /**
  * Dedicated public icon entry for `@rottay/design-system/icons`.
  *
- * `Icon` is the supplier-independent product facade. The named Lucide-shaped
- * catalog remains exported only as a compatibility surface during migration.
+ * `Icon` is the supplier-independent product facade. The historical named
+ * catalog remains exported only as a one-minor compatibility surface.
  * The entry file deliberately does not shadow the canonical
  * `src/graphics/icons/` owner.
- * Only this focused package subpath can reach the Phosphor adapter.
+ * Only this focused package subpath can reach the governed icon adapter.
  */
 export * from '../../graphics/icons';
 export { Icon } from '../../graphics/icons/presentation/semantic-icon';

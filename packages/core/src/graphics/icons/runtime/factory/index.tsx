@@ -3,7 +3,7 @@
 /**
  * @fileoverview createIcon factory - Rottay Design System
  *
- * Wraps a lucide-react icon component with DS defaults:
+ * Wraps a compatible SVG icon component with DS defaults:
  * - Size defaults to 'md' (20px), reads from --ds-icon-md-size token
  * - Color defaults to 'currentColor' (inherits from parent text)
  * - StrokeWidth defaults to CSS var --ds-icon-stroke-width (1.5)
@@ -12,7 +12,12 @@
  */
 
 import React, { forwardRef } from 'react';
-import type { LucideIcon, LucideProps } from 'lucide-react';
+import type {
+  DSIconComponent,
+  DSIconProps,
+  DSIconSourceComponent,
+  IconSize,
+} from '../../foundation/contracts';
 
 const ICON_SIZE_MAP: Record<string, string> = {
   xs: 'var(--ds-icon-xs-size, 12px)',
@@ -23,26 +28,15 @@ const ICON_SIZE_MAP: Record<string, string> = {
   '2xl': 'var(--ds-icon-2xl-size, 48px)',
 };
 
-type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | number;
-
-/** DS icon props - superset of LucideProps with DS-specific size tokens. */
-interface DSIconProps extends Omit<LucideProps, 'ref' | 'size'> {
-  /** DS size token or numeric px value. Defaults to 'md' (20px). */
-  size?: IconSize | string | number;
-  /** Accessible title rendered as SVG <title> element. */
-  title?: string;
-}
-
 /**
- * Factory that wraps a lucide-react icon component with DS defaults.
- *
- * Returns a component typed as LucideIcon for full compatibility with
- * existing code that expects lucide-react icon types.
+ * Factory that wraps a compatible SVG icon component with DS defaults.
+ * Its input and output are structural DS contracts so provider declarations
+ * never cross the public package boundary.
  */
 export function createIcon(
-  LucideComponent: React.ComponentType<LucideProps>,
+  SourceComponent: DSIconSourceComponent,
   displayName: string,
-): LucideIcon {
+): DSIconComponent {
   const DSIcon = forwardRef<SVGSVGElement, DSIconProps>((props, ref) => {
     const {
       size = 'md',
@@ -64,7 +58,7 @@ export function createIcon(
     const hasAccessibleName = Boolean(title || ariaLabel);
 
     return React.createElement(
-      LucideComponent,
+      SourceComponent,
       {
         ref,
         size: resolvedSize,
@@ -76,14 +70,14 @@ export function createIcon(
         'aria-hidden': hasAccessibleName ? undefined : (ariaHidden ?? true),
         'aria-label': ariaLabel ?? title,
         role: hasAccessibleName ? 'img' : rest.role,
-      } as LucideProps,
+      } as DSIconProps & React.RefAttributes<SVGSVGElement>,
       title ? React.createElement('title', null, title) : undefined,
       children,
     );
   });
 
   DSIcon.displayName = displayName;
-  return DSIcon as unknown as LucideIcon;
+  return DSIcon;
 }
 
-export type { DSIconProps, IconSize };
+export type { DSIconComponent, DSIconProps, DSIconSourceComponent, IconSize };

@@ -20,6 +20,8 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { auditPublicDeclarationClosures } from '../packages/core/scripts/cra-17-public-declaration-gate.mjs';
+
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 export const repositoryRoot = resolve(scriptDir, '..');
 export const coreRoot = resolve(repositoryRoot, 'packages/core');
@@ -3757,6 +3759,8 @@ export async function auditPackedArtifact(root = coreRoot) {
     const extractedPackage = resolve(extractDir, 'package');
     const packedManifest = readJson(resolve(extractedPackage, 'package.json'));
     const errors = validatePackedManifest(packedManifest, extractedPackage);
+    const publicDeclarations = auditPublicDeclarationClosures(extractedPackage);
+    errors.push(...publicDeclarations.errors.map((error) => `public declaration closure: ${error}`));
     const symlink = packageHasSymlink(extractedPackage);
     if (symlink) errors.push(`packed artifact contains a symlink: ${symlink}`);
     if (errors.length > 0) throw new Error(errors.join('\n'));
@@ -4278,6 +4282,8 @@ export async function auditPackedArtifact(root = coreRoot) {
       installedRuntimePackages: installedRuntimeFixtures.tarballs.size,
       stagedRuntimePackages: installedRuntimeFixtures.stagedPackages,
       supplierCli: cliReport.contract,
+      publicDeclarationEntrypoints: Object.keys(publicDeclarations.entrypoints).length,
+      publicDeclarationFiles: publicDeclarations.files,
       typecheckedConsumer: true,
       typecheckedServerSafeSpatialSpec: true,
       executedImportConditions: runtimeFixtures.import.length,

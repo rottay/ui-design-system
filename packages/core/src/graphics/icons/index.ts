@@ -1,15 +1,20 @@
 /**
  * @fileoverview Icon exports - Rottay Design System
  * @description Public compatibility barrel. The supplier-independent semantic
- * Icon facade and generated Phosphor-backed packs are the default product API;
- * the Lucide-shaped named catalog remains available during migration.
+ * Icon facade and generated named packs are the default product API; the
+ * historical named catalog remains available during its one-minor migration.
  */
 
-// Lucide compatibility factory
+// One-minor named-icon compatibility factory
 export { createIcon } from './runtime/factory';
-export type { DSIconProps, IconSize } from './runtime/factory';
+export type {
+  DSIconComponent,
+  DSIconProps,
+  DSIconSourceComponent,
+  IconSize,
+} from './runtime/factory';
 
-// Compatibility catalog (DS-wrapped Lucide names; do not use for new roles)
+// Compatibility catalog (historical names; do not use for new roles)
 export * from './presentation/catalog';
 
 // Types

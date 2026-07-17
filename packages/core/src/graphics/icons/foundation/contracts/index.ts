@@ -7,8 +7,38 @@
  */
 
 import type React from 'react';
-import type { SVGProps } from 'react';
+import type {
+  ForwardRefExoticComponent,
+  RefAttributes,
+  SVGProps,
+} from 'react';
 import { ICON_SIZE_TOKENS, type IconSizeToken } from '..';
+
+/** Stable size contract retained by the one-minor named-icon compatibility API. */
+export type IconSize = IconSizeToken | number;
+
+/**
+ * Supplier-independent props for DS-wrapped named icons.
+ *
+ * The compatibility surface accepts native SVG attributes plus arbitrary CSS
+ * sizes, matching its historical runtime behaviour without exposing the type
+ * declarations of the underlying renderer.
+ */
+export interface DSIconProps extends Omit<SVGProps<SVGSVGElement>, 'ref' | 'size'> {
+  size?: IconSize | string;
+  /** Preserve the historical named-icon option while its aliases migrate. */
+  absoluteStrokeWidth?: boolean;
+  /** Accessible title rendered as an SVG `<title>` element. */
+  title?: string;
+}
+
+/** Structural component contract for the one-minor named-icon compatibility API. */
+export type DSIconComponent = ForwardRefExoticComponent<
+  Omit<DSIconProps, 'ref'> & RefAttributes<SVGSVGElement>
+>;
+
+/** Structural input accepted by `createIcon`, including function/class SVG renderers. */
+export type DSIconSourceComponent = React.ComponentType<DSIconProps>;
 
 /**
  * Base props for every icon in the DS. Extends native SVG element props with
@@ -45,9 +75,9 @@ export interface SvgIconProps extends SVGProps<SVGSVGElement> {
 /**
  * Type for an icon component in the system.
  *
- * Widened to accept both DS-wrapped icons (from createIcon/catalog) and raw
- * lucide-react icons. Any component that takes size, color, strokeWidth,
- * className, style, title, and aria-hidden satisfies this contract.
+ * Widened to accept DS-wrapped icons and compatible SVG renderers. Any
+ * component that takes size, color, strokeWidth, className, style, title, and
+ * aria-hidden satisfies this contract.
  */
 export type IconComponent = React.ComponentType<{
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | number;

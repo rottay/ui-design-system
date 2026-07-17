@@ -4,17 +4,18 @@ import type {
   CloudService,
   CloudServiceMarkProvenance,
   MarkLicense,
+  MarkSourcePackage,
 } from '../../foundation/catalog';
 
 export const MARK_TRADEMARK_NOTICE =
   'Marks remain subject to their owners\' trademark guidelines; inclusion and asset licensing do not grant trademark permission.';
 
-export const MARK_CATALOG_SOURCE = Object.freeze({
+export const MARK_CATALOG_SOURCE: MarkSourcePackage = Object.freeze({
   packageName: 'thesvg',
   version: '3.2.6',
 });
 
-export const MARK_RENDERER_SOURCE = Object.freeze({
+export const MARK_RENDERER_SOURCE: MarkSourcePackage = Object.freeze({
   packageName: '@thesvg/react',
   version: '3.2.7',
 });

@@ -1,9 +1,9 @@
 /**
  * @fileoverview Icon catalog barrel - Rottay Design System
  *
- * Re-exports all DS-wrapped icons from category files. Each icon is a
- * lucide-react component wrapped via createIcon() with DS defaults
- * (token-driven sizing, currentColor inheritance, rottay-icon class).
+ * Re-exports all DS-wrapped compatibility icons from category files. Each icon
+ * uses createIcon() for token-driven sizing, currentColor inheritance, and the
+ * rottay-icon class.
  */
 
 export * from './navigation';
