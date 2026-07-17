@@ -1,12 +1,9 @@
-/** Dedicated public entry for registered explanatory artwork. */
-export * from '../../../graphics/pictograms';
 export {
   GRAPHIC_ASSET_CLASSES,
   GRAPHIC_ASSET_PROVIDERS,
   GRAPHIC_ASSET_PROVIDER_BY_CLASS,
   GRAPHIC_ASSET_TELEMETRY_CODES,
-  installGraphicAssetRuntimeControl,
-} from '../../../infrastructure/runtime/graphics/asset-governance';
+} from './foundation/contracts';
 export type {
   GraphicAssetClass,
   GraphicAssetDisableScope,
@@ -15,4 +12,5 @@ export type {
   GraphicAssetTelemetryCode,
   GraphicAssetTelemetryEvent,
   GraphicAssetTelemetryOutcome,
-} from '../../../infrastructure/runtime/graphics/asset-governance';
+} from './foundation/contracts';
+export { installGraphicAssetRuntimeControl } from './runtime/control';

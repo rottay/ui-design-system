@@ -14,9 +14,19 @@ import type {
   MarkVariant,
 } from '../../../../foundation/catalog';
 import {
+  resolveMarkRendererDefault,
   sharedSvgProps,
   type SharedMarkAdapterProps,
 } from '..';
+
+const OpenaiRenderer = resolveMarkRendererDefault(Openai);
+const AnthropicRenderer = resolveMarkRendererDefault(Anthropic);
+const GithubRenderer = resolveMarkRendererDefault(Github);
+const GoogleRenderer = resolveMarkRendererDefault(Google);
+const LinkedinRenderer = resolveMarkRendererDefault(Linkedin);
+const InstagramRenderer = resolveMarkRendererDefault(Instagram);
+const XRenderer = resolveMarkRendererDefault(X);
+const GoogleChromeRenderer = resolveMarkRendererDefault(GoogleChrome);
 
 interface BrandMarkAdapterProps extends SharedMarkAdapterProps {
   name: BrandMarkName;
@@ -40,21 +50,21 @@ export const TheSvgBrandMarkAdapter = forwardRef<SVGSVGElement, BrandMarkAdapter
 
     switch (name) {
       case 'openai':
-        return <Openai {...svgProps} variant={sourceVariant as OpenaiVariant} />;
+        return <OpenaiRenderer {...svgProps} variant={sourceVariant as OpenaiVariant} />;
       case 'anthropic':
-        return <Anthropic {...svgProps} variant={sourceVariant as AnthropicVariant} />;
+        return <AnthropicRenderer {...svgProps} variant={sourceVariant as AnthropicVariant} />;
       case 'github':
-        return <Github {...svgProps} variant={sourceVariant as GithubVariant} />;
+        return <GithubRenderer {...svgProps} variant={sourceVariant as GithubVariant} />;
       case 'google':
-        return <Google {...svgProps} variant={sourceVariant as GoogleVariant} />;
+        return <GoogleRenderer {...svgProps} variant={sourceVariant as GoogleVariant} />;
       case 'linkedin':
-        return <Linkedin {...svgProps} variant={sourceVariant as LinkedinVariant} />;
+        return <LinkedinRenderer {...svgProps} variant={sourceVariant as LinkedinVariant} />;
       case 'instagram':
-        return <Instagram {...svgProps} variant={sourceVariant as InstagramVariant} />;
+        return <InstagramRenderer {...svgProps} variant={sourceVariant as InstagramVariant} />;
       case 'x':
-        return <X {...svgProps} variant={sourceVariant as XVariant} />;
+        return <XRenderer {...svgProps} variant={sourceVariant as XVariant} />;
       case 'chrome':
-        return <GoogleChrome {...svgProps} variant={sourceVariant as GoogleChromeVariant} />;
+        return <GoogleChromeRenderer {...svgProps} variant={sourceVariant as GoogleChromeVariant} />;
       default:
         return null;
     }

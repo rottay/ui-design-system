@@ -14,9 +14,15 @@ import type {
   CloudService,
 } from '../../../../foundation/catalog';
 import {
+  resolveMarkRendererDefault,
   sharedSvgProps,
   type SharedMarkAdapterProps,
 } from '..';
+
+const AwsLambdaRenderer = resolveMarkRendererDefault(AwsAwsLambda);
+const AwsBedrockRenderer = resolveMarkRendererDefault(AwsAmazonBedrock);
+const AwsS3Renderer = resolveMarkRendererDefault(AwsAmazonSimpleStorageService);
+const AwsRdsRenderer = resolveMarkRendererDefault(AwsAmazonRds);
 
 interface CloudServiceMarkAdapterProps extends SharedMarkAdapterProps {
   provider: CloudProvider;
@@ -45,23 +51,23 @@ export const TheSvgCloudServiceMarkAdapter = forwardRef<
 
   switch (service) {
     case 'lambda':
-      return <AwsAwsLambda {...svgProps} variant={opticalVariant as AwsAwsLambdaVariant} />;
+      return <AwsLambdaRenderer {...svgProps} variant={opticalVariant as AwsAwsLambdaVariant} />;
     case 'bedrock':
       return (
-        <AwsAmazonBedrock
+        <AwsBedrockRenderer
           {...svgProps}
           variant={opticalVariant as AwsAmazonBedrockVariant}
         />
       );
     case 's3':
       return (
-        <AwsAmazonSimpleStorageService
+        <AwsS3Renderer
           {...svgProps}
           variant={opticalVariant as AwsAmazonSimpleStorageServiceVariant}
         />
       );
     case 'rds':
-      return <AwsAmazonRds {...svgProps} variant={opticalVariant as AwsAmazonRdsVariant} />;
+      return <AwsRdsRenderer {...svgProps} variant={opticalVariant as AwsAmazonRdsVariant} />;
     default:
       return null;
   }

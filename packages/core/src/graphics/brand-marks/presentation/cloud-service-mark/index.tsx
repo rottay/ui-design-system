@@ -1,5 +1,9 @@
 import React, { forwardRef } from 'react';
 
+import {
+  isGraphicAssetAdapterEnabled,
+  reportGraphicAssetTelemetry,
+} from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
 import { TheSvgCloudServiceMarkAdapter } from '../../runtime/adapters/thesvg-react/cloud-service';
 import {
   isCloudProvider,
@@ -32,6 +36,12 @@ export const CloudServiceMark = forwardRef<SVGSVGElement, CloudServiceMarkProps>
 
     if (!isCloudProvider(provider) || !isCloudService(service)) {
       const key = `${String(provider)}:${String(service)}`;
+      reportGraphicAssetTelemetry({
+        code: 'unmapped-name',
+        assetClass: 'cloud-service-mark',
+        assetKey: key,
+        outcome: 'dropped',
+      });
       warnMarkOnce(`unknown-cloud:${key}`, `Unknown cloud service "${key}"; rendered null.`);
       return null;
     }
@@ -41,7 +51,17 @@ export const CloudServiceMark = forwardRef<SVGSVGElement, CloudServiceMarkProps>
       label,
       decorative,
     );
-    if (!accessibility) return null;
+    if (!accessibility) {
+      reportGraphicAssetTelemetry({
+        code: 'accessible-name-failure',
+        assetClass: 'cloud-service-mark',
+        assetKey: `${provider}:${service}`,
+        outcome: 'dropped',
+      });
+      return null;
+    }
+
+    if (!isGraphicAssetAdapterEnabled('cloud-service-mark', `${provider}:${service}`)) return null;
 
     return (
       <TheSvgCloudServiceMarkAdapter

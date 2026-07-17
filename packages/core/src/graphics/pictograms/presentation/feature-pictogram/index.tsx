@@ -1,5 +1,9 @@
 import React, { forwardRef } from "react";
 
+import {
+  isGraphicAssetAdapterEnabled,
+  reportGraphicAssetTelemetry,
+} from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
 import { FEATURE_PICTOGRAM_ARTWORK } from "./artwork";
 import {
   isFeaturePictogramName,
@@ -41,6 +45,12 @@ export const FeaturePictogram = forwardRef<
   } = props;
 
   if (!isFeaturePictogramName(name)) {
+    reportGraphicAssetTelemetry({
+      code: 'unmapped-name',
+      assetClass: 'feature-pictogram',
+      assetKey: String(name),
+      outcome: 'dropped',
+    });
     warnFeaturePictogramOnce(
       `unknown:${String(name)}`,
       `Unknown pictogram "${String(name)}"; rendered null.`
@@ -49,6 +59,12 @@ export const FeaturePictogram = forwardRef<
   }
   const resolvedSize = resolveFeaturePictogramSize(size);
   if (resolvedSize === null) {
+    reportGraphicAssetTelemetry({
+      code: 'invalid-optical-input',
+      assetClass: 'feature-pictogram',
+      assetKey: name,
+      outcome: 'dropped',
+    });
     warnFeaturePictogramOnce(
       `size:${String(size)}`,
       `Size must be a token or a number from 32 through 96.`
@@ -61,11 +77,26 @@ export const FeaturePictogram = forwardRef<
     decorative,
   );
   if (accessibility === null) {
+    reportGraphicAssetTelemetry({
+      code: 'accessible-name-failure',
+      assetClass: 'feature-pictogram',
+      assetKey: name,
+      outcome: 'dropped',
+    });
     return null;
   }
 
   const Artwork = FEATURE_PICTOGRAM_ARTWORK[name];
   const resolvedTone = resolveFeaturePictogramTone(tone);
+  if (resolvedTone !== tone) {
+    reportGraphicAssetTelemetry({
+      code: 'variant-fallback',
+      assetClass: 'feature-pictogram',
+      assetKey: name,
+      outcome: 'fallback',
+    });
+  }
+  if (!isGraphicAssetAdapterEnabled('feature-pictogram', name)) return null;
   const isLabeled = accessibility.label !== undefined;
 
   return (

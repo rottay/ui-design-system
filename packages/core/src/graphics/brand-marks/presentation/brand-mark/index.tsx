@@ -1,5 +1,9 @@
 import React, { forwardRef } from 'react';
 
+import {
+  isGraphicAssetAdapterEnabled,
+  reportGraphicAssetTelemetry,
+} from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
 import { TheSvgBrandMarkAdapter } from '../../runtime/adapters/thesvg-react/brand';
 import {
   isBrandMarkName,
@@ -31,21 +35,43 @@ export const BrandMark = forwardRef<SVGSVGElement, BrandMarkProps>(function Bran
   } = props;
 
   if (!isBrandMarkName(name)) {
+    reportGraphicAssetTelemetry({
+      code: 'unmapped-name',
+      assetClass: 'brand-mark',
+      assetKey: String(name),
+      outcome: 'dropped',
+    });
     warnMarkOnce(`unknown-brand:${String(name)}`, `Unknown brand "${String(name)}"; rendered null.`);
     return null;
   }
 
   const accessibility = resolveMarkAccessibility(`brand:${name}`, label, decorative);
-  if (!accessibility) return null;
+  if (!accessibility) {
+    reportGraphicAssetTelemetry({
+      code: 'accessible-name-failure',
+      assetClass: 'brand-mark',
+      assetKey: name,
+      outcome: 'dropped',
+    });
+    return null;
+  }
 
   const requestedVariant: MarkVariant = isMarkVariant(variant) ? variant : 'color';
   if (!isMarkVariant(variant)) {
+    reportGraphicAssetTelemetry({
+      code: 'variant-fallback',
+      assetClass: 'brand-mark',
+      assetKey: name,
+      outcome: 'fallback',
+    });
     warnMarkOnce(
       `variant:${name}:${String(variant)}`,
       `Unknown variant "${String(variant)}" for "${name}"; using "color".`,
     );
   }
   const resolution = getBrandVariantResolution(name, requestedVariant);
+
+  if (!isGraphicAssetAdapterEnabled('brand-mark', name)) return null;
 
   return (
     <TheSvgBrandMarkAdapter

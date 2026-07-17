@@ -5,6 +5,24 @@ import type {
   MarkSizeToken,
 } from '../../../foundation/catalog';
 
+/**
+ * Normalizes a package default across ESM and the provider's CJS `{ default }`
+ * shape. Preserve-modules leaves the provider external, so this adapter—not a
+ * consuming app or a bundler flag—owns the interop boundary.
+ */
+export function resolveMarkRendererDefault<Component>(candidate: Component): Component {
+  const possibleCommonJsModule = candidate as Component & { readonly default?: Component };
+  if (
+    possibleCommonJsModule !== null
+    && typeof possibleCommonJsModule === 'object'
+    && 'default' in possibleCommonJsModule
+    && possibleCommonJsModule.default !== undefined
+  ) {
+    return possibleCommonJsModule.default;
+  }
+  return candidate;
+}
+
 const MARK_SIZE_FALLBACKS: Readonly<Record<MarkSizeToken, string>> = {
   xs: 'var(--ds-mark-xs-size, var(--ds-icon-xs-size, 0.75rem))',
   sm: 'var(--ds-mark-sm-size, var(--ds-icon-sm-size, 1rem))',

@@ -9,6 +9,10 @@ import type {
   SVGProps,
 } from 'react';
 
+import {
+  isGraphicAssetAdapterEnabled,
+  reportGraphicAssetTelemetry,
+} from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
 import { ICON_SIZE_TOKENS } from '../../../foundation';
 import type { IconRole, IconState, IconTone } from '../../../foundation/contracts';
 import { resolveIconWeight } from '../../../foundation/contracts/registry/policy';
@@ -151,12 +155,20 @@ export function createSemanticIcon(
     const isLabeled = normalizedLabel.length > 0;
     const isDecorative = decorative === true;
     if (isLabeled === isDecorative) {
+      reportGraphicAssetTelemetry({
+        code: 'accessible-name-failure',
+        assetClass: 'semantic-icon',
+        assetKey: name,
+        outcome: 'dropped',
+      });
       warnOnce(
         `a11y:${name}:${String(label)}:${String(decorative)}`,
         `Icon "${name}" must have either a non-empty label or decorative={true}; rendered null.`,
       );
       return null;
     }
+
+    if (!isGraphicAssetAdapterEnabled('semantic-icon', name)) return null;
 
     const resolvedRole = VALID_ROLES.has(role as IconRole) ? role as IconRole : defaultRole;
     const resolvedState = VALID_STATES.has(state as IconState) ? state as IconState : 'idle';
