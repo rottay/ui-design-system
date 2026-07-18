@@ -32,9 +32,10 @@ import type {
   ChartCompactProps,
   ChartLegendProps,
   ChartMarginProps,
+  ChartStateProps,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { buildSvgWaterfallGeometry } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgWaterfallRenderer } from '../../runtime/chart-engine/presentation/react/renderers/waterfall';
 
@@ -48,8 +49,8 @@ export interface WaterfallDataPoint {
   type?: 'increase' | 'decrease' | 'total';
 }
 
-/** Props for the {@link WaterfallChart} component. */
-export interface WaterfallChartProps
+/** Own props for the {@link WaterfallChart} component (state copy is composed below). */
+interface WaterfallChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartMarginProps,
@@ -70,6 +71,9 @@ export interface WaterfallChartProps
   /** Orientation. Default: 'vertical' */
   orientation?: 'vertical' | 'horizontal';
 }
+
+/** Props for the {@link WaterfallChart} component. */
+export type WaterfallChartProps = WaterfallChartOwnProps & ChartStateProps;
 
 function defaultFormatValue(value: number): string {
   return String(value);
@@ -95,6 +99,13 @@ export const WaterfallChart = memo(function WaterfallChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = false,
@@ -140,6 +151,35 @@ export const WaterfallChart = memo(function WaterfallChart({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: summaryGeometry.bars.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   const description = describeChart('Waterfall chart', summaryGeometry.bars.length, subtitle, [
     orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.',
     showConnectors ? 'Connector lines shown between bars.' : null,
@@ -153,7 +193,7 @@ export const WaterfallChart = memo(function WaterfallChart({
       height={height}
       className={['ds-chart-waterfall', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

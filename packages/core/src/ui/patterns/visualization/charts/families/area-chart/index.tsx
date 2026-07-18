@@ -33,11 +33,12 @@ import type {
   ChartCompactProps,
   ChartLegendProps,
   ChartMarginProps,
+  ChartStateProps,
   Series,
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../../runtime';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { ChartTooltip } from '../../presentation/tooltip';
 import type { SvgAreaSeries, SvgLineCurve } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgAreaRenderer } from '../../runtime/chart-engine/presentation/react/renderers/area';
@@ -56,8 +57,8 @@ function validPoint(point: AreaPoint): boolean {
   return typeof point.x === 'string';
 }
 
-/** Props for the {@link AreaChart} component. */
-export interface AreaChartProps
+/** Own props for the {@link AreaChart} component (state copy is composed below). */
+interface AreaChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartColorsProps,
@@ -71,6 +72,9 @@ export interface AreaChartProps
   xAxisLabel?: string;
   yAxisLabel?: string;
 }
+
+/** Props for the {@link AreaChart} component. */
+export type AreaChartProps = AreaChartOwnProps & ChartStateProps;
 
 /**
  * Renders a multi-series area chart with optional stacking and gradient fills.
@@ -90,6 +94,13 @@ export const AreaChart = memo(function AreaChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = true,
@@ -179,6 +190,35 @@ export const AreaChart = memo(function AreaChart({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: pointCount,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -187,7 +227,7 @@ export const AreaChart = memo(function AreaChart({
       height={height}
       className={['ds-chart-area', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

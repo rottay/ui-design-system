@@ -15,22 +15,26 @@ import type {
   ChartColorsProps,
   ChartLegendProps,
   ChartMarginProps,
+  ChartStateProps,
   DataPoint,
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import { buildSvgFunnelGeometry } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgFunnelRenderer } from '../../runtime/chart-engine/presentation/react/renderers/funnel';
 
-/** Props for the backward-compatible {@link FunnelChart} family adapter. */
-export interface FunnelChartProps
+/** Own props for the {@link FunnelChart} component (state copy is composed below). */
+interface FunnelChartOwnProps
   extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartMarginProps {
   data: DataPoint[];
   showPercentage?: boolean;
   showConversion?: boolean;
   orientation?: 'vertical' | 'horizontal';
 }
+
+/** Props for the backward-compatible {@link FunnelChart} family adapter. */
+export type FunnelChartProps = FunnelChartOwnProps & ChartStateProps;
 
 /**
  * Public FunnelChart compatibility adapter. All SVG ownership is delegated to
@@ -46,6 +50,13 @@ export const FunnelChart = memo(function FunnelChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = false,
@@ -131,6 +142,35 @@ export const FunnelChart = memo(function FunnelChart({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: data.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -139,7 +179,7 @@ export const FunnelChart = memo(function FunnelChart({
       height={height}
       className={['ds-chart-funnel', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

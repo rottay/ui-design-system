@@ -11,9 +11,9 @@
 
 import { memo, useMemo, useRef } from 'react';
 
-import type { ChartBaseProps, ChartColorsProps, ChartMarginProps } from '../../contracts';
+import type { ChartBaseProps, ChartColorsProps, ChartMarginProps, ChartStateProps } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import type { SvgGanttTask } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgGanttRenderer } from '../../runtime/chart-engine/presentation/react/renderers/gantt';
@@ -29,12 +29,15 @@ export interface GanttTask {
   group?: string;
 }
 
-/** Props for the {@link GanttChart} component. */
-export interface GanttChartProps extends ChartBaseProps, ChartColorsProps, ChartMarginProps {
+/** Own props for the {@link GanttChart} component (state copy is composed below). */
+interface GanttChartOwnProps extends ChartBaseProps, ChartColorsProps, ChartMarginProps {
   tasks: GanttTask[];
   showProgress?: boolean;
   showToday?: boolean;
 }
+
+/** Props for the {@link GanttChart} component. */
+export type GanttChartProps = GanttChartOwnProps & ChartStateProps;
 
 const DEFAULT_GANTT_MARGIN = { ...DEFAULT_MARGIN, bottom: 30, left: 150 };
 
@@ -51,6 +54,13 @@ export const GanttChart = memo(function GanttChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   animate = true,
@@ -112,6 +122,35 @@ export const GanttChart = memo(function GanttChart({
     ]),
   };
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: parsedTasks.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -120,7 +159,7 @@ export const GanttChart = memo(function GanttChart({
       height={dynamicHeight}
       className={['ds-chart-gantt', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

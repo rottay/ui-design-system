@@ -27,10 +27,11 @@ import type {
   ChartCompactProps,
   ChartLegendProps,
   ChartMarginProps,
+  ChartStateProps,
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { useChartCompact, useChartDimensions, useChartPersonality, useChartTooltip } from '../../runtime';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { ChartTooltip } from '../../presentation/tooltip';
 import type {
   SvgScatterDatum,
@@ -62,8 +63,8 @@ export interface ScatterDataPoint {
   [key: string]: unknown;
 }
 
-/** Props for the {@link ScatterChart} component. */
-export interface ScatterChartProps
+/** Own props for the {@link ScatterChart} component (state copy is composed below). */
+interface ScatterChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartColorsProps,
@@ -87,6 +88,9 @@ export interface ScatterChartProps
   /** Show linear trend line (least squares). Default: false */
   trendLine?: boolean;
 }
+
+/** Props for the {@link ScatterChart} component. */
+export type ScatterChartProps = ScatterChartOwnProps & ChartStateProps;
 
 /**
  * Public ScatterChart compatibility adapter. SVG ownership, Cartesian geometry,
@@ -112,6 +116,13 @@ export const ScatterChart = memo(function ScatterChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = false,
@@ -222,6 +233,35 @@ export const ScatterChart = memo(function ScatterChart({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: finiteData.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -230,7 +270,7 @@ export const ScatterChart = memo(function ScatterChart({
       height={height}
       className={['ds-chart-scatter', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

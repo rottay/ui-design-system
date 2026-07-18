@@ -16,9 +16,10 @@ import type {
   ChartCompactCoreConfig,
   ChartCompactProps,
   ChartLegendProps,
+  ChartStateProps,
 } from '../../contracts';
 import { useChartCompact, useChartDimensions, useChartPersonality } from '../../runtime';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { SvgGaugeRenderer } from '../../runtime/chart-engine/presentation/react/renderers/gauge';
 
 /** A single threshold segment rendered as a colored arc band on the gauge. */
@@ -33,8 +34,8 @@ export interface GaugeSegment {
   label?: string;
 }
 
-/** Props for the backward-compatible {@link GaugeChart} family adapter. */
-export interface GaugeChartProps
+/** Own props for the {@link GaugeChart} component (state copy is composed below). */
+interface GaugeChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartCompactProps<ChartCompactCoreConfig> {
@@ -63,6 +64,9 @@ export interface GaugeChartProps
   /** Needle color. Default: var(--ds-color-text-primary). */
   needleColor?: string;
 }
+
+/** Props for the backward-compatible {@link GaugeChart} family adapter. */
+export type GaugeChartProps = GaugeChartOwnProps & ChartStateProps;
 
 const DEFAULT_SEGMENT_TONES = ['error', 'warning', 'success'] as const;
 const DEFAULT_SEGMENT_COLORS = [
@@ -131,6 +135,13 @@ export const GaugeChart = memo(function GaugeChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = false,
@@ -242,6 +253,38 @@ export const GaugeChart = memo(function GaugeChart({
     </div>
   ) : null;
 
+  // A gauge always shows exactly one scalar; the resolver's dataCount treats a
+  // non-finite value as "nothing to render" so the auto-empty arm can activate
+  // when a caller passes both an invalid value and emptyLabel.
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: Number.isFinite(value) ? 1 : 0,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -250,7 +293,7 @@ export const GaugeChart = memo(function GaugeChart({
       height={chartHeight}
       className={['ds-chart-gauge', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

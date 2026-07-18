@@ -28,14 +28,15 @@ import type {
   ChartCompactProps,
   ChartLegendProps,
   ChartMarginProps,
+  ChartStateProps,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { buildSvgHistogramGeometry } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgHistogramRenderer } from '../../runtime/chart-engine/presentation/react/renderers/histogram';
 
-/** Props for the {@link Histogram} component. */
-export interface HistogramProps
+/** Own props for the {@link Histogram} component (state copy is composed below). */
+interface HistogramOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartMarginProps,
@@ -64,6 +65,9 @@ export interface HistogramProps
   density?: boolean;
 }
 
+/** Props for the {@link Histogram} component. */
+export type HistogramProps = HistogramOwnProps & ChartStateProps;
+
 function defaultFormatValue(value: number): string {
   return String(value);
 }
@@ -91,6 +95,13 @@ export const Histogram = memo(function Histogram({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = false,
@@ -148,6 +159,35 @@ export const Histogram = memo(function Histogram({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: finiteCount,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   const description = describeChart('Histogram', summaryGeometry.bins.length, subtitle, [
     `${finiteCount} data points across ${summaryGeometry.bins.length} bins.`,
     density ? 'Density normalization enabled.' : null,
@@ -164,7 +204,7 @@ export const Histogram = memo(function Histogram({
       height={height}
       className={['ds-chart-histogram', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

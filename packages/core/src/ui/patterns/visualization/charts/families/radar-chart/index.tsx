@@ -15,16 +15,17 @@ import type {
   ChartColorSchemeProps,
   ChartColorsProps,
   ChartLegendProps,
+  ChartStateProps,
 } from '../../contracts';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import {
   buildSvgRadarGeometry,
 } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgRadarRenderer } from '../../runtime/chart-engine/presentation/react/renderers/radar';
 
-/** Props for the backward-compatible {@link RadarChart} family adapter. */
-export interface RadarChartProps
+/** Own props for the {@link RadarChart} component (state copy is composed below). */
+interface RadarChartOwnProps
   extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartColorSchemeProps {
   data: { axis: string; value: number }[];
   series?: { name: string; data: { axis: string; value: number }[]; color?: string }[];
@@ -32,6 +33,9 @@ export interface RadarChartProps
   levels?: number;
   showLabels?: boolean;
 }
+
+/** Props for the backward-compatible {@link RadarChart} family adapter. */
+export type RadarChartProps = RadarChartOwnProps & ChartStateProps;
 
 /**
  * Public RadarChart compatibility adapter. Existing consumers keep their
@@ -48,6 +52,13 @@ export const RadarChart = memo(function RadarChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = true,
@@ -138,6 +149,35 @@ export const RadarChart = memo(function RadarChart({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: summary.rows.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -146,7 +186,7 @@ export const RadarChart = memo(function RadarChart({
       height={height}
       className={['ds-chart-radar', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

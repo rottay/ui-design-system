@@ -15,8 +15,9 @@ import type {
   ChartColorSchemeProps,
   ChartColorsProps,
   ChartLegendProps,
+  ChartStateProps,
 } from '../../contracts';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import {
   buildSvgTreeMapGeometry,
@@ -31,13 +32,16 @@ export interface TreeMapNode {
   children?: TreeMapNode[];
 }
 
-/** Props for the {@link TreeMap} component. */
-export interface TreeMapProps
+/** Own props for the {@link TreeMap} component (state copy is composed below). */
+interface TreeMapOwnProps
   extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartColorSchemeProps {
   data: TreeMapNode[];
   showLabels?: boolean;
   padding?: number;
 }
+
+/** Props for the {@link TreeMap} component. */
+export type TreeMapProps = TreeMapOwnProps & ChartStateProps;
 
 function normalizeTreeNode(node: TreeMapNode): SvgTreeMapNode | null {
   const children = (node.children ?? [])
@@ -71,6 +75,13 @@ export const TreeMap = memo(function TreeMap({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = false,
@@ -117,6 +128,35 @@ export const TreeMap = memo(function TreeMap({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: leavesForSummary.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -125,7 +165,7 @@ export const TreeMap = memo(function TreeMap({
       height={height}
       className={['ds-chart-treemap', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

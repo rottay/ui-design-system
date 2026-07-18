@@ -11,8 +11,8 @@
 
 import { memo, useMemo, useRef } from 'react';
 
-import type { ChartBaseProps, ChartColorSchemeProps } from '../../contracts';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import type { ChartBaseProps, ChartColorSchemeProps, ChartStateProps } from '../../contracts';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import { SvgCalendarHeatMapRenderer } from '../../runtime/chart-engine/presentation/react/renderers/calendar-heat-map';
 
@@ -24,8 +24,8 @@ export interface CalendarHeatMapDataPoint {
   value: number;
 }
 
-/** Props for the {@link CalendarHeatMap} component. */
-export interface CalendarHeatMapProps extends ChartBaseProps, ChartColorSchemeProps {
+/** Own props for the {@link CalendarHeatMap} component (state copy is composed below). */
+interface CalendarHeatMapOwnProps extends ChartBaseProps, ChartColorSchemeProps {
   data: CalendarHeatMapDataPoint[];
   /** Start date of the range. Default: 1 year ago from today */
   startDate?: Date | string;
@@ -48,6 +48,9 @@ export interface CalendarHeatMapProps extends ChartBaseProps, ChartColorSchemePr
   /** Click handler for individual cells */
   onCellClick?: (date: Date, value: number) => void;
 }
+
+/** Props for the {@link CalendarHeatMap} component. */
+export type CalendarHeatMapProps = CalendarHeatMapOwnProps & ChartStateProps;
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -94,6 +97,13 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   animate = true,
@@ -169,6 +179,35 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
     [onCellClick],
   );
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: values.size,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -177,7 +216,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
       height={heightProp}
       className={['ds-chart-calendar-heatmap', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

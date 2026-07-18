@@ -18,8 +18,8 @@
 
 import { memo, useMemo, useRef } from 'react';
 
-import type { ChartBaseProps, ChartMarginProps } from '../../contracts';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import type { ChartBaseProps, ChartMarginProps, ChartStateProps } from '../../contracts';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import type { SvgHeatMapDatum } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgHeatMapRenderer } from '../../runtime/chart-engine/presentation/react/renderers/heat-map';
@@ -30,14 +30,17 @@ const DEFAULT_HEATMAP_COLOR_RANGE: [string, string] = [
 ];
 const DEFAULT_HEATMAP_MARGIN = { top: 20, right: 20, bottom: 60, left: 80 };
 
-/** Props for the {@link HeatMap} component. */
-export interface HeatMapProps extends ChartBaseProps, ChartMarginProps {
+/** Own props for the {@link HeatMap} component (state copy is composed below). */
+interface HeatMapOwnProps extends ChartBaseProps, ChartMarginProps {
   data: { x: string; y: string; value: number }[];
   xLabels?: string[];
   yLabels?: string[];
   colorRange?: [string, string];
   cellRadius?: number;
 }
+
+/** Props for the {@link HeatMap} component. */
+export type HeatMapProps = HeatMapOwnProps & ChartStateProps;
 
 /**
  * Public HeatMap compatibility adapter. SVG ownership, band geometry, and
@@ -59,6 +62,13 @@ export const HeatMap = memo(function HeatMap({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   animate = true,
@@ -94,6 +104,35 @@ export const HeatMap = memo(function HeatMap({
     rows: finiteData.map((item) => [item.x, item.y, item.value]),
   }), [finiteData, title]);
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: finiteData.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -102,7 +141,7 @@ export const HeatMap = memo(function HeatMap({
       height={height}
       className={['ds-chart-heatmap', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

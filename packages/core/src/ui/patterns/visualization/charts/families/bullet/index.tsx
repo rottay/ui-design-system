@@ -17,8 +17,9 @@ import type {
   ChartCompactCoreConfig,
   ChartCompactProps,
   ChartLegendProps,
+  ChartStateProps,
 } from '../../contracts';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality, useChartCompact, useChartDimensions } from '../../runtime';
 import {
   buildSvgBulletGeometry,
@@ -40,8 +41,8 @@ export interface BulletDataPoint {
   max?: number;
 }
 
-/** Props for the {@link BulletChart} component. */
-export interface BulletChartProps
+/** Own props for the {@link BulletChart} component (state copy is composed below). */
+interface BulletChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartCompactProps<ChartCompactCoreConfig> {
@@ -64,6 +65,9 @@ export interface BulletChartProps
   /** Target marker color. Default: var(--ds-color-error) */
   targetColor?: string;
 }
+
+/** Props for the {@link BulletChart} component. */
+export type BulletChartProps = BulletChartOwnProps & ChartStateProps;
 
 function defaultFormatValue(value: number): string {
   return String(value);
@@ -88,6 +92,13 @@ export const BulletChart = memo(function BulletChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = false,
@@ -197,6 +208,35 @@ export const BulletChart = memo(function BulletChart({
     </div>
   ) : null;
 
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: items.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
+
   return (
     <ChartScaffold
       containerRef={containerRef}
@@ -205,7 +245,7 @@ export const BulletChart = memo(function BulletChart({
       height={height}
       className={['ds-chart-bullet', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}

@@ -30,11 +30,12 @@
 import { memo } from 'react';
 
 import { useChartPersonality } from '../../runtime';
-import type { ChartColorScheme } from '../../contracts';
+import type { ChartColorScheme, ChartStateProps } from '../../contracts';
+import { resolveChartScaffoldState } from '../../presentation/scaffold';
 import { SvgSparklineRenderer } from '../../runtime/chart-engine/presentation/react/renderers/sparkline';
 
-/** Props for the {@link Sparkline} component. */
-export interface SparklineProps {
+/** Own props for the {@link Sparkline} component (state copy is composed below). */
+interface SparklineOwnProps {
   /** Data values to plot along the sparkline. */
   data: number[];
   /** Width of the SVG. CSS string or pixel number. Default: 100 */
@@ -66,6 +67,13 @@ export interface SparklineProps {
 }
 
 /**
+ * Props for the {@link Sparkline} component. Sparkline has no scaffold chrome
+ * to host loading/empty/error copy, so a non-ready `state` renders nothing
+ * (see the component body) instead of displaying the typed-required labels.
+ */
+export type SparklineProps = SparklineOwnProps & ChartStateProps;
+
+/**
  * Renders a tiny inline sparkline chart as a standalone SVG element.
  *
  * No axes, no legend, no tooltip -- just the data trend line. Area fill,
@@ -87,6 +95,8 @@ export const Sparkline = memo(function Sparkline({
   showEndDot,
   showMinMax = false,
   animate,
+  state,
+  emptyLabel,
   className,
   style,
   colorScheme,
@@ -100,6 +110,19 @@ export const Sparkline = memo(function Sparkline({
   // reduced-motion prohibition into one decision; re-applying `animate` here
   // would let `animate={true}` bypass that accessibility outcome.
   const resolvedAnimate = chartPersonality.animate;
+
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    dataCount: data.filter((value) => Number.isFinite(value)).length,
+    emptyLabel,
+  });
+  // Sparkline is a chrome-less inline mark with no surface to host loading,
+  // empty, or error copy: a non-ready state renders nothing rather than
+  // reserving space for unstyled text (mirrors the renderer's own
+  // no-finite-datum null return below).
+  if (resolvedState !== 'ready') {
+    return null;
+  }
 
   return (
     <SvgSparklineRenderer
