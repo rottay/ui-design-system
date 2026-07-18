@@ -1,10 +1,50 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "workOrder": "WO-CRA-15",
   "sourceId": "DS-IMP-106",
   "scope": "ParticleField plus governed Canvas and WebGL lifecycle hardening",
   "package": "@rottay/design-system@2.19.34",
-  "sourceFingerprint": "4cff0d787ff871a167c80c46818bd772bc84fe97dbe24a44feacf43f6e64218c",
+  "sourceFingerprint": "6917f22699c1df161f4bd2e212b884bee3cbee8ae65854cfbf190f723153b368",
+  "structurallyPassed": true,
+  "completionEligible": false,
+  "checks": {
+    "roadmapAuthority": {
+      "status": "pending",
+      "snapshot": {
+        "workOrderStatus": "todo",
+        "phase": "2C",
+        "dependencyState": {
+          "WO-GAT-05": "done",
+          "WO-GAT-06": "done",
+          "WO-CRA-12": "done",
+          "WO-CRA-13": "done",
+          "WO-CRA-14": "done"
+        },
+        "claimState": "locked",
+        "ownerGo": "pending"
+      }
+    },
+    "sourceContracts": {
+      "status": "pass",
+      "assertions": 14
+    },
+    "canvasCensus": {
+      "status": "pass",
+      "governedSinks": 6
+    },
+    "effectProvenance": {
+      "status": "pass",
+      "certifiedEffects": 1
+    },
+    "realBrowserPerformanceAndBundle": {
+      "status": "pending",
+      "summary": null
+    }
+  },
+  "pending": [
+    "Phase 2C remains locked without structured owner GO",
+    "completion evidence is missing; extend/run the current production-build Particle and Spatial probes with recorded zero suspended RAF, long-task, rapid-cleanup and clean-bundle results"
+  ],
   "governance": {
     "sharedContinuousRuntimeBudget": 1,
     "decorative2dBudget": 1,
@@ -19,6 +59,11 @@
       "maxParticles": 1200,
       "maxPixels": 4194304
     },
+    "spatial": {
+      "maxDpr": 1.5,
+      "maxDimension": 2560,
+      "maxPixels": 4194304
+    },
     "watermark": {
       "maxDpr": 2,
       "maxDimension": 2048,
@@ -29,11 +74,16 @@
       "maxDimension": 8192,
       "maxPixels": 16777216
     },
-    "particleBundleGzipBytes": 16384
+    "particleBundleGzipBytes": 16384,
+    "spatialHostBundleGzipBytes": 7800,
+    "spatialSpecBundleGzipBytes": 1300,
+    "longTaskMs": 50,
+    "suspendedRafCallbacks": 0
   },
   "requiredBrowserEvidence": [
-    "particle: provider color isolation, sole lease, viewport handoff, context recovery, reduced/coarse fallback",
-    "spatial: sole context, viewport handoff, bounded backing store, context retry, reduced/coarse/save-data/unsupported fallback"
+    "particle: provider color isolation, sole lease, bounded DPR/count/pixels, viewport/background zero RAF, context recovery and meaningful fallback",
+    "spatial: sole context, viewport/background zero RAF, bounded backing store, context retry and meaningful reduced/coarse/save-data/unsupported fallback",
+    "combined: rapid mount/unmount cleanup, <=50 ms long tasks and clean-build gzip budgets"
   ],
   "intentionallyDeferred": [
     "WebGPU admission",

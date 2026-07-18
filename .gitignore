@@ -32,6 +32,8 @@ test-artifacts/architecture/*
 test-artifacts/craft/*
 !test-artifacts/craft/cra-11/
 !test-artifacts/craft/cra-11/adaptive-contract-census.generated.json
+!test-artifacts/craft/cra-15/
+!test-artifacts/craft/cra-16/
 !test-artifacts/craft/cra-17/
 !test-artifacts/craft/cra-17/icon-supplier-decision.json
 !test-artifacts/gates/
