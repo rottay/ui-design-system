@@ -6,9 +6,10 @@
  * Designed for embedding in tables, cards, and text-adjacent contexts where
  * full chart chrome (axes, legends, tooltips) would be excessive.
  *
- * Uses D3 `line()` and `area()` generators with `scaleLinear` for projection,
- * but renders a standalone `<svg>` without ChartScaffold (sparklines are tiny
- * inline elements that do not need the full accessibility scaffold).
+ * This adapter resolves the tenant/brand chart personality and delegates all
+ * SVG ownership to the engine `SvgSparklineRenderer`, whose projection math
+ * lives in the pure `buildSvgSparklineGeometry` builder. The standalone
+ * `data-part="sparkline"` contract is preserved.
  *
  * @example
  * <Sparkline data={[4, 8, 3, 12, 7, 9]} color="var(--ds-color-success)" fill />
@@ -26,18 +27,11 @@
  * />
  */
 
-import { memo, useId, useMemo, useRef } from 'react';
-import {
-  area as d3Area,
-  curveLinear,
-  curveMonotoneX,
-  curveStepAfter,
-  extent,
-  line as d3Line,
-  scaleLinear,
-} from 'd3';
+import { memo } from 'react';
+
 import { useChartPersonality } from '../../runtime';
 import type { ChartColorScheme } from '../../contracts';
+import { SvgSparklineRenderer } from '../../runtime/chart-engine/presentation/react/renderers/sparkline';
 
 /** Props for the {@link Sparkline} component. */
 export interface SparklineProps {
@@ -71,24 +65,15 @@ export interface SparklineProps {
   colorScheme?: ChartColorScheme;
 }
 
-/** Maps curve prop strings to D3 curve factories. */
-const CURVE_MAP = {
-  sharp: curveLinear,
-  smooth: curveMonotoneX,
-  step: curveStepAfter,
-} as const;
-
 /**
  * Renders a tiny inline sparkline chart as a standalone SVG element.
  *
  * No axes, no legend, no tooltip -- just the data trend line. Area fill,
- * end dot, and min/max markers are optional. Animation uses the
- * stroke-dashoffset drawing trick and respects `prefers-reduced-motion`
- * via a CSS media query on the animation itself (no JS motion query needed
- * since the animation is purely CSS-driven after initial render).
+ * end dot, and min/max markers are optional. Animation respects
+ * `prefers-reduced-motion` (the resolved personality forces it off).
  *
  * @param props - See {@link SparklineProps} for the full option set.
- * @returns An inline `<svg>` element suitable for embedding in tables and cards.
+ * @returns An inline `<svg>` element, or `null` when there is no finite datum.
  */
 export const Sparkline = memo(function Sparkline({
   data,
@@ -106,208 +91,32 @@ export const Sparkline = memo(function Sparkline({
   style,
   colorScheme,
 }: SparklineProps) {
-  const pathRef = useRef<SVGPathElement>(null);
-  const uniqueId = useId();
-  const gradientId = `sparkline-fill-${uniqueId}`;
   const chartPersonality = useChartPersonality({ animate, colorScheme });
   const resolvedColor = color ?? chartPersonality.colors[0] ?? 'var(--ds-color-primary)';
   const resolvedFill = fill ?? chartPersonality.useGradientFill;
   const resolvedCurve = curve ?? chartPersonality.lineMode;
   const resolvedShowEndDot = showEndDot ?? chartPersonality.showDots;
-  // The personality resolver already applies the explicit prop and then lets
-  // the system reduced-motion prohibition win. Re-applying `animate` here
-  // would allow `animate={true}` to bypass that accessibility decision.
+  // The personality resolver already folds the explicit prop and the system
+  // reduced-motion prohibition into one decision; re-applying `animate` here
+  // would let `animate={true}` bypass that accessibility outcome.
   const resolvedAnimate = chartPersonality.animate;
 
-  // Padding inside the SVG to prevent line/dot clipping at the edges.
-  const padding = { x: resolvedShowEndDot || showMinMax ? 4 : 2, y: 2 };
-
-  // Resolve the numeric width for scale computation. When width is a CSS
-  // string (e.g. '100%'), we use a fallback of 100px for the internal
-  // scale domain; the SVG stretches via the width attribute.
-  const numericWidth = typeof width === 'number' ? width : 100;
-
-  const curveFactory = CURVE_MAP[resolvedCurve] ?? curveMonotoneX;
-
-  // Compute scales, line path, and area path once per data/dimension change.
-  const computed = useMemo(() => {
-    if (!data || data.length === 0) return null;
-
-    const innerWidth = numericWidth - padding.x * 2;
-    const innerHeight = height - padding.y * 2;
-
-    const x = scaleLinear()
-      .domain([0, data.length - 1])
-      .range([padding.x, padding.x + innerWidth]);
-
-    const [yMin, yMax] = extent(data) as [number, number];
-    // When all values are equal, create a 1-unit range so the line
-    // renders at the vertical center rather than at the edge.
-    const y = scaleLinear()
-      .domain([yMin === yMax ? yMin - 0.5 : yMin, yMin === yMax ? yMax + 0.5 : yMax])
-      .range([padding.y + innerHeight, padding.y]);
-
-    const lineGenerator = d3Line<number>()
-      .x((_, i) => x(i))
-      .y((d) => y(d))
-      .curve(curveFactory);
-
-    const linePath = lineGenerator(data) ?? '';
-
-    let areaPath: string | null = null;
-    if (resolvedFill) {
-      const areaGenerator = d3Area<number>()
-        .x((_, i) => x(i))
-        .y0(padding.y + innerHeight)
-        .y1((d) => y(d))
-        .curve(curveFactory);
-
-      areaPath = areaGenerator(data) ?? null;
-    }
-
-    // Compute dot positions
-    const endDot = resolvedShowEndDot && data.length > 0
-      ? { cx: x(data.length - 1), cy: y(data[data.length - 1]) }
-      : null;
-
-    let minDot: { cx: number; cy: number } | null = null;
-    let maxDot: { cx: number; cy: number } | null = null;
-    if (showMinMax && data.length > 1) {
-      let minIdx = 0;
-      let maxIdx = 0;
-      for (let i = 1; i < data.length; i++) {
-        if (data[i] < data[minIdx]) minIdx = i;
-        if (data[i] > data[maxIdx]) maxIdx = i;
-      }
-      // Only show min/max dots if they differ from the end dot index
-      // to avoid overlapping markers at the same position.
-      if (!resolvedShowEndDot || minIdx !== data.length - 1) {
-        minDot = { cx: x(minIdx), cy: y(data[minIdx]) };
-      }
-      if (!resolvedShowEndDot || maxIdx !== data.length - 1) {
-        maxDot = { cx: x(maxIdx), cy: y(data[maxIdx]) };
-      }
-    }
-
-    return { linePath, areaPath, endDot, minDot, maxDot };
-  }, [data, numericWidth, height, padding.x, padding.y, curveFactory, resolvedFill, resolvedShowEndDot, showMinMax]);
-
-  if (!computed || !data || data.length === 0) {
-    return null;
-  }
-
-  // The stroke-dashoffset animation is handled by a CSS @keyframes rule
-  // injected via a <style> element scoped to this instance. This avoids
-  // D3 transitions (which would require an effect + DOM mutation) and
-  // automatically respects prefers-reduced-motion via a media query.
-  const animationName = `ds-sparkline-draw-${uniqueId.replace(/:/g, '')}`;
-
   return (
-    <svg
+    <SvgSparklineRenderer
+      data={data}
       width={width}
       height={height}
-      viewBox={`0 0 ${numericWidth} ${height}`}
-      className={['ds-chart-sparkline', className].filter(Boolean).join(' ')}
-      data-part="sparkline"
-      data-state="ready"
-      data-variant={resolvedCurve}
-      data-fill={resolvedFill ? 'true' : 'false'}
-      style={{ display: 'inline-block', verticalAlign: 'middle', overflow: 'visible', ...style }}
-      role="img"
-      aria-label={`Sparkline: ${data.length} data points, range ${Math.min(...data)} to ${Math.max(...data)}`}
-    >
-      {/* Scoped animation keyframes and reduced-motion override */}
-      {resolvedAnimate && (
-        <style>{`
-          @keyframes ${animationName} {
-            from { stroke-dashoffset: var(--sparkline-length); }
-            to { stroke-dashoffset: 0; }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .${animationName} {
-              animation: none !important;
-              stroke-dashoffset: 0 !important;
-            }
-          }
-        `}</style>
-      )}
-
-      {/* Area fill gradient for a top-to-bottom fade effect */}
-      {resolvedFill && computed.areaPath && (
-        <defs data-part="definitions">
-          <linearGradient id={gradientId} data-part="area-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop data-part="area-gradient-stop" data-position="start" offset="0%" stopColor={resolvedColor} stopOpacity={fillOpacity} />
-            <stop data-part="area-gradient-stop" data-position="end" offset="100%" stopColor={resolvedColor} stopOpacity={fillOpacity * 0.15} />
-          </linearGradient>
-        </defs>
-      )}
-
-      {/* Area fill path */}
-      {resolvedFill && computed.areaPath && (
-        <path
-          data-part="area"
-          d={computed.areaPath}
-          fill={`url(#${gradientId})`}
-          stroke="none"
-        />
-      )}
-
-      {/* Main line path */}
-      <path
-        ref={pathRef}
-        data-part="line"
-        d={computed.linePath}
-        fill="none"
-        stroke={resolvedColor}
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={resolvedAnimate ? animationName : undefined}
-        style={resolvedAnimate ? {
-          // The path length is estimated generously; the actual dasharray
-          // value only needs to be >= the real path length for the drawing
-          // trick to work. 2000 covers any reasonable sparkline width.
-          strokeDasharray: 2000,
-          strokeDashoffset: 0,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ['--sparkline-length' as any]: 2000,
-          animation: `${animationName} ${chartPersonality.animationDuration}ms ease-out forwards`,
-        } : undefined}
-      />
-
-      {/* End dot: highlights the most recent value */}
-      {computed.endDot && (
-        <circle
-          data-part="end-dot"
-          cx={computed.endDot.cx}
-          cy={computed.endDot.cy}
-          r={strokeWidth + 1}
-          fill={resolvedColor}
-          strokeWidth={1}
-        />
-      )}
-
-      {/* Min dot: marks the lowest value */}
-      {computed.minDot && (
-        <circle
-          data-part="min-dot"
-          cx={computed.minDot.cx}
-          cy={computed.minDot.cy}
-          r={strokeWidth}
-          strokeWidth={1}
-        />
-      )}
-
-      {/* Max dot: marks the highest value */}
-      {computed.maxDot && (
-        <circle
-          data-part="max-dot"
-          cx={computed.maxDot.cx}
-          cy={computed.maxDot.cy}
-          r={strokeWidth}
-          strokeWidth={1}
-        />
-      )}
-    </svg>
+      color={resolvedColor}
+      fill={resolvedFill}
+      fillOpacity={fillOpacity}
+      strokeWidth={strokeWidth}
+      curve={resolvedCurve}
+      showEndDot={resolvedShowEndDot}
+      showMinMax={showMinMax}
+      animate={resolvedAnimate}
+      animationDuration={chartPersonality.animationDuration}
+      className={className}
+      style={style}
+    />
   );
 });
