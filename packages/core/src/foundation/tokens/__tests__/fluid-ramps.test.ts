@@ -28,10 +28,19 @@ const spacing = readFileSync(join(FOUNDATION, 'spacing.css'), 'utf-8');
 const MIN_WIDTH_REM = 22.5;
 const MAX_WIDTH_REM = 80;
 
-/** Every value the static ramp declares, so a bound can be checked for membership. */
+/**
+ * Every value the static ramp declares, so a bound can be checked for
+ * membership. Steps declare either a bare literal or the density-axis form
+ * calc(<literal> * var(--ds-density-scale, 1)); the literal is the value at
+ * density 1 in both shapes, and the axis token is matched exactly so a
+ * different multiplier cannot slip through as a plain step.
+ */
 function staticSteps(css: string, prefix: string): Set<number> {
   const steps = new Set<number>();
-  const pattern = new RegExp(`^\\s*${prefix}[a-z0-9-]+:\\s*([0-9.]+)rem;`, 'gm');
+  const pattern = new RegExp(
+    `^\\s*${prefix}[a-z0-9-]+:\\s*(?:calc\\(\\s*)?([0-9.]+)rem(?:\\s*\\*\\s*var\\(--ds-density-scale,\\s*1\\)\\s*\\))?;`,
+    'gm'
+  );
   for (const match of css.matchAll(pattern)) steps.add(Number(match[1]));
   return steps;
 }
