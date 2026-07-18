@@ -2827,8 +2827,13 @@ html[data-theme='dark'],
 html.dark {
   color-scheme: dark;
 
-  --ds-color-bg-primary: #0b1220;
-  --ds-color-bg-secondary: #111827;
+  /* Semantic neutrals reference the dark neutral ramp below wherever a ramp
+     step carries the exact same value, so a ramp override cascades here.
+     Values without an exact step (#172033, #182235, #101826, #152033,
+     #f3f4f6, #1e293b) stay literal until the ramp itself grows a matching
+     step; approximating to a near step would be a visual change. */
+  --ds-color-bg-primary: var(--ds-color-neutral-50);
+  --ds-color-bg-secondary: var(--ds-color-neutral-100);
   --ds-color-bg-tertiary: #172033;
   --ds-color-bg-elevated: #182235;
   --ds-color-bg-overlay: rgba(2, 6, 23, 0.88);
@@ -2836,13 +2841,13 @@ html.dark {
   --ds-color-surface-muted: #152033;
 
   --ds-color-text-primary: #f3f4f6;
-  --ds-color-text-secondary: #cbd5e1;
-  --ds-color-text-tertiary: #94a3b8;
-  --ds-color-text-muted: #94a3b8;
+  --ds-color-text-secondary: var(--ds-color-neutral-700);
+  --ds-color-text-tertiary: var(--ds-color-neutral-600);
+  --ds-color-text-muted: var(--ds-color-neutral-600);
   --ds-color-text-on-primary: #ffffff;
-  --ds-color-text-inverse: #020617;
+  --ds-color-text-inverse: var(--ds-color-neutral-0);
 
-  --ds-color-border-primary: #334155;
+  --ds-color-border-primary: var(--ds-color-neutral-300);
   --ds-color-border-secondary: #1e293b;
   --ds-color-border-focus: var(--ds-color-primary-400);
   /* Dark-surface focus ring must read >=3:1 on the dark canvas; the primary-400
@@ -5903,6 +5908,12 @@ html.dark {
  * Tenant-free reusable styling contracts for application surfaces and compact
  * data patterns. Apps can compose these tokens without depending on a vertical
  * namespace.
+ *
+ * This file is imported inside `rottay-components`, below a Tailwind v4
+ * host's preflight (P-76). It may carry ONLY: custom properties, keyframes,
+ * `!important` declarations, and non-preflight-killable properties. The
+ * killable paint (padding/margin/border/background/box-shadow) lives in
+ * patterns-paint.css, unlayered; css-layer-paint-gate.mjs enforces the split.
  */
 
 :root {
@@ -6463,12 +6474,9 @@ html.dark {
   width: 100%;
   max-width: 100%;
   overflow: hidden;
-  border: 1px solid var(--ds-workspace-shell-border, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-base);
-  background: var(--ds-workspace-shell-bg);
-  box-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
   animation: ds-surface-enter 180ms ease-out;
 }
 
@@ -6506,7 +6514,6 @@ html.dark {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: var(--ds-workspace-shell-overlay);
 }
 
 :where(.ds-workspace-frame__inner) {
@@ -6517,10 +6524,6 @@ html.dark {
 :where(.ds-workspace-frame) > :not(:where(.ds-workspace-frame__inner)) {
   position: relative;
   z-index: 1;
-}
-
-:where(.ds-workspace-frame--padded) > :where(.ds-workspace-frame__inner) {
-  padding: var(--ds-workspace-frame-padding, clamp(16px, 2.2vw, 28px));
 }
 
 :where(.ds-workspace-frame--loading) {
@@ -6542,8 +6545,6 @@ html.dark {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: var(--ds-command-grid-bg-strong);
-  background-size: var(--ds-command-grid-size) var(--ds-command-grid-size);
   opacity: var(--ds-command-grid-opacity, 0.18);
 }
 
@@ -6563,21 +6564,14 @@ html.dark {
 :where(.ds-surface-hero) {
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-workspace-hero-bg);
-  box-shadow: var(--ds-card-shadow);
 }
 
 :where(.ds-surface-card, .ds-surface-rail-card) {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  border: 1px solid var(--ds-premium-card-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-premium-card-bg);
-  background-clip: padding-box;
-  box-shadow: var(--ds-card-shadow);
   animation: ds-surface-enter var(--ds-duration-slow, 300ms) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both;
   transition:
     border-color var(--ds-duration-fast, 150ms) ease,
@@ -6594,12 +6588,6 @@ html.dark {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image:
-    var(--ds-surface-card-grid-bg),
-    var(--ds-premium-card-sheen);
-  background-size:
-    var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size),
-    auto;
   opacity: 0.28;
   mask-image: linear-gradient(180deg, var(--ds-color-text-primary), transparent 82%);
   transition: opacity var(--ds-duration-fast, 150ms) ease;
@@ -6617,8 +6605,6 @@ html.dark {
 }
 
 :where(.ds-surface-card, .ds-surface-rail-card):hover {
-  border-color: var(--ds-premium-card-border-hover);
-  box-shadow: var(--ds-card-shadow-hover);
   transform: translateY(-1px);
   filter: saturate(1.01);
 }
@@ -6631,9 +6617,7 @@ html.dark {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
-  background: color-mix(in srgb, var(--ds-surface-panel-bg) 92%, var(--ds-surface-card-bg));
   transition:
     border-color var(--ds-duration-fast, 150ms) ease,
     background var(--ds-duration-fast, 150ms) ease,
@@ -6646,8 +6630,6 @@ html.dark {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image: var(--ds-surface-card-grid-bg);
-  background-size: var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size);
   opacity: 0.16;
   mask-image: linear-gradient(180deg, var(--ds-color-text-primary), transparent 76%);
 }
@@ -6657,16 +6639,8 @@ html.dark {
   z-index: 1;
 }
 
-:where(.ds-surface-panel):focus-within {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
-  box-shadow: var(--ds-shadow-focus-ring);
-}
-
 :where(.ds-surface-control-row) {
-  border: 1px solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-sm);
-  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
 }
 
 :where(.ds-surface-table-card) {
@@ -6675,10 +6649,7 @@ html.dark {
   width: 100%;
   max-width: 100%;
   overflow: hidden;
-  border: 1px solid var(--ds-premium-card-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-premium-card-bg);
-  box-shadow: var(--ds-card-shadow);
   transition:
     border-color var(--ds-duration-fast, 150ms) ease,
     box-shadow var(--ds-duration-fast, 150ms) ease,
@@ -6698,10 +6669,7 @@ html.dark {
   isolation: isolate;
   overflow: hidden;
   color: var(--ds-color-text-primary);
-  background: var(--ds-premium-card-bg);
-  border: 1px solid var(--ds-premium-card-border);
   border-radius: var(--ds-radius-md);
-  box-shadow: var(--ds-card-shadow);
   animation: ds-surface-enter var(--ds-duration-slow, 300ms) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both;
   transition:
     border-color var(--ds-duration-fast, 150ms) ease,
@@ -6711,8 +6679,6 @@ html.dark {
 }
 
 :where(.ds-rich-card--interactive):hover {
-  border-color: var(--ds-premium-card-border-hover);
-  box-shadow: var(--ds-card-shadow-hover);
   transform: translateY(-1px);
   filter: saturate(1.015);
 }
@@ -6721,50 +6687,20 @@ html.dark {
   opacity: 0.44;
 }
 
-:where(.ds-rich-card--interactive):focus-within {
-  border-color: var(--ds-premium-card-border-hover);
-  box-shadow: var(--ds-card-shadow-hover), var(--ds-shadow-focus-ring);
-}
-
-:where(.ds-rich-card--selected) {
-  border-color: var(--ds-premium-card-selected-border);
-  box-shadow: var(--ds-card-shadow), var(--ds-premium-card-selected-ring);
-}
-
 :where(.ds-rich-card__header) {
   position: relative;
   overflow: hidden;
-  background: var(--ds-premium-card-header-bg);
-  border-bottom: 1px solid var(--ds-color-border-subtle);
-}
-
-:where(.ds-rich-card__section) {
-  background: var(--ds-premium-card-section-bg);
-  border-top: 1px solid var(--ds-color-border-subtle);
-}
-
-:where(.ds-rich-card__section--alt) {
-  background: var(--ds-premium-card-section-alt-bg);
-}
-
-:where(.ds-rich-card__footer) {
-  background: var(--ds-premium-card-footer-bg);
-  border-top: 1px solid var(--ds-color-border-subtle);
 }
 
 :where(.ds-rich-card__icon) {
-  border: 1px solid var(--ds-icon-tile-border);
   border-radius: var(--ds-radius-md);
   color: var(--ds-color-primary);
-  background: var(--ds-icon-tile-bg);
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
   transition:
     border-color var(--ds-duration-fast, 150ms) ease,
     transform var(--ds-duration-fast, 150ms) ease;
 }
 
 :where(.ds-rich-card--interactive:hover, .ds-rich-card--interactive:focus-within) :where(.ds-rich-card__icon) {
-  border-color: color-mix(in srgb, currentColor 34%, var(--ds-color-border));
   transform: translateY(-1px);
 }
 
@@ -6813,18 +6749,6 @@ html.dark {
 }
 
 :where(.ds-metric-card):where(.ds-rich-card)::before {
-  background-image:
-    var(--ds-surface-card-grid-bg),
-    linear-gradient(115deg, transparent 0%, var(--ds-surface-highlight-faint) 46%, transparent 64%),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 5%, transparent),
-      transparent 52%
-    );
-  background-size:
-    18px 18px,
-    18px 18px,
-    auto;
   opacity: 0.34;
 }
 
@@ -6841,17 +6765,11 @@ html.dark {
   width: 132px;
   height: 132px;
   pointer-events: none;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent) 0%,
-    transparent 66%
-  );
   opacity: 0.3;
 }
 
 :where(.ds-metric-card__header) {
   min-height: 38px;
-  margin-bottom: 10px;
   flex-shrink: 0;
 }
 
@@ -6864,10 +6782,6 @@ html.dark {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--ds-signal-card-accent, var(--ds-color-primary));
-  box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 10%, transparent),
-    0 0 12px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, transparent);
 }
 
 :where(.ds-metric-card__body) {
@@ -6905,13 +6819,8 @@ html.dark {
 :where(.ds-metric-card__icon) {
   width: 38px;
   height: 38px;
-  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 20%, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
   color: var(--ds-color-primary);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card-bg) 84%, transparent), transparent),
-    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 12%, var(--ds-icon-tile-bg));
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, transparent);
 }
 
 :where(.ds-metric-card__value, .ds-stat-card__value) {
@@ -6944,12 +6853,8 @@ html.dark {
   flex-shrink: 0;
   min-height: 26px;
   max-width: 45%;
-  padding: 5px 8px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 13%, var(--ds-color-border));
   border-radius: 999px;
-  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 72%, transparent);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -6959,25 +6864,9 @@ html.dark {
   text-overflow: ellipsis;
 }
 
-:where(.ds-metric-card__trend--up) {
-  border-color: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-surface-card-bg));
-}
-
-:where(.ds-metric-card__trend--down) {
-  border-color: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card-bg));
-}
-
 :where(.ds-metric-card__footer) {
   flex-shrink: 0;
   min-height: 44px;
-  margin-top: auto;
-  padding-top: 12px;
-}
-
-:where(.ds-metric-card__progress-meta) {
-  margin-bottom: 7px;
 }
 
 :where(.ds-metric-card__progress-label, .ds-metric-card__progress-value) {
@@ -7001,12 +6890,6 @@ html.dark {
   height: var(--ds-metric-card-meter-height, 6px);
   overflow: hidden;
   border-radius: 999px;
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border) 70%, transparent), color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent)),
-    color-mix(in srgb, var(--ds-color-border) 58%, transparent);
-  box-shadow:
-    inset 0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--ds-surface-card-bg) 62%, transparent);
 }
 
 :where(.ds-metric-card__progress-bar) {
@@ -7014,8 +6897,6 @@ html.dark {
   overflow: hidden;
   height: 100%;
   border-radius: inherit;
-  background: var(--ds-meter-fill);
-  box-shadow: 0 0 16px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 32%, transparent);
   transition: width 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -7023,14 +6904,12 @@ html.dark {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, var(--ds-surface-highlight-medium), transparent);
   transform: translateX(-100%);
   animation: ds-meter-sweep 1.4s ease-out 120ms 1;
 }
 
 :where(.ds-metric-card__status-row) {
   min-width: 0;
-  margin-top: 10px;
 }
 
 :where(.ds-metric-card__status-row) > * {
@@ -7054,28 +6933,17 @@ html.dark {
 :where(.ds-metric-card__status-tag) {
   flex-shrink: 0;
   max-width: 44%;
-  padding: 3px 7px;
-  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 18%, var(--ds-color-border));
   border-radius: 999px;
   color: var(--ds-signal-card-accent, var(--ds-color-primary));
-  background: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, var(--ds-surface-card-bg));
 }
 
 :where(.ds-metric-card--interactive):hover {
-  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, var(--ds-color-border));
-  box-shadow: var(--ds-signal-card-shadow-hover);
   transform: translateY(-2px);
   filter: saturate(1.015);
 }
 
 :where(.ds-metric-card-link):focus-visible :where(.ds-metric-card) {
-  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 42%, var(--ds-color-border));
-  box-shadow: var(--ds-signal-card-shadow-hover), var(--ds-shadow-focus-ring);
   transform: translateY(-1px);
-}
-
-:where(.ds-metric-card--interactive:hover, .ds-metric-card-link:focus-visible) :where(.ds-metric-card__icon) {
-  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 40%, var(--ds-color-border));
 }
 
 :is(.ds-command-home-shell) {
@@ -7103,16 +6971,8 @@ html.dark {
   min-width: 0;
   width: min(100%, var(--ds-command-home-max-width));
   max-width: var(--ds-command-home-max-width);
-  margin-inline: auto;
-  padding: var(--ds-command-home-console-padding);
   overflow: hidden;
-  border: 1px solid var(--ds-command-home-panel-border);
   border-radius: var(--ds-radius-lg, 12px);
-  background-clip: padding-box;
-  background: var(--ds-command-home-console-bg);
-  box-shadow:
-    var(--ds-command-home-panel-shadow),
-    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
 }
 
 :is(.ds-command-home-console > *) {
@@ -7126,24 +6986,14 @@ html.dark {
   gap: 18px;
   width: 100%;
   min-width: 0;
-  padding: 16px 18px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-lg, 12px);
-  background-clip: padding-box;
-  background: var(--ds-command-home-hero-bg);
-  box-shadow:
-    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
-    0 12px 30px color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
 }
 
 :is(.ds-command-home-icon, .ds-command-home-hero__mark, .ds-command-home-message-avatar, .ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
   display: grid;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid var(--ds-command-home-icon-border);
   color: var(--ds-color-primary);
-  background: var(--ds-command-home-icon-bg);
 }
 
 :is(.ds-command-home-hero__mark) {
@@ -7161,11 +7011,8 @@ html.dark {
 
 :is(.ds-command-home-hero__pill) {
   min-height: 30px;
-  padding: 6px 10px;
-  border: 1px solid var(--ds-command-home-control-border);
   border-radius: var(--ds-radius-sm, 6px);
   color: var(--ds-color-text-secondary);
-  background: var(--ds-command-home-control-bg);
   font-size: 0.75rem;
   font-weight: 760;
   line-height: 1.2;
@@ -7186,7 +7033,6 @@ html.dark {
 }
 
 :is(.ds-command-home-title) {
-  margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-display, var(--ds-font-family-heading, var(--ds-font-family-base)));
   font-size: var(--ds-command-home-title-size, 2rem);
@@ -7216,23 +7062,17 @@ html.dark {
   height: 8px;
   flex: 0 0 auto;
   border-radius: 999px;
-  background: var(--ds-color-success);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
 }
 
 :is(.ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
   width: 34px;
   height: 34px;
-  border-radius: var(--ds-radius-sm, 6px);
 }
 
 :is(.ds-command-home-error) {
   justify-self: center;
   width: min(100%, var(--ds-command-home-max-width));
-  padding: 10px 12px;
-  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-sm, 6px);
-  background: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-surface-card-bg));
   color: var(--ds-color-text-primary);
   font-size: 0.8125rem;
 }
@@ -7242,11 +7082,7 @@ html.dark {
   gap: var(--ds-command-home-panel-gap);
   width: 100%;
   min-width: 0;
-  padding: 16px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-lg, 12px);
-  background-clip: padding-box;
-  background: var(--ds-command-home-surface-bg);
 }
 
 :is(.ds-command-home-launchpad__header, .ds-launchpad__header) {
@@ -7274,14 +7110,7 @@ html.dark {
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 10px;
   min-width: 0;
-  padding: 13px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-md, 8px);
-  background-clip: padding-box;
-  background: var(--ds-command-home-panel-bg);
-  box-shadow:
-    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
-    0 10px 24px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
   transition:
     border-color var(--ds-duration-fast, 150ms) ease,
     box-shadow var(--ds-duration-fast, 150ms) ease,
@@ -7289,8 +7118,6 @@ html.dark {
 }
 
 :is(.ds-command-home-launchpad-card, .ds-launchpad-card):hover {
-  border-color: var(--ds-command-home-control-hover-border);
-  box-shadow: 0 16px 32px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   transform: translateY(-1px);
 }
 
@@ -7318,21 +7145,15 @@ html.dark {
 :is(.ds-command-home-launchpad-card[data-tone='green'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='green'] .ds-command-home-capability__icon),
 :is(.ds-command-home-next-move[data-tone='green'] .ds-command-home-prompt-row__icon) {
   color: var(--ds-color-success);
-  border-color: color-mix(in srgb, var(--ds-color-success) 32%, var(--ds-color-border-primary));
-  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card-bg));
 }
 
 :is(.ds-command-home-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon),
 :is(.ds-command-home-next-move[data-tone='teal'] .ds-command-home-prompt-row__icon) {
   color: var(--ds-color-success);
-  border-color: color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-primary));
-  background: color-mix(in srgb, var(--ds-color-success) 7%, var(--ds-surface-card-bg));
 }
 
 :is(.ds-command-home-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon) {
   color: var(--ds-color-warning);
-  border-color: color-mix(in srgb, var(--ds-color-warning) 36%, var(--ds-color-border-primary));
-  background: color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-surface-card-bg));
 }
 
 :is(.ds-command-home-command-grid) {
@@ -7351,14 +7172,7 @@ html.dark {
 :is(.ds-command-home-chat-panel, .ds-ai-chat-panel) {
   display: grid;
   gap: 14px;
-  padding: 14px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-lg, 12px);
-  background-clip: padding-box;
-  background: var(--ds-command-home-surface-bg);
-  box-shadow:
-    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
-    0 14px 34px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 
 :is(.ds-command-home-rail) {
@@ -7373,12 +7187,7 @@ html.dark {
   display: grid;
   place-items: center;
   min-height: 178px;
-  padding: 22px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-lg, 12px);
-  background:
-    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent 46%),
-    var(--ds-command-home-panel-bg);
   text-align: center;
 }
 
@@ -7387,11 +7196,8 @@ html.dark {
   place-items: center;
   width: 52px;
   height: 52px;
-  margin-block-end: 12px;
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-md, 8px);
   color: var(--ds-color-primary);
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg));
 }
 
 :is(.ds-command-home-brief__title) {
@@ -7413,10 +7219,7 @@ html.dark {
   min-height: 240px;
   max-height: 380px;
   min-width: 0;
-  padding: 14px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-command-home-panel-bg);
   overflow: auto;
 }
 
@@ -7428,27 +7231,17 @@ html.dark {
 :is(.ds-command-home-message-avatar, .ds-ai-chat-message-avatar) {
   width: 30px;
   height: 30px;
-  margin-inline-end: 8px;
   border-radius: var(--ds-radius-sm, 6px);
 }
 
 :is(.ds-command-home-message, .ds-ai-chat-message) {
   max-width: min(78%, 720px);
   min-width: 0;
-  padding: 12px 13px;
-  border: 1px solid var(--ds-color-border-primary);
   border-radius: var(--ds-radius-md, 8px);
-  box-shadow: var(--ds-shadow-xs);
-}
-
-:is(.ds-command-home-message--assistant, .ds-ai-chat-message--assistant) {
-  background: color-mix(in srgb, var(--ds-surface-card-bg) 88%, var(--ds-color-primary) 4%);
 }
 
 :is(.ds-command-home-message--user, .ds-ai-chat-message--user) {
   color: var(--ds-color-text-on-primary, #fff);
-  background: var(--ds-color-primary);
-  border-color: color-mix(in srgb, var(--ds-color-primary) 75%, var(--ds-color-border-primary));
 }
 
 :is(.ds-command-home-message__text, .ds-ai-chat-message__text) {
@@ -7458,17 +7251,10 @@ html.dark {
   white-space: pre-wrap;
 }
 
-:is(.ds-command-home-tools, .ds-ai-chat-tools) {
-  margin-block-start: 8px;
-}
-
 :is(.ds-command-home-tool-call, .ds-ai-chat-tool-call) {
   width: fit-content;
   max-width: 100%;
-  padding: 5px 7px;
-  border: 1px solid var(--ds-command-home-control-border);
   border-radius: var(--ds-radius-sm, 6px);
-  background: var(--ds-command-home-control-bg);
 }
 
 :is(.ds-command-home-tool-call__text, .ds-ai-chat-tool-call__text, .ds-command-home-message__error, .ds-ai-chat-message__error) {
@@ -7477,7 +7263,6 @@ html.dark {
 }
 
 :is(.ds-command-home-message__error, .ds-ai-chat-message__error) {
-  margin-block-start: 6px;
   color: var(--ds-color-danger, var(--ds-color-error));
 }
 
@@ -7498,10 +7283,6 @@ html.dark {
   gap: 12px;
   min-width: 0;
   width: 100%;
-  padding: 10px 14px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
-  border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-command-home-control-bg);
   color: var(--ds-color-text-primary);
   cursor: pointer;
   text-align: start;
@@ -7512,8 +7293,6 @@ html.dark {
 }
 
 :is(.ds-command-home-prompt-row, .ds-ai-prompt-row):hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 48%, var(--ds-color-border-primary));
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   transform: translateY(-1px);
 }
 
@@ -7543,11 +7322,7 @@ html.dark {
   width: 100%;
   height: var(--ds-command-home-compact-action-height);
   min-width: 0;
-  padding: 10px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-lg, 12px);
-  background: var(--ds-command-home-panel-bg-strong);
-  box-shadow: 0 18px 42px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
 }
 
 :is(.ds-command-home-composer__toolbar, .ds-command-home-composer__footer, .ds-ai-composer__toolbar, .ds-ai-composer__footer) {
@@ -7569,9 +7344,6 @@ html.dark {
 }
 
 :is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button) {
-  border: 1px solid var(--ds-command-home-control-border);
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(--ds-command-home-control-bg);
   color: var(--ds-color-text-secondary);
   cursor: pointer;
   font-family: inherit;
@@ -7586,7 +7358,6 @@ html.dark {
   align-items: center;
   gap: 7px;
   min-height: 32px;
-  padding: 6px 10px;
   font-size: 0.8125rem;
   font-weight: 690;
 }
@@ -7596,13 +7367,10 @@ html.dark {
   place-items: center;
   width: 32px;
   height: 32px;
-  padding: 0;
 }
 
 :is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button):hover {
-  border-color: var(--ds-command-home-control-hover-border);
   color: var(--ds-color-primary);
-  background: var(--ds-command-home-control-hover-bg);
 }
 
 :is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button):disabled {
@@ -7612,7 +7380,6 @@ html.dark {
 
 :is(.ds-command-home-send, .ds-ai-send) {
   min-width: 48px;
-  padding-inline: 16px;
 }
 
 :is(.ds-command-home-live-pill, .ds-live-pill) {
@@ -7627,14 +7394,7 @@ html.dark {
   display: grid;
   gap: 12px;
   min-width: 0;
-  padding: 14px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-lg, 12px);
-  background-clip: padding-box;
-  background: var(--ds-command-home-surface-bg);
-  box-shadow:
-    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
-    0 14px 32px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 
 :is(.ds-command-home-rail-card__title, .ds-rail-card__title) {
@@ -7651,11 +7411,8 @@ html.dark {
 }
 
 :is(.ds-command-home-rail-card__badge, .ds-rail-card__badge) {
-  padding: 5px 10px;
-  border: 1px solid color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-sm, 6px);
   color: var(--ds-color-success);
-  background: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-surface-card-bg));
   font-size: 0.75rem;
   font-weight: 760;
 }
@@ -7672,14 +7429,12 @@ html.dark {
   height: 7px;
   overflow: hidden;
   border-radius: 999px;
-  background: var(--ds-command-home-meter-bg);
 }
 
 :is(.ds-command-home-meter, .ds-meter) > span {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--ds-command-home-meter-fill);
 }
 
 :is(.ds-command-home-next-move) {
@@ -7687,10 +7442,7 @@ html.dark {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 10px;
   min-width: 0;
-  padding: 11px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-command-home-control-bg);
   transition:
     border-color var(--ds-duration-fast, 150ms) ease,
     box-shadow var(--ds-duration-fast, 150ms) ease,
@@ -7698,8 +7450,6 @@ html.dark {
 }
 
 :is(.ds-command-home-next-move):hover {
-  border-color: var(--ds-command-home-control-hover-border);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
   transform: translateY(-1px);
 }
 
@@ -7744,10 +7494,7 @@ html.dark {
   min-width: 0;
   min-height: 40px;
   height: 100%;
-  padding: 9px 11px;
-  border: 1px solid var(--ds-command-home-panel-border-soft);
   border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-command-home-control-bg);
   color: var(--ds-color-text-primary);
   font-size: 0.875rem;
   font-weight: 760;
@@ -7758,8 +7505,6 @@ html.dark {
 }
 
 :is(.ds-command-home-search-lane):hover {
-  border-color: var(--ds-command-home-control-hover-border);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
   transform: translateY(-1px);
 }
 
@@ -7770,7 +7515,6 @@ html.dark {
   gap: 12px;
   width: 100%;
   min-width: 0;
-  padding-inline: 4px;
   color: var(--ds-color-text-secondary);
 }
 
@@ -7778,7 +7522,6 @@ html.dark {
   display: block;
   min-width: 0;
   max-width: 100%;
-  margin: 0;
   font-size: 0.75rem;
   line-height: 1.45;
   writing-mode: horizontal-tb;
@@ -7838,7 +7581,6 @@ html.dark {
 
   :is(.ds-command-home-console) {
     min-height: auto;
-    padding: 14px;
   }
 
   :is(.ds-command-home-message, .ds-ai-chat-message) {
@@ -7885,15 +7627,8 @@ html.dark {
   max-width: var(--ds-command-home-max-width);
   min-width: 0;
   min-height: var(--ds-command-home-console-min-height);
-  margin-inline: auto;
-  padding: var(--ds-command-home-console-padding);
   overflow: hidden;
-  border: 1px solid var(--ds-command-home-panel-border);
   border-radius: 12px;
-  background: var(--ds-command-home-console-bg);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    var(--ds-command-home-panel-shadow);
 }
 
 .ds-command-home-shell .ds-command-home-hero,
@@ -7904,14 +7639,7 @@ html.dark {
   position: relative;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--ds-command-home-panel-border);
   border-radius: 10px;
-  background-clip: padding-box;
-  background: var(--ds-command-home-surface-bg);
-  box-shadow:
-    0 1px 2px rgba(22, 42, 67, 0.08),
-    0 12px 28px rgba(22, 42, 67, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .ds-command-home-shell .ds-command-home-hero {
@@ -7920,8 +7648,6 @@ html.dark {
   align-items: center;
   gap: 18px;
   width: 100%;
-  padding: 16px 18px;
-  background: var(--ds-command-home-hero-bg);
 }
 
 .ds-command-home-shell .ds-command-home-hero__status {
@@ -7939,10 +7665,7 @@ html.dark {
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border: 1px solid var(--ds-command-home-icon-border);
-  border-radius: var(--ds-radius-sm, 6px);
   color: var(--ds-color-primary);
-  background: var(--ds-command-home-icon-bg);
 }
 
 .ds-command-home-shell .ds-command-home-hero__mark {
@@ -8026,7 +7749,6 @@ html.dark {
   display: grid;
   gap: var(--ds-command-home-panel-gap);
   width: 100%;
-  padding: 18px;
 }
 
 .ds-command-home-shell .ds-launchpad__header {
@@ -8049,13 +7771,8 @@ html.dark {
   gap: 10px;
   min-width: 0;
   min-height: 110px;
-  padding: 14px;
   border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
   border-radius: var(--ds-radius-sm, 6px);
-  background-clip: padding-box;
-  background: var(--ds-command-home-card-bg);
-  background-size: 24px 24px, 24px 24px, auto;
-  box-shadow: var(--ds-command-home-card-shadow);
 }
 
 .ds-command-home-shell .ds-launchpad-card[data-tone='blue'],
@@ -8080,13 +7797,11 @@ html.dark {
 
 .ds-command-home-shell .ds-launchpad-card:hover {
   border-color: color-mix(in srgb, var(--ds-command-home-card-tone) 30%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
-  box-shadow: var(--ds-command-home-card-shadow-hover);
   transform: translateY(-1px);
 }
 
 .ds-command-home-shell .ds-launchpad-card__arrow {
   align-self: start;
-  margin-block-start: 2px;
   color: var(--ds-color-text-muted);
 }
 
@@ -8103,10 +7818,6 @@ html.dark {
   display: grid;
   gap: 14px;
   min-width: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
 }
 
 .ds-command-home-shell .ds-command-home-rail {
@@ -8121,17 +7832,12 @@ html.dark {
 .ds-command-home-shell .ds-command-home-rail-card {
   display: grid;
   gap: 12px;
-  padding: 14px;
-  background: var(--ds-command-home-card-bg);
-  background-size: 24px 24px, 24px 24px, auto;
-  box-shadow: var(--ds-command-home-card-shadow);
 }
 
 .ds-command-home-shell .ds-command-home-brief {
   display: grid;
   place-items: center;
   min-height: 178px;
-  padding: 22px;
   text-align: center;
 }
 
@@ -8148,9 +7854,7 @@ html.dark {
   gap: 12px;
   width: 100%;
   min-width: 0;
-  padding: 10px 14px;
   border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
-  border-radius: var(--ds-radius-sm, 6px);
   color: var(--ds-color-text-primary);
   background: var(--ds-command-home-card-bg) !important;
   background-size: 24px 24px, 24px 24px, auto !important;
@@ -8179,9 +7883,6 @@ html.dark {
   width: 100%;
   height: var(--ds-command-home-compact-action-height);
   min-width: 0;
-  padding: 12px;
-  border-color: var(--ds-command-home-panel-border);
-  background: var(--ds-command-home-panel-bg-strong);
 }
 
 .ds-command-home-shell .ds-ai-composer__input {
@@ -8202,10 +7903,7 @@ html.dark {
 
 .ds-command-home-shell .ds-ai-context-select,
 .ds-command-home-shell .ds-ai-icon-button {
-  border: 1px solid var(--ds-command-home-control-border);
-  border-radius: var(--ds-radius-sm, 6px);
   color: var(--ds-color-text-secondary);
-  background: var(--ds-command-home-control-bg);
 }
 
 .ds-command-home-shell .ds-ai-context-select {
@@ -8213,7 +7911,6 @@ html.dark {
   align-items: center;
   gap: 7px;
   min-height: 32px;
-  padding: 6px 10px;
   font-size: 0.8125rem;
   font-weight: 690;
 }
@@ -8223,7 +7920,6 @@ html.dark {
   place-items: center;
   width: 32px;
   height: 32px;
-  padding: 0;
 }
 
 .ds-command-home-shell .ds-command-home-search-card {
@@ -8266,14 +7962,12 @@ html.dark {
   gap: 10px;
   min-height: 40px;
   height: 100%;
-  padding: 9px 11px;
 }
 
 .ds-command-home-shell .ds-command-home-next-move {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 10px;
-  padding: 11px;
 }
 
 .ds-command-home-shell .ds-command-home-footnote {
@@ -8283,7 +7977,6 @@ html.dark {
   gap: 12px;
   width: 100%;
   min-width: 0;
-  padding-inline: 4px;
 }
 
 .ds-command-home-shell .ds-command-home-footnote__text,
@@ -8291,7 +7984,6 @@ html.dark {
   display: block;
   min-width: 0;
   max-width: 100%;
-  margin: 0;
   writing-mode: horizontal-tb;
   white-space: normal;
   word-break: normal;
@@ -8382,9 +8074,14 @@ html.dark {
  *
  * Targets:
  * - .ds-collapse: Token wrapper (receives CSS custom properties)
- * - .ant-collapse-*: Ant Design internal classes (Titan engine)
- * - [data-collapse-*]: DaisyUI/custom attributes (Hermes engine)
- * - Native elements: For Apollo (vanilla) engine
+ * - .ant-collapse-*: Ant Design internal classes (classic engine)
+ *
+ * This file is imported inside `rottay-components`, below a Tailwind v4
+ * host's preflight (P-76). The wrapper family's killable paint lives in
+ * collapse-paint.css, unlayered. The `.ant-*` channels here are contested by
+ * antd's unlayered cssinjs runtime and by classic theme.css in
+ * `rottay-engines`; they must stay layered (see collapse-paint.css header)
+ * and are declared residue in css-layer-paint-gate.allowlist.json.
  */
 
 /* =============================================================================
@@ -8397,12 +8094,7 @@ html.dark {
   box-sizing: border-box;
 
   /* Apply root tokens */
-  background: var(--ds-collapse-root-bg);
-  border-color: var(--ds-collapse-root-border-color);
-  border-width: var(--ds-collapse-root-border-width);
-  border-style: solid;
   border-radius: var(--ds-collapse-root-border-radius);
-  box-shadow: var(--ds-collapse-root-shadow);
 
   /* Ensure full width */
   width: 100%;
@@ -8518,12 +8210,6 @@ html.dark {
    GHOST VARIANT
    ============================================================================= */
 
-.ds-collapse--ghost {
-  background: var(--ds-collapse-root-ghost-idle-bg);
-  border: none;
-  box-shadow: none;
-}
-
 .ds-collapse--ghost .ant-collapse-header {
   background: var(--ds-collapse-header-ghost-idle-bg) !important;
   color: var(--ds-collapse-header-ghost-idle-color) !important;
@@ -8552,11 +8238,6 @@ html.dark {
 /* =============================================================================
    BORDERED VARIANT
    ============================================================================= */
-
-.ds-collapse--bordered {
-  background: var(--ds-collapse-root-bordered-idle-bg);
-  border-color: var(--ds-collapse-root-bordered-idle-border-color);
-}
 
 /* =============================================================================
    SIZE VARIANTS
@@ -13523,6 +13204,682 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 
 }
+
+/* P-76 paint bridges. DELIBERATELY UNLAYERED (same law as the skins below):
+   the preflight-killable paint of the layered patterns/collapse bridges.
+   Imported before every skin so a contesting skin keeps winning the tie. */
+/**
+ * Pattern Chrome Paint - Rottay Design System
+ *
+ * The preflight-killable paint channels (padding, margin, border, background,
+ * box-shadow) of the pattern styling contract. The token contract itself
+ * (every `--ds-*` custom property), the keyframes, and the `!important`
+ * declarations stay in presentation/components/patterns.css inside
+ * `rottay-components`; selectors here are byte-identical to their layered
+ * originals and keep their source order.
+ *
+ * DELIBERATELY UNLAYERED. Tailwind v4 hosts declare their unnamed `base`
+ * layer after every `rottay-*` layer, so preflight's universal
+ * margin/padding/border reset outranks ANY specificity inside those layers
+ * (measured; see P-47/P-76). These declarations only paint in a Tailwind
+ * host from outside the layer statement, and they still yield to a
+ * consumer's inline `style` prop.
+ *
+ * Cascade position: both entrypoints import this file BEFORE every skin
+ * import, so any skin contesting one of these channels keeps winning the
+ * tie exactly as it did while this paint lived inside `rottay-components`.
+ */
+
+:where(.ds-workspace-frame) {
+  border: 1px solid var(--ds-workspace-shell-border, var(--ds-color-border));
+  background: var(--ds-workspace-shell-bg);
+  box-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
+}
+
+:where(.ds-workspace-frame)::before {
+  background: var(--ds-workspace-shell-overlay);
+}
+
+:where(.ds-workspace-frame--padded) > :where(.ds-workspace-frame__inner) {
+  padding: var(--ds-workspace-frame-padding, clamp(16px, 2.2vw, 28px));
+}
+
+:where(.ds-command-grid) {
+  background-image: var(--ds-command-grid-bg-strong);
+  background-size: var(--ds-command-grid-size) var(--ds-command-grid-size);
+}
+
+:where(.ds-surface-hero) {
+  border: 1px solid var(--ds-color-border-secondary);
+  background: var(--ds-workspace-hero-bg);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card) {
+  border: 1px solid var(--ds-premium-card-border);
+  background: var(--ds-premium-card-bg);
+  background-clip: padding-box;
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card)::before,
+:where(.ds-surface-table-card)::before,
+:where(.ds-rich-card)::before {
+  background-image:
+    var(--ds-surface-card-grid-bg),
+    var(--ds-premium-card-sheen);
+  background-size:
+    var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size),
+    auto;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):hover {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover);
+}
+
+:where(.ds-surface-panel) {
+  border: 1px solid var(--ds-color-border);
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 92%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-surface-panel)::before {
+  background-image: var(--ds-surface-card-grid-bg);
+  background-size: var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size);
+}
+
+:where(.ds-surface-panel):focus-within {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
+  box-shadow: var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-surface-control-row) {
+  border: 1px solid var(--ds-color-border-subtle);
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
+}
+
+:where(.ds-surface-table-card) {
+  border: 1px solid var(--ds-premium-card-border);
+  background: var(--ds-premium-card-bg);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-rich-card) {
+  background: var(--ds-premium-card-bg);
+  border: 1px solid var(--ds-premium-card-border);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-rich-card--interactive):hover {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover);
+}
+
+:where(.ds-rich-card--interactive):focus-within {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover), var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-rich-card--selected) {
+  border-color: var(--ds-premium-card-selected-border);
+  box-shadow: var(--ds-card-shadow), var(--ds-premium-card-selected-ring);
+}
+
+:where(.ds-rich-card__header) {
+  background: var(--ds-premium-card-header-bg);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section) {
+  background: var(--ds-premium-card-section-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section--alt) {
+  background: var(--ds-premium-card-section-alt-bg);
+}
+
+:where(.ds-rich-card__footer) {
+  background: var(--ds-premium-card-footer-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__icon) {
+  border: 1px solid var(--ds-icon-tile-border);
+  background: var(--ds-icon-tile-bg);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+}
+
+:where(.ds-rich-card--interactive:hover, .ds-rich-card--interactive:focus-within) :where(.ds-rich-card__icon) {
+  border-color: color-mix(in srgb, currentColor 34%, var(--ds-color-border));
+}
+
+:where(.ds-metric-card):where(.ds-rich-card)::before {
+  background-image:
+    var(--ds-surface-card-grid-bg),
+    linear-gradient(115deg, transparent 0%, var(--ds-surface-highlight-faint) 46%, transparent 64%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 5%, transparent),
+      transparent 52%
+    );
+  background-size:
+    18px 18px,
+    18px 18px,
+    auto;
+}
+
+:where(.ds-metric-card__halo) {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent) 0%,
+    transparent 66%
+  );
+}
+
+:where(.ds-metric-card__header) {
+  margin-bottom: 10px;
+}
+
+:where(.ds-metric-card__status-dot) {
+  background: var(--ds-signal-card-accent, var(--ds-color-primary));
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 10%, transparent),
+    0 0 12px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, transparent);
+}
+
+:where(.ds-metric-card__icon) {
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 20%, var(--ds-color-border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card-bg) 84%, transparent), transparent),
+    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 12%, var(--ds-icon-tile-bg));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, transparent);
+}
+
+:where(.ds-metric-card__trend) {
+  padding: 5px 8px;
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 13%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 72%, transparent);
+}
+
+:where(.ds-metric-card__trend--up) {
+  border-color: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card__trend--down) {
+  border-color: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card__footer) {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+:where(.ds-metric-card__progress-meta) {
+  margin-bottom: 7px;
+}
+
+:where(.ds-metric-card__progress) {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border) 70%, transparent), color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent)),
+    color-mix(in srgb, var(--ds-color-border) 58%, transparent);
+  box-shadow:
+    inset 0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ds-surface-card-bg) 62%, transparent);
+}
+
+:where(.ds-metric-card__progress-bar) {
+  background: var(--ds-meter-fill);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 32%, transparent);
+}
+
+:where(.ds-metric-card__progress-bar)::after {
+  background: linear-gradient(90deg, transparent, var(--ds-surface-highlight-medium), transparent);
+}
+
+:where(.ds-metric-card__status-row) {
+  margin-top: 10px;
+}
+
+:where(.ds-metric-card__status-tag) {
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 18%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card--interactive):hover {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, var(--ds-color-border));
+  box-shadow: var(--ds-signal-card-shadow-hover);
+}
+
+:where(.ds-metric-card-link):focus-visible :where(.ds-metric-card) {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 42%, var(--ds-color-border));
+  box-shadow: var(--ds-signal-card-shadow-hover), var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-metric-card--interactive:hover, .ds-metric-card-link:focus-visible) :where(.ds-metric-card__icon) {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 40%, var(--ds-color-border));
+}
+
+:is(.ds-command-home-console) {
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  border: 1px solid var(--ds-command-home-panel-border);
+  background-clip: padding-box;
+  background: var(--ds-command-home-console-bg);
+  box-shadow:
+    var(--ds-command-home-panel-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(.ds-command-home-hero) {
+  padding: 16px 18px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-hero-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 12px 30px color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(.ds-command-home-icon, .ds-command-home-hero__mark, .ds-command-home-message-avatar, .ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  border: 1px solid var(--ds-command-home-icon-border);
+  background: var(--ds-command-home-icon-bg);
+}
+
+:is(.ds-command-home-hero__pill) {
+  padding: 6px 10px;
+  border: 1px solid var(--ds-command-home-control-border);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-title) {
+  margin: 0;
+}
+
+:is(.ds-command-home-status-dot) {
+  background: var(--ds-color-success);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+}
+
+:is(.ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-error) {
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad, .ds-launchpad) {
+  padding: 16px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card) {
+  padding: 13px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-panel-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    0 10px 24px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='green'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='green'] .ds-command-home-capability__icon),
+:is(.ds-command-home-next-move[data-tone='green'] .ds-command-home-prompt-row__icon) {
+  border-color: color-mix(in srgb, var(--ds-color-success) 32%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon),
+:is(.ds-command-home-next-move[data-tone='teal'] .ds-command-home-prompt-row__icon) {
+  border-color: color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 7%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon) {
+  border-color: color-mix(in srgb, var(--ds-color-warning) 36%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-chat-panel, .ds-ai-chat-panel) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 34px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-brief) {
+  padding: 22px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent 46%),
+    var(--ds-command-home-panel-bg);
+}
+
+:is(.ds-command-home-brief__icon) {
+  margin-block-end: 12px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-chat-stream, .ds-ai-chat-stream) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-panel-bg);
+}
+
+:is(.ds-command-home-message-avatar, .ds-ai-chat-message-avatar) {
+  margin-inline-end: 8px;
+}
+
+:is(.ds-command-home-message, .ds-ai-chat-message) {
+  padding: 12px 13px;
+  border: 1px solid var(--ds-color-border-primary);
+  box-shadow: var(--ds-shadow-xs);
+}
+
+:is(.ds-command-home-message--assistant, .ds-ai-chat-message--assistant) {
+  background: color-mix(in srgb, var(--ds-surface-card-bg) 88%, var(--ds-color-primary) 4%);
+}
+
+:is(.ds-command-home-message--user, .ds-ai-chat-message--user) {
+  background: var(--ds-color-primary);
+  border-color: color-mix(in srgb, var(--ds-color-primary) 75%, var(--ds-color-border-primary));
+}
+
+:is(.ds-command-home-tools, .ds-ai-chat-tools) {
+  margin-block-start: 8px;
+}
+
+:is(.ds-command-home-tool-call, .ds-ai-chat-tool-call) {
+  padding: 5px 7px;
+  border: 1px solid var(--ds-command-home-control-border);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-message__error, .ds-ai-chat-message__error) {
+  margin-block-start: 6px;
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row) {
+  padding: 10px 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row):hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 48%, var(--ds-color-border-primary));
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-composer, .ds-ai-composer) {
+  padding: 10px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-panel-bg-strong);
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button) {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select) {
+  padding: 6px 10px;
+}
+
+:is(.ds-command-home-icon-button, .ds-ai-icon-button) {
+  padding: 0;
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  background: var(--ds-command-home-control-hover-bg);
+}
+
+:is(.ds-command-home-send, .ds-ai-send) {
+  padding-inline: 16px;
+}
+
+:is(.ds-command-home-rail-card, .ds-rail-card) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 32px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-rail-card__badge, .ds-rail-card__badge) {
+  padding: 5px 10px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-meter, .ds-meter) {
+  background: var(--ds-command-home-meter-bg);
+}
+
+:is(.ds-command-home-meter, .ds-meter) > span {
+  background: var(--ds-command-home-meter-fill);
+}
+
+:is(.ds-command-home-next-move) {
+  padding: 11px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-next-move):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-search-lane) {
+  padding: 9px 11px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-search-lane):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-footnote) {
+  padding-inline: 4px;
+}
+
+:is(.ds-command-home-footnote__text, .ds-command-home-footnote__layer p) {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+
+  :is(.ds-command-home-console) {
+    padding: 14px;
+  }
+}
+
+.ds-command-home-shell .ds-command-home-console {
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  border: 1px solid var(--ds-command-home-panel-border);
+  background: var(--ds-command-home-console-bg);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    var(--ds-command-home-panel-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-hero,
+.ds-command-home-shell .ds-launchpad,
+.ds-command-home-shell .ds-command-home-rail-card,
+.ds-command-home-shell .ds-command-home-brief,
+.ds-command-home-shell .ds-ai-composer {
+  border: 1px solid var(--ds-command-home-panel-border);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 2px rgba(22, 42, 67, 0.08),
+    0 12px 28px rgba(22, 42, 67, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.ds-command-home-shell .ds-command-home-hero {
+  padding: 16px 18px;
+  background: var(--ds-command-home-hero-bg);
+}
+
+.ds-command-home-shell .ds-command-home-hero__mark,
+.ds-command-home-shell .ds-command-home-capability__icon,
+.ds-command-home-shell .ds-command-home-prompt-row__icon,
+.ds-command-home-shell .ds-command-home-brief__icon,
+.ds-command-home-shell .ds-ai-chat-message-avatar {
+  border: 1px solid var(--ds-command-home-icon-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-icon-bg);
+}
+
+.ds-command-home-shell .ds-launchpad {
+  padding: 18px;
+}
+
+.ds-command-home-shell .ds-launchpad-card {
+  padding: 14px;
+  background-clip: padding-box;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-launchpad-card:hover {
+  box-shadow: var(--ds-command-home-card-shadow-hover);
+}
+
+.ds-command-home-shell .ds-launchpad-card__arrow {
+  margin-block-start: 2px;
+}
+
+.ds-command-home-shell .ds-ai-chat-panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ds-command-home-shell .ds-command-home-rail-card {
+  padding: 14px;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-brief {
+  padding: 22px;
+}
+
+.ds-command-home-shell .ds-ai-prompt-row {
+  padding: 10px 14px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-command-home-shell .ds-ai-composer {
+  padding: 12px;
+  border-color: var(--ds-command-home-panel-border);
+  background: var(--ds-command-home-panel-bg-strong);
+}
+
+.ds-command-home-shell .ds-ai-context-select,
+.ds-command-home-shell .ds-ai-icon-button {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+}
+
+.ds-command-home-shell .ds-ai-context-select {
+  padding: 6px 10px;
+}
+
+.ds-command-home-shell .ds-ai-icon-button {
+  padding: 0;
+}
+
+.ds-command-home-shell .ds-command-home-search-lane {
+  padding: 9px 11px;
+}
+
+.ds-command-home-shell .ds-command-home-next-move {
+  padding: 11px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote {
+  padding-inline: 4px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote__text,
+.ds-command-home-shell .ds-command-home-footnote__layer p {
+  margin: 0;
+}
+
+/**
+ * Collapse Bridge Paint - Rottay Design System
+ *
+ * The preflight-killable paint of the `.ds-collapse` wrapper family. The
+ * wrapper element is bridge-owned: no engine theme, tenant artifact, or antd
+ * runtime style targets it, so these channels are safe outside the layers.
+ *
+ * DELIBERATELY UNLAYERED (P-47/P-76): a Tailwind v4 host's preflight resets
+ * border/margin/padding above every `rottay-*` layer; wrapper paint only
+ * survives from outside the layer statement.
+ *
+ * The `.ant-collapse-*` channels stay in runtime/bridges/collapse.css inside
+ * `rottay-components`: antd cssinjs injects unlayered runtime styles whose
+ * position relative to this bundle is host-dependent, and classic
+ * theme.css contests the same channels from `rottay-engines`, so unlayering
+ * them would flip the cascade in tenant contexts.
+ */
+
+.ds-collapse {
+  background: var(--ds-collapse-root-bg);
+  border-color: var(--ds-collapse-root-border-color);
+  border-width: var(--ds-collapse-root-border-width);
+  border-style: solid;
+  box-shadow: var(--ds-collapse-root-shadow);
+}
+
+.ds-collapse--ghost {
+  background: var(--ds-collapse-root-ghost-idle-bg);
+  border: none;
+  box-shadow: none;
+}
+
+.ds-collapse--bordered {
+  background: var(--ds-collapse-root-bordered-idle-bg);
+  border-color: var(--ds-collapse-root-bordered-idle-border-color);
+}
+
+
 /* Modern engine skins. DELIBERATELY UNLAYERED: every `rottay-*` layer sorts
    before Tailwind's own `base` layer, whose preflight resets `button`'s
    background, radius and border. A layered skin loses to it on layer order,
@@ -36408,11 +36765,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * ==========================================================================
  * A SURFACE OWNS NO DOM (P-79). IT OWNS COMPOSITION.
  * ==========================================================================
- * `Grid`, `Card` and (in the modern engine) `Button` never emit a
- * consumer-supplied `data-part`: Grid/Card have no rest-spread, and Button's own
- * `partAttributes('trigger', …)` spread wins last and rewrites it. `tsc` accepts
- * the stamp regardless -- `BaseComponentProps` declares `data-part` on every
- * component -- so a rule anchored on one would silently match nothing. The
+ * `Grid`, `Card` and `Button` never emit a consumer-supplied `data-part`:
+ * Grid has no rest-spread, and Card/Button spread caller rest FIRST and stamp
+ * their own `partAttributes(...)` last (pass-through honesty law: engines win
+ * on data-part). `tsc` accepts the stamp regardless -- `BaseComponentProps`
+ * declares `data-part` on every component -- so a rule anchored on one would
+ * silently match nothing (or match the engine's own stamp instead). The
  * anatomy of every composed primitive below is therefore its CLASSNAME. Only the
  * nodes this surface renders ITSELF (`Box`/`Flex`/`Text`) are addressed by part.
  *
@@ -49819,6 +50177,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * These rules apply personality tokens to ALL three engines
  * (Classic/Ant, Modern/DaisyUI, Rustic/Vanilla) via the CSS cascade.
  * Zero engine file changes required.
+ *
+ * This file is imported inside `rottay-personality`, below a Tailwind v4
+ * host's preflight (P-76). Its preflight-killable channels (card padding,
+ * divider border-style/color) live in personality-paint.css, unlayered. The
+ * box-shadow / scrollbar / ::selection paint remaining here is not
+ * preflight-resettable on its targets, and the layered position is
+ * load-bearing: unlayered skins must keep beating personality (P-87);
+ * declared residue in css-layer-paint-gate.allowlist.json.
  */
 
 /* ========================================================================
@@ -49833,16 +50199,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   transition: box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
               transform var(--ds-personality-animation-entrance-duration, 300ms),
               background-color var(--ds-personality-animation-entrance-duration, 300ms);
-}
-
-.ant-card .ant-card-head,
-.card .card-title {
-  padding-inline: var(--ds-card-header-padding);
-}
-
-.ant-card .ant-card-body,
-.card .card-body {
-  padding: var(--ds-card-body-padding);
 }
 
 .ant-card:hover,
@@ -49918,13 +50274,6 @@ h1, h2, h3, h4, h5, h6,
    DIVIDER PERSONALITY
    Applies personality-driven border-style to dividers.
    ======================================================================== */
-
-.ant-divider,
-.divider,
-[data-engine] .ds-divider {
-  border-style: var(--ds-divider-style);
-  border-color: var(--ds-divider-color);
-}
 
 /* ========================================================================
    SKELETON PERSONALITY
@@ -52183,6 +52532,70 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 
 
 
+/* Personality paint + reduced-motion token neutralization. DELIBERATELY
+   UNLAYERED and imported AFTER foundation/animations: its guarded :root
+   blocks must win the source-order tie against the foundation's base
+   --ds-motion-* durations. */
+/**
+ * Personality Paint Bridge - Rottay Design System
+ *
+ * Two jobs that both require an unlayered, late cascade position:
+ *
+ * 1. The preflight-killable personality channels (card header/body padding,
+ *    divider border-style/color). Inside `rottay-personality` a Tailwind v4
+ *    host's preflight reset outranks them on layer order, whatever their
+ *    specificity (P-47/P-76). Selectors are byte-identical to their layered
+ *    originals in runtime/personality.css.
+ *
+ * 2. Reduced-motion neutralization of the `--ds-motion-*` canon durations
+ *    (MOT-03). The base values are declared on `:root` by the UNLAYERED
+ *    foundation/animations import, so a layered guard can never zero them.
+ *    Both entrypoints import this file AFTER foundation/animations: the
+ *    guarded blocks below win the source-order tie on `:root`, and the
+ *    `html[data-ds-motion='reduced']` seam mirrors the OS media query for
+ *    the MotionProvider runtime policy.
+ */
+
+.ant-card .ant-card-head,
+.card .card-title {
+  padding-inline: var(--ds-card-header-padding);
+}
+
+.ant-card .ant-card-body,
+.card .card-body {
+  padding: var(--ds-card-body-padding);
+}
+
+.ant-divider,
+.divider,
+[data-engine] .ds-divider {
+  border-style: var(--ds-divider-style);
+  border-color: var(--ds-divider-color);
+}
+
+/* Token-riding motion must self-neutralize even where the personality
+   wildcard suppression is absent (standalone compositions, JS readers of
+   getComputedStyle). Durations only; easings and magnitudes are inert at
+   zero duration. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-motion-instant: 0s;
+    --ds-motion-fast: 0s;
+    --ds-motion-normal: 0s;
+    --ds-motion-slow: 0s;
+    --ds-motion-glacial: 0s;
+  }
+}
+
+html[data-ds-motion='reduced'] {
+  --ds-motion-instant: 0s;
+  --ds-motion-fast: 0s;
+  --ds-motion-normal: 0s;
+  --ds-motion-slow: 0s;
+  --ds-motion-glacial: 0s;
+}
+
+
 
 /* === Modern Engine (DaisyUI + Tailwind utilities) === */
 /*! tailwindcss v4.2.4 | MIT License | https://tailwindcss.com */
@@ -52218,8 +52631,6 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
     --text-2xl--line-height: calc(2 / 1.5);
     --text-3xl: 1.875rem;
     --text-3xl--line-height: calc(2.25 / 1.875);
-    --text-4xl: 2.25rem;
-    --text-4xl--line-height: calc(2.5 / 2.25);
     --text-5xl: 3rem;
     --text-5xl--line-height: 1;
     --text-7xl: 4.5rem;
@@ -54775,18 +55186,6 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   .sticky {
     position: sticky;
   }
-  .tooltip-right {
-    @layer daisyui.l1.l2 {
-      > .tooltip-content, &[data-tip]:before {
-        transform: translateX(calc(var(--tt-pos, -0.25rem) + 0.25rem)) translateY(-50%);
-        inset: 50% auto auto var(--tt-off);
-      }
-      &:after {
-        transform: translateX(var(--tt-pos, -0.25rem)) translateY(-50%) rotate(90deg);
-        inset: 50% auto auto calc(var(--tt-tail) + 1px);
-      }
-    }
-  }
   .inset-0 {
     inset: calc(var(--spacing) * 0);
   }
@@ -57082,10 +57481,6 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
     font-size: var(--text-3xl);
     line-height: var(--tw-leading, var(--text-3xl--line-height));
   }
-  .text-4xl {
-    font-size: var(--text-4xl);
-    line-height: var(--tw-leading, var(--text-4xl--line-height));
-  }
   .text-5xl {
     font-size: var(--text-5xl);
     line-height: var(--tw-leading, var(--text-5xl--line-height));
@@ -57279,14 +57674,8 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   .text-error {
     color: var(--color-error);
   }
-  .text-primary {
-    color: var(--color-primary);
-  }
   .text-secondary {
     color: var(--color-secondary);
-  }
-  .text-success {
-    color: var(--color-success);
   }
   .text-warning {
     color: var(--color-warning);

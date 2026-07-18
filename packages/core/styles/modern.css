@@ -31,8 +31,6 @@
     --text-2xl--line-height: calc(2 / 1.5);
     --text-3xl: 1.875rem;
     --text-3xl--line-height: calc(2.25 / 1.875);
-    --text-4xl: 2.25rem;
-    --text-4xl--line-height: calc(2.5 / 2.25);
     --text-5xl: 3rem;
     --text-5xl--line-height: 1;
     --text-7xl: 4.5rem;
@@ -2588,18 +2586,6 @@
   .sticky {
     position: sticky;
   }
-  .tooltip-right {
-    @layer daisyui.l1.l2 {
-      > .tooltip-content, &[data-tip]:before {
-        transform: translateX(calc(var(--tt-pos, -0.25rem) + 0.25rem)) translateY(-50%);
-        inset: 50% auto auto var(--tt-off);
-      }
-      &:after {
-        transform: translateX(var(--tt-pos, -0.25rem)) translateY(-50%) rotate(90deg);
-        inset: 50% auto auto calc(var(--tt-tail) + 1px);
-      }
-    }
-  }
   .inset-0 {
     inset: calc(var(--spacing) * 0);
   }
@@ -4895,10 +4881,6 @@
     font-size: var(--text-3xl);
     line-height: var(--tw-leading, var(--text-3xl--line-height));
   }
-  .text-4xl {
-    font-size: var(--text-4xl);
-    line-height: var(--tw-leading, var(--text-4xl--line-height));
-  }
   .text-5xl {
     font-size: var(--text-5xl);
     line-height: var(--tw-leading, var(--text-5xl--line-height));
@@ -5092,14 +5074,8 @@
   .text-error {
     color: var(--color-error);
   }
-  .text-primary {
-    color: var(--color-primary);
-  }
   .text-secondary {
     color: var(--color-secondary);
-  }
-  .text-success {
-    color: var(--color-success);
   }
   .text-warning {
     color: var(--color-warning);
@@ -6052,4 +6028,58 @@
       --tw-scale-z: 1;
     }
   }
+}
+
+
+/* === Global reduced-motion guard (sourced from runtime/personality.css) === */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Disable all personality animations when reduced-motion is preferred */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  /* DS motion primitives opt into choreography suppression without replacing
+     caller-owned opacity or transforms. Their SSR render already emits the
+     final visible state through the runtime reduced-motion snapshot. */
+  [data-ds-motion-primitive][data-ds-motion-state='entrance'],
+  [data-ds-motion-primitive][data-ds-motion-state='entrance']::before,
+  [data-ds-motion-primitive][data-ds-motion-state='entrance']::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* MotionProvider's additive runtime override for app/document policy. The OS
+   media-query block above remains the no-JS authority; this seam extends the
+   same choreography suppression to CSS-only effects when React forces reduced
+   motion. */
+html[data-ds-motion='reduced'] {
+  scroll-behavior: auto;
+}
+
+html[data-ds-motion='reduced'] *,
+html[data-ds-motion='reduced'] *::before,
+html[data-ds-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
+}
+
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance'],
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance']::before,
+html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='entrance']::after {
+  animation: none !important;
+  transition: none !important;
 }
