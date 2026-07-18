@@ -27,13 +27,13 @@ describe('chart family mathematical correctness', () => {
     const view = renderSurface(<Harness />);
 
     await waitFor(() => {
-      expect(view.container.querySelectorAll('[data-part="slice-surface"]')).toHaveLength(2);
+      expect(view.container.querySelectorAll('[data-part="pie-slice"]')).toHaveLength(2);
     });
 
     act(() => setVariant('empty'));
 
     await waitFor(() => {
-      expect(view.container.querySelectorAll('[data-part="slice-surface"]')).toHaveLength(0);
+      expect(view.container.querySelectorAll('[data-part="pie-slice"]')).toHaveLength(0);
       expect(view.container.querySelector('[data-part="data-fallback"]')).toHaveTextContent('No data');
     });
 
@@ -41,7 +41,7 @@ describe('chart family mathematical correctness', () => {
 
     await waitFor(() => {
       expect(view.container.querySelector('[data-part="data-fallback"]')).toHaveTextContent('negative');
-      expect(view.container.querySelectorAll('[data-part="slice-surface"]')).toHaveLength(0);
+      expect(view.container.querySelectorAll('[data-part="pie-slice"]')).toHaveLength(0);
     });
     expectFiniteSvg(view.container);
   });

@@ -91,7 +91,7 @@ const remainingCases: Array<{
   },
   {
     title: 'Correct scatter',
-    selector: 'circle[data-part="series-point"]',
+    selector: 'circle[data-part="scatter-point"]',
     expectedMarks: 1,
     renderChart: (populated) => (
       <ScatterChart
@@ -263,8 +263,12 @@ describe('remaining chart-family correctness floor', () => {
     const chart = screen.getByRole('img', { name: 'Density cumulative' });
     const points = [...chart.querySelectorAll<SVGCircleElement>('[data-part="cumulative-point"]')];
     expect(points).toHaveLength(3);
-    expect(Number(points[1].getAttribute('cy'))).toBeCloseTo(90, 4);
-    expect(Number(points[2].getAttribute('cy'))).toBeCloseTo(0, 4);
+    // Absolute-viewBox canon: the renderer emits absolute coordinates (the
+    // 16px top margin included) where the D3 body used plot-local translated
+    // coordinates. The count semantics are unchanged: the middle point sits at
+    // 3/4 of the count range, the last at the full count.
+    expect(Number(points[1].getAttribute('cy'))).toBeCloseTo(106, 4);
+    expect(Number(points[2].getAttribute('cy'))).toBeCloseTo(16, 4);
   });
 
   it('normalizes scatter radius options and suppresses non-finite regressions', async () => {

@@ -211,11 +211,11 @@ describe('AreaChart and LineChart correctness floor', () => {
     const constant = screen.getByRole('img', { name: 'Constant time line' });
 
     await waitFor(() => {
-      expect(signed.querySelectorAll('circle[data-part="series-point"]')).toHaveLength(3);
-      expect(constant.querySelectorAll('circle[data-part="series-point"]')).toHaveLength(2);
+      expect(signed.querySelectorAll('circle[data-part="point"]')).toHaveLength(3);
+      expect(constant.querySelectorAll('circle[data-part="point"]')).toHaveLength(2);
     });
 
-    const signedPoints = [...signed.querySelectorAll<SVGCircleElement>('circle[data-part="series-point"]')];
+    const signedPoints = [...signed.querySelectorAll<SVGCircleElement>('circle[data-part="point"]')];
     const signedX = signedPoints.map((point) => numberAttribute(point, 'cx'));
     const signedY = signedPoints.map((point) => numberAttribute(point, 'cy'));
     expect(signedX[0]).toBeLessThan(signedX[1]);
@@ -223,7 +223,7 @@ describe('AreaChart and LineChart correctness floor', () => {
     expect(signedY[0]).toBeGreaterThan(signedY[1]);
     expect(signedY[1]).toBeGreaterThan(signedY[2]);
 
-    const constantPoints = [...constant.querySelectorAll<SVGCircleElement>('circle[data-part="series-point"]')];
+    const constantPoints = [...constant.querySelectorAll<SVGCircleElement>('circle[data-part="point"]')];
     const constantX = constantPoints.map((point) => numberAttribute(point, 'cx'));
     const constantY = constantPoints.map((point) => numberAttribute(point, 'cy'));
     expect(constantX[0]).toBeCloseTo(constantX[1], 6);
@@ -253,26 +253,21 @@ describe('AreaChart and LineChart correctness floor', () => {
     );
 
     const chart = screen.getByRole('img', { name: 'Signed stacked area' });
-    let overlay!: SVGRectElement;
     await waitFor(() => {
       expect(chart.querySelectorAll('path[data-part="area"]')).toHaveLength(4);
-      overlay = chart.querySelector('.chart-hover-overlay') as SVGRectElement;
-      expect(overlay).toBeTruthy();
     });
 
-    fireEvent.mouseMove(overlay, { clientX: 50, clientY: 20 });
-    const focusDots = [...chart.querySelectorAll<SVGCircleElement>('.chart-crosshair-dot')];
-    expect(focusDots).toHaveLength(4);
-
-    const [zeroY, positiveY, negativeOneY, negativeTwoY] = focusDots.map((dot) =>
-      numberAttribute(dot, 'cy'),
-    );
-    expect(positiveY).toBeLessThan(zeroY);
-    expect(negativeOneY).toBeGreaterThan(zeroY);
-    expect(negativeTwoY).toBeGreaterThan(negativeOneY);
+    // The legacy `.chart-hover-overlay` crosshair belonged to the pre-renderer
+    // D3 body. Live hover on the migrated area family arrives with the Stage-C
+    // interaction-controller wire; until then the idle ChartTooltip element is
+    // the family's interaction contract and the stack semantics are asserted
+    // from the rendered geometry directly.
+    expect(document.querySelector("[data-part='chart-tooltip']")).toBeTruthy();
 
     const paths = [...chart.querySelectorAll<SVGPathElement>('path[data-part="area"]')];
     const [zeroPathY, positivePathY, negativeOnePathY, negativeTwoPathY] = paths.map(pathYCoordinates);
+    const zeroY = zeroPathY[0];
+    expect(Number.isFinite(zeroY)).toBe(true);
     expect(zeroPathY.every((value) => Math.abs(value - zeroY) < 0.001)).toBe(true);
     expect(Math.min(...positivePathY)).toBeLessThan(zeroY);
     expect(Math.max(...positivePathY)).toBeCloseTo(zeroY, 3);
@@ -300,13 +295,16 @@ describe('AreaChart and LineChart correctness floor', () => {
     );
 
     const chart = screen.getByRole('img', { name: 'Equivalent time values' });
-    const overlay = await waitFor(() => {
-      const current = chart.querySelector('.chart-hover-overlay');
-      expect(current).toBeTruthy();
-      return current as SVGRectElement;
+    // Renderer DOM: equivalent Date and ISO timestamps resolve to the same
+    // pure-geometry x position, so both series' single points share `cx`.
+    const points = await waitFor(() => {
+      const current = [...chart.querySelectorAll<SVGCircleElement>('circle[data-part="point"]')];
+      expect(current).toHaveLength(2);
+      return current;
     });
-    fireEvent.mouseMove(overlay, { clientX: 50, clientY: 20 });
-    expect(chart.querySelectorAll('.chart-crosshair-dot')).toHaveLength(2);
+    const xs = points.map((point) => Number(point.getAttribute('cx')));
+    expect(xs[0]).toBeCloseTo(xs[1], 6);
+    expect(xs[0]).toBeGreaterThan(0);
   });
 
   it('normalizes area opacity and rejects an overflowing diverging stack visibly', async () => {
@@ -352,18 +350,24 @@ describe('AreaChart and LineChart correctness floor', () => {
       productProfile: 'events.organizer',
     });
 
+    // Renderer DOM: the migrated LineChart emits a `line` edge (not the area
+    // `series-line`) and a CSS-painted `area` (no gradient defs); the AreaChart
+    // renderer keeps its `series-line` edge and per-series gradient defs. So the
+    // two `series-line` and two gradients come from the area chart's two series,
+    // and the three `area` paths are one from the line plus two from the area.
     await waitFor(() => {
-      expect(container.querySelectorAll('path[data-part="series-line"]')).toHaveLength(3);
+      expect(container.querySelectorAll('path[data-part="line"]')).toHaveLength(1);
+      expect(container.querySelectorAll('path[data-part="series-line"]')).toHaveLength(2);
       expect(container.querySelectorAll('path[data-part="area"]')).toHaveLength(3);
-      expect(container.querySelectorAll('linearGradient')).toHaveLength(3);
+      expect(container.querySelectorAll('linearGradient')).toHaveLength(2);
     });
 
     fireEvent.click(screen.getByRole('button', { name: 'Clear charts' }));
     await waitFor(() => {
+      expect(container.querySelectorAll('path[data-part="line"]')).toHaveLength(0);
       expect(container.querySelectorAll('path[data-part="series-line"]')).toHaveLength(0);
       expect(container.querySelectorAll('path[data-part="area"]')).toHaveLength(0);
       expect(container.querySelectorAll('linearGradient')).toHaveLength(0);
-      expect(container.querySelectorAll('.chart-hover-overlay')).toHaveLength(0);
     });
   });
 
@@ -375,14 +379,18 @@ describe('AreaChart and LineChart correctness floor', () => {
       productProfile: 'events.organizer',
     });
 
+    // Renderer DOM: the migrated LineChart paints its area fill through CSS
+    // (no gradient defs), so every gradient here now belongs to the AreaChart
+    // renderer -- two per stacked instance -- and must stay uniquely scoped per
+    // series, instance, and independent React root.
     await waitFor(() => {
-      expect(firstRoot.container.querySelectorAll('linearGradient')).toHaveLength(4);
-      expect(secondRoot.container.querySelectorAll('linearGradient')).toHaveLength(4);
+      expect(firstRoot.container.querySelectorAll('linearGradient')).toHaveLength(2);
+      expect(secondRoot.container.querySelectorAll('linearGradient')).toHaveLength(2);
     });
 
     const gradients = [...document.querySelectorAll<SVGLinearGradientElement>('linearGradient[id]')];
     const ids = gradients.map((gradient) => gradient.id);
-    expect(ids).toHaveLength(8);
+    expect(ids).toHaveLength(4);
     expect(new Set(ids).size).toBe(ids.length);
     expect(ids.every((id) => id.length > 0 && !id.includes(':'))).toBe(true);
 

@@ -84,11 +84,17 @@ describe('chart tooltip personality', () => {
       { productProfile: 'events.organizer' },
     );
 
+    // Line, Area, and Scatter keep the idle ChartTooltip overlay element, which
+    // carries the resolved tooltip personality as a variant class.
     const tooltips = [...container.querySelectorAll<HTMLElement>('[data-part="chart-tooltip"]')];
-    expect(tooltips).toHaveLength(4);
+    expect(tooltips).toHaveLength(3);
     for (const tooltip of tooltips) {
       expect(tooltip).toHaveAttribute('data-variant', 'glass');
       expect(tooltip).toHaveClass('ds-chart-tooltip--glass');
     }
+    // BarChart delegates to the interactive renderer, which carries the same
+    // resolved tooltip personality on its surface rather than an idle overlay.
+    const barSurface = container.querySelector('.ds-chart-bar [data-part="chart-renderer"]');
+    expect(barSurface).toHaveAttribute('data-chart-tooltip-style', 'glass');
   });
 });

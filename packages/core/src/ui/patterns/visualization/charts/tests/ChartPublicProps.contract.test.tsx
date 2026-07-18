@@ -37,10 +37,15 @@ describe('chart public prop runtime contracts', () => {
     });
 
     const items = [...container.querySelectorAll<SVGGElement>('[data-part="item"]')];
-    expect(items.map((item) => item.getAttribute('transform'))).toEqual([
-      'translate(100,12)',
-      'translate(100,65)',
-    ]);
+    // Absolute-viewBox canon: the renderer positions each lane through absolute
+    // band geometry instead of per-item group transforms, so the gap prop is
+    // observable as the distance between consecutive lane tops.
+    const laneBands = items.map(
+      (item) => item.querySelector<SVGRectElement>('[data-part="range-band"]')!,
+    );
+    const laneTops = laneBands.map((band) => Number(band.getAttribute('y')));
+    const laneHeight = Number(laneBands[0].getAttribute('height'));
+    expect(laneTops[1] - laneTops[0]).toBeCloseTo(laneHeight + 33, 4);
 
     const firstItemBands = [
       ...items[0].querySelectorAll<SVGRectElement>('[data-part="range-band"]'),
@@ -223,10 +228,10 @@ describe('chart public prop runtime contracts', () => {
     );
 
     await waitFor(() => {
-      expect(container.querySelectorAll('[data-part="series-point"]')).toHaveLength(2);
+      expect(container.querySelectorAll('[data-part="scatter-point"]')).toHaveLength(2);
     });
     expect(container.querySelector('[data-part="grid"]')).toBeNull();
-    container.querySelectorAll('[data-part="series-point"]').forEach((point) => {
+    container.querySelectorAll('[data-part="scatter-point"]').forEach((point) => {
       expect(point).toHaveAttribute('fill-opacity', '0.23');
     });
   });

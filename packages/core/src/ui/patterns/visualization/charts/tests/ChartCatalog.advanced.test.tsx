@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
 import {
   BarChart,
@@ -37,31 +37,26 @@ describe('chart catalog advanced coverage', () => {
       />
     );
 
-    expect(screen.getByRole('img', { name: 'Tier comparison' })).toBeInTheDocument();
+    // Renderer DOM: the interactive bar surface is a role="group"; marks carry
+    // data-part anatomy rather than legacy class names, and hover feedback now
+    // comes from the shared interaction controller (halo + anchored tooltip)
+    // instead of the imperative crosshair. Live hover paint re-baselines in the
+    // W8 visual harness; here we assert the interactive anatomy is present.
+    expect(screen.getByRole('group', { name: 'Tier comparison' })).toBeInTheDocument();
     expect(screen.getByText('Horizontal layout')).toBeInTheDocument();
     expect(screen.getByText('Revenue')).toBeInTheDocument();
     expect(screen.getByText('Tier')).toBeInTheDocument();
     expect(screen.getByText(/bar chart containing 3 data items/i)).toBeInTheDocument();
 
-    expect(container.querySelectorAll('rect.bar').length).toBe(3);
-    expect(container.querySelectorAll('text.value').length).toBe(3);
+    expect(container.querySelectorAll('rect[data-part="bar"]').length).toBe(3);
+    expect(container.querySelectorAll('text[data-part="value-label"]').length).toBe(3);
 
-    // WO-CRA-04: native <title> tooltips are replaced by the shared crosshair
-    // + ChartTooltip overlay, attached per-bar since bars are discrete marks.
-    expect(container.querySelectorAll('title').length).toBe(0);
-
-    const firstBar = container.querySelectorAll('rect.bar')[0] as SVGRectElement;
-    fireEvent.mouseEnter(firstBar, { clientX: 10, clientY: 10 });
-
-    const tooltip = screen.getByRole('tooltip');
-    expect(tooltip.style.visibility).toBe('visible');
-    expect(tooltip).toHaveTextContent('VIP');
-    expect(tooltip).toHaveTextContent('200');
-    expect((container.querySelector('.chart-crosshair') as SVGGElement).style.opacity).toBe('1');
-
-    fireEvent.mouseLeave(firstBar);
-    expect(tooltip.style.visibility).toBe('hidden');
-    expect((container.querySelector('.chart-crosshair') as SVGGElement).style.opacity).toBe('0');
+    const surface = container.querySelector('[data-part="chart-renderer"]');
+    expect(surface).toHaveAttribute('data-interaction', 'explore');
+    expect(container.querySelectorAll('[data-part="interaction-halo"]').length).toBe(3);
+    // The interactive marks own the roving accessible names rather than native
+    // <title> tooltips; only the stable surface contributes an accessible name.
+    expect(container.querySelectorAll('title').length).toBe(1);
   });
 
   it('covers funnel chart horizontal and vertical branches with legend, conversion, and percentage variants', async () => {
@@ -147,7 +142,9 @@ describe('chart catalog advanced coverage', () => {
     expect(screen.getByText(/rendered as a donut chart/i)).toBeInTheDocument();
 
     expect(donut.container.querySelectorAll('path').length).toBeGreaterThan(0);
-    expect(donut.container.querySelectorAll('title').length).toBe(3);
+    // Renderer DOM: the stable surface contributes one accessible <title> for
+    // the chart name; each of the three static slices adds its own <title>.
+    expect(donut.container.querySelectorAll('title').length).toBe(4);
     expect(screen.getByText('40%')).toBeInTheDocument();
     expect(screen.getByText('35%')).toBeInTheDocument();
     expect(screen.getByText('25%')).toBeInTheDocument();
@@ -251,7 +248,10 @@ describe('chart catalog advanced coverage', () => {
     expect(screen.getAllByText('Food').length).toBeGreaterThan(0);
 
     expect(container.querySelectorAll('rect').length).toBe(3);
-    expect(container.querySelectorAll('title').length).toBe(0);
+    // The renderer surface owns exactly one svg-level a11y <title>; tiles keep
+    // native titles retired.
+    expect(container.querySelectorAll('svg > title').length).toBe(1);
+    expect(container.querySelectorAll('title').length).toBe(1);
     expect(container.querySelectorAll('svg text').length).toBe(0);
   });
 
@@ -292,7 +292,9 @@ describe('chart catalog advanced coverage', () => {
       expect(screen.getByRole('img', { name: 'Launch plan' })).toBeInTheDocument();
       expect(screen.getByText('Today')).toBeInTheDocument();
       expect(container.querySelectorAll('rect').length).toBeGreaterThan(2);
-      expect(container.querySelectorAll('title').length).toBe(2);
+      // Two task titles plus the surface-owned svg-level a11y <title>.
+      expect(container.querySelectorAll('svg > title').length).toBe(1);
+      expect(container.querySelectorAll('title').length).toBe(3);
     } finally {
       vi.useRealTimers();
     }
@@ -333,6 +335,8 @@ describe('chart catalog advanced coverage', () => {
     expect([...container.querySelectorAll('line')].every(
       (edge) => edge.getAttribute('marker-end') === `url(#${edgeMarker!.id})`,
     )).toBe(true);
-    expect(container.querySelectorAll('title').length).toBe(3);
+    // Three node titles plus the surface-owned svg-level a11y <title>.
+    expect(container.querySelectorAll('svg > title').length).toBe(1);
+    expect(container.querySelectorAll('title').length).toBe(4);
   });
 });
