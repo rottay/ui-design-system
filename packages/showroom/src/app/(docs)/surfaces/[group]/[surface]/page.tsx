@@ -15,6 +15,7 @@ import {
   type SurfaceGroup,
 } from '@/data/registry';
 import { formatShowroomLabel } from '@/components/layout/config';
+import { SurfaceEnginePreview } from './surface-engine-preview';
 
 const SURFACE_COMPOSITIONS: Record<
   string,
@@ -605,6 +606,47 @@ export default async function SurfaceDetailPage({
               </Box>
             </Stack>
           </Box>
+        </Stack>
+      </Card>
+
+      <Card
+        style={{
+          padding: 20,
+          border: `1px solid ${SHOWROOM_SURFACES.border}`,
+          background: `linear-gradient(180deg, ${SHOWROOM_SURFACES.surface} 0%, ${SHOWROOM_SURFACES.canvas} 100%)`,
+          boxShadow: SHOWROOM_SURFACES.shadow,
+        }}
+      >
+        <Stack spacing="sm" fullWidth>
+          <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
+            <Box style={{ minWidth: 0, maxWidth: 760 }}>
+              <Text as={"h2" as any} size="lg" weight="semibold" style={{ display: 'block' }}>
+                Live preview
+              </Text>
+              <Text
+                size="sm"
+                style={{
+                  display: 'block',
+                  marginTop: 6,
+                  color: 'var(--ds-color-text-secondary)',
+                  lineHeight: 1.65,
+                }}
+              >
+                The real {entry.name} recipe rendered with representative, domain-free mock data.
+                Compare layout rhythm and section cadence across engines; the app still owns data,
+                permissions, and routing.
+              </Text>
+            </Box>
+            <Flex gap={8} style={{ flexWrap: 'wrap' }}>
+              {entry.engines.map((engine) => (
+                <Badge key={engine} variant="secondary">
+                  {engine}
+                </Badge>
+              ))}
+            </Flex>
+          </Flex>
+
+          <SurfaceEnginePreview slug={entry.slug} />
         </Stack>
       </Card>
 
