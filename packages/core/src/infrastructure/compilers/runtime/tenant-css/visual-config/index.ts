@@ -545,8 +545,14 @@ export function generateTenantCssFromResolvedVisualConfig(
     }
   }
 
+  // The header comment interpolates tenant-controlled strings; a name or slug
+  // containing `*/` (or a newline) would break out of the comment and inject
+  // live CSS into every consumer of the generated stylesheet.
+  const commentSafe = (value: string): string =>
+    value.replace(/\*\//g, '* /').replace(/[\r\n]+/g, ' ');
+
   return [
-    `/* Auto-generated tenant theme for ${effectiveConfig.name} (${effectiveConfig.slug}) */`,
+    `/* Auto-generated tenant theme for ${commentSafe(effectiveConfig.name)} (${commentSafe(effectiveConfig.slug)}) */`,
     ...blocks,
     '',
   ].join('\n');

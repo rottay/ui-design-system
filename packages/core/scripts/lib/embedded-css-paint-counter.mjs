@@ -22,7 +22,10 @@ const CSS_PAINT_EXEMPT = new Set(["border-collapse", "border-spacing"]);
 // These generators are deliberate data CSS channels, not opaque escape
 // hatches. `generateResponsiveCSS` is driven by the component responsive-prop
 // contract (layout/typography only), `generateResponsiveGridCSS` emits grid
-// layout, and `generateTenantCss` emits tenant custom-property definitions.
+// layout, `generateTenantCss` emits tenant custom-property definitions, and
+// `buildPreviewCss` is the tenant-preview sanitizer that rebuilds
+// generateTenantCss output through a declaration whitelist re-anchored to the
+// preview root (CMP-02).
 // Everything else used as a whole stylesheet root must be source-resolvable or
 // it fails closed. Runtime fragments interpolated *inside* a classified source
 // template remain data and are handled separately below.
@@ -36,6 +39,10 @@ const CERTIFIED_DATA_CSS_IMPORTS = new Map([
     "src/ui/primitives/layout/Grid/runtime/responsive",
   ],
   ["generateTenantCss", "src/infrastructure/runtime/tenant"],
+  [
+    "buildPreviewCss",
+    "src/ui/patterns/customization/tenant-preview/runtime/preview-css",
+  ],
 ]);
 const CORE_PACKAGE_ROOT = realpathSync(
   resolve(dirname(fileURLToPath(import.meta.url)), "../..")

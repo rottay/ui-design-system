@@ -3008,5 +3008,8 @@
   "embeddedCssPaint.surfaces/runtime/profile-defaults/index.ts": 0,
   "embeddedCssPaint.surfaces/runtime/profile-defaults/overrides/index.ts": 0,
   "embeddedCssPaint.surfaces/runtime/profile-defaults/personality/index.tsx": 0,
-  "embeddedCssPaint.surfaces/runtime/responsive/index.ts": 0
+  "embeddedCssPaint.surfaces/runtime/responsive/index.ts": 0,
+  "fleet.inlinePaint.patterns/customization/tenant-preview/runtime/preview-css/index.ts": 0,
+  "runtimeSvgPaint.patterns/customization/tenant-preview/runtime/preview-css/index.ts": 0,
+  "embeddedCssPaint.patterns/customization/tenant-preview/runtime/preview-css/index.ts": 0
 }

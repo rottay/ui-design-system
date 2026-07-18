@@ -23,7 +23,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
-import { generateTenantCss } from '../../../../../../infrastructure/runtime/tenant';
+import { buildPreviewCss } from '../../runtime/preview-css';
 
 /** Default component samples shown when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
@@ -109,8 +109,9 @@ function getContrastColor(hex: string): string {
 
 /**
  * Modern (DS-token) implementation of the TenantPreview pattern.
- * Wraps everything in a token-styled card and injects scoped CSS via a
- * `<style>` tag with `data-tenant` scoping on the container.
+ * Wraps everything in a token-styled card and injects sanitized CSS via a
+ * `<style>` tag anchored to the preview-owned scope attribute, so the
+ * generated variables apply only inside this container.
  *
  * @param props - See {@link TenantPreviewProps} for the full prop contract.
  * @returns The rendered tenant preview card.
@@ -124,8 +125,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     className,
     style,
   } = props;
-
-  const previewRef = useRef<HTMLDivElement>(null);
 
   /* Build full tenant config from creation input -- memoized for performance */
   const tenantConfig = useMemo(() => createTenantConfig(creationConfig), [creationConfig]);
@@ -144,17 +143,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     [creationConfig.secondaryColor]
   );
 
-  /* Generate scoped CSS; dark mode excluded since this is a preview card */
-  const previewCss = useMemo(
-    () =>
-      generateTenantCss(tenantConfig, {
-        includeDarkSelector: false,
-        includeSystemDarkSelector: false,
-      }),
-    [tenantConfig]
-  );
+  /* Sanitized CSS re-anchored to the preview root; never html[data-tenant] */
+  const preview = useMemo(() => buildPreviewCss(tenantConfig), [tenantConfig]);
 
-  /* Set data-tenant attribute for CSS scoping; cleanup on unmount */
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  /* Informational data-tenant marker; no CSS keys on it. Removed on unmount
+     so a detached root never advertises a tenant (CK-H1 lifecycle contract). */
   useEffect(() => {
     const container = previewRef.current;
     if (!container) return;
@@ -172,11 +167,15 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
       ref={previewRef}
       className={`ds-pattern-tenant-preview ds-engine-modern ${className ?? ''}`}
       data-part="root"
+      /* Literal form of PREVIEW_SCOPE_ATTRIBUTE: every buildPreviewCss selector
+         anchors on this attribute, and the contract tests query it by the
+         exported constant. */
+      data-ds-tenant-preview-root={preview.safeSlug}
       style={{
         ...style,
       }}
     >
-      <style dangerouslySetInnerHTML={{ __html: previewCss }} />
+      <style dangerouslySetInnerHTML={{ __html: preview.css }} />
 
       <div
         style={{

@@ -20,7 +20,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
-import { generateTenantCss } from '../../../../../../infrastructure/runtime/tenant';
+import { buildPreviewCss } from '../../runtime/preview-css';
 
 /** Default component samples shown when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
@@ -88,8 +88,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
     style,
   } = props;
 
-  const previewRef = useRef<HTMLDivElement>(null);
-
   /* Build full tenant config from creation input */
   const tenantConfig = useMemo(() => createTenantConfig(creationConfig), [creationConfig]);
 
@@ -107,17 +105,13 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
     [creationConfig.secondaryColor]
   );
 
-  /* Generate scoped CSS; dark mode excluded for preview context */
-  const previewCss = useMemo(
-    () =>
-      generateTenantCss(tenantConfig, {
-        includeDarkSelector: false,
-        includeSystemDarkSelector: false,
-      }),
-    [tenantConfig]
-  );
+  /* Sanitized CSS re-anchored to the preview root; never html[data-tenant] */
+  const preview = useMemo(() => buildPreviewCss(tenantConfig), [tenantConfig]);
 
-  /* Attach data-tenant for CSS scoping; cleanup removes attribute on unmount */
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  /* Informational data-tenant marker; no CSS keys on it. Removed on unmount
+     so a detached root never advertises a tenant (CK-H1 lifecycle contract). */
   useEffect(() => {
     const container = previewRef.current;
     if (!container) return;
@@ -144,13 +138,17 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
       ref={previewRef}
       className={`ds-pattern-tenant-preview ds-engine-rustic ${className ?? ''}`}
       data-part="root"
+      /* Literal form of PREVIEW_SCOPE_ATTRIBUTE: every buildPreviewCss selector
+         anchors on this attribute, and the contract tests query it by the
+         exported constant. */
+      data-ds-tenant-preview-root={preview.safeSlug}
       style={{
         padding: '20px',
         fontFamily: 'system-ui, -apple-system, sans-serif',
         ...style,
       }}
     >
-      <style dangerouslySetInnerHTML={{ __html: previewCss }} />
+      <style dangerouslySetInnerHTML={{ __html: preview.css }} />
 
       {/* Header */}
       <div

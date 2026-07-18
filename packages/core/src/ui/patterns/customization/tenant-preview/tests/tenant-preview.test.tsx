@@ -15,7 +15,10 @@ import {
   type TenantCreationConfig,
 } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { generateTenantCss } from '../../../../../infrastructure/runtime/tenant';
+import { PREVIEW_SCOPE_ATTRIBUTE } from '../runtime/preview-css';
 import RusticTenantPreview from '../engines/rustic';
+import ClassicTenantPreview from '../engines/classic';
+import ModernTenantPreview from '../engines/modern';
 
 const rusticSkin = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css'),
@@ -125,6 +128,7 @@ describe('TenantPreview', () => {
 
       const root = container.firstElementChild as HTMLDivElement | null;
       expect(root).toHaveAttribute('data-tenant', 'test-tenant');
+      expect(root).toHaveAttribute(PREVIEW_SCOPE_ATTRIBUTE, 'test-tenant');
       expect(screen.getByText('Color Palette')).toBeInTheDocument();
       expect(screen.getByText('Component Preview')).toBeInTheDocument();
       expect(screen.getByText('Personality: formal')).toBeInTheDocument();
@@ -158,6 +162,83 @@ describe('TenantPreview', () => {
       expect(screen.getByText('Buttons')).toBeInTheDocument();
       expect(screen.queryByText('Card')).not.toBeInTheDocument();
       expect(screen.queryByText('Input')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Preview CSS scoping (CMP-02)', () => {
+    const engines = [
+      ['rustic', RusticTenantPreview],
+      ['classic', ClassicTenantPreview],
+      ['modern', ModernTenantPreview],
+    ] as const;
+
+    /** Selector-open lines of the injected stylesheet, without the trailing brace. */
+    function styleSelectors(styleEl: HTMLStyleElement): string[] {
+      return (styleEl.textContent ?? '')
+        .split('\n')
+        .filter((line) => line.endsWith('{'))
+        .map((line) => line.slice(0, -1).trim());
+    }
+
+    it.each(engines)('%s: applies inside the preview container only', (_name, Engine) => {
+      const { container } = render(
+        <div>
+          <Engine config={sampleConfig} />
+          <div data-testid={`outside-${_name}`} />
+        </div>
+      );
+
+      const styleEl = container.querySelector('style') as HTMLStyleElement;
+      expect(styleEl).not.toBeNull();
+      const selectors = styleSelectors(styleEl);
+      expect(selectors.length).toBeGreaterThan(0);
+
+      const root = container.querySelector(`[${PREVIEW_SCOPE_ATTRIBUTE}]`) as HTMLElement;
+      const outside = screen.getByTestId(`outside-${_name}`);
+      for (const selector of selectors) {
+        expect(root.matches(selector)).toBe(true);
+        expect(outside.matches(selector)).toBe(false);
+        expect(document.documentElement.matches(selector)).toBe(false);
+      }
+    });
+
+    it('emits no document-root rule when previewing the ACTIVE tenant slug', () => {
+      document.documentElement.setAttribute('data-tenant', 'test-tenant');
+      try {
+        const { container } = render(<RusticTenantPreview config={sampleConfig} />);
+        const styleEl = container.querySelector('style') as HTMLStyleElement;
+        const cssText = styleEl.textContent ?? '';
+
+        expect(cssText).not.toContain('html[data-tenant');
+        for (const selector of styleSelectors(styleEl)) {
+          expect(document.documentElement.matches(selector)).toBe(false);
+        }
+      } finally {
+        document.documentElement.removeAttribute('data-tenant');
+      }
+    });
+
+    it('neutralizes a hostile slug before it reaches the selector', () => {
+      const { container } = render(
+        <RusticTenantPreview
+          config={{
+            ...sampleConfig,
+            slug: "x'] , * { --pwn9: 1 } [q9='",
+          }}
+        />
+      );
+
+      const root = container.firstElementChild as HTMLDivElement;
+      expect(root.getAttribute(PREVIEW_SCOPE_ATTRIBUTE)).toMatch(/^[a-z0-9-]+$/);
+
+      const styleEl = container.querySelector('style') as HTMLStyleElement;
+      const cssText = styleEl.textContent ?? '';
+      expect(cssText).not.toContain('*');
+      expect(cssText).not.toContain('--pwn9:');
+      expect(cssText).not.toContain('html[data-tenant');
+      for (const selector of styleSelectors(styleEl)) {
+        expect(selector.startsWith(`[${PREVIEW_SCOPE_ATTRIBUTE}='`)).toBe(true);
+      }
     });
   });
 });

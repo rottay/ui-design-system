@@ -424,4 +424,29 @@ describe('tenant css generator', () => {
     expect(darkBlock).toContain('--ds-input-bg: #0f172a;');
     expect(darkBlock).toContain('--ds-modal-bg: #111827;');
   });
+
+  it('neutralizes comment breakout via tenant name or slug in the generated header', () => {
+    const config: TenantConfig = {
+      ...TENANT,
+      name: 'Evil */ body { background: red } /*',
+      slug: 'evil */ * { display: none } /*',
+    };
+
+    const css = generateTenantCss(config);
+    const headerEnd = css.indexOf('\n');
+    const header = css.slice(0, headerEnd);
+
+    expect(header.startsWith('/* Auto-generated tenant theme for ')).toBe(true);
+    expect(header.endsWith('*/')).toBe(true);
+    // The interpolated strings must not terminate the comment early: the
+    // first `*/` in the stylesheet is the header's own closer, so the hostile
+    // payload never becomes live CSS.
+    expect(header.slice(2, -2)).not.toContain('*/');
+    expect(css.indexOf('*/')).toBe(header.length - 2);
+  });
+
+  it('keeps a benign header byte-identical after comment hardening', () => {
+    const css = generateTenantCss(TENANT);
+    expect(css.startsWith('/* Auto-generated tenant theme for Evnto Labs (evnto-labs) */\n')).toBe(true);
+  });
 });
