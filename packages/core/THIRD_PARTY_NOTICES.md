@@ -83,6 +83,28 @@ pictograms are original Rottay assets governed by
 - `team-collaboration`
 - `workflow-automation`
 
+## Font packs — SIL Open Font License 1.1
+
+The opt-in white-label font packs under `dist/fonts/` ship latin-subset woff2
+binaries of six typeface families, all licensed under the SIL Open Font
+License 1.1 (https://openfontlicense.org/open-font-license-official-text/).
+The binaries were fetched from Google Fonts at pack-creation time and are
+served only through the opt-in `@rottay/design-system/fonts/<pack>.css`
+subpath exports; they never enter `dist/styles.css`.
+
+| Family | Pack(s) | Files | License | Source |
+| --- | --- | --- | --- | --- |
+| Fraunces | `editorial-display` | `fraunces-latin-variable.woff2` | OFL-1.1 | https://fonts.google.com/specimen/Fraunces |
+| Newsreader | `editorial-text` | `newsreader-latin-variable.woff2` | OFL-1.1 | https://fonts.google.com/specimen/Newsreader |
+| Space Grotesk | `grotesk-display` | `space-grotesk-latin-variable.woff2` | OFL-1.1 | https://fonts.google.com/specimen/Space+Grotesk |
+| Public Sans | `humanist-text` | `public-sans-latin-variable.woff2` | OFL-1.1 | https://fonts.google.com/specimen/Public+Sans |
+| Outfit | `geometric-display` | `outfit-latin-variable.woff2` | OFL-1.1 | https://fonts.google.com/specimen/Outfit |
+| IBM Plex Mono | `plex-mono` | `ibm-plex-mono-latin-400.woff2`, `ibm-plex-mono-latin-600.woff2` | OFL-1.1 | https://fonts.google.com/specimen/IBM+Plex+Mono |
+
+The OFL-1.1 reserves the font names for their copyright holders; the packs do
+not rename any family. Per-family copyright statements and the archived
+license texts are owed under `provenance/` before the next npm publish.
+
 ## License texts
 
 ### Phosphor Icons — MIT

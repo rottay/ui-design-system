@@ -51,38 +51,56 @@
 :root {
   /* ========================================================================
      SPACING SCALE - 4px Grid System
-     Used for margins, paddings, gaps, and any dimensional spacing
+     Used for margins, paddings, gaps, and any dimensional spacing.
+
+     Each public --ds-spacing-* step is a calc() over its literal times
+     var(--ds-density-scale, 1) — the same definition-site density axis the
+     font-size ramp uses for var(--ds-type-scale, 1). When the density axis is
+     absent the fallback 1 makes every step resolve to its literal byte-for-byte
+     (calc(1rem * 1) computes to 1rem); when a container carries
+     data-density="compact|comfortable|spacious" (foundation/base/density.css)
+     or a tenant emits --ds-density-scale (0.85-1.15) the whole ramp scales at
+     this one definition site, so every var(--ds-spacing-*) consumer — and the
+     named/layout/component aliases below that reference the ramp — scales with
+     no fleet sweep. --ds-spacing-0 stays literal 0 (scaling zero is a no-op).
+
+     NOTE: themes/default.css redefines the common steps (0-64) and wins the
+     rottay-tokens cascade (imported later); it must carry the same calc wrap
+     over its own literals for density to reach those steps — the steps only
+     defined here (7, 9, 11, 14, 28, 36, 44, 52, 56, 60, 72, 80, 96) already
+     scale from this file. The fluid ramp below is a separate opt-in axis and is
+     intentionally NOT density-wrapped.
      ======================================================================== */
   --ds-spacing-0: 0;
-  --ds-spacing-1: 0.25rem;   /* 4px */
-  --ds-spacing-2: 0.5rem;    /* 8px */
-  --ds-spacing-3: 0.75rem;   /* 12px */
-  --ds-spacing-4: 1rem;      /* 16px */
-  --ds-spacing-5: 1.25rem;   /* 20px */
-  --ds-spacing-6: 1.5rem;    /* 24px */
-  --ds-spacing-7: 1.75rem;   /* 28px */
-  --ds-spacing-8: 2rem;      /* 32px */
-  --ds-spacing-9: 2.25rem;   /* 36px */
-  --ds-spacing-10: 2.5rem;   /* 40px */
-  --ds-spacing-11: 2.75rem;  /* 44px */
-  --ds-spacing-12: 3rem;     /* 48px */
-  --ds-spacing-14: 3.5rem;   /* 56px */
-  --ds-spacing-16: 4rem;     /* 64px */
-  --ds-spacing-20: 5rem;     /* 80px */
-  --ds-spacing-24: 6rem;     /* 96px */
-  --ds-spacing-28: 7rem;     /* 112px */
-  --ds-spacing-32: 8rem;     /* 128px */
-  --ds-spacing-36: 9rem;     /* 144px */
-  --ds-spacing-40: 10rem;    /* 160px */
-  --ds-spacing-44: 11rem;    /* 176px */
-  --ds-spacing-48: 12rem;    /* 192px */
-  --ds-spacing-52: 13rem;    /* 208px */
-  --ds-spacing-56: 14rem;    /* 224px */
-  --ds-spacing-60: 15rem;    /* 240px */
-  --ds-spacing-64: 16rem;    /* 256px */
-  --ds-spacing-72: 18rem;    /* 288px */
-  --ds-spacing-80: 20rem;    /* 320px */
-  --ds-spacing-96: 24rem;    /* 384px */
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-scale, 1));   /* 4px */
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-scale, 1));    /* 8px */
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-scale, 1));   /* 12px */
+  --ds-spacing-4: calc(1rem * var(--ds-density-scale, 1));      /* 16px */
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-scale, 1));   /* 20px */
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-scale, 1));    /* 24px */
+  --ds-spacing-7: calc(1.75rem * var(--ds-density-scale, 1));   /* 28px */
+  --ds-spacing-8: calc(2rem * var(--ds-density-scale, 1));      /* 32px */
+  --ds-spacing-9: calc(2.25rem * var(--ds-density-scale, 1));   /* 36px */
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-scale, 1));   /* 40px */
+  --ds-spacing-11: calc(2.75rem * var(--ds-density-scale, 1));  /* 44px */
+  --ds-spacing-12: calc(3rem * var(--ds-density-scale, 1));     /* 48px */
+  --ds-spacing-14: calc(3.5rem * var(--ds-density-scale, 1));   /* 56px */
+  --ds-spacing-16: calc(4rem * var(--ds-density-scale, 1));     /* 64px */
+  --ds-spacing-20: calc(5rem * var(--ds-density-scale, 1));     /* 80px */
+  --ds-spacing-24: calc(6rem * var(--ds-density-scale, 1));     /* 96px */
+  --ds-spacing-28: calc(7rem * var(--ds-density-scale, 1));     /* 112px */
+  --ds-spacing-32: calc(8rem * var(--ds-density-scale, 1));     /* 128px */
+  --ds-spacing-36: calc(9rem * var(--ds-density-scale, 1));     /* 144px */
+  --ds-spacing-40: calc(10rem * var(--ds-density-scale, 1));    /* 160px */
+  --ds-spacing-44: calc(11rem * var(--ds-density-scale, 1));    /* 176px */
+  --ds-spacing-48: calc(12rem * var(--ds-density-scale, 1));    /* 192px */
+  --ds-spacing-52: calc(13rem * var(--ds-density-scale, 1));    /* 208px */
+  --ds-spacing-56: calc(14rem * var(--ds-density-scale, 1));    /* 224px */
+  --ds-spacing-60: calc(15rem * var(--ds-density-scale, 1));    /* 240px */
+  --ds-spacing-64: calc(16rem * var(--ds-density-scale, 1));    /* 256px */
+  --ds-spacing-72: calc(18rem * var(--ds-density-scale, 1));    /* 288px */
+  --ds-spacing-80: calc(20rem * var(--ds-density-scale, 1));    /* 320px */
+  --ds-spacing-96: calc(24rem * var(--ds-density-scale, 1));    /* 384px */
 
   /* ========================================================================
      NAMED SPACING - Semantic Aliases
@@ -153,6 +171,42 @@
 }
 
 /**
+ * Base Density Attribute Modes - Rottay Design System
+ *
+ * Container-scoped density. A data-density attribute on ANY container sets a
+ * local --ds-density-scale, inherited by descendants, so a compact rail can sit
+ * beside comfortable content without a JS factor. The spacing ramp
+ * (foundation/base/spacing.css) multiplies every step by var(--ds-density-scale,
+ * 1) at its definition site, so these three values scale the whole rhythm of the
+ * subtree they annotate.
+ *
+ * The three factors are numerically identical to the appearance density factor
+ * in the useTokens JS token graph
+ * (infrastructure/runtime/theming/composition/react/tokens/index.ts:
+ * general.density 'compact' -> 0.85, 'spacious' -> 1.15, else -> 1), which stays
+ * for its JS consumers. The css-to-js equality is pinned by
+ * tests/density-scale-parity.test.ts, so the CSS attribute path and the JS
+ * factor path can never drift.
+ *
+ * Absent attribute => --ds-density-scale unset => the ramp's calc fallback 1 =>
+ * byte-identical rendering. --ds-density-scale is produced here (and inline by
+ * resolveDensityStyleVars for JS-driven surfaces); it is never given a :root
+ * default so an annotated container always wins for its own subtree.
+ */
+
+[data-density='compact'] {
+  --ds-density-scale: 0.85;
+}
+
+[data-density='comfortable'] {
+  --ds-density-scale: 1;
+}
+
+[data-density='spacious'] {
+  --ds-density-scale: 1.15;
+}
+
+/**
  * Base Typography Tokens - Rottay Design System
  *
  * Typography scale including font families, sizes, weights, line heights,
@@ -175,22 +229,48 @@
 
   /* ========================================================================
      FONT SIZES
-     Type scale from small to 4xl for consistent text sizing
+     Type scale from small to 9xl for consistent text sizing.
+
+     Each public --ds-font-size-* is a calc() over a private -base literal times
+     var(--ds-type-scale, 1). When the tenant type-scale axis is absent the
+     fallback 1 makes every step resolve to its -base literal byte-for-byte;
+     when a tenant emits --ds-type-scale (0.92-1.08) the whole ramp scales at
+     the definition site, so every var(--ds-font-size-*) consumer scales with no
+     fleet sweep. The -base tokens are private (no consumer references them).
+     NOTE: themes/default.css redefines most of these steps and wins the cascade
+     (later in the rottay-tokens layer); it carries the same calc wrap over its
+     own -base literals so the winning value scales identically. The steps only
+     defined here (md, 7xl-9xl) win from this file.
      ======================================================================== */
-  --ds-font-size-xs: 0.75rem;      /* 12px */
-  --ds-font-size-sm: 0.875rem;     /* 14px */
-  --ds-font-size-base: 1rem;       /* 16px - Base font size */
-  --ds-font-size-md: 1rem;         /* 16px - Alias for base */
-  --ds-font-size-lg: 1.125rem;     /* 18px */
-  --ds-font-size-xl: 1.25rem;      /* 20px */
-  --ds-font-size-2xl: 1.5rem;      /* 24px */
-  --ds-font-size-3xl: 1.875rem;    /* 30px */
-  --ds-font-size-4xl: 2.25rem;     /* 36px */
-  --ds-font-size-5xl: 3rem;        /* 48px */
-  --ds-font-size-6xl: 3.75rem;     /* 60px */
-  --ds-font-size-7xl: 4.5rem;      /* 72px */
-  --ds-font-size-8xl: 6rem;        /* 96px */
-  --ds-font-size-9xl: 8rem;        /* 128px */
+  --ds-font-size-xs-base: 0.75rem;   /* 12px */
+  --ds-font-size-sm-base: 0.875rem;  /* 14px */
+  --ds-font-size-base-base: 1rem;    /* 16px */
+  --ds-font-size-md-base: 1rem;      /* 16px - Alias for base */
+  --ds-font-size-lg-base: 1.125rem;  /* 18px */
+  --ds-font-size-xl-base: 1.25rem;   /* 20px */
+  --ds-font-size-2xl-base: 1.5rem;   /* 24px */
+  --ds-font-size-3xl-base: 1.875rem; /* 30px */
+  --ds-font-size-4xl-base: 2.25rem;  /* 36px */
+  --ds-font-size-5xl-base: 3rem;     /* 48px */
+  --ds-font-size-6xl-base: 3.75rem;  /* 60px */
+  --ds-font-size-7xl-base: 4.5rem;   /* 72px */
+  --ds-font-size-8xl-base: 6rem;     /* 96px */
+  --ds-font-size-9xl-base: 8rem;     /* 128px */
+
+  --ds-font-size-xs: calc(var(--ds-font-size-xs-base) * var(--ds-type-scale, 1));
+  --ds-font-size-sm: calc(var(--ds-font-size-sm-base) * var(--ds-type-scale, 1));
+  --ds-font-size-base: calc(var(--ds-font-size-base-base) * var(--ds-type-scale, 1));
+  --ds-font-size-md: calc(var(--ds-font-size-md-base) * var(--ds-type-scale, 1));
+  --ds-font-size-lg: calc(var(--ds-font-size-lg-base) * var(--ds-type-scale, 1));
+  --ds-font-size-xl: calc(var(--ds-font-size-xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-2xl: calc(var(--ds-font-size-2xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-3xl: calc(var(--ds-font-size-3xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-4xl: calc(var(--ds-font-size-4xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-5xl: calc(var(--ds-font-size-5xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-6xl: calc(var(--ds-font-size-6xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-7xl: calc(var(--ds-font-size-7xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-8xl: calc(var(--ds-font-size-8xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-9xl: calc(var(--ds-font-size-9xl-base) * var(--ds-type-scale, 1));
 
   /* ========================================================================
      HEADING SIZES
@@ -1033,17 +1113,32 @@
   --ds-font-family-heading: var(--ds-font-sans);
   --ds-font-family-mono: var(--ds-font-mono);
 
-  /* Font Sizes */
-  --ds-font-size-xs: 0.75rem;
-  --ds-font-size-sm: 0.875rem;
-  --ds-font-size-base: 0.9375rem;
-  --ds-font-size-lg: 1rem;
-  --ds-font-size-xl: 1.125rem;
-  --ds-font-size-2xl: 1.25rem;
-  --ds-font-size-3xl: 1.5rem;
-  --ds-font-size-4xl: 2rem;
-  --ds-font-size-5xl: 2.5rem;
-  --ds-font-size-6xl: 3rem;
+  /* Font Sizes
+     This block wins the cascade over foundation/base/typography.css (imported
+     earlier in the rottay-tokens layer). Each public step is a calc() over a
+     private -base literal times var(--ds-type-scale, 1): absent scale => the
+     fallback 1 => byte-identical to the prior literal; a tenant --ds-type-scale
+     scales the whole ramp at this one site. */
+  --ds-font-size-xs-base: 0.75rem;
+  --ds-font-size-sm-base: 0.875rem;
+  --ds-font-size-base-base: 0.9375rem;
+  --ds-font-size-lg-base: 1rem;
+  --ds-font-size-xl-base: 1.125rem;
+  --ds-font-size-2xl-base: 1.25rem;
+  --ds-font-size-3xl-base: 1.5rem;
+  --ds-font-size-4xl-base: 2rem;
+  --ds-font-size-5xl-base: 2.5rem;
+  --ds-font-size-6xl-base: 3rem;
+  --ds-font-size-xs: calc(var(--ds-font-size-xs-base) * var(--ds-type-scale, 1));
+  --ds-font-size-sm: calc(var(--ds-font-size-sm-base) * var(--ds-type-scale, 1));
+  --ds-font-size-base: calc(var(--ds-font-size-base-base) * var(--ds-type-scale, 1));
+  --ds-font-size-lg: calc(var(--ds-font-size-lg-base) * var(--ds-type-scale, 1));
+  --ds-font-size-xl: calc(var(--ds-font-size-xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-2xl: calc(var(--ds-font-size-2xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-3xl: calc(var(--ds-font-size-3xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-4xl: calc(var(--ds-font-size-4xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-5xl: calc(var(--ds-font-size-5xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-6xl: calc(var(--ds-font-size-6xl-base) * var(--ds-type-scale, 1));
 
   /* Font Weights */
   --ds-font-weight-thin: 100;
@@ -1074,23 +1169,25 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      3. SPACING - 4px Grid System
      ───────────────────────────────────────────────────────────────────────────── */
+  /* Spacing steps multiply against the tenant density dial; this block redefines
+     base/spacing.css in the same layer, so the wrap must live here too. */
   --ds-spacing-0: 0;
-  --ds-spacing-1: 0.25rem;
-  --ds-spacing-2: 0.5rem;
-  --ds-spacing-3: 0.75rem;
-  --ds-spacing-4: 1rem;
-  --ds-spacing-5: 1.25rem;
-  --ds-spacing-6: 1.5rem;
-  --ds-spacing-8: 2rem;
-  --ds-spacing-10: 2.5rem;
-  --ds-spacing-12: 3rem;
-  --ds-spacing-16: 4rem;
-  --ds-spacing-20: 5rem;
-  --ds-spacing-24: 6rem;
-  --ds-spacing-32: 8rem;
-  --ds-spacing-40: 10rem;
-  --ds-spacing-48: 12rem;
-  --ds-spacing-64: 16rem;
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-scale, 1));
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-scale, 1));
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-scale, 1));
+  --ds-spacing-4: calc(1rem * var(--ds-density-scale, 1));
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-scale, 1));
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-scale, 1));
+  --ds-spacing-8: calc(2rem * var(--ds-density-scale, 1));
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-scale, 1));
+  --ds-spacing-12: calc(3rem * var(--ds-density-scale, 1));
+  --ds-spacing-16: calc(4rem * var(--ds-density-scale, 1));
+  --ds-spacing-20: calc(5rem * var(--ds-density-scale, 1));
+  --ds-spacing-24: calc(6rem * var(--ds-density-scale, 1));
+  --ds-spacing-32: calc(8rem * var(--ds-density-scale, 1));
+  --ds-spacing-40: calc(10rem * var(--ds-density-scale, 1));
+  --ds-spacing-48: calc(12rem * var(--ds-density-scale, 1));
+  --ds-spacing-64: calc(16rem * var(--ds-density-scale, 1));
 
   /* Semantic Spacing */
   --ds-spacing-xs: var(--ds-spacing-1);
@@ -1114,10 +1211,20 @@
   /* Border Radius - Modern, Rounded */
   --ds-radius-none: 0;
   --ds-radius-xs: 3px;
-  --ds-radius-sm: 6px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 12px;
-  --ds-radius-xl: 16px;
+  /* sm/md/lg/xl carry the tenant radius dial: each is a calc() over a private
+     -base literal times var(--ds-radius-scale, 1). Absent scale => fallback 1 =>
+     byte-identical to the prior literal; a tenant --ds-radius-scale (0.75-1.25)
+     scales these four steps at this one definition site. A tenant --ds-radius-*
+     OVERRIDE from the token set replaces the calc entirely (explicit beats dial).
+     none/xs/2xl/3xl/full stay literal (0 and pill radii are not dial-scaled). */
+  --ds-radius-sm-base: 6px;
+  --ds-radius-md-base: 8px;
+  --ds-radius-lg-base: 12px;
+  --ds-radius-xl-base: 16px;
+  --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
+  --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
+  --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
+  --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
   --ds-radius-2xl: 20px;
   --ds-radius-3xl: 24px;
   --ds-radius-full: 9999px;
@@ -14716,6 +14823,50 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-card-footer-bg, transparent);
 }
 
+/* ===========================================================================
+ * Anatomy variants (W4-A). `cardComponent.anatomy` in the tenant chrome compiles
+ * to a `data-anatomy-card` attribute on the DS root; the closed vocabulary lives
+ * in TENANT_THEME_ANATOMY_VARIANTS_V1 and is enforced by anatomy-variant-gate.mjs.
+ * `default`/absent selects the base rendering above and needs no rule here.
+ *
+ * Each block prefixes the anatomy attribute onto the base root chain and REPEATS
+ * `[data-part='root']`, reaching (0,5,0): one attribute over the (0,4,0)
+ * variant/tone/radius rules it governs, so it wins in the same unlayered origin
+ * without `!important`. Anatomy is a cross-variant frame treatment; the
+ * per-instance variant still colours within the frame the anatomy defines. State
+ * rules (hover/focus at (0,6,0)+) intentionally still react on top of the frame.
+ * ======================================================================== */
+
+/* framed: an explicit full border + surface shadow, uniform across variants. The
+   shadow/radius reach every framed card; the neutral border is added only to an
+   untoned card, so a toned card keeps its tone frame. */
+[data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-card-radius, 12px);
+  box-shadow: var(--ds-card-shadow, var(--ds-elevation-1));
+}
+[data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root']:not([data-tone]) {
+  border: var(--ds-card-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+}
+
+/* underline: no side/top borders, one bottom hairline, tighter radius, no lift. */
+[data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
+  border: 0;
+  border-bottom: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border-radius: var(--ds-card-radius-sm, 4px);
+  box-shadow: none;
+}
+
+/* ghost: no frame at rest; an interactive ghost card tints only on hover. */
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
+  background-image: none;
+}
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered'] {
+  background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
+}
+
 /**
  * Rustic Card skin (WO-ARC-07).
  *
@@ -14879,6 +15030,45 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 @keyframes ds-card-spin-rustic {
   to { transform: rotate(360deg); }
+}
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `cardComponent.anatomy` compiles to a
+ * `data-anatomy-card` attribute on the DS root; vocabulary in
+ * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * `default`/absent = base rendering above, no rule needed.
+ *
+ * The anatomy attribute prefixes the base root chain and REPEATS
+ * `[data-part='root']`, reaching (0,5,0): one attribute over the (0,4,0)
+ * variant/tone/radius rules, winning unlayered without `!important`. Rustic
+ * gates hover on `data-hoverable` (no `data-interactive`), preserved below.
+ * ======================================================================== */
+
+/* framed: full border + shadow uniform across variants; toned cards keep tone. */
+[data-anatomy-card='framed'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-card-radius, 12px);
+  box-shadow: var(--ds-card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+[data-anatomy-card='framed'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root']:not([data-tone]) {
+  border: var(--ds-card-border-width, 1px) solid var(--ds-card-border, #e5e5e5);
+}
+
+/* underline: no side/top borders, one bottom hairline, tighter radius, no lift. */
+[data-anatomy-card='underline'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'] {
+  border: 0;
+  border-bottom: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, #e5e5e5);
+  border-radius: var(--ds-card-radius-sm, 4px);
+  box-shadow: none;
+}
+
+/* ghost: no frame at rest; a hoverable ghost card tints only on hover. */
+[data-anatomy-card='ghost'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'] {
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+[data-anatomy-card='ghost'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'][data-hoverable='true'][data-state~='hovered'] {
+  background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
 }
 
 /**
@@ -17218,6 +17408,53 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border: none;
 }
 
+/* ===========================================================================
+ * Anatomy variants (W4-A). `table.anatomy` in the tenant chrome compiles to a
+ * `data-anatomy-table` attribute on the DS root; vocabulary in
+ * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * `default`/absent = the base rows/rules above, no rule needed.
+ *
+ * Row rules prefix the anatomy attribute onto a base row selector, reaching
+ * (0,5,0)/(0,6,0): one attribute over the (0,4,0) stripe/hairline rules they
+ * govern. Selection stays authoritative (its rows are excluded from the zebra
+ * stripe) and hover is re-asserted above the stripe so it still reads.
+ * ======================================================================== */
+
+/* ruled: row hairlines, no stripes. Suppress any striped fill; the not-last
+   divider below reasserts the hairline so the mode is self-contained. */
+[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+  background-color: transparent;
+}
+[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+
+/* zebra: alternating stripe on even rows (independent of the striped prop), no
+   hairlines. Selected rows keep their selection fill; hover re-asserts above. */
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row']:nth-of-type(even):not([data-selected='true']) {
+  background-color: var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+}
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 0;
+}
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-hoverable='true']:not([data-selected='true']):hover {
+  background-color: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
+}
+
+/* open: no row hairlines or stripes, header rule only, roomier vertical rhythm. */
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+  background-color: transparent;
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 0;
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='header-row'][data-part='header-row'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='data-cell'] {
+  padding-block: var(--ds-table-open-cell-padding-block, 0.875rem);
+}
+
 /**
  * Rustic DataTable skin (WO-ARC-09 checkpoint 6).
  *
@@ -17399,6 +17636,51 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* ---- expanded row content ---- */
 .ds-pattern-data-table.ds-engine-rustic [data-part='expanded-row-content'] {
   background: var(--ds-color-neutral-50);
+}
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `table.anatomy` compiles to a `data-anatomy-table`
+ * attribute on the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1,
+ * enforced by anatomy-variant-gate.mjs. `default`/absent = base above.
+ *
+ * Rustic keys row fill on the `data-state` enum (selected|striped|default) and
+ * draws hairlines on the CELLS, not the row. Anatomy rules prefix the attribute
+ * and REPEAT the cell `data-part` to reach (0,5,0)/(0,6,0), one attribute over
+ * the (0,4,0) base. Rustic paints no row hover, so no hover re-assert is needed.
+ * ======================================================================== */
+
+/* ruled: cell hairlines (the rustic default), no stripes. */
+[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] {
+  background: transparent;
+}
+
+/* zebra: alternating stripe on even rows (independent of data-state), no
+   cell hairlines. Selected rows keep their selection fill. */
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='body-row']:nth-of-type(even):not([data-state='selected']) {
+  background: var(--ds-color-neutral-50);
+}
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='selection-cell'][data-part='selection-cell'],
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='expand-cell'][data-part='expand-cell'],
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='data-cell'][data-part='data-cell'],
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='actions-cell'][data-part='actions-cell'] {
+  border-bottom: 0;
+}
+
+/* open: no cell hairlines or stripes, header bottom rule only (drop the vertical
+   header rules), roomier vertical rhythm. */
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] {
+  background: transparent;
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='selection-cell'][data-part='selection-cell'],
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='expand-cell'][data-part='expand-cell'],
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='data-cell'][data-part='data-cell'],
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='actions-cell'][data-part='actions-cell'] {
+  border-bottom: 0;
+  padding-block: var(--ds-table-open-cell-padding-block, 0.875rem);
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='header-cell'][data-part='header-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-200);
+  border-right: 0;
 }
 
 /**
@@ -30360,6 +30642,55 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
+/* ===========================================================================
+ * Anatomy variants (W4-A). `sidebar.anatomy` and `layout.anatomy` in the tenant
+ * chrome compile to `data-anatomy-sidebar` / `data-anatomy-layout` attributes on
+ * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by
+ * anatomy-variant-gate.mjs. `default`/absent = the base above, no rule needed.
+ *
+ * Sidebar rail/panel governs the sider's interior rhythm and alignment plus the
+ * cascaded `--ds-sidebar-item-*` rhythm tokens a nested nav reads. The sider
+ * container WIDTH is set inline by the component (`Layout.Sider` width prop /
+ * the app-shell `--ds-shell-inline-start-inset`) and is NOT overridable here, so
+ * `inline-size` is best-effort (it wins only where the host drives width from
+ * CSS). Rules REPEAT `[data-part='sider']` to reach (0,5,0), one attribute over
+ * the (0,4,0) theme rules. `data-anatomy-layout` covers this engine's shell
+ * `Layout.Header`; the cockpit-header pattern carries its own copy.
+ * ======================================================================== */
+
+/* sidebar panel: the wide, comfortable default; roomy item rhythm, left-read. */
+[data-anatomy-sidebar='panel'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-part='sider'] {
+  --ds-sidebar-item-padding-inline: var(--ds-spacing-3, 12px);
+  --ds-sidebar-item-gap: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-2, 8px));
+}
+
+/* sidebar rail: narrow, icon-first; tight rhythm, centred, best-effort width. */
+[data-anatomy-sidebar='rail'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-part='sider'] {
+  --ds-sidebar-item-padding-inline: 0px;
+  --ds-sidebar-item-gap: var(--ds-spacing-1, 4px);
+  align-items: center;
+  text-align: center;
+  padding-inline: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-1, 4px));
+  inline-size: var(--ds-sidebar-collapsed-width, 68px);
+}
+
+/* layout flat: the shell header merges with the canvas -- no border, radius or
+   elevation. */
+[data-anatomy-layout='flat'] .rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+  border-bottom: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* layout floating: the shell header lifts into an inset, rounded, elevated card. */
+[data-anatomy-layout='floating'] .rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+  border-bottom: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2);
+  margin: var(--ds-spacing-2, 8px);
+}
+
 /**
  * Rustic Layout skin (WO-SKIN-05 checkpoint L).
  *
@@ -30472,6 +30803,54 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-box.rottay-box--rustic[data-shadow='2xl'] {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `sidebar.anatomy` and `layout.anatomy` in the tenant
+ * chrome compile to `data-anatomy-sidebar` / `data-anatomy-layout` attributes on
+ * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by
+ * anatomy-variant-gate.mjs. `default`/absent = the base above, no rule needed.
+ *
+ * Rustic owns no cockpit-header skin, so `data-anatomy-layout` rides this
+ * engine's shell `Layout.Header` here -- the real header chrome for this engine.
+ * Sidebar rail/panel governs interior rhythm/alignment plus cascaded
+ * `--ds-sidebar-item-*` tokens; the sider container width is set inline by the
+ * component and is not overridable, so `inline-size` is best-effort. Rules
+ * REPEAT `[data-part='sider']` to reach (0,5,0), one attribute over the (0,4,0)
+ * theme rules.
+ * ======================================================================== */
+
+/* sidebar panel: the wide, comfortable default; roomy item rhythm, left-read. */
+[data-anatomy-sidebar='panel'] .rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'][data-part='sider'] {
+  --ds-sidebar-item-padding-inline: var(--ds-spacing-3, 12px);
+  --ds-sidebar-item-gap: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-2, 8px));
+}
+
+/* sidebar rail: narrow, icon-first; tight rhythm, centred, best-effort width. */
+[data-anatomy-sidebar='rail'] .rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'][data-part='sider'] {
+  --ds-sidebar-item-padding-inline: 0px;
+  --ds-sidebar-item-gap: var(--ds-spacing-1, 4px);
+  align-items: center;
+  text-align: center;
+  padding-inline: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-1, 4px));
+  inline-size: var(--ds-sidebar-collapsed-width, 68px);
+}
+
+/* layout flat: the shell header merges with the canvas -- no border, radius or
+   elevation. */
+[data-anatomy-layout='flat'] .rottay-layout-header.rottay-layout-header--rustic[data-part='header'] {
+  border-bottom: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* layout floating: the shell header lifts into an inset, rounded, elevated card. */
+[data-anatomy-layout='floating'] .rottay-layout-header.rottay-layout-header--rustic[data-part='header'] {
+  border-bottom: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2);
+  margin: var(--ds-spacing-2, 8px);
 }
 
 /**
@@ -33556,6 +33935,34 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
   border-radius: var(--ds-cockpit-header-skeleton-radius, var(--ds-radius-sm));
   background: var(--ds-color-neutral-100);
+}
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `layout.anatomy` in the tenant chrome compiles to a
+ * `data-anatomy-layout` attribute on the DS root; vocabulary in
+ * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * `default`/absent = the base header above (surface card + bottom rule).
+ *
+ * The cockpit header is this engine's primary app header. Rules prefix the
+ * anatomy attribute and REPEAT `[data-part='root']`, reaching (0,5,0): one
+ * attribute over the (0,4,0) bottom-border rule and level with the (0,5,0)
+ * sticky-elevation rule, which they follow in source order so the anatomy
+ * treatment wins its box-shadow tie without `!important`.
+ * ======================================================================== */
+
+/* layout flat: header merges with the canvas -- drop the bottom rule and any
+   sticky elevation. */
+[data-anatomy-layout='flat'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 0;
+  box-shadow: none;
+}
+
+/* layout floating: header lifts into an inset, rounded, elevated card. */
+[data-anatomy-layout='floating'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2);
+  margin: var(--ds-spacing-2, 8px);
 }
 
 /**
@@ -50290,6 +50697,31 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * load-bearing: unlayered skins must keep beating personality (P-87);
  * declared residue in css-layer-paint-gate.allowlist.json.
  */
+
+/* ========================================================================
+   TYPOGRAPHY DIAL BRIDGE
+   Chains the personality typography namespace (the vars component skins read)
+   onto the tenant document dials, with a byte-stable literal as the last
+   fallback so absent-dial rendering is unchanged. A consumer that reads
+   --ds-typography-heading-letter-spacing therefore resolves the tenant's
+   --ds-letter-spacing-heading override when one is set and no personality
+   preset value overrides the namespace var.
+
+   SystemCssVariablesBridge writes these same namespace vars into an UNLAYERED
+   :root rule from the resolved personality tokens, so when it is mounted its
+   value wins over this layered default; these defaults govern the SSR /
+   no-JS / compiled-artifact paints and keep the dial in the resolved chain.
+   ======================================================================== */
+
+:root {
+  --ds-typography-heading-letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  --ds-typography-heading-font-weight: var(--ds-font-weight-heading, 600);
+  --ds-typography-body-letter-spacing: var(--ds-letter-spacing-body, normal);
+  --ds-typography-display-letter-spacing: var(--ds-letter-spacing-display, normal);
+  --ds-typography-heading-line-height: var(--ds-line-height-heading, 1.2);
+  --ds-typography-body-line-height: var(--ds-line-height-body, 1.6);
+  --ds-typography-display-line-height: var(--ds-line-height-display, 1);
+}
 
 /* ========================================================================
    CARD PERSONALITY

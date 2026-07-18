@@ -397,12 +397,16 @@ function countDarkPureBlackElevations() {
  * Count radius SCALE definition sites at the foundation/engine layer (tenant
  * artifacts and legacy tenant files are tenant-specific overrides, not scales
  * - same convention as countShadowScales). The single source of truth is
- * foundation/themes/default.css's literal --ds-radius-sm/md/lg/xl/full block;
- * every other consumer (including the component-specific --ds-radius-button/
- * -card/... aliases in foundation/base/borders.css) must reference it via
- * var(), never redeclare the literal scale. A "declaration site" requires TWO
- * core scale keys (sm AND md) defined with a literal px/rem value in the same
- * file, to avoid flagging a lone component-specific alias. Target: exactly 1.
+ * foundation/themes/default.css's literal radius scale; every other consumer
+ * (including the component-specific --ds-radius-button/-card/... aliases in
+ * foundation/base/borders.css) must reference it via var(), never redeclare the
+ * literal scale. Since W4-B1 the sm/md/lg/xl steps carry the tenant radius dial
+ * as calc(var(--ds-radius-<step>-base) * var(--ds-radius-scale, 1)); the literal
+ * now lives in the private --ds-radius-<step>-base tokens, still in the same one
+ * file. A "declaration site" therefore requires TWO core scale keys (sm AND md),
+ * in EITHER their public or their -base form, defined with a literal px/rem
+ * value in the same file, to avoid flagging a lone component-specific alias.
+ * Target: exactly 1.
  */
 function countRadiusScaleDeclarations() {
   const files = [
@@ -412,11 +416,36 @@ function countRadiusScaleDeclarations() {
   let scales = 0;
   for (const f of files) {
     const t = readFileSync(f, 'utf8');
-    if (/--ds-radius-sm:\s*(?!var\()[^;]*(?:px|rem)/.test(t) && /--ds-radius-md:\s*(?!var\()[^;]*(?:px|rem)/.test(t)) {
+    if (/--ds-radius-sm(?:-base)?:\s*(?!var\()[^;]*(?:px|rem)/.test(t) && /--ds-radius-md(?:-base)?:\s*(?!var\()[^;]*(?:px|rem)/.test(t)) {
       scales += 1;
     }
   }
   return scales;
+}
+
+/**
+ * W4-B1 (design section 3.2): count hardcoded font-size length literals inside
+ * the engine + agnostic SKIN stylesheets. A skin that writes `font-size: 13px`
+ * instead of `font-size: var(--ds-font-size-sm)` opts out of the type-scale
+ * ramp -- the tenant --ds-type-scale dial cannot reach it. A `font-size:` set
+ * from a --ds-* token or from a keyword (inherit/…) is fine and does not count;
+ * clamp()/calc() carrying a raw px/rem/em literal does. Decrease-only ratchet
+ * (baseline = measured count); drain opportunistically toward 0.
+ */
+function countFontSizeLiterals() {
+  const declRe = /font-size\s*:\s*([^;}{]+)[;}]/gi;
+  const literalLen = /(?<![\w-])-?\d*\.?\d+(?:px|rem|em)\b/;
+  let total = 0;
+  for (const file of collectSkinFiles()) {
+    const t = readFileSync(file, 'utf8');
+    for (const m of t.matchAll(declRe)) {
+      const val = m[1];
+      if (/var\(\s*--/.test(val)) continue;
+      if (!literalLen.test(val)) continue;
+      total += 1;
+    }
+  }
+  return total;
 }
 
 const foundationDir = join(tokensCssDir, 'foundation');
@@ -2421,6 +2450,11 @@ const counters = {
   'depth.darkPureBlackElevations': countDarkPureBlackElevations(),
   'scale.radiusScaleDeclarations': countRadiusScaleDeclarations(),
   'scale.fallbackParityViolations': countFallbackParityViolations(),
+  // W4-B1 (design section 3.2): hardcoded font-size length literals in skins.
+  // The type-scale ramp (calc(--ds-font-size-*-base * var(--ds-type-scale,1)))
+  // only reaches skins that read the token; a raw `font-size: 13px` opts out.
+  // Decrease-only ratchet; drain toward 0.
+  'scale.fontSizeLiterals': countFontSizeLiterals(),
   'state.darkFocusRingDefects': countDarkFocusRingDefects(),
   'state.inlineStateLiterals': countInlineStateLiterals(),
   // NOT the authority on whether the effect renders. This is a MIN floor over

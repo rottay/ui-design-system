@@ -191,6 +191,36 @@
       "import": "./dist/commercial.css",
       "default": "./dist/commercial.css"
     },
+    "./fonts/editorial-display.css": {
+      "style": "./dist/fonts/editorial-display.css",
+      "import": "./dist/fonts/editorial-display.css",
+      "default": "./dist/fonts/editorial-display.css"
+    },
+    "./fonts/editorial-text.css": {
+      "style": "./dist/fonts/editorial-text.css",
+      "import": "./dist/fonts/editorial-text.css",
+      "default": "./dist/fonts/editorial-text.css"
+    },
+    "./fonts/grotesk-display.css": {
+      "style": "./dist/fonts/grotesk-display.css",
+      "import": "./dist/fonts/grotesk-display.css",
+      "default": "./dist/fonts/grotesk-display.css"
+    },
+    "./fonts/humanist-text.css": {
+      "style": "./dist/fonts/humanist-text.css",
+      "import": "./dist/fonts/humanist-text.css",
+      "default": "./dist/fonts/humanist-text.css"
+    },
+    "./fonts/geometric-display.css": {
+      "style": "./dist/fonts/geometric-display.css",
+      "import": "./dist/fonts/geometric-display.css",
+      "default": "./dist/fonts/geometric-display.css"
+    },
+    "./fonts/plex-mono.css": {
+      "style": "./dist/fonts/plex-mono.css",
+      "import": "./dist/fonts/plex-mono.css",
+      "default": "./dist/fonts/plex-mono.css"
+    },
     "./dist/*.css": "./dist/*.css"
   },
   "files": [
@@ -203,6 +233,7 @@
     "dist/platform.css",
     "dist/bithire.css",
     "dist/evnto.css",
+    "dist/fonts/**",
     "supplier-contract.json",
     "consumer/ds-supplier-honesty.mjs",
     "THIRD_PARTY_NOTICES.md",
@@ -216,7 +247,7 @@
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
     "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check",
     "prepack": "pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
-    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:stamp",
+    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
     "postbuild": "pnpm run cra14:check",
     "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled.css -o dist/modern-engine.css",
     "build:commercial-css": "node scripts/build-commercial-css.mjs",
@@ -240,7 +271,7 @@
     "gat09:structural": "node scripts/gat-09-full-claim-integrity.mjs --structural",
     "gat09:gate": "node scripts/gat-09-full-claim-integrity.mjs",
     "test:scripts": "node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
-    "pretest": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run contract:check && node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check",
+    "pretest": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run contract:check && node scripts/engine-token-audit.mjs --check && node scripts/anatomy-variant-gate.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check && node scripts/tenant-channel-consumer-gate.mjs --check",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",
@@ -275,7 +306,8 @@
     "structure:report": "node scripts/core-structure-audit.mjs --report",
     "lint:integration": "node scripts/audit-integration.mjs",
     "lint:vertical": "node scripts/audit-vertical-compliance.mjs",
-    "docs:taxonomy": "node scripts/generate-taxonomy.mjs"
+    "docs:taxonomy": "node scripts/generate-taxonomy.mjs",
+    "build:fonts": "node scripts/build-font-packs.mjs"
   },
   "releaseSync": {
     "sourceEntrypoints": {

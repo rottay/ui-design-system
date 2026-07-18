@@ -33,9 +33,11 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     `runtime SVG CLI failed\nstdout:\n${censusRun.stdout}\nstderr:\n${censusRun.stderr}`
   );
   const census = JSON.parse(censusRun.stdout);
-  // 1086 = the 2026-07-17 consolidation census + the W3 collection-stagger
-  // pattern hook (patterns/foundation/motion/collection-stagger/index.ts).
-  assert.equal(Object.keys(census.files).length, 1086);
+  // 1091 = the 2026-07-17 consolidation census + the W3 collection-stagger
+  // pattern hook (patterns/foundation/motion/collection-stagger/index.ts) +
+  // the W4 brand-studio tenant-theme-preview family (hook, preview-scope,
+  // pack-warnings, contrast-adjustments, report).
+  assert.equal(Object.keys(census.files).length, 1091);
   assert.equal(census.total, 109);
   assert.equal(census.classifiedPaint, 109);
   assert.equal(census.unclassified, 0);
@@ -52,7 +54,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     `embedded CSS CLI failed\nstdout:\n${embeddedRun.stdout}\nstderr:\n${embeddedRun.stderr}`
   );
   const embedded = JSON.parse(embeddedRun.stdout);
-  assert.equal(Object.keys(embedded.files).length, 1086);
+  assert.equal(Object.keys(embedded.files).length, 1091);
   assert.equal(embedded.total, 7);
   assert.equal(embedded.classifiedPaint, 7);
   assert.equal(embedded.unclassified, 0);
@@ -92,7 +94,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   ]);
   const embeddedPerFileKeys = baselineEmbeddedKeys.filter((key) => !embeddedAggregateKeys.has(key));
 
-  assert.equal(baseline['runtimeSvgPaint.filesScanned'], 1086);
+  assert.equal(baseline['runtimeSvgPaint.filesScanned'], 1091);
   assert.equal(baseline['runtimeSvgPaint.total'], 109);
   assert.equal(baseline['runtimeSvgPaint.unclassified'], 0);
   assert.equal(baseline['runtimeSvgPaint.ignoredStructural'], 387);
@@ -151,7 +153,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   assert.equal(perFileKeys.length, baseline['runtimeSvgPaint.filesScanned']);
   assert.deepEqual(collectMissingPrefixedCounters(counters, baseline, 'runtimeSvgPaint.'), []);
 
-  assert.equal(baseline['embeddedCssPaint.filesScanned'], 1086);
+  assert.equal(baseline['embeddedCssPaint.filesScanned'], 1091);
   assert.equal(baseline['embeddedCssPaint.total'], 7);
   assert.equal(baseline['embeddedCssPaint.classifiedPaint'], 7);
   assert.equal(baseline['embeddedCssPaint.unclassified'], 0);
@@ -183,7 +185,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     perFileKeys.reduce((sum, key) => sum + baseline[key], 0)
   );
 
-  assert.equal(baseline['fleet.inlinePaint.filesScanned'], 785);
+  assert.equal(baseline['fleet.inlinePaint.filesScanned'], 795);
   assert.equal(baseline['fleet.inlinePaint.total'], 203);
   assert.equal(fleetPerFileKeys.length, baseline['fleet.inlinePaint.filesScanned']);
   assert.equal(

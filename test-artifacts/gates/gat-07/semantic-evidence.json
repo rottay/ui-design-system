@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "f25046cce8104a3c4e68bb52287b86793730ea5a3211346d8e4cdeec96255a9f",
+    "authorityDigest": "0738a23a70027c0018d7604bf383aa9d66ce4bbd014408a8d9d8f75da1296514",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -249,8 +249,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 18357,
-        "sha256": "45d6dc48ef3216641212c9a2cdd253ff0b9e4c86df6790321e9e2bbe3608cdd0"
+        "bytes": 19738,
+        "sha256": "73296d7c82741f23bf68f0d0a562506adcf7a811b879f50ab8e39e61f3577cae"
       },
       {
         "path": "ui-design-system/packages/core/scripts/analyze-bundle.mjs",
@@ -259,6 +259,22 @@
         ],
         "bytes": 123675,
         "sha256": "739d44b120c920648b16be16633964998f99daff1d67026f3fed6b3b67ee04ef"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/anatomy-variant-gate.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 13169,
+        "sha256": "27872b0fc01b6ae0853e24db9954c7a29183562f3beedb18610cb71a5b52a065"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/anatomy-variant-gate.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 8624,
+        "sha256": "092dfb05321a33cafc46d60bf4c3ec6aa28e316dbb02f59efe423ec6ac468f0c"
       },
       {
         "path": "ui-design-system/packages/core/scripts/app-surface-factory-drain.test.mjs",
@@ -291,6 +307,14 @@
         ],
         "bytes": 1937,
         "sha256": "fec9dec2357bfd5614e14bb0295b091cd479923b7f3f330b372c207b97893b4a"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/build-font-packs.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 2214,
+        "sha256": "a83e72ea9d238ba38912a8b62aed9d8b53bb6d8df3bb9888226daeac7afde9de"
       },
       {
         "path": "ui-design-system/packages/core/scripts/build-vertical-artifacts.mjs",
@@ -386,7 +410,7 @@
           "audit-machinery"
         ],
         "bytes": 4370,
-        "sha256": "ae2f830bb14bae9908fea72870c49b70243c79d770497b52ddcdad9d773ad1e0"
+        "sha256": "faf6f1efdf0c9ffab7a494904ff44bddb82dfb60fa3b4b656a869858ec9cd090"
       },
       {
         "path": "ui-design-system/packages/core/scripts/codemod-motion-durations.mjs",
@@ -449,16 +473,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 52774,
-        "sha256": "5d30079bc58f7f3f4a981ae72a9e7b58be831eb0ef1eacad2b1dce36502b6991"
+        "bytes": 53087,
+        "sha256": "6070c9da3f0cfe6385bec711ec1fb7c40451338d73a53bfc62b49cf41dac84f6"
       },
       {
         "path": "ui-design-system/packages/core/scripts/core-structure-audit.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 34827,
-        "sha256": "58ff562b8b4b54e7505cef0bb7b4101146a2bf775fd93edc6bb612b9ca4bcb61"
+        "bytes": 34942,
+        "sha256": "470c32412d6e3d0e9572654c0254710f151d31230da1feb99a86b98bdc81cad1"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-11-adaptive-contract-census.mjs",
@@ -649,8 +673,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 228326,
-        "sha256": "398e5e865ad0ea058bad8aa53e2e586805063836786469acb07daf9fc4b96a86"
+        "bytes": 230617,
+        "sha256": "abc03190f24e8777e95f55ab47cf232adce007cd057ab418cc72e490f6725bba"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-token-audit.effects.test.mjs",
@@ -673,8 +697,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 126886,
-        "sha256": "ac798f9f414e549a044b8d70edc3c579e61f7934c8dd1bcb2bfac896e7eb7c76"
+        "bytes": 128514,
+        "sha256": "200cc69536cd77bd5437fca94ea2735154f650c068950fdf2b2f44278ba99ded"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-token-audit.motion-recipes.test.mjs",
@@ -689,8 +713,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12390,
-        "sha256": "4e7a7ff94d08d78838714f2e18b35b41af8f1b74d09e2c5ccff122f66eb943e1"
+        "bytes": 12517,
+        "sha256": "ffd5582b237c680f1dfa3244e5574c385b329bbb10d0b5679d5fa2c0dc8ca153"
       },
       {
         "path": "ui-design-system/packages/core/scripts/fleet-inline-paint-census.test.mjs",
@@ -893,8 +917,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 66388,
-        "sha256": "152c8a9da764a70f71a6f9767e874a35a3f8a121c6842a2de176a7592aa82d1d"
+        "bytes": 66505,
+        "sha256": "2abd43c9a55c3ca1e9c65daee63fad401f718e0082acfb21050edf15450f8df7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/engine-token-governance.mjs",
@@ -1021,8 +1045,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 866221,
-        "sha256": "447a50f213ca7754d967925a981e0f7fff4220a067c6da6fb1a48d740c2ce578"
+        "bytes": 871583,
+        "sha256": "163bf73add16bb1a6ebcf302883fffbddc8034a579f48193ccdf5fbefd2e0ac7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/pack-inventory.lucide-allowlist.json",
@@ -1111,6 +1135,30 @@
         ],
         "bytes": 2570,
         "sha256": "26232c1cc0996d653f4ef8a5b7605f51476c3b2cfe22fd1e1481aff3b7e59cd3"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/tenant-channel-consumer-gate.baseline.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 58488,
+        "sha256": "d750e7639cfc1da19059e045df4ad82e19c6d5a8992ad106f5d7f3b75927c572"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/tenant-channel-consumer-gate.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 14935,
+        "sha256": "55b0f801e63c10e0acb7e12195f15dfc563a4cb62493d9bb3adfd53506e56fd1"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/tenant-channel-consumer-gate.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 6097,
+        "sha256": "b1054c4201a7e13bfbef1b732b61c6d3e20013b86d740272f3162a123b15ba7d"
       },
       {
         "path": "ui-design-system/packages/core/scripts/typecheck-tests-ratchet.mjs",
@@ -1373,8 +1421,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 3199,
-        "sha256": "70c44404b16433cbf9c12e1e73a467385a2455f6491b6a6e2662d5f6144ac4ca"
+        "bytes": 3883,
+        "sha256": "438b8283d430fa61673e7593b285e0863cf724995943d59028e6c23b1dd3ab3c"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/behavior/index.ts",
@@ -1451,8 +1499,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 25679,
-        "sha256": "26567254e23b511db8fc9f14a88cfffad850ac487e764f635131359a7704897f"
+        "bytes": 26476,
+        "sha256": "1de9b99d717c0add670637fcf154ec51f6f668590965ee8d6ac6ed7b001d7662"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
@@ -1461,8 +1509,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 12355,
-        "sha256": "3b2a0e78597db79cf9d6ef86a0e8bc90b7cc6777fcf7ad2dc5b6fcfc053ccdd5"
+        "bytes": 15902,
+        "sha256": "221904c2228486c4f76c6fd2816f024f383870a255b571d25b067b83fca169b2"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/index.ts",
@@ -2065,8 +2113,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 17273,
-        "sha256": "cc03939ba92913aa5f82e312df35309da46874e8113d43a4f404a6ecea8005dd"
+        "bytes": 15896,
+        "sha256": "98d97d053da1a01aae2772c2950bb2ef6aa69da3779f8efe8a2609e0b18d19b4"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/kernel/accessibility/branding-contrast/tests/apca-oracle.test.ts",
@@ -2075,6 +2123,24 @@
         ],
         "bytes": 2339,
         "sha256": "4615f01a0c49c160950192dc3312c08e74442d33d7a41f46807404a94fe843a7"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 10246,
+        "sha256": "e73976f6cf09f7514a9ed2a7b92e9da70645a6e3e5f2ee125930267de6147b55"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 10903,
+        "sha256": "b4ba34c2d2ec0145001a4f56db090f7e119564151bad514abb817825786a026d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/kernel/accessibility/wcag/index.ts",
@@ -2111,6 +2177,42 @@
         ],
         "bytes": 1695,
         "sha256": "b6ee20facb94a67b29ffa8e2afc87148acc8e5586a5ba2d0454172fcb1307d62"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/kernel/color/contrast/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2640,
+        "sha256": "ff8f8c0952a608ed31bb6872ce61d25da69e4ae604bf7e812496050a1cf1cd41"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/kernel/color/contrast/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3616,
+        "sha256": "5602724085977bac767e9a8b8896679d159fe40fc5d2c0d3c747e26566328134"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/kernel/color/oklch/chart-series/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 5323,
+        "sha256": "5d0fc4172a6220a318dbf063dffe8c1cb9eaee35b8e9c3c9c75e6935fbd63b0f"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/kernel/color/oklch/chart-series/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 6288,
+        "sha256": "ee32bbc06e0fe3e1a1d4b99aac139c3ad4423dd33e348f8d41c78ec0f127fb8d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/kernel/color/oklch/index.ts",
@@ -2483,12 +2585,20 @@
         "sha256": "e0791ae3626a74ba8dcea2fb901f43e6c2279926f5897ea9c354360ad36cedd9"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/density.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1410,
+        "sha256": "dcc4079e1c24bf9b9efbb67fb615c88134b99eb5ab1111cc167fe89982e3449f"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 399,
-        "sha256": "a9dde6b58db2f0194d2c4845a6d21992af6499a666c15ad7639f762ebfb44e3d"
+        "bytes": 424,
+        "sha256": "cb618111669038cf094a2462fd95b12c28ae43750aa415755b7c6773a411cb8e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/shadows.css",
@@ -2503,16 +2613,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5684,
-        "sha256": "b443e8ae62cca59548b73994d4a9aed69dc9fa6bf0927e209e75352e34efd276"
+        "bytes": 7909,
+        "sha256": "bb181440544130b0179f70e22647fb27f71b9e8c7a9c95ef117e4e39dba0843e"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/tests/density-scale-parity.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3739,
+        "sha256": "78159b184354702cb26d9c34e20c843cdd25eda82be443865f32ddd41981c973"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/typography.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 12767,
-        "sha256": "d8bd61457e9e1de647eb7eae5969b9a5247c14efbe16d332be8af731f739eecb"
+        "bytes": 14713,
+        "sha256": "c51b21c5477bd7f9e7e7cd4bc559c4f57ec1b7ad69868f0210e147ed530025d9"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/z-index.css",
@@ -2551,8 +2669,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 105461,
-        "sha256": "570def583378e5abf61647f73957ad4df0c4f8326e93b4e9b1a9893c906c23c0"
+        "bytes": 108244,
+        "sha256": "51d9a73c9fa4209056c2c95d0982fa66981285f6e605372052d8d80b39326fd8"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/themes/tests/default-theme-neutral-derivation.test.ts",
@@ -2561,6 +2679,80 @@
         ],
         "bytes": 5523,
         "sha256": "50f119a8816173ddc1eb9764bd04a57419348ccf46c46cae3ec1e47751f4bc2b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 7384,
+        "sha256": "35f3437b4e8499569b8c4d60bc2bc92ce306b5042d0daebd3f1cf0bb5c618c01"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/editorial-display/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 911,
+        "sha256": "911e6e5786b79ac5ff1aa5f47c6b81f075cbf0b9ab335e926d5947db95315d0b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/editorial-text/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 727,
+        "sha256": "dafdbb17c54c3b79c231caecbb492e8dd225cab3480e13aa4091ea7c337dea66"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/geometric-display/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 749,
+        "sha256": "9283d089f5e01cf0366425bf09d4ffb481fea74806e8b8850ce19c010a15bbf3"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/grotesk-display/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 771,
+        "sha256": "d0227371ba23d556d5418ed30bb00ebfd0e5c7a213e7019beef6edff3f16c111"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/humanist-text/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 757,
+        "sha256": "634e0fd744b00ada59739d9da3437290ce9bbf7575ba3bd82edef4552e50458f"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/manifest/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 4975,
+        "sha256": "16d63ec31f9eb0765b0054831f32ded14d43e35b5f432a59f826299ebfa8f26e"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/plex-mono/index.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 870,
+        "sha256": "5e20323b328bfda63adf2647b2e06beff8ec071a23fd68da201285741b8708ba"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/typography/font-packs/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3764,
+        "sha256": "e2c1973a8cbf63631dfbaeeda058d487769fc4227bb5b646f94a79dec0c258fd"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/avatar.css",
@@ -4111,6 +4303,14 @@
         "sha256": "80083ea2e7348e1bdfaa3bd51156cd7345cfb96eb52b7fd949d3f5adb1a34bcf"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/classic/classic-anatomy-support.json",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3277,
+        "sha256": "bb44b0a5f613a90b5bb416a258eb90a651ec503e4d996c6f98d622bf0f0708c1"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css",
         "roles": [
           "audit-input",
@@ -4284,8 +4484,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 10928,
-        "sha256": "d621ea2893f7f888437ca16111abacf9aaad806e7500ed7e9538343b1973a678"
+        "bytes": 13424,
+        "sha256": "6bf3df24ee73ebdc842f5954334307e001159043336bbbb6503215b587e55da1"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
@@ -4324,8 +4524,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5858,
-        "sha256": "cef2f58feaa3ee65959adf265217f57fdd299bc5a1d8f864f35d5b767318d37e"
+        "bytes": 7262,
+        "sha256": "97279ff40b8c348481da75fcec2e2b6881b728786a3cdeca8ec2933a96f0d349"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
@@ -4394,8 +4594,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 14035,
-        "sha256": "d49d24f52827feec53bc5da98c9c3a57bc4472800e2749ec6c48be2c2ebada11"
+        "bytes": 16851,
+        "sha256": "f8e556b6278deb815b7dbccd82f935a53b7b097dd46529d576e3d988528cdcce"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
@@ -4634,8 +4834,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 4786,
-        "sha256": "04f97a9c0dddb07e4fb66d6021e392be7df1a5766131e8451c2a3dac4e257ecc"
+        "bytes": 7373,
+        "sha256": "b2cf538834b720b88915677ba2fa05255fe26b7969b716bf50803379b4f2a340"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/link.css",
@@ -5443,8 +5643,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 7632,
-        "sha256": "05ed0a1225bc00842dd797c1180c91cbc38200d31cd9e62bd90d96d5cc837783"
+        "bytes": 9726,
+        "sha256": "5175e82d28271425aa4695afe730364dd68e9134c4ce4cb77f29313893f18da1"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css",
@@ -5543,8 +5743,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 8436,
-        "sha256": "3f33456b020268daa89ec19d2d5ec4f0a015f0db1d67dcabde97119970741b55"
+        "bytes": 11237,
+        "sha256": "4f8e9cf2e747f463d202917ec93679fcbcefc3b3bf67cc6e4f1067e72ea0d349"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker.css",
@@ -5783,8 +5983,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5317,
-        "sha256": "c25fcde0c88c33c67eb38c6de2dd46a1061349478c2a02b64343ebf3c709fbc9"
+        "bytes": 7758,
+        "sha256": "e255e02a7499f0adf23b03bf7f6cbe9b30fde2d5eaac8fa45079a900d4bf1ec8"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/link.css",
@@ -6438,8 +6638,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 26720,
-        "sha256": "32a0771852d51d77a43567aead84a8f412d2a7078094f04a72b203a11a13a6ce"
+        "bytes": 28180,
+        "sha256": "9dd3be4298da11e8e274aa49e2ebf691fcf9a135e6c1538507b7b47d049f1d81"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/index.ts",
@@ -6572,6 +6772,26 @@
         "sha256": "50c84d2a7b5c7925ab06703224752fff7d5a71bf2d35d5a857fba585208ebcf4"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/divergence-editorial/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2359,
+        "sha256": "dcbe7dec3daaa194be61c2b45370c53c1c2a1bd6bfd3eb18259fb8745574d21b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/divergence-sober/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2842,
+        "sha256": "1d33eadc65ff7d7c0d8b502264e7be2911439c1447fbcb0627171aeaab85e514"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts",
         "roles": [
           "audit-input",
@@ -6610,6 +6830,24 @@
         ],
         "bytes": 9056,
         "sha256": "f66f690198ab666b01cb173e5ec1ac2413964cd2366fc899ff8f60f43125f47f"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/typography/pairings/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2754,
+        "sha256": "9d1abd7919294a6d8e2e55a11fdf2fa3e60bfa8da685a1c5e236003bd370d7ac"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/typography/pairings/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3237,
+        "sha256": "df0e72b75c1fe71cb9078dfbb0e4c9996e9bb51ea3f5665d319ac1dbe225a03f"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/runtime/components/avatar/index.ts",
@@ -10908,8 +11146,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 44956,
-        "sha256": "1f38092d082bf0b0542f49aedce2c90331541932b71a81a7027ce06709a76f18"
+        "bytes": 49195,
+        "sha256": "6589577bed40052d45e3dcf0c3c3fd4ceb619ae7267bc40a5eb38c506440cab9"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/divergence-fixtures.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5700,
+        "sha256": "8a5d0c9924f069c03704d25d63bed2e0cf0c1bd85805c0690cd0a61368eed395"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/fixtures/null-override-artifact.fixture.json",
@@ -10928,20 +11174,44 @@
         "sha256": "49d74fc21520183c077e71ef5369edb597fac3541c2dfd808c23b76e5122990c"
       },
       {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/fixtures/w4-absent-new-fields-artifact.fixture.json",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4473,
+        "sha256": "274d19a0bbcdcea80769dc278253620c07e8c64d2b5f97880b99787d115dcd4e"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/fixtures/w4-pre-change-digests.json",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 203,
+        "sha256": "d55eb92b63ce495ad3a71bbee58d4bfdeb36aeda9ec40c8f7c249a7dd74fc726"
+      },
+      {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-artifact-stability.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 3187,
-        "sha256": "e58bd2c2d72f7e84fa20ed2d79cced1c26ec21dc6f19063c071844e203acfd2c"
+        "bytes": 6531,
+        "sha256": "d4c0eb7bc627c16b6683c2fa62e916ba24b74048ffbbfcbe114a47d8965411bd"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-compiler.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 32415,
-        "sha256": "8d993b75a98597e1b539f9e16dd76d0646b6b454c38535bf078bdde7b6b40f47"
+        "bytes": 33263,
+        "sha256": "468093c91208b68ef667c204458db658d8f777ce79c1401f8e31e2af2fa39baf"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/w4-whitelabel-contract.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 12885,
+        "sha256": "404c47fc4af758dd34b0518f2bc31c0ff8f83f60fee813eebe69ffcde16b3bca"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/facade/index.ts",
@@ -11066,8 +11336,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 16417,
-        "sha256": "e742fce36067a70e1599f2155efb7d6cf417f094bc94a40cc34c777b43294279"
+        "bytes": 17301,
+        "sha256": "724cfa142b9517548e258ded6c656b192108d3113812210ac993d4a0e31fb765"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/index.ts",
@@ -11086,8 +11356,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 12715,
-        "sha256": "971615d38359c4d80f6e4d24a1a985a2f4c1f7293cb107a35965280109c5eda2"
+        "bytes": 17745,
+        "sha256": "dfdf66465ebbb241c3dd26a2503f72d204d6c6239c938fa41be24748919d0e07"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/appearance/tests/appearance-runtime.test.tsx",
@@ -11104,6 +11374,14 @@
         ],
         "bytes": 15170,
         "sha256": "15c620b1771279ad27c4586135818c62ea2253d619b5f2bce317f1d88dabfb08"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/appearance/tests/w4-appearance-emission.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 6643,
+        "sha256": "dcc1fb6c9e1d1ff3ac817afcb5e39d2c8eaa0cee86f6f4954e86379ec6a90739"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
@@ -12512,8 +12790,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1848,
-        "sha256": "d6dd54bcd1e31acafc44f555ec9ffac04c5de177081df04efdf22682a94c25b1"
+        "bytes": 2105,
+        "sha256": "49937a092cf34ad77a45390d4785c196661c2a1891e396c65176cd17b156df41"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/runtime/personality/index.ts",
@@ -13011,6 +13289,24 @@
         ],
         "bytes": 5175,
         "sha256": "29f76cf93c67ccf09cf81813b5f2a023e860a4099f0942bd851fa5c1658e8b81"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/preview-scope/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3473,
+        "sha256": "c0a5a1988da3ba835f9637f6f1fdc1d5f363a6fb57e282993ba5ad238c33a216"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/preview-scope/tests/preview-scope.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3177,
+        "sha256": "6d31db478c90ea99624d6a8e71d9a05fa4f350c19ed1a25bff548eb33553ce2a"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/resolution/domain/index.ts",
@@ -14483,8 +14779,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 3667,
-        "sha256": "168e536b359e456a6afaf35bbbde37f1b17c7d8b1f7d6f6e410e0eab54282918"
+        "bytes": 6063,
+        "sha256": "082c47813f82f7b264cb6b1cc7c87765fea7710ea2980126fd0d2f9282d9ea51"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/index.tsx",
@@ -14493,8 +14789,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 45223,
-        "sha256": "292d8361e722be83bb192acac470dd89b79be85e18de2e195a74f773cfa4ccdd"
+        "bytes": 49051,
+        "sha256": "1d2033f355847865d1e22c9c84dbc8505fc9e31e251305bfff45d9840ae6a8f1"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/file-export/index.ts",
@@ -14505,6 +14801,122 @@
         ],
         "bytes": 7909,
         "sha256": "a741dfba333b6a3d3991ed14f267f05e97db7ba8dfc924043ab3f753e7e316a5"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/contrast-adjustments/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 1242,
+        "sha256": "f3ae2a02cf2e42a585e6ed47f74b9beedff979e97dc0eef1cd0893c7d682c2cd"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/dashboard-metrics/index.tsx",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2369,
+        "sha256": "44921cad2eea20637b1e5dde544d9a74ec57823250c3f357473c97fc7eacfbaa"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/form-detail/index.tsx",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2408,
+        "sha256": "6d678a993ef4f6ec23b482f7f57984505055f738eac1ad64f70f32178e1360e8"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/gallery/index.tsx",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 1571,
+        "sha256": "f94b1452574724677bb191428a45ad7494d00e296d52a9a091f3db9292cdf340"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 805,
+        "sha256": "e45e2a9e698800174e1242140a0bb4f786ef4b741e573026b3ff225f84c60dcc"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/fixtures/list-collection/index.tsx",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3289,
+        "sha256": "5d87095cc60585c113154d2310919e63a0451f84234d358b982adde94bd16cb1"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 7969,
+        "sha256": "203c829a8fd518450635720630ac2c47ab4139bd31c9c17ddf01077cc282854a"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/pack-warnings/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2820,
+        "sha256": "d56c6b1381564d2e02fbf264f803fc6451f53e84ccf06c13b935dba32197e8a8"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/preview-scope/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2836,
+        "sha256": "6ee559b9d31882dde3ea8ef40b53d85bf7c8bca872bc85d78316c664d816c9df"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 8630,
+        "sha256": "410e0b0df5d11fd166a4b13783376e5144fe0b75dbf3caba9434ce366c27d1fd"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/fixtures.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5343,
+        "sha256": "bac81533adb55645d1792bf9df8946bd033da59b90be937853453b5c12504969"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 9935,
+        "sha256": "e137879eedbf4b84b4768e6a836894debb24d0cd1fbab50cf1fa524e9d8242c6"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/customization/brand-studio/tests/brand-studio.test.tsx",
@@ -14531,8 +14943,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 552,
-        "sha256": "02270f1bad6caac2594b4412bc4d257c623a849d0fde967425267a7765d962bf"
+        "bytes": 1173,
+        "sha256": "f5b2ad019fa8fa3b4ec6eef38dd5ed216e5e2059c23525ba3288f6adafa843d5"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/contracts/index.ts",
@@ -14591,24 +15003,24 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6784,
-        "sha256": "8a5aa00ecfa52cc2bc223eeba1547a12fcfae7b7c71d32de3f54579d95b2fb43"
+        "bytes": 4467,
+        "sha256": "3fba14bf5f284117a053e83c7f8c4e2dbd24716d40c3479c67efe193ead12191"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7628,
-        "sha256": "516f70a54cac4b9533da6ae6388ef57a005bef571d25a11d154fa823e7fceaac"
+        "bytes": 5340,
+        "sha256": "8174308400653c315e1aa42c79928ab12ecb894440e4925532bcf412348de939"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 9116,
-        "sha256": "d393777a65704a9b5a2fbc414983c9e7de23936ef0e62cc9b3c0ae160c5cc32d"
+        "bytes": 9160,
+        "sha256": "caaf7a810ef0c6376703b82490e77338abc22df3656288bb3ebef2e8532c8108"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/customization/token-inspector/index.tsx",
@@ -29767,24 +30179,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 2604725,
-        "sha256": "c4fdccfba240d4c7fb95a6961a36d49e061fc718d26ced3f11eece64bdaf86e0"
+        "bytes": 2631189,
+        "sha256": "732a73cd64fc46c06d4e71c79c613f8d217f10e31ff718594e6b833887f48358"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2402620,
-        "sha256": "55dd59f893874b4da1345a2f65ae8eb60c077654ae140da30be023487f09217e"
+        "bytes": 2429084,
+        "sha256": "d7aa22a97eec54982d27a0f430dfef9386b93f4ffcc3958b64fc1b5823e93897"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2758472,
-        "sha256": "54300d97a3a75673adaa36192e17410eec7c2bc044d715971ced736d9727d67f"
+        "bytes": 2784936,
+        "sha256": "b01fdfa5e41e0c841b84bd700540fe0c9a119e3417b15857c04e628aba2108ff"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -29799,16 +30211,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 2502405,
-        "sha256": "b1d4aff33918bfc5928d852c558e7a304277974614d6ed14ba89ba55af7bdd0f"
+        "bytes": 2528869,
+        "sha256": "65281eb333448c4654a76eb9bd64bb11a43e9ca0acad2883ead2a5fcaca54398"
       },
       {
         "path": "ui-design-system/packages/core/styles/rottay.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2502405,
-        "sha256": "b1d4aff33918bfc5928d852c558e7a304277974614d6ed14ba89ba55af7bdd0f"
+        "bytes": 2528869,
+        "sha256": "65281eb333448c4654a76eb9bd64bb11a43e9ca0acad2883ead2a5fcaca54398"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -30491,8 +30903,35 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 28678,
-        "sha256": "0bc4d467a9bc49aa71e87cb332e4b6805c3437bce65520af1c8378dfe32b2c5c"
+        "bytes": 30269,
+        "sha256": "7ee7b79693a462c9379a649fd602095d80a979c5d15653c6c2a331531fcd0509"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/app/(docs)/surfaces/[group]/[surface]/surface-engine-preview.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 814,
+        "sha256": "ad7894742d4ed05690c0e4eaa87278916236cdb93ab1e64d008e76607c041e33"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/app/(docs)/surfaces/[group]/[surface]/surface-preview.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 5583,
+        "sha256": "d6c89c56e88eca25549b26f49eb38cd2a491fef6bf87f9427bc7d425ae26f3a2"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/app/(docs)/surfaces/[group]/[surface]/surfaces-preview-fixtures.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 6219,
+        "sha256": "212a4e8c495a18e916531a68c9f2872d5d8abdd54c7864fa0228e1687bc7544a"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/(docs)/surfaces/[group]/page.tsx",
@@ -30828,6 +31267,15 @@
         "sha256": "22c829b329a024a2e3af8aa06f68cf8f38a372ecc2ba0e30f7ebf241be1f75b0"
       },
       {
+        "path": "ui-design-system/packages/showroom/src/app/probe/whitelabel-divergence/page.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2355,
+        "sha256": "49fa0cb9eb8b73a39a7042c8226d0f4ed5416d25e0fe88bef7d6780395fb67a7"
+      },
+      {
         "path": "ui-design-system/packages/showroom/src/app/probe/whitelabel-torture/page.tsx",
         "roles": [
           "claim-census",
@@ -30943,6 +31391,24 @@
         ],
         "bytes": 15050,
         "sha256": "4f661effceb6b758c91c2289190d88d6adda00e5b24915434f1c9ac896c4f966"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/components/divergence-surface/fixtures/index.ts",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3461,
+        "sha256": "617592ea4782cdce6a8313cf82c94e7e0cf191ac2490d6e6a62ef8d496313570"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/components/divergence-surface/index.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 13425,
+        "sha256": "7037968d39fff46c3b5d6164084866cdff4d35361f9fc53f39d4d410332e0026"
       },
       {
         "path": "ui-design-system/packages/showroom/src/components/docs/editorial-chrome.tsx",
@@ -31419,20 +31885,20 @@
         "sha256": "cbb09ba684648879a73df484f6b064f1c5b4b70fcb409b6e0f8aaa4a34ca4485"
       }
     ],
-    "digest": "f25046cce8104a3c4e68bb52287b86793730ea5a3211346d8e4cdeec96255a9f"
+    "digest": "0738a23a70027c0018d7604bf383aa9d66ce4bbd014408a8d9d8f75da1296514"
   },
   "paintAudit": {
-    "output": "engine-token-audit --check OK (3017 counters; 2894 completed zeros locked exactly; 114 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
+    "output": "engine-token-audit --check OK (3038 counters; 2914 completed zeros locked exactly; 115 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/engine-token-audit.baseline.json",
-      "sha256": "398e5e865ad0ea058bad8aa53e2e586805063836786469acb07daf9fc4b96a86",
+      "sha256": "abc03190f24e8777e95f55ab47cf232adce007cd057ab418cc72e490f6725bba",
       "ok": true,
       "errors": [],
-      "counters": 3017,
-      "zeroLocked": 2894,
-      "positiveGoverned": 123,
-      "ordinaryCeilings": 2997,
-      "positiveOrdinaryCeilings": 114,
+      "counters": 3038,
+      "zeroLocked": 2914,
+      "positiveGoverned": 124,
+      "ordinaryCeilings": 3018,
+      "positiveOrdinaryCeilings": 115,
       "exactInvariants": 13,
       "positiveExactInvariants": 2,
       "minimumFloors": 7,
@@ -32581,6 +33047,22 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
           "line": 174
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
         }
       ],
       "active-count-badge": [
@@ -33533,6 +34015,34 @@
           "line": 145
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 309
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 312
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 318
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 321
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 324
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 329
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 332
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
           "line": 157
         },
@@ -33563,6 +34073,18 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
           "line": 174
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 196
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 202
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 214
         }
       ],
       "box": [
@@ -34730,6 +35252,10 @@
           "line": 162
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 338
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
           "line": 86
         },
@@ -34748,6 +35274,22 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
           "line": 174
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
         }
       ],
       "description": [
@@ -36071,6 +36613,22 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
           "line": 86
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
         }
       ],
       "expand-indicator": [
@@ -37559,6 +38117,14 @@
           "line": 33
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "line": 142
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "line": 149
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css",
           "line": 53
         },
@@ -37727,6 +38293,14 @@
           "line": 32
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout.css",
+          "line": 149
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout.css",
+          "line": 156
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/list.css",
           "line": 49
         },
@@ -37853,6 +38427,14 @@
           "line": 81
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 224
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 224
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css",
           "line": 68
         },
@@ -37889,6 +38471,14 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
           "line": 91
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 335
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+          "line": 335
         }
       ],
       "help-text": [
@@ -42508,6 +43098,46 @@
           "line": 205
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 227
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 227
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 231
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 231
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 236
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 236
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 244
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 244
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 250
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+          "line": 250
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
           "line": 76
         },
@@ -42562,6 +43192,22 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
           "line": 42
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "line": 143
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "line": 143
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "line": 149
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "line": 149
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
@@ -44790,6 +45436,46 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
           "line": 156
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 179
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 179
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 183
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 183
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 188
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 188
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 196
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 196
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 201
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/collapse.css",
@@ -47207,6 +47893,22 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
           "line": 86
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 205
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
+          "line": 217
         }
       ],
       "selection-control": [
@@ -51545,7 +52247,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header-cell",
-        "skinSelectorCount": 16
+        "skinSelectorCount": 18
       },
       {
         "section": "Table",
@@ -52430,7 +53132,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "FieldFiltersPanel",
@@ -52846,7 +53548,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "FilterPanel",
@@ -52885,7 +53587,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "FilterPanel",
@@ -53537,7 +54239,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "SelectionPreviewRail",
@@ -54131,7 +54833,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "DetailPanel",
@@ -54351,7 +55053,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "DetailPanel",
@@ -54805,7 +55507,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "DataTable",
@@ -55058,7 +55760,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header-row",
-        "skinSelectorCount": 3
+        "skinSelectorCount": 5
       },
       {
         "section": "DataTable",
@@ -55175,7 +55877,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header-cell",
-        "skinSelectorCount": 16
+        "skinSelectorCount": 18
       },
       {
         "section": "DataTable",
@@ -55394,7 +56096,7 @@
           }
         ],
         "skinSelectorCorpusKey": "body-row",
-        "skinSelectorCount": 12
+        "skinSelectorCount": 22
       },
       {
         "section": "DataTable",
@@ -55446,7 +56148,7 @@
           }
         ],
         "skinSelectorCorpusKey": "selection-cell",
-        "skinSelectorCount": 2
+        "skinSelectorCount": 6
       },
       {
         "section": "DataTable",
@@ -55498,7 +56200,7 @@
           }
         ],
         "skinSelectorCorpusKey": "expand-cell",
-        "skinSelectorCount": 2
+        "skinSelectorCount": 6
       },
       {
         "section": "DataTable",
@@ -55602,7 +56304,7 @@
           }
         ],
         "skinSelectorCorpusKey": "data-cell",
-        "skinSelectorCount": 7
+        "skinSelectorCount": 12
       },
       {
         "section": "DataTable",
@@ -55654,7 +56356,7 @@
           }
         ],
         "skinSelectorCorpusKey": "actions-cell",
-        "skinSelectorCount": 6
+        "skinSelectorCount": 10
       },
       {
         "section": "DataTable",
@@ -56455,7 +57157,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "FormField",
@@ -56650,7 +57352,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Textarea",
@@ -56714,7 +57416,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "TagInput",
@@ -56909,7 +57611,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "InputNumber",
@@ -57169,7 +57871,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "PasswordInput",
@@ -57364,7 +58066,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Switch",
@@ -57546,7 +58248,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Toggle",
@@ -57805,7 +58507,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Radio",
@@ -58014,7 +58716,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Radio",
@@ -58180,7 +58882,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Checkbox",
@@ -58376,7 +59078,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Checkbox",
@@ -58491,7 +59193,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Slider",
@@ -58777,7 +59479,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "OTPInput",
@@ -58894,7 +59596,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Form",
@@ -59322,7 +60024,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Select",
@@ -60583,7 +61285,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "AutoComplete",
@@ -60856,7 +61558,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Mentions",
@@ -61037,7 +61739,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "TreeSelect",
@@ -61716,7 +62418,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Cascader",
@@ -62383,7 +63085,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Transfer",
@@ -63007,7 +63709,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Upload",
@@ -63735,7 +64437,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "DatePicker",
@@ -64151,7 +64853,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "DatePicker",
@@ -64918,7 +65620,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "TimePicker",
@@ -65176,7 +65878,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "TimePicker",
@@ -65367,7 +66069,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "ColorPicker",
@@ -65781,7 +66483,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Input",
@@ -66068,7 +66770,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Input",
@@ -66106,7 +66808,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Input",
@@ -66416,7 +67118,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Skeleton",
@@ -66586,7 +67288,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Skeleton",
@@ -66823,7 +67525,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Alert",
@@ -67071,7 +67773,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Progress",
@@ -67333,7 +68035,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Spinner",
@@ -67450,7 +68152,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Rate",
@@ -67528,7 +68230,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Modal",
@@ -67645,7 +68347,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "Modal",
@@ -68078,7 +68780,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "Drawer",
@@ -68343,7 +69045,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Toast",
@@ -68616,7 +69318,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Toast",
@@ -68770,7 +69472,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Message",
@@ -68991,7 +69693,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Notification",
@@ -69277,7 +69979,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Result",
@@ -69667,7 +70369,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Modal (overlay)",
@@ -69862,7 +70564,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "Modal (overlay)",
@@ -70321,7 +71023,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Tour",
@@ -71022,7 +71724,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "AlertDialog",
@@ -71619,7 +72321,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Sheet",
@@ -71775,7 +72477,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 131
+        "skinSelectorCount": 135
       },
       {
         "section": "Sheet",
@@ -72555,7 +73257,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Watermark",
@@ -72622,7 +73324,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Affix",
@@ -72687,7 +73389,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Anchor",
@@ -72726,7 +73428,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Anchor",
@@ -72832,7 +73534,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "BottomTabBar",
@@ -72983,7 +73685,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Breadcrumb",
@@ -73139,7 +73841,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "FloatButton",
@@ -73399,7 +74101,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Menu",
@@ -73438,7 +74140,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Menu",
@@ -74085,7 +74787,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "MobileHeader",
@@ -74180,7 +74882,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Pagination",
@@ -74401,7 +75103,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Segmented",
@@ -74504,7 +75206,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Stepper",
@@ -74844,7 +75546,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Steps",
@@ -75142,7 +75844,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1466
+        "skinSelectorCount": 1490
       },
       {
         "section": "Tabs",
@@ -75356,7 +76058,7 @@
           "includeTests": false
         }
       ],
-      "typescriptFiles": 1962,
+      "typescriptFiles": 1986,
       "cssRoots": [
         "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components",
         "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines"
@@ -75389,8 +76091,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "ae24bb4898ecde8711f7f470e8c20829c590800eac7ea88fe31b651893b8ba43",
-      "ae24bb4898ecde8711f7f470e8c20829c590800eac7ea88fe31b651893b8ba43"
+      "9714fa5e9616824fc316727112a97ed395e1368557f2ab9032f96e902870979f",
+      "9714fa5e9616824fc316727112a97ed395e1368557f2ab9032f96e902870979f"
     ],
     "agree": true
   }

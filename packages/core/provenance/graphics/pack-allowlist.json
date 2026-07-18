@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "notice": {
     "path": "THIRD_PARTY_NOTICES.md",
-    "sha256": "1fc3a612c587da49076840fd652bca751b715b4041113fd507bff23188f69273"
+    "sha256": "75e3ded4d6c577f2ccfabc3069f79764d9b0962968a85942939f7d45d2e7b042"
   },
   "runtimePackageAllowlist": [
     "@rottay/design-system",
