@@ -19,6 +19,7 @@ import React from 'react';
 
 import { Box, Button, Card, Stack, Text, Tag } from '../../../primitives';
 import { ShimmerText, useReducedMotion } from '@/graphics/motion';
+import { MarkdownView } from '../../../primitives/display/MarkdownView';
 import type {
   AssistantAgentStatus,
   AssistantDeliveryStatus,
@@ -551,13 +552,23 @@ function renderDefaultPart(part: AssistantMessagePart, index: number): React.Rea
     case 'text':
       return <StreamingText key={`part-${index}`} text={part.content} streaming={part.streaming} />;
     case 'markdown':
-      return (
+      // While tokens are still streaming, keep the raw monospace stream (a
+      // per-chunk markdown re-parse is a deliberate follow-up, not v1). Once the
+      // part completes, swap to MarkdownView so the user sees rendered markdown
+      // -- headings, lists, code, links -- instead of raw source. MarkdownView
+      // is XSS-safe by construction (AST -> DS primitives, no innerHTML).
+      // ChatSurface needs no change: it renders parts through this default
+      // renderer (or a consumer `renderPart` override), and the part union
+      // already carries the `markdown` type.
+      return part.streaming ? (
         <StreamingText
           key={`part-${index}`}
           text={part.content}
-          streaming={part.streaming}
+          streaming
           as="markdown"
         />
+      ) : (
+        <MarkdownView key={`part-${index}`} source={part.content} />
       );
     case 'tool-status':
       return (

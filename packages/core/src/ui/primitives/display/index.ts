@@ -76,3 +76,20 @@ export { KBD_DEFAULTS } from './Kbd';
 export { Callout } from './Callout';
 export type { CalloutProps, CalloutVariant, CalloutTone } from './Callout';
 export { CALLOUT_DEFAULTS, CALLOUT_COLORS, TONE_TO_CALLOUT_VARIANT } from './Callout';
+
+// CodeBlock
+export { CodeBlock, registerHighlighter, getHighlighter, useHighlighter, CODE_BLOCK_DEFAULTS } from './CodeBlock';
+export type { CodeBlockProps, HighlighterAdapter, HighlightTokenLine, HighlightTokenSpan } from './CodeBlock';
+
+// MarkdownView
+export { MarkdownView, parseMarkdown, parseInline, sanitizeHref } from './MarkdownView';
+export type {
+  MarkdownViewProps,
+  MarkdownDensity,
+  MarkdownLinkPolicy,
+  MarkdownLinkScheme,
+  MarkdownCodeSlotProps,
+  MarkdownNode,
+  MarkdownBlockNode,
+  MarkdownInlineNode,
+} from './MarkdownView';
