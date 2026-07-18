@@ -17,7 +17,13 @@
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { flushSync } from 'react-dom';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import {
+  directionFromIndexDelta,
+  tabPanelTransitionStyle,
+  useDirectionalViewTransition,
+} from '@/graphics/motion/react/runtime';
 import {
   CheckSquareIcon,
   ChevronDownIcon,
@@ -268,6 +274,22 @@ function compareSortValues(a: unknown, b: unknown): number {
 const DEFAULT_PREVIEW_RAIL_WIDTH = 380;
 const DEFAULT_PREVIEW_RAIL_MIN_WIDTH = 280;
 const DEFAULT_PREVIEW_RAIL_MAX_WIDTH = 720;
+
+/**
+ * Canonical presentation order of collection view modes, mirroring the
+ * ViewModeSwitcher's left-to-right layout. The view-mode transition derives
+ * its slide direction from index deltas in this order; modes not listed
+ * resolve to the directionless crossfade.
+ */
+const COLLECTION_VIEW_MODE_ORDER: readonly string[] = [
+  'table',
+  'list',
+  'cards',
+  'grid',
+  'kanban',
+  'gallery',
+  'calendar',
+];
 
 function isInlineEditablePrimitive(value: unknown): boolean {
   return value == null || ['string', 'number', 'boolean'].includes(typeof value);
@@ -790,6 +812,33 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     config: { controls, behavior, presentation, data, columns: capabilityColumns },
     defaultViewMode,
   });
+
+  // View-mode switches run inside a direction-aware view transition scoped to
+  // the collection container (see collectionTransitionStyle below). Direction
+  // follows the switcher's presentation order; reduced motion and browsers
+  // without the View Transitions API resolve to an instant swap.
+  const collectionTransitionScope = useId().replace(/:/g, '');
+  const runViewModeTransition = useDirectionalViewTransition();
+  const changeViewMode = useCallback(
+    (mode: string) => {
+      const previousMode = workspace.activeViewMode;
+      if (mode === previousMode) return;
+      const direction = directionFromIndexDelta(
+        COLLECTION_VIEW_MODE_ORDER.indexOf(previousMode),
+        COLLECTION_VIEW_MODE_ORDER.indexOf(mode),
+      );
+      // flushSync puts the re-rendered collection in the DOM before the new
+      // snapshot is captured; on the immediate path it degrades to a plain
+      // synchronous state update.
+      runViewModeTransition(
+        () => {
+          flushSync(() => workspace.setViewMode(mode));
+        },
+        { direction },
+      );
+    },
+    [runViewModeTransition, workspace.activeViewMode, workspace.setViewMode],
+  );
   const [internalSorting, setInternalSorting] = useState<SortConfig | null>(
     behavior?.sorting ?? null,
   );
@@ -1884,7 +1933,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               onSearchChange={workspace.setSearchValue}
               searchPlaceholder={controls?.search?.placeholder ?? 'Search...'}
               viewMode={toolbarViewMode}
-              onViewModeChange={(mode: ViewMode) => workspace.setViewMode(mode === 'list' ? 'table' : mode)}
+              onViewModeChange={(mode: ViewMode) => changeViewMode(mode === 'list' ? 'table' : mode)}
               density={density}
               onDensityChange={(d: DensityKey) => controls?.density?.onChange?.(d)}
               activeFilters={workspace.filterValues}
@@ -1945,7 +1994,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           </Button>
         )}
         <Flex className="ds-collection-workspace__content" data-part="content" gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0 }}>
+          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0, ...tabPanelTransitionStyle(collectionTransitionScope) }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
@@ -2577,7 +2626,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         }}
       >
         <Flex className="ds-collection-workspace__body-content" data-part="body-content" gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0 }}>
+          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0, ...tabPanelTransitionStyle(collectionTransitionScope) }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}

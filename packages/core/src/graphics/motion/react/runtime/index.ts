@@ -14,11 +14,27 @@ export { useScrollProgress } from './scroll-progress';
 export { useSmoothCounter } from './smooth-counter';
 // `useMotionPersonality` is the bridge between token personality and motion primitives.
 export { useMotionPersonality } from './motion-personality';
-export { useViewTransition, startDsViewTransition, recordTransitionName } from './view-transition';
+export {
+  useViewTransition,
+  startDsViewTransition,
+  recordTransitionName,
+  useDirectionalViewTransition,
+  startDirectionalViewTransition,
+  directionFromIndexDelta,
+  tabPanelTransitionName,
+  tabPanelTransitionStyle,
+  recordMorphStyle,
+  VIEW_TRANSITION_DIRECTION_ATTRIBUTE,
+  TAB_PANEL_TRANSITION_CLASS,
+  RECORD_MORPH_TRANSITION_CLASS,
+  MODAL_PROMOTE_TRANSITION_NAME,
+} from './view-transition';
 export type {
   ViewTransitionUpdate,
   StartViewTransitionOptions,
   DsViewTransitionHandle,
+  ViewTransitionDirection,
+  StartDirectionalViewTransitionOptions,
 } from './view-transition';
 export { usePresence } from './presence';
 export type { UsePresenceOptions, UsePresenceResult } from './presence';

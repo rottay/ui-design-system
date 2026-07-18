@@ -25,7 +25,13 @@
  */
 
 import React, { useCallback, useId, useLayoutEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import {
+  directionFromIndexDelta,
+  tabPanelTransitionStyle,
+  useDirectionalViewTransition,
+} from '@/graphics/motion/react/runtime';
 import type { TabsProps, TabItem, TabsSize } from '../../contracts';
 import { TABS_DEFAULTS } from '../../contracts';
 import {
@@ -34,6 +40,7 @@ import {
   type ResponsivePropEntry,
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 // ============================================================================
 // Constants
@@ -267,9 +274,39 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
 
   const [active, setActive] = useState(activeKey || defaultActiveKey || arrayValueAt(items, 0)?.key);
 
+  const runPanelTransition = useDirectionalViewTransition();
+
+  // state.change recipe (motion canon): panel entrance and indicator glide
+  // timing resolve from the stamped `--ds-recipe-*` variables. Under reduced
+  // motion the resolver returns the settled state and both declarations are
+  // dropped, so the swap renders instantly with no interpolation.
+  const stateMotion = useMotionRecipePresentation('state.change');
+  const motionIsFinal = stateMotion.recipe.state === 'final';
+
   const handleChange = (key: string) => {
-    if (!activeKey) setActive(key);
-    onChange?.(key);
+    const previousKey = activeKey || active;
+    if (key === previousKey) {
+      onChange?.(key);
+      return;
+    }
+    const direction = directionFromIndexDelta(
+      items.findIndex((item) => item.key === previousKey),
+      items.findIndex((item) => item.key === key)
+    );
+    // The panel swap must be IN the DOM before the browser captures the new
+    // snapshot, so the state change (and any controlled parent's re-render via
+    // onChange) is flushed synchronously inside the transition's update
+    // callback. On the immediate path (no API / reduced motion) the callback
+    // runs inline and this degrades to an instant swap.
+    runPanelTransition(
+      () => {
+        flushSync(() => {
+          if (!activeKey) setActive(key);
+          onChange?.(key);
+        });
+      },
+      { direction }
+    );
   };
 
   const enabledItems = items.filter((item) => !item.disabled);
@@ -398,7 +435,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           width: '1px',
           transformOrigin: 'left',
           transform: `translateX(${indicatorPos.left}px) scaleX(${indicatorPos.width})`,
-          transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
+          transition: motionIsFinal
+            ? undefined
+            : 'transform var(--ds-recipe-settle, var(--ds-motion-normal)) var(--ds-recipe-curve, var(--ds-motion-ease-out))',
           pointerEvents: 'none',
         }
       : null;
@@ -410,8 +449,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   return (
     <div
       className={`rottay-tabs rottay-tabs--modern ${className}`.trim()}
-      style={style}
+      style={{ ...stateMotion.variables, ...style }}
       data-part="root"
+      {...stateMotion.attributes}
       data-variant={type || 'line'}
     >
       {responsive && responsive.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
@@ -484,7 +524,14 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           tabIndex={0}
           style={{
             padding: 'var(--ds-spacing-4, 16px) 0 0 0',
-            animation: 'ds-tabs-fade-in var(--ds-motion-fast) var(--ds-motion-ease-out)',
+            animation: motionIsFinal
+              ? undefined
+              : 'ds-tabs-fade-in var(--ds-recipe-enter, var(--ds-motion-fast)) var(--ds-recipe-curve, var(--ds-motion-ease-out))',
+            // Names the panel as its own view-transition group so a tab switch
+            // slides/crossfades just the panel instead of the whole page. The
+            // useId-derived scope keeps the name unique per mounted instance
+            // (duplicate names make the browser skip a transition outright).
+            ...tabPanelTransitionStyle(tabsId),
           }}
         >
           {activeItem.children}

@@ -19,6 +19,7 @@
  */
 
 import { useCallback } from 'react';
+import type { CSSProperties } from 'react';
 import { getReducedMotionSnapshot } from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
 import { useReducedMotion } from '../foundation/reduced-motion';
 
@@ -184,4 +185,192 @@ function sanitizeTransitionNameSegment(key: string): string {
  */
 export function recordTransitionName(key: string): string {
   return `${RECORD_TRANSITION_NAME_PREFIX}${sanitizeTransitionNameSegment(key)}`;
+}
+
+/* ==========================================================================
+   View Transitions v2 -- direction-aware choreography
+   CSS lives in foundation/tokens/css/foundation/animations/transitions.css
+   (the "VIEW TRANSITIONS V2" section); this module owns the runtime side:
+   the direction attribute stamped on <html> and the shared name/class
+   vocabulary the CSS keys on.
+   ========================================================================== */
+
+/**
+ * Direction of a panel switch relative to reading order. `forward` means the
+ * user moved to a later panel (new content enters from the end side, old
+ * content exits toward the start side); `backward` is the mirror; `none`
+ * requests the directionless crossfade.
+ */
+export type ViewTransitionDirection = 'forward' | 'backward' | 'none';
+
+/**
+ * Attribute stamped on `document.documentElement` for the lifetime of one
+ * directional view transition. The transitions.css directional rules select
+ * on it; it is removed once the transition settles so page-level transitions
+ * started by other code never inherit a stale direction.
+ */
+export const VIEW_TRANSITION_DIRECTION_ATTRIBUTE = 'data-ds-vt-direction';
+
+/**
+ * `view-transition-class` shared by every DS panel that swaps content in
+ * place (tab panels, workspace view-mode containers). The CSS targets
+ * `::view-transition-old/new(*.ds-vt-tab-panel)`, so per-instance unique
+ * names all share one choreography. Requires `view-transition-class` support;
+ * browsers without it fall back to the default named-group crossfade.
+ */
+export const TAB_PANEL_TRANSITION_CLASS = 'ds-vt-tab-panel';
+
+/**
+ * `view-transition-class` for record-shaped morphs (card -> detail, row ->
+ * detail). Pair with {@link recordTransitionName}: the name pairs the two
+ * elements, the class gives every record morph the same timing envelope.
+ */
+export const RECORD_MORPH_TRANSITION_CLASS = 'ds-vt-record';
+
+/**
+ * The name both sides of a modal -> full-page promote declare. The modal
+ * panel (via the Modal `style` prop, which the engines spread onto the
+ * panel element) and the destination page region declare this same
+ * `view-transition-name`, and the promoting navigation runs through
+ * {@link startDsViewTransition}; the browser then morphs the panel into the
+ * page region. Only one promote can be in flight at a time -- the name is
+ * fixed, and duplicate active names would make the browser skip the
+ * transition (the navigation itself still completes).
+ */
+export const MODAL_PROMOTE_TRANSITION_NAME = 'ds-vt-modal-promote';
+
+/** Prefix shared by every panel-scoped `view-transition-name`. */
+const TAB_PANEL_TRANSITION_NAME_PREFIX = 'ds-vt-tab-panel-';
+
+/**
+ * Derives the per-instance `view-transition-name` for a content panel that
+ * swaps in place. `scope` must be unique per mounted instance (a `useId`
+ * value) -- two live elements sharing one name make the browser skip the
+ * whole transition.
+ */
+export function tabPanelTransitionName(scope: string): string {
+  return `${TAB_PANEL_TRANSITION_NAME_PREFIX}${sanitizeTransitionNameSegment(scope)}`;
+}
+
+/**
+ * React style props with the view-transition members that are newer than the
+ * bundled CSS typings. Browsers without `view-transition-class` ignore the
+ * property (the panel then falls back to the default crossfade).
+ */
+type ViewTransitionStyle = CSSProperties & {
+  viewTransitionName?: string;
+  viewTransitionClass?: string;
+};
+
+/**
+ * Style object a panel element declares so tab-switch transitions animate it
+ * as its own group (directional slide via {@link TAB_PANEL_TRANSITION_CLASS})
+ * instead of riding the root crossfade.
+ */
+export function tabPanelTransitionStyle(scope: string): CSSProperties {
+  const style: ViewTransitionStyle = {
+    viewTransitionName: tabPanelTransitionName(scope),
+    viewTransitionClass: TAB_PANEL_TRANSITION_CLASS,
+  };
+  return style;
+}
+
+/**
+ * Style object a record-shaped element (kanban card, list row, detail body)
+ * declares so navigating between two surfaces showing the same record morphs
+ * the element instead of cross-fading the page. Both surfaces must resolve
+ * the SAME `key` for the pairing to occur (see {@link recordTransitionName}).
+ */
+export function recordMorphStyle(key: string): CSSProperties {
+  const style: ViewTransitionStyle = {
+    viewTransitionName: recordTransitionName(key),
+    viewTransitionClass: RECORD_MORPH_TRANSITION_CLASS,
+  };
+  return style;
+}
+
+/**
+ * Maps an index delta to a {@link ViewTransitionDirection}. A missing index
+ * (`< 0`, e.g. the key was not found) or a zero delta resolves to `none`, so
+ * degenerate inputs produce the safe directionless crossfade rather than a
+ * misleading slide.
+ */
+export function directionFromIndexDelta(
+  previousIndex: number,
+  nextIndex: number
+): ViewTransitionDirection {
+  if (previousIndex < 0 || nextIndex < 0 || previousIndex === nextIndex) return 'none';
+  return nextIndex > previousIndex ? 'forward' : 'backward';
+}
+
+/** Options accepted by {@link startDirectionalViewTransition}. */
+export interface StartDirectionalViewTransitionOptions extends StartViewTransitionOptions {
+  /** Slide direction for panels carrying {@link TAB_PANEL_TRANSITION_CLASS}. @default 'none' */
+  direction?: ViewTransitionDirection;
+}
+
+/**
+ * Monotonic stamp of the most recent direction write. Only one native view
+ * transition runs at a time, but a second start can supersede a still-running
+ * first; the sequence guarantees only the LAST writer's cleanup restores the
+ * attribute, even when both writes carried the same direction value.
+ */
+let directionStampSequence = 0;
+
+/**
+ * Start a view transition with a direction stamped on `<html>` for its
+ * duration, so the transitions.css directional panel rules apply. On the
+ * immediate path (API missing, `skipTransition`, reduced motion) this
+ * delegates straight to {@link startDsViewTransition}: the update runs
+ * instantly, and the attribute is never written -- reduced motion resolves to
+ * a plain state swap with no intermediate frames.
+ */
+export function startDirectionalViewTransition(
+  update: ViewTransitionUpdate,
+  options?: StartDirectionalViewTransitionOptions
+): DsViewTransitionHandle {
+  const doc = typeof document !== 'undefined' ? (document as ViewTransitionDocument) : undefined;
+  const direction = options?.direction ?? 'none';
+  const canAnimate =
+    !!doc &&
+    typeof doc.startViewTransition === 'function' &&
+    !options?.skipTransition &&
+    !environmentPrefersReducedMotion();
+
+  if (!canAnimate || direction === 'none') {
+    return startDsViewTransition(update, options);
+  }
+
+  const rootElement = doc.documentElement;
+  const stamp = ++directionStampSequence;
+  rootElement.setAttribute(VIEW_TRANSITION_DIRECTION_ATTRIBUTE, direction);
+
+  const handle = startDsViewTransition(update, options);
+  const clear = () => {
+    if (stamp === directionStampSequence) {
+      rootElement.removeAttribute(VIEW_TRANSITION_DIRECTION_ATTRIBUTE);
+    }
+  };
+  void handle.finished.then(clear, clear);
+  return handle;
+}
+
+/**
+ * React hook returning a stable {@link startDirectionalViewTransition} caller
+ * that also honors the live provider-aware motion preference (a
+ * `MotionProvider reducedMotion` override, not just the OS media query).
+ */
+export function useDirectionalViewTransition(): (
+  update: ViewTransitionUpdate,
+  options?: StartDirectionalViewTransitionOptions
+) => DsViewTransitionHandle {
+  const prefersReducedMotion = useReducedMotion();
+  return useCallback(
+    (update: ViewTransitionUpdate, options?: StartDirectionalViewTransitionOptions) =>
+      startDirectionalViewTransition(update, {
+        ...options,
+        skipTransition: options?.skipTransition || prefersReducedMotion,
+      }),
+    [prefersReducedMotion]
+  );
 }

@@ -105,6 +105,9 @@
   /* Entrance geometry — the start offsets a reveal animates FROM (paired with the durations). */
   --ds-motion-scale-in: 0.98;
   --ds-motion-offset-in: -2px;
+  /* Horizontal travel for the direction-aware panel slide (view transitions).
+     Kept small: the slide is a cue, not a carousel. */
+  --ds-motion-panel-offset: 12px;
 
   /* Pre-composed per-component transitions, re-expressed on the canon primitives.
      These are the ONLY thing modern components reference for multi-property
@@ -445,6 +448,154 @@
   ::view-transition-new(*) {
     animation: none;
   }
+}
+
+/* =========================================================================
+   VIEW TRANSITIONS V2 - PANEL + MORPH CHOREOGRAPHY
+   Runtime counterpart: graphics/motion/react/runtime/view-transition
+   (startDirectionalViewTransition stamps html[data-ds-vt-direction] for the
+   lifetime of one transition; tabPanelTransitionStyle / recordMorphStyle
+   declare the names and view-transition-classes these rules key on).
+
+   All rules resolve on the --ds-motion-* canon and animate only opacity and
+   transform (compositor-friendly). Browsers without view-transition-class
+   ignore the *.class selectors and fall back to the default named-group
+   crossfade; browsers without the View Transitions API never create these
+   pseudo-elements at all.
+   ========================================================================= */
+
+/* Directionless fallback for in-place panel swaps (also what a `direction:
+   none` transition renders): the panel crossfades as its own group instead of
+   riding the root crossfade. */
+::view-transition-group(*.ds-vt-tab-panel) {
+  animation-duration: var(--ds-motion-normal);
+  animation-timing-function: var(--ds-motion-ease-out);
+}
+
+::view-transition-old(*.ds-vt-tab-panel) {
+  animation: ds-view-transition-fade-out var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+}
+
+::view-transition-new(*.ds-vt-tab-panel) {
+  animation: ds-view-transition-fade-in var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
+/* Direction-aware slide: old exits toward, new enters from. Each keyframe set
+   carries opacity + transform so the animation-name override below fully
+   replaces the crossfade instead of compounding with it. */
+@keyframes ds-vt-panel-exit-toward-start {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+  }
+}
+
+@keyframes ds-vt-panel-exit-toward-end {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(var(--ds-motion-panel-offset));
+  }
+}
+
+@keyframes ds-vt-panel-enter-from-end {
+  from {
+    opacity: 0;
+    transform: translateX(var(--ds-motion-panel-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-vt-panel-enter-from-start {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* The :where() wrapper zeroes the html-side specificity so these tie with the
+   class-selector rules above and win purely by source order -- and, critically,
+   so the reduced-motion neutralization block below can out-cascade them the
+   same way. Do not replace :where() with a bare attribute selector. */
+:where(html[data-ds-vt-direction='forward'])::view-transition-old(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-exit-toward-start var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+}
+
+:where(html[data-ds-vt-direction='forward'])::view-transition-new(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-enter-from-end var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
+:where(html[data-ds-vt-direction='backward'])::view-transition-old(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-exit-toward-end var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+}
+
+:where(html[data-ds-vt-direction='backward'])::view-transition-new(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-enter-from-start var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
+/* Record morphs (kanban card -> detail, row -> detail): the browser's default
+   group animation already interpolates geometry between the paired elements;
+   these rules only put its timing on the canon. */
+::view-transition-group(*.ds-vt-record) {
+  animation-duration: var(--ds-motion-slow);
+  animation-timing-function: var(--ds-motion-ease-out);
+}
+
+/* Modal -> full-page promote morph (named pair ds-vt-modal-promote; see
+   MODAL_PROMOTE_TRANSITION_NAME in the view-transition runtime for the wiring
+   contract). */
+::view-transition-group(ds-vt-modal-promote),
+::view-transition-old(ds-vt-modal-promote),
+::view-transition-new(ds-vt-modal-promote) {
+  animation-duration: var(--ds-motion-slow);
+  animation-timing-function: var(--ds-motion-ease-out);
+}
+
+/* Reduced-motion neutralization for every group this section styles. The
+   generic ::view-transition-*(*) block above already matches these names, but
+   the directional rules tie or beat it on specificity; these selectors mirror
+   the styled groups exactly and sit later in source order, so they win the
+   tie. The runtime backstop is stronger still: under reduced motion
+   startDsViewTransition takes the immediate path and no pseudo-elements are
+   created. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*.ds-vt-tab-panel),
+  ::view-transition-old(*.ds-vt-tab-panel),
+  ::view-transition-new(*.ds-vt-tab-panel),
+  ::view-transition-group(*.ds-vt-record),
+  ::view-transition-old(*.ds-vt-record),
+  ::view-transition-new(*.ds-vt-record),
+  ::view-transition-group(ds-vt-modal-promote),
+  ::view-transition-old(ds-vt-modal-promote),
+  ::view-transition-new(ds-vt-modal-promote) {
+    animation: none;
+  }
+}
+
+/* Provider-owned reduce seam: MotionProvider stamps html[data-ds-motion=
+   'reduced'] when reduced motion is forced without the OS media query (see
+   runtime/personality.css). View transitions started by non-DS code (an app
+   router) bypass the runtime gate, so the CSS neutralization must also hold
+   on this seam. html + attribute out-specifies every :where()-wrapped
+   directional rule above. */
+html[data-ds-motion='reduced']::view-transition-group(*),
+html[data-ds-motion='reduced']::view-transition-old(*),
+html[data-ds-motion='reduced']::view-transition-new(*) {
+  animation: none;
 }
 
 /* =========================================================================

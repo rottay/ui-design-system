@@ -44,6 +44,7 @@ import type { TabsProps, TabItem, TabsSize } from '../../contracts';
 import { TABS_DEFAULTS } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
   if (value === undefined || value === null) return undefined;
@@ -148,6 +149,12 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
    * Falls back to first item if no default provided.
    */
   const [active, setActive] = useState(activeKey || defaultActiveKey || arrayValueAt(items, 0)?.key);
+
+  // state.change recipe (motion canon): the panel's entrance fade resolves its
+  // timing from the stamped `--ds-recipe-*` variables. Under reduced motion
+  // the resolver returns the settled state and no animation is declared.
+  const stateMotion = useMotionRecipePresentation('state.change');
+  const motionIsFinal = stateMotion.recipe.state === 'final';
 
   /**
    * Handles tab selection.
@@ -255,8 +262,9 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
   return (
     <div
       className={`rottay-tabs rottay-tabs--rustic ${className}`.trim()}
-      style={style}
+      style={{ ...stateMotion.variables, ...style }}
       data-part="root"
+      {...stateMotion.attributes}
       data-variant={type}
     >
       {responsive && responsive.css && (
@@ -296,7 +304,12 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
           data-part="tab-panel"
           aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
           tabIndex={0}
-          style={{ padding: '1rem' }}
+          style={{
+            padding: '1rem',
+            animation: motionIsFinal
+              ? undefined
+              : 'ds-tabs-fade-in var(--ds-recipe-enter, var(--ds-motion-fast, 120ms)) var(--ds-recipe-curve, var(--ds-motion-ease-out, ease-out))',
+          }}
         >
           {activeItem.children}
         </div>
