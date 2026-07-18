@@ -1,12 +1,8 @@
 /**
  * NotificationSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered. Private Card hooks preserve the unread rail above Card hover state;
- * text rules clear Typography's (0,4,0) color floor.
+ * unlayered. Text rules clear Typography's (0,4,0) color floor. Unread state is
+ * communicated by content and actions rather than a decorative edge rail.
  */
-
-.ds-surface.ds-notification .ds-notification__item.ds-notification__item.ds-notification__item.ds-notification__item--unread[data-part='root'][data-variant='outlined'] {
-  border-left: 3px solid var(--ds-color-primary);
-}
 
 .ds-surface.ds-notification .ds-notification__muted-text[data-part='muted-text'][data-part='muted-text'] {
   color: var(--ds-color-text-muted);

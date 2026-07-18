@@ -7,10 +7,6 @@
  * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1);
  * non-border paint wins at (0,3,0); `Text` colour buys (0,5,0).
  *
- * DIVERGENCE: this variant's `TYPE_CONFIG` gradient is `90deg`, NOT the `135deg`
- * the other three activity variants use — a real, visible accent direction and
- * kept as its own value (a byte-exact pass may not flatten it onto 135deg).
- *
  * ICON COLOUR via stamped-ancestor currentColor; the chevron is the only
  * direct-child svg of `item-row`, reached by `[data-part='item-row'] > svg`.
  * HOVER was React `isHovered` (deleted from the TSX), transcribed to
@@ -76,21 +72,6 @@
 }
 .ds-activity-cards.ds-activity-cards [data-part='item'][data-part='item'] {
   border: 1px solid var(--ds-color-border-secondary);
-}
-
-/* accent bar — type gradient (90deg), hover widens 3px -> 4px ---------------- */
-
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='success'] { background: linear-gradient(90deg, var(--ds-color-success), var(--ds-color-success-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='primary'] { background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='info']    { background: linear-gradient(90deg, var(--ds-color-info), var(--ds-color-info-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='warning'] { background: linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='error']   { background: linear-gradient(90deg, var(--ds-color-error), var(--ds-color-error-200)); }
-
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'] {
-  width: 3px;
-}
-.ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='accent-bar'] {
-  width: 4px;
 }
 
 /* per-item icon box — bg + type-200 border + icon colour; hover scale -------- */

@@ -15,38 +15,31 @@
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * border-color on every element. The left accent is a `border-left` SHORTHAND
- * (as it is inline) so width, style and color land atomically; it therefore
- * reaches (0,4,0) via the two shell classes + `[data-part='root']` +
- * `[data-tone]`. The close button's `border: none` is a color-free reset
- * (exempt). Values transcribed verbatim from `engines/rustic.tsx` /
- * `CALLOUT_COLORS`.
+ * border-color on every element. The close button's `border: none` is a
+ * color-free reset (exempt). Values transcribed verbatim from
+ * `engines/rustic.tsx` / `CALLOUT_COLORS`.
  */
 
-/* ---- root: tone-independent radius, then per-tone surface, left accent and
-        text color (was the inline style object + CALLOUT_COLORS lookup). ---- */
+/* ---- root: tone-independent radius, then per-tone surface and text color
+        (was the inline style object + CALLOUT_COLORS lookup). ---- */
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'] {
   border-radius: 8px;
 }
 
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] {
   background-color: var(--ds-color-info-50, #eff6ff);
-  border-left: 4px solid var(--ds-color-info-500, #3b82f6);
   color: var(--ds-color-info-800, #1e40af);
 }
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] {
   background-color: var(--ds-color-warning-50, #fffbeb);
-  border-left: 4px solid var(--ds-color-warning-500, #f59e0b);
   color: var(--ds-color-warning-800, #92400e);
 }
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] {
   background-color: var(--ds-color-error-50, #fef2f2);
-  border-left: 4px solid var(--ds-color-error-500, #ef4444);
   color: var(--ds-color-error-800, #991b1b);
 }
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] {
   background-color: var(--ds-color-success-50, #f0fdf4);
-  border-left: 4px solid var(--ds-color-success-500, #22c55e);
   color: var(--ds-color-success-800, #166534);
 }
 

@@ -83,10 +83,6 @@
 .rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item']:not([data-disabled='true']):hover {
   background-color: var(--ds-transfer-item-bg-hover);
 }
-.rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item'][data-part='panel-item']:not([data-disabled='true']):hover {
-  border-left: 3px solid var(--ds-color-primary, #1677ff);
-}
-
 .rottay-transfer.rottay-transfer--rustic [data-part='panel-empty'] {
   color: var(--ds-transfer-empty-color);
 }

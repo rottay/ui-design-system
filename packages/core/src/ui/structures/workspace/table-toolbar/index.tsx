@@ -26,7 +26,11 @@
  *     settings dropdown
  */
 
-import { Plus, Search, X } from 'lucide-react';
+import {
+  PlusIcon as Plus,
+  SearchIcon as Search,
+  XIcon as X,
+} from '../../../../graphics/icons';
 import type { ReactNode } from 'react';
 
 import { Box, Button, Flex, Input, Text } from '../../../primitives';

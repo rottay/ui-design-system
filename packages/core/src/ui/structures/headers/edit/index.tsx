@@ -33,7 +33,7 @@
  *   - Optional entityId chip (monospace, truncated to 8 chars)
  *   - Hero title cluster: optional eyebrow chip, title, optional status
  *     pill, optional subtitle
- *   - Optional icon badge (LucideIcon, displayed in colored box; the
+ *   - Optional icon badge (supplier-independent icon, displayed in a colored box; the
  *     `colorVariant` prop controls the box tone)
  *   - Action rail with Save / Cancel built-ins, optional structured
  *     `actions[]` (using SharedHeaderActionDescriptor from the shared
@@ -52,9 +52,12 @@
 import { type CSSProperties, type ReactNode } from 'react';
 
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Save, X } from 'lucide-react';
+import {
+  SaveIcon as Save,
+  XIcon as X,
+} from '../../../../graphics/icons';
 import type { ComponentType } from 'react';
-type LucideIcon = ComponentType<any>;
+type HeaderIcon = ComponentType<any>;
 
 import { Box, Button, Flex, Spinner, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
@@ -70,8 +73,8 @@ import {
  * ========================================================================== */
 
 export interface EditHeaderProps {
-  /** Icon to display (Lucide icon) */
-  icon?: LucideIcon;
+  /** Supplier-independent icon to display. */
+  icon?: HeaderIcon;
   /** Main title */
   title: string;
   /** Subtitle/description */

@@ -14,7 +14,14 @@
  * is exported as a convenience for surfaces that want sensible defaults.
  */
 
-import { List, LayoutGrid, Grid3x3, Columns3, GalleryHorizontalEnd, Calendar } from 'lucide-react';
+import {
+  CalendarIcon as Calendar,
+  Columns3Icon as Columns3,
+  Grid3x3Icon as Grid3x3,
+  ImageIcon as GalleryIcon,
+  LayoutGridIcon as LayoutGrid,
+  ListIcon as List,
+} from '../../../../graphics/icons';
 import type { ReactNode } from 'react';
 
 import { Box, Flex } from '../../../primitives';
@@ -30,7 +37,7 @@ export const defaultViewModeIcons: Record<CollectionViewMode, ReactNode> = {
   cards: <LayoutGrid size={16} />,
   grid: <Grid3x3 size={16} />,
   kanban: <Columns3 size={16} />,
-  gallery: <GalleryHorizontalEnd size={16} />,
+  gallery: <GalleryIcon size={16} />,
   calendar: <Calendar size={16} />,
 };
 

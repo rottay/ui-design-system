@@ -124,9 +124,9 @@ describe('DashboardWidgets data-part contract (WO-SKIN-06 CK-A)', () => {
       expect(q(container, '[data-part="item"]')).toHaveLength(5);
       expect(q(container, '[data-part="item-row"]')).toHaveLength(5);
       for (const t of TYPES) {
-        expect(q(container, `[data-part="accent-bar"][data-type="${t}"]`)).toHaveLength(1);
         expect(q(container, `[data-part="item-icon-box"][data-type="${t}"]`)).toHaveLength(1);
       }
+      expect(q(container, '[data-part="accent-bar"]')).toHaveLength(0);
       expect(q(container, '[data-part="update-count"]').length).toBe(1);
     });
 
@@ -140,9 +140,9 @@ describe('DashboardWidgets data-part contract (WO-SKIN-06 CK-A)', () => {
       expect(q(container, '[data-part="item"]')).toHaveLength(5);
       expect(q(container, '[data-part="item-row"]')).toHaveLength(5);
       for (const t of TYPES) {
-        expect(q(container, `[data-part="accent-bar"][data-type="${t}"]`)).toHaveLength(1);
         expect(q(container, `[data-part="item-dot"][data-type="${t}"]`)).toHaveLength(1);
       }
+      expect(q(container, '[data-part="accent-bar"]')).toHaveLength(0);
     });
   });
 

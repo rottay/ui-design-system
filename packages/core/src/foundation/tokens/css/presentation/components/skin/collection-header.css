@@ -123,17 +123,13 @@
   filter: drop-shadow(0 0 18px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 12%, transparent));
 }
 
-/* subtitle divider + editorial-tech rule + title accent bar --------------------- */
+/* subtitle divider + editorial-tech rule ------------------------------------ */
 
 .ds-structure.ds-collection-header [data-part='subtitle-divider'] {
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 100%);
 }
 .ds-structure.ds-collection-header [data-part='editorial-tech-rule'] {
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%);
-}
-.ds-structure.ds-collection-header [data-part='title-accent'] {
-  border-radius: 999px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 48%, transparent) 0%, color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 100%);
 }
 /* subtitle-row: the default-branch subtitle wrapper. The repeated data-part buys
    (0,4,0) so its top border clears the tenant border-color floor at (0,3,1). */

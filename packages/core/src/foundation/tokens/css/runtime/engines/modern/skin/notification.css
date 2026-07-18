@@ -2,19 +2,8 @@
  * Modern Notification skin (WO-SKIN-03 checkpoint O).
  *
  * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. The item carries
- * DaisyUI's structural `alert` class, and TWO layered rules paint through it:
- *
- *   DaisyUI `.alert`                    -> border-color from --alert-border-color
- *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
- *                                          border-left-style: solid
- *                                          transition: opacity/transform
- *
- * Neither is suppressed today and neither becomes suppressed now: this engine
- * never painted a `border` on the item -- only `background`/`color` (and a
- * `box-shadow`) -- so it inherits DaisyUI's border-color and personality's 4px
- * left accent bar, and it still does. Nothing in this file declares any border
- * channel on the root; adding one would visibly change the item. (The rustic
- * engine draws its own 4px accent explicitly, in its own skin.)
+ * DaisyUI's structural `alert` class. Personality contributes only the
+ * opacity/transform transition; decorative one-sided borders are forbidden.
  *
  * SPECIFICITY (P-48): no rule here paints a border COLOR, so the tenant
  * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply.

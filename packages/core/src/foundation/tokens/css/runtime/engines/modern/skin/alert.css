@@ -8,11 +8,9 @@
  *
  * SCOPE ROOT carries `rottay-alert-shell rottay-alert-shell--modern` alongside
  * the DaisyUI `.alert` class and `data-part='root'` + `data-tone`. The dedicated
- * `-shell` scope (not bare `.rottay-alert`) is required: `.rottay-alert` is
- * already claimed by the ALERT PERSONALITY rule in runtime/personality.css
- * (border-left accent + transition), so anchoring on it would activate that
- * rule's paint. `-shell` is collision-free (grep-verified), mirroring the
- * `rottay-progress-shell` precedent.
+ * `-shell` scope (not bare `.rottay-alert`) keeps the engine selector isolated
+ * from the ALERT PERSONALITY transition rule. It is collision-free
+ * (grep-verified), mirroring the `rottay-progress-shell` precedent.
  *
  * SPECIFICITY (P-48): non-border paint (background, color, border-radius) beats
  * preflight unlayered at (0,3,0)+. None of Modern Alert's moved paint touches a

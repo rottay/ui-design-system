@@ -1,7 +1,11 @@
 'use client';
 
 import { Box, Text, Stack, Flex, Grid } from '@/ui/primitives';
-import { Activity, TrendingUp, TrendingDown } from 'lucide-react';
+import {
+  ActivityIcon as Activity,
+  TrendingDownIcon as TrendingDown,
+  TrendingUpIcon as TrendingUp,
+} from '../../../../../../../graphics/icons';
 import { useSmoothCounter } from '@/graphics/motion/react/runtime';
 import { DENSITY_PRESETS, resolveDensityStyleVars } from '@/foundation/tokens/ts/foundation/base/density';
 import type { MetricsProps, KeyMetric } from '../../../foundation/contracts';
@@ -63,18 +67,6 @@ function MetricCard({
         overflow: 'hidden',
       }}
     >
-      <Box
-        className="card-top-accent"
-        data-part="top-accent"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-        }}
-      />
-
       <Stack spacing="sm" align="center" style={{ position: 'relative' }}>
         <Box
           className="metric-icon-container"

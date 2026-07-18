@@ -26,7 +26,11 @@
  */
 
 import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
-import { Check, GripVertical, X } from 'lucide-react';
+import {
+  CheckIcon as Check,
+  GripVerticalIcon as GripVertical,
+  XIcon as X,
+} from '../../../../../../graphics/icons';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { DataTablePatternProps } from '../../contracts';
 import { resolveAccessor, resolveRowKey } from '../../runtime/row-resolution';
@@ -1049,7 +1053,7 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
                         boxSizing: 'border-box',
                         height: 'var(--ds-table-header-block-size, auto)',
                         fontWeight: 'var(--ds-table-header-font-weight, 500)',
-                        fontSize: 'var(--ds-table-header-font-size, 12px)',
+                        fontSize: 'var(--ds-table-header-font-size, 13px)',
                         letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
                         textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as React.CSSProperties['textTransform'],
                         verticalAlign: 'middle',
@@ -1101,7 +1105,7 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
                           padding: isLeadingDataColumn && selectable ? leadingDataColumnPadding : densityPadding,
                           height: 'var(--ds-table-header-block-size, auto)',
                           fontWeight: 'var(--ds-table-header-font-weight, 500)',
-                          fontSize: 'var(--ds-table-header-font-size, 11px)',
+                          fontSize: 'var(--ds-table-header-font-size, 13px)',
                           letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
                           textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as React.CSSProperties['textTransform'],
                           position: (pinnedStyle.position as any) || (resizable ? 'relative' : undefined),
@@ -1304,7 +1308,7 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
                         zIndex: 2,
                         height: 'var(--ds-table-header-block-size, auto)',
                         fontWeight: 'var(--ds-table-header-font-weight, 500)',
-                        fontSize: 'var(--ds-table-header-font-size, 12px)',
+                          fontSize: 'var(--ds-table-header-font-size, 13px)',
                         letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
                         textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as React.CSSProperties['textTransform'],
                       }}

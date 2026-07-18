@@ -23,12 +23,12 @@ import {
   Tooltip,
 } from '../../../../../primitives';
 import {
-  GripVertical,
-  Pin,
-  PinOff,
-  RotateCcw,
-  Search,
-} from 'lucide-react';
+  GripVerticalIcon as GripVertical,
+  PinIcon as Pin,
+  PinOffIcon as PinOff,
+  RotateCcwIcon as RotateCcw,
+  SearchIcon as Search,
+} from '../../../../../../graphics/icons';
 
 import type { ColumnSettingsProps, ColumnSettingItem } from '../../contracts';
 

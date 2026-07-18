@@ -5,8 +5,8 @@
  * generated tenant reset while continuing to yield to caller inline styles.
  * Every selector is anchored to the existing two-class component scope.
  *
- * The ten palette values, both mapped swatch fills, the primary-500 contrast
- * label and the card accent bar remain inline because they are tenant-derived.
+ * The ten palette values, both mapped swatch fills, and the primary-500
+ * contrast label remain inline because they are tenant-derived.
  * The badge variants are finite authored states and therefore live here.
  * Border-color declarations reach at least (0,4,0) to clear the generated
  * tenant floor at (0,3,1).

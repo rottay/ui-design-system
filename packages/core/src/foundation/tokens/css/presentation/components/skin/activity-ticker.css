@@ -17,7 +17,7 @@
  * + the data-part repeated three times.
  *
  * ICON COLOR: the Bell / ExternalLink / Chevron / per-item icons carry no
- * data-part (raw lucide nodes). Their color is painted on the nearest stamped
+ * data-part (supplier-independent SVG nodes). Their color is painted on the nearest stamped
  * ancestor Box and inherited through `currentColor` (the dashboard-header
  * precedent); every Text sibling carries its own (0,5,0) color rule, so none
  * inherits the icon color by accident.

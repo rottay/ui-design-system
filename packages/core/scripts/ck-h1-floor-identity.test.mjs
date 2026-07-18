@@ -62,7 +62,6 @@ test('CK-H1 tenant-preview floors retain the exact tenant-derived identities', (
     'border: `1px solid ${primary500}`',
     'color: primary500',
     'backgroundColor: primary500',
-    'backgroundColor: primary500',
     'color: primaryFg',
     'backgroundColor: `${primary500}18`',
     'color: primary500',
@@ -71,7 +70,6 @@ test('CK-H1 tenant-preview floors retain the exact tenant-derived identities', (
     'backgroundColor: color',
     'color: primaryFg',
     'backgroundColor: color',
-    'backgroundColor: primary500',
   ];
 
   for (const fragment of new Set(modernRenderFloor)) {
@@ -112,8 +110,8 @@ test('CK-H1 brand-studio floors retain one live swatch and eight domain-object s
 
 test('CK-H1 counters cannot fall below their certified identity floors', () => {
   const expected = new Map([
-    [paths.modern, 22],
-    [paths.rustic, 14],
+    [paths.modern, 21],
+    [paths.rustic, 13],
     [paths.studio, 9],
   ]);
 

@@ -40,20 +40,20 @@ import {
   Tooltip,
 } from '../../../../../primitives';
 import {
-  Search,
-  List,
-  LayoutGrid,
-  Download,
-  Plus,
-  Settings2,
-  Filter,
-  X,
-  AlignJustify,
-  AlignCenter,
-  AlignLeft,
-  ChevronDown,
-  MoreHorizontal,
-} from 'lucide-react';
+  SearchIcon as Search,
+  ListIcon as List,
+  LayoutGridIcon as LayoutGrid,
+  DownloadIcon as Download,
+  PlusIcon as Plus,
+  Settings2Icon as Settings2,
+  FilterIcon as Filter,
+  XIcon as X,
+  AlignJustifyIcon as AlignJustify,
+  AlignCenterIcon as AlignCenter,
+  AlignLeftIcon as AlignLeft,
+  ChevronDownIcon as ChevronDown,
+  MoreHorizontalIcon as MoreHorizontal,
+} from '../../../../../../graphics/icons';
 
 import type { ListToolbarProps, FilterPillConfig, DensityKey } from '../../contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';

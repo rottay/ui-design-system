@@ -38,7 +38,7 @@
 
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon as ChevronDown } from '../../../../graphics/icons';
 
 import { Box, Flex, Stack, Text } from '../../../primitives';
 

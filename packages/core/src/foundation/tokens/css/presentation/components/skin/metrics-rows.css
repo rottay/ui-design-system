@@ -15,8 +15,8 @@
  * (`.metric-row-v3:hover .metric-row-value`) and was always suppressed by the
  * inline value colour; the (0,5,0) rest rule below preserves that suppression.
  *
- * STATE: `data-positive` (2-tone). Only the accent-bar width was React
- * `isHovered` (deleted); it is transcribed to `[data-part='metric-row']:hover …`.
+ * STATE: `data-positive` drives the 2-tone trend treatment while the
+ * quantitative meter remains the sole bar-shaped data visualization.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -67,21 +67,6 @@
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-part='metric-row'] {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
-}
-
-/* accent bar — trend meter fill, hover widens 4px -> 6px -------------------- */
-
-.ds-metrics-rows.ds-metrics-rows [data-part='accent-bar'] {
-  width: 4px;
-}
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row']:hover [data-part='accent-bar'] {
-  width: 6px;
-}
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
-}
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
 }
 
 /* shimmer sweep ------------------------------------------------------------- */

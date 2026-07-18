@@ -2,27 +2,9 @@
  * Modern Toast skin (WO-SKIN-03 checkpoint O).
  *
  * DELIBERATELY UNLAYERED (P-47), and here that is the whole point of the file.
- * The root carries DaisyUI's structural `alert` class, and TWO layered rules
- * paint through it:
- *
- *   DaisyUI `.alert`                    -> border-color from --alert-border-color
- *                                          (on the BASE rule: this engine applies
- *                                          no `alert-{variant}` modifier)
- *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
- *                                          border-left-style: solid
- *                                          transition: opacity/transform
- *
- * Both live in layers (Tailwind's, and `rottay-personality`). An unlayered
- * declaration outranks EVERY layer regardless of specificity, so the per-tone
- * `border` shorthands below suppress the DaisyUI border-color AND personality's
- * accent bar -- exactly as the inline `border` from the deleted getAlertStyle()
- * did. The floor to clear is (0,1,0); this file sits above it by being unlayered,
- * not by escalation. Personality's `transition` is untouched by anything here and
- * stays live, as before.
- *
- * The `border` MUST stay a SHORTHAND. Splitting it into longhands would leave
- * `border-left-style`/`border-left-width` uncontested and let personality's 4px
- * accent bar re-appear on the left edge of every toast.
+ * The root carries DaisyUI's structural `alert` class. The per-tone `border`
+ * shorthands below keep a full container border above DaisyUI while personality
+ * contributes only the opacity/transform transition.
  *
  * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
  * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`

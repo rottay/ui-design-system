@@ -19,15 +19,15 @@ const SOURCES = {
 };
 
 const POST_MIGRATION_PAINT_COUNTS = {
-  modern: 22,
-  rustic: 14,
+  modern: 21,
+  rustic: 13,
   sandbox: 0,
   studio: 9,
 };
 
 const RENDER_TOPOLOGY_SHA256 = {
-  modern: 'ef39d31f1999d32935635c24d2fb766d796696e591ec5cbdb39009a1566721fe',
-  rustic: '715956838d0dc8cdc278085fd50afe6b37447e89f10676948e30fa0004bfecd1',
+  modern: '03a9e40fa5b3d8c71c372dbb810e2188c81648f5e94302814787f8d228e7ea1c',
+  rustic: '709598682cf33788abab2fae40e15acf7161b42a2ae47c35bd3e95fa8418b5cb',
   sandbox: '365c4d16b7ea690ff4dcd09b27ca18217bd896d8f5f6a7b3dafa513afb6f844e',
   studio: '26d1cf0c2a1c95d176ecb02a13678fb4f1830962939ab4b75f8997a80a2d6496',
 };
@@ -98,7 +98,7 @@ function renderTopology(path) {
   return roots.join('\n');
 }
 
-test('CK-H1 migration reaches the exact 22/14/0/9 paint floors', () => {
+test('CK-H1 migration reaches the exact 21/13/0/9 paint floors', () => {
   let total = 0;
   for (const [name, path] of Object.entries(SOURCES)) {
     const count = countArc09PaintInFile(source(path), path);
@@ -109,10 +109,10 @@ test('CK-H1 migration reaches the exact 22/14/0/9 paint floors', () => {
     );
     total += count;
   }
-  assert.equal(total, 45, 'CK-H1 must retain exactly 45 adjudicated floor sites');
+  assert.equal(total, 43, 'CK-H1 must retain exactly 43 adjudicated floor sites');
 });
 
-test('CK-H1 migration preserves each pre-step rendered topology', () => {
+test('CK-H1 pins the post-prohibition rendered topology', () => {
   const actual = {};
   for (const [name, path] of Object.entries(SOURCES)) {
     actual[name] = createHash('sha256').update(renderTopology(path)).digest('hex');

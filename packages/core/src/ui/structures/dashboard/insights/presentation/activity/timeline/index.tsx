@@ -4,20 +4,20 @@ import { type CSSProperties, type ReactNode } from 'react';
 import { Box, Text, Stack, Flex } from '@/ui/primitives';
 import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
 import {
-  Bell,
-  Check,
-  Plus,
-  AlertCircle,
-  Info,
-  ChevronRight,
-  ExternalLink,
-  Briefcase,
-  FileText,
-  Users,
-  Star,
-  Zap,
-  RefreshCw,
-} from 'lucide-react';
+  AlertCircleIcon as AlertCircle,
+  BellIcon as Bell,
+  BriefcaseIcon as Briefcase,
+  CheckIcon as Check,
+  ChevronRightIcon as ChevronRight,
+  ExternalLinkIcon as ExternalLink,
+  FileTextIcon as FileText,
+  InfoIcon as Info,
+  PlusIcon as Plus,
+  RefreshCwIcon as RefreshCw,
+  StarIcon as Star,
+  UsersIcon as Users,
+  ZapIcon as Zap,
+} from '../../../../../../../graphics/icons';
 import type { ActivityProps, ActivityItem } from '../../../foundation/contracts';
 
 function NavLinkAnchor({ href, style, children }: { href: string; style?: CSSProperties; children: ReactNode }) {

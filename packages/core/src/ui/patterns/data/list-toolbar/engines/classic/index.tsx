@@ -27,17 +27,17 @@ import {
   Tag,
 } from '../../../../../primitives';
 import {
-  Search,
-  List,
-  LayoutGrid,
-  Download,
-  Plus,
-  Settings2,
-  Filter,
-  AlignJustify,
-  AlignCenter,
-  AlignLeft,
-} from 'lucide-react';
+  SearchIcon as Search,
+  ListIcon as List,
+  LayoutGridIcon as LayoutGrid,
+  DownloadIcon as Download,
+  PlusIcon as Plus,
+  Settings2Icon as Settings2,
+  FilterIcon as Filter,
+  AlignJustifyIcon as AlignJustify,
+  AlignCenterIcon as AlignCenter,
+  AlignLeftIcon as AlignLeft,
+} from '../../../../../../graphics/icons';
 
 import type { ListToolbarProps, FilterPillConfig, DensityKey } from '../../contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';

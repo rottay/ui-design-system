@@ -150,19 +150,13 @@
         JS checked `isHovered` before `isSelected`), so the hover background
         rule below is NOT qualified with `:not([data-selected])` -- its added
         `:hover` pseudo-class already gives it higher specificity than the
-        selected rule, so it wins regardless of source order. The inset
-        left-accent bar, by contrast, only ever showed when hovered AND NOT
-        selected, so that one rule keeps the qualifier. ---- */
+        selected rule, so it wins regardless of source order. ---- */
 .ds-table.ds-table--rustic [data-part='row'][data-selected='true'] {
   background-color: var(--ds-table-row-bg-selected, var(--ds-color-primary-100));
 }
 .ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:hover {
   background-color: var(--ds-table-row-bg-hover, var(--ds-color-bg-secondary));
 }
-.ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
-  box-shadow: inset 3px 0 0 var(--ds-color-primary);
-}
-
 /* ---- body cell: bottom border is unconditional in rustic (data-bordered is
         stamped "true" on every cell, not gated on the `bordered` prop), and
         the editable-cell hover ---- */

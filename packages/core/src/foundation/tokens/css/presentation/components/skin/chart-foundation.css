@@ -177,7 +177,7 @@
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='insight'] {
   padding: var(--ds-spacing-3);
-  border-inline-start: 3px solid var(--ds-color-primary);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
   border-radius: var(--ds-radius-sm);
   background: var(--ds-color-bg-secondary);
   color: var(--ds-color-text-primary);

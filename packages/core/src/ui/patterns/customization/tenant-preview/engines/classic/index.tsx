@@ -314,8 +314,7 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
-            {/* Card -- border visibility respects the tenant's personality.card.showBorder token.
-                The colored accent bar at the top reinforces brand identity within containers. */}
+            {/* Card -- border visibility respects the tenant's personality.card.showBorder token. */}
             {components.includes('card') && (
               <div>
                 <div style={{ fontSize: '12px', color: textSecondary, marginBottom: '8px' }}>
@@ -333,14 +332,6 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
                     backgroundColor: bgPrimary,
                   }}
                 >
-                  {/* Accent bar -- thin colored strip that establishes brand presence */}
-                  <div style={{
-                    width: '100%',
-                    height: '3px',
-                    backgroundColor: primary500,
-                    borderRadius: '2px',
-                    marginBottom: '12px',
-                  }} />
                   <div style={{ fontSize: '14px', fontWeight: 600, color: textPrimary }}>
                     Sample Card Title
                   </div>
@@ -492,7 +483,7 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
               { label: 'Badge Shape', value: personalityInfo.tokens.accent?.badgeShape ?? 'rounded' },
               { label: 'Label Style', value: personalityInfo.tokens.typography?.labelStyle ?? 'sentence' },
               { label: 'Hover Lift', value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px` },
-              { label: 'Accent Bar', value: personalityInfo.tokens.accent?.barPosition ?? 'top' },
+              { label: 'Edge Accent', value: 'Disabled' },
             ].map(({ label, value }) => (
               <div
                 key={label}

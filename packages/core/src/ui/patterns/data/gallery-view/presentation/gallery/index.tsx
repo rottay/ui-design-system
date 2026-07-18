@@ -16,7 +16,7 @@
  */
 
 import React, { useCallback, useMemo, useState } from 'react';
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon } from '../../../../../../graphics/icons';
 
 import { Box, Flex, Skeleton, Stack, Text } from '../../../../../primitives';
 import { Checkbox } from '../../../../../primitives/inputs/Checkbox';

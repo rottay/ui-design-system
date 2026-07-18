@@ -4,20 +4,20 @@ import { type CSSProperties, type ReactNode } from 'react';
 import { Box, Text, Stack, Flex } from '@/ui/primitives';
 import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
 import {
-  Bell,
-  Check,
-  Plus,
-  AlertCircle,
-  Info,
-  ChevronRight,
-  ExternalLink,
-  Briefcase,
-  FileText,
-  Users,
-  Star,
-  Zap,
-  RefreshCw,
-} from 'lucide-react';
+  AlertCircleIcon as AlertCircle,
+  BellIcon as Bell,
+  BriefcaseIcon as Briefcase,
+  CheckIcon as Check,
+  ChevronRightIcon as ChevronRight,
+  ExternalLinkIcon as ExternalLink,
+  FileTextIcon as FileText,
+  InfoIcon as Info,
+  PlusIcon as Plus,
+  RefreshCwIcon as RefreshCw,
+  StarIcon as Star,
+  UsersIcon as Users,
+  ZapIcon as Zap,
+} from '../../../../../../../graphics/icons';
 import type { ActivityProps, ActivityItem } from '../../../foundation/contracts';
 
 function NavLinkAnchor({ href, style, children }: { href: string; style?: CSSProperties; children: ReactNode }) {
@@ -43,26 +43,11 @@ const WARNING_ICONS = [AlertCircle, RefreshCw, FileText];
 const ERROR_ICONS = [RefreshCw, AlertCircle];
 
 const TYPE_CONFIG = {
-  success: {
-    icons: SUCCESS_ICONS,
-    gradient: 'linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200))',
-  },
-  primary: {
-    icons: PRIMARY_ICONS,
-    gradient: 'linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200))',
-  },
-  info: {
-    icons: INFO_ICONS,
-    gradient: 'linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200))',
-  },
-  warning: {
-    icons: WARNING_ICONS,
-    gradient: 'linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200))',
-  },
-  error: {
-    icons: ERROR_ICONS,
-    gradient: 'linear-gradient(135deg, var(--ds-color-error), var(--ds-color-error-200))',
-  },
+  success: { icons: SUCCESS_ICONS },
+  primary: { icons: PRIMARY_ICONS },
+  info: { icons: INFO_ICONS },
+  warning: { icons: WARNING_ICONS },
+  error: { icons: ERROR_ICONS },
 } as const;
 
 function CompactItem({ item, index }: { item: ActivityProps['items'][0]; index: number }) {
@@ -81,18 +66,7 @@ function CompactItem({ item, index }: { item: ActivityProps['items'][0]; index: 
         cursor: 'pointer',
       }}
     >
-      <Box
-        data-part="accent-bar"
-        data-type={item.type}
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          transition: 'width 0.3s ease',
-        }}
-      />
-      <Flex align="center" gap={12} data-part="item-row" style={{ position: 'relative', paddingLeft: 4 }}>
+      <Flex align="center" gap={12} data-part="item-row" style={{ position: 'relative' }}>
         <Box
           data-part="item-icon-box"
           data-type={item.type}

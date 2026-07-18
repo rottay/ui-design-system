@@ -66,15 +66,6 @@
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
-/* top accent — success/error meter fill by trend --------------------------- */
-
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='top-accent'] {
-  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
-}
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='top-accent'] {
-  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
-}
-
 /* card icon box — 2px border, static colour -------------------------------- */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'] {

@@ -13,15 +13,11 @@
  * `ds-notification` would newly activate personality's dormant `ds-toast-enter`
  * entrance rule on top of this engine's own slide-in.
  *
- * SPECIFICITY (P-48): the per-tone `border-left` accent bars paint a border COLOR
- * and reach b >= 4 to clear the tenant artifacts' unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
- * (0,3,1). `border: none` on the close button is a color-free reset and is exempt.
+ * `border: none` on the close button is a color-free reset and is exempt from
+ * the tenant border-color floor.
  *
- * The `open` type has NO accent bar: its entry in the style table was an empty
- * object. It DOES have an icon colour, but the icon is never rendered for it (the
- * icon renderer returns null on `open` before reaching the table) -- that entry
- * was unreachable, so it is not transcribed.
+ * The `open` type has no icon: the icon renderer returns null before reaching
+ * the style table, so that entry remains unreachable and is not transcribed.
  */
 
 /* ---- item: base surface ---- */
@@ -29,20 +25,6 @@
   border-radius: var(--ds-notification-radius, 12px);
   background-color: var(--ds-notification-bg, var(--ds-color-bg-elevated));
   box-shadow: var(--ds-notification-shadow, var(--ds-shadow-lg));
-}
-
-/* ---- per-type left accent bar ---- */
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='success'] {
-  border-left: 4px solid var(--ds-notification-success-color, var(--ds-color-success));
-}
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='error'] {
-  border-left: 4px solid var(--ds-notification-error-color, var(--ds-color-error));
-}
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='info'] {
-  border-left: 4px solid var(--ds-notification-info-color, var(--ds-color-primary-500));
-}
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='warning'] {
-  border-left: 4px solid var(--ds-notification-warning-color, var(--ds-color-warning));
 }
 
 /* ---- per-type icon colour (built-in glyph only) ---- */

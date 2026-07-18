@@ -488,15 +488,14 @@ input:focus-visible,
 
 /* ========================================================================
    ALERT PERSONALITY
-   Applies personality-driven border accent and transition to alerts.
+   Applies personality-driven transition to alerts. Decorative edge accents
+   are forbidden; tone remains available through surface, text, and icon paint.
    ======================================================================== */
 
 .ant-alert,
 .alert,
 .rottay-alert,
 [data-engine] .ds-alert {
-  border-left-width: var(--ds-personality-accent-bar-thickness, 4px);
-  border-left-style: var(--ds-personality-accent-bar-style, solid);
   transition: opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out),
               transform var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
 }

@@ -25,7 +25,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, GripVertical, PinOff, RotateCcw } from 'lucide-react';
+import {
+  ArrowDownIcon as ArrowDown,
+  ArrowUpIcon as ArrowUp,
+  ChevronDownIcon as ChevronDown,
+  ChevronRightIcon as ChevronRight,
+  GripVerticalIcon as GripVertical,
+  PinOffIcon as PinOff,
+  RotateCcwIcon as RotateCcw,
+} from '../../../../graphics/icons';
 
 import { Box, Checkbox, Flex, Text } from '../../../primitives';
 

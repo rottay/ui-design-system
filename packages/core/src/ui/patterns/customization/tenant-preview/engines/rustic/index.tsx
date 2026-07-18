@@ -344,8 +344,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
               </div>
             )}
 
-            {/* Card -- all visual properties flow from --ds-card-* tokens with generic fallbacks.
-                The accent bar width/color reinforces brand identity within containers. */}
+            {/* Card -- all visual properties flow from --ds-card-* tokens with generic fallbacks. */}
             {components.includes('card') && (
               <div>
                 <div
@@ -362,16 +361,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     padding: '14px',
                   }}
                 >
-                  {/* Accent bar in primary color for brand reinforcement */}
-                  <div
-                    data-part="accent-bar"
-                    style={{
-                      width: '100%',
-                      height: '2px',
-                      backgroundColor: primary500,
-                      marginBottom: '10px',
-                    }}
-                  />
                   <div
                     data-part="preview-card-title"
                     style={{
@@ -607,8 +596,8 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px`,
               },
               {
-                label: 'Accent Bar',
-                value: personalityInfo.tokens.accent?.barPosition ?? 'top',
+                label: 'Edge Accent',
+                value: 'Disabled',
               },
             ].map(({ label, value }) => (
               <div

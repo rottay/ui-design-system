@@ -35,11 +35,11 @@ import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 
 import {
-  ArrowUpRight,
-  Copy,
-  PanelRightClose,
-  ScanSearch,
-} from 'lucide-react';
+  ArrowUpRightIcon as ArrowUpRight,
+  CopyIcon as Copy,
+  PanelRightCloseIcon as PanelRightClose,
+  ScanSearchIcon as ScanSearch,
+} from '../../../../graphics/icons';
 
 import { Badge, Box, Button, Flex, Text } from '../../../primitives';
 

@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 import type { DensityMode } from '../../../../../../foundation/tokens/ts/foundation/base/density';
-type LucideIcon = ComponentType<any>;
+type DashboardInsightIcon = ComponentType<any>;
 
 // Variant types
 export type MetricsVariant = "rows" | "cards" | "minimal" | "chart";
@@ -12,7 +12,7 @@ export interface KeyMetric {
   value: string;
   change: string;
   positive: boolean;
-  icon: LucideIcon;
+  icon: DashboardInsightIcon;
   trend?: "up" | "down" | "neutral";
   unit?: string;
   progress?: number;
@@ -22,7 +22,7 @@ export interface ActivityItem {
   text: string;
   time: string;
   type: "success" | "primary" | "info" | "warning" | "error";
-  icon?: LucideIcon;
+  icon?: DashboardInsightIcon;
   label?: string;
   sublabel?: string;
 }

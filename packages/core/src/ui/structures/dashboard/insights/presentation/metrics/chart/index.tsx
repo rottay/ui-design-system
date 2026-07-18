@@ -1,7 +1,11 @@
 'use client';
 
 import { Box, Text, Stack, Flex } from '@/ui/primitives';
-import { Activity, TrendingUp, TrendingDown } from 'lucide-react';
+import {
+  ActivityIcon as Activity,
+  TrendingDownIcon as TrendingDown,
+  TrendingUpIcon as TrendingUp,
+} from '../../../../../../../graphics/icons';
 import { useSmoothCounter } from '@/graphics/motion/react/runtime';
 import type { MetricsProps, KeyMetric } from '../../../foundation/contracts';
 import {
@@ -61,17 +65,6 @@ function ChartRow({
         overflow: 'hidden',
       }}
     >
-      <Box
-        data-part="accent-bar"
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          transition: 'width 0.2s ease',
-        }}
-      />
-
       <Flex align="center" justify="between" style={{ marginBottom: 8, position: 'relative' }}>
         <Flex align="center" gap={10}>
           <Box

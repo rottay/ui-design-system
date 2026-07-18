@@ -1,7 +1,12 @@
 'use client';
 
 import { Box, Text, Stack, Flex } from '@/ui/primitives';
-import { Activity, TrendingUp, TrendingDown, ChevronRight } from 'lucide-react';
+import {
+  ActivityIcon as Activity,
+  ChevronRightIcon as ChevronRight,
+  TrendingDownIcon as TrendingDown,
+  TrendingUpIcon as TrendingUp,
+} from '../../../../../../../graphics/icons';
 import { useSmoothCounter } from '@/graphics/motion/react/runtime';
 import type { MetricsProps, KeyMetric } from '../../../foundation/contracts';
 import {
@@ -63,17 +68,6 @@ function MetricRow({
         cursor: 'pointer',
       }}
     >
-      <Box
-        data-part="accent-bar"
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          transition: 'width 0.2s ease',
-        }}
-      />
-
       <Flex align="center" gap={16} style={{ position: 'relative' }}>
         <Box
           data-part="metric-icon-box"

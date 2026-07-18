@@ -9,8 +9,8 @@
  * the typography skin.
  *
  * ICON COLOUR: Bell / ExternalLink painted on their stamped ancestor Box
- * (currentColor). The per-item chevron is a bare lucide `svg`, the only
- * direct-child svg of `item-row`; it is reached by `[data-part='item-row'] > svg`
+ * (currentColor). The per-item chevron is a supplier-independent `svg`, the
+ * only direct-child svg of `item-row`; it is reached by `[data-part='item-row'] > svg`
  * (its colour keyed through the item's `data-type`, its hover slide-in through
  * the item's `:hover`).
  *
@@ -19,8 +19,8 @@
  * (`.activity-compact-item-v3:hover` background / border-color) stays in the
  * co-located `<style>` and remains suppressed by the (0,3,0)/(0,4,0) rest rules
  * below, exactly as the former inline paint suppressed it. `data-type` selects
- * the bounded 5-value enum for `TYPE_CONFIG` (135deg gradient) and the
- * string-concat sites. Badge count text is a literal `white`, transcribed as-is.
+ * the bounded 5-value enum for `TYPE_CONFIG` and the string-concat sites. Badge
+ * count text is a literal `white`, transcribed as-is.
  */
 
 /* root + header ------------------------------------------------------------- */
@@ -84,21 +84,6 @@
 }
 .ds-activity-compact.ds-activity-compact [data-part='item'][data-part='item'] {
   border: 1px solid var(--ds-color-border-secondary);
-}
-
-/* accent bar — type gradient (135deg), hover widens 3px -> 5px --------------- */
-
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='primary'] { background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='info']    { background: linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='error']   { background: linear-gradient(135deg, var(--ds-color-error), var(--ds-color-error-200)); }
-
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'] {
-  width: 3px;
-}
-.ds-activity-compact.ds-activity-compact [data-part='item']:hover [data-part='accent-bar'] {
-  width: 5px;
 }
 
 /* per-item icon box — bg + type-200 border + icon colour; hover scale -------- */

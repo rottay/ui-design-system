@@ -27,16 +27,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import {
-  Bookmark,
-  BookmarkPlus,
-  Check,
-  Copy,
-  LayoutTemplate,
-  Share2,
-  Sparkles,
-  Star,
-  Trash2,
-} from 'lucide-react';
+  BookmarkIcon as Bookmark,
+  BookmarkPlusIcon as BookmarkPlus,
+  CheckIcon as Check,
+  CopyIcon as Copy,
+  LayoutTemplateIcon as LayoutTemplate,
+  Share2Icon as Share2,
+  SparklesIcon as Sparkles,
+  StarIcon as Star,
+  Trash2Icon as Trash2,
+} from '../../../../graphics/icons';
 
 import { Box, Flex, Text } from '../../../primitives';
 

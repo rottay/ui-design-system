@@ -26,7 +26,13 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { AudioLines, ExternalLink, LoaderCircle, Mic, X } from 'lucide-react';
+import {
+  AudioLinesIcon as AudioLines,
+  ExternalLinkIcon as ExternalLink,
+  LoaderCircleIcon as LoaderCircle,
+  MicIcon as Mic,
+  XIcon as X,
+} from '../../../../../graphics/icons';
 
 import { useVoiceInput } from '@/infrastructure/runtime/application/automation/voice';
 import { useRegisterCommands } from '@/infrastructure/runtime/application/commands';

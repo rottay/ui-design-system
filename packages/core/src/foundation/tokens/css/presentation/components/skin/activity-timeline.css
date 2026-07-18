@@ -10,7 +10,7 @@
  * typography skin (0,4,0).
  *
  * ICON COLOR: Bell / ExternalLink carry no data-part — painted on the stamped
- * ancestor Box (currentColor). The per-item chevron is a bare lucide `svg` with
+ * ancestor Box (currentColor). The per-item chevron is an unstamped `svg` with
  * no data-part and no stampable direct parent; it is reached by
  * `[data-part='item-content'] svg` (the only svg inside item-content), which
  * takes its colour from item-content's own currentColor and its hover
@@ -153,7 +153,7 @@
   color: var(--ds-color-text-muted);
 }
 
-/* chevron — bare svg inside item-content: hover slide-in (colour inherited) -- */
+/* chevron — unstamped svg inside item-content: hover slide-in (colour inherited) */
 
 .ds-activity-timeline.ds-activity-timeline [data-part='item-content'] svg {
   opacity: 0;

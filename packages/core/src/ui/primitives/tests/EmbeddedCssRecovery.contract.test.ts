@@ -13,7 +13,7 @@ const readSource = (path: string) => readFileSync(resolve(srcRoot, path), 'utf8'
 const readSkin = (name: string) => readSource(`foundation/tokens/css/presentation/components/skin/${name}`);
 
 const SKIN_HASHES = {
-  'data-table-interactions.css': 'ed433b6802e97d7dcc5415c4821756cf2b17e3d655af03087c35c1fbf691a016',
+  'data-table-interactions.css': '6d7ee17c26eda20cec65551d28c9ab5080caa74f650c14f0b8ce07a47226a217',
   'form-placeholders.css': 'c26b0d68812a0b668f5992cfa868ce8ee1c9b9047c7e7cbfe91b110d82ab2a8f',
   'navigation-static.css': '27dd6e831cc8e09c7cb07ee078e4a8f28aab4572f572a1bae74893bce9784f05',
   'primitive-motion.css': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
@@ -127,7 +127,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       navigation: paintCount(SKINS.navigation),
       formPlaceholders: paintCount(SKINS.formPlaceholders),
     }).toEqual({
-      dataTable: 22,
+      dataTable: 21,
       primitiveMotion: 8,
       toast: 20,
       scrollArea: 25,
@@ -194,21 +194,11 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
         'background-color var(--ds-motion-fast) ease, box-shadow var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease',
     });
     expect(
-      ruleContract(
+      ruleContracts(
         SKINS.dataTable,
         ".ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover::after"
       )
-    ).toEqual({
-      content: "''",
-      position: 'absolute',
-      left: '0',
-      top: '0',
-      bottom: '0',
-      width: '2px',
-      background: 'var(--ds-color-primary)',
-      opacity: '0.4',
-      'pointer-events': 'none',
-    });
+    ).toHaveLength(0);
     expect(
       ruleContract(SKINS.dataTable, ".ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover")
     ).toEqual({

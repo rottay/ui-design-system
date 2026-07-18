@@ -34,22 +34,22 @@ import React, { useRef, useState } from 'react';
 import type { FilterPanelProps } from '../../contracts';
 import type { FilterDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
 import {
-  AlertTriangle,
-  BriefcaseBusiness,
-  CalendarClock,
-  CheckCircle2,
-  CircleDot,
-  ClipboardCheck,
-  Clock3,
-  Layers3,
-  MapPin,
-  Route,
-  ShieldCheck,
-  Target,
-  UserRound,
-  UsersRound,
-  XCircle,
-} from 'lucide-react';
+  AlertTriangleIcon as AlertTriangle,
+  BriefcaseBusinessIcon as BriefcaseBusiness,
+  CalendarClockIcon as CalendarClock,
+  CheckCircle2Icon as CheckCircle2,
+  CircleDotIcon as CircleDot,
+  ClipboardCheckIcon as ClipboardCheck,
+  Clock3Icon as Clock3,
+  Layers3Icon as Layers3,
+  MapPinIcon as MapPin,
+  RouteIcon as Route,
+  ShieldCheckIcon as ShieldCheck,
+  TargetIcon as Target,
+  UserRoundIcon as UserRound,
+  UsersRoundIcon as UsersRound,
+  XCircleIcon as XCircle,
+} from '../../../../../../graphics/icons';
 import ModernSwitch from '../../../../../primitives/inputs/Switch/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/Select/engines/modern';

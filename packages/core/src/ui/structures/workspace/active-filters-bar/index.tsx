@@ -19,7 +19,10 @@
  * or any specific entity.
  */
 
-import { Plus, X } from 'lucide-react';
+import {
+  PlusIcon as Plus,
+  XIcon as X,
+} from '../../../../graphics/icons';
 
 import { Box, Flex, Text } from '../../../primitives';
 import type { ActiveFilter } from '@/foundation/contracts/runtime/components/patterns/data';

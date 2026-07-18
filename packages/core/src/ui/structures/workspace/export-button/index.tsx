@@ -24,7 +24,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Braces, Check, ClipboardCopy, Download, FileDown } from 'lucide-react';
+import {
+  BracesIcon as Braces,
+  CheckIcon as Check,
+  ClipboardCopyIcon as ClipboardCopy,
+  DownloadIcon as Download,
+  FileDownIcon as FileDown,
+} from '../../../../graphics/icons';
 
 import { Box, Button, Flex, Text } from '../../../primitives';
 import type { ExportColumn } from './runtime/file-export';

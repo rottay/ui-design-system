@@ -46,7 +46,7 @@ import { type CSSProperties, type ReactNode } from 'react';
 
 import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
 import type { ComponentType } from 'react';
-type LucideIcon = ComponentType<any>;
+type DetailHeaderIcon = ComponentType<any>;
 
 import { Badge, Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
@@ -62,7 +62,7 @@ export type DetailHeaderArchetype = 'editorial' | 'control' | 'technical' | 'gov
 export interface DetailHeaderAction {
   label: string;
   kind?: SharedHeaderActionKind;
-  icon?: LucideIcon;
+  icon?: DetailHeaderIcon;
   onClick?: () => void;
   href?: string;
   loading?: boolean;
@@ -75,7 +75,7 @@ export interface DetailHeaderTab {
   id: string;
   label: string;
   count?: number;
-  icon?: LucideIcon;
+  icon?: DetailHeaderIcon;
 }
 
 export interface DetailHeaderProps {
@@ -93,7 +93,7 @@ export interface DetailHeaderProps {
   tabs?: DetailHeaderTab[];
   activeTab?: string;
   onTabChange?: (tabId: string) => void;
-  metadata?: Array<{ label: string; value: string; icon?: LucideIcon; mono?: boolean }>;
+  metadata?: Array<{ label: string; value: string; icon?: DetailHeaderIcon; mono?: boolean }>;
   eyebrow?: string;
   archetype?: DetailHeaderArchetype;
   contextRail?: ReactNode;

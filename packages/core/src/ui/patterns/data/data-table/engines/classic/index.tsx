@@ -11,7 +11,7 @@
 
 import React, { useMemo, useState, useCallback, useRef } from 'react';
 import { Table, Space, Button, Empty } from 'antd';
-import { GripVertical } from 'lucide-react';
+import { GripVerticalIcon as GripVertical } from '../../../../../../graphics/icons';
 import type { ColumnsType } from 'antd/es/table';
 import type { DataTablePatternProps } from '../../contracts';
 import { resolveAccessor, resolveRowKey } from '../../runtime/row-resolution';

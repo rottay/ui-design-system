@@ -29,9 +29,17 @@ import { useMemo, createContext, useContext, type CSSProperties, type ReactNode 
 import { Box, Text, Flex } from '@/ui/primitives';
 import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
 import { useDsFocusMode } from '@/infrastructure/runtime/adapters/presentation/react/focus-mode';
-import { TrendingUp, TrendingDown, ArrowRight, Eye, Plus, BarChart3, Activity } from 'lucide-react';
+import {
+  ActivityIcon as Activity,
+  ArrowRightIcon as ArrowRight,
+  BarChart3Icon as BarChart3,
+  EyeIcon as Eye,
+  PlusIcon as Plus,
+  TrendingDownIcon as TrendingDown,
+  TrendingUpIcon as TrendingUp,
+} from '../../../../graphics/icons';
 import type { ComponentType } from 'react';
-type LucideIcon = ComponentType<any>;
+type DataTerminalIcon = ComponentType<any>;
 
 /**
  * Internal Link wrapper that resolves the consumer-supplied Link via the
@@ -60,7 +68,7 @@ export interface DataTerminalCardProps {
   value: number | string;
   change?: string;
   trend?: 'up' | 'down';
-  icon: LucideIcon;
+  icon: DataTerminalIcon;
   path: string;
   progress?: number;
   subtitle?: string;
@@ -167,7 +175,7 @@ function ActivityIndicator() {
 }
 
 // Quick action button
-function QuickAction({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
+function QuickAction({ icon: Icon, label }: { icon: DataTerminalIcon; label: string }) {
   return (
     <Box
       as="button"

@@ -122,7 +122,6 @@ describe.each([
     }
     for (const part of [
       'sample-card',
-      'accent-bar',
       'preview-card-title',
       'preview-card-body',
       'sample-input',
@@ -131,6 +130,7 @@ describe.each([
     ]) {
       expect(queryAll(root, `[data-part="${part}"]`), part).toHaveLength(1);
     }
+    expect(queryAll(root, '[data-part="accent-bar"]')).toHaveLength(0);
     expect(queryAll(root, '[data-part="preview-table-cell"]')).toHaveLength(9);
     expect(queryAll(root, '[data-part="personality-tile"]')).toHaveLength(8);
     expect(queryAll(root, '[data-part="badge"][data-status="active"]')).toHaveLength(2);

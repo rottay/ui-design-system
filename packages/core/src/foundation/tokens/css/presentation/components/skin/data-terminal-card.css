@@ -88,7 +88,7 @@
   color: var(--ds-color-text);
 }
 
-/* trend-icon (lucide, currentColor) — binary on data-trend, all five bodies. */
+/* trend-icon (supplier-independent, currentColor) — binary on data-trend, all five bodies. */
 .ds-data-terminal-card[data-trend='up'] [data-part='trend-icon'],
 .ds-data-terminal-stat[data-trend='up'] [data-part='trend-icon'] {
   color: var(--ds-color-success);
@@ -137,7 +137,7 @@
   border: 1px solid var(--ds-color-border);
 }
 
-/* header-icon (lucide) — HUD/Circuit/Matrix, text-secondary. */
+/* header-icon — HUD/Circuit/Matrix, text-secondary. */
 .ds-data-terminal-card [data-part='header-icon'][data-part='header-icon'] {
   color: var(--ds-color-text-secondary);
 }
@@ -152,7 +152,7 @@
   color: var(--ds-color-text-muted);
 }
 
-/* details-arrow (lucide) — HUD/Matrix, text-muted. */
+/* details-arrow — HUD/Matrix, text-muted. */
 .ds-data-terminal-card [data-part='details-arrow'][data-part='details-arrow'] {
   color: var(--ds-color-text-muted);
 }
@@ -415,7 +415,7 @@
   color: var(--ds-color-error);
 }
 
-/* details-icon (Activity lucide) — always success. */
+/* details-icon (activity glyph) — always success. */
 .ds-data-terminal-card [data-part='details-icon'][data-part='details-icon'] {
   color: var(--ds-color-success);
 }

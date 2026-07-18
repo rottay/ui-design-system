@@ -24,7 +24,7 @@
  */
 
 import React, { useMemo, useState, useCallback, useRef } from 'react';
-import { GripVertical } from 'lucide-react';
+import { GripVerticalIcon as GripVertical } from '../../../../../../graphics/icons';
 import type { DataTablePatternProps } from '../../contracts';
 import { resolveAccessor, resolveRowKey } from '../../runtime/row-resolution';
 
@@ -127,7 +127,7 @@ const styles = {
   th: {
     textAlign: 'left' as const,
     height: 'var(--ds-table-header-block-size, auto)',
-    fontWeight: 'var(--ds-table-header-font-weight, 600)' as unknown as number,
+    fontWeight: 'var(--ds-table-header-font-weight, 500)' as unknown as number,
     textTransform: 'var(--ds-table-header-text-transform, var(--ds-text-eyebrow-transform, uppercase))' as unknown as React.CSSProperties['textTransform'],
     letterSpacing: 'var(--ds-table-header-letter-spacing, var(--ds-text-eyebrow-letter-spacing, 0.05em))',
     whiteSpace: 'nowrap' as const,

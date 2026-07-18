@@ -55,7 +55,10 @@
 
 import { type CSSProperties, type ReactNode } from 'react';
 
-import { ArrowUpRight, Copy } from 'lucide-react';
+import {
+  ArrowUpRightIcon as ArrowUpRight,
+  CopyIcon as Copy,
+} from '../../../../graphics/icons';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';

@@ -13,7 +13,7 @@
  */
 
 import type { ComponentType } from 'react';
-type LucideIcon = ComponentType<any>;
+type StatusFilterPillIcon = ComponentType<any>;
 
 import { Box, Flex, Text } from '../../../primitives';
 import { PATTERN_TRANSITION } from '../../foundation/motion';
@@ -22,7 +22,7 @@ export interface StatusFilterPillOption {
   value: string;
   label: string;
   count?: number;
-  icon?: LucideIcon;
+  icon?: StatusFilterPillIcon;
 }
 
 /**

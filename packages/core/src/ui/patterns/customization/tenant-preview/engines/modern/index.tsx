@@ -397,7 +397,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 </div>
               )}
 
-              {/* Card -- token-styled card with accent bar in tenant primary color */}
+              {/* Card -- token-styled card using tenant surface tokens. */}
               {components.includes('card') && (
                 <div>
                   <div style={subLabelStyle}>Card</div>
@@ -410,15 +410,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         gap: 4,
                       }}
                     >
-                      {/* Accent bar reinforces brand identity within card containers */}
-                      <div
-                        data-part="accent-bar"
-                        style={{
-                          height: 4,
-                          marginBottom: 8,
-                          backgroundColor: primary500,
-                        }}
-                      />
                       <h3
                         data-part="preview-card-title"
                         style={{
@@ -669,8 +660,8 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px`,
                 },
                 {
-                  label: 'Accent Bar',
-                  value: personalityInfo.tokens.accent?.barPosition ?? 'top',
+                  label: 'Edge Accent',
+                  value: 'Disabled',
                 },
               ].map(({ label, value }) => (
                 <div

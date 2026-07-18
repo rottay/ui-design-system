@@ -26,7 +26,7 @@
  * header without committing to the full surface config contract.
  *
  * Features:
- *   - Required icon badge (LucideIcon, displayed in colored box; the
+ *   - Required supplier-independent icon badge (displayed in a colored box; the
  *     `colorVariant` prop controls the box tone -- 5 options:
  *     primary, secondary, success, warning, info)
  *   - Back button (uses NavigationLinkProvider Link adapter when
@@ -56,7 +56,7 @@ import { type CSSProperties, type ReactNode } from 'react';
 
 import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
 import type { ComponentType } from 'react';
-type LucideIcon = ComponentType<any>;
+type FormHeaderIcon = ComponentType<any>;
 
 import { Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
@@ -70,7 +70,7 @@ import {
 export interface FormHeaderAction {
   label: string;
   kind?: SharedHeaderActionKind;
-  icon?: LucideIcon;
+  icon?: FormHeaderIcon;
   onClick: () => void;
   loading?: boolean;
   disabled?: boolean;
@@ -80,7 +80,7 @@ export interface FormHeaderAction {
 
 export interface FormHeaderProps {
   /** Main icon displayed next to title */
-  icon: LucideIcon;
+  icon: FormHeaderIcon;
   /** Page title */
   title: string;
   /** Subtitle/description */

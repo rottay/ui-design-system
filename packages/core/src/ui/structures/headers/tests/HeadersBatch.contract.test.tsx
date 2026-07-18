@@ -172,7 +172,7 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
     });
 
     it('stamps root/top-bar/back-button/back-icon/back-label/breadcrumb-divider/breadcrumb-link/breadcrumb-separator/breadcrumb-item/entity-id/hero-panel/icon-badge/icon-badge-glyph/eyebrow/title/status-pill/status-pill-text/subtitle/actions/context-card/context-rail/context-card-children (§4 className hooks deleted)', async () => {
-      // A real lucide-react/DS icon forwards arbitrary props (including
+      // A governed DS icon forwards arbitrary props (including
       // `data-part`) onto its root <svg> via a rest-spread -- this fixture
       // must replicate that, or it silently disproves the stamp reaching
       // the DOM for the wrong reason (an unrealistic fixture, not a P-79
@@ -370,7 +370,7 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
       expect(container.querySelector('[data-part="shortcut-pill"]')).not.toBeNull();
     });
 
-    it('embedded + default title + no quickActions: stamps root(data-embedded=true)/title-accent/subtitle(data-variant=default)/secondary-rail(no-quickActions branch)/shortcut-pill(duplicate render path)', async () => {
+    it('embedded + default title + no quickActions: stamps root(data-embedded=true)/subtitle(data-variant=default)/secondary-rail(no-quickActions branch)/shortcut-pill(duplicate render path)', async () => {
       const { container } = renderWithEngine(
         <CollectionHeader
           eyebrow="Workspace"
@@ -387,7 +387,7 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
       expect(root.getAttribute('data-embedded')).toBe('true');
 
       expect(container.querySelector('[data-part="title"][data-title-treatment="default"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="title-accent"]')).not.toBeNull();
+      expect(container.querySelector('[data-part="title-accent"]')).toBeNull();
       // The default-branch subtitle wrapper carries the top border in the skin.
       expect(container.querySelector('[data-part="subtitle-row"]')).not.toBeNull();
       expect(container.querySelector('[data-part="subtitle"][data-variant="default"]')).not.toBeNull();

@@ -74,7 +74,6 @@
 }
 .rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]):not([data-drop-position='inside']) {
   background-color: var(--ds-tree-node-hover-bg, rgba(0, 0, 0, 0.04));
-  border-left: 3px solid var(--ds-color-primary, #1677ff);
 }
 
 /* ---- row contents: expander (rotates on the row's data-expanded), checkbox,

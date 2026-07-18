@@ -11,7 +11,10 @@
  * the active state and selected-count from their own state container.
  */
 
-import { MousePointerSquareDashed, X } from 'lucide-react';
+import {
+  CheckSquareIcon,
+  XIcon,
+} from '../../../../graphics/icons';
 
 import { Badge, Button, Flex, Text } from '../../../primitives';
 
@@ -51,7 +54,7 @@ export function BulkSelectToggle({
         }}
       >
         {active ? (
-          <X
+          <XIcon
             data-part="icon"
             style={{
               width: 14,
@@ -59,7 +62,7 @@ export function BulkSelectToggle({
             }}
           />
         ) : (
-          <MousePointerSquareDashed data-part="icon" style={{ width: 14, height: 14 }} />
+          <CheckSquareIcon data-part="icon" style={{ width: 14, height: 14 }} />
         )}
         <Text data-part="label" size="sm">{active ? 'Done' : 'Select'}</Text>
       </Button>

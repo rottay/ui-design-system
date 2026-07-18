@@ -19,7 +19,7 @@
  * is painted directly (currentColor).
  *
  * STATE: `metric.positive` is the row's `data-positive`; the 3-tone icon colour,
- * the 2-tone trend/change colour and the success/error meter fill all key on it.
+ * the 2-tone trend/change colour and the quantitative meter fill all key on it.
  * HOVER was React `isHovered` (deleted from the TSX), transcribed to
  * `[data-part='metric-row']:hover …`. The row's `<style>` `:hover` treatment
  * stays suppressed by the (0,3,0)/(0,4,0) rest rules, as the inline paint did.
@@ -76,21 +76,6 @@
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'] {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
-}
-
-/* accent bar — success/error meter fill by trend, hover widens 3px -> 4px ---- */
-
-.ds-metrics-minimal.ds-metrics-minimal [data-part='accent-bar'] {
-  width: 3px;
-}
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='accent-bar'] {
-  width: 4px;
-}
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
-}
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
 }
 
 /* row icon box — static bg/border, 3-tone icon colour, hover scale ---------- */

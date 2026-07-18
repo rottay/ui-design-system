@@ -27,9 +27,8 @@
  *
  * THE BORDER SHORTHAND IS RE-FUSED, NOT SPLIT. The source set `border: '2px
  * solid'` (width + style, no color) and then a separate `borderColor` — two keys
- * that only resolve together. Splitting a border across declarations is what
- * re-materialized a stray accent bar in the feedback batch, so each status gets
- * ONE atomic `border: 2px solid <color>` shorthand. Computed result is identical
+ * that only resolve together. Each status gets ONE atomic
+ * `border: 2px solid <color>` shorthand. Computed result is identical
  * (the source's colorless shorthand resolved to `currentColor` and was then
  * overridden by `border-color` on the very next key).
  *

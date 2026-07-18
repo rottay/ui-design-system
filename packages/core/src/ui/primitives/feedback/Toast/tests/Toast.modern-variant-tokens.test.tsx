@@ -12,11 +12,8 @@
  * limitations (`color-mix()`, a `var()` whose fallback is another `var()`)
  * that kept the pre-migration suite from asserting several variants at all.
  *
- * The per-tone `border` MUST stay a shorthand: Toast-modern's root carries
- * DaisyUI's structural `alert` class, which `personality.css` targets with a
- * `border-left-width: 4px` accent bar. The inline shorthand suppressed it; a
- * skin that split the shorthand into longhands would leave that bar
- * uncontested and re-materialise it on every modern toast.
+ * Per-tone borders remain full, neutral container borders. No variant may
+ * reintroduce a one-sided decorative rail.
  */
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -85,7 +82,7 @@ describe('Toast modern engine — the skin derives every variant from tokens', (
     expect(SKIN).toContain(`border: 1px solid ${VARIANT_COLORS[variant].borderColor};`);
   });
 
-  it('never leaves a border longhand for personality.css`s accent bar to win', () => {
+  it('never introduces a one-sided decorative border rail', () => {
     expect(SKIN).not.toMatch(/border-left-(width|style)\s*:/);
   });
 

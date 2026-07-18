@@ -7,31 +7,24 @@
  *
  * SCOPE ROOT carries `rottay-alert-shell rottay-alert-shell--rustic` +
  * `data-part='root'` + `data-tone`. The `-shell` scope is deliberate: bare
- * `.rottay-alert` is claimed by the ALERT PERSONALITY rule in
- * runtime/personality.css (border-left accent + transition) which today does NOT
- * apply to Rustic (its root carries no alert class), so anchoring on
- * `.rottay-alert` would introduce that rule's paint. `-shell` is collision-free
- * (grep-verified), mirroring `rottay-progress-shell`.
+ * `.rottay-alert` is claimed by the ALERT PERSONALITY transition rule in
+ * runtime/personality.css. `-shell` is collision-free (grep-verified), mirroring
+ * `rottay-progress-shell`.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. Per-tone `border-color` therefore reaches
  * (0,4,0) via the two shell classes + `[data-part='root']` + `[data-tone]`.
- * The left accent's width/style are longhands (never the shorthand) so they do
- * not reset border-left-COLOR out from under the per-tone rule; the color-free
- * close-button `border: none` reset is exempt from the floor. Values transcribed
- * verbatim from `engines/rustic.tsx`.
+ * The color-free close-button `border: none` reset is exempt from the floor.
+ * Values transcribed verbatim from `engines/rustic.tsx`.
  */
 
-/* ---- root: radius + left accent width/style (was baseStyle). Longhands keep
-        border-left-color untouched so the per-tone rule owns it. ---- */
+/* ---- root radius (was baseStyle). ---- */
 .rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'] {
   border-radius: var(--ds-radius-md, 0.5rem);
-  border-left-width: 4px;
-  border-left-style: solid;
 }
 
-/* ---- per-tone surface + accent color + text color (was TYPE_STYLES).
+/* ---- per-tone surface + border token + text color (was TYPE_STYLES).
         border-color at (0,4,0) to clear the tenant border-color floor. ---- */
 .rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='info'] {
   background-color: var(--ds-alert-info-bg, var(--ds-color-info-bg));

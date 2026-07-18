@@ -25,7 +25,10 @@
 
 import type { ReactNode } from 'react';
 
-import { Sparkles, SlidersHorizontal } from 'lucide-react';
+import {
+  SlidersHorizontalIcon as SlidersHorizontal,
+  SparklesIcon as Sparkles,
+} from '../../../../graphics/icons';
 
 import { Box, Flex, Input, Select, Text } from '../../../primitives';
 

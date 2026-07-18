@@ -332,16 +332,6 @@ export function CollectionHeader({
                 maxWidth: compactLayout ? '100%' : 620,
               }}
             >
-              <Box
-                aria-hidden
-                data-part="title-accent"
-                style={{
-                  width: 3,
-                  minHeight: compactLayout ? 28 : 34,
-                  alignSelf: 'stretch',
-                  flexShrink: 0,
-                }}
-              />
               <Text
                 data-part="subtitle"
                 data-variant="default"
