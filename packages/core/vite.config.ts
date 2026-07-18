@@ -92,12 +92,33 @@ export default defineConfig({
         /^antd\/.*/,
         /^@ant-design\/icons\/.*/,
         /^@thesvg\/react\/.*/,
-        // The semantic icon entry intentionally embeds its pinned 50-glyph
-        // Phosphor SSR corpus. Phosphor 2.1.10 advertises a CommonJS condition
-        // that points at a `.js` file inside a `type: module` package, which
-        // breaks packed CJS consumers. Keeping the supplier inside the focused
-        // entry avoids exposing that upstream packaging defect while the root
-        // entry remains supplier-free because it cannot reach the focused icon entrypoint.
+        // Phosphor is intentionally NOT externalized. 2.1.10 advertises a
+        // CommonJS condition that points at a `.js` file inside a
+        // `type: module` package, which breaks packed CJS consumers; vendoring
+        // it locally avoids exposing that upstream packaging defect.
+        //
+        // Do not describe the embedded surface with a specific glyph count in
+        // this comment -- that claim went stale (it once said "~50-glyph")
+        // and nothing here re-derives it. Two systems import Phosphor SSR
+        // modules directly and both grow independently of each other: the
+        // generated semantic corpus (one file per role under
+        // src/graphics/icons/presentation/semantic/generated/roles, sized by
+        // src/graphics/icons/foundation/semantic/corpus/manifest.json) and the
+        // historical vendor-named compatibility catalog
+        // (src/graphics/icons/presentation/catalog). Every entry above shares
+        // one Rollup module graph with `preserveModules: true`, so any SSR
+        // module reachable from ANY entry -- not just `icons`/`icons-full` --
+        // is vendored into dist/node_modules once. That includes the root
+        // `index` entry: several first-party ui/** primitives, patterns and
+        // structures (Button's compound Icon, data-table, workspace chrome,
+        // record headers...) import catalog names directly through the
+        // `graphics/icons` barrel, which re-exports the whole compatibility
+        // catalog, so the root entry is not supplier-free either.
+        //
+        // The actual post-build count is enforced, not narrated: run
+        // `node scripts/icon-embed-inventory-gate.mjs` after `vite build` to
+        // measure what shipped, checked against the reviewed, decrease-only
+        // ceiling in scripts/icon-embed-inventory-gate.baseline.json.
         /^d3-.*/,
         /^motion\/.*/,
         /^dayjs\/.*/,

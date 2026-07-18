@@ -2,8 +2,16 @@
  * This file is processed by Tailwind CSS 4 + DaisyUI 5 at build time.
  * It generates all utility classes used by modern engine components.
  */
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @plugin "daisyui";
 
-/* Scan the canonical nested modern-engine entrypoints under src/ui. */
+/* Utility candidates come ONLY from the canonical nested modern-engine
+ * entrypoints under src/ui. source(none) disables Tailwind's automatic
+ * project-wide scan so strings in tests/, scripts/, and e2e files can never
+ * become shipped utilities. */
 @source "../../../../../../ui/**/engines/modern/index.tsx";
+
+/* Declared candidate: primitives/display/Statistic/engines/rustic anchors the
+ * `sr-only` utility (base.css ships only `.ds-sr-only`), and consumer apps
+ * reach `.sr-only` through the shipped vertical bundles. */
+@source inline("sr-only");

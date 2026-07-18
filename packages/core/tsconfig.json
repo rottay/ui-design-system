@@ -35,5 +35,5 @@
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "src/testing/**/*", "src/tooling/testing/**/*"]
+  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "src/testing/**/*", "src/tooling/testing/**/*", "**/fixtures/**"]
 }

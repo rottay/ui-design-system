@@ -1,7 +1,9 @@
 // styles/*.css staleness gate (GAT-02).
 //
-// The six committed bundles under packages/core/styles/ ship in the npm `files`
-// list, but nothing in CI verified they matched their build inputs. Worse, the
+// The six committed bundles under packages/core/styles/ are the source-of-truth
+// mirrors of the shipped dist CSS (the npm `files` list ships the byte-identical
+// dist/ copies only), but nothing in CI verified they matched their build
+// inputs. Worse, the
 // CI `build` step runs `build:vertical-css`, which regenerates them in place --
 // so by the time any later step ran, a stale committed bundle had already been
 // silently overwritten and no downstream check could see the drift. This gate

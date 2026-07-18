@@ -17,8 +17,15 @@
  * order. A @layer wrapper is intentionally NOT used.
  *
  * styles/{index,modern,platform,rottay,bithire,evnto}.css are committed to git.
- * --check regenerates the bundles in memory and diffs them against those files,
- * byte for byte, instead of writing.
+ * They are the gate-checked source-of-truth mirrors; the npm tarball ships the
+ * dist/ copies only (package.json `files` excludes styles/). dist and styles
+ * copies are written from the same in-memory bundle, so each shipped dist file
+ * is byte-identical to its committed mirror. dist/modern-engine.css is the
+ * shipping target of the ./styles/modern export and therefore receives the
+ * SAME guarded bundle as styles/modern.css (engine + reduced-motion guard).
+ * --check regenerates the bundles in memory and diffs them against the
+ * committed files (plus dist/modern-engine.css), byte for byte, without
+ * writing.
  *
  * Usage:
  *   node scripts/build-vertical-css.mjs           # write dist/ and styles/ bundles
@@ -113,10 +120,18 @@ if (!existsSync(modernEnginePath)) {
   console.error('  Run `pnpm -C packages/core build:modern-css` first, then retry.');
   process.exit(1);
 }
-const modernEngine = unwrapRegisteredCustomProperties(readFile(modernEnginePath));
-if (!check) {
-  writeFileSync(modernEnginePath, modernEngine);
+// dist/modern-engine.css is the raw postcss output right after build:modern-css
+// and the guarded shipping bundle after a previous run of this script. Strip a
+// previously appended guard before use so tenant bundles never embed it twice
+// and re-runs stay byte-stable.
+const GUARD_HEADER =
+  '/* === Global reduced-motion guard (sourced from runtime/personality.css) === */';
+let modernEngineRaw = readFile(modernEnginePath);
+const priorGuardIndex = modernEngineRaw.indexOf(`\n\n${GUARD_HEADER}`);
+if (priorGuardIndex !== -1) {
+  modernEngineRaw = modernEngineRaw.slice(0, priorGuardIndex);
 }
+const modernEngine = unwrapRegisteredCustomProperties(modernEngineRaw);
 
 // The engine-only styles/modern.css bundle must carry the same global
 // reduced-motion guard the tenant bundles inherit from base.css. base.css pulls
@@ -146,7 +161,7 @@ if (
 const modernBundle = [
   modernEngine,
   '',
-  '/* === Global reduced-motion guard (sourced from runtime/personality.css) === */',
+  GUARD_HEADER,
   reducedMotionGuard,
   '',
 ].join('\n');
@@ -263,10 +278,15 @@ const stylesBundle = [
 if (check) {
   compareToDisk('styles/index.css', stylesBundle);
   compareToDisk('styles/modern.css', modernBundle);
+  // dist/modern-engine.css ships as the ./styles/modern export target, so the
+  // reduced-motion guard must be present in the dist copy, byte-equal to the
+  // committed mirror.
+  compareToDisk('dist/modern-engine.css', modernBundle);
 } else {
   writeFileSync(resolve(dist, 'styles.css'), stylesBundle);
   writeFileSync(resolve(styles, 'index.css'), stylesBundle);
   writeFileSync(resolve(styles, 'modern.css'), modernBundle);
+  writeFileSync(modernEnginePath, modernBundle);
   console.log(`  -> dist/styles.css (${Math.round(stylesBundle.length / 1024)}KB)`);
 }
 

@@ -11,7 +11,6 @@
   },
   "sideEffects": [
     "*.css",
-    "styles/**/*.css",
     "dist/**/*.css"
   ],
   "exports": {
@@ -166,9 +165,9 @@
       "default": "./dist/platform.css"
     },
     "./styles/modern": {
-      "style": "./styles/modern.css",
-      "import": "./styles/modern.css",
-      "default": "./styles/modern.css"
+      "style": "./dist/modern-engine.css",
+      "import": "./dist/modern-engine.css",
+      "default": "./dist/modern-engine.css"
     },
     "./eslint": {
       "types": "./dist/eslint.d.ts",
@@ -208,7 +207,6 @@
     "consumer/ds-supplier-honesty.mjs",
     "THIRD_PARTY_NOTICES.md",
     "provenance/graphics/**",
-    "styles/**/*.css",
     "!dist/**/*.d.ts.map",
     "README.md"
   ],
@@ -216,12 +214,14 @@
     "dev": "node scripts/dev.mjs",
     "icons:generate": "node scripts/generate-semantic-icons.mjs",
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
-    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check",
-    "prepack": "pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
-    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css",
+    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check",
+    "prepack": "pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
+    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:stamp",
     "postbuild": "pnpm run cra14:check",
     "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled.css -o dist/modern-engine.css",
     "build:commercial-css": "node scripts/build-commercial-css.mjs",
+    "build:stamp": "node scripts/write-build-stamp.mjs",
+    "distfresh:check": "node scripts/dist-freshness-gate.mjs --check",
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
     "engine-audit:relocate-paths": "node scripts/relocate-engine-token-baseline.mjs",
     "cra14:check": "node scripts/cra-14-public-barrel-gate.mjs",
@@ -229,6 +229,8 @@
     "cra15:write": "node scripts/cra-15-runtime-hardening-gate.mjs --write",
     "cra17:licenses": "node scripts/cra-17-packaging-license-gate.mjs",
     "cra17:declarations": "node scripts/cra-17-public-declaration-gate.mjs",
+    "contract:check": "node scripts/generate-supplier-contract.mjs --check",
+    "contract:generate": "node scripts/generate-supplier-contract.mjs --write",
     "cra11:generate": "node scripts/cra-11-adaptive-contract-census.mjs",
     "cra11:check": "node scripts/cra-11-adaptive-contract-census.mjs --check",
     "cra11:gate": "node scripts/cra-11-adaptive-contract-census.mjs --check --require-clean",
@@ -238,7 +240,7 @@
     "gat09:structural": "node scripts/gat-09-full-claim-integrity.mjs --structural",
     "gat09:gate": "node scripts/gat-09-full-claim-integrity.mjs",
     "test:scripts": "node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
-    "pretest": "pnpm run cra17:licenses && pnpm run effects:provenance && node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check",
+    "pretest": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run contract:check && node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",
@@ -248,6 +250,10 @@
     "typecheck:tests": "node scripts/typecheck-tests-ratchet.mjs --label core --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json",
     "csspaint:check": "node scripts/css-layer-paint-gate.mjs",
     "gate:styles-css": "node --test scripts/vertical-css-staleness.gate.mjs",
+    "packinv:check": "node scripts/pack-inventory-gate.mjs --check",
+    "packinv:write": "node scripts/pack-inventory-gate.mjs --write",
+    "iconembed:check": "node scripts/icon-embed-inventory-gate.mjs --check",
+    "iconembed:write": "node scripts/icon-embed-inventory-gate.mjs --write",
     "test": "vitest",
     "test:run": "vitest run",
     "test:unit": "vitest run --project unit",
