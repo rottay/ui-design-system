@@ -1833,7 +1833,7 @@ describe('CollectionWorkspaceSurface', () => {
     ).toBeTruthy();
 
     const disclosure = accordion!.querySelector<HTMLElement>(
-      '[data-part="preview-accordion-trigger"]',
+      ':scope > [data-part="trigger"]',
     );
     expect(disclosure).not.toBeNull();
     await waitFor(() => expect(disclosure).toHaveAttribute('aria-expanded', 'true'));

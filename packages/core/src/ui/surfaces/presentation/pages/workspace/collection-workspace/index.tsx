@@ -1767,7 +1767,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         block
         aria-expanded={compactPreviewOpen}
         aria-controls={`${compactPreviewId}-region`}
-        data-part="preview-accordion-trigger"
         data-expanded={compactPreviewOpen ? 'true' : 'false'}
         onClick={() => handleCompactPreviewOpenChange(!compactPreviewOpen)}
       >

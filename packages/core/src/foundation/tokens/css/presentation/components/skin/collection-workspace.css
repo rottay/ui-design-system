@@ -342,7 +342,7 @@
   background: var(--ds-surface-card);
 }
 
-.ds-surface.ds-collection-workspace [data-part='preview-accordion-trigger'] {
+.ds-surface.ds-collection-workspace [data-part='preview-accordion'] > [data-part='trigger'] {
   min-block-size: var(--ds-size-touch-target, 44px);
   border-radius: 0;
   text-align: start;
@@ -353,7 +353,7 @@
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.ds-surface.ds-collection-workspace [data-part='preview-accordion-trigger'][data-expanded='true'] [data-part='preview-accordion-icon'] {
+.ds-surface.ds-collection-workspace [data-part='preview-accordion'] > [data-part='trigger'][data-expanded='true'] [data-part='preview-accordion-icon'] {
   transform: rotate(180deg);
 }
 
