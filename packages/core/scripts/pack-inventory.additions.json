@@ -1,0 +1,4 @@
+{
+  "$comment": "Explicit-review list for NEW packed entries. The pack-inventory gate fails when a path appears in the tarball that is neither in pack-inventory.baseline.json nor listed here. To intentionally add a file to the published package, add its exact packed path (as reported by `npm pack --dry-run --json`) with a reason, land it through review, then re-seed the baseline with `pnpm --filter @rottay/design-system packinv:write` and empty this list again. This keeps every growth of the published surface a deliberate, reviewed act.",
+  "additions": []
+}

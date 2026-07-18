@@ -1,0 +1,7 @@
+{
+  "ceiling": 807,
+  "measuredTotalFiles": 1614,
+  "measuredBytes": 2996689,
+  "measuredAt": "2026-07-18",
+  "note": "Decrease-only ceiling on vendored supplier modules under dist/node_modules (one entry per logical module; CJS twins excluded). Raise only with --allow-increase and record why in this note. RESEED 721 -> 807 (2026-07-18, W2 Task B): first clean build (2.19.34) after the W0-1.2 100%-Phosphor icon source landing; the fresh dist embeds every SSR module the enlarged semantic corpus + compatibility catalog reach, all 807 attributed to @phosphor-icons/react, zero lucide. This matches the growth S3 predicted from source (~403 distinct SSR import specifiers under src/graphics/icons/**) and is corpus/catalog growth, not drift."
+}

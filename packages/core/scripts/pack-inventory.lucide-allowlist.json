@@ -1,0 +1,13 @@
+{
+  "$comment": "Shipped pack paths where the token 'lucide' is legitimately present because the file NAMES lucide as a forbidden/contract supplier -- it is NOT an icon-supplier import. Every OTHER packed file must be lucide-free (the icon source is 100% Phosphor). Reviewed manually; each entry is load-bearing. 'prefix' matches a path prefix; 'path' matches exactly. Keep this minimal: a new entry needs a written reason and review.",
+  "allow": [
+    {
+      "prefix": "dist/tooling/eslint/",
+      "reason": "The @rottay/no-direct-lucide ESLint rule the package ships names 'lucide-react' as the FORBIDDEN import specifier it bans in consumer code. The token is the ban target, not a supplier import."
+    },
+    {
+      "path": "supplier-contract.json",
+      "reason": "The supplier-honesty contract lists 'lucide-react' in supplierPackages: it stays TRACKED as governance/ban machinery (app-side audits, runtime-alias expectation, showroom marketing exception). No entrypoint claims it as a capability; the ./icons wildcard is Phosphor-only. Contract data, not an icon import."
+    }
+  ]
+}
