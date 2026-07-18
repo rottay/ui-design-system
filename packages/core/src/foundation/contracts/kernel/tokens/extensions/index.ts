@@ -175,7 +175,7 @@ export interface ActionDefinition<T = any> {
   key: string;
   /** Display label */
   label: string;
-  /** Icon (ReactNode, typically from lucide-react) */
+  /** Icon content supplied through the governed Design System icon facade. */
   icon?: ReactNode;
   /** Visual variant */
   variant?: 'default' | 'primary' | 'secondary' | 'danger' | 'ghost' | 'link';

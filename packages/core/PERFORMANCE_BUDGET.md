@@ -12,7 +12,7 @@ Enforced in CI via `scripts/analyze-bundle.mjs`. Any violation fails the build.
 | Icons bundle (`dist/icons.js`) | < 40 KB gzipped |
 | Marks bundle (`dist/marks.js`) | < 30 KB gzipped, excluding the explicitly installed renderer peer |
 | Named semantic role consumer closure | < 40 KB gzipped in ESM and CJS; renderer supplier included, React external |
-| BitHire selected `Icon` preset closure | < 40 KB gzipped in ESM and CJS; exact productive 46-role inventory, renderer supplier included, React external |
+| BitHire selected `Icon` preset closure | < 40 KB gzipped in ESM and CJS; exact productive 104-role inventory, renderer supplier included, React external |
 | Explicit full-corpus `Icon` compatibility closure | < 203/226 KB gzip ESM/CJS compatibility ratchet (184,033/204,761 B measured +10%, rounded upward); all 263 roles, never presented as a route-sized < 40 KB payload |
 | `BrandMark` consumer closure | < 30 KB gzipped in ESM and CJS; renderer supplier included, React external |
 | `CloudServiceMark` consumer closure | < 30 KB gzipped in ESM and CJS; renderer supplier included, React external |
@@ -144,7 +144,7 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    also enforces the four raw facade ceilings. `node scripts/analyze-bundle.mjs --spatial` runs
    only this focused gate.
 9. The WO-CRA-17 semantic-asset retention gate selects a generated role subpath, the exact
-   46-role BitHire preset, the explicit full-corpus compatibility facade, focused `BrandMark` and
+   104-role BitHire preset, the explicit full-corpus compatibility facade, focused `BrandMark` and
    `CloudServiceMark` entries, and `FeaturePictogram`. For ESM it records the tree-shaken inline
    bundle; for CJS it walks the complete executable static `require()` closure. Both formats
    include resolvable renderer suppliers and keep only React external. Route boundaries retain
@@ -159,7 +159,7 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 
 The 40 KB icon and 30 KB mark ceilings are payload contracts, not top-level
 preserveModules file-size checks. They are enforced on generated per-role
-ESM/CJS subpaths, the exact 46-role BitHire preset, and separate brand/cloud
+ESM/CJS subpaths, the exact 104-role BitHire preset, and separate brand/cloud
 entries. The exhaustive synchronous 263-role registry remains available at
 `./icons/full` and is always measured, but is explicitly not represented as a
 route-sized payload. Its independent ESM/CJS compatibility ratchet is derived

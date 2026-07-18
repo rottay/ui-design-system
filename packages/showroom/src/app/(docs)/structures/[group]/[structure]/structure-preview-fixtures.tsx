@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { forwardRef, useState, type ReactNode, type SVGProps } from 'react';
 import {
   ActiveFiltersBar,
   ActionDock,
@@ -58,22 +58,127 @@ import {
   type SelectionPreviewRailColumn,
 } from '@rottay/design-system';
 import {
-  Activity,
-  BarChart3,
-  CalendarDays,
-  CreditCard,
-  FileText,
-  Globe2,
-  LifeBuoy,
-  MapPinned,
-  MessageSquare,
-  RefreshCw,
-  ShieldCheck,
-  Upload,
-  UserCog,
-  UserPlus,
-  Users,
-} from 'lucide-react';
+  ActionRefreshIcon as ActionRefreshSemanticIcon,
+  ActionUploadIcon as ActionUploadSemanticIcon,
+  CommunicationMessageIcon as CommunicationMessageSemanticIcon,
+  ContentDocumentIcon as ContentDocumentSemanticIcon,
+  EntityGroupIcon as EntityGroupSemanticIcon,
+  LocationGlobalIcon as LocationGlobalSemanticIcon,
+  LocationPlaceIcon as LocationPlaceSemanticIcon,
+  TimeDateIcon as TimeDateSemanticIcon,
+  type SemanticIconComponent,
+} from '@rottay/design-system/icons/foundation';
+import {
+  AccessAdminIcon as AccessAdminSemanticIcon,
+  IdentityProvisioningIcon as IdentityProvisioningSemanticIcon,
+  SecurityProtectionIcon as SecurityProtectionSemanticIcon,
+} from '@rottay/design-system/icons/identity';
+import {
+  AnalyticsActivityIcon as AnalyticsActivitySemanticIcon,
+  AnalyticsBarIcon as AnalyticsBarSemanticIcon,
+} from '@rottay/design-system/icons/intelligence';
+import {
+  BillingCreditCardIcon as BillingCreditCardSemanticIcon,
+  OperationsSupportIcon as OperationsSupportSemanticIcon,
+} from '@rottay/design-system/icons/operations';
+
+type FixtureIconProps = Omit<SVGProps<SVGSVGElement>, 'ref'> & {
+  size?: string | number;
+  'data-testid'?: string;
+};
+
+function createDecorativeFixtureIcon(
+  SemanticIcon: SemanticIconComponent,
+  displayName: string,
+) {
+  const FixtureIcon = forwardRef<SVGSVGElement, FixtureIconProps>(
+    function DecorativeFixtureIcon(
+      {
+        size = 20,
+        className,
+        style,
+        id,
+        'aria-describedby': ariaDescribedBy,
+        'data-testid': testId,
+      },
+      ref,
+    ) {
+      return (
+        <SemanticIcon
+          ref={ref}
+          decorative
+          size={typeof size === 'number' ? size : 'md'}
+          className={className}
+          style={style}
+          id={id}
+          aria-describedby={ariaDescribedBy}
+          data-testid={testId}
+        />
+      );
+    },
+  );
+
+  FixtureIcon.displayName = displayName;
+  return FixtureIcon;
+}
+
+const ActionRefreshIcon = createDecorativeFixtureIcon(
+  ActionRefreshSemanticIcon,
+  'ActionRefreshFixtureIcon',
+);
+const ActionUploadIcon = createDecorativeFixtureIcon(
+  ActionUploadSemanticIcon,
+  'ActionUploadFixtureIcon',
+);
+const CommunicationMessageIcon = createDecorativeFixtureIcon(
+  CommunicationMessageSemanticIcon,
+  'CommunicationMessageFixtureIcon',
+);
+const ContentDocumentIcon = createDecorativeFixtureIcon(
+  ContentDocumentSemanticIcon,
+  'ContentDocumentFixtureIcon',
+);
+const EntityGroupIcon = createDecorativeFixtureIcon(
+  EntityGroupSemanticIcon,
+  'EntityGroupFixtureIcon',
+);
+const LocationGlobalIcon = createDecorativeFixtureIcon(
+  LocationGlobalSemanticIcon,
+  'LocationGlobalFixtureIcon',
+);
+const LocationPlaceIcon = createDecorativeFixtureIcon(
+  LocationPlaceSemanticIcon,
+  'LocationPlaceFixtureIcon',
+);
+const TimeDateIcon = createDecorativeFixtureIcon(TimeDateSemanticIcon, 'TimeDateFixtureIcon');
+const AccessAdminIcon = createDecorativeFixtureIcon(
+  AccessAdminSemanticIcon,
+  'AccessAdminFixtureIcon',
+);
+const IdentityProvisioningIcon = createDecorativeFixtureIcon(
+  IdentityProvisioningSemanticIcon,
+  'IdentityProvisioningFixtureIcon',
+);
+const SecurityProtectionIcon = createDecorativeFixtureIcon(
+  SecurityProtectionSemanticIcon,
+  'SecurityProtectionFixtureIcon',
+);
+const AnalyticsActivityIcon = createDecorativeFixtureIcon(
+  AnalyticsActivitySemanticIcon,
+  'AnalyticsActivityFixtureIcon',
+);
+const AnalyticsBarIcon = createDecorativeFixtureIcon(
+  AnalyticsBarSemanticIcon,
+  'AnalyticsBarFixtureIcon',
+);
+const BillingCreditCardIcon = createDecorativeFixtureIcon(
+  BillingCreditCardSemanticIcon,
+  'BillingCreditCardFixtureIcon',
+);
+const OperationsSupportIcon = createDecorativeFixtureIcon(
+  OperationsSupportSemanticIcon,
+  'OperationsSupportFixtureIcon',
+);
 
 const noop = () => {};
 
@@ -252,19 +357,19 @@ const FIELD_FILTER_PRESETS: FieldFilterPreset[] = [
 
 const FIELD_FILTER_VISUALS: Record<string, FieldFilterVisual> = {
   status: {
-    icon: <ShieldCheck size={16} />,
+    icon: <SecurityProtectionIcon size={16} />,
     description: 'Separate active seats from paused or invitation-only access.',
   },
   region: {
-    icon: <Globe2 size={16} />,
+    icon: <LocationGlobalIcon size={16} />,
     description: 'Focus operational follow-up by coverage region.',
   },
   joinedAt: {
-    icon: <CalendarDays size={16} />,
+    icon: <TimeDateIcon size={16} />,
     description: 'Audit recent onboarding waves and rollout windows.',
   },
   owner: {
-    icon: <Users size={16} />,
+    icon: <EntityGroupIcon size={16} />,
     description: 'Route review queues to the accountable team lead.',
   },
 };
@@ -338,7 +443,7 @@ const SEARCH_COMMANDS: SearchCommandBarCommand[] = [
     label: 'Invite teammate',
     description: 'Open the member invite flow.',
     category: 'Workspace',
-    icon: <UserPlus size={14} />,
+    icon: <IdentityProvisioningIcon size={14} />,
     shortcut: 'I',
     action: noop,
   },
@@ -347,7 +452,7 @@ const SEARCH_COMMANDS: SearchCommandBarCommand[] = [
     label: 'Export current view',
     description: 'Download the current workspace slice.',
     category: 'Workspace',
-    icon: <Upload size={14} />,
+    icon: <ActionUploadIcon size={14} />,
     shortcut: 'E',
     action: noop,
   },
@@ -356,7 +461,7 @@ const SEARCH_COMMANDS: SearchCommandBarCommand[] = [
     label: 'Open support queue',
     description: 'Jump to escalations tied to this collection.',
     category: 'Operations',
-    icon: <LifeBuoy size={14} />,
+    icon: <OperationsSupportIcon size={14} />,
     shortcut: 'Q',
     action: noop,
   },
@@ -386,7 +491,7 @@ const STATS = [
     changeType: 'increase' as const,
     periodLabel: 'vs last week',
     sparkDots: [42, 55, 60, 51, 68, 74, 81],
-    icon: <LifeBuoy size={16} />,
+    icon: <OperationsSupportIcon size={16} />,
   },
   {
     key: 'finance',
@@ -398,7 +503,7 @@ const STATS = [
     changeType: 'increase' as const,
     periodLabel: 'month to date',
     sparkDots: [52, 58, 61, 67, 70, 78, 84],
-    icon: <CreditCard size={16} />,
+    icon: <BillingCreditCardIcon size={16} />,
   },
   {
     key: 'coverage',
@@ -410,7 +515,7 @@ const STATS = [
     changeType: 'increase' as const,
     periodLabel: 'this week',
     sparkDots: [61, 60, 64, 66, 72, 77, 79],
-    icon: <Globe2 size={16} />,
+    icon: <LocationGlobalIcon size={16} />,
   },
 ];
 
@@ -420,28 +525,28 @@ const DASHBOARD_INSIGHT_METRICS = [
     value: '18',
     change: '-12%',
     positive: true,
-    icon: Users,
+    icon: EntityGroupIcon,
   },
   {
     label: 'Weekly invites',
     value: '41',
     change: '+8%',
     positive: true,
-    icon: UserPlus,
+    icon: IdentityProvisioningIcon,
   },
   {
     label: 'Queue SLA',
     value: '94%',
     change: '+2%',
     positive: true,
-    icon: ShieldCheck,
+    icon: SecurityProtectionIcon,
   },
   {
     label: 'Coverage gaps',
     value: '6',
     change: '+1',
     positive: false,
-    icon: MapPinned,
+    icon: LocationPlaceIcon,
   },
 ];
 
@@ -522,7 +627,12 @@ function DashboardHeaderPreview() {
       ]}
       status={{ state: 'live', label: 'Streaming now' }}
       actions={[
-        { key: 'refresh', label: 'Refresh', icon: <RefreshCw size={14} />, onClick: noop },
+        {
+          key: 'refresh',
+          label: 'Refresh',
+          icon: <ActionRefreshIcon size={14} />,
+          onClick: noop,
+        },
         { key: 'share', label: 'Share board', onClick: noop, variant: 'primary' },
       ]}
       searchSlot={
@@ -536,7 +646,7 @@ function DashboardHeaderPreview() {
           Last 24 hours
         </Badge>
       }
-      icon={<BarChart3 size={18} />}
+      icon={<AnalyticsBarIcon size={18} />}
     />
   );
 }
@@ -560,28 +670,28 @@ function DetailHeaderPreview() {
       actions={[
         {
           label: 'Message owner',
-          icon: MessageSquare,
+          icon: CommunicationMessageIcon,
           onClick: noop,
           variant: 'secondary',
         },
         {
           label: 'Adjust access',
-          icon: UserCog,
+          icon: AccessAdminIcon,
           onClick: noop,
           variant: 'primary',
         },
       ]}
       tabs={[
-        { id: 'overview', label: 'Overview', icon: Users },
-        { id: 'activity', label: 'Activity', count: 12, icon: Activity },
-        { id: 'billing', label: 'Billing', count: 2, icon: CreditCard },
+        { id: 'overview', label: 'Overview', icon: EntityGroupIcon },
+        { id: 'activity', label: 'Activity', count: 12, icon: AnalyticsActivityIcon },
+        { id: 'billing', label: 'Billing', count: 2, icon: BillingCreditCardIcon },
       ]}
       activeTab={activeTab}
       onTabChange={setActiveTab}
       metadata={[
-        { label: 'Owner', value: 'Sarah Johnson', icon: Users },
-        { label: 'Region', value: 'North America', icon: Globe2 },
-        { label: 'Trust tier', value: 'Tier 1', icon: ShieldCheck },
+        { label: 'Owner', value: 'Sarah Johnson', icon: EntityGroupIcon },
+        { label: 'Region', value: 'North America', icon: LocationGlobalIcon },
+        { label: 'Trust tier', value: 'Tier 1', icon: SecurityProtectionIcon },
       ]}
       eyebrow="Member detail"
       archetype="technical"
@@ -609,7 +719,7 @@ function DetailHeaderPreview() {
 function EditHeaderPreview() {
   return (
     <EditHeader
-      icon={UserCog}
+      icon={AccessAdminIcon}
       title="Edit tenant access policy"
       subtitle="Adjust reviewers, escalation paths, and required approvals before publishing."
       entityId="tap_4918a21c"
@@ -650,7 +760,7 @@ function EditHeaderPreview() {
 function FormHeaderPreview() {
   return (
     <FormHeader
-      icon={UserPlus}
+      icon={IdentityProvisioningIcon}
       title="Create teammate profile"
       subtitle="Start with workspace identity, access level, and routing preferences."
       backHref="/workspace/members"
@@ -1031,20 +1141,20 @@ function SelectionPreviewRailPreview() {
           {
             key: 'message',
             label: 'Message owner',
-            icon: <MessageSquare size={14} />,
+            icon: <CommunicationMessageIcon size={14} />,
             onClick: noop,
           },
           {
             key: 'review',
             label: 'Review access',
-            icon: <ShieldCheck size={14} />,
+            icon: <SecurityProtectionIcon size={14} />,
             onClick: noop,
             variant: 'primary',
           },
           {
             key: 'log',
             label: 'Open activity',
-            icon: <FileText size={14} />,
+            icon: <ContentDocumentIcon size={14} />,
             onClick: noop,
           },
         ]}
@@ -1241,7 +1351,7 @@ function DataTerminalCardPreview() {
         value="$182k"
         change="+12.5%"
         trend="up"
-        icon={BarChart3}
+        icon={AnalyticsBarIcon}
         path="/analytics/revenue"
         progress={74}
         subtitle="target attainment"
@@ -1340,9 +1450,14 @@ function BottomTabBarPreview() {
         activeKey={activeKey}
         onChange={setActiveKey}
         items={[
-          { key: 'workspace', label: 'Workspace', icon: <Users size={20} /> },
-          { key: 'activity', label: 'Activity', icon: <Activity size={20} />, badge: 3 },
-          { key: 'coverage', label: 'Coverage', icon: <Globe2 size={20} /> },
+          { key: 'workspace', label: 'Workspace', icon: <EntityGroupIcon size={20} /> },
+          {
+            key: 'activity',
+            label: 'Activity',
+            icon: <AnalyticsActivityIcon size={20} />,
+            badge: 3,
+          },
+          { key: 'coverage', label: 'Coverage', icon: <LocationGlobalIcon size={20} /> },
         ]}
         style={{ position: 'relative' }}
       />

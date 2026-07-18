@@ -15,7 +15,7 @@
  *     label, kind, icon, variant, onClick / href, loading / disabled state
  *   - `inferSharedHeaderActionKind(label)` -- infer the kind from a
  *     human-readable label using English keyword matching
- *   - `resolveSharedHeaderActionIcon(action)` -- resolve a Lucide icon
+ *   - `resolveSharedHeaderActionIcon(action)` -- resolve a DS icon
  *     from the action's kind (or fall back to the explicit `icon`)
  *   - `resolveSharedHeaderActionVariant(action)` -- infer a Button
  *     variant from the action's kind (delete -> error, save/send -> primary)
@@ -28,22 +28,22 @@
  */
 
 import type { ComponentType } from 'react';
-type LucideIcon = ComponentType<any>;
+type HeaderActionIcon = ComponentType<any>;
 import {
-  ArrowUpRight,
-  CalendarClock,
-  Copy,
-  GitCompareArrows,
-  PencilLine,
-  Plus,
-  Power,
-  RefreshCw,
-  Save,
-  Send,
-  Settings2,
-  Trash2,
-  X,
-} from 'lucide-react';
+  ArrowUpRightIcon as ArrowUpRight,
+  CalendarClockIcon as CalendarClock,
+  CopyIcon as Copy,
+  GitCompareIcon,
+  PencilLineIcon as PencilLine,
+  PlusIcon as Plus,
+  PowerIcon as Power,
+  RefreshCwIcon as RefreshCw,
+  SaveIcon as Save,
+  SendIcon as Send,
+  Settings2Icon as Settings2,
+  Trash2Icon as Trash2,
+  XIcon as X,
+} from '../../../../graphics/icons';
 
 export type SharedHeaderActionKind =
   | 'edit'
@@ -68,7 +68,7 @@ export type SharedHeaderActionVariant = 'primary' | 'secondary' | 'ghost' | 'err
 export interface SharedHeaderActionDescriptor {
   label: string;
   kind?: SharedHeaderActionKind;
-  icon?: LucideIcon;
+  icon?: HeaderActionIcon;
   tooltip?: string;
   variant?: SharedHeaderActionVariant;
   onClick?: () => void;
@@ -77,7 +77,7 @@ export interface SharedHeaderActionDescriptor {
   disabled?: boolean;
 }
 
-const ACTION_ICON_MAP: Record<Exclude<SharedHeaderActionKind, 'secondary'>, LucideIcon> = {
+const ACTION_ICON_MAP: Record<Exclude<SharedHeaderActionKind, 'secondary'>, HeaderActionIcon> = {
   edit: PencilLine,
   create: Plus,
   assign: Plus,
@@ -87,7 +87,7 @@ const ACTION_ICON_MAP: Record<Exclude<SharedHeaderActionKind, 'secondary'>, Luci
   delete: Trash2,
   rotate: RefreshCw,
   toggle: Power,
-  compare: GitCompareArrows,
+  compare: GitCompareIcon,
   send: Send,
   schedule: CalendarClock,
   save: Save,

@@ -9,6 +9,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { ICON_PROVENANCE, Icon } from "@/entrypoints/icons";
 import {
   BRAND_MARK_PROVENANCE,
+  BRAND_MARK_NAMES,
+  CLOUD_SERVICES,
   CLOUD_SERVICE_MARK_PROVENANCE,
   MARK_TRADEMARK_NOTICE,
   BrandMark,
@@ -250,7 +252,12 @@ describe("CRA17 four-facade asset certification", () => {
       ...Object.values(BRAND_MARK_PROVENANCE),
       ...Object.values(CLOUD_SERVICE_MARK_PROVENANCE),
     ];
-    expect(markRecords).toHaveLength(12);
+    expect(Object.keys(BRAND_MARK_PROVENANCE).sort()).toEqual(
+      [...BRAND_MARK_NAMES].sort(),
+    );
+    expect(Object.keys(CLOUD_SERVICE_MARK_PROVENANCE).sort()).toEqual(
+      [...CLOUD_SERVICES].sort(),
+    );
     for (const record of markRecords) {
       expect(record.license).toMatch(/^(MIT|CC0-1\.0|CC-BY-ND-2\.0)$/);
       expect(record.url).toMatch(/^https:\/\//);

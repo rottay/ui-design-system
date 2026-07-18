@@ -11,8 +11,8 @@ import { EngineSignaturesSection } from '@/components/landing/engine-signatures-
 import { MarketingHero } from '@/components/landing/marketing-hero';
 import ValueProofSection from '@/components/landing/value-proof-section';
 import { BrandShiftSection } from '@/components/landing/brand-shift-section';
-import { ArrowUpRight } from 'lucide-react';
 import { ArrowRightIcon } from '@rottay/design-system/icons';
+import { ActionOpenExternalIcon } from '@rottay/design-system/icons/foundation';
 
 export const metadata: Metadata = {
   title: 'Rottay Design System',
@@ -106,7 +106,7 @@ function NavLink({
   return (
     <Link className="landing-nav-link" href={href}>
       <span>{label}</span>
-      <ArrowUpRight size={14} strokeWidth={1.8} />
+      <ActionOpenExternalIcon decorative size={14} />
     </Link>
   );
 }
@@ -138,7 +138,7 @@ function InlineLink({
   return (
     <Link className="landing-inline-link" href={href}>
       <span>{label}</span>
-      <ArrowUpRight size={14} strokeWidth={1.8} />
+      <ActionOpenExternalIcon decorative size={14} />
     </Link>
   );
 }

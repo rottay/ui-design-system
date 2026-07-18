@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "notice": {
     "path": "THIRD_PARTY_NOTICES.md",
-    "sha256": "70796232ae6aeb44d1e19652827d15d05a6e3816c47182abbaa9ccd1639d0149"
+    "sha256": "1fc3a612c587da49076840fd652bca751b715b4041113fd507bff23188f69273"
   },
   "runtimePackageAllowlist": [
     "@rottay/design-system",
@@ -19,16 +19,6 @@
       "licenseFile": "licenses/phosphor-icons-react-LICENSE",
       "licenseSha256": "6918b72504641180600cbbd4a86b0dfa9dfccf788775694325b71b9a029f6eb4",
       "usage": "bundled-semantic-icons"
-    },
-    {
-      "id": "lucide-react",
-      "packageName": "lucide-react",
-      "version": "0.563.0",
-      "license": "ISC",
-      "source": "https://github.com/lucide-icons/lucide/tree/main/packages/lucide-react",
-      "licenseFile": "licenses/lucide-react-LICENSE",
-      "licenseSha256": "668dcc52803480e0a026b31140a4cae668772663cd764e5991d252eef03f98db",
-      "usage": "external-compatibility-icons"
     },
     {
       "id": "thesvg-react",
@@ -56,7 +46,14 @@
       "provider": "@phosphor-icons/react",
       "registryPath": "src/graphics/icons/foundation/semantic/adapters/phosphor-2.1.10.json",
       "registrySha256": "e806df07c4647ad72b83d926b99516e7fd11a4558ce05323a113c15680cd47df",
-      "expectedEntries": 263
+      "expectedEntries": 263,
+      "semanticSourceRoot": "src/graphics/icons/presentation/semantic/generated/roles",
+      "compatibilityCatalog": {
+        "rootPath": "src/graphics/icons/presentation/catalog",
+        "providers": ["@phosphor-icons/react"],
+        "expectedImportEntries": 330,
+        "importInventorySha256": "0430966c6a54680ed8ad74127ae22c845ecf33baec72f750b73878f05a752c12"
+      }
     },
     "brandMark": [
       {
@@ -130,6 +127,15 @@
         "license": "CC0-1.0",
         "sourceUrl": "https://www.google.com/chrome",
         "sourceSha256": "574b5aff45e3f098cda23d8c50b9a94450d7ccc197b5f48c95c2f011232ad5a1"
+      },
+      {
+        "name": "microsoft",
+        "module": "@thesvg/react/microsoft",
+        "slug": "microsoft",
+        "title": "Microsoft",
+        "license": "MIT",
+        "sourceUrl": "https://www.microsoft.com/",
+        "sourceSha256": "1af5274fc606d1381b8aa9cd4e649d0f5ec4a9550153ff31eece98eb5b987625"
       }
     ],
     "cloudServiceMark": [

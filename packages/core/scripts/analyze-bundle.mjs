@@ -499,7 +499,7 @@ const ASSET_RETENTION_FIXTURES = Object.freeze({
     budgetClass: 'route-payload',
   }),
   bithirePreset: Object.freeze({
-    label: 'BitHireIconPreset (46 selected roles)',
+    label: 'BitHireIconPreset (104 selected roles)',
     entryEsm: 'dist/icons-preset-bithire.js',
     entryCjs: 'dist/icons-preset-bithire.cjs',
     exportName: 'BitHireIconPreset',
@@ -835,7 +835,7 @@ async function runAssetRetentionBudgets() {
     architectureDecision: {
       implemented: [
         'Generated per-role ESM/CJS subpaths prevent a named semantic role from executing an entire pack barrel.',
-        'The SSR-safe BitHire preset contains the exact 46-role productive application inventory.',
+        'The SSR-safe BitHire preset contains the exact 104-role productive application inventory.',
         'The exhaustive synchronous registry is explicit at ./icons/full and uses a separate measured regression ratchet without pretending to be a sub-40-KB route payload.',
         'Brand and cloud CJS public entrypoints are split so neither asset class executes the other adapter.',
       ],

@@ -111,32 +111,56 @@ test('rejects provider imports, identifiers, literals, and broken relative decla
 test('current icons, marks, and pictograms emit a supplier-free public declaration closure', async () => {
   const declarationRoot = await mkdtemp(resolve(tmpdir(), 'cra17-current-declarations-'));
   try {
-    execFileSync(
-      resolve(CORE_ROOT, 'node_modules/.bin/tsc'),
-      [
-        '--declaration',
-        '--emitDeclarationOnly',
-        '--outDir', declarationRoot,
-        '--rootDir', resolve(CORE_ROOT, 'src'),
-        '--target', 'ES2020',
-        '--module', 'ESNext',
-        '--moduleResolution', 'bundler',
-        '--jsx', 'react-jsx',
-        '--skipLibCheck',
-        '--strict',
-        resolve(CORE_ROOT, 'src/entrypoints/icons/index.ts'),
-        resolve(CORE_ROOT, 'src/entrypoints/icons/full/index.ts'),
-        resolve(CORE_ROOT, 'src/entrypoints/icons/presets/bithire/index.ts'),
-        resolve(CORE_ROOT, 'src/graphics/icons/presentation/semantic/generated/roles/action-add.ts'),
-        resolve(CORE_ROOT, 'src/entrypoints/graphics/marks/index.ts'),
-        resolve(CORE_ROOT, 'src/entrypoints/graphics/marks/brand/index.ts'),
-        resolve(CORE_ROOT, 'src/entrypoints/graphics/marks/cloud/index.ts'),
-        resolve(CORE_ROOT, 'src/entrypoints/graphics/pictograms/index.ts'),
-      ],
-      { cwd: CORE_ROOT, encoding: 'utf8', stdio: 'pipe' },
-    );
+    const emittedRoot = resolve(declarationRoot, 'emitted');
+    const sourceFiles = [
+      resolve(CORE_ROOT, 'src/entrypoints/icons/index.ts'),
+      resolve(CORE_ROOT, 'src/entrypoints/icons/full/index.ts'),
+      resolve(CORE_ROOT, 'src/entrypoints/icons/presets/bithire/index.ts'),
+      resolve(CORE_ROOT, 'src/graphics/icons/presentation/semantic/generated/roles/action-add.ts'),
+      resolve(CORE_ROOT, 'src/entrypoints/graphics/marks/index.ts'),
+      resolve(CORE_ROOT, 'src/entrypoints/graphics/marks/brand/index.ts'),
+      resolve(CORE_ROOT, 'src/entrypoints/graphics/marks/cloud/index.ts'),
+      resolve(CORE_ROOT, 'src/entrypoints/graphics/pictograms/index.ts'),
+    ];
+    const configPath = resolve(declarationRoot, 'tsconfig.json');
+    await writeFile(configPath, `${JSON.stringify({
+      compilerOptions: {
+        declaration: true,
+        emitDeclarationOnly: true,
+        outDir: emittedRoot,
+        rootDir: resolve(CORE_ROOT, 'src'),
+        baseUrl: CORE_ROOT,
+        paths: {
+          '@/*': ['src/*'],
+          '@types/*': ['src/foundation/contracts/*'],
+          '@ui/*': ['src/ui/*'],
+        },
+        target: 'ES2020',
+        module: 'ESNext',
+        moduleResolution: 'bundler',
+        jsx: 'react-jsx',
+        types: ['node'],
+        typeRoots: [resolve(CORE_ROOT, 'node_modules/@types')],
+        skipLibCheck: true,
+        strict: true,
+      },
+      files: sourceFiles,
+    }, null, 2)}\n`, 'utf8');
+    try {
+      execFileSync(
+        resolve(CORE_ROOT, 'node_modules/.bin/tsc'),
+        ['--project', configPath],
+        { cwd: CORE_ROOT, encoding: 'utf8', stdio: 'pipe' },
+      );
+    } catch (error) {
+      throw new Error(
+        `CRA17 declaration emission failed:\n${String(error.stdout ?? '')}` +
+        `${String(error.stderr ?? '')}`,
+        { cause: error },
+      );
+    }
 
-    const result = auditPublicDeclarationClosures(declarationRoot, {
+    const result = auditPublicDeclarationClosures(emittedRoot, {
       roots: {
         './icons': 'entrypoints/icons/index.d.ts',
         './icons/full': 'entrypoints/icons/full/index.d.ts',
@@ -152,11 +176,11 @@ test('current icons, marks, and pictograms emit a supplier-free public declarati
     assert.ok(result.files >= 35, `expected a real public closure, found ${result.files} files`);
 
     const factory = await readFile(
-      resolve(declarationRoot, 'graphics/icons/runtime/factory/index.d.ts'),
+      resolve(emittedRoot, 'graphics/icons/runtime/factory/index.d.ts'),
       'utf8',
     );
     const catalog = await readFile(
-      resolve(declarationRoot, 'graphics/icons/presentation/catalog/action/index.d.ts'),
+      resolve(emittedRoot, 'graphics/icons/presentation/catalog/action/index.d.ts'),
       'utf8',
     );
     assert.match(factory, /DSIconComponent/u);

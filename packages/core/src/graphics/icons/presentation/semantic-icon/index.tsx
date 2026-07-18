@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 
-import { reportGraphicAssetTelemetry } from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
+import { reportGraphicAssetTelemetry } from '../../../../infrastructure/runtime/graphics/asset-governance/runtime/control';
 import type { IconProps } from '../../foundation/contracts/registry/semantic';
 import { resolveGeneratedIcon } from '../semantic/generated/facade-map';
 

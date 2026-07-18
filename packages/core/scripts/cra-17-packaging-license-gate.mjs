@@ -106,6 +106,33 @@ function sourceFile(ts, path) {
   );
 }
 
+function portableRelativePath(root, path) {
+  return relative(root, path).split(sep).join('/');
+}
+
+/**
+ * Keeps the source ownership of every third-party import.  The graphics gate
+ * used to need only a module list because all functional glyphs belonged to
+ * the generated semantic corpus.  Named compatibility exports are a second,
+ * intentionally bounded consumer of the same supplier, so provenance must
+ * retain both the module and the declared owner tree.
+ */
+function importRecords(ts, paths, root) {
+  const imports = [];
+  for (const path of paths) {
+    const file = sourceFile(ts, path);
+    for (const statement of file.statements) {
+      if (!ts.isImportDeclaration(statement)) continue;
+      if (!ts.isStringLiteral(statement.moduleSpecifier)) continue;
+      imports.push({
+        sourcePath: portableRelativePath(root, path),
+        module: statement.moduleSpecifier.text,
+      });
+    }
+  }
+  return imports;
+}
+
 function importSpecifiers(ts, paths) {
   const imports = [];
   for (const path of paths) {
@@ -117,6 +144,19 @@ function importSpecifiers(ts, paths) {
     }
   }
   return imports;
+}
+
+function stableImportRecords(records) {
+  return [...records]
+    .map(({ sourcePath, module }) => ({ sourcePath, module }))
+    .sort(
+      (left, right) =>
+        left.sourcePath.localeCompare(right.sourcePath) || left.module.localeCompare(right.module),
+    );
+}
+
+function importInventoryFingerprint(records) {
+  return sha256(JSON.stringify(stableImportRecords(records)));
 }
 
 function unwrap(ts, node) {
@@ -377,7 +417,8 @@ export function auditGraphicsPackaging(options = {}) {
   }
 
   const graphicsFiles = sourceFiles(graphicsRoot);
-  const imports = importSpecifiers(ts, graphicsFiles);
+  const graphicsImportRecords = importRecords(ts, graphicsFiles, coreRoot);
+  const imports = graphicsImportRecords.map(({ module }) => module);
   const discoveredProviders = stable(new Set(
     imports
       .map(packageNameFromSpecifier)
@@ -395,6 +436,147 @@ export function auditGraphicsPackaging(options = {}) {
     productionProviders,
     discoveredProviders,
   );
+
+  const knownProviderNames = new Set(providers.map(({ packageName }) => packageName));
+  const semanticSourceRootValue = functionalIcons.semanticSourceRoot;
+  const semanticSourceRoot =
+    typeof semanticSourceRootValue === 'string' && semanticSourceRootValue.length > 0
+      ? resolve(coreRoot, semanticSourceRootValue)
+      : null;
+  if (
+    !semanticSourceRoot ||
+    !isInside(coreRoot, semanticSourceRoot) ||
+    !existsSync(semanticSourceRoot)
+  ) {
+    errors.push(
+      `functional icon semantic source root is missing: ${String(semanticSourceRootValue)}`,
+    );
+  }
+
+  const compatibilityCatalog = functionalIcons.compatibilityCatalog ?? {};
+  const compatibilityCatalogRootValue = compatibilityCatalog.rootPath;
+  const compatibilityCatalogRoot =
+    typeof compatibilityCatalogRootValue === 'string' && compatibilityCatalogRootValue.length > 0
+      ? resolve(coreRoot, compatibilityCatalogRootValue)
+      : null;
+  if (
+    !compatibilityCatalogRoot ||
+    !isInside(coreRoot, compatibilityCatalogRoot) ||
+    !existsSync(compatibilityCatalogRoot)
+  ) {
+    errors.push(
+      `functional icon compatibility catalog root is missing: ${String(
+        compatibilityCatalogRootValue,
+      )}`,
+    );
+  }
+  if (
+    semanticSourceRoot &&
+    compatibilityCatalogRoot &&
+    (isInside(semanticSourceRoot, compatibilityCatalogRoot) ||
+      isInside(compatibilityCatalogRoot, semanticSourceRoot))
+  ) {
+    errors.push('functional icon semantic and compatibility source roots must not overlap');
+  }
+
+  const compatibilityProviderValues = compatibilityCatalog.providers;
+  if (!Array.isArray(compatibilityProviderValues)) {
+    errors.push('functional icon compatibility catalog providers must be an array');
+  }
+  const compatibilityProviders = Array.isArray(compatibilityProviderValues)
+    ? compatibilityProviderValues.filter(
+        (provider) => typeof provider === 'string' && provider.length > 0,
+      )
+    : [];
+  if (
+    compatibilityProviders.length !== (compatibilityProviderValues?.length ?? 0) ||
+    compatibilityProviders.length === 0
+  ) {
+    errors.push(
+      'functional icon compatibility catalog providers must contain non-empty package names',
+    );
+  }
+  if (new Set(compatibilityProviders).size !== compatibilityProviders.length) {
+    errors.push('functional icon compatibility catalog providers must be unique');
+  }
+  if (!same(compatibilityProviders, stable(compatibilityProviders))) {
+    errors.push('functional icon compatibility catalog providers must be sorted');
+  }
+  for (const provider of compatibilityProviders) {
+    if (!knownProviderNames.has(provider)) {
+      errors.push(
+        `functional icon compatibility catalog provider is not covered by the allowlist: ${provider}`,
+      );
+    }
+  }
+
+  const expectedCompatibilityImportEntries = compatibilityCatalog.expectedImportEntries;
+  if (
+    !Number.isInteger(expectedCompatibilityImportEntries) ||
+    expectedCompatibilityImportEntries < 1
+  ) {
+    errors.push(
+      'functional icon compatibility catalog expectedImportEntries must be a positive integer',
+    );
+  }
+  const expectedCompatibilityInventoryHash = compatibilityCatalog.importInventorySha256;
+  if (
+    typeof expectedCompatibilityInventoryHash !== 'string' ||
+    !/^[a-f0-9]{64}$/u.test(expectedCompatibilityInventoryHash)
+  ) {
+    errors.push(
+      'functional icon compatibility catalog importInventorySha256 must be a SHA-256 hex digest',
+    );
+  }
+
+  const semanticImportRecords =
+    semanticSourceRoot && existsSync(semanticSourceRoot)
+      ? importRecords(ts, sourceFiles(semanticSourceRoot), coreRoot)
+      : [];
+  const compatibilityImportRecords =
+    compatibilityCatalogRoot && existsSync(compatibilityCatalogRoot)
+      ? importRecords(ts, sourceFiles(compatibilityCatalogRoot), coreRoot)
+      : [];
+  const semanticProviderImports = semanticImportRecords.filter(({ module }) =>
+    knownProviderNames.has(packageNameFromSpecifier(module)),
+  );
+  const semanticFunctionalImports = semanticProviderImports.filter(
+    ({ module }) => packageNameFromSpecifier(module) === functionalIcons.provider,
+  );
+  const semanticUnexpectedProviderImports = semanticProviderImports.filter(
+    ({ module }) => packageNameFromSpecifier(module) !== functionalIcons.provider,
+  );
+  if (semanticUnexpectedProviderImports.length > 0) {
+    errors.push(
+      `functional icon semantic corpus imports a non-semantic provider: ${JSON.stringify(
+        stableImportRecords(semanticUnexpectedProviderImports),
+      )}`,
+    );
+  }
+
+  const compatibilityProviderSet = new Set(compatibilityProviders);
+  const compatibilityDeclaredProviderImports = compatibilityImportRecords.filter(({ module }) =>
+    compatibilityProviderSet.has(packageNameFromSpecifier(module)),
+  );
+  const importedCompatibilityProviders = new Set(
+    compatibilityDeclaredProviderImports.map(({ module }) => packageNameFromSpecifier(module)),
+  );
+  for (const provider of compatibilityProviders) {
+    if (!importedCompatibilityProviders.has(provider)) {
+      errors.push(`functional icon compatibility catalog declares an unused provider: ${provider}`);
+    }
+  }
+  const compatibilityUndeclaredProviderImports = compatibilityImportRecords.filter(({ module }) => {
+    const packageName = packageNameFromSpecifier(module);
+    return knownProviderNames.has(packageName) && !compatibilityProviderSet.has(packageName);
+  });
+  if (compatibilityUndeclaredProviderImports.length > 0) {
+    errors.push(
+      `functional icon compatibility catalog imports an undeclared provider: ${JSON.stringify(
+        stableImportRecords(compatibilityUndeclaredProviderImports),
+      )}`,
+    );
+  }
 
   const iconRegistryPath = resolve(coreRoot, functionalIcons.registryPath ?? '');
   if (!isInside(coreRoot, iconRegistryPath) || !existsSync(iconRegistryPath)) {
@@ -418,11 +600,44 @@ export function auditGraphicsPackaging(options = {}) {
       );
     }
     const registeredModules = stable((registry.entries ?? []).map((entry) => entry.module));
-    const importedModules = stable(
-      imports.filter((specifier) => specifier.startsWith(`${functionalIcons.provider}/`)),
-    );
+    const importedModules = stable(semanticFunctionalImports.map(({ module }) => module));
     compare(errors, 'functional icon module inventory', registeredModules, importedModules);
   }
+
+  // A canonical source-path/module serialization makes catalogue additions,
+  // removals and supplier substitutions reviewable without treating its
+  // compatibility modules as semantic-role modules.
+  const actualCompatibilityInventory = stableImportRecords(compatibilityDeclaredProviderImports);
+  if (actualCompatibilityInventory.length !== expectedCompatibilityImportEntries) {
+    errors.push(
+      `functional icon compatibility catalog expected ${String(
+        expectedCompatibilityImportEntries,
+      )} imports, found ${String(actualCompatibilityInventory.length)}`,
+    );
+  }
+  const actualCompatibilityInventoryHash = importInventoryFingerprint(actualCompatibilityInventory);
+  if (actualCompatibilityInventoryHash !== expectedCompatibilityInventoryHash) {
+    errors.push(
+      `functional icon compatibility catalog import inventory hash drifted; expected ${String(
+        expectedCompatibilityInventoryHash,
+      )}, found ${actualCompatibilityInventoryHash}`,
+    );
+  }
+
+  const functionalSupplierPackages = new Set([functionalIcons.provider, ...compatibilityProviders]);
+  const functionalSupplierImports = graphicsImportRecords.filter(({ module }) =>
+    functionalSupplierPackages.has(packageNameFromSpecifier(module)),
+  );
+  const classifiedFunctionalSupplierImports = [
+    ...semanticFunctionalImports,
+    ...compatibilityDeclaredProviderImports,
+  ];
+  compare(
+    errors,
+    'functional icon supplier source boundary',
+    stableImportRecords(functionalSupplierImports),
+    stableImportRecords(classifiedFunctionalSupplierImports),
+  );
 
   const markCatalogPath = resolve(
     graphicsRoot,
@@ -634,6 +849,7 @@ export function auditGraphicsPackaging(options = {}) {
     schemaVersion: manifest.schemaVersion,
     providers: providers.length,
     functionalIcons: functionalIcons.expectedEntries,
+    functionalIconCompatibilityImports: actualCompatibilityInventory.length,
     brandMarks: brandMarks.length,
     cloudServiceMarks: cloudMarks.length,
     featurePictograms: pictograms.entries.length,

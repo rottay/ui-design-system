@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ActionOpenExternalIcon } from '@rottay/design-system/icons/foundation';
 import { ShowroomLink as Link } from '@/components/showroom-link';
 
 const SHIFT_DIMENSIONS = [
@@ -1173,7 +1173,7 @@ function BrandShiftLink({
   return (
     <Link className="brand-shift__link" href={href}>
       <span>{label}</span>
-      <ArrowUpRight size={14} strokeWidth={1.8} />
+      <ActionOpenExternalIcon decorative size={14} />
     </Link>
   );
 }

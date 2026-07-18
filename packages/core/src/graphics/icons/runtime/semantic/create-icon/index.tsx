@@ -12,7 +12,7 @@ import type {
 import {
   isGraphicAssetAdapterEnabled,
   reportGraphicAssetTelemetry,
-} from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
+} from '../../../../../infrastructure/runtime/graphics/asset-governance/runtime/control';
 import { ICON_SIZE_TOKENS } from '../../../foundation';
 import type { IconRole, IconState, IconTone } from '../../../foundation/contracts';
 import { resolveIconWeight } from '../../../foundation/contracts/registry/policy';

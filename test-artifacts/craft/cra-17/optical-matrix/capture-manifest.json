@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "workOrder": "WO-CRA-17",
+  "formFactor": "mobile",
+  "roleCount": 40,
+  "sizesPx": [
+    12,
+    16,
+    20,
+    24
+  ],
+  "engines": [
+    "classic",
+    "modern",
+    "rustic"
+  ],
+  "schemes": [
+    "light",
+    "dark"
+  ],
+  "tenantContexts": [
+    "bithire",
+    "themanagementmiami"
+  ],
+  "requiredRoleCells": 1920,
+  "recordedRoleCells": 1920,
+  "screenshotCount": 12,
+  "sightedReview": "pending",
+  "captures": [
+    {
+      "tenant": "bithire",
+      "engine": "classic",
+      "theme": "light",
+      "bytes": 357418,
+      "file": "bithire-classic-light-mobile.png",
+      "roleCells": 160,
+      "sha256": "a514319ae149ee1a85cdda564af5d981dd18b751b72b17af20a9ad7003adf8b8"
+    },
+    {
+      "tenant": "bithire",
+      "engine": "classic",
+      "theme": "dark",
+      "bytes": 352118,
+      "file": "bithire-classic-dark-mobile.png",
+      "roleCells": 160,
+      "sha256": "90bcfcf13bf02b0dac28df91c62c9f0ab69a08771c5e218031b7265e8259b190"
+    },
+    {
+      "tenant": "bithire",
+      "engine": "modern",
+      "theme": "light",
+      "bytes": 358079,
+      "file": "bithire-modern-light-mobile.png",
+      "roleCells": 160,
+      "sha256": "ea4e0c125d25b08f78b8b812724f81ff565a4d4a491afe41c36e627f3d187d36"
+    },
+    {
+      "tenant": "bithire",
+      "engine": "modern",
+      "theme": "dark",
+      "bytes": 352726,
+      "file": "bithire-modern-dark-mobile.png",
+      "roleCells": 160,
+      "sha256": "2ce6fc5439f55fed103167d5d39f501b6f083129da39475039fcad9a9b6f742f"
+    },
+    {
+      "tenant": "bithire",
+      "engine": "rustic",
+      "theme": "light",
+      "bytes": 358027,
+      "file": "bithire-rustic-light-mobile.png",
+      "roleCells": 160,
+      "sha256": "a35446f760b07349909ddbcf66d81c20fc39dc305ce3c540b6a42b25d06b5dc8"
+    },
+    {
+      "tenant": "bithire",
+      "engine": "rustic",
+      "theme": "dark",
+      "bytes": 352675,
+      "file": "bithire-rustic-dark-mobile.png",
+      "roleCells": 160,
+      "sha256": "a96b0c985fe1881d373edce8b0b021ac604501669acc59cb15b0d9bcd9b21f21"
+    },
+    {
+      "tenant": "themanagementmiami",
+      "engine": "classic",
+      "theme": "light",
+      "bytes": 325878,
+      "file": "themanagementmiami-classic-light-mobile.png",
+      "roleCells": 160,
+      "sha256": "2d7272cbae0bbc8b4d8a3650d7b8a309cb2f711e0be4dfb76b24b37e6b0b5137"
+    },
+    {
+      "tenant": "themanagementmiami",
+      "engine": "classic",
+      "theme": "dark",
+      "bytes": 341138,
+      "file": "themanagementmiami-classic-dark-mobile.png",
+      "roleCells": 160,
+      "sha256": "60a1accf0c1d4bdf7bdf58c51f4773a72be0eaf6164d3e80d5d93ef9f4e258ab"
+    },
+    {
+      "tenant": "themanagementmiami",
+      "engine": "modern",
+      "theme": "light",
+      "bytes": 325980,
+      "file": "themanagementmiami-modern-light-mobile.png",
+      "roleCells": 160,
+      "sha256": "3be70182a674e7e29b90ea4f2405450a88f6edb338c9d3e9ef342267e0f9911a"
+    },
+    {
+      "tenant": "themanagementmiami",
+      "engine": "modern",
+      "theme": "dark",
+      "bytes": 341242,
+      "file": "themanagementmiami-modern-dark-mobile.png",
+      "roleCells": 160,
+      "sha256": "4a6013cc4cd3e3c8391656a87228d6a5d160cb707af0fcca51efa808a6804e86"
+    },
+    {
+      "tenant": "themanagementmiami",
+      "engine": "rustic",
+      "theme": "light",
+      "bytes": 326011,
+      "file": "themanagementmiami-rustic-light-mobile.png",
+      "roleCells": 160,
+      "sha256": "4760c60e9cc1d3efcccaceeaaa140bf4a59d98e0f41510808b273deea5194d06"
+    },
+    {
+      "tenant": "themanagementmiami",
+      "engine": "rustic",
+      "theme": "dark",
+      "bytes": 341197,
+      "file": "themanagementmiami-rustic-dark-mobile.png",
+      "roleCells": 160,
+      "sha256": "4a656e6674befbef197e0ae3c75cb6ea7a48b53936a8c5c7d600f18129cccd1a"
+    }
+  ]
+}

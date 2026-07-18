@@ -69,7 +69,7 @@ const ICON_REGISTRY: IconEntry[] = curatedIcons
     return {
       slug: entry.slug,
       name: entry.name,
-      lucideSource: entry.lucideSource,
+      searchAlias: entry.searchAlias,
       component,
       category: entry.category,
       usesFallback,
@@ -216,7 +216,7 @@ export default function IconsPage() {
       const searchableValues = [
         entry.name,
         entry.slug,
-        entry.lucideSource,
+        entry.searchAlias,
         CATEGORY_LABELS[entry.category],
         entry.name.replace(/Icon$/, ''),
       ];

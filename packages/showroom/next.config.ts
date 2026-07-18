@@ -15,7 +15,6 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: [
-      'lucide-react',
       'antd',
       '@ant-design/icons',
       'motion/react',

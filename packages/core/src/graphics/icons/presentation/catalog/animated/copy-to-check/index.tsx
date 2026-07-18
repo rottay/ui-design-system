@@ -17,12 +17,13 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { CheckIcon as Check } from '@phosphor-icons/react/dist/ssr/Check';
+import { CopyIcon as Copy } from '@phosphor-icons/react/dist/ssr/Copy';
 import { useMediaQuery } from '@/infrastructure/runtime/responsive/runtime/media-query';
-import { createIcon } from '../../../../runtime/factory';
+import { createPhosphorCompatibilityIcon } from '../../../../runtime/factory/phosphor-compat';
 
-const CopyGlyph = createIcon(Copy, 'CopyToCheckCopyGlyph');
-const CheckGlyph = createIcon(Check, 'CopyToCheckCheckGlyph');
+const CopyGlyph = createPhosphorCompatibilityIcon(Copy, 'CopyToCheckCopyGlyph');
+const CheckGlyph = createPhosphorCompatibilityIcon(Check, 'CopyToCheckCheckGlyph');
 
 export interface CopyToCheckProps {
   /** Whether the icon shows the check (copied) state. `false` shows the copy icon. */

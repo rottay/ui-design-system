@@ -1,6 +1,13 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CalendarDays, Filter, GitCompare, Inbox, ListTree, ShieldCheck } from 'lucide-react';
+import {
+  CalendarDaysIcon as CalendarDays,
+  FilterIcon as Filter,
+  FolderTreeIcon,
+  GitCompareIcon as GitCompare,
+  InboxIcon as Inbox,
+  ShieldCheckIcon as ShieldCheck,
+} from '../../../../../../graphics/icons';
 
 import { Box, Button, Card, Stack, Text } from '../../../../../primitives';
 import { PatternApprovalWorkflow } from '../../../../workflow/approval-workflow';
@@ -181,7 +188,7 @@ export const AdvancedPatterns: Story = {
                 {
                   key: 'ops',
                   label: 'Operations',
-                  icon: <ListTree size={16} />,
+                  icon: <FolderTreeIcon size={16} />,
                   children: [
                     { key: 'ops-checkin', label: 'Check-in' },
                     { key: 'ops-security', label: 'Security' },

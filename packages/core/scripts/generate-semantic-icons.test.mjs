@@ -86,8 +86,8 @@ test('Phosphor 2.1.10 adapter is ordered, exhaustive, and locally resolvable', a
 test('BitHire preset is the exact bounded productive Icon inventory', async () => {
   const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
   const preset = validateIconPresetManifest(await readJson(BITHIRE_PRESET_PATH), corpus);
-  assert.equal(preset.names.length, 46);
-  assert.equal(new Set(preset.names).size, 46);
+  assert.equal(preset.names.length, 104);
+  assert.equal(new Set(preset.names).size, 104);
   assert.deepEqual(preset.names, [...preset.names].sort());
   assert.deepEqual(
     preset.names.filter((name) => name.startsWith('bithire.')),
@@ -163,7 +163,8 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
   assert.match(first.get('facade-map/index.tsx'), /resolveGeneratedIcon/u);
   assert.match(first.get('presets/bithire/index.tsx'), /export const BitHireIconPreset/u);
   assert.match(first.get('presets/bithire/index.tsx'), /"bithire\.candidate": BithireCandidateIcon/u);
-  assert.doesNotMatch(first.get('presets/bithire/index.tsx'), /"action\.add"|Phosphor|@phosphor/u);
+  assert.match(first.get('presets/bithire/index.tsx'), /"action\.add": ActionAddIcon/u);
+  assert.doesNotMatch(first.get('presets/bithire/index.tsx'), /Phosphor|@phosphor/u);
   assert.doesNotMatch(first.get('index.ts'), /phosphor|supplier/iu);
 });
 
@@ -282,7 +283,7 @@ test('the canonical Icon facade reaches all 263 roles through SSR-only supplier 
   assert.doesNotMatch(bundle, /@phosphor-icons\/react\/dist\/(?!ssr\/)/u);
 });
 
-test('BitHire preset retains only its 46 selected supplier glyphs', () => {
+test('BitHire preset retains only its 104 selected supplier glyphs', () => {
   const bundle = execFileSync(
     resolve(CORE_ROOT, 'node_modules/.bin/esbuild'),
     [
@@ -304,9 +305,9 @@ test('BitHire preset retains only its 46 selected supplier glyphs', () => {
   );
   const supplierModules = [...bundle.matchAll(/@phosphor-icons\/react\/dist\/ssr\/[A-Za-z0-9]+/gu)]
     .map((match) => match[0]);
-  assert.equal(supplierModules.length, 46);
-  assert.equal(new Set(supplierModules).size, 46);
-  assert.doesNotMatch(bundle, /ActionAddIcon|IDENTITY_ICON_COMPONENTS|OPERATIONS_ICON_COMPONENTS/u);
+  assert.equal(supplierModules.length, 104);
+  assert.equal(new Set(supplierModules).size, 104);
+  assert.doesNotMatch(bundle, /FOUNDATION_ICON_COMPONENTS|IDENTITY_ICON_COMPONENTS|OPERATIONS_ICON_COMPONENTS/u);
 });
 
 test('closed schemas reject drift, duplicates, and adapter-order mismatches', async () => {

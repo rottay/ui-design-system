@@ -1,40 +1,65 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Data icons - charts, search, filters, databases
  */
 
-import {
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  Database,
-  Search,
-  Filter,
-  ListFilter,
-  SlidersHorizontal,
-  Layers,
-  Globe,
-  Globe2,
-  ChartNoAxesColumn,
-  LineChart,
-  Server,
-} from 'lucide-react';
-import { createIcon } from '../../../runtime/factory';
+import { DatabaseIcon as Database } from "@phosphor-icons/react/dist/ssr/Database";
+import { SlidersHorizontalIcon as SlidersHorizontal } from "@phosphor-icons/react/dist/ssr/SlidersHorizontal";
+import { GlobeIcon as Globe } from "@phosphor-icons/react/dist/ssr/Globe";
+import { ChartBarIcon as BarChart3 } from "@phosphor-icons/react/dist/ssr/ChartBar";
+import { TrendUpIcon as TrendingUp } from "@phosphor-icons/react/dist/ssr/TrendUp";
+import { TrendDownIcon as TrendingDown } from "@phosphor-icons/react/dist/ssr/TrendDown";
+import { PulseIcon as Activity } from "@phosphor-icons/react/dist/ssr/Pulse";
+import { MagnifyingGlassIcon as Search } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass";
+import { FunnelIcon as Filter } from "@phosphor-icons/react/dist/ssr/Funnel";
+import { FunnelSimpleIcon as ListFilter } from "@phosphor-icons/react/dist/ssr/FunnelSimple";
+import { StackIcon as Layers } from "@phosphor-icons/react/dist/ssr/Stack";
+import { GlobeHemisphereWestIcon as Globe2 } from "@phosphor-icons/react/dist/ssr/GlobeHemisphereWest";
+import { ChartBarIcon as ChartNoAxesColumn } from "@phosphor-icons/react/dist/ssr/ChartBar";
+import { ChartLineIcon as LineChart } from "@phosphor-icons/react/dist/ssr/ChartLine";
+import { HardDriveIcon as Server } from "@phosphor-icons/react/dist/ssr/HardDrive";
+import { createPhosphorCompatibilityIcon } from "../../../runtime/factory/phosphor-compat";
 
-export const BarChart3Icon = createIcon(BarChart3, 'BarChart3Icon');
-export const TrendingUpIcon = createIcon(TrendingUp, 'TrendingUpIcon');
-export const TrendingDownIcon = createIcon(TrendingDown, 'TrendingDownIcon');
-export const ActivityIcon = createIcon(Activity, 'ActivityIcon');
-export const DatabaseIcon = createIcon(Database, 'DatabaseIcon');
-export const SearchIcon = createIcon(Search, 'SearchIcon');
-export const FilterIcon = createIcon(Filter, 'FilterIcon');
-export const SlidersHorizontalIcon = createIcon(SlidersHorizontal, 'SlidersHorizontalIcon');
-export const LayersIcon = createIcon(Layers, 'LayersIcon');
-export const GlobeIcon = createIcon(Globe, 'GlobeIcon');
-export const ChartNoAxesColumnIcon = createIcon(ChartNoAxesColumn, 'ChartNoAxesColumnIcon');
-export const LineChartIcon = createIcon(LineChart, 'LineChartIcon');
-export const ListFilterIcon = createIcon(ListFilter, 'ListFilterIcon');
-export const Globe2Icon = createIcon(Globe2, 'Globe2Icon');
-export const ServerIcon = createIcon(Server, 'ServerIcon');
+export const BarChart3Icon = createPhosphorCompatibilityIcon(
+  BarChart3,
+  "BarChart3Icon"
+);
+export const TrendingUpIcon = createPhosphorCompatibilityIcon(
+  TrendingUp,
+  "TrendingUpIcon"
+);
+export const TrendingDownIcon = createPhosphorCompatibilityIcon(
+  TrendingDown,
+  "TrendingDownIcon"
+);
+export const ActivityIcon = createPhosphorCompatibilityIcon(
+  Activity,
+  "ActivityIcon"
+);
+export const DatabaseIcon = createPhosphorCompatibilityIcon(
+  Database,
+  "DatabaseIcon"
+);
+export const SearchIcon = createPhosphorCompatibilityIcon(Search, "SearchIcon");
+export const FilterIcon = createPhosphorCompatibilityIcon(Filter, "FilterIcon");
+export const SlidersHorizontalIcon = createPhosphorCompatibilityIcon(
+  SlidersHorizontal,
+  "SlidersHorizontalIcon"
+);
+export const LayersIcon = createPhosphorCompatibilityIcon(Layers, "LayersIcon");
+export const GlobeIcon = createPhosphorCompatibilityIcon(Globe, "GlobeIcon");
+export const ChartNoAxesColumnIcon = createPhosphorCompatibilityIcon(
+  ChartNoAxesColumn,
+  "ChartNoAxesColumnIcon"
+);
+export const LineChartIcon = createPhosphorCompatibilityIcon(
+  LineChart,
+  "LineChartIcon"
+);
+export const ListFilterIcon = createPhosphorCompatibilityIcon(
+  ListFilter,
+  "ListFilterIcon"
+);
+export const Globe2Icon = createPhosphorCompatibilityIcon(Globe2, "Globe2Icon");
+export const ServerIcon = createPhosphorCompatibilityIcon(Server, "ServerIcon");

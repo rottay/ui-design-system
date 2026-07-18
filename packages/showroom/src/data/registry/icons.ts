@@ -2,7 +2,7 @@
  * Icons Registry
  *
  * Catalog of all 109 curated icons in the design system.
- * All icons are created via createIcon() wrapping lucide-react.
+ * Product icons resolve through the governed semantic icon facade.
  * Grouped by category: navigation, action, status, content, communication,
  * user, data, layout, media, misc.
  */
@@ -23,7 +23,8 @@ export interface IconEntry {
   slug: string;
   name: string;
   category: IconCategory;
-  lucideSource: string;
+  /** Supplier-independent lookup alias retained for catalog search. */
+  searchAlias: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -31,21 +32,21 @@ export interface IconEntry {
 // ---------------------------------------------------------------------------
 
 const navigation: IconEntry[] = [
-  { slug: 'arrow-left', name: 'ArrowLeftIcon', category: 'navigation', lucideSource: 'ArrowLeft' },
-  { slug: 'arrow-right', name: 'ArrowRightIcon', category: 'navigation', lucideSource: 'ArrowRight' },
-  { slug: 'arrow-up', name: 'ArrowUpIcon', category: 'navigation', lucideSource: 'ArrowUp' },
-  { slug: 'arrow-down', name: 'ArrowDownIcon', category: 'navigation', lucideSource: 'ArrowDown' },
-  { slug: 'arrow-up-right', name: 'ArrowUpRightIcon', category: 'navigation', lucideSource: 'ArrowUpRight' },
-  { slug: 'chevron-down', name: 'ChevronDownIcon', category: 'navigation', lucideSource: 'ChevronDown' },
-  { slug: 'chevron-up', name: 'ChevronUpIcon', category: 'navigation', lucideSource: 'ChevronUp' },
-  { slug: 'chevron-left', name: 'ChevronLeftIcon', category: 'navigation', lucideSource: 'ChevronLeft' },
-  { slug: 'chevron-right', name: 'ChevronRightIcon', category: 'navigation', lucideSource: 'ChevronRight' },
-  { slug: 'home', name: 'HomeIcon', category: 'navigation', lucideSource: 'Home' },
-  { slug: 'external-link', name: 'ExternalLinkIcon', category: 'navigation', lucideSource: 'ExternalLink' },
-  { slug: 'menu', name: 'MenuIcon', category: 'navigation', lucideSource: 'Menu' },
-  { slug: 'more-horizontal', name: 'MoreHorizontalIcon', category: 'navigation', lucideSource: 'MoreHorizontal' },
-  { slug: 'panel-right-close', name: 'PanelRightCloseIcon', category: 'navigation', lucideSource: 'PanelRightClose' },
-  { slug: 'scan-search', name: 'ScanSearchIcon', category: 'navigation', lucideSource: 'ScanSearch' },
+  { slug: 'arrow-left', name: 'ArrowLeftIcon', category: 'navigation', searchAlias: 'ArrowLeft' },
+  { slug: 'arrow-right', name: 'ArrowRightIcon', category: 'navigation', searchAlias: 'ArrowRight' },
+  { slug: 'arrow-up', name: 'ArrowUpIcon', category: 'navigation', searchAlias: 'ArrowUp' },
+  { slug: 'arrow-down', name: 'ArrowDownIcon', category: 'navigation', searchAlias: 'ArrowDown' },
+  { slug: 'arrow-up-right', name: 'ArrowUpRightIcon', category: 'navigation', searchAlias: 'ArrowUpRight' },
+  { slug: 'chevron-down', name: 'ChevronDownIcon', category: 'navigation', searchAlias: 'ChevronDown' },
+  { slug: 'chevron-up', name: 'ChevronUpIcon', category: 'navigation', searchAlias: 'ChevronUp' },
+  { slug: 'chevron-left', name: 'ChevronLeftIcon', category: 'navigation', searchAlias: 'ChevronLeft' },
+  { slug: 'chevron-right', name: 'ChevronRightIcon', category: 'navigation', searchAlias: 'ChevronRight' },
+  { slug: 'home', name: 'HomeIcon', category: 'navigation', searchAlias: 'Home' },
+  { slug: 'external-link', name: 'ExternalLinkIcon', category: 'navigation', searchAlias: 'ExternalLink' },
+  { slug: 'menu', name: 'MenuIcon', category: 'navigation', searchAlias: 'Menu' },
+  { slug: 'more-horizontal', name: 'MoreHorizontalIcon', category: 'navigation', searchAlias: 'MoreHorizontal' },
+  { slug: 'panel-right-close', name: 'PanelRightCloseIcon', category: 'navigation', searchAlias: 'PanelRightClose' },
+  { slug: 'scan-search', name: 'ScanSearchIcon', category: 'navigation', searchAlias: 'ScanSearch' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -53,21 +54,21 @@ const navigation: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const action: IconEntry[] = [
-  { slug: 'plus', name: 'PlusIcon', category: 'action', lucideSource: 'Plus' },
-  { slug: 'edit', name: 'EditIcon', category: 'action', lucideSource: 'Edit' },
-  { slug: 'pencil', name: 'PencilIcon', category: 'action', lucideSource: 'Pencil' },
-  { slug: 'pencil-line', name: 'PencilLineIcon', category: 'action', lucideSource: 'PencilLine' },
-  { slug: 'trash', name: 'Trash2Icon', category: 'action', lucideSource: 'Trash2' },
-  { slug: 'save', name: 'SaveIcon', category: 'action', lucideSource: 'Save' },
-  { slug: 'download', name: 'DownloadIcon', category: 'action', lucideSource: 'Download' },
-  { slug: 'upload', name: 'UploadIcon', category: 'action', lucideSource: 'Upload' },
-  { slug: 'copy', name: 'CopyIcon', category: 'action', lucideSource: 'Copy' },
-  { slug: 'clipboard-copy', name: 'ClipboardCopyIcon', category: 'action', lucideSource: 'ClipboardCopy' },
-  { slug: 'refresh', name: 'RefreshCwIcon', category: 'action', lucideSource: 'RefreshCw' },
-  { slug: 'rotate', name: 'RotateCcwIcon', category: 'action', lucideSource: 'RotateCcw' },
-  { slug: 'send', name: 'SendIcon', category: 'action', lucideSource: 'Send' },
-  { slug: 'share', name: 'Share2Icon', category: 'action', lucideSource: 'Share2' },
-  { slug: 'power', name: 'PowerIcon', category: 'action', lucideSource: 'Power' },
+  { slug: 'plus', name: 'PlusIcon', category: 'action', searchAlias: 'Plus' },
+  { slug: 'edit', name: 'EditIcon', category: 'action', searchAlias: 'Edit' },
+  { slug: 'pencil', name: 'PencilIcon', category: 'action', searchAlias: 'Pencil' },
+  { slug: 'pencil-line', name: 'PencilLineIcon', category: 'action', searchAlias: 'PencilLine' },
+  { slug: 'trash', name: 'Trash2Icon', category: 'action', searchAlias: 'Trash2' },
+  { slug: 'save', name: 'SaveIcon', category: 'action', searchAlias: 'Save' },
+  { slug: 'download', name: 'DownloadIcon', category: 'action', searchAlias: 'Download' },
+  { slug: 'upload', name: 'UploadIcon', category: 'action', searchAlias: 'Upload' },
+  { slug: 'copy', name: 'CopyIcon', category: 'action', searchAlias: 'Copy' },
+  { slug: 'clipboard-copy', name: 'ClipboardCopyIcon', category: 'action', searchAlias: 'ClipboardCopy' },
+  { slug: 'refresh', name: 'RefreshCwIcon', category: 'action', searchAlias: 'RefreshCw' },
+  { slug: 'rotate', name: 'RotateCcwIcon', category: 'action', searchAlias: 'RotateCcw' },
+  { slug: 'send', name: 'SendIcon', category: 'action', searchAlias: 'Send' },
+  { slug: 'share', name: 'Share2Icon', category: 'action', searchAlias: 'Share2' },
+  { slug: 'power', name: 'PowerIcon', category: 'action', searchAlias: 'Power' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -75,18 +76,18 @@ const action: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const status: IconEntry[] = [
-  { slug: 'check', name: 'CheckIcon', category: 'status', lucideSource: 'Check' },
-  { slug: 'check-circle', name: 'CheckCircleIcon', category: 'status', lucideSource: 'CheckCircle' },
-  { slug: 'check-circle-2', name: 'CheckCircle2Icon', category: 'status', lucideSource: 'CheckCircle2' },
-  { slug: 'x', name: 'XIcon', category: 'status', lucideSource: 'X' },
-  { slug: 'x-circle', name: 'XCircleIcon', category: 'status', lucideSource: 'XCircle' },
-  { slug: 'alert-circle', name: 'AlertCircleIcon', category: 'status', lucideSource: 'AlertCircle' },
-  { slug: 'alert-triangle', name: 'AlertTriangleIcon', category: 'status', lucideSource: 'AlertTriangle' },
-  { slug: 'alert-octagon', name: 'AlertOctagonIcon', category: 'status', lucideSource: 'AlertOctagon' },
-  { slug: 'info', name: 'InfoIcon', category: 'status', lucideSource: 'Info' },
-  { slug: 'ban', name: 'BanIcon', category: 'status', lucideSource: 'Ban' },
-  { slug: 'loader-circle', name: 'LoaderCircleIcon', category: 'status', lucideSource: 'LoaderCircle' },
-  { slug: 'circle-alert', name: 'CircleAlertIcon', category: 'status', lucideSource: 'CircleAlert' },
+  { slug: 'check', name: 'CheckIcon', category: 'status', searchAlias: 'Check' },
+  { slug: 'check-circle', name: 'CheckCircleIcon', category: 'status', searchAlias: 'CheckCircle' },
+  { slug: 'check-circle-2', name: 'CheckCircle2Icon', category: 'status', searchAlias: 'CheckCircle2' },
+  { slug: 'x', name: 'XIcon', category: 'status', searchAlias: 'X' },
+  { slug: 'x-circle', name: 'XCircleIcon', category: 'status', searchAlias: 'XCircle' },
+  { slug: 'alert-circle', name: 'AlertCircleIcon', category: 'status', searchAlias: 'AlertCircle' },
+  { slug: 'alert-triangle', name: 'AlertTriangleIcon', category: 'status', searchAlias: 'AlertTriangle' },
+  { slug: 'alert-octagon', name: 'AlertOctagonIcon', category: 'status', searchAlias: 'AlertOctagon' },
+  { slug: 'info', name: 'InfoIcon', category: 'status', searchAlias: 'Info' },
+  { slug: 'ban', name: 'BanIcon', category: 'status', searchAlias: 'Ban' },
+  { slug: 'loader-circle', name: 'LoaderCircleIcon', category: 'status', searchAlias: 'LoaderCircle' },
+  { slug: 'circle-alert', name: 'CircleAlertIcon', category: 'status', searchAlias: 'CircleAlert' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -94,13 +95,13 @@ const status: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const content: IconEntry[] = [
-  { slug: 'file-text', name: 'FileTextIcon', category: 'content', lucideSource: 'FileText' },
-  { slug: 'file-down', name: 'FileDownIcon', category: 'content', lucideSource: 'FileDown' },
-  { slug: 'folder', name: 'FolderIcon', category: 'content', lucideSource: 'Folder' },
-  { slug: 'braces', name: 'BracesIcon', category: 'content', lucideSource: 'Braces' },
-  { slug: 'bookmark-plus', name: 'BookmarkPlusIcon', category: 'content', lucideSource: 'BookmarkPlus' },
-  { slug: 'bookmark', name: 'BookmarkIcon', category: 'content', lucideSource: 'Bookmark' },
-  { slug: 'image', name: 'ImageIcon', category: 'content', lucideSource: 'Image' },
+  { slug: 'file-text', name: 'FileTextIcon', category: 'content', searchAlias: 'FileText' },
+  { slug: 'file-down', name: 'FileDownIcon', category: 'content', searchAlias: 'FileDown' },
+  { slug: 'folder', name: 'FolderIcon', category: 'content', searchAlias: 'Folder' },
+  { slug: 'braces', name: 'BracesIcon', category: 'content', searchAlias: 'Braces' },
+  { slug: 'bookmark-plus', name: 'BookmarkPlusIcon', category: 'content', searchAlias: 'BookmarkPlus' },
+  { slug: 'bookmark', name: 'BookmarkIcon', category: 'content', searchAlias: 'Bookmark' },
+  { slug: 'image', name: 'ImageIcon', category: 'content', searchAlias: 'Image' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -108,12 +109,12 @@ const content: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const communication: IconEntry[] = [
-  { slug: 'mail', name: 'MailIcon', category: 'communication', lucideSource: 'Mail' },
-  { slug: 'message-square', name: 'MessageSquareIcon', category: 'communication', lucideSource: 'MessageSquare' },
-  { slug: 'bell', name: 'BellIcon', category: 'communication', lucideSource: 'Bell' },
-  { slug: 'phone', name: 'PhoneIcon', category: 'communication', lucideSource: 'Phone' },
-  { slug: 'inbox', name: 'InboxIcon', category: 'communication', lucideSource: 'Inbox' },
-  { slug: 'send-message', name: 'SendMessageIcon', category: 'communication', lucideSource: 'Send' },
+  { slug: 'mail', name: 'MailIcon', category: 'communication', searchAlias: 'Mail' },
+  { slug: 'message-square', name: 'MessageSquareIcon', category: 'communication', searchAlias: 'MessageSquare' },
+  { slug: 'bell', name: 'BellIcon', category: 'communication', searchAlias: 'Bell' },
+  { slug: 'phone', name: 'PhoneIcon', category: 'communication', searchAlias: 'Phone' },
+  { slug: 'inbox', name: 'InboxIcon', category: 'communication', searchAlias: 'Inbox' },
+  { slug: 'send-message', name: 'SendMessageIcon', category: 'communication', searchAlias: 'Send' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -121,20 +122,20 @@ const communication: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const user: IconEntry[] = [
-  { slug: 'user', name: 'UserIcon', category: 'user', lucideSource: 'User' },
-  { slug: 'users', name: 'UsersIcon', category: 'user', lucideSource: 'Users' },
-  { slug: 'user-check', name: 'UserCheckIcon', category: 'user', lucideSource: 'UserCheck' },
-  { slug: 'user-x', name: 'UserXIcon', category: 'user', lucideSource: 'UserX' },
-  { slug: 'user-minus', name: 'UserMinusIcon', category: 'user', lucideSource: 'UserMinus' },
-  { slug: 'settings', name: 'SettingsIcon', category: 'user', lucideSource: 'Settings' },
-  { slug: 'settings-2', name: 'Settings2Icon', category: 'user', lucideSource: 'Settings2' },
-  { slug: 'shield', name: 'ShieldIcon', category: 'user', lucideSource: 'Shield' },
-  { slug: 'shield-check', name: 'ShieldCheckIcon', category: 'user', lucideSource: 'ShieldCheck' },
-  { slug: 'lock', name: 'LockIcon', category: 'user', lucideSource: 'Lock' },
-  { slug: 'key', name: 'KeyIcon', category: 'user', lucideSource: 'Key' },
-  { slug: 'key-round', name: 'KeyRoundIcon', category: 'user', lucideSource: 'KeyRound' },
-  { slug: 'fingerprint', name: 'FingerprintIcon', category: 'user', lucideSource: 'Fingerprint' },
-  { slug: 'log-out', name: 'LogOutIcon', category: 'user', lucideSource: 'LogOut' },
+  { slug: 'user', name: 'UserIcon', category: 'user', searchAlias: 'User' },
+  { slug: 'users', name: 'UsersIcon', category: 'user', searchAlias: 'Users' },
+  { slug: 'user-check', name: 'UserCheckIcon', category: 'user', searchAlias: 'UserCheck' },
+  { slug: 'user-x', name: 'UserXIcon', category: 'user', searchAlias: 'UserX' },
+  { slug: 'user-minus', name: 'UserMinusIcon', category: 'user', searchAlias: 'UserMinus' },
+  { slug: 'settings', name: 'SettingsIcon', category: 'user', searchAlias: 'Settings' },
+  { slug: 'settings-2', name: 'Settings2Icon', category: 'user', searchAlias: 'Settings2' },
+  { slug: 'shield', name: 'ShieldIcon', category: 'user', searchAlias: 'Shield' },
+  { slug: 'shield-check', name: 'ShieldCheckIcon', category: 'user', searchAlias: 'ShieldCheck' },
+  { slug: 'lock', name: 'LockIcon', category: 'user', searchAlias: 'Lock' },
+  { slug: 'key', name: 'KeyIcon', category: 'user', searchAlias: 'Key' },
+  { slug: 'key-round', name: 'KeyRoundIcon', category: 'user', searchAlias: 'KeyRound' },
+  { slug: 'fingerprint', name: 'FingerprintIcon', category: 'user', searchAlias: 'Fingerprint' },
+  { slug: 'log-out', name: 'LogOutIcon', category: 'user', searchAlias: 'LogOut' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -142,16 +143,16 @@ const user: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const dataIcons: IconEntry[] = [
-  { slug: 'bar-chart', name: 'BarChart3Icon', category: 'data', lucideSource: 'BarChart3' },
-  { slug: 'trending-up', name: 'TrendingUpIcon', category: 'data', lucideSource: 'TrendingUp' },
-  { slug: 'trending-down', name: 'TrendingDownIcon', category: 'data', lucideSource: 'TrendingDown' },
-  { slug: 'activity', name: 'ActivityIcon', category: 'data', lucideSource: 'Activity' },
-  { slug: 'database', name: 'DatabaseIcon', category: 'data', lucideSource: 'Database' },
-  { slug: 'search', name: 'SearchIcon', category: 'data', lucideSource: 'Search' },
-  { slug: 'filter', name: 'FilterIcon', category: 'data', lucideSource: 'Filter' },
-  { slug: 'sliders', name: 'SlidersHorizontalIcon', category: 'data', lucideSource: 'SlidersHorizontal' },
-  { slug: 'layers', name: 'LayersIcon', category: 'data', lucideSource: 'Layers' },
-  { slug: 'globe', name: 'GlobeIcon', category: 'data', lucideSource: 'Globe' },
+  { slug: 'bar-chart', name: 'BarChart3Icon', category: 'data', searchAlias: 'BarChart3' },
+  { slug: 'trending-up', name: 'TrendingUpIcon', category: 'data', searchAlias: 'TrendingUp' },
+  { slug: 'trending-down', name: 'TrendingDownIcon', category: 'data', searchAlias: 'TrendingDown' },
+  { slug: 'activity', name: 'ActivityIcon', category: 'data', searchAlias: 'Activity' },
+  { slug: 'database', name: 'DatabaseIcon', category: 'data', searchAlias: 'Database' },
+  { slug: 'search', name: 'SearchIcon', category: 'data', searchAlias: 'Search' },
+  { slug: 'filter', name: 'FilterIcon', category: 'data', searchAlias: 'Filter' },
+  { slug: 'sliders', name: 'SlidersHorizontalIcon', category: 'data', searchAlias: 'SlidersHorizontal' },
+  { slug: 'layers', name: 'LayersIcon', category: 'data', searchAlias: 'Layers' },
+  { slug: 'globe', name: 'GlobeIcon', category: 'data', searchAlias: 'Globe' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -159,16 +160,16 @@ const dataIcons: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const layoutIcons: IconEntry[] = [
-  { slug: 'list', name: 'ListIcon', category: 'layout', lucideSource: 'List' },
-  { slug: 'layout-grid', name: 'LayoutGridIcon', category: 'layout', lucideSource: 'LayoutGrid' },
-  { slug: 'grid-3x3', name: 'Grid3x3Icon', category: 'layout', lucideSource: 'Grid3x3' },
-  { slug: 'columns-3', name: 'Columns3Icon', category: 'layout', lucideSource: 'Columns3' },
-  { slug: 'calendar', name: 'CalendarIcon', category: 'layout', lucideSource: 'Calendar' },
-  { slug: 'calendar-days', name: 'CalendarDaysIcon', category: 'layout', lucideSource: 'CalendarDays' },
-  { slug: 'align-justify', name: 'AlignJustifyIcon', category: 'layout', lucideSource: 'AlignJustify' },
-  { slug: 'align-center', name: 'AlignCenterIcon', category: 'layout', lucideSource: 'AlignCenter' },
-  { slug: 'align-left', name: 'AlignLeftIcon', category: 'layout', lucideSource: 'AlignLeft' },
-  { slug: 'layout-template', name: 'LayoutTemplateIcon', category: 'layout', lucideSource: 'LayoutTemplate' },
+  { slug: 'list', name: 'ListIcon', category: 'layout', searchAlias: 'List' },
+  { slug: 'layout-grid', name: 'LayoutGridIcon', category: 'layout', searchAlias: 'LayoutGrid' },
+  { slug: 'grid-3x3', name: 'Grid3x3Icon', category: 'layout', searchAlias: 'Grid3x3' },
+  { slug: 'columns-3', name: 'Columns3Icon', category: 'layout', searchAlias: 'Columns3' },
+  { slug: 'calendar', name: 'CalendarIcon', category: 'layout', searchAlias: 'Calendar' },
+  { slug: 'calendar-days', name: 'CalendarDaysIcon', category: 'layout', searchAlias: 'CalendarDays' },
+  { slug: 'align-justify', name: 'AlignJustifyIcon', category: 'layout', searchAlias: 'AlignJustify' },
+  { slug: 'align-center', name: 'AlignCenterIcon', category: 'layout', searchAlias: 'AlignCenter' },
+  { slug: 'align-left', name: 'AlignLeftIcon', category: 'layout', searchAlias: 'AlignLeft' },
+  { slug: 'layout-template', name: 'LayoutTemplateIcon', category: 'layout', searchAlias: 'LayoutTemplate' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -176,15 +177,15 @@ const layoutIcons: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const media: IconEntry[] = [
-  { slug: 'eye', name: 'EyeIcon', category: 'media', lucideSource: 'Eye' },
-  { slug: 'eye-off', name: 'EyeOffIcon', category: 'media', lucideSource: 'EyeOff' },
-  { slug: 'star', name: 'StarIcon', category: 'media', lucideSource: 'Star' },
-  { slug: 'zap', name: 'ZapIcon', category: 'media', lucideSource: 'Zap' },
-  { slug: 'sparkles', name: 'SparklesIcon', category: 'media', lucideSource: 'Sparkles' },
-  { slug: 'mic', name: 'MicIcon', category: 'media', lucideSource: 'Mic' },
-  { slug: 'mic-off', name: 'MicOffIcon', category: 'media', lucideSource: 'MicOff' },
-  { slug: 'audio-lines', name: 'AudioLinesIcon', category: 'media', lucideSource: 'AudioLines' },
-  { slug: 'camera', name: 'CameraIcon', category: 'media', lucideSource: 'Camera' },
+  { slug: 'eye', name: 'EyeIcon', category: 'media', searchAlias: 'Eye' },
+  { slug: 'eye-off', name: 'EyeOffIcon', category: 'media', searchAlias: 'EyeOff' },
+  { slug: 'star', name: 'StarIcon', category: 'media', searchAlias: 'Star' },
+  { slug: 'zap', name: 'ZapIcon', category: 'media', searchAlias: 'Zap' },
+  { slug: 'sparkles', name: 'SparklesIcon', category: 'media', searchAlias: 'Sparkles' },
+  { slug: 'mic', name: 'MicIcon', category: 'media', searchAlias: 'Mic' },
+  { slug: 'mic-off', name: 'MicOffIcon', category: 'media', searchAlias: 'MicOff' },
+  { slug: 'audio-lines', name: 'AudioLinesIcon', category: 'media', searchAlias: 'AudioLines' },
+  { slug: 'camera', name: 'CameraIcon', category: 'media', searchAlias: 'Camera' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -192,17 +193,17 @@ const media: IconEntry[] = [
 // ---------------------------------------------------------------------------
 
 const misc: IconEntry[] = [
-  { slug: 'briefcase', name: 'BriefcaseIcon', category: 'misc', lucideSource: 'Briefcase' },
-  { slug: 'building', name: 'Building2Icon', category: 'misc', lucideSource: 'Building2' },
-  { slug: 'keyboard', name: 'KeyboardIcon', category: 'misc', lucideSource: 'Keyboard' },
-  { slug: 'clock', name: 'ClockIcon', category: 'misc', lucideSource: 'Clock' },
-  { slug: 'loader', name: 'Loader2Icon', category: 'misc', lucideSource: 'Loader2' },
-  { slug: 'flag', name: 'FlagIcon', category: 'misc', lucideSource: 'Flag' },
-  { slug: 'rocket', name: 'RocketIcon', category: 'misc', lucideSource: 'Rocket' },
-  { slug: 'grip-vertical', name: 'GripVerticalIcon', category: 'misc', lucideSource: 'GripVertical' },
-  { slug: 'pin', name: 'PinIcon', category: 'misc', lucideSource: 'Pin' },
-  { slug: 'pin-off', name: 'PinOffIcon', category: 'misc', lucideSource: 'PinOff' },
-  { slug: 'git-compare', name: 'GitCompareIcon', category: 'misc', lucideSource: 'GitCompare' },
+  { slug: 'briefcase', name: 'BriefcaseIcon', category: 'misc', searchAlias: 'Briefcase' },
+  { slug: 'building', name: 'Building2Icon', category: 'misc', searchAlias: 'Building2' },
+  { slug: 'keyboard', name: 'KeyboardIcon', category: 'misc', searchAlias: 'Keyboard' },
+  { slug: 'clock', name: 'ClockIcon', category: 'misc', searchAlias: 'Clock' },
+  { slug: 'loader', name: 'Loader2Icon', category: 'misc', searchAlias: 'Loader2' },
+  { slug: 'flag', name: 'FlagIcon', category: 'misc', searchAlias: 'Flag' },
+  { slug: 'rocket', name: 'RocketIcon', category: 'misc', searchAlias: 'Rocket' },
+  { slug: 'grip-vertical', name: 'GripVerticalIcon', category: 'misc', searchAlias: 'GripVertical' },
+  { slug: 'pin', name: 'PinIcon', category: 'misc', searchAlias: 'Pin' },
+  { slug: 'pin-off', name: 'PinOffIcon', category: 'misc', searchAlias: 'PinOff' },
+  { slug: 'git-compare', name: 'GitCompareIcon', category: 'misc', searchAlias: 'GitCompare' },
 ];
 
 // ---------------------------------------------------------------------------

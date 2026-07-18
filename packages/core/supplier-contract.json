@@ -463,7 +463,6 @@
         "Switch",
         "SystemCssVariablesBridge",
         "TAGINPUT_DEFAULTS",
-        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
@@ -479,7 +478,6 @@
         "TONE_TO_BADGE_VARIANT",
         "TONE_TO_CALLOUT_VARIANT",
         "TONE_TO_TAG_VARIANT",
-        "TORTURE_PROBE_VARS",
         "TOUR_DEFAULTS",
         "TRANSFER_DEFAULTS",
         "TREESELECT_DEFAULTS",
@@ -715,14 +713,11 @@
         "startDsViewTransition",
         "stringifySurfaceValue",
         "tenantThemeArtifactRootAttributes",
-        "themanagementmiamiBrandTheme",
         "toBreakpoint",
         "toLegacySize",
         "toOperatorDefinition",
         "toSupportedLocale",
         "toast",
-        "tortureDarkBrandTheme",
-        "tortureLightBrandTheme",
         "triggerDownload",
         "unregisterCustomComponent",
         "unregisterSkinPack",
@@ -839,35 +834,35 @@
           "antd"
         ],
         "ActiveFiltersBar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ActivityCards": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ActivityCompact": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ActivitySurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "ActivityTicker": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ActivityTimeline": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "AdaptiveOverlay": [
@@ -899,20 +894,20 @@
           "motion"
         ],
         "AssistantStatusBadge": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "AssistantStatusIndicator": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "AuditSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Aurora": [
@@ -920,8 +915,8 @@
           "motion"
         ],
         "AuthSurface": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "AutoComplete": [
@@ -943,9 +938,9 @@
         ],
         "BillingSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "BottomTabBar": [
@@ -955,13 +950,13 @@
           "antd"
         ],
         "buildViewModes": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "BulkSelectToggle": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "BulletChart": [
@@ -991,9 +986,9 @@
         ],
         "ChatSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Checkbox": [
@@ -1003,35 +998,35 @@
           "antd"
         ],
         "CollectionHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "CollectionWorkspace": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "CollectionWorkspaceSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "ColorPicker": [
           "antd"
         ],
         "ColumnMenu": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ColumnSettingsDropdown": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "CommandCenterSurface": [
@@ -1040,14 +1035,14 @@
         ],
         "CompareSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "ConfirmActionCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ConfirmDialog": [
@@ -1061,55 +1056,55 @@
           "motion"
         ],
         "CopyToCheck": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CountUp": [
           "antd",
           "motion"
         ],
         "DashboardHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "DashboardSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "DataTerminalCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "DataTerminalCardProvider": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "DataTerminalStat": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "DatePicker": [
           "antd"
         ],
         "DecisionInboxSurface": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "defaultViewModeIcons": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "defaultViewModeLabels": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Descriptions": [
@@ -1121,21 +1116,21 @@
         ],
         "DetailFormSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "DetailHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "DetailSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Divider": [
@@ -1151,15 +1146,15 @@
         ],
         "EditHeader": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "EditorSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Empty": [
@@ -1167,14 +1162,14 @@
         ],
         "EmptyStateSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "ExportButton": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "FadeIn": [
@@ -1182,15 +1177,15 @@
           "motion"
         ],
         "FieldFiltersPanel": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "FileBrowserSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Flex": [
@@ -1203,28 +1198,28 @@
           "antd"
         ],
         "FormFactsCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "FormField": [
           "antd"
         ],
         "FormHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "FormSections": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "FormSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "FunnelChart": [
@@ -1255,13 +1250,13 @@
           "motion"
         ],
         "GuidedDraftFormSurface": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "HeaderSurface": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Heading": [
@@ -1285,47 +1280,47 @@
         ],
         "ImportExportSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "inferSharedHeaderActionKind": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "InlineEditControl": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "InlineEditField": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "InlineEditFooter": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "InlineEditGrid": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "InlineEditor": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "InlineEditorGroup": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "InlineEditSection": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Input": [
@@ -1336,16 +1331,16 @@
         ],
         "IntegrationSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "KanbanSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Layout": [
@@ -1364,24 +1359,24 @@
         ],
         "ListSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "ListToolbar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "LiveCursor": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "LoadingOverlay": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Magnetic": [
@@ -1389,15 +1384,15 @@
           "motion"
         ],
         "MarketingSurface": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "MediaSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Mentions": [
@@ -1410,8 +1405,8 @@
           "antd"
         ],
         "MessageBubble": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "MessageItem": [
@@ -1421,23 +1416,23 @@
           "antd"
         ],
         "MetricsCards": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "MetricsChart": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "MetricsMinimal": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "MetricsRows": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "MobileHeader": [
@@ -1447,8 +1442,8 @@
           "antd"
         ],
         "MoreFieldsToggle": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Morph": [
@@ -1480,16 +1475,16 @@
         ],
         "NotificationSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "OperationalSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "OverlayModal": [
@@ -1498,9 +1493,9 @@
         ],
         "PageShellSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Pagination": [
@@ -1526,8 +1521,8 @@
           "antd"
         ],
         "PatternApprovalInbox": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternApprovalWorkflow": [
@@ -1535,21 +1530,21 @@
           "antd"
         ],
         "PatternBrandStudio": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternCalendarView": [
           "antd"
         ],
         "PatternCockpitHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternColumnSettings": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternCommandPalette": [
@@ -1560,8 +1555,8 @@
           "antd"
         ],
         "PatternDataTable": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternDetailPanel": [
@@ -1584,20 +1579,20 @@
           "antd"
         ],
         "PatternFilterPanel": [
-          "antd",
-          "lucide-react"
+          "@phosphor-icons/react",
+          "antd"
         ],
         "PatternFormBuilder": [
           "antd"
         ],
         "PatternGalleryView": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternGridView": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternInvoiceTemplate": [
@@ -1610,8 +1605,8 @@
           "motion"
         ],
         "PatternListToolbar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternLiveFeed": [
@@ -1626,8 +1621,8 @@
           "antd"
         ],
         "PatternModerationGallery": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternNotificationCenter": [
@@ -1635,8 +1630,8 @@
           "antd"
         ],
         "PatternOperationalLedger": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternPageShell": [
@@ -1652,8 +1647,8 @@
           "antd"
         ],
         "PatternShiftMatrix": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternShortcutsOverlay": [
@@ -1678,8 +1673,8 @@
           "antd"
         ],
         "PatternWorkbenchHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PatternWorkspaceSwitcher": [
@@ -1698,45 +1693,45 @@
           "antd"
         ],
         "PremiumFormFactsCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PremiumFormSections": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Presence": [
           "motion"
         ],
         "PresenceBar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PresenceTypingIndicator": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PreviewDiffCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "PricingSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "ProfileSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Progress": [
@@ -1757,28 +1752,28 @@
           "antd"
         ],
         "RecordActionBar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "RecordField": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "RecordFieldGrid": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "RecordPanel": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "RecordSummaryStrip": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "recordTransitionName": [
@@ -1789,22 +1784,22 @@
         ],
         "ReportSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "resolveListCardMinWidth": [
           "antd"
         ],
         "resolveSharedHeaderActionIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "resolveSharedHeaderActionTooltip": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "resolveSharedHeaderActionVariant": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "resolveSurfaceTabsType": [
           "antd"
@@ -1818,8 +1813,8 @@
           "motion"
         ],
         "SavedViewsMenu": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ScaleIn": [
@@ -1833,14 +1828,14 @@
         ],
         "SchedulerSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "ScopeSwitcher": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "ScrollReveal": [
@@ -1848,15 +1843,15 @@
           "motion"
         ],
         "SearchCommandBar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SearchSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Segmented": [
@@ -1866,15 +1861,15 @@
           "antd"
         ],
         "SelectionPreviewRail": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SettingsSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Sheet": [
@@ -1885,8 +1880,8 @@
           "motion"
         ],
         "SidebarSurface": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Skeleton": [
@@ -1925,18 +1920,18 @@
           "motion"
         ],
         "Statistic": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "StatsHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "StatusFilterPills": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Stepper": [
@@ -1946,86 +1941,86 @@
           "antd"
         ],
         "StreamingText": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceActionFooter": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceCapabilityAnatomy": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "SurfaceEmptyState": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "SurfaceEmptyStateCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceErrorState": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "SurfaceErrorStateCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceFieldGrid": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceLoadingSkeleton": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceLoadingState": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "SurfaceOfflineBanner": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfacePanel": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceReadField": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceStaleBanner": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "SurfaceSummaryStrip": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Switch": [
@@ -2038,8 +2033,8 @@
           "antd"
         ],
         "TableToolbar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Tabs": [
@@ -2053,9 +2048,9 @@
         ],
         "TeamSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "Text": [
@@ -2086,8 +2081,8 @@
           "antd"
         ],
         "ToolCallCard": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Tooltip": [
@@ -2111,8 +2106,8 @@
           "antd"
         ],
         "TypingIndicator": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "Typography": [
@@ -2192,20 +2187,20 @@
           "motion"
         ],
         "ViewModeSwitcher": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "VisualizationSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "VoiceInputButton": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WaterfallChart": [
@@ -2218,52 +2213,52 @@
         ],
         "WizardSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "d3",
-          "lucide-react",
           "motion"
         ],
         "WorkspaceAdvancedFilters": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WorkspaceColumnsMenu": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WorkspaceCommandBar": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WorkspaceFilterRail": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WorkspaceHeader": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WorkspacePreviewRail": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WorkspaceScopes": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ],
         "WorkspaceShell": [
           "motion"
         ],
         "WorkspaceViewsMenu": [
+          "@phosphor-icons/react",
           "antd",
-          "lucide-react",
           "motion"
         ]
       },
@@ -2445,7 +2440,6 @@
         "StepperStep",
         "SurfaceErrorBoundary",
         "TAGINPUT_DEFAULTS",
-        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
@@ -2461,7 +2455,6 @@
         "TONE_TO_BADGE_VARIANT",
         "TONE_TO_CALLOUT_VARIANT",
         "TONE_TO_TAG_VARIANT",
-        "TORTURE_PROBE_VARS",
         "TOUR_DEFAULTS",
         "TRANSFER_DEFAULTS",
         "TREESELECT_DEFAULTS",
@@ -2644,14 +2637,11 @@
         "sha256TenantThemeValue",
         "stringifySurfaceValue",
         "tenantThemeArtifactRootAttributes",
-        "themanagementmiamiBrandTheme",
         "toBreakpoint",
         "toLegacySize",
         "toOperatorDefinition",
         "toSupportedLocale",
         "toast",
-        "tortureDarkBrandTheme",
-        "tortureLightBrandTheme",
         "triggerDownload",
         "unregisterCustomComponent",
         "unregisterSkinPack",
@@ -2745,7 +2735,6 @@
     "./server": {
       "exports": [
         "DEFAULT_TENANT_SLUG",
-        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
@@ -2782,7 +2771,6 @@
       "symbols": {},
       "supplierFreeExports": [
         "DEFAULT_TENANT_SLUG",
-        "TENANT_PRESENTATION_PROFILE_IDS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
         "TENANT_THEME_CONFIG_V1_SCHEMA",
@@ -3161,991 +3149,991 @@
       ],
       "symbols": {
         "AccessibilityIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ActivityIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AlertCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AlertOctagonIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AlertTriangleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AlignCenterIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AlignJustifyIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AlignLeftIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArchiveIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowDownIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowDownLeftIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowDownRightIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowLeftIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowLeftRightIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowRightIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowUpDownIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowUpIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ArrowUpRightIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AudioLinesIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AudioWaveformIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "AwardIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BadgeCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BadgeDollarSignIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BanIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BarChart3Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BarcodeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BellIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BellOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BookmarkIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BookmarkPlusIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BookOpenIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BotIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BoxesIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BracesIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BrainCircuitIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BrainIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BriefcaseBusinessIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BriefcaseIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Building2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "BuildingIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CalculatorIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CalendarCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CalendarClockIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CalendarDaysIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CalendarIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CalendarPlusIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CameraIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ChartNoAxesColumnIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CheckCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CheckCircle2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CheckCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CheckSquareIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ChefHatIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ChevronDownIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ChevronLeftIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ChevronRightIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ChevronUpIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ChromeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CircleAlertIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CircleDashedIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CircleDollarSignIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CircleDotIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CircuitBoardIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ClipboardCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ClipboardCopyIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ClipboardIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ClipboardListIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Clock3Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ClockIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Code2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CodeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CoffeeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CoinsIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Columns3Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CommandIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CompassIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CopyIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CpuIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CreditCardIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CrosshairIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "CrownIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "DatabaseIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "DollarSignIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "DotIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "DownloadIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "DramaIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Edit2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Edit3Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "EditIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ExternalLinkIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "EyeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "EyeOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileAudioIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileCheck2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileCodeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileDownIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileEditIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FilePenLineIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FilePlus2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileQuestionIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileSearchIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileSignatureIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileStackIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileTextIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileTypeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FileWarningIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FilterIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FingerprintIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FlagIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FlameIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FlaskConicalIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FolderIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FolderOpenIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FolderTreeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "FunnelIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GaugeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GemIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GiftIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GitBranchIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GitCompareIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GithubIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Globe2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GlobeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GraduationCapIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Grid3x3Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GridIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "GripVerticalIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HandIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HandshakeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HashIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HeadphonesIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HeartHandshakeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HeartIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HelpCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HighlighterIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HistoryIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "HomeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Icon": [
           "@phosphor-icons/react"
         ],
         "ImageIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ImageOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "InboxIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "InfinityIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "InfoIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "InstagramIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "KanbanIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "KeyboardIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "KeyIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "KeyRoundIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LandmarkIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LanguagesIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Layers3Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LayersIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LayoutDashboardIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LayoutGridIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LayoutIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LayoutListIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LayoutTemplateIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LightbulbIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LineChartIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Link2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LinkedinIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LinkIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ListChecksIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ListFilterIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ListIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Loader2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LoaderCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LockIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LockKeyholeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "LogOutIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MailIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MailOpenIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MapPinIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Maximize2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MedalIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MegaphoneIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MenuIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MessageCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MessageSquareIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MessageSquarePlusIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MessageSquareQuoteIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MessageSquareTextIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MessageSquareWarningIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Mic2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MicIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MicOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MicVocalIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Minimize2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MinusCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MinusIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MonitorIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MonitorSmartphoneIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MoreHorizontalIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MoreVerticalIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MoveIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "MusicIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "NavigationIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PackageCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PackageIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PackageSearchIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PaletteIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PalmtreeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PanelLeftCloseIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PanelLeftOpenIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PanelRightCloseIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PaperclipIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PauseCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PauseIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PencilIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PencilLineIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PercentIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PhoneCallIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PhoneIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PhoneIncomingIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PhoneOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PieChartIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PinIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PinOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PlaneIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PlayCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PlayIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PlugIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PlusCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PlusIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PowerIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PowerOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "PrinterIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "QrCodeIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "QuoteIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RadarIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RadioIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RadioTowerIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ReceiptIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ReceiptTextIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RefreshCcwIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RefreshCwIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Repeat2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RepeatIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ReplyIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RocketIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RotateCcwIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RotateCwIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "RouteIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SaveIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ScaleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ScanFaceIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ScanLineIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ScanSearchIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SearchIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SearchXIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SendIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SendMessageIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ServerIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Settings2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SettingsIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Share2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShieldAlertIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShieldCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShieldIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShieldOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShieldXIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShoppingBagIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShoppingCartIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ShuffleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SignalHighIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SkipBackIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SkipForwardIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SlidersHorizontalIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SmartphoneIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SparklesIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "SquareIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "StarIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "StickyNoteIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "StoreIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Table2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TabletIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TagIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TagsIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TargetIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ThumbsDownIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ThumbsUpIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TicketIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TimerIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TimerResetIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ToggleLeftIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ToggleRightIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Trash2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TrendingDownIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TrendingUpIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TrophyIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TruckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "TwitterIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Undo2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UnlockIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UnplugIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UploadIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserCogIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserMinusIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserPlusIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserRoundCheckIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserRoundIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UsersIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UsersRoundIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UserXIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "UtensilsCrossedIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "VariableIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "VideoIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Volume2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "VolumeXIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "VoteIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WalletCardsIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WalletIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "Wand2Icon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WarehouseIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WebhookIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WifiIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WifiOffIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WineIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WorkflowIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "WrenchIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "XCircleIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "XIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ],
         "ZapIcon": [
-          "lucide-react"
+          "@phosphor-icons/react"
         ]
       },
       "wildcard": [
@@ -5670,15 +5658,28 @@
     "./charts/renderers": {
       "exports": [
         "SvgBarRenderer",
+        "SvgFunnelRenderer",
+        "SvgGaugeRenderer",
         "SvgHeatMapRenderer",
         "SvgLineRenderer",
         "SvgPieRenderer",
+        "SvgRadarRenderer",
         "SvgScatterRenderer",
         "createSvgLineDatumKey"
       ],
       "symbols": {
         "SvgBarRenderer": [
           "d3"
+        ],
+        "SvgFunnelRenderer": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "SvgGaugeRenderer": [
+          "antd",
+          "d3",
+          "motion"
         ],
         "SvgHeatMapRenderer": [
           "d3"
@@ -5688,6 +5689,11 @@
         ],
         "SvgPieRenderer": [
           "d3"
+        ],
+        "SvgRadarRenderer": [
+          "antd",
+          "d3",
+          "motion"
         ],
         "SvgScatterRenderer": [
           "d3"

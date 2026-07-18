@@ -17,13 +17,13 @@ test('generated role wildcard resolves to one exact public component in ESM and 
   assert.deepEqual(Object.keys(cjs).sort(), ['ActionAddIcon']);
 });
 
-test('BitHire preset is bounded to its exact 46-role application inventory', async () => {
+test('BitHire preset is bounded to its exact 104-role application inventory', async () => {
   const esm = await import(PRESET_SUBPATH);
   const cjs = require(PRESET_SUBPATH);
-  assert.equal(esm.BITHIRE_PRESET_ICON_NAMES.length, 46);
-  assert.equal(cjs.BITHIRE_PRESET_ICON_NAMES.length, 46);
+  assert.equal(esm.BITHIRE_PRESET_ICON_NAMES.length, 104);
+  assert.equal(cjs.BITHIRE_PRESET_ICON_NAMES.length, 104);
   assert.deepEqual(esm.BITHIRE_PRESET_ICON_NAMES, cjs.BITHIRE_PRESET_ICON_NAMES);
-  assert.equal(new Set(esm.BITHIRE_PRESET_ICON_NAMES).size, 46);
+  assert.equal(new Set(esm.BITHIRE_PRESET_ICON_NAMES).size, 104);
   assert.equal(typeof esm.BitHireIconPreset, 'object');
   assert.equal(typeof cjs.BitHireIconPreset, 'object');
 });

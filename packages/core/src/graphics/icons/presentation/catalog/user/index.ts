@@ -1,48 +1,79 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview User and identity icons - people, auth, security
  */
 
-import {
-  User,
-  Users,
-  UserCheck,
-  UserCog,
-  UserPlus,
-  UserRound,
-  UserRoundCheck,
-  UserX,
-  UserMinus,
-  Settings,
-  Settings2,
-  Shield,
-  ShieldCheck,
-  Lock,
-  Unlock,
-  Key,
-  KeyRound,
-  Fingerprint,
-  LogOut,
-} from 'lucide-react';
-import { createIcon } from '../../../runtime/factory';
+import { UserIcon as User } from "@phosphor-icons/react/dist/ssr/User";
+import { UsersIcon as Users } from "@phosphor-icons/react/dist/ssr/Users";
+import { UserCheckIcon as UserCheck } from "@phosphor-icons/react/dist/ssr/UserCheck";
+import { UserPlusIcon as UserPlus } from "@phosphor-icons/react/dist/ssr/UserPlus";
+import { UserMinusIcon as UserMinus } from "@phosphor-icons/react/dist/ssr/UserMinus";
+import { ShieldIcon as Shield } from "@phosphor-icons/react/dist/ssr/Shield";
+import { ShieldCheckIcon as ShieldCheck } from "@phosphor-icons/react/dist/ssr/ShieldCheck";
+import { LockIcon as Lock } from "@phosphor-icons/react/dist/ssr/Lock";
+import { KeyIcon as Key } from "@phosphor-icons/react/dist/ssr/Key";
+import { FingerprintIcon as Fingerprint } from "@phosphor-icons/react/dist/ssr/Fingerprint";
+import { UserGearIcon as UserCog } from "@phosphor-icons/react/dist/ssr/UserGear";
+import { UserCircleIcon as UserRound } from "@phosphor-icons/react/dist/ssr/UserCircle";
+import { UserCircleCheckIcon as UserRoundCheck } from "@phosphor-icons/react/dist/ssr/UserCircleCheck";
+import { UserMinusIcon as UserX } from "@phosphor-icons/react/dist/ssr/UserMinus";
+import { GearIcon as Settings } from "@phosphor-icons/react/dist/ssr/Gear";
+import { GearSixIcon as Settings2 } from "@phosphor-icons/react/dist/ssr/GearSix";
+import { LockOpenIcon as Unlock } from "@phosphor-icons/react/dist/ssr/LockOpen";
+import { KeyIcon as KeyRound } from "@phosphor-icons/react/dist/ssr/Key";
+import { SignOutIcon as LogOut } from "@phosphor-icons/react/dist/ssr/SignOut";
+import { createPhosphorCompatibilityIcon } from "../../../runtime/factory/phosphor-compat";
 
-export const UserIcon = createIcon(User, 'UserIcon');
-export const UsersIcon = createIcon(Users, 'UsersIcon');
-export const UserCheckIcon = createIcon(UserCheck, 'UserCheckIcon');
-export const UserXIcon = createIcon(UserX, 'UserXIcon');
-export const UserMinusIcon = createIcon(UserMinus, 'UserMinusIcon');
-export const SettingsIcon = createIcon(Settings, 'SettingsIcon');
-export const Settings2Icon = createIcon(Settings2, 'Settings2Icon');
-export const ShieldIcon = createIcon(Shield, 'ShieldIcon');
-export const ShieldCheckIcon = createIcon(ShieldCheck, 'ShieldCheckIcon');
-export const LockIcon = createIcon(Lock, 'LockIcon');
-export const KeyIcon = createIcon(Key, 'KeyIcon');
-export const KeyRoundIcon = createIcon(KeyRound, 'KeyRoundIcon');
-export const FingerprintIcon = createIcon(Fingerprint, 'FingerprintIcon');
-export const LogOutIcon = createIcon(LogOut, 'LogOutIcon');
-export const UserCogIcon = createIcon(UserCog, 'UserCogIcon');
-export const UserPlusIcon = createIcon(UserPlus, 'UserPlusIcon');
-export const UserRoundIcon = createIcon(UserRound, 'UserRoundIcon');
-export const UserRoundCheckIcon = createIcon(UserRoundCheck, 'UserRoundCheckIcon');
-export const UnlockIcon = createIcon(Unlock, 'UnlockIcon');
+export const UserIcon = createPhosphorCompatibilityIcon(User, "UserIcon");
+export const UsersIcon = createPhosphorCompatibilityIcon(Users, "UsersIcon");
+export const UserCheckIcon = createPhosphorCompatibilityIcon(
+  UserCheck,
+  "UserCheckIcon"
+);
+export const UserXIcon = createPhosphorCompatibilityIcon(UserX, "UserXIcon");
+export const UserMinusIcon = createPhosphorCompatibilityIcon(
+  UserMinus,
+  "UserMinusIcon"
+);
+export const SettingsIcon = createPhosphorCompatibilityIcon(
+  Settings,
+  "SettingsIcon"
+);
+export const Settings2Icon = createPhosphorCompatibilityIcon(
+  Settings2,
+  "Settings2Icon"
+);
+export const ShieldIcon = createPhosphorCompatibilityIcon(Shield, "ShieldIcon");
+export const ShieldCheckIcon = createPhosphorCompatibilityIcon(
+  ShieldCheck,
+  "ShieldCheckIcon"
+);
+export const LockIcon = createPhosphorCompatibilityIcon(Lock, "LockIcon");
+export const KeyIcon = createPhosphorCompatibilityIcon(Key, "KeyIcon");
+export const KeyRoundIcon = createPhosphorCompatibilityIcon(
+  KeyRound,
+  "KeyRoundIcon"
+);
+export const FingerprintIcon = createPhosphorCompatibilityIcon(
+  Fingerprint,
+  "FingerprintIcon"
+);
+export const LogOutIcon = createPhosphorCompatibilityIcon(LogOut, "LogOutIcon");
+export const UserCogIcon = createPhosphorCompatibilityIcon(
+  UserCog,
+  "UserCogIcon"
+);
+export const UserPlusIcon = createPhosphorCompatibilityIcon(
+  UserPlus,
+  "UserPlusIcon"
+);
+export const UserRoundIcon = createPhosphorCompatibilityIcon(
+  UserRound,
+  "UserRoundIcon"
+);
+export const UserRoundCheckIcon = createPhosphorCompatibilityIcon(
+  UserRoundCheck,
+  "UserRoundCheckIcon"
+);
+export const UnlockIcon = createPhosphorCompatibilityIcon(Unlock, "UnlockIcon");

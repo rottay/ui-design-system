@@ -41,13 +41,59 @@ function mutateManifest(manifestPath, mutate) {
 test('canonical graphics pack has exhaustive licensed provenance and notice coverage', () => {
   assert.deepEqual(auditGraphicsPackaging(), {
     schemaVersion: 1,
-    providers: 4,
+    providers: 3,
     functionalIcons: 263,
-    brandMarks: 8,
+    functionalIconCompatibilityImports: 330,
+    brandMarks: 9,
     cloudServiceMarks: 4,
     featurePictograms: 8,
     notice: 'THIRD_PARTY_NOTICES.md',
-    archivedLicenses: 3,
+    archivedLicenses: 2,
+  });
+});
+
+test('functional semantic corpus and named compatibility catalog have separate pinned inventories', () => {
+  withManifestFixture(({ manifestPath }) => {
+    mutateManifest(manifestPath, (manifest) => {
+      const catalog = manifest.assetClasses.functionalIcon.compatibilityCatalog;
+      catalog.expectedImportEntries -= 1;
+    });
+    assert.throws(
+      () => auditGraphicsPackaging({ manifestPath }),
+      /functional icon compatibility catalog expected 329 imports, found 330/,
+    );
+  });
+
+  withManifestFixture(({ manifestPath }) => {
+    mutateManifest(manifestPath, (manifest) => {
+      const catalog = manifest.assetClasses.functionalIcon.compatibilityCatalog;
+      catalog.importInventorySha256 = 'f'.repeat(64);
+    });
+    assert.throws(
+      () => auditGraphicsPackaging({ manifestPath }),
+      /functional icon compatibility catalog import inventory hash drifted/,
+    );
+  });
+
+  withManifestFixture(({ manifestPath }) => {
+    mutateManifest(manifestPath, (manifest) => {
+      const functionalIcon = manifest.assetClasses.functionalIcon;
+      functionalIcon.semanticSourceRoot = functionalIcon.compatibilityCatalog.rootPath;
+    });
+    assert.throws(
+      () => auditGraphicsPackaging({ manifestPath }),
+      /functional icon semantic and compatibility source roots must not overlap/,
+    );
+  });
+
+  withManifestFixture(({ manifestPath }) => {
+    mutateManifest(manifestPath, (manifest) => {
+      manifest.assetClasses.functionalIcon.compatibilityCatalog.providers = ['@thesvg/react'];
+    });
+    assert.throws(
+      () => auditGraphicsPackaging({ manifestPath }),
+      /functional icon compatibility catalog imports an undeclared provider/,
+    );
   });
 });
 
@@ -55,7 +101,7 @@ test('packaged supplier imports fail closed without an allowlisted license recor
   withManifestFixture(({ manifestPath }) => {
     mutateManifest(manifestPath, (manifest) => {
       manifest.providers = manifest.providers.filter(
-        ({ packageName }) => packageName !== 'lucide-react',
+        ({ packageName }) => packageName !== '@phosphor-icons/react',
       );
     });
     assert.throws(

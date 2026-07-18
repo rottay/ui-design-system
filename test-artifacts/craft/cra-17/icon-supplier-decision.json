@@ -203,6 +203,14 @@
         ]
       },
       {
+        "id": "optical-capture-integrity",
+        "kind": "machine-capture-manifest",
+        "result": "12 byte-counted and SHA-256-pinned mobile captures account for all 1,920 required role cells; sightedReview remains pending",
+        "paths": [
+          "test-artifacts/craft/cra-17/optical-matrix/capture-manifest.json"
+        ]
+      },
+      {
         "id": "hugeicons-deadline-eligibility",
         "kind": "workspace-manifest-lock-install-and-evidence-scan",
         "result": "No installed or declared Hugeicons Pro package and no verifiable written rights artifact"
@@ -214,7 +222,7 @@
       }
     ],
     "pending": [
-      "1920-cell capture atlas and sighted review",
+      "Human sighted review of the complete 1920-cell capture atlas",
       "12/16/20/24px optical quality and distinctness",
       "classic/modern/rustic, light/dark, mobile, BitHire/The Management visual results",
       "RTL and forced-colors matrix",

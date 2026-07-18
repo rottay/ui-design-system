@@ -85,7 +85,6 @@ export default defineConfig({
         '@ant-design/icons',
         '@thesvg/react',
         'motion',
-        'lucide-react',
         'dayjs',
         // @rottay domain modules (provided by consuming app)
         /^@rottay\/.*/,
@@ -99,7 +98,6 @@ export default defineConfig({
         // breaks packed CJS consumers. Keeping the supplier inside the focused
         // entry avoids exposing that upstream packaging defect while the root
         // entry remains supplier-free because it cannot reach the focused icon entrypoint.
-        /^lucide-react\/.*/,
         /^d3-.*/,
         /^motion\/.*/,
         /^dayjs\/.*/,

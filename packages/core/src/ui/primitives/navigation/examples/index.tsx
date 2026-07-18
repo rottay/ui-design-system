@@ -8,7 +8,14 @@
 import React, { useState } from 'react';
 import { Tabs, Breadcrumb, Pagination } from '..';
 import type { TabItem } from '..';
-import { Home, User, Settings, ChevronRight, FileText, Folder } from 'lucide-react';
+import {
+  ChevronRightIcon as ChevronRight,
+  FileTextIcon as FileText,
+  FolderIcon as Folder,
+  HomeIcon as Home,
+  SettingsIcon as Settings,
+  UserIcon as User,
+} from '../../../../graphics/icons';
 
 type BreadcrumbItems = React.ComponentProps<typeof Breadcrumb>['items'];
 

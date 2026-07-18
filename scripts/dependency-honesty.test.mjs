@@ -829,6 +829,11 @@ test('supplier contract deletion drills fail for AreaChart, CountUp, and the ico
   );
 });
 
+test('supplier contract records CopyToCheck through the pinned Phosphor SSR supplier', () => {
+  const contract = loadSupplierContract();
+  assert.deepEqual(contract.entrypoints['.'].symbols.CopyToCheck, ['@phosphor-icons/react']);
+});
+
 test('runtime contract excludes type-only barrel collisions and includes the CLI subpath', () => {
   const contract = loadSupplierContract();
   assert.equal(contract.entrypoints['.'].exports.includes('BreadcrumbItem'), false);

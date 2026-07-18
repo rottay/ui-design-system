@@ -24,7 +24,12 @@
  */
 
 import { Box, Tooltip } from '../..';
-import { AudioLines, LoaderCircle, Mic, MicOff } from 'lucide-react';
+import {
+  AudioLinesIcon as AudioLines,
+  LoaderCircleIcon as LoaderCircle,
+  MicIcon as Mic,
+  MicOffIcon as MicOff,
+} from '../../../../graphics/icons';
 
 import { useVoiceInput } from '../../../../infrastructure/runtime/application/automation/voice';
 

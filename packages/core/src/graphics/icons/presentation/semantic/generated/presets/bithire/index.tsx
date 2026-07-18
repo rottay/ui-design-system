@@ -2,23 +2,40 @@
 
 import { forwardRef } from 'react';
 import type { SemanticIconComponent, SemanticIconProps } from '../../../../../runtime/semantic/create-icon';
+import { AccessKeyIcon } from '../../roles/access-key';
 import { AccessLoginIcon } from '../../roles/access-login';
+import { AccessLogoutIcon } from '../../roles/access-logout';
+import { ActionAddIcon } from '../../roles/action-add';
+import { ActionArchiveIcon } from '../../roles/action-archive';
 import { ActionCloseIcon } from '../../roles/action-close';
 import { ActionConcealIcon } from '../../roles/action-conceal';
 import { ActionConfirmIcon } from '../../roles/action-confirm';
+import { ActionDownloadIcon } from '../../roles/action-download';
+import { ActionFilterIcon } from '../../roles/action-filter';
+import { ActionOpenExternalIcon } from '../../roles/action-open-external';
 import { ActionPauseIcon } from '../../roles/action-pause';
 import { ActionPlayIcon } from '../../roles/action-play';
 import { ActionRevealIcon } from '../../roles/action-reveal';
 import { ActionSearchIcon } from '../../roles/action-search';
+import { ActionShareIcon } from '../../roles/action-share';
+import { AiAgentIcon } from '../../roles/ai-agent';
 import { AiAssistantIcon } from '../../roles/ai-assistant';
+import { AiComputeIcon } from '../../roles/ai-compute';
+import { AiExperimentIcon } from '../../roles/ai-experiment';
 import { AiFeedbackIcon } from '../../roles/ai-feedback';
 import { AiReasoningIcon } from '../../roles/ai-reasoning';
 import { AiSparklesIcon } from '../../roles/ai-sparkles';
+import { AiSpeechIcon } from '../../roles/ai-speech';
+import { AnalyticsActivityIcon } from '../../roles/analytics-activity';
+import { AnalyticsBarIcon } from '../../roles/analytics-bar';
+import { AnalyticsDashboardIcon } from '../../roles/analytics-dashboard';
 import { AppearanceThemeIcon } from '../../roles/appearance-theme';
 import { AuthPasskeyIcon } from '../../roles/auth-passkey';
 import { AuthPasswordIcon } from '../../roles/auth-password';
 import { AuthSsoIcon } from '../../roles/auth-sso';
+import { BillingCreditCardIcon } from '../../roles/billing-credit-card';
 import { BillingCurrencyIcon } from '../../roles/billing-currency';
+import { BillingReceiptIcon } from '../../roles/billing-receipt';
 import { BillingWalletIcon } from '../../roles/billing-wallet';
 import { BithireCandidateIcon } from '../../roles/bithire-candidate';
 import { BithireEvidenceIcon } from '../../roles/bithire-evidence';
@@ -26,47 +43,105 @@ import { BithireInterviewIcon } from '../../roles/bithire-interview';
 import { BithireJobIcon } from '../../roles/bithire-job';
 import { BithireOfferIcon } from '../../roles/bithire-offer';
 import { BithirePipelineIcon } from '../../roles/bithire-pipeline';
+import { CommerceShippingIcon } from '../../roles/commerce-shipping';
+import { CommunicationCallIcon } from '../../roles/communication-call';
 import { CommunicationEmailIcon } from '../../roles/communication-email';
 import { CommunicationInboxIcon } from '../../roles/communication-inbox';
 import { CommunicationMessageIcon } from '../../roles/communication-message';
+import { CommunicationNotificationIcon } from '../../roles/communication-notification';
+import { CommunicationSendIcon } from '../../roles/communication-send';
 import { CommunicationVoiceIcon } from '../../roles/communication-voice';
+import { ComplianceReviewIcon } from '../../roles/compliance-review';
 import { ConnectivityWebIcon } from '../../roles/connectivity-web';
+import { ContentBookmarkIcon } from '../../roles/content-bookmark';
+import { ContentCodeIcon } from '../../roles/content-code';
+import { ContentDocumentIcon } from '../../roles/content-document';
+import { ContentFileIcon } from '../../roles/content-file';
+import { ContentVideoIcon } from '../../roles/content-video';
 import { DataChartIcon } from '../../roles/data-chart';
+import { DataDatabaseIcon } from '../../roles/data-database';
 import { DataGaugeIcon } from '../../roles/data-gauge';
+import { DataPieChartIcon } from '../../roles/data-pie-chart';
 import { DataTrendIcon } from '../../roles/data-trend';
 import { DeviceDesktopIcon } from '../../roles/device-desktop';
 import { DeviceMobileIcon } from '../../roles/device-mobile';
+import { EntityGroupIcon } from '../../roles/entity-group';
+import { EntityOrganizationIcon } from '../../roles/entity-organization';
+import { EntityPersonIcon } from '../../roles/entity-person';
+import { EntityTaskIcon } from '../../roles/entity-task';
+import { FeedbackHelpIcon } from '../../roles/feedback-help';
+import { IdentityDirectoryIcon } from '../../roles/identity-directory';
+import { IdentityProvisioningIcon } from '../../roles/identity-provisioning';
+import { LayoutColumnsIcon } from '../../roles/layout-columns';
+import { LayoutGridIcon } from '../../roles/layout-grid';
+import { LocationGlobalIcon } from '../../roles/location-global';
 import { NavigationBackIcon } from '../../roles/navigation-back';
+import { NavigationCollapseIcon } from '../../roles/navigation-collapse';
+import { NavigationDownIcon } from '../../roles/navigation-down';
+import { NavigationExpandIcon } from '../../roles/navigation-expand';
 import { NavigationForwardIcon } from '../../roles/navigation-forward';
+import { NavigationHomeIcon } from '../../roles/navigation-home';
 import { NavigationMenuIcon } from '../../roles/navigation-menu';
+import { NavigationMoreIcon } from '../../roles/navigation-more';
+import { NavigationProfileIcon } from '../../roles/navigation-profile';
 import { NavigationRouteIcon } from '../../roles/navigation-route';
+import { NavigationSettingsIcon } from '../../roles/navigation-settings';
+import { NavigationUpIcon } from '../../roles/navigation-up';
+import { OperationsDeploymentIcon } from '../../roles/operations-deployment';
+import { OperationsTargetIcon } from '../../roles/operations-target';
+import { SecurityAlertIcon } from '../../roles/security-alert';
+import { SecurityProtectionIcon } from '../../roles/security-protection';
 import { SecurityScanIcon } from '../../roles/security-scan';
 import { StatusErrorIcon } from '../../roles/status-error';
+import { StatusInfoIcon } from '../../roles/status-info';
 import { StatusLiveIcon } from '../../roles/status-live';
 import { StatusLoadingIcon } from '../../roles/status-loading';
 import { StatusSecureIcon } from '../../roles/status-secure';
 import { StatusSuccessIcon } from '../../roles/status-success';
+import { StatusVerifiedIcon } from '../../roles/status-verified';
 import { StatusWarningIcon } from '../../roles/status-warning';
+import { SystemAutomationIcon } from '../../roles/system-automation';
+import { SystemWorkflowIcon } from '../../roles/system-workflow';
 import { TimeDateIcon } from '../../roles/time-date';
+import { TimeScheduleIcon } from '../../roles/time-schedule';
+import { TimeTimestampIcon } from '../../roles/time-timestamp';
+import { WorkflowWebhookIcon } from '../../roles/workflow-webhook';
 
 export const BITHIRE_PRESET_ICON_NAMES = [
+  "access.key",
   "access.login",
+  "access.logout",
+  "action.add",
+  "action.archive",
   "action.close",
   "action.conceal",
   "action.confirm",
+  "action.download",
+  "action.filter",
+  "action.open-external",
   "action.pause",
   "action.play",
   "action.reveal",
   "action.search",
+  "action.share",
+  "ai.agent",
   "ai.assistant",
+  "ai.compute",
+  "ai.experiment",
   "ai.feedback",
   "ai.reasoning",
   "ai.sparkles",
+  "ai.speech",
+  "analytics.activity",
+  "analytics.bar",
+  "analytics.dashboard",
   "appearance.theme",
   "auth.passkey",
   "auth.password",
   "auth.sso",
+  "billing.credit-card",
   "billing.currency",
+  "billing.receipt",
   "billing.wallet",
   "bithire.candidate",
   "bithire.evidence",
@@ -74,28 +149,69 @@ export const BITHIRE_PRESET_ICON_NAMES = [
   "bithire.job",
   "bithire.offer",
   "bithire.pipeline",
+  "commerce.shipping",
+  "communication.call",
   "communication.email",
   "communication.inbox",
   "communication.message",
+  "communication.notification",
+  "communication.send",
   "communication.voice",
+  "compliance.review",
   "connectivity.web",
+  "content.bookmark",
+  "content.code",
+  "content.document",
+  "content.file",
+  "content.video",
   "data.chart",
+  "data.database",
   "data.gauge",
+  "data.pie-chart",
   "data.trend",
   "device.desktop",
   "device.mobile",
+  "entity.group",
+  "entity.organization",
+  "entity.person",
+  "entity.task",
+  "feedback.help",
+  "identity.directory",
+  "identity.provisioning",
+  "layout.columns",
+  "layout.grid",
+  "location.global",
   "navigation.back",
+  "navigation.collapse",
+  "navigation.down",
+  "navigation.expand",
   "navigation.forward",
+  "navigation.home",
   "navigation.menu",
+  "navigation.more",
+  "navigation.profile",
   "navigation.route",
+  "navigation.settings",
+  "navigation.up",
+  "operations.deployment",
+  "operations.target",
+  "security.alert",
+  "security.protection",
   "security.scan",
   "status.error",
+  "status.info",
   "status.live",
   "status.loading",
   "status.secure",
   "status.success",
+  "status.verified",
   "status.warning",
+  "system.automation",
+  "system.workflow",
   "time.date",
+  "time.schedule",
+  "time.timestamp",
+  "workflow.webhook",
 ] as const;
 
 export type BitHirePresetIconName = (typeof BITHIRE_PRESET_ICON_NAMES)[number];
@@ -104,23 +220,40 @@ export type BitHireIconPresetProps = SemanticIconProps & {
 };
 
 export const BITHIRE_PRESET_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
+  "access.key": AccessKeyIcon,
   "access.login": AccessLoginIcon,
+  "access.logout": AccessLogoutIcon,
+  "action.add": ActionAddIcon,
+  "action.archive": ActionArchiveIcon,
   "action.close": ActionCloseIcon,
   "action.conceal": ActionConcealIcon,
   "action.confirm": ActionConfirmIcon,
+  "action.download": ActionDownloadIcon,
+  "action.filter": ActionFilterIcon,
+  "action.open-external": ActionOpenExternalIcon,
   "action.pause": ActionPauseIcon,
   "action.play": ActionPlayIcon,
   "action.reveal": ActionRevealIcon,
   "action.search": ActionSearchIcon,
+  "action.share": ActionShareIcon,
+  "ai.agent": AiAgentIcon,
   "ai.assistant": AiAssistantIcon,
+  "ai.compute": AiComputeIcon,
+  "ai.experiment": AiExperimentIcon,
   "ai.feedback": AiFeedbackIcon,
   "ai.reasoning": AiReasoningIcon,
   "ai.sparkles": AiSparklesIcon,
+  "ai.speech": AiSpeechIcon,
+  "analytics.activity": AnalyticsActivityIcon,
+  "analytics.bar": AnalyticsBarIcon,
+  "analytics.dashboard": AnalyticsDashboardIcon,
   "appearance.theme": AppearanceThemeIcon,
   "auth.passkey": AuthPasskeyIcon,
   "auth.password": AuthPasswordIcon,
   "auth.sso": AuthSsoIcon,
+  "billing.credit-card": BillingCreditCardIcon,
   "billing.currency": BillingCurrencyIcon,
+  "billing.receipt": BillingReceiptIcon,
   "billing.wallet": BillingWalletIcon,
   "bithire.candidate": BithireCandidateIcon,
   "bithire.evidence": BithireEvidenceIcon,
@@ -128,28 +261,69 @@ export const BITHIRE_PRESET_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
   "bithire.job": BithireJobIcon,
   "bithire.offer": BithireOfferIcon,
   "bithire.pipeline": BithirePipelineIcon,
+  "commerce.shipping": CommerceShippingIcon,
+  "communication.call": CommunicationCallIcon,
   "communication.email": CommunicationEmailIcon,
   "communication.inbox": CommunicationInboxIcon,
   "communication.message": CommunicationMessageIcon,
+  "communication.notification": CommunicationNotificationIcon,
+  "communication.send": CommunicationSendIcon,
   "communication.voice": CommunicationVoiceIcon,
+  "compliance.review": ComplianceReviewIcon,
   "connectivity.web": ConnectivityWebIcon,
+  "content.bookmark": ContentBookmarkIcon,
+  "content.code": ContentCodeIcon,
+  "content.document": ContentDocumentIcon,
+  "content.file": ContentFileIcon,
+  "content.video": ContentVideoIcon,
   "data.chart": DataChartIcon,
+  "data.database": DataDatabaseIcon,
   "data.gauge": DataGaugeIcon,
+  "data.pie-chart": DataPieChartIcon,
   "data.trend": DataTrendIcon,
   "device.desktop": DeviceDesktopIcon,
   "device.mobile": DeviceMobileIcon,
+  "entity.group": EntityGroupIcon,
+  "entity.organization": EntityOrganizationIcon,
+  "entity.person": EntityPersonIcon,
+  "entity.task": EntityTaskIcon,
+  "feedback.help": FeedbackHelpIcon,
+  "identity.directory": IdentityDirectoryIcon,
+  "identity.provisioning": IdentityProvisioningIcon,
+  "layout.columns": LayoutColumnsIcon,
+  "layout.grid": LayoutGridIcon,
+  "location.global": LocationGlobalIcon,
   "navigation.back": NavigationBackIcon,
+  "navigation.collapse": NavigationCollapseIcon,
+  "navigation.down": NavigationDownIcon,
+  "navigation.expand": NavigationExpandIcon,
   "navigation.forward": NavigationForwardIcon,
+  "navigation.home": NavigationHomeIcon,
   "navigation.menu": NavigationMenuIcon,
+  "navigation.more": NavigationMoreIcon,
+  "navigation.profile": NavigationProfileIcon,
   "navigation.route": NavigationRouteIcon,
+  "navigation.settings": NavigationSettingsIcon,
+  "navigation.up": NavigationUpIcon,
+  "operations.deployment": OperationsDeploymentIcon,
+  "operations.target": OperationsTargetIcon,
+  "security.alert": SecurityAlertIcon,
+  "security.protection": SecurityProtectionIcon,
   "security.scan": SecurityScanIcon,
   "status.error": StatusErrorIcon,
+  "status.info": StatusInfoIcon,
   "status.live": StatusLiveIcon,
   "status.loading": StatusLoadingIcon,
   "status.secure": StatusSecureIcon,
   "status.success": StatusSuccessIcon,
+  "status.verified": StatusVerifiedIcon,
   "status.warning": StatusWarningIcon,
+  "system.automation": SystemAutomationIcon,
+  "system.workflow": SystemWorkflowIcon,
   "time.date": TimeDateIcon,
+  "time.schedule": TimeScheduleIcon,
+  "time.timestamp": TimeTimestampIcon,
+  "workflow.webhook": WorkflowWebhookIcon,
 } as const satisfies Record<BitHirePresetIconName, SemanticIconComponent>);
 
 export function isBitHirePresetIconName(value: unknown): value is BitHirePresetIconName {

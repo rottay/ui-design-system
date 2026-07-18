@@ -38,6 +38,7 @@ comparison result.
 | Offline adapter | The governed adapter manifest pins Phosphor 2.1.10 and exact local SSR module/export pairs | `packages/core/src/graphics/icons/foundation/semantic/adapters/phosphor-2.1.10.json` |
 | Canonical 40 membership | All 40 roles below exist exactly once in the governed corpus and exactly once in the pinned adapter | Rechecked while preparing this ledger; semantic and adapter identity only, not optical quality |
 | Bounded prior canary | CRA16 records 33/33 DS semantic/mark SSR checks, 8/8 generator adversarial checks, deterministic 263-role generation, and 21/21 BitHire architecture checks | `test-artifacts/craft/cra-16/certification.json`; bounded canary evidence, not CRA17 completion |
+| Optical capture integrity | 12 mobile screenshots account for all 1,920 required role cells and are byte-counted and SHA-256 pinned | `test-artifacts/craft/cra-17/optical-matrix/capture-manifest.json`; machine integrity only, with `sightedReview` still `pending` |
 | Hugeicons eligibility | No installed/declared package and no verifiable written rights artifact at the deadline | Workspace/manifests/lockfile scan; does not assert what may exist outside accessible evidence |
 | Hugeicons private-registry traffic | 0 install/auth/build commands and 0 observed calls during this decision | Process observation only; no claim about historical traffic outside this decision |
 
@@ -73,10 +74,13 @@ the planned matrix size, not a passing-test count.
 
 ### Sighted evidence still pending
 
-No CRA17 capture or human optical verdict is recorded in this ledger. The
-following remain pending and must not be inferred from the supplier decision:
+The 12 capture files and their 1,920 role cells now have a machine-readable
+inventory with byte counts and SHA-256 hashes. That proves capture presence and
+integrity only. No human optical verdict is recorded, and the manifest remains
+explicitly `sightedReview: "pending"`. The following remain pending and must
+not be inferred from the supplier decision or from capture existence:
 
-- the 1,920-cell atlas/capture set and sighted review;
+- human sighted review of the complete 1,920-cell atlas;
 - legibility, optical weight, alignment and distinctness at each size;
 - classic/modern/rustic, light/dark, mobile, BitHire/The Management results;
 - RTL, forced-colors and every supported variant/optical fallback;
@@ -84,6 +88,12 @@ following remain pending and must not be inferred from the supplier decision:
 - measured one-icon bundle output, per-entry retention and tree-shaking;
 - completion of `Icon`, `BrandMark`, `CloudServiceMark` and
   `FeaturePictogram` as four fully separated certified asset classes.
+
+The machine boundary is enforced by
+`packages/core/scripts/cra-17-integral-gate.mjs`. Its `--structural` mode can
+report final-only evidence as pending; its default final mode fails while the
+sighted review or any other required evidence remains pending. Neither mode
+writes roadmap status or closes source items.
 
 The existing CRA16 SSR/canary results remain valid only for their recorded
 scope. They are not sighted evidence and are not silently promoted to cover

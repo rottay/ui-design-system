@@ -506,6 +506,21 @@ DS-IMP-106/110 completion claim or source-item transition.
 - **Execution control** — Retain the prior certified adapter and one-minor compatibility aliases; disable one supplier or asset-class adapter independently without conflating functional icons, marks and pictograms. Telemetry: unmapped names, direct supplier paths, per-entry bundle retention, SSR/RSC failures, accessible-name failures and provenance coverage. Stop on absent written distribution rights, network-dependent builds, supplier leakage, asset-class conflation, inaccessible SVG output or an uncertified optical variant.
 - **Do NOT** — Do not absorb DS-IMP-092 fleet migration or DS-IMP-093 vertical recipes/signature glyphs into this authority; do not treat a canary, package publish or supplier fallback alone as completion.
 
+#### CRA17 integral gate contract (2026-07-17)
+
+`node packages/core/scripts/cra-17-integral-gate.mjs --structural` composes the selected
+Phosphor 2.1.10 supplier, the semantic catalog, the four separate facade entries, packaged
+provenance/licenses, supplier-free public declarations, independent ESM/CJS bundle-retention
+evidence and the optical capture manifest. Structural mode may report final-only evidence as
+pending, but it still fails on source, manifest, provenance, facade or artifact drift. The same
+command without `--structural` is the final gate: every pending item is blocking.
+
+In particular, `sightedReview: "pending"` is never interpreted as visual approval. It keeps the
+final gate red and `completionEligible` false even when every capture byte and all 1,920 matrix
+cells are present. The gate also reads roadmap authority and cannot turn WO-CRA-17 or
+DS-IMP-090/091 into done state. Roadmap status remains registry-owned and phase 2B remains subject
+to its explicit owner-GO control.
+
 ## DS improvements — Phase 2C final authority
 
 ### WO-CRA-15 ParticleField and Canvas/WebGL hardening
