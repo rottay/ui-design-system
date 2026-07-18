@@ -15,7 +15,7 @@ import {
   type TenantCreationConfig,
 } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { generateTenantCss } from '../../../../../infrastructure/runtime/tenant';
-import { PREVIEW_SCOPE_ATTRIBUTE } from '../runtime/preview-css';
+import { PREVIEW_SCOPE_ATTRIBUTE } from '../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
 import RusticTenantPreview from '../engines/rustic';
 import ClassicTenantPreview from '../engines/classic';
 import ModernTenantPreview from '../engines/modern';

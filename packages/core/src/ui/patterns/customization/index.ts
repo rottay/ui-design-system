@@ -16,3 +16,24 @@ export type {
   BrandStudioGalleryContext,
   BrandStudioContrastReport,
 } from './brand-studio';
+export {
+  useTenantThemePreview,
+  compileTenantThemePreview,
+  buildTenantThemePreviewScope,
+  probeTenantThemePackWarnings,
+  selectTenantThemeAdjustments,
+  PREVIEW_SCOPE_ATTRIBUTE,
+  DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS,
+  TenantThemePreviewReport,
+} from './brand-studio';
+export type {
+  UseTenantThemePreviewInput,
+  UseTenantThemePreviewResult,
+  TenantThemePreviewScope,
+  TenantThemeContrastAdjustmentV1,
+  TenantThemePackWarning,
+  ProbeTenantThemePackWarningsOptions,
+  TenantThemePreviewReportProps,
+  BrandStudioTenantThemePreviewConfig,
+  BrandStudioTenantThemeGalleriesSlot,
+} from './brand-studio';

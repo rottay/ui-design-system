@@ -14,6 +14,12 @@
 import type { ReactNode } from 'react';
 import type { BrandTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
 import type {
+  TenantThemeArtifactV1,
+  TenantThemeConfigIdentityV1,
+  TenantThemeDocumentV1,
+  TenantThemeVerticalEnvelopeV1,
+} from '../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
+import type {
   BrandingColors,
   ContrastViolation,
   ContrastSuggestion,
@@ -69,6 +75,44 @@ export interface BrandStudioContrastReport {
   suggestions: ContrastSuggestion[];
 }
 
+/**
+ * Render slot for the surfaces shown inside the themed tenant-theme preview
+ * scope. The consumer returns generic component states (e.g. the DS preview
+ * fixtures); the studio wraps them in the scoped, sanitized container so the
+ * compiled artifact re-skins them live. Keeping this a slot is what lets the
+ * design system preview real surfaces without depending on a product surface.
+ */
+export type BrandStudioTenantThemeGalleriesSlot = (ctx: {
+  artifact: TenantThemeArtifactV1;
+}) => ReactNode;
+
+/**
+ * Optional live-preview channel for a DB-tenant theme document. When supplied,
+ * PatternBrandStudio compiles the document through the tenant-theme compiler
+ * (debounced), renders inline validation issues for an invalid document, and on
+ * success re-skins the {@link BrandStudioTenantThemeGalleriesSlot} content inside
+ * the CMP-02 preview scope, with the APCA autocorrections and font-pack warnings
+ * reported beneath it.
+ */
+export interface BrandStudioTenantThemePreviewConfig {
+  /** The bounded tenant theme document being edited (simple or advanced). */
+  document: TenantThemeDocumentV1;
+  /** Trusted row identity (tenantId/slug/verticalKey/rowVersion). */
+  identity: TenantThemeConfigIdentityV1;
+  /**
+   * Code-owned vertical policy envelope. Optional: a simple document resolves
+   * its registered vertical envelope automatically; an advanced document
+   * without one fails closed into inline issues.
+   */
+  envelope?: TenantThemeVerticalEnvelopeV1;
+  /** Recompile debounce in ms. Defaults to 150. */
+  debounceMs?: number;
+  /** Content rendered inside the themed preview scope. */
+  galleries?: BrandStudioTenantThemeGalleriesSlot;
+  /** Optional heading rendered above the tenant-theme preview. */
+  label?: string;
+}
+
 export interface PatternBrandStudioProps {
   /**
    * The BrandTheme being edited. Accepts a partial theme; `id`/`name` are
@@ -88,4 +132,12 @@ export interface PatternBrandStudioProps {
   title?: string;
   /** Optional supporting copy rendered below the heading. */
   description?: string;
+  /**
+   * Optional live preview of a DB-tenant theme document. When present, the
+   * studio renders a second preview section driven by the tenant-theme compiler
+   * (validation issues, APCA autocorrections, font-pack warnings) below the
+   * BrandTheme preview grid. Independent of {@link value}; the BrandTheme editor
+   * is unchanged when this is absent.
+   */
+  tenantThemePreview?: BrandStudioTenantThemePreviewConfig;
 }

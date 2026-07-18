@@ -43,6 +43,10 @@ const CERTIFIED_DATA_CSS_IMPORTS = new Map([
     "buildPreviewCss",
     "src/ui/patterns/customization/tenant-preview/runtime/preview-css",
   ],
+  [
+    "useTenantThemePreview",
+    "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview",
+  ],
 ]);
 const CORE_PACKAGE_ROOT = realpathSync(
   resolve(dirname(fileURLToPath(import.meta.url)), "../..")

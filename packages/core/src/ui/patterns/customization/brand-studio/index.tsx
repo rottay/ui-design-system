@@ -39,10 +39,13 @@ import type {
   BrandTheme,
 } from '../../../../foundation/contracts/composition/tenants/themes';
 import { cloneBrandTheme } from './runtime/file-export';
+import { useTenantThemePreview } from './runtime/tenant-theme-preview';
+import { TenantThemePreviewReport } from './runtime/tenant-theme-preview/report';
 import type {
   BrandStudioContrastReport,
   BrandStudioSurfaceConfig,
   BrandStudioSurfaceKey,
+  BrandStudioTenantThemePreviewConfig,
   PatternBrandStudioProps,
 } from './contracts';
 
@@ -53,6 +56,25 @@ export {
   deserializeBrandTheme,
   brandThemeToTenantAppearanceAdvanced,
 } from './runtime/file-export';
+export {
+  useTenantThemePreview,
+  compileTenantThemePreview,
+  buildTenantThemePreviewScope,
+  probeTenantThemePackWarnings,
+  selectTenantThemeAdjustments,
+  PREVIEW_SCOPE_ATTRIBUTE,
+  DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS,
+} from './runtime/tenant-theme-preview';
+export type {
+  UseTenantThemePreviewInput,
+  UseTenantThemePreviewResult,
+  TenantThemePreviewScope,
+  TenantThemeContrastAdjustmentV1,
+  TenantThemePackWarning,
+  ProbeTenantThemePackWarningsOptions,
+} from './runtime/tenant-theme-preview';
+export { TenantThemePreviewReport } from './runtime/tenant-theme-preview/report';
+export type { TenantThemePreviewReportProps } from './runtime/tenant-theme-preview/report';
 
 // ---------------------------------------------------------------------------
 // Base ground token scaffolds
@@ -1235,6 +1257,84 @@ function BrandThemeEditor({
 }
 
 // ---------------------------------------------------------------------------
+// Tenant-theme live preview section
+//
+// An optional second preview driven by the DB-tenant compiler
+// (`compileTenantThemeConfig`) rather than `compileBrandTheme`. It compiles the
+// edited document (debounced), renders inline issues for an invalid document,
+// and on success re-skins the consumer's galleries inside the CMP-02 preview
+// scope with the anatomy attributes stamped on the same root, then reports the
+// APCA autocorrections and font-pack warnings beneath it.
+// ---------------------------------------------------------------------------
+
+function TenantThemePreviewSection({
+  config,
+}: {
+  config: BrandStudioTenantThemePreviewConfig;
+}): React.ReactElement {
+  const { document, identity, envelope, debounceMs, galleries, label } = config;
+  const preview = useTenantThemePreview({ document, identity, envelope, debounceMs });
+  const { artifact, issues, adjustments, packWarnings, previewRootAttributes } = preview;
+
+  return (
+    <Stack
+      className="ds-pattern-brand-studio__tenant-preview"
+      data-part="tenant-preview"
+      data-state={artifact ? 'valid' : 'invalid'}
+      spacing="sm"
+    >
+      <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+        <Text
+          className="ds-pattern-brand-studio__tenant-preview-heading"
+          data-part="tenant-preview-heading"
+          size="sm"
+          weight="semibold"
+          style={{ display: 'block' }}
+        >
+          {label ?? 'Tenant theme live preview'}
+        </Text>
+        <Badge variant={artifact ? 'secondary' : 'error'} data-state={artifact ? 'valid' : 'invalid'}>
+          {artifact ? identity.verticalKey : 'invalid document'}
+        </Badge>
+      </Flex>
+
+      {artifact ? (
+        <Box
+          className="ds-pattern-brand-studio__tenant-preview-stage"
+          data-part="tenant-preview-stage"
+        >
+          <style dangerouslySetInnerHTML={{ __html: preview.css }} />
+          <Box
+            className="ds-pattern-brand-studio__tenant-preview-scope"
+            data-part="tenant-preview-scope"
+            {...previewRootAttributes}
+          >
+            {galleries ? (
+              galleries({ artifact })
+            ) : (
+              <Text
+                className="ds-pattern-brand-studio__tenant-preview-fallback"
+                data-part="tenant-preview-fallback"
+                size="sm"
+                style={{ display: 'block' }}
+              >
+                Pass a galleries slot to render live surfaces under this theme.
+              </Text>
+            )}
+          </Box>
+        </Box>
+      ) : null}
+
+      <TenantThemePreviewReport
+        issues={issues}
+        adjustments={adjustments}
+        packWarnings={packWarnings}
+      />
+    </Stack>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // PatternBrandStudio
 // ---------------------------------------------------------------------------
 
@@ -1246,6 +1346,7 @@ export function PatternBrandStudio({
   darkSurface,
   title = 'Brand Studio',
   description,
+  tenantThemePreview,
 }: PatternBrandStudioProps): React.ReactElement {
   const scopeSalt = useId().replace(/:/g, '');
   const theme = useMemo(() => normalizeBrandTheme(value), [value]);
@@ -1394,6 +1495,10 @@ export function PatternBrandStudio({
           </Card>
         </Stack>
       </Box>
+
+      {tenantThemePreview ? (
+        <TenantThemePreviewSection config={tenantThemePreview} />
+      ) : null}
 
       {/* The column track lives here rather than inline: a container query
           cannot outrank an inline style without !important, and an escape
