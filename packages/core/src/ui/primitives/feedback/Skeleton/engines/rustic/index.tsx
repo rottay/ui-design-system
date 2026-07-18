@@ -83,9 +83,9 @@ import { SKELETON_DEFAULTS } from '../../contracts';
  * - Uses flexbox for layout structure
  * - Dynamic border-radius for shape variants
  *
- * **CSS Keyframes (defined in the unlayered rustic Skeleton skin):**
- * - `ds-skeleton-pulse-rustic`: Opacity animation 1-0.4-1
- * - `ds-skeleton-wave-rustic`: Background position animation
+ * **CSS Keyframes (shared canon set in foundation/animations/keyframes.css):**
+ * - `ds-skeleton-pulse`: Opacity animation 1-0.4-1
+ * - `ds-skeleton-wave`: Background position animation
  *
  * **Accessibility Features:**
  * - Semantic div structure
@@ -151,13 +151,14 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
     if (!active || !animation) return {};
 
     if (animation === 'pulse') {
-      return { animation: 'ds-skeleton-pulse-rustic 1.5s ease-in-out infinite' };
+      return { animation: 'ds-skeleton-pulse 1.5s ease-in-out infinite' };
     }
 
     // Wave: the sliding gradient background + its 400% sizing paint from the
     // rustic Skeleton skin (keyed on data-animation='wave'); only the animation
     // reference — which drives the background-position slide — stays inline.
-    return { animation: 'ds-skeleton-wave-rustic 1.4s ease-in-out infinite' };
+    // ds-skeleton-wave is the shared canon keyframe (keyframes.css).
+    return { animation: 'ds-skeleton-wave 1.4s ease-in-out infinite' };
   };
 
   // ---------------------------------------------------------------------------

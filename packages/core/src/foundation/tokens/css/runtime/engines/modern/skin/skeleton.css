@@ -1,44 +1,67 @@
 /**
- * Modern Skeleton skin (WO-SKIN-03 checkpoint S).
+ * Modern Skeleton skin (TASK S canon-shimmer pass; supersedes the WO-SKIN-03
+ * DaisyUI-owned split).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer and DaisyUI's own
  * `.skeleton` sort before Tailwind's base layer, so a layered rule cannot paint
  * these blocks. Unlayered outranks preflight + DaisyUI and still yields to a
  * caller's inline `style`.
  *
- * The 4-way Skeleton animation split is PRESERVED mechanism-by-mechanism: modern
- * stays DaisyUI-owned (the `.skeleton` class supplies animation-name; the engine
- * keeps animation-duration/-easing inline). Only the moved paint lives here:
- *  - Every skeleton block reads the tenant background. It is a `background`
- *    SHORTHAND (not `background-color`) because the engine used the shorthand,
- *    which wipes DaisyUI's shimmer GRADIENT down to a flat fill — reproduce that
- *    exactly or the gradient reappears.
- *  - The shape-variant root and the avatar carry a variant/shape-conditional
- *    corner radius, so each rides a custom-property hatch stamped inline
- *    (--ds-skeleton-shape-radius / --ds-skeleton-avatar-radius). Title/line have
- *    no radius (DaisyUI's `.skeleton` default), so none is set here.
+ * The modern Skeleton no longer rides DaisyUI's `.skeleton` class -- that class
+ * is gone from the engine, so this file decrements daisy.classConsumers. Anatomy
+ * now mirrors the rustic skin: the shape-variant root carries `.rottay-skeleton`
+ * directly; the text/default avatar/title/line are blocks inside
+ * `.rottay-skeleton-wrapper` (a flex container, not itself a block). The
+ * animation is the shared canon set (foundation/animations/keyframes.css)
+ * selected through --ds-skeleton-animation-name -- the engine sets it from the
+ * personality-resolved skeletonStyle -- and ridden on the
+ * --ds-skeleton-animation-duration token so pulseSpeed still drives cadence.
+ *
+ * BACKGROUND: base is the flat tenant fill (--ds-skeleton-bg). The moving
+ * ('shimmer') style swaps in the sweeping gradient at higher specificity, keyed
+ * on data-animation='shimmer' -- exactly the rustic model. pulse animates opacity
+ * over the flat fill; shimmer sweeps background-position over the gradient. An
+ * inactive skeleton carries no data-animation and --ds-skeleton-animation-name:
+ * none, so it holds a static flat block.
  *
  * SPECIFICITY (P-48): background and border-radius are non-border paint, so
- * (0,2,0)+ unlayered clears preflight; unlayered clears DaisyUI (layered)
- * regardless. None touches the tenant `* { border-color }` floor.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * (0,3,0)+ unlayered clears preflight and DaisyUI regardless; none touches the
+ * tenant `* { border-color }` floor. The gradient override buys (0,4,0) via the
+ * extra data-animation attribute so it wins over the flat base.
  */
 
-/* ---- tenant fill on every DaisyUI skeleton block: the shape-variant root
-        carries `.skeleton` directly, the text/default avatar/title/line carry it
-        as descendants. `background` shorthand mirrors the inline wipe. ---- */
-.rottay-skeleton--modern.skeleton,
-.rottay-skeleton--modern .skeleton {
+/* ---- base flat fill + canon animation on every modern skeleton block ---- */
+.rottay-skeleton.rottay-skeleton--modern[data-part='root'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
   background: var(--ds-skeleton-bg, var(--ds-color-neutral-100));
+  animation: var(--ds-skeleton-animation-name, ds-skeleton-shimmer)
+    var(--ds-skeleton-animation-duration, 1.5s)
+    var(--ds-skeleton-animation-easing, ease-in-out) infinite;
+}
+
+/* ---- shimmer style: sweeping gradient (higher specificity via data-animation) ---- */
+.rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
+  background: var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%));
+  background-size: 200% 100%;
 }
 
 /* ---- shape-variant root radius (circular/rounded/rectangular) ---- */
-.rottay-skeleton--modern.skeleton[data-part='root'] {
+.rottay-skeleton.rottay-skeleton--modern[data-part='root'] {
   border-radius: var(--ds-skeleton-shape-radius);
 }
 
 /* ---- avatar radius (circle/rounded) ---- */
-.rottay-skeleton--modern .skeleton[data-part='avatar'] {
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'] {
   border-radius: var(--ds-skeleton-avatar-radius);
+}
+
+/* ---- title/line corner radius (DaisyUI's `.skeleton` no longer supplies it) ---- */
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
+  border-radius: 4px;
 }

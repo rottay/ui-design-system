@@ -24,6 +24,7 @@ import {
   SurfaceAccentBarWrapper,
 } from '../../../../runtime/profile-defaults/personality';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
+import { useMotionPolicy } from '@/infrastructure/runtime/motion';
 
 export interface DashboardSurfaceProps {
   config: DashboardSurfaceConfig;
@@ -45,6 +46,13 @@ export function DashboardSurface({
     stackOnTablet: false,
   });
   const isMobile = responsiveLayout.isMobile;
+  // Section reveals opt into the scroll-driven entry fade-up only when the
+  // ambient dial allows decorative motion. allowAmbientMotion already folds in
+  // reduced-motion, coarse-pointer, constrained-power and hidden-tab state, so
+  // this single gate is the sanctioned "should ambient motion run" flag. The
+  // .ds-scroll-reveal class is additionally reduce-neutralized in transitions.css
+  // and degrades to static content where the view() timeline is unsupported.
+  const sectionRevealClass = useMotionPolicy().allowAmbientMotion ? 'ds-scroll-reveal' : undefined;
   // Permission filtering happens early so the action count drives both
   // rendering and layout decisions (e.g. no empty action bar wrapper).
   const headerActions = filterSurfaceActions(config.behavior.headerActions, config.access);
@@ -167,6 +175,7 @@ export function DashboardSurface({
             return (
               <Grid.Item
                 key={section.key}
+                className={sectionRevealClass}
                 span={
                   isMobile && config.visual.stackSectionsOnMobile !== false
                     ? undefined

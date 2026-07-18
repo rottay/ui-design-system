@@ -107,7 +107,7 @@ export interface SkeletonListItemProps {
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  animation: 'ds-foundation-skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
+  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
 };
 
 // ============================================================================

@@ -98,15 +98,6 @@
     var(--ds-surface-panel) 75%
   );
   background-size: 200% 100%;
-  animation: ds-stats-shimmer 1.5s ease-in-out infinite;
+  animation: ds-skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: var(--ds-radius-sm);
-}
-
-@keyframes ds-stats-shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }

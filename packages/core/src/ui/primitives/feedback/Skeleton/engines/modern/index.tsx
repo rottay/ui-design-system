@@ -89,7 +89,8 @@ import { SKELETON_DEFAULTS } from '../../contracts';
  * - Percentage-based last line width for realistic text appearance
  *
  * **CSS Classes Used:**
- * - `skeleton`: DaisyUI skeleton animation
+ * - `rottay-skeleton` / `rottay-skeleton-wrapper`: scope classes the unlayered
+ *   modern Skeleton skin paints (fill + canon animation), mirroring rustic
  * - `flex`, `gap-4`: Container layout
  * - `space-y-2`: Paragraph line spacing
  * - `flex-1`: Content area expansion
@@ -119,6 +120,10 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
     width,
     height,
 
+    // Animation
+    animation = SKELETON_DEFAULTS.animation,
+    active = SKELETON_DEFAULTS.active,
+
     // Text configuration
     rows = SKELETON_DEFAULTS.rows,
 
@@ -135,6 +140,21 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
     className = '',
     style,
   } = props;
+
+  // ---------------------------------------------------------------------------
+  // Animation Resolution
+  // ---------------------------------------------------------------------------
+
+  // The Skeleton wrapper injects `animation` from the tenant personality
+  // (resolveSkeletonPersonalityDefaults -> 'pulse' | 'wave'), so this honors
+  // skeletonStyle across engines. Modern renders the premium sweeping gradient
+  // (ds-skeleton-shimmer) for any moving style and the flat opacity pulse
+  // (ds-skeleton-pulse) for 'pulse'; an inactive/false skeleton holds static.
+  // `data-animation` selects the flat-vs-gradient background in the unlayered
+  // skin; --ds-skeleton-animation-name selects the shared canon keyframe.
+  const resolvedStyle = active && animation ? (animation === 'pulse' ? 'pulse' : 'shimmer') : undefined;
+  const animationName =
+    resolvedStyle === 'pulse' ? 'ds-skeleton-pulse' : resolvedStyle === 'shimmer' ? 'ds-skeleton-shimmer' : 'none';
 
   // ---------------------------------------------------------------------------
   // Style Helpers
@@ -155,16 +175,18 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // Shape Variant Rendering
   // ---------------------------------------------------------------------------
 
-  // Shape variants render a single div with the DaisyUI skeleton class. The
-  // tenant background (a `background` SHORTHAND that intentionally overrides
-  // DaisyUI's shimmer gradient) and the variant-driven corner radius paint from
-  // the unlayered modern Skeleton skin; the radius rides the
-  // --ds-skeleton-shape-radius hatch because it is variant-conditional.
+  // Shape variants render a single block carrying the `.rottay-skeleton` scope
+  // class (mirroring the rustic engine). The tenant background, the canon
+  // animation and the variant-driven corner radius paint from the unlayered
+  // modern Skeleton skin; the radius rides the --ds-skeleton-shape-radius hatch
+  // because it is variant-conditional, and data-animation selects the flat/
+  // gradient background.
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
       <div
         data-part="root"
-        className={`skeleton rottay-skeleton--modern ${className}`}
+        data-animation={resolvedStyle}
+        className={`rottay-skeleton rottay-skeleton--modern ${className}`}
         style={{
           ...getSkeletonStyle(),
           '--ds-skeleton-shape-radius': variant === 'circular'
@@ -172,8 +194,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
             : variant === 'rounded'
               ? 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))'
               : '0',
-          animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
-          animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)',
+          '--ds-skeleton-animation-name': animationName,
         } as React.CSSProperties}
       />
     );
@@ -183,20 +204,27 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // Text/Default Variant Rendering
   // ---------------------------------------------------------------------------
 
+  // Text/default variant: the wrapper is a flex container (NOT a painted block),
+  // so it carries `.rottay-skeleton-wrapper` and owns --ds-skeleton-animation-name
+  // plus the personality style (which carries --ds-skeleton-animation-duration);
+  // both inherit to the avatar/title/line blocks below, which the unlayered skin
+  // paints as descendants keyed on data-part + data-animation.
   return (
-    <div data-part="root" className={`flex gap-4 rottay-skeleton--modern ${className}`} style={style}>
+    <div
+      data-part="root"
+      className={`flex gap-4 rottay-skeleton-wrapper rottay-skeleton--modern ${className}`}
+      style={{ ...style, '--ds-skeleton-animation-name': animationName } as React.CSSProperties}
+    >
       {/* Avatar placeholder */}
       {avatar && (
         <div
           data-part="avatar"
-          className="skeleton"
+          data-animation={resolvedStyle}
           style={{
             width: avatarSize,
             height: avatarSize,
             '--ds-skeleton-avatar-radius': avatarShape === 'circle' ? '50%' : 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))',
             flexShrink: 0,
-            animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
-            animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)',
           } as React.CSSProperties}
         />
       )}
@@ -204,7 +232,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
       {/* Content section with title and paragraph lines */}
       <div className="flex-1 space-y-2">
         {/* Title line is 60% width to visually distinguish it from body text */}
-        {title && <div data-part="title" className="skeleton" style={{ height: '1.25rem', width: '60%', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }} />}
+        {title && <div data-part="title" data-animation={resolvedStyle} style={{ height: '1.25rem', width: '60%' }} />}
 
         {/* Last paragraph line is 80% width to simulate a natural text ending,
             preventing the skeleton from looking like a uniform block */}
@@ -215,8 +243,8 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
             <div
               key={i}
               data-part="line"
-              className="skeleton"
-              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }}
+              data-animation={resolvedStyle}
+              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%' }}
             />
           ))}
       </div>

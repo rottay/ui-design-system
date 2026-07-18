@@ -1055,14 +1055,10 @@
   }
 }
 
-@keyframes ds-skeleton-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
+/* The legacy `.ds-skeleton` block above references ds-skeleton-pulse, now the
+   canon keyframe in foundation/animations/keyframes.css (same bundle via
+   base.css). A local duplicate here is removed so exactly one ds-skeleton-pulse
+   exists workspace-wide (CRA-12 duplicate-keyframe rule). */
 
 /* =============================================================================
    UTILITY CLASSES

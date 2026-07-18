@@ -185,7 +185,7 @@ export const SkeletonAvatar = forwardRef<HTMLDivElement, SkeletonAvatarProps>(
       width: sizeValue,
       height: sizeValue,
       '--ds-skeleton-avatar-radius': shape === 'circle' ? '50%' : '4px',
-      animation: 'ds-foundation-skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
+      animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
       ...style,
     } as React.CSSProperties;
 

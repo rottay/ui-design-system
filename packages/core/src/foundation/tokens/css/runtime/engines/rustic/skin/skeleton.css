@@ -5,14 +5,12 @@
  * layer and loses to preflight; unlayered outranks it and still yields to the
  * caller's inline `style`.
  *
- * The 4-way Skeleton animation split is PRESERVED mechanism-by-mechanism. This
- * file owns ONLY the rustic engine's local pulse + wave. The two keyframes moved
- * out of the engine's per-mount <style> and are RENAMED + engine-namespaced:
- * `ds-skeleton-pulse-rustic` (opacity floor 0.4) MUST NOT collide with the DEAD
- * `ds-skeleton-pulse` (floor 0.5) in engines/rustic/theme.css, which is left
- * untouched; `ds-skeleton-wave-rustic` is likewise a fresh name. The engine keeps
- * the `animation` reference inline (non-paint) and stamps `data-animation` so the
- * wave gradient can be applied here without a foreign inline value.
+ * This file owns ONLY the rustic engine's fill + wave GRADIENT paint. The pulse
+ * and wave keyframes are the shared canon set (ds-skeleton-pulse /
+ * ds-skeleton-wave) in foundation/animations/keyframes.css, referenced inline by
+ * the engine (non-paint); no engine-local keyframe survives here. The engine
+ * stamps `data-animation` so the wave gradient can be applied here without a
+ * foreign inline value.
  *
  * SCOPE: the shape-variant root carries the block on itself
  * (`.rottay-skeleton[data-part='root']`); the text/default avatar/title/line are
@@ -26,25 +24,6 @@
  * so (0,3,0)+ unlayered clears preflight; none touches the tenant
  * `* { border-color }` floor. Values transcribed verbatim from `engines/rustic.tsx`.
  */
-
-@keyframes ds-skeleton-pulse-rustic {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
-
-@keyframes ds-skeleton-wave-rustic {
-  0% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0 50%;
-  }
-}
 
 /* ---- base fill on every rustic skeleton block ---- */
 .rottay-skeleton.rottay-skeleton--rustic[data-part='root'],

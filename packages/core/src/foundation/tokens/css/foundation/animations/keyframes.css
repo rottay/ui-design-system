@@ -392,12 +392,39 @@
   }
 }
 
-@keyframes ds-foundation-skeleton-loading {
+/* Canon skeleton loading set (TASK S). ONE ds- namespaced set shared by every
+   engine's Skeleton skin plus the skeleton-shimmer consumers (compounds,
+   stats-grid), replacing the piecemeal per-engine keyframes. Members map 1:1 to
+   the skeletonStyle personality ('pulse'|'shimmer'|'wave'); a consumer selects
+   one through --ds-skeleton-animation-name and rides the
+   --ds-skeleton-animation-duration token. Each animates only opacity or
+   background-position (compositor-friendly, no layout tokens); the global
+   reduced-motion guard in runtime/personality.css neutralizes all three. */
+@keyframes ds-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes ds-skeleton-shimmer {
   0% {
     background-position: -200% 0;
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+@keyframes ds-skeleton-wave {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
   }
 }
 

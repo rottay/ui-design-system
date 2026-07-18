@@ -6,9 +6,9 @@
  *
  * Every compound shares ONE shimmer: the sweeping gradient `background` + its
  * `200% 100%` sizing (identical across all eight, so one selector list owns it);
- * the `ds-foundation-skeleton-loading` animation reference stays inline on each
- * block (the global keyframe is reused as-is — that reference is a
- * contract-exempt residual, not migrated). Corner radii are per-part static
+ * the `ds-skeleton-shimmer` animation reference (the shared canon keyframe in
+ * foundation/animations/keyframes.css) stays inline on each block. Corner radii
+ * are per-part static
  * values except Avatar/Button,
  * whose shape-conditional radius rides a hatch stamped inline
  * (--ds-skeleton-avatar-radius / --ds-skeleton-button-radius).
