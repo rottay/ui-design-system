@@ -80,8 +80,12 @@
      rustic engines (zero visual delta).
      ======================================================================== */
 
-  /* Durations — the 120/200/320ms product-law cadence. */
-  --ds-motion-instant: 80ms;
+  /* Durations — the 120/200/320ms product-law cadence. --ds-motion-instant MUST
+     stay equal to the 120ms the brand-theme compiler re-declares per tenant
+     (infrastructure/compilers/kernel/runtime/brand-theme setMotionVariables,
+     design-language section 2.6 closed set 120/200/320), so tenant-scoped and
+     unscoped contexts resolve the token to the same duration. */
+  --ds-motion-instant: 120ms;
   --ds-motion-fast: 120ms;
   --ds-motion-normal: 200ms;
   --ds-motion-slow: 320ms;

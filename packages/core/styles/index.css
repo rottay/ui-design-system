@@ -15465,19 +15465,13 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
         JS checked `isHovered` before `isSelected`), so the hover background
         rule below is NOT qualified with `:not([data-selected])` -- its added
         `:hover` pseudo-class already gives it higher specificity than the
-        selected rule, so it wins regardless of source order. The inset
-        left-accent bar, by contrast, only ever showed when hovered AND NOT
-        selected, so that one rule keeps the qualifier. ---- */
+        selected rule, so it wins regardless of source order. ---- */
 .ds-table.ds-table--rustic [data-part='row'][data-selected='true'] {
   background-color: var(--ds-table-row-bg-selected, var(--ds-color-primary-100));
 }
 .ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:hover {
   background-color: var(--ds-table-row-bg-hover, var(--ds-color-bg-secondary));
 }
-.ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
-  box-shadow: inset 3px 0 0 var(--ds-color-primary);
-}
-
 /* ---- body cell: bottom border is unconditional in rustic (data-bordered is
         stamped "true" on every cell, not gated on the `bordered` prop), and
         the editable-cell hover ---- */
@@ -17149,18 +17143,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true'] {
   cursor: text;
   transition: background-color var(--ds-motion-fast) ease, box-shadow var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease;
-}
-
-.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--ds-color-primary);
-  opacity: 0.4;
-  pointer-events: none;
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover {
@@ -19930,10 +19912,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item']:not([data-disabled='true']):hover {
   background-color: var(--ds-transfer-item-bg-hover);
 }
-.rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item'][data-part='panel-item']:not([data-disabled='true']):hover {
-  border-left: 3px solid var(--ds-color-primary, #1677ff);
-}
-
 .rottay-transfer.rottay-transfer--rustic [data-part='panel-empty'] {
   color: var(--ds-transfer-empty-color);
 }
@@ -21653,7 +21631,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background-color: var(--ds-select-option-bg-hover);
 }
 .rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-active='true']:not([data-selected='true']) {
-  border-left: 3px solid var(--ds-color-primary, #1677ff);
   box-shadow: inset 0 0 0 1px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15));
 }
 .rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-selected='true'] {
@@ -22415,9 +22392,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-cascader__dropdown[data-part='dropdown'] [data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
   background-color: var(--ds-cascader-item-bg-hover);
 }
-.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
-  border-left: 3px solid var(--ds-color-primary, #1677ff);
-}
 .rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
   background-color: var(--ds-cascader-item-bg-selected);
 }
@@ -22448,11 +22422,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * SCOPE ROOT carries `rottay-alert-shell rottay-alert-shell--modern` alongside
  * the DaisyUI `.alert` class and `data-part='root'` + `data-tone`. The dedicated
- * `-shell` scope (not bare `.rottay-alert`) is required: `.rottay-alert` is
- * already claimed by the ALERT PERSONALITY rule in runtime/personality.css
- * (border-left accent + transition), so anchoring on it would activate that
- * rule's paint. `-shell` is collision-free (grep-verified), mirroring the
- * `rottay-progress-shell` precedent.
+ * `-shell` scope (not bare `.rottay-alert`) keeps the engine selector isolated
+ * from the ALERT PERSONALITY transition rule. It is collision-free
+ * (grep-verified), mirroring the `rottay-progress-shell` precedent.
  *
  * SPECIFICITY (P-48): non-border paint (background, color, border-radius) beats
  * preflight unlayered at (0,3,0)+. None of Modern Alert's moved paint touches a
@@ -22497,31 +22469,24 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * SCOPE ROOT carries `rottay-alert-shell rottay-alert-shell--rustic` +
  * `data-part='root'` + `data-tone`. The `-shell` scope is deliberate: bare
- * `.rottay-alert` is claimed by the ALERT PERSONALITY rule in
- * runtime/personality.css (border-left accent + transition) which today does NOT
- * apply to Rustic (its root carries no alert class), so anchoring on
- * `.rottay-alert` would introduce that rule's paint. `-shell` is collision-free
- * (grep-verified), mirroring `rottay-progress-shell`.
+ * `.rottay-alert` is claimed by the ALERT PERSONALITY transition rule in
+ * runtime/personality.css. `-shell` is collision-free (grep-verified), mirroring
+ * `rottay-progress-shell`.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. Per-tone `border-color` therefore reaches
  * (0,4,0) via the two shell classes + `[data-part='root']` + `[data-tone]`.
- * The left accent's width/style are longhands (never the shorthand) so they do
- * not reset border-left-COLOR out from under the per-tone rule; the color-free
- * close-button `border: none` reset is exempt from the floor. Values transcribed
- * verbatim from `engines/rustic.tsx`.
+ * The color-free close-button `border: none` reset is exempt from the floor.
+ * Values transcribed verbatim from `engines/rustic.tsx`.
  */
 
-/* ---- root: radius + left accent width/style (was baseStyle). Longhands keep
-        border-left-color untouched so the per-tone rule owns it. ---- */
+/* ---- root radius (was baseStyle). ---- */
 .rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'] {
   border-radius: var(--ds-radius-md, 0.5rem);
-  border-left-width: 4px;
-  border-left-style: solid;
 }
 
-/* ---- per-tone surface + accent color + text color (was TYPE_STYLES).
+/* ---- per-tone surface + border token + text color (was TYPE_STYLES).
         border-color at (0,4,0) to clear the tenant border-color floor. ---- */
 .rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='info'] {
   background-color: var(--ds-alert-info-bg, var(--ds-color-info-bg));
@@ -23769,27 +23734,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Toast skin (WO-SKIN-03 checkpoint O).
  *
  * DELIBERATELY UNLAYERED (P-47), and here that is the whole point of the file.
- * The root carries DaisyUI's structural `alert` class, and TWO layered rules
- * paint through it:
- *
- *   DaisyUI `.alert`                    -> border-color from --alert-border-color
- *                                          (on the BASE rule: this engine applies
- *                                          no `alert-{variant}` modifier)
- *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
- *                                          border-left-style: solid
- *                                          transition: opacity/transform
- *
- * Both live in layers (Tailwind's, and `rottay-personality`). An unlayered
- * declaration outranks EVERY layer regardless of specificity, so the per-tone
- * `border` shorthands below suppress the DaisyUI border-color AND personality's
- * accent bar -- exactly as the inline `border` from the deleted getAlertStyle()
- * did. The floor to clear is (0,1,0); this file sits above it by being unlayered,
- * not by escalation. Personality's `transition` is untouched by anything here and
- * stays live, as before.
- *
- * The `border` MUST stay a SHORTHAND. Splitting it into longhands would leave
- * `border-left-style`/`border-left-width` uncontested and let personality's 4px
- * accent bar re-appear on the left edge of every toast.
+ * The root carries DaisyUI's structural `alert` class. The per-tone `border`
+ * shorthands below keep a full container border above DaisyUI while personality
+ * contributes only the opacity/transform transition.
  *
  * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
  * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
@@ -24235,19 +24182,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Message skin (WO-SKIN-03 checkpoint O).
  *
  * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. The message item
- * carries DaisyUI's structural `alert` class, and TWO layered rules paint through
- * it:
- *
- *   DaisyUI `.alert`                    -> border-color from --alert-border-color
- *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
- *                                          border-left-style: solid
- *                                          transition: opacity/transform
- *
- * Neither is suppressed today and neither becomes suppressed now: this engine
- * never painted a `border` on the item -- only `background`/`color` (and a
- * `box-shadow`) -- so it inherits DaisyUI's border-color and personality's 4px
- * left accent bar, and it still does. Nothing in this file declares any border
- * channel on the root; adding one would visibly change the item.
+ * carries DaisyUI's structural `alert` class. Personality contributes only the
+ * opacity/transform transition; decorative one-sided borders are forbidden.
  *
  * SPECIFICITY (P-48): the only rule here that paints a border COLOR is the
  * loading spinner's ring, and it reaches exactly b=4 (class + data-tone +
@@ -24450,19 +24386,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Notification skin (WO-SKIN-03 checkpoint O).
  *
  * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. The item carries
- * DaisyUI's structural `alert` class, and TWO layered rules paint through it:
- *
- *   DaisyUI `.alert`                    -> border-color from --alert-border-color
- *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
- *                                          border-left-style: solid
- *                                          transition: opacity/transform
- *
- * Neither is suppressed today and neither becomes suppressed now: this engine
- * never painted a `border` on the item -- only `background`/`color` (and a
- * `box-shadow`) -- so it inherits DaisyUI's border-color and personality's 4px
- * left accent bar, and it still does. Nothing in this file declares any border
- * channel on the root; adding one would visibly change the item. (The rustic
- * engine draws its own 4px accent explicitly, in its own skin.)
+ * DaisyUI's structural `alert` class. Personality contributes only the
+ * opacity/transform transition; decorative one-sided borders are forbidden.
  *
  * SPECIFICITY (P-48): no rule here paints a border COLOR, so the tenant
  * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply.
@@ -24524,15 +24449,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `ds-notification` would newly activate personality's dormant `ds-toast-enter`
  * entrance rule on top of this engine's own slide-in.
  *
- * SPECIFICITY (P-48): the per-tone `border-left` accent bars paint a border COLOR
- * and reach b >= 4 to clear the tenant artifacts' unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
- * (0,3,1). `border: none` on the close button is a color-free reset and is exempt.
+ * `border: none` on the close button is a color-free reset and is exempt from
+ * the tenant border-color floor.
  *
- * The `open` type has NO accent bar: its entry in the style table was an empty
- * object. It DOES have an icon colour, but the icon is never rendered for it (the
- * icon renderer returns null on `open` before reaching the table) -- that entry
- * was unreachable, so it is not transcribed.
+ * The `open` type has no icon: the icon renderer returns null before reaching
+ * the style table, so that entry remains unreachable and is not transcribed.
  */
 
 /* ---- item: base surface ---- */
@@ -24540,20 +24461,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: var(--ds-notification-radius, 12px);
   background-color: var(--ds-notification-bg, var(--ds-color-bg-elevated));
   box-shadow: var(--ds-notification-shadow, var(--ds-shadow-lg));
-}
-
-/* ---- per-type left accent bar ---- */
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='success'] {
-  border-left: 4px solid var(--ds-notification-success-color, var(--ds-color-success));
-}
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='error'] {
-  border-left: 4px solid var(--ds-notification-error-color, var(--ds-color-error));
-}
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='info'] {
-  border-left: 4px solid var(--ds-notification-info-color, var(--ds-color-primary-500));
-}
-.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='warning'] {
-  border-left: 4px solid var(--ds-notification-warning-color, var(--ds-color-warning));
 }
 
 /* ---- per-type icon colour (built-in glyph only) ---- */
@@ -27375,9 +27282,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * THE BORDER SHORTHAND IS RE-FUSED, NOT SPLIT. The source set `border: '2px
  * solid'` (width + style, no color) and then a separate `borderColor` — two keys
- * that only resolve together. Splitting a border across declarations is what
- * re-materialized a stray accent bar in the feedback batch, so each status gets
- * ONE atomic `border: 2px solid <color>` shorthand. Computed result is identical
+ * that only resolve together. Each status gets ONE atomic
+ * `border: 2px solid <color>` shorthand. Computed result is identical
  * (the source's colorless shorthand resolved to `currentColor` and was then
  * overridden by `border-color` on the very next key).
  *
@@ -28983,38 +28889,31 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * border-color on every element. The left accent is a `border-left` SHORTHAND
- * (as it is inline) so width, style and color land atomically; it therefore
- * reaches (0,4,0) via the two shell classes + `[data-part='root']` +
- * `[data-tone]`. The close button's `border: none` is a color-free reset
- * (exempt). Values transcribed verbatim from `engines/rustic.tsx` /
- * `CALLOUT_COLORS`.
+ * border-color on every element. The close button's `border: none` is a
+ * color-free reset (exempt). Values transcribed verbatim from
+ * `engines/rustic.tsx` / `CALLOUT_COLORS`.
  */
 
-/* ---- root: tone-independent radius, then per-tone surface, left accent and
-        text color (was the inline style object + CALLOUT_COLORS lookup). ---- */
+/* ---- root: tone-independent radius, then per-tone surface and text color
+        (was the inline style object + CALLOUT_COLORS lookup). ---- */
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'] {
   border-radius: 8px;
 }
 
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] {
   background-color: var(--ds-color-info-50, #eff6ff);
-  border-left: 4px solid var(--ds-color-info-500, #3b82f6);
   color: var(--ds-color-info-800, #1e40af);
 }
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] {
   background-color: var(--ds-color-warning-50, #fffbeb);
-  border-left: 4px solid var(--ds-color-warning-500, #f59e0b);
   color: var(--ds-color-warning-800, #92400e);
 }
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] {
   background-color: var(--ds-color-error-50, #fef2f2);
-  border-left: 4px solid var(--ds-color-error-500, #ef4444);
   color: var(--ds-color-error-800, #991b1b);
 }
 .rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] {
   background-color: var(--ds-color-success-50, #f0fdf4);
-  border-left: 4px solid var(--ds-color-success-500, #22c55e);
   color: var(--ds-color-success-800, #166534);
 }
 
@@ -31263,7 +31162,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]) {
   background: var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent));
-  border-left: 2px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
 /* ---- row contents: expander, icon, search highlight ---- */
@@ -31357,7 +31255,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]):not([data-drop-position='inside']) {
   background-color: var(--ds-tree-node-hover-bg, rgba(0, 0, 0, 0.04));
-  border-left: 3px solid var(--ds-color-primary, #1677ff);
 }
 
 /* ---- row contents: expander (rotates on the row's data-expanded), checkbox,
@@ -37662,17 +37559,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   filter: drop-shadow(0 0 18px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 12%, transparent));
 }
 
-/* subtitle divider + editorial-tech rule + title accent bar --------------------- */
+/* subtitle divider + editorial-tech rule ------------------------------------ */
 
 .ds-structure.ds-collection-header [data-part='subtitle-divider'] {
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 100%);
 }
 .ds-structure.ds-collection-header [data-part='editorial-tech-rule'] {
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%);
-}
-.ds-structure.ds-collection-header [data-part='title-accent'] {
-  border-radius: 999px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 48%, transparent) 0%, color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 100%);
 }
 /* subtitle-row: the default-branch subtitle wrapper. The repeated data-part buys
    (0,4,0) so its top border clears the tenant border-color floor at (0,3,1). */
@@ -37891,7 +37784,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * + the data-part repeated three times.
  *
  * ICON COLOR: the Bell / ExternalLink / Chevron / per-item icons carry no
- * data-part (raw lucide nodes). Their color is painted on the nearest stamped
+ * data-part (supplier-independent SVG nodes). Their color is painted on the nearest stamped
  * ancestor Box and inherited through `currentColor` (the dashboard-header
  * precedent); every Text sibling carries its own (0,5,0) color rule, so none
  * inherits the icon color by accident.
@@ -38056,7 +37949,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * typography skin (0,4,0).
  *
  * ICON COLOR: Bell / ExternalLink carry no data-part — painted on the stamped
- * ancestor Box (currentColor). The per-item chevron is a bare lucide `svg` with
+ * ancestor Box (currentColor). The per-item chevron is an unstamped `svg` with
  * no data-part and no stampable direct parent; it is reached by
  * `[data-part='item-content'] svg` (the only svg inside item-content), which
  * takes its colour from item-content's own currentColor and its hover
@@ -38199,7 +38092,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-muted);
 }
 
-/* chevron — bare svg inside item-content: hover slide-in (colour inherited) -- */
+/* chevron — unstamped svg inside item-content: hover slide-in (colour inherited) */
 
 .ds-activity-timeline.ds-activity-timeline [data-part='item-content'] svg {
   opacity: 0;
@@ -38221,8 +38114,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * the typography skin.
  *
  * ICON COLOUR: Bell / ExternalLink painted on their stamped ancestor Box
- * (currentColor). The per-item chevron is a bare lucide `svg`, the only
- * direct-child svg of `item-row`; it is reached by `[data-part='item-row'] > svg`
+ * (currentColor). The per-item chevron is a supplier-independent `svg`, the
+ * only direct-child svg of `item-row`; it is reached by `[data-part='item-row'] > svg`
  * (its colour keyed through the item's `data-type`, its hover slide-in through
  * the item's `:hover`).
  *
@@ -38231,8 +38124,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (`.activity-compact-item-v3:hover` background / border-color) stays in the
  * co-located `<style>` and remains suppressed by the (0,3,0)/(0,4,0) rest rules
  * below, exactly as the former inline paint suppressed it. `data-type` selects
- * the bounded 5-value enum for `TYPE_CONFIG` (135deg gradient) and the
- * string-concat sites. Badge count text is a literal `white`, transcribed as-is.
+ * the bounded 5-value enum for `TYPE_CONFIG` and the string-concat sites. Badge
+ * count text is a literal `white`, transcribed as-is.
  */
 
 /* root + header ------------------------------------------------------------- */
@@ -38296,21 +38189,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-activity-compact.ds-activity-compact [data-part='item'][data-part='item'] {
   border: 1px solid var(--ds-color-border-secondary);
-}
-
-/* accent bar — type gradient (135deg), hover widens 3px -> 5px --------------- */
-
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='primary'] { background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='info']    { background: linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'][data-type='error']   { background: linear-gradient(135deg, var(--ds-color-error), var(--ds-color-error-200)); }
-
-.ds-activity-compact.ds-activity-compact [data-part='accent-bar'] {
-  width: 3px;
-}
-.ds-activity-compact.ds-activity-compact [data-part='item']:hover [data-part='accent-bar'] {
-  width: 5px;
 }
 
 /* per-item icon box — bg + type-200 border + icon colour; hover scale -------- */
@@ -38378,10 +38256,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1);
  * non-border paint wins at (0,3,0); `Text` colour buys (0,5,0).
  *
- * DIVERGENCE: this variant's `TYPE_CONFIG` gradient is `90deg`, NOT the `135deg`
- * the other three activity variants use — a real, visible accent direction and
- * kept as its own value (a byte-exact pass may not flatten it onto 135deg).
- *
  * ICON COLOUR via stamped-ancestor currentColor; the chevron is the only
  * direct-child svg of `item-row`, reached by `[data-part='item-row'] > svg`.
  * HOVER was React `isHovered` (deleted from the TSX), transcribed to
@@ -38447,21 +38321,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-activity-cards.ds-activity-cards [data-part='item'][data-part='item'] {
   border: 1px solid var(--ds-color-border-secondary);
-}
-
-/* accent bar — type gradient (90deg), hover widens 3px -> 4px ---------------- */
-
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='success'] { background: linear-gradient(90deg, var(--ds-color-success), var(--ds-color-success-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='primary'] { background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='info']    { background: linear-gradient(90deg, var(--ds-color-info), var(--ds-color-info-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='warning'] { background: linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='error']   { background: linear-gradient(90deg, var(--ds-color-error), var(--ds-color-error-200)); }
-
-.ds-activity-cards.ds-activity-cards [data-part='accent-bar'] {
-  width: 3px;
-}
-.ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='accent-bar'] {
-  width: 4px;
 }
 
 /* per-item icon box — bg + type-200 border + icon colour; hover scale -------- */
@@ -38787,7 +38646,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * is painted directly (currentColor).
  *
  * STATE: `metric.positive` is the row's `data-positive`; the 3-tone icon colour,
- * the 2-tone trend/change colour and the success/error meter fill all key on it.
+ * the 2-tone trend/change colour and the quantitative meter fill all key on it.
  * HOVER was React `isHovered` (deleted from the TSX), transcribed to
  * `[data-part='metric-row']:hover …`. The row's `<style>` `:hover` treatment
  * stays suppressed by the (0,3,0)/(0,4,0) rest rules, as the inline paint did.
@@ -38844,21 +38703,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'] {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
-}
-
-/* accent bar — success/error meter fill by trend, hover widens 3px -> 4px ---- */
-
-.ds-metrics-minimal.ds-metrics-minimal [data-part='accent-bar'] {
-  width: 3px;
-}
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='accent-bar'] {
-  width: 4px;
-}
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
-}
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
 }
 
 /* row icon box — static bg/border, 3-tone icon colour, hover scale ---------- */
@@ -39006,15 +38850,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
-/* top accent — success/error meter fill by trend --------------------------- */
-
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='top-accent'] {
-  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
-}
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='top-accent'] {
-  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
-}
-
 /* card icon box — 2px border, static colour -------------------------------- */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'] {
@@ -39153,21 +38988,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
-/* accent bar — trend meter fill, hover widens 3px -> 4px -------------------- */
-
-.ds-metrics-chart.ds-metrics-chart [data-part='accent-bar'] {
-  width: 3px;
-}
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover [data-part='accent-bar'] {
-  width: 4px;
-}
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
-}
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
-}
-
 /* row icon box — static bg/border/colour ------------------------------------ */
 
 .ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'] {
@@ -39255,8 +39075,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (`.metric-row-v3:hover .metric-row-value`) and was always suppressed by the
  * inline value colour; the (0,5,0) rest rule below preserves that suppression.
  *
- * STATE: `data-positive` (2-tone). Only the accent-bar width was React
- * `isHovered` (deleted); it is transcribed to `[data-part='metric-row']:hover …`.
+ * STATE: `data-positive` drives the 2-tone trend treatment while the
+ * quantitative meter remains the sole bar-shaped data visualization.
  */
 
 /* panel chrome -------------------------------------------------------------- */
@@ -39307,21 +39127,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-part='metric-row'] {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
-}
-
-/* accent bar — trend meter fill, hover widens 4px -> 6px -------------------- */
-
-.ds-metrics-rows.ds-metrics-rows [data-part='accent-bar'] {
-  width: 4px;
-}
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row']:hover [data-part='accent-bar'] {
-  width: 6px;
-}
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
-}
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] [data-part='accent-bar'] {
-  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
 }
 
 /* shimmer sweep ------------------------------------------------------------- */
@@ -39859,7 +39664,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text);
 }
 
-/* trend-icon (lucide, currentColor) — binary on data-trend, all five bodies. */
+/* trend-icon (supplier-independent, currentColor) — binary on data-trend, all five bodies. */
 .ds-data-terminal-card[data-trend='up'] [data-part='trend-icon'],
 .ds-data-terminal-stat[data-trend='up'] [data-part='trend-icon'] {
   color: var(--ds-color-success);
@@ -39908,7 +39713,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-color-border);
 }
 
-/* header-icon (lucide) — HUD/Circuit/Matrix, text-secondary. */
+/* header-icon — HUD/Circuit/Matrix, text-secondary. */
 .ds-data-terminal-card [data-part='header-icon'][data-part='header-icon'] {
   color: var(--ds-color-text-secondary);
 }
@@ -39923,7 +39728,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-muted);
 }
 
-/* details-arrow (lucide) — HUD/Matrix, text-muted. */
+/* details-arrow — HUD/Matrix, text-muted. */
 .ds-data-terminal-card [data-part='details-arrow'][data-part='details-arrow'] {
   color: var(--ds-color-text-muted);
 }
@@ -40186,7 +39991,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-error);
 }
 
-/* details-icon (Activity lucide) — always success. */
+/* details-icon (activity glyph) — always success. */
 .ds-data-terminal-card [data-part='details-icon'][data-part='details-icon'] {
   color: var(--ds-color-success);
 }
@@ -43381,40 +43186,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
- * SurfaceAccentBar skin (WO-SKIN-06 / CK-I). Engine-agnostic: the helper
- * renders one tree under every engine.
+ * Retired SurfaceAccentBar compatibility skin.
  *
- * DELIBERATELY UNLAYERED. Every tenant layer sorts before Tailwind preflight;
- * an unlayered skin keeps the component paint above that reset while leaving
- * caller inline overrides in charge.
- *
- * The caller-controlled thickness remains inline as the
- * `--ds-accent-bar-thickness` hatch. Position selects its original corner
- * shape. `ds-accent-bar-shimmer` is intentionally referenced by the component
- * but not defined here: the keyframe is absent from the existing runtime, and
- * defining it would introduce new motion rather than preserve current paint.
+ * Decorative colored edge rails are forbidden across every engine, vertical,
+ * and tenant. Current runtimes render no accent-bar node; this inert selector
+ * also suppresses stale server markup during mixed-version hydration.
  */
 
-.ds-surface.ds-accent-bar[data-part='bar'][data-position='top'] {
-  border-radius: var(--ds-accent-bar-thickness) var(--ds-accent-bar-thickness) 0 0;
-}
-
-.ds-surface.ds-accent-bar[data-part='bar'][data-position='left'] {
-  border-radius: var(--ds-accent-bar-thickness) 0 0 var(--ds-accent-bar-thickness);
-}
-
-.ds-surface.ds-accent-bar[data-part='bar'][data-style='solid'] {
-  background: var(--ds-color-primary);
-}
-
-/* Secondary falls back to primary for single-brand products. */
-.ds-surface.ds-accent-bar[data-part='bar'][data-style='gradient'] {
-  background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)));
-}
-
-.ds-surface.ds-accent-bar[data-part='bar'][data-style='animated'] {
-  background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)), var(--ds-color-primary));
-  background-size: 200% 100%;
+.ds-surface.ds-accent-bar[data-part='bar'] {
+  display: none;
 }
 
 /**
@@ -43904,9 +43684,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
     inset 0 -1px 0 color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
-.ds-collection-enhanced tr[data-row-key]:hover td:first-child {
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
-}
 .ds-collection-enhanced tr[data-selected="true"] td {
   background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent) !important;
 }
@@ -44094,6 +43871,24 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-surface.ds-collection-workspace .ds-collection-workspace__context-slot[data-part='context-slot'][data-collapsed='true'],
 .ds-surface.ds-collection-workspace .ds-collection-workspace__stats-slot[data-part='stats-slot'][data-collapsed='true'] {
   opacity: 0;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__stats-slot[data-part='stats-slot'] {
+  transition: max-height 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), padding 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__stats-slot[data-part='stats-slot'][data-collapsed='false'] {
+  padding: 14px 16px 10px;
+  max-height: none;
+  overflow: visible;
+  pointer-events: auto;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__stats-slot[data-part='stats-slot'][data-collapsed='true'] {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .ds-surface.ds-collection-workspace .ds-collection-workspace__masthead[data-part='masthead'] {
@@ -44394,26 +44189,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /** CommandCenterSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
-
-.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'] {
-  border-radius: var(--ds-radius-full, 9999px);
-}
-
-.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='info'] {
-  background: var(--ds-color-info);
-}
-
-.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='warning'] {
-  background: var(--ds-color-warning);
-}
-
-.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='success'] {
-  background: var(--ds-color-success);
-}
-
-.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='error'] {
-  background: var(--ds-color-error);
-}
 
 .ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
   border-radius: var(--ds-radius-md, 8px);
@@ -44857,13 +44632,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /**
  * NotificationSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered. Private Card hooks preserve the unread rail above Card hover state;
- * text rules clear Typography's (0,4,0) color floor.
+ * unlayered. Text rules clear Typography's (0,4,0) color floor. Unread state is
+ * communicated by content and actions rather than a decorative edge rail.
  */
-
-.ds-surface.ds-notification .ds-notification__item.ds-notification__item.ds-notification__item.ds-notification__item--unread[data-part='root'][data-variant='outlined'] {
-  border-left: 3px solid var(--ds-color-primary);
-}
 
 .ds-surface.ds-notification .ds-notification__muted-text[data-part='muted-text'][data-part='muted-text'] {
   color: var(--ds-color-text-muted);
@@ -47227,10 +46998,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   box-shadow: var(--ds-elevation-1);
 }
 
-.ds-pattern-tenant-preview.ds-engine-modern [data-part="accent-bar"] {
-  border-radius: var(--ds-radius-full);
-}
-
 .ds-pattern-tenant-preview.ds-engine-modern
   [data-part="preview-card-title"][data-part="preview-card-title"] {
   color: var(--ds-color-text-primary);
@@ -47316,8 +47083,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * generated tenant reset while continuing to yield to caller inline styles.
  * Every selector is anchored to the existing two-class component scope.
  *
- * The ten palette values, both mapped swatch fills, the primary-500 contrast
- * label and the card accent bar remain inline because they are tenant-derived.
+ * The ten palette values, both mapped swatch fills, and the primary-500
+ * contrast label remain inline because they are tenant-derived.
  * The badge variants are finite authored states and therefore live here.
  * Border-color declarations reach at least (0,4,0) to clear the generated
  * tenant floor at (0,3,1).
@@ -47977,7 +47744,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'] > [data-part='insight'] {
   padding: var(--ds-spacing-3);
-  border-inline-start: 3px solid var(--ds-color-primary);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
   border-radius: var(--ds-radius-sm);
   background: var(--ds-color-bg-secondary);
   color: var(--ds-color-text-primary);
@@ -50534,15 +50301,14 @@ input:focus-visible,
 
 /* ========================================================================
    ALERT PERSONALITY
-   Applies personality-driven border accent and transition to alerts.
+   Applies personality-driven transition to alerts. Decorative edge accents
+   are forbidden; tone remains available through surface, text, and icon paint.
    ======================================================================== */
 
 .ant-alert,
 .alert,
 .rottay-alert,
 [data-engine] .ds-alert {
-  border-left-width: var(--ds-personality-accent-bar-thickness, 4px);
-  border-left-style: var(--ds-personality-accent-bar-style, solid);
   transition: opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out),
               transform var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
 }
@@ -51275,8 +51041,12 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
      rustic engines (zero visual delta).
      ======================================================================== */
 
-  /* Durations — the 120/200/320ms product-law cadence. */
-  --ds-motion-instant: 80ms;
+  /* Durations — the 120/200/320ms product-law cadence. --ds-motion-instant MUST
+     stay equal to the 120ms the brand-theme compiler re-declares per tenant
+     (infrastructure/compilers/kernel/runtime/brand-theme setMotionVariables,
+     design-language section 2.6 closed set 120/200/320), so tenant-scoped and
+     unscoped contexts resolve the token to the same duration. */
+  --ds-motion-instant: 120ms;
   --ds-motion-fast: 120ms;
   --ds-motion-normal: 200ms;
   --ds-motion-slow: 320ms;
@@ -58731,6 +58501,9 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   --ds-shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.34), 0 24px 56px rgba(0, 0, 0, 0.28);
   --ds-shell-grid-line: rgba(255, 255, 255, 0.03);
   --ds-shell-grid-size: 28px;
+  --ds-shell-sidebar-collapsed-width: 96px;
+  --ds-shell-sidebar-header-block-size: 104px;
+  --ds-shell-sidebar-width: 296px;
   --ds-sidebar-bg: #0D0D10;
   --ds-sidebar-border: #18181C;
   --ds-sidebar-collapsed-width: 96px;

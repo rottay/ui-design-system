@@ -255,6 +255,9 @@
   --ds-shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.34), 0 24px 56px rgba(0, 0, 0, 0.28);
   --ds-shell-grid-line: rgba(255, 255, 255, 0.03);
   --ds-shell-grid-size: 28px;
+  --ds-shell-sidebar-collapsed-width: 96px;
+  --ds-shell-sidebar-header-block-size: 104px;
+  --ds-shell-sidebar-width: 296px;
   --ds-sidebar-bg: #0D0D10;
   --ds-sidebar-border: #18181C;
   --ds-sidebar-collapsed-width: 96px;
