@@ -68,7 +68,7 @@
 
 import React from 'react';
 import type { ProgressProps, ProgressStatus } from '../../contracts';
-import { PROGRESS_DEFAULTS } from '../../contracts';
+import { PROGRESS_DEFAULTS, TONE_TO_PROGRESS_STATUS } from '../../contracts';
 
 // ============================================================================
 // Constants
@@ -138,11 +138,15 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
     percent,
     type = PROGRESS_DEFAULTS.type,
     status = PROGRESS_DEFAULTS.status,
+    tone,
     showInfo = PROGRESS_DEFAULTS.showInfo,
     strokeColor,
     className = '',
     style,
   } = props;
+
+  // `tone` takes precedence over `status`'s color implication when both are given.
+  const resolvedStatus = tone ? TONE_TO_PROGRESS_STATUS[tone] : status;
 
   // ---------------------------------------------------------------------------
   // Circle Type Rendering
@@ -167,8 +171,8 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
     return (
       <div
         data-part="root"
-        data-status={status}
-        className={`radial-progress ${STATUS_CLASSES[status!]} rottay-progress-shell rottay-progress-shell--modern ${className}`}
+        data-status={resolvedStatus}
+        className={`radial-progress ${STATUS_CLASSES[resolvedStatus!]} rottay-progress-shell rottay-progress-shell--modern ${className}`}
         style={circleStyle}
         role="progressbar"
       >
@@ -191,14 +195,14 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
   } as React.CSSProperties;
 
   return (
-    <div data-part="root" data-status={status} className="w-full rottay-progress-shell rottay-progress-shell--modern">
+    <div data-part="root" data-status={resolvedStatus} className="w-full rottay-progress-shell rottay-progress-shell--modern">
       {/* Native <progress> element provides built-in accessibility (no ARIA
           needed) and works with browser defaults when CSS fails to load.
           DaisyUI progress classes override the native appearance while
           preserving the semantic meaning for assistive technologies. */}
       <progress
         data-part="fill"
-        className={`progress ${STATUS_CLASSES[status!]} w-full ${className}`}
+        className={`progress ${STATUS_CLASSES[resolvedStatus!]} w-full ${className}`}
         value={percent}
         max="100"
         style={progressStyle}

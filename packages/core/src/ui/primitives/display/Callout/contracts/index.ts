@@ -11,6 +11,7 @@
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
 import type { Tone } from '../../../../../foundation/contracts/kernel/common';
+import { TONE_TO_VARIANT } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * @deprecated Use {@link Tone} via the `tone` prop instead. Retained for one release so
@@ -25,15 +26,15 @@ export type CalloutVariant = 'info' | 'warning' | 'error' | 'success';
 export type CalloutTone = 'info' | 'warning' | 'danger' | 'success';
 
 /**
- * Every {@link CalloutTone} value mapped to the internal color-token key `variant` has always
- * used ('danger' is the canonical Tone spelling; Callout's internal key has always been 'error').
+ * @deprecated Use the kernel {@link TONE_TO_VARIANT} map directly; this export now folds into it
+ * and is retained under Callout's name for one release. Every {@link CalloutTone} value mapped
+ * to the internal color-token key `variant` has always used ('danger' is the canonical Tone
+ * spelling; Callout's internal key has always been 'error'). Callout's own `CalloutVariant`
+ * vocabulary ('info' | 'warning' | 'error' | 'success') happens to be a subset of the literal
+ * values `TONE_TO_VARIANT` produces for these four keys, so the kernel map is directly assignable
+ * here too despite not sharing the generic `Variant` type.
  */
-export const TONE_TO_CALLOUT_VARIANT: Record<CalloutTone, CalloutVariant> = {
-  info: 'info',
-  warning: 'warning',
-  danger: 'error',
-  success: 'success',
-};
+export const TONE_TO_CALLOUT_VARIANT: Record<CalloutTone, CalloutVariant> = TONE_TO_VARIANT;
 
 /**
  * Props for the Callout component.

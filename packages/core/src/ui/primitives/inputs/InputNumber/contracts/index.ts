@@ -9,7 +9,7 @@
  *
  * **Exported Types:**
  * - `InputNumberProps` - Main component props interface
- * - `InputNumberSize` - Size variant type (SizeType)
+ * - `InputNumberSize` - Size variant type ('sm' | 'md' | 'lg', legacy 'small' | 'middle' | 'large' | 'default' accepted for one release)
  * - `InputNumberStatus` - Validation status type (StatusType)
  *
  * **Configuration Constants:**
@@ -39,13 +39,16 @@
  */
 
 import type { ReactNode, CSSProperties, KeyboardEvent } from 'react';
-import type { SizeType, StatusType } from '../../../../../foundation/contracts/kernel/common';
+import type { LegacySizeAlias, Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Size variants for the InputNumber input.
- * Inherits from the shared SizeType: 'small' | 'default' | 'large'.
+ * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
+ * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
+ * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
+ * code.
  */
-export type InputNumberSize = SizeType;
+export type InputNumberSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
 
 /**
  * Validation status for the InputNumber input.

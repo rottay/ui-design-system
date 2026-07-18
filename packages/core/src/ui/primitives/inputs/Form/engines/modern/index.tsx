@@ -63,6 +63,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle, useEffect } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../contracts';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 /**
  * Renders an inline SVG icon corresponding to the current validation status.
@@ -112,7 +113,8 @@ interface FormContextValue {
   setTouched: (name: string, touched: boolean) => void;
   registerField: (name: string, initialValue?: unknown, rules?: FormRule[]) => void;
   layout?: 'horizontal' | 'vertical' | 'inline';
-  size?: 'small' | 'default' | 'large';
+  /** Canonical `sm | md | lg` step; the public `size` prop's legacy spelling is normalized once via `toCanonicalSize` before entering context. */
+  size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   colon?: boolean;
   requiredMark?: boolean | 'optional';
@@ -478,7 +480,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     setTouched: setFieldTouched,
     registerField,
     layout,
-    size: size === 'middle' ? 'default' : size,
+    size: toCanonicalSize(size),
     disabled,
     colon,
     requiredMark,
@@ -624,10 +626,10 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
   if (hidden) return null;
 
-  const sizeFontMap: Record<string, number> = {
-    small: 14,
-    default: 16,
-    large: 18,
+  const sizeFontMap: Record<'sm' | 'md' | 'lg', number> = {
+    sm: 14,
+    md: 16,
+    lg: 18,
   };
 
   // Clone children to inject controlled value, onChange, disabled, and id props.
@@ -676,7 +678,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
             ...(layout === 'horizontal' ? { width: '25%' } : {}),
           }}
         >
-          <span data-part="label-text" style={{ fontWeight: 500, letterSpacing: '-0.01em', fontSize: sizeFontMap[size || 'default'] || 16 }}>
+          <span data-part="label-text" style={{ fontWeight: 500, letterSpacing: '-0.01em', fontSize: sizeFontMap[size || 'md'] || 16 }}>
             {label}
             {isRequired && requiredMark && (
               <span data-part="required-mark" style={{ marginLeft: 4 }}>*</span>

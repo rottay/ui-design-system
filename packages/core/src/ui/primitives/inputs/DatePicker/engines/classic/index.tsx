@@ -21,8 +21,17 @@ import { DatePicker as AntDatePicker } from 'antd';
 import type { DatePickerProps, RangePickerProps } from '../../contracts';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import { toCanonicalSize, toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 
 const { RangePicker: AntRangePicker } = AntDatePicker;
+
+/**
+ * Resolves any accepted `size` spelling (canonical `sm | md | lg` or the
+ * deprecated `small | middle | large | default`) to AntD's three-value size
+ * enum. Byte-identical to the previous `size === 'default' ? 'middle' : size`
+ * for every value that was legal before this migration.
+ */
+const toAntSize = (size: DatePickerProps['size']) => toLegacySize(toCanonicalSize(size));
 
 // The DS normalizes on native Date objects, but antd uses dayjs internally.
 // These bridge functions convert at the boundary so consumers never see dayjs.
@@ -122,7 +131,7 @@ const DatePickerBase = React.forwardRef<unknown, DatePickerProps>((props, ref) =
       showNow={showNow}
       disabled={disabled}
       // DS uses "default" for the base size; antd calls it "middle".
-      size={size === 'default' ? 'middle' : size}
+      size={toAntSize(size)}
       status={status}
       placeholder={placeholder}
       placement={placement}
@@ -234,7 +243,7 @@ const RangePicker = React.forwardRef<unknown, RangePickerProps>((props, ref) => 
       format={format}
       showTime={showTime}
       disabled={disabled}
-      size={size === 'default' ? 'middle' : size}
+      size={toAntSize(size)}
       status={status}
       placeholder={placeholder}
       placement={placement}

@@ -32,12 +32,13 @@ import {
   type HeaderCell,
 } from '../../runtime/table-features';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
-/** Padding tokens per DS size variant (replaces DaisyUI table-xs/md/lg). */
-const SIZE_PADDING: Record<string, { cell: string; fontSize: number }> = {
-  small: { cell: '4px 8px', fontSize: 12 },
-  default: { cell: '8px 12px', fontSize: 14 },
-  large: { cell: '12px 16px', fontSize: 16 },
+/** Padding tokens per canonical `sm | md | lg` size step (replaces DaisyUI table-xs/md/lg). */
+const SIZE_PADDING: Record<'sm' | 'md' | 'lg', { cell: string; fontSize: number }> = {
+  sm: { cell: '4px 8px', fontSize: 12 },
+  md: { cell: '8px 12px', fontSize: 14 },
+  lg: { cell: '12px 16px', fontSize: 16 },
 };
 
 /** Layout for inline inputs; the paint is the modern skin's `[data-part='field']`. */
@@ -139,9 +140,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   } = features;
 
   const { onCellEdit } = props;
-  // Normalize size to one of our three DS tokens. Any unrecognized value
-  // falls through to 'default' so the table always has valid sizing.
-  const sizeKey = size === 'large' ? 'large' : size === 'small' ? 'small' : 'default';
+  // Normalize size (canonical sm/md/lg or the deprecated small/middle/large/
+  // default spellings) to one of our three DS tokens. Any unrecognized value
+  // falls through to 'md' so the table always has valid sizing.
+  const sizeKey = toCanonicalSize(size) ?? 'md';
   const sizeTokens = SIZE_PADDING[sizeKey];
   const hasExpandable = !!expandable?.expandedRowRender;
   // The expand column is rendered unless the consumer explicitly opts out via

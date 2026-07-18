@@ -42,12 +42,13 @@
 
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../../contracts';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
-/** Maps DS size tokens to inline style dimensions. */
-const sizeStyles: Record<string, React.CSSProperties> = {
-  small: { height: 32, fontSize: 13, padding: '4px 10px' },
-  default: { height: 36, fontSize: 14, padding: '6px 12px' },
-  large: { height: 40, fontSize: 16, padding: '8px 14px' },
+/** Maps the canonical `sm | md | lg` size step to inline style dimensions. */
+const sizeStyles: Record<'sm' | 'md' | 'lg', React.CSSProperties> = {
+  sm: { height: 32, fontSize: 13, padding: '4px 10px' },
+  md: { height: 36, fontSize: 14, padding: '6px 12px' },
+  lg: { height: 40, fontSize: 16, padding: '8px 14px' },
 };
 
 /**
@@ -162,7 +163,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
 
     // Resolve size to inline style values (paint is in the modern skin, keyed
     // on the `data-status` attribute stamped on root below)
-    const sizeKey = size === 'large' ? 'large' : size === 'small' ? 'small' : 'default';
+    const sizeKey = toCanonicalSize(size) ?? 'md';
     const sizeStyle = sizeStyles[sizeKey];
 
     return (

@@ -62,7 +62,7 @@
 import React from 'react';
 import { Progress as AntProgress } from 'antd';
 import type { ProgressProps } from '../../contracts';
-import { PROGRESS_DEFAULTS } from '../../contracts';
+import { PROGRESS_DEFAULTS, TONE_TO_PROGRESS_STATUS } from '../../contracts';
 
 // ============================================================================
 // Component
@@ -114,12 +114,16 @@ export default function ClassicProgress(props: ProgressProps): React.ReactElemen
     percent,
     type = PROGRESS_DEFAULTS.type,
     status = PROGRESS_DEFAULTS.status,
+    tone,
     showInfo = PROGRESS_DEFAULTS.showInfo,
     strokeColor,
     strokeWidth = PROGRESS_DEFAULTS.strokeWidth,
     className,
     style,
   } = props;
+
+  // `tone` takes precedence over `status`'s color implication when both are given.
+  const resolvedStatus = tone ? TONE_TO_PROGRESS_STATUS[tone] : status;
 
   // ---------------------------------------------------------------------------
   // Render
@@ -133,7 +137,7 @@ export default function ClassicProgress(props: ProgressProps): React.ReactElemen
     <AntProgress
       percent={percent}
       type={type}
-      status={status === 'error' ? 'exception' : status === 'success' ? 'success' : undefined}
+      status={resolvedStatus === 'error' ? 'exception' : resolvedStatus === 'success' ? 'success' : undefined}
       showInfo={showInfo}
       strokeColor={strokeColor}
       size={strokeWidth}

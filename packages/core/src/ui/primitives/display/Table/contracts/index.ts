@@ -49,13 +49,16 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties, Key } from 'react';
-import type { SizeType } from '../../../../../foundation/contracts/kernel/common';
+import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
 
 /**
- * Table size variant, derived from the shared SizeType token.
- * Controls row height, padding, and font-size of the table.
+ * Table size variant. Controls row height, padding, and font-size of the table.
+ * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
+ * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
+ * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
+ * code.
  */
-export type TableSize = SizeType;
+export type TableSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
 
 /**
  * Table layout algorithm.

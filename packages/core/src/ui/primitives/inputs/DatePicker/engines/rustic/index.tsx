@@ -37,25 +37,28 @@ import {
   getKeyboardNavDate,
   type CalendarDay,
 } from '../../runtime/calendar';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 // ---------------------------------------------------------------------------
 // Size configuration using CSS variables
 // Rustic engine uses CSS custom properties with hardcoded fallbacks throughout,
 // so tenant theming works at the CSS layer without any JavaScript re-renders.
+// Keyed by the canonical `sm | md | lg` step -- `toCanonicalSize` resolves any
+// accepted spelling before lookup.
 // ---------------------------------------------------------------------------
 
-const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; minWidth: string }> = {
-  small: {
+const SIZE_CONFIG: Record<'sm' | 'md' | 'lg', { padding: string; fontSize: string; minWidth: string }> = {
+  sm: {
     padding: 'var(--ds-datepicker-sm-padding, 4px 8px)',
     fontSize: 'var(--ds-datepicker-sm-font-size, 12px)',
     minWidth: '160px',
   },
-  default: {
+  md: {
     padding: 'var(--ds-datepicker-md-padding, 6px 12px)',
     fontSize: 'var(--ds-datepicker-md-font-size, 14px)',
     minWidth: '180px',
   },
-  large: {
+  lg: {
     padding: 'var(--ds-datepicker-lg-padding, 8px 16px)',
     fontSize: 'var(--ds-datepicker-lg-font-size, 15px)',
     minWidth: '200px',
@@ -788,13 +791,14 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
 
   // Display
   const displayText = formatDisplay(selectedDate, format, picker, showTime);
-  const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+  const canonicalSize = toCanonicalSize(size) ?? 'md';
+  const sizeConfig = SIZE_CONFIG[canonicalSize];
 
   // Class names
   const containerClasses = [
     'rottay-datepicker',
     'rottay-datepicker--rustic',
-    `rottay-datepicker--${size}`,
+    `rottay-datepicker--${canonicalSize}`,
     status && `rottay-datepicker--${status}`,
     disabled && 'rottay-datepicker--disabled',
     isFocused && 'rottay-datepicker--focused',
@@ -1099,12 +1103,13 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
 
   const startText = formatDisplay(startDate, format, picker, showTime);
   const endText = formatDisplay(endDate, format, picker, showTime);
-  const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+  const canonicalSize = toCanonicalSize(size) ?? 'md';
+  const sizeConfig = SIZE_CONFIG[canonicalSize];
 
   const containerClasses = [
     'rottay-datepicker-range',
     'rottay-datepicker-range--rustic',
-    `rottay-datepicker-range--${size}`,
+    `rottay-datepicker-range--${canonicalSize}`,
     status && `rottay-datepicker-range--${status}`,
     disabled && 'rottay-datepicker-range--disabled',
     className,

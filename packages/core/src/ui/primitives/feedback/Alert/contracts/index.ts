@@ -53,6 +53,8 @@
  */
 
 import type { EngineAwareProps, BaseComponentProps } from '../../../../../foundation/contracts';
+import type { Tone } from '../../../../../foundation/contracts/kernel/common';
+import { TONE_TO_VARIANT } from '../../../../../foundation/contracts/kernel/common';
 import type { ReactNode } from 'react';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
@@ -92,6 +94,23 @@ import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/v
  */
 export type AlertType = 'info' | 'success' | 'warning' | 'error';
 
+/**
+ * The {@link Tone} values Alert accepts through the `tone` prop ('neutral' and 'primary' have no
+ * Alert rendering and remain excluded, matching the deprecated `type`'s vocabulary -- the same
+ * curated subset Callout's `CalloutTone` already uses).
+ */
+export type AlertTone = 'info' | 'warning' | 'danger' | 'success';
+
+/**
+ * Every {@link AlertTone} value mapped to the internal color-token key `type` has always used
+ * ('danger' is the canonical Tone spelling; Alert's internal key has always been 'error').
+ * Resolves through the kernel {@link TONE_TO_VARIANT} map (single authority): Alert's own
+ * `AlertType` vocabulary ('info' | 'warning' | 'error' | 'success') is a subset of the literal
+ * values `TONE_TO_VARIANT` produces for these four keys -- the same relationship Callout's
+ * `TONE_TO_CALLOUT_VARIANT` has to it.
+ */
+export const TONE_TO_ALERT_TYPE: Record<AlertTone, AlertType> = TONE_TO_VARIANT;
+
 // ============================================================================
 // Props Interface
 // ============================================================================
@@ -124,7 +143,14 @@ export interface AlertProps extends BaseComponentProps, EngineAwareProps {
   // ---------------------------------------------------------------------------
 
   /**
-   * The alert type/variant.
+   * Alert semantic color. Takes precedence over the deprecated `type` prop when both
+   * are given.
+   * @default 'info'
+   */
+  tone?: AlertTone;
+
+  /**
+   * @deprecated Use `tone` instead. The alert type/variant.
    * Determines color scheme and default icon.
    * @default 'info'
    */

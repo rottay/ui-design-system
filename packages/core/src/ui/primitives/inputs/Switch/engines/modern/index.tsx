@@ -28,6 +28,7 @@
 
 import React, { useState, useCallback } from 'react';
 import type { SwitchProps } from '../../contracts';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 /* ------------------------------------------------------------------ */
 /*  Size presets                                                       */
@@ -40,10 +41,11 @@ interface SwitchDimensions {
   thumbInset: number;
 }
 
-const dimensionMap: Record<string, SwitchDimensions> = {
-  small:   { trackW: 28, trackH: 16, thumbSize: 12, thumbInset: 2 },
-  default: { trackW: 36, trackH: 20, thumbSize: 16, thumbInset: 2 },
-  large:   { trackW: 44, trackH: 24, thumbSize: 20, thumbInset: 2 },
+/** Keyed by the canonical `sm | md | lg` step -- `toCanonicalSize` resolves any accepted spelling to one of these three before lookup. */
+const dimensionMap: Record<'sm' | 'md' | 'lg', SwitchDimensions> = {
+  sm: { trackW: 28, trackH: 16, thumbSize: 12, thumbInset: 2 },
+  md: { trackW: 36, trackH: 20, thumbSize: 16, thumbInset: 2 },
+  lg: { trackW: 44, trackH: 24, thumbSize: 20, thumbInset: 2 },
 };
 
 /* ------------------------------------------------------------------ */
@@ -89,7 +91,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     }, [isChecked, onClick]);
 
     /* -- Dimensions ------------------------------------------------- */
-    const sizeKey = size === 'large' ? 'large' : size === 'small' ? 'small' : 'default';
+    const sizeKey = toCanonicalSize(size) ?? 'md';
     const dim = dimensionMap[sizeKey];
     const thumbTravel = dim.trackW - dim.thumbSize - dim.thumbInset * 2;
 

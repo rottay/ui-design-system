@@ -33,6 +33,7 @@ import {
   type HeaderCell,
 } from '../../runtime/table-features';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 // ---------------------------------------------------------------------------
 // Style definitions using CSS custom properties
@@ -307,11 +308,14 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   // ---- Style helpers ----
   // These functions compose the base style objects with size/bordered/layout
   // overrides. Composition happens at render time because the size prop can
-  // change dynamically (e.g., responsive layouts).
+  // change dynamically (e.g., responsive layouts). Canonicalizing once here
+  // means the new 'sm'/'lg' steps and the legacy 'small'/'large' spellings
+  // both resolve to the same branch.
+  const canonicalSize = toCanonicalSize(size);
   const getTableStyle = (): CSSProperties => {
     const base: CSSProperties = { ...baseStyles.table };
-    if (size === 'small') Object.assign(base, baseStyles.tableSmall);
-    if (size === 'large') Object.assign(base, baseStyles.tableLarge);
+    if (canonicalSize === 'sm') Object.assign(base, baseStyles.tableSmall);
+    if (canonicalSize === 'lg') Object.assign(base, baseStyles.tableLarge);
     if (props.tableLayout === 'fixed') base.tableLayout = 'fixed';
     const scrollXValue = scroll?.x;
     if (scrollXValue) {
@@ -322,8 +326,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
   const getCellStyle = (): CSSProperties => {
     const base: CSSProperties = { ...baseStyles.td };
-    if (size === 'small') Object.assign(base, baseStyles.tdSmall);
-    if (size === 'large') Object.assign(base, baseStyles.tdLarge);
+    if (canonicalSize === 'sm') Object.assign(base, baseStyles.tdSmall);
+    if (canonicalSize === 'lg') Object.assign(base, baseStyles.tdLarge);
     return base;
   };
 

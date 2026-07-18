@@ -20,20 +20,21 @@ import React, { useState } from 'react';
 
 import { useInteractionState } from '../../../../../../foundation/behavior';
 import type { TimePickerProps, TimeRangePickerProps } from '../../contracts';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
-/** Size dimensions driven by CSS variables for each size variant. */
-const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; minWidth: string }> = {
-  small: {
+/** Size dimensions driven by CSS variables, keyed by the canonical `sm | md | lg` step. */
+const SIZE_CONFIG: Record<'sm' | 'md' | 'lg', { padding: string; fontSize: string; minWidth: string }> = {
+  sm: {
     padding: 'var(--ds-timepicker-sm-padding)',
     fontSize: 'var(--ds-timepicker-sm-font-size)',
     minWidth: '100px',
   },
-  default: {
+  md: {
     padding: 'var(--ds-timepicker-md-padding)',
     fontSize: 'var(--ds-timepicker-md-font-size)',
     minWidth: '120px',
   },
-  large: {
+  lg: {
     padding: 'var(--ds-timepicker-lg-padding)',
     fontSize: 'var(--ds-timepicker-lg-font-size)',
     minWidth: '140px',
@@ -154,13 +155,14 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     onChange?.(null, '');
   };
 
-  const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+  const canonicalSize = toCanonicalSize(size) ?? 'md';
+  const sizeConfig = SIZE_CONFIG[canonicalSize];
 
   // BEM class names for external CSS targeting and state-driven modifiers
   const containerClasses = [
     'rottay-timepicker',
     'rottay-timepicker--rustic',
-    `rottay-timepicker--${size}`,
+    `rottay-timepicker--${canonicalSize}`,
     status && `rottay-timepicker--${status}`,
     disabled && 'rottay-timepicker--disabled',
     isFocused && 'rottay-timepicker--focused',
@@ -336,13 +338,14 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     );
   };
 
-  const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+  const canonicalSize = toCanonicalSize(size) ?? 'md';
+  const sizeConfig = SIZE_CONFIG[canonicalSize];
 
   // BEM class names for external CSS targeting and state-driven modifiers
   const containerClasses = [
     'rottay-timepicker-range',
     'rottay-timepicker-range--rustic',
-    `rottay-timepicker-range--${size}`,
+    `rottay-timepicker-range--${canonicalSize}`,
     status && `rottay-timepicker-range--${status}`,
     disabled && 'rottay-timepicker-range--disabled',
     className,

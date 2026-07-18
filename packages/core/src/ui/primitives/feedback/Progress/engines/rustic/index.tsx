@@ -64,7 +64,7 @@
 
 import React from 'react';
 import type { ProgressProps } from '../../contracts';
-import { PROGRESS_DEFAULTS } from '../../contracts';
+import { PROGRESS_DEFAULTS, TONE_TO_PROGRESS_STATUS } from '../../contracts';
 
 // ============================================================================
 // Constants
@@ -127,12 +127,16 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
     percent,
     type = PROGRESS_DEFAULTS.type,
     status = PROGRESS_DEFAULTS.status,
+    tone,
     showInfo = PROGRESS_DEFAULTS.showInfo,
     strokeColor,
     strokeWidth = PROGRESS_DEFAULTS.strokeWidth,
     className,
     style,
   } = props;
+
+  // `tone` takes precedence over `status`'s color implication when both are given.
+  const resolvedStatus = tone ? TONE_TO_PROGRESS_STATUS[tone] : status;
 
   // ---------------------------------------------------------------------------
   // Derived Values
@@ -172,7 +176,7 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
     return (
       <div
         data-part="root"
-        data-status={status}
+        data-status={resolvedStatus}
         className={['rottay-progress-shell', 'rottay-progress-shell--rustic', className].filter(Boolean).join(' ')}
         style={containerStyle}
       >
@@ -262,7 +266,7 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   return (
     <div
       data-part="root"
-      data-status={status}
+      data-status={resolvedStatus}
       className={['rottay-progress-shell', 'rottay-progress-shell--rustic', className].filter(Boolean).join(' ')}
       style={containerStyle}
     >

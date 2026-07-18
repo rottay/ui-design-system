@@ -42,6 +42,15 @@
 import React from 'react';
 import { InputNumber as AntInputNumber, Space } from 'antd';
 import type { InputNumberProps } from '../../contracts';
+import { toCanonicalSize, toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+
+/**
+ * Resolves any accepted `size` spelling (canonical `sm | md | lg` or the
+ * deprecated `small | middle | large | default`) to AntD's three-value size
+ * enum. Byte-identical to the previous `size === 'default' ? 'middle' : size`
+ * for every value that was legal before this migration.
+ */
+const toAntSize = (size: InputNumberProps['size']) => toLegacySize(toCanonicalSize(size));
 
 /**
  * Classic engine InputNumber backed by Ant Design's InputNumber.
@@ -101,7 +110,7 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
         precision={precision}
         disabled={disabled}
         readOnly={readOnly}
-        size={size === 'default' ? 'middle' : size}
+        size={toAntSize(size)}
         status={status}
         prefix={prefix}
         suffix={suffix}

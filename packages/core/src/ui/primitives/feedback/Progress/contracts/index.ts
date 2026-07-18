@@ -51,6 +51,7 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps, BaseComponentProps } from '../../../../../foundation/contracts';
+import type { Tone } from '../../../../../foundation/contracts/kernel/common';
 
 // ============================================================================
 // Type Definitions
@@ -83,6 +84,29 @@ export type ProgressType = 'line' | 'circle';
  * | `active` | Primary blue + animation | Actively processing |
  */
 export type ProgressStatus = 'normal' | 'success' | 'error' | 'active';
+
+/**
+ * The {@link Tone} values Progress accepts through the `tone` prop. Progress's color vocabulary
+ * only ever covered 'normal' (unthemed) | 'success' | 'error' -- 'primary', 'warning', and 'info'
+ * have no engine color tokens, so this is a curated subset like {@link Exclude}<Tone, 'info'>
+ * would be for a component with a richer palette, not a straight re-export of {@link Tone}.
+ * `tone` is a pure color override: it does not replace `status`, which also drives the
+ * `'active'` animated-stripe state (a structural concern {@link Tone} deliberately excludes --
+ * see the kernel `Tone` doc).
+ */
+export type ProgressTone = 'neutral' | 'success' | 'danger';
+
+/**
+ * Every {@link ProgressTone} value mapped to the internal color-token key `status` has always
+ * used ('danger' is the canonical Tone spelling; Progress's internal key has always been
+ * 'error'; 'neutral' maps to 'normal', Progress's unthemed spelling -- not 'default', so this
+ * cannot derive from the kernel's shared `TONE_TO_VARIANT` map).
+ */
+export const TONE_TO_PROGRESS_STATUS: Record<ProgressTone, ProgressStatus> = {
+  neutral: 'normal',
+  success: 'success',
+  danger: 'error',
+};
 
 // ============================================================================
 // Props Interface
@@ -155,6 +179,13 @@ export interface ProgressProps extends BaseComponentProps, EngineAwareProps {
    * @default 'normal'
    */
   status?: ProgressStatus;
+
+  /**
+   * Semantic color override for the progress indicator. Takes precedence over `status`'s color
+   * implication (normal/success/error) when both are given, but does not replace `status`,
+   * which also controls the `'active'` animated-stripe state.
+   */
+  tone?: ProgressTone;
 
   /**
    * Whether to display the percentage value.

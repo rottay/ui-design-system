@@ -9,7 +9,7 @@
  *
  * **Exported Types:**
  * - `SwitchProps` - Main component props interface
- * - `SwitchSize` - Size variant type (uses SizeType: 'small' | 'default' | 'large')
+ * - `SwitchSize` - Size variant type ('sm' | 'md' | 'lg', legacy 'small' | 'middle' | 'large' | 'default' accepted for one release)
  *
  * **Configuration Constants:**
  * - `SWITCH_DEFAULTS` - Default prop values
@@ -38,9 +38,16 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { SizeType } from '../../../../../foundation/contracts/kernel/common';
+import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
 
-export type SwitchSize = SizeType;
+/**
+ * Size of the switch.
+ * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
+ * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
+ * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
+ * code.
+ */
+export type SwitchSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
 
 export interface SwitchProps {
   /** Whether the switch is checked */

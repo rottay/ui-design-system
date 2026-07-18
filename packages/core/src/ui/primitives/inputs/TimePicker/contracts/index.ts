@@ -36,12 +36,16 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
-import type { SizeType, StatusType } from '../../../../../foundation/contracts/kernel/common';
+import type { LegacySizeAlias, Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Size variants for the TimePicker input.
+ * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
+ * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
+ * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
+ * code.
  */
-export type TimePickerSize = SizeType;
+export type TimePickerSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
 
 /**
  * Validation status for the TimePicker.

@@ -20,6 +20,18 @@ import { TimePicker as AntTimePicker } from 'antd';
 import type { TimePickerProps, TimeRangePickerProps } from '../../contracts';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import { toCanonicalSize, toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+
+/**
+ * Resolves any accepted `size` spelling (canonical `sm | md | lg` or the
+ * deprecated `small | middle | large | default`) to AntD's three-value size
+ * enum. Canonicalizing first means the new canonical steps and their legacy
+ * counterparts converge on the same AntD value; already-legacy input passes
+ * through both helpers unchanged, so this is byte-identical to the previous
+ * `size === 'default' ? 'middle' : size` for every value that was legal
+ * before this migration.
+ */
+const toAntSize = (size: TimePickerProps['size']) => toLegacySize(toCanonicalSize(size));
 
 const { RangePicker: AntTimeRangePicker } = AntTimePicker;
 
@@ -118,7 +130,7 @@ const TimePickerBase = React.forwardRef<unknown, TimePickerProps>((props, ref) =
       use12Hours={use12Hours}
       showNow={showNow}
       disabled={disabled}
-      size={size === 'default' ? 'middle' : size}
+      size={toAntSize(size)}
       status={status}
       placeholder={placeholder}
       placement={placement}
@@ -215,7 +227,7 @@ const TimeRangePicker = React.forwardRef<unknown, TimeRangePickerProps>((props, 
       secondStep={secondStep as any}
       use12Hours={use12Hours}
       disabled={disabled}
-      size={size === 'default' ? 'middle' : size}
+      size={toAntSize(size)}
       status={status}
       placeholder={placeholder}
       placement={placement}

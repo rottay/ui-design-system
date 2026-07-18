@@ -69,6 +69,7 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle, useEffect } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 // Feedback icon data keyed by validation status. Using a static lookup table
 // instead of a switch statement keeps the rendering logic minimal and lets us
@@ -200,7 +201,8 @@ interface FormContextValue {
   setTouched: (name: string, touched: boolean) => void;
   registerField: (name: string, initialValue?: unknown, rules?: FormRule[]) => void;
   layout?: 'horizontal' | 'vertical' | 'inline';
-  size?: 'small' | 'default' | 'large';
+  /** Canonical `sm | md | lg` step; the public `size` prop's legacy spelling is normalized once via `toCanonicalSize` before entering context. */
+  size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   colon?: boolean;
   requiredMark?: boolean | 'optional';
@@ -533,7 +535,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     setTouched: setFieldTouched,
     registerField,
     layout,
-    size: size === 'middle' ? 'default' : size,
+    size: toCanonicalSize(size),
     disabled,
     colon,
     requiredMark,

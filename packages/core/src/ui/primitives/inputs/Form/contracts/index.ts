@@ -75,7 +75,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
-import type { SizeType } from '../../../../../foundation/contracts/kernel/common';
+import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Layout direction for the form and its fields.
@@ -88,8 +88,12 @@ export type FormLayout = 'horizontal' | 'vertical' | 'inline';
 /**
  * Size variants for all form controls within the form.
  * Propagated to child Input, Select, DatePicker, etc. components.
+ * @remarks Canonical values are the {@link Size} subset `'sm' | 'md' | 'lg'`. The legacy Ant
+ * Design-style spellings (`'small' | 'middle' | 'large' | 'default'`) are accepted for one
+ * release via {@link LegacySizeAlias} and are deprecated; prefer the canonical spelling in new
+ * code.
  */
-export type FormSize = SizeType;
+export type FormSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
 
 /**
  * Text alignment for form field labels in horizontal layout.

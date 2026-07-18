@@ -13,12 +13,13 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { TimePickerProps, TimeRangePickerProps } from '../../contracts';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
-/** Maps DS size values to inline style dimensions. */
-const sizeStyleMap: Record<string, React.CSSProperties> = {
-  small: { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' },
-  default: { height: 'var(--ds-input-md-height, 40px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' },
-  large: { height: 'var(--ds-input-lg-height, 44px)', fontSize: 'var(--ds-input-lg-font-size, 15px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
+/** Maps the canonical `sm | md | lg` size step to inline style dimensions. */
+const sizeStyleMap: Record<'sm' | 'md' | 'lg', React.CSSProperties> = {
+  sm: { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' },
+  md: { height: 'var(--ds-input-md-height, 40px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' },
+  lg: { height: 'var(--ds-input-lg-height, 44px)', fontSize: 'var(--ds-input-lg-font-size, 15px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
 };
 
 /** Pads a number to 2 digits. */
@@ -368,7 +369,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     if (parsed) handleSelect(parsed.h, parsed.m, parsed.s);
   }, [isControlled, onChange, handleSelect]);
 
-  const sizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
+  const sizeStyle = sizeStyleMap[toCanonicalSize(size) ?? 'md'];
 
   return (
     <>
@@ -588,7 +589,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     setIsOpen(false);
   }, [handleSelect]);
 
-  const rangeSizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
+  const rangeSizeStyle = sizeStyleMap[toCanonicalSize(size) ?? 'md'];
   const activeTime = activeInput === 'start' ? displayValue[0] : displayValue[1];
 
   const rangeInputBaseStyle: React.CSSProperties = {

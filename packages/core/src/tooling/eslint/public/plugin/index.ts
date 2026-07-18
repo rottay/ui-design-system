@@ -25,6 +25,7 @@ import {
   noHardcodedColors,
   noMotionLiterals,
   noRawHtml,
+  noSizeTypeOutsideClassic,
 } from '../../runtime/rules';
 
 // ── Plugin object ──────────────────────────────────────────────────
@@ -35,6 +36,7 @@ export const rules = {
   'no-db-in-components': noDbInComponents,
   'no-direct-lucide': noDirectLucide,
   'no-motion-literals': noMotionLiterals,
+  'no-size-type-outside-classic': noSizeTypeOutsideClassic,
 };
 
 /** Standalone plugin reference (for manual wiring) */
@@ -57,6 +59,7 @@ export const configs = {
       '@rottay/no-db-in-components': 'error' as const,
       '@rottay/no-direct-lucide': 'warn' as const,
       '@rottay/no-motion-literals': 'error' as const,
+      '@rottay/no-size-type-outside-classic': 'warn' as const,
     },
   },
 

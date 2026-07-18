@@ -24,9 +24,24 @@ export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
  * @deprecated Ant Design-compatible size vocabulary. Use {@link Size} ('sm' | 'md' | 'lg')
  * in public component prop types; the classic engine's antd adapters translate a canonical
  * `Size` step to this spelling internally via {@link toLegacySize}. Retained for one release
- * so existing `'small' | 'middle' | 'large' | 'default'` values keep compiling.
+ * so existing `'small' | 'middle' | 'large' | 'default'` values keep compiling. Importable only
+ * under `engines/classic/` (the antd size-vocabulary bridge) -- see the
+ * `no-size-type-outside-classic` ESLint rule in `@rottay/design-system/eslint`. Public contract
+ * files reference {@link LegacySizeAlias} instead so that restriction can be enforced by name.
  */
 export type SizeType = 'small' | 'middle' | 'large' | 'default';
+
+/**
+ * @deprecated Same literal union as {@link SizeType}, exported under a second name so the six
+ * retyped `*Size` contracts (Table, TimePicker, DatePicker, Form, InputNumber, Switch) can widen
+ * their canonical `'sm' | 'md' | 'lg'` step with the deprecated antd-style spellings for one
+ * release without importing `SizeType` itself (which is restricted to `engines/classic/`).
+ * Every exported `*Props` size-typed field across the design system must stay assignable to
+ * `Size | LegacySizeAlias` -- this is the axis-law ratchet enforced by
+ * `scripts/size-axis-law-gate.mjs`. A follow-up release deletes this alias from the six
+ * contracts' `*Size` unions (recorded in the roadmap, not silently).
+ */
+export type LegacySizeAlias = SizeType;
 
 /** The `sm | md | lg` subset of {@link Size} that has a legacy `SizeType` counterpart. */
 type CanonicalLegacySizeStep = 'sm' | 'md' | 'lg';
@@ -57,6 +72,33 @@ export function toLegacySize<T extends string | undefined>(
   return size as Exclude<T, CanonicalLegacySizeStep>;
 }
 
+/** Every deprecated `SizeType` spelling (including the ambiguous `'default'`) mapped to its canonical `Size` step. */
+const CANON_SIZE_BY_LEGACY: Record<'small' | 'middle' | 'large' | 'default', CanonicalLegacySizeStep> = {
+  small: 'sm',
+  middle: 'md',
+  large: 'lg',
+  default: 'md',
+};
+
+/**
+ * Resolves a legacy `SizeType` spelling -- or the ambiguous `'default'` -- to its canonical
+ * `sm | md | lg` step, for engine bindings (modern/rustic) that key an internal lookup table,
+ * CSS class suffix, or `data-size` attribute by the canonical vocabulary. Already-canonical
+ * input, `undefined`, or any other `Size` step (`'xs'`, `'xl'`, ...) passes through unchanged,
+ * so calling this once on a `size` prop before it reaches existing lookup/switch/className logic
+ * normalizes both the deprecated antd-style spelling AND the new canonical spelling to the one
+ * vocabulary modern/rustic render against. Inverse of {@link toLegacySize}; scoped to string
+ * inputs the same way.
+ */
+export function toCanonicalSize<T extends string | undefined>(
+  size: T,
+): Exclude<T, 'small' | 'middle' | 'large' | 'default'> | CanonicalLegacySizeStep {
+  if (size === 'small' || size === 'middle' || size === 'large' || size === 'default') {
+    return CANON_SIZE_BY_LEGACY[size as 'small' | 'middle' | 'large' | 'default'];
+  }
+  return size as Exclude<T, 'small' | 'middle' | 'large' | 'default'>;
+}
+
 /** Status types for form control validation states. */
 export type StatusType = '' | 'error' | 'warning';
 
@@ -75,6 +117,32 @@ export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning
  * into one union.
  */
 export type Tone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+
+/**
+ * Single-authority {@link Tone} -> internal color-token key mapping. Component engines that key
+ * an internal lookup table, CSS class, or supplier prop (antd `type`/`status`) by a
+ * component-local "variant" vocabulary resolve their `tone` prop through this map rather than
+ * hand-rolling a parallel `TONE_TO_*` table; `as const` keeps every property's literal type
+ * (not widened to `string`), so a component whose internal vocabulary is a strict subset of
+ * these six values -- e.g. Tag has no `'info'` color tokens -- can still assign this object to
+ * its own narrower `Record<XTone, XVariant>` binding: TypeScript checks each required key is
+ * present with an assignable literal type and does not reject the unused extra keys on a
+ * non-literal source. Only `danger` renames (`'error'`) because none of the internal
+ * vocabularies spell it `danger`; `neutral` renders `'default'`, the spelling every
+ * `Variant`-shaped internal vocabulary (Badge/Tag/Avatar) already uses for its unthemed case.
+ * A component whose internal "unthemed" key is NOT spelled `'default'` (e.g. Progress's
+ * `'normal'`) cannot derive from this shared object and keeps its own small bridge map --
+ * that is a vocabulary difference, not a second semantic authority: {@link Tone} itself, defined
+ * once above, remains what "neutral/primary/success/warning/danger/info" mean everywhere.
+ */
+export const TONE_TO_VARIANT = {
+  neutral: 'default',
+  primary: 'primary',
+  success: 'success',
+  warning: 'warning',
+  danger: 'error',
+  info: 'info',
+} as const satisfies Record<Tone, string>;
 
 /**
  * Modal width scale, shared by both Modal component families

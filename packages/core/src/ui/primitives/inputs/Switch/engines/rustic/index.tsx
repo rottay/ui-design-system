@@ -19,26 +19,27 @@
 import React, { useState } from 'react';
 
 import type { SwitchProps } from '../../contracts';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 /**
- * Size configuration using CSS variables for each switch variant.
- * The `translate` value is a CSS calc() that moves the thumb knob from
- * left edge to right edge, accounting for thumb size and internal offset.
+ * Size configuration using CSS variables for each switch variant, keyed by
+ * the canonical `sm | md | lg` step -- `toCanonicalSize` resolves any
+ * accepted spelling to one of these three before lookup.
  */
-const SIZE_CONFIG: Record<string, { width: string; height: string; thumbSize: string; translate: string }> = {
-  small: {
+const SIZE_CONFIG: Record<'sm' | 'md' | 'lg', { width: string; height: string; thumbSize: string; translate: string }> = {
+  sm: {
     width: 'var(--ds-switch-sm-width)',
     height: 'var(--ds-switch-sm-height)',
     thumbSize: 'var(--ds-switch-sm-thumb-size)',
     translate: 'calc(var(--ds-switch-sm-width) - var(--ds-switch-sm-thumb-size) - var(--ds-switch-thumb-offset) * 2)',
   },
-  default: {
+  md: {
     width: 'var(--ds-switch-md-width)',
     height: 'var(--ds-switch-md-height)',
     thumbSize: 'var(--ds-switch-md-thumb-size)',
     translate: 'calc(var(--ds-switch-md-width) - var(--ds-switch-md-thumb-size) - var(--ds-switch-thumb-offset) * 2)',
   },
-  large: {
+  lg: {
     width: 'var(--ds-switch-lg-width)',
     height: 'var(--ds-switch-lg-height)',
     thumbSize: 'var(--ds-switch-lg-thumb-size)',
@@ -100,8 +101,10 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       onClick?.(isChecked, e as unknown as React.MouseEvent);
     };
 
-    // Fall back to 'default' if an unrecognised size string is passed
-    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+    // Canonicalize once: resolves both the new 'sm'/'md'/'lg' steps and the
+    // deprecated 'small'/'middle'/'large'/'default' spellings to the same key.
+    const canonicalSize = toCanonicalSize(size) ?? 'md';
+    const sizeConfig = SIZE_CONFIG[canonicalSize];
 
     // BEM class names for external CSS targeting and state-driven modifiers
     const containerClasses = [
@@ -109,7 +112,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       'rottay-switch--rustic',
       'ds-switch',
       'ds-switch--rustic',
-      `rottay-switch--${size}`,
+      `rottay-switch--${canonicalSize}`,
       isChecked && 'rottay-switch--checked',
       disabled && 'rottay-switch--disabled',
       loading && 'rottay-switch--loading',

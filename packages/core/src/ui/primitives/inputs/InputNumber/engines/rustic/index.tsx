@@ -20,23 +20,26 @@ import React, { useState, useCallback } from 'react';
 
 import { useInteractionState } from '../../../../../../foundation/behavior';
 import type { InputNumberProps } from '../../contracts';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 /**
- * Size configuration referencing CSS variables for each size tier.
- * Tenants override the underlying --ds-inputnumber-* tokens to control sizing.
+ * Size configuration referencing CSS variables for each size tier, keyed by
+ * the canonical `sm | md | lg` step -- `toCanonicalSize` resolves any
+ * accepted spelling before lookup. Tenants override the underlying
+ * --ds-inputnumber-* tokens to control sizing.
  */
-const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; width: string }> = {
-  small: {
+const SIZE_CONFIG: Record<'sm' | 'md' | 'lg', { padding: string; fontSize: string; width: string }> = {
+  sm: {
     padding: 'var(--ds-inputnumber-sm-padding)',
     fontSize: 'var(--ds-inputnumber-sm-font-size)',
     width: 'var(--ds-inputnumber-sm-width)',
   },
-  default: {
+  md: {
     padding: 'var(--ds-inputnumber-md-padding)',
     fontSize: 'var(--ds-inputnumber-md-font-size)',
     width: 'var(--ds-inputnumber-md-width)',
   },
-  large: {
+  lg: {
     padding: 'var(--ds-inputnumber-lg-padding)',
     fontSize: 'var(--ds-inputnumber-lg-font-size)',
     width: 'var(--ds-inputnumber-lg-width)',
@@ -154,13 +157,14 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       }
     };
 
-    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+    const canonicalSize = toCanonicalSize(size) ?? 'md';
+    const sizeConfig = SIZE_CONFIG[canonicalSize];
 
     // Build BEM class names; falsy entries are filtered out before joining
     const containerClasses = [
       'rottay-inputnumber',
       'rottay-inputnumber--rustic',
-      `rottay-inputnumber--${size}`,
+      `rottay-inputnumber--${canonicalSize}`,
       status && `rottay-inputnumber--${status}`,
       disabled && 'rottay-inputnumber--disabled',
       isFocused && 'rottay-inputnumber--focused',

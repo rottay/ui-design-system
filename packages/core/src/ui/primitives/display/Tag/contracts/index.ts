@@ -33,6 +33,7 @@
 
 import type { ReactNode } from 'react';
 import type { BaseComponentProps, Size, Tone, Variant, WithChildren } from '../../../../../foundation/contracts/kernel/common';
+import { TONE_TO_VARIANT } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 
 /** Tag size type alias derived from the global Size scale. */
@@ -52,15 +53,12 @@ export type TagVariant = Variant;
 export type TagTone = Exclude<Tone, 'info'>;
 
 /**
- * Every {@link TagTone} value mapped to the internal color-token key `variant` has always used.
+ * @deprecated Use the kernel {@link TONE_TO_VARIANT} map directly; this export now folds into
+ * it and is retained under Tag's name for one release. Every {@link TagTone} value mapped to the
+ * internal color-token key `variant` has always used. `TONE_TO_VARIANT`'s extra `info` key is
+ * harmless here: this binding's `Record<TagTone, TagVariant>` type does not require it.
  */
-export const TONE_TO_TAG_VARIANT: Record<TagTone, TagVariant> = {
-  neutral: 'default',
-  primary: 'primary',
-  success: 'success',
-  warning: 'warning',
-  danger: 'error',
-};
+export const TONE_TO_TAG_VARIANT: Record<TagTone, TagVariant> = TONE_TO_VARIANT;
 
 /**
  * Tag component props.

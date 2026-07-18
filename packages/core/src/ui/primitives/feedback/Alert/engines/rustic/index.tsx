@@ -77,7 +77,7 @@
 
 import React, { useState, useId } from 'react';
 import type { AlertProps, AlertType } from '../../contracts';
-import { ALERT_DEFAULTS } from '../../contracts';
+import { ALERT_DEFAULTS, TONE_TO_ALERT_TYPE } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 
 // ============================================================================
@@ -174,6 +174,7 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
 
   const {
     // Type & Appearance
+    tone,
     type = ALERT_DEFAULTS.type as AlertType,
     icon,
     showIcon = ALERT_DEFAULTS.showIcon,
@@ -229,7 +230,8 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
   // Derived Values
   // ---------------------------------------------------------------------------
 
-  const alertType = type as AlertType;
+  // `tone` takes precedence over the deprecated `type` prop when both are given.
+  const alertType = tone ? TONE_TO_ALERT_TYPE[tone] : (type as AlertType);
 
   // ---------------------------------------------------------------------------
   // Style Definitions

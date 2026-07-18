@@ -21,6 +21,7 @@
  */
 import { Table as AntTable } from 'antd';
 import type { TableProps } from '../../contracts';
+import { toCanonicalSize, toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 
 /**
  * Classic Table engine backed by Ant Design.
@@ -67,8 +68,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     id,
   } = props;
 
-  // Antd uses "middle" where the DS uses "default". Other sizes pass through.
-  const antSize = size === 'default' ? 'middle' : size;
+  // Antd uses "middle" where the DS uses "default"; canonicalizing first also
+  // resolves the new "md"/"sm"/"lg" steps and the legacy "middle" spelling to
+  // the same AntD value. Byte-identical to the previous
+  // `size === 'default' ? 'middle' : size` for every value legal before this
+  // migration.
+  const antSize = toLegacySize(toCanonicalSize(size));
 
   // Classic engine is a thin wrapper -- antd handles sorting, filtering,
   // pagination, virtual scroll, and all other table features internally.

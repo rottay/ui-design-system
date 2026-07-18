@@ -35,12 +35,21 @@ import type {
   FormErrorListProps,
   FormInstance,
 } from '../../../contracts';
+import { toCanonicalSize, toLegacySize } from '../../../../../../../foundation/contracts/kernel/common';
 
 /**
  * Re-export Ant Design's useForm hook directly.
  * Consumers get the same form instance API without importing antd themselves.
  */
 export const useForm = AntForm.useForm;
+
+/**
+ * Resolves any accepted `size` spelling (canonical `sm | md | lg` or the
+ * deprecated `small | middle | large | default`) to AntD's three-value size
+ * enum. Byte-identical to the previous `size === 'default' ? 'middle' : size`
+ * for every value that was legal before this migration.
+ */
+const toAntSize = (size: FormProps['size']) => toLegacySize(toCanonicalSize(size));
 
 /**
  * Classic engine Form root component.
@@ -96,7 +105,7 @@ export const ClassicFormBase = React.forwardRef<FormInstance, FormProps>((props,
       labelWrap={labelWrap}
       colon={colon}
       // DS uses "default" but Ant Design's equivalent is "middle"
-      size={size === 'default' ? 'middle' : size}
+      size={toAntSize(size)}
       disabled={disabled}
       requiredMark={requiredMark}
       validateTrigger={validateTrigger}

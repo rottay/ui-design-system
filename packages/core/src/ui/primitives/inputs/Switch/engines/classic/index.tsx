@@ -78,8 +78,11 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
       name: _name,
     } = props;
 
-    // AntD only has 'default' and 'small'; collapse 'large' into 'default'
-    const antSize = size === 'large' ? 'default' : size === 'default' ? 'default' : 'small';
+    // AntD only has 'default' and 'small'; collapse 'large'/'lg' and the new
+    // canonical 'md' into 'default'. Every other input -- 'small', the legacy
+    // 'middle' (never explicitly handled here, byte-identical to before this
+    // migration), and unset/undefined -- keeps falling through to 'small'.
+    const antSize = size === 'large' || size === 'default' || size === 'lg' || size === 'md' ? 'default' : 'small';
 
     // Assemble props for AntD -- `name` is intentionally excluded (_name)
     // because AntD Switch does not accept a `name` attribute
