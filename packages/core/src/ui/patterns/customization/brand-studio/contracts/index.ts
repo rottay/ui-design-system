@@ -14,10 +14,10 @@
 import type { ReactNode } from 'react';
 import type { BrandTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
 import type {
-  TenantThemeArtifactV1,
-  TenantThemeConfigIdentityV1,
-  TenantThemeDocumentV1,
-  TenantThemeVerticalEnvelopeV1,
+  TenantThemeArtifact,
+  TenantThemeConfigIdentity,
+  TenantThemeDocument,
+  TenantThemeVerticalEnvelope,
 } from '../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
 import type {
   BrandingColors,
@@ -83,7 +83,7 @@ export interface BrandStudioContrastReport {
  * design system preview real surfaces without depending on a product surface.
  */
 export type BrandStudioTenantThemeGalleriesSlot = (ctx: {
-  artifact: TenantThemeArtifactV1;
+  artifact: TenantThemeArtifact;
 }) => ReactNode;
 
 /**
@@ -96,15 +96,15 @@ export type BrandStudioTenantThemeGalleriesSlot = (ctx: {
  */
 export interface BrandStudioTenantThemePreviewConfig {
   /** The bounded tenant theme document being edited (simple or advanced). */
-  document: TenantThemeDocumentV1;
+  document: TenantThemeDocument;
   /** Trusted row identity (tenantId/slug/verticalKey/rowVersion). */
-  identity: TenantThemeConfigIdentityV1;
+  identity: TenantThemeConfigIdentity;
   /**
    * Code-owned vertical policy envelope. Optional: a simple document resolves
    * its registered vertical envelope automatically; an advanced document
    * without one fails closed into inline issues.
    */
-  envelope?: TenantThemeVerticalEnvelopeV1;
+  envelope?: TenantThemeVerticalEnvelope;
   /** Recompile debounce in ms. Defaults to 150. */
   debounceMs?: number;
   /** Content rendered inside the themed preview scope. */

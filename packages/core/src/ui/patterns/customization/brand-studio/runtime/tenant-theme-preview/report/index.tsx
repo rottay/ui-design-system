@@ -24,7 +24,7 @@ import { Badge, Box, Flex, Stack, Text } from '@/ui/primitives';
 // Sourced from the owner barrel rather than the sibling leaf modules so the
 // report stays a downstream consumer of its own owner, not a peer of them.
 import type {
-  TenantThemeContrastAdjustmentV1,
+  TenantThemeContrastAdjustment,
   TenantThemePackWarning,
 } from '../index';
 
@@ -32,7 +32,7 @@ export interface TenantThemePreviewReportProps {
   /** Structured validation issues; a non-empty list renders the invalid-document panel. */
   issues?: readonly TenantThemeValidationIssue[] | null;
   /** APCA autocorrections recorded on the compiled artifact. */
-  adjustments?: readonly TenantThemeContrastAdjustmentV1[];
+  adjustments?: readonly TenantThemeContrastAdjustment[];
   /** Referenced font packs not loaded in the host document. */
   packWarnings?: readonly TenantThemePackWarning[];
 }
@@ -118,7 +118,7 @@ function IssuesView({
 function AdjustmentsView({
   adjustments,
 }: {
-  adjustments: readonly TenantThemeContrastAdjustmentV1[];
+  adjustments: readonly TenantThemeContrastAdjustment[];
 }): React.ReactElement {
   return (
     <Box

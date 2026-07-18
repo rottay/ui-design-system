@@ -10,25 +10,25 @@ import { type TenantAppearance } from "@/foundation/contracts/composition/tenant
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
 import { enforceTextContrast } from "@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect";
 import type {
-  NormalizedTenantThemeAppearanceV1,
-  TenantThemeArtifactV1,
-  TenantThemeConfigIdentityV1,
-  TenantThemeConfigV1,
-  TenantThemeDocumentV1,
+  NormalizedTenantThemeAppearance,
+  TenantThemeArtifact,
+  TenantThemeConfigIdentity,
+  TenantThemeConfig,
+  TenantThemeDocument,
   TenantThemeDocumentValidationResult,
-  TenantThemeRootAttributesV1,
+  TenantThemeRootAttributes,
   TenantThemeValidationIssue,
   TenantThemeValidationResult,
-  TenantThemeVerticalEnvelopeV1,
+  TenantThemeVerticalEnvelope,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
-  TENANT_THEME_ANATOMY_VARIANTS_V1,
-  TENANT_THEME_CHROME_FAMILIES_V1,
-  TENANT_THEME_FONT_PACK_IDS_V1,
-  TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
-  TENANT_THEME_REFERENCE_TOKENS_V1,
+  TENANT_THEME_ANATOMY_VARIANTS,
+  TENANT_THEME_CHROME_FAMILIES,
+  TENANT_THEME_FONT_PACK_IDS,
+  TENANT_THEME_RADIUS_SCALE_BOUNDS,
+  TENANT_THEME_REFERENCE_TOKENS,
   TENANT_THEME_SCHEMA_VERSION,
-  TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
+  TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   isHexColor,
@@ -36,12 +36,12 @@ import {
   normalizeHexColor,
 } from "../../kernel/foundation/css/color-math";
 import {
-  TENANT_THEME_CONFIG_V1_SCHEMA,
+  TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
 import { appearanceToVariables } from "../../kernel/runtime/appearance";
 
-export { TENANT_THEME_CONFIG_V1_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
+export { TENANT_THEME_CONFIG_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
 export type { TenantThemeSchemaNode } from "../../kernel/foundation/schemas/tenant-theme";
 
 export const TENANT_THEME_COMPILER_VERSION = "tenant-theme-compiler@3" as const;
@@ -60,13 +60,13 @@ function deepFreezeTenantThemeValue<T>(value: T): Readonly<T> {
  * their tenant directory, then ask this registry for the compilation envelope;
  * neither client payloads nor tenant JSONB can supply or widen this authority.
  */
-export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
+export const TENANT_THEME_VERTICAL_ENVELOPES = deepFreezeTenantThemeValue({
   bithire: {
     schemaVersion: TENANT_THEME_SCHEMA_VERSION,
     verticalKey: "bithire",
     allowedModes: ["simple", "advanced"],
     advanced: {
-      chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
+      chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES],
       allowTokenOverrides: true,
       allowAnatomyVariants: true,
     },
@@ -84,7 +84,7 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
     verticalKey: "evnto",
     allowedModes: ["simple", "advanced"],
     advanced: {
-      chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
+      chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES],
       allowTokenOverrides: true,
       allowAnatomyVariants: true,
     },
@@ -99,21 +99,21 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
       radiusScale: { min: 0.8, max: 1.2 },
     },
   },
-} as const satisfies Readonly<Record<string, TenantThemeVerticalEnvelopeV1>>);
+} as const satisfies Readonly<Record<string, TenantThemeVerticalEnvelope>>);
 
 /** Resolve a trusted code-owned envelope; unknown verticals fail closed. */
 export function getTenantThemeVerticalEnvelope(
   verticalKey: string
-): TenantThemeVerticalEnvelopeV1 | undefined {
+): TenantThemeVerticalEnvelope | undefined {
   if (
     !Object.prototype.hasOwnProperty.call(
-      TENANT_THEME_VERTICAL_ENVELOPES_V1,
+      TENANT_THEME_VERTICAL_ENVELOPES,
       verticalKey
     )
   )
     return undefined;
-  return TENANT_THEME_VERTICAL_ENVELOPES_V1[
-    verticalKey as keyof typeof TENANT_THEME_VERTICAL_ENVELOPES_V1
+  return TENANT_THEME_VERTICAL_ENVELOPES[
+    verticalKey as keyof typeof TENANT_THEME_VERTICAL_ENVELOPES
   ];
 }
 
@@ -288,26 +288,26 @@ export function canonicalizeTenantThemeValue(value: unknown): string {
 }
 
 const documentSchemaSource = {
-  id: TENANT_THEME_CONFIG_V1_SCHEMA.id,
-  schemaVersion: TENANT_THEME_CONFIG_V1_SCHEMA.schemaVersion,
-  documents: TENANT_THEME_CONFIG_V1_SCHEMA.documents,
-  forbiddenCapabilities: TENANT_THEME_CONFIG_V1_SCHEMA.forbiddenCapabilities,
-  overrideTokens: TENANT_THEME_CONFIG_V1_SCHEMA.overrideTokens,
-  referenceTokens: TENANT_THEME_CONFIG_V1_SCHEMA.referenceTokens,
-  fontPackIds: TENANT_THEME_CONFIG_V1_SCHEMA.fontPackIds,
-  limits: TENANT_THEME_CONFIG_V1_SCHEMA.limits,
+  id: TENANT_THEME_CONFIG_SCHEMA.id,
+  schemaVersion: TENANT_THEME_CONFIG_SCHEMA.schemaVersion,
+  documents: TENANT_THEME_CONFIG_SCHEMA.documents,
+  forbiddenCapabilities: TENANT_THEME_CONFIG_SCHEMA.forbiddenCapabilities,
+  overrideTokens: TENANT_THEME_CONFIG_SCHEMA.overrideTokens,
+  referenceTokens: TENANT_THEME_CONFIG_SCHEMA.referenceTokens,
+  fontPackIds: TENANT_THEME_CONFIG_SCHEMA.fontPackIds,
+  limits: TENANT_THEME_CONFIG_SCHEMA.limits,
 };
 
 /** Drift sentinel for the JSONB document/editor/DTO/SSR contract. */
-export const TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST =
+export const TENANT_THEME_DOCUMENT_SCHEMA_DIGEST =
   `sha256-${sha256TenantThemeValue(
     canonicalizeTenantThemeValue(documentSchemaSource)
   )}` as const;
 
 /** Drift sentinel for the fully hydrated compiler envelope. */
-export const TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST =
+export const TENANT_THEME_CONFIG_SCHEMA_DIGEST =
   `sha256-${sha256TenantThemeValue(
-    canonicalizeTenantThemeValue(TENANT_THEME_CONFIG_V1_SCHEMA)
+    canonicalizeTenantThemeValue(TENANT_THEME_CONFIG_SCHEMA)
   )}` as const;
 
 export class TenantThemeValidationError extends Error {
@@ -496,7 +496,7 @@ function isSafeVisualValue(
   path: string,
   enforceAuthoredCaps = true
 ): boolean {
-  const limits = TENANT_THEME_CONFIG_V1_SCHEMA.limits;
+  const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
   if (
     value.length === 0 ||
     value.length > limits.maxStringLength ||
@@ -522,7 +522,7 @@ function isSafeVisualValue(
   const varReferences = [...value.matchAll(/var\(\s*(--[a-z0-9-]+)/gi)];
   if (varReferences.length !== varCount) return false;
   if (enforceAuthoredCaps) {
-    const allowedReferences = new Set(TENANT_THEME_REFERENCE_TOKENS_V1);
+    const allowedReferences = new Set(TENANT_THEME_REFERENCE_TOKENS);
     if (varReferences.some((match) => !allowedReferences.has(match[1])))
       return false;
   } else if (varReferences.some((match) => !match[1].startsWith("--ds-"))) {
@@ -600,7 +600,7 @@ const FONT_PACK_REFERENCE =
  * tokens or turn font loading into a tenant-owned asset channel.
  */
 function isSafeFontFamily(value: string): boolean {
-  const limits = TENANT_THEME_CONFIG_V1_SCHEMA.limits;
+  const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
   if (
     value.length === 0 ||
     value.length > limits.maxFontFamilyLength ||
@@ -610,7 +610,7 @@ function isSafeFontFamily(value: string): boolean {
   const references = value.match(FONT_PACK_REFERENCE) ?? [];
   const allVarFunctions = value.match(/var\s*\(/gi) ?? [];
   if (references.length !== allVarFunctions.length) return false;
-  const allowedPacks = new Set<string>(TENANT_THEME_FONT_PACK_IDS_V1);
+  const allowedPacks = new Set<string>(TENANT_THEME_FONT_PACK_IDS);
   for (const reference of references) {
     const packId = /^var\(--ds-font-pack-(.+)\)$/.exec(reference)?.[1];
     if (!packId || !allowedPacks.has(packId)) return false;
@@ -745,8 +745,8 @@ function validateNode(
 function validateEnvelopeShape(
   input: unknown,
   schemas:
-    | typeof TENANT_THEME_CONFIG_V1_SCHEMA.documents
-    | typeof TENANT_THEME_CONFIG_V1_SCHEMA.modes
+    | typeof TENANT_THEME_CONFIG_SCHEMA.documents
+    | typeof TENANT_THEME_CONFIG_SCHEMA.modes
 ): TenantThemeValidationIssue[] {
   if (!isPlainObject(input))
     return [
@@ -775,7 +775,7 @@ function validateEnvelopeShape(
     ];
   }
 
-  const limits = TENANT_THEME_CONFIG_V1_SCHEMA.limits;
+  const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
   const shape = countValueShape(input);
   const issues: TenantThemeValidationIssue[] = [];
   if (shape.maxDepth > limits.maxDepth) {
@@ -823,16 +823,16 @@ export function validateTenantThemeDocument(
 ): TenantThemeDocumentValidationResult {
   const issues = validateEnvelopeShape(
     input,
-    TENANT_THEME_CONFIG_V1_SCHEMA.documents
+    TENANT_THEME_CONFIG_SCHEMA.documents
   );
   return issues.length === 0
-    ? { success: true, data: normalizedClone(input as TenantThemeDocumentV1) }
+    ? { success: true, data: normalizedClone(input as TenantThemeDocument) }
     : { success: false, issues };
 }
 
 export function parseTenantThemeDocument(
   input: unknown
-): TenantThemeDocumentV1 {
+): TenantThemeDocument {
   const result = validateTenantThemeDocument(input);
   if (!result.success) throw new TenantThemeValidationError(result.issues);
   return result.data;
@@ -843,14 +843,14 @@ export function validateTenantThemeConfig(
 ): TenantThemeValidationResult {
   const issues = validateEnvelopeShape(
     input,
-    TENANT_THEME_CONFIG_V1_SCHEMA.modes
+    TENANT_THEME_CONFIG_SCHEMA.modes
   );
   return issues.length === 0
-    ? { success: true, data: normalizedClone(input as TenantThemeConfigV1) }
+    ? { success: true, data: normalizedClone(input as TenantThemeConfig) }
     : { success: false, issues };
 }
 
-export function parseTenantThemeConfig(input: unknown): TenantThemeConfigV1 {
+export function parseTenantThemeConfig(input: unknown): TenantThemeConfig {
   const result = validateTenantThemeConfig(input);
   if (!result.success) throw new TenantThemeValidationError(result.issues);
   return result.data;
@@ -858,15 +858,15 @@ export function parseTenantThemeConfig(input: unknown): TenantThemeConfigV1 {
 
 export interface HydrateTenantThemeConfigOptions {
   /** Trusted request/directory identity; any row mismatch fails closed. */
-  expectedIdentity?: Partial<TenantThemeConfigIdentityV1>;
+  expectedIdentity?: Partial<TenantThemeConfigIdentity>;
 }
 
 /** Build a compiler envelope from validated JSONB plus trusted row columns. */
 export function hydrateTenantThemeConfig(
   document: unknown,
-  identity: TenantThemeConfigIdentityV1,
+  identity: TenantThemeConfigIdentity,
   options: HydrateTenantThemeConfigOptions = {}
-): TenantThemeConfigV1 {
+): TenantThemeConfig {
   const parsedDocument = parseTenantThemeDocument(document);
   const mismatchIssues: TenantThemeValidationIssue[] = [];
   for (const key of [
@@ -897,8 +897,8 @@ export function hydrateTenantThemeConfig(
  * fails closed when the envelope is absent.
  */
 export function validateTenantThemeAgainstVerticalEnvelope(
-  config: TenantThemeConfigV1,
-  envelope: TenantThemeVerticalEnvelopeV1 | undefined
+  config: TenantThemeConfig,
+  envelope: TenantThemeVerticalEnvelope | undefined
 ): TenantThemeValidationIssue[] {
   if (!envelope) {
     return [
@@ -979,7 +979,7 @@ export function validateTenantThemeAgainstVerticalEnvelope(
     });
   }
 
-  const knownChromeFamilies = new Set<string>(TENANT_THEME_CHROME_FAMILIES_V1);
+  const knownChromeFamilies = new Set<string>(TENANT_THEME_CHROME_FAMILIES);
   if (envelope.advanced !== undefined) {
     if (!isPlainObject(envelope.advanced)) {
       issues.push({
@@ -1041,8 +1041,8 @@ export function validateTenantThemeAgainstVerticalEnvelope(
     effectIntensity: { min: 0, max: 1 },
     motionIntensity: { min: 0, max: 1 },
     motionDurationScale: { min: 0.5, max: 1.5 },
-    typeScale: TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
-    radiusScale: TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
+    typeScale: TENANT_THEME_TYPE_SCALE_BOUNDS,
+    radiusScale: TENANT_THEME_RADIUS_SCALE_BOUNDS,
   } as const;
   if (envelope.ranges !== undefined) {
     if (!isPlainObject(envelope.ranges)) {
@@ -1144,8 +1144,8 @@ export function validateTenantThemeAgainstVerticalEnvelope(
       }
       if (policy.allowAnatomyVariants !== true) {
         for (const family of Object.keys(
-          TENANT_THEME_ANATOMY_VARIANTS_V1
-        ) as (keyof typeof TENANT_THEME_ANATOMY_VARIANTS_V1)[]) {
+          TENANT_THEME_ANATOMY_VARIANTS
+        ) as (keyof typeof TENANT_THEME_ANATOMY_VARIANTS)[]) {
           const anatomyVariant = advanced.chrome?.[family]?.anatomy;
           if (anatomyVariant !== undefined && anatomyVariant !== "default") {
             issues.push({
@@ -1187,12 +1187,12 @@ export function validateTenantThemeAgainstVerticalEnvelope(
 }
 
 export interface CompileTenantThemeConfigOptions {
-  verticalEnvelope?: TenantThemeVerticalEnvelopeV1;
+  verticalEnvelope?: TenantThemeVerticalEnvelope;
 }
 
 function normalizeAppearance(
-  config: TenantThemeConfigV1
-): NormalizedTenantThemeAppearanceV1 {
+  config: TenantThemeConfig
+): NormalizedTenantThemeAppearance {
   if (config.mode === "simple")
     return normalizedClone({ general: config.appearance });
   return normalizedClone({
@@ -1206,8 +1206,8 @@ function normalizeAppearance(
 }
 
 function buildScopes(
-  config: TenantThemeConfigV1
-): TenantThemeArtifactV1["scopes"] {
+  config: TenantThemeConfig
+): TenantThemeArtifact["scopes"] {
   const rootSelector = ":where([data-ds-root])";
   const verticalSelector = `:where([data-ds-root][data-vertical="${config.verticalKey}"])`;
   const tenantSelector = `:where([data-ds-root][data-tenant="${config.slug}"])`;
@@ -1235,8 +1235,8 @@ function buildScopes(
 
 /** Server-safe attribute projection for the provider-owned SSR root. */
 export function tenantThemeArtifactRootAttributes(
-  artifact: Pick<TenantThemeArtifactV1, "slug" | "verticalKey">
-): TenantThemeRootAttributesV1 {
+  artifact: Pick<TenantThemeArtifact, "slug" | "verticalKey">
+): TenantThemeRootAttributes {
   return {
     "data-ds-root": "",
     "data-vertical": artifact.verticalKey,
@@ -1250,7 +1250,7 @@ const ANATOMY_ATTRIBUTE_BY_FAMILY = {
   sidebar: "data-anatomy-sidebar",
   layout: "data-anatomy-layout",
 } as const satisfies Record<
-  keyof typeof TENANT_THEME_ANATOMY_VARIANTS_V1,
+  keyof typeof TENANT_THEME_ANATOMY_VARIANTS,
   string
 >;
 
@@ -1263,7 +1263,7 @@ const ANATOMY_ATTRIBUTE_BY_FAMILY = {
  * same root; skins select on the attribute, one level above the scope class.
  */
 export function tenantThemeAnatomyAttributes(
-  artifact: Pick<TenantThemeArtifactV1, "normalizedAppearance">
+  artifact: Pick<TenantThemeArtifact, "normalizedAppearance">
 ): Record<string, string> {
   const chrome = artifact.normalizedAppearance.advanced?.chrome;
   const attributes: Record<string, string> = {};
@@ -1275,7 +1275,7 @@ export function tenantThemeAnatomyAttributes(
     if (
       typeof variant !== "string" ||
       variant === "default" ||
-      !(TENANT_THEME_ANATOMY_VARIANTS_V1[family] as readonly string[]).includes(
+      !(TENANT_THEME_ANATOMY_VARIANTS[family] as readonly string[]).includes(
         variant
       )
     ) {
@@ -1320,7 +1320,7 @@ const CHART_SURFACE_TOKENS = [
  * Chart anatomy still supplies labels/patterns; color is never the sole cue.
  */
 function validateCompiledChartCategories(
-  appearance: NormalizedTenantThemeAppearanceV1,
+  appearance: NormalizedTenantThemeAppearance,
   variables: Readonly<Record<string, string>>
 ): TenantThemeValidationIssue[] {
   const categories = Object.entries(variables).filter(([token]) =>
@@ -1411,7 +1411,7 @@ function renderArtifactCss(
 export function compileTenantThemeConfig(
   input: unknown,
   options: CompileTenantThemeConfigOptions = {}
-): TenantThemeArtifactV1 {
+): TenantThemeArtifact {
   const config = parseTenantThemeConfig(input);
   // Simple v1 documents remain source-compatible: their trusted vertical
   // resolves the code-owned vertical default even when the caller omits the
@@ -1457,13 +1457,13 @@ export function compileTenantThemeConfig(
   const compiledVariableCount = Object.keys(variables).length;
   if (
     compiledVariableCount >
-    TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariables
+    TENANT_THEME_CONFIG_SCHEMA.limits.maxCompiledVariables
   ) {
     throw new TenantThemeValidationError([
       {
         code: "invalid_value",
         path: "$.visualFoundation",
-        message: `Compiled variable count exceeds ${TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariables}`,
+        message: `Compiled variable count exceeds ${TENANT_THEME_CONFIG_SCHEMA.limits.maxCompiledVariables}`,
       },
     ]);
   }
@@ -1486,13 +1486,13 @@ export function compileTenantThemeConfig(
   ).byteLength;
   if (
     compiledVariableBytes >
-    TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariableBytes
+    TENANT_THEME_CONFIG_SCHEMA.limits.maxCompiledVariableBytes
   ) {
     throw new TenantThemeValidationError([
       {
         code: "invalid_value",
         path: "$.visualFoundation",
-        message: `Compiled variable payload exceeds ${TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxCompiledVariableBytes} bytes`,
+        message: `Compiled variable payload exceeds ${TENANT_THEME_CONFIG_SCHEMA.limits.maxCompiledVariableBytes} bytes`,
       },
     ]);
   }

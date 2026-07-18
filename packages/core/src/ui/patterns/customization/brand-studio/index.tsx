@@ -69,7 +69,7 @@ export type {
   UseTenantThemePreviewInput,
   UseTenantThemePreviewResult,
   TenantThemePreviewScope,
-  TenantThemeContrastAdjustmentV1,
+  TenantThemeContrastAdjustment,
   TenantThemePackWarning,
   ProbeTenantThemePackWarningsOptions,
 } from './runtime/tenant-theme-preview';

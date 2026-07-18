@@ -14,7 +14,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import type { TenantThemeArtifactV1 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import type { TenantThemeArtifact } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -26,18 +26,18 @@ const FIXTURE_DIR = resolve(
   "src/infrastructure/compilers/composition/tenant-theme/tests/fixtures"
 );
 
-const readFixture = (name: string): TenantThemeArtifactV1 =>
+const readFixture = (name: string): TenantThemeArtifact =>
   JSON.parse(readFileSync(resolve(FIXTURE_DIR, name), "utf8"));
 
 const CHART_SERIES_TOKEN = /^--ds-chart-series-(?:[1-9]|10)$/;
 
 /** The artifact css minus its digest banner line. */
-const cssBody = (artifact: Pick<TenantThemeArtifactV1, "css">): string =>
+const cssBody = (artifact: Pick<TenantThemeArtifact, "css">): string =>
   artifact.css.split("\n").slice(1).join("\n");
 
 function expectStableEmission(
-  artifact: TenantThemeArtifactV1,
-  fixture: TenantThemeArtifactV1
+  artifact: TenantThemeArtifact,
+  fixture: TenantThemeArtifact
 ): string[] {
   expect(JSON.stringify(artifact.normalizedAppearance)).toBe(
     JSON.stringify(fixture.normalizedAppearance)

@@ -36,7 +36,7 @@ export const TENANT_THEME_SCHEMA_VERSION = 1 as const;
  * This is deliberately not a `--ds-${string}` index signature. Adding a token
  * is a contract change that must update the schema manifest and its digest.
  */
-export const TENANT_THEME_OVERRIDE_TOKENS_V1 = [
+export const TENANT_THEME_OVERRIDE_TOKENS = [
   "--ds-color-primary",
   "--ds-color-secondary",
   "--ds-color-accent",
@@ -100,23 +100,23 @@ export const TENANT_THEME_OVERRIDE_TOKENS_V1 = [
   "--ds-effect-intensity",
 ] as const;
 
-export type TenantThemeOverrideTokenV1 =
-  (typeof TENANT_THEME_OVERRIDE_TOKENS_V1)[number];
+export type TenantThemeOverrideToken =
+  (typeof TENANT_THEME_OVERRIDE_TOKENS)[number];
 
 /**
  * Neutral text/border overrides admit opaque hex only. They anchor global
  * reading surfaces, so functional colors, var() references and alpha channels
  * stay out of the tenant-authored channel.
  */
-export const TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1 = [
+export const TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS = [
   "--ds-color-text-primary",
   "--ds-color-text-secondary",
   "--ds-color-text-muted",
   "--ds-color-border-primary",
   "--ds-color-border-secondary",
-] as const satisfies readonly TenantThemeOverrideTokenV1[];
+] as const satisfies readonly TenantThemeOverrideToken[];
 
-const TENANT_THEME_COLOR_ROLES_V1 = [
+const TENANT_THEME_COLOR_ROLES = [
   "primary",
   "secondary",
   "accent",
@@ -125,7 +125,7 @@ const TENANT_THEME_COLOR_ROLES_V1 = [
   "error",
   "info",
 ] as const;
-const TENANT_THEME_COLOR_STEPS_V1 = [
+const TENANT_THEME_COLOR_STEPS = [
   50, 100, 200, 300, 400, 500, 600, 700, 800, 900,
 ] as const;
 
@@ -134,11 +134,11 @@ const TENANT_THEME_COLOR_STEPS_V1 = [
  * `var()`. Prefix-only admission is forbidden because `--ds-*` also contains
  * private implementation tokens.
  */
-export const TENANT_THEME_REFERENCE_TOKENS_V1: readonly string[] =
+export const TENANT_THEME_REFERENCE_TOKENS: readonly string[] =
   Object.freeze(
     Array.from(
       new Set([
-        ...TENANT_THEME_OVERRIDE_TOKENS_V1,
+        ...TENANT_THEME_OVERRIDE_TOKENS,
         "--ds-color-white",
         "--ds-color-bg-primary",
         "--ds-color-bg-secondary",
@@ -156,8 +156,8 @@ export const TENANT_THEME_REFERENCE_TOKENS_V1: readonly string[] =
         "--ds-tint-12",
         "--ds-tint-16",
         "--ds-tint-24",
-        ...TENANT_THEME_COLOR_ROLES_V1.flatMap((role) =>
-          TENANT_THEME_COLOR_STEPS_V1.map(
+        ...TENANT_THEME_COLOR_ROLES.flatMap((role) =>
+          TENANT_THEME_COLOR_STEPS.map(
             (step) => `--ds-color-${role}-${step}`
           )
         ),
@@ -187,73 +187,73 @@ export const TENANT_THEME_REFERENCE_TOKENS_V1: readonly string[] =
  * - layout `flat` = header merged with canvas (no border/shadow); `floating` =
  *   inset header card with radius + shadow.
  */
-export const TENANT_THEME_ANATOMY_VARIANTS_V1 = {
+export const TENANT_THEME_ANATOMY_VARIANTS = {
   cardComponent: ["default", "framed", "underline", "ghost"],
   table: ["default", "ruled", "zebra", "open"],
   sidebar: ["default", "rail", "panel"],
   layout: ["default", "flat", "floating"],
 } as const;
 
-export type TenantThemeCardAnatomyV1 =
-  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.cardComponent)[number];
-export type TenantThemeTableAnatomyV1 =
-  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.table)[number];
-export type TenantThemeSidebarAnatomyV1 =
-  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.sidebar)[number];
-export type TenantThemeLayoutAnatomyV1 =
-  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.layout)[number];
+export type TenantThemeCardAnatomy =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS.cardComponent)[number];
+export type TenantThemeTableAnatomy =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS.table)[number];
+export type TenantThemeSidebarAnatomy =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS.sidebar)[number];
+export type TenantThemeLayoutAnatomy =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS.layout)[number];
 
 /** Bounded sidebar paint, rhythm and geometry authored by the published tenant. */
-export type TenantThemeSidebarChromeV1 = BrandSidebarChrome & {
-  anatomy?: TenantThemeSidebarAnatomyV1;
+export type TenantThemeSidebarChrome = BrandSidebarChrome & {
+  anatomy?: TenantThemeSidebarAnatomy;
 };
 
 /** Complete bounded shell anatomy; gridOpacity has no compiler-owned variable. */
-export type TenantThemeShellChromeV1 = Omit<BrandShellChrome, "gridOpacity">;
+export type TenantThemeShellChrome = Omit<BrandShellChrome, "gridOpacity">;
 
 /** Complete bounded component-family anatomy authored by the published tenant. */
-export type TenantThemeCardChromeV1 = BrandCardChrome & {
-  anatomy?: TenantThemeCardAnatomyV1;
+export type TenantThemeCardChrome = BrandCardChrome & {
+  anatomy?: TenantThemeCardAnatomy;
 };
-export type TenantThemeTableChromeV1 = BrandTableChrome & {
-  anatomy?: TenantThemeTableAnatomyV1;
+export type TenantThemeTableChrome = BrandTableChrome & {
+  anatomy?: TenantThemeTableAnatomy;
 };
-export type TenantThemeLayoutChromeV1 = BrandLayoutChrome & {
-  anatomy?: TenantThemeLayoutAnatomyV1;
+export type TenantThemeLayoutChrome = BrandLayoutChrome & {
+  anatomy?: TenantThemeLayoutAnatomy;
 };
-export type TenantThemePremiumCardChromeV1 = BrandPremiumCardChrome;
-export type TenantThemeMetricCardChromeV1 = BrandMetricCardChrome;
-export type TenantThemeSignalCardChromeV1 = BrandSignalCardChrome;
-export type TenantThemeListingGridChromeV1 = BrandListingGridChrome;
+export type TenantThemePremiumCardChrome = BrandPremiumCardChrome;
+export type TenantThemeMetricCardChrome = BrandMetricCardChrome;
+export type TenantThemeSignalCardChrome = BrandSignalCardChrome;
+export type TenantThemeListingGridChrome = BrandListingGridChrome;
 
 /**
  * Advanced, data-only chrome surface. Every exposed family maps to compiler-
  * owned variables; executable CSS, selectors and uncompiled anatomy remain
  * outside the tenant document.
  */
-export interface TenantThemeChromeV1 {
-  sidebar?: TenantThemeSidebarChromeV1;
-  layout?: TenantThemeLayoutChromeV1;
-  shell?: TenantThemeShellChromeV1;
+export interface TenantThemeChrome {
+  sidebar?: TenantThemeSidebarChrome;
+  layout?: TenantThemeLayoutChrome;
+  shell?: TenantThemeShellChrome;
   toolbar?: BrandToolbarChrome;
   filterPill?: BrandFilterPillChrome;
   breadcrumb?: BrandBreadcrumbChrome;
   search?: BrandSearchChrome;
   controls?: BrandControlsChrome;
-  table?: TenantThemeTableChromeV1;
-  cardComponent?: TenantThemeCardChromeV1;
-  metricCard?: TenantThemeMetricCardChromeV1;
-  signalCard?: TenantThemeSignalCardChromeV1;
-  workspaceCard?: TenantThemePremiumCardChromeV1;
-  compactCard?: TenantThemePremiumCardChromeV1;
-  tallCard?: TenantThemePremiumCardChromeV1;
-  collectionCard?: TenantThemePremiumCardChromeV1;
-  listingGrid?: TenantThemeListingGridChromeV1;
+  table?: TenantThemeTableChrome;
+  cardComponent?: TenantThemeCardChrome;
+  metricCard?: TenantThemeMetricCardChrome;
+  signalCard?: TenantThemeSignalCardChrome;
+  workspaceCard?: TenantThemePremiumCardChrome;
+  compactCard?: TenantThemePremiumCardChrome;
+  tallCard?: TenantThemePremiumCardChrome;
+  collectionCard?: TenantThemePremiumCardChrome;
+  listingGrid?: TenantThemeListingGridChrome;
   modal?: BrandModalChrome;
   tabs?: BrandTabsChrome;
 }
 
-export const TENANT_THEME_CHROME_FAMILIES_V1 = [
+export const TENANT_THEME_CHROME_FAMILIES = [
   "sidebar",
   "layout",
   "shell",
@@ -273,7 +273,7 @@ export const TENANT_THEME_CHROME_FAMILIES_V1 = [
   "listingGrid",
   "modal",
   "tabs",
-] as const satisfies readonly (keyof TenantThemeChromeV1)[];
+] as const satisfies readonly (keyof TenantThemeChrome)[];
 
 /**
  * Code-owned static font packs TenantTheme may reference by CSS variable.
@@ -281,7 +281,7 @@ export const TENANT_THEME_CHROME_FAMILIES_V1 = [
  * Ids are role-suffixed because one `var()` slot carries ONE family list; a
  * pack that changes display AND body is two variables.
  */
-export const TENANT_THEME_FONT_PACK_IDS_V1 = [
+export const TENANT_THEME_FONT_PACK_IDS = [
   "editorial-display",
   "editorial-text",
   "grotesk-display",
@@ -289,12 +289,12 @@ export const TENANT_THEME_FONT_PACK_IDS_V1 = [
   "geometric-display",
   "plex-mono",
 ] as const;
-export type TenantThemeFontPackIdV1 =
-  (typeof TENANT_THEME_FONT_PACK_IDS_V1)[number];
+export type TenantThemeFontPackId =
+  (typeof TENANT_THEME_FONT_PACK_IDS)[number];
 
-export interface TenantThemeAdvancedAppearanceV1 {
-  chrome?: TenantThemeChromeV1;
-  tokenOverrides?: Partial<Record<TenantThemeOverrideTokenV1, string | number>>;
+export interface TenantThemeAdvancedAppearance {
+  chrome?: TenantThemeChrome;
+  tokenOverrides?: Partial<Record<TenantThemeOverrideToken, string | number>>;
 }
 
 /**
@@ -302,16 +302,16 @@ export interface TenantThemeAdvancedAppearanceV1 {
  * manifest, the envelope range validator and the appearance compiler all read
  * these objects; a second literal anywhere is a cascade-integrity defect.
  */
-export const TENANT_THEME_TYPE_SCALE_BOUNDS_V1 = {
+export const TENANT_THEME_TYPE_SCALE_BOUNDS = {
   min: 0.9,
   max: 1.1,
 } as const;
-export const TENANT_THEME_RADIUS_SCALE_BOUNDS_V1 = {
+export const TENANT_THEME_RADIUS_SCALE_BOUNDS = {
   min: 0.75,
   max: 1.25,
 } as const;
 
-export type TenantThemeChromeFamilyV1 = keyof TenantThemeChromeV1;
+export type TenantThemeChromeFamily = keyof TenantThemeChrome;
 
 /**
  * Vertical-owned policy envelope. The config owns values; the vertical owns
@@ -319,12 +319,12 @@ export type TenantThemeChromeFamilyV1 = keyof TenantThemeChromeV1;
  * This cannot enable engine, topology, semantics or behavior fields because
  * those fields are absent from the config schema itself.
  */
-export interface TenantThemeVerticalEnvelopeV1 {
+export interface TenantThemeVerticalEnvelope {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
   verticalKey: string;
   allowedModes: readonly ("simple" | "advanced")[];
   advanced?: {
-    chromeFamilies: readonly TenantThemeChromeFamilyV1[];
+    chromeFamilies: readonly TenantThemeChromeFamily[];
     allowTokenOverrides: boolean;
     /** Absent = false: non-default anatomy variants fail closed per vertical. */
     allowAnatomyVariants?: boolean;
@@ -340,12 +340,12 @@ export interface TenantThemeVerticalEnvelopeV1 {
 }
 
 /** Full v1 visual foundation, normalized into the existing appearance compiler. */
-export interface TenantVisualFoundationV1 {
+export interface TenantVisualFoundation {
   general?: TenantAppearanceGeneral;
-  advanced?: TenantThemeAdvancedAppearanceV1;
+  advanced?: TenantThemeAdvancedAppearance;
 }
 
-export interface TenantThemeConfigIdentityV1 {
+export interface TenantThemeConfigIdentity {
   /** Stable tenant database identifier; never used as a CSS selector. */
   tenantId: string;
   /** Canonical lower-kebab tenant slug. */
@@ -357,43 +357,41 @@ export interface TenantThemeConfigIdentityV1 {
 }
 
 /** JSONB payload. Tenant identity/version columns are intentionally absent. */
-export interface TenantThemeSimpleDocumentV1 {
+export interface TenantThemeSimpleDocument {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
   mode: "simple";
   appearance: TenantAppearanceGeneral;
 }
 
 /** JSONB payload. Tenant identity/version columns are intentionally absent. */
-export interface TenantThemeAdvancedDocumentV1 {
+export interface TenantThemeAdvancedDocument {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
   mode: "advanced";
-  visualFoundation: TenantVisualFoundationV1;
+  visualFoundation: TenantVisualFoundation;
 }
 
 /** Canonical document stored in the versioned tenant theme row. */
-export type TenantThemeDocumentV1 =
-  | TenantThemeSimpleDocumentV1
-  | TenantThemeAdvancedDocumentV1;
-export type TenantThemeDocument = TenantThemeDocumentV1;
+export type TenantThemeDocument =
+  | TenantThemeSimpleDocument
+  | TenantThemeAdvancedDocument;
 
 /**
  * Read/compile envelope constructed from the JSONB document plus trusted row
  * columns. Keeping it as an intersection preserves the convenient mode
  * discriminant without persisting identity twice.
  */
-export type TenantThemeSimpleConfigV1 = TenantThemeSimpleDocumentV1 &
-  TenantThemeConfigIdentityV1;
-export type TenantThemeAdvancedConfigV1 = TenantThemeAdvancedDocumentV1 &
-  TenantThemeConfigIdentityV1;
-export type TenantThemeConfigV1 =
-  | TenantThemeSimpleConfigV1
-  | TenantThemeAdvancedConfigV1;
-export type TenantThemeConfig = TenantThemeConfigV1;
+export type TenantThemeSimpleConfig = TenantThemeSimpleDocument &
+  TenantThemeConfigIdentity;
+export type TenantThemeAdvancedConfig = TenantThemeAdvancedDocument &
+  TenantThemeConfigIdentity;
+export type TenantThemeConfig =
+  | TenantThemeSimpleConfig
+  | TenantThemeAdvancedConfig;
 
 /** Appearance shape emitted by the v1 compiler after mode normalization. */
-export interface NormalizedTenantThemeAppearanceV1 {
+export interface NormalizedTenantThemeAppearance {
   general?: TenantAppearanceGeneral;
-  advanced?: TenantThemeAdvancedAppearanceV1;
+  advanced?: TenantThemeAdvancedAppearance;
 }
 
 export interface TenantThemeScopeDescriptor {
@@ -417,7 +415,7 @@ export interface TenantThemeArtifactScopes {
 }
 
 /** Attributes the SSR/app root must stamp for the artifact selector to match. */
-export interface TenantThemeRootAttributesV1 {
+export interface TenantThemeRootAttributes {
   "data-ds-root": "";
   "data-vertical": string;
   "data-tenant": string;
@@ -428,7 +426,7 @@ export interface TenantThemeRootAttributesV1 {
  * authored text/ground pairing readable. Corrections are never silent and
  * never a rejection: the editor renders these rows.
  */
-export interface TenantThemeContrastAdjustmentV1 {
+export interface TenantThemeContrastAdjustment {
   /** Foreground variable that was adjusted. */
   token: string;
   /** Ground variable the pairing was evaluated against. */
@@ -442,7 +440,7 @@ export interface TenantThemeContrastAdjustmentV1 {
 }
 
 /** Immutable, cacheable compiler output consumed by SSR and hydration. */
-export interface TenantThemeArtifactV1 {
+export interface TenantThemeArtifact {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
   tenantId: string;
   slug: string;
@@ -453,15 +451,13 @@ export interface TenantThemeArtifactV1 {
   verticalEnvelopeDigest?: string;
   /** `sha256-<hex>` over the canonical artifact source. */
   digest: string;
-  normalizedAppearance: NormalizedTenantThemeAppearanceV1;
+  normalizedAppearance: NormalizedTenantThemeAppearance;
   variables: Readonly<Record<string, string>>;
   /** Present only when at least one contrast autocorrect was applied. */
-  adjustments?: readonly TenantThemeContrastAdjustmentV1[];
+  adjustments?: readonly TenantThemeContrastAdjustment[];
   css: string;
   scopes: TenantThemeArtifactScopes;
 }
-
-export type TenantThemeArtifact = TenantThemeArtifactV1;
 
 export type TenantThemeValidationIssueCode =
   | "invalid_type"
@@ -477,9 +473,9 @@ export interface TenantThemeValidationIssue {
 }
 
 export type TenantThemeValidationResult =
-  | { success: true; data: TenantThemeConfigV1 }
+  | { success: true; data: TenantThemeConfig }
   | { success: false; issues: TenantThemeValidationIssue[] };
 
 export type TenantThemeDocumentValidationResult =
-  | { success: true; data: TenantThemeDocumentV1 }
+  | { success: true; data: TenantThemeDocument }
   | { success: false; issues: TenantThemeValidationIssue[] };

@@ -20,8 +20,8 @@ import type {
 } from '@/foundation/contracts/composition/tenants/themes';
 import { MOTION_DIAL_BOUNDS } from '@/foundation/contracts/runtime/motion';
 import {
-  TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
-  TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
+  TENANT_THEME_RADIUS_SCALE_BOUNDS,
+  TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
   RAMP_STEPS,
@@ -37,11 +37,11 @@ import {
   normalizeHexColor,
 } from '../../foundation/css/color-math';
 import { chromeToVariables } from '../../foundation/css/chrome-variables';
-import { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../foundation/schemas/tenant-theme';
+import { TENANT_THEME_CONFIG_SCHEMA } from '../../foundation/schemas/tenant-theme';
 
 /** Raw tokenOverrides entry cap; the schema limits object is the sole authority. */
 const MAX_TOKEN_OVERRIDES: number =
-  TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxTokenOverrides;
+  TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
 
 // ── Validation helpers ──────────────────────────────────────
 
@@ -257,8 +257,8 @@ export function appearanceGeneralToVariables(
         '--ds-type-scale',
         clampValue(
           t.scale,
-          TENANT_THEME_TYPE_SCALE_BOUNDS_V1.min,
-          TENANT_THEME_TYPE_SCALE_BOUNDS_V1.max,
+          TENANT_THEME_TYPE_SCALE_BOUNDS.min,
+          TENANT_THEME_TYPE_SCALE_BOUNDS.max,
         ),
       );
     }
@@ -278,8 +278,8 @@ export function appearanceGeneralToVariables(
       '--ds-radius-scale',
       clampValue(
         general.shape.radiusScale,
-        TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.min,
-        TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.max,
+        TENANT_THEME_RADIUS_SCALE_BOUNDS.min,
+        TENANT_THEME_RADIUS_SCALE_BOUNDS.max,
       ),
     );
   }

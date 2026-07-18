@@ -30,7 +30,7 @@ export type {
   UseTenantThemePreviewInput,
   UseTenantThemePreviewResult,
   TenantThemePreviewScope,
-  TenantThemeContrastAdjustmentV1,
+  TenantThemeContrastAdjustment,
   TenantThemePackWarning,
   ProbeTenantThemePackWarningsOptions,
   TenantThemePreviewReportProps,

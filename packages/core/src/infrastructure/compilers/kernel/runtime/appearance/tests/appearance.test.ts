@@ -13,7 +13,7 @@ import {
   deriveAppearanceColorRamps,
 } from '..';
 import { RAMP_STEPS } from '@/foundation/kernel/color/oklch/ramp';
-import { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../../foundation/schemas/tenant-theme';
+import { TENANT_THEME_CONFIG_SCHEMA } from '../../../foundation/schemas/tenant-theme';
 import type {
   TenantAppearanceGeneral,
   TenantAppearanceAdvanced,
@@ -263,7 +263,7 @@ describe('appearanceAdvancedToVariables', () => {
   ])(
     'caps raw tokenOverrides at the schema limits authority %s',
     (_name, chrome) => {
-      const cap = TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxTokenOverrides;
+      const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
       expect(cap).toBe(200);
       const tokenOverrides: Record<string, string> = {};
       for (let index = 0; index < cap + 25; index++) {

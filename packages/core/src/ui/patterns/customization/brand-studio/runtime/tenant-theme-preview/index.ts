@@ -20,17 +20,17 @@
 import { useMemo, useState, useEffect } from 'react';
 
 import type {
-  TenantThemeArtifactV1,
-  TenantThemeConfigIdentityV1,
-  TenantThemeDocumentV1,
+  TenantThemeArtifact,
+  TenantThemeConfigIdentity,
+  TenantThemeDocument,
   TenantThemeValidationIssue,
-  TenantThemeVerticalEnvelopeV1,
+  TenantThemeVerticalEnvelope,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import * as tenantThemeCompiler from '@/infrastructure/compilers/composition/tenant-theme';
 
 import {
   selectTenantThemeAdjustments,
-  type TenantThemeContrastAdjustmentV1,
+  type TenantThemeContrastAdjustment,
 } from './contrast-adjustments';
 import {
   probeTenantThemePackWarnings,
@@ -49,7 +49,7 @@ export {
 } from './preview-scope';
 export {
   selectTenantThemeAdjustments,
-  type TenantThemeContrastAdjustmentV1,
+  type TenantThemeContrastAdjustment,
 } from './contrast-adjustments';
 export {
   probeTenantThemePackWarnings,
@@ -62,15 +62,15 @@ export const DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS = 150;
 
 export interface UseTenantThemePreviewInput {
   /** The bounded tenant theme document being edited (simple or advanced). */
-  document: TenantThemeDocumentV1;
+  document: TenantThemeDocument;
   /** Trusted row identity (tenantId/slug/verticalKey/rowVersion). */
-  identity: TenantThemeConfigIdentityV1;
+  identity: TenantThemeConfigIdentity;
   /**
    * Code-owned vertical policy envelope. Optional: a simple document resolves
    * the registered envelope for its vertical automatically; an advanced
    * document without one fails closed into `issues`.
    */
-  envelope?: TenantThemeVerticalEnvelopeV1;
+  envelope?: TenantThemeVerticalEnvelope;
   /** Recompile debounce in ms. Defaults to {@link DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS}. */
   debounceMs?: number;
   /** Test seam for the font-pack computed-style probe. */
@@ -79,11 +79,11 @@ export interface UseTenantThemePreviewInput {
 
 export interface UseTenantThemePreviewResult {
   /** The compiled artifact, or `null` when the document is invalid. */
-  artifact: TenantThemeArtifactV1 | null;
+  artifact: TenantThemeArtifact | null;
   /** Structured validation issues for inline rendering, or `null` when valid. */
   issues: readonly TenantThemeValidationIssue[] | null;
   /** APCA autocorrections the compiler recorded on the artifact (empty when none). */
-  adjustments: readonly TenantThemeContrastAdjustmentV1[];
+  adjustments: readonly TenantThemeContrastAdjustment[];
   /** Referenced font packs not loaded in the host document (empty when all resolve). */
   packWarnings: readonly TenantThemePackWarning[];
   /** Container-scoped, sanitized CSS to inject; empty when invalid. */
@@ -96,13 +96,13 @@ export interface UseTenantThemePreviewResult {
 
 /** The compile inputs that must be identical for the debounced artifact to be reused. */
 interface TenantThemeCompileInput {
-  document: TenantThemeDocumentV1;
-  identity: TenantThemeConfigIdentityV1;
-  envelope?: TenantThemeVerticalEnvelopeV1;
+  document: TenantThemeDocument;
+  identity: TenantThemeConfigIdentity;
+  envelope?: TenantThemeVerticalEnvelope;
 }
 
 type TenantThemeCompileOutput =
-  | { artifact: TenantThemeArtifactV1; issues: null }
+  | { artifact: TenantThemeArtifact; issues: null }
   | { artifact: null; issues: readonly TenantThemeValidationIssue[] };
 
 /**
@@ -142,10 +142,10 @@ export function compileTenantThemePreview(
  * optionally so anatomy variants preview as their default until it lands.
  */
 type AnatomyAttributeProjection = (
-  artifact: Pick<TenantThemeArtifactV1, 'normalizedAppearance'>
+  artifact: Pick<TenantThemeArtifact, 'normalizedAppearance'>
 ) => Record<string, string>;
 
-function resolveAnatomyAttributes(artifact: TenantThemeArtifactV1): Record<string, string> {
+function resolveAnatomyAttributes(artifact: TenantThemeArtifact): Record<string, string> {
   const projection = (
     tenantThemeCompiler as unknown as {
       tenantThemeAnatomyAttributes?: AnatomyAttributeProjection;

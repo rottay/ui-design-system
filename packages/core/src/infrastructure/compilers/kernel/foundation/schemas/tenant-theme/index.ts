@@ -8,14 +8,14 @@
 
 import { MOTION_DIAL_BOUNDS } from "@/foundation/contracts/runtime/motion";
 import {
-  TENANT_THEME_ANATOMY_VARIANTS_V1,
-  TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1,
-  TENANT_THEME_OVERRIDE_TOKENS_V1,
-  TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
-  TENANT_THEME_REFERENCE_TOKENS_V1,
-  TENANT_THEME_FONT_PACK_IDS_V1,
+  TENANT_THEME_ANATOMY_VARIANTS,
+  TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS,
+  TENANT_THEME_OVERRIDE_TOKENS,
+  TENANT_THEME_RADIUS_SCALE_BOUNDS,
+  TENANT_THEME_REFERENCE_TOKENS,
+  TENANT_THEME_FONT_PACK_IDS,
   TENANT_THEME_SCHEMA_VERSION,
-  TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
+  TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 export type TenantThemeSchemaNode =
@@ -95,15 +95,15 @@ const general = object({
     fontFamilyHeading: string("font-family"),
     typePairing: enumeration("sober", "editorial", "geometric", "technical"),
     scale: number({
-      min: TENANT_THEME_TYPE_SCALE_BOUNDS_V1.min,
-      max: TENANT_THEME_TYPE_SCALE_BOUNDS_V1.max,
+      min: TENANT_THEME_TYPE_SCALE_BOUNDS.min,
+      max: TENANT_THEME_TYPE_SCALE_BOUNDS.max,
     }),
   }),
   shape: object({
     buttonStyle: enumeration("sharp", "soft", "pill"),
     radiusScale: number({
-      min: TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.min,
-      max: TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.max,
+      min: TENANT_THEME_RADIUS_SCALE_BOUNDS.min,
+      max: TENANT_THEME_RADIUS_SCALE_BOUNDS.max,
     }),
   }),
   density: enumeration("compact", "normal", "spacious"),
@@ -125,9 +125,9 @@ const general = object({
 });
 
 const anatomy = (
-  family: keyof typeof TENANT_THEME_ANATOMY_VARIANTS_V1
+  family: keyof typeof TENANT_THEME_ANATOMY_VARIANTS
 ): TenantThemeSchemaNode =>
-  enumeration(...TENANT_THEME_ANATOMY_VARIANTS_V1[family]);
+  enumeration(...TENANT_THEME_ANATOMY_VARIANTS[family]);
 
 const sidebar = object({
   anatomy: anatomy("sidebar"),
@@ -575,12 +575,12 @@ const chrome = object({
 });
 
 const NEUTRAL_OVERRIDE_TOKENS = new Set<string>(
-  TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1
+  TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS
 );
 
 const tokenValueRules: Readonly<Record<string, TenantThemeSchemaNode>> =
   Object.fromEntries(
-    TENANT_THEME_OVERRIDE_TOKENS_V1.map((token) => {
+    TENANT_THEME_OVERRIDE_TOKENS.map((token) => {
       if (token.startsWith("--ds-chart-category-")) return [token, HEX_COLOR];
       if (NEUTRAL_OVERRIDE_TOKENS.has(token)) return [token, HEX_COLOR];
       if (token.startsWith("--ds-color-") || token.startsWith("--ds-overlay-"))
@@ -622,7 +622,7 @@ function deepFreeze<T>(value: T): Readonly<T> {
   return value;
 }
 
-export const TENANT_THEME_CONFIG_V1_SCHEMA = deepFreeze({
+export const TENANT_THEME_CONFIG_SCHEMA = deepFreeze({
   id: "rottay.tenant-theme-config",
   schemaVersion: TENANT_THEME_SCHEMA_VERSION,
   documents: Object.freeze({
@@ -694,9 +694,9 @@ export const TENANT_THEME_CONFIG_V1_SCHEMA = deepFreeze({
     "chartRenderer",
     "chartDataSemantics",
   ]),
-  overrideTokens: TENANT_THEME_OVERRIDE_TOKENS_V1,
-  referenceTokens: TENANT_THEME_REFERENCE_TOKENS_V1,
-  fontPackIds: TENANT_THEME_FONT_PACK_IDS_V1,
+  overrideTokens: TENANT_THEME_OVERRIDE_TOKENS,
+  referenceTokens: TENANT_THEME_REFERENCE_TOKENS,
+  fontPackIds: TENANT_THEME_FONT_PACK_IDS,
   limits: Object.freeze({
     maxDocumentBytes: 65_536,
     maxDepth: 10,

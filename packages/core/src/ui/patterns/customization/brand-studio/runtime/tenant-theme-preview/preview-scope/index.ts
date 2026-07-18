@@ -19,7 +19,7 @@
  * that function) is dropped fail-closed rather than injected.
  */
 
-import type { TenantThemeArtifactV1 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
@@ -47,7 +47,7 @@ export interface TenantThemePreviewScope {
  * survives, so an empty `<style>` never carries a dangling selector.
  */
 export function buildTenantThemePreviewScope(
-  artifact: Pick<TenantThemeArtifactV1, 'slug' | 'variables'>
+  artifact: Pick<TenantThemeArtifact, 'slug' | 'variables'>
 ): TenantThemePreviewScope {
   const safeSlug = sanitizePreviewSlug(artifact.slug);
   const scopeSelector = buildPreviewScopeSelector(safeSlug);

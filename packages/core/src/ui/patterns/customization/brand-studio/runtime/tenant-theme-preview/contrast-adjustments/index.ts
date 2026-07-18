@@ -11,11 +11,11 @@
  */
 
 import type {
-  TenantThemeArtifactV1,
-  TenantThemeContrastAdjustmentV1,
+  TenantThemeArtifact,
+  TenantThemeContrastAdjustment,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 
-export type { TenantThemeContrastAdjustmentV1 };
+export type { TenantThemeContrastAdjustment };
 
 /**
  * Read the compiler-emitted contrast adjustments off a compiled artifact.
@@ -24,7 +24,7 @@ export type { TenantThemeContrastAdjustmentV1 };
  * degrades to "no corrections" rather than throwing.
  */
 export function selectTenantThemeAdjustments(
-  artifact: Pick<TenantThemeArtifactV1, 'adjustments'> | null | undefined
-): readonly TenantThemeContrastAdjustmentV1[] {
+  artifact: Pick<TenantThemeArtifact, 'adjustments'> | null | undefined
+): readonly TenantThemeContrastAdjustment[] {
   return artifact?.adjustments ?? [];
 }

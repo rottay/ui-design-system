@@ -16,7 +16,7 @@ import {
   type SkinPack,
 } from '..';
 import { clearCustomRegistry, getCustomComponent, hasCustomComponent } from '../..';
-import { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../../../../../../compilers/kernel/foundation/schemas/tenant-theme';
+import { TENANT_THEME_CONFIG_SCHEMA } from '../../../../../../../compilers/kernel/foundation/schemas/tenant-theme';
 import type { BrandTheme } from '../../../../../../../../foundation/contracts/composition/tenants/themes';
 
 function resetDom(): void {
@@ -116,7 +116,7 @@ describe('SkinPack bounded token-override contract', () => {
   });
 
   it('derives its bound from the tenant-theme schema limits object (single authority)', () => {
-    const cap = TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxTokenOverrides;
+    const cap = TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
     expect(cap).toBe(200);
 
     const atCap: Record<string, string> = {};

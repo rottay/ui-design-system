@@ -2,16 +2,16 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import type {
-  TenantThemeConfigIdentityV1,
-  TenantThemeDocumentV1,
+  TenantThemeConfigIdentity,
+  TenantThemeDocument,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
-  TENANT_THEME_ANATOMY_VARIANTS_V1,
-  TENANT_THEME_FONT_PACK_IDS_V1,
+  TENANT_THEME_ANATOMY_VARIANTS,
+  TENANT_THEME_FONT_PACK_IDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
-  TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST,
-  TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST,
+  TENANT_THEME_CONFIG_SCHEMA_DIGEST,
+  TENANT_THEME_DOCUMENT_SCHEMA_DIGEST,
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
@@ -29,7 +29,7 @@ const PRE_CHANGE_DIGESTS = JSON.parse(
   readFileSync(resolve(FIXTURE_DIR, "w4-pre-change-digests.json"), "utf8")
 ) as { documentSchemaDigest: string; configSchemaDigest: string };
 
-const IDENTITY: TenantThemeConfigIdentityV1 = {
+const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: "tenant_w4",
   slug: "w4-tenant",
   verticalKey: "bithire",
@@ -40,7 +40,7 @@ const BITHIRE_ENVELOPE = getTenantThemeVerticalEnvelope("bithire")!;
 
 const anatomyDocument = (
   anatomy: Record<string, string>
-): TenantThemeDocumentV1 =>
+): TenantThemeDocument =>
   ({
     schemaVersion: 1,
     mode: "advanced",
@@ -54,23 +54,23 @@ const anatomyDocument = (
         ),
       },
     },
-  }) as TenantThemeDocumentV1;
+  }) as TenantThemeDocument;
 
 describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", () => {
   it("performs one coherent schema digest bump for the wave", () => {
-    expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).not.toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       PRE_CHANGE_DIGESTS.documentSchemaDigest
     );
-    expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).not.toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       PRE_CHANGE_DIGESTS.configSchemaDigest
     );
-    expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toMatch(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toMatch(
       /^sha256-[a-f0-9]{64}$/
     );
   });
 
   it("retires the bare editorial pack id for the six role-suffixed packs", () => {
-    expect([...TENANT_THEME_FONT_PACK_IDS_V1]).toEqual([
+    expect([...TENANT_THEME_FONT_PACK_IDS]).toEqual([
       "editorial-display",
       "editorial-text",
       "grotesk-display",
@@ -192,7 +192,7 @@ describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", 
 describe("W4 anatomy variants: closed data enums selecting code-owned skins", () => {
   it("accepts every registered (family, variant) pair and rejects foreign pairs", () => {
     for (const [family, variants] of Object.entries(
-      TENANT_THEME_ANATOMY_VARIANTS_V1
+      TENANT_THEME_ANATOMY_VARIANTS
     )) {
       for (const variant of variants) {
         const result = validateTenantThemeDocument(

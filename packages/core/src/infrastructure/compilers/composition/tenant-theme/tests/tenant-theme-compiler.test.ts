@@ -3,16 +3,16 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import type {
-  TenantThemeConfigIdentityV1,
-  TenantThemeDocumentV1,
-  TenantThemeVerticalEnvelopeV1,
+  TenantThemeConfigIdentity,
+  TenantThemeDocument,
+  TenantThemeVerticalEnvelope,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   TENANT_THEME_COMPILER_VERSION,
-  TENANT_THEME_CONFIG_V1_SCHEMA,
-  TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST,
-  TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST,
-  TENANT_THEME_VERTICAL_ENVELOPES_V1,
+  TENANT_THEME_CONFIG_SCHEMA,
+  TENANT_THEME_CONFIG_SCHEMA_DIGEST,
+  TENANT_THEME_DOCUMENT_SCHEMA_DIGEST,
+  TENANT_THEME_VERTICAL_ENVELOPES,
   TenantThemeValidationError,
   canonicalizeTenantThemeValue,
   compileTenantThemeConfig,
@@ -25,7 +25,7 @@ import {
   validateTenantThemeDocument,
 } from "..";
 
-const IDENTITY: TenantThemeConfigIdentityV1 = {
+const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: "tenant_01",
   slug: "themanagementmiami",
   verticalKey: "bithire",
@@ -40,7 +40,7 @@ const BITHIRE_STATIC_ARTIFACT = readFileSync(
   "utf8"
 );
 
-const SIMPLE_DOCUMENT: TenantThemeDocumentV1 = {
+const SIMPLE_DOCUMENT: TenantThemeDocument = {
   schemaVersion: 1,
   mode: "simple",
   appearance: {
@@ -57,7 +57,7 @@ const SIMPLE_DOCUMENT: TenantThemeDocumentV1 = {
   },
 };
 
-const ADVANCED_DOCUMENT: TenantThemeDocumentV1 = {
+const ADVANCED_DOCUMENT: TenantThemeDocument = {
   schemaVersion: 1,
   mode: "advanced",
   visualFoundation: {
@@ -151,8 +151,8 @@ const BITHIRE_TEST_ENVELOPE = getTenantThemeVerticalEnvelope("bithire")!;
 const EVNTO_TEST_ENVELOPE = getTenantThemeVerticalEnvelope("evnto")!;
 
 const hydrate = (
-  document: TenantThemeDocumentV1 = SIMPLE_DOCUMENT,
-  identity: TenantThemeConfigIdentityV1 = IDENTITY
+  document: TenantThemeDocument = SIMPLE_DOCUMENT,
+  identity: TenantThemeConfigIdentity = IDENTITY
 ) => hydrateTenantThemeConfig(document, identity);
 
 describe("TenantThemeConfig v1 server contract", () => {
@@ -165,31 +165,31 @@ describe("TenantThemeConfig v1 server contract", () => {
   });
 
   it("publishes immutable schema/document drift sentinels", () => {
-    expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
       "sha256-85586096e40f9bb976419e92cd83a7a19ff74f68a5afd1c1a258e6473c056242"
     );
-    expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
       "sha256-722c1a75193ef57ce111b519d3ddb952db256e06387ee55366f0d17c2ad59d9e"
     );
-    expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA)).toBe(true);
+    expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(
-      Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.documents.simple)
+      Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)
     ).toBe(true);
-    expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA.limits)).toBe(true);
+    expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.limits)).toBe(true);
     expect(TENANT_THEME_COMPILER_VERSION).toBe("tenant-theme-compiler@3");
-    expect(TENANT_THEME_CONFIG_V1_SCHEMA.limits).toMatchObject({
+    expect(TENANT_THEME_CONFIG_SCHEMA.limits).toMatchObject({
       maxCompiledVariables: 512,
       maxCompiledVariableBytes: 90_112,
       maxTokenOverrides: 200,
     });
-    expect(TENANT_THEME_CONFIG_V1_SCHEMA.scopeAttributes).toEqual([
+    expect(TENANT_THEME_CONFIG_SCHEMA.scopeAttributes).toEqual([
       "data-ds-root",
       "data-vertical",
       "data-tenant",
     ]);
     expect(() => {
       (
-        TENANT_THEME_CONFIG_V1_SCHEMA.limits as { maxDepth: number }
+        TENANT_THEME_CONFIG_SCHEMA.limits as { maxDepth: number }
       ).maxDepth = 999;
     }).toThrow(TypeError);
   });
@@ -232,8 +232,8 @@ describe("TenantThemeConfig v1 server contract", () => {
         typeScale: { min: 0.92, max: 1.08 },
         radiusScale: { min: 0.8, max: 1.2 },
       },
-    } satisfies TenantThemeVerticalEnvelopeV1);
-    expect(Object.isFrozen(TENANT_THEME_VERTICAL_ENVELOPES_V1)).toBe(true);
+    } satisfies TenantThemeVerticalEnvelope);
+    expect(Object.isFrozen(TENANT_THEME_VERTICAL_ENVELOPES)).toBe(true);
     expect(
       Object.isFrozen(BITHIRE_TEST_ENVELOPE.advanced?.chromeFamilies)
     ).toBe(true);
@@ -258,14 +258,14 @@ describe("TenantThemeConfig v1 server contract", () => {
         typeScale: { min: 0.92, max: 1.08 },
         radiusScale: { min: 0.8, max: 1.2 },
       },
-    } satisfies Partial<TenantThemeVerticalEnvelopeV1>);
+    } satisfies Partial<TenantThemeVerticalEnvelope>);
     expect(EVNTO_TEST_ENVELOPE.advanced?.chromeFamilies).toEqual(
       BITHIRE_TEST_ENVELOPE.advanced?.chromeFamilies
     );
     expect(Object.isFrozen(EVNTO_TEST_ENVELOPE)).toBe(true);
     expect(Object.isFrozen(EVNTO_TEST_ENVELOPE.ranges)).toBe(true);
 
-    const evntoIdentity: TenantThemeConfigIdentityV1 = {
+    const evntoIdentity: TenantThemeConfigIdentity = {
       ...IDENTITY,
       tenantId: "tenant_evnto",
       slug: "acme-events",

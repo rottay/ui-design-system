@@ -28,18 +28,18 @@
  */
 
 import type {
-  TenantThemeAdvancedDocumentV1,
-  TenantThemeConfigIdentityV1,
+  TenantThemeAdvancedDocument,
+  TenantThemeConfigIdentity,
 } from "../../../../../../contracts/composition/tenants/themes/tenant-theme";
 
-export const DIVERGENCE_SOBER_IDENTITY: TenantThemeConfigIdentityV1 = {
+export const DIVERGENCE_SOBER_IDENTITY: TenantThemeConfigIdentity = {
   tenantId: "tenant_divergence_sober",
   slug: "divergence-sober",
   verticalKey: "bithire",
   rowVersion: 1,
 };
 
-export const DIVERGENCE_SOBER_DOCUMENT: TenantThemeAdvancedDocumentV1 = {
+export const DIVERGENCE_SOBER_DOCUMENT: TenantThemeAdvancedDocument = {
   schemaVersion: 1,
   mode: "advanced",
   visualFoundation: {

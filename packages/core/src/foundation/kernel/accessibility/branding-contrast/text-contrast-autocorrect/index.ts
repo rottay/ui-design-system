@@ -81,7 +81,7 @@ const BUTTON_VARIANTS = ['primary', 'secondary', 'success', 'warning', 'error', 
  * The governed pairing list. Variable names mirror the chrome emitter's
  * exact output names -- a rename there must be reflected here.
  */
-export const TEXT_CONTRAST_PAIRINGS_V1: readonly TextContrastPairing[] = [
+export const TEXT_CONTRAST_PAIRINGS: readonly TextContrastPairing[] = [
   ...BUTTON_VARIANTS.map((variant) => ({
     token: `--ds-button-${variant}-color`,
     groundChain: [`--ds-button-${variant}-bg`],
@@ -217,7 +217,7 @@ function snapForeground(fgHex: string, groundHex: string, thresholdLc: number): 
  *
  * Deterministic and pure: the same inputs always produce byte-identical
  * output, the input map is never mutated, and pair order follows
- * TEXT_CONTRAST_PAIRINGS_V1. A pair participates only when its foreground
+ * TEXT_CONTRAST_PAIRINGS. A pair participates only when its foreground
  * token is authored; a chrome pair whose ground chain is entirely unauthored
  * is inapplicable (its real ground is a code-owned default unknown here) and
  * produces no row.
@@ -230,7 +230,7 @@ export function enforceTextContrast(
   const adjustments: TextContrastAdjustment[] = [];
   const unverifiable: TextContrastUnverifiable[] = [];
 
-  for (const pairing of TEXT_CONTRAST_PAIRINGS_V1) {
+  for (const pairing of TEXT_CONTRAST_PAIRINGS) {
     const fg = variables[pairing.token];
     if (fg === undefined) continue;
 

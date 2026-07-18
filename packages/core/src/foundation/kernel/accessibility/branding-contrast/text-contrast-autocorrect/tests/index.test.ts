@@ -13,7 +13,7 @@ import { apcaContrast } from '../..';
 import { hexToOklch } from '../../../../color/oklch';
 import {
   TEXT_CONTRAST_FALLBACK_CANDIDATES,
-  TEXT_CONTRAST_PAIRINGS_V1,
+  TEXT_CONTRAST_PAIRINGS,
   TEXT_CONTRAST_PRIMARY_TEXT_MIN_LC,
   enforceTextContrast,
 } from '../index';
@@ -230,7 +230,7 @@ describe('enforceTextContrast', () => {
   });
 
   it('checks every governed pairing family', () => {
-    const tokens = TEXT_CONTRAST_PAIRINGS_V1.map((pairing) => pairing.token);
+    const tokens = TEXT_CONTRAST_PAIRINGS.map((pairing) => pairing.token);
     for (const variant of ['primary', 'secondary', 'success', 'warning', 'error', 'info']) {
       expect(tokens).toContain(`--ds-button-${variant}-color`);
     }

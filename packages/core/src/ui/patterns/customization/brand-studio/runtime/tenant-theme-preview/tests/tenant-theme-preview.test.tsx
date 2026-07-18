@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 
 import type {
-  TenantThemeConfigIdentityV1,
-  TenantThemeDocumentV1,
+  TenantThemeConfigIdentity,
+  TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 
 import {
@@ -16,14 +16,14 @@ import {
   useTenantThemePreview,
 } from '../index';
 
-const IDENTITY: TenantThemeConfigIdentityV1 = {
+const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_preview',
   slug: 'preview-tenant',
   verticalKey: 'bithire',
   rowVersion: 1,
 };
 
-function makeDocument(primary: string): TenantThemeDocumentV1 {
+function makeDocument(primary: string): TenantThemeDocument {
   return {
     schemaVersion: 1,
     mode: 'simple',
@@ -39,7 +39,7 @@ const INVALID_DOCUMENT = {
   schemaVersion: 1,
   mode: 'simple',
   appearance: { density: 'ultra' },
-} as unknown as TenantThemeDocumentV1;
+} as unknown as TenantThemeDocument;
 
 describe('compileTenantThemePreview', () => {
   it('compiles a valid document into an artifact with no issues', () => {

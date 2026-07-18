@@ -44,7 +44,7 @@
  */
 
 import { DEFAULT_PACK, registerCustomComponents } from '..';
-import { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../../../../../compilers/kernel/foundation/schemas/tenant-theme';
+import { TENANT_THEME_CONFIG_SCHEMA } from '../../../../../../compilers/kernel/foundation/schemas/tenant-theme';
 import { compileBrandTheme } from '../../../../../../compilers/kernel/runtime/brand-theme';
 import { warnInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import {
@@ -70,7 +70,7 @@ const TOKEN_PREFIX = '--ds-';
 
 /** Same bound as `TenantAppearanceAdvanced.tokenOverrides`; the schema limits object is the sole authority. */
 const MAX_TOKEN_OVERRIDES: number =
-  TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxTokenOverrides;
+  TENANT_THEME_CONFIG_SCHEMA.limits.maxTokenOverrides;
 
 /**
  * Validates a skin pack's raw token overrides against the bounded contract.

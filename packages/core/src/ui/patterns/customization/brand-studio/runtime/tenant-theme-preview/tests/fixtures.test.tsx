@@ -5,8 +5,8 @@ import { render, screen, within } from '@testing-library/react';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '@/foundation/contracts';
 import type {
-  TenantThemeConfigIdentityV1,
-  TenantThemeDocumentV1,
+  TenantThemeConfigIdentity,
+  TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 
 import { PatternBrandStudio } from '../../../index';
@@ -39,14 +39,14 @@ function Harness({ children }: { children: React.ReactNode }): React.ReactElemen
 /** Product vocabulary the DS ownership law forbids in a generic preview fixture. */
 const DOMAIN_VOCABULARY = /candidate|interview|recruiter|\btenant\b|venue|ticket|evnto|bithire/i;
 
-const IDENTITY: TenantThemeConfigIdentityV1 = {
+const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_preview',
   slug: 'preview-tenant',
   verticalKey: 'bithire',
   rowVersion: 1,
 };
 
-const VALID_DOCUMENT: TenantThemeDocumentV1 = {
+const VALID_DOCUMENT: TenantThemeDocument = {
   schemaVersion: 1,
   mode: 'simple',
   appearance: { palette: { primary: '#2F6B9A' } },
@@ -56,7 +56,7 @@ const INVALID_DOCUMENT = {
   schemaVersion: 1,
   mode: 'simple',
   appearance: { density: 'ultra' },
-} as unknown as TenantThemeDocumentV1;
+} as unknown as TenantThemeDocument;
 
 describe('tenant-theme preview fixtures render without a product concept', () => {
   it('renders the list collection fixture', async () => {
