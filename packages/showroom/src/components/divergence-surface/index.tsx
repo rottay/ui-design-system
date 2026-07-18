@@ -19,7 +19,7 @@ import {
   getTenantThemeVerticalEnvelope,
   tenantThemeAnatomyAttributes,
   tenantThemeArtifactRootAttributes,
-  type TenantThemeArtifactV1,
+  type TenantThemeArtifact,
 } from '@rottay/design-system/server';
 import {
   BarChart3Icon,
@@ -71,7 +71,7 @@ export interface DivergenceProbePayload {
   slug: string;
   digest: string;
   compilerVersion: string;
-  adjustments: NonNullable<TenantThemeArtifactV1['adjustments']>;
+  adjustments: NonNullable<TenantThemeArtifact['adjustments']>;
   anatomy: Record<string, string>;
   variables: Readonly<Record<string, string>>;
 }

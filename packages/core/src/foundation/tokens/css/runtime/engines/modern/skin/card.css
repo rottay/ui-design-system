@@ -210,7 +210,7 @@
 /* ===========================================================================
  * Anatomy variants (W4-A). `cardComponent.anatomy` in the tenant chrome compiles
  * to a `data-anatomy-card` attribute on the DS root; the closed vocabulary lives
- * in TENANT_THEME_ANATOMY_VARIANTS_V1 and is enforced by anatomy-variant-gate.mjs.
+ * in TENANT_THEME_ANATOMY_VARIANTS and is enforced by anatomy-variant-gate.mjs.
  * `default`/absent selects the base rendering above and needs no rule here.
  *
  * Each block prefixes the anatomy attribute onto the base root chain and REPEATS

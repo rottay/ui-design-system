@@ -183,7 +183,7 @@
 
 /* ===========================================================================
  * Anatomy variants (W4-A). `table.anatomy` compiles to a `data-anatomy-table`
- * attribute on the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1,
+ * attribute on the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS,
  * enforced by anatomy-variant-gate.mjs. `default`/absent = base above.
  *
  * Rustic keys row fill on the `data-state` enum (selected|striped|default) and

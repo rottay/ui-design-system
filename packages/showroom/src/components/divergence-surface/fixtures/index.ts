@@ -12,7 +12,7 @@
  */
 
 import type {
-  TenantThemeConfigIdentityV1,
+  TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from '@rottay/design-system/server';
 
@@ -21,7 +21,7 @@ export type DivergenceFixtureId = 'sober' | 'editorial';
 export interface DivergenceFixture {
   readonly id: DivergenceFixtureId;
   readonly displayName: string;
-  readonly identity: TenantThemeConfigIdentityV1;
+  readonly identity: TenantThemeConfigIdentity;
   readonly document: TenantThemeDocument;
 }
 

@@ -128,7 +128,7 @@
 /* ===========================================================================
  * Anatomy variants (W4-A). `layout.anatomy` in the tenant chrome compiles to a
  * `data-anatomy-layout` attribute on the DS root; vocabulary in
- * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * TENANT_THEME_ANATOMY_VARIANTS, enforced by anatomy-variant-gate.mjs.
  * `default`/absent = the base header above (surface card + bottom rule).
  *
  * The cockpit header is this engine's primary app header. Rules prefix the

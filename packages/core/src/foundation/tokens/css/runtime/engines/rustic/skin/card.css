@@ -166,7 +166,7 @@
 /* ===========================================================================
  * Anatomy variants (W4-A). `cardComponent.anatomy` compiles to a
  * `data-anatomy-card` attribute on the DS root; vocabulary in
- * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * TENANT_THEME_ANATOMY_VARIANTS, enforced by anatomy-variant-gate.mjs.
  * `default`/absent = base rendering above, no rule needed.
  *
  * The anatomy attribute prefixes the base root chain and REPEATS

@@ -107,7 +107,7 @@
 /* ===========================================================================
  * Anatomy variants (W4-A). `sidebar.anatomy` and `layout.anatomy` in the tenant
  * chrome compile to `data-anatomy-sidebar` / `data-anatomy-layout` attributes on
- * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by
+ * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS, enforced by
  * anatomy-variant-gate.mjs. `default`/absent = the base above, no rule needed.
  *
  * Sidebar rail/panel governs the sider's interior rhythm and alignment plus the

@@ -295,7 +295,7 @@
 /* ===========================================================================
  * Anatomy variants (W4-A). `table.anatomy` in the tenant chrome compiles to a
  * `data-anatomy-table` attribute on the DS root; vocabulary in
- * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * TENANT_THEME_ANATOMY_VARIANTS, enforced by anatomy-variant-gate.mjs.
  * `default`/absent = the base rows/rules above, no rule needed.
  *
  * Row rules prefix the anatomy attribute onto a base row selector, reaching
