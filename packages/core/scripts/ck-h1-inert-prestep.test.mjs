@@ -29,7 +29,7 @@ const RENDER_TOPOLOGY_SHA256 = {
   modern: '03a9e40fa5b3d8c71c372dbb810e2188c81648f5e94302814787f8d228e7ea1c',
   rustic: '709598682cf33788abab2fae40e15acf7161b42a2ae47c35bd3e95fa8418b5cb',
   sandbox: '365c4d16b7ea690ff4dcd09b27ca18217bd896d8f5f6a7b3dafa513afb6f844e',
-  studio: '26d1cf0c2a1c95d176ecb02a13678fb4f1830962939ab4b75f8997a80a2d6496',
+  studio: '0118a6d4e1e177a6a2856a55623bfcd6fc0729e1dab8bf261bb85c366df3cf54',
 };
 
 function source(path) {

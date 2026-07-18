@@ -93,6 +93,8 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
   });
   assert.deepEqual(SCOPED_OWNER_RANKS, {
     foundation: { contracts: 0, presets: 1 },
+    'foundation/kernel': { color: 0, accessibility: 1 },
+    'foundation/kernel/color': { contrast: 0, oklch: 1 },
     infrastructure: { compilers: 0, runtime: 1 },
     'ui/primitives/feedback/Toast/runtime/state': {
       'method-registry': 0,
