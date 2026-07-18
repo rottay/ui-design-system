@@ -52,8 +52,9 @@ const SIZE_CONFIG: Record<string, { width: string; height: string; thumbSize: st
  * Uses a hidden native checkbox for accessibility while rendering a custom
  * track and sliding knob. The knob position is animated via CSS transition
  * and `translateX`, calculated from the size configuration CSS variables.
- * An inline `<style>` block injects the `@keyframes spin` animation for
- * the loading spinner SVG.
+ * An inline `<style>` block injects the `@keyframes ds-switch-spin` animation
+ * for the loading spinner SVG (renamed off the shared `ds-foundation-spin`
+ * so it does not redefine the globally-loaded keyframe).
  *
  * @param props - {@link SwitchProps} unified switch props shared across engines.
  * @returns A ref-forwarding toggle switch with pure CSS variable styling.

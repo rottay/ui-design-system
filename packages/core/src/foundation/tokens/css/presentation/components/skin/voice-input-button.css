@@ -12,7 +12,7 @@
  *
  * The two per-mount `<style>` keyframes are moved here renamed
  * `ds-voice-input-button-pulse` / `-spin`; the inline `animation` references the
- * new names, and `-spin` no longer shadows the global `spin`.
+ * new names, and `-spin` no longer shadows the global `ds-foundation-spin`.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1); with only ONE root class, the border rules reach (0,4,0) via a

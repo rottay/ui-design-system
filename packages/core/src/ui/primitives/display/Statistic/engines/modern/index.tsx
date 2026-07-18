@@ -159,7 +159,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       return (
         <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="true" style={{
           ...style,
-          animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
+          animation: 'ds-foundation-pulse 2s var(--ds-motion-ease-in-out) infinite',
           animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
         }}>
           <div

@@ -58,7 +58,7 @@
      ======================================================================== */
 
   --ds-timeline-pending-dot-color: var(--ds-color-primary, #1890ff);
-  --ds-timeline-pending-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --ds-timeline-pending-animation: ds-foundation-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   /* ========================================================================
      TIMELINE TRANSITIONS

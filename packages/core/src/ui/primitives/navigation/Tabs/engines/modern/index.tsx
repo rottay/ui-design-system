@@ -484,7 +484,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           tabIndex={0}
           style={{
             padding: 'var(--ds-spacing-4, 16px) 0 0 0',
-            animation: 'rottay-tabs-fade-in var(--ds-motion-fast) var(--ds-motion-ease-out)',
+            animation: 'ds-tabs-fade-in var(--ds-motion-fast) var(--ds-motion-ease-out)',
           }}
         >
           {activeItem.children}

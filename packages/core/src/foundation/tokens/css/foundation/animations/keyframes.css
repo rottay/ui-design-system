@@ -10,7 +10,7 @@
    Opacity-based entrance and exit animations
    ======================================================================== */
 
-@keyframes fade-in {
+@keyframes ds-foundation-fade-in {
   from {
     opacity: 0;
   }
@@ -19,7 +19,7 @@
   }
 }
 
-@keyframes fade-out {
+@keyframes ds-foundation-fade-out {
   from {
     opacity: 1;
   }
@@ -28,7 +28,7 @@
   }
 }
 
-@keyframes fade-in-up {
+@keyframes ds-foundation-fade-in-up {
   from {
     opacity: 0;
     transform: translateY(1rem);
@@ -39,7 +39,7 @@
   }
 }
 
-@keyframes fade-in-down {
+@keyframes ds-foundation-fade-in-down {
   from {
     opacity: 0;
     transform: translateY(-1rem);
@@ -50,7 +50,7 @@
   }
 }
 
-@keyframes fade-in-left {
+@keyframes ds-foundation-fade-in-left {
   from {
     opacity: 0;
     transform: translateX(-1rem);
@@ -61,7 +61,7 @@
   }
 }
 
-@keyframes fade-in-right {
+@keyframes ds-foundation-fade-in-right {
   from {
     opacity: 0;
     transform: translateX(1rem);
@@ -77,7 +77,7 @@
    Grow and shrink effects
    ======================================================================== */
 
-@keyframes scale-in {
+@keyframes ds-foundation-scale-in {
   from {
     opacity: 0;
     transform: scale(0.95);
@@ -88,7 +88,7 @@
   }
 }
 
-@keyframes scale-out {
+@keyframes ds-foundation-scale-out {
   from {
     opacity: 1;
     transform: scale(1);
@@ -99,7 +99,7 @@
   }
 }
 
-@keyframes scale-up {
+@keyframes ds-foundation-scale-up {
   from {
     transform: scale(0);
   }
@@ -108,7 +108,7 @@
   }
 }
 
-@keyframes scale-down {
+@keyframes ds-foundation-scale-down {
   from {
     transform: scale(1);
   }
@@ -117,7 +117,7 @@
   }
 }
 
-@keyframes zoom-in {
+@keyframes ds-foundation-zoom-in {
   from {
     opacity: 0;
     transform: scale(0.3);
@@ -131,7 +131,7 @@
   }
 }
 
-@keyframes zoom-out {
+@keyframes ds-foundation-zoom-out {
   from {
     opacity: 1;
     transform: scale(1);
@@ -150,7 +150,7 @@
    Directional sliding effects
    ======================================================================== */
 
-@keyframes slide-in-up {
+@keyframes ds-foundation-slide-in-up {
   from {
     transform: translateY(100%);
   }
@@ -159,7 +159,7 @@
   }
 }
 
-@keyframes slide-in-down {
+@keyframes ds-foundation-slide-in-down {
   from {
     transform: translateY(-100%);
   }
@@ -168,7 +168,7 @@
   }
 }
 
-@keyframes slide-in-left {
+@keyframes ds-foundation-slide-in-left {
   from {
     transform: translateX(-100%);
   }
@@ -177,7 +177,7 @@
   }
 }
 
-@keyframes slide-in-right {
+@keyframes ds-foundation-slide-in-right {
   from {
     transform: translateX(100%);
   }
@@ -186,7 +186,7 @@
   }
 }
 
-@keyframes slide-out-up {
+@keyframes ds-foundation-slide-out-up {
   from {
     transform: translateY(0);
   }
@@ -195,7 +195,7 @@
   }
 }
 
-@keyframes slide-out-down {
+@keyframes ds-foundation-slide-out-down {
   from {
     transform: translateY(0);
   }
@@ -204,7 +204,7 @@
   }
 }
 
-@keyframes slide-out-left {
+@keyframes ds-foundation-slide-out-left {
   from {
     transform: translateX(0);
   }
@@ -213,7 +213,7 @@
   }
 }
 
-@keyframes slide-out-right {
+@keyframes ds-foundation-slide-out-right {
   from {
     transform: translateX(0);
   }
@@ -227,7 +227,7 @@
    Spinning and rotation effects
    ======================================================================== */
 
-@keyframes spin {
+@keyframes ds-foundation-spin {
   from {
     transform: rotate(0deg);
   }
@@ -236,7 +236,7 @@
   }
 }
 
-@keyframes spin-reverse {
+@keyframes ds-foundation-spin-reverse {
   from {
     transform: rotate(360deg);
   }
@@ -245,7 +245,7 @@
   }
 }
 
-@keyframes rotate-in {
+@keyframes ds-foundation-rotate-in {
   from {
     opacity: 0;
     transform: rotate(-180deg);
@@ -256,7 +256,7 @@
   }
 }
 
-@keyframes rotate-out {
+@keyframes ds-foundation-rotate-out {
   from {
     opacity: 1;
     transform: rotate(0deg);
@@ -272,7 +272,7 @@
    Playful bouncing effects
    ======================================================================== */
 
-@keyframes bounce {
+@keyframes ds-foundation-bounce {
   0%, 100% {
     transform: translateY(0);
   }
@@ -281,7 +281,7 @@
   }
 }
 
-@keyframes bounce-in {
+@keyframes ds-foundation-bounce-in {
   0% {
     opacity: 0;
     transform: scale(0.3);
@@ -298,7 +298,7 @@
   }
 }
 
-@keyframes bounce-out {
+@keyframes ds-foundation-bounce-out {
   0% {
     transform: scale(1);
   }
@@ -320,7 +320,7 @@
    Error indication and attention grabbers
    ======================================================================== */
 
-@keyframes shake {
+@keyframes ds-foundation-shake {
   0%, 100% {
     transform: translateX(0);
   }
@@ -332,7 +332,7 @@
   }
 }
 
-@keyframes shake-vertical {
+@keyframes ds-foundation-shake-vertical {
   0%, 100% {
     transform: translateY(0);
   }
@@ -349,7 +349,7 @@
    Attention and loading indicators
    ======================================================================== */
 
-@keyframes pulse {
+@keyframes ds-foundation-pulse {
   0%, 100% {
     opacity: 1;
   }
@@ -358,7 +358,7 @@
   }
 }
 
-@keyframes pulse-scale {
+@keyframes ds-foundation-pulse-scale {
   0%, 100% {
     transform: scale(1);
   }
@@ -367,7 +367,7 @@
   }
 }
 
-@keyframes pulse-ring {
+@keyframes ds-foundation-pulse-ring {
   0% {
     transform: scale(1);
     opacity: 1;
@@ -383,7 +383,7 @@
    Skeleton loaders and loading states
    ======================================================================== */
 
-@keyframes shimmer {
+@keyframes ds-foundation-shimmer {
   0% {
     background-position: -100% 0;
   }
@@ -392,7 +392,7 @@
   }
 }
 
-@keyframes skeleton-loading {
+@keyframes ds-foundation-skeleton-loading {
   0% {
     background-position: -200% 0;
   }
@@ -401,7 +401,7 @@
   }
 }
 
-@keyframes progress-indeterminate {
+@keyframes ds-foundation-progress-indeterminate {
   0% {
     transform: translateX(-100%);
   }
@@ -415,7 +415,7 @@
    Card flip and rotation effects
    ======================================================================== */
 
-@keyframes flip-horizontal {
+@keyframes ds-foundation-flip-horizontal {
   0% {
     transform: rotateY(0deg);
   }
@@ -424,7 +424,7 @@
   }
 }
 
-@keyframes flip-vertical {
+@keyframes ds-foundation-flip-vertical {
   0% {
     transform: rotateX(0deg);
   }
@@ -438,7 +438,7 @@
    Pendulum and hanging effects
    ======================================================================== */
 
-@keyframes swing {
+@keyframes ds-foundation-swing {
   0%, 100% {
     transform: rotate(0deg);
   }
@@ -461,7 +461,7 @@
    Playful attention grabbers
    ======================================================================== */
 
-@keyframes wiggle {
+@keyframes ds-foundation-wiggle {
   0%, 100% {
     transform: rotate(0deg);
   }
@@ -478,7 +478,7 @@
    Like/favorite indication
    ======================================================================== */
 
-@keyframes heartbeat {
+@keyframes ds-foundation-heartbeat {
   0%, 100% {
     transform: scale(1);
   }
@@ -501,7 +501,7 @@
    Cursor and attention indication
    ======================================================================== */
 
-@keyframes blink {
+@keyframes ds-foundation-blink {
   0%, 100% {
     opacity: 1;
   }
@@ -515,7 +515,7 @@
    Loading indicator with dots
    ======================================================================== */
 
-@keyframes typing-dots {
+@keyframes ds-foundation-typing-dots {
   0%, 60%, 100% {
     transform: translateY(0);
   }
@@ -529,7 +529,7 @@
    Material-style ripple effect
    ======================================================================== */
 
-@keyframes ripple {
+@keyframes ds-foundation-ripple {
   0% {
     transform: scale(0);
     opacity: 1;
@@ -545,7 +545,7 @@
    Glowing effect for emphasis
    ======================================================================== */
 
-@keyframes glow {
+@keyframes ds-foundation-glow {
   0%, 100% {
     box-shadow: 0 0 0.5rem rgba(var(--ds-color-primary-rgb, 0, 102, 204), 0.5);
   }
@@ -561,7 +561,7 @@
    ======================================================================== */
 
 /* Button spinner - used by Rustic and Modern engines */
-@keyframes rottay-button-spin {
+@keyframes ds-button-spin {
   from {
     transform: rotate(0deg);
   }
@@ -571,7 +571,7 @@
 }
 
 /* Button pulse - used by Rustic engine */
-@keyframes rottay-button-pulse {
+@keyframes ds-button-pulse {
   0%, 100% {
     box-shadow: 0 0 0 0 rgba(var(--ds-color-primary-rgb, 59, 130, 246), 0.5);
   }
@@ -580,8 +580,9 @@
   }
 }
 
-/* Modal entrance - used by Modern engine */
-@keyframes rottay-modal-enter {
+/* Modal entrance - currently unreferenced (superseded by the modern engine's
+   own ds-overlay-modal-enter-modern / ds-modal-panel-enter-modern keyframes). */
+@keyframes ds-foundation-modal-scale-in {
   from {
     opacity: 0;
     transform: scale(0.95);
@@ -592,8 +593,9 @@
   }
 }
 
-/* Modal backdrop entrance - used by Modern engine */
-@keyframes rottay-modal-backdrop-enter {
+/* Modal backdrop entrance - currently unreferenced (superseded by the modern
+   engine's own ds-overlay-modal-backdrop-enter-modern keyframe). */
+@keyframes ds-foundation-modal-backdrop-enter {
   from {
     opacity: 0;
   }
@@ -602,8 +604,10 @@
   }
 }
 
-/* Select dropdown slide-in - used by Modern engine */
-@keyframes rottay-select-slide-in {
+/* Select dropdown slide-in - currently unreferenced (superseded by the
+   picker/select family's own ds-select-dropdown-in / ds-date-picker-slide-in /
+   ds-time-picker-slide-in / ds-tree-select-slide-in keyframes). */
+@keyframes ds-foundation-select-slide-in {
   from {
     opacity: 0;
     transform: scaleY(0.95);
@@ -617,7 +621,7 @@
 }
 
 /* Tabs panel fade-in - used by Modern engine */
-@keyframes rottay-tabs-fade-in {
+@keyframes ds-tabs-fade-in {
   from {
     opacity: 0;
     transform: translateY(2px);
@@ -633,12 +637,12 @@
    Shared keyframes for modal entrance and backdrop fade.
    ======================================================================== */
 
-@keyframes ds-modal-enter {
+@keyframes ds-foundation-modal-enter {
   from { opacity: 0; transform: scale(0.95) translateY(8px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes ds-backdrop-fade {
+@keyframes ds-foundation-backdrop-fade {
   from { opacity: 0; }
   to { opacity: 1; }
 }

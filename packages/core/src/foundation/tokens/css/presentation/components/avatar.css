@@ -180,7 +180,7 @@
      Skeleton/loading appearance
      ======================================================================== */
   --ds-avatar-loading-bg: var(--ds-color-neutral-100);
-  --ds-avatar-loading-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --ds-avatar-loading-animation: ds-foundation-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   /* ========================================================================
      TOUCH TARGETS

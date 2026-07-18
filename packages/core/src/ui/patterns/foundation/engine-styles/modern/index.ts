@@ -76,7 +76,7 @@ export function spinnerStyle(size: number = 20): CSSProperties {
     border: `${Math.max(2, size / 10)}px solid var(--ds-color-border)`,
     borderTopColor: 'var(--ds-color-primary)',
     borderRadius: '50%',
-    animation: 'spin var(--ds-motion-glacial) linear infinite',
+    animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
     flexShrink: 0,
   };
 }

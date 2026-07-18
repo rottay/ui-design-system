@@ -159,7 +159,7 @@ function SavedViewTab({
 /* ------------------------------------------------------------------ */
 
 const PULSE_STYLE: React.CSSProperties = {
-  animation: 'pulse 1.5s ease-in-out infinite',
+  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
 };
 
 function SkeletonBlock(props: { width: number | string; height: number; style?: React.CSSProperties }) {

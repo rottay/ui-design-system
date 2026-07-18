@@ -18,8 +18,8 @@
  *
  * The loading spinner's `@keyframes spin` was injected per-mount via a
  * `<style>` tag; it is renamed `ds-switch-spin` here so it does not redefine
- * the globally-loaded `spin`, and the svg's inline `animation` references the
- * new name.
+ * the globally-loaded `ds-foundation-spin`, and the svg's inline `animation`
+ * references the new name.
  *
  * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
  * unlayered at (0,3,0) or higher.

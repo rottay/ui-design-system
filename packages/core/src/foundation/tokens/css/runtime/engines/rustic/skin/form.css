@@ -14,7 +14,8 @@
  *
  * The four per-mount `<style>` keyframes are moved here renamed
  * `ds-form-rustic-*` (engine-namespaced: the modern Form's `feedback-in` has
- * different content, and the local `spin` shadowed the global one). The inline
+ * different content, and the local `spin` shadowed the global
+ * `ds-foundation-spin`). The inline
  * `animation` references the new names.
  *
  * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins

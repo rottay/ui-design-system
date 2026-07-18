@@ -458,7 +458,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                               >
                                 <span className="truncate">{optLabel}</span>
                                 {isLoading ? (
-                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }} />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
                                     <span data-part="menu-item-arrow">›</span>

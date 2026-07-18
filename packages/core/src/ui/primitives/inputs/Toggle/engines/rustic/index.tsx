@@ -239,7 +239,7 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
               height={sizeValues.dot * 0.6}
               viewBox="0 0 16 16"
               fill="none"
-              style={{ animation: 'spin 1s linear infinite' }}
+              style={{ animation: 'ds-foundation-spin 1s linear infinite' }}
             >
               <circle
                 cx="8"

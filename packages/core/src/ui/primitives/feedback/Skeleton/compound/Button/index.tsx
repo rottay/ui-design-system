@@ -208,7 +208,7 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
       width: shape === 'circle' ? dimensions.height : dimensions.width,
       height: dimensions.height,
       '--ds-skeleton-button-radius': borderRadius,
-      animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
+      animation: 'ds-foundation-skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
       ...style,
     } as React.CSSProperties;
 

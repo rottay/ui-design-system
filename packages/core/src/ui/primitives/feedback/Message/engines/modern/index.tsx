@@ -450,7 +450,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     // `data-icon` marks the built-in spinner so the skin's ring rule cannot also
     // paint a consumer-supplied `icon` rendered into the same slot.
     loading: (
-      <span data-icon="spinner" style={{ display: 'inline-block', width: 16, height: 16, animation: 'spin var(--ds-motion-glacial) linear infinite' }}></span>
+      <span data-icon="spinner" style={{ display: 'inline-block', width: 16, height: 16, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }}></span>
     ),
   };
 

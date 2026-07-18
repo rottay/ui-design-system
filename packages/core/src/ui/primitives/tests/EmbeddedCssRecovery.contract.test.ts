@@ -15,7 +15,7 @@ const readSkin = (name: string) => readSource(`foundation/tokens/css/presentatio
 const SKIN_HASHES = {
   'data-table-interactions.css': '6d7ee17c26eda20cec65551d28c9ab5080caa74f650c14f0b8ce07a47226a217',
   'form-placeholders.css': 'c26b0d68812a0b668f5992cfa868ce8ee1c9b9047c7e7cbfe91b110d82ab2a8f',
-  'navigation-static.css': '27dd6e831cc8e09c7cb07ee078e4a8f28aab4572f572a1bae74893bce9784f05',
+  'navigation-static.css': '6cd5b7b38182d79521bd23f9832ccda68140e9af6b75bffd39b5576da44c5489',
   'primitive-motion.css': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
   'scroll-area.css': '060d4fab16df50659d75c29d41943e8348b25a3d7b249d3ad13d1f43b40714c1',
   'toast-animation-keyframes.css': 'a18d974060652fda28e40aa14d46173de1f766ac067cec4a689b43124c33c62a',
@@ -303,7 +303,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       'border-radius': 'var(--ds-radius-sm)',
     });
     expectKeyframeContracts(SKINS.navigation, {
-      'rottay-tabs-fade-in': {
+      'ds-tabs-fade-in': {
         from: { opacity: '0', transform: 'translateY(2px)' },
         to: { opacity: '1', transform: 'translateY(0)' },
       },
@@ -531,7 +531,7 @@ describe('WO-SKIN-06 embedded CSS recovery — producer and hook contract', () =
     expect(select.match(/className="rottay-select__search-input"/g)).toHaveLength(2);
 
     expect(tabs).not.toContain('::webkit-scrollbar');
-    expect(tabs).not.toContain('@keyframes rottay-tabs-fade-in');
+    expect(tabs).not.toContain('@keyframes ds-tabs-fade-in');
     expect(tabs.match(/<style/g)).toHaveLength(1);
   });
 
@@ -563,7 +563,7 @@ describe('WO-SKIN-06 embedded CSS recovery — producer and hook contract', () =
         'ui/primitives/display/Tree/engines/rustic/index.tsx',
         ['rottay-tree-spin', 'rottay-tree-drop-line-in'],
       ],
-      ['navigation-static.css', 'ui/primitives/navigation/Tabs/engines/modern/index.tsx', ['rottay-tabs-fade-in']],
+      ['navigation-static.css', 'ui/primitives/navigation/Tabs/engines/modern/index.tsx', ['ds-tabs-fade-in']],
     ] as const;
 
     for (const [skinName, sourcePath, names] of families) {

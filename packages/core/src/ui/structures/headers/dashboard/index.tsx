@@ -95,7 +95,7 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
           width: 6,
           height: 6,
           flexShrink: 0,
-          animation: state === 'live' || state === 'syncing' ? 'pulse 2s infinite' : undefined,
+          animation: state === 'live' || state === 'syncing' ? 'ds-foundation-pulse 2s infinite' : undefined,
         }}
       />
       <Text data-part="status-dot-text" data-state={state} size="xs" style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>

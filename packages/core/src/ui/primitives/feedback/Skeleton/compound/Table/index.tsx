@@ -106,7 +106,7 @@ export interface SkeletonTableProps {
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
+  animation: 'ds-foundation-skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
 };
 
 // ============================================================================

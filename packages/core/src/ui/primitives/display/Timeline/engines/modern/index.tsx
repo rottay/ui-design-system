@@ -135,7 +135,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
         <li data-part="item" data-side="start" data-pending="true">
           <hr data-part="connector" style={{ width: 'var(--ds-timeline-line-width, 2px)' }} />
           <div className="timeline-start" data-part="body">
-            <span data-part="spinner" style={{ display: 'inline-block', width: 16, height: 16, animation: 'spin var(--ds-motion-glacial) linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
+            <span data-part="spinner" style={{ display: 'inline-block', width: 16, height: 16, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
             {pending}
           </div>
           <div className="timeline-middle" data-part="dot" data-pending="true">

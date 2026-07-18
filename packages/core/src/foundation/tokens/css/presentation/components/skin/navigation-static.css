@@ -20,7 +20,7 @@
   display: none;
 }
 
-@keyframes rottay-tabs-fade-in {
+@keyframes ds-tabs-fade-in {
   from {
     opacity: 0;
     transform: translateY(2px);

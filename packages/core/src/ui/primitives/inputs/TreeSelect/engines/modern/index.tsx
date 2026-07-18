@@ -238,7 +238,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
             data-part="tree-node-toggle"
           >
             {isLoading ? (
-              <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+              <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }} />
             ) : (
               <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`inline-block ${isExpanded ? 'rotate-90' : ''}`}>&#9654;</span>
             )}

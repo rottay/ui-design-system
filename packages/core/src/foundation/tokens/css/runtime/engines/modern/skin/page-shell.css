@@ -27,7 +27,7 @@
  * until a tenant sets `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks
  * share one `data-part` but differ in radius, so each carries its radius on an
  * inline `--ds-page-shell-skeleton-radius` custom property (default sm). The
- * `animation: pulse` reference to the global keyframe stays inline.
+ * `animation: ds-foundation-pulse` reference to the global keyframe stays inline.
  *
  * Values are transcribed verbatim from `engines/modern.tsx`.
  */

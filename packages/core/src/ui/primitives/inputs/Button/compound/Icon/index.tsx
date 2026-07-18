@@ -118,7 +118,7 @@ const LoadingSpinner: React.FC<{ size: keyof typeof SPINNER_SIZE_MAP }> = ({ siz
       height={spinnerSize}
       viewBox="0 0 24 24"
       fill="none"
-      style={{ animation: 'rottay-button-spin 1s linear infinite' }}
+      style={{ animation: 'ds-button-spin 1s linear infinite' }}
     >
       <circle
         cx="12"

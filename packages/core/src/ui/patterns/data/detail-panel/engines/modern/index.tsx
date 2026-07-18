@@ -31,7 +31,7 @@ const TRANSITION_FAST =
   'var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
 const PULSE_STYLE: React.CSSProperties = {
-  animation: 'pulse 1.5s ease-in-out infinite',
+  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
 };
 
 /* ------------------------------------------------------------------ */
@@ -123,7 +123,7 @@ function ActionButton({ action }: { action: DetailAction }) {
             display: 'inline-block',
             width: 14,
             height: 14,
-            animation: 'spin var(--ds-motion-glacial) linear infinite',
+            animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
             flexShrink: 0,
           }}
         />

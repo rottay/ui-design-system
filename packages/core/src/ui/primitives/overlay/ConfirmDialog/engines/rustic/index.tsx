@@ -53,7 +53,7 @@ const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
  * button colour, icon tint, and icon background are all keyed on the surface's
  * `data-variant` stamp, so each variant (info, warning, danger) receives a
  * consistent visual treatment from the skin.
- * A CSS `@keyframes spin` animation is assumed to exist for the loading spinner SVG.
+ * A CSS `@keyframes ds-foundation-spin` animation is assumed to exist for the loading spinner SVG.
  *
  * @param props - {@link ConfirmDialogProps} shared across all engines.
  * @returns A self-contained modal element, or an empty fragment when closed.
@@ -230,7 +230,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
                 height="14"
                 viewBox="0 0 16 16"
                 fill="none"
-                style={{ display: 'inline-block', marginRight: '6px', verticalAlign: 'middle', animation: 'spin 1s linear infinite' }}
+                style={{ display: 'inline-block', marginRight: '6px', verticalAlign: 'middle', animation: 'ds-foundation-spin 1s linear infinite' }}
               >
                 <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="30 10" fill="none" />
               </svg>

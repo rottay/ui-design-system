@@ -900,7 +900,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 display: 'inline-block',
                 width: 12,
                 height: 12,
-                animation: 'spin var(--ds-motion-glacial) linear infinite',
+                animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
               }}
             />
           </span>
@@ -1204,7 +1204,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 display: 'inline-block',
                 width: 12,
                 height: 12,
-                animation: 'spin var(--ds-motion-glacial) linear infinite',
+                animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
               }}
             />
           )}

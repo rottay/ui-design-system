@@ -6,7 +6,7 @@ import { forwardRef } from 'react';
 import { BaseIcon } from '../../../foundation/contracts/base';
 import type { SvgIconProps as IconProps } from '../../../foundation/contracts';
 
-/** Eight-spoke loader icon. Animate with CSS `animation: spin` for rotation effect. */
+/** Eight-spoke loader icon. Animate with CSS `animation: ds-foundation-spin` for rotation effect. */
 export const LoaderIcon = forwardRef<SVGSVGElement, IconProps>((props, ref) => (
   <BaseIcon ref={ref} {...props}>
     <line x1="12" y1="2" x2="12" y2="6" />

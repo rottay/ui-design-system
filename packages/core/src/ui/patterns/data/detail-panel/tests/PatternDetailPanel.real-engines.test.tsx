@@ -193,14 +193,14 @@ describe('DetailPanel rustic skin — engine-specific interaction rules', () => 
     ).toBe(true);
   });
 
-  it('renames its local pulse to ds-detail-panel-pulse and does not redefine the global @keyframes pulse', () => {
+  it('renames its local pulse to ds-detail-panel-pulse and does not redefine the global @keyframes ds-foundation-pulse', () => {
     expect(
       /@keyframes\s+ds-detail-panel-pulse\b/.test(SKINS.rustic),
       'the renamed ds-detail-panel-pulse keyframes are missing',
     ).toBe(true);
     expect(
-      /@keyframes\s+pulse\b/.test(SKINS.rustic),
-      'the rustic skin must NOT redefine the globally-loaded @keyframes pulse',
+      /@keyframes\s+ds-foundation-pulse\b/.test(SKINS.rustic),
+      'the rustic skin must NOT redefine the globally-loaded @keyframes ds-foundation-pulse',
     ).toBe(false);
   });
 });

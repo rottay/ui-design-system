@@ -216,7 +216,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
             style={{
               width: 160,
               height: 12,
-              animation: 'pulse 1.5s ease-in-out infinite',
+              animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
             }}
           />
           {/* Title row skeleton */}
@@ -235,7 +235,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   width: 34,
                   height: 34,
                   '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                 } as React.CSSProperties}
               />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -244,7 +244,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   style={{
                     width: 260,
                     height: 24,
-                    animation: 'pulse 1.5s ease-in-out infinite',
+                    animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                   }}
                 />
                 <div
@@ -252,7 +252,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   style={{
                     width: 180,
                     height: 14,
-                    animation: 'pulse 1.5s ease-in-out infinite',
+                    animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                   }}
                 />
               </div>
@@ -265,7 +265,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   width: 80,
                   height: 34,
                   '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                 } as React.CSSProperties}
               />
               <div
@@ -274,7 +274,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   width: 100,
                   height: 34,
                   '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                 } as React.CSSProperties}
               />
             </div>

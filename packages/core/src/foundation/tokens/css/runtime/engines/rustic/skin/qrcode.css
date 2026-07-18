@@ -19,11 +19,12 @@
  * because preflight zeroes `border-width` on every element.
  *
  * KEYFRAME: this engine injected a per-mount `<style>` redefining the GLOBAL
- * `spin` (`foundation/animations/keyframes.css`) with byte-identical content —
- * a global name shadowed for the whole document while any rustic QRCode is
- * mounted. The copy is renamed and engine-namespaced here so it can never diverge
- * from, or shadow, the global one; the modern engine's spinner keeps reading the
- * global `spin`, which is the asymmetry that already shipped.
+ * `ds-foundation-spin` (`foundation/animations/keyframes.css`) with
+ * byte-identical content — a global name shadowed for the whole document while
+ * any rustic QRCode is mounted. The copy is renamed and engine-namespaced here
+ * so it can never diverge from, or shadow, the global one; the modern engine's
+ * spinner keeps reading the global `ds-foundation-spin`, which is the asymmetry
+ * that already shipped.
  *
  * Values transcribed verbatim from `engines/rustic.tsx`.
  */

@@ -47,7 +47,7 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
       case 'loading':
         return (
           <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" style={{ opacity: 'var(--ds-qrcode-loading-opacity, 1)' }} role="status" aria-label="Loading QR code">
-            <span data-part="spinner" aria-hidden="true" style={{ display: 'inline-block', width: 24, height: 24, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+            <span data-part="spinner" aria-hidden="true" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }} />
           </div>
         );
       case 'expired':

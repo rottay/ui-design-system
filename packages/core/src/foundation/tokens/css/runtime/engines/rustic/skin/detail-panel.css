@@ -33,9 +33,9 @@
  */
 
 /* ---- pulse keyframes: rustic's skeleton dims to opacity .4 (dimmer than the
-        global keyframes.css `pulse`, which bottoms at .5). Renamed off `pulse`
-        so this globally-loaded definition does not redefine the shared one; the
-        skeleton's inline `animation` references this name. ---- */
+        global keyframes.css `ds-foundation-pulse`, which bottoms at .5). Renamed
+        off `pulse` so this local definition does not redefine the globally-loaded
+        one; the skeleton's inline `animation` references this name. ---- */
 @keyframes ds-detail-panel-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }

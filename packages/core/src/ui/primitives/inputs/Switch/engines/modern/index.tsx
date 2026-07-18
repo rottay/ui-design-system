@@ -188,7 +188,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             viewBox="0 0 14 14"
             fill="none"
             style={{
-              animation: 'spin var(--ds-motion-glacial) linear infinite',
+              animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
               marginLeft: 2,
             }}
           >

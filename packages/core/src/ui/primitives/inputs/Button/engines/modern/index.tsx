@@ -95,7 +95,7 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
       viewBox="0 0 24 24"
       fill="none"
       style={{
-        animation: 'rottay-button-spin var(--ds-motion-glacial) linear infinite',
+        animation: 'ds-button-spin var(--ds-motion-glacial) linear infinite',
         flexShrink: 0,
       }}
     >

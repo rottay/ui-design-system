@@ -50,7 +50,7 @@ export default function ClassicWorkbenchHeader(props: WorkbenchHeaderProps) {
               height: 24,
               borderRadius: 4,
               background: 'var(--ds-color-bg-secondary)',
-              animation: 'pulse 1.5s ease-in-out infinite',
+              animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
             }}
           />
           <Box
@@ -59,7 +59,7 @@ export default function ClassicWorkbenchHeader(props: WorkbenchHeaderProps) {
               height: 16,
               borderRadius: 4,
               background: 'var(--ds-color-bg-secondary)',
-              animation: 'pulse 1.5s ease-in-out infinite',
+              animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
             }}
           />
         </Flex>

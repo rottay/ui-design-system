@@ -267,7 +267,7 @@
 
 /* attention */
 .rottay-button.rottay-button--rustic[data-part='trigger'][data-pulse='true'] {
-  animation: rottay-button-pulse 2s infinite;
+  animation: ds-button-pulse 2s infinite;
 }
 
 /* inert postures. `pending` refuses activation without refusing the cursor:

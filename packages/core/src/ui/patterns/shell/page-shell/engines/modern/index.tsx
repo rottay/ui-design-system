@@ -250,7 +250,7 @@ export default function ModernPageShell(props: PageShellProps) {
             style={{
               width: 180,
               height: 12,
-              animation: 'pulse 1.5s ease-in-out infinite',
+              animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
             }}
           />
           {/* Title skeleton */}
@@ -271,7 +271,7 @@ export default function ModernPageShell(props: PageShellProps) {
                   width: '100%',
                   maxWidth: 280,
                   height: 28,
-                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                 }}
               />
               <div
@@ -279,7 +279,7 @@ export default function ModernPageShell(props: PageShellProps) {
                 style={{
                   width: 200,
                   height: 14,
-                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                 }}
               />
             </div>
@@ -290,7 +290,7 @@ export default function ModernPageShell(props: PageShellProps) {
                   width: 80,
                   height: 32,
                   '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                 } as React.CSSProperties}
               />
               <div
@@ -299,7 +299,7 @@ export default function ModernPageShell(props: PageShellProps) {
                   width: 100,
                   height: 32,
                   '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'pulse 1.5s ease-in-out infinite',
+                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
                 } as React.CSSProperties}
               />
             </div>
