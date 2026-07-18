@@ -468,9 +468,10 @@ to the **Quiet Premium** target. Two artifacts govern this:
   contract, gradient/glass/glow roles, color purity, scale hygiene, theme.css drain, content integrity,
   cross-engine layout, premium signature, and the section 12 metrics ratchet). Read it FULLY before
   touching the modern engine, tokens, or the `packages/core/src/foundation/tokens/css/runtime/engines/modern/` tree.
-- **Operative backlog (the work)**: `roadmap/` holds one lane, `roadmap/engine-modern.md` (11 delegable
-  work orders WO-ENG-01..11, each with file-level steps, a blocking acceptance gate, and a ready-to-paste
-  delegation prompt). State lives in `roadmap/registry.json`; check status with `pnpm roadmap:status`
+- **Operative backlog (the work)**: `roadmap/` holds six lanes totalling 99 work orders —
+  `engine-modern.md` (25, WO-ENG-01..25), `craft.md` (22), `architecture.md` (21), `gates.md` (12),
+  `tokens.md` (11), `skin-adoption.md` (8) — each WO with file-level steps, a blocking acceptance
+  gate, and a ready-to-paste delegation prompt. State lives in `roadmap/registry.json`; check status with `pnpm roadmap:status`
   and validate registry/lane agreement with `pnpm roadmap:check`. Read `roadmap/README.md` (start order,
   handoff protocol, bootstrap prompt, sighted-check law) before picking work. The lane's mechanical gate
   is `scripts/engine-token-audit.mjs` (created by WO-ENG-01). Statuses change ONLY via

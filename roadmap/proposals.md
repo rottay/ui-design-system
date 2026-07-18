@@ -12,7 +12,7 @@
 - **Sources**: the 2026-07-06 visual audit (82 screenshots), the Quiet Premium spec
   (`docs-engineering/engineering/design-system/runtime/engines/modern/README.md`), the roadmap
   re-audit round (2026-07-07), and the current `ui-design-system/CLAUDE.md` architecture contract.
-- **Relationship to the approved lane**: WO-ENG-01..11 fixes the WIRING of the modern engine
+- **Relationship to the approved lane**: the engine-modern lane (WO-ENG-01..25) fixes the WIRING of the modern engine
   (tokens, dark elevation, states, effects, drains, galleries). These proposals address what the
   lane deliberately does not touch: the engine implementation STRATEGY, the color/token engine,
   whitelabel proof, and the 2026 trend gap. Nothing here blocks the ENG lane; sequencing notes
@@ -72,7 +72,7 @@ Effort: S (< 1 day agent work) / M (1-3 days) / L (1-2 weeks) / XL (multi-week p
 > of three times), not what renders. Everything the WO-ENG uplift builds — the Quiet Premium
 > tokens, CSS, and signature — IS the modern skin and is preserved as-is; the refactor moves
 > behavior, never appearance. Sequencing honors the owner's instinct: modern goes premium FIRST
-> (the approved WO-ENG-01..11 lane, independent of this proposal), and this compatibility
+> (the approved engine-modern lane, WO-ENG-01..25, independent of this proposal), and this compatibility
 > restructure comes LATER; rustic migrates first as the pilot, modern migrates onto its
 > already-premium skin, classic is never touched.
 
