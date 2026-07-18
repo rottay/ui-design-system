@@ -16,9 +16,9 @@ and dialog semantics stay under one overlay authority.
 
 ## Presentation geometry
 
-The typed `geometry` props remain the default and the values exposed through
-`useShellContext()`. A code-owned presentation profile may declaratively replace
-their rendered CSS lengths with:
+The typed `geometry` props remain the fallback and the values exposed through
+`useShellContext()`. The static vertical baseline or the published tenant
+artifact may declaratively replace their rendered CSS lengths with:
 
 - `--ds-shell-sidebar-width`
 - `--ds-shell-sidebar-collapsed-width`
@@ -26,8 +26,8 @@ their rendered CSS lengths with:
 - `--ds-shell-sidebar-header-block-size`
 
 The same resolved inputs govern the fixed desktop rail, main-area inset,
-compact Sheet and safe-area-aware headers. Tenant data may select an allowed
-profile, but it must not store arbitrary shell CSS or topology.
+compact Sheet and safe-area-aware headers. Tenant data stores only bounded
+schema fields; it cannot store arbitrary shell CSS, selectors or topology.
 
 ## Insets
 

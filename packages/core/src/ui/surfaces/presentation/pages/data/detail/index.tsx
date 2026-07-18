@@ -28,8 +28,7 @@ import {
   resolveSurfaceDetailActionVariant,
 } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
-import { SurfaceAccentBar } from '../../../../runtime/profile-defaults/personality';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import type {
   DetailSurfaceConfig,
   EntityAdapter,
@@ -92,7 +91,7 @@ export function DetailSurface<TRaw, TView>({
   onRetry,
 }: DetailSurfaceProps<TRaw, TView>): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isMobile } = useBreakpoints();
 
   if (error) {
@@ -216,32 +215,15 @@ export function DetailSurface<TRaw, TView>({
 
   const detailPanel = (
     <Box
+      className="ds-surface ds-detail-surface__panel"
+      data-part="detail-panel"
       style={{
-        position: profileDefaults.accentPosition !== 'none' ? 'relative' : undefined,
-        overflow: profileDefaults.accentPosition !== 'none' ? 'hidden' : undefined,
         // Record-derived seam when recordKey is configured, else the coarse
         // constant detail-body seam. Inert outside an active view transition.
         viewTransitionName: detailTransitionName,
       }}
     >
-      {/* Accent bars are rendered at the surface layer so patterns remain presentation-agnostic. */}
-      {profileDefaults.accentPosition !== 'none' && (
-        <SurfaceAccentBar
-          position={profileDefaults.accentPosition}
-          thickness={profileDefaults.accentBarThickness}
-          barStyle={profileDefaults.accentBarStyle}
-        />
-      )}
-      <Box
-        style={
-          profileDefaults.accentPosition === 'left'
-            ? { paddingLeft: profileDefaults.accentBarThickness + 4 }
-            : profileDefaults.accentPosition === 'top'
-              ? { paddingTop: profileDefaults.accentBarThickness }
-              : undefined
-        }
-      >
-        <PatternDetailPanel
+      <PatternDetailPanel
           data={item as TView}
           /* When wrapped in PageShell, the page-level heading shows the title.
              DetailPanel suppresses its own <h2> to avoid a double heading.
@@ -262,8 +244,7 @@ export function DetailSurface<TRaw, TView>({
           loading={loading}
           breadcrumbs={hasPageChrome ? undefined : config.presentation.chrome?.breadcrumbs}
           onBack={hasPageChrome ? undefined : config.presentation.chrome?.back?.onClick}
-        />
-      </Box>
+      />
     </Box>
   );
 

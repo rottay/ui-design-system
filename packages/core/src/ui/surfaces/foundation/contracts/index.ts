@@ -442,7 +442,7 @@ export interface ListSurfaceVisualConfig {
   /** Callback when visible columns change (e.g., from a column settings panel). */
   onColumnVisibilityChange?: (visibleKeys: string[]) => void;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -581,7 +581,7 @@ export interface DashboardSurfaceVisualConfig {
   /** Stack sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -702,7 +702,7 @@ export interface DetailSurfaceVisualConfig {
   /** Move the sidebar content below the main detail content on mobile. Defaults to `true`. */
   collapseSidebarOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -751,7 +751,7 @@ export interface FormSurfaceVisualConfig {
   /** Keep the submit/cancel action cluster visible near the bottom on mobile. */
   mobileActionsSticky?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -881,7 +881,7 @@ export interface WizardSurfaceVisualConfig {
   /** Keep wizard navigation and draft/cancel actions visible on mobile. */
   mobileActionsSticky?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -957,7 +957,7 @@ export interface HeaderSurfaceVisualConfig {
   /** Hide secondary (non-primary) actions on mobile to reduce clutter. */
   hideSecondaryActionsOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1020,7 +1020,7 @@ export interface SidebarSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1084,7 +1084,7 @@ export interface DetailFormSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1147,7 +1147,7 @@ export interface VisualizationSurfaceVisualConfig {
   /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
   compactChartsOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1223,7 +1223,7 @@ export interface SearchSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1296,7 +1296,7 @@ export interface EditorSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1403,7 +1403,7 @@ export interface OperationalSurfaceVisualConfig {
   /** Stack the dashboard-style sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1491,7 +1491,7 @@ export interface MediaSurfaceVisualConfig {
   /** Maximum number of gallery columns on mobile. */
   mobileColumnsLimit?: number;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1582,7 +1582,7 @@ export interface ChatSurfaceVisualConfig {
   /** Keep the message composer input sticky at the bottom on mobile. */
   stickyInputOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1651,7 +1651,7 @@ export interface SchedulerSurfaceVisualConfig {
   /** Hide the timeline sidebar on mobile. */
   hideTimelineOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1743,7 +1743,7 @@ export interface CompareSurfaceVisualConfig {
   /** Render the comparison in compact mode (smaller cells, tighter spacing). */
   compact?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1794,7 +1794,7 @@ export interface AuthSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1852,7 +1852,7 @@ export interface MarketingSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1904,7 +1904,7 @@ export interface OnboardingSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1950,7 +1950,7 @@ export interface OnboardingSurfaceConfig {
 export interface EmptyStateSurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1997,7 +1997,7 @@ export interface SettingsSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2084,7 +2084,7 @@ export interface AuditSurfaceVisualConfig {
   /** Constrain table height and enable vertical scrolling. */
   maxHeight?: string;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2172,7 +2172,7 @@ export interface BillingSurfaceVisualConfig {
   /** 'tabs' groups plan/usage/invoices into tabs; 'sections' stacks them vertically. */
   layout?: 'tabs' | 'sections';
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2240,7 +2240,7 @@ export interface ProfileSurfaceVisualConfig {
   /** 'sidebar' shows section nav on the side; 'stacked' renders all sections vertically. */
   layout?: 'sidebar' | 'stacked';
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2314,7 +2314,7 @@ export interface NotificationSurfaceVisualConfig {
   /** 'tabs' separates feed and preferences into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2407,7 +2407,7 @@ export interface ImportExportHistoryEntry {
 export interface ImportExportSurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2496,7 +2496,7 @@ export interface ReportSurfaceVisualConfig {
   layout?: 'sidebar-filters' | 'top-filters';
   maxWidth?: number | string;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2570,7 +2570,7 @@ export interface TeamSurfaceVisualConfig {
   maxWidth?: number | string;
   layout?: 'table' | 'cards';
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2652,7 +2652,7 @@ export interface IntegrationSurfaceVisualConfig {
   /** 'tabs' separates keys/webhooks/apps into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2738,7 +2738,7 @@ export interface KanbanSurfaceVisualConfig {
   /** Stack columns vertically on mobile instead of horizontal scroll. */
   stackColumnsOnMobile?: boolean;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2812,7 +2812,7 @@ export interface ActivitySurfaceFilter {
 export interface ActivitySurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2886,7 +2886,7 @@ export interface FileBrowserSurfaceVisualConfig {
   /** 'grid' shows thumbnails; 'list' shows a detailed table. */
   viewMode?: 'grid' | 'list';
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2968,7 +2968,7 @@ export interface PricingSurfaceFeature {
 export interface PricingSurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
+  /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -3015,12 +3015,9 @@ export interface PricingSurfaceConfig {
 // ---------------------------------------------------------------------------
 
 /**
- * Reserved shape declared by each surface visual config. The standalone merge
- * hook can resolve it, but no production surface calls that hook today, so a
- * nested `visual.profileOverrides` value has no runtime effect.
- *
- * @deprecated Experimental and unconsumed. DS-IMP-022 owns field-by-field
- * wiring or removal in its deferred phase; do not advertise or add new uses.
+ * Instance-level visual configuration applied after the resolved tenant artifact.
+ * This is the highest typed DS configuration layer before app-local class rules
+ * and the narrowly allowed runtime-geometry inline escape hatch.
  */
 export interface SurfaceVisualOverrides {
   density?: 'compact' | 'comfortable' | 'spacious';
@@ -3031,11 +3028,8 @@ export interface SurfaceVisualOverrides {
   entranceStyle?: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
   entranceDuration?: number;
   staggerDelay?: number;
-  accentPosition?: 'top' | 'left' | 'none';
   badgeShape?: 'rounded' | 'pill' | 'square';
   labelStyle?: 'uppercase' | 'sentence' | 'capitalize';
   countUpEnabled?: boolean;
   pulseSpeed?: 'none' | 'slow' | 'normal' | 'fast';
-  accentBarThickness?: number;
-  accentBarStyle?: 'solid' | 'gradient' | 'animated';
 }

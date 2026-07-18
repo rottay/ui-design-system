@@ -84,9 +84,6 @@ export {
   TENANT_THEME_CHROME_FAMILIES_V1,
   TENANT_THEME_FONT_PACK_IDS_V1,
 } from '../../foundation/contracts/composition/tenants/themes/tenant-theme';
-export { TENANT_PRESENTATION_PROFILE_IDS } from '../../foundation/contracts/composition/tenants/themes';
-export type { TenantPresentationProfileId } from '../../foundation/contracts/composition/tenants/themes';
-
 // A11y: branding contrast validation (Wave 6.2 Accessibility Guardian)
 export {
   validateBrandingContrast,

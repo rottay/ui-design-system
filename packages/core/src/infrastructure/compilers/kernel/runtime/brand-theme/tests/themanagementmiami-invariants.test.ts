@@ -30,7 +30,8 @@ import { describe, it, expect } from 'vitest';
 
 import { compileBrandTheme } from '../index';
 import type { CompiledBrand } from '@/foundation/contracts/composition/tenants/themes';
-import { themanagementmiamiBrandTheme, bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
 import {
   isBundledTenant,
   isKnownTenant,

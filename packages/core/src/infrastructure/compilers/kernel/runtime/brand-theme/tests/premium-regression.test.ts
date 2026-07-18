@@ -29,7 +29,8 @@ import {
   isBundledTenant,
   BUNDLED_TENANT_SLUGS,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
-import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme, themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
 
 // ── Helpers ─────────────────────────────────────────────
 

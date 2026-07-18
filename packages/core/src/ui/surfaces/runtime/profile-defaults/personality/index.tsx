@@ -3,13 +3,13 @@
 /**
  * @fileoverview Personality rendering helpers for the surface layer.
  * @description Translates personality profile defaults into concrete visual
- * elements: accent bars (solid/gradient/animated), heading weights, label text
- * transforms, and section spacing. Each surface composes these helpers rather
- * than reimplementing personality-driven differentiation.
+ * decisions such as heading weights, label text transforms, and section
+ * spacing. The former decorative accent-bar API remains as an inert
+ * compatibility boundary: white-label differentiation must come from semantic
+ * surface recipes, never from a colored edge rail.
  */
 
 import React from 'react';
-import { Box } from '../../../../primitives';
 import type { SurfaceSectionSpacing, ResolvedSurfaceProfileDefaults } from '..';
 
 // ---------------------------------------------------------------------------
@@ -52,76 +52,26 @@ export interface AccentBarProps {
   barStyle: 'solid' | 'gradient' | 'animated';
 }
 
-export function SurfaceAccentBar({ position, thickness, barStyle }: AccentBarProps): React.ReactElement | null {
-  if (position === 'none') {
-    return null;
-  }
-
-  const isTop = position === 'top';
-
-  // The bar is absolutely positioned inside its container so it does not
-  // affect content flow. The container must have position:relative and
-  // overflow:hidden (handled by SurfaceAccentBarWrapper).
-  const baseStyle: React.CSSProperties = {
-    position: 'absolute' as const,
-    ...({
-      '--ds-accent-bar-thickness': `${thickness}px`,
-    } as React.CSSProperties),
-    ...(isTop ? { top: 0, left: 0, right: 0, height: thickness } : { top: 0, left: 0, bottom: 0, width: thickness }),
-  };
-
-  // Animated style uses a wider gradient (200%) that shifts via keyframes,
-  // creating a shimmer effect. The keyframe `ds-accent-bar-shimmer` must be
-  // defined in the global DS stylesheet.
-  if (barStyle === 'animated') {
-    baseStyle.animation = 'ds-accent-bar-shimmer 3s ease-in-out infinite';
-  }
-
-  return (
-    <Box
-      className="ds-surface ds-accent-bar"
-      data-part="bar"
-      data-position={position}
-      data-style={barStyle}
-      style={baseStyle}
-      aria-hidden
-    />
-  );
+/**
+ * @deprecated Decorative colored edge rails are forbidden across every
+ * engine, vertical, and tenant. Kept temporarily so existing surface call
+ * sites remain source-compatible while they migrate away from this API.
+ */
+export function SurfaceAccentBar(_props: AccentBarProps): null {
+  return null;
 }
 
 /**
- * Wraps children in an accent-bar-aware container when accent position is not
- * "none". Returns children unchanged when no accent is needed.
+ * @deprecated Transparent compatibility wrapper for the retired accent-bar
+ * API. It must never add layout, clipping, padding, or DOM anatomy.
  */
 export function SurfaceAccentBarWrapper({
   children,
-  defaults,
 }: {
   children: React.ReactNode;
   defaults: ResolvedSurfaceProfileDefaults;
 }): React.ReactElement {
-  if (defaults.accentPosition === 'none') {
-    return <>{children}</>;
-  }
-
-  return (
-    <Box style={{ position: 'relative', overflow: 'hidden' }}>
-      <SurfaceAccentBar
-        position={defaults.accentPosition}
-        thickness={defaults.accentBarThickness}
-        barStyle={defaults.accentBarStyle}
-      />
-      <Box
-        style={{
-          ...(defaults.accentPosition === 'left'
-            ? { paddingLeft: defaults.accentBarThickness + 4 }
-            : { paddingTop: defaults.accentBarThickness }),
-        }}
-      >
-        {children}
-      </Box>
-    </Box>
-  );
+  return <>{children}</>;
 }
 
 // ---------------------------------------------------------------------------

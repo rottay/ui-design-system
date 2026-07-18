@@ -11,7 +11,7 @@ import { Box, Stack, Tabs, Text } from '../../../../../primitives';
 import { filterSurfaceActions, filterSurfaceTabbedViews } from '../../../../runtime/helpers';
 import type { HeaderSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '..';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../runtime/helpers/rendering';
 
@@ -24,7 +24,7 @@ export function HeaderSurface({
   config,
   loading = false,
 }: HeaderSurfaceProps): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout();
   const resolvedMobile = isMobile && hasResolvedViewport;
   // Tabs use app-resolved access so hidden tabs never appear in the

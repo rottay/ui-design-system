@@ -13,7 +13,7 @@ import { PatternCalendarView, type CalendarEvent } from '../../../../../patterns
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import type { SchedulerSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
 import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
@@ -39,7 +39,7 @@ export function SchedulerSurface({
   config,
   loading = false,
 }: SchedulerSurfaceProps): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurface, locale } = useSurfaceTranslations();
   const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
   const resolvedMobile = isMobile && hasResolvedViewport;

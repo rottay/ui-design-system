@@ -7,8 +7,8 @@
  * panels and field renderers.
  *
  * @remarks
- * Premium polish integrates personality tokens (accent bar, entrance animation,
- * card variant, section spacing) so every product profile gets a cohesive
+ * Premium polish integrates personality tokens (entrance animation, card
+ * variant, section spacing) so every product profile gets a cohesive
  * settings experience without per-instance configuration.
  */
 
@@ -18,7 +18,7 @@ import { FadeIn } from '@/graphics/motion';
 import { filterSurfaceTabbedViews } from '../../../../runtime/helpers';
 import type { SettingsSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import {
   resolveStackSpacing,
@@ -45,7 +45,7 @@ export function SettingsSurface({
   config,
   loading = false,
 }: SettingsSurfaceProps): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);

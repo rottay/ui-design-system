@@ -130,9 +130,18 @@ export function chromeToVariables(chrome: BrandChrome | undefined): Record<strin
     if (s.border) vars['--ds-sidebar-border'] = s.border;
     if (s.text) vars['--ds-sidebar-text'] = s.text;
     if (s.textMuted) vars['--ds-sidebar-text-muted'] = s.textMuted;
-    if (s.width) vars['--ds-sidebar-width'] = s.width;
-    if (s.collapsedWidth) vars['--ds-sidebar-collapsed-width'] = s.collapsedWidth;
-    if (s.headerHeight) vars['--ds-sidebar-header-height'] = s.headerHeight;
+    if (s.width) {
+      vars['--ds-sidebar-width'] = s.width;
+      vars['--ds-shell-sidebar-width'] = s.width;
+    }
+    if (s.collapsedWidth) {
+      vars['--ds-sidebar-collapsed-width'] = s.collapsedWidth;
+      vars['--ds-shell-sidebar-collapsed-width'] = s.collapsedWidth;
+    }
+    if (s.headerHeight) {
+      vars['--ds-sidebar-header-height'] = s.headerHeight;
+      vars['--ds-shell-sidebar-header-block-size'] = s.headerHeight;
+    }
     if (s.groupFontSize) vars['--ds-sidebar-group-font-size'] = s.groupFontSize;
     if (s.groupFontWeight != null) vars['--ds-sidebar-group-font-weight'] = String(s.groupFontWeight);
     if (s.groupColor) vars['--ds-sidebar-group-color'] = s.groupColor;
@@ -154,6 +163,10 @@ export function chromeToVariables(chrome: BrandChrome | undefined): Record<strin
     const l = chrome.layout;
     if (l.bg) vars['--ds-layout-bg'] = l.bg;
     if (l.headerBg) vars['--ds-layout-header-bg'] = l.headerBg;
+    if (l.headerHeight) {
+      vars['--ds-layout-header-height'] = l.headerHeight;
+      vars['--ds-shell-header-block-size'] = l.headerHeight;
+    }
     if (l.headerBackdrop) vars['--ds-layout-header-backdrop'] = l.headerBackdrop;
     if (l.headerBorder) vars['--ds-layout-header-border'] = l.headerBorder;
     if (l.siderBg) vars['--ds-layout-sider-bg'] = l.siderBg;

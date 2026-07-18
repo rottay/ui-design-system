@@ -12,7 +12,7 @@ import { Box, Card, Stack, Table, Text } from '../../../../../primitives';
 import type { CompareSurfaceConfig, CompareSurfaceRow } from '../../../../foundation/contracts';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar } from '../../../../runtime/helpers/rendering';
 import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
@@ -26,7 +26,7 @@ export function CompareSurface({
   config,
   loading = false,
 }: CompareSurfaceProps): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurface } = useSurfaceTranslations();
   const responsive = useSurfaceResponsiveLayout({ stackOnMobile: true });
   // Empty state requires both subjects AND at least one populated section.

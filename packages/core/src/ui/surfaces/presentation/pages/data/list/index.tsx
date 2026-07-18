@@ -30,7 +30,7 @@ import {
 import type { EntityAdapter, ListSurfaceConfig, ListSurfaceView, SurfaceAction } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
@@ -266,7 +266,7 @@ export function ListSurface<TRaw, TView extends object>({
   error,
   onRetry,
 }: ListSurfaceProps<TRaw, TView>): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurface } = useSurfaceTranslations();
   const { isMobile } = useBreakpoints();
   // Visual defaults cascade: explicit surface config -> product profile -> DS defaults.

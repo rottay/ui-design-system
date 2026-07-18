@@ -22,12 +22,14 @@ import { describe, it, expect } from 'vitest';
 
 import { compileBrandTheme } from '../index';
 import {
-  tortureDarkBrandTheme,
-  tortureLightBrandTheme,
-  TORTURE_PROBE_VARS,
   rottayBrandTheme,
   bithireBrandTheme,
 } from '@/foundation/tokens/ts/presentation/brand-themes';
+import {
+  tortureDarkBrandTheme,
+  tortureLightBrandTheme,
+  TORTURE_PROBE_VARS,
+} from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/torture';
 import {
   getKnownTenantSlugs,
   isBundledTenant,

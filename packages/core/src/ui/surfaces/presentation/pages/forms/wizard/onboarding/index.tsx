@@ -41,6 +41,7 @@ export function OnboardingSurface({
       allowSkip: config.visual.allowSkip,
       stackOnMobile: config.visual.stackOnMobile,
       stackOnTablet: config.visual.stackOnTablet,
+      profileOverrides: config.visual.profileOverrides,
     },
     presentation: {
       chrome: config.presentation.chrome,

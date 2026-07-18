@@ -14,7 +14,7 @@ import { filterSurfaceTabbedViews } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import type { VisualizationSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../runtime/helpers/rendering';
 import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
@@ -28,7 +28,7 @@ export function VisualizationSurface({
   config,
   loading = false,
 }: VisualizationSurfaceProps): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurface } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
   const compactMobileCharts =

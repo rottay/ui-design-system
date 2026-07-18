@@ -25,8 +25,7 @@ import type {
   BrandTabsChrome,
   BrandToolbarChrome,
   TenantAppearanceGeneral,
-  TenantPresentationProfileId,
-} from '..';
+} from "..";
 
 /** The only TenantThemeConfig schema accepted by this release. */
 export const TENANT_THEME_SCHEMA_VERSION = 1 as const;
@@ -38,176 +37,136 @@ export const TENANT_THEME_SCHEMA_VERSION = 1 as const;
  * is a contract change that must update the schema manifest and its digest.
  */
 export const TENANT_THEME_OVERRIDE_TOKENS_V1 = [
-  '--ds-color-primary',
-  '--ds-color-secondary',
-  '--ds-color-accent',
-  '--ds-chart-category-1',
-  '--ds-chart-category-2',
-  '--ds-chart-category-3',
-  '--ds-chart-category-4',
-  '--ds-chart-category-5',
-  '--ds-chart-category-6',
-  '--ds-chart-category-7',
-  '--ds-chart-category-8',
-  '--ds-chart-category-9',
-  '--ds-chart-category-10',
-  '--ds-color-success',
-  '--ds-color-warning',
-  '--ds-color-error',
-  '--ds-color-info',
-  '--ds-color-dark-primary',
-  '--ds-color-dark-secondary',
-  '--ds-color-dark-accent',
-  '--ds-color-dark-bg',
-  '--ds-color-bg-primary',
-  '--ds-color-bg',
-  '--ds-color-background',
-  '--ds-font-family-base',
-  '--ds-font-family-heading',
-  '--ds-font-family-mono',
-  '--ds-font-family-display',
-  '--ds-letter-spacing-display',
-  '--ds-letter-spacing-heading',
-  '--ds-letter-spacing-body',
-  '--ds-letter-spacing-mono',
-  '--ds-line-height-display',
-  '--ds-line-height-heading',
-  '--ds-line-height-body',
-  '--ds-line-height-tight',
-  '--ds-line-height-relaxed',
-  '--ds-radius-sm',
-  '--ds-radius-md',
-  '--ds-radius-lg',
-  '--ds-radius-xl',
-  '--ds-shadow-sm',
-  '--ds-shadow-md',
-  '--ds-shadow-lg',
-  '--ds-shadow-xl',
-  '--ds-glass-bg',
-  '--ds-glass-border',
-  '--ds-glass-blur',
-  '--ds-gradient-primary',
-  '--ds-gradient-surface',
-  '--ds-gradient-mesh',
-  '--ds-overlay-light',
-  '--ds-overlay-medium',
-  '--ds-overlay-heavy',
-  '--ds-density-scale',
-  '--ds-effect-intensity',
+  "--ds-color-primary",
+  "--ds-color-secondary",
+  "--ds-color-accent",
+  "--ds-chart-category-1",
+  "--ds-chart-category-2",
+  "--ds-chart-category-3",
+  "--ds-chart-category-4",
+  "--ds-chart-category-5",
+  "--ds-chart-category-6",
+  "--ds-chart-category-7",
+  "--ds-chart-category-8",
+  "--ds-chart-category-9",
+  "--ds-chart-category-10",
+  "--ds-color-success",
+  "--ds-color-warning",
+  "--ds-color-error",
+  "--ds-color-info",
+  "--ds-color-dark-primary",
+  "--ds-color-dark-secondary",
+  "--ds-color-dark-accent",
+  "--ds-color-dark-bg",
+  "--ds-color-bg-primary",
+  "--ds-color-bg",
+  "--ds-color-background",
+  "--ds-font-family-base",
+  "--ds-font-family-heading",
+  "--ds-font-family-mono",
+  "--ds-font-family-display",
+  "--ds-letter-spacing-display",
+  "--ds-letter-spacing-heading",
+  "--ds-letter-spacing-body",
+  "--ds-letter-spacing-mono",
+  "--ds-line-height-display",
+  "--ds-line-height-heading",
+  "--ds-line-height-body",
+  "--ds-line-height-tight",
+  "--ds-line-height-relaxed",
+  "--ds-radius-sm",
+  "--ds-radius-md",
+  "--ds-radius-lg",
+  "--ds-radius-xl",
+  "--ds-shadow-sm",
+  "--ds-shadow-md",
+  "--ds-shadow-lg",
+  "--ds-shadow-xl",
+  "--ds-glass-bg",
+  "--ds-glass-border",
+  "--ds-glass-blur",
+  "--ds-gradient-primary",
+  "--ds-gradient-surface",
+  "--ds-gradient-mesh",
+  "--ds-overlay-light",
+  "--ds-overlay-medium",
+  "--ds-overlay-heavy",
+  "--ds-density-scale",
+  "--ds-effect-intensity",
 ] as const;
 
-export type TenantThemeOverrideTokenV1 = (typeof TENANT_THEME_OVERRIDE_TOKENS_V1)[number];
+export type TenantThemeOverrideTokenV1 =
+  (typeof TENANT_THEME_OVERRIDE_TOKENS_V1)[number];
 
-const TENANT_THEME_COLOR_ROLES_V1 = ['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info'] as const;
-const TENANT_THEME_COLOR_STEPS_V1 = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
+const TENANT_THEME_COLOR_ROLES_V1 = [
+  "primary",
+  "secondary",
+  "accent",
+  "success",
+  "warning",
+  "error",
+  "info",
+] as const;
+const TENANT_THEME_COLOR_STEPS_V1 = [
+  50, 100, 200, 300, 400, 500, 600, 700, 800, 900,
+] as const;
 
 /**
  * Public semantic variables an authored Advanced value may reference with
  * `var()`. Prefix-only admission is forbidden because `--ds-*` also contains
  * private implementation tokens.
  */
-export const TENANT_THEME_REFERENCE_TOKENS_V1: readonly string[] = Object.freeze(Array.from(new Set([
-  ...TENANT_THEME_OVERRIDE_TOKENS_V1,
-  '--ds-color-white',
-  '--ds-color-bg-primary',
-  '--ds-color-bg-secondary',
-  '--ds-color-bg-tertiary',
-  '--ds-color-bg-elevated',
-  '--ds-color-bg-hover',
-  '--ds-color-text-primary',
-  '--ds-color-text-secondary',
-  '--ds-color-text-muted',
-  '--ds-color-border-primary',
-  '--ds-color-border-secondary',
-  '--ds-radius-button',
-  '--ds-tint-4',
-  '--ds-tint-8',
-  '--ds-tint-12',
-  '--ds-tint-16',
-  '--ds-tint-24',
-  ...TENANT_THEME_COLOR_ROLES_V1.flatMap((role) =>
-    TENANT_THEME_COLOR_STEPS_V1.map((step) => `--ds-color-${role}-${step}`),
-  ),
-  ...(['success', 'warning', 'error', 'info'] as const).flatMap((role) =>
-    [4, 8, 12, 16, 24].map((step) => `--ds-tint-${role}-${step}`),
-  ),
-])));
+export const TENANT_THEME_REFERENCE_TOKENS_V1: readonly string[] =
+  Object.freeze(
+    Array.from(
+      new Set([
+        ...TENANT_THEME_OVERRIDE_TOKENS_V1,
+        "--ds-color-white",
+        "--ds-color-bg-primary",
+        "--ds-color-bg-secondary",
+        "--ds-color-bg-tertiary",
+        "--ds-color-bg-elevated",
+        "--ds-color-bg-hover",
+        "--ds-color-text-primary",
+        "--ds-color-text-secondary",
+        "--ds-color-text-muted",
+        "--ds-color-border-primary",
+        "--ds-color-border-secondary",
+        "--ds-radius-button",
+        "--ds-tint-4",
+        "--ds-tint-8",
+        "--ds-tint-12",
+        "--ds-tint-16",
+        "--ds-tint-24",
+        ...TENANT_THEME_COLOR_ROLES_V1.flatMap((role) =>
+          TENANT_THEME_COLOR_STEPS_V1.map(
+            (step) => `--ds-color-${role}-${step}`
+          )
+        ),
+        ...(["success", "warning", "error", "info"] as const).flatMap((role) =>
+          [4, 8, 12, 16, 24].map((step) => `--ds-tint-${role}-${step}`)
+        ),
+      ])
+    )
+  );
 
-/** Sidebar paint and local rhythm; shell widths remain vertical-owned. */
-export type TenantThemeSidebarChromeV1 = Omit<
-  BrandSidebarChrome,
-  'width' | 'collapsedWidth' | 'headerHeight' | 'iconSize'
->;
+/** Bounded sidebar paint, rhythm and geometry authored by the published tenant. */
+export type TenantThemeSidebarChromeV1 = BrandSidebarChrome;
 
-/** Shell atmosphere only; route/workspace geometry remains vertical-owned. */
-export type TenantThemeShellChromeV1 = Pick<
-  BrandShellChrome,
-  | 'gridSize'
-  | 'gridLine'
-  | 'bg'
-  | 'border'
-  | 'overlay'
-  | 'shadow'
-  | 'activeBg'
-  | 'activeGradient'
-  | 'dropdownShadow'
-  | 'shimmerFaint'
-  | 'shimmerSoft'
-  | 'shimmerMedium'
-  | 'shimmerStrong'
-  | 'commandFont'
-  | 'commandLetterSpacing'
-  | 'commandGridSize'
-  | 'commandGridLineSoft'
-  | 'commandGridLine'
-  | 'commandGridLineStrong'
-  | 'commandGridBg'
-  | 'commandGridBgStrong'
-  | 'commandGlow'
-  | 'commandLine'
-  | 'commandRailBg'
-  | 'commandHomeGridLine'
-  | 'commandHomePanelBorder'
-  | 'commandHomePanelBorderSoft'
-  | 'commandHomePanelShadow'
-  | 'commandHomePanelBg'
-  | 'commandHomePanelBgStrong'
-  | 'commandHomeConsoleBg'
-  | 'commandHomeSurfaceBg'
-  | 'commandHomeHeroBg'
-  | 'commandHomeControlBg'
-  | 'commandHomeControlBorder'
-  | 'commandHomeControlHoverBg'
-  | 'commandHomeControlHoverBorder'
-  | 'commandHomeMeterBg'
-  | 'commandHomeMeterFill'
->;
+/** Complete bounded shell anatomy; gridOpacity has no compiler-owned variable. */
+export type TenantThemeShellChromeV1 = Omit<BrandShellChrome, "gridOpacity">;
 
-/** Tenant paint cannot author hover choreography. */
-export type TenantThemeCardChromeV1 = Omit<BrandCardChrome, 'hoverTransform'>;
-export type TenantThemePremiumCardChromeV1 = Omit<
-  BrandPremiumCardChrome,
-  'minHeight' | 'hoverTransform' | 'transition' | 'iconBg' | 'iconBorder'
->;
-export type TenantThemeMetricCardChromeV1 = Omit<
-  BrandMetricCardChrome,
-  'minHeight' | 'hoverTransform' | 'transition' | 'iconBg' | 'iconBorder'
->;
-export type TenantThemeSignalCardChromeV1 = Omit<
-  BrandSignalCardChrome,
-  'minHeight' | 'hoverTransform' | 'transition' | 'topLineDisplay' | 'iconBg' | 'iconBorder'
->;
-
-/** Collection projection/column geometry remains vertical/app-owned. */
-export type TenantThemeListingGridChromeV1 = Omit<
-  BrandListingGridChrome,
-  'minCardWidth' | 'minCompactWidth' | 'minTallWidth' | 'columns'
->;
+/** Complete bounded component-family anatomy authored by the published tenant. */
+export type TenantThemeCardChromeV1 = BrandCardChrome;
+export type TenantThemePremiumCardChromeV1 = BrandPremiumCardChrome;
+export type TenantThemeMetricCardChromeV1 = BrandMetricCardChrome;
+export type TenantThemeSignalCardChromeV1 = BrandSignalCardChrome;
+export type TenantThemeListingGridChromeV1 = BrandListingGridChrome;
 
 /**
- * Advanced, data-only chrome surface. BrandChrome.card/accent are intentionally
- * absent because they change icon containers, accent grammar and anatomy
- * posture rather than tenant-owned paint.
+ * Advanced, data-only chrome surface. Every exposed family maps to compiler-
+ * owned variables; executable CSS, selectors and uncompiled anatomy remain
+ * outside the tenant document.
  */
 export interface TenantThemeChromeV1 {
   sidebar?: TenantThemeSidebarChromeV1;
@@ -232,30 +191,31 @@ export interface TenantThemeChromeV1 {
 }
 
 export const TENANT_THEME_CHROME_FAMILIES_V1 = [
-  'sidebar',
-  'layout',
-  'shell',
-  'toolbar',
-  'filterPill',
-  'breadcrumb',
-  'search',
-  'controls',
-  'table',
-  'cardComponent',
-  'metricCard',
-  'signalCard',
-  'workspaceCard',
-  'compactCard',
-  'tallCard',
-  'collectionCard',
-  'listingGrid',
-  'modal',
-  'tabs',
+  "sidebar",
+  "layout",
+  "shell",
+  "toolbar",
+  "filterPill",
+  "breadcrumb",
+  "search",
+  "controls",
+  "table",
+  "cardComponent",
+  "metricCard",
+  "signalCard",
+  "workspaceCard",
+  "compactCard",
+  "tallCard",
+  "collectionCard",
+  "listingGrid",
+  "modal",
+  "tabs",
 ] as const satisfies readonly (keyof TenantThemeChromeV1)[];
 
 /** Code-owned static font packs TenantTheme may reference by CSS variable. */
-export const TENANT_THEME_FONT_PACK_IDS_V1 = ['editorial'] as const;
-export type TenantThemeFontPackIdV1 = (typeof TENANT_THEME_FONT_PACK_IDS_V1)[number];
+export const TENANT_THEME_FONT_PACK_IDS_V1 = ["editorial"] as const;
+export type TenantThemeFontPackIdV1 =
+  (typeof TENANT_THEME_FONT_PACK_IDS_V1)[number];
 
 export interface TenantThemeAdvancedAppearanceV1 {
   chrome?: TenantThemeChromeV1;
@@ -273,12 +233,7 @@ export type TenantThemeChromeFamilyV1 = keyof TenantThemeChromeV1;
 export interface TenantThemeVerticalEnvelopeV1 {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
   verticalKey: string;
-  allowedModes: readonly ('simple' | 'advanced')[];
-  /** Code-owned profile policy; tenant JSONB may select but never define it. */
-  presentationProfiles: {
-    default: TenantPresentationProfileId;
-    allowed: readonly TenantPresentationProfileId[];
-  };
+  allowedModes: readonly ("simple" | "advanced")[];
   advanced?: {
     chromeFamilies: readonly TenantThemeChromeFamilyV1[];
     allowTokenOverrides: boolean;
@@ -311,19 +266,21 @@ export interface TenantThemeConfigIdentityV1 {
 /** JSONB payload. Tenant identity/version columns are intentionally absent. */
 export interface TenantThemeSimpleDocumentV1 {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
-  mode: 'simple';
+  mode: "simple";
   appearance: TenantAppearanceGeneral;
 }
 
 /** JSONB payload. Tenant identity/version columns are intentionally absent. */
 export interface TenantThemeAdvancedDocumentV1 {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
-  mode: 'advanced';
+  mode: "advanced";
   visualFoundation: TenantVisualFoundationV1;
 }
 
 /** Canonical document stored in the versioned tenant theme row. */
-export type TenantThemeDocumentV1 = TenantThemeSimpleDocumentV1 | TenantThemeAdvancedDocumentV1;
+export type TenantThemeDocumentV1 =
+  | TenantThemeSimpleDocumentV1
+  | TenantThemeAdvancedDocumentV1;
 export type TenantThemeDocument = TenantThemeDocumentV1;
 
 /**
@@ -331,9 +288,13 @@ export type TenantThemeDocument = TenantThemeDocumentV1;
  * columns. Keeping it as an intersection preserves the convenient mode
  * discriminant without persisting identity twice.
  */
-export type TenantThemeSimpleConfigV1 = TenantThemeSimpleDocumentV1 & TenantThemeConfigIdentityV1;
-export type TenantThemeAdvancedConfigV1 = TenantThemeAdvancedDocumentV1 & TenantThemeConfigIdentityV1;
-export type TenantThemeConfigV1 = TenantThemeSimpleConfigV1 | TenantThemeAdvancedConfigV1;
+export type TenantThemeSimpleConfigV1 = TenantThemeSimpleDocumentV1 &
+  TenantThemeConfigIdentityV1;
+export type TenantThemeAdvancedConfigV1 = TenantThemeAdvancedDocumentV1 &
+  TenantThemeConfigIdentityV1;
+export type TenantThemeConfigV1 =
+  | TenantThemeSimpleConfigV1
+  | TenantThemeAdvancedConfigV1;
 export type TenantThemeConfig = TenantThemeConfigV1;
 
 /** Appearance shape emitted by the v1 compiler after mode normalization. */
@@ -343,29 +304,30 @@ export interface NormalizedTenantThemeAppearanceV1 {
 }
 
 export interface TenantThemeScopeDescriptor {
-  attribute:
-    | 'data-ds-root'
-    | 'data-vertical'
-    | 'data-tenant'
-    | 'data-ds-presentation-profile';
+  attribute: "data-ds-root" | "data-vertical" | "data-tenant";
   value?: string;
   selector: string;
 }
 
 export interface TenantThemeArtifactScopes {
-  root: TenantThemeScopeDescriptor & { attribute: 'data-ds-root' };
-  vertical: TenantThemeScopeDescriptor & { attribute: 'data-vertical'; value: string };
-  tenant: TenantThemeScopeDescriptor & { attribute: 'data-tenant'; value: string };
+  root: TenantThemeScopeDescriptor & { attribute: "data-ds-root" };
+  vertical: TenantThemeScopeDescriptor & {
+    attribute: "data-vertical";
+    value: string;
+  };
+  tenant: TenantThemeScopeDescriptor & {
+    attribute: "data-tenant";
+    value: string;
+  };
   /** Exact provider-owned selector used by the generated CSS block. */
   combinedSelector: string;
 }
 
 /** Attributes the SSR/app root must stamp for the artifact selector to match. */
 export interface TenantThemeRootAttributesV1 {
-  'data-ds-root': '';
-  'data-vertical': string;
-  'data-tenant': string;
-  'data-ds-presentation-profile': TenantPresentationProfileId;
+  "data-ds-root": "";
+  "data-vertical": string;
+  "data-tenant": string;
 }
 
 /** Immutable, cacheable compiler output consumed by SSR and hydration. */
@@ -376,8 +338,6 @@ export interface TenantThemeArtifactV1 {
   verticalKey: string;
   rowVersion: number;
   compilerVersion: string;
-  /** Fully resolved code-owned profile, including the vertical default. */
-  presentationProfile: TenantPresentationProfileId;
   /** Digest of the vertical policy applied during compilation, when present. */
   verticalEnvelopeDigest?: string;
   /** `sha256-<hex>` over the canonical artifact source. */
@@ -391,11 +351,11 @@ export interface TenantThemeArtifactV1 {
 export type TenantThemeArtifact = TenantThemeArtifactV1;
 
 export type TenantThemeValidationIssueCode =
-  | 'invalid_type'
-  | 'invalid_value'
-  | 'unknown_key'
-  | 'unsupported_schema_version'
-  | 'unsafe_value';
+  | "invalid_type"
+  | "invalid_value"
+  | "unknown_key"
+  | "unsupported_schema_version"
+  | "unsafe_value";
 
 export interface TenantThemeValidationIssue {
   code: TenantThemeValidationIssueCode;

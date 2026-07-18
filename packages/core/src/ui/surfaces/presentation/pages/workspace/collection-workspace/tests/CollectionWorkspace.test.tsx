@@ -360,7 +360,7 @@ describe('CollectionWorkspaceSurface', () => {
   });
 
   it('allows embedded chrome regions to be re-enabled explicitly', async () => {
-    renderSurface(
+    const { container } = renderSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           surfaceMode: 'embed',
@@ -379,6 +379,14 @@ describe('CollectionWorkspaceSurface', () => {
     expect(await screen.findByText('Test Collection')).toBeInTheDocument();
     expect(await screen.findByText('Visible context')).toBeInTheDocument();
     expect(await screen.findByText('Visible stats')).toBeInTheDocument();
+    const statsSlot = container.querySelector<HTMLElement>('[data-part="stats-slot"]');
+    expect(statsSlot).not.toBeNull();
+    expect(statsSlot).toHaveAttribute('data-collapsed', 'false');
+    expect(statsSlot?.style.padding).toBe('');
+    expect(statsSlot?.style.maxHeight).toBe('');
+    expect(statsSlot?.style.overflow).toBe('');
+    expect(statsSlot?.style.transition).toBe('');
+    expect(statsSlot?.style.pointerEvents).toBe('');
   });
 
   it('renders header and footer slots', async () => {

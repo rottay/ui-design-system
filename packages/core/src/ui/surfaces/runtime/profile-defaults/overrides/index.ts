@@ -2,8 +2,7 @@
 
 /**
  * @fileoverview Per-surface profile defaults override hook.
- * @description Isolated experimental merge helper. It accepts
- * `SurfaceVisualOverrides`, but no production surface invokes it today.
+ * @description Runtime merge helper consumed by every config-driven surface.
  *
  * Merge precedence:
  * 1. Surface visual overrides (highest -- per-surface instance)
@@ -29,19 +28,12 @@ import {
 /**
  * Resolve surface profile defaults with per-surface visual overrides.
  *
- * This helper is unit-testable in isolation; that does not make the 33 nested
- * `visual.profileOverrides` declarations effective. Production surfaces do not
- * call it, so those fields currently have no runtime effect.
- *
  * When `overrides` is `undefined` or empty, the hook short-circuits and returns
  * the base defaults without allocating a new object.
  *
  * @param overrides - Optional visual overrides from a surface config's `visual.profileOverrides`.
  * @returns A memoized `ResolvedSurfaceProfileDefaults` with overrides applied.
  *
- * @deprecated Experimental/unconsumed. DS-IMP-022 owns field-by-field wiring
- * or removal in its deferred phase. Do not use this export as evidence that
- * surface configs apply profile overrides.
  */
 export function useSurfaceProfileDefaultsWithOverrides(
   overrides?: SurfaceVisualOverrides
@@ -77,16 +69,16 @@ export function useSurfaceProfileDefaultsWithOverrides(
       sectionSpacing,
       headerWeight: overrides.headerWeight ?? base.headerWeight,
       animateEntrance: overrides.animateEntrance ?? base.animateEntrance,
-      accentPosition: overrides.accentPosition ?? base.accentPosition,
       badgeShape: overrides.badgeShape ?? base.badgeShape,
       labelStyle: overrides.labelStyle ?? base.labelStyle,
+      accentPosition: base.accentPosition,
+      accentBarThickness: base.accentBarThickness,
+      accentBarStyle: base.accentBarStyle,
       entranceStyle: overrides.entranceStyle ?? base.entranceStyle,
       entranceDuration: overrides.entranceDuration ?? base.entranceDuration,
       staggerDelay: overrides.staggerDelay ?? base.staggerDelay,
       countUpEnabled: overrides.countUpEnabled ?? base.countUpEnabled,
       pulseSpeed: overrides.pulseSpeed ?? base.pulseSpeed,
-      accentBarThickness: overrides.accentBarThickness ?? base.accentBarThickness,
-      accentBarStyle: overrides.accentBarStyle ?? base.accentBarStyle,
     };
   }, [base, overrides]);
 }

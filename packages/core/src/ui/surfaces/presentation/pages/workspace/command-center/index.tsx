@@ -143,18 +143,6 @@ function InsightCard({ insight }: { insight: InsightItem }) {
           align="center"
           gap={3}
         >
-          {/* Accent bar */}
-          <Box
-            className="ds-command-center__insight-accent"
-            data-part="insight-accent"
-            data-tone={insight.type}
-            style={{
-              width: 4,
-              alignSelf: 'stretch',
-              minHeight: 32,
-              flexShrink: 0,
-            }}
-          />
           <Box style={{ flex: 1, minWidth: 0 }}>
             <Text className="ds-command-center__insight-title" data-part="insight-title" size="sm" weight="medium">{insight.title}</Text>
             {insight.description && (

@@ -2181,13 +2181,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           className="ds-collection-workspace__stats-slot"
           data-part="stats-slot"
           data-collapsed={slotsCollapsed ? 'true' : 'false'}
-          style={{
-            padding: slotsCollapsed ? 0 : '14px 16px 10px',
-            maxHeight: slotsCollapsed ? 0 : 400,
-            overflow: slotsCollapsed ? 'hidden' : 'visible',
-            transition: 'max-height 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1)',
-            pointerEvents: slotsCollapsed ? 'none' : undefined,
-          }}
         >
           {resolvedStatsSlot}
         </Box>

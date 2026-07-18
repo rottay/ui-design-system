@@ -16,7 +16,7 @@ import { FadeIn, StaggerChildren } from '@/graphics/motion';
 import { filterSurfaceActions, resolveSurfaceButtonVariant } from '../../../../runtime/helpers';
 import type { DashboardSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import {
   resolveHeadingFontWeight,
@@ -39,7 +39,7 @@ export function DashboardSurface({
   error,
   onRetry,
 }: DashboardSurfaceProps): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const responsiveLayout = useSurfaceResponsiveLayout({
     stackOnMobile: true,
     stackOnTablet: false,

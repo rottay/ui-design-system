@@ -100,10 +100,6 @@ export type {
   SurfaceDensity,
   SurfaceSectionSpacing,
 } from './runtime/profile-defaults';
-/**
- * @deprecated Experimental isolated helper. No production surface consumes
- * visual.profileOverrides; DS-IMP-022 owns wiring/removal.
- */
 export { useSurfaceProfileDefaultsWithOverrides } from './runtime/profile-defaults/overrides';
 
 // -- Composition: page shells, headers, sidebars --

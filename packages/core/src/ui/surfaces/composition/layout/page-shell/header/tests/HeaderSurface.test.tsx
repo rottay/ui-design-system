@@ -126,6 +126,21 @@ describe('HeaderSurface', () => {
     expect(screen.queryByText('Danger zone')).not.toBeInTheDocument();
   });
 
+  it('lets the surface instance override the profile-derived tab treatment', async () => {
+    const config = buildConfig({
+      visual: {
+        profileOverrides: {
+          density: 'spacious',
+        },
+      },
+    });
+
+    renderSurface(<HeaderSurface config={config} />);
+
+    const tabList = await screen.findByRole('tablist');
+    expect(tabList.parentElement).toHaveAttribute('data-variant', 'card');
+  });
+
   it('keeps one primary action and compacts body chrome on a resolved phone', async () => {
     const config = buildConfig({
       visual: {

@@ -12,21 +12,3 @@
 export { rottayBrandTheme } from './platform';
 export { bithireBrandTheme } from './bithire';
 export { evntoBrandTheme } from './evnto';
-
-/**
- * @deprecated Migration/regression fixture only. Customer tenant identity is
- * published from the tenancy DB and must not be registered as a DS runtime
- * source. Kept temporarily as an explicit fixture for compatibility and QA.
- */
-export { themanagementmiamiBrandTheme } from './fixtures/themanagementmiami';
-
-/**
- * Hostile-tenant whitelabel PROOF FIXTURES (WO-GAT-03). NOT product tenants —
- * never registered in KNOWN_TENANTS, BUNDLED_TENANT_SLUGS, or
- * FIRST_PARTY_ARTIFACT_SPECS. See _fixtures/torture.ts for the full rationale.
- */
-export {
-  tortureDarkBrandTheme,
-  tortureLightBrandTheme,
-  TORTURE_PROBE_VARS,
-} from './fixtures/torture';

@@ -18,7 +18,7 @@ import { useUnsavedChangesGuard } from '../../../../../../infrastructure/runtime
 import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../../../../runtime/helpers';
 import type { FormSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import {
@@ -38,7 +38,7 @@ export interface FormSurfaceProps {
 /** Page-level form shell with error handling, action normalization, and optional aside content. */
 export function FormSurface({ config, loading = false, error, onRetry }: FormSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
   const dirtyState = config.behavior.dirtyState;
   const { requestDiscard } = useUnsavedChangesGuard({

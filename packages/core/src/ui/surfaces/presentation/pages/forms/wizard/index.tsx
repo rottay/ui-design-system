@@ -14,7 +14,7 @@ import { FadeIn, SlideIn } from '@/graphics/motion';
 import { useUnsavedChangesGuard } from '../../../../../../infrastructure/runtime/application/forms';
 import { filterSurfaceFields, resolveSurfaceAction, resolveSurfaceButtonVariant } from '../../../../runtime/helpers';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../runtime/profile-defaults/personality';
 import type {
   WizardSurfaceConfig,
@@ -114,7 +114,7 @@ export interface WizardSurfaceProps {
 
 export function WizardSurface({ config, loading = false, error, onRetry }: WizardSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
   const resolvedMobile = hasResolvedViewport && isMobile;
   const dirtyState = config.behavior.dirtyState;

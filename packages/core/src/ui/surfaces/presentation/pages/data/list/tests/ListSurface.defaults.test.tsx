@@ -72,4 +72,32 @@ describe('ListSurface profile defaults', () => {
 
     expect(await screen.findByText('Card view: Ana Gomez')).toBeInTheDocument();
   });
+
+  it('lets the surface instance override profile-driven card chrome', async () => {
+    const config = buildConfig();
+    config.visual.defaultView = 'cards';
+    config.visual.profileOverrides = {
+      cardVariant: 'ghost',
+    };
+    config.presentation.renderCard = undefined;
+
+    renderSurface(
+      <ListSurface
+        data={[
+          {
+            id: '1',
+            name: 'Ana Gomez',
+          },
+        ]}
+        adapter={candidateAdapter}
+        config={config}
+      />,
+      {
+        productProfile: 'events.organizer',
+      }
+    );
+
+    const cardContent = await screen.findByText('Ana Gomez');
+    expect(cardContent.closest('.rottay-card')).toHaveAttribute('data-variant', 'ghost');
+  });
 });

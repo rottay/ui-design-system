@@ -72,7 +72,7 @@ export {
 // the icon catalog into every consumer bundle.
 //
 // `@rottay/design-system/icons` exports the supplier-independent semantic
-// Icon facade plus the temporary Lucide-shaped compatibility catalog.
+// Icon facade plus the temporary named-icon compatibility catalog.
 // Product code should use semantic names; suppliers stay behind adapters.
 //
 // Neither catalog is re-exported from this root barrel.
@@ -107,13 +107,6 @@ export * from './infrastructure/compilers';
 // Consumers (and the in-app artifact drift test) resolve the canonical vertical
 // BrandTheme from here; the CSS artifact is a generated projection of these.
 export { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './foundation/tokens/ts/presentation/brand-themes';
-/**
- * @deprecated Explicit migration/regression fixture only. Runtime customer
- * themes are supplied from the tenancy DB and are never auto-registered here.
- */
-export { themanagementmiamiBrandTheme } from './foundation/tokens/ts/presentation/brand-themes';
-// Whitelabel proof fixtures (WO-GAT-03) — never product tenants — consumed by the showroom probe surface.
-export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './foundation/tokens/ts/presentation/brand-themes';
 
 // ============================================
 // I18N (locales, provider, hooks)

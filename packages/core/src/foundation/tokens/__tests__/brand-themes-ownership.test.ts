@@ -4,7 +4,7 @@
  * rather than an import graph, so a file dropped back at the brand-themes
  * root — or a fixture smuggled inside a vertical folder — fails here.
  */
-import { readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -59,6 +59,27 @@ describe('brand-themes tree pins vertical ownership', () => {
       } else if (entry.isDirectory()) {
         expect(allowedDirs.has(entry.name)).toBe(true);
       }
+    }
+  });
+
+  it('keeps tenant and torture fixtures out of production barrels', () => {
+    const brandThemeBarrel = readFileSync(
+      resolve(BRAND_THEMES_DIR, 'index.ts'),
+      'utf8',
+    );
+    const packageRoot = readFileSync(
+      resolve(TEST_DIR, '../../..', 'index.ts'),
+      'utf8',
+    );
+
+    for (const fixtureExport of [
+      'themanagementmiamiBrandTheme',
+      'tortureDarkBrandTheme',
+      'tortureLightBrandTheme',
+      'TORTURE_PROBE_VARS',
+    ]) {
+      expect(brandThemeBarrel).not.toContain(fixtureExport);
+      expect(packageRoot).not.toContain(fixtureExport);
     }
   });
 });

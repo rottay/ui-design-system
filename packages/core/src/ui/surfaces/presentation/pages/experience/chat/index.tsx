@@ -30,7 +30,7 @@ import {
 } from '../../../../../patterns';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
+import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import {
   resolveStackSpacing,
@@ -124,7 +124,7 @@ export function ChatSurface({
   loading = false,
 }: ChatSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
-  const profileDefaults = useSurfaceProfileDefaults();
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
   const { virtualKeyboardInset, isVirtualKeyboardOpen } = useResponsive();
   const resolvedMobile = isMobile && hasResolvedViewport;
@@ -183,7 +183,7 @@ export function ChatSurface({
   // content is provided, it collapses to a single column.
   const chatContent = (
     <Grid
-      className={`ds-surface ds-chat ds-chat--${showSidebar && !shouldStack ? 'split' : 'stacked'} ds-chat--${profileDefaults.accentPosition !== 'none' ? 'accented' : 'plain'}${loading ? ' ds-chat--loading' : ''}`}
+      className={`ds-surface ds-chat ds-chat--${showSidebar && !shouldStack ? 'split' : 'stacked'}${loading ? ' ds-chat--loading' : ''}`}
       data-mobile-sidebar={showSidebar ? 'visible' : 'hidden'}
       data-mobile-composer={stickyComposer ? 'sticky' : 'inline'}
       columns={showSidebar && !shouldStack ? 12 : 1}
@@ -267,9 +267,6 @@ export function ChatSurface({
           >
             <SurfaceSectionCard title={tSurface('chat.composer_title')}>
               <Stack spacing="md">
-                {/* When a personality accent bar is active, the composer gets a
-                    matching primary border to visually tie it to the accent
-                    theme. Without an accent, the default border is used. */}
                 <Textarea
                   className="ds-chat__composer-input"
                   value={draft}

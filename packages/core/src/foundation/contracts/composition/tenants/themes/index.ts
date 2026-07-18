@@ -238,6 +238,7 @@ export interface BrandSidebarChrome {
 export interface BrandLayoutChrome {
   bg?: string;
   headerBg?: string;
+  headerHeight?: string;
   headerBackdrop?: string;
   headerBorder?: string;
   siderBg?: string;
@@ -670,14 +671,6 @@ export type VerticalTheme = BrandTheme;
  * A profile selects a reviewed DS presentation posture; it does not open a
  * tenant-authored CSS, component-topology, icon-glyph or motion-recipe channel.
  */
-export const TENANT_PRESENTATION_PROFILE_IDS = [
-  'editorial-ledger',
-  'ambient-command',
-] as const;
-
-export type TenantPresentationProfileId =
-  (typeof TENANT_PRESENTATION_PROFILE_IDS)[number];
-
 /**
  * Safe, high-signal customization for most tenant admins.
  *
@@ -692,8 +685,6 @@ export type TenantPresentationProfileId =
  * - data.chartColorFamily: removed (no chart palette system)
  */
 export interface TenantAppearanceGeneral {
-  /** Selects one code-owned, vertical-allowlisted presentation recipe. */
-  presentationProfile?: TenantPresentationProfileId;
   palette?: {
     primary?: string;
     secondary?: string;

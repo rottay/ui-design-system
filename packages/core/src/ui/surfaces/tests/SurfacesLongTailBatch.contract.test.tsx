@@ -166,8 +166,6 @@ describe('CK-I foundation anatomy (I-1)', () => {
     );
 
     await waitForSelectors(container, [
-      '.ds-surface.ds-accent-bar[data-part="bar"][data-position="top"][data-style="animated"]',
-      '.ds-surface.ds-accent-bar[data-part="bar"][data-position="left"][data-style="gradient"]',
       '.ds-surface.ds-section-card',
       '.ds-surface.ds-loading-state',
       '.ds-surface.ds-empty-state',
@@ -180,6 +178,7 @@ describe('CK-I foundation anatomy (I-1)', () => {
       '.ds-surface.ds-offline-banner',
     ]);
 
+    expect(q(container, '.ds-surface.ds-accent-bar')).toHaveLength(0);
     expect(q(container, '[data-surface-action="enabled"]')).toHaveLength(1);
     expect(q(container, '[data-surface-action="disabled"]')).toHaveLength(1);
     expect(q(container, '.ds-section-card__body')).toHaveLength(1);
@@ -383,8 +382,8 @@ describe('CK-I layout and workspace anatomy (I-3)', () => {
     expect(q(container, '.ds-collection-render-dispatch__page-size-select[data-part="page-size-select"]')).toHaveLength(1);
     for (const tone of ['info', 'warning', 'success', 'error']) {
       expect(q(container, `.ds-command-center__insight-tile[data-part="insight-tile"][data-tone="${tone}"]`)).toHaveLength(1);
-      expect(q(container, `.ds-command-center__insight-accent[data-part="insight-accent"][data-tone="${tone}"]`)).toHaveLength(1);
     }
+    expect(q(container, '[data-part="insight-accent"]')).toHaveLength(0);
     expect(q(container, '.ds-command-center__quick-action-card')).toHaveLength(1);
     expect(q(container, '.ds-decision-inbox__selection-bar')).toHaveLength(1);
     expect(q(container, '.ds-record-workbench__status-badge[data-part="status-badge"][data-variant="warning"]')).toHaveLength(1);

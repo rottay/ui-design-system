@@ -5,8 +5,8 @@
  * surface emits `--ds-density-cell-padding` / `--ds-density-card-padding` on
  * its root so the inner table and embedded cards derive padding from the
  * token cascade (route comfortable vs embedded/beside-chat compact). Scale is
- * routed through the presentation-profile hook with the mode preset as its
- * non-breaking fallback.
+ * inherited from the tenant artifact with the mode preset as its non-breaking
+ * fallback.
  */
 
 import React from 'react';
@@ -65,10 +65,10 @@ describe('CollectionWorkspaceSurface density', () => {
     );
   });
 
-  it('lets a presentation profile govern scale without replacing the mode fallback', async () => {
+  it('lets the inherited tenant variable govern scale without replacing the mode fallback', async () => {
     const { container } = renderSurface(
       <div
-        data-ds-presentation-profile="ambient-command"
+        data-tenant-theme-scope="test"
         style={{ '--ds-collection-workspace-density-scale': '0.84' } as React.CSSProperties}
       >
         <CollectionWorkspaceSurface
@@ -82,10 +82,10 @@ describe('CollectionWorkspaceSurface density', () => {
     );
 
     await screen.findByText('Test Collection');
-    const profile = container.querySelector('[data-ds-presentation-profile]') as HTMLElement;
+    const themeScope = container.querySelector('[data-tenant-theme-scope]') as HTMLElement;
     const root = container.querySelector('[style*="--ds-density-cell-padding"]') as HTMLElement;
 
-    expect(profile.style.getPropertyValue('--ds-collection-workspace-density-scale')).toBe('0.84');
+    expect(themeScope.style.getPropertyValue('--ds-collection-workspace-density-scale')).toBe('0.84');
     expect(root.style.getPropertyValue('--ds-density-scale')).toBe(
       'var(--ds-collection-workspace-density-scale, 0.9)',
     );

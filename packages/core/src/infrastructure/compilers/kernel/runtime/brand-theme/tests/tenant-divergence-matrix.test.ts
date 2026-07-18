@@ -17,7 +17,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../index';
-import { bithireBrandTheme, themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 

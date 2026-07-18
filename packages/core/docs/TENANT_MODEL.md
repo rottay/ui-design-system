@@ -9,8 +9,8 @@ branding, and customization. All implementation must conform to these rules.
 
 Baselines: `rottay`, `bithire`, `evnto`.
 
-- They define the visual grammar shared by a product vertical: topology,
-  component recipes, semantic icon roles, chart renderers, motion posture and
+- They define the visual grammar shared by a product vertical: component
+  contracts, semantic icon roles, chart renderers, motion behavior and
   accessibility behavior.
 - They resolve from
   `infrastructure/runtime/tenant/foundation/configuration/registry/` with zero
@@ -57,8 +57,7 @@ Rottay or another customer's styling.
 only write contract for tenant customization.
 
 - General fields expose bounded palette, typography, shape, density, motion,
-  elevation and navigation dials, plus one code-owned presentation profile
-  allowlisted by the trusted vertical envelope.
+  elevation and navigation dials.
 - Advanced fields expose only allowlisted visual values across DS chrome
   families and allowlisted reference/override tokens.
 - Chart tenants may choose the bounded category palette; renderer, data
@@ -69,10 +68,12 @@ only write contract for tenant customization.
   size. Unknown keys, schema/compiler drift, invalid contrast and duplicate
   chart colors are rejected before publication.
 
-Tenants cannot author component topology, permissions, glyph semantics,
-responsive rules, chart renderers, spatial lifecycle, motion topology or
-accessibility behavior. A presentation-profile selection chooses only a
-reviewed code-owned posture; it does not open any of those authoring channels.
+Tenants cannot author permissions, data semantics, glyph semantics, chart
+renderers, spatial lifecycle, motion topology or accessibility behavior. They
+can author the complete bounded visual anatomy exposed by the published schema:
+chrome geometry, density, typography, radii, elevation, surface treatments,
+navigation posture and responsive presentation variables. Product components
+consume those values through declarative CSS without tenant-specific selectors.
 
 ## Publication and Concurrency
 
@@ -88,9 +89,9 @@ reviewed code-owned posture; it does not open any of those authoring channels.
 
 Legacy `TenantConfig.branding`, `personality`, `appearance` and
 `tokenOverrides` remain readable at compatibility boundaries, but new writes
-must normalize into `TenantThemeDocument`. The deprecated
-`themanagementmiamiBrandTheme` export is an explicit fixture only and is not a
-runtime source.
+must normalize into `TenantThemeDocument`. Tenant and hostile-theme fixtures
+live under the internal testing tree and are not exported by any production
+barrel or package entrypoint.
 
 ## Enforcement
 
