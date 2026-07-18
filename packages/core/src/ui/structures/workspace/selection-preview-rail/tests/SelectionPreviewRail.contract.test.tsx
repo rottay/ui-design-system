@@ -163,11 +163,9 @@ describe('SelectionPreviewRail data-part contract', () => {
       // Trap (b): the Button primitive's own partAttributes('trigger', ...)
       // stamp is spread after caller props, so data-part cannot be used as
       // this button's landing selector -- className is the only viable hook.
-      // (Modern always overwrites a caller data-part with 'trigger'; rustic's
-      // non-anchor <button> branch spreads `...rest` after partAttributes and
-      // lets a caller data-part win instead -- see the clobber probe below.
-      // Either way, className is the only selector that lands reliably across
-      // both engines.)
+      // (Every engine stamps 'trigger' last under the pass-through honesty
+      // law: engines win on data-part, callers win on id/aria-*/other
+      // data-* -- see the clobber probe below.)
       expect(closeButtons[0].getAttribute('data-part')).toBe('trigger');
 
       for (const part of ['identity-card', 'snapshot-card', 'match-reason-panel']) {
@@ -180,7 +178,7 @@ describe('SelectionPreviewRail data-part contract', () => {
   );
 
   it.each(ENGINES)(
-    'documents whether the Button primitive clobbers a caller-supplied data-part under the %s engine',
+    'Button stamps its own data-part over a caller-supplied one under the %s engine',
     async (engine) => {
       const { container } = renderWithEngine(
         <Button variant="ghost" size="sm" data-part="caller-supplied-part">
@@ -195,11 +193,10 @@ describe('SelectionPreviewRail data-part contract', () => {
         expect(button).not.toBeNull();
       });
 
-      // Modern clobbers (partAttributes spreads after nativeButtonProps ->
-      // 'trigger' wins). Rustic's <button> branch spreads {...rest} LAST, so
-      // the caller's data-part survives instead -- a pre-existing engine
-      // inconsistency, not something this pre-step introduces or fixes.
-      const expectedDataPart = engine === 'rustic' ? 'caller-supplied-part' : 'trigger';
+      // Pass-through honesty law: the engine owns data-part on the roots it
+      // renders, so every engine stamps 'trigger' after caller props. Caller
+      // id/aria-*/other data-* still pass through.
+      const expectedDataPart = 'trigger';
       expect((button as unknown as Element).getAttribute('data-part')).toBe(expectedDataPart);
     },
   );

@@ -318,9 +318,9 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
             className={classNames}
             style={buttonStyle}
             {...interactionHandlers}
-            {...partAttributes('trigger', interaction)}
             {...skinAttributes}
             {...responsiveAttrs}
+            {...partAttributes('trigger', interaction)}
           >
             {loading && <LoadingSpinner size={size} />}
             {!loading && iconPosition === 'start' && renderIcon}
@@ -337,6 +337,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       <>
         {responsiveStyleTag}
         <button
+          {...rest}
           ref={ref}
           type={htmlType}
           className={classNames}
@@ -344,12 +345,11 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           disabled={disabled || loading}
           onClick={handleClick}
           {...interactionHandlers}
-          {...partAttributes('trigger', interaction)}
           {...skinAttributes}
           aria-disabled={disabled || loading}
           aria-busy={loading}
           {...responsiveAttrs}
-          {...rest}
+          {...partAttributes('trigger', interaction)}
         >
           {loading && <LoadingSpinner size={size} />}
           {!loading && iconPosition === 'start' && renderIcon}

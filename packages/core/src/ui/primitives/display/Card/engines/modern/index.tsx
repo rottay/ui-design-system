@@ -129,6 +129,16 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     onClick,
     className = '',
     style,
+    backgroundColor: _backgroundColor,
+    selectable: _selectable,
+    selected: _selected,
+    onSelect: _onSelect,
+    extensions: _extensions,
+    engine: _engine,
+    // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+    // root element. It must spread BEFORE the engine's own stamps so the
+    // engine's data-part and skin contract always land last.
+    ...rest
   } = props;
 
   // Responsive padding handling
@@ -229,7 +239,13 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     return (
       <>
         {responsiveStyleTag}
-        <div style={cardStyle} className={cardClassName} {...responsiveAttrs}>
+        <div
+          {...rest}
+          style={cardStyle}
+          className={cardClassName}
+          {...responsiveAttrs}
+          {...partAttributes('root', interaction)}
+        >
           {/* Placeholder cover */}
           {cover && (
             <div
@@ -296,16 +312,17 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     <>
       {responsiveStyleTag}
       <div
+        {...rest}
         className={cardClassName}
         onClick={onClick}
         {...interactionHandlers}
-        {...partAttributes('root', interaction)}
         onKeyDown={onClick ? handleKeyDown : undefined}
         tabIndex={onClick ? 0 : undefined}
         role={onClick ? 'button' : undefined}
         style={cardStyle}
         {...skinAttributes}
         {...responsiveAttrs}
+        {...partAttributes('root', interaction)}
       >
         {/* Cover image - top */}
         {cover && coverPosition === 'top' && (

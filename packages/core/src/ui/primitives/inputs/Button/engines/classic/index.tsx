@@ -239,6 +239,9 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
         tabIndex={tabIndex}
         aria-busy={loading || undefined}
         {...(responsive ? responsive.attrs : {})}
+        // The engine owns data-part: it lands after the caller passthrough so a
+        // caller-supplied data-part can never rename this engine's anatomy.
+        data-part="trigger"
       >
         {loading && resolvedBusyLabel != null ? resolvedBusyLabel : children}
         {/* End icon / suffix is rendered outside Ant's icon slot because Ant

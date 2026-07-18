@@ -20,8 +20,9 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 // all five components without moving any paint. Per the checkpoint contract
 // (P-79 / "a surface owns no DOM"), these five files are engine-free
 // structures that COMPOSE engine-switched primitives (Button, Badge,
-// Breadcrumb, Spinner, Tooltip) -- `Grid`/`Card` DROP a `data-part` stamp in
-// BOTH engines and `Button` drops it in modern only, so any anatomy this
+// Breadcrumb, Spinner, Tooltip) -- `Grid`/`Card` DROP a caller `data-part`
+// in BOTH engines and `Button` drops it in EVERY engine (each stamps its own
+// part last under the pass-through honesty law), so any anatomy this
 // file owns on a composed Button rides a className, never `data-part`. This
 // file is the only thing in the chain that proves a stamp actually reached
 // the DOM (P-79's own lesson from CK-D: tsc accepts the stamp everywhere,
@@ -52,8 +53,9 @@ async function waitForPart(container: HTMLElement, part: string): Promise<Elemen
 
 /**
  * A surface owns no DOM of its own -- it owns composition. `Button` drops a
- * `data-part` stamp in the modern engine (forwards in rustic), so any
- * anatomy hook this file needs on a composed Button is a className, never
+ * caller `data-part` in EVERY engine (each stamps its own 'trigger' part
+ * last under the pass-through honesty law), so any anatomy hook this file
+ * needs on a composed Button is a className, never
  * `data-part`. See the README's "A surface owns no DOM" law and CK-D/R's
  * `RecordBatch.contract.test.tsx`, which established this exact helper for
  * the same reason.

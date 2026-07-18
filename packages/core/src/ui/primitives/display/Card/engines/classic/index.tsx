@@ -111,6 +111,17 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
     onClick,
     className = '',
     style,
+    coverPosition: _coverPosition,
+    backgroundColor: _backgroundColor,
+    selectable: _selectable,
+    selected: _selected,
+    onSelect: _onSelect,
+    extensions: _extensions,
+    engine: _engine,
+    // Caller passthrough (id / aria-* / data-* / data-testid): AntD forwards
+    // unknown props to the root element. It must spread BEFORE the engine's
+    // own stamps so the engine's data-part always lands last.
+    ...rest
   } = props;
 
   // Responsive padding handling
@@ -192,6 +203,7 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
       <AntCard
+        {...rest}
         title={cardTitle}
         extra={extra}
         cover={coverElement}
@@ -220,6 +232,7 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
           ...style,
         }}
         {...(responsive ? responsive.attrs : {})}
+        data-part="root"
       >
         {/* When loading we render AntD Skeleton instead of children so the card
             maintains its approximate dimensions while content is being fetched. */}

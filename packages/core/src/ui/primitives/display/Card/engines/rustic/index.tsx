@@ -122,6 +122,15 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     onClick,
     className = '',
     style,
+    selectable: _selectable,
+    selected: _selected,
+    onSelect: _onSelect,
+    extensions: _extensions,
+    engine: _engine,
+    // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+    // root element. It must spread BEFORE the engine's own stamps so the
+    // engine's data-part and skin contract always land last.
+    ...rest
   } = props;
 
   // Responsive padding handling
@@ -249,12 +258,12 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
     )}
     <div
+      {...rest}
       className={`rottay-card rottay-card--rustic ${className}`}
       style={cardStyle}
       {...skinAttributes}
       onClick={onClick}
       {...interactionHandlers}
-      {...partAttributes('root', interaction)}
       // The three go together or none of them do. A `role="button"` with a tab
       // stop and no activation path is a control a pointer can use and a
       // keyboard cannot. `clickable` is a styling flag, not a promise that the
@@ -264,6 +273,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       tabIndex={onClick ? 0 : undefined}
       aria-busy={loading}
       {...(responsive ? responsive.attrs : {})}
+      {...partAttributes('root', interaction)}
     >
       {loadingOverlay}
 

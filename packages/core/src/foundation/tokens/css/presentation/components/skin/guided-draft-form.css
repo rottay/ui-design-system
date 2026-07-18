@@ -10,11 +10,12 @@
  * ==========================================================================
  * A SURFACE OWNS NO DOM (P-79). IT OWNS COMPOSITION.
  * ==========================================================================
- * `Grid`, `Card` and (in the modern engine) `Button` never emit a
- * consumer-supplied `data-part`: Grid/Card have no rest-spread, and Button's own
- * `partAttributes('trigger', …)` spread wins last and rewrites it. `tsc` accepts
- * the stamp regardless -- `BaseComponentProps` declares `data-part` on every
- * component -- so a rule anchored on one would silently match nothing. The
+ * `Grid`, `Card` and `Button` never emit a consumer-supplied `data-part`:
+ * Grid has no rest-spread, and Card/Button spread caller rest FIRST and stamp
+ * their own `partAttributes(...)` last (pass-through honesty law: engines win
+ * on data-part). `tsc` accepts the stamp regardless -- `BaseComponentProps`
+ * declares `data-part` on every component -- so a rule anchored on one would
+ * silently match nothing (or match the engine's own stamp instead). The
  * anatomy of every composed primitive below is therefore its CLASSNAME. Only the
  * nodes this surface renders ITSELF (`Box`/`Flex`/`Text`) are addressed by part.
  *

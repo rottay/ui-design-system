@@ -68,13 +68,13 @@ async function waitForPart(container: HTMLElement, part: string): Promise<Elemen
 }
 
 /**
- * A surface owns no DOM of its own -- it owns composition. `Grid` and `Card`
- * (unlike Box/Stack/Flex/Text) have no rest-spread in their own prop
- * destructuring and never forward a consumer-passed `data-part` to the DOM
- * (`Button`'s modern engine drops it too, via its own `partAttributes`
- * spread winning last; rustic forwards it, so the asymmetry is per-engine,
- * not just per-primitive). A surface's anatomy on a composed Grid/Card/
- * Button is therefore carried by className, never by data-part.
+ * A surface owns no DOM of its own -- it owns composition. `Grid` (unlike
+ * Box/Stack/Flex/Text) has no rest-spread in its own prop destructuring, and
+ * `Card`/`Button` stamp their own `partAttributes(...)` after caller rest in
+ * EVERY engine (pass-through honesty law: engines win on data-part), so none
+ * of them forward a consumer-passed `data-part` to the DOM. A surface's
+ * anatomy on a composed Grid/Card/Button is therefore carried by className,
+ * never by data-part.
  */
 async function waitForClass(container: HTMLElement, className: string): Promise<Element> {
   await waitFor(
@@ -488,8 +488,9 @@ describe('Record + workflow + form-surfaces data-part contract (WO-SKIN-06 check
 
   describe('FormSurface / WizardSurface / DetailFormSurface', () => {
     // FormSurface/WizardSurface/DetailFormSurface own no DOM of their own --
-    // they compose Grid/Stack/Card. Grid and Card have no rest-spread in
-    // their own prop destructuring and never forward a consumer-passed
+    // they compose Grid/Stack/Card. Grid has no rest-spread in its own prop
+    // destructuring, and Card stamps its own data-part after caller rest in
+    // every engine, so neither forwards a consumer-passed
     // data-part to the DOM (confirmed for both engines of each), so their
     // anatomy is the className already on them (`ds-surface ds-form` /
     // `ds-wizard` / `ds-detail-form`, `ds-form__error-card`, etc.), never a

@@ -100,6 +100,15 @@ export type Alignment = 'start' | 'center' | 'end';
  *
  * Keeping these centralized avoids dozens of tiny `className/style/id`
  * redefinitions across component-specific prop files.
+ *
+ * Pass-through honesty law (binding on every engine implementation):
+ * `id`, `aria-*`, and `data-*` attributes declared here MUST reach the root
+ * DOM element the engine owns -- an engine may not silently drop them. The
+ * single exception is `data-part`: the engine owns its anatomy vocabulary, so
+ * every engine spreads the caller's passthrough FIRST and stamps its own
+ * `data-part` (and skin-contract `data-*` keys) LAST. A caller-supplied
+ * `data-part` therefore never renames an engine part, while every other
+ * caller attribute survives to the DOM.
  */
 export interface BaseComponentProps {
   /** Arbitrary semantic state hooks forwarded to the rendered DOM element. */
