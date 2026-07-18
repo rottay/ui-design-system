@@ -8,6 +8,12 @@
  * When animation is disabled the simulation uses a calibrated, bounded synchronous pass to reach
  * a settled layout without visual motion.
  *
+ * The tick-driven simulation is a Class-H wrap: it keeps its imperative body but draws INSIDE the
+ * shared `ChartImperativePlot` bridge, so the stable `ChartRendererSurface` owns the SVG element,
+ * its accessible `<title>/<desc>`, the tooltip anchor variables, and the `data-empty` stamp. The
+ * bridge's per-draw cleanup stops the live simulation before it clears the mount. The
+ * `ChartScaffold` still owns the heading, accessible summary table, legend, and lifecycle states.
+ *
  * @example
  * <NetworkGraph
  *   nodes={[
@@ -25,7 +31,7 @@
  * />
  */
 
-import { memo, useEffect, useId, useMemo, useRef } from 'react';
+import { memo, useCallback, useEffect, useId, useMemo, useRef } from 'react';
 import {
   drag,
   forceCenter,
@@ -37,9 +43,18 @@ import {
   type SimulationNodeDatum,
 } from 'd3';
 
-import type { ChartBaseProps, ChartColorsProps, ChartLegendProps } from '../../contracts';
-import { useChartDimensions, useChartPersonality } from '../../runtime';
+import type {
+  ChartBaseProps,
+  ChartColorsProps,
+  ChartLegendProps,
+  ChartStateProps,
+} from '../../contracts';
+import { useChartPersonality } from '../../runtime';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import {
+  ChartImperativePlot,
+  type ChartImperativePlotDraw,
+} from '../../runtime/chart-engine/presentation/react/renderers/imperative';
 
 /** A node in the network graph. `group` drives automatic colour assignment. */
 export interface NetworkNode {
@@ -58,12 +73,21 @@ export interface NetworkLink {
   label?: string;
 }
 
-/** Props for the {@link NetworkGraph} component. */
-export interface NetworkGraphProps extends ChartBaseProps, ChartLegendProps, ChartColorsProps {
+/** Topology, presentation, and layout options for {@link NetworkGraph}. */
+export interface NetworkGraphOwnProps extends ChartBaseProps, ChartLegendProps, ChartColorsProps {
   nodes: NetworkNode[];
   links: NetworkLink[];
   directed?: boolean;
+  /** Render the loading state as placeholder bars instead of a centered label. */
+  skeleton?: boolean;
 }
+
+/**
+ * Props for the {@link NetworkGraph} component. The caller-declared lifecycle
+ * states (`state` plus typed-required empty/error copy) are threaded through the
+ * shared {@link ChartStateProps} contract.
+ */
+export type NetworkGraphProps = NetworkGraphOwnProps & ChartStateProps;
 
 type NetworkSimulationNode = NetworkNode & SimulationNodeDatum;
 
@@ -136,39 +160,59 @@ function finiteCoordinate(value: number | undefined, fallback: number): number {
  * Renders a force-directed network graph with draggable nodes and optional directed edges.
  *
  * @param props - See {@link NetworkGraphProps} for the full option set.
- * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ * @returns A `ChartScaffold`-wrapped imperative plot with accessible summary table and optional legend.
  */
-export const NetworkGraph = memo(function NetworkGraph({
-  nodes,
-  links,
-  directed = false,
-  width,
-  height = 500,
-  className,
-  style,
-  loading = false,
-  title,
-  subtitle,
-  legend = false,
-  animate = true,
-  responsive = true,
-  colors,
-  tooltip = true,
-}: NetworkGraphProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
+export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps) {
+  const {
+    nodes,
+    links,
+    directed = false,
+    width,
+    height = 500,
+    className,
+    style,
+    loading = false,
+    title,
+    subtitle,
+    legend = false,
+    animate = true,
+    responsive = true,
+    colors,
+    tooltip = true,
+    skeleton,
+    state,
+    emptyLabel,
+    emptyDescription,
+    emptyAction,
+    errorLabel,
+    errorDescription,
+    errorAction,
+  } = props;
+  // Forward the caller-declared lifecycle contract to the scaffold as one unit.
+  // The reconstructed object carries only the state fields (no own-prop leak);
+  // the cast is a downcast from the widened destructured shape to the union.
+  const scaffoldStateProps = {
+    state,
+    emptyLabel,
+    emptyDescription,
+    emptyAction,
+    errorLabel,
+    errorDescription,
+    errorAction,
+  } as ChartStateProps;
+  const scaffoldRef = useRef<HTMLDivElement>(null);
+  const legacySvgRef = useRef<SVGSVGElement>(null);
   const positionsRef = useRef(new Map<string, NetworkPosition>());
   const instanceId = useId();
   const instanceToken = instanceId.replace(/[^a-zA-Z0-9_-]/g, '');
   const definitionsId = `network-definitions-${instanceToken}`;
   const markerId = `network-arrow-${instanceToken}`;
-  const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = height;
   const validation = useMemo(() => validateNetworkData(nodes, links), [nodes, links]);
   const graphNodes = validation.ok ? validation.nodes : [];
   const graphLinks = validation.ok ? validation.links : [];
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
+  const hasRenderableData = validation.ok && graphNodes.length > 0;
   const summary = {
     caption: title ? `${title} data summary` : 'Network graph data summary',
     headers: ['Kind', 'Primary', 'Secondary'],
@@ -178,31 +222,34 @@ export const NetworkGraph = memo(function NetworkGraph({
     ],
   };
 
-  useEffect(() => {
-    if (!svgRef.current) return;
+  const animateMount = chartPersonality.animate;
+  const showTooltip = chartPersonality.tooltip;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').interrupt();
-    svg.selectAll('*').remove();
+  // Imperative draw procedure. It owns only the bridge-provided mount `<g>`; the
+  // surrounding renderer surface owns the SVG element, accessible name, and
+  // tooltip vars. Dimensions arrive from the bridge, so this callback is stable
+  // across unrelated re-renders (a resize redraws; identity churn would restart
+  // the live simulation, so the dependency list stays minimal).
+  const draw = useCallback<ChartImperativePlotDraw>((context) => {
+    const { mount, width: chartWidth, height: chartHeight } = context;
+    const currentNodes = validation.ok ? validation.nodes : [];
+    const currentLinks = validation.ok ? validation.links : [];
 
-    if (!validation.ok || graphNodes.length === 0) {
+    if (!validation.ok || currentNodes.length === 0) {
       positionsRef.current.clear();
-      return () => {
-        svg.selectAll('*').interrupt();
-        svg.selectAll('*').remove();
-      };
+      return undefined;
     }
 
-    const knownNodeIds = new Set(graphNodes.map((node) => node.id));
+    const knownNodeIds = new Set(currentNodes.map((node) => node.id));
     for (const storedId of positionsRef.current.keys()) {
       if (!knownNodeIds.has(storedId)) positionsRef.current.delete(storedId);
     }
 
-    svg.attr('width', chartWidth).attr('height', chartHeight).attr('data-variant', directed ? 'directed' : 'undirected');
+    const root = select(mount).attr('data-variant', directed ? 'directed' : 'undirected');
 
     // Stable group-to-colour mapping: groups are collected in insertion order
     // so the same group always maps to the same palette index across renders.
-    const groups = [...new Set(graphNodes.map((n) => n.group).filter(Boolean))] as string[];
+    const groups = [...new Set(currentNodes.map((n) => n.group).filter(Boolean))] as string[];
     const groupColor = (group?: string) => {
       if (!group) return palette[0];
       const idx = groups.indexOf(group);
@@ -212,7 +259,7 @@ export const NetworkGraph = memo(function NetworkGraph({
     // SVG marker definition for directed edge arrows. refX=20 offsets the tip
     // so it does not overlap the target node's circle (radius ~8px + padding).
     if (directed) {
-      svg
+      root
         .append('defs')
         .attr('data-part', 'definitions')
         .attr('id', definitionsId)
@@ -232,11 +279,11 @@ export const NetworkGraph = memo(function NetworkGraph({
 
     // Clone input data so D3's simulation can mutate x/y/vx/vy without side
     // effects on the consumer's data structures.
-    const simNodes: NetworkSimulationNode[] = graphNodes.map((node) => ({
+    const simNodes: NetworkSimulationNode[] = currentNodes.map((node) => ({
       ...node,
       ...positionsRef.current.get(node.id),
     }));
-    const simLinks = graphLinks.map((link) => ({ ...link }));
+    const simLinks = currentLinks.map((link) => ({ ...link }));
 
     // Four forces cooperate: links pull connected nodes together, charge
     // pushes all nodes apart (like electrons), center keeps the graph from
@@ -252,7 +299,7 @@ export const NetworkGraph = memo(function NetworkGraph({
       .force('center', forceCenter(chartWidth / 2, chartHeight / 2))
       .force('collision', forceCollide().radius(20));
 
-    const linkElements = svg
+    const linkElements = root
       .selectAll('.link')
       .data(simLinks)
       .enter()
@@ -271,7 +318,7 @@ export const NetworkGraph = memo(function NetworkGraph({
 
     // Drag behaviour: on start, fix the node in place and reheat the simulation
     // (alphaTarget > 0). On end, release the node (fx/fy = null) and cool down.
-    const nodeElements = svg
+    const nodeElements = root
       .selectAll('.node')
       .data(simNodes)
       .enter()
@@ -304,7 +351,7 @@ export const NetworkGraph = memo(function NetworkGraph({
       .attr('fill', (d) => d.color ?? groupColor(d.group))
       .attr('stroke-width', 2);
 
-    if (chartPersonality.tooltip) {
+    if (showTooltip) {
       nodeElements.append('title').text((d) => d.label ?? d.id);
     }
 
@@ -350,7 +397,7 @@ export const NetworkGraph = memo(function NetworkGraph({
     // When animation is disabled, run the simulation synchronously to its
     // settled position. A calibrated alpha decay reaches alphaMin in 120 ticks
     // instead of blocking the main thread for D3's default ~300-tick schedule.
-    if (!chartPersonality.animate) {
+    if (!animateMount) {
       simulation.stop();
       simulation.alphaDecay(
         1 - Math.pow(simulation.alphaMin(), 1 / STATIC_LAYOUT_TICKS),
@@ -360,15 +407,15 @@ export const NetworkGraph = memo(function NetworkGraph({
       renderPositions();
     }
 
+    // Stop the live simulation and interrupt drag before the bridge clears the mount.
     return () => {
       persistPositions();
       simulation.on('tick', null).on('end', null);
       simulation.alphaTarget(0).stop();
       nodeElements.on('.drag', null);
-      svg.selectAll('*').interrupt();
-      svg.selectAll('*').remove();
+      select(mount).selectAll('*').interrupt();
     };
-  }, [validation, graphNodes, graphLinks, chartWidth, chartHeight, directed, definitionsId, markerId, chartPersonality.animate, palette, chartPersonality.tooltip]);
+  }, [validation, directed, definitionsId, markerId, animateMount, palette, showTooltip]);
 
   useEffect(() => () => {
     positionsRef.current.clear();
@@ -410,13 +457,15 @@ export const NetworkGraph = memo(function NetworkGraph({
 
   return (
     <ChartScaffold
-      containerRef={containerRef}
-      svgRef={svgRef}
+      {...scaffoldStateProps}
+      containerRef={scaffoldRef}
+      svgRef={legacySvgRef}
       width={width}
       height={height}
       className={['ds-chart-network-graph', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
+      skeleton={skeleton}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}
@@ -431,6 +480,18 @@ export const NetworkGraph = memo(function NetworkGraph({
       )}
       summary={summary}
       legend={fallbackNode ?? legendNode}
+      plot={({ descriptionId }) => (
+        <ChartImperativePlot
+          rendererId="network-graph"
+          ariaLabel={title ?? 'Network graph'}
+          ariaDescribedBy={descriptionId}
+          width={typeof width === 'number' ? width : 600}
+          height={height}
+          responsive={responsive}
+          empty={!hasRenderableData}
+          draw={draw}
+        />
+      )}
     />
   );
 });

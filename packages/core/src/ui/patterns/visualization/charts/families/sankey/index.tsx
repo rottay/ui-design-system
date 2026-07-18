@@ -6,6 +6,13 @@
  * simplified topological-sort layout (no d3-sankey dependency). Links are drawn
  * as cubic bezier paths whose width encodes flow volume.
  *
+ * The imperative d3 body is a Class-H wrap: it keeps its custom layout and link
+ * paths but draws INSIDE the shared `ChartImperativePlot` bridge, so the stable
+ * `ChartRendererSurface` owns the SVG element, its accessible `<title>/<desc>`,
+ * the tooltip anchor variables, and the `data-empty` stamp. The `ChartScaffold`
+ * still owns the heading, accessible summary table, legend, and lifecycle states
+ * so the public family contract is preserved.
+ *
  * The headline use case is candidate-pipeline visualization (e.g. BitHire:
  * Applied -> Screening -> Interview -> Offer -> Hired, with branches for
  * Rejected / Withdrawn at each stage), but the component is fully
@@ -44,7 +51,7 @@
  * ```
  */
 
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import { scaleLinear, select } from 'd3';
 
 import type {
@@ -52,9 +59,14 @@ import type {
   ChartColorsProps,
   ChartLegendProps,
   ChartMarginProps,
+  ChartStateProps,
 } from '../../contracts';
-import { useChartDimensions, useChartPersonality } from '../../runtime';
+import { useChartPersonality } from '../../runtime';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import {
+  ChartImperativePlot,
+  type ChartImperativePlotDraw,
+} from '../../runtime/chart-engine/presentation/react/renderers/imperative';
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -82,8 +94,8 @@ export interface SankeyLink {
   color?: string;
 }
 
-/** Props for the {@link SankeyChart} component. */
-export interface SankeyChartProps
+/** Layout, presentation, and callback options for {@link SankeyChart}. */
+export interface SankeyChartOwnProps
   extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartMarginProps {
   /** The set of nodes displayed as rectangles in the diagram. */
   nodes: SankeyNode[];
@@ -109,7 +121,16 @@ export interface SankeyChartProps
   onNodeClick?: (node: SankeyNode) => void;
   /** Callback when a link path is clicked. */
   onLinkClick?: (link: SankeyLink) => void;
+  /** Render the loading state as placeholder bars instead of a centered label. */
+  skeleton?: boolean;
 }
+
+/**
+ * Props for the {@link SankeyChart} component. The caller-declared lifecycle
+ * states (`state` plus typed-required empty/error copy) are threaded through the
+ * shared {@link ChartStateProps} contract.
+ */
+export type SankeyChartProps = SankeyChartOwnProps & ChartStateProps;
 
 // ---------------------------------------------------------------------------
 // Internal layout types
@@ -486,40 +507,59 @@ function linkPath(
  * and curved links showing directed flows between them.
  *
  * @param props - See {@link SankeyChartProps} for the full option set.
- * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ * @returns A `ChartScaffold`-wrapped imperative plot with accessible summary table and optional legend.
  */
-export const SankeyChart = memo(function SankeyChart({
-  nodes,
-  links,
-  nodeWidth = 20,
-  nodePadding = 16,
-  linkOpacity = 0.4,
-  linkHoverOpacity = 0.7,
-  align = 'justify',
-  showLinkValues = false,
-  showNodeLabels = true,
-  formatValue,
-  onNodeClick,
-  onLinkClick,
-  width,
-  height = 400,
-  className,
-  style,
-  loading = false,
-  title,
-  subtitle,
-  legend = false,
-  animate = true,
-  responsive = true,
-  colors,
-  tooltip = true,
-  margin = { top: 16, right: 120, bottom: 16, left: 16 },
-}: SankeyChartProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const { containerRef, dimensions } = useChartDimensions(width, height);
+export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
+  const {
+    nodes,
+    links,
+    nodeWidth = 20,
+    nodePadding = 16,
+    linkOpacity = 0.4,
+    linkHoverOpacity = 0.7,
+    align = 'justify',
+    showLinkValues = false,
+    showNodeLabels = true,
+    formatValue,
+    onNodeClick,
+    onLinkClick,
+    width,
+    height = 400,
+    className,
+    style,
+    loading = false,
+    title,
+    subtitle,
+    legend = false,
+    animate = true,
+    responsive = true,
+    colors,
+    tooltip = true,
+    margin = { top: 16, right: 120, bottom: 16, left: 16 },
+    skeleton,
+    state,
+    emptyLabel,
+    emptyDescription,
+    emptyAction,
+    errorLabel,
+    errorDescription,
+    errorAction,
+  } = props;
+  // Forward the caller-declared lifecycle contract to the scaffold as one unit.
+  // The reconstructed object carries only the state fields (no own-prop leak);
+  // the cast is a downcast from the widened destructured shape to the union.
+  const scaffoldStateProps = {
+    state,
+    emptyLabel,
+    emptyDescription,
+    emptyAction,
+    errorLabel,
+    errorDescription,
+    errorAction,
+  } as ChartStateProps;
+  const scaffoldRef = useRef<HTMLDivElement>(null);
+  const legacySvgRef = useRef<SVGSVGElement>(null);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = height;
 
   const fmt = useCallback(
     (v: number) => (formatValue ? formatValue(v) : v.toLocaleString()),
@@ -530,6 +570,7 @@ export const SankeyChart = memo(function SankeyChart({
   const safeNodes = validation.ok ? validation.nodes : [];
   const safeLinks = validation.ok ? validation.links : [];
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
+  const hasRenderableData = validation.ok && validation.nodes.length > 0;
 
   // Accessibility summary table.
   const summary = {
@@ -546,29 +587,25 @@ export const SankeyChart = memo(function SankeyChart({
     }),
   };
 
-  // Main D3 render effect.
-  useEffect(() => {
-    if (!svgRef.current) return;
+  const animationDuration = chartPersonality.animationDuration;
+  const animateMount = chartPersonality.animate;
+  const showTooltip = chartPersonality.tooltip;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').interrupt();
-    svg.selectAll('*').remove();
+  // Imperative draw procedure. It owns only the bridge-provided mount `<g>`; the
+  // surrounding renderer surface owns the SVG element, accessible name, and
+  // tooltip vars. Dimensions arrive from the bridge, so this callback is stable
+  // across unrelated re-renders (data/option changes redraw; a resize redraws).
+  const draw = useCallback<ChartImperativePlotDraw>((context) => {
+    const { mount, width: chartWidth, height: chartHeight } = context;
 
-    const clearSvg = () => {
-      svg.selectAll('*').interrupt();
-      svg.selectAll('*').remove();
-    };
-
-    if (!validation.ok || validation.nodes.length === 0) return clearSvg;
+    if (!validation.ok || validation.nodes.length === 0) return undefined;
 
     const innerWidth = chartWidth - margin.left - margin.right;
     const innerHeight = chartHeight - margin.top - margin.bottom;
 
-    if (innerWidth <= 0 || innerHeight <= 0) return;
+    if (innerWidth <= 0 || innerHeight <= 0) return undefined;
 
-    svg.attr('width', chartWidth).attr('height', chartHeight);
-
-    const g = svg
+    const g = select(mount)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('data-variant', align)
@@ -623,7 +660,7 @@ export const SankeyChart = memo(function SankeyChart({
     }
 
     // Tooltip on links.
-    if (chartPersonality.tooltip) {
+    if (showTooltip) {
       linkPaths.append('title').text((d) => {
         const sLabel = d.sourceNode.label;
         const tLabel = d.targetNode.label;
@@ -654,7 +691,7 @@ export const SankeyChart = memo(function SankeyChart({
     }
 
     // Mount animation: links draw from left to right.
-    if (chartPersonality.animate) {
+    if (animateMount) {
       linkPaths.each(function () {
         const path = select(this);
         const totalLength = (this as SVGPathElement).getTotalLength?.() ?? 0;
@@ -663,7 +700,7 @@ export const SankeyChart = memo(function SankeyChart({
             .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
             .attr('stroke-dashoffset', totalLength)
             .transition()
-            .duration(chartPersonality.animationDuration)
+            .duration(animationDuration)
             .attr('stroke-dashoffset', 0)
             .on('end', function () {
               select(this)
@@ -720,7 +757,7 @@ export const SankeyChart = memo(function SankeyChart({
     }
 
     // Node tooltips.
-    if (chartPersonality.tooltip) {
+    if (showTooltip) {
       nodeElements.append('title').text((d) => `${d.label}: ${fmt(d.value)}`);
     }
 
@@ -766,20 +803,21 @@ export const SankeyChart = memo(function SankeyChart({
     }
 
     // Node mount animation: fade in with stagger.
-    if (chartPersonality.animate) {
+    if (animateMount) {
       nodeRects
         .attr('opacity', 0)
         .transition()
-        .duration(chartPersonality.animationDuration * 0.6)
+        .duration(animationDuration * 0.6)
         .delay((_, i) => i * 60)
         .attr('opacity', 1);
     }
 
-    return clearSvg;
+    // Interrupt scheduled transitions before the bridge clears the mount.
+    return () => {
+      select(mount).selectAll('*').interrupt();
+    };
   }, [
     validation,
-    chartWidth,
-    chartHeight,
     nodeWidth,
     nodePadding,
     linkOpacity,
@@ -789,16 +827,16 @@ export const SankeyChart = memo(function SankeyChart({
     showNodeLabels,
     palette,
     margin,
-    chartPersonality.animate,
-    chartPersonality.animationDuration,
-    chartPersonality.tooltip,
+    animateMount,
+    animationDuration,
+    showTooltip,
     fmt,
     onNodeClick,
     onLinkClick,
   ]);
 
   // Legend.
-  const legendNode = legend && validation.ok ? (
+  const legendNode = legend && hasRenderableData ? (
     <div data-part="legend" data-variant="sankey" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
       {validation.nodes.map((n, i) => (
         <div key={n.id} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
@@ -841,13 +879,15 @@ export const SankeyChart = memo(function SankeyChart({
 
   return (
     <ChartScaffold
-      containerRef={containerRef}
-      svgRef={svgRef}
+      {...scaffoldStateProps}
+      containerRef={scaffoldRef}
+      svgRef={legacySvgRef}
       width={width}
       height={height}
       className={['ds-chart-sankey', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
+      skeleton={skeleton}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}
@@ -862,6 +902,18 @@ export const SankeyChart = memo(function SankeyChart({
       )}
       summary={summary}
       legend={fallbackNode ?? legendNode}
+      plot={({ descriptionId }) => (
+        <ChartImperativePlot
+          rendererId="sankey"
+          ariaLabel={title ?? 'Sankey chart'}
+          ariaDescribedBy={descriptionId}
+          width={typeof width === 'number' ? width : 600}
+          height={height}
+          responsive={responsive}
+          empty={!hasRenderableData}
+          draw={draw}
+        />
+      )}
     />
   );
 });
