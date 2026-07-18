@@ -12,6 +12,7 @@ import linkedinCatalog from 'thesvg/linkedin';
 import instagramCatalog from 'thesvg/instagram';
 import xCatalog from 'thesvg/x';
 import chromeCatalog from 'thesvg/google-chrome';
+import microsoftCatalog from 'thesvg/microsoft';
 import lambdaCatalog from 'thesvg/aws-aws-lambda';
 import bedrockCatalog from 'thesvg/aws-amazon-bedrock';
 import s3Catalog from 'thesvg/aws-amazon-simple-storage-service';
@@ -51,6 +52,7 @@ const EXPECTED_BRANDS = [
   'instagram',
   'x',
   'chrome',
+  'microsoft',
 ] as const;
 const EXPECTED_SERVICES = ['lambda', 'bedrock', 's3', 'rds'] as const;
 
@@ -63,6 +65,7 @@ const RAW_CATALOG_BY_SLUG = {
   instagram: instagramCatalog,
   x: xCatalog,
   'google-chrome': chromeCatalog,
+  microsoft: microsoftCatalog,
   'aws-aws-lambda': lambdaCatalog,
   'aws-amazon-bedrock': bedrockCatalog,
   'aws-amazon-simple-storage-service': s3Catalog,
@@ -98,7 +101,7 @@ describe('mark corpus and SSR boundary', () => {
       </>,
     );
 
-    expect((html.match(/<svg/g) ?? [])).toHaveLength(12);
+    expect((html.match(/<svg/g) ?? [])).toHaveLength(13);
     for (const name of BRAND_MARK_NAMES) expect(html).toContain(`data-mark-name="${name}"`);
     for (const service of CLOUD_SERVICES) {
       expect(html).toContain(`data-mark-service="${service}"`);
@@ -109,14 +112,14 @@ describe('mark corpus and SSR boundary', () => {
 
 describe('mark accessibility and hostile runtime input', () => {
   it('labels informative SVGs and hides explicitly decorative SVGs', () => {
-    const { rerender } = render(<BrandMark name="openai" label="OpenAI" />);
+    const { rerender } = render(<BrandMark name="microsoft" label="Microsoft" />);
 
-    const labeled = screen.getByRole('img', { name: 'OpenAI' });
-    expect(labeled).toHaveAttribute('aria-label', 'OpenAI');
+    const labeled = screen.getByRole('img', { name: 'Microsoft' });
+    expect(labeled).toHaveAttribute('aria-label', 'Microsoft');
     expect(labeled).not.toHaveAttribute('aria-hidden');
     expect(labeled).toHaveAttribute('focusable', 'false');
 
-    rerender(<BrandMark name="openai" decorative />);
+    rerender(<BrandMark name="microsoft" decorative />);
     const decorative = document.querySelector('svg');
     expect(decorative).toHaveAttribute('aria-hidden', 'true');
     expect(decorative).not.toHaveAttribute('role');
@@ -189,6 +192,11 @@ describe('brand variant and cloud optical resolution', () => {
       ['google', 'light', 'mono', 'mono'],
       ['google', 'dark', 'mono', 'mono'],
       ['google', 'wordmark', 'wordmark', 'wordmark'],
+      ['microsoft', 'color', 'color', 'default'],
+      ['microsoft', 'mono', 'color', 'default'],
+      ['microsoft', 'light', 'color', 'default'],
+      ['microsoft', 'dark', 'color', 'default'],
+      ['microsoft', 'wordmark', 'wordmark', 'wordmark'],
     ] as const;
 
     for (const [name, requested, resolvedVariant, sourceVariant] of cases) {
@@ -276,7 +284,7 @@ describe('mark provenance and supplier boundary', () => {
       ...Object.values(CLOUD_SERVICE_MARK_PROVENANCE),
     ];
 
-    expect(records).toHaveLength(12);
+    expect(records).toHaveLength(13);
     for (const record of records) {
       const raw = RAW_CATALOG_BY_SLUG[record.slug as keyof typeof RAW_CATALOG_BY_SLUG];
       expect(raw, record.slug).toBeDefined();
@@ -310,6 +318,14 @@ describe('mark provenance and supplier boundary', () => {
       license: 'CC0-1.0',
       url: 'https://www.google.com/',
     });
+    expect(BRAND_MARK_PROVENANCE.microsoft).toMatchObject({
+      kind: 'brand',
+      name: 'microsoft',
+      slug: 'microsoft',
+      title: 'Microsoft',
+      license: 'MIT',
+      url: 'https://www.microsoft.com/',
+    });
   });
 
   it('keeps vendor types and unsafe/raw rendering out of the public API', () => {
@@ -327,7 +343,7 @@ describe('mark provenance and supplier boundary', () => {
     );
 
     expect(publicSources).not.toMatch(/@thesvg|OpenaiVariant|AwsAmazon/i);
-    expect(imports).toHaveLength(12);
+    expect(imports).toHaveLength(13);
     expect(imports.every((path) => path.startsWith('@thesvg/react/'))).toBe(true);
     expect(imports).not.toContain('@thesvg/react');
     expect(adapter).not.toMatch(/dangerouslySetInnerHTML|<svg[\s>]|https?:\/\/|from ['"]thesvg/i);

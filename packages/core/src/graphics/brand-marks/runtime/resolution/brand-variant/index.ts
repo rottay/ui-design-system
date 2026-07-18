@@ -75,6 +75,13 @@ const BRAND_VARIANT_REGISTRY: Readonly<Record<BrandMarkName, BrandVariantMap>> =
       dark: { resolved: 'mono', sourceVariant: 'mono' },
       wordmark: { resolved: 'color', sourceVariant: 'default' },
     }),
+    microsoft: variants({
+      color: { resolved: 'color', sourceVariant: 'default' },
+      mono: { resolved: 'color', sourceVariant: 'default' },
+      light: { resolved: 'color', sourceVariant: 'default' },
+      dark: { resolved: 'color', sourceVariant: 'default' },
+      wordmark: { resolved: 'wordmark', sourceVariant: 'wordmark' },
+    }),
   });
 
 /** Public supplier-free fallback matrix, useful to preview effective variants. */

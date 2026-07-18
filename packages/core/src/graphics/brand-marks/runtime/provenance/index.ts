@@ -89,6 +89,13 @@ export const BRAND_MARK_PROVENANCE: Readonly<Record<BrandMarkName, BrandMarkProv
       'CC0-1.0',
       'https://www.google.com/chrome',
     ),
+    microsoft: brand(
+      'microsoft',
+      'microsoft',
+      'Microsoft',
+      'MIT',
+      'https://www.microsoft.com/',
+    ),
   });
 
 export const CLOUD_SERVICE_MARK_PROVENANCE: Readonly<

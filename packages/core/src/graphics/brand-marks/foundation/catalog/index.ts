@@ -10,6 +10,7 @@ export const BRAND_MARK_NAMES = [
   'instagram',
   'x',
   'chrome',
+  'microsoft',
 ] as const;
 
 export type BrandMarkName = (typeof BRAND_MARK_NAMES)[number];

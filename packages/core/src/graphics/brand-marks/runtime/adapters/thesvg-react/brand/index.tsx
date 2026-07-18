@@ -7,6 +7,7 @@ import Linkedin, { type LinkedinVariant } from '@thesvg/react/linkedin';
 import Instagram, { type InstagramVariant } from '@thesvg/react/instagram';
 import X, { type XVariant } from '@thesvg/react/x';
 import GoogleChrome, { type GoogleChromeVariant } from '@thesvg/react/google-chrome';
+import Microsoft, { type MicrosoftVariant } from '@thesvg/react/microsoft';
 
 import type {
   BrandMarkName,
@@ -27,6 +28,7 @@ const LinkedinRenderer = resolveMarkRendererDefault(Linkedin);
 const InstagramRenderer = resolveMarkRendererDefault(Instagram);
 const XRenderer = resolveMarkRendererDefault(X);
 const GoogleChromeRenderer = resolveMarkRendererDefault(GoogleChrome);
+const MicrosoftRenderer = resolveMarkRendererDefault(Microsoft);
 
 interface BrandMarkAdapterProps extends SharedMarkAdapterProps {
   name: BrandMarkName;
@@ -65,6 +67,8 @@ export const TheSvgBrandMarkAdapter = forwardRef<SVGSVGElement, BrandMarkAdapter
         return <XRenderer {...svgProps} variant={sourceVariant as XVariant} />;
       case 'chrome':
         return <GoogleChromeRenderer {...svgProps} variant={sourceVariant as GoogleChromeVariant} />;
+      case 'microsoft':
+        return <MicrosoftRenderer {...svgProps} variant={sourceVariant as MicrosoftVariant} />;
       default:
         return null;
     }
