@@ -61,8 +61,9 @@ const EXPECTED_KEYS = [
   '--ds-personality-card-show-border',
   '--ds-personality-card-hover-tint',
   '--ds-personality-accent-bar-position',
-  '--ds-personality-accent-bar-style',
-  '--ds-personality-accent-bar-thickness',
+  // No --ds-personality-accent-bar-style / -thickness: the decorative accent
+  // rail has no reader, so those two channels project to no CSS variable
+  // (pinned absent by the dedicated test below).
   '--ds-personality-accent-badge-shape',
   '--ds-personality-accent-icon-shape',
   '--ds-personality-accent-divider-style',
@@ -112,6 +113,17 @@ describe('resolvePersonalityCssVariables', () => {
   it('emits exactly the audited set of CSS variable names', () => {
     const keys = Object.keys(resolvePersonalityCssVariables(buildTokens())).sort();
     expect(keys).toEqual(EXPECTED_KEYS);
+  });
+
+  it('emits no CSS variable for the decorative accent rail (style/thickness)', () => {
+    // Aesthetic law: no decorative accent rails. accent.barStyle and
+    // accent.barThickness have no CSS-var reader, so the emitter must not
+    // project them -- emitting either re-orphans the channel (lint:integration
+    // Rule 7). accent.barPosition stays emitted (audit-exempted) and both
+    // fields survive on AccentPersonalityTokens for profile-defaults.
+    const keys = Object.keys(resolvePersonalityCssVariables(buildTokens()));
+    expect(keys).not.toContain('--ds-personality-accent-bar-style');
+    expect(keys).not.toContain('--ds-personality-accent-bar-thickness');
   });
 
   it('derives --ds-card-border from personality.card.showBorder', () => {

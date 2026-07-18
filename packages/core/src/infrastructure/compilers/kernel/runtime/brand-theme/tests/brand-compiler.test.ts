@@ -538,7 +538,7 @@ describe('parity: static generator with brandTheme', () => {
     // BrandTheme card preserved
     expect(css).toContain('--ds-personality-card-padding-density: compact');
     // BrandTheme accent preserved
-    expect(css).toContain('--ds-personality-accent-bar-style: solid');
+    expect(css).toContain('--ds-personality-accent-bar-position: left');
     // BrandTheme typography preserved
     expect(css).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
     // BrandTheme animation.entrance preserved (tenant only overrode intensity)

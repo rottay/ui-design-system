@@ -223,9 +223,13 @@ export function resolvePartialPersonalityCssVariables(
     '--ds-personality-card-show-border': card?.showBorder !== undefined ? (card.showBorder ? '1' : '0') : undefined,
     '--ds-personality-card-hover-tint': card?.hoverTint !== undefined ? (card.hoverTint ? '1' : '0') : undefined,
     '--ds-personality-accent-bar-position': accent?.barPosition,
-    '--ds-personality-accent-bar-style': accent?.barStyle,
-    '--ds-personality-accent-bar-thickness':
-      accent?.barThickness !== undefined ? `${accent.barThickness}px` : undefined,
+    // accent.barStyle and accent.barThickness project to NO CSS variable: no
+    // component consumes a decorative accent rail, so a
+    // --ds-personality-accent-bar-style / --ds-personality-accent-bar-thickness
+    // var would be an unread channel (lint:integration Rule 7 rejects an
+    // emitted-but-unread personality var). The two fields remain on
+    // AccentPersonalityTokens and still feed profile-defaults surface hints;
+    // only their CSS-variable projection is intentionally absent.
     '--ds-personality-accent-badge-shape': accent?.badgeShape,
     '--ds-personality-accent-icon-shape': accent?.iconContainerShape,
     '--ds-personality-accent-divider-style': accent?.dividerStyle,

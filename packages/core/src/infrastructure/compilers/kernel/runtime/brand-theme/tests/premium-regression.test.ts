@@ -158,7 +158,7 @@ describe('shared pipeline: personality baseline', () => {
     (tenant) => {
       const config = { bithire: BITHIRE_CONFIG, evnto: EVNTO_CONFIG, rottay: ROTTAY_CONFIG }[tenant];
       const css = generateTenantCss(config, { includeDarkSelector: false });
-      expect(css).toContain('--ds-personality-accent-bar-style');
+      expect(css).toContain('--ds-personality-accent-badge-shape');
     }
   );
 
