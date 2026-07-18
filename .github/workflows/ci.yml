@@ -181,6 +181,29 @@ jobs:
       - name: Packed artifact and non-consuming bundle honesty
         run: node scripts/dependency-honesty.mjs pack
 
+      # Prepack precondition proven in-band: the build immediately above must have
+      # written dist/build-stamp.json, and it must match the current source. This
+      # is the same gate prepack runs on `npm pack`/`npm publish`; running it here
+      # fails the pipeline (before any pack/publish) if the build did not produce a
+      # fresh, source-matching dist. It never builds.
+      - name: Dist freshness (prepack precondition)
+        run: pnpm --filter @rottay/design-system run distfresh:check
+
+      # Packaging honesty: the npm pack file list + total size are pinned against a
+      # committed baseline (additions need explicit review, size is decrease-only),
+      # and every shipped path + file body is scanned so no fixtures, tenant
+      # proof-fixture names, or lucide taint can ship. Sequenced after Build so it
+      # sees the exact dist that would be packed, and before any pack/publish job.
+      - name: Pack inventory gate (size ratchet + forbidden content)
+        run: pnpm --filter @rottay/design-system run packinv:check
+
+      # Vendored-supplier ceiling: counts the logical supplier modules embedded
+      # under dist/node_modules after the build and fails above the committed
+      # decrease-only ceiling. Complementary to the pack gate: this one bounds
+      # HOW MUCH supplier code ships, not which paths or tokens.
+      - name: Icon embed inventory gate (vendored supplier ceiling)
+        run: pnpm --filter @rottay/design-system run iconembed:check
+
       - name: Bundle budgets
         run: |
           pnpm --filter @rottay/design-system run analyze -- --skip-build
