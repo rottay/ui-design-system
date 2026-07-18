@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-07-17",
+ "updated": "2026-07-18",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -1704,11 +1704,15 @@
     "WO-SKIN-03",
     "WO-SKIN-04",
     "WO-SKIN-05",
-    "WO-SKIN-06"
+    "WO-SKIN-06",
+    "WO-GAT-05",
+    "WO-GAT-06"
    ],
    "mustLandWith": [],
-   "programs": [],
-   "notes": "Owner-approved 2026-07-11 (stage-1 byte-exact plumbing; stage-2 visual improvement is a later program). Normative lane doc: roadmap/skin-adoption.md; authoring law: docs-engineering/engineering/design-system/runtime/skins/README.md. File lists are hypotheses until WO-SKIN-01 census corrects them.",
+   "programs": [
+    "ds-improvements"
+   ],
+   "notes": "Owner-approved 2026-07-11 (stage-1 byte-exact plumbing; stage-2 visual improvement is a later program). Normative lane doc: roadmap/skin-adoption.md; authoring law: docs-engineering/engineering/design-system/runtime/skins/README.md. File lists are hypotheses until WO-SKIN-01 census corrects them. DS-IMP-053 re-adjudicated deferred to execute under this done authority (2026-07-18, audit DEF-02): WO-SKIN-07 certification and the 2.19.0 publish on 2026-07-14 retroactively satisfy the WO-SKIN-01..07 ownership/version alignment and moot its sequencing constraint.",
    "progressLog": [
     {
      "at": "2026-07-14 20:05",
@@ -1724,7 +1728,30 @@
    "claimedBy": "ds-agent",
    "claimedAt": "2026-07-14",
    "doneAt": "2026-07-14",
-   "evidence": "@rottay/design-system@2.19.0 was built, packed and published to GitHub Packages as latest (tarball sha 6235a48a1858ef4ac3a5a129d882fc30ca6f29a7). Core build, engine/token/artifact checks, Storybook build budgets (17.71 MB/50 MB; largest chunk 2.05 MB/3 MB), full showroom visual gates 487/487, signature 11/11, hairline 2/2 and the standing unit ledger (only the 10-file allowlist: 13 failed tests, 82 passed) were certified. app-bithire alone was repinned exactly 2.18.0->2.19.0 from the registry (commit 72405adbf); its seven same-seed before/after screens keep identical dimensions, six are pixel-identical and login differs only 0.4514% from its clock/activity animation. BitHire static certification passed end-to-end: unit 222/222 suites (1960 tests), contracts 113/113 (1193), architecture 150/150 (982 passed, 1 expected skip), integration API 20/20 (304), plus all lint/architecture/roadmap/docs/listing/UX/schema/styles/domain/i18n/dependency/override gates. app-platform remains pinned 2.17.0 and app-evnto 2.8.24; 2.19.0 is their external-release marker, not an unauthorized repin."
+   "evidence": "@rottay/design-system@2.19.0 was built, packed and published to GitHub Packages as latest (tarball sha 6235a48a1858ef4ac3a5a129d882fc30ca6f29a7). Core build, engine/token/artifact checks, Storybook build budgets (17.71 MB/50 MB; largest chunk 2.05 MB/3 MB), full showroom visual gates 487/487, signature 11/11, hairline 2/2 and the standing unit ledger (only the 10-file allowlist: 13 failed tests, 82 passed) were certified. app-bithire alone was repinned exactly 2.18.0->2.19.0 from the registry (commit 72405adbf); its seven same-seed before/after screens keep identical dimensions, six are pixel-identical and login differs only 0.4514% from its clock/activity animation. BitHire static certification passed end-to-end: unit 222/222 suites (1960 tests), contracts 113/113 (1193), architecture 150/150 (982 passed, 1 expected skip), integration API 20/20 (304), plus all lint/architecture/roadmap/docs/listing/UX/schema/styles/domain/i18n/dependency/override gates. app-platform remains pinned 2.17.0 and app-evnto 2.8.24; 2.19.0 is their external-release marker, not an unauthorized repin.",
+   "sourceIds": [
+    "DS-IMP-053"
+   ],
+   "phase": "0",
+   "execution": {
+    "decisionOwner": "skin-adoption-program",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-bithire"
+    ],
+    "rollback": "Restore the prior published design-system version for repinned consumers and revert the skin-adoption certification release pin.",
+    "disable": "Freeze further skin-adoption certification claims while keeping the published 2.19.0 artifacts and consumer repins intact.",
+    "telemetry": [
+     "byte-exact extraction parity",
+     "showroom visual gate pass rate",
+     "repinned consumer certification results"
+    ],
+    "stopConditions": [
+     "a certified skin diverges from its extracted baseline",
+     "a consumer repin fails certification",
+     "stage-2 visual work is presented as covered by this certification"
+    ]
+   }
   },
   {
    "id": "WO-GAT-05",
@@ -1836,6 +1863,7 @@
    "sourceIds": [
     "DS-IMP-005",
     "DS-IMP-006",
+    "DS-IMP-022",
     "DS-IMP-055",
     "DS-IMP-056",
     "DS-IMP-059"
@@ -1851,7 +1879,7 @@
     "finalPhase": "6"
    },
    "phase": "0",
-   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. This WO supports the DS-IMP-060 Phase-0 minimum but cannot complete that Phase-6 source ID; status lives only in this registry.",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. This WO supports the DS-IMP-060 Phase-0 minimum but cannot complete that Phase-6 source ID; status lives only in this registry. DS-IMP-022 re-adjudicated deferred to execute under this done authority (2026-07-18, audit DEF-02): packages/core/scripts/gat-07-public-claim-floor.json records the surface-profile-overrides public claim at fleet-wired-33-of-33 with executable parity assertions, satisfying the wire-or-remove requirement.",
    "progressLog": [
     {
      "at": "2026-07-14 23:55",
@@ -2274,12 +2302,13 @@
     "ds-improvements"
    ],
    "sourceIds": [
+    "DS-IMP-016",
     "DS-IMP-083",
     "DS-IMP-084",
     "DS-IMP-085"
    ],
    "phase": "0",
-   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. Coordinate the use-chart-personality ownership window with WO-CRA-13; status lives only in this registry.",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. Coordinate the use-chart-personality ownership window with WO-CRA-13; status lives only in this registry. DS-IMP-016 re-adjudicated deferred to execute under this done authority (2026-07-18, audit DEF-02): packages/core/scripts/cra-12-motion-governance.mjs global-keyframes governance flags bare, dynamic and duplicate keyframe definitions plus bare animation references, superseding the standalone namespace-lint ask.",
    "progressLog": [
     {
      "at": "2026-07-15 18:19",
@@ -4120,11 +4149,9 @@
     },
     {
      "id": "DS-IMP-016",
-     "disposition": "deferred",
-     "owner": "design-system-program",
-     "targetPhase": "1",
-     "reviewBy": "2026-08-31",
-     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+     "disposition": "execute",
+     "authority": "WO-CRA-12",
+     "phase": "0"
     },
     {
      "id": "DS-IMP-017",
@@ -4168,11 +4195,9 @@
     },
     {
      "id": "DS-IMP-022",
-     "disposition": "deferred",
-     "owner": "design-system-program",
-     "targetPhase": "2A",
-     "reviewBy": "2026-08-31",
-     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+     "disposition": "execute",
+     "authority": "WO-GAT-07",
+     "phase": "0"
     },
     {
      "id": "DS-IMP-023",
@@ -4416,11 +4441,9 @@
     },
     {
      "id": "DS-IMP-053",
-     "disposition": "deferred",
-     "owner": "design-system-program",
-     "targetPhase": "5",
-     "reviewBy": "2026-08-31",
-     "reason": "Deferred until Wave 0 proof integrity and phase controls are green; canonical requirements remain in the pinned docs."
+     "disposition": "execute",
+     "authority": "WO-SKIN-07",
+     "phase": "0"
     },
     {
      "id": "DS-IMP-054",
