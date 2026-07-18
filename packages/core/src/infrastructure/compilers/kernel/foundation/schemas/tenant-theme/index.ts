@@ -8,11 +8,14 @@
 
 import { MOTION_DIAL_BOUNDS } from "@/foundation/contracts/runtime/motion";
 import {
+  TENANT_THEME_ANATOMY_VARIANTS_V1,
   TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1,
   TENANT_THEME_OVERRIDE_TOKENS_V1,
+  TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
   TENANT_THEME_REFERENCE_TOKENS_V1,
   TENANT_THEME_FONT_PACK_IDS_V1,
   TENANT_THEME_SCHEMA_VERSION,
+  TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 export type TenantThemeSchemaNode =
@@ -80,12 +83,29 @@ const general = object({
     secondary: COLOR,
     accent: COLOR,
     backgroundMode: enumeration("light", "dark", "auto"),
+    dark: object({
+      primary: COLOR,
+      secondary: COLOR,
+      accent: COLOR,
+      background: COLOR,
+    }),
   }),
   typography: object({
     fontFamilyBase: string("font-family"),
     fontFamilyHeading: string("font-family"),
+    typePairing: enumeration("sober", "editorial", "geometric", "technical"),
+    scale: number({
+      min: TENANT_THEME_TYPE_SCALE_BOUNDS_V1.min,
+      max: TENANT_THEME_TYPE_SCALE_BOUNDS_V1.max,
+    }),
   }),
-  shape: object({ buttonStyle: enumeration("sharp", "soft", "pill") }),
+  shape: object({
+    buttonStyle: enumeration("sharp", "soft", "pill"),
+    radiusScale: number({
+      min: TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.min,
+      max: TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.max,
+    }),
+  }),
   density: enumeration("compact", "normal", "spacious"),
   motion: object({
     intensity: number({
@@ -104,7 +124,13 @@ const general = object({
   }),
 });
 
+const anatomy = (
+  family: keyof typeof TENANT_THEME_ANATOMY_VARIANTS_V1
+): TenantThemeSchemaNode =>
+  enumeration(...TENANT_THEME_ANATOMY_VARIANTS_V1[family]);
+
 const sidebar = object({
+  anatomy: anatomy("sidebar"),
   ...visualFields([
     "bg",
     "border",
@@ -294,8 +320,9 @@ const premiumCardFields: Readonly<Record<string, TenantThemeSchemaNode>> =
 
 const chrome = object({
   sidebar,
-  layout: object(
-    visualFields([
+  layout: object({
+    anatomy: anatomy("layout"),
+    ...visualFields([
       "bg",
       "headerBg",
       "headerHeight",
@@ -303,8 +330,8 @@ const chrome = object({
       "headerBorder",
       "siderBg",
       "siderBorder",
-    ])
-  ),
+    ]),
+  }),
   shell,
   toolbar: object(
     visualFields([
@@ -387,6 +414,7 @@ const chrome = object({
   ),
   controls,
   table: object({
+    anatomy: anatomy("table"),
     ...visualFields([
       "bg",
       "border",
@@ -424,6 +452,7 @@ const chrome = object({
     headerFontWeight: FONT_WEIGHT,
   }),
   cardComponent: object({
+    anatomy: anatomy("cardComponent"),
     ...visualFields([
       "padding",
       "paddingSm",

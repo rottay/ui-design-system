@@ -26,6 +26,19 @@ export type {
 
 export { toSupportedLocale } from '../../foundation/i18n/runtime/resolution/locale';
 
+// Font-pack registry (W4-B1): manifest for SSR <link rel="preload"> emission of
+// the opt-in @rottay/design-system/fonts/<id>.css packs a tenant envelope enables.
+export {
+  FONT_PACK_MANIFEST,
+  FONT_PACK_IDS,
+} from '../../foundation/tokens/css/foundation/typography/font-packs/manifest/index';
+export type {
+  FontPackEntry,
+  FontPackFace,
+  FontPackId,
+  FontPackRole,
+} from '../../foundation/tokens/css/foundation/typography/font-packs/manifest/index';
+
 // Versioned DB tenant themes: pure schema/validation/SSR compilation.
 export {
   TENANT_THEME_COMPILER_VERSION,
@@ -45,6 +58,7 @@ export {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   tenantThemeArtifactRootAttributes,
+  tenantThemeAnatomyAttributes,
 } from '../../infrastructure/compilers/composition/tenant-theme';
 export type {
   CompileTenantThemeConfigOptions,
@@ -58,8 +72,13 @@ export type {
   TenantThemeArtifact,
   TenantThemeArtifactScopes,
   TenantThemeArtifactV1,
+  TenantThemeCardAnatomyV1,
   TenantThemeChromeFamilyV1,
   TenantThemeChromeV1,
+  TenantThemeContrastAdjustmentV1,
+  TenantThemeLayoutAnatomyV1,
+  TenantThemeSidebarAnatomyV1,
+  TenantThemeTableAnatomyV1,
   TenantThemeConfig,
   TenantThemeConfigIdentityV1,
   TenantThemeConfigV1,
@@ -83,6 +102,7 @@ export {
   TENANT_THEME_REFERENCE_TOKENS_V1,
   TENANT_THEME_CHROME_FAMILIES_V1,
   TENANT_THEME_FONT_PACK_IDS_V1,
+  TENANT_THEME_ANATOMY_VARIANTS_V1,
 } from '../../foundation/contracts/composition/tenants/themes/tenant-theme';
 // A11y: branding contrast validation (Wave 6.2 Accessibility Guardian)
 export {

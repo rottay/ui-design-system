@@ -676,8 +676,8 @@ export type VerticalTheme = BrandTheme;
  *
  * Every field in this interface has a real runtime consumer. Fields that
  * were declared but never wired have been removed or narrowed:
- * - typography.scale: removed (needs calc() adoption across all primitives)
- * - shape.radiusScale: removed (same reason)
+ * - typography.scale and shape.radiusScale resolve through the calc()-wrapped
+ *   ramp definitions (`--ds-type-scale` / `--ds-radius-scale` multipliers)
  * - motion is deliberately bounded to a semantic dial; arbitrary timing,
  *   springs, keyframes and topology remain owned by the vertical envelope
  * - media (logo/logoMark/favicon): removed (no CSS reader — re-add when
@@ -691,13 +691,33 @@ export interface TenantAppearanceGeneral {
     accent?: string;
     /** Feeds ThemeProvider theme resolution (not a CSS variable). */
     backgroundMode?: 'light' | 'dark' | 'auto';
+    /**
+     * Optional dark-scheme seeds. Under backgroundMode `auto` they enable
+     * dual-ramp `light-dark()` emission; under `light`/`dark` they are inert
+     * so single-mode tenants keep their deterministic single-value artifact.
+     */
+    dark?: {
+      primary?: string;
+      secondary?: string;
+      accent?: string;
+      background?: string;
+    };
   };
   typography?: {
     fontFamilyBase?: string;
     fontFamilyHeading?: string;
+    /**
+     * Compiler-owned font pairing preset applied before the free-form
+     * families; explicit fontFamilyBase/Heading always win.
+     */
+    typePairing?: 'sober' | 'editorial' | 'geometric' | 'technical';
+    /** Multiplies the font-size ramp through `--ds-type-scale`. */
+    scale?: number;
   };
   shape?: {
     buttonStyle?: 'sharp' | 'soft' | 'pill';
+    /** Multiplies the radius ramp through `--ds-radius-scale`. */
+    radiusScale?: number;
   };
   /** Multiplies the spacing array in useTokens(). Not a CSS variable. */
   density?: 'compact' | 'normal' | 'spacious';

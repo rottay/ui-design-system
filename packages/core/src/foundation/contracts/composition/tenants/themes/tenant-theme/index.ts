@@ -168,14 +168,59 @@ export const TENANT_THEME_REFERENCE_TOKENS_V1: readonly string[] =
     )
   );
 
+/**
+ * Closed anatomy-variant vocabulary per participating chrome family.
+ *
+ * Anatomy is DATA that selects among code-owned skin variants; it never rides
+ * as CSS in the artifact and never becomes component replacement. `default`
+ * always maps to the current rendering and is what an absent field means, so
+ * every existing document keeps compiling to zero visual change.
+ *
+ * Semantics:
+ * - card `framed` = current default look (full border + shadow); `underline` =
+ *   no side borders, bottom hairline, tighter radius; `ghost` = no border,
+ *   background tint only on hover.
+ * - table `ruled` = row hairlines, no stripes; `zebra` = striped rows, no
+ *   hairlines; `open` = no hairlines/stripes, whitespace rhythm + header rule.
+ * - sidebar `rail` = narrow icon-first rail with flyout labels; `panel` =
+ *   current wide panel.
+ * - layout `flat` = header merged with canvas (no border/shadow); `floating` =
+ *   inset header card with radius + shadow.
+ */
+export const TENANT_THEME_ANATOMY_VARIANTS_V1 = {
+  cardComponent: ["default", "framed", "underline", "ghost"],
+  table: ["default", "ruled", "zebra", "open"],
+  sidebar: ["default", "rail", "panel"],
+  layout: ["default", "flat", "floating"],
+} as const;
+
+export type TenantThemeCardAnatomyV1 =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.cardComponent)[number];
+export type TenantThemeTableAnatomyV1 =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.table)[number];
+export type TenantThemeSidebarAnatomyV1 =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.sidebar)[number];
+export type TenantThemeLayoutAnatomyV1 =
+  (typeof TENANT_THEME_ANATOMY_VARIANTS_V1.layout)[number];
+
 /** Bounded sidebar paint, rhythm and geometry authored by the published tenant. */
-export type TenantThemeSidebarChromeV1 = BrandSidebarChrome;
+export type TenantThemeSidebarChromeV1 = BrandSidebarChrome & {
+  anatomy?: TenantThemeSidebarAnatomyV1;
+};
 
 /** Complete bounded shell anatomy; gridOpacity has no compiler-owned variable. */
 export type TenantThemeShellChromeV1 = Omit<BrandShellChrome, "gridOpacity">;
 
 /** Complete bounded component-family anatomy authored by the published tenant. */
-export type TenantThemeCardChromeV1 = BrandCardChrome;
+export type TenantThemeCardChromeV1 = BrandCardChrome & {
+  anatomy?: TenantThemeCardAnatomyV1;
+};
+export type TenantThemeTableChromeV1 = BrandTableChrome & {
+  anatomy?: TenantThemeTableAnatomyV1;
+};
+export type TenantThemeLayoutChromeV1 = BrandLayoutChrome & {
+  anatomy?: TenantThemeLayoutAnatomyV1;
+};
 export type TenantThemePremiumCardChromeV1 = BrandPremiumCardChrome;
 export type TenantThemeMetricCardChromeV1 = BrandMetricCardChrome;
 export type TenantThemeSignalCardChromeV1 = BrandSignalCardChrome;
@@ -188,14 +233,14 @@ export type TenantThemeListingGridChromeV1 = BrandListingGridChrome;
  */
 export interface TenantThemeChromeV1 {
   sidebar?: TenantThemeSidebarChromeV1;
-  layout?: BrandLayoutChrome;
+  layout?: TenantThemeLayoutChromeV1;
   shell?: TenantThemeShellChromeV1;
   toolbar?: BrandToolbarChrome;
   filterPill?: BrandFilterPillChrome;
   breadcrumb?: BrandBreadcrumbChrome;
   search?: BrandSearchChrome;
   controls?: BrandControlsChrome;
-  table?: BrandTableChrome;
+  table?: TenantThemeTableChromeV1;
   cardComponent?: TenantThemeCardChromeV1;
   metricCard?: TenantThemeMetricCardChromeV1;
   signalCard?: TenantThemeSignalCardChromeV1;
@@ -230,8 +275,20 @@ export const TENANT_THEME_CHROME_FAMILIES_V1 = [
   "tabs",
 ] as const satisfies readonly (keyof TenantThemeChromeV1)[];
 
-/** Code-owned static font packs TenantTheme may reference by CSS variable. */
-export const TENANT_THEME_FONT_PACK_IDS_V1 = ["editorial"] as const;
+/**
+ * Code-owned static font packs TenantTheme may reference by CSS variable.
+ *
+ * Ids are role-suffixed because one `var()` slot carries ONE family list; a
+ * pack that changes display AND body is two variables.
+ */
+export const TENANT_THEME_FONT_PACK_IDS_V1 = [
+  "editorial-display",
+  "editorial-text",
+  "grotesk-display",
+  "humanist-text",
+  "geometric-display",
+  "plex-mono",
+] as const;
 export type TenantThemeFontPackIdV1 =
   (typeof TENANT_THEME_FONT_PACK_IDS_V1)[number];
 
@@ -239,6 +296,20 @@ export interface TenantThemeAdvancedAppearanceV1 {
   chrome?: TenantThemeChromeV1;
   tokenOverrides?: Partial<Record<TenantThemeOverrideTokenV1, string | number>>;
 }
+
+/**
+ * Global v1 caps for the tenant type-scale and radius-scale dials. The schema
+ * manifest, the envelope range validator and the appearance compiler all read
+ * these objects; a second literal anywhere is a cascade-integrity defect.
+ */
+export const TENANT_THEME_TYPE_SCALE_BOUNDS_V1 = {
+  min: 0.9,
+  max: 1.1,
+} as const;
+export const TENANT_THEME_RADIUS_SCALE_BOUNDS_V1 = {
+  min: 0.75,
+  max: 1.25,
+} as const;
 
 export type TenantThemeChromeFamilyV1 = keyof TenantThemeChromeV1;
 
@@ -255,12 +326,16 @@ export interface TenantThemeVerticalEnvelopeV1 {
   advanced?: {
     chromeFamilies: readonly TenantThemeChromeFamilyV1[];
     allowTokenOverrides: boolean;
+    /** Absent = false: non-default anatomy variants fail closed per vertical. */
+    allowAnatomyVariants?: boolean;
   };
   ranges?: {
     densityScale?: { min: number; max: number };
     effectIntensity?: { min: number; max: number };
     motionIntensity?: { min: number; max: number };
     motionDurationScale?: { min: number; max: number };
+    typeScale?: { min: number; max: number };
+    radiusScale?: { min: number; max: number };
   };
 }
 
@@ -348,6 +423,24 @@ export interface TenantThemeRootAttributesV1 {
   "data-tenant": string;
 }
 
+/**
+ * One deterministic APCA autocorrect applied by the compiler to keep an
+ * authored text/ground pairing readable. Corrections are never silent and
+ * never a rejection: the editor renders these rows.
+ */
+export interface TenantThemeContrastAdjustmentV1 {
+  /** Foreground variable that was adjusted. */
+  token: string;
+  /** Ground variable the pairing was evaluated against. */
+  pairedWith: string;
+  /** Authored (pre-correction) foreground value. */
+  from: string;
+  /** Emitted (corrected) foreground value. */
+  to: string;
+  lcBefore: number;
+  lcAfter: number;
+}
+
 /** Immutable, cacheable compiler output consumed by SSR and hydration. */
 export interface TenantThemeArtifactV1 {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
@@ -362,6 +455,8 @@ export interface TenantThemeArtifactV1 {
   digest: string;
   normalizedAppearance: NormalizedTenantThemeAppearanceV1;
   variables: Readonly<Record<string, string>>;
+  /** Present only when at least one contrast autocorrect was applied. */
+  adjustments?: readonly TenantThemeContrastAdjustmentV1[];
   css: string;
   scopes: TenantThemeArtifactScopes;
 }

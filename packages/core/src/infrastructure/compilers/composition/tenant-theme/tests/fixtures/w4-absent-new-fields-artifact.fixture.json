@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "tenantId": "tenant_w4_pin",
+  "slug": "w4-pin-tenant",
+  "verticalKey": "bithire",
+  "rowVersion": 3,
+  "compilerVersion": "tenant-theme-compiler@3",
+  "verticalEnvelopeDigest": "sha256-dcd102e9b78c41f14ebbd3962ea098b9da26bf14213ee1af91706f542d051333",
+  "digest": "sha256-e5d52fcf7d45b04231c1020cc78ce8b63812f3802dc25e50ef61adce2e18220e",
+  "normalizedAppearance": {
+    "advanced": {
+      "chrome": {
+        "cardComponent": {
+          "bg": "#FFFFFF",
+          "radius": "10px"
+        },
+        "layout": {
+          "headerBg": "#FFFFFF",
+          "headerHeight": "56px"
+        },
+        "sidebar": {
+          "bg": "#101014",
+          "text": "#F4F4F5",
+          "width": "248px"
+        },
+        "table": {
+          "cellPadding": "10px 12px",
+          "headerBg": "#F8F8FA"
+        }
+      },
+      "tokenOverrides": {
+        "--ds-density-scale": 0.9,
+        "--ds-radius-md": "10px"
+      }
+    },
+    "general": {
+      "density": "compact",
+      "motion": {
+        "ambient": "off",
+        "durationScale": 0.9,
+        "intensity": 0.4
+      },
+      "navigation": {
+        "sidebarTone": "inverse"
+      },
+      "shape": {
+        "buttonStyle": "pill"
+      },
+      "surfaces": {
+        "elevation": "flat"
+      },
+      "typography": {
+        "fontFamilyBase": "Optima, Candara, 'Noto Sans', sans-serif",
+        "fontFamilyHeading": "'Fraunces', Georgia, serif"
+      }
+    }
+  },
+  "variables": {
+    "--ds-card-bg": "#FFFFFF",
+    "--ds-card-border-radius": "10px",
+    "--ds-card-radius": "10px",
+    "--ds-density-scale": "0.9",
+    "--ds-elevation-1": "none",
+    "--ds-elevation-2": "none",
+    "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
+    "--ds-font-family-base": "Optima, Candara, 'Noto Sans', sans-serif",
+    "--ds-font-family-heading": "'Fraunces', Georgia, serif",
+    "--ds-layout-header-bg": "#FFFFFF",
+    "--ds-layout-header-height": "56px",
+    "--ds-motion-ambient": "off",
+    "--ds-motion-duration-scale": "0.9",
+    "--ds-motion-intensity": "0.4",
+    "--ds-radius-button": "9999px",
+    "--ds-radius-md": "10px",
+    "--ds-shell-header-block-size": "56px",
+    "--ds-shell-sidebar-width": "248px",
+    "--ds-sidebar-bg": "#101014",
+    "--ds-sidebar-item-bg-active": "var(--ds-color-neutral-700)",
+    "--ds-sidebar-item-bg-hover": "var(--ds-color-neutral-800)",
+    "--ds-sidebar-item-color-active": "var(--ds-color-white)",
+    "--ds-sidebar-text": "#F4F4F5",
+    "--ds-sidebar-text-muted": "var(--ds-color-neutral-500)",
+    "--ds-sidebar-width": "248px",
+    "--ds-table-cell-padding": "10px 12px",
+    "--ds-table-header-bg": "#F8F8FA"
+  },
+  "css": "/* TenantThemeArtifact v1 | tenant-theme-compiler@3 | sha256-e5d52fcf7d45b04231c1020cc78ce8b63812f3802dc25e50ef61adce2e18220e */\n[data-ds-root][data-vertical=\"bithire\"][data-tenant][data-tenant=\"w4-pin-tenant\"] {\n  --ds-card-bg: #FFFFFF;\n  --ds-card-border-radius: 10px;\n  --ds-card-radius: 10px;\n  --ds-density-scale: 0.9;\n  --ds-elevation-1: none;\n  --ds-elevation-2: none;\n  --ds-elevation-3: 0 1px 2px rgba(0,0,0,0.05);\n  --ds-font-family-base: Optima, Candara, 'Noto Sans', sans-serif;\n  --ds-font-family-heading: 'Fraunces', Georgia, serif;\n  --ds-layout-header-bg: #FFFFFF;\n  --ds-layout-header-height: 56px;\n  --ds-motion-ambient: off;\n  --ds-motion-duration-scale: 0.9;\n  --ds-motion-intensity: 0.4;\n  --ds-radius-button: 9999px;\n  --ds-radius-md: 10px;\n  --ds-shell-header-block-size: 56px;\n  --ds-shell-sidebar-width: 248px;\n  --ds-sidebar-bg: #101014;\n  --ds-sidebar-item-bg-active: var(--ds-color-neutral-700);\n  --ds-sidebar-item-bg-hover: var(--ds-color-neutral-800);\n  --ds-sidebar-item-color-active: var(--ds-color-white);\n  --ds-sidebar-text: #F4F4F5;\n  --ds-sidebar-text-muted: var(--ds-color-neutral-500);\n  --ds-sidebar-width: 248px;\n  --ds-table-cell-padding: 10px 12px;\n  --ds-table-header-bg: #F8F8FA;\n}\n",
+  "scopes": {
+    "root": {
+      "attribute": "data-ds-root",
+      "selector": ":where([data-ds-root])"
+    },
+    "vertical": {
+      "attribute": "data-vertical",
+      "value": "bithire",
+      "selector": ":where([data-ds-root][data-vertical=\"bithire\"])"
+    },
+    "tenant": {
+      "attribute": "data-tenant",
+      "value": "w4-pin-tenant",
+      "selector": ":where([data-ds-root][data-tenant=\"w4-pin-tenant\"])"
+    },
+    "combinedSelector": "[data-ds-root][data-vertical=\"bithire\"][data-tenant][data-tenant=\"w4-pin-tenant\"]"
+  }
+}

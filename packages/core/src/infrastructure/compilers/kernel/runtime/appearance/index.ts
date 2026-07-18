@@ -20,10 +20,16 @@ import type {
 } from '@/foundation/contracts/composition/tenants/themes';
 import { MOTION_DIAL_BOUNDS } from '@/foundation/contracts/runtime/motion';
 import {
+  TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
+  TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
+} from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import {
   RAMP_STEPS,
   deriveOklchRamp,
   type RampSurface,
 } from '@/foundation/kernel/color/oklch/ramp';
+import { deriveChartSeriesPalette } from '@/foundation/kernel/color/oklch/chart-series';
+import { TYPE_PAIRINGS } from '@/foundation/tokens/ts/presentation/typography/pairings';
 import {
   clampValue,
   isHexColor,
@@ -109,6 +115,28 @@ function deriveFunctionalOklchRamp(
   }));
 }
 
+type TenantAppearanceDarkSeeds = NonNullable<
+  NonNullable<TenantAppearanceGeneral['palette']>['dark']
+>;
+
+/**
+ * Ground for the dark half of a dual (`auto` + dark seeds) derivation. The
+ * authored dark background wins; `--ds-color-dark-bg` (a legal tokenOverride)
+ * is the fallback; the code-owned dark ground anchors the rest. The generic
+ * light-first resolver is not reused here because under `auto` its
+ * `--ds-color-bg-primary` candidate is the tenant's LIGHT canvas.
+ */
+function resolveAppearanceDarkGround(
+  darkSeeds: TenantAppearanceDarkSeeds | undefined,
+  compiledBaseVariables: Readonly<Record<string, string>>,
+): string {
+  const authored = darkSeeds?.background;
+  if (authored && isHexColor(authored)) return normalizeHexColor(authored);
+  const declared = compiledBaseVariables['--ds-color-dark-bg'];
+  if (declared && isHexColor(declared)) return normalizeHexColor(declared);
+  return APPEARANCE_RAMP_GROUNDS.dark;
+}
+
 function resolveAppearanceRampGround(
   surface: RampSurface,
   compiledBaseVariables: Readonly<Record<string, string>>,
@@ -142,6 +170,18 @@ export function deriveAppearanceColorRamps(
   const ground = resolveAppearanceRampGround(surface, compiledBaseVariables);
   const vars: Record<string, string> = {};
 
+  // Dual emission is only honest under `auto` with authored dark seeds; a
+  // single-mode tenant keeps today's deterministic single-value ramps.
+  const darkSeeds = palette?.backgroundMode === 'auto' ? palette.dark : undefined;
+  const dualActive =
+    darkSeeds !== undefined
+    && Object.values(darkSeeds).some(
+      (seed) => typeof seed === 'string' && isValidCssColor(seed),
+    );
+  const darkGround = dualActive
+    ? resolveAppearanceDarkGround(darkSeeds, compiledBaseVariables)
+    : APPEARANCE_RAMP_GROUNDS.dark;
+
   for (const role of [
     'primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info',
   ] as const) {
@@ -150,8 +190,29 @@ export function deriveAppearanceColorRamps(
     const ramp = isHexColor(seed)
       ? deriveOklchRamp(normalizeHexColor(seed), ground, surface)
       : deriveFunctionalOklchRamp(seed, surface, ground);
-    for (const step of RAMP_STEPS) vars[`--ds-color-${role}-${step}`] = ramp[step];
+    if (!dualActive) {
+      for (const step of RAMP_STEPS) vars[`--ds-color-${role}-${step}`] = ramp[step];
+      continue;
+    }
+    const authoredDarkSeed =
+      role === 'primary' || role === 'secondary' || role === 'accent'
+        ? darkSeeds?.[role]
+        : undefined;
+    const darkSeed =
+      authoredDarkSeed && isValidCssColor(authoredDarkSeed) ? authoredDarkSeed : seed;
+    const darkRamp = isHexColor(darkSeed)
+      ? deriveOklchRamp(normalizeHexColor(darkSeed), darkGround, 'dark')
+      : deriveFunctionalOklchRamp(darkSeed, 'dark', darkGround);
+    for (const step of RAMP_STEPS) {
+      vars[`--ds-color-${role}-${step}`] = `light-dark(${ramp[step]}, ${darkRamp[step]})`;
+    }
+    if (darkSeed !== seed) {
+      vars[`--ds-color-${role}`] = `light-dark(${seed}, ${darkSeed})`;
+    }
   }
+
+  // Consumed by the theme bridge; the artifact block stays custom-properties-only.
+  if (dualActive) vars['--ds-color-scheme'] = 'light dark';
 
   return vars;
 }
@@ -174,17 +235,53 @@ export function appearanceGeneralToVariables(
     // backgroundMode is consumed by ThemeProvider, not a CSS variable
   }
 
-  // Typography — font families are real CSS vars consumed by engines
+  // Typography — font families are real CSS vars consumed by engines.
+  // The pairing preset applies first; explicit free-form families still win.
   if (general.typography) {
     const t = general.typography;
+    if (t.typePairing) {
+      const pairing = TYPE_PAIRINGS[t.typePairing];
+      if (pairing) {
+        vars['--ds-font-family-heading'] = pairing.heading;
+        vars['--ds-font-family-base'] = pairing.base;
+        if ('mono' in pairing && pairing.mono) vars['--ds-font-family-mono'] = pairing.mono;
+        vars['--ds-letter-spacing-heading'] = pairing.headingLs;
+        vars['--ds-line-height-display'] = String(pairing.displayLh);
+      }
+    }
     if (t.fontFamilyBase) vars['--ds-font-family-base'] = t.fontFamilyBase;
     if (t.fontFamilyHeading) vars['--ds-font-family-heading'] = t.fontFamilyHeading;
+    if (typeof t.scale === 'number' && Number.isFinite(t.scale)) {
+      setVar(
+        vars,
+        '--ds-type-scale',
+        clampValue(
+          t.scale,
+          TENANT_THEME_TYPE_SCALE_BOUNDS_V1.min,
+          TENANT_THEME_TYPE_SCALE_BOUNDS_V1.max,
+        ),
+      );
+    }
   }
 
   // Shape — buttonStyle maps to a real CSS var consumed by engines
   if (general.shape?.buttonStyle) {
     const r = BUTTON_STYLE_RADIUS[general.shape.buttonStyle];
     if (r) vars['--ds-radius-button'] = r;
+  }
+  if (
+    typeof general.shape?.radiusScale === 'number'
+    && Number.isFinite(general.shape.radiusScale)
+  ) {
+    setVar(
+      vars,
+      '--ds-radius-scale',
+      clampValue(
+        general.shape.radiusScale,
+        TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.min,
+        TENANT_THEME_RADIUS_SCALE_BOUNDS_V1.max,
+      ),
+    );
   }
 
   // Density is consumed by useTokens() as a JS factor, not a CSS variable.
@@ -320,7 +417,34 @@ export function appearanceToVariables(
   // Derived ramps are compiler-owned output. Apply them after Advanced so a
   // broad runtime Appearance object cannot accidentally arbitrate ramp names;
   // TenantTheme's closed schema rejects those names at the DB boundary too.
+  // The chart-series seed is read BEFORE the ramp merge: dual (light-dark)
+  // emission may rewrite `--ds-color-primary` into a non-hex function value.
+  const chartSeriesSeed = vars['--ds-color-primary'];
   Object.assign(vars, deriveAppearanceColorRamps(appearance.general ?? {}, vars));
+
+  // Generated categorical series are compiler-owned and always emitted when a
+  // concrete seed exists. Tenant-authored `--ds-chart-category-N` stays the
+  // authoritative channel in the palette resolver's fallback chain.
+  if (chartSeriesSeed && isHexColor(chartSeriesSeed)) {
+    const mode = appearance.general?.palette?.backgroundMode ?? 'light';
+    const surface: RampSurface = mode === 'dark' ? 'dark' : 'light';
+    const grounds: string[] = [];
+    if (mode !== 'dark') grounds.push(resolveAppearanceRampGround('light', vars));
+    if (mode === 'dark') grounds.push(resolveAppearanceRampGround('dark', vars));
+    if (mode === 'auto') {
+      grounds.push(
+        resolveAppearanceDarkGround(appearance.general?.palette?.dark, vars),
+      );
+    }
+    const series = deriveChartSeriesPalette(
+      normalizeHexColor(chartSeriesSeed),
+      grounds,
+      surface,
+    );
+    series.forEach((color, index) => {
+      vars[`--ds-chart-series-${index + 1}`] = color;
+    });
+  }
 
   return vars;
 }

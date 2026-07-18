@@ -166,10 +166,10 @@ describe("TenantThemeConfig v1 server contract", () => {
 
   it("publishes immutable schema/document drift sentinels", () => {
     expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toBe(
-      "sha256-a8db4e88221d0d5067732acc774ccf39a85969a1ad7f441eb8cd814ef47b35d1"
+      "sha256-85586096e40f9bb976419e92cd83a7a19ff74f68a5afd1c1a258e6473c056242"
     );
     expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).toBe(
-      "sha256-cd0cd8c02fbed2b4ad4bf2e3ea67f9a237a109a5d94a94e5348aaf61e1cc97bb"
+      "sha256-722c1a75193ef57ce111b519d3ddb952db256e06387ee55366f0d17c2ad59d9e"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA)).toBe(true);
     expect(
@@ -222,12 +222,15 @@ describe("TenantThemeConfig v1 server contract", () => {
           "tabs",
         ],
         allowTokenOverrides: true,
+        allowAnatomyVariants: true,
       },
       ranges: {
         densityScale: { min: 0.85, max: 1.15 },
         effectIntensity: { min: 0, max: 0.65 },
         motionIntensity: { min: 0, max: 0.8 },
         motionDurationScale: { min: 0.75, max: 1.35 },
+        typeScale: { min: 0.92, max: 1.08 },
+        radiusScale: { min: 0.8, max: 1.2 },
       },
     } satisfies TenantThemeVerticalEnvelopeV1);
     expect(Object.isFrozen(TENANT_THEME_VERTICAL_ENVELOPES_V1)).toBe(true);
@@ -242,12 +245,18 @@ describe("TenantThemeConfig v1 server contract", () => {
       schemaVersion: 1,
       verticalKey: "evnto",
       allowedModes: ["simple", "advanced"],
-      advanced: { allowTokenOverrides: true },
+      advanced: {
+        allowTokenOverrides: true,
+        allowAnatomyVariants: true,
+        chromeFamilies: BITHIRE_TEST_ENVELOPE.advanced!.chromeFamilies,
+      },
       ranges: {
         densityScale: { min: 0.85, max: 1.15 },
         effectIntensity: { min: 0, max: 0.75 },
         motionIntensity: { min: 0, max: 0.8 },
         motionDurationScale: { min: 0.75, max: 1.35 },
+        typeScale: { min: 0.92, max: 1.08 },
+        radiusScale: { min: 0.8, max: 1.2 },
       },
     } satisfies Partial<TenantThemeVerticalEnvelopeV1>);
     expect(EVNTO_TEST_ENVELOPE.advanced?.chromeFamilies).toEqual(
@@ -392,7 +401,7 @@ describe("deterministic artifact compilation and isolation", () => {
       typography: {
         ...document.visualFoundation.general?.typography,
         fontFamilyHeading:
-          "var(--ds-font-pack-editorial), Georgia, 'Times New Roman', serif",
+          "var(--ds-font-pack-editorial-display), Georgia, 'Times New Roman', serif",
       },
     };
     document.visualFoundation.advanced = {
@@ -400,7 +409,7 @@ describe("deterministic artifact compilation and isolation", () => {
       tokenOverrides: {
         ...document.visualFoundation.advanced?.tokenOverrides,
         "--ds-font-family-display":
-          "var(--ds-font-pack-editorial), Georgia, 'Times New Roman', serif",
+          "var(--ds-font-pack-editorial-display), Georgia, 'Times New Roman', serif",
       },
     };
 
@@ -408,19 +417,21 @@ describe("deterministic artifact compilation and isolation", () => {
       verticalEnvelope: BITHIRE_TEST_ENVELOPE,
     });
     expect(artifact.variables["--ds-font-family-heading"]).toContain(
-      "var(--ds-font-pack-editorial)"
+      "var(--ds-font-pack-editorial-display)"
     );
     expect(artifact.variables["--ds-font-family-display"]).toContain(
-      "var(--ds-font-pack-editorial)"
+      "var(--ds-font-pack-editorial-display)"
     );
   });
 
   it.each([
     "var(--ds-font-family-heading), serif",
-    "var(--ds-font-pack-editorial, Georgia), serif",
-    "var(--ds-font-pack-Editorial), serif",
+    "var(--ds-font-pack-editorial-display, Georgia), serif",
+    "var(--ds-font-pack-Editorial-Display), serif",
     "var(--ds-font-pack-unknown), serif",
-    "var(--ds-font-pack-editorial); color: red",
+    // The bare pre-W4 id never resolved to any css and is retired, not aliased.
+    "var(--ds-font-pack-editorial), serif",
+    "var(--ds-font-pack-editorial-display); color: red",
   ])(
     "rejects unsafe font-family variable reference %s",
     (fontFamilyHeading) => {
@@ -884,12 +895,19 @@ describe("closed schema and hostile input rejection", () => {
     const document = {
       schemaVersion: 1,
       mode: "advanced" as const,
-      visualFoundation: { advanced: { tokenOverrides: neutralOverrides } },
+      visualFoundation: {
+        // The light neutral text set is honest only on this tenant's own dark
+        // canvas; the APCA autocorrect pass otherwise rewrites it against the
+        // default light page ground.
+        general: { palette: { backgroundMode: "dark" as const } },
+        advanced: { tokenOverrides: neutralOverrides },
+      },
     };
     expect(validateTenantThemeDocument(document).success).toBe(true);
     const artifact = compileTenantThemeConfig(hydrate(document), {
       verticalEnvelope: BITHIRE_TEST_ENVELOPE,
     });
+    expect(artifact.adjustments).toBeUndefined();
     for (const [token, value] of Object.entries(neutralOverrides)) {
       expect(artifact.variables[token]).toBe(value);
       expect(artifact.css).toContain(`${token}: ${value};`);

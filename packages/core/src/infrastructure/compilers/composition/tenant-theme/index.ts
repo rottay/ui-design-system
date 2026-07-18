@@ -8,6 +8,7 @@
 
 import { type TenantAppearance } from "@/foundation/contracts/composition/tenants/themes";
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
+import { enforceTextContrast } from "@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect";
 import type {
   NormalizedTenantThemeAppearanceV1,
   TenantThemeArtifactV1,
@@ -21,12 +22,19 @@ import type {
   TenantThemeVerticalEnvelopeV1,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
+  TENANT_THEME_ANATOMY_VARIANTS_V1,
   TENANT_THEME_CHROME_FAMILIES_V1,
   TENANT_THEME_FONT_PACK_IDS_V1,
+  TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
   TENANT_THEME_REFERENCE_TOKENS_V1,
   TENANT_THEME_SCHEMA_VERSION,
+  TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { isValidCssColor } from "../../kernel/foundation/css/color-math";
+import {
+  isHexColor,
+  isValidCssColor,
+  normalizeHexColor,
+} from "../../kernel/foundation/css/color-math";
 import {
   TENANT_THEME_CONFIG_V1_SCHEMA,
   type TenantThemeSchemaNode,
@@ -60,12 +68,15 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
     advanced: {
       chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
       allowTokenOverrides: true,
+      allowAnatomyVariants: true,
     },
     ranges: {
       densityScale: { min: 0.85, max: 1.15 },
       effectIntensity: { min: 0, max: 0.65 },
       motionIntensity: { min: 0, max: 0.8 },
       motionDurationScale: { min: 0.75, max: 1.35 },
+      typeScale: { min: 0.92, max: 1.08 },
+      radiusScale: { min: 0.8, max: 1.2 },
     },
   },
   evnto: {
@@ -75,6 +86,7 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
     advanced: {
       chromeFamilies: [...TENANT_THEME_CHROME_FAMILIES_V1],
       allowTokenOverrides: true,
+      allowAnatomyVariants: true,
     },
     ranges: {
       // Capability limits, not defaults. The static Evnto vertical remains the
@@ -83,6 +95,8 @@ export const TENANT_THEME_VERTICAL_ENVELOPES_V1 = deepFreezeTenantThemeValue({
       effectIntensity: { min: 0, max: 0.75 },
       motionIntensity: { min: 0, max: 0.8 },
       motionDurationScale: { min: 0.75, max: 1.35 },
+      typeScale: { min: 0.92, max: 1.08 },
+      radiusScale: { min: 0.8, max: 1.2 },
     },
   },
 } as const satisfies Readonly<Record<string, TenantThemeVerticalEnvelopeV1>>);
@@ -350,6 +364,7 @@ const ALLOWED_VALUE_FUNCTIONS = new Set([
   "lab",
   "lch",
   "color-mix",
+  "light-dark",
   "linear-gradient",
   "radial-gradient",
   "conic-gradient",
@@ -974,7 +989,11 @@ export function validateTenantThemeAgainstVerticalEnvelope(
       });
     } else {
       for (const key of Object.keys(envelope.advanced)) {
-        if (key !== "chromeFamilies" && key !== "allowTokenOverrides") {
+        if (
+          key !== "chromeFamilies" &&
+          key !== "allowTokenOverrides" &&
+          key !== "allowAnatomyVariants"
+        ) {
           issues.push({
             code: "unknown_key",
             path: `$.verticalEnvelope.advanced.${key}`,
@@ -1004,6 +1023,16 @@ export function validateTenantThemeAgainstVerticalEnvelope(
           message: "Expected a boolean",
         });
       }
+      if (
+        envelope.advanced.allowAnatomyVariants !== undefined &&
+        typeof envelope.advanced.allowAnatomyVariants !== "boolean"
+      ) {
+        issues.push({
+          code: "invalid_type",
+          path: "$.verticalEnvelope.advanced.allowAnatomyVariants",
+          message: "Expected a boolean",
+        });
+      }
     }
   }
 
@@ -1012,6 +1041,8 @@ export function validateTenantThemeAgainstVerticalEnvelope(
     effectIntensity: { min: 0, max: 1 },
     motionIntensity: { min: 0, max: 1 },
     motionDurationScale: { min: 0.5, max: 1.5 },
+    typeScale: TENANT_THEME_TYPE_SCALE_BOUNDS_V1,
+    radiusScale: TENANT_THEME_RADIUS_SCALE_BOUNDS_V1,
   } as const;
   if (envelope.ranges !== undefined) {
     if (!isPlainObject(envelope.ranges)) {
@@ -1068,6 +1099,8 @@ export function validateTenantThemeAgainstVerticalEnvelope(
       general?.motion?.durationScale,
       ranges?.motionDurationScale,
     ],
+    ["typography.scale", general?.typography?.scale, ranges?.typeScale],
+    ["shape.radiusScale", general?.shape?.radiusScale, ranges?.radiusScale],
   ] as const;
   for (const [field, value, range] of rangedValues) {
     if (
@@ -1108,6 +1141,20 @@ export function validateTenantThemeAgainstVerticalEnvelope(
           path: "$.visualFoundation.advanced.tokenOverrides",
           message: "Token overrides are disabled by this vertical",
         });
+      }
+      if (policy.allowAnatomyVariants !== true) {
+        for (const family of Object.keys(
+          TENANT_THEME_ANATOMY_VARIANTS_V1
+        ) as (keyof typeof TENANT_THEME_ANATOMY_VARIANTS_V1)[]) {
+          const anatomyVariant = advanced.chrome?.[family]?.anatomy;
+          if (anatomyVariant !== undefined && anatomyVariant !== "default") {
+            issues.push({
+              code: "invalid_value",
+              path: `$.visualFoundation.advanced.chrome.${family}.anatomy`,
+              message: "Anatomy variants are disabled by this vertical",
+            });
+          }
+        }
       }
       const density = advanced.tokenOverrides?.["--ds-density-scale"];
       if (
@@ -1197,6 +1244,48 @@ export function tenantThemeArtifactRootAttributes(
   };
 }
 
+const ANATOMY_ATTRIBUTE_BY_FAMILY = {
+  cardComponent: "data-anatomy-card",
+  table: "data-anatomy-table",
+  sidebar: "data-anatomy-sidebar",
+  layout: "data-anatomy-layout",
+} as const satisfies Record<
+  keyof typeof TENANT_THEME_ANATOMY_VARIANTS_V1,
+  string
+>;
+
+/**
+ * Pure projection of the compiled anatomy selections into `data-anatomy-*`
+ * root attributes. Values come from the closed per-family enum only — never
+ * from interpolated tenant strings — and `default`/absent emits nothing, so
+ * every pre-anatomy document stamps zero additional attributes. The SSR
+ * provider spreads this beside `tenantThemeArtifactRootAttributes` on the
+ * same root; skins select on the attribute, one level above the scope class.
+ */
+export function tenantThemeAnatomyAttributes(
+  artifact: Pick<TenantThemeArtifactV1, "normalizedAppearance">
+): Record<string, string> {
+  const chrome = artifact.normalizedAppearance.advanced?.chrome;
+  const attributes: Record<string, string> = {};
+  if (!chrome) return attributes;
+  for (const family of Object.keys(
+    ANATOMY_ATTRIBUTE_BY_FAMILY
+  ) as (keyof typeof ANATOMY_ATTRIBUTE_BY_FAMILY)[]) {
+    const variant = chrome[family]?.anatomy;
+    if (
+      typeof variant !== "string" ||
+      variant === "default" ||
+      !(TENANT_THEME_ANATOMY_VARIANTS_V1[family] as readonly string[]).includes(
+        variant
+      )
+    ) {
+      continue;
+    }
+    attributes[ANATOMY_ATTRIBUTE_BY_FAMILY[family]] = variant;
+  }
+  return attributes;
+}
+
 function sortedVariables(
   variables: Record<string, string>
 ): Record<string, string> {
@@ -1262,6 +1351,12 @@ function validateCompiledChartCategories(
   if (mode === "auto") {
     grounds.add(DEFAULT_CHART_GROUNDS.light);
     grounds.add(DEFAULT_CHART_GROUNDS.dark);
+    // Dual-seed tenants render their own dark canvas; authored categorical
+    // marks must clear it in addition to the deterministic base grounds.
+    const darkGround = appearance.general?.palette?.dark?.background;
+    if (darkGround && isHexColor(darkGround)) {
+      grounds.add(normalizeHexColor(darkGround).toUpperCase());
+    }
   } else {
     grounds.add(DEFAULT_CHART_GROUNDS[mode]);
   }
@@ -1343,9 +1438,16 @@ export function compileTenantThemeConfig(
   }
 
   const normalizedAppearance = normalizeAppearance(config);
-  const variables = sortedVariables(
+  const mergedVariables = sortedVariables(
     appearanceToVariables(normalizedAppearance as TenantAppearance)
   );
+  // Contrast autocorrect runs before chart validation so categorical marks
+  // are checked against the corrected surfaces the artifact actually emits.
+  const { variables: contrastedVariables, adjustments } = enforceTextContrast(
+    mergedVariables,
+    normalizedAppearance
+  );
+  const variables = sortedVariables(contrastedVariables);
   const chartCategoryIssues = validateCompiledChartCategories(
     normalizedAppearance,
     variables
@@ -1409,6 +1511,9 @@ export function compileTenantThemeConfig(
     normalizedAppearance,
     variables,
     scopes,
+    // Empty adjustment lists stay out of the digest source so pre-autocorrect
+    // artifacts keep their digests; a non-empty list is a real output change.
+    ...(adjustments.length > 0 ? { adjustments } : {}),
     ...(verticalEnvelopeDigest ? { verticalEnvelopeDigest } : {}),
   };
   const digest = `sha256-${sha256TenantThemeValue(
@@ -1426,6 +1531,7 @@ export function compileTenantThemeConfig(
     digest,
     normalizedAppearance,
     variables,
+    ...(adjustments.length > 0 ? { adjustments } : {}),
     css: renderArtifactCss(scopes.combinedSelector, variables, digest),
     scopes,
   };
