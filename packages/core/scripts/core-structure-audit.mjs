@@ -147,6 +147,16 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     contracts: 0,
     presets: 1,
   }),
+  // Colorimetry sits below the accessibility math that consumes it.
+  'foundation/kernel': Object.freeze({
+    color: 0,
+    accessibility: 1,
+  }),
+  // Scalar WCAG colorimetry sits below the color-space modules that consume it.
+  'foundation/kernel/color': Object.freeze({
+    contrast: 0,
+    oklch: 1,
+  }),
   infrastructure: Object.freeze({
     compilers: 0,
     runtime: 1,
