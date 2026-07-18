@@ -40,6 +40,9 @@ const TRACKED_SUPPLIERS = Object.freeze([
   'motion',
   '@phosphor-icons/react',
   '@thesvg/react',
+  // lucide-react stays TRACKED even though zero icons ship from it: the tracking feeds live
+  // governance/ban machinery (app-side supplier audits, the runtime-alias expectation, the
+  // showroom marketing exception). Removing it would blind those gates, not clean anything.
   'lucide-react',
   'three',
   '@react-three/fiber',
@@ -49,7 +52,7 @@ const TRACKED_SUPPLIERS = Object.freeze([
 ]);
 
 const WILDCARD_ENTRYPOINT_SUPPLIERS = Object.freeze({
-  './icons': Object.freeze(['@phosphor-icons/react', 'lucide-react']),
+  './icons': Object.freeze(['@phosphor-icons/react']),
   './marks': Object.freeze(['@thesvg/react']),
 });
 
@@ -2410,8 +2413,8 @@ export function validateSupplierContractShape(contract) {
       if (!classified.has(symbol)) errors.push(`supplier contract leaves ${entrypoint}#${symbol} unclassified`);
     }
   }
-  if (JSON.stringify(contract.entrypoints?.['./icons']?.wildcard ?? []) !== JSON.stringify(['@phosphor-icons/react', 'lucide-react'])) {
-    errors.push('./icons must retain its governed functional and compatibility suppliers');
+  if (JSON.stringify(contract.entrypoints?.['./icons']?.wildcard ?? []) !== JSON.stringify(['@phosphor-icons/react'])) {
+    errors.push('./icons must claim exactly the pinned Phosphor supplier and no other');
   }
   if (JSON.stringify(contract.entrypoints?.['./marks']?.wildcard ?? []) !== JSON.stringify(['@thesvg/react'])) {
     errors.push('./marks must retain its governed brand/provider supplier');

@@ -469,6 +469,7 @@
         "TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST",
         "TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST",
         "TENANT_THEME_FONT_PACK_IDS_V1",
+        "TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1",
         "TENANT_THEME_OVERRIDE_TOKENS_V1",
         "TENANT_THEME_REFERENCE_TOKENS_V1",
         "TENANT_THEME_SCHEMA_VERSION",
@@ -2446,6 +2447,7 @@
         "TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST",
         "TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST",
         "TENANT_THEME_FONT_PACK_IDS_V1",
+        "TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1",
         "TENANT_THEME_OVERRIDE_TOKENS_V1",
         "TENANT_THEME_REFERENCE_TOKENS_V1",
         "TENANT_THEME_SCHEMA_VERSION",
@@ -4137,8 +4139,7 @@
         ]
       },
       "wildcard": [
-        "@phosphor-icons/react",
-        "lucide-react"
+        "@phosphor-icons/react"
       ],
       "supplierFreeExports": [
         "AlertIcon",

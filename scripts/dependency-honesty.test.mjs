@@ -812,7 +812,7 @@ test('supplier contract derivation attributes named and wildcard external re-exp
 test('supplier contract deletion drills fail for AreaChart, CountUp, and the icons wildcard', () => {
   const contract = loadSupplierContract();
   assert.deepEqual(contract.entrypoints['./icons'].symbols.Icon, ['@phosphor-icons/react']);
-  assert.deepEqual(contract.entrypoints['./icons'].wildcard, ['@phosphor-icons/react', 'lucide-react']);
+  assert.deepEqual(contract.entrypoints['./icons'].wildcard, ['@phosphor-icons/react']);
   for (const symbol of ['AreaChart', 'CountUp']) {
     const mutated = structuredClone(contract);
     delete mutated.entrypoints['.'].symbols[symbol];
@@ -825,7 +825,7 @@ test('supplier contract deletion drills fail for AreaChart, CountUp, and the ico
   delete missingWildcard.entrypoints['./icons'].wildcard;
   assert.throws(
     () => requiredSuppliersForDesignSystemImports(new Map(), missingWildcard),
-    /icons must retain its governed functional and compatibility suppliers/,
+    /icons must claim exactly the pinned Phosphor supplier and no other/,
   );
 });
 
@@ -903,9 +903,12 @@ test('chart-access runtime contract is exact and supplier-free', () => {
 test('chart-renderer runtime contract includes the public datum-key utility', () => {
   const rendererExports = [
     'SvgBarRenderer',
+    'SvgFunnelRenderer',
+    'SvgGaugeRenderer',
     'SvgHeatMapRenderer',
     'SvgLineRenderer',
     'SvgPieRenderer',
+    'SvgRadarRenderer',
     'SvgScatterRenderer',
     'createSvgLineDatumKey',
   ];
@@ -914,9 +917,12 @@ test('chart-renderer runtime contract includes the public datum-key utility', ()
     exports: rendererExports,
     symbols: {
       SvgBarRenderer: ['d3'],
+      SvgFunnelRenderer: ['antd', 'd3', 'motion'],
+      SvgGaugeRenderer: ['antd', 'd3', 'motion'],
       SvgHeatMapRenderer: ['d3'],
       SvgLineRenderer: ['d3'],
       SvgPieRenderer: ['d3'],
+      SvgRadarRenderer: ['antd', 'd3', 'motion'],
       SvgScatterRenderer: ['d3'],
     },
     supplierFreeExports: ['createSvgLineDatumKey'],
@@ -1498,11 +1504,15 @@ test('live core graph has no false optional or zero-importer peer', () => {
   const graph = auditCoreDependencyGraph();
   assert.deepEqual(graph.errors, []);
   // The governed corpus emits one supplier-isolated module per semantic role
-  // (263) plus the bounded 50-role facade adapter. Only two of those modules
-  // are reachable through components exported by the root entrypoint.
+  // plus the bounded facade adapter and preset modules. The root entrypoint is
+  // NOT supplier-free: graphics/icons/index.ts re-exports the compatibility
+  // catalog, so catalog-consuming first-party ui/** modules keep Phosphor
+  // reachable from the root entry. These exact counts pin the measured 2.19.34
+  // graph after the corpus/catalog growth certified by the icon-embed baseline
+  // reseed (721 -> 807); an unexplained increase here is supplier creep.
   assert.deepEqual(graph.report['@phosphor-icons/react'], {
-    productionImporters: 264,
-    rootReachableImporters: 2,
+    productionImporters: 274,
+    rootReachableImporters: 13,
   });
   assert.deepEqual(graph.report.three, {
     productionImporters: 0,
