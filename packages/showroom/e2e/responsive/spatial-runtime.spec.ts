@@ -2,7 +2,9 @@ import { expect, test } from '@playwright/test';
 
 const LIVE = '[data-spatial-mode^="live-"]';
 const CANVAS = '[data-spatial-experience-canvas]';
-const MAX_DPR = 2;
+// The DS-owned live-high ceiling is 1.5. Keeping the browser assertion at the
+// same value prevents a probe scene from silently widening the public budget.
+const MAX_DPR = 1.5;
 const MAX_PIXELS = 4_194_304;
 
 test.use({
