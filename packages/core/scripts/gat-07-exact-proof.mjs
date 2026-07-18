@@ -44,7 +44,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = resolve(HERE, '..');
 const UI_ROOT = resolve(CORE_ROOT, '../..');
 const WORKSPACE_ROOT = resolve(UI_ROOT, '..');
-const DOCS_ROOT = resolve(
+export const DOCS_ROOT = resolve(
   process.env.DOCS_ENGINEERING_ROOT || join(WORKSPACE_ROOT, 'docs-engineering'),
 );
 const COMPONENTS = join(CORE_ROOT, 'src/ui');
@@ -98,6 +98,20 @@ const VERTICAL_DOCS = {
   tenancy: join(DOCS_ROOT, 'engineering/design-system/runtime/tenancy/README.md'),
   engines: join(DOCS_ROOT, 'engineering/design-system/runtime/engines/README.md'),
 };
+
+// Reference/spec documents whose volatile prose claims (the showroom stats
+// table, the engine-modern work-order count) carry no named GAT07-CLAIM block
+// and are not code-derived vertical rows, so neither the claim-block census nor
+// the vertical-line requirement fits them. They are instead governed by the
+// whole-file SHA-256 documentation seal: any drifted stats row or reverted
+// work-order count changes the file hash and is rejected until the document is
+// re-reviewed and re-sealed to a new documentation revision. Both MUST resolve
+// under DOCS_ROOT, or validateDocumentationSeal's DOCS_ROOT filter silently
+// skips them and the coverage is a no-op (asserted by the seal contract test).
+export const SEALED_REFERENCE_DOCS = Object.freeze({
+  showroom: join(DOCS_ROOT, 'engineering/design-system/showroom/README.md'),
+  engineModern: join(DOCS_ROOT, 'engineering/design-system/runtime/engines/modern/README.md'),
+});
 
 const CLAIM_FLOOR_KEYS = new Set([
   'id',
@@ -842,6 +856,19 @@ function runPaintAudit() {
   return result.stdout.trim();
 }
 
+/**
+ * A sealed reference/claim document is exact only when its worktree bytes hash
+ * identically to the bytes committed at the sealed documentation revision. Any
+ * edit — a drifted showroom stats row, a reverted engine-modern work-order count
+ * — changes the hash and must be rejected until the document is re-reviewed and
+ * re-sealed. A non-string input (e.g. a missing git object) never matches.
+ */
+export function sealedDocumentationContentMatches(revisionContent, worktreeContent) {
+  return typeof revisionContent === 'string'
+    && typeof worktreeContent === 'string'
+    && sha256(revisionContent) === sha256(worktreeContent);
+}
+
 function validateDocumentationSeal(documentPaths) {
   const seal = JSON.parse(read(DOCUMENTATION_SEAL_PATH));
   const errors = [];
@@ -850,7 +877,7 @@ function validateDocumentationSeal(documentPaths) {
     errors.push(`requirementsRevision must remain ${REQUIREMENTS_REVISION}`);
   }
   if (seal.documentationRevision === null) {
-    errors.push('documentationRevision is unsealed; commit the 12 inspected docs, set their implementation commit, then regenerate the artifact');
+    errors.push('documentationRevision is unsealed; commit the 14 inspected docs, set their implementation commit, then regenerate the artifact');
   } else if (!/^[0-9a-f]{40}$/.test(seal.documentationRevision ?? '')) {
     errors.push('documentationRevision must be a full 40-character Git commit');
   } else {
@@ -884,7 +911,7 @@ function validateDocumentationSeal(documentPaths) {
       });
       if (result.status !== 0) {
         errors.push(`documentationRevision does not contain ${relativePath}`);
-      } else if (sha256(result.stdout) !== sha256(read(path))) {
+      } else if (!sealedDocumentationContentMatches(result.stdout, read(path))) {
         errors.push(`${relativePath} does not match documentationRevision ${seal.documentationRevision}`);
       }
     }
@@ -1033,6 +1060,7 @@ function buildSemanticEvidence({ allowUnsealedDocumentation = false } = {}) {
   const inspectedDocs = [
     ...CLAIM_DOCS.map(({ path }) => path),
     ...Object.values(VERTICAL_DOCS),
+    ...Object.values(SEALED_REFERENCE_DOCS),
     DATA_PART_DOC,
   ];
   const documentation = validateDocumentationSeal(inspectedDocs);

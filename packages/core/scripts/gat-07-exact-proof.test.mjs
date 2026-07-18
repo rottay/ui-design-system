@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, dirname } from 'node:path';
+import { join, dirname, sep } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -23,10 +23,13 @@ import {
   validateClaimDocumentationInventory,
 } from './lib/gat-07-static-analysis.mjs';
 import {
+  DOCS_ROOT,
+  SEALED_REFERENCE_DOCS,
   discoverStaleTypescriptFiles,
   evaluateDataPartUnresolved,
   evaluateClaimFloor,
   projectGat07RegistryDefinition,
+  sealedDocumentationContentMatches,
 } from './gat-07-exact-proof.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -976,6 +979,45 @@ test('G4 documentation permits only exact generated claim contracts even after a
     algorithm: 'gat07-positive-claim-block-v1',
   };
   assert.equal(validateClaimDocumentationInventory(inventory, schemaOne, markers, templates).ok, false);
+});
+
+test('G4b sealed reference docs cover the drifted showroom + engine-modern claims and reject tampering', () => {
+  // The two documents the 2026-07-17 DS full audit found drifting -- the showroom
+  // README stats table and the engine-modern work-order count -- carry no named
+  // GAT07-CLAIM block, so they are covered by whole-file SHA-256 sealing instead.
+  const sealed = Object.values(SEALED_REFERENCE_DOCS);
+  assert.equal(sealed.length, 2);
+  assert.ok(
+    sealed.some((path) => path.endsWith('/engineering/design-system/showroom/README.md')),
+    'showroom README must be sealed',
+  );
+  assert.ok(
+    sealed.some((path) => path.endsWith('/engineering/design-system/runtime/engines/modern/README.md')),
+    'engine-modern README must be sealed',
+  );
+  // Both MUST resolve under DOCS_ROOT, or validateDocumentationSeal's DOCS_ROOT
+  // filter silently skips them and the coverage is a no-op.
+  for (const path of sealed) {
+    assert.ok(path.startsWith(`${DOCS_ROOT}${sep}`), `${path} must live under DOCS_ROOT`);
+    assert.ok(existsSync(path), `${path} must exist on disk`);
+  }
+
+  // Negative drill: an exact byte match seals; a tampered stats row or a reverted
+  // work-order count breaks the SHA-256 and is rejected until a fresh reseal.
+  const statsTable = '## Stats\n\n- 265 static pages\n- 158 source files\n- 0 TypeScript errors\n';
+  assert.equal(sealedDocumentationContentMatches(statsTable, statsTable), true);
+  assert.equal(
+    sealedDocumentationContentMatches(statsTable, statsTable.replace('158 source files', '77 source files')),
+    false,
+  );
+  const laneClaim = 'the engine-modern lane comprises 25 work orders (WO-ENG-01..WO-ENG-25)';
+  assert.equal(sealedDocumentationContentMatches(laneClaim, laneClaim), true);
+  assert.equal(
+    sealedDocumentationContentMatches(laneClaim, laneClaim.replace('25 work orders', '11 work orders')),
+    false,
+  );
+  // A missing git object (non-string) never counts as a seal match.
+  assert.equal(sealedDocumentationContentMatches(undefined, statsTable), false);
 });
 
 test('G3 public claim floor is exact and rejects invented authority, assertions, or families', () => {
