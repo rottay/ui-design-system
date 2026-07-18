@@ -2,9 +2,6 @@ import type { ChartPersonalityTokens } from '@/foundation/contracts/kernel/token
 
 export const CHART_CATEGORICAL_SIZE = 10;
 
-export type ChartSeriesVariableName = `--ds-chart-series-${number}`;
-export type ChartSeriesVariableMap = Readonly<Record<ChartSeriesVariableName, string>>;
-
 const LIGHT_FALLBACKS = Object.freeze({
   accessible: Object.freeze([
     '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5',
@@ -31,54 +28,45 @@ const LIGHT_FALLBACKS = Object.freeze({
 type BoundedChartScheme = keyof typeof LIGHT_FALLBACKS;
 
 /**
- * Resolve a scheme through mode-aware DS channels. The concrete fallback is
- * the audited light-surface color used when consumers omit the stylesheet;
- * patterns.css replaces it in dark mode. Tenant-owned category channels still
- * wrap these values later and therefore retain highest visual precedence.
+ * Canonical categorical paint resolution, highest precedence first:
+ *
+ *   1. authored `--ds-chart-category-N` (tenant document channel)
+ *   2. generated `--ds-chart-series-N` (tenant-scope compiler output)
+ *   3. `--ds-chart-{scheme}-N` (mode-aware channel; dark override in patterns.css)
+ *   4. embedded audited light literal (stylesheet-free rendering)
+ *
+ * `--ds-chart-series-N` is a reserved name owned exclusively by the tenant
+ * appearance compiler. The design-system runtime must never DEFINE it — an
+ * element-scope definition would shadow the inherited tenant palette (nearest
+ * custom-property definition wins) — so this module returns consumption
+ * expressions only, and every runtime sink (marks, legend swatches, the
+ * chart-foundation.css `--ds-chart-paint-N` bridge, personality palettes)
+ * resolves through this one chain.
  */
-function createSchemePalette(scheme: BoundedChartScheme): readonly string[] {
+function createSeriesPaint(scheme: BoundedChartScheme): readonly string[] {
   return Object.freeze(
-    LIGHT_FALLBACKS[scheme].map(
-      (fallback, index) => `var(--ds-chart-${scheme}-${index + 1}, ${fallback})`,
-    ),
+    LIGHT_FALLBACKS[scheme].map((fallback, index) => {
+      const slot = index + 1;
+      return `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-${scheme}-${slot}, ${fallback})))`;
+    }),
   );
 }
 
-const ACCESSIBLE = createSchemePalette('accessible');
-const DEFAULT = createSchemePalette('default');
-const MONOCHROME = createSchemePalette('monochrome');
-const PASTEL = createSchemePalette('pastel');
-const VIBRANT = createSchemePalette('vibrant');
-
-const SCHEMES = Object.freeze({
-  accessible: Object.freeze(ACCESSIBLE),
-  default: Object.freeze(DEFAULT),
-  monochrome: Object.freeze(MONOCHROME),
-  pastel: Object.freeze(PASTEL),
-  vibrant: Object.freeze(VIBRANT),
+const SERIES_PAINT = Object.freeze({
+  accessible: createSeriesPaint('accessible'),
+  default: createSeriesPaint('default'),
+  monochrome: createSeriesPaint('monochrome'),
+  pastel: createSeriesPaint('pastel'),
+  vibrant: createSeriesPaint('vibrant'),
 });
 
 /**
- * Foundation mapping from the bounded chart scheme to provider-scoped CSS channels.
- * Status tokens are intentionally absent: arbitrary categories may never
- * borrow success, warning, error, or info meaning.
+ * Resolve a bounded chart scheme to its ten categorical paint expressions.
+ * Status tokens are intentionally absent from every tier: arbitrary categories
+ * may never borrow success, warning, error, or info meaning.
  */
-export function resolveChartSeriesVariables(
+export function resolveChartSeriesPaint(
   scheme: ChartPersonalityTokens['colorScheme'] = 'default',
-): ChartSeriesVariableMap {
-  const palette = SCHEMES[scheme] ?? SCHEMES.default;
-  const [one, two, three, four, five, six, seven, eight, nine, ten] = palette;
-
-  return Object.freeze({
-    '--ds-chart-series-1': `var(--ds-chart-category-1, ${one})`,
-    '--ds-chart-series-2': `var(--ds-chart-category-2, ${two})`,
-    '--ds-chart-series-3': `var(--ds-chart-category-3, ${three})`,
-    '--ds-chart-series-4': `var(--ds-chart-category-4, ${four})`,
-    '--ds-chart-series-5': `var(--ds-chart-category-5, ${five})`,
-    '--ds-chart-series-6': `var(--ds-chart-category-6, ${six})`,
-    '--ds-chart-series-7': `var(--ds-chart-category-7, ${seven})`,
-    '--ds-chart-series-8': `var(--ds-chart-category-8, ${eight})`,
-    '--ds-chart-series-9': `var(--ds-chart-category-9, ${nine})`,
-    '--ds-chart-series-10': `var(--ds-chart-category-10, ${ten})`,
-  });
+): readonly string[] {
+  return SERIES_PAINT[scheme] ?? SERIES_PAINT.default;
 }

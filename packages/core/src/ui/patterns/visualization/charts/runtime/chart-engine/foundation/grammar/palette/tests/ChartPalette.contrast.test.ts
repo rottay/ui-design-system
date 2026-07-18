@@ -8,7 +8,7 @@ import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-the
 import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
 import {
   CHART_CATEGORICAL_SIZE,
-  resolveChartSeriesVariables,
+  resolveChartSeriesPaint,
 } from '..';
 
 const PATTERNS_CSS = readFileSync(
@@ -87,11 +87,12 @@ describe('Chart grammar foundation palette non-text contrast', () => {
 
     for (const scheme of SCHEMES) {
       const colors = readModeColors(scheme);
-      const variables = resolveChartSeriesVariables(scheme);
+      const paint = resolveChartSeriesPaint(scheme);
 
+      expect(paint).toHaveLength(CHART_CATEGORICAL_SIZE);
       for (let index = 1; index <= CHART_CATEGORICAL_SIZE; index += 1) {
-        expect(variables[`--ds-chart-series-${index}`]).toBe(
-          `var(--ds-chart-category-${index}, var(--ds-chart-${scheme}-${index}, ${colors.light[index - 1]}))`,
+        expect(paint[index - 1]).toBe(
+          `var(--ds-chart-category-${index}, var(--ds-chart-series-${index}, var(--ds-chart-${scheme}-${index}, ${colors.light[index - 1]})))`,
         );
       }
     }

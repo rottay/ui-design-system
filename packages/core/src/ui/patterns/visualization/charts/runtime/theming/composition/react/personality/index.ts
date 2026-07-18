@@ -12,7 +12,21 @@ import { useTokens } from '@/infrastructure/runtime/theming/composition/react/to
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { useReducedMotion } from '@/graphics/motion/react/runtime';
 import type { ChartColorScheme } from '@ui/patterns/visualization/charts/contracts';
-import { DEFAULT_COLORS, COLOR_SCHEME_MAP } from '@ui/patterns/visualization/charts/foundation/palettes';
+import { COLOR_SCHEME_MAP } from '@ui/patterns/visualization/charts/foundation/palettes';
+import { resolveChartSeriesPaint } from '@ui/patterns/visualization/charts/runtime/chart-engine/foundation/grammar/palette';
+
+/**
+ * The legacy `default` and `accessible` schemes resolve through the canonical
+ * consumption chain (category > generated series > mode-aware channel >
+ * literal) instead of the raw-hex arrays, so compiler-generated tenant
+ * palettes reach every family without a local definition shadowing them.
+ * Both map onto the `accessible` channel because `DEFAULT_COLORS` has always
+ * aliased `ACCESSIBLE_COLORS` on this path: the channel's light values equal
+ * those legacy hexes byte-for-byte, keeping standalone light rendering
+ * byte-stable. Scheme-faithful `default`-channel adoption arrives with each
+ * family's migration onto the engine renderers, where baselines gate it.
+ */
+const LEGACY_SERIES_PAINT: string[] = [...resolveChartSeriesPaint('accessible')];
 
 export interface ChartPersonalityOptions {
   animate?: boolean;
@@ -82,7 +96,9 @@ export function useChartPersonality(
     const chartPersonality = tokens.personality.chart;
     // Color scheme cascade: explicit option -> personality token -> 'default'.
     const scheme = options.colorScheme ?? chartPersonality.colorScheme ?? 'default';
-    const colors = COLOR_SCHEME_MAP[scheme] ?? DEFAULT_COLORS;
+    const colors = scheme === 'default' || scheme === 'accessible'
+      ? LEGACY_SERIES_PAINT
+      : COLOR_SCHEME_MAP[scheme] ?? LEGACY_SERIES_PAINT;
 
     return {
       animate: !resolvedStatic && (options.animate ?? chartPersonality.animateOnMount),

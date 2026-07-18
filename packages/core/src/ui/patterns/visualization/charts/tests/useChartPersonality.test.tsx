@@ -70,6 +70,48 @@ function createReducedMotionController(initial: boolean) {
 }
 
 describe('useChartPersonality', () => {
+  it('resolves default and accessible schemes to the canonical consumption chain', () => {
+    mockMatchMedia(1440, false);
+
+    // The legacy raw-hex arrays are replaced by consumption expressions:
+    // authored category > generated tenant series > mode-aware channel >
+    // audited literal. Both legacy schemes ride the accessible channel
+    // because DEFAULT_COLORS always aliased ACCESSIBLE_COLORS on this path;
+    // the channel's light values equal those hexes, so standalone light
+    // rendering is byte-stable while tenant palettes become visible.
+    const legacyAccessibleHexes = [
+      '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5',
+      '#7a4595', '#5f6368', '#006d77', '#9b4a5a', '#4d6a00',
+    ];
+
+    for (const colorScheme of ['default', 'accessible'] as const) {
+      const { result } = renderHook(() => useChartPersonality({ colorScheme }), {
+        wrapper: buildWrapper('events.organizer'),
+      });
+
+      expect(result.current.colors).toHaveLength(10);
+      result.current.colors.forEach((color, index) => {
+        const slot = index + 1;
+        expect(color).toBe(
+          `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-accessible-${slot}, ${legacyAccessibleHexes[index]})))`,
+        );
+      });
+    }
+  });
+
+  it('keeps the bounded var-backed schemes on their existing palettes', () => {
+    mockMatchMedia(1440, false);
+
+    const { result } = renderHook(() => useChartPersonality({ colorScheme: 'monochrome' }), {
+      wrapper: buildWrapper('events.organizer'),
+    });
+
+    expect(result.current.colors[0]).toBe('var(--ds-color-primary-900)');
+    for (const color of result.current.colors) {
+      expect(color).toMatch(/^var\(--ds-color-primary-\d+\)$/);
+    }
+  });
+
   it('resolves different chart defaults for expressive and dense product profiles', () => {
     mockMatchMedia(1440, false);
 

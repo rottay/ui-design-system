@@ -92,7 +92,7 @@ describe('chart personality palette fallback', () => {
     );
 
     await waitFor(() => {
-      expect(container.querySelectorAll('[data-part="series-point"]')).toHaveLength(1);
+      expect(container.querySelectorAll('[data-part="scatter-point-mark"]')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="node-mark"]')).toHaveLength(3);
     });
 
@@ -102,11 +102,20 @@ describe('chart personality palette fallback', () => {
       container.querySelector('[data-testid="gantt-palette"] [data-part="task-duration"]'),
       container.querySelector('[data-testid="network-palette"] [data-part="node-mark"]'),
       container.querySelector('[data-testid="sankey-palette"] [data-part="node-mark"]'),
-      container.querySelector('[data-testid="scatter-palette"] [data-part="series-point"]'),
     ];
 
     for (const mark of marks) {
       expect(mark).toHaveAttribute('fill', expected);
     }
+
+    // Scatter (like pie) is a categorical family: it paints through the governed
+    // `--ds-chart-paint-N` skin channel keyed on `data-series-index`, not an
+    // inline resolved fill. Its tenant-palette governance is therefore proven by
+    // the governed series index on the mark rather than a concrete fill attr.
+    const scatterMark = container.querySelector(
+      '[data-testid="scatter-palette"] [data-part="scatter-point-mark"]',
+    );
+    expect(scatterMark).toHaveAttribute('data-series-index', '0');
+    expect(scatterMark?.querySelector('[data-part="scatter-point"]')).not.toHaveAttribute('fill');
   });
 });
