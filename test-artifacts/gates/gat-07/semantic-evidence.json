@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "ca5a7cdf4e4e2fe0e2bc5f0735e923341a5dc4abd2c0ebacf68d25d7674bdd57",
+    "authorityDigest": "cbc212a0f28c2cffbeb7a96d7592222890e9bac8c8f8315a483ba214a0ba8ab1",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -206,8 +206,8 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 23929,
-        "sha256": "5835eb311415fca9a096d751ec904b09cd8e5abe44e0401dbd0c45102fa7da4d"
+        "bytes": 25425,
+        "sha256": "573ea322e5cf44adbdad4d92d1a6a6fffe7c0e40d93eb4fe73942f2c88cb0400"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -249,16 +249,16 @@
           "gate-wiring",
           "workspace-toolchain"
         ],
-        "bytes": 17705,
-        "sha256": "d7cd35cd74da358ba1bf1681eec8572f0856130e51a54bef935a7ae4d82c34c4"
+        "bytes": 18357,
+        "sha256": "45d6dc48ef3216641212c9a2cdd253ff0b9e4c86df6790321e9e2bbe3608cdd0"
       },
       {
         "path": "ui-design-system/packages/core/scripts/analyze-bundle.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 122823,
-        "sha256": "c884bd4a7828427a28edbc41747eec8eff75ae396968603814469472593b9985"
+        "bytes": 123675,
+        "sha256": "739d44b120c920648b16be16633964998f99daff1d67026f3fed6b3b67ee04ef"
       },
       {
         "path": "ui-design-system/packages/core/scripts/app-surface-factory-drain.test.mjs",
@@ -305,8 +305,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 10969,
-        "sha256": "5c6951cbbef4e1bf8f6fc6fe8b11858f2ca67b7bdd2d60c9d00a999a64b33799"
+        "bytes": 12211,
+        "sha256": "0194a6e19eb11729f0eabb0a1bbeefed70854935344b85d89b33ff2f2f386955"
       },
       {
         "path": "ui-design-system/packages/core/scripts/canvas-sink-census.mjs",
@@ -537,8 +537,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 25961,
-        "sha256": "780664675e174a44be279ddccd64e89efabd213aa98fe1b7a0bfbeb86b92706d"
+        "bytes": 26973,
+        "sha256": "71ab469730e986a3ae2a26247a064c2bcf7e184b0f3f74c6ffb8e60f5f5608f4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-17-integral-gate.test.mjs",
@@ -611,6 +611,22 @@
         ],
         "bytes": 3564,
         "sha256": "7a485e14386df91e2f59ebcee4fe5ae97c2e9d88c7c79af8c97c915022bf6bb3"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/dist-freshness-gate.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 4264,
+        "sha256": "0d9278ce09ef208eb46e2b1993adc43801a9cc222f9fbc59f02bb88765404568"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/dist-freshness-gate.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 5437,
+        "sha256": "5a9d7ec5e33580beed82c17b57155cf08da61a551d2c1df9d8dfcef9dfd73d2a"
       },
       {
         "path": "ui-design-system/packages/core/scripts/embedded-css-paint-census.mjs",
@@ -769,6 +785,22 @@
         "sha256": "25019136a9b57d13ed517c233ab0993563a0f2d046d2457d99e15ce249ec7226"
       },
       {
+        "path": "ui-design-system/packages/core/scripts/generate-supplier-contract.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 9587,
+        "sha256": "284e4fb79374fae216b60195042425a1271b3dbf065eeeb657718dddca211bdf"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/generate-supplier-contract.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 9295,
+        "sha256": "3ad7e1dd10ad940f67eb9eec004cf49d13f8b5e5e890cb376cc5c0d490bbec13"
+      },
+      {
         "path": "ui-design-system/packages/core/scripts/generate-surface-capability-census.mjs",
         "roles": [
           "audit-machinery"
@@ -785,12 +817,44 @@
         "sha256": "2249daaa57d402f62168aae6d13c5bcec9952a38b300e31775e04c52a08d148f"
       },
       {
+        "path": "ui-design-system/packages/core/scripts/icon-embed-inventory-gate.baseline.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 747,
+        "sha256": "af7e58cf94f9539620b65053a44c97a8a7881e5d11c85359ffc4653eb1b1b5fc"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/icon-embed-inventory-gate.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 10009,
+        "sha256": "9ffb722541b924166428f4d404923812dfa746d3c333d18de93d578aaaf0a264"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/icon-embed-inventory-gate.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 3503,
+        "sha256": "6cad6ccc59ecc6f5aad36fe74ef2e8a9c065461dc8fba980839642e042f85afb"
+      },
+      {
         "path": "ui-design-system/packages/core/scripts/inline-paint-recovery.test.mjs",
         "roles": [
           "audit-machinery"
         ],
         "bytes": 6821,
         "sha256": "fdb7d45f71871d39bf315d13987ff882fd5747e110fb42ea215f5a0b53a9d18c"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/lib/build-input-hash.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 4755,
+        "sha256": "94aeea0ebc347fadd73546f9fedb25950798baf556219eca79223a3c6ba51551"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/counter-presence-audit.mjs",
@@ -913,6 +977,46 @@
         "sha256": "6277e5e3ad57c87c736b0d52ed8bcb7374b7ef0550760100354c474fff637001"
       },
       {
+        "path": "ui-design-system/packages/core/scripts/pack-inventory-gate.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 13447,
+        "sha256": "89f2348e61b79e6d5023480fb7b27a856b570bb4e1cd40e3380370d02820ec58"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/pack-inventory-gate.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 7562,
+        "sha256": "085d18f270b2e2ca9e70a694138b958522b8726f8f67d03ff08541c20693d87f"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/pack-inventory.additions.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 565,
+        "sha256": "48426fc518773862d5bb72d222000e61d33b7be79f1bdb89d34048f3370d9f9a"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/pack-inventory.baseline.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 866221,
+        "sha256": "447a50f213ca7754d967925a981e0f7fff4220a067c6da6fb1a48d740c2ce578"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/pack-inventory.lucide-allowlist.json",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 1097,
+        "sha256": "cae909fbe4fe6ca8105ed9587b657ee84efc341aa5868f35d28e63fd7879fe91"
+      },
+      {
         "path": "ui-design-system/packages/core/scripts/path-keyed-baseline-relocation.test.mjs",
         "roles": [
           "audit-machinery"
@@ -1005,8 +1109,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 8432,
-        "sha256": "39a14d5deb8270df68d1f276cd18d3b5ffd0876924bdad67947e4787713b9030"
+        "bytes": 8531,
+        "sha256": "e832edf785956e6df7bc2d953ef9d7813cc217046eadd6d51ddf5abd0c73121c"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/write-build-stamp.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 3963,
+        "sha256": "107e7d5e429c321a891e0bac3a209d402a24e19e734227065655bb7e42cdb92f"
       },
       {
         "path": "ui-design-system/packages/core/src/entrypoints/charts/access/index.ts",
@@ -3966,8 +4078,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 352,
-        "sha256": "c61b96fed10a197ece297507ef1fd982d01f390791bf73a0afdc17d03e49629d"
+        "bytes": 790,
+        "sha256": "52afa853f915ac9c9091b685934372111d8b09ae13cb19e2809ea66bf6f721bc"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
@@ -7100,8 +7212,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 12090,
-        "sha256": "be6f265234e09cb33a762e4d39b9f6de003fdfc5299c43698d8fdf2703bf7aa6"
+        "bytes": 14110,
+        "sha256": "ccf8720c4bbb022421c4fa5e5fa5d46fdcb32cd2a7ffa85ffdef7c312fdd4079"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/catalog/user/index.ts",
@@ -7288,8 +7400,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 11471,
-        "sha256": "4dbf9475669ae2a1473f1dc95887a6db5165ba644320c4e7576c390297cdc884"
+        "bytes": 12434,
+        "sha256": "197a4f76c5a9296d4a969757e0d9aea530767ecf9fac89946ec3ea4fbe37195b"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/semantic/generated/facade-map/index.tsx",
@@ -29469,48 +29581,48 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 2601560,
-        "sha256": "c34272f9473b108857a7c1499a3c56594a84ac7c27059e487e1e2e9983fd6ad3"
+        "bytes": 2587496,
+        "sha256": "631ea13b9f257bc9f37149164a52558c0c38bd9270a942ba1a189f63d74d85cc"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2399073,
-        "sha256": "c39cc1096e655fa3b7981196d53e5f0b9420f4cbd747f32545d5bd766b996f72"
+        "bytes": 2385009,
+        "sha256": "48f40bd127ceb49f913058f84cb831baff78c2ac3514bd86aa57326a1f91daf6"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2754466,
-        "sha256": "c49f1cb49b5b2f8e3291e4d96d79cdd7c6efff6f9c9aec0deb033c1e73208a12"
+        "bytes": 2740402,
+        "sha256": "a105c67e78a879a1298d3e3377d083776bd7d386df7d599670675c8806622482"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 180336,
-        "sha256": "096b7a7d59d105f04388be71eea0c1368e3e79a221b1e16c1b381a08994dd2f2"
+        "bytes": 166272,
+        "sha256": "31cefbc7849ca083238859535fda8acca9f655339fccdcfd768863c8111b88a2"
       },
       {
         "path": "ui-design-system/packages/core/styles/platform.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2498846,
-        "sha256": "f7d12a31fcbab409d33a2d8d076e24333587ecc9074e75116e2e4146cb3a560f"
+        "bytes": 2484782,
+        "sha256": "077c8870e8ad5721d934983029431d6ce82c4d3e3bcd7085a7a512256ecbbc88"
       },
       {
         "path": "ui-design-system/packages/core/styles/rottay.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2498846,
-        "sha256": "f7d12a31fcbab409d33a2d8d076e24333587ecc9074e75116e2e4146cb3a560f"
+        "bytes": 2484782,
+        "sha256": "077c8870e8ad5721d934983029431d6ce82c4d3e3bcd7085a7a512256ecbbc88"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -31094,7 +31206,7 @@
         "sha256": "cbb09ba684648879a73df484f6b064f1c5b4b70fcb409b6e0f8aaa4a34ca4485"
       }
     ],
-    "digest": "ca5a7cdf4e4e2fe0e2bc5f0735e923341a5dc4abd2c0ebacf68d25d7674bdd57"
+    "digest": "cbc212a0f28c2cffbeb7a96d7592222890e9bac8c8f8315a483ba214a0ba8ab1"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3013 counters; 2891 completed zeros locked exactly; 114 decrease-only ceilings; 2 positive exact invariants; 6 positive minimum floors)",
@@ -74971,8 +75083,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "162b72a471837b5d1d2cdffdafe6f96268e4b690721304c4e5bf64623cfc330e",
-      "162b72a471837b5d1d2cdffdafe6f96268e4b690721304c4e5bf64623cfc330e"
+      "a8feb6664e79f123be3d9986d692c89662fac10cb1041abc66be06fa226f14e8",
+      "a8feb6664e79f123be3d9986d692c89662fac10cb1041abc66be06fa226f14e8"
     ],
     "agree": true
   }
