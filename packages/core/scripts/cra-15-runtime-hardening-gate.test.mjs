@@ -27,12 +27,18 @@ test("canonical CRA15 source produces deterministic structural evidence without 
   assert.equal(first.artifact.structurallyPassed, true);
   assert.equal(first.artifact.completionEligible, false);
   assert.equal(first.artifact.checks.roadmapAuthority.status, "pending");
+  // Real browser evidence is recorded (W3): the evidence check passes, and the
+  // ONLY remaining pending item is the owner-held Phase 2C registry GO -- the
+  // artifact must still never claim completion on its own.
   assert.equal(
     first.artifact.checks.realBrowserPerformanceAndBundle.status,
-    "pending"
+    "pass"
+  );
+  assert.deepEqual(
+    first.pending.filter((item) => !/Phase 2C remains locked/u.test(item)),
+    []
   );
   assert.match(first.pending.join("\n"), /Phase 2C remains locked/u);
-  assert.match(first.pending.join("\n"), /completion evidence is missing/u);
   assert.equal(first.artifact.governance.sharedContinuousRuntimeBudget, 1);
   assert.equal(first.artifact.governance.certifiedEffects, 1);
   assert.equal(

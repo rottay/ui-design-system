@@ -33,6 +33,9 @@ test-artifacts/craft/*
 !test-artifacts/craft/cra-11/
 !test-artifacts/craft/cra-11/adaptive-contract-census.generated.json
 !test-artifacts/craft/cra-15/
+# Per-test measurement partials are intermediates; the sanctioned artifact is
+# the assembled browser-evidence.json (see cra-15-assemble.mjs).
+test-artifacts/craft/cra-15/.run/
 !test-artifacts/craft/cra-16/
 !test-artifacts/craft/cra-17/
 !test-artifacts/craft/cra-17/icon-supplier-decision.json

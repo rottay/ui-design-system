@@ -1,0 +1,430 @@
+{
+  "config": {
+    "argv": [
+      "/Users/daniel/.nvm/versions/node/v22.17.0/bin/node",
+      "/Users/daniel/Developer/Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/cli.js",
+      "test",
+      "e2e/responsive/particle-runtime.spec.ts",
+      "e2e/responsive/spatial-runtime.spec.ts",
+      "e2e/responsive/runtime.mobile.spec.ts",
+      "--config",
+      "playwright.visual.config.ts",
+      "--reporter=list,json"
+    ],
+    "configFile": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/playwright.visual.config.ts",
+    "rootDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e",
+        "testIgnore": [
+          "/\\.mobile\\.spec\\.ts$/"
+        ],
+        "testMatch": [
+          "visual/**/*.spec.ts",
+          "whitelabel/**/*.spec.ts",
+          "responsive/**/*.spec.ts",
+          "diagnostics/**/*.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-chromium",
+        "name": "mobile-chromium",
+        "testDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/\\.mobile\\.spec\\.ts$/"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @rottay/showroom run start",
+      "url": "http://localhost:7001",
+      "reuseExistingServer": false,
+      "timeout": 180000,
+      "stdout": "pipe",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "responsive/particle-runtime.spec.ts",
+      "file": "responsive/particle-runtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "ParticleField real-browser lifecycle budget",
+          "file": "responsive/particle-runtime.spec.ts",
+          "line": 109,
+          "column": 6,
+          "specs": [
+            {
+              "title": "bounds one live context, hands it across viewports and recovers from context loss",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1180,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:28.600Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "057edfea4f6ed49bf92e-3968ee94535d600a972b",
+              "file": "responsive/particle-runtime.spec.ts",
+              "line": 112,
+              "column": 3
+            },
+            {
+              "title": "keeps reduced-motion and coarse-pointer environments static with no canvas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1348,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:30.046Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "057edfea4f6ed49bf92e-c8797a290dba409089c0",
+              "file": "responsive/particle-runtime.spec.ts",
+              "line": 193,
+              "column": 3
+            },
+            {
+              "title": "never exceeds one runtime while rapidly mounting and unmounting across viewports",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1082,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:31.399Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "057edfea4f6ed49bf92e-52893579d9e255cb12f6",
+              "file": "responsive/particle-runtime.spec.ts",
+              "line": 229,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "responsive/spatial-runtime.spec.ts",
+      "file": "responsive/spatial-runtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SpatialExperience real-browser lifecycle budget",
+          "file": "responsive/spatial-runtime.spec.ts",
+          "line": 19,
+          "column": 6,
+          "specs": [
+            {
+              "title": "bounds one live context, hands it across viewports and retries after context loss",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2902,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:32.888Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "528e8d59f8c773324689-56fb52c071a9d8447b77",
+              "file": "responsive/spatial-runtime.spec.ts",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "keeps reduced-motion, coarse-pointer and save-data environments static",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2136,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:35.888Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "528e8d59f8c773324689-ee26580294c20cc76c2a",
+              "file": "responsive/spatial-runtime.spec.ts",
+              "line": 74,
+              "column": 3
+            },
+            {
+              "title": "fails closed when the browser cannot allocate WebGL2",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 674,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:38.031Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "528e8d59f8c773324689-38bd841112a6aba66976",
+              "file": "responsive/spatial-runtime.spec.ts",
+              "line": 120,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "responsive/runtime.mobile.spec.ts",
+      "file": "responsive/runtime.mobile.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Governed runtimes fall back statically on a mobile device",
+          "file": "responsive/runtime.mobile.spec.ts",
+          "line": 43,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Particle keeps a mobile viewport static with no canvas and no RAF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chromium",
+                  "projectName": "mobile-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 731,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:39.136Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4d7df2d06bdca02f05ef-534a9c7e4bc9ee930a46",
+              "file": "responsive/runtime.mobile.spec.ts",
+              "line": 46,
+              "column": 3
+            },
+            {
+              "title": "Spatial keeps a mobile viewport static with no live WebGL context",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chromium",
+                  "projectName": "mobile-chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 716,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-18T12:40:39.968Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4d7df2d06bdca02f05ef-d110d5efe979c18d3503",
+              "file": "responsive/runtime.mobile.spec.ts",
+              "line": 72,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-18T12:40:26.746Z",
+    "duration": 13993.659,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

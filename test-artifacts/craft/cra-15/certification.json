@@ -4,7 +4,7 @@
   "sourceId": "DS-IMP-106",
   "scope": "ParticleField plus governed Canvas and WebGL lifecycle hardening",
   "package": "@rottay/design-system@2.19.34",
-  "sourceFingerprint": "6917f22699c1df161f4bd2e212b884bee3cbee8ae65854cfbf190f723153b368",
+  "sourceFingerprint": "41ed296f39ba99d5fca99e2436b470c4763b7a489a6601abcba3c944c7ba9937",
   "structurallyPassed": true,
   "completionEligible": false,
   "checks": {
@@ -37,13 +37,18 @@
       "certifiedEffects": 1
     },
     "realBrowserPerformanceAndBundle": {
-      "status": "pending",
-      "summary": null
+      "status": "pass",
+      "summary": {
+        "reportSha256": "66ee63184088d8a632b731d769f2471b624e965c39fa33b537cddf7390f670df",
+        "passedTests": 8,
+        "browser": "149.0.7827.55",
+        "maxLongTaskMs": 1.6,
+        "maxSuspendedRafCallbacks": 0
+      }
     }
   },
   "pending": [
-    "Phase 2C remains locked without structured owner GO",
-    "completion evidence is missing; extend/run the current production-build Particle and Spatial probes with recorded zero suspended RAF, long-task, rapid-cleanup and clean-bundle results"
+    "Phase 2C remains locked without structured owner GO"
   ],
   "governance": {
     "sharedContinuousRuntimeBudget": 1,

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "workOrder": "WO-CRA-15",
+  "package": "@rottay/design-system@2.19.34",
+  "sourceFingerprint": "41ed296f39ba99d5fca99e2436b470c4763b7a489a6601abcba3c944c7ba9937",
+  "runner": {
+    "productionBuild": true,
+    "browserName": "chromium",
+    "browserVersion": "149.0.7827.55"
+  },
+  "report": {
+    "path": "test-artifacts/craft/cra-15/playwright-report.json",
+    "sha256": "66ee63184088d8a632b731d769f2471b624e965c39fa33b537cddf7390f670df",
+    "passed": 8,
+    "failed": 0
+  },
+  "assertions": {
+    "providerColorIsolation": true,
+    "distinctProviderColors": 2,
+    "maxConcurrentContinuousRuntimes": 1,
+    "maxSuspendedRafCallbacks": 0,
+    "maxLongTaskMs": 1.6,
+    "rapidMountUnmountCleanup": true,
+    "bundle": {
+      "cleanBuild": true,
+      "particleGzipBytes": 14347,
+      "spatialHostGzipBytes": 7064,
+      "spatialSpecGzipBytes": 1097
+    },
+    "particle": {
+      "maxDpr": 1,
+      "maxCount": 502,
+      "maxPixels": 385560,
+      "contextLossRecovered": true,
+      "cleanupPassed": true
+    },
+    "spatial": {
+      "maxDpr": 1,
+      "maxDimension": 918,
+      "maxPixels": 385560,
+      "contextLossRecovered": true,
+      "cleanupPassed": true
+    },
+    "fallbackPolicies": {
+      "reduced-motion": true,
+      "coarse-pointer": true,
+      "save-data": true,
+      "unsupported": true
+    }
+  },
+  "mobile": {
+    "device": "Pixel 7",
+    "browserName": "chromium",
+    "browserVersion": "149.0.7827.55",
+    "isMobile": true,
+    "hasTouch": true,
+    "particle": {
+      "coarsePointerStatic": true,
+      "canvasCount": 0,
+      "rafCallbacks": 0
+    },
+    "spatial": {
+      "coarsePointerStatic": true,
+      "canvasCount": 0,
+      "liveCount": 0
+    }
+  },
+  "provenance": {
+    "recordedBy": "packages/showroom/e2e/responsive/cra-15-assemble.mjs",
+    "probes": [
+      "e2e/responsive/particle-runtime.spec.ts",
+      "e2e/responsive/spatial-runtime.spec.ts",
+      "e2e/responsive/runtime.mobile.spec.ts"
+    ],
+    "server": "next start (production build) on :7001 via playwright.visual.config.ts",
+    "bundleMeasurement": "vite inline closure, peers external, gzip level 9 (analyze-bundle.mjs methodology)",
+    "longTaskMetric": "runtime-phase long tasks only: max synchronous rAF callback duration + PerformanceObserver longtask entries attributed to the runtime phase by the first-frame boundary; one-time page hydration is excluded and recorded under pageBootstrapContext",
+    "flaky": 0,
+    "tree": {
+      "headCommit": "58d3853f2f3d9064e94f93912a45639d6419a67c",
+      "workingTreeClean": false,
+      "uncommittedFiles": 88,
+      "showroomBuildId": "eDKB5D8-_uucpdrMgTCNZ",
+      "note": "built from an in-flight W3 working tree (concurrent motion-adoption lane); no CRA-15 source-assertion file was dirty, so the source fingerprint is unaffected"
+    }
+  },
+  "pageBootstrapContext": {
+    "note": "Probe-page hydration long tasks, outside the certified runtime. Recorded so a reader can reconcile the raw trace (e.g. a ~52 ms cold-hydration task) with the certified runtime-phase result.",
+    "boundaryDefinition": "runtime phase begins at the runtime's first requestAnimationFrame request (React hydration never schedules rAF); a long task counts as runtime when start+duration >= boundary, so runtime init/first-frame is included and only tasks that fully completed before the runtime came up are excluded",
+    "probePageHydrationMaxLongTaskMs": 0,
+    "probePageHydrationLongTaskEntries": 0,
+    "runtimePhaseBoundaryMs": 538.4000000059605
+  }
+}

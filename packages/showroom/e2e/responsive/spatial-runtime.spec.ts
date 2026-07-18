@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { recordCra15Measurement } from './cra-15-evidence';
+
 const LIVE = '[data-spatial-mode^="live-"]';
 const CANVAS = '[data-spatial-experience-canvas]';
 // The DS-owned live-high ceiling is 1.5. Keeping the browser assertion at the
@@ -55,13 +57,26 @@ test.describe('SpatialExperience real-browser lifecycle budget', () => {
     await expect(secondary.locator(LIVE)).toHaveCount(1);
     await expect(secondary.locator('[data-spatial-ready="true"]')).toHaveCount(1);
     await expect(page.getByText('Candidate relationship map')).toBeAttached();
+
+    // A single live context was leased at a time (secondary live == 1 while the
+    // primary released to 0), the backing store stayed bounded, and the context
+    // recovered after loss with the offscreen canvas cleaned up (count 0).
+    recordCra15Measurement('desktop-spatial-allocation', {
+      maxDpr: allocation.dpr,
+      maxDimension: Math.max(allocation.width, allocation.height),
+      maxPixels: allocation.pixels,
+      contextLossRecovered: true,
+      cleanupPassed: true,
+      maxConcurrentContexts: 1,
+    });
   });
 
   test('keeps reduced-motion, coarse-pointer and save-data environments static', async ({ browser }) => {
+    const verified: Record<string, boolean> = {};
     for (const environment of [
-      { mobile: false, reduce: 'reduce' as const, saveData: false },
-      { mobile: true, reduce: 'no-preference' as const, saveData: false },
-      { mobile: false, reduce: 'no-preference' as const, saveData: true },
+      { policy: 'reduced-motion', mobile: false, reduce: 'reduce' as const, saveData: false },
+      { policy: 'coarse-pointer', mobile: true, reduce: 'no-preference' as const, saveData: false },
+      { policy: 'save-data', mobile: false, reduce: 'no-preference' as const, saveData: true },
     ]) {
       const context = await browser.newContext({
         hasTouch: environment.mobile,
@@ -89,10 +104,17 @@ test.describe('SpatialExperience real-browser lifecycle budget', () => {
         await expect(page.locator(CANVAS)).toHaveCount(0);
         await expect(page.locator(LIVE)).toHaveCount(0);
         await expect(page.getByText(/(?:Reduced )?operational (?:relationship )?map/i)).toBeVisible();
+        verified[environment.policy] = true;
       } finally {
         await context.close();
       }
     }
+
+    recordCra15Measurement('desktop-spatial-fallback', {
+      reducedMotion: verified['reduced-motion'] === true,
+      coarsePointer: verified['coarse-pointer'] === true,
+      saveData: verified['save-data'] === true,
+    });
   });
 
   test('fails closed when the browser cannot allocate WebGL2', async ({ page }) => {
@@ -112,5 +134,7 @@ test.describe('SpatialExperience real-browser lifecycle budget', () => {
     await expect(page.locator(CANVAS)).toHaveCount(0);
     await expect(page.locator('[data-spatial-reason="webgl2-unsupported"]')).toHaveCount(1);
     await expect(page.getByText('Operational relationship map')).toBeVisible();
+
+    recordCra15Measurement('desktop-spatial-unsupported', { unsupported: true });
   });
 });

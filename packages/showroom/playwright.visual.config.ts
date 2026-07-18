@@ -83,7 +83,26 @@ export default defineConfig({
     // so galleries settle into their final state without an animation tail.
     reducedMotion: 'reduce',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+      // The CRA-15 mobile probe belongs to the mobile-chromium project (real
+      // Pixel 7 device emulation). Excluding it here keeps this fine-pointer
+      // desktop project from running a coarse-pointer fallback spec.
+      testIgnore: /\.mobile\.spec\.ts$/,
+    },
+    {
+      // CRA-15 step 3 (audit MOT-01): real mobile-device evidence for the
+      // governed Particle and Spatial runtimes. Pixel 7 is a Chromium Android
+      // profile (isMobile + hasTouch), so the governed runner.browserName stays
+      // chromium. Only *.mobile.spec.ts runs here; the visual/whitelabel/
+      // diagnostics galleries never match it and stay desktop-only.
+      name: 'mobile-chromium',
+      use: { ...devices['Pixel 7'] },
+      testMatch: /\.mobile\.spec\.ts$/,
+    },
+  ],
   webServer: {
     command: 'pnpm --filter @rottay/showroom run start',
     url: BASE_URL,
