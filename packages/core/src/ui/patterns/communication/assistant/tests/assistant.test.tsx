@@ -1,5 +1,6 @@
 import React from 'react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { MotionProvider } from '@/infrastructure/runtime/motion';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 import {
   AssistantStatusBadge,
@@ -179,6 +180,49 @@ describe('assistant patterns', () => {
     renderSurface(<StreamingText text="Generating summary" />);
     expect(await screen.findByText('Generating summary')).toBeInTheDocument();
     expect(screen.queryByText('|')).not.toBeInTheDocument();
+  });
+
+  it('runs the streaming shimmer and an animated caret when motion is allowed', async () => {
+    renderSurface(<StreamingText text="Generating summary" streaming />);
+
+    expect(await screen.findByText('Generating summary')).toBeInTheDocument();
+    // The shimmer effect mounts its own `ds-shimmer` keyframe; its presence is
+    // proof the live (animated) streaming branch rendered.
+    const hasShimmer = Array.from(document.querySelectorAll('style')).some((node) =>
+      node.textContent?.includes('ds-shimmer'),
+    );
+    expect(hasShimmer).toBe(true);
+    const caret = document.querySelector('[data-part="caret"]');
+    expect(caret?.getAttribute('style')).toContain('ds-assistant-caret');
+  });
+
+  it('renders the full text immediately with no shimmer or blinking caret under a reduced-motion preference', async () => {
+    renderSurface(
+      <MotionProvider reducedMotion>
+        <StreamingText text="Generating summary" streaming />
+      </MotionProvider>,
+    );
+
+    // Full text is present at once -- there is no per-character cadence to wait on.
+    expect(await screen.findByText('Generating summary')).toBeInTheDocument();
+    // The streaming shimmer branch is not mounted, so its keyframe is absent.
+    const hasShimmer = Array.from(document.querySelectorAll('style')).some((node) =>
+      node.textContent?.includes('ds-shimmer'),
+    );
+    expect(hasShimmer).toBe(false);
+    // The caret holds a static position instead of blinking.
+    const caret = document.querySelector('[data-part="caret"]');
+    expect(caret?.getAttribute('style')).toContain('animation: none');
+  });
+
+  it('honors the reducedMotion prop override even without an OS preference', async () => {
+    renderSurface(<StreamingText text="Generating summary" streaming reducedMotion />);
+
+    expect(await screen.findByText('Generating summary')).toBeInTheDocument();
+    const hasShimmer = Array.from(document.querySelectorAll('style')).some((node) =>
+      node.textContent?.includes('ds-shimmer'),
+    );
+    expect(hasShimmer).toBe(false);
   });
 
   it('renders a terminal receipt for a completed tool call and hides live I/O', async () => {

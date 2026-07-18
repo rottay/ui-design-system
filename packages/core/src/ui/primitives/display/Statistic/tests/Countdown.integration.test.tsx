@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { MotionProvider } from '@/infrastructure/runtime/motion';
 import { Countdown } from '../compound/Countdown';
 import { Countdown as ClassicCountdown } from '../engines/classic';
 
@@ -50,6 +51,35 @@ describe('Countdown integration', () => {
       expect(screen.getByText('remaining')).toBeInTheDocument();
       expect(handleFinish).toHaveBeenCalledTimes(1);
     }, { timeout: 1000 });
+  });
+
+  it('under reduced motion, drops the continuous animation-frame loop while the timing display keeps counting down', async () => {
+    const rafSpy = vi.spyOn(window, 'requestAnimationFrame');
+    const handleChange = vi.fn();
+    const handleFinish = vi.fn();
+
+    render(
+      <MotionProvider reducedMotion>
+        <Countdown
+          value={Date.now() + 1100}
+          format="ss"
+          onChange={handleChange}
+          onFinish={handleFinish}
+        />
+      </MotionProvider>
+    );
+
+    await waitFor(() => {
+      expect(handleFinish).toHaveBeenCalledTimes(1);
+      expect(screen.getByText('00')).toBeInTheDocument();
+    }, { timeout: 4000 });
+
+    // The timing display kept advancing (a function, not motion) ...
+    expect(handleChange).toHaveBeenCalled();
+    // ... but no continuous requestAnimationFrame attention loop was scheduled.
+    expect(rafSpy).not.toHaveBeenCalled();
+
+    rafSpy.mockRestore();
   });
 
   it('renders the classic engine countdown without Ant Design deprecation warnings', () => {

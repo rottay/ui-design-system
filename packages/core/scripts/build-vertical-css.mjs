@@ -118,6 +118,39 @@ if (!check) {
   writeFileSync(modernEnginePath, modernEngine);
 }
 
+// The engine-only styles/modern.css bundle must carry the same global
+// reduced-motion guard the tenant bundles inherit from base.css. base.css pulls
+// runtime/personality.css (layer rottay-personality); its tail section holds the
+// `@media (prefers-reduced-motion: reduce)` wildcard plus the
+// html[data-ds-motion='reduced'] runtime seam. Extract that guard region from
+// the same source file so the standalone bundle neutralizes animation and
+// transition under reduced motion instead of relying on a tenant baseline.
+const personalityCss = readFile(resolve(srcCss, 'runtime/personality.css'));
+const reducedMotionGuardStart = personalityCss.indexOf(
+  '@media (prefers-reduced-motion: reduce)'
+);
+if (reducedMotionGuardStart === -1) {
+  console.error('  ERROR: reduced-motion guard not found in runtime/personality.css');
+  process.exit(1);
+}
+const reducedMotionGuard = personalityCss.slice(reducedMotionGuardStart).trimEnd();
+if (
+  !reducedMotionGuard.includes('animation-duration: 0.01ms') ||
+  !reducedMotionGuard.includes("html[data-ds-motion='reduced']")
+) {
+  console.error(
+    '  ERROR: reduced-motion guard in runtime/personality.css is missing its wildcard or runtime seam'
+  );
+  process.exit(1);
+}
+const modernBundle = [
+  modernEngine,
+  '',
+  '/* === Global reduced-motion guard (sourced from runtime/personality.css) === */',
+  reducedMotionGuard,
+  '',
+].join('\n');
+
 // Read tenant-free base CSS and resolve its imports
 const baseCssPath = resolve(srcCss, 'facade/entrypoints/base.css');
 let baseCss = readFile(baseCssPath);
@@ -229,11 +262,11 @@ const stylesBundle = [
 
 if (check) {
   compareToDisk('styles/index.css', stylesBundle);
-  compareToDisk('styles/modern.css', modernEngine);
+  compareToDisk('styles/modern.css', modernBundle);
 } else {
   writeFileSync(resolve(dist, 'styles.css'), stylesBundle);
   writeFileSync(resolve(styles, 'index.css'), stylesBundle);
-  writeFileSync(resolve(styles, 'modern.css'), modernEngine);
+  writeFileSync(resolve(styles, 'modern.css'), modernBundle);
   console.log(`  -> dist/styles.css (${Math.round(stylesBundle.length / 1024)}KB)`);
 }
 

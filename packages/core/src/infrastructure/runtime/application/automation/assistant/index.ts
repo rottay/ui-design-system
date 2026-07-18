@@ -65,6 +65,8 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 
+import { useMotionPreference } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
+
 // ============================================================================
 // useStreamingText
 // ============================================================================
@@ -148,6 +150,13 @@ export function useStreamingText(
   const fullTextRef = useRef('');
   const cursorRef = useRef(0);
 
+  // Reduced motion must suppress the per-character typewriter cadence
+  // (MOT-04): under reduce, startTyping delivers the final text immediately.
+  // A ref keeps startTyping's identity stable across preference flips.
+  const prefersReducedMotion = useMotionPreference();
+  const reducedMotionRef = useRef(prefersReducedMotion);
+  reducedMotionRef.current = prefersReducedMotion;
+
   // Cancel any in-flight animation frame on unmount to prevent state
   // updates on an unmounted component.
   useEffect(() => {
@@ -217,6 +226,16 @@ export function useStreamingText(
       setIsStreaming(true);
       setIsComplete(false);
       setError(null);
+
+      // Final-first under reduced motion: no per-character cadence, no rAF.
+      if (reducedMotionRef.current) {
+        cursorRef.current = fullText.length;
+        setTextState(fullText);
+        setIsStreaming(false);
+        setIsComplete(true);
+        onCompleteRef.current?.(fullText);
+        return;
+      }
 
       const tick = (): void => {
         try {

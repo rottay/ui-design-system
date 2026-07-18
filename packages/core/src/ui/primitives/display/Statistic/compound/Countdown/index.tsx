@@ -5,7 +5,9 @@
  *
  * @remarks
  * The Countdown component displays time remaining until a target date/time.
- * Uses requestAnimationFrame for smooth, performant updates.
+ * Updates ride a self-throttled requestAnimationFrame loop; under reduced
+ * motion a plain one-second timeout chain drives the same once-per-second
+ * display update so no continuous animation-frame loop runs.
  *
  * **Exported Components:**
  * - `Countdown` - Main countdown timer component
@@ -54,6 +56,7 @@
 'use client';
 
 import React, { forwardRef, useState, useEffect, useCallback } from 'react';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import type { CountdownProps } from '../../contracts';
 import { STATISTIC_DEFAULTS } from '../../contracts';
 
@@ -133,6 +136,7 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [isFinished, setIsFinished] = useState(false);
+    const { prefersReducedMotion } = useBreakpoints();
 
     // Calculate target time from value
     const getTargetTime = useCallback(() => {
@@ -145,19 +149,15 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     // Update countdown timer
     useEffect(() => {
       const targetTime = getTargetTime();
-      let animationFrameId: number;
-      let lastUpdate = 0;
+      let animationFrameId: number | undefined;
+      let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
-      const updateTime = (timestamp: number) => {
-        // Throttle updates to once per second for performance
-        if (timestamp - lastUpdate < 1000) {
-          animationFrameId = requestAnimationFrame(updateTime);
-          return;
-        }
-        lastUpdate = timestamp;
-
-        const now = Date.now();
-        const diff = Math.max(0, targetTime - now);
+      // Reads the clock, pushes the next value, and reports whether the timer
+      // should keep running. Advancing the displayed time is a function, not
+      // motion, so it runs under reduced motion too; only the scheduling
+      // mechanism below differs.
+      const tick = (): boolean => {
+        const diff = Math.max(0, targetTime - Date.now());
 
         setTimeLeft(diff);
         onChange?.(diff);
@@ -165,29 +165,58 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
         if (diff === 0 && !isFinished) {
           setIsFinished(true);
           onFinish?.();
-        } else if (diff > 0) {
-          animationFrameId = requestAnimationFrame(updateTime);
+          return false;
         }
+        return diff > 0;
       };
 
       // Initial update
-      const now = Date.now();
-      const initialDiff = Math.max(0, targetTime - now);
+      const initialDiff = Math.max(0, targetTime - Date.now());
       setTimeLeft(initialDiff);
 
-      if (initialDiff > 0) {
+      if (initialDiff <= 0) {
+        if (!isFinished) {
+          setIsFinished(true);
+          onFinish?.();
+        }
+        return;
+      }
+
+      if (prefersReducedMotion) {
+        // Reduced motion: no continuous requestAnimationFrame loop. A
+        // one-second timeout chain keeps the timing display advancing without
+        // running a per-frame animation loop.
+        const schedule = (): void => {
+          timeoutId = setTimeout(() => {
+            if (tick()) schedule();
+          }, 1000);
+        };
+        schedule();
+      } else {
+        let lastUpdate = 0;
+        const updateTime = (timestamp: number): void => {
+          // Throttle updates to once per second for performance
+          if (timestamp - lastUpdate < 1000) {
+            animationFrameId = requestAnimationFrame(updateTime);
+            return;
+          }
+          lastUpdate = timestamp;
+          if (tick()) {
+            animationFrameId = requestAnimationFrame(updateTime);
+          }
+        };
         animationFrameId = requestAnimationFrame(updateTime);
-      } else if (!isFinished) {
-        setIsFinished(true);
-        onFinish?.();
       }
 
       return () => {
-        if (animationFrameId) {
+        if (animationFrameId !== undefined) {
           cancelAnimationFrame(animationFrameId);
         }
+        if (timeoutId !== undefined) {
+          clearTimeout(timeoutId);
+        }
       };
-    }, [value, onFinish, onChange, getTargetTime, isFinished]);
+    }, [value, onFinish, onChange, getTargetTime, isFinished, prefersReducedMotion]);
 
     // Reset finished state when value changes
     useEffect(() => {
