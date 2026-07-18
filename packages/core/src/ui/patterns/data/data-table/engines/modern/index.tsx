@@ -35,7 +35,7 @@ import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { DataTablePatternProps } from '../../contracts';
 import { resolveAccessor, resolveRowKey } from '../../runtime/row-resolution';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
-import { useVirtualScroll } from '../../runtime/virtualization';
+import { useVirtualScroll } from '../../../../runtime/virtualization/virtual-scroll';
 import { useGroupedData } from '../../runtime/grouping';
 import type { EditableConfig } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
 import { InlineCellEditor } from './cell-editor';

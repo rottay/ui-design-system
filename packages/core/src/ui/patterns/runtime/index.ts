@@ -4,3 +4,4 @@ export * from './forms';
 export * from './kanban';
 export * from './pulse';
 export * from './recipes';
+export * from './virtualization';

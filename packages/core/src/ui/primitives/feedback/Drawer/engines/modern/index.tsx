@@ -19,6 +19,7 @@ import type { DrawerProps, DrawerSize } from '../../contracts';
 import { DRAWER_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
 // ============================================================================
 // Constants
@@ -134,6 +135,18 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   // vanishing the instant `open` changes.
   const { shouldRender, dataState, ref: presenceRef } = usePresence(open ?? false);
 
+  // Overlay stack participation for canonical z-index + nested stacking (static
+  // zIndex seam only; this engine keeps its own Escape and scroll-lock). The
+  // resolved value equals `--ds-z-drawer` for a lone drawer and offsets when
+  // several overlays stack.
+  const overlayLayer = useOverlayLayer({
+    kind: 'drawer',
+    active: open ?? false,
+    modal: false,
+    lockScroll: false,
+    restoreFocus: false,
+  });
+
   // overlay.sheet recipe (motion canon): a drawer is a side panel, so its
   // enter/exit timing resolves from the sheet recipe's stamped `--ds-recipe-*`
   // variables. The slide travel stays the skin's anatomical 100%. Under
@@ -193,8 +206,9 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       position: 'fixed',
       // Tokenized overlay stack (spec section 9): the panel sits one tier
       // above the backdrop via the drawer/overlay pair, not a `zBase + 1`
-      // magic-number offset.
-      zIndex: 'var(--ds-z-drawer)',
+      // magic-number offset. The layer manager supplies the canonical drawer
+      // band (equal to --ds-z-drawer for a lone drawer) plus a stack offset.
+      zIndex: overlayLayer.zIndex,
       display: 'flex',
       flexDirection: 'column',
       ...overlayMotion.variables,

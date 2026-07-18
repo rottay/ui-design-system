@@ -125,3 +125,12 @@ export { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS as CONFIRM_DIALOG_VARIANT_COLOR
 export { AlertDialog } from './AlertDialog';
 export type { AlertDialogProps } from './AlertDialog';
 export { ALERT_DIALOG_DEFAULTS } from './AlertDialog';
+
+// Overlay layer-stack manager (shared z-band, Escape routing, scroll-lock)
+export { useOverlayLayer } from '../runtime/overlay/layer-stack';
+export type {
+  OverlayLayerKind,
+  UseOverlayLayerOptions,
+  OverlayLayerProps,
+  OverlayLayerHandle,
+} from '../runtime/overlay/layer-stack';

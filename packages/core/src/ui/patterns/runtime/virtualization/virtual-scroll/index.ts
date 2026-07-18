@@ -9,9 +9,11 @@
  *
  * @remarks
  * This implementation intentionally supports fixed row heights only. Variable
- * row heights would require a measurement pass and row-height cache, which adds
- * complexity. Fixed heights cover the vast majority of data-table use cases and
- * keep the hook lightweight with zero external dependencies.
+ * row heights are covered by the sibling {@link ../variable-scroll | useMeasuredScroll}
+ * hook. Fixed heights cover the vast majority of data-table use cases and keep
+ * this hook lightweight with zero external dependencies. It is re-exported from
+ * the PatternDataTable barrel for API continuity after the physical move into
+ * the shared patterns virtualization support owner.
  */
 
 import { useCallback, useRef, useState } from 'react';

@@ -19,6 +19,9 @@
 import React, { useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../../contracts';
 import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle, spinnerStyle } from '../../../../foundation/engine-styles/modern';
+import { useInfiniteScroll } from '../../../../runtime/virtualization/infinite-scroll';
+
+const NO_OP = (): void => {};
 
 /**
  * Modern (token-driven) LiveFeed engine.
@@ -65,6 +68,18 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
 
   // Cap visible items to prevent excessive DOM nodes in high-throughput feeds.
   const displayItems = maxItems ? items.slice(0, maxItems) : items;
+
+  // Infinite scroll: an end-of-feed sentinel auto-loads the next page. Observes
+  // the internal scroll container when maxHeight bounds it, else the viewport.
+  // The Load more button below stays as an explicit fallback.
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { sentinelRef } = useInfiniteScroll({
+    hasMore: hasMore ?? false,
+    onLoadMore: onLoadMore ?? NO_OP,
+    enabled: Boolean(onLoadMore) && Boolean(hasMore),
+    rootMargin: '0px 0px 120px 0px',
+    root: maxHeight ? scrollContainerRef : null,
+  });
 
   // Skeleton loading state: only shown when there are zero items and loading is true.
   // Subsequent refreshes keep existing items visible (no flicker).
@@ -119,7 +134,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
 
         {/* Feed -- maxHeight enables vertical scrolling for bounded-height containers.
             When omitted, the feed grows unbounded. */}
-        <div style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
+        <div ref={scrollContainerRef} style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
           {displayItems.length === 0 ? (
             emptyState ?? <div data-part="empty" className="text-center py-8">No items</div>
           ) : (
@@ -136,6 +151,10 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
               ))}
             </div>
           )}
+          {/* End-of-feed sentinel: triggers onLoadMore when scrolled into view. */}
+          {hasMore && onLoadMore ? (
+            <div ref={sentinelRef} data-part="sentinel" aria-hidden="true" style={{ height: 1 }} />
+          ) : null}
         </div>
 
         {/* Load more */}

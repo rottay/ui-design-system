@@ -24,6 +24,7 @@ import type { ModalProps } from '../../contracts';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { usePresence } from '@/graphics/motion/react/runtime';
@@ -135,7 +136,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     // This engine's header border is unconditional: both branches of its
     // `divider` ternary resolved to the same value, so the prop paints nothing.
     divider: _divider = MODAL_DEFAULTS.divider,
-    zIndex = MODAL_DEFAULTS.zIndex,
+    zIndex,
     disableAnimation: _disableAnimation = MODAL_DEFAULTS.disableAnimation,
     className = '',
     style = {},
@@ -172,6 +173,20 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   });
 
   useModalInertSiblings(shouldRender);
+
+  // Overlay stack participation for canonical z-index + nested stacking. This
+  // is the static-zIndex seam only (modal: false) -- this engine keeps its own
+  // Escape and scroll-lock handling; the manager just supplies the z band and
+  // stack offset. An explicit `zIndex` prop still wins. MODAL_DEFAULTS.zIndex
+  // stays exported for API stability.
+  const overlayLayer = useOverlayLayer({
+    kind: 'modal',
+    active: open,
+    modal: false,
+    lockScroll: false,
+    restoreFocus: false,
+  });
+  const resolvedZIndex = zIndex ?? overlayLayer.zIndex;
 
   // -- ESC key ----------------------------------------------------------------
 
@@ -288,7 +303,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           justifyContent: isAdaptiveFullscreen ? 'stretch' : 'center',
           paddingTop: isAdaptiveFullscreen ? undefined : placement === 'top' ? '10vh' : undefined,
           paddingBottom: isAdaptiveFullscreen ? undefined : placement === 'bottom' ? '10vh' : undefined,
-          zIndex,
+          zIndex: resolvedZIndex,
         }}
         onClick={handleBackdropClick}
         onClose={handleDialogClose}

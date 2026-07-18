@@ -4,6 +4,7 @@
  */
 
 export * from './data-table';
+export * from './virtual-list';
 export * from './grid-view';
 export * from './gallery-view';
 export * from './detail-panel';

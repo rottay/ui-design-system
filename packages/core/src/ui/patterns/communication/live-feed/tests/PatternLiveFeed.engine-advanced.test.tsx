@@ -125,12 +125,17 @@ describe('PatternLiveFeed advanced engine coverage', () => {
       fireEvent.click(newItemsTrigger);
       expect(onShowNewItems).toHaveBeenCalledTimes(1);
 
+      // The shared infinite-scroll sentinel auto-loads once on mount (the
+      // test-environment IntersectionObserver reports every element visible);
+      // the manual load-more button then adds exactly one further call.
+      const sentinelCalls = onLoadMore.mock.calls.length;
+      expect(sentinelCalls).toBe(1);
       const loadMoreTrigger =
         engine === 'rustic'
           ? screen.getByRole('button', { name: /loading\.\.\.|load more/i })
           : screen.getByRole('button', { name: /load more/i });
       fireEvent.click(loadMoreTrigger);
-      expect(onLoadMore).toHaveBeenCalledTimes(1);
+      expect(onLoadMore).toHaveBeenCalledTimes(sentinelCalls + 1);
 
       act(() => {
         vi.advanceTimersByTime(1000);

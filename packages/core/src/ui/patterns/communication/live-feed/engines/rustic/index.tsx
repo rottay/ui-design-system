@@ -20,6 +20,9 @@
 
 import React, { useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../../contracts';
+import { useInfiniteScroll } from '../../../../runtime/virtualization/infinite-scroll';
+
+const NO_OP = (): void => {};
 
 // ---------------------------------------------------------------------------
 // Static style objects.
@@ -131,6 +134,18 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   // Cap visible items to prevent excessive DOM rendering in high-throughput feeds.
   const displayItems = maxItems ? items.slice(0, maxItems) : items;
 
+  // Infinite scroll: an end-of-feed sentinel auto-loads the next page. Observes
+  // the internal scroll container when maxHeight bounds it, else the viewport.
+  // The Load more button below stays as an explicit fallback.
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { sentinelRef } = useInfiniteScroll({
+    hasMore: hasMore ?? false,
+    onLoadMore: onLoadMore ?? NO_OP,
+    enabled: Boolean(onLoadMore) && Boolean(hasMore),
+    rootMargin: '0px 0px 120px 0px',
+    root: maxHeight ? scrollContainerRef : null,
+  });
+
   // Skeleton loading: only on first load (empty items). Subsequent refreshes
   // preserve existing items so users see continuous content.
   if (loading && items.length === 0) {
@@ -168,7 +183,7 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
 
       {/* Scrollable feed area. maxHeight makes the container scroll;
           when omitted, the list grows without constraint. */}
-      <div style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
+      <div ref={scrollContainerRef} style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
         {displayItems.length === 0 ? (
           emptyState ?? <div data-part="empty" style={s.empty}>No items</div>
         ) : (
@@ -186,6 +201,10 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             ))}
           </div>
         )}
+        {/* End-of-feed sentinel: triggers onLoadMore when scrolled into view. */}
+        {hasMore && onLoadMore ? (
+          <div ref={sentinelRef} data-part="sentinel" aria-hidden="true" style={{ height: 1 }} />
+        ) : null}
       </div>
 
       {/* Load-more button. Text changes to "Loading..." during fetch to give

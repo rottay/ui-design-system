@@ -35,5 +35,8 @@ export { useInlineEditing } from './runtime/inline-editing';
 export type { UseInlineEditingOptions, UseInlineEditingReturn } from './runtime/inline-editing';
 export { useDataTable } from './runtime/state';
 export type { UseDataTableOptions, UseDataTableReturn } from './runtime/state';
-export { useVirtualScroll } from './runtime/virtualization';
-export type { UseVirtualScrollOptions, UseVirtualScrollReturn } from './runtime/virtualization';
+// `useVirtualScroll` physically moved to the shared patterns virtualization
+// runtime; this re-export preserves its historical public API from the
+// PatternDataTable barrel.
+export { useVirtualScroll } from '../../runtime/virtualization/virtual-scroll';
+export type { UseVirtualScrollOptions, UseVirtualScrollReturn } from '../../runtime/virtualization/virtual-scroll';
