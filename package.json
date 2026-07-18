@@ -48,6 +48,7 @@
     "test:coverage": "pnpm --filter @rottay/design-system run test:coverage",
     "typecheck": "pnpm --filter @rottay/design-system run build && pnpm -r run typecheck",
     "typecheck:core": "pnpm --filter @rottay/design-system run typecheck",
+    "typecheck:tests": "pnpm --filter @rottay/design-system run typecheck:tests && pnpm --filter @rottay/showroom run typecheck:tests",
     "verify:core": "pnpm --filter @rottay/design-system run engine-audit:check && pnpm --filter @rottay/design-system run test:scripts && pnpm --filter @rottay/design-system run typecheck && pnpm --filter @rottay/design-system exec vitest run && pnpm --filter @rottay/design-system run build && pnpm --filter @rottay/design-system run build-storybook",
     "next:free": "kill-port 3000 && kill-port 6006 && kill-port 6007",
     "changeset": "changeset",

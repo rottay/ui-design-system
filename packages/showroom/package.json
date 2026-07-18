@@ -9,6 +9,8 @@
     "build": "next build --webpack",
     "start": "next start --port 7001",
     "typecheck": "tsc --noEmit",
+    "typecheck:tests": "node ../core/scripts/typecheck-tests-ratchet.mjs --label showroom --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json",
+    "test:diagnostics": "node --test e2e/diagnostics/skin-rule-coverage.unit.test.mjs",
     "lint": "eslint . --max-warnings=0",
     "test:visual": "playwright test e2e/visual --config playwright.visual.config.ts",
     "test:visual:approve": "playwright test e2e/visual --config playwright.visual.config.ts --update-snapshots",

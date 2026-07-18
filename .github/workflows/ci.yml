@@ -25,6 +25,7 @@ jobs:
     outputs:
       core: ${{ steps.changes.outputs.core }}
       showroom: ${{ steps.changes.outputs.showroom }}
+      gates: ${{ steps.changes.outputs.gates }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,10 +66,21 @@ jobs:
             SHOWROOM="true"
           fi
 
+          # Local-gate set: structure/audit/census gates plus roadmap:check.
+          # roadmap/ and root scripts/ changes trigger nothing else, so the
+          # ledger-consistency and motion/structure gates would never run
+          # without their own trigger (audit GAT-04).
+          GATES="false"
+          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/|roadmap/|package\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|\.github/workflows/ci\.yml$)'; then
+            GATES="true"
+          fi
+
           echo "core=$CORE" >> $GITHUB_OUTPUT
           echo "showroom=$SHOWROOM" >> $GITHUB_OUTPUT
+          echo "gates=$GATES" >> $GITHUB_OUTPUT
           echo "Core changed: $CORE"
           echo "Showroom changed: $SHOWROOM"
+          echo "Gates triggered: $GATES"
 
   # ─────────────────────────────────────────────────────
   #  Core Library (typecheck, build, test, storybook)
@@ -101,6 +113,13 @@ jobs:
 
       - name: Typecheck
         run: pnpm --filter @rottay/design-system run typecheck
+
+      # GAT-03: test files are excluded from the production tsconfig, so a spec
+      # could import a nonexistent symbol and stay green. This type-checks them
+      # under a decrease-only error-count ratchet (large standing debt, bites on
+      # any NEW test type error). Runs off source, no build required.
+      - name: Typecheck test files (GAT-03 ratchet)
+        run: pnpm --filter @rottay/design-system run typecheck:tests
 
       # WO-GAT-04: the engine-token ratchet includes the APCA contrast counter
       # (a11y.apcaPairings). It runs off source, so no build is required first.
@@ -144,6 +163,15 @@ jobs:
       # in this workflow where the staleness check can actually see anything.
       - name: Artifact staleness (before Build regenerates them)
         run: pnpm --filter @rottay/design-system exec vitest run src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts
+
+      # GAT-02: the six committed styles/*.css bundles ship in the npm files list
+      # but had no CI check, and Build (below) regenerates them in place, masking
+      # any committed drift. This recomposes every bundle IN MEMORY (compiling the
+      # modern engine from source via postcss, no dist dependency) and byte-diffs
+      # against the committed files. It MUST run before Build for the same reason
+      # the artifact-staleness step above does.
+      - name: Styles bundle staleness (GAT-02, before Build regenerates them)
+        run: pnpm --filter @rottay/design-system run gate:styles-css
 
       # The package postbuild hook runs the WO-CRA-14 public-barrel/chunk gate
       # against the exact dist artifacts produced immediately above it.
@@ -233,6 +261,18 @@ jobs:
 
       - name: Typecheck
         run: pnpm --filter @rottay/showroom run typecheck
+
+      # GAT-03: e2e specs and both Playwright configs are type-erased too.
+      # Same decrease-only ratchet as core.
+      - name: Typecheck test files (GAT-03 ratchet)
+        run: pnpm --filter @rottay/showroom run typecheck:tests
+
+      # GAT-01: proves the dead-selector audit's collectRules() reads the real
+      # skin corpus (thousands of selectors) rather than scanning relocated paths
+      # and asserting nothing. Node-only, no browser — the Playwright audit itself
+      # runs in the visual job against the production build.
+      - name: Skin-rule collection non-vacuity (GAT-01 unit)
+        run: pnpm --filter @rottay/showroom run test:diagnostics
 
       - name: Lint
         run: pnpm --filter @rottay/showroom run lint
@@ -366,6 +406,70 @@ jobs:
           retention-days: 14
 
   # ─────────────────────────────────────────────────────
+  #  Local gates — structure/audits/census/roadmap (audit GAT-04)
+  #  These node gates were maintained but never ran in CI, so structure
+  #  law, brand-compiler emitter closure, census staleness and roadmap
+  #  ledger integrity were enforced only by contributor discipline.
+  # ─────────────────────────────────────────────────────
+  local_gates:
+    name: Local Gates
+    needs: detect
+    if: needs.detect.outputs.gates == 'true'
+    runs-on: self-hosted
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@rottay'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Structure real-tree check
+        run: pnpm --filter @rottay/design-system run structure:check
+
+      # P-76: unlayered paint twins must stay unlayered and the layered bridge
+      # files must never regrow preflight-killable paint (decrease-only ceilings).
+      - name: CSS layer paint gate (P-76)
+        run: pnpm --filter @rottay/design-system run csspaint:check
+
+      # Allow-listed OFF (pre-existing): two orphan personality vars
+      # (--ds-personality-accent-bar-style / --ds-personality-accent-bar-thickness)
+      # are emitted by resolvePartialPersonalityCssVariables() with no reader
+      # (WLB-04 dead-channel class), so this gate is red at HEAD independent of
+      # this wave. TODO drop the `|| ...` once a reader lands or the vars are removed.
+      - name: Integration audit (brand-compiler emitter closure)
+        run: pnpm --filter @rottay/design-system run lint:integration || echo "::warning title=lint:integration allow-listed::pre-existing orphan personality vars accent-bar-style/-thickness (WLB-04); re-enable when a reader lands or the vars are dropped"
+
+      - name: Vertical compliance
+        run: pnpm --filter @rottay/design-system run lint:vertical
+
+      - name: CRA-11 adaptive/factory census staleness
+        run: pnpm run cra11:check
+
+      # Allow-listed OFF (structural): cra-12 scanWorkspace() throws unless
+      # ../app-bithire and ../app-platform are present at pinned SHAs — a
+      # cross-repo dependency this single-repo checkout does not satisfy. TODO
+      # wire with sibling checkouts, or split the DS-local slice out of the gate.
+      - name: CRA-12 motion governance
+        run: pnpm run cra12:check || echo "::warning title=cra12:check allow-listed::cross-repo gate needs ../app-bithire and ../app-platform checkouts at pinned SHAs"
+
+      - name: Roadmap ledger consistency
+        run: pnpm run roadmap:check
+
+  # ─────────────────────────────────────────────────────
   #  Changeset Validation (PRs only)
   # ─────────────────────────────────────────────────────
   changeset:
@@ -402,7 +506,7 @@ jobs:
   # ─────────────────────────────────────────────────────
   gate:
     name: Summary
-    needs: [detect, core, showroom, a11y, visual, changeset]
+    needs: [detect, core, showroom, a11y, visual, local_gates, changeset]
     if: always()
     runs-on: self-hosted
     timeout-minutes: 2
@@ -418,6 +522,7 @@ jobs:
           SHOWROOM_RESULT="${{ needs.showroom.result }}"
           A11Y_RESULT="${{ needs.a11y.result }}"
           VISUAL_RESULT="${{ needs.visual.result }}"
+          LOCAL_GATES_RESULT="${{ needs.local_gates.result }}"
           CHANGESET_RESULT="${{ needs.changeset.result }}"
 
           if [ "$CORE_RESULT" = "skipped" ]; then
@@ -444,6 +549,12 @@ jobs:
             echo "| Visual Regression + Whitelabel | $VISUAL_RESULT |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
+          if [ "$LOCAL_GATES_RESULT" = "skipped" ]; then
+            echo "| Local Gates | Skipped (no changes) |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Local Gates | $LOCAL_GATES_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           if [ "$CHANGESET_RESULT" = "skipped" ]; then
             echo "| Changeset | Skipped (push event) |" >> "$GITHUB_STEP_SUMMARY"
           else
@@ -451,7 +562,7 @@ jobs:
           fi
 
           # Fail if any required job failed or was cancelled
-          if [ "$CORE_RESULT" = "failure" ] || [ "$CORE_RESULT" = "cancelled" ] || [ "$SHOWROOM_RESULT" = "failure" ] || [ "$SHOWROOM_RESULT" = "cancelled" ] || [ "$A11Y_RESULT" = "failure" ] || [ "$A11Y_RESULT" = "cancelled" ] || [ "$VISUAL_RESULT" = "failure" ] || [ "$VISUAL_RESULT" = "cancelled" ] || [ "$CHANGESET_RESULT" = "failure" ]; then
+          if [ "$CORE_RESULT" = "failure" ] || [ "$CORE_RESULT" = "cancelled" ] || [ "$SHOWROOM_RESULT" = "failure" ] || [ "$SHOWROOM_RESULT" = "cancelled" ] || [ "$A11Y_RESULT" = "failure" ] || [ "$A11Y_RESULT" = "cancelled" ] || [ "$VISUAL_RESULT" = "failure" ] || [ "$VISUAL_RESULT" = "cancelled" ] || [ "$LOCAL_GATES_RESULT" = "failure" ] || [ "$LOCAL_GATES_RESULT" = "cancelled" ] || [ "$CHANGESET_RESULT" = "failure" ]; then
             echo ""
             echo "CI FAILED"
             exit 1

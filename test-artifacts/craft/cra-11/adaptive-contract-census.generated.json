@@ -55,7 +55,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 776,
+            "line": 798,
             "column": 38,
             "role": "transport-read"
           },
@@ -135,7 +135,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 776,
+            "line": 798,
             "column": 38,
             "role": "transport-read"
           },
@@ -197,7 +197,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 776,
+            "line": 798,
             "column": 38,
             "role": "transport-read"
           },
@@ -241,8 +241,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1813,
           "column": 3,
-          "offsetStart": 74188,
-          "offsetEnd": 74198
+          "offsetStart": 73865,
+          "offsetEnd": 73875
         },
         "productiveConsumers": [
           {
@@ -285,8 +285,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1794,
           "column": 3,
-          "offsetStart": 73382,
-          "offsetEnd": 73395
+          "offsetStart": 73078,
+          "offsetEnd": 73091
         },
         "productiveConsumers": [
           {
@@ -330,8 +330,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1795,
           "column": 3,
-          "offsetStart": 73409,
-          "offsetEnd": 73422
+          "offsetStart": 73105,
+          "offsetEnd": 73118
         },
         "productiveConsumers": [
           {
@@ -362,8 +362,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1581,
           "column": 3,
-          "offsetStart": 64788,
-          "offsetEnd": 64804
+          "offsetStart": 64541,
+          "offsetEnd": 64557
         },
         "productiveConsumers": [
           {
@@ -387,8 +387,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1578,
           "column": 3,
-          "offsetStart": 64679,
-          "offsetEnd": 64692
+          "offsetStart": 64432,
+          "offsetEnd": 64445
         },
         "productiveConsumers": [
           {
@@ -419,8 +419,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1579,
           "column": 3,
-          "offsetStart": 64706,
-          "offsetEnd": 64719
+          "offsetStart": 64459,
+          "offsetEnd": 64472
         },
         "productiveConsumers": [
           {
@@ -444,8 +444,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1583,
           "column": 3,
-          "offsetStart": 64891,
-          "offsetEnd": 64910
+          "offsetStart": 64644,
+          "offsetEnd": 64663
         },
         "productiveConsumers": [
           {
@@ -469,8 +469,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 566,
           "column": 3,
-          "offsetStart": 22351,
-          "offsetEnd": 22363
+          "offsetStart": 22332,
+          "offsetEnd": 22344
         },
         "productiveConsumers": [
           {
@@ -507,8 +507,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 564,
           "column": 3,
-          "offsetStart": 22247,
-          "offsetEnd": 22261
+          "offsetStart": 22228,
+          "offsetEnd": 22242
         },
         "productiveConsumers": [
           {
@@ -563,8 +563,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 568,
           "column": 3,
-          "offsetStart": 22463,
-          "offsetEnd": 22473
+          "offsetStart": 22444,
+          "offsetEnd": 22454
         },
         "productiveConsumers": [
           {
@@ -594,8 +594,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 580,
           "column": 3,
-          "offsetStart": 22986,
-          "offsetEnd": 23007
+          "offsetStart": 22967,
+          "offsetEnd": 22988
         },
         "productiveConsumers": [
           {
@@ -619,8 +619,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 576,
           "column": 3,
-          "offsetStart": 22772,
-          "offsetEnd": 22788
+          "offsetStart": 22753,
+          "offsetEnd": 22769
         },
         "productiveConsumers": [
           {
@@ -657,8 +657,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 582,
           "column": 3,
-          "offsetStart": 23101,
-          "offsetEnd": 23122
+          "offsetStart": 23082,
+          "offsetEnd": 23103
         },
         "productiveConsumers": [
           {
@@ -695,8 +695,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1084,
           "column": 3,
-          "offsetStart": 44353,
-          "offsetEnd": 44366
+          "offsetStart": 44220,
+          "offsetEnd": 44233
         },
         "productiveConsumers": [
           {
@@ -711,7 +711,7 @@
         "testOnly": [
           {
             "source": "ui-design-system/packages/core/src/ui/structures/record/tests/RecordBatch.contract.test.tsx",
-            "line": 551,
+            "line": 552,
             "column": 19,
             "role": "write"
           }
@@ -727,8 +727,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1085,
           "column": 3,
-          "offsetStart": 44380,
-          "offsetEnd": 44393
+          "offsetStart": 44247,
+          "offsetEnd": 44260
         },
         "productiveConsumers": [
           {
@@ -743,7 +743,7 @@
         "testOnly": [
           {
             "source": "ui-design-system/packages/core/src/ui/structures/record/tests/RecordBatch.contract.test.tsx",
-            "line": 551,
+            "line": 552,
             "column": 41,
             "role": "write"
           }
@@ -759,13 +759,13 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 703,
           "column": 3,
-          "offsetStart": 28639,
-          "offsetEnd": 28662
+          "offsetStart": 28601,
+          "offsetEnd": 28624
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/detail/index.tsx",
-            "line": 180,
+            "line": 179,
             "column": 52,
             "role": "read"
           }
@@ -791,8 +791,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1296,
           "column": 3,
-          "offsetStart": 52888,
-          "offsetEnd": 52901
+          "offsetStart": 52698,
+          "offsetEnd": 52711
         },
         "productiveConsumers": [
           {
@@ -816,8 +816,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1297,
           "column": 3,
-          "offsetStart": 52915,
-          "offsetEnd": 52928
+          "offsetStart": 52725,
+          "offsetEnd": 52738
         },
         "productiveConsumers": [
           {
@@ -841,8 +841,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 750,
           "column": 3,
-          "offsetStart": 30466,
-          "offsetEnd": 30483
+          "offsetStart": 30409,
+          "offsetEnd": 30426
         },
         "productiveConsumers": [
           {
@@ -892,8 +892,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 752,
           "column": 3,
-          "offsetStart": 30579,
-          "offsetEnd": 30598
+          "offsetStart": 30522,
+          "offsetEnd": 30541
         },
         "productiveConsumers": [
           {
@@ -955,8 +955,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 746,
           "column": 3,
-          "offsetStart": 30262,
-          "offsetEnd": 30275
+          "offsetStart": 30205,
+          "offsetEnd": 30218
         },
         "productiveConsumers": [
           {
@@ -980,8 +980,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 748,
           "column": 3,
-          "offsetStart": 30357,
-          "offsetEnd": 30370
+          "offsetStart": 30300,
+          "offsetEnd": 30313
         },
         "productiveConsumers": [
           {
@@ -1005,8 +1005,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 956,
           "column": 3,
-          "offsetStart": 39485,
-          "offsetEnd": 39500
+          "offsetStart": 39390,
+          "offsetEnd": 39405
         },
         "productiveConsumers": [
           {
@@ -1030,8 +1030,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 958,
           "column": 3,
-          "offsetStart": 39589,
-          "offsetEnd": 39617
+          "offsetStart": 39494,
+          "offsetEnd": 39522
         },
         "productiveConsumers": [
           {
@@ -1067,8 +1067,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 2737,
           "column": 3,
-          "offsetStart": 107947,
-          "offsetEnd": 107965
+          "offsetStart": 107396,
+          "offsetEnd": 107414
         },
         "productiveConsumers": [
           {
@@ -1092,8 +1092,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 2739,
           "column": 3,
-          "offsetStart": 108052,
-          "offsetEnd": 108072
+          "offsetStart": 107501,
+          "offsetEnd": 107521
         },
         "productiveConsumers": [
           {
@@ -1231,8 +1231,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1874,
           "column": 3,
-          "offsetStart": 76444,
-          "offsetEnd": 76454
+          "offsetStart": 76102,
+          "offsetEnd": 76112
         },
         "productiveConsumers": [
           {
@@ -1269,8 +1269,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1872,
           "column": 3,
-          "offsetStart": 76392,
-          "offsetEnd": 76408
+          "offsetStart": 76050,
+          "offsetEnd": 76066
         },
         "productiveConsumers": [
           {
@@ -1307,8 +1307,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1852,
           "column": 3,
-          "offsetStart": 75784,
-          "offsetEnd": 75797
+          "offsetStart": 75461,
+          "offsetEnd": 75474
         },
         "productiveConsumers": [
           {
@@ -1352,8 +1352,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1853,
           "column": 3,
-          "offsetStart": 75811,
-          "offsetEnd": 75824
+          "offsetStart": 75488,
+          "offsetEnd": 75501
         },
         "productiveConsumers": [
           {
@@ -1377,8 +1377,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1492,
           "column": 3,
-          "offsetStart": 60917,
-          "offsetEnd": 60935
+          "offsetStart": 60689,
+          "offsetEnd": 60707
         },
         "productiveConsumers": [
           {
@@ -1402,8 +1402,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1489,
           "column": 3,
-          "offsetStart": 60809,
-          "offsetEnd": 60822
+          "offsetStart": 60581,
+          "offsetEnd": 60594
         },
         "productiveConsumers": [
           {
@@ -1427,8 +1427,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1490,
           "column": 3,
-          "offsetStart": 60836,
-          "offsetEnd": 60849
+          "offsetStart": 60608,
+          "offsetEnd": 60621
         },
         "productiveConsumers": [
           {
@@ -1452,8 +1452,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1904,
           "column": 3,
-          "offsetStart": 77537,
-          "offsetEnd": 77550
+          "offsetStart": 77195,
+          "offsetEnd": 77208
         },
         "productiveConsumers": [
           {
@@ -1490,8 +1490,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1905,
           "column": 3,
-          "offsetStart": 77564,
-          "offsetEnd": 77577
+          "offsetStart": 77222,
+          "offsetEnd": 77235
         },
         "productiveConsumers": [
           {
@@ -1515,8 +1515,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1402,
           "column": 3,
-          "offsetStart": 57348,
-          "offsetEnd": 57374
+          "offsetStart": 57139,
+          "offsetEnd": 57165
         },
         "productiveConsumers": [
           {
@@ -1547,8 +1547,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1400,
           "column": 3,
-          "offsetStart": 57212,
-          "offsetEnd": 57230
+          "offsetStart": 57003,
+          "offsetEnd": 57021
         },
         "productiveConsumers": [
           {
@@ -1579,8 +1579,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1398,
           "column": 3,
-          "offsetStart": 57086,
-          "offsetEnd": 57105
+          "offsetStart": 56877,
+          "offsetEnd": 56896
         },
         "productiveConsumers": [
           {
@@ -1611,8 +1611,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1390,
           "column": 3,
-          "offsetStart": 56753,
-          "offsetEnd": 56774
+          "offsetStart": 56544,
+          "offsetEnd": 56565
         },
         "productiveConsumers": [
           {
@@ -1636,8 +1636,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1396,
           "column": 3,
-          "offsetStart": 56981,
-          "offsetEnd": 56997
+          "offsetStart": 56772,
+          "offsetEnd": 56788
         },
         "productiveConsumers": [
           {
@@ -1674,8 +1674,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1393,
           "column": 3,
-          "offsetStart": 56871,
-          "offsetEnd": 56884
+          "offsetStart": 56662,
+          "offsetEnd": 56675
         },
         "productiveConsumers": [
           {
@@ -1699,8 +1699,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1394,
           "column": 3,
-          "offsetStart": 56898,
-          "offsetEnd": 56911
+          "offsetStart": 56689,
+          "offsetEnd": 56702
         },
         "productiveConsumers": [
           {
@@ -1724,8 +1724,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1404,
           "column": 3,
-          "offsetStart": 57484,
-          "offsetEnd": 57505
+          "offsetStart": 57275,
+          "offsetEnd": 57296
         },
         "productiveConsumers": [
           {
@@ -1762,8 +1762,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1652,
           "column": 3,
-          "offsetStart": 67972,
-          "offsetEnd": 67992
+          "offsetStart": 67706,
+          "offsetEnd": 67726
         },
         "productiveConsumers": [
           {
@@ -1787,8 +1787,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1650,
           "column": 3,
-          "offsetStart": 67876,
-          "offsetEnd": 67886
+          "offsetStart": 67610,
+          "offsetEnd": 67620
         },
         "productiveConsumers": [
           {
@@ -1812,8 +1812,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1647,
           "column": 3,
-          "offsetStart": 67731,
-          "offsetEnd": 67744
+          "offsetStart": 67465,
+          "offsetEnd": 67478
         },
         "productiveConsumers": [
           {
@@ -1837,8 +1837,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1648,
           "column": 3,
-          "offsetStart": 67758,
-          "offsetEnd": 67771
+          "offsetStart": 67492,
+          "offsetEnd": 67505
         },
         "productiveConsumers": [
           {
@@ -1862,8 +1862,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1223,
           "column": 3,
-          "offsetStart": 49623,
-          "offsetEnd": 49636
+          "offsetStart": 49452,
+          "offsetEnd": 49465
         },
         "productiveConsumers": [
           {
@@ -1900,8 +1900,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1224,
           "column": 3,
-          "offsetStart": 49650,
-          "offsetEnd": 49663
+          "offsetStart": 49479,
+          "offsetEnd": 49492
         },
         "productiveConsumers": [
           {
@@ -1932,8 +1932,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1997,
           "column": 3,
-          "offsetStart": 81130,
-          "offsetEnd": 81143
+          "offsetStart": 80750,
+          "offsetEnd": 80763
         },
         "productiveConsumers": [
           {
@@ -1957,8 +1957,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1998,
           "column": 3,
-          "offsetStart": 81157,
-          "offsetEnd": 81170
+          "offsetStart": 80777,
+          "offsetEnd": 80790
         },
         "productiveConsumers": [
           {
@@ -1982,8 +1982,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1020,
           "column": 3,
-          "offsetStart": 41977,
-          "offsetEnd": 41990
+          "offsetStart": 41863,
+          "offsetEnd": 41876
         },
         "productiveConsumers": [
           {
@@ -2014,8 +2014,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1021,
           "column": 3,
-          "offsetStart": 42004,
-          "offsetEnd": 42017
+          "offsetStart": 41890,
+          "offsetEnd": 41903
         },
         "productiveConsumers": [
           {
@@ -2052,13 +2052,13 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 873,
+            "line": 897,
             "column": 46,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2690,
+            "line": 2707,
             "column": 16,
             "role": "read"
           }
@@ -2083,19 +2083,19 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 887,
+            "line": 911,
             "column": 17,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 888,
+            "line": 912,
             "column": 22,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 891,
+            "line": 915,
             "column": 15,
             "role": "read"
           }
@@ -2120,19 +2120,19 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 875,
+            "line": 899,
             "column": 13,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 893,
+            "line": 917,
             "column": 39,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2065,
+            "line": 2089,
             "column": 28,
             "role": "read"
           }
@@ -2157,13 +2157,13 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 866,
+            "line": 890,
             "column": 27,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 869,
+            "line": 893,
             "column": 27,
             "role": "read"
           }
@@ -2255,13 +2255,13 @@
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1929,
+            "line": 1953,
             "column": 44,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2568,
+            "line": 2585,
             "column": 44,
             "role": "read"
           }
@@ -2305,43 +2305,43 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 906,
+            "line": 930,
             "column": 31,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1361,
+            "line": 1385,
             "column": 41,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1362,
+            "line": 1386,
             "column": 45,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1405,
+            "line": 1429,
             "column": 15,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1413,
+            "line": 1437,
             "column": 39,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1414,
+            "line": 1438,
             "column": 43,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1424,
+            "line": 1448,
             "column": 56,
             "role": "read"
           }
@@ -2415,8 +2415,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1148,
           "column": 3,
-          "offsetStart": 46794,
-          "offsetEnd": 46815
+          "offsetStart": 46642,
+          "offsetEnd": 46663
         },
         "productiveConsumers": [
           {
@@ -2440,8 +2440,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1145,
           "column": 3,
-          "offsetStart": 46658,
-          "offsetEnd": 46671
+          "offsetStart": 46506,
+          "offsetEnd": 46519
         },
         "productiveConsumers": [
           {
@@ -2472,8 +2472,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 1146,
           "column": 3,
-          "offsetStart": 46685,
-          "offsetEnd": 46698
+          "offsetStart": 46533,
+          "offsetEnd": 46546
         },
         "productiveConsumers": [
           {
@@ -2497,8 +2497,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 880,
           "column": 3,
-          "offsetStart": 36147,
-          "offsetEnd": 36167
+          "offsetStart": 36071,
+          "offsetEnd": 36091
         },
         "productiveConsumers": [
           {
@@ -2522,8 +2522,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 882,
           "column": 3,
-          "offsetStart": 36257,
-          "offsetEnd": 36276
+          "offsetStart": 36181,
+          "offsetEnd": 36200
         },
         "productiveConsumers": [
           {
@@ -2547,8 +2547,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 877,
           "column": 3,
-          "offsetStart": 36046,
-          "offsetEnd": 36059
+          "offsetStart": 35970,
+          "offsetEnd": 35983
         },
         "productiveConsumers": [
           {
@@ -2579,8 +2579,8 @@
           "source": "ui-design-system/packages/core/src/ui/surfaces/foundation/contracts/index.ts",
           "line": 878,
           "column": 3,
-          "offsetStart": 36073,
-          "offsetEnd": 36086
+          "offsetStart": 35997,
+          "offsetEnd": 36010
         },
         "productiveConsumers": [
           {
@@ -2617,25 +2617,25 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1360,
+            "line": 1384,
             "column": 48,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1399,
+            "line": 1423,
             "column": 30,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1412,
+            "line": 1436,
             "column": 46,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1424,
+            "line": 1448,
             "column": 30,
             "role": "read"
           }
@@ -2660,25 +2660,25 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1362,
+            "line": 1386,
             "column": 77,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1363,
+            "line": 1387,
             "column": 48,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1414,
+            "line": 1438,
             "column": 75,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1417,
+            "line": 1441,
             "column": 21,
             "role": "read"
           }
@@ -2703,25 +2703,25 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1368,
+            "line": 1392,
             "column": 49,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1369,
+            "line": 1393,
             "column": 44,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1418,
+            "line": 1442,
             "column": 21,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1423,
+            "line": 1447,
             "column": 22,
             "role": "read"
           }
@@ -2746,13 +2746,13 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1372,
+            "line": 1396,
             "column": 49,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1373,
+            "line": 1397,
             "column": 21,
             "role": "read"
           }
@@ -2777,7 +2777,7 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 767,
+            "line": 789,
             "column": 44,
             "role": "transport-read"
           },
@@ -2814,7 +2814,7 @@
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 767,
+            "line": 789,
             "column": 44,
             "role": "transport-read"
           },
@@ -2898,7 +2898,7 @@
           },
           {
             "source": "app-bithire/src/features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-            "line": 679,
+            "line": 650,
             "column": 29,
             "repository": "app-bithire"
           }
@@ -3114,19 +3114,19 @@
           },
           {
             "source": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
-            "line": 100,
+            "line": 99,
             "column": 11,
             "repository": "ui-design-system"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
-            "line": 131,
+            "line": 130,
             "column": 38,
             "repository": "ui-design-system"
           },
           {
             "source": "ui-design-system/packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx",
-            "line": 94,
+            "line": 92,
             "column": 38,
             "repository": "ui-design-system"
           }

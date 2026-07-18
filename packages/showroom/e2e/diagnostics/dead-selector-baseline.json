@@ -1,0 +1,12 @@
+{
+  "$schema-note": "Reviewed allow-list for the dead-selector audit (P-79). deadAnchors is the BUG class: a skin rule whose data-part anchor is absent from the DOM no matter the state, so the rule reaches nobody. It MUST stay empty; the static skins.deadParts gate already enforces 0 stamped-but-unreferenced parts, so a browser-observed dead anchor is a genuine render-drop regression. Any entry added here is an explicitly reviewed exception and REQUIRES a non-empty reason. thinFixtures and uncoveredFiles are informational (measured, not failing): an unphotographed state or an unrendered component is a torture-page coverage hole, not a dead rule.",
+  "deadAnchors": [],
+  "thinFixtures": {
+    "$note": "Populated on the first authenticated Playwright run under playwright.visual.config.ts. Seeded empty; the spec writes the full measured set to dead-selector-report.json for review. Not a failing assertion.",
+    "reviewed": []
+  },
+  "uncoveredFiles": {
+    "$note": "Skin files whose component never rendered on any torture-page section visited. A coverage gap in /probe/whitelabel-torture, not a dead rule. Seeded empty; reviewed on the first authenticated run.",
+    "reviewed": []
+  }
+}

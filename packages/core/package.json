@@ -166,9 +166,9 @@
       "default": "./dist/platform.css"
     },
     "./styles/modern": {
-      "style": "./dist/modern-engine.css",
-      "import": "./dist/modern-engine.css",
-      "default": "./dist/modern-engine.css"
+      "style": "./styles/modern.css",
+      "import": "./styles/modern.css",
+      "default": "./styles/modern.css"
     },
     "./eslint": {
       "types": "./dist/eslint.d.ts",
@@ -245,6 +245,9 @@
     "build-storybook": "storybook build && node scripts/check-storybook-budget.mjs",
     "pretypecheck": "pnpm run icons:check",
     "typecheck": "tsc --noEmit",
+    "typecheck:tests": "node scripts/typecheck-tests-ratchet.mjs --label core --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json",
+    "csspaint:check": "node scripts/css-layer-paint-gate.mjs",
+    "gate:styles-css": "node --test scripts/vertical-css-staleness.gate.mjs",
     "test": "vitest",
     "test:run": "vitest run",
     "test:unit": "vitest run --project unit",

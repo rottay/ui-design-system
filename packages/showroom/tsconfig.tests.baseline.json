@@ -1,0 +1,5 @@
+{
+  "note": "Decrease-only ceiling for typecheck:tests error count. Regenerate with --write only after reviewing the change. Never raise this to green a new test type error; fix the error instead.",
+  "errors": 5,
+  "topErrorClasses": "error TS2353=3 error TS2769=2"
+}

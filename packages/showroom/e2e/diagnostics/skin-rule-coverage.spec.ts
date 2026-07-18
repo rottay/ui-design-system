@@ -1,16 +1,17 @@
-import { test } from '@playwright/test';
-import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
+import { test, expect } from '@playwright/test';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import postcss from 'postcss';
+import { collectRules, SKIN_DIRS } from './skin-rule-coverage.lib.mjs';
 
 // ---------------------------------------------------------------------------
 // Dead-selector audit (P-79).
 //
-// Three ways a skin can silently paint nothing, and we only guard two:
+// Three ways a skin can silently paint nothing, and we only guard two
+// statically:
 //   - it does not PARSE            -> skins.parseErrors
 //   - it is never IMPORTED         -> skins.unwired
-//   - its selectors MATCH NOTHING  -> nothing catches this
+//   - its selectors MATCH NOTHING  -> nothing static catches this
 //
 // The third silence is the one P-79 exposed: `data-part` is declared on every
 // component but Grid/Card drop it (and Button drops it in modern), so a rule
@@ -29,16 +30,12 @@ import postcss from 'postcss';
 //
 // Interaction pseudo-classes are stripped before querying (`:hover` matches
 // nothing at rest, which says nothing about the rule) and so are pseudo-
-// elements (`::after` always exists if its base matches).
+// elements (`::after` always exists if its base matches). Rule collection lives
+// in ./skin-rule-coverage.lib.mjs so a node unit test can prove this spec is not
+// vacuous without a browser.
 // ---------------------------------------------------------------------------
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_CSS = join(HERE, '../../../core/src/foundation/tokens/css');
-const SKIN_DIRS = [
-  ['modern', join(CORE_CSS, 'engines/modern/skin')],
-  ['rustic', join(CORE_CSS, 'engines/rustic/skin')],
-  ['agnostic', join(CORE_CSS, 'components/skin')],
-] as const;
 
 // EVERY section flag the torture page understands, read off the page source --
 // not a hand-written list. An under-visited page reports live rules as dead:
@@ -52,77 +49,20 @@ const TORTURE_SECTIONS = [
 ];
 
 type Rule = { engine: string; file: string; selector: string; probe: string; skeleton: string };
+type DeadAnchor = { file: string; selectors: string[]; liveInFile: number };
 
-/** Strip what cannot match at rest: interaction pseudo-classes and pseudo-elements. */
-function toProbe(selector: string): string | null {
-  let s = selector
-    .replace(/::[a-z-]+(\([^)]*\))?/g, '')
-    .replace(/:(hover|focus|focus-visible|focus-within|active|target|checked|disabled|enabled|placeholder-shown|autofill|visited|link|empty)\b/g, '');
-  s = s.trim();
-  if (!s || s.startsWith('@') || s.includes('%')) return null;
-  // A selector reduced to nothing but a combinator is not probeable.
-  if (/^[>+~,\s]*$/.test(s)) return null;
-  return s;
-}
-
-/**
- * The STRUCTURAL skeleton: classes and `data-part` only. Every other attribute
- * is dropped.
- *
- * This is the discriminator that makes the audit mean something. A rule can fail
- * to match for two completely different reasons, and only one of them is a bug:
- *
- *   - `[data-variant='outline']` matches nothing because the page renders no
- *     outline button. The rule is FINE; the FIXTURE is thin. (Still worth
- *     knowing -- an unrendered state is an unphotographed state, so no baseline
- *     can catch a regression in it -- but it is not a dead rule.)
- *   - `[data-part='sort-indicator']` matches nothing even with every state
- *     attribute stripped. Then the PART ITSELF is not in the DOM, and no value
- *     of any state attribute would ever bring it back. The rule reaches nobody.
- *     That is the P-79 shape, and it is a bug.
- *
- * So: probe the full selector to measure fixture coverage, and probe the
- * skeleton to find genuinely dead anchors.
- */
-function toSkeleton(probe: string): string | null {
-  const s = probe
-    .replace(/\[(?!data-part)[^\]]*\]/g, '')
-    .replace(/:not\([^)]*\)/g, '')
-    .trim();
-  if (!s || /^[>+~,\s]*$/.test(s)) return null;
-  return s;
-}
-
-function collectRules(): Rule[] {
-  const out: Rule[] = [];
-  for (const [engine, dir] of SKIN_DIRS) {
-    if (!existsSync(dir)) continue;
-    for (const f of readdirSync(dir).filter((n) => n.endsWith('.css'))) {
-      const css = readFileSync(join(dir, f), 'utf8');
-      let root;
-      try {
-        root = postcss.parse(css);
-      } catch {
-        continue; // parseErrors already guards this
-      }
-      root.walkRules((rule) => {
-        // Rules inside @keyframes are step selectors (`from`, `50%`), not DOM selectors.
-        if (rule.parent?.type === 'atrule' && /keyframes/.test((rule.parent as postcss.AtRule).name)) return;
-        for (const sel of rule.selectors) {
-          const probe = toProbe(sel);
-          if (!probe) continue;
-          const skeleton = toSkeleton(probe);
-          if (skeleton) out.push({ engine, file: f, selector: sel, probe, skeleton });
-        }
-      });
-    }
-  }
-  return out;
+/** Reviewed allow-list. deadAnchors MUST stay empty; any entry needs a reason. */
+function loadReviewedDeadAnchors(): Array<{ file: string; selectors: string[] }> {
+  const raw = JSON.parse(readFileSync(join(HERE, 'dead-selector-baseline.json'), 'utf8'));
+  return Array.isArray(raw.deadAnchors) ? raw.deadAnchors : [];
 }
 
 test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) => {
   test.setTimeout(600_000);
-  const rules = collectRules();
+  const rules: Rule[] = collectRules();
+  // A relocation that left SKIN_DIRS stale used to yield 0 rules and assert
+  // nothing. Fail loudly instead of running a vacuous audit.
+  expect(rules.length, `no skin rules collected from ${SKIN_DIRS.map((d) => d[0]).join(', ')} — SKIN_DIRS is stale`).toBeGreaterThan(1000);
   console.log(`### ${rules.length} probeable selectors across ${new Set(rules.map((r) => `${r.engine}/${r.file}`)).size} skin files`);
 
   const matched = new Set<number>();
@@ -164,7 +104,7 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
     if (!skeletonMatched.has(i)) e.deadAnchor.push(r);
   });
 
-  const deadAnchors: Array<{ file: string; selectors: string[]; liveInFile: number }> = [];
+  const deadAnchors: DeadAnchor[] = [];
   const thinFixtures: Array<{ file: string; unexercised: number; total: number }> = [];
   const uncovered: string[] = [];
   for (const [file, e] of byFile) {
@@ -202,4 +142,18 @@ test('dead-selector audit: a skin rule that reaches nobody', async ({ page }) =>
     for (const sel of d.selectors.slice(0, 3)) console.log(`###       ${sel}`);
   }
   console.log(`### thin fixtures — rules NO baseline exercises at rest: ${totalUnexercised} of ${rules.length}`);
+
+  // HARD ASSERTION (the whole point of the resurrection): the P-79 bug class
+  // must be empty. A dead anchor is a skin rule whose part is absent from the
+  // rendered DOM under every state -- a genuine render-drop. Reviewed, explained
+  // exceptions may be allow-listed in dead-selector-baseline.json (each with a
+  // reason); the residual after removing them must be zero. thinFixtures and
+  // uncovered are measured above and written to the report, but do not fail the
+  // gate: an unphotographed state is a coverage hole, not a dead rule.
+  const reviewed = loadReviewedDeadAnchors();
+  const reviewedByFile = new Map(reviewed.map((r) => [r.file, new Set(r.selectors)]));
+  const unreviewed = deadAnchors
+    .map((d) => ({ file: d.file, selectors: d.selectors.filter((s) => !reviewedByFile.get(d.file)?.has(s)) }))
+    .filter((d) => d.selectors.length > 0);
+  expect(unreviewed, 'dead skin anchors observed in the rendered DOM (P-79 render-drop). Fix the component to stamp the part, or add a reviewed exception with a reason to dead-selector-baseline.json.').toEqual([]);
 });
