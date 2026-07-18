@@ -202,6 +202,24 @@ function isDeclarationOrModuleEdge(node) {
   return Boolean(current && (ts.isImportDeclaration(current) || ts.isExportDeclaration(current)));
 }
 
+function isUnusedContainmentExclusion(node, source) {
+  // Shape: `{ governedField: _binding, ...rest }` where `_binding` is never
+  // read afterwards. The governed name must be the PROPERTY side of the
+  // binding element and the local binding an underscore-prefixed identifier
+  // with exactly one occurrence in the file (its own declaration).
+  const parent = node.parent;
+  if (!parent || !ts.isBindingElement(parent) || parent.propertyName !== node) return false;
+  if (!ts.isIdentifier(parent.name) || !parent.name.text.startsWith('_')) return false;
+  const bindingName = parent.name.text;
+  let occurrences = 0;
+  const count = (candidate) => {
+    if (ts.isIdentifier(candidate) && candidate.text === bindingName) occurrences += 1;
+    if (occurrences <= 1) ts.forEachChild(candidate, count);
+  };
+  count(source);
+  return occurrences === 1;
+}
+
 function isTypeOnlyPosition(node) {
   let current = node.parent;
   while (current && !ts.isStatement(current)) {
@@ -252,6 +270,7 @@ export function analyzeClaimSourceRecords(records) {
     'surface-profile-overrides': new Set(),
   };
   const potentialConsumers = [];
+  const containmentExclusions = [];
   const unsupportedReferences = [];
   const findingKeys = new Set();
   let profileDeclarations = 0;
@@ -461,7 +480,21 @@ export function analyzeClaimSourceRecords(records) {
           directFieldSpec = null;
         }
       }
-      if (directFieldSpec) {
+      if (directFieldSpec && isUnusedContainmentExclusion(node, source)) {
+        // A destructuring exclusion (`extensions: _extensions`) whose binding is
+        // never read keeps the governed field OUT of a DOM/props spread. That is
+        // containment of the deprecated channel, not runtime consumption; the
+        // zero-consumption floor stays intact only if this shape never counts.
+        addFinding(
+          containmentExclusions,
+          directFieldSpec.claimId,
+          record,
+          source,
+          node,
+          'unused underscore exclusion binding (containment, not consumption)',
+          directFieldSpec.name,
+        );
+      } else if (directFieldSpec) {
         addFinding(
           potentialConsumers,
           directFieldSpec.claimId,
@@ -559,6 +592,7 @@ export function analyzeClaimSourceRecords(records) {
       staticallyResolvedExtensionHelperReferenceFiles: sorted(extensionHelperFiles),
       staticallyResolvedPotentialConsumers: potentialConsumerFiles['component-extensions'].size,
       potentialConsumers: sortedFindings(potentialConsumers, 'component-extensions'),
+      containmentExclusions: sortedFindings(containmentExclusions, 'component-extensions'),
       unsupportedGovernedReferences: sortedFindings(unsupportedReferences, 'component-extensions').length,
       unsupportedReferences: sortedFindings(unsupportedReferences, 'component-extensions'),
       registeredExecutableEvidence: 0,
@@ -572,6 +606,7 @@ export function analyzeClaimSourceRecords(records) {
       staticallyResolvedShowroomProfileOverrideReferenceFiles: sorted(showroomOverrideFiles),
       staticallyResolvedPotentialConsumers: potentialConsumerFiles['surface-profile-overrides'].size,
       potentialConsumers: sortedFindings(potentialConsumers, 'surface-profile-overrides'),
+      containmentExclusions: sortedFindings(containmentExclusions, 'surface-profile-overrides'),
       unsupportedGovernedReferences: sortedFindings(unsupportedReferences, 'surface-profile-overrides').length,
       unsupportedReferences: sortedFindings(unsupportedReferences, 'surface-profile-overrides'),
       registeredExecutableEvidence: 0,

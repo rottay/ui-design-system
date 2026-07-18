@@ -510,6 +510,41 @@ test('G1 typed claim references resolve named/default/namespace/reexports withou
   ]);
 });
 
+test('G1b unused underscore exclusion destructuring is containment, a read binding is consumption', () => {
+  const definitions = [
+    {
+      path: '/repo/src/foundation/contracts/runtime/engine/index.ts',
+      kind: 'core',
+      text: `export interface EngineAwareProps { extensions?: Record<string, unknown>; engine?: string }`,
+    },
+    {
+      path: '/repo/src/foundation/contracts/kernel/tokens/extensions/index.ts',
+      kind: 'core',
+      text: `export interface ComponentExtensions { slot?: string } export const ExtensionHelpers = {};`,
+    },
+  ];
+  const containment = {
+    path: '/repo/src/ui/primitives/display/Card/engines/classic/index.tsx',
+    kind: 'core',
+    text: `import type { EngineAwareProps } from '../../../../../../foundation/contracts/runtime/engine/index';
+const Impl = (props: EngineAwareProps) => { const { extensions: _extensions, ...rest } = props; return rest; };
+export default Impl;`,
+  };
+  const consumption = {
+    path: '/repo/src/ui/primitives/display/Card/engines/modern/index.tsx',
+    kind: 'core',
+    text: `import type { EngineAwareProps } from '../../../../../../foundation/contracts/runtime/engine/index';
+const Impl = (props: EngineAwareProps) => { const { extensions: _extensions, ...rest } = props; void _extensions; return rest; };
+export default Impl;`,
+  };
+  const facts = analyzeClaimSourceRecords([...definitions, containment, consumption])['component-extensions'];
+  assert.equal(facts.staticallyResolvedExtensionRuntimeReferences, 1);
+  assert.deepEqual(facts.staticallyResolvedExtensionRuntimeReferenceFiles, [consumption.path]);
+  assert.equal(facts.containmentExclusions.length, 1);
+  assert.equal(facts.containmentExclusions[0].path, containment.path);
+  assert.equal(facts.staticallyResolvedPotentialConsumers, 1);
+});
+
 test('G2 claim census keeps opaque transports and computed access out of direct evidence', () => {
   const records = [
     {

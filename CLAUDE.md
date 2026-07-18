@@ -335,9 +335,9 @@ Features implemented across Waves 2 through 6 of the DS execution plan.
 
 ### Wave 5 -- Surface Lifecycle and Permissions
 
-<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=fleet-wired-33-of-33; affirmative-behavior=true; owner=DS-IMP-022 -->
+<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-33-applied-11; affirmative-behavior=true; owner=DS-IMP-022 -->
 
-GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=fleet-wired-33-of-33; affirmative-behavior=true; production-consumers=33; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.
+GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=declared-33-applied-11; affirmative-behavior=true; production-consumers=11; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.
 
 - `useSurfaceState` hook (8 lifecycle states, `renderState` helper)
 - Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyStateCard`, `SurfaceErrorStateCard`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`

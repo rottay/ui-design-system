@@ -79,7 +79,7 @@ const SKIN_DIRS = [
 
 const CANONICAL_DOC_MARKERS = Object.freeze({
   'component-extensions': '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->',
-  'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=fleet-wired-33-of-33; affirmative-behavior=true; owner=DS-IMP-022 -->',
+  'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-33-applied-11; affirmative-behavior=true; owner=DS-IMP-022 -->',
 });
 
 const CLAIM_DOCS = [
@@ -131,37 +131,15 @@ const GAT07_STATIC_REGISTRY_FIELDS = Object.freeze([
 ]);
 const SURFACE_PROFILE_OVERRIDE_CONSUMERS = Object.freeze([
   'src/ui/surfaces/composition/layout/page-shell/header/index.tsx',
-  'src/ui/surfaces/composition/layout/sidebar/index.tsx',
-  'src/ui/surfaces/presentation/pages/admin/audit/index.tsx',
-  'src/ui/surfaces/presentation/pages/admin/billing/index.tsx',
-  'src/ui/surfaces/presentation/pages/admin/file-browser/index.tsx',
-  'src/ui/surfaces/presentation/pages/admin/import-export/index.tsx',
-  'src/ui/surfaces/presentation/pages/admin/integration/index.tsx',
-  'src/ui/surfaces/presentation/pages/admin/profile/index.tsx',
   'src/ui/surfaces/presentation/pages/admin/settings/index.tsx',
-  'src/ui/surfaces/presentation/pages/admin/team/index.tsx',
   'src/ui/surfaces/presentation/pages/data/compare/index.tsx',
   'src/ui/surfaces/presentation/pages/data/dashboard/index.tsx',
   'src/ui/surfaces/presentation/pages/data/detail/index.tsx',
   'src/ui/surfaces/presentation/pages/data/list/index.tsx',
-  'src/ui/surfaces/presentation/pages/data/report/index.tsx',
-  'src/ui/surfaces/presentation/pages/data/search/index.tsx',
   'src/ui/surfaces/presentation/pages/data/visualization/index.tsx',
-  'src/ui/surfaces/presentation/pages/experience/auth/index.tsx',
   'src/ui/surfaces/presentation/pages/experience/chat/index.tsx',
-  'src/ui/surfaces/presentation/pages/experience/editor/index.tsx',
-  'src/ui/surfaces/presentation/pages/experience/empty-state/index.tsx',
-  'src/ui/surfaces/presentation/pages/experience/marketing/index.tsx',
-  'src/ui/surfaces/presentation/pages/experience/media/index.tsx',
-  'src/ui/surfaces/presentation/pages/experience/notification/index.tsx',
-  'src/ui/surfaces/presentation/pages/experience/pricing/index.tsx',
-  'src/ui/surfaces/presentation/pages/forms/detail-form/index.tsx',
   'src/ui/surfaces/presentation/pages/forms/form/index.tsx',
   'src/ui/surfaces/presentation/pages/forms/wizard/index.tsx',
-  'src/ui/surfaces/presentation/pages/forms/wizard/onboarding/index.tsx',
-  'src/ui/surfaces/presentation/pages/operations/activity/index.tsx',
-  'src/ui/surfaces/presentation/pages/operations/kanban/index.tsx',
-  'src/ui/surfaces/presentation/pages/operations/operational/index.tsx',
   'src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx',
 ]);
 const SURFACE_PROFILE_OVERRIDE_ASSERTIONS = Object.freeze([
@@ -195,7 +173,7 @@ const EXPECTED_CLAIM_FLOOR = Object.freeze({
   'surface-profile-overrides': {
     symbols: ['SurfaceVisualOverrides', 'useSurfaceProfileDefaultsWithOverrides', 'visual.profileOverrides'],
     disposition: 'active',
-    runtimeStatus: 'fleet-wired-33-of-33',
+    runtimeStatus: 'declared-33-applied-11',
     deferredOwner: {
       sourceId: 'DS-IMP-022',
       owner: 'design-system-program',
@@ -212,9 +190,9 @@ const EXPECTED_CLAIM_FLOOR = Object.freeze({
     executableAssertions: SURFACE_PROFILE_OVERRIDE_ASSERTIONS,
     requiredAssertions: {
       profileOverrideDeclarations: 33,
-      staticallyResolvedSurfaceHookCalls: 32,
+      staticallyResolvedSurfaceHookCalls: 11,
       staticallyResolvedShowroomProfileOverrideReferences: 0,
-      staticallyResolvedPotentialConsumers: 33,
+      staticallyResolvedPotentialConsumers: 12,
       unsupportedGovernedReferences: 0,
       registeredExecutableEvidence: 2,
     },
