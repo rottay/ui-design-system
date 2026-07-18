@@ -36,17 +36,17 @@ const read = (p: string) => readFileSync(join(CSS, p), 'utf8');
 
 /** Every new skin file this checkpoint added, keyed by a readable label. */
 const SKINS: Record<string, string> = {
-  'modern/select': read('engines/modern/skin/select.css'),
-  'rustic/select': read('engines/rustic/skin/select.css'),
-  'modern/tree-select': read('engines/modern/skin/tree-select.css'),
-  'rustic/tree-select': read('engines/rustic/skin/tree-select.css'),
-  'modern/cascader': read('engines/modern/skin/cascader.css'),
-  'rustic/cascader': read('engines/rustic/skin/cascader.css'),
-  'modern/autocomplete': read('engines/modern/skin/autocomplete.css'),
-  'rustic/autocomplete': read('engines/rustic/skin/autocomplete.css'),
-  'modern/mentions': read('engines/modern/skin/mentions.css'),
-  'rustic/mentions': read('engines/rustic/skin/mentions.css'),
-  'select-compounds': read('components/skin/select-compounds.css'),
+  'modern/select': read('runtime/engines/modern/skin/select.css'),
+  'rustic/select': read('runtime/engines/rustic/skin/select.css'),
+  'modern/tree-select': read('runtime/engines/modern/skin/tree-select.css'),
+  'rustic/tree-select': read('runtime/engines/rustic/skin/tree-select.css'),
+  'modern/cascader': read('runtime/engines/modern/skin/cascader.css'),
+  'rustic/cascader': read('runtime/engines/rustic/skin/cascader.css'),
+  'modern/autocomplete': read('runtime/engines/modern/skin/autocomplete.css'),
+  'rustic/autocomplete': read('runtime/engines/rustic/skin/autocomplete.css'),
+  'modern/mentions': read('runtime/engines/modern/skin/mentions.css'),
+  'rustic/mentions': read('runtime/engines/rustic/skin/mentions.css'),
+  'select-compounds': read('presentation/components/skin/select-compounds.css'),
 };
 
 /** Strip comments and `@keyframes` blocks, then return every `{selector, body}` rule. */
@@ -208,13 +208,26 @@ describe('dropdown skins -- interaction literal pins', () => {
     expect(/rgba\(22,\s*119,\s*255,\s*0\.08\)/.test(NC['rustic/tree-select'])).toBe(true);
   });
 
-  it('Cascader rustic search focus ring + hover accent carry #1677ff verbatim', () => {
+  it('Cascader rustic search focus ring carries #1677ff verbatim; hover/selected accents ride their tokens', () => {
     expect(/\[data-part='search-input'\]:focus\s*\{[^}]*#1677ff/.test(NC['rustic/cascader'])).toBe(true);
-    expect(/:hover[^{]*\{[^}]*#1677ff/.test(NC['rustic/cascader'])).toBe(true);
+    // The option hover accent was tokenised to --ds-cascader-item-bg-hover; the
+    // #1677ff family survives as the primary fallback on the selected border.
+    expect(/:hover[^{]*\{[^}]*var\(--ds-cascader-item-bg-hover\)/.test(NC['rustic/cascader'])).toBe(true);
+    expect(
+      /\[data-selected='true'\]\s*\{[^}]*var\(--ds-color-primary,\s*#1677ff\)/.test(
+        NC['rustic/cascader'],
+      ),
+    ).toBe(true);
   });
 
-  it('Select rustic option focus keys #1677ff on the removed React-state hover (data-active)', () => {
-    expect(/\[data-active='true'\][^{]*\{[^}]*#1677ff/.test(NC['rustic/select'])).toBe(true);
+  it('Select rustic option focus keys the primary accent (tokenised #1677ff family) on the removed React-state hover (data-active)', () => {
+    // The former #1677ff literal was tokenised to --ds-color-primary-100 with
+    // the same-family rgba fallback; the data-active rule must still carry it.
+    expect(
+      /\[data-active='true'\][^{]*\{[^}]*var\(--ds-color-primary-100,\s*rgba\(22,\s*119,\s*255,\s*0\.15\)\)/.test(
+        NC['rustic/select'],
+      ),
+    ).toBe(true);
   });
 
   it('keyframes were renamed into the skins (ds-*-*), never the old rottay-select-* / rottay-*select-*', () => {

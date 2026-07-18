@@ -55,8 +55,12 @@ describe('List advanced engine coverage', () => {
       <RusticList loading className="loading-shell" />
     );
 
+    // Skeleton paint (avatar circle, bar chrome) moved into the rustic skin;
+    // the DOM carries the data-part anatomy the skin keys on.
     expect(container.textContent).toBe('');
-    expect(container.querySelectorAll('div[style*="border-radius: 50%"]').length).toBeGreaterThan(0);
+    expect(container.querySelector('[data-part="root"][data-loading="true"]')).not.toBeNull();
+    expect(container.querySelectorAll('[data-part="skeleton-avatar"]').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('[data-part="skeleton-line"]').length).toBeGreaterThan(0);
 
     rerender(
       <RusticList bordered header="Team" footer="2 members" size="small" split>
@@ -74,6 +78,7 @@ describe('List advanced engine coverage', () => {
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument();
     expect(screen.getByText('Grace Hopper')).toBeInTheDocument();
     expect(container.querySelector('ul')?.getAttribute('style') ?? '').toContain('padding: 0px 16px');
-    expect(container.querySelectorAll('div[style*="border-bottom"]').length).toBeGreaterThan(0);
+    // Split dividers are skin-painted; the DOM stamps the divider part between rows.
+    expect(container.querySelectorAll('[data-part="divider"]').length).toBeGreaterThan(0);
   });
 });

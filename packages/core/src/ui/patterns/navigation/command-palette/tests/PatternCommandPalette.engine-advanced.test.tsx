@@ -63,7 +63,9 @@ describe('PatternCommandPalette advanced engine coverage', () => {
 
     renderWithEngine(<Component {...props} />, engine);
 
-    const input = await screen.findByRole('textbox');
+    // The modern engine's search input is role="combobox" (classic/rustic are
+    // implicit textboxes), so query by the shared default placeholder.
+    const input = await screen.findByPlaceholderText('Type a command...');
     expect(await screen.findByText('Recent')).toBeInTheDocument();
     expect(screen.getByText('Actions')).toBeInTheDocument();
     expect(screen.getByText('Use arrows to navigate')).toBeInTheDocument();

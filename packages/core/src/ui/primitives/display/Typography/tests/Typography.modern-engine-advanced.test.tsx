@@ -72,20 +72,32 @@ describe('Typography modern advanced engine coverage', () => {
       </>
     );
 
-    expect(screen.getByText('Heading')).toHaveClass(
-      'text-4xl',
+    // Color and font-size paint moved into the modern skin: the engine stamps
+    // the scope classes plus data-color, and sizes resolve to DS font tokens.
+    const heading = screen.getByText('Heading');
+    expect(heading).toHaveClass(
+      'rottay-typography',
+      'rottay-typography--modern',
       'font-bold',
       'text-right',
-      'text-error',
       'truncate',
       'line-clamp-2',
       'qa-heading'
     );
-    expect(screen.getByText('Inline text')).toHaveClass(
-      'text-lg',
+    expect(heading).toHaveAttribute('data-part', 'root');
+    expect(heading).toHaveAttribute('data-color', 'error');
+    // Size resolves to a DS font token via inline fontSize; happy-dom drops
+    // var() values for validated properties, so probe the plain-literal
+    // companions of the 2xl heading ramp instead.
+    expect(heading.style.letterSpacing).toBe('-0.025em');
+    expect(heading.style.lineHeight).toBe('1.1');
+
+    const inlineText = screen.getByText('Inline text');
+    expect(inlineText).toHaveClass(
+      'rottay-typography',
+      'rottay-typography--modern',
       'font-medium',
       'text-justify',
-      'text-warning',
       'underline',
       'line-through',
       'italic',
@@ -94,30 +106,35 @@ describe('Typography modern advanced engine coverage', () => {
       'line-clamp-3',
       'qa-text'
     );
-    expect(screen.getByText('Paragraph copy')).toHaveClass(
-      'text-sm',
+    expect(inlineText).toHaveAttribute('data-color', 'warning');
+
+    const paragraph = screen.getByText('Paragraph copy');
+    expect(paragraph).toHaveClass(
+      'rottay-typography',
+      'rottay-typography--modern',
       'font-semibold',
       'text-center',
-      'text-primary',
       'leading-relaxed',
       'mb-4',
       'truncate',
       'line-clamp-4',
       'qa-paragraph'
     );
+    expect(paragraph).toHaveAttribute('data-color', 'primary');
 
     const externalLink = screen.getByText('External link');
     fireEvent.click(externalLink);
     expect(handleLinkClick).toHaveBeenCalledTimes(1);
     expect(externalLink).toHaveClass(
-      'text-xl',
+      'rottay-typography',
+      'rottay-typography--modern',
       'font-bold',
-      'text-success',
       'font-semibold',
       'hover:underline',
       'transition-colors',
       'qa-link'
     );
+    expect(externalLink).toHaveAttribute('data-color', 'success');
     expect(externalLink).toHaveAttribute('rel', 'noopener noreferrer');
 
     rerender(

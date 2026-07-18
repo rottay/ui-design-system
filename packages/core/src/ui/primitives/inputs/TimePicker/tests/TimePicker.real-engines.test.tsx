@@ -40,6 +40,8 @@ describe('TimePicker real engine coverage', () => {
   });
 
   it('covers modern base and range picker branches', async () => {
+    // The modern engine renders a read-only text trigger opening a portaled
+    // hour/minute/second panel; selections happen via time-option buttons.
     const onChange = vi.fn();
     const { container } = render(
       <>
@@ -59,15 +61,33 @@ describe('TimePicker real engine coverage', () => {
       </>
     );
 
-    const baseInput = container.querySelector('input[type="time"]') as HTMLInputElement;
-    fireEvent.change(baseInput, { target: { value: '10:45:00' } });
+    const columns = () =>
+      Array.from(document.querySelectorAll<HTMLElement>('[data-part="time-column"]'));
+    const optionsOf = (column: HTMLElement) =>
+      Array.from(column.querySelectorAll<HTMLButtonElement>('button[data-part="time-option"]'));
 
-    const [start, end] = Array.from(container.querySelectorAll('input[type="time"]')) as HTMLInputElement[];
-    fireEvent.change(start, { target: { value: '08:15:00' } });
-    fireEvent.change(end, { target: { value: '17:30:00' } });
+    const triggers = Array.from(
+      container.querySelectorAll<HTMLInputElement>('[data-part="trigger-input"]')
+    );
+    expect(triggers).toHaveLength(3);
+    const [baseTrigger, rangeStart] = triggers;
+
+    fireEvent.click(baseTrigger);
+    expect(columns()).toHaveLength(3);
+    fireEvent.click(optionsOf(columns()[0])[10]);
+    expect(onChange).toHaveBeenLastCalledWith(expect.any(Date), '10:30:00');
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(document.querySelector('.rottay-timepicker__panel')).toBeNull();
+
+    fireEvent.click(rangeStart);
+    fireEvent.click(optionsOf(columns()[1])[15]);
 
     await waitFor(() => {
-      expect(onChange).toHaveBeenCalled();
+      expect(onChange).toHaveBeenLastCalledWith(
+        [expect.any(Date), expect.any(Date)],
+        [expect.any(String), expect.any(String)]
+      );
     });
   });
 

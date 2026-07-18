@@ -1,15 +1,26 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernTimePicker, { TimePicker as ModernTimePickerCompound } from '../engines/modern';
+
+// The modern engine renders a read-only text trigger (data-part="trigger-input")
+// that opens a portaled hour/minute/second panel (.rottay-timepicker__panel) on
+// click; paint is owned by the modern skin, so tests drive the data-part anatomy.
+
+/** The portaled panel lives under document.body, outside the render container. */
+const panel = () => document.querySelector('.rottay-timepicker__panel');
+const columns = () =>
+  Array.from(document.querySelectorAll<HTMLElement>('[data-part="time-column"]'));
+const optionsOf = (column: HTMLElement) =>
+  Array.from(column.querySelectorAll<HTMLButtonElement>('button[data-part="time-option"]'));
 
 describe('TimePicker modern advanced coverage', () => {
   it('covers time parsing, clear handling, disabled guards, and range updates', async () => {
     const handleChange = vi.fn();
     const { container, rerender } = render(
       <ModernTimePicker
-        defaultValue={new Date('2026-03-13T09:30:00.000Z')}
+        defaultValue="09:30:00"
         status="error"
         size="small"
         format="HH:mm:ss"
@@ -17,16 +28,26 @@ describe('TimePicker modern advanced coverage', () => {
       />
     );
 
-    const timeInput = container.querySelector('input[type="time"]') as HTMLInputElement;
-    expect(timeInput).toHaveAttribute('step', '1');
-    expect(timeInput.className).toContain('input-sm');
-    expect(timeInput.className).toContain('input-error');
+    const trigger = container.querySelector('[data-part="trigger-input"]') as HTMLInputElement;
+    expect(trigger).toHaveAttribute('readonly');
+    expect(trigger).toHaveAttribute('data-status', 'error');
+    expect(trigger).toHaveValue('09:30:00');
+    expect(trigger.style.boxSizing).toBe('border-box');
 
-    fireEvent.change(timeInput, { target: { value: '10:45:00' } });
-    expect(handleChange).toHaveBeenCalledWith(expect.any(Date), '10:45:00');
+    fireEvent.click(trigger);
+    expect(panel()).not.toBeNull();
+    // HH:mm:ss format shows hour, minute, and second columns.
+    expect(columns()).toHaveLength(3);
 
-    fireEvent.click(container.querySelector('button') as HTMLButtonElement);
+    fireEvent.click(optionsOf(columns()[0])[10]);
+    expect(handleChange).toHaveBeenCalledWith(expect.any(Date), '10:30:00');
+    expect(trigger).toHaveValue('10:30:00');
+
+    fireEvent.click(container.querySelector('[data-part="clear-button"]') as HTMLButtonElement);
     expect(handleChange).toHaveBeenCalledWith(null, '');
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(panel()).toBeNull();
 
     rerender(
       <ModernTimePicker
@@ -37,8 +58,11 @@ describe('TimePicker modern advanced coverage', () => {
       />
     );
 
-    expect(container.querySelector('input[type="time"]')).toHaveAttribute('step', '60');
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    const disabledTrigger = container.querySelector('[data-part="trigger-input"]') as HTMLInputElement;
+    expect(disabledTrigger).toBeDisabled();
+    expect(container.querySelector('[data-part="clear-button"]')).toBeNull();
+    fireEvent.click(disabledTrigger);
+    expect(panel()).toBeNull();
 
     rerender(
       <ModernTimePickerCompound.RangePicker
@@ -49,23 +73,36 @@ describe('TimePicker modern advanced coverage', () => {
       />
     );
 
-    const [start, end] = Array.from(container.querySelectorAll('input[type="time"]')) as HTMLInputElement[];
-    expect(start.className).toContain('input-warning');
+    const rangeInputs = Array.from(
+      container.querySelectorAll<HTMLInputElement>('[data-part="trigger-input"]')
+    );
+    expect(rangeInputs).toHaveLength(2);
+    expect(rangeInputs[0]).toHaveAttribute('data-range-input', 'start');
+    expect(rangeInputs[0]).toHaveAttribute('data-status', 'warning');
     expect(screen.getByText('through')).toBeInTheDocument();
 
-    fireEvent.change(start, { target: { value: '08:15:00' } });
-    fireEvent.change(end, { target: { value: '17:30:00' } });
+    fireEvent.click(rangeInputs[0]);
+    // Default HH:mm format: hour and minute columns only.
+    expect(columns()).toHaveLength(2);
+    fireEvent.click(optionsOf(columns()[1])[15]);
+    expect(handleChange).toHaveBeenLastCalledWith(
+      [expect.any(Date), expect.any(Date)],
+      ['08:15', '17:00']
+    );
 
-    await waitFor(() => {
-      expect(handleChange.mock.calls.length).toBeGreaterThanOrEqual(4);
-    });
+    fireEvent.click(rangeInputs[1]);
+    fireEvent.click(optionsOf(columns()[0])[18]);
+    expect(handleChange).toHaveBeenLastCalledWith(
+      [expect.any(Date), expect.any(Date)],
+      ['08:15', '18:00']
+    );
   });
 
   it('covers controlled values, invalid string parsing, and allowClear=false branches', () => {
     const handleChange = vi.fn();
     const { container, rerender } = render(
       <ModernTimePicker
-        value={new Date('2026-03-13T13:45:00.000Z')}
+        value="13:45"
         defaultValue="not-a-time"
         allowClear={false}
         format="HH:mm"
@@ -73,14 +110,20 @@ describe('TimePicker modern advanced coverage', () => {
       />
     );
 
-    const input = container.querySelector('input[type="time"]') as HTMLInputElement;
-    expect(input).toHaveAttribute('step', '60');
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    const trigger = container.querySelector('[data-part="trigger-input"]') as HTMLInputElement;
+    expect(trigger).toHaveValue('13:45');
+    expect(container.querySelector('[data-part="clear-button"]')).toBeNull();
 
-    fireEvent.change(input, { target: { value: '14:00' } });
-    expect(handleChange).toHaveBeenCalledWith(expect.any(Date), '14:00');
+    fireEvent.click(trigger);
+    expect(columns()).toHaveLength(2);
+
+    // Controlled: selection emits onChange but the displayed value stays pinned
+    // to the value prop.
+    fireEvent.click(optionsOf(columns()[1])[0]);
+    expect(handleChange).toHaveBeenCalledWith(expect.any(Date), '13:00');
+    expect(trigger).toHaveValue('13:45');
 
     rerender(<ModernTimePicker value="09:15:00" format="HH:mm:ss" />);
-    expect(container.querySelector('input[type="time"]')).toHaveValue('09:15:00');
+    expect(container.querySelector('[data-part="trigger-input"]')).toHaveValue('09:15:00');
   });
 });

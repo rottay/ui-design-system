@@ -36,7 +36,11 @@ describe('Statistic rustic engine advanced coverage', () => {
     expect(screen.getByText('Revenue')).toBeInTheDocument();
     expect(screen.getByText('$')).toBeInTheDocument();
     expect(screen.getByText('ARR')).toBeInTheDocument();
-    expect(value.style.color).toContain('--ds-statistic-positive-color');
+    // Trend color paint moved into the rustic skin, keyed on data-trend; the
+    // engine stamps the anatomy the skin selects on instead of an inline color.
+    expect(value).toHaveAttribute('data-part', 'value');
+    expect(value).toHaveAttribute('data-trend', 'positive');
+    expect(value.style.color).toBe('');
   });
 
   it('prefers custom formatter output and preserves invalid string values', () => {

@@ -22,9 +22,12 @@ expect.extend(matchers);
  * The DS test suite exercises a large amount of lazy-loaded engine code. The
  * default Testing Library timeout is too small for full coverage runs, which
  * can otherwise produce false negatives while imports are still resolving.
+ * This value must stay BELOW vitest's testTimeout (15000 in vitest.config.ts):
+ * a failing findBy or waitFor call must reject with the real query error
+ * instead of outliving the test and surfacing as an opaque per-test timeout.
  */
 configure({
-  asyncUtilTimeout: 30000,
+  asyncUtilTimeout: 10000,
 });
 
 if ('happyDOM' in window) {

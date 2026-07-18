@@ -27,16 +27,16 @@ const CSS = join(here, '../../../../foundation/tokens/css');
 const read = (p: string) => readFileSync(join(CSS, p), 'utf8');
 
 const SKINS: Record<string, string> = {
-  'modern/upload': read('engines/modern/skin/upload.css'),
-  'rustic/upload': read('engines/rustic/skin/upload.css'),
-  'modern/transfer': read('engines/modern/skin/transfer.css'),
-  'rustic/transfer': read('engines/rustic/skin/transfer.css'),
-  'modern/color-picker': read('engines/modern/skin/color-picker.css'),
-  'rustic/color-picker': read('engines/rustic/skin/color-picker.css'),
-  'modern/time-picker': read('engines/modern/skin/time-picker.css'),
-  'rustic/time-picker': read('engines/rustic/skin/time-picker.css'),
-  'modern/date-picker': read('engines/modern/skin/date-picker.css'),
-  'rustic/date-picker': read('engines/rustic/skin/date-picker.css'),
+  'modern/upload': read('runtime/engines/modern/skin/upload.css'),
+  'rustic/upload': read('runtime/engines/rustic/skin/upload.css'),
+  'modern/transfer': read('runtime/engines/modern/skin/transfer.css'),
+  'rustic/transfer': read('runtime/engines/rustic/skin/transfer.css'),
+  'modern/color-picker': read('runtime/engines/modern/skin/color-picker.css'),
+  'rustic/color-picker': read('runtime/engines/rustic/skin/color-picker.css'),
+  'modern/time-picker': read('runtime/engines/modern/skin/time-picker.css'),
+  'rustic/time-picker': read('runtime/engines/rustic/skin/time-picker.css'),
+  'modern/date-picker': read('runtime/engines/modern/skin/date-picker.css'),
+  'rustic/date-picker': read('runtime/engines/rustic/skin/date-picker.css'),
 };
 /** Comment-stripped copies -- keyframe/posture pins must not match header prose. */
 const NC: Record<string, string> = Object.fromEntries(

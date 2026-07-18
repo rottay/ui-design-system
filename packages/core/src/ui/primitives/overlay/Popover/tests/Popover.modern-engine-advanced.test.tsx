@@ -28,14 +28,22 @@ describe('Popover modern engine advanced coverage', () => {
       </ModernPopover>
     );
 
-    const wrapper = container.querySelector('.tooltip');
-    expect(wrapper?.className).toContain('tooltip-right');
+    // Chrome moved into the modern skin: the trigger wrapper carries the scope
+    // class and open state; placement rides data-placement on the surface part.
+    const wrapper = container.querySelector('.rottay-popover--modern');
+    expect(wrapper).not.toBeNull();
+    expect(wrapper).toHaveAttribute('data-part', 'trigger');
+    expect(wrapper).toHaveAttribute('data-open', 'false');
 
     fireEvent.mouseEnter(wrapper!);
     act(() => {
       vi.advanceTimersByTime(25);
     });
     expect(screen.getByText('Popover body')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="surface"]')).toHaveAttribute(
+      'data-placement',
+      'rightTop'
+    );
 
     fireEvent.mouseLeave(wrapper!);
     act(() => {
@@ -70,7 +78,7 @@ describe('Popover modern engine advanced coverage', () => {
 
     expect(screen.getByText('Controlled body')).toBeInTheDocument();
     expect(container.querySelector('.qa-popover')).not.toBeNull();
-    expect(container.querySelector('.qa-popover .absolute.w-3.h-3')).toBeNull();
+    expect(container.querySelector('.qa-popover [data-part="arrow"]')).toBeNull();
     expect(onOpenChange).toHaveBeenCalled();
   });
 });
