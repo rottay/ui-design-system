@@ -233,7 +233,20 @@ const REVIEWED_PHOSPHOR_ALIASES: Readonly<Record<string, string>> = {
   LogOut: "SignOut",
 };
 
-const PREVIOUSLY_REVIEWED_ALIAS_COUNT = 67;
+/**
+ * Every other count in this file is derived at runtime from the catalog
+ * scan itself or from REVIEWED_PHOSPHOR_ALIASES, so catalog growth cannot
+ * silently drift the guard: adding, removing, or renaming a catalog icon
+ * changes both sides of each relationship assertion together. This is the
+ * one deliberate exception -- a decrease-only floor on the catalog's total
+ * migrated-icon count. Without it, a bulk deletion of catalog files would
+ * make every relationship assertion below vacuously true (0 imports, 0
+ * factory calls, 0 aliases all still agree with each other) and the
+ * regression would pass silently. Seeded at the count measured when the
+ * Lucide -> Phosphor migration completed; raise it when the catalog grows,
+ * never lower it just to make a shrinking catalog pass.
+ */
+const CATALOG_PHOSPHOR_IMPORT_FLOOR = 330;
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -304,6 +317,7 @@ describe("catalog Phosphor supplier migration", () => {
     const entries = collectCatalogEntries(CATALOG_ROOT);
     const lucideImports: string[] = [];
     const phosphorMigrations: string[] = [];
+    let compatibilityFactoryCallCount = 0;
 
     for (const entry of entries) {
       const source = readFileSync(entry, "utf8");
@@ -312,6 +326,11 @@ describe("catalog Phosphor supplier migration", () => {
       for (const { imported } of namedImportsFrom(source, "lucide-react")) {
         lucideImports.push(`${displayPath}:${imported}`);
       }
+
+      compatibilityFactoryCallCount += (
+        source.match(new RegExp(`${PHOSPHOR_COMPATIBILITY_FACTORY}\\(`, "gu")) ??
+        []
+      ).length;
 
       for (const { imported, local, moduleName } of phosphorSsrImportsFrom(
         source
@@ -352,10 +371,17 @@ describe("catalog Phosphor supplier migration", () => {
     }
 
     expect(lucideImports).toEqual([]);
-    expect(phosphorMigrations).toHaveLength(330);
+    // Every SSR import must be paired with exactly one compatibility-factory
+    // call. This bijection holds regardless of catalog size, so it catches
+    // an orphaned import or an orphaned factory call without a magic total
+    // that has to be hand-bumped on every legitimate catalog addition.
+    expect(phosphorMigrations).toHaveLength(compatibilityFactoryCallCount);
+    expect(phosphorMigrations.length).toBeGreaterThanOrEqual(
+      CATALOG_PHOSPHOR_IMPORT_FLOOR
+    );
   });
 
-  it("covers all 123 former Lucide occurrences without a parallel catalog factory", () => {
+  it("keeps every aliased catalog import one-to-one with a governed Phosphor rename", () => {
     const entries = collectCatalogEntries(CATALOG_ROOT);
     const aliasImports = entries.flatMap((entry) =>
       phosphorSsrImportsFrom(readFileSync(entry, "utf8")).filter(
@@ -366,15 +392,24 @@ describe("catalog Phosphor supplier migration", () => {
       .map((entry) => readFileSync(entry, "utf8"))
       .join("\n");
     const importedAliases = new Set(aliasImports.map(({ local }) => local));
+    const reviewedAliasNames = Object.keys(REVIEWED_PHOSPHOR_ALIASES);
+    const reviewedAliasNameSet = new Set(reviewedAliasNames);
 
-    expect(Object.keys(REVIEWED_PHOSPHOR_ALIASES)).toHaveLength(189);
-    expect(aliasImports).toHaveLength(190);
-    expect(aliasImports).toHaveLength(PREVIOUSLY_REVIEWED_ALIAS_COUNT + 123);
+    // Bijection, both directions, derived from the catalog scan and the
+    // registry object rather than a pinned count: every governed alias must
+    // be used somewhere in the catalog (otherwise the registry carries a
+    // dead entry), and every aliased catalog import must be governed
+    // (otherwise a rename shipped without review). The previous test
+    // already enforces the second direction per import site; asserted again
+    // here as an aggregate so this test stays meaningful on its own.
     expect(
-      Object.keys(REVIEWED_PHOSPHOR_ALIASES).every((name) =>
-        importedAliases.has(name)
-      )
+      reviewedAliasNames.every((name) => importedAliases.has(name))
     ).toBe(true);
+    expect(
+      [...importedAliases].every((name) => reviewedAliasNameSet.has(name))
+    ).toBe(true);
+    expect(importedAliases.size).toBe(reviewedAliasNames.length);
+
     expect(source).not.toMatch(/from\s*['"]lucide-react['"]/u);
     expect(source).not.toMatch(/\bcreateIcon\s*\(/u);
   });

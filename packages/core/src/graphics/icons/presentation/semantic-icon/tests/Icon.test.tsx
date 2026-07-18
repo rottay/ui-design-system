@@ -36,14 +36,41 @@ function svgChildren(markup: string): string {
 }
 
 describe('semantic Icon corpus', () => {
-  it('publishes the exact generated 263-name corpus as the canonical truth', () => {
+  it('publishes the exact generated corpus as the canonical truth', () => {
+    const manifest = JSON.parse(
+      readFileSync(
+        resolve(
+          process.cwd(),
+          'src/graphics/icons/foundation/semantic/corpus/manifest.json',
+        ),
+        'utf8',
+      ),
+    ) as {
+      expectedCounts: { global: number };
+      entries: ReadonlyArray<{ status: string }>;
+    };
+    // The manifest is the governed corpus. Assert it agrees with itself
+    // before using it to check the generated output, so a hand-edited
+    // expectedCounts.global can't silently mask a missing or extra entry.
+    expect(manifest.entries).toHaveLength(manifest.expectedCounts.global);
+    const manifestStableCount = manifest.entries.filter(
+      (entry) => entry.status === 'stable',
+    ).length;
+    const manifestCandidateCount = manifest.entries.filter(
+      (entry) => entry.status === 'candidate',
+    ).length;
+
     expect(ICON_NAMES).toBe(GENERATED_ICON_NAMES);
-    expect(ICON_NAMES).toHaveLength(263);
-    expect(new Set(ICON_NAMES)).toHaveProperty('size', 263);
+    expect(ICON_NAMES).toHaveLength(manifest.expectedCounts.global);
+    expect(new Set(ICON_NAMES)).toHaveProperty('size', manifest.expectedCounts.global);
     expect(ICON_CORPUS.map(({ name }) => name)).toEqual(GENERATED_ICON_NAMES);
-    expect(ICON_CORPUS).toHaveLength(263);
-    expect(ICON_CORPUS.filter(({ status }) => status === 'stable')).toHaveLength(50);
-    expect(ICON_CORPUS.filter(({ status }) => status === 'candidate')).toHaveLength(213);
+    expect(ICON_CORPUS).toHaveLength(manifest.expectedCounts.global);
+    expect(ICON_CORPUS.filter(({ status }) => status === 'stable')).toHaveLength(
+      manifestStableCount,
+    );
+    expect(ICON_CORPUS.filter(({ status }) => status === 'candidate')).toHaveLength(
+      manifestCandidateCount,
+    );
 
     for (const entry of ICON_CORPUS) {
       const metadata = getGeneratedIconMetadata(entry.name);
@@ -74,7 +101,7 @@ describe('semantic Icon corpus', () => {
     expect(isIconName(null)).toBe(false);
   });
 
-  it('server-renders every one of the 263 canonical names without a null adapter', () => {
+  it('server-renders every canonical name without a null adapter', () => {
     for (const name of ICON_NAMES) {
       const html = renderToStaticMarkup(<Icon name={name} decorative />);
       expect(html, name).toContain('<svg');
