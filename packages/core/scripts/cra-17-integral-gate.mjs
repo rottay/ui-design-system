@@ -175,7 +175,28 @@ export function auditNoLucideBoundary({ repoRoot, paths } = {}) {
     const display = portable(path, root);
     if (TEST_PATH.test(display) || LUCIDE_RULE_PATH.test(display)) continue;
     const source = readFileSync(path, 'utf8');
-    if (!LUCIDE_TEXT.test(source)) continue;
+    let scanned = source;
+    if (display === 'packages/core/supplier-contract.json') {
+      // Ruling R1a (2026-07-18): 'lucide-react' stays listed in the contract's
+      // supplierPackages because the tracking feeds live governance/ban machinery
+      // (app-side supplier audits, the runtime-alias expectation, the showroom
+      // marketing exception). That single governance entry is the ONLY sanctioned
+      // mention; a lucide token anywhere else in the contract (an entrypoint
+      // wildcard claim or a symbol attribution) is supplier reintroduction and
+      // must fail this boundary. Scan a copy with that one entry removed.
+      try {
+        const contract = JSON.parse(source);
+        if (Array.isArray(contract.supplierPackages)) {
+          contract.supplierPackages = contract.supplierPackages.filter(
+            (name) => name !== 'lucide-react',
+          );
+        }
+        scanned = JSON.stringify(contract, null, 2);
+      } catch {
+        scanned = source;
+      }
+    }
+    if (!LUCIDE_TEXT.test(scanned)) continue;
     const lines = lineNumbers(source, LUCIDE_TEXT);
     violations.push({
       path: display,

@@ -461,7 +461,13 @@ function deriveAssetRetentionCompatibilityBudget(measuredBytes) {
 
 const ASSET_RETENTION_BUDGET = Object.freeze({
   namedSemanticRole: 40_000,
-  bithirePreset: 40_000,
+  // Decision 2026-07-18 (W2 Task B, ruling R2): the BitHire preset ceiling is the EXACT
+  // gzip size measured on the first clean 2.19.34 build after the 100%-Phosphor supplier
+  // migration. Phosphor ships per-icon SSR modules that each carry all weight variants,
+  // so the migration itself landed this weight (104 roles retain 209 Phosphor modules).
+  // Decrease-only from these bytes: no headroom, never raise. Weight reduction belongs to
+  // the generator-level weight-pruning WO in the W5 icon lane, not to a budget change.
+  bithirePreset: Object.freeze({ esm: 75_275, cjs: 81_828 }),
   dynamicIconFull: Object.freeze({
     esm: deriveAssetRetentionCompatibilityBudget(FULL_CORPUS_COMPATIBILITY_BASELINE_BYTES.esm),
     cjs: deriveAssetRetentionCompatibilityBudget(FULL_CORPUS_COMPATIBILITY_BASELINE_BYTES.cjs),
@@ -814,6 +820,7 @@ async function runAssetRetentionBudgets() {
     budgetPolicy: {
       semanticRoleCount: SEMANTIC_ROLE_COUNT,
       iconsGzipBytes: 40_000,
+      bithirePresetGzipBytes: ASSET_RETENTION_BUDGET.bithirePreset,
       marksGzipBytes: 30_000,
       featurePictogramGzipBytes: 4_000,
       fullCorpusCompatibilityHasRouteBudget: false,
@@ -842,6 +849,7 @@ async function runAssetRetentionBudgets() {
       constraints: [
         'Do not remove any of the governed semantic roles.',
         'Do not widen the 40-KB icon or 30-KB mark ceiling to silence this gate.',
+        'The BitHire preset ceiling is the exact measured post-Phosphor-migration size (75275/81828 gzip bytes) and is decrease-only; shrinking it is owned by the W5 generator-level weight-pruning work order.',
         'Preserve supplier-free public props, SSR output, hydration and one-minor compatibility aliases.',
       ],
     },
