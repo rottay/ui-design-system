@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "cbc212a0f28c2cffbeb7a96d7592222890e9bac8c8f8315a483ba214a0ba8ab1",
+    "authorityDigest": "f25046cce8104a3c4e68bb52287b86793730ea5a3211346d8e4cdeec96255a9f",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/gat-07-documentation-seal.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "ad5edfe12f4ce97285e829281ed23da16754ac50",
+    "documentationRevision": "c817fdc2cf6566a97e445299d7ae47898b09ee43",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -161,8 +161,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 18928,
-        "sha256": "9c7b8f7e12564f98d6ceba5d3f6eb6c066b00c85c774ba4ac735ca5419920afa"
+        "bytes": 19059,
+        "sha256": "33cf4f2d9531a2257b036e3883e42477f8aefe2a781522659cdf8a4de0d906fb"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/engines/README.md",
@@ -188,8 +188,8 @@
           "documentation-seal",
           "vertical-facts"
         ],
-        "bytes": 10373,
-        "sha256": "d0e6f92551102acbe1dd6dd96023ab5bd12fa40ad29e8b92119a523b785e850b"
+        "bytes": 10499,
+        "sha256": "090fab80a05d1f1003a87161c022b1133245e002ac69c9d6956f59ecd5af2f82"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/verticals/README.md",
@@ -207,15 +207,15 @@
           "workspace-toolchain"
         ],
         "bytes": 25425,
-        "sha256": "573ea322e5cf44adbdad4d92d1a6a6fffe7c0e40d93eb4fe73942f2c88cb0400"
+        "sha256": "d061a27c86e9e9db014a7a86baf4114d5bf1ccd6b81854c47edc1dde9586742b"
       },
       {
         "path": "ui-design-system/.gitignore",
         "roles": [
           "gate-wiring"
         ],
-        "bytes": 1834,
-        "sha256": "54f1f8e39df4545ca9ba24dfc28067ff7f478513d936154c4bcaa69520f38b1f"
+        "bytes": 2011,
+        "sha256": "5bcfb0de7c166bcca30b85b765657ad13be776e9eed6db028caa15373a49a427"
       },
       {
         "path": "ui-design-system/CLAUDE.md",
@@ -305,8 +305,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12211,
-        "sha256": "0194a6e19eb11729f0eabb0a1bbeefed70854935344b85d89b33ff2f2f386955"
+        "bytes": 15117,
+        "sha256": "77c6d32f9f721d9b10b8a52585831546b607d9f6d9b5ffd709e5381bde5c8470"
       },
       {
         "path": "ui-design-system/packages/core/scripts/canvas-sink-census.mjs",
@@ -521,8 +521,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 7921,
-        "sha256": "2cb4b260623aa21f25b929400f698da5648505b641e4d0b59a4517689408189f"
+        "bytes": 8168,
+        "sha256": "b56c8d27d6bb3b321cb941679211b15fbeded43ed10796087fe38e155d58344d"
       },
       {
         "path": "ui-design-system/packages/core/scripts/cra-17-asset-entrypoints.test.mjs",
@@ -649,8 +649,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 228055,
-        "sha256": "1c0df9829a205d88ab02f01dd2201474f56c7cfc6955cb425b2659e202bce30c"
+        "bytes": 228326,
+        "sha256": "398e5e865ad0ea058bad8aa53e2e586805063836786469acb07daf9fc4b96a86"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-token-audit.effects.test.mjs",
@@ -673,16 +673,24 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 125432,
-        "sha256": "d7d25adbfc303f5cba4d9d7361b4553a64e2bf69916d56bdd5aab5edffa4aa91"
+        "bytes": 126886,
+        "sha256": "ac798f9f414e549a044b8d70edc3c579e61f7934c8dd1bcb2bfac896e7eb7c76"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/engine-token-audit.motion-recipes.test.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 3538,
+        "sha256": "ee4393e5dc38fc6fe3a3d025a29df952b2a919ca839352d6aaba50f26f659f53"
       },
       {
         "path": "ui-design-system/packages/core/scripts/engine-token-audit.runtime-svg.integration.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 12238,
-        "sha256": "8dc33ed02a044c7482e91b5d89f171a072d1cafd14f1ce197a3bebf2ee367795"
+        "bytes": 12390,
+        "sha256": "4e7a7ff94d08d78838714f2e18b35b41af8f1b74d09e2c5ccff122f66eb943e1"
       },
       {
         "path": "ui-design-system/packages/core/scripts/fleet-inline-paint-census.test.mjs",
@@ -708,7 +716,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "501b286fe1b25ff8221dcc310927f964d960bced4089f0f2724c9e49bf7cca55"
+        "sha256": "0346b972deef30a44fd0fcf04c78ad62066afcea4b1513d469e1f52b535c1e99"
       },
       {
         "path": "ui-design-system/packages/core/scripts/gat-07-exact-proof.mjs",
@@ -893,8 +901,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 1144,
-        "sha256": "b0230ca75ab919188c6ee166687d78ebb13aa16425a20bb23b4957de0af3df0a"
+        "bytes": 1325,
+        "sha256": "6654f8091e8a8c025427dafa28ebfa6e39ea819b4f54c95da7bf6abf17792399"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/fleet-inline-paint-census.mjs",
@@ -917,8 +925,16 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 97016,
-        "sha256": "a9afb68975227222fc561513207db20cbfe51c1353dcc1db5a85e520eea2783a"
+        "bytes": 98809,
+        "sha256": "e67706ac610f07d1a3eb9236514e832851d16e112e3bf7d9dfaddcfe121ce1b4"
+      },
+      {
+        "path": "ui-design-system/packages/core/scripts/lib/motion-recipe-consumer-counter.mjs",
+        "roles": [
+          "audit-machinery"
+        ],
+        "bytes": 1557,
+        "sha256": "497c78d5d49821890715c710ca21d75d32aa3a3490de29855176b94b631d4df4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/lib/path-keyed-baseline-relocation.mjs",
@@ -1109,8 +1125,8 @@
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 8531,
-        "sha256": "e832edf785956e6df7bc2d953ef9d7813cc217046eadd6d51ddf5abd0c73121c"
+        "bytes": 10980,
+        "sha256": "b808408ed7b2d405f7d78ac353d3f7c486d213dda18cbe7f80926a31e203c372"
       },
       {
         "path": "ui-design-system/packages/core/scripts/write-build-stamp.mjs",
@@ -2272,6 +2288,22 @@
         "sha256": "156239d64cb80cd986f40cbfe76cc926b72b323b4d82bef744b6f9f0e65179e1"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/keyframe-namespace-contract.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2876,
+        "sha256": "2c87e4dd8bd2bd22bef9f869b77b9e7175d31800d8dd36ec88e7ccb1751c8dd9"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/motion-interactions.contract.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3975,
+        "sha256": "7654b49e6582cf3aa933aa33050b38df723fd82f5ed59cf39680a2883b1966e3"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/pulse-changed-css.test.ts",
         "roles": [
           "audit-input"
@@ -2288,12 +2320,28 @@
         "sha256": "bf393e9b3668cd07d4b46ab1b46938c253f9362986a686079d95497af141fbb3"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/spring-precompute.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2753,
+        "sha256": "e6dc7db017a161726b3dfb7f6a14840a5d263ef7c10c7493b1759deeca9768bb"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/tokens.contract.test.ts",
         "roles": [
           "audit-input"
         ],
         "bytes": 2307,
         "sha256": "967237e12fc80b8d845f7d6775bbe40dfca16d656e31d9afc3925b83ca31f83f"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/view-transition-choreography-contract.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 6857,
+        "sha256": "e2ed99b238d495b45836a9e1229299ab4aa6777fac79b39b481d8824ebcca11d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
@@ -2387,20 +2435,28 @@
         "sha256": "55036a1f7e8b64d56bcbaba4dfaa47d1a34440489c2b68aa1dc96be44ee4ac3e"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/animations/collection-stagger.css",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2430,
+        "sha256": "8e72551a75faa54e09b68c7465ff17b532c5c999854d5e8644f841475dd6e933"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/animations/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 248,
-        "sha256": "c21869c11a630a4eef92b46949e677f1f999280ec57ee2c0876aa65f4c46cda7"
+        "bytes": 284,
+        "sha256": "a0e9cdd3d179bc6882980496ce1baed852a892dd4bb5da3ab9c213fed6f3ecc5"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/animations/keyframes.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 11605,
-        "sha256": "386fda7b2ee56eb83b3096314c32f0093dc98a65a21def957dd61535a0a05834"
+        "bytes": 13437,
+        "sha256": "517c9095f1c8078f9213535528afcd52251a4df098a17b45525f30108d6d1f54"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
@@ -2415,8 +2471,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 20402,
-        "sha256": "081146c839c19003fc62c3295792c39e210a778d94d3767c7a6f3e675e4619fb"
+        "bytes": 26369,
+        "sha256": "e6548fe2b87a03fad6fec46e1af9e6b4d711aac0b78f185086f2617924b21078"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/borders.css",
@@ -2512,8 +2568,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 9520,
-        "sha256": "3891d36aba648a264b67cca461da875d08400d8ef02df1c5475e567e6adaead5"
+        "bytes": 9534,
+        "sha256": "ebc0cc84890e7bb7bc1dd9b5691dfed25fb661fd26fc2c8eeebf30d6869b37a3"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/badge.css",
@@ -2539,8 +2595,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 15737,
-        "sha256": "faeb398ae919692a15e549fcd49964c40625f050bea71262158d9b645ffc64c5"
+        "bytes": 15751,
+        "sha256": "2c5413471d5f3f733d4d8bcee84fc602881a22842a18af7e248b9dde9e199baa"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
@@ -3112,8 +3168,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 16066,
-        "sha256": "1b656ce4a96ab711e38a2cea63dff8fcf5459ac1a8e16b4bcce53f322f0c3cc4"
+        "bytes": 16098,
+        "sha256": "47671845df0fbea0cf5278e480cd9f3a43c5bb6669fda6063e029d88ec797863"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu.css",
@@ -3572,8 +3628,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 936,
-        "sha256": "27dd6e831cc8e09c7cb07ee078e4a8f28aab4572f572a1bae74893bce9784f05"
+        "bytes": 932,
+        "sha256": "6cd5b7b38182d79521bd23f9832ccda68140e9af6b75bffd39b5576da44c5489"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
@@ -3792,8 +3848,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 4813,
-        "sha256": "fad6096e9f88e22ebf57a6da2a801a0f84f643e778ec23030469b2710cbac296"
+        "bytes": 4785,
+        "sha256": "67f9ca36374cc9168e001c9d15e510ebad740e7d7658619eb17b4137efd33cb0"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css",
@@ -3962,8 +4018,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 3158,
-        "sha256": "65ce1c07bcf47f4ff271b1ed967a248983a685e0a8eec7eff7d742544d4d07fe"
+        "bytes": 3172,
+        "sha256": "4aba962d692d9d53b2b212f2eda1635c9b542169e79cae9b509df64fd2e8ec28"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface.css",
@@ -4017,8 +4073,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 2540,
-        "sha256": "7b1e08713a35bf4e51a012d442b4e38e261fea4d9efa33615dcf73bda854f478"
+        "bytes": 2554,
+        "sha256": "0bdf79cbb35a45592bd7e9f4dc40dbcdbaa63c1f61fa033c1566b446a44e3658"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/toggle.css",
@@ -4198,8 +4254,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 14992,
-        "sha256": "ccbed61b50cb19d1578f56ab8e837f23651369da7642b731642a7ec40439810f"
+        "bytes": 16302,
+        "sha256": "707ef57a6096a6da8968ed81b61880fbbdfbf1a3553662c8e66d8aa38ab7f589"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
@@ -4248,8 +4304,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5608,
-        "sha256": "e610b7cffeb3156335c9df1f2efe175c1a051264568485d61a48f5fbe8bbf27a"
+        "bytes": 5636,
+        "sha256": "adc78d440f4e1578fd1e2dbb85ebd1a3fb9ea46424abf1e873ddee45bb6625da"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
@@ -4258,8 +4314,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 3841,
-        "sha256": "2d1db86467f35bfc3e85de37c58c95dafab13787f9fb042e8e40f7967a8b32a9"
+        "bytes": 4925,
+        "sha256": "0cddfa97197f55389a16b969935fc2999f08daa53e578f932433468b01f64198"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
@@ -4268,8 +4324,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5844,
-        "sha256": "158eecef858b9b795439850e58f2375d4391243a3af12413d815178ace510fcb"
+        "bytes": 5858,
+        "sha256": "cef2f58feaa3ee65959adf265217f57fdd299bc5a1d8f864f35d5b767318d37e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
@@ -4368,8 +4424,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 10953,
-        "sha256": "29a65fe17b43ee49ebe3186dc11c6b6823f0f406bd0a255f882c29f9564b565a"
+        "bytes": 10981,
+        "sha256": "70741ce67026b7a36d271689c4705301eb6198c29dd838185362086be1e66376"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/divider.css",
@@ -4708,8 +4764,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6676,
-        "sha256": "926f57fcf674427f6380dfd9f971b46786f3dd327863e3658ced97c4bcec3b57"
+        "bytes": 7210,
+        "sha256": "9079677398f7ef6d2a408ae450e093262eb2b27bb6dd74190eb4ded12da67717"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
@@ -4718,8 +4774,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5499,
-        "sha256": "a84f8606e49fae8d34a08ff68bed607a882e01f3f4086276351ff4a273997cc3"
+        "bytes": 5513,
+        "sha256": "7abc207f8f9cb2ffa51cedcf08855a2f40e355b75de48747c9fb95df6a7a4eb0"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination.css",
@@ -4898,8 +4954,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 17942,
-        "sha256": "4b3157ef4b771624e9f894676f2580471b8533067fb240e4dc8b086550ae87e7"
+        "bytes": 19016,
+        "sha256": "79b90a908f9bf2ce2879697f24955903721879bb7027dc11de89bc16cf9176ca"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
@@ -4928,8 +4984,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 2155,
-        "sha256": "817f93862c7968bd798a3f743a0f8091868c12bddd5b7c9e0fbdfdb821fd3f36"
+        "bytes": 3675,
+        "sha256": "054c1bb08740c38b3531384a89330336f660d7327d71131ef0e2c5d7210b8ad0"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
@@ -4978,8 +5034,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 3433,
-        "sha256": "1f5a3fd42c66900dce32958d2191edbc6f8ad8c6de2bdd59c089bec7a31495f5"
+        "bytes": 3312,
+        "sha256": "c0a163e370c61fd1b0fd83f97a54f70b6725260c25a4dfe9f18248c6d1824184"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
@@ -5018,8 +5074,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 3017,
-        "sha256": "fd0afc476f085df174e5f184943b57ddaba825a1b4ff9678a79e40bfb3ee883c"
+        "bytes": 3498,
+        "sha256": "25d621d506d3cb73d787e0af33cc17aff914589d0e35c67b7ce49fd0d87a9fac"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css",
@@ -5158,8 +5214,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5145,
-        "sha256": "8131a97f7da7087be70464e1ef1571b157bc8cb8201d6735e720874ad4dd044e"
+        "bytes": 5176,
+        "sha256": "ffb4d8e0fef908207b0fcfec2edfeae0b242906f2c557922ed6f1399907fda33"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
@@ -5218,8 +5274,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6924,
-        "sha256": "0fbdf974e151899723b00ec2e19709b6e35b17235e06883e80ffb994e4d5ac77"
+        "bytes": 6938,
+        "sha256": "f5c0e583e6455c686ac7e5bfdbd5e2ee585152f61c222386f42788adfc9c450f"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher.css",
@@ -5237,8 +5293,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 40835,
-        "sha256": "e8a8dfd0bbbf3a7385b77b2958d5868fa5ffae88f2ca6ebabcf3347468cda2d5"
+        "bytes": 40849,
+        "sha256": "296f13364ea7936f80d9dea7184450f29e70752b965ff5551a78fa75840d97d1"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
@@ -5357,8 +5413,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 13414,
-        "sha256": "5edb029878e07128d366b9cc6391c7115e7d87d11814c6cd4a875209e973deaf"
+        "bytes": 14513,
+        "sha256": "f6e9c6e752cd6cc8e13f3ab2f1d279444a116c4eb3d38b0a50e4c6743ed330a4"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css",
@@ -5517,8 +5573,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 8233,
-        "sha256": "7b9bb0855480324d8b51d73c6be3cad4244ead3f6ac83dea912b1de60aec38b4"
+        "bytes": 8246,
+        "sha256": "2e6eb86400b00dc8606ab4bb4d005966109cff194ee6a81581eee739ac6e14b8"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/divider.css",
@@ -5647,8 +5703,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 3173,
-        "sha256": "ea98d81cf7c4abaef293b2db3f1712fbe1914f7f17220b4f660c7a27d5597677"
+        "bytes": 3193,
+        "sha256": "23a00ad8a8f3d864b0492fe03f6d59aa40d1a20d239e3c8fdc6c4242d2e06af6"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/hover-card.css",
@@ -5977,8 +6033,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 3576,
-        "sha256": "7cd75121e639202bf2459446d9ecb6f489186aaca6a9bfcf6ad101cf45ef4121"
+        "bytes": 3607,
+        "sha256": "bc77ac76fb7cea063ac6af1ade02482e68467fc17ffbae5e54174a1557a654f9"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/radio.css",
@@ -6067,8 +6123,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 3514,
-        "sha256": "6a6767ef2a5c6e37cc78fad8d7924b1954f908b0f0321f108a58ac6e4a475340"
+        "bytes": 3055,
+        "sha256": "966b5286c648f86bfa4efed15a29ca06562e7bc59e3b183d73aa17504ef308ac"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css",
@@ -6157,8 +6213,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 2309,
-        "sha256": "fd5867848044c917ef7307647fa0cbc2bca0d45bf2b056c2904df1e009f5179d"
+        "bytes": 2323,
+        "sha256": "733378304af382d11def92c3ded5fa3441bc3ab6aefc89a58c46ec3e16a27d83"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/table.css",
@@ -6366,8 +6422,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 27161,
-        "sha256": "e4169838872bf266d35cea0ce185f94c8492f7ece3bddcd3613e7770f3938906"
+        "bytes": 27361,
+        "sha256": "185f0a72de3af3e30e0c3aedc21e5353ff984bb10bf2f073255c657fe8f2e0fc"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/personality-paint.css",
@@ -7342,8 +7398,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 923,
-        "sha256": "5819f360281c4c95919bb79f2d902451b33c75e6b53a463a3da282b33d255208"
+        "bytes": 937,
+        "sha256": "330d19132fe1d792bcd7bf3d70902effd1044185b3e2e68fe1d6f29e0021614d"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/icons/presentation/legacy/SearchIcon/index.tsx",
@@ -10646,8 +10702,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1142,
-        "sha256": "b1abeb1aa66f28f3720e90ae35c35b840258120869c6f90d2400c2c469925314"
+        "bytes": 1518,
+        "sha256": "16e9d46b013623570d9031ba9f1ee15475ebe5b7a028b3307a5cd1048a075697"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/motion-personality/index.ts",
@@ -10722,8 +10778,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7247,
-        "sha256": "534dbae787f363ce27c6b37a852855014a67f155d0872842bc0c958e4a576b6a"
+        "bytes": 15053,
+        "sha256": "1c2a703dd283bba61d11a811dcb7d345cf0998a74fd1553c3b20a4e1f05a019c"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/view-transition/tests/directional-view-transition.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 9233,
+        "sha256": "66ba35815f857deeb8d764a165c88ae25fbbcd822360aa12cffe446739dd4a5f"
       },
       {
         "path": "ui-design-system/packages/core/src/graphics/motion/react/runtime/view-transition/tests/use-view-transition.test.tsx",
@@ -12156,8 +12220,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 744,
-        "sha256": "42c23fae8c52391eb268da8cccc54b714cf7bcaadcba424491fc1648e0294f6e"
+        "bytes": 3958,
+        "sha256": "cd5fa0af8185369a46b0099aa5caedfee411d7004dbb3ecb2d9a816d6e04a178"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/runtime/foundation/motion/composition/react/preference/recipe/tests/motion-recipe-presentation.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3803,
+        "sha256": "9b66131cac53086b447c6353fc72fcf704e8af93d91ca2ee0453d69d3621a6ae"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/runtime/foundation/motion/policy/index.ts",
@@ -12402,8 +12474,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 698,
-        "sha256": "b5b434df756177ec3b4183e25581ec809c689f60f070c0d896efbbe353a5022d"
+        "bytes": 930,
+        "sha256": "6a5a4b945dd40dbbe78dd133c7b89e27079941046579cf94e4e78a1dce8af023"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/runtime/motion/index.ts",
@@ -14866,8 +14938,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 21870,
-        "sha256": "df7526e76079e0fca10b88ad5e5554ce99ba1f64f4997838cb7cca11e06dc6aa"
+        "bytes": 21898,
+        "sha256": "009fefd643f99cc7f9ea22a49d60fd35abb3eb7b1abd94a57024a717a75b4f61"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/data/detail-panel/engines/rustic/index.tsx",
@@ -14912,8 +14984,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 14390,
-        "sha256": "5005a279a7155f4dd632759748c1438074986526060626b5d8ad35fb0c09184b"
+        "bytes": 14432,
+        "sha256": "075835b8c805b3a11e63c51a2fc60e38c0507d8f279b8e72f1c5a38172881b8b"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/data/file-manager/contracts/index.ts",
@@ -15066,8 +15138,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 9077,
-        "sha256": "532d032ef0b46f33728b244d5572435a416efb9e5a957a01245eb92886c36aff"
+        "bytes": 10691,
+        "sha256": "abe4e03f8a3f9900c851457053c6d6cb5364fe71c662712d32375d8136ee1fb2"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/data/grid-view/presentation/grid/tests/GridView.stagger.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3323,
+        "sha256": "5fb88b760a70af7377668eb22fdbc6012a76ceb97c50fcc0794fbffeba098fbb"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/data/grid-view/runtime/item-identity/index.ts",
@@ -15937,8 +16017,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 2584,
-        "sha256": "d1b6581537406f76c13b93a439f4075131b4fafb2d2e40d54bf46b928fe7ed65"
+        "bytes": 2598,
+        "sha256": "fbc51ca01f9f2af20e7378f5d9db648a479282c04649d27cebc214ad56357dfb"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/foundation/header-actions/index.ts",
@@ -15961,14 +16041,32 @@
         "sha256": "83084e3dce77e9dd013085510dd66f8a86ac70429e042a78fa8d3ccc7bfcfa8b"
       },
       {
+        "path": "ui-design-system/packages/core/src/ui/patterns/foundation/motion/collection-stagger/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3813,
+        "sha256": "7f54ff763fbd0ce438cb9ca7aa51f7e5e667c20e06509abd0631482a41f66b73"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/patterns/foundation/motion/collection-stagger/tests/collection-stagger.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2267,
+        "sha256": "5d392fcc1fc9ec57b75a8a941ef58c5b4082b86604195f0adcf490cd97663212"
+      },
+      {
         "path": "ui-design-system/packages/core/src/ui/patterns/foundation/motion/index.ts",
         "roles": [
           "audit-input",
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 91,
-        "sha256": "e8add5e23dff24469eb863f6d1edc18b4c350f0b9fc7ad0ed69b9c41097b2cd4"
+        "bytes": 129,
+        "sha256": "bc501a15c244e1e81a02c5a7eab5e35951560421f155ea78d6e6a194b9c27057"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/foundation/motion/transition/index.ts",
@@ -16633,8 +16731,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 12987,
-        "sha256": "ad85152990ae34b66ceda0127462bf0d8cd1a256f16172350fdfba48f51d9a5a"
+        "bytes": 13071,
+        "sha256": "4926aae4ade6397fdf9a7afd4756e50d0f35bea4e2039976fc70b16e98593219"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/shell/cockpit-header/index.ts",
@@ -16691,8 +16789,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 14071,
-        "sha256": "d1fa2e9a99815a8870a4975a9e4bf5c9c9204c803e07a1684cd35a7fb253419a"
+        "bytes": 14141,
+        "sha256": "1a314930092e94a21f75560404251695886fbca9326f57b8104423aaec4f3c2d"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/shell/page-shell/engines/rustic/index.tsx",
@@ -16739,8 +16837,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4263,
-        "sha256": "b1470cd5a7fdb64a1cdf5ee3df4425fbee56a533d2d156528acd76872abb4470"
+        "bytes": 4291,
+        "sha256": "6a0f59f408a760b4b7e403cdd2d56a4c7676025935b62dde717f7492dd21e8b8"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx",
@@ -16749,8 +16847,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 12618,
-        "sha256": "e7ab82247894c60a56dc56683d2573a9e66da419adf6bc905e25ab528dfdfdaa"
+        "bytes": 12632,
+        "sha256": "c25374245e7e522551761a5199b6d21808787beca87113154cac55e954d119bd"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/shell/workbench-header/index.ts",
@@ -18797,8 +18895,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 13979,
-        "sha256": "5298934688efb62a62edde7c4559cfedca2bea1b616201d754cc4ba4273cb050"
+        "bytes": 13975,
+        "sha256": "41099d964db1f1a96131d8ef81354b392ea9e0fe52e3a0611b8c77e1e657c647"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
@@ -19423,8 +19521,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4960,
-        "sha256": "18a5f9ab2dfbbe8913252aaf0400715844ad6fea15b3789c24075bd091de4aaf"
+        "bytes": 4974,
+        "sha256": "84ccf81f981964719ff21afb516cd2cc6c63da60762d51fb44c6d9a955309cfb"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx",
@@ -19527,8 +19625,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 12358,
-        "sha256": "d7cbb6f7679f7dd55f2ac4b9db67956b23f2e3324d75f15aafd88e9da20f3fbd"
+        "bytes": 12372,
+        "sha256": "b7539b92ebf54eec4bf81303bc70680627f7308c78bcbd38cb02531f131d9d56"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx",
@@ -19885,8 +19983,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6796,
-        "sha256": "cace14c47582909ee8760e7363442ae6cf036ff8e9b5d06e458d28a2f3937ad6"
+        "bytes": 6810,
+        "sha256": "e7ab71cfec23cae783d9f99c50bb90370c611a756a8f6088148a3db13c263ab6"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/Timeline/engines/rustic/index.tsx",
@@ -20495,8 +20593,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 10704,
-        "sha256": "02ba8bef784bc6cd6e6f099eaabf53408ee79fd2b0016d0d35f0c43370769855"
+        "bytes": 11906,
+        "sha256": "8411d6436c29826ec6d860f870d69e483e42793bbc5f873f32e5f2a8ce8b623a"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/rustic/index.tsx",
@@ -20527,6 +20625,14 @@
         ],
         "bytes": 4398,
         "sha256": "8d61650e14216e52ad29c1c2dcd08bb2588e994342c26e37b424dcff208433ef"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/tests/Drawer.motion-recipe.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1636,
+        "sha256": "35c734f0ec2d5bf6ea701118ac22f98cdd30184b8c1b1104720e6d6bfe1cc43b"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/tests/Drawer.test.tsx",
@@ -20576,8 +20682,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 19652,
-        "sha256": "c534f3a18fcb60b5a5444cd2d7c59e5337edd31e806bdc59198168e0b15bd117"
+        "bytes": 19666,
+        "sha256": "7d3ca27241c57e7a3746cac97845793296d5e692c5ff6474b5f4096cd880233f"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Message/engines/rustic/index.tsx",
@@ -21127,8 +21233,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5986,
-        "sha256": "03a7949b7244488920f43f5b91841f415194d11e98b0408ed7ce245f472799cb"
+        "bytes": 5989,
+        "sha256": "54b231fba8be7d58e1423acb2f57e2878176e9624f5069c71027f569d7d64af3"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/Button/index.tsx",
@@ -21138,8 +21244,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 7060,
-        "sha256": "76e51760f3942dd81fc60b88b1ba22f6a0b35eda2d8521ede76ce8debdb92f26"
+        "bytes": 7063,
+        "sha256": "471f135e9d086b4f8a560be907a8e20504cc8633e7a1384b42b46d13375c267b"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/Card/index.tsx",
@@ -21149,8 +21255,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6769,
-        "sha256": "578d3cd34cd52323456d2573a8a5dfc6ef0335b3741dc8ab7521211a0b43a353"
+        "bytes": 6772,
+        "sha256": "64b210c582f993340625e4782aed327e2effdcea5769f7530e119f12325195c8"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/FormSkeleton/index.tsx",
@@ -21160,8 +21266,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6129,
-        "sha256": "16bc7a5aaa7470381f3fccc7e32a471be9dbdfa9ee53243acd1cd89fd379c88a"
+        "bytes": 6132,
+        "sha256": "57a946165c2134932adf24ff239c169f777cb02872844f4e818d94b2fa01b327"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/index.ts",
@@ -21182,8 +21288,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6447,
-        "sha256": "1ebf620f32501681b4b7b09d830f6fbedf1f8dd14882c33a125cf8a993262c1f"
+        "bytes": 6450,
+        "sha256": "741dae2de6f7f52ab4829e70981df73cb93c15309755d727041d6dedf9ef5353"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/Paragraph/index.tsx",
@@ -21193,8 +21299,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5922,
-        "sha256": "8907361e481e955ca2aa4200d742a8592d279e05732a0c52fcff695e23883807"
+        "bytes": 5925,
+        "sha256": "ffc7a3c351c1faf28b854aa7f840e57ae6384f67e04cb865fed319f37520474b"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/Table/index.tsx",
@@ -21204,8 +21310,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6996,
-        "sha256": "9a6e592851264f27f79817a8e56004a13369e20ede959a303598150204b41735"
+        "bytes": 6999,
+        "sha256": "ee6dec42870fe91874a2a6fbdcce3d36f0c91c61476f518216b8b46c6150756b"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/Text/index.tsx",
@@ -21215,8 +21321,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5575,
-        "sha256": "88579c0c638a08cdf077513b0404011cece5442fef7a5f299dbbb629616692d6"
+        "bytes": 5578,
+        "sha256": "7043f9ac312db9cd3728274d1ac19dd2fc44bd9db4a218466084fcecc6d5474f"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/compound/Transition/index.tsx",
@@ -21259,8 +21365,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 7925,
-        "sha256": "96de9540f81d18a7f7695323a97bc840a4f011299192a7bae70dc34421c6f0f2"
+        "bytes": 9194,
+        "sha256": "7cdeed032bbcd998686ec8448d84596a6a96c3d11b272d292554aaf50cb432e4"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/rustic/index.tsx",
@@ -21270,8 +21376,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 8261,
-        "sha256": "b45755caa7ddd5707edf4d4a9f1c27800092b67b3f10c4adf8066509e4f44520"
+        "bytes": 8313,
+        "sha256": "aeb245bcb63be3839477cfc36fc6c32fd45f4322fb2922190986af52bbeb2614"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/index.tsx",
@@ -21297,8 +21403,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 3189,
-        "sha256": "23e1a8847a82efa96b503fab5602533a4e0ff4180cbb6fc2ce052ad9f6d3aa2f"
+        "bytes": 3204,
+        "sha256": "06a4a6d0915c67b4a8fcf73a36039182cad9417a96894f29a6cb900e092845de"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/tests/Skeleton.test.tsx",
@@ -21307,6 +21413,14 @@
         ],
         "bytes": 7014,
         "sha256": "1d05976396cfe79119b25683c290ea363c222e05962cbe55ed2b60a4e249fc0d"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/tests/SkeletonCanonMotion.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5224,
+        "sha256": "bdaa1a5a656c5c95094255dd4b93e931506aea9f121262aa2d51f94b6563f238"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/tests/SkeletonTransition.test.tsx",
@@ -21794,8 +21908,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6062,
-        "sha256": "3705d23f5fedafd216a0d495cdacc7270f4b0ee28d14009d6241074436e35ec3"
+        "bytes": 6058,
+        "sha256": "16dfed7fb94d9377f0a48703ba5c574f9d08f98ded3fd89b76c868fd2ab90b2f"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Button/compound/index.ts",
@@ -21838,8 +21952,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 15150,
-        "sha256": "da6f8375b6d5ee8b98a46f38bff6600265acefb84090b63dfac1a582c5c77bde"
+        "bytes": 15939,
+        "sha256": "fb2df5cfa509fa454bbc768eb8449d947ba0617b43acb4d7f6ee65c1e56d1967"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Button/engines/rustic/index.tsx",
@@ -21849,8 +21963,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 13002,
-        "sha256": "608331a1764e1574b76237f325fc0be9292426c8aaa340f0bcb02e8b513cd5cc"
+        "bytes": 13623,
+        "sha256": "2ff07f80b5e9421650f32b644f6442bc80d586810737330e95d951e068632570"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Button/index.ts",
@@ -21894,6 +22008,14 @@
         ],
         "bytes": 4775,
         "sha256": "8dd3a69effa3f5ba5916ddf909a874134cd95a18140d602daa7914ed96978b26"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Button/tests/Button.motion-recipe.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2120,
+        "sha256": "702aeb551d1b2ce15392031199203b314b6790429200e2e19e16d688dc5c73c4"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Button/tests/Button.passthrough-contract.test.tsx",
@@ -21973,8 +22095,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 19708,
-        "sha256": "09de3b452f10e21eb6fb04af978d890df968bd097bcc51a883fa2a636d451967"
+        "bytes": 19722,
+        "sha256": "5118a18051f766e143fbb57514f020716d18c1107119a9660a3e8d4185fde0ae"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx",
@@ -23166,8 +23288,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 47842,
-        "sha256": "a7026380b99fde720060aeda794a5466d62fe88c7c10d78d8cf9c39633fcbbc6"
+        "bytes": 47870,
+        "sha256": "5a951a5bfe7cfc0b70b6a6b29c958e300342ebb97a41df4ecb193c4650c84b0e"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Select/engines/rustic/index.tsx",
@@ -23375,8 +23497,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 6851,
-        "sha256": "8a29b797cfbe80349d9ca43ffd51787ec428d3f6e3363f6d50b7d3b397c3a184"
+        "bytes": 6865,
+        "sha256": "22b03b8af28fc330b339bbfaf4c87ea6c7cf58e650631c226aedcd3d1036f121"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx",
@@ -23386,8 +23508,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 7496,
-        "sha256": "cfc75bb11dcad164a495783c61b322f2890c89941bcc805c2174d186e8847e38"
+        "bytes": 7608,
+        "sha256": "08774735d4f8545220707a27b3b769f5e278f7e1aaa5a170dd9bc523ad300fb4"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Switch/index.tsx",
@@ -23788,8 +23910,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 9913,
-        "sha256": "b627bdb8cc7099288d029096f57f26d879dacce221768aed47b09f8bf6d4a379"
+        "bytes": 9927,
+        "sha256": "5bc1c9f7e30ee3117cc67a09c33f6915d79ca7c9a45820e6256a5c1f82a524f0"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Toggle/index.ts",
@@ -23935,8 +24057,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 24446,
-        "sha256": "6deb4c4ba371372ed3c294607c3382d591ccabec2b6289c1556b9f0c9d47d8ee"
+        "bytes": 24460,
+        "sha256": "6d4fc9338b7571e69ecb4d7c1f481cb474501c7b9332c0b5e9d9bb604319de72"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/TreeSelect/engines/rustic/index.tsx",
@@ -26316,8 +26438,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 16449,
-        "sha256": "40d153608df8b2e8ffffecb0f9ea7bf290df2b16bc0eef28916d15eedaf04750"
+        "bytes": 18643,
+        "sha256": "ea773ad1d2bc8e9047abded0293eaccf7fe96427852c8481f6653605e2123344"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/rustic/index.tsx",
@@ -26327,8 +26449,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 10187,
-        "sha256": "03c1a3bc89e2a341f98e2d581d157591899194c7ccda7cb19abc889d8cf81fcb"
+        "bytes": 10975,
+        "sha256": "5e2d0b778c86c2b5b1c649c5b36cf65b5f43dde0bf253e233407bfb7cc699d62"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/index.tsx",
@@ -26358,6 +26480,14 @@
         "sha256": "60cb3f03ca6d3d1f70778702a26732d620441fccabefe823d8ee6724a5e319e5"
       },
       {
+        "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/tests/Tabs.motion-recipe.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2025,
+        "sha256": "d584a8de1b31f846d506416011be5d466975bf5e97718e49cc4d1b6830a4573e"
+      },
+      {
         "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/tests/Tabs.responsive.test.tsx",
         "roles": [
           "audit-input"
@@ -26372,6 +26502,14 @@
         ],
         "bytes": 6573,
         "sha256": "f495188ea6b73ba8a062b81e1ee03b378fc90ede44a30c8fb1530f9e19bee2ce"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/tests/Tabs.view-transition.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5699,
+        "sha256": "d20e31230db21112c6d53d39586ac27f845c1c91af68c146fe7028078c8ec8f6"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/navigation/tests/NavigationBatch.contract.test.tsx",
@@ -26509,8 +26647,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 8055,
-        "sha256": "3287d30c73d6aadef6cc024dd5bc67777015fd2dfe82c3a4eb45b0a867196a70"
+        "bytes": 8083,
+        "sha256": "1edb33762a27f0be19e955e45f8d1a0fd91f0ac20afa2f28bb8add29aa2384b2"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/ConfirmDialog/index.tsx",
@@ -26849,8 +26987,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 9697,
-        "sha256": "d95fa2363c8dd5eeb36547d49370154d97d9f9a1b31ddd4d19e32aae8fd8b7f2"
+        "bytes": 10276,
+        "sha256": "4cf7d04706deff040dd6e751e5da77e01a04895bedfdb49a7371756db5cef190"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/classic/index.tsx",
@@ -26871,8 +27009,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 14545,
-        "sha256": "fd7cb2b1a8a34b973e0b183be30bba5dddf467c76631e3bbfd57d3e1439d6515"
+        "bytes": 15597,
+        "sha256": "3c9f68b193aeb3ec79db04abfcc97da968d38dd7818f80034f2074999e83983f"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
@@ -26882,8 +27020,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 12026,
-        "sha256": "33044bdea1b8633a0974f631c7ff8a06a89ae639dc4af48d7b7675bdc323a3fa"
+        "bytes": 12704,
+        "sha256": "c5310326b81b6d93e419a108b0f987f77fd83681f15ba67313bd35df282bef65"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/index.ts",
@@ -26927,6 +27065,14 @@
         ],
         "bytes": 2578,
         "sha256": "68d8092fd660056966cc40904e23e667ece5a38b80aed8d709e360f329dd3e9e"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/tests/Modal.motion-recipe.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3383,
+        "sha256": "6d199bf8bbc5b5e752918349ccf8b737e03cdc0f5087c22a7fed201472abfeb9"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/tests/Modal.test.tsx",
@@ -27124,8 +27270,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 10278,
-        "sha256": "e4549deb127dc87a4dd533f5bb2454b0006c91945b11b2f40caf4aa0a9224e9e"
+        "bytes": 11200,
+        "sha256": "57e2096a50413fdfe6138b292018c20a2f0478c1b387269ac53424a3a6cba265"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
@@ -27135,8 +27281,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 8804,
-        "sha256": "1151fa0859aff73d863284d210137e40cb6744ee7265c8910f517eac89d7232a"
+        "bytes": 9592,
+        "sha256": "f5a94ab541f6405574fd7745d30ab8a945eb5a48c6ee72586d8173bf5956b8fb"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/index.tsx",
@@ -27167,6 +27313,14 @@
         ],
         "bytes": 1250,
         "sha256": "714c442059bb8dc0ed60633a262f8f8559da2a6f0eb3be12bd3f29d954dbf9ea"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/tests/Sheet.motion-recipe.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2946,
+        "sha256": "745e9e5c2e7d198180968cbb1c2fe55400fe84b26e00f2c5acec17d65917924c"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/tests/Sheet.real-engines.test.tsx",
@@ -27416,8 +27570,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 24010,
-        "sha256": "1754ee08264d9e4a29b664fac44bcd41be055abead47addf5c182e436741eb5a"
+        "bytes": 23998,
+        "sha256": "265e33696cdc87f6b826de38b333d2182cf5da64e00214c91c880fa994c050f6"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/dashboard/data-terminal-card/index.tsx",
@@ -27726,8 +27880,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 9156,
-        "sha256": "1ca1c65eaf47847dde62d25a9970d6b2c19c20ee6dbd2d5cc1ec26e4f7d72264"
+        "bytes": 9170,
+        "sha256": "0323798161f5f425d51205a2c30fb1153420fea5f0d8c474d1f361fe74b9aae0"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/headers/detail/index.tsx",
@@ -27871,8 +28025,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 14061,
-        "sha256": "7beda70984785316f5b5e084bc0f4adae82654297ea4e5bc275ebd85ccd6b114"
+        "bytes": 14962,
+        "sha256": "4e3c6679659bc8d8cafef1fc44d87f2ad468cc11636220d7b25eae7c6d85fd49"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/record/edit-fields/index.tsx",
@@ -27919,6 +28073,14 @@
         ],
         "bytes": 27585,
         "sha256": "f569b92224434d18f5ae0918de8a372551e75a492338bc53216d6d9c3566a2da"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/structures/record/tests/RecordFieldCopyConfirm.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2090,
+        "sha256": "79d877a2caa2026bf35b98591e52616990f7d41faf2d184d8864bfcd60b97b67"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/shell/bottom-tab-bar/contracts/index.ts",
@@ -28683,8 +28845,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7350,
-        "sha256": "a3051a2553249de5c80cab167013a30cd0c0adaf569d803983f3470af669a85d"
+        "bytes": 8039,
+        "sha256": "eb24ee69493f4cd52ed19b1a7e5394ba97f846140dde009cd133bae4b90ecccb"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/tests/DashboardScrollReveal.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3904,
+        "sha256": "68f4c34cc4aeb95c1af37bf424941e8c0f73adea84e9bf69c97cfb8985fe958c"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/tests/DashboardSurface.test.tsx",
@@ -28737,8 +28907,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 21674,
-        "sha256": "b3daa659708c5a333b5181fde7ab9451bcecee323e93fa14ffe2d57a1b7ddd8d"
+        "bytes": 22462,
+        "sha256": "412e2453f55e56c288a50638a2e7884e0a90a81cef25bd414c557a8429c6ec0a"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/tests/ListSurface.defaults.test.tsx",
@@ -28755,6 +28925,14 @@
         ],
         "bytes": 7702,
         "sha256": "b78c5c67065ba8e6a69fe863176e95ec4623ee41943e809dd528eb02942c8bca"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/tests/ListSurface.stagger.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2790,
+        "sha256": "e935f0b0ed3c7ea901d4ef652b98050c260e3f1e54efdc0d28deba8878db6cdf"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/tests/ListSurface.viewTransition.test.tsx",
@@ -29279,8 +29457,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 101031,
-        "sha256": "920734799553f48a629e6d7e1948a5e825bd1b035b5e069612881387246d7b08"
+        "bytes": 102850,
+        "sha256": "b5acbc853c9b987b4d83b1466c3c196a8712cbd2ddbe2530d2174dfddb0a243b"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
@@ -29313,8 +29491,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 79225,
-        "sha256": "a4b289edf7766f4bd2c07601704985299b423cca6e01560ef11fe4f656633915"
+        "bytes": 79216,
+        "sha256": "3b0f0b5d3ac1c9ddebfa458760b424ad8becd6ea57b0275d46473b5068f77917"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.view-transition.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5658,
+        "sha256": "538c14cafc21f51a7dd8770efcd6247eab830b6d8a52bc66eaf9512fbfaf1082"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/workspace/command-center/index.tsx",
@@ -29581,24 +29767,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 2587496,
-        "sha256": "631ea13b9f257bc9f37149164a52558c0c38bd9270a942ba1a189f63d74d85cc"
+        "bytes": 2604725,
+        "sha256": "c4fdccfba240d4c7fb95a6961a36d49e061fc718d26ced3f11eece64bdaf86e0"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2385009,
-        "sha256": "48f40bd127ceb49f913058f84cb831baff78c2ac3514bd86aa57326a1f91daf6"
+        "bytes": 2402620,
+        "sha256": "55dd59f893874b4da1345a2f65ae8eb60c077654ae140da30be023487f09217e"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2740402,
-        "sha256": "a105c67e78a879a1298d3e3377d083776bd7d386df7d599670675c8806622482"
+        "bytes": 2758472,
+        "sha256": "54300d97a3a75673adaa36192e17410eec7c2bc044d715971ced736d9727d67f"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -29613,16 +29799,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 2484782,
-        "sha256": "077c8870e8ad5721d934983029431d6ce82c4d3e3bcd7085a7a512256ecbbc88"
+        "bytes": 2502405,
+        "sha256": "b1d4aff33918bfc5928d852c558e7a304277974614d6ed14ba89ba55af7bdd0f"
       },
       {
         "path": "ui-design-system/packages/core/styles/rottay.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 2484782,
-        "sha256": "077c8870e8ad5721d934983029431d6ce82c4d3e3bcd7085a7a512256ecbbc88"
+        "bytes": 2502405,
+        "sha256": "b1d4aff33918bfc5928d852c558e7a304277974614d6ed14ba89ba55af7bdd0f"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -30089,8 +30275,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 39252,
-        "sha256": "bd4c18f9b58c04623e72da9e24b38157a76bd1dfc059a66a314c7427e400fb15"
+        "bytes": 42808,
+        "sha256": "0c29efe6bfdab29a5fd65876f0971ae11ea01ba77dbfb3cc8ba801f4b36ac6f2"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/(docs)/patterns/[group]/[pattern]/pattern-engine-preview.tsx",
@@ -30116,8 +30302,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7737,
-        "sha256": "bd9448c77b1e62fa9dd3dd64e22eae79c882d48a426fff453e7e14e262d20e20"
+        "bytes": 8272,
+        "sha256": "34568e83a6cc9839103d92652f1e38835a1e241dafdfd70516bcd00697ea7bd1"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/(docs)/patterns/[group]/page.tsx",
@@ -30125,8 +30311,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 24643,
-        "sha256": "98703e3104c8e9be4ca8d5ac7f922a6db4f52bfd1ec050e3faaa2eb884e8b8b1"
+        "bytes": 25831,
+        "sha256": "4d5bd2124e212c98a9db2aa5d179f4b0d4cb7564139158e38f80332a76a4e1b3"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/(docs)/patterns/page.tsx",
@@ -30134,8 +30320,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 36118,
-        "sha256": "16bfabab418e579f4a31656dd3a1f94c781889d15b6aa188f7830b3dbf08d229"
+        "bytes": 37997,
+        "sha256": "e9cae60b94f940226a41fc73cec310ddb5bc3382b21a5846348bec4bee0c3049"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/(docs)/patterns/visualization/charts/[type]/chart-demo-lazy.tsx",
@@ -31092,13 +31278,40 @@
         "sha256": "cb1b341f069308332088233504807d75accd13356af5e4e27b053ebbe21d1205"
       },
       {
+        "path": "ui-design-system/packages/showroom/src/components/torture-surface/fixtures/index.ts",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 492,
+        "sha256": "537dc63fa2af7161fdc6bc14893856c419933c109fbf92478f407f9e7399ce51"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/components/torture-surface/fixtures/themanagementmiami/index.ts",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 16550,
+        "sha256": "e471bdfb99513afe2a593b7b3a3c9d92a11811ed64ae5e012041954e9787b2e1"
+      },
+      {
+        "path": "ui-design-system/packages/showroom/src/components/torture-surface/fixtures/torture/index.ts",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 25122,
+        "sha256": "700810baad337e845e3caa8601584a44dabfc94a3c6af505f8cb7f8e47145d8c"
+      },
+      {
         "path": "ui-design-system/packages/showroom/src/components/torture-surface/index.tsx",
         "roles": [
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6630,
-        "sha256": "69d64a7f08f86f767b33917afad3cccbab997614fe873d61d6983d60cea03f65"
+        "bytes": 6661,
+        "sha256": "f0d6fe7ac6c980ac2c265fa671a9d2430f892bd28e67174d9463975a23679cd2"
       },
       {
         "path": "ui-design-system/packages/showroom/src/data/index.ts",
@@ -31115,8 +31328,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 26110,
-        "sha256": "9b493ad3e43f1427ebcab1311a370f85eb1a49de1fdf4533e3e0c025451087f7"
+        "bytes": 26539,
+        "sha256": "a318b060e26a284c92707d9ea7ddd9e1546ed0a678179ef32d0e0e7fe6249b53"
       },
       {
         "path": "ui-design-system/packages/showroom/src/data/registry/charts.ts",
@@ -31151,8 +31364,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 10971,
-        "sha256": "a08439a031645e6d89312a072f80aa4f3e0b9e350ca94c9f892ad8b6e35ab5bf"
+        "bytes": 12067,
+        "sha256": "1eebc7af001cb2cf3d202f32ee991014123f51cdb98de09916e207f71fe2b559"
       },
       {
         "path": "ui-design-system/packages/showroom/src/data/registry/primitives.ts",
@@ -31206,24 +31419,24 @@
         "sha256": "cbb09ba684648879a73df484f6b064f1c5b4b70fcb409b6e0f8aaa4a34ca4485"
       }
     ],
-    "digest": "cbc212a0f28c2cffbeb7a96d7592222890e9bac8c8f8315a483ba214a0ba8ab1"
+    "digest": "f25046cce8104a3c4e68bb52287b86793730ea5a3211346d8e4cdeec96255a9f"
   },
   "paintAudit": {
-    "output": "engine-token-audit --check OK (3013 counters; 2891 completed zeros locked exactly; 114 decrease-only ceilings; 2 positive exact invariants; 6 positive minimum floors)",
+    "output": "engine-token-audit --check OK (3017 counters; 2894 completed zeros locked exactly; 114 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/engine-token-audit.baseline.json",
-      "sha256": "1c0df9829a205d88ab02f01dd2201474f56c7cfc6955cb425b2659e202bce30c",
+      "sha256": "398e5e865ad0ea058bad8aa53e2e586805063836786469acb07daf9fc4b96a86",
       "ok": true,
       "errors": [],
-      "counters": 3013,
-      "zeroLocked": 2891,
-      "positiveGoverned": 122,
-      "ordinaryCeilings": 2994,
+      "counters": 3017,
+      "zeroLocked": 2894,
+      "positiveGoverned": 123,
+      "ordinaryCeilings": 2997,
       "positiveOrdinaryCeilings": 114,
       "exactInvariants": 13,
       "positiveExactInvariants": 2,
-      "minimumFloors": 6,
-      "positiveMinimumFloors": 6
+      "minimumFloors": 7,
+      "positiveMinimumFloors": 7
     },
     "governance": {
       "exact": {
@@ -31245,6 +31458,7 @@
         "effects.gradientConsumers": 1,
         "effects.glassConsumers": 1,
         "effects.glowConsumers": 1,
+        "motion.recipeConsumers": 3,
         "fleet.inlinePaint.filesScanned": 778,
         "runtimeSvgPaint.filesScanned": 1062,
         "embeddedCssPaint.filesScanned": 1062
@@ -31452,7 +31666,7 @@
           {
             "claimId": "surface-profile-overrides",
             "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 42,
+            "line": 43,
             "reason": "checker-resolved direct call/reference",
             "expression": "useSurfaceProfileDefaultsWithOverrides",
             "symbol": "useSurfaceProfileDefaultsWithOverrides"
@@ -31460,7 +31674,7 @@
           {
             "claimId": "surface-profile-overrides",
             "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 42,
+            "line": 43,
             "reason": "checker-resolved direct governed field reference",
             "expression": "profileOverrides",
             "symbol": "profileOverrides"
@@ -31484,7 +31698,7 @@
           {
             "claimId": "surface-profile-overrides",
             "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx",
-            "line": 269,
+            "line": 283,
             "reason": "checker-resolved direct call/reference",
             "expression": "useSurfaceProfileDefaultsWithOverrides",
             "symbol": "useSurfaceProfileDefaultsWithOverrides"
@@ -31492,7 +31706,7 @@
           {
             "claimId": "surface-profile-overrides",
             "path": "ui-design-system/packages/core/src/ui/surfaces/presentation/pages/data/list/index.tsx",
-            "line": 269,
+            "line": 283,
             "reason": "checker-resolved direct governed field reference",
             "expression": "profileOverrides",
             "symbol": "profileOverrides"
@@ -31648,26 +31862,26 @@
             "component-extensions",
             "surface-profile-overrides"
           ],
-          "sha256": "9c7b8f7e12564f98d6ceba5d3f6eb6c066b00c85c774ba4ac735ca5419920afa",
+          "sha256": "33cf4f2d9531a2257b036e3883e42477f8aefe2a781522659cdf8a4de0d906fb",
           "blocks": [
             {
               "claimId": "component-extensions",
-              "line": 240,
+              "line": 241,
               "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
             },
             {
               "claimId": "component-extensions",
-              "line": 238,
+              "line": 239,
               "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
             },
             {
               "claimId": "surface-profile-overrides",
-              "line": 244,
+              "line": 245,
               "sha256": "d2b6f416216c78f4f1e3268d98c883d2ae3b27496dfeed64efd75f5ea6e255a8"
             },
             {
               "claimId": "surface-profile-overrides",
-              "line": 242,
+              "line": 243,
               "sha256": "e9900b34ec00d26c43961910c5b36cc15c13ac31d6bee16f93ac9a706f909bbb"
             }
           ]
@@ -31873,7 +32087,7 @@
       },
       "tenancy": {
         "path": "docs-engineering/engineering/design-system/runtime/tenancy/README.md",
-        "sha256": "d0e6f92551102acbe1dd6dd96023ab5bd12fa40ad29e8b92119a523b785e850b"
+        "sha256": "090fab80a05d1f1003a87161c022b1133245e002ac69c9d6956f59ecd5af2f82"
       },
       "engines": {
         "path": "docs-engineering/engineering/design-system/runtime/engines/README.md",
@@ -31904,11 +32118,11 @@
       "action": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 67
+          "line": 68
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert-dialog.css",
@@ -32544,11 +32758,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 190
+          "line": 206
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 194
+          "line": 211
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
@@ -32622,11 +32836,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 73
+          "line": 74
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
@@ -32646,7 +32860,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
-          "line": 42
+          "line": 34
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 45
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 59
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
@@ -32662,15 +32884,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 50
+          "line": 29
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 59
+          "line": 38
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 72
+          "line": 51
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card.css",
@@ -32814,11 +33036,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 69
+          "line": 80
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 72
+          "line": 83
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
@@ -33242,7 +33464,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 120
+          "line": 131
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
@@ -33346,43 +33568,47 @@
       "box": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 27
+          "line": 42
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 32
+          "line": 52
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 37
+          "line": 55
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 37
+          "line": 60
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 40
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 44
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 50
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 54
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 58
+          "line": 60
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
           "line": 63
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "line": 67
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "line": 73
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "line": 77
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "line": 81
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "line": 86
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css",
@@ -33658,11 +33884,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 95
+          "line": 96
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
@@ -33800,7 +34026,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 68
+          "line": 91
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "line": 96
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css",
@@ -33916,11 +34146,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 199
+          "line": 216
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 205
+          "line": 222
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
@@ -33928,7 +34158,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 64
+          "line": 65
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css",
@@ -34052,11 +34282,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 134
+          "line": 145
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 143
+          "line": 154
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
@@ -34691,7 +34921,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 113
+          "line": 124
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
@@ -35186,35 +35416,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 248
+          "line": 265
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 255
+          "line": 272
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 255
+          "line": 272
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 255
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 260
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 263
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 269
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 274
+          "line": 272
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
@@ -35222,79 +35436,95 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 285
+          "line": 280
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 289
+          "line": 286
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 293
+          "line": 291
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 297
+          "line": 294
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 300
+          "line": 302
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 304
+          "line": 306
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 308
+          "line": 310
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 312
+          "line": 314
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 316
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 320
+          "line": 321
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 323
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 328
+          "line": 329
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 332
+          "line": 333
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 335
+          "line": 337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 338
+          "line": 340
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 343
+          "line": 345
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 346
+          "line": 349
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 351
+          "line": 352
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 355
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 360
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 363
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 368
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 72
+          "line": 73
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css",
@@ -35598,7 +35828,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 351
+          "line": 368
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay.css",
@@ -35606,7 +35836,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 94
+          "line": 95
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
@@ -35762,7 +35992,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 63
+          "line": 64
         }
       ],
       "error-message": [
@@ -35885,7 +36115,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 46
+          "line": 47
         }
       ],
       "fallback-boolean": [],
@@ -35910,19 +36140,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 27
+          "line": 28
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 30
+          "line": 31
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 33
+          "line": 34
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 36
+          "line": 37
         }
       ],
       "field": [
@@ -36634,11 +36864,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 127
+          "line": 138
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 127
+          "line": 138
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
@@ -36974,15 +37204,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 274
+          "line": 291
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 277
+          "line": 294
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 277
+          "line": 294
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
@@ -37370,27 +37600,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 103
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 103
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 108
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 113
+          "line": 124
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 134
+          "line": 145
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 143
+          "line": 154
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
@@ -37680,19 +37910,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 50
+          "line": 51
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 53
+          "line": 54
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 56
+          "line": 57
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 59
+          "line": 60
         }
       ],
       "hex-input": [
@@ -37916,7 +38146,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css",
-          "line": 63
+          "line": 64
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stepper.css",
@@ -38086,11 +38316,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 67
+          "line": 68
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
@@ -38683,11 +38913,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 64
+          "line": 65
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/stepper-compounds.css",
@@ -38703,11 +38933,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 72
+          "line": 101
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "line": 75
+          "line": 104
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
@@ -38743,11 +38973,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "line": 59
+          "line": 67
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "line": 62
+          "line": 70
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/timeline.css",
@@ -38787,7 +39017,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 40
+          "line": 41
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/progress.css",
@@ -38907,39 +39137,51 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 58
+          "line": 59
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 76
+          "line": 77
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 81
+          "line": 82
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 86
+          "line": 87
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log.css",
           "line": 126
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 34
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 45
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 64
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
@@ -38947,15 +39189,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 50
+          "line": 29
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 59
+          "line": 38
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 75
+          "line": 54
         }
       ],
       "loading": [
@@ -38977,11 +39219,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 231
+          "line": 248
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 116
+          "line": 117
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/activity-log.css",
@@ -39057,11 +39299,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 238
+          "line": 255
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 238
+          "line": 255
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table.css",
@@ -39308,91 +39550,91 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 285
+          "line": 302
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 289
+          "line": 306
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 289
+          "line": 306
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 293
+          "line": 310
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 297
+          "line": 314
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 300
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 300
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 304
+          "line": 321
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 308
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 308
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 312
+          "line": 329
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 316
+          "line": 333
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 316
+          "line": 333
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 320
+          "line": 337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 323
+          "line": 340
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 323
+          "line": 340
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 328
+          "line": 345
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 332
+          "line": 349
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 335
+          "line": 352
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 338
+          "line": 355
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 346
+          "line": 363
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 99
+          "line": 100
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css",
@@ -39564,7 +39806,7 @@
       "option-check": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 346
+          "line": 363
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select.css",
@@ -39574,27 +39816,27 @@
       "option-checkbox": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 328
+          "line": 345
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 332
+          "line": 349
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 332
+          "line": 349
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 335
+          "line": 352
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 338
+          "line": 355
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 338
+          "line": 355
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select.css",
@@ -39612,7 +39854,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 343
+          "line": 360
         }
       ],
       "option-dot": [
@@ -39643,7 +39885,7 @@
       "option-icon": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 122
+          "line": 123
         }
       ],
       "option-icon-badge": [
@@ -40323,11 +40565,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 177
+          "line": 191
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 60
+          "line": 61
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
@@ -40639,7 +40881,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form.css",
-          "line": 43
+          "line": 44
         }
       ],
       "reset-button": [
@@ -41611,35 +41853,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 44
+          "line": 45
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 49
+          "line": 50
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 54
+          "line": 55
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 54
+          "line": 55
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 91
+          "line": 92
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 91
+          "line": 92
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css",
@@ -42835,59 +43077,59 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 60
+          "line": 71
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 69
+          "line": 80
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 72
+          "line": 83
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 79
+          "line": 90
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 86
+          "line": 97
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 91
+          "line": 102
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 95
+          "line": 106
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 103
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 108
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 113
+          "line": 124
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 120
+          "line": 131
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 127
+          "line": 138
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 134
+          "line": 145
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 143
+          "line": 154
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
@@ -43191,47 +43433,43 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 58
+          "line": 60
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 70
+          "line": 72
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 74
+          "line": 84
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 86
+          "line": 88
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 92
+          "line": 100
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 97
+          "line": 106
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 105
+          "line": 111
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 109
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 112
+          "line": 123
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 116
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 122
+          "line": 126
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
@@ -43239,75 +43477,83 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 143
+          "line": 136
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 147
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 156
+          "line": 157
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 160
+          "line": 161
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 165
+          "line": 170
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 169
+          "line": 174
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 177
+          "line": 179
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 182
+          "line": 183
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 190
+          "line": 191
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 194
+          "line": 196
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 199
+          "line": 206
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 205
+          "line": 211
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 210
+          "line": 216
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 215
+          "line": 222
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 220
+          "line": 227
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 226
+          "line": 232
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 231
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 238
+          "line": 243
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 248
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 255
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
@@ -43391,7 +43637,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
-          "line": 37
+          "line": 34
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 45
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 54
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/splitter.css",
@@ -44015,55 +44269,55 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 52
+          "line": 53
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 60
+          "line": 61
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 64
+          "line": 65
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 72
+          "line": 73
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 81
+          "line": 82
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 86
+          "line": 87
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 94
+          "line": 95
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 99
+          "line": 100
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 105
+          "line": 106
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 109
+          "line": 110
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 116
+          "line": 117
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 122
+          "line": 123
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 126
+          "line": 127
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
@@ -45475,7 +45729,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css",
-          "line": 33
+          "line": 34
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/saved-views.css",
@@ -45687,15 +45941,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 50
+          "line": 29
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 59
+          "line": 38
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 69
+          "line": 48
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/splitter.css",
@@ -46585,23 +46839,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 99
+          "line": 100
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 99
+          "line": 100
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 102
+          "line": 103
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 106
+          "line": 107
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 106
+          "line": 107
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
@@ -46834,7 +47088,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 269
+          "line": 286
         }
       ],
       "search-input": [
@@ -46852,15 +47106,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 182
+          "line": 196
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 263
+          "line": 280
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 86
+          "line": 87
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
@@ -46914,15 +47168,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 260
+          "line": 277
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 260
+          "line": 277
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 81
+          "line": 82
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
@@ -47322,11 +47576,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css",
-          "line": 45
+          "line": 46
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css",
-          "line": 45
+          "line": 46
         }
       ],
       "spotlight": [
@@ -48050,55 +48304,55 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 79
+          "line": 90
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 86
+          "line": 97
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 91
+          "line": 102
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 91
+          "line": 102
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 95
+          "line": 106
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 95
+          "line": 106
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 103
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 108
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 113
+          "line": 124
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 120
+          "line": 131
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 127
+          "line": 138
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 134
+          "line": 145
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 143
+          "line": 154
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
@@ -48882,7 +49136,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 210
+          "line": 227
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select.css",
@@ -48906,7 +49160,7 @@
       "tag-count": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 215
+          "line": 232
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select.css",
@@ -48916,11 +49170,11 @@
       "tag-remove": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 220
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 226
+          "line": 243
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
@@ -48973,6 +49227,10 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
           "line": 51
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "line": 62
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/toggle.css",
@@ -49278,11 +49536,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 26
+          "line": 27
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/skeleton-compounds.css",
-          "line": 58
+          "line": 59
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css",
@@ -49354,7 +49612,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 108
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
@@ -49375,6 +49633,18 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css",
           "line": 104
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 34
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 45
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+          "line": 64
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css",
@@ -49446,15 +49716,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 50
+          "line": 29
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 59
+          "line": 38
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/skeleton.css",
-          "line": 75
+          "line": 54
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css",
@@ -49624,7 +49894,7 @@
       "tree-list": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 126
+          "line": 127
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree-select.css",
@@ -49638,7 +49908,7 @@
       "tree-node-highlight": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 105
+          "line": 106
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
@@ -49674,7 +49944,7 @@
       "tree-node-toggle": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 109
+          "line": 110
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
@@ -49717,6 +49987,14 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/button-icon.css",
           "line": 37
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css",
+          "line": 345
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css",
+          "line": 356
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu.css",
@@ -49908,47 +50186,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 217
+          "line": 221
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 222
+          "line": 231
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 228
+          "line": 234
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 232
+          "line": 239
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 236
+          "line": 244
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 240
+          "line": 250
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 243
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 246
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 249
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 252
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 255
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
@@ -49956,15 +50218,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 261
+          "line": 262
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 264
+          "line": 265
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 275
+          "line": 268
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "line": 271
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "line": 274
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "line": 277
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
@@ -49972,15 +50246,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 280
+          "line": 283
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 284
+          "line": 286
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-          "line": 293
+          "line": 297
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "line": 302
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "line": 302
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "line": 306
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+          "line": 315
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
@@ -50152,47 +50442,43 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 58
+          "line": 60
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 70
+          "line": 72
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 74
+          "line": 84
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 86
+          "line": 88
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 92
+          "line": 100
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 97
+          "line": 106
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 105
+          "line": 111
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 109
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 112
+          "line": 123
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 116
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 122
+          "line": 126
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
@@ -50200,39 +50486,47 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 143
+          "line": 136
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 147
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 156
+          "line": 157
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 160
+          "line": 161
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 165
+          "line": 170
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 169
+          "line": 174
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 182
+          "line": 179
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 194
+          "line": 183
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 196
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+          "line": 211
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select.css",
-          "line": 52
+          "line": 53
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/upload.css",
@@ -50468,23 +50762,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
-          "line": 263
+          "line": 267
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
-          "line": 269
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
-          "line": 275
+          "line": 281
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
-          "line": 275
+          "line": 286
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
-          "line": 279
+          "line": 292
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
+          "line": 298
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
+          "line": 298
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/button.css",
+          "line": 302
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
@@ -52124,7 +52430,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "FieldFiltersPanel",
@@ -52540,7 +52846,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "FilterPanel",
@@ -52618,7 +52924,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "FilterPanel",
@@ -53231,7 +53537,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "SelectionPreviewRail",
@@ -53825,7 +54131,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "DetailPanel",
@@ -54084,7 +54390,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "DetailPanel",
@@ -54499,7 +54805,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "DataTable",
@@ -56149,7 +56455,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "FormField",
@@ -56344,7 +56650,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Textarea",
@@ -56408,7 +56714,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "TagInput",
@@ -56603,7 +56909,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "InputNumber",
@@ -56863,7 +57169,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "PasswordInput",
@@ -57046,7 +57352,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx",
-            "line": 172,
+            "line": 173,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -57058,7 +57364,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Switch",
@@ -57085,7 +57391,7 @@
           {
             "part": "track",
             "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx",
-            "line": 196,
+            "line": 197,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -57124,7 +57430,7 @@
           {
             "part": "thumb",
             "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx",
-            "line": 197,
+            "line": 198,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -57136,7 +57442,7 @@
           }
         ],
         "skinSelectorCorpusKey": "thumb",
-        "skinSelectorCount": 6
+        "skinSelectorCount": 7
       },
       {
         "section": "Switch",
@@ -57176,7 +57482,7 @@
           {
             "part": "label",
             "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx",
-            "line": 179,
+            "line": 180,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -57189,7 +57495,7 @@
           {
             "part": "label",
             "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx",
-            "line": 201,
+            "line": 202,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -57240,7 +57546,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Toggle",
@@ -57318,7 +57624,7 @@
           }
         ],
         "skinSelectorCorpusKey": "thumb",
-        "skinSelectorCount": 6
+        "skinSelectorCount": 7
       },
       {
         "section": "Toggle",
@@ -57499,7 +57805,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Radio",
@@ -57708,7 +58014,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Radio",
@@ -57874,7 +58180,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Checkbox",
@@ -57913,7 +58219,7 @@
           }
         ],
         "skinSelectorCorpusKey": "box",
-        "skinSelectorCount": 18
+        "skinSelectorCount": 19
       },
       {
         "section": "Checkbox",
@@ -57978,7 +58284,7 @@
           }
         ],
         "skinSelectorCorpusKey": "checkmark",
-        "skinSelectorCount": 5
+        "skinSelectorCount": 6
       },
       {
         "section": "Checkbox",
@@ -58070,7 +58376,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Checkbox",
@@ -58185,7 +58491,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Slider",
@@ -58471,7 +58777,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "OTPInput",
@@ -58588,7 +58894,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Form",
@@ -59016,7 +59322,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Select",
@@ -59068,7 +59374,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Select",
@@ -60277,7 +60583,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "AutoComplete",
@@ -60550,7 +60856,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Mentions",
@@ -60731,7 +61037,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "TreeSelect",
@@ -60770,7 +61076,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "TreeSelect",
@@ -61410,7 +61716,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Cascader",
@@ -61449,7 +61755,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Cascader",
@@ -62077,7 +62383,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Transfer",
@@ -62701,7 +63007,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Upload",
@@ -62740,7 +63046,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Upload",
@@ -63429,7 +63735,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "DatePicker",
@@ -64612,7 +64918,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "TimePicker",
@@ -65061,7 +65367,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "ColorPicker",
@@ -65086,7 +65392,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "ColorPicker",
@@ -65475,7 +65781,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Input",
@@ -65762,7 +66068,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Input",
@@ -65800,7 +66106,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Input",
@@ -66032,7 +66338,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Button",
@@ -66057,7 +66363,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Button",
@@ -66110,7 +66416,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Skeleton",
@@ -66229,19 +66535,6 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/modern/index.tsx",
-            "line": 166,
-            "syntax": "jsx-intrinsic",
-            "sinkKind": "intrinsic-dom",
-            "provenance": {
-              "tagName": "div"
-            },
-            "staticValues": [
-              "root"
-            ]
-          },
-          {
-            "part": "root",
-            "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/modern/index.tsx",
             "line": 187,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
@@ -66254,8 +66547,8 @@
           },
           {
             "part": "root",
-            "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/rustic/index.tsx",
-            "line": 191,
+            "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/modern/index.tsx",
+            "line": 214,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66268,7 +66561,20 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/rustic/index.tsx",
-            "line": 212,
+            "line": 192,
+            "syntax": "jsx-intrinsic",
+            "sinkKind": "intrinsic-dom",
+            "provenance": {
+              "tagName": "div"
+            },
+            "staticValues": [
+              "root"
+            ]
+          },
+          {
+            "part": "root",
+            "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/rustic/index.tsx",
+            "line": 213,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66280,7 +66586,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Skeleton",
@@ -66347,7 +66653,7 @@
           {
             "part": "line",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/modern/index.tsx",
-            "line": 217,
+            "line": 245,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66360,7 +66666,7 @@
           {
             "part": "line",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/rustic/index.tsx",
-            "line": 240,
+            "line": 241,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66372,7 +66678,7 @@
           }
         ],
         "skinSelectorCorpusKey": "line",
-        "skinSelectorCount": 22
+        "skinSelectorCount": 25
       },
       {
         "section": "Skeleton",
@@ -66400,7 +66706,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/modern/index.tsx",
-            "line": 207,
+            "line": 235,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66413,7 +66719,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/rustic/index.tsx",
-            "line": 235,
+            "line": 236,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66425,7 +66731,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Skeleton",
@@ -66453,7 +66759,7 @@
           {
             "part": "avatar",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/modern/index.tsx",
-            "line": 191,
+            "line": 221,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66466,7 +66772,7 @@
           {
             "part": "avatar",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Skeleton/engines/rustic/index.tsx",
-            "line": 220,
+            "line": 221,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -66478,7 +66784,7 @@
           }
         ],
         "skinSelectorCorpusKey": "avatar",
-        "skinSelectorCount": 26
+        "skinSelectorCount": 28
       },
       {
         "section": "Alert",
@@ -66517,7 +66823,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Alert",
@@ -66765,7 +67071,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Progress",
@@ -67027,7 +67333,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Spinner",
@@ -67144,7 +67450,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Rate",
@@ -67222,7 +67528,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Modal",
@@ -67392,7 +67698,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Modal",
@@ -67655,7 +67961,7 @@
           {
             "part": "backdrop",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx",
-            "line": 248,
+            "line": 262,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -67694,7 +68000,7 @@
           {
             "part": "surface",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx",
-            "line": 265,
+            "line": 284,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -67747,7 +68053,7 @@
           {
             "part": "header",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx",
-            "line": 279,
+            "line": 299,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -67800,7 +68106,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx",
-            "line": 293,
+            "line": 313,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -67825,7 +68131,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Drawer",
@@ -67853,7 +68159,7 @@
           {
             "part": "close-button",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx",
-            "line": 63,
+            "line": 64,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -67906,7 +68212,7 @@
           {
             "part": "body",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx",
-            "line": 310,
+            "line": 330,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -67959,7 +68265,7 @@
           {
             "part": "footer",
             "path": "ui-design-system/packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx",
-            "line": 323,
+            "line": 343,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -68037,7 +68343,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Toast",
@@ -68310,7 +68616,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Toast",
@@ -68464,7 +68770,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Message",
@@ -68685,7 +68991,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Notification",
@@ -68776,7 +69082,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Notification",
@@ -68971,7 +69277,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Result",
@@ -69192,7 +69498,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Result",
@@ -69349,7 +69655,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 258,
+            "line": 266,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69361,7 +69667,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Modal (overlay)",
@@ -69387,7 +69693,7 @@
           {
             "part": "backdrop",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 289,
+            "line": 299,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69439,7 +69745,7 @@
           {
             "part": "surface",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 303,
+            "line": 317,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69452,7 +69758,7 @@
           {
             "part": "surface",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
-            "line": 282,
+            "line": 290,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69531,7 +69837,7 @@
           {
             "part": "header",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 332,
+            "line": 348,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69544,7 +69850,7 @@
           {
             "part": "header",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
-            "line": 298,
+            "line": 307,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69623,7 +69929,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 348,
+            "line": 364,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69636,7 +69942,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
-            "line": 299,
+            "line": 308,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69648,7 +69954,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Modal (overlay)",
@@ -69675,7 +69981,7 @@
           {
             "part": "description",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 361,
+            "line": 377,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69688,7 +69994,7 @@
           {
             "part": "description",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
-            "line": 335,
+            "line": 344,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69767,7 +70073,7 @@
           {
             "part": "body",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 382,
+            "line": 398,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69780,7 +70086,7 @@
           {
             "part": "body",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
-            "line": 331,
+            "line": 340,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69859,7 +70165,7 @@
           {
             "part": "footer",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 395,
+            "line": 411,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69872,7 +70178,7 @@
           {
             "part": "footer",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
-            "line": 348,
+            "line": 357,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69951,7 +70257,7 @@
           {
             "part": "close-button",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx",
-            "line": 69,
+            "line": 70,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -69964,7 +70270,7 @@
           {
             "part": "close-button",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx",
-            "line": 307,
+            "line": 316,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -70015,7 +70321,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Tour",
@@ -70171,7 +70477,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Tour",
@@ -70548,7 +70854,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "ConfirmDialog",
@@ -70716,7 +71022,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "AlertDialog",
@@ -70872,7 +71178,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "AlertDialog",
@@ -71028,7 +71334,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Popconfirm",
@@ -71145,7 +71451,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Popconfirm",
@@ -71288,7 +71594,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 215,
+            "line": 226,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71301,7 +71607,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 149,
+            "line": 158,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71313,7 +71619,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Sheet",
@@ -71327,7 +71633,7 @@
           {
             "part": "backdrop",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 230,
+            "line": 243,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71340,7 +71646,7 @@
           {
             "part": "backdrop",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 156,
+            "line": 166,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71366,7 +71672,7 @@
           {
             "part": "surface",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 249,
+            "line": 264,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71379,7 +71685,7 @@
           {
             "part": "surface",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 175,
+            "line": 187,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71405,7 +71711,7 @@
           {
             "part": "handle",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 282,
+            "line": 297,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71418,7 +71724,7 @@
           {
             "part": "handle",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 208,
+            "line": 220,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71444,7 +71750,7 @@
           {
             "part": "header",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 294,
+            "line": 309,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71457,7 +71763,7 @@
           {
             "part": "header",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 218,
+            "line": 230,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71483,7 +71789,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 305,
+            "line": 320,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71496,7 +71802,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 226,
+            "line": 238,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71508,7 +71814,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Sheet",
@@ -71522,7 +71828,7 @@
           {
             "part": "close-button",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 50,
+            "line": 51,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71535,7 +71841,7 @@
           {
             "part": "close-button",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 229,
+            "line": 241,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71561,7 +71867,7 @@
           {
             "part": "body",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx",
-            "line": 322,
+            "line": 337,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71574,7 +71880,7 @@
           {
             "part": "body",
             "path": "ui-design-system/packages/core/src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
-            "line": 245,
+            "line": 257,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -71625,7 +71931,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "ContextMenu",
@@ -71820,7 +72126,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Popover",
@@ -71898,7 +72204,7 @@
           }
         ],
         "skinSelectorCorpusKey": "title",
-        "skinSelectorCount": 99
+        "skinSelectorCount": 102
       },
       {
         "section": "Popover",
@@ -71976,7 +72282,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Dropdown",
@@ -72171,7 +72477,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "HoverCard",
@@ -72249,7 +72555,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Watermark",
@@ -72316,7 +72622,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Affix",
@@ -72381,7 +72687,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Anchor",
@@ -72420,7 +72726,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Anchor",
@@ -72498,7 +72804,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "BottomTabBar",
@@ -72526,7 +72832,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "BottomTabBar",
@@ -72677,7 +72983,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Breadcrumb",
@@ -72833,7 +73139,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "FloatButton",
@@ -72950,7 +73256,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "FloatButton",
@@ -73093,7 +73399,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Menu",
@@ -73132,7 +73438,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Menu",
@@ -73698,7 +74004,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "Menu",
@@ -73779,7 +74085,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "MobileHeader",
@@ -73807,7 +74113,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 250
+        "skinSelectorCount": 259
       },
       {
         "section": "MobileHeader",
@@ -73874,7 +74180,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Pagination",
@@ -74095,7 +74401,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Segmented",
@@ -74198,7 +74504,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Stepper",
@@ -74538,7 +74844,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Steps",
@@ -74811,7 +75117,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx",
-            "line": 414,
+            "line": 453,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74824,7 +75130,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/rustic/index.tsx",
-            "line": 259,
+            "line": 266,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74836,7 +75142,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 1463
+        "skinSelectorCount": 1466
       },
       {
         "section": "Tabs",
@@ -74850,7 +75156,7 @@
           {
             "part": "tab-list",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx",
-            "line": 425,
+            "line": 465,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74863,7 +75169,7 @@
           {
             "part": "tab-list",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/rustic/index.tsx",
-            "line": 266,
+            "line": 274,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74889,7 +75195,7 @@
           {
             "part": "tab-button",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx",
-            "line": 442,
+            "line": 482,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74902,7 +75208,7 @@
           {
             "part": "tab-button",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/rustic/index.tsx",
-            "line": 275,
+            "line": 283,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74927,7 +75233,7 @@
           {
             "part": "icon",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx",
-            "line": 455,
+            "line": 495,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74952,7 +75258,7 @@
           {
             "part": "tab-badge",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx",
-            "line": 156,
+            "line": 163,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -74977,7 +75283,7 @@
           {
             "part": "indicator",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx",
-            "line": 474,
+            "line": 514,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -75003,7 +75309,7 @@
           {
             "part": "tab-panel",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx",
-            "line": 482,
+            "line": 522,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -75016,7 +75322,7 @@
           {
             "part": "tab-panel",
             "path": "ui-design-system/packages/core/src/ui/primitives/navigation/Tabs/engines/rustic/index.tsx",
-            "line": 296,
+            "line": 304,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -75050,7 +75356,7 @@
           "includeTests": false
         }
       ],
-      "typescriptFiles": 1958,
+      "typescriptFiles": 1962,
       "cssRoots": [
         "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components",
         "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines"
@@ -75083,8 +75389,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "a8feb6664e79f123be3d9986d692c89662fac10cb1041abc66be06fa226f14e8",
-      "a8feb6664e79f123be3d9986d692c89662fac10cb1041abc66be06fa226f14e8"
+      "ae24bb4898ecde8711f7f470e8c20829c590800eac7ea88fe31b651893b8ba43",
+      "ae24bb4898ecde8711f7f470e8c20829c590800eac7ea88fe31b651893b8ba43"
     ],
     "agree": true
   }
