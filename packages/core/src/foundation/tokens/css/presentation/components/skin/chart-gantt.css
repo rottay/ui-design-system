@@ -16,9 +16,6 @@
   fill: var(--ds-color-error-500);
 }
 
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-gantt [data-part='axis-domain'],
-.ds-chart-gantt [data-part='axis-tick'],
 .ds-chart-gantt [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }

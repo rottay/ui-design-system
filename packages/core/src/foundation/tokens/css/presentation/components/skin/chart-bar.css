@@ -21,9 +21,6 @@
   fill: var(--ds-color-text-primary);
 }
 
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-bar [data-part='axis-domain'],
-.ds-chart-bar [data-part='axis-tick'],
 .ds-chart-bar [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }

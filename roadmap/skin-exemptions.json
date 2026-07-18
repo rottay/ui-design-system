@@ -61,18 +61,15 @@
       },
       "patterns/visualization/charts/families/bar-chart/index.tsx": {
         "floor": 2,
-        "runtimeSvgFloor": 6,
-        "why": "Two legend swatches and six D3 bar/gradient paint sinks consume caller- or datum-derived series colours. Both channels retain exact independent floors."
+        "why": "Two legend swatches consume caller- or datum-derived series colours. The former six D3 bar/gradient runtime-SVG paint sinks moved to the chart-engine SvgBarRenderer (W5 CLASS-R-BAR recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/line-chart/index.tsx": {
         "floor": 2,
-        "runtimeSvgFloor": 5,
-        "why": "Legend/tooltip value objects retain two runtime colour sites; five D3 line, area-gradient and dot sinks paint the same caller-derived series colours."
+        "why": "Legend/tooltip value objects retain two runtime colour sites. The former five D3 line, area-gradient and dot runtime-SVG sinks moved to the chart-engine SvgLineRenderer (W5 CLASS-R-BAR recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/area-chart/index.tsx": {
         "floor": 2,
-        "runtimeSvgFloor": 8,
-        "why": "Legend/tooltip value objects retain two runtime colour sites; eight D3 area, gradient, line and dot sinks consume caller-derived series colours."
+        "why": "Legend/tooltip value objects retain two runtime colour sites. The former eight D3 area, gradient, line and dot runtime-SVG sinks moved to the chart-engine SvgAreaRenderer (W5 recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/radar-chart/index.tsx": {
         "floor": 2,
@@ -80,18 +77,15 @@
       },
       "patterns/visualization/charts/families/scatter/index.tsx": {
         "floor": 1,
-        "runtimeSvgFloor": 2,
-        "why": "The legend swatch and two D3 point paint sinks consume per-datum or caller-palette colours."
+        "why": "The legend swatch consumes per-datum or caller-palette colours. The former two D3 point runtime-SVG sinks moved to the chart-engine SvgScatterRenderer (W5 recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/pie-chart/index.tsx": {
         "floor": 1,
-        "runtimeSvgFloor": 1,
-        "why": "The legend swatch and D3 slice fill consume per-datum or caller-palette colours."
+        "why": "The legend swatch consumes per-datum or caller-palette colours. The former single D3 slice-fill runtime-SVG sink moved to the chart-engine SvgPieRenderer (W5 CLASS-R-BAR recount, measured runtimeSvgPaint 0); the renderer paints slices through the data-series-index CSS channel."
       },
       "patterns/visualization/charts/families/treemap/index.tsx": {
         "floor": 1,
-        "runtimeSvgFloor": 1,
-        "why": "The legend swatch and D3 tile fill consume the caller-supplied palette."
+        "why": "The legend swatch consumes the caller-supplied palette. The former D3 tile-fill runtime-SVG sink moved to the chart-engine treemap renderer (W5 recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/funnel-chart/index.tsx": {
         "floor": 1,
@@ -99,22 +93,19 @@
       },
       "patterns/visualization/charts/families/waterfall/index.tsx": {
         "floor": 4,
-        "runtimeSvgFloor": 2,
-        "why": "Four legend value/swatch sites and two D3 bar paint sinks consume the caller-overridable increase, decrease and total colours."
+        "why": "Four legend value/swatch sites consume the caller-overridable increase, decrease and total colours. The former two D3 bar runtime-SVG sinks moved to the chart-engine waterfall renderer (W5 recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/histogram/index.tsx": {
         "floor": 2,
-        "runtimeSvgFloor": 5,
-        "why": "Two legend swatches and five D3 bar, cumulative-line and point sinks consume caller-overridable colours."
+        "why": "Two legend swatches consume caller-overridable colours. The former five D3 bar, cumulative-line and point runtime-SVG sinks moved to the chart-engine histogram renderer (W5 recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/gauge/index.tsx": {
         "floor": 1,
         "why": "The legend swatch consumes caller-supplied segment colour. The four segment/needle sinks moved to the chart-engine gauge renderer (2026-07-17 recount); its floor lives on that file."
       },
       "patterns/visualization/charts/families/bullet/index.tsx": {
-        "floor": 12,
-        "runtimeSvgFloor": 8,
-        "why": "Twelve value-object and legend sites plus eight D3 range/value/target sinks across the horizontal and vertical render paths trace to caller-overridable range, value and target colours."
+        "floor": 6,
+        "why": "Six value-object and legend sites trace to caller-overridable range, value and target colours (W5 recount: the horizontal/vertical duplicate render paths collapsed into the facade, measured inline 6). The former eight D3 range/value/target runtime-SVG sinks moved to the chart-engine bullet renderer (W5 recount, measured runtimeSvgPaint 0); its floor lives on the renderer file."
       },
       "patterns/visualization/charts/families/sankey/index.tsx": {
         "floor": 3,
@@ -125,22 +116,6 @@
         "floor": 1,
         "runtimeSvgFloor": 1,
         "why": "The legend swatch and D3 node fill consume caller palette, group or per-node colours."
-      },
-      "patterns/visualization/charts/families/calendar-heatmap/index.tsx": {
-        "runtimeSvgFloor": 1,
-        "why": "The D3 day-cell fill is a runtime scale output derived from chart data and the caller-visible colour range."
-      },
-      "patterns/visualization/charts/families/gantt-chart/index.tsx": {
-        "runtimeSvgFloor": 2,
-        "why": "The D3 task-duration and task-progress fills consume each task's caller-derived colour."
-      },
-      "patterns/visualization/charts/families/heatmap/index.tsx": {
-        "runtimeSvgFloor": 1,
-        "why": "The D3 cell fill is a runtime scale output derived from chart data and the caller-visible colour range."
-      },
-      "patterns/visualization/charts/families/sparkline/index.tsx": {
-        "runtimeSvgFloor": 4,
-        "why": "Four intrinsic-SVG paint attributes consume caller-overridable line, area and point colours."
       },
       "patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/funnel/index.tsx": {
         "runtimeSvgFloor": 1,

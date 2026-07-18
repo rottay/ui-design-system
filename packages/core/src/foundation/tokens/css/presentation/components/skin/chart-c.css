@@ -31,8 +31,6 @@
   fill: var(--ds-color-text-primary);
 }
 
-.ds-chart-histogram [data-part='axis-domain'],
-.ds-chart-histogram [data-part='axis-tick'],
 .ds-chart-histogram [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
@@ -60,8 +58,6 @@
   stroke: var(--ds-color-text-secondary);
 }
 
-.ds-chart-scatter [data-part='axis-domain'],
-.ds-chart-scatter [data-part='axis-tick'],
 .ds-chart-scatter [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }

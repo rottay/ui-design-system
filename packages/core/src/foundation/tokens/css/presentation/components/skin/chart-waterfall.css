@@ -24,9 +24,6 @@
   fill: var(--ds-color-text-primary);
 }
 
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-waterfall [data-part='axis-domain'],
-.ds-chart-waterfall [data-part='axis-tick'],
 .ds-chart-waterfall [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }

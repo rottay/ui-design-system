@@ -8,10 +8,3 @@
   color: var(--ds-color-text-secondary);
 }
 
-.ds-chart-pie [data-part='slice-surface'] {
-  stroke: var(--ds-color-bg-primary);
-}
-
-.ds-chart-pie [data-part='slice-label'] {
-  fill: var(--ds-color-text-primary);
-}

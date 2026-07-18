@@ -48897,77 +48897,84 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
 }
 
-/* VIZ-03 — bounded chart schemes resolve through provider-scoped category
- * channels in CSS. Caller-owned inline variables can still override a series,
- * while the runtime only stamps the semantic scheme identifier. */
+/* VIZ-03 — bounded chart schemes resolve through the canonical paint chain,
+ * highest precedence first: authored --ds-chart-category-N (tenant document)
+ * > generated --ds-chart-series-N (tenant-scope compiler output) > mode-aware
+ * --ds-chart-{scheme}-N channel > embedded light literal. --ds-chart-series-N
+ * is a reserved name owned exclusively by the tenant appearance compiler:
+ * defining it here would shadow the inherited tenant palette (nearest
+ * custom-property definition wins), so these blocks define only the private
+ * --ds-chart-paint-N bridge and every sink consumes that. The chain must stay
+ * byte-equal to resolveChartSeriesPaint() in the chart grammar palette module
+ * (parity-locked by SvgRenderers.test.tsx). */
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='default'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='default'] {
-  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-default-1, #0f766e));
-  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-default-2, #8c6d46));
-  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-default-3, #b24d3a));
-  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-default-4, #296f68));
-  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-default-5, #735838));
-  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-default-6, #963f31));
-  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-default-7, #3d756f));
-  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-default-8, #7d6140));
-  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-default-9, #a04435));
-  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-default-10, #5e5a52));
+  --ds-chart-paint-1: var(--ds-chart-category-1, var(--ds-chart-series-1, var(--ds-chart-default-1, #0f766e)));
+  --ds-chart-paint-2: var(--ds-chart-category-2, var(--ds-chart-series-2, var(--ds-chart-default-2, #8c6d46)));
+  --ds-chart-paint-3: var(--ds-chart-category-3, var(--ds-chart-series-3, var(--ds-chart-default-3, #b24d3a)));
+  --ds-chart-paint-4: var(--ds-chart-category-4, var(--ds-chart-series-4, var(--ds-chart-default-4, #296f68)));
+  --ds-chart-paint-5: var(--ds-chart-category-5, var(--ds-chart-series-5, var(--ds-chart-default-5, #735838)));
+  --ds-chart-paint-6: var(--ds-chart-category-6, var(--ds-chart-series-6, var(--ds-chart-default-6, #963f31)));
+  --ds-chart-paint-7: var(--ds-chart-category-7, var(--ds-chart-series-7, var(--ds-chart-default-7, #3d756f)));
+  --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-default-8, #7d6140)));
+  --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-default-9, #a04435)));
+  --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-default-10, #5e5a52)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessible'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='accessible'] {
-  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-accessible-1, #2f6b9a));
-  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-accessible-2, #a23b72));
-  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-accessible-3, #1f7a55));
-  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-accessible-4, #9a5700));
-  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-accessible-5, #355cb5));
-  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-accessible-6, #7a4595));
-  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-accessible-7, #5f6368));
-  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-accessible-8, #006d77));
-  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-accessible-9, #9b4a5a));
-  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-accessible-10, #4d6a00));
+  --ds-chart-paint-1: var(--ds-chart-category-1, var(--ds-chart-series-1, var(--ds-chart-accessible-1, #2f6b9a)));
+  --ds-chart-paint-2: var(--ds-chart-category-2, var(--ds-chart-series-2, var(--ds-chart-accessible-2, #a23b72)));
+  --ds-chart-paint-3: var(--ds-chart-category-3, var(--ds-chart-series-3, var(--ds-chart-accessible-3, #1f7a55)));
+  --ds-chart-paint-4: var(--ds-chart-category-4, var(--ds-chart-series-4, var(--ds-chart-accessible-4, #9a5700)));
+  --ds-chart-paint-5: var(--ds-chart-category-5, var(--ds-chart-series-5, var(--ds-chart-accessible-5, #355cb5)));
+  --ds-chart-paint-6: var(--ds-chart-category-6, var(--ds-chart-series-6, var(--ds-chart-accessible-6, #7a4595)));
+  --ds-chart-paint-7: var(--ds-chart-category-7, var(--ds-chart-series-7, var(--ds-chart-accessible-7, #5f6368)));
+  --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-accessible-8, #006d77)));
+  --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-accessible-9, #9b4a5a)));
+  --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-accessible-10, #4d6a00)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrome'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='monochrome'] {
-  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-monochrome-1, #2c5587));
-  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-monochrome-2, #3a6fb0));
-  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-monochrome-3, #21528b));
-  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-monochrome-4, #4b78ad));
-  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-monochrome-5, #315f97));
-  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-monochrome-6, #103968));
-  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-monochrome-7, #526f91));
-  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-monochrome-8, #37699f));
-  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-monochrome-9, #274b77));
-  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-monochrome-10, #5a789a));
+  --ds-chart-paint-1: var(--ds-chart-category-1, var(--ds-chart-series-1, var(--ds-chart-monochrome-1, #2c5587)));
+  --ds-chart-paint-2: var(--ds-chart-category-2, var(--ds-chart-series-2, var(--ds-chart-monochrome-2, #3a6fb0)));
+  --ds-chart-paint-3: var(--ds-chart-category-3, var(--ds-chart-series-3, var(--ds-chart-monochrome-3, #21528b)));
+  --ds-chart-paint-4: var(--ds-chart-category-4, var(--ds-chart-series-4, var(--ds-chart-monochrome-4, #4b78ad)));
+  --ds-chart-paint-5: var(--ds-chart-category-5, var(--ds-chart-series-5, var(--ds-chart-monochrome-5, #315f97)));
+  --ds-chart-paint-6: var(--ds-chart-category-6, var(--ds-chart-series-6, var(--ds-chart-monochrome-6, #103968)));
+  --ds-chart-paint-7: var(--ds-chart-category-7, var(--ds-chart-series-7, var(--ds-chart-monochrome-7, #526f91)));
+  --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-monochrome-8, #37699f)));
+  --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-monochrome-9, #274b77)));
+  --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-monochrome-10, #5a789a)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='pastel'] {
-  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-pastel-1, #527aa3));
-  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-pastel-2, #9b557a));
-  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-pastel-3, #3d8065));
-  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-pastel-4, #9a652b));
-  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-pastel-5, #5c6fb0));
-  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-pastel-6, #80628f));
-  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-pastel-7, #686868));
-  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-pastel-8, #3b777c));
-  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-pastel-9, #95606a));
-  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-pastel-10, #62752e));
+  --ds-chart-paint-1: var(--ds-chart-category-1, var(--ds-chart-series-1, var(--ds-chart-pastel-1, #527aa3)));
+  --ds-chart-paint-2: var(--ds-chart-category-2, var(--ds-chart-series-2, var(--ds-chart-pastel-2, #9b557a)));
+  --ds-chart-paint-3: var(--ds-chart-category-3, var(--ds-chart-series-3, var(--ds-chart-pastel-3, #3d8065)));
+  --ds-chart-paint-4: var(--ds-chart-category-4, var(--ds-chart-series-4, var(--ds-chart-pastel-4, #9a652b)));
+  --ds-chart-paint-5: var(--ds-chart-category-5, var(--ds-chart-series-5, var(--ds-chart-pastel-5, #5c6fb0)));
+  --ds-chart-paint-6: var(--ds-chart-category-6, var(--ds-chart-series-6, var(--ds-chart-pastel-6, #80628f)));
+  --ds-chart-paint-7: var(--ds-chart-category-7, var(--ds-chart-series-7, var(--ds-chart-pastel-7, #686868)));
+  --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-pastel-8, #3b777c)));
+  --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-pastel-9, #95606a)));
+  --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-pastel-10, #62752e)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-chart-color-scheme='vibrant'] {
-  --ds-chart-series-1: var(--ds-chart-category-1, var(--ds-chart-vibrant-1, #006b63));
-  --ds-chart-series-2: var(--ds-chart-category-2, var(--ds-chart-vibrant-2, #a12b68));
-  --ds-chart-series-3: var(--ds-chart-category-3, var(--ds-chart-vibrant-3, #007a4d));
-  --ds-chart-series-4: var(--ds-chart-category-4, var(--ds-chart-vibrant-4, #a65000));
-  --ds-chart-series-5: var(--ds-chart-category-5, var(--ds-chart-vibrant-5, #244fc0));
-  --ds-chart-series-6: var(--ds-chart-category-6, var(--ds-chart-vibrant-6, #702a91));
-  --ds-chart-series-7: var(--ds-chart-category-7, var(--ds-chart-vibrant-7, #4e545b));
-  --ds-chart-series-8: var(--ds-chart-category-8, var(--ds-chart-vibrant-8, #00727b));
-  --ds-chart-series-9: var(--ds-chart-category-9, var(--ds-chart-vibrant-9, #a3364f));
-  --ds-chart-series-10: var(--ds-chart-category-10, var(--ds-chart-vibrant-10, #486900));
+  --ds-chart-paint-1: var(--ds-chart-category-1, var(--ds-chart-series-1, var(--ds-chart-vibrant-1, #006b63)));
+  --ds-chart-paint-2: var(--ds-chart-category-2, var(--ds-chart-series-2, var(--ds-chart-vibrant-2, #a12b68)));
+  --ds-chart-paint-3: var(--ds-chart-category-3, var(--ds-chart-series-3, var(--ds-chart-vibrant-3, #007a4d)));
+  --ds-chart-paint-4: var(--ds-chart-category-4, var(--ds-chart-series-4, var(--ds-chart-vibrant-4, #a65000)));
+  --ds-chart-paint-5: var(--ds-chart-category-5, var(--ds-chart-series-5, var(--ds-chart-vibrant-5, #244fc0)));
+  --ds-chart-paint-6: var(--ds-chart-category-6, var(--ds-chart-series-6, var(--ds-chart-vibrant-6, #702a91)));
+  --ds-chart-paint-7: var(--ds-chart-category-7, var(--ds-chart-series-7, var(--ds-chart-vibrant-7, #4e545b)));
+  --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-vibrant-8, #00727b)));
+  --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-vibrant-9, #a3364f)));
+  --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-vibrant-10, #486900)));
 }
 
 /* VIZ-02 — React-owned SVG renderer anatomy. D3 computes geometry only; all
@@ -49056,6 +49063,22 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   vector-effect: non-scaling-stroke;
 }
 
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='trend-line'] {
+  stroke: var(--ds-color-text-secondary);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+  opacity: 0.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='axis-label'] {
+  fill: var(--ds-color-text-secondary);
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-font-size-xs);
+}
+
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer'] [data-part='pie-slice'] {
   fill: var(--ds-chart-mark-color, var(--ds-color-primary));
   stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
@@ -49067,70 +49090,70 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   [data-part='pie-slice-mark'][data-series-index='0'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='0'] {
-  --ds-chart-mark-color: var(--ds-chart-series-1, var(--ds-color-primary));
+  --ds-chart-mark-color: var(--ds-chart-paint-1, var(--ds-color-primary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='1'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='1'] {
-  --ds-chart-mark-color: var(--ds-chart-series-2, var(--ds-color-secondary));
+  --ds-chart-mark-color: var(--ds-chart-paint-2, var(--ds-color-secondary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='2'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='2'] {
-  --ds-chart-mark-color: var(--ds-chart-series-3, var(--ds-color-success));
+  --ds-chart-mark-color: var(--ds-chart-paint-3, var(--ds-color-success));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='3'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='3'] {
-  --ds-chart-mark-color: var(--ds-chart-series-4, var(--ds-color-warning));
+  --ds-chart-mark-color: var(--ds-chart-paint-4, var(--ds-color-warning));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='4'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='4'] {
-  --ds-chart-mark-color: var(--ds-chart-series-5, var(--ds-color-info));
+  --ds-chart-mark-color: var(--ds-chart-paint-5, var(--ds-color-info));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='5'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='5'] {
-  --ds-chart-mark-color: var(--ds-chart-series-6, var(--ds-color-primary));
+  --ds-chart-mark-color: var(--ds-chart-paint-6, var(--ds-color-primary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='6'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='6'] {
-  --ds-chart-mark-color: var(--ds-chart-series-7, var(--ds-color-secondary));
+  --ds-chart-mark-color: var(--ds-chart-paint-7, var(--ds-color-secondary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='7'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='7'] {
-  --ds-chart-mark-color: var(--ds-chart-series-8, var(--ds-color-success));
+  --ds-chart-mark-color: var(--ds-chart-paint-8, var(--ds-color-success));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='8'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='8'] {
-  --ds-chart-mark-color: var(--ds-chart-series-9, var(--ds-color-warning));
+  --ds-chart-mark-color: var(--ds-chart-paint-9, var(--ds-color-warning));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
   [data-part='pie-slice-mark'][data-series-index='9'],
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='9'] {
-  --ds-chart-mark-color: var(--ds-chart-series-10, var(--ds-color-info));
+  --ds-chart-mark-color: var(--ds-chart-paint-10, var(--ds-color-info));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
@@ -49517,6 +49540,73 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
 }
 
+/* Scaffold feedback states. Empty announces politely, error asserts; the
+ * layout is React-owned, only paint lives here. The error label reads the
+ * semantic error token because a failed chart is meaning-bearing status, not
+ * a category. */
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state'] > [data-part='state-label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='state'] > [data-part='state-description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-state='error'] > [data-part='state'] > [data-part='state-label'] {
+  color: var(--ds-color-error, var(--ds-color-text-primary));
+}
+
+/* Skeleton loading variant: static placeholder bars. Deliberately unanimated
+ * until the shared skeleton shimmer canon exists; skins may then animate this
+ * same anatomy without a markup change. */
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] [data-part='skeleton-bar'] {
+  background: var(--ds-color-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+}
+
+/* Generic micro projection (metric + trend). The trend line consumes the
+ * canonical categorical paint bridge inherited from the owning chart frame;
+ * standalone use falls back to the primary color. Delta tones are
+ * meaning-bearing status, exempt from the category/status separation law. */
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='delta'][data-tone='neutral'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='delta'][data-tone='positive'] {
+  color: var(--ds-color-success, var(--ds-color-text-secondary));
+}
+
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='delta'][data-tone='negative'] {
+  color: var(--ds-color-error, var(--ds-color-text-secondary));
+}
+
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='trend'] > [data-part='trend-line'] {
+  stroke: var(--ds-chart-paint-1, var(--ds-color-primary));
+  stroke-width: 2;
+}
+
+/* Generic ranked-rows phone projection. */
+.ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] > [data-part='rank'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-secondary));
+}
+
+.ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] > [data-part='row-label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] > [data-part='row-value'] {
+  color: var(--ds-color-text-primary);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
 /** AreaChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
 .ds-chart-area [data-part='legend-swatch'] {
@@ -49536,13 +49626,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   stroke: var(--ds-color-border-secondary);
 }
 
-.ds-chart-area [data-part='interaction-overlay'] {
-  fill: transparent;
-}
-
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-area [data-part='axis-domain'],
-.ds-chart-area [data-part='axis-tick'],
 .ds-chart-area [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
@@ -49570,9 +49653,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   fill: var(--ds-color-text-primary);
 }
 
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-bar [data-part='axis-domain'],
-.ds-chart-bar [data-part='axis-tick'],
 .ds-chart-bar [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
@@ -49624,9 +49704,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   fill: var(--ds-color-error-500);
 }
 
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-gantt [data-part='axis-domain'],
-.ds-chart-gantt [data-part='axis-tick'],
 .ds-chart-gantt [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
@@ -49637,10 +49714,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   fill: var(--ds-color-text-secondary);
 }
 
-.ds-chart-heatmap [data-part='axis-domain'],
-.ds-chart-heatmap [data-part='axis-tick'] {
-  stroke: var(--ds-color-border-primary);
-}
 
 /** LineChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
@@ -49665,13 +49738,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   stroke: var(--ds-color-bg-primary);
 }
 
-.ds-chart-line [data-part='interaction-overlay'] {
-  fill: transparent;
-}
-
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-line [data-part='axis-domain'],
-.ds-chart-line [data-part='axis-tick'],
 .ds-chart-line [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
@@ -49686,13 +49752,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-secondary);
 }
 
-.ds-chart-pie [data-part='slice-surface'] {
-  stroke: var(--ds-color-bg-primary);
-}
-
-.ds-chart-pie [data-part='slice-label'] {
-  fill: var(--ds-color-text-primary);
-}
 
 /** RadarChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
@@ -49765,9 +49824,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   fill: var(--ds-color-text-primary);
 }
 
-/* The former final `.tick line` D3 write also repainted grid ticks. */
-.ds-chart-waterfall [data-part='axis-domain'],
-.ds-chart-waterfall [data-part='axis-tick'],
 .ds-chart-waterfall [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
@@ -49805,8 +49861,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   fill: var(--ds-color-text-primary);
 }
 
-.ds-chart-histogram [data-part='axis-domain'],
-.ds-chart-histogram [data-part='axis-tick'],
 .ds-chart-histogram [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
@@ -49834,8 +49888,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   stroke: var(--ds-color-text-secondary);
 }
 
-.ds-chart-scatter [data-part='axis-domain'],
-.ds-chart-scatter [data-part='axis-tick'],
 .ds-chart-scatter [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
