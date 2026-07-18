@@ -335,14 +335,14 @@ Features implemented across Waves 2 through 6 of the DS execution plan.
 
 ### Wave 5 -- Surface Lifecycle and Permissions
 
-<!-- GAT07-CLAIM surface-profile-overrides: reserved-experimental; runtime=unconsumed; affirmative-behavior=false; owner=DS-IMP-022 -->
+<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=fleet-wired-33-of-33; affirmative-behavior=true; owner=DS-IMP-022 -->
 
-GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=reserved-experimental; runtime-status=isolated-helper-unconsumed-by-surfaces; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-022; target-phase=2A.
+GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=fleet-wired-33-of-33; affirmative-behavior=true; production-consumers=33; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.
 
 - `useSurfaceState` hook (8 lifecycle states, `renderState` helper)
 - Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyStateCard`, `SurfaceErrorStateCard`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`
-- The generated GAT07 contract above is the only authority for the reserved
-  surface-override family.
+- The generated GAT07 contract above certifies exact declaration-to-consumer
+  parity for the active surface-override family.
 - Enhanced permissions: `isRowAllowed`, `cascadeRules`, `resolveFieldAccess`
 
 ### Wave 6 -- Branding Validation, Collaboration, and Lint Rules

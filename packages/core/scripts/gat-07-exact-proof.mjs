@@ -79,7 +79,7 @@ const SKIN_DIRS = [
 
 const CANONICAL_DOC_MARKERS = Object.freeze({
   'component-extensions': '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->',
-  'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: reserved-experimental; runtime=unconsumed; affirmative-behavior=false; owner=DS-IMP-022 -->',
+  'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=fleet-wired-33-of-33; affirmative-behavior=true; owner=DS-IMP-022 -->',
 });
 
 const CLAIM_DOCS = [
@@ -129,6 +129,45 @@ const GAT07_STATIC_REGISTRY_FIELDS = Object.freeze([
   'notes',
   'execution',
 ]);
+const SURFACE_PROFILE_OVERRIDE_CONSUMERS = Object.freeze([
+  'src/ui/surfaces/composition/layout/page-shell/header/index.tsx',
+  'src/ui/surfaces/composition/layout/sidebar/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/audit/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/billing/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/file-browser/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/import-export/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/integration/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/profile/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/settings/index.tsx',
+  'src/ui/surfaces/presentation/pages/admin/team/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/compare/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/dashboard/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/detail/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/list/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/report/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/search/index.tsx',
+  'src/ui/surfaces/presentation/pages/data/visualization/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/auth/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/chat/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/editor/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/empty-state/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/marketing/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/media/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/notification/index.tsx',
+  'src/ui/surfaces/presentation/pages/experience/pricing/index.tsx',
+  'src/ui/surfaces/presentation/pages/forms/detail-form/index.tsx',
+  'src/ui/surfaces/presentation/pages/forms/form/index.tsx',
+  'src/ui/surfaces/presentation/pages/forms/wizard/index.tsx',
+  'src/ui/surfaces/presentation/pages/forms/wizard/onboarding/index.tsx',
+  'src/ui/surfaces/presentation/pages/operations/activity/index.tsx',
+  'src/ui/surfaces/presentation/pages/operations/kanban/index.tsx',
+  'src/ui/surfaces/presentation/pages/operations/operational/index.tsx',
+  'src/ui/surfaces/presentation/pages/operations/scheduler/index.tsx',
+]);
+const SURFACE_PROFILE_OVERRIDE_ASSERTIONS = Object.freeze([
+  'scripts/surface-profile-overrides.test.mjs',
+  'src/ui/surfaces/tests/SurfacesLongTailBatch.contract.test.tsx',
+]);
 const EXPECTED_CLAIM_FLOOR = Object.freeze({
   'component-extensions': {
     symbols: ['ComponentExtensions', 'ExtensionHelpers', 'EngineAwareProps.extensions'],
@@ -155,27 +194,29 @@ const EXPECTED_CLAIM_FLOOR = Object.freeze({
   },
   'surface-profile-overrides': {
     symbols: ['SurfaceVisualOverrides', 'useSurfaceProfileDefaultsWithOverrides', 'visual.profileOverrides'],
-    disposition: 'reserved-experimental',
-    runtimeStatus: 'isolated-helper-unconsumed-by-surfaces',
+    disposition: 'active',
+    runtimeStatus: 'fleet-wired-33-of-33',
     deferredOwner: {
       sourceId: 'DS-IMP-022',
       owner: 'design-system-program',
       targetPhase: '2A',
-      decision: 'wire each field with runtime and visual evidence or remove it',
+      decision: 'maintain exact declaration-to-consumer parity with executable evidence',
     },
     definitionFiles: [
       'src/ui/surfaces/foundation/contracts/index.ts',
       'src/ui/surfaces/runtime/profile-defaults/overrides/index.ts',
+      'src/ui/surfaces/runtime/profile-defaults/attributes/index.ts',
       'src/ui/surfaces/index.ts',
     ],
+    productionConsumers: SURFACE_PROFILE_OVERRIDE_CONSUMERS,
+    executableAssertions: SURFACE_PROFILE_OVERRIDE_ASSERTIONS,
     requiredAssertions: {
       profileOverrideDeclarations: 33,
-      staticallyResolvedSurfaceHookCalls: 0,
+      staticallyResolvedSurfaceHookCalls: 32,
       staticallyResolvedShowroomProfileOverrideReferences: 0,
-      staticallyResolvedPotentialConsumers: 0,
+      staticallyResolvedPotentialConsumers: 33,
       unsupportedGovernedReferences: 0,
-      registeredExecutableEvidence: 0,
-      deprecatedMarkersMinimum: 3,
+      registeredExecutableEvidence: 2,
     },
   },
 });
@@ -277,14 +318,27 @@ export function evaluateClaimFloor(floor) {
         errors.push(`${claim.id}.${field} must match the adjudicated Phase-0 claim floor`);
       }
     }
-    if (claim.affirmativeBehaviorClaimAllowed !== false) {
-      errors.push(`${claim.id}: reserved/deferred claim cannot allow affirmative behavior language`);
-    }
-    if (!Array.isArray(claim.productionConsumers) || claim.productionConsumers.length !== 0) {
-      errors.push(`${claim.id}: Phase-0 reserved claim must have zero productionConsumers`);
-    }
-    if (!Array.isArray(claim.executableAssertions) || claim.executableAssertions.length !== 0) {
-      errors.push(`${claim.id}: Phase-0 reserved claim must have zero executableAssertions`);
+    const active = claim.disposition === 'active';
+    if (active) {
+      if (claim.affirmativeBehaviorClaimAllowed !== true) {
+        errors.push(`${claim.id}: active claim must allow its bounded affirmative behavior`);
+      }
+      if (!Array.isArray(claim.productionConsumers) || claim.productionConsumers.length === 0) {
+        errors.push(`${claim.id}: active claim must register productionConsumers`);
+      }
+      if (!Array.isArray(claim.executableAssertions) || claim.executableAssertions.length === 0) {
+        errors.push(`${claim.id}: active claim must register executableAssertions`);
+      }
+    } else {
+      if (claim.affirmativeBehaviorClaimAllowed !== false) {
+        errors.push(`${claim.id}: reserved/deferred claim cannot allow affirmative behavior language`);
+      }
+      if (!Array.isArray(claim.productionConsumers) || claim.productionConsumers.length !== 0) {
+        errors.push(`${claim.id}: reserved claim must have zero productionConsumers`);
+      }
+      if (!Array.isArray(claim.executableAssertions) || claim.executableAssertions.length !== 0) {
+        errors.push(`${claim.id}: reserved claim must have zero executableAssertions`);
+      }
     }
   }
   for (const required of Object.keys(EXPECTED_CLAIM_FLOOR)) {
@@ -319,6 +373,20 @@ function measureClaims() {
   for (const claim of (Array.isArray(floor.claims) ? floor.claims : [])) {
     const measured = facts[claim.id];
     if (!measured) continue;
+    const registeredAssertions = (claim.executableAssertions ?? []).filter((path) => {
+      const absolutePath = join(CORE_ROOT, path);
+      if (!existsSync(absolutePath)) {
+        errors.push(`${claim.id}.executableAssertions: missing ${path}`);
+        return false;
+      }
+      return true;
+    });
+    measured.registeredExecutableEvidence = registeredAssertions.length;
+    for (const path of claim.productionConsumers ?? []) {
+      if (!existsSync(join(CORE_ROOT, path))) {
+        errors.push(`${claim.id}.productionConsumers: missing ${path}`);
+      }
+    }
     for (const [assertion, expected] of Object.entries(claim.requiredAssertions ?? {})) {
       const actual = measured[assertion.replace(/Minimum$/, '')];
       if (assertion.endsWith('Minimum')) {

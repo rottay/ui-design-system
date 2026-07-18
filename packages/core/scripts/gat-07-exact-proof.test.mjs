@@ -865,11 +865,11 @@ test('G8 WO-GAT-07 projection is deterministic and binds only immutable executio
 test('G4 documentation permits only exact generated claim contracts even after allowlist rewrites', () => {
   const markers = {
     'component-extensions': '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->',
-    'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: reserved-experimental; runtime=isolated-helper-unconsumed-by-surfaces; affirmative-behavior=false; owner=DS-IMP-022 -->',
+    'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=fleet-wired-33-of-33; affirmative-behavior=true; owner=DS-IMP-022 -->',
   };
   const templates = {
     'component-extensions': 'GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=reserved-deprecated; runtime-status=unimplemented; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.',
-    'surface-profile-overrides': 'GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=reserved-experimental; runtime-status=isolated-helper-unconsumed-by-surfaces; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-022; target-phase=2A.',
+    'surface-profile-overrides': 'GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=fleet-wired-33-of-33; affirmative-behavior=true; production-consumers=33; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.',
   };
   const records = [{
     path: 'contracts.md',
@@ -950,7 +950,7 @@ test('G3 public claim floor is exact and rejects invented authority, assertions,
 
   const mutations = [
     (candidate) => { candidate.claims[0].runtimeStatus = 'implemented'; },
-    (candidate) => { candidate.claims[1].affirmativeBehaviorClaimAllowed = true; },
+    (candidate) => { candidate.claims[1].affirmativeBehaviorClaimAllowed = false; },
     (candidate) => { candidate.claims[0].deferredOwner.sourceId = 'DS-IMP-022'; },
     (candidate) => { candidate.claims[0].deferredOwner.owner = 'app'; },
     (candidate) => { candidate.claims[1].deferredOwner.targetPhase = '6'; },
