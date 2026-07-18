@@ -19,6 +19,9 @@ export const ENGINE_TOKEN_MINIMUM = Object.freeze({
   'effects.gradientConsumers': 1,
   'effects.glassConsumers': 1,
   'effects.glowConsumers': 1,
+  // WO-CRA-15: the motion recipe canon must keep at least three distinct
+  // component consumers (audit MOT-02 found the tuned recipes fully dead).
+  'motion.recipeConsumers': 3,
   // Recalibrated after the reviewed 2026-07-17 source-tree consolidation:
   // six compatibility leaves were folded into canonical folder/index homes.
   // The structure gate independently prevents authored leaves from escaping

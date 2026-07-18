@@ -8,9 +8,11 @@
  * `foundation/tokens/css/runtime/engines/modern/skin/button.css`, keyed on the `data-*` contract
  * this component stamps: `data-variant`, `data-size`, `data-shape`,
  * `data-disabled`, `data-loading`, `data-pending`, `data-icon-only`,
- * `data-size-responsive`, and the `data-part` / `data-state` anatomy attributes
- * from `behavior/anatomy.ts`. No DaisyUI btn-* classes are used. A caller's own
- * `style` prop is the only inline declaration on the element.
+ * `data-size-responsive`, the `data-part` / `data-state` anatomy attributes
+ * from `behavior/anatomy.ts`, and the `data-recipe` / `data-recipe-state`
+ * motion vocabulary plus `--ds-recipe-*` variables from the feedback.press
+ * recipe. No DaisyUI btn-* classes are used. Besides those variables, a
+ * caller's own `style` prop is the only inline declaration on the element.
  *
  * **Design principles:**
  * - Precise, calm, expensive, editorial
@@ -39,6 +41,7 @@
 import React, { forwardRef, useId } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import type { ButtonProps, ButtonSize } from '../../contracts';
 import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP, resolveButtonBusyState } from '../../contracts';
 import {
@@ -179,6 +182,12 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const { state: interaction, handlers: interactionHandlers } = useInteractionState({
     disabled: disabled || busy,
   });
+
+  // feedback.press recipe (motion canon): the skin reads the stamped
+  // `--ds-recipe-*` variables for press geometry/timing. Under reduced motion
+  // the resolver returns the settled state (scale 1, zero duration) and the skin's
+  // `[data-recipe-state='final']` rule disables interpolation entirely.
+  const pressMotion = useMotionRecipePresentation('feedback.press');
   const isFocused = interaction.focusVisible;
 
   const isFullWidth = fullWidth ?? block;
@@ -254,9 +263,13 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   // -------------------------------------------------------------------------
   // Every variant, size, shape, state and inert posture is painted by
   // `foundation/tokens/css/runtime/engines/modern/skin/button.css`, keyed on the `data-*` contract
-  // stamped below. Only a caller's own `style` prop survives as an inline
-  // declaration, which is the precedence it has always had.
-  const interactiveStyle: React.CSSProperties | undefined = style;
+  // stamped below. The `--ds-recipe-*` variables are custom-property inputs the
+  // skin consumes, not paint; a caller's own `style` prop merges after them and
+  // keeps the precedence it has always had.
+  const interactiveStyle: React.CSSProperties = {
+    ...pressMotion.variables,
+    ...style,
+  };
 
   // -------------------------------------------------------------------------
   // Content
@@ -322,6 +335,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         {...interactionHandlers}
         aria-disabled={disabled || busy}
         aria-busy={busy}
+        {...pressMotion.attributes}
         data-variant={effectiveVariant}
         data-size={size}
         data-shape={shape}

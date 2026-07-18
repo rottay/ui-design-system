@@ -27,6 +27,7 @@ import { useModalInertSiblings } from '../../../../runtime/overlay/focus-managem
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { usePresence } from '@/graphics/motion/react/runtime';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 // ============================================================================
 // Constants
@@ -150,6 +151,13 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   /** Whether the modal should render as fullscreen on the current viewport. */
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
 
+  // overlay.modal recipe (motion canon): durations/geometry for the panel and
+  // backdrop keyframes resolve from the stamped `--ds-recipe-*` variables.
+  // Under reduced motion the resolver returns the settled state and this
+  // engine declares NO animation at all, so usePresence unmounts immediately.
+  const overlayMotion = useMotionRecipePresentation('overlay.modal');
+  const motionIsFinal = overlayMotion.recipe.state === 'final';
+
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   // Presence: `open` flipping false keeps the dialog mounted and open in the
@@ -261,7 +269,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         aria-label={ariaLabel}
         aria-labelledby={!ariaLabel && title && !header ? titleId : undefined}
         aria-describedby={ariaDescribedBy || (description ? descriptionId : undefined)}
+        {...overlayMotion.attributes}
         style={{
+          ...overlayMotion.variables,
           /* Reset native dialog styling */
           position: 'fixed',
           inset: 0,
@@ -291,7 +301,11 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             style={{
               position: 'fixed',
               inset: 0,
-              animation: `${dataState === 'open' ? 'ds-overlay-modal-backdrop-enter-modern' : 'ds-overlay-modal-backdrop-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+              animation: motionIsFinal
+                ? undefined
+                : dataState === 'open'
+                  ? `ds-overlay-modal-backdrop-enter-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
+                  : `ds-overlay-modal-backdrop-exit-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
               pointerEvents: 'none',
             }}
           />
@@ -319,9 +333,11 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             // The radius folds a size enum (RADIUS_MAP) and the fullscreen
             // override into one value; the skin reads it (not a paint key).
             ['--ds-overlay-modal-radius' as any]: panelRadius,
-            animation: isAdaptiveFullscreen
+            animation: isAdaptiveFullscreen || motionIsFinal
               ? undefined
-              : `${dataState === 'open' ? 'ds-overlay-modal-enter-modern' : 'ds-overlay-modal-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+              : dataState === 'open'
+                ? `ds-overlay-modal-enter-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
+                : `ds-overlay-modal-exit-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
             overflow: 'hidden',
             ...style,
           }}

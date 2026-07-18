@@ -18,6 +18,7 @@ import React, { useEffect, useCallback, useId } from 'react';
 import type { DrawerProps, DrawerSize } from '../../contracts';
 import { DRAWER_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 // ============================================================================
 // Constants
@@ -133,6 +134,14 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   // vanishing the instant `open` changes.
   const { shouldRender, dataState, ref: presenceRef } = usePresence(open ?? false);
 
+  // overlay.sheet recipe (motion canon): a drawer is a side panel, so its
+  // enter/exit timing resolves from the sheet recipe's stamped `--ds-recipe-*`
+  // variables. The slide travel stays the skin's anatomical 100%. Under
+  // reduced motion the resolver returns the settled state, no animation is
+  // declared, and usePresence unmounts immediately on close.
+  const overlayMotion = useMotionRecipePresentation('overlay.sheet');
+  const motionIsFinal = overlayMotion.recipe.state === 'final';
+
   // -- escape key -------------------------------------------------------------
 
   useEffect(() => {
@@ -188,7 +197,12 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       zIndex: 'var(--ds-z-drawer)',
       display: 'flex',
       flexDirection: 'column',
-      animation: `${animationName} ${MOTION_DURATION} ${MOTION_EASING} both`,
+      ...overlayMotion.variables,
+      animation: motionIsFinal
+        ? undefined
+        : dataState === 'open'
+          ? `${animationName} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
+          : `${animationName} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
       overflow: 'hidden',
       ...style,
     };
@@ -252,7 +266,12 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             position: 'fixed',
             inset: 0,
             zIndex: 'var(--ds-z-overlay)',
-            animation: `${dataState === 'open' ? 'rottay-drawer-backdrop-fade-modern' : 'rottay-drawer-backdrop-fade-out-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+            ...overlayMotion.variables,
+            animation: motionIsFinal
+              ? undefined
+              : dataState === 'open'
+                ? `rottay-drawer-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
+                : `rottay-drawer-backdrop-fade-out-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
           }}
         />
       )}
@@ -263,6 +282,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
         id={id}
         data-testid={dataTestId}
         data-part="surface"
+        {...overlayMotion.attributes}
         data-placement={placement}
         data-open={dataState === 'open' ? 'true' : 'false'}
         role="dialog"

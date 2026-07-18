@@ -15,4 +15,13 @@ export {
   resolveMotionPolicy,
 } from '../../foundation/motion/policy';
 export { resolveMotionRecipe } from '../../foundation/motion/policy/recipes';
-export { useMotionRecipe } from '../../foundation/motion/composition/react/preference/recipe';
+export {
+  motionRecipeCssVariables,
+  useMotionRecipe,
+  useMotionRecipePresentation,
+} from '../../foundation/motion/composition/react/preference/recipe';
+export type {
+  MotionRecipeCssVariables,
+  MotionRecipeDataAttributes,
+  MotionRecipePresentation,
+} from '../../foundation/motion/composition/react/preference/recipe';

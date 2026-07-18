@@ -20,6 +20,7 @@ import { SHEET_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useSheetOverlayRuntime } from '../../runtime/overlay-stack';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 // ============================================================================
 // Constants
@@ -129,6 +130,14 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
   const titleId = `${id || generatedTitleId}-title`;
   const { isTopmost } = useSheetOverlayRuntime(open);
 
+  // overlay.sheet recipe (motion canon): entrance timing/easing resolve from
+  // the stamped `--ds-recipe-*` variables. The slide TRAVEL stays the skin's
+  // anatomical 100% (the panel enters from its own edge), so the recipe's
+  // distance dials are not what moves it; under reduced motion the resolver
+  // returns the settled state and this engine declares no animation at all.
+  const overlayMotion = useMotionRecipePresentation('overlay.sheet');
+  const motionIsFinal = overlayMotion.recipe.state === 'final';
+
   const handleClose = useCallback(() => {
     onOpenChange(false);
   }, [onOpenChange]);
@@ -164,7 +173,9 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
       zIndex: 'var(--ds-z-drawer)',
       display: 'flex',
       flexDirection: 'column',
-      animation: `${animationName} ${MOTION_DURATION} ${MOTION_EASING} both`,
+      animation: motionIsFinal
+        ? undefined
+        : `${animationName} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
       overflow: 'hidden',
     };
 
@@ -213,8 +224,10 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
       {/* ---- Wrapper ---- */}
       <div
         data-part="root"
+        {...overlayMotion.attributes}
         className={`rottay-sheet--modern ${className || ''} ${rootClassName || ''}`}
         style={{
+          ...overlayMotion.variables,
           position: 'fixed',
           inset: 0,
           // Tokenized overlay stack (spec section 9), matching Drawer's
@@ -232,7 +245,9 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             style={{
               position: 'fixed',
               inset: 0,
-              animation: `ds-sheet-backdrop-fade-modern ${MOTION_DURATION} ${MOTION_EASING}`,
+              animation: motionIsFinal
+                ? undefined
+                : `ds-sheet-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING})`,
             }}
           />
         )}

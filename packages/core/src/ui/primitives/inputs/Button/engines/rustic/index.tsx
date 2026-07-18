@@ -78,6 +78,7 @@
 import React, { forwardRef, useId, type AnchorHTMLAttributes } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import type { ButtonProps, ButtonSize } from '../../contracts';
 import { BUTTON_DEFAULTS, SIZE_MAP, resolveButtonBusyState } from '../../contracts';
 import {
@@ -243,14 +244,25 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     // definitions for sizes, variants, and shapes.
     const effectiveVariant = danger ? 'danger' : (variant || 'primary');
 
+    // feedback.press recipe (motion canon): the rustic skin reads the stamped
+    // `--ds-recipe-*` variables for press timing; a tenant's
+    // --ds-button-active-transform still owns the press geometry. Reduced
+    // motion resolves to the settled state and data-recipe-state='final'.
+    const pressMotion = useMotionRecipePresentation('feedback.press');
+
     // Paint lives in `foundation/tokens/css/runtime/engines/rustic/skin/button.css`, keyed on the
-    // attributes below. Only a caller's own `style` prop stays inline, which is
-    // the precedence it has always had.
-    const buttonStyle: React.CSSProperties | undefined = style;
+    // attributes below. The `--ds-recipe-*` variables are skin inputs, not
+    // paint; a caller's own `style` prop merges after them and keeps the
+    // precedence it has always had.
+    const buttonStyle: React.CSSProperties = {
+      ...pressMotion.variables,
+      ...style,
+    };
 
     /** The DOM contract the rustic skin selects on. Spread onto whichever
      *  element this engine renders, so a link and a button paint alike. */
     const skinAttributes = {
+      ...pressMotion.attributes,
       'data-variant': effectiveVariant,
       'data-size': size,
       'data-shape': shape,

@@ -31,6 +31,7 @@ import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-tr
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 /**
  * Rustic engine implementation of Modal using vanilla HTML/CSS.
@@ -87,6 +88,12 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
 
   /** Whether the modal should render as fullscreen on the current viewport. */
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
+
+  // overlay.modal recipe (motion canon): the surface transition's timing
+  // resolves from the stamped `--ds-recipe-*` variables; under reduced motion
+  // the resolver returns the settled state and the transition is dropped.
+  const overlayMotion = useMotionRecipePresentation('overlay.modal');
+  const motionIsFinal = overlayMotion.recipe.state === 'final';
 
   useModalInertSiblings(open);
 
@@ -201,9 +208,10 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     overflow: 'hidden',
     cursor: 'default',
     opacity: isAdaptiveFullscreen ? 1 : open ? 1 : 0,
-    transition: isAdaptiveFullscreen || disableAnimation
+    ...overlayMotion.variables,
+    transition: isAdaptiveFullscreen || disableAnimation || motionIsFinal
       ? 'none'
-      : 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+      : 'transform var(--ds-recipe-enter, 0.3s) var(--ds-recipe-curve, cubic-bezier(0.16, 1, 0.3, 1)), opacity var(--ds-recipe-enter, 0.3s) var(--ds-recipe-curve, cubic-bezier(0.16, 1, 0.3, 1))',
     ...style,
   };
 
@@ -281,6 +289,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
               data-testid={dataTestId}
               data-part="surface"
               data-open="true"
+              {...overlayMotion.attributes}
               data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
               data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
               data-shadow={shadow ? 'true' : 'false'}

@@ -213,6 +213,28 @@
   transform: scale(var(--ds-state-press-scale));
 }
 
+/* feedback.press recipe: when the engine stamps the recipe contract, press
+   geometry and the transform channel's timing resolve from the --ds-recipe-*
+   variables. Under reduced motion the resolver emits scale 1 / 0ms and
+   data-recipe-state='final', whose rule below removes interpolation so the
+   settled state renders directly. */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='animated'] {
+  transition:
+    transform var(--ds-recipe-enter, var(--ds-motion-fast)) var(--ds-recipe-curve, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    filter var(--ds-motion-fast) var(--ds-motion-ease-out),
+    text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='final'] {
+  transition: none;
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-state~='pressed'] {
+  transform: scale(var(--ds-recipe-scale-from, var(--ds-state-press-scale)));
+}
+
 /* resting elevation on a raised button; hover lifts it a step via the hover rule */
 .rottay-button.rottay-button--modern[data-part='trigger'].rottay-button--shadow:not([data-state~='hovered']) {
   box-shadow: var(--ds-elevation-1);

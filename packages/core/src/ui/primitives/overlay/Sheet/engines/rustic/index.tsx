@@ -24,6 +24,7 @@ import type { SheetProps } from '../../contracts';
 import { SHEET_DEFAULTS } from '../../contracts';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useSheetOverlayRuntime } from '../../runtime/overlay-stack';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 /**
  * Rustic engine implementation of Sheet using vanilla HTML/CSS and createPortal.
@@ -75,6 +76,12 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
   const { isTopmost } = useSheetOverlayRuntime(open);
   const isBottom = side === 'bottom';
 
+  // overlay.sheet recipe (motion canon): transition timing resolves from the
+  // stamped `--ds-recipe-*` variables; under reduced motion the resolver
+  // returns the settled state and the declared transitions are dropped.
+  const overlayMotion = useMotionRecipePresentation('overlay.sheet');
+  const motionIsFinal = overlayMotion.recipe.state === 'final';
+
   const handleEscape = useCallback((e: KeyboardEvent) => {
     if (closeOnEscape && e.key === 'Escape' && isTopmost()) {
       e.preventDefault();
@@ -107,7 +114,9 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
       flexDirection: 'column',
       // The transition is inert: `transform` is never assigned on any branch and
       // the panel unmounts synchronously on close, so no slide ever plays.
-      transition: 'transform var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1)), box-shadow var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
+      transition: motionIsFinal
+        ? 'none'
+        : 'transform var(--ds-recipe-enter, var(--ds-modal-animation-duration, 200ms)) var(--ds-recipe-curve, var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))), box-shadow var(--ds-recipe-enter, var(--ds-modal-animation-duration, 200ms)) var(--ds-recipe-curve, var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1)))',
     };
 
     switch (side) {
@@ -147,8 +156,9 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
   return createPortal(
     <div
       data-part="root"
+      {...overlayMotion.attributes}
       className={`rottay-sheet--rustic ${className || ''} ${rootClassName || ''}`}
-      style={{ ...style, ...rootStyle }}
+      style={{ ...overlayMotion.variables, ...style, ...rootStyle }}
     >
       {/* Overlay sits one z-index below the panel so clicks land on it for dismissal */}
       {showOverlay && (
@@ -158,7 +168,9 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
             position: 'fixed',
             inset: 0,
             zIndex: 'var(--ds-z-overlay, 1300)',
-            transition: 'opacity var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
+            transition: motionIsFinal
+              ? 'none'
+              : 'opacity var(--ds-recipe-enter, var(--ds-modal-animation-duration, 200ms)) var(--ds-recipe-curve, var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1)))',
           }}
           onClick={closeOnOverlayClick ? () => onOpenChange(false) : undefined}
         />

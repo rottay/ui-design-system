@@ -47,13 +47,24 @@
   from { opacity: 1; }
   to   { opacity: 0; }
 }
+/* Panel geometry resolves from the overlay.modal recipe variables the engine
+   stamps on the <dialog> root (inherited here by the animated surface). The
+   fallbacks reproduce the pre-recipe values for a tree without the contract.
+   Under reduced motion the engine declares no animation at all, so these
+   keyframes never run with settled 0-values. */
 @keyframes ds-overlay-modal-enter-modern {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-recipe-y, 0px)) scale(var(--ds-recipe-scale-from, 0.95));
+  }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes ds-overlay-modal-exit-modern {
-  from { opacity: 1; transform: scale(1); }
-  to   { opacity: 0; transform: scale(0.95); }
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   {
+    opacity: 0;
+    transform: translateY(var(--ds-recipe-y, 0px)) scale(var(--ds-recipe-scale-from, 0.95));
+  }
 }
 
 /* ---- root: the native <dialog>, stripped of its UA chrome ---- */

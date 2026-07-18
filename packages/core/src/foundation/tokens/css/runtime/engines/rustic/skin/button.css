@@ -259,6 +259,29 @@
   transform: var(--ds-button-active-transform, scale(0.97));
 }
 
+/* feedback.press recipe: press geometry defaults to the recipe's scale and the
+   transform channel's timing to the recipe's enter duration/curve; a tenant's
+   --ds-button-active-transform / --ds-button-transition still win. Under
+   reduced motion the resolver stamps data-recipe-state='final' with scale 1
+   and 0ms, and the final rule removes interpolation entirely. */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='animated'] {
+  transition: var(
+    --ds-button-transition,
+    transform var(--ds-recipe-enter, 150ms) var(--ds-recipe-curve, ease),
+    box-shadow 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease
+  );
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='final'] {
+  transition: none;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-recipe='feedback.press'][data-state~='pressed'] {
+  transform: var(--ds-button-active-transform, scale(var(--ds-recipe-scale-from, 0.97)));
+}
+
 /* a full-width button outranks a circle's box */
 .rottay-button.rottay-button--rustic[data-part='trigger'][data-full-width='true'] {
   width: 100%;

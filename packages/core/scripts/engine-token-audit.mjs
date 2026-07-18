@@ -32,6 +32,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 import { countPremiumEffectConsumers } from './lib/effect-consumer-counter.mjs';
+import { countMotionRecipeConsumers } from './lib/motion-recipe-consumer-counter.mjs';
 import { countSkinExemptionBreaches } from './lib/skin-exemption-audit.mjs';
 import { countRuntimeSvgPaintByFile } from './lib/runtime-svg-paint-counter.mjs';
 import { countEmbeddedCssPaintByFile, countEmbeddedCssPaintInFile } from './lib/embedded-css-paint-counter.mjs';
@@ -846,6 +847,34 @@ function countEffectConsumers() {
     sourceFiles,
     skinFiles: collectSkinFiles(),
   });
+}
+
+/**
+ * Count DISTINCT src/ui components consuming the motion recipe canon
+ * (WO-CRA-15): a production TS/TSX file calling `useMotionRecipe*(...)`. A
+ * component's several engine files collapse to one owner, so the MIN floor
+ * reads "at least N components", never "at least N files". Like the effect
+ * floors, this is a wiring signal, not proof the motion renders; the
+ * reduced-motion unit contracts and visual specs own that.
+ */
+function countRecipeConsumers() {
+  const sourceFiles = [];
+  function walk(dir) {
+    if (!existsSync(dir)) return;
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      const rel = full.replace(/\\/g, '/');
+      if (statSync(full).isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!/\.tsx?$/.test(full)) continue;
+      if (/__tests__|\.(test|spec|stories)\./.test(rel)) continue;
+      sourceFiles.push(full);
+    }
+  }
+  walk(componentsDir);
+  return countMotionRecipeConsumers({ sourceFiles, componentsDir });
 }
 
 /* ============================================================================
@@ -2383,6 +2412,11 @@ const counters = {
   // WO-CRA-06 (choreography layer): compositor-only law. See this counter's
   // module doc (search "Compositor-only motion gate") for exact scope.
   'motion.compositorOnlyViolations': countCompositorOnlyViolations(files),
+  // WO-CRA-15 (motion recipe canon adoption): distinct src/ui components whose
+  // production source consumes useMotionRecipe*/useMotionRecipePresentation.
+  // MIN floor: the recipe canon must never regress to zero functional
+  // consumers again (audit MOT-02). See countRecipeConsumers() for scope.
+  'motion.recipeConsumers': countRecipeConsumers(),
   'depth.shadowScales': countShadowScales(),
   'depth.darkPureBlackElevations': countDarkPureBlackElevations(),
   'scale.radiusScaleDeclarations': countRadiusScaleDeclarations(),

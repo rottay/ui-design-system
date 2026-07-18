@@ -95,6 +95,15 @@ export interface ModalProps extends BaseComponentProps, EngineAwareProps, WithCh
 
   /**
    * Whether the modal takes up the full viewport.
+   *
+   * Modal -> full-page promote seam: there is no built-in promote control.
+   * An app that navigates a modal into a full page declares
+   * `MODAL_PROMOTE_TRANSITION_NAME` (graphics/motion view-transition runtime)
+   * as the `viewTransitionName` in this modal's `style` prop -- every engine
+   * spreads `style` onto the panel element -- gives the destination page
+   * region the same name, and runs the navigation through
+   * `startDsViewTransition`. The browser then morphs panel -> page; reduced
+   * motion and unsupported browsers resolve to the plain navigation.
    */
   fullScreen?: boolean;
 
