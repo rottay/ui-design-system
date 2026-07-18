@@ -42,16 +42,13 @@ import {
   useState,
 } from 'react';
 
+import type { BrushSelection } from '../../foundation/brush-selection';
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export interface BrushSelection {
-  /** Start index or value (always <= end) */
-  start: number;
-  /** End index or value (always >= start) */
-  end: number;
-}
+export type { BrushSelection } from '../../foundation/brush-selection';
 
 export interface UseChartBrushOptions {
   /** SVG ref to attach brush event listeners to */

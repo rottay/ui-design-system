@@ -10,6 +10,11 @@
  */
 
 export { useChartDimensions } from './chart-engine/runtime/dimensions';
+export type {
+  ChartDimensions,
+  ChartDimensionsOptions,
+  UseChartDimensionsResult,
+} from './chart-engine/runtime/dimensions';
 
 export { useChartPersonality } from './theming/composition/react/personality';
 export type { ChartPersonalityOptions, ResolvedChartPersonality } from './theming/composition/react/personality';
@@ -25,6 +30,29 @@ export type { UseChartTooltipReturn } from './interaction/tooltip-state';
 
 export { useChartBrush } from './interaction/brush';
 export type { BrushSelection, UseChartBrushOptions, UseChartBrushReturn } from './interaction/brush';
+
+export { useChartViewport } from './interaction/viewport';
+export type {
+  ChartAxisInterval,
+  ChartDomain,
+  ChartViewportAxis,
+  ChartViewportBrushAxis,
+  ChartViewportBrushConfig,
+  ChartViewportBrushScale,
+  ChartViewportConfig,
+  ChartViewportPlotRect,
+  ChartViewportResetButtonProps,
+  ChartViewportRootProps,
+  ChartViewportState,
+  ChartViewportZoomConfig,
+} from './interaction/viewport';
+
+export { applyStreamCommit, useChartStream } from './streaming';
+export type {
+  ChartStreamOptions,
+  ChartStreamState,
+  ChartStreamWindow,
+} from './streaming';
 
 export { useChartExport } from './exporting/composition/react';
 export type { UseChartExportReturn } from './exporting/composition/react';
