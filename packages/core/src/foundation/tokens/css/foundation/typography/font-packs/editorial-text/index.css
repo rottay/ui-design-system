@@ -1,0 +1,21 @@
+/**
+ * Font pack: editorial-text (Newsreader).
+ *
+ * Opt-in subpath: @rottay/design-system/fonts/editorial-text.css. NEVER imported
+ * by styles.css or any default bundle. Newsreader is a variable serif (OFL-1.1);
+ * the latin-subset variable file carries the 400-600 range this pack advertises.
+ * The custom property is defined UNCONDITIONALLY so the already-validated
+ * var(--ds-font-pack-editorial-text) channel resolves when this css is present.
+ */
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('./newsreader-latin-variable.woff2') format('woff2');
+}
+
+:root {
+  --ds-font-pack-editorial-text: 'Newsreader', Georgia, 'Times New Roman', serif;
+}

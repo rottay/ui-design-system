@@ -1,0 +1,22 @@
+/**
+ * Font pack: geometric-display (Outfit).
+ *
+ * Opt-in subpath: @rottay/design-system/fonts/geometric-display.css. NEVER
+ * imported by styles.css or any default bundle. Outfit is a variable geometric
+ * sans (OFL-1.1); the latin-subset variable file carries the 400-700 range this
+ * pack advertises. The custom property is defined UNCONDITIONALLY so the
+ * already-validated var(--ds-font-pack-geometric-display) channel resolves when
+ * this css is present.
+ */
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('./outfit-latin-variable.woff2') format('woff2');
+}
+
+:root {
+  --ds-font-pack-geometric-display: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}

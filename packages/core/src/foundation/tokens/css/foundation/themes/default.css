@@ -241,17 +241,32 @@
   --ds-font-family-heading: var(--ds-font-sans);
   --ds-font-family-mono: var(--ds-font-mono);
 
-  /* Font Sizes */
-  --ds-font-size-xs: 0.75rem;
-  --ds-font-size-sm: 0.875rem;
-  --ds-font-size-base: 0.9375rem;
-  --ds-font-size-lg: 1rem;
-  --ds-font-size-xl: 1.125rem;
-  --ds-font-size-2xl: 1.25rem;
-  --ds-font-size-3xl: 1.5rem;
-  --ds-font-size-4xl: 2rem;
-  --ds-font-size-5xl: 2.5rem;
-  --ds-font-size-6xl: 3rem;
+  /* Font Sizes
+     This block wins the cascade over foundation/base/typography.css (imported
+     earlier in the rottay-tokens layer). Each public step is a calc() over a
+     private -base literal times var(--ds-type-scale, 1): absent scale => the
+     fallback 1 => byte-identical to the prior literal; a tenant --ds-type-scale
+     scales the whole ramp at this one site. */
+  --ds-font-size-xs-base: 0.75rem;
+  --ds-font-size-sm-base: 0.875rem;
+  --ds-font-size-base-base: 0.9375rem;
+  --ds-font-size-lg-base: 1rem;
+  --ds-font-size-xl-base: 1.125rem;
+  --ds-font-size-2xl-base: 1.25rem;
+  --ds-font-size-3xl-base: 1.5rem;
+  --ds-font-size-4xl-base: 2rem;
+  --ds-font-size-5xl-base: 2.5rem;
+  --ds-font-size-6xl-base: 3rem;
+  --ds-font-size-xs: calc(var(--ds-font-size-xs-base) * var(--ds-type-scale, 1));
+  --ds-font-size-sm: calc(var(--ds-font-size-sm-base) * var(--ds-type-scale, 1));
+  --ds-font-size-base: calc(var(--ds-font-size-base-base) * var(--ds-type-scale, 1));
+  --ds-font-size-lg: calc(var(--ds-font-size-lg-base) * var(--ds-type-scale, 1));
+  --ds-font-size-xl: calc(var(--ds-font-size-xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-2xl: calc(var(--ds-font-size-2xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-3xl: calc(var(--ds-font-size-3xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-4xl: calc(var(--ds-font-size-4xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-5xl: calc(var(--ds-font-size-5xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-6xl: calc(var(--ds-font-size-6xl-base) * var(--ds-type-scale, 1));
 
   /* Font Weights */
   --ds-font-weight-thin: 100;
@@ -282,23 +297,25 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      3. SPACING - 4px Grid System
      ───────────────────────────────────────────────────────────────────────────── */
+  /* Spacing steps multiply against the tenant density dial; this block redefines
+     base/spacing.css in the same layer, so the wrap must live here too. */
   --ds-spacing-0: 0;
-  --ds-spacing-1: 0.25rem;
-  --ds-spacing-2: 0.5rem;
-  --ds-spacing-3: 0.75rem;
-  --ds-spacing-4: 1rem;
-  --ds-spacing-5: 1.25rem;
-  --ds-spacing-6: 1.5rem;
-  --ds-spacing-8: 2rem;
-  --ds-spacing-10: 2.5rem;
-  --ds-spacing-12: 3rem;
-  --ds-spacing-16: 4rem;
-  --ds-spacing-20: 5rem;
-  --ds-spacing-24: 6rem;
-  --ds-spacing-32: 8rem;
-  --ds-spacing-40: 10rem;
-  --ds-spacing-48: 12rem;
-  --ds-spacing-64: 16rem;
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-scale, 1));
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-scale, 1));
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-scale, 1));
+  --ds-spacing-4: calc(1rem * var(--ds-density-scale, 1));
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-scale, 1));
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-scale, 1));
+  --ds-spacing-8: calc(2rem * var(--ds-density-scale, 1));
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-scale, 1));
+  --ds-spacing-12: calc(3rem * var(--ds-density-scale, 1));
+  --ds-spacing-16: calc(4rem * var(--ds-density-scale, 1));
+  --ds-spacing-20: calc(5rem * var(--ds-density-scale, 1));
+  --ds-spacing-24: calc(6rem * var(--ds-density-scale, 1));
+  --ds-spacing-32: calc(8rem * var(--ds-density-scale, 1));
+  --ds-spacing-40: calc(10rem * var(--ds-density-scale, 1));
+  --ds-spacing-48: calc(12rem * var(--ds-density-scale, 1));
+  --ds-spacing-64: calc(16rem * var(--ds-density-scale, 1));
 
   /* Semantic Spacing */
   --ds-spacing-xs: var(--ds-spacing-1);
@@ -322,10 +339,20 @@
   /* Border Radius - Modern, Rounded */
   --ds-radius-none: 0;
   --ds-radius-xs: 3px;
-  --ds-radius-sm: 6px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 12px;
-  --ds-radius-xl: 16px;
+  /* sm/md/lg/xl carry the tenant radius dial: each is a calc() over a private
+     -base literal times var(--ds-radius-scale, 1). Absent scale => fallback 1 =>
+     byte-identical to the prior literal; a tenant --ds-radius-scale (0.75-1.25)
+     scales these four steps at this one definition site. A tenant --ds-radius-*
+     OVERRIDE from the token set replaces the calc entirely (explicit beats dial).
+     none/xs/2xl/3xl/full stay literal (0 and pill radii are not dial-scaled). */
+  --ds-radius-sm-base: 6px;
+  --ds-radius-md-base: 8px;
+  --ds-radius-lg-base: 12px;
+  --ds-radius-xl-base: 16px;
+  --ds-radius-sm: calc(var(--ds-radius-sm-base) * var(--ds-radius-scale, 1));
+  --ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1));
+  --ds-radius-lg: calc(var(--ds-radius-lg-base) * var(--ds-radius-scale, 1));
+  --ds-radius-xl: calc(var(--ds-radius-xl-base) * var(--ds-radius-scale, 1));
   --ds-radius-2xl: 20px;
   --ds-radius-3xl: 24px;
   --ds-radius-full: 9999px;

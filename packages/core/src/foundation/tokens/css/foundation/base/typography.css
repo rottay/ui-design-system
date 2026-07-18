@@ -21,22 +21,48 @@
 
   /* ========================================================================
      FONT SIZES
-     Type scale from small to 4xl for consistent text sizing
+     Type scale from small to 9xl for consistent text sizing.
+
+     Each public --ds-font-size-* is a calc() over a private -base literal times
+     var(--ds-type-scale, 1). When the tenant type-scale axis is absent the
+     fallback 1 makes every step resolve to its -base literal byte-for-byte;
+     when a tenant emits --ds-type-scale (0.92-1.08) the whole ramp scales at
+     the definition site, so every var(--ds-font-size-*) consumer scales with no
+     fleet sweep. The -base tokens are private (no consumer references them).
+     NOTE: themes/default.css redefines most of these steps and wins the cascade
+     (later in the rottay-tokens layer); it carries the same calc wrap over its
+     own -base literals so the winning value scales identically. The steps only
+     defined here (md, 7xl-9xl) win from this file.
      ======================================================================== */
-  --ds-font-size-xs: 0.75rem;      /* 12px */
-  --ds-font-size-sm: 0.875rem;     /* 14px */
-  --ds-font-size-base: 1rem;       /* 16px - Base font size */
-  --ds-font-size-md: 1rem;         /* 16px - Alias for base */
-  --ds-font-size-lg: 1.125rem;     /* 18px */
-  --ds-font-size-xl: 1.25rem;      /* 20px */
-  --ds-font-size-2xl: 1.5rem;      /* 24px */
-  --ds-font-size-3xl: 1.875rem;    /* 30px */
-  --ds-font-size-4xl: 2.25rem;     /* 36px */
-  --ds-font-size-5xl: 3rem;        /* 48px */
-  --ds-font-size-6xl: 3.75rem;     /* 60px */
-  --ds-font-size-7xl: 4.5rem;      /* 72px */
-  --ds-font-size-8xl: 6rem;        /* 96px */
-  --ds-font-size-9xl: 8rem;        /* 128px */
+  --ds-font-size-xs-base: 0.75rem;   /* 12px */
+  --ds-font-size-sm-base: 0.875rem;  /* 14px */
+  --ds-font-size-base-base: 1rem;    /* 16px */
+  --ds-font-size-md-base: 1rem;      /* 16px - Alias for base */
+  --ds-font-size-lg-base: 1.125rem;  /* 18px */
+  --ds-font-size-xl-base: 1.25rem;   /* 20px */
+  --ds-font-size-2xl-base: 1.5rem;   /* 24px */
+  --ds-font-size-3xl-base: 1.875rem; /* 30px */
+  --ds-font-size-4xl-base: 2.25rem;  /* 36px */
+  --ds-font-size-5xl-base: 3rem;     /* 48px */
+  --ds-font-size-6xl-base: 3.75rem;  /* 60px */
+  --ds-font-size-7xl-base: 4.5rem;   /* 72px */
+  --ds-font-size-8xl-base: 6rem;     /* 96px */
+  --ds-font-size-9xl-base: 8rem;     /* 128px */
+
+  --ds-font-size-xs: calc(var(--ds-font-size-xs-base) * var(--ds-type-scale, 1));
+  --ds-font-size-sm: calc(var(--ds-font-size-sm-base) * var(--ds-type-scale, 1));
+  --ds-font-size-base: calc(var(--ds-font-size-base-base) * var(--ds-type-scale, 1));
+  --ds-font-size-md: calc(var(--ds-font-size-md-base) * var(--ds-type-scale, 1));
+  --ds-font-size-lg: calc(var(--ds-font-size-lg-base) * var(--ds-type-scale, 1));
+  --ds-font-size-xl: calc(var(--ds-font-size-xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-2xl: calc(var(--ds-font-size-2xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-3xl: calc(var(--ds-font-size-3xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-4xl: calc(var(--ds-font-size-4xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-5xl: calc(var(--ds-font-size-5xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-6xl: calc(var(--ds-font-size-6xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-7xl: calc(var(--ds-font-size-7xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-8xl: calc(var(--ds-font-size-8xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-9xl: calc(var(--ds-font-size-9xl-base) * var(--ds-type-scale, 1));
 
   /* ========================================================================
      HEADING SIZES

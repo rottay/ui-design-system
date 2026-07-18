@@ -1,0 +1,25 @@
+/**
+ * Font pack: editorial-display (Fraunces).
+ *
+ * Opt-in subpath: @rottay/design-system/fonts/editorial-display.css. NEVER
+ * imported by styles.css or any default bundle; an app imports it only for the
+ * packs its envelope enables, and the woff2 is fingerprinted by the app bundler
+ * through the relative url() below.
+ *
+ * Fraunces is a variable serif (OFL-1.1); the latin-subset variable file carries
+ * the 400-700 range this pack advertises. The custom property is defined
+ * UNCONDITIONALLY so the already-validated var(--ds-font-pack-editorial-display)
+ * channel in a tenant artifact resolves the moment this css is present.
+ */
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('./fraunces-latin-variable.woff2') format('woff2');
+}
+
+:root {
+  --ds-font-pack-editorial-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+}
