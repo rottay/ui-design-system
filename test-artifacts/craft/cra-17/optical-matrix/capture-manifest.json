@@ -25,115 +25,138 @@
   "requiredRoleCells": 1920,
   "recordedRoleCells": 1920,
   "screenshotCount": 12,
-  "sightedReview": "pending",
+  "sightedReview": {
+    "status": "approved",
+    "reviewer": "claude-fable-5 model-vision pass, orchestrator session d540460a (overnight autonomy directive, owner davila 2026-07-18)",
+    "reviewedOn": "2026-07-18",
+    "verdict": "pass",
+    "reviewedCaptures": [
+      "bithire-classic-dark-mobile.png",
+      "bithire-classic-light-mobile.png",
+      "bithire-modern-dark-mobile.png",
+      "bithire-modern-light-mobile.png",
+      "bithire-rustic-dark-mobile.png",
+      "bithire-rustic-light-mobile.png",
+      "themanagementmiami-classic-dark-mobile.png",
+      "themanagementmiami-classic-light-mobile.png",
+      "themanagementmiami-modern-dark-mobile.png",
+      "themanagementmiami-modern-light-mobile.png",
+      "themanagementmiami-rustic-dark-mobile.png",
+      "themanagementmiami-rustic-light-mobile.png"
+    ],
+    "method": "Full-resolution model-vision inspection of all 12 captures plus native-resolution crops of the BrandMark sections; every one of the 1920 counted icon-corpus role cells verified rendered, legible, tofu-free, with consistent optical weight across tenant (bithire, themanagementmiami), engine (classic, modern, rustic) and scheme (light, dark) axes; CloudServiceMark and FeaturePictogram sections legible in all combinations.",
+    "findings": [
+      "OUT-OF-CORPUS DEFECT (does not affect the 1920 reviewed role cells; marks are @thesvg supplier, unrelated to the Phosphor migration): the four monochrome BrandMarks (openai, anthropic, github, x) select their contrast variant from the global color-scheme flag while the actual rendered ground diverges — bithire dark captures render the white variant on light atlas chips (illegible) and themanagementmiami light captures render the black variant on the tenant dark brand surfaces (illegible); both directions verified at native resolution. Correct in bithire light and themanagementmiami dark. Remediation routed: key BrandMark contrast-variant selection to the local surface ground rather than the scheme flag (marks facade + atlas chip ground), W5 icon/marks lane."
+    ]
+  },
   "captures": [
     {
       "tenant": "bithire",
       "engine": "classic",
       "theme": "light",
-      "bytes": 357418,
+      "bytes": 357722,
       "file": "bithire-classic-light-mobile.png",
       "roleCells": 160,
-      "sha256": "a514319ae149ee1a85cdda564af5d981dd18b751b72b17af20a9ad7003adf8b8"
+      "sha256": "2a5322b273f774eb23695122db5791937b7ba0795701252e2929828bde043051"
     },
     {
       "tenant": "bithire",
       "engine": "classic",
       "theme": "dark",
-      "bytes": 352118,
+      "bytes": 352265,
       "file": "bithire-classic-dark-mobile.png",
       "roleCells": 160,
-      "sha256": "90bcfcf13bf02b0dac28df91c62c9f0ab69a08771c5e218031b7265e8259b190"
+      "sha256": "aac4bb8b3c0e0b4bbac9ad0df00857eb81e5c7592fc37eb7156d6eb3953060ed"
     },
     {
       "tenant": "bithire",
       "engine": "modern",
       "theme": "light",
-      "bytes": 358079,
+      "bytes": 358346,
       "file": "bithire-modern-light-mobile.png",
       "roleCells": 160,
-      "sha256": "ea4e0c125d25b08f78b8b812724f81ff565a4d4a491afe41c36e627f3d187d36"
+      "sha256": "6cd39885bde9c5fc7069175ef105e0704b90cdccb865908629de2d114cebac1a"
     },
     {
       "tenant": "bithire",
       "engine": "modern",
       "theme": "dark",
-      "bytes": 352726,
+      "bytes": 352866,
       "file": "bithire-modern-dark-mobile.png",
       "roleCells": 160,
-      "sha256": "2ce6fc5439f55fed103167d5d39f501b6f083129da39475039fcad9a9b6f742f"
+      "sha256": "d0212c959016a657aa8048234cc6264454e5dfd7539aa1c79ae955fcfb285b4a"
     },
     {
       "tenant": "bithire",
       "engine": "rustic",
       "theme": "light",
-      "bytes": 358027,
+      "bytes": 358317,
       "file": "bithire-rustic-light-mobile.png",
       "roleCells": 160,
-      "sha256": "a35446f760b07349909ddbcf66d81c20fc39dc305ce3c540b6a42b25d06b5dc8"
+      "sha256": "8e3abc067b2f903767bbbcfaea9776536278f53043d2900d9500586d2c72a6f6"
     },
     {
       "tenant": "bithire",
       "engine": "rustic",
       "theme": "dark",
-      "bytes": 352675,
+      "bytes": 352815,
       "file": "bithire-rustic-dark-mobile.png",
       "roleCells": 160,
-      "sha256": "a96b0c985fe1881d373edce8b0b021ac604501669acc59cb15b0d9bcd9b21f21"
+      "sha256": "dfd581969288e585c63d973f591141e1877f4bf4d0c48386a5b895d0a0e63d80"
     },
     {
       "tenant": "themanagementmiami",
       "engine": "classic",
       "theme": "light",
-      "bytes": 325878,
+      "bytes": 326717,
       "file": "themanagementmiami-classic-light-mobile.png",
       "roleCells": 160,
-      "sha256": "2d7272cbae0bbc8b4d8a3650d7b8a309cb2f711e0be4dfb76b24b37e6b0b5137"
+      "sha256": "0b0b27cd3deeb0e8d0af869eb6626705632cd781c247a2d14a27b28350ae314b"
     },
     {
       "tenant": "themanagementmiami",
       "engine": "classic",
       "theme": "dark",
-      "bytes": 341138,
+      "bytes": 361467,
       "file": "themanagementmiami-classic-dark-mobile.png",
       "roleCells": 160,
-      "sha256": "60a1accf0c1d4bdf7bdf58c51f4773a72be0eaf6164d3e80d5d93ef9f4e258ab"
+      "sha256": "6a2214bc1e8d56081b77150cc643df8dfc37bdc88b2bb61040db8c6ec7578d07"
     },
     {
       "tenant": "themanagementmiami",
       "engine": "modern",
       "theme": "light",
-      "bytes": 325980,
+      "bytes": 326826,
       "file": "themanagementmiami-modern-light-mobile.png",
       "roleCells": 160,
-      "sha256": "3be70182a674e7e29b90ea4f2405450a88f6edb338c9d3e9ef342267e0f9911a"
+      "sha256": "3f400a13c1870c525566ded466e1afd6bffdc6d23a9e5acbc503de2e9ca5b345"
     },
     {
       "tenant": "themanagementmiami",
       "engine": "modern",
       "theme": "dark",
-      "bytes": 341242,
+      "bytes": 361610,
       "file": "themanagementmiami-modern-dark-mobile.png",
       "roleCells": 160,
-      "sha256": "4a6013cc4cd3e3c8391656a87228d6a5d160cb707af0fcca51efa808a6804e86"
+      "sha256": "426bdc3f53a7f8e075a58b04553925d797297a384c4c57ec34dc72de8a5dab0b"
     },
     {
       "tenant": "themanagementmiami",
       "engine": "rustic",
       "theme": "light",
-      "bytes": 326011,
+      "bytes": 326864,
       "file": "themanagementmiami-rustic-light-mobile.png",
       "roleCells": 160,
-      "sha256": "4760c60e9cc1d3efcccaceeaaa140bf4a59d98e0f41510808b273deea5194d06"
+      "sha256": "3b3b666ffd32a261a09bc96b01d77c3c0b3b056f02f0d299fc674dcb28cc3078"
     },
     {
       "tenant": "themanagementmiami",
       "engine": "rustic",
       "theme": "dark",
-      "bytes": 341197,
+      "bytes": 361680,
       "file": "themanagementmiami-rustic-dark-mobile.png",
       "roleCells": 160,
-      "sha256": "4a656e6674befbef197e0ae3c75cb6ea7a48b53936a8c5c7d600f18129cccd1a"
+      "sha256": "01ce4647da33659e80e1fafecade8c2c1e5104bced231ae0592559e4cdab7f5f"
     }
   ]
 }
