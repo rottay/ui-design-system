@@ -224,3 +224,36 @@ These work orders execute the requirements pinned at `docs-engineering@969205380
 - **Acceptance gate** — `pnpm --filter @rottay/design-system run gat09:structural` proves the inventory/evidence schema, complete-input reproducibility and negative posture while honestly reporting completion blockers as pending. The final `pnpm --filter @rottay/design-system run gat09:gate` remains red until two runs agree, claim-to-evidence cardinality is complete, docs link current executable proof or production consumption, no open execute authority remains, no deferred item is overdue, Phase 6 is open with owner GO, WO-GAT-09 is in progress and live GAT-07 plus every registered assertion pass. Inject an unsupported completeness claim and prove final mode fails. Deterministic artifacts, when required, are written atomically only with an explicit `--as-of=YYYY-MM-DD` (or `GAT09_AS_OF`) and checked byte-for-byte; a structural report is not completion evidence.
 - **Execution control** — Certification changes no runtime default. Withdraw unsupported claims, block publish/repin/system certification, and retain the prior certified release. Telemetry covers claim cardinality, inventory freshness, provenance, stale assertions, clean-run agreement and open/expired authorities.
 - **Do NOT** — Do not count WO-GAT-07's Phase-0 milestone as DS-IMP-060 completion, approve prose-only evidence, or claim the desired system while any authority remains open.
+
+### WO-GAT-10 Effect license and provenance gate generalization
+- **Source IDs / phase** — DS-IMP-110; Phase 2C.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The icon license/provenance gate is generalized over the effect registry (W3), so every registered effect carries a licensed, provenance-tracked source the same way icons do.
+- **Steps** — Generalize the icon license/provenance gate to the effect registry; register provenance for each effect; wire the gate into CI.
+- **Acceptance gate** — Every registered effect has a licensed, provenance-tracked source; the generalized gate fails closed on a missing license; gate green in CI.
+- **Execution control** — Rollback: Revert the effect-registry gate generalization; the icon license and provenance gate returns to its prior narrower scope. Disable: Run the generalized effect license and provenance gate in report-only mode until the W3 effect registry lands. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — S.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, generalize the icon license/provenance gate over the effect registry (DS-IMP-110). Gate: every effect has licensed provenance, gate fails closed on a gap, green in CI. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-GAT-11 Forced-colors, RTL, zoom and long-content robustness matrix
+- **Source IDs / phase** — DS-IMP-054; Phase 6.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The optical-matrix machinery is extended to the robustness axes: forced-colors, RTL, zoom, and long-content, proving the fleet survives each (W7/W8 window).
+- **Steps** — Add forced-colors/RTL/zoom/long-content axes to the optical matrix; capture the fleet across each; triage and fix failures.
+- **Acceptance gate** — The fleet passes the forced-colors, RTL, zoom and long-content axes; captures reviewed; no axis regressed.
+- **Execution control** — Rollback: Revert the robustness-axis matrix extension; the optical-matrix machinery returns to its prior axes. Disable: Run the forced-colors, RTL, zoom and long-content matrix in report-only mode until the W7/W8 window opens. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — L.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, extend the optical matrix to forced-colors, RTL, zoom and long-content (DS-IMP-054). Gate: fleet passes each axis, captures reviewed, no regression. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-GAT-12 Capability census regeneration with pinned sibling SHAs
+- **Source IDs / phase** — Support milestone (supports DS-IMP-060 / WO-GAT-09, final phase 6); Phase 6.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The arc-11 capability census is regenerated against pinned app checkouts (pinned sibling SHAs), closing test 253. Recorded as a non-completing support milestone against the final claim-integrity certification.
+- **Steps** — Pin the sibling app SHAs; regenerate the arc-11 capability census artifacts against them; re-run test 253.
+- **Acceptance gate** — The capability census is regenerated against pinned sibling SHAs; test 253 passes; the pinned SHAs are recorded in the artifact provenance.
+- **Execution control** — Rollback: Revert the arc-11 capability census regeneration; the prior pinned artifacts and test 253 baseline are restored. Disable: Keep test 253 pending against the prior census until the pinned sibling SHAs are confirmed. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — S.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` against pinned app checkouts, regenerate the arc-11 capability census with pinned sibling SHAs to close test 253 (support milestone for DS-IMP-060). Gate: census regenerated, test 253 green, SHAs recorded in provenance. Fences: edit-only, no commits, never git-restore directories.

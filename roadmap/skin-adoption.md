@@ -196,3 +196,18 @@ Start order: 01 strictly first (everything else derives its file lists from it);
 rest (it dissolves suppression interplays the later batches would otherwise have to reproduce);
 03-06 parallelizable pairwise where files are disjoint; 07 last. Statuses change ONLY via
 `scripts/roadmap-status.mjs`.
+
+### WO-SKIN-08 Stage-2 residue adjudication sweep
+- **Source IDs / phase** — DS-IMP-039, DS-IMP-040, DS-IMP-041, DS-IMP-042, DS-IMP-043, DS-IMP-044, DS-IMP-045, DS-IMP-046, DS-IMP-047, DS-IMP-049, DS-IMP-050; Phase 6.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The W8 Stage-2 residue sweep adjudicates every recorded skin-adoption residue, absorbing the MD-DEF-04 asymmetry and the MD-DEF-05 CK-I scope audit. Much of the residue lands organically in W3-W6; this WO closes the remainder.
+- **Steps** — Enumerate the recorded residues; adjudicate each (fix, exempt with basis, or absorb); fold in MD-DEF-04/05; tighten the residue gate.
+- **Acceptance gate** — Every recorded residue is adjudicated to a terminal state; MD-DEF-04/05 are resolved; the skin-adoption residue gate is green with no unjustified exemption.
+- **Execution control** — Rollback: Revert the residue adjudications per recorded residue; the prior skin-adoption state is preserved. Disable: Freeze the Stage-2 residue sweep claims until the W8 residue window opens and the recorded residues are re-audited. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — L.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, adjudicate the Stage-2 skin-adoption residues (DS-IMP-039..047, 049, 050) at the W8 window, absorbing MD-DEF-04/05. Gate: every residue terminal, MD-DEF-04/05 resolved, residue gate green with no unjustified exemption. Fences: edit-only, no commits, never git-restore directories.
+
+#### MD-DEF annotations (2026-07-18 adjudication)
+- **MD-DEF-03 / MD-DEF-06 / MD-DEF-07** — already done (audit-verified); recorded here for completeness.
+- **MD-DEF-04 / MD-DEF-05** — folded into WO-SKIN-08's acceptance scope (the asymmetry and the CK-I scope audit).

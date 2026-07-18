@@ -497,3 +497,116 @@ apps see zero API change through `createEngineComponent`.
 - **Acceptance gate** — per component: `test:gates` green with the component's own baselines byte-unchanged; `pnpm typecheck`, build, and `pnpm test` green; the inline `style={}` object gone from that component's modern and rustic engines; a DRILL proving the new stylesheet actually paints (delete a rule, watch the visual baseline go red, restore).
 - **Do NOT** — do not migrate a component whose interaction state still lives in its engine; wire it to the core first. Do not touch classic. Never `git restore` directories.
 - **Size** — L.
+
+### WO-ARC-12 Pass-through attribute honesty law
+- **Source IDs / phase** — DS-IMP-015; Phase 1.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The pass-through attribute honesty law (a component only advertises the pass-through attributes it actually forwards) is landed and certified. W1 already delivered the mechanism (commits 09367145, 1c5d58c7, and the W1.2 classic stampDataPart); this WO records the certification and closes at the phase-1 cascade open with that evidence.
+- **Steps** — Confirm the W1 stampDataPart honesty across classic/modern/rustic; keep the data-part law gate green; record the closing evidence at the phase-1 open.
+- **Acceptance gate** — The attribute-honesty gate is green across engines; no primitive advertises an unforwarded pass-through attribute; classic byte-identical where untouched.
+- **Execution control** — Rollback: Revert the pass-through attribute honesty commits; the W1 stampDataPart evidence and decrease-only gates preserve prior behavior. Disable: Keep the law dark behind the existing W1 entrypoints until the phase-1 cascade opens. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — S.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, certify the pass-through attribute honesty law (DS-IMP-015) against the landed W1 evidence (stampDataPart across classic/modern/rustic). Prove the data-part honesty gate green on all engines, classic byte-identical, and record the closing evidence. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-13 Certified cascade order graph
+- **Source IDs / phase** — DS-IMP-011; Phase 1.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — A written, certified cascade-order graph for the engine paint chain. W1 landed the css-layer-paint gate and the unlayered twins that enforce the order mechanically; this WO writes the certification document (the W4-D deliverable) that pins the graph to the gate.
+- **Steps** — Enumerate the layer/paint order the css-layer-paint gate enforces; document the certified cascade graph in docs-engineering; cross-link the gate as the mechanical proof.
+- **Acceptance gate** — The css-layer-paint gate is green; the certification doc matches the gate-enforced order exactly; no unlayered-twin drift.
+- **Execution control** — Rollback: Revert the cascade-order certification doc and gate wiring; the css-layer-paint gate already preserves the invariant. Disable: Withhold the written cascade certification until W4-D lands its evidence. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — S.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, write the certified cascade-order graph (DS-IMP-011) documenting the layer/paint order enforced by the css-layer-paint gate, and cross-link the gate as the mechanical proof. Gate: css-layer-paint green, doc matches the enforced order. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-14 Provider-scoped identity, anatomy manifest and skin-import generation
+- **Source IDs / phase** — DS-IMP-002, DS-IMP-003, DS-IMP-004, DS-IMP-007, DS-IMP-008, DS-IMP-009, DS-IMP-010; Phase 1.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The W4 landlord family: provider-scoped identity, the split of identity from rendering, the anatomy manifest (canonical for the former DS-IMP-058 ownership registry), the portal bridge, and generated skin imports. This is the architectural spine the anatomy-variant pilots (WO-ARC-17) build on.
+- **Steps** — Scope providers per landlord; split identity from render; author the anatomy manifest; wire the portal bridge; generate skin imports from the manifest.
+- **Acceptance gate** — Provider scoping and identity split are certified; the anatomy manifest is the single source for component anatomy; generated skin imports match the manifest; build and unit green; no counter regresses.
+- **Execution control** — Rollback: Revert the landlord-family commits one seam at a time; provider scoping, identity split and generated imports fall back to the pre-W4 registry. Disable: Gate the provider-scoped identity and generated skin imports behind the W4 landlord seam until adopted. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — XL.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the W4 landlord family (DS-IMP-002/003/004/007/008/009/010): provider-scoped identity, identity/render split, the anatomy manifest (canonical for DS-IMP-058), portal bridge, and manifest-generated skin imports. Gate: provider scoping + identity split certified, manifest is the single anatomy source, generated imports match, build/unit green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-15 Primitive-owned focus and keyboard parity floor
+- **Source IDs / phase** — DS-IMP-013, DS-IMP-014; Phase 1.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — A primitive-owned focus and keyboard-parity floor across the engine-switched primitives, absorbing the MD-DEF-08 P-27 pending-button accessible-name fix. Focus visibility and keyboard operability are owned by the behavior core, not re-implemented per engine.
+- **Steps** — Move focus/keyboard ownership into the behavior core; ensure focus-visible vs focus distinction; fix the P-27 pending-button accessible name; extend the a11y gate to the parity floor.
+- **Acceptance gate** — The a11y gate proves keyboard parity and focus-visible behavior across primitives; the pending-button exposes an accessible name; no visual baseline regresses.
+- **Execution control** — Rollback: Revert the focus and keyboard parity commits per primitive; the accessibility gate holds the prior floor. Disable: Keep the primitive-owned focus floor dark until the W4 accessibility lane certifies it. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, land the primitive-owned focus and keyboard parity floor (DS-IMP-013/014) in the behavior core, absorbing the MD-DEF-08 P-27 pending-button accessible-name fix. Gate: a11y gate proves keyboard parity + focus-visible across primitives, pending button has an accessible name, no baseline regression. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-21 DB TenantThemeConfig round-trip through the vertical apps
+- **Source IDs / phase** — DS-IMP-061; Phase 1 (hard-pinned phase-1 tenant-theme authority).
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The DB-backed TenantThemeConfig round-trip is proven end to end through the vertical apps (DB write to first paint), satisfying the DS-IMP-061 phase-1 runtime-authority pin. The DS owns the schema and compiler; the apps own the plumb.
+- **Steps** — Wire the app-side read of the compiled TenantThemeConfig; prove DB-to-SSR first paint per app; run the W4 divergence exit cert.
+- **Acceptance gate** — The round-trip is proven in each vertical app (DB write reflected at first paint) without the DS reading the DB; the W4 exit cert passes; the DS-IMP-061 phase-1 pin holds.
+- **Execution control** — Rollback: Revert the app-side TenantThemeConfig plumb per app; the DS schema and compiler stay on the certified static path. Disable: Disable the DB-to-first-paint TenantThemeConfig round-trip per vertical app until the W4 exit cert passes. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — L.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` plus the vertical apps, prove the DB TenantThemeConfig round-trip (DS-IMP-061) from DB write to first paint per app, keeping schema/compiler ownership in the DS and plumb in the apps. Gate: round-trip proven per app, DS never reads the DB, W4 exit cert green, phase-1 pin holds. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-17 Anatomy variants, typed grammar and the extension pilots
+- **Source IDs / phase** — DS-IMP-017, DS-IMP-018, DS-IMP-019, DS-IMP-020, DS-IMP-023, DS-IMP-024; Phase 2A.
+- **Depends on** — WO-GAT-05, WO-GAT-06, WO-ARC-14 (the anatomy manifest spine).
+- **Outcome** — Anatomy-variant enums and a typed variant grammar, piloted on Card, DataTable, navigation and header (the extension pilots). Variants are typed and manifest-declared, not ad-hoc props.
+- **Steps** — Define the typed variant grammar over the WO-ARC-14 manifest; add anatomy-variant enums to the four pilots; prove typed composition seams.
+- **Acceptance gate** — The four pilots expose typed anatomy variants declared in the manifest; the typed grammar rejects unknown variants at compile time; build and unit green.
+- **Execution control** — Rollback: Revert the anatomy-variant enums and typed grammar per pilot component; the pre-variant anatomy contract is preserved. Disable: Keep the anatomy variants and extension pilots behind the W4-A variant seam until adopted. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — XL.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build anatomy variants + typed grammar (DS-IMP-017/018/019/020/023/024) on the WO-ARC-14 manifest, piloted on Card/DataTable/navigation/header. Gate: typed manifest-declared variants on the four pilots, compile-time rejection of unknowns, build/unit green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-16 Component-extensions retirement census and removal
+- **Source IDs / phase** — DS-IMP-021; Phase 2A.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The legacy component-extensions channel is censused and removed. The W1.2 containment forensics already recorded the exclusion carve-out; this WO retires the dead channel once no live consumer remains.
+- **Steps** — Census every component-extension consumer; migrate or confirm dead; remove the channel; add a dead-selector guard.
+- **Acceptance gate** — Zero live consumers of the component-extensions channel; the channel is removed; a guard prevents its reintroduction; build and unit green.
+- **Execution control** — Rollback: Restore the retired component-extension channel from the W1.2 forensics inventory if a consumer is found. Disable: Freeze the component-extensions removal while any live consumer remains in the dead-channel census. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, census and remove the component-extensions dead channel (DS-IMP-021) using the W1.2 forensics inventory, adding a guard against reintroduction. Gate: zero live consumers, channel removed, guard green, build/unit green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-20 Bounded workspace correctness fixes
+- **Source IDs / phase** — DS-IMP-037, DS-IMP-038; Phase 2A.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — Two bounded workspace correctness fixes: the FieldFiltersPanel multi-select round-trip and the preset-chip `type=button`.
+- **Steps** — Fix the FieldFiltersPanel multi-select value round-trip; set the preset chip to `type=button`; add regression coverage.
+- **Acceptance gate** — Multi-select round-trips correctly; preset chips no longer submit their form; unit coverage proves both; no baseline regression.
+- **Execution control** — Rollback: Revert the FieldFiltersPanel multi-select and preset-chip type fixes individually; prior workspace behavior is restored. Disable: Not-applicable as a runtime flag for the bounded workspace fixes; revert the specific field instead of gating. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — S.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, fix the FieldFiltersPanel multi-select round-trip and set preset chips to `type=button` (DS-IMP-037/038), with regression coverage. Gate: multi-select round-trips, chips do not submit, unit green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-18 Container-adaptive shells and collection projection
+- **Source IDs / phase** — DS-IMP-065, DS-IMP-074, DS-IMP-075, DS-IMP-076, DS-IMP-081; Phase 2B.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The W6 container platform: named containers, AppShellTopology v2, CollectionProjection, adaptive filters/preview/header mechanics, and breakpoint governance. Structures adapt to their container, not the viewport.
+- **Steps** — Introduce named containers + `container-type` contexts; ship AppShellTopology v2; build CollectionProjection; make filters/preview/header container-adaptive; add breakpoint governance.
+- **Acceptance gate** — Shells adapt by container query; CollectionProjection is proven; breakpoint governance gate green; build, unit and visual green under both tenant palettes.
+- **Execution control** — Rollback: Revert the named-container and AppShellTopology v2 commits per structure; the fixed-breakpoint shells are preserved. Disable: Gate the container-adaptive shells and CollectionProjection behind the W6 topology seam until adopted. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — XL.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the W6 container platform (DS-IMP-065/074/075/076/081): named containers, AppShellTopology v2, CollectionProjection, adaptive filters/preview/header, breakpoint governance. Gate: container-query adaptation, projection proven, governance gate green, build/unit/visual green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-19 Two-tenant divergence proofs and vertical invariants
+- **Source IDs / phase** — DS-IMP-028, DS-IMP-029; Phase 3.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — Proofs that two tenants visibly diverge while the vertical invariants hold: a bithire divergence demo (W4) plus evnto/platform proofs through the showroom vertical pages (W7).
+- **Steps** — Build the bithire divergence demo; add evnto/platform proofs via showroom vertical pages; assert the vertical invariants under divergence.
+- **Acceptance gate** — Two tenants render visibly distinct while every vertical invariant holds; captures reviewed under both palettes; no invariant violated.
+- **Execution control** — Rollback: Revert the divergence proof surfaces per app; the bithire demo and showroom vertical pages fall back to their prior state. Disable: Keep the two-tenant divergence proofs behind the W4 and W7 proof seams until certified. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` plus the showroom and apps, prove two-tenant divergence with held vertical invariants (DS-IMP-028/029): bithire demo (W4) + evnto/platform via showroom (W7). Gate: visibly distinct tenants, invariants hold, captures reviewed. Fences: edit-only, no commits, never git-restore directories.
+
+#### MD-DEF annotation (2026-07-18 adjudication)
+- **MD-DEF-08** (P-27 pending-button accessible name) — folded into WO-ARC-15's acceptance scope.

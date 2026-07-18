@@ -260,3 +260,19 @@ TOK-01; TOK-03 after WO-ENG-08.
 - **Acceptance gate** — a DRILL proving the audit sees a divergence introduced in EITHER personality emitter; the generated artifacts regenerate with the newly-emitted personality channels and every moved value is named in the evidence (this WILL move first-party pixels — the static path is currently missing channels the runtime has); `test:gates`, build and `pnpm test` green.
 - **Do NOT** — Do not close this by deleting the generator's personality emission; the static path needs it. Never `git restore` directories.
 - **Size** — M.
+
+### WO-TOK-11 Close the APCA text-contrast failures
+- **Source IDs / phase** — DS-IMP-048; Phase 2A.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The W4-C1 APCA autocorrect closes the six failed and five skipped text-contrast pairs, so every governed text/background pair meets its APCA target.
+- **Steps** — Run the APCA autocorrect over the failed and skipped pairs; adjust the offending token stops; re-run the contrast gate.
+- **Acceptance gate** — Zero failed and zero unjustified skipped APCA pairs; the contrast gate is green; no first-party pixel moves beyond the corrected pairs.
+- **Execution control** — Rollback: Revert the APCA autocorrect token deltas; the prior contrast pairs and their skip-list are restored. Disable: Hold the APCA autocorrect behind the W4-C1 token pipeline until the failed and skipped pairs are re-verified. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — S.
+- **Note** — Numbered WO-TOK-11 (not WO-TOK-09) because WO-TOK-09/WO-TOK-10 already exist in the tokens lane from the spec-12 program; this is the next free id.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, close the APCA text-contrast failures (DS-IMP-048) with the W4-C1 autocorrect over the six failed and five skipped pairs. Gate: zero failed/unjustified-skipped APCA pairs, contrast gate green, no stray pixel movement. Fences: edit-only, no commits, never git-restore directories.
+
+#### MD-DEF annotations (2026-07-18 adjudication)
+- **MD-DEF-01** (motion-canon compiler rename) — RESOLVED by W0's single-source `--ds-motion-instant` 120ms default; no compiler rename is needed.
+- **MD-DEF-02** (DTCG) — stands as a written DEFER; no guard impact.

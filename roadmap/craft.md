@@ -585,3 +585,58 @@ adopted the host, and packed ESM/CJS/types, supplier-isolation, bundle, real con
 cross-host browser evidence are pending. DS-IMP-108 remains open until real-browser phone/coarse/
 save-data/visibility/offscreen behavior, zero suspended RAF and demand-loop enforcement, actual R3F
 mount/unmount/context lifecycle, keyboard/AT equivalence and long-task/frame/memory/DPR budgets pass.
+
+### WO-CRA-19 Overlay layer kernel
+- **Source IDs / phase** — DS-IMP-078; Phase 2B.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The W5 overlay layer-stack kernel: a single z-authority, one Escape router, focus restore, and a scroll-lock refcount shared across every overlay primitive.
+- **Steps** — Build the z-authority + layer stack; route Escape through one owner; add focus restore; refcount scroll-lock.
+- **Acceptance gate** — One z-authority governs stacking; a single Escape router closes the top layer; focus restores on close; scroll-lock refcounts correctly; unit and visual green.
+- **Execution control** — Rollback: Revert the overlay layer kernel; per-overlay z, Escape and scroll-lock handling fall back to their current local implementations. Disable: Keep the single Escape router and z-authority kernel behind the W5 layer-stack seam until adopted. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the overlay layer kernel (DS-IMP-078): single z-authority, one Escape router, focus restore, scroll-lock refcount. Gate: one z-authority, single Escape owner, focus restores, refcounted scroll-lock, unit/visual green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-CRA-18 One chart system convergence with a11y, grammar and governance
+- **Source IDs / phase** — DS-IMP-098, DS-IMP-099, DS-IMP-100, DS-IMP-101, DS-IMP-102, DS-IMP-104; Phase 2C.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The W5 Part 1 chart convergence: every chart family onto the one engine, chart states, CSV/a11y output, annotation/streaming, the census gate and the budget ceilings — one chart system, not many.
+- **Steps** — Converge families onto the engine; add states + CSV/a11y + annotation/streaming; add the family census gate and budgets.
+- **Acceptance gate** — All families render on the one engine with states + a11y/CSV + annotation/streaming; the census gate holds one system; budgets not exceeded; build/unit/visual green.
+- **Execution control** — Rollback: Revert the chart-family engine convergence per family; the legacy chart export and rendering path is retained. Disable: Disable a converged chart family back to its deterministic static rendering until the W5 census gate passes. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — XL.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, converge the one chart system (DS-IMP-098/099/100/101/102/104): families onto the engine, states, CSV/a11y, annotation/streaming, census gate, budgets. Gate: one engine, a11y/CSV present, census + budgets green, build/unit/visual green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-CRA-20 Icon preset weight pruning
+- **Source IDs / phase** — Support milestone (supports DS-IMP-060 / WO-GAT-09, final phase 6); Phase 2C.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The icon generator emits only preset-used weights, shrinking the generated corpus. Promised in the WO-CRA-17 R2 retention evidence. Recorded as a non-completing support milestone against the final claim-integrity certification.
+- **Steps** — Determine the preset-used weight set; make the generator emit only those; regenerate and prove every consumer still resolves.
+- **Acceptance gate** — The generator emits only preset-used weights; every consumer resolves; generated corpus shrinks with no missing glyph; icon gates green.
+- **Execution control** — Rollback: Revert the generator weight-pruning change; the full preset weight set is regenerated. Disable: Keep the generator emitting all preset weights until the pruned set is proven against every consumer. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, prune icon-preset weights at the generator level (support milestone for DS-IMP-060) so only preset-used weights emit. Gate: consumers all resolve, corpus shrinks, no missing glyph, icon gates green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-CRA-21 BrandMark ground-keyed contrast variant
+- **Source IDs / phase** — Support milestone (supports DS-IMP-060 / WO-GAT-09, final phase 6); Phase 2C.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — BrandMark contrast-variant selection keys to the local surface ground rather than the scheme flag (a sighted-review finding). Recorded as a non-completing support milestone against the final certification.
+- **Steps** — Detect the local surface ground; key variant selection to it; verify against the sighted review.
+- **Acceptance gate** — The correct contrast variant is chosen from local ground on both light and dark surfaces regardless of the scheme flag; sighted captures reviewed.
+- **Execution control** — Rollback: Revert the ground-keyed BrandMark variant selection; the scheme-flag keyed variant is restored. Disable: Hold the ground-keyed BrandMark variant behind the existing mark facade until the sighted review confirms it. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, key BrandMark contrast-variant selection to local surface ground, not the scheme flag (support milestone for DS-IMP-060). Gate: correct variant on light/dark ground independent of scheme flag, sighted captures reviewed. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-CRA-22 Root-entry supplier purity
+- **Source IDs / phase** — Support milestone (supports DS-IMP-060 / WO-GAT-09, final phase 6); Phase 2C.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The ~30 root-reachable ui files migrate off catalog names onto the semantic supplier facade (W2 pinned 13 root-reachable importers). Recorded as a non-completing support milestone against the final certification.
+- **Steps** — Enumerate the root-reachable importers; migrate each to the semantic facade; add a guard against catalog-name reintroduction at the root entry.
+- **Acceptance gate** — Zero root-reachable catalog-name imports; the semantic facade is the only root-entry supplier path; a guard prevents regression; build green.
+- **Execution control** — Rollback: Revert the root-entry facade migration per file; the prior catalog-name imports are restored. Disable: Not-applicable as a runtime flag; revert the specific root-entry import instead of gating the supplier facade. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, migrate the ~30 root-reachable ui files onto the semantic supplier facade (support milestone for DS-IMP-060), adding a root-entry guard. Gate: zero root-reachable catalog-name imports, guard green, build green. Fences: edit-only, no commits, never git-restore directories.

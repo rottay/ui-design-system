@@ -67,7 +67,7 @@ function validRegistry() {
     traceability: {
       "ds-improvements": {
         source: "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
-        sourceRevision: "969205380fd24eb45947bf3748db5a6cacd798f8",
+        sourceRevision: "8b618ab000b784fc7fa05bca96a1dcc9de80b3b9",
         roadmap: "../docs-engineering/engineering/audits/ds-improvements/09-implementation-roadmap-and-gates.md",
         adjudication: "../docs-engineering/engineering/audits/ds-improvements/13-claude-reaudit-adjudication.md",
         statusAuthority: "roadmap/registry.json",

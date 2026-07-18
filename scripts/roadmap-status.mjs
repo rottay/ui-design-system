@@ -75,10 +75,11 @@ const DS_IMPROVEMENTS_PHASE_INDEX = new Map(
 // Adjudicated program-plan lock. Mutable status/evidence/review dates are
 // deliberately excluded; trace mapping and mapped-WO topology changes require
 // a reviewed code+registry update when the owner opens the next wave.
-// Owner-approved wave mapping update 2026-07-18: CRA-17 material completion
-// recorded on the locked 2B claim reason pending the deferred-item adjudication.
-const DS_IMPROVEMENTS_PLAN_SHA256 = "a9f7291e387695c75119ce6c913c2f9df1119082bb428cdec56adf759bf030eb";
-const DS_IMPROVEMENTS_SOURCE_REVISION = "969205380fd24eb45947bf3748db5a6cacd798f8";
+// Owner-approved wave mapping update 2026-07-18: overnight deferred adjudication
+// landed (94 items -> 56 execute on 22 new WOs, 37 rejected, 1 absorbed; deferred 0);
+// source revision advanced to the anchored adjudication doc commit.
+const DS_IMPROVEMENTS_PLAN_SHA256 = "333f82d54717128673a18ec79e163a078e7c917113cd1b6f60cde1e7924a31b8";
+const DS_IMPROVEMENTS_SOURCE_REVISION = "8b618ab000b784fc7fa05bca96a1dcc9de80b3b9";
 const DS_IMPROVEMENTS_DOC_ROOT = path.resolve(
   ROOT,
   "../docs-engineering/engineering/audits/ds-improvements",

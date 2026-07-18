@@ -596,3 +596,25 @@ Packages, repinned, and deployed. This work order does none of those.
 - **Acceptance gate** — the new contrast gate green for every first-party tenant in every mode it declares, with a DRILL (reintroduce evnto's white input chrome into its dark block, watch it go red); sighted captures of evnto and rottay in both modes; `test:gates` green with first-party pixels moving ONLY where a contrast defect is being corrected, and every moved baseline named in the evidence; build, `pnpm test`, and `engine-token-audit --check` green.
 - **Do NOT** — Do not fix this by reverting WO-TOK-08's control-surface channel; the channel is correct and the theme is wrong. Do not silence it by adding an exemption to the APCA counter. Never `git restore` directories.
 - **Size** — M.
+
+### WO-ENG-25 Semantic motion profiles, presence family and the AI state-motion kit
+- **Source IDs / phase** — DS-IMP-086, DS-IMP-087, DS-IMP-088, DS-IMP-089; Phase 2B.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The W3 motion adoption wave wires semantic motion profiles/recipes, the presence and continuity family, the motion-governor extension, and the AI state-motion kit onto the modern engine.
+- **Steps** — Define semantic motion profiles; ship the presence/continuity family; extend the motion governor; build the AI state-motion kit; keep `prefers-reduced-motion` correct.
+- **Acceptance gate** — Motion recipes resolve semantically; presence/continuity proven; reduced-motion honored; build, unit and visual green; no motion-token counter regresses.
+- **Execution control** — Rollback: Revert the motion recipes, presence family and AI kit per recipe; the governor default motion is preserved. Disable: Keep the semantic motion profiles and AI state-motion kit behind the W3 motion-adoption seam until adopted. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — L.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, wire the W3 motion adoption wave (DS-IMP-086/087/088/089): semantic motion profiles, presence/continuity family, governor extension, AI state-motion kit. Gate: semantic resolution, presence proven, reduced-motion honored, build/unit/visual green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ENG-24 Classic-engine boundary endgame
+- **Source IDs / phase** — DS-IMP-117; Phase 2C.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — The recorded antd end-state decision executed: SizeType retirement and the classic-engine boundary shrink, tightening the antd wrapper surface to its certified minimum.
+- **Steps** — Retire SizeType at every call site; shrink the classic boundary to the certified minimum; prove no classic public-surface regression.
+- **Acceptance gate** — SizeType is gone; the classic boundary is at its certified minimum; classic byte-identical where untouched; build and unit green.
+- **Execution control** — Rollback: Revert the SizeType retirement and classic-boundary shrink per call site; the antd wrapper boundary is preserved. Disable: Hold the classic-boundary shrink behind the W5 boundary seam until the SizeType kill is complete. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
+- **Size** — L.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute the classic-engine boundary endgame (DS-IMP-117): retire SizeType and shrink the classic boundary to its certified minimum. Gate: SizeType gone, boundary at minimum, classic byte-identical, build/unit green. Fences: edit-only, no commits, never git-restore directories.
