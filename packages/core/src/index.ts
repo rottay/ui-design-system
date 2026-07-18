@@ -101,6 +101,14 @@ export * from './infrastructure/runtime/verticals';
 // ============================================
 export * from './infrastructure/compilers';
 
+// Client-safe artifact->DOM projections: the browser hydration path restamps
+// these attributes on artifact refresh, so they ship from the main entrypoint,
+// not only from ./server with the compile/parse family.
+export {
+  tenantThemeArtifactRootAttributes,
+  tenantThemeAnatomyAttributes,
+} from './infrastructure/compilers/composition/tenant-theme';
+
 // ============================================
 // BRAND THEMES (first-party authored BrandTheme sources)
 // ============================================
