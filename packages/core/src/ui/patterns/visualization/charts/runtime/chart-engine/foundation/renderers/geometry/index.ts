@@ -463,6 +463,712 @@ export function buildSvgPieGeometry({
   };
 }
 
+/** One threshold band in a radial gauge. An explicitly empty color is valid. */
+export interface SvgGaugeSegment {
+  readonly from: number;
+  readonly to: number;
+  readonly color?: string;
+  readonly label?: string;
+}
+
+export type SvgGaugeTone = 'error' | 'warning' | 'success' | 'custom';
+
+export interface SvgGaugeGeometrySegment extends SvgGaugeSegment {
+  readonly id: string;
+  readonly path: string;
+  readonly startRadians: number;
+  readonly endRadians: number;
+  readonly centerX: number;
+  readonly centerY: number;
+  readonly active: boolean;
+  readonly colorSource: 'default' | 'custom';
+  readonly tone: SvgGaugeTone;
+}
+
+export interface SvgGaugeGeometry {
+  readonly width: number;
+  readonly height: number;
+  readonly rangeMin: number;
+  readonly rangeMax: number;
+  readonly value: number;
+  /** Compatibility-facing degree values retained for the public gauge contract. */
+  readonly startAngle: number;
+  readonly endAngle: number;
+  readonly startRadians: number;
+  readonly endRadians: number;
+  readonly centerX: number;
+  readonly centerY: number;
+  readonly outerRadius: number;
+  readonly innerRadius: number;
+  readonly trackPath: string;
+  readonly needleRotation: number;
+  readonly needlePath: string;
+  readonly needleCapRadius: number;
+  readonly valueY: number;
+  readonly labelY: number;
+  readonly valueFontSize: number;
+  readonly labelFontSize: number;
+  readonly segments: readonly SvgGaugeGeometrySegment[];
+}
+
+export interface BuildSvgGaugeGeometryOptions {
+  readonly value: number;
+  readonly width: number;
+  readonly height: number;
+  readonly min?: number;
+  readonly max?: number;
+  readonly segments?: readonly SvgGaugeSegment[];
+  readonly startAngle?: number;
+  readonly endAngle?: number;
+  readonly innerRadiusRatio?: number;
+  readonly trackCornerRadius?: number;
+  readonly segmentCornerRadius?: number;
+}
+
+const DEFAULT_GAUGE_TONES: readonly SvgGaugeTone[] = [
+  'error',
+  'warning',
+  'success',
+];
+
+function degreesToRadians(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
+
+function resolveGaugeRange(min: number | undefined, max: number | undefined): readonly [number, number] {
+  const finiteMin = Number.isFinite(min) ? min as number : 0;
+  const finiteMax = Number.isFinite(max) ? max as number : 100;
+  if (finiteMin === finiteMax) return [finiteMin, finiteMin + 1];
+  return finiteMin < finiteMax ? [finiteMin, finiteMax] : [finiteMax, finiteMin];
+}
+
+function resolveGaugeAngles(
+  startValue: number | undefined,
+  endValue: number | undefined,
+): readonly [number, number] {
+  const rawStart = Number.isFinite(startValue) ? startValue as number : -120;
+  const rawEnd = Number.isFinite(endValue) ? endValue as number : 120;
+  const normalizedStart = rawStart % 360;
+  const start = Object.is(normalizedStart, -0) ? 0 : normalizedStart;
+  const rawSpan = rawEnd - rawStart;
+  if (!Number.isFinite(rawSpan) || rawSpan === 0) return [start, start + 240];
+  const span = Math.max(-360, Math.min(360, rawSpan));
+  return [start, start + span];
+}
+
+function defaultGaugeSegments(rangeMin: number, rangeMax: number): readonly SvgGaugeSegment[] {
+  const third = (rangeMax - rangeMin) / 3;
+  return [
+    { from: rangeMin, to: rangeMin + third, label: 'Low' },
+    { from: rangeMin + third, to: rangeMin + third * 2, label: 'Medium' },
+    { from: rangeMin + third * 2, to: rangeMax, label: 'High' },
+  ];
+}
+
+function normalizedGaugeCornerRadius(value: number | undefined, fallback: number): number {
+  return Number.isFinite(value) ? Math.max(0, value as number) : fallback;
+}
+
+function buildGaugeArcPath(
+  innerRadius: number,
+  outerRadius: number,
+  startAngle: number,
+  endAngle: number,
+  cornerRadius: number,
+): string {
+  const datum = { innerRadius, outerRadius, startAngle, endAngle };
+  return createArcPath<typeof datum>()
+    .innerRadius(innerRadius)
+    .outerRadius(outerRadius)
+    .startAngle(startAngle)
+    .endAngle(endAngle)
+    .cornerRadius(cornerRadius)(datum) ?? '';
+}
+
+function radialPoint(
+  centerX: number,
+  centerY: number,
+  radius: number,
+  angle: number,
+): readonly [number, number] {
+  // d3.arc starts at twelve o'clock, therefore x follows sin and y follows -cos.
+  return [
+    centerX + Math.sin(angle) * radius,
+    centerY - Math.cos(angle) * radius,
+  ];
+}
+
+/**
+ * Builds deterministic radial-gauge geometry for React-owned SVG rendering.
+ * D3 contributes only path math; it never receives or owns a DOM node here.
+ */
+export function buildSvgGaugeGeometry({
+  value,
+  width: widthInput,
+  height: heightInput,
+  min,
+  max,
+  segments: providedSegments,
+  startAngle: startAngleInput,
+  endAngle: endAngleInput,
+  innerRadiusRatio = 0.7,
+  trackCornerRadius,
+  segmentCornerRadius,
+}: BuildSvgGaugeGeometryOptions): SvgGaugeGeometry {
+  const width = finiteSize(widthInput, 400);
+  const height = finiteSize(heightInput, 300);
+  const [rangeMin, rangeMax] = resolveGaugeRange(min, max);
+  const normalizedValue = Number.isFinite(value)
+    ? Math.max(rangeMin, Math.min(rangeMax, value))
+    : rangeMin;
+  const [startAngle, endAngle] = resolveGaugeAngles(startAngleInput, endAngleInput);
+  const startRadians = degreesToRadians(startAngle);
+  const endRadians = degreesToRadians(endAngle);
+  const totalRadians = endRadians - startRadians;
+  const normalizedInnerRatio = Number.isFinite(innerRadiusRatio)
+    ? Math.min(0.95, Math.max(0, innerRadiusRatio))
+    : 0.7;
+  const outerRadius = Math.max(0, Math.min(width, height) / 2 - 20);
+  const innerRadius = outerRadius * normalizedInnerRatio;
+  const centerX = width / 2;
+  const centerY = height / 2 + (
+    startAngle < 0 && endAngle > 0 ? outerRadius * 0.1 : 0
+  );
+  const sourceSegments = providedSegments ?? defaultGaugeSegments(rangeMin, rangeMax);
+  const usesDefaultSegments = providedSegments === undefined;
+  const normalizedSegments = sourceSegments.flatMap((segment, index) => {
+    if (!Number.isFinite(segment.from) || !Number.isFinite(segment.to)) return [];
+    const from = Math.max(rangeMin, segment.from);
+    const to = Math.min(rangeMax, segment.to);
+    if (to <= from) return [];
+    return [{ ...segment, from, to, sourceIndex: index }];
+  });
+  const activeIndex = normalizedSegments.findIndex((segment) => (
+    normalizedValue >= segment.from && normalizedValue <= segment.to
+  ));
+  const range = rangeMax - rangeMin;
+  const resolvedTrackCornerRadius = normalizedGaugeCornerRadius(trackCornerRadius, 2);
+  const resolvedSegmentCornerRadius = normalizedGaugeCornerRadius(segmentCornerRadius, 1);
+  const middleRadius = innerRadius + (outerRadius - innerRadius) / 2;
+  const segments = normalizedSegments.map<SvgGaugeGeometrySegment>((segment, index) => {
+    const startFraction = Math.max(0, (segment.from - rangeMin) / range);
+    const endFraction = Math.min(1, (segment.to - rangeMin) / range);
+    const segmentStartRadians = startRadians + totalRadians * startFraction;
+    const segmentEndRadians = startRadians + totalRadians * endFraction;
+    const [segmentCenterX, segmentCenterY] = radialPoint(
+      centerX,
+      centerY,
+      middleRadius,
+      segmentStartRadians + (segmentEndRadians - segmentStartRadians) / 2,
+    );
+    return {
+      id: `gauge-segment-${segment.sourceIndex}`,
+      from: segment.from,
+      to: segment.to,
+      ...(segment.color === undefined ? {} : { color: segment.color }),
+      ...(segment.label === undefined ? {} : { label: segment.label }),
+      path: buildGaugeArcPath(
+        innerRadius,
+        outerRadius,
+        segmentStartRadians,
+        segmentEndRadians,
+        resolvedSegmentCornerRadius,
+      ),
+      startRadians: segmentStartRadians,
+      endRadians: segmentEndRadians,
+      centerX: segmentCenterX,
+      centerY: segmentCenterY,
+      active: index === activeIndex,
+      colorSource: usesDefaultSegments ? 'default' : 'custom',
+      tone: usesDefaultSegments
+        ? DEFAULT_GAUGE_TONES[index % DEFAULT_GAUGE_TONES.length] ?? 'error'
+        : 'custom',
+    };
+  });
+  const valueFraction = (normalizedValue - rangeMin) / range;
+  const needleRadians = startRadians + totalRadians * valueFraction;
+  const needleRotation = (needleRadians * 180) / Math.PI;
+  const needleLength = outerRadius * 0.88;
+  const needleBaseWidth = 4;
+
+  return {
+    width,
+    height,
+    rangeMin,
+    rangeMax,
+    value: normalizedValue,
+    startAngle,
+    endAngle,
+    startRadians,
+    endRadians,
+    centerX,
+    centerY,
+    outerRadius,
+    innerRadius,
+    trackPath: buildGaugeArcPath(
+      innerRadius,
+      outerRadius,
+      startRadians,
+      endRadians,
+      resolvedTrackCornerRadius,
+    ),
+    needleRotation,
+    needlePath: [
+      `M ${-needleBaseWidth} 0`,
+      `L 0 ${-needleLength}`,
+      `L ${needleBaseWidth} 0`,
+      'Z',
+    ].join(' '),
+    needleCapRadius: needleBaseWidth + 2,
+    valueY: 8,
+    labelY: 32,
+    valueFontSize: Math.max(16, outerRadius * 0.22),
+    labelFontSize: Math.max(11, outerRadius * 0.11),
+    segments: Object.freeze(segments),
+  };
+}
+
+/** A single value projected on one named radar axis. */
+export interface SvgRadarDatum {
+  readonly axis: string;
+  readonly value: number;
+}
+
+/** A named radar polygon. Colors remain optional so the renderer can inherit a palette. */
+export interface SvgRadarSeries {
+  readonly name: string;
+  readonly data: readonly SvgRadarDatum[];
+  readonly color?: string;
+}
+
+/** One immutable axis vector in the local, centre-origin radar coordinate space. */
+export interface SvgRadarGeometryAxis {
+  readonly id: string;
+  readonly index: number;
+  readonly axis: string;
+  readonly angle: number;
+  readonly lineX: number;
+  readonly lineY: number;
+  readonly labelX: number;
+  readonly labelY: number;
+}
+
+/** One vertex of a radar polygon, relative to the chart centre. */
+export interface SvgRadarGeometryPoint extends SvgRadarDatum {
+  readonly id: string;
+  readonly axisIndex: number;
+  readonly x: number;
+  readonly y: number;
+}
+
+/** One concentric polygonal grid line. */
+export interface SvgRadarGeometryGridLevel {
+  readonly id: string;
+  readonly level: number;
+  readonly points: string;
+}
+
+/** An immutable, fully resolved radar series ready for React/SVG presentation. */
+export interface SvgRadarGeometrySeries {
+  readonly id: string;
+  readonly name: string;
+  readonly color: string;
+  readonly colorSource: 'palette' | 'custom';
+  readonly points: readonly SvgRadarGeometryPoint[];
+  readonly polygonPoints: string;
+  readonly zeroBaseline: boolean;
+}
+
+/**
+ * Deterministic radar layout. Invalid legacy data is represented as an empty
+ * mark set plus a user-facing fallback message rather than an exception.
+ */
+export interface SvgRadarGeometry {
+  readonly width: number;
+  readonly height: number;
+  readonly centerX: number;
+  readonly centerY: number;
+  readonly radius: number;
+  readonly domainMax: number;
+  readonly levels: number;
+  readonly fallbackMessage: string | null;
+  readonly axes: readonly SvgRadarGeometryAxis[];
+  readonly gridLevels: readonly SvgRadarGeometryGridLevel[];
+  readonly series: readonly SvgRadarGeometrySeries[];
+}
+
+export interface BuildSvgRadarGeometryOptions {
+  readonly data: readonly SvgRadarDatum[];
+  readonly series?: readonly SvgRadarSeries[];
+  readonly colors?: readonly string[];
+  readonly width: number;
+  readonly height: number;
+  readonly maxValue?: number;
+  readonly levels?: number;
+}
+
+function radarCoordinate(value: number): number {
+  return Math.abs(value) < 0.0000000001 ? 0 : value;
+}
+
+function radarFallbackMessage(
+  series: readonly SvgRadarSeries[],
+  axes: readonly string[],
+  values: readonly number[],
+): string | null {
+  if (series.length === 0 || axes.length === 0) return 'No data to display.';
+  if (axes.length < 3) return 'Radar charts require at least three axes.';
+  if (values.some((value) => !Number.isFinite(value))) {
+    return 'Radar charts require finite values.';
+  }
+  if (values.some((value) => value < 0)) {
+    return 'Radar charts cannot represent negative values.';
+  }
+  const hasAlignedAxes = series.every((currentSeries) => (
+    currentSeries.data.length === axes.length
+    && currentSeries.data.every((point, index) => point.axis === axes[index])
+  ));
+  return hasAlignedAxes ? null : 'Radar chart series must use the same axes.';
+}
+
+/**
+ * Builds immutable, centre-origin radar geometry for React-owned SVG marks.
+ * The function intentionally has no DOM dependency so server and browser
+ * render the exact same settled geometry.
+ */
+export function buildSvgRadarGeometry({
+  data,
+  series: providedSeries,
+  colors,
+  width: widthInput,
+  height: heightInput,
+  maxValue,
+  levels: levelsInput = 5,
+}: BuildSvgRadarGeometryOptions): SvgRadarGeometry {
+  const width = finiteSize(widthInput, 400);
+  const height = finiteSize(heightInput, 400);
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = Math.max(1, Math.min(width, height) / 2 - 40);
+  const safeLevels = Number.isFinite(levelsInput)
+    ? Math.max(1, Math.floor(levelsInput))
+    : 5;
+  const sourceSeries: readonly SvgRadarSeries[] = providedSeries ?? [{ name: 'Data', data }];
+  const referenceAxes = sourceSeries[0]?.data.map((point) => point.axis) ?? [];
+  const values = sourceSeries.flatMap((currentSeries) => (
+    currentSeries.data.map((point) => point.value)
+  ));
+  const fallbackMessage = radarFallbackMessage(sourceSeries, referenceAxes, values);
+  const requestedMax = Number.isFinite(maxValue) && (maxValue ?? 0) > 0
+    ? maxValue ?? 1
+    : 1;
+  const observedMax = fallbackMessage === null
+    ? values.reduce((currentMax, value) => Math.max(currentMax, value), 0)
+    : 0;
+  const domainMax = Math.max(1, observedMax, requestedMax);
+
+  if (fallbackMessage !== null) {
+    return {
+      width,
+      height,
+      centerX,
+      centerY,
+      radius,
+      domainMax,
+      levels: safeLevels,
+      fallbackMessage,
+      axes: Object.freeze([]),
+      gridLevels: Object.freeze([]),
+      series: Object.freeze([]),
+    };
+  }
+
+  const angleSlice = (2 * Math.PI) / referenceAxes.length;
+  const axes = referenceAxes.map<SvgRadarGeometryAxis>((axis, index) => {
+    const angle = angleSlice * index - Math.PI / 2;
+    const lineX = radarCoordinate(radius * Math.cos(angle));
+    const lineY = radarCoordinate(radius * Math.sin(angle));
+    const labelRadius = radius + 18;
+    return {
+      id: `radar-axis-${index}`,
+      index,
+      axis,
+      angle,
+      lineX,
+      lineY,
+      labelX: radarCoordinate(labelRadius * Math.cos(angle)),
+      labelY: radarCoordinate(labelRadius * Math.sin(angle)),
+    };
+  });
+  const gridLevels = Array.from({ length: safeLevels }, (_, index) => {
+    const level = index + 1;
+    const ratio = level / safeLevels;
+    return {
+      id: `radar-grid-${level}`,
+      level,
+      points: axes.map((axis) => (
+        `${radarCoordinate(axis.lineX * ratio)},${radarCoordinate(axis.lineY * ratio)}`
+      )).join(' '),
+    };
+  });
+  const palette = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
+  const resolvedSeries = sourceSeries.map<SvgRadarGeometrySeries>((currentSeries, seriesIndex) => {
+    const color = currentSeries.color ?? palette[seriesIndex % palette.length] ?? 'currentColor';
+    const points = currentSeries.data.map<SvgRadarGeometryPoint>((point, axisIndex) => {
+      const axis = axes[axisIndex] as SvgRadarGeometryAxis;
+      const ratio = Math.max(0, Math.min(1, point.value / domainMax));
+      return {
+        id: `radar-series-${seriesIndex}-point-${axisIndex}`,
+        axis: point.axis,
+        value: point.value,
+        axisIndex,
+        x: radarCoordinate(axis.lineX * ratio),
+        y: radarCoordinate(axis.lineY * ratio),
+      };
+    });
+
+    return {
+      id: `radar-series-${seriesIndex}`,
+      name: currentSeries.name,
+      color,
+      colorSource: currentSeries.color === undefined ? 'palette' : 'custom',
+      points: Object.freeze(points),
+      polygonPoints: points.map((point) => `${point.x},${point.y}`).join(' '),
+      zeroBaseline: currentSeries.data.every((point) => point.value === 0),
+    };
+  });
+
+  return {
+    width,
+    height,
+    centerX,
+    centerY,
+    radius,
+    domainMax,
+    levels: safeLevels,
+    fallbackMessage: null,
+    axes: Object.freeze(axes),
+    gridLevels: Object.freeze(gridLevels),
+    series: Object.freeze(resolvedSeries),
+  };
+}
+
+/** A categorical stage in a tapering funnel. */
+export interface SvgFunnelDatum {
+  readonly label: string;
+  readonly value: number;
+  readonly color?: string;
+}
+
+export type SvgFunnelOrientation = 'vertical' | 'horizontal';
+export type SvgFunnelSegmentPosition = 'first' | 'middle' | 'last';
+
+/** An immutable funnel segment ready for React/SVG presentation. */
+export interface SvgFunnelGeometrySegment extends SvgFunnelDatum {
+  readonly id: string;
+  readonly index: number;
+  readonly color: string;
+  readonly colorSource: 'palette' | 'custom';
+  readonly position: SvgFunnelSegmentPosition;
+  readonly polygonPoints: string;
+  readonly centerX: number;
+  readonly centerY: number;
+  readonly labelX: number;
+  readonly labelY: number;
+  readonly valueX: number;
+  readonly valueY: number;
+  readonly percentage: number;
+  readonly percentageLabel: string;
+  readonly conversionLabel?: string;
+  readonly conversionX?: number;
+  readonly conversionY?: number;
+}
+
+/**
+ * Deterministic taper geometry for a funnel. Invalid input becomes an empty
+ * mark set with a fallback message, allowing compatibility adapters to retain
+ * their existing status overlay without imperative cleanup.
+ */
+export interface SvgFunnelGeometry {
+  readonly width: number;
+  readonly height: number;
+  readonly orientation: SvgFunnelOrientation;
+  readonly margin: ChartGeometryInsets;
+  readonly innerWidth: number;
+  readonly innerHeight: number;
+  readonly maxValue: number;
+  readonly fallbackMessage: string | null;
+  readonly segments: readonly SvgFunnelGeometrySegment[];
+}
+
+export interface BuildSvgFunnelGeometryOptions {
+  readonly data: readonly SvgFunnelDatum[];
+  readonly width: number;
+  readonly height: number;
+  readonly orientation?: SvgFunnelOrientation;
+  readonly colors?: readonly string[];
+  readonly margin?: ChartGeometryInsets;
+}
+
+/** Preserves the historic funnel padding while making it an explicit engine token. */
+export const DEFAULT_FUNNEL_INSETS: ChartGeometryInsets = Object.freeze({
+  top: 20,
+  right: 20,
+  bottom: 40,
+  left: 50,
+});
+
+function funnelFallbackMessage(data: readonly SvgFunnelDatum[]): string | null {
+  if (data.length === 0) return 'No data to display.';
+  if (data.some((item) => !Number.isFinite(item.value))) {
+    return 'Funnel charts require finite values.';
+  }
+  if (data.some((item) => item.value < 0)) {
+    return 'Funnel charts cannot represent negative stages.';
+  }
+  const maxValue = data.reduce((currentMax, item) => Math.max(currentMax, item.value), 0);
+  return maxValue <= 0 ? 'Funnel chart has no positive stages.' : null;
+}
+
+function funnelPosition(index: number, length: number): SvgFunnelSegmentPosition {
+  if (index === 0) return 'first';
+  if (index === length - 1) return 'last';
+  return 'middle';
+}
+
+function funnelConversionLabel(value: number, previousValue: number): string {
+  const rawRate = previousValue > 0 ? (value / previousValue) * 100 : null;
+  if (rawRate !== null && Number.isFinite(rawRate)) return `${rawRate.toFixed(1)}%`;
+  return value === 0 ? '0.0%' : 'N/A';
+}
+
+/**
+ * Builds immutable funnel polygons using only arithmetic. The returned mark
+ * coordinates are local to the supplied margin so React can own the SVG tree
+ * with a single translated plot group.
+ */
+export function buildSvgFunnelGeometry({
+  data,
+  width: widthInput,
+  height: heightInput,
+  orientation = 'vertical',
+  colors,
+  margin: marginInput,
+}: BuildSvgFunnelGeometryOptions): SvgFunnelGeometry {
+  const width = finiteSize(widthInput, 600);
+  const height = finiteSize(heightInput, 400);
+  const margin = normalizeInsets(marginInput, DEFAULT_FUNNEL_INSETS);
+  const innerWidth = Math.max(1, width - margin.left - margin.right);
+  const innerHeight = Math.max(1, height - margin.top - margin.bottom);
+  const fallbackMessage = funnelFallbackMessage(data);
+  const maxValue = fallbackMessage === null
+    ? data.reduce((currentMax, item) => Math.max(currentMax, item.value), 0)
+    : 0;
+
+  if (fallbackMessage !== null) {
+    return {
+      width,
+      height,
+      orientation,
+      margin,
+      innerWidth,
+      innerHeight,
+      maxValue,
+      fallbackMessage,
+      segments: Object.freeze([]),
+    };
+  }
+
+  const palette = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
+  const segmentExtent = orientation === 'vertical'
+    ? innerHeight / data.length
+    : innerWidth / data.length;
+  // Keep seams legible without allowing tiny containers to invert a polygon.
+  const gap = Math.min(2, Math.max(0, segmentExtent / 3));
+  const segments = data.map<SvgFunnelGeometrySegment>((item, index) => {
+    const ratio = item.value / maxValue;
+    const nextValue = data[index + 1]?.value;
+    const nextRatio = nextValue === undefined ? ratio * 0.8 : nextValue / maxValue;
+    const color = item.color ?? palette[index % palette.length] ?? 'currentColor';
+    const percentage = ratio * 100;
+    const base = {
+      id: `funnel-segment-${index}`,
+      index,
+      label: item.label,
+      value: item.value,
+      color,
+      colorSource: item.color === undefined ? 'palette' as const : 'custom' as const,
+      position: funnelPosition(index, data.length),
+      percentage,
+      percentageLabel: `${percentage.toFixed(0)}%`,
+      ...(index > 0 ? {
+        conversionLabel: funnelConversionLabel(item.value, data[index - 1]?.value ?? 0),
+      } : {}),
+    };
+
+    if (orientation === 'vertical') {
+      const topWidth = innerWidth * ratio;
+      const bottomWidth = innerWidth * nextRatio;
+      const topX = (innerWidth - topWidth) / 2;
+      const bottomX = (innerWidth - bottomWidth) / 2;
+      const y = index * segmentExtent;
+      const centerY = y + segmentExtent / 2;
+      return {
+        ...base,
+        polygonPoints: [
+          [topX, y + gap],
+          [topX + topWidth, y + gap],
+          [bottomX + bottomWidth, y + segmentExtent - gap],
+          [bottomX, y + segmentExtent - gap],
+        ].map((point) => point.join(',')).join(' '),
+        centerX: innerWidth / 2,
+        centerY,
+        labelX: innerWidth / 2,
+        labelY: centerY - 6,
+        valueX: innerWidth / 2,
+        valueY: centerY + 10,
+        ...(index > 0 ? {
+          conversionX: innerWidth + 8,
+          conversionY: y + 4,
+        } : {}),
+      };
+    }
+
+    const leftHeight = innerHeight * ratio;
+    const rightHeight = innerHeight * nextRatio;
+    const leftY = (innerHeight - leftHeight) / 2;
+    const rightY = (innerHeight - rightHeight) / 2;
+    const x = index * segmentExtent;
+    return {
+      ...base,
+      polygonPoints: [
+        [x + gap, leftY],
+        [x + segmentExtent - gap, rightY],
+        [x + segmentExtent - gap, rightY + rightHeight],
+        [x + gap, leftY + leftHeight],
+      ].map((point) => point.join(',')).join(' '),
+      centerX: x + segmentExtent / 2,
+      centerY: innerHeight / 2,
+      labelX: x + segmentExtent / 2,
+      labelY: innerHeight / 2,
+      valueX: x + segmentExtent / 2,
+      valueY: innerHeight / 2,
+    };
+  });
+
+  return {
+    width,
+    height,
+    orientation,
+    margin,
+    innerWidth,
+    innerHeight,
+    maxValue,
+    fallbackMessage: null,
+    segments: Object.freeze(segments),
+  };
+}
+
 export type SvgLineXValue = string | number;
 export type SvgLineXType = 'category' | 'linear' | 'time';
 export type SvgLineCurve = 'linear' | 'smooth' | 'step';

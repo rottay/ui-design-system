@@ -25,6 +25,8 @@ export interface ChartRendererSurfaceProps {
   readonly rendererId: string;
   readonly ariaLabel: string;
   readonly ariaDescription?: string;
+  /** ID of app- or family-owned extended description content. */
+  readonly ariaDescribedBy?: string;
   readonly width: number;
   readonly height: number;
   /** Whether the SVG geometry follows the measured container width. */
@@ -52,6 +54,7 @@ export function ChartRendererSurface({
   rendererId,
   ariaLabel,
   ariaDescription,
+  ariaDescribedBy,
   width,
   height,
   responsive = true,
@@ -69,6 +72,10 @@ export function ChartRendererSurface({
 }: ChartRendererSurfaceProps): React.ReactElement {
   const titleId = useId();
   const descriptionId = useId();
+  const describedBy = [
+    ariaDescription ? descriptionId : undefined,
+    ariaDescribedBy,
+  ].filter(Boolean).join(' ') || undefined;
   const grammar = useResolvedChartGrammar();
   const chartPersonality = useResolvedChartPersonality();
   const colorScheme = chartPersonality.colorScheme ?? 'default';
@@ -121,7 +128,7 @@ export function ChartRendererSurface({
         preserveAspectRatio="xMidYMid meet"
         role={interactive ? 'group' : 'img'}
         aria-labelledby={titleId}
-        aria-describedby={ariaDescription ? descriptionId : undefined}
+        aria-describedby={describedBy}
       >
         <title id={titleId}>{ariaLabel}</title>
         {ariaDescription ? <desc id={descriptionId}>{ariaDescription}</desc> : null}

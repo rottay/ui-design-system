@@ -1,28 +1,14 @@
 'use client';
 
 /**
- * @fileoverview FunnelChart -- D3-backed funnel visualization rendered as tapering polygons.
- * Each stage is a four-point polygon whose top/bottom (or left/right) widths reflect the ratio
- * of that stage's value to the maximum. No D3 scales are used -- widths are computed manually
- * from value ratios, giving full control over the taper geometry. Supports vertical (top-down)
- * and horizontal (left-to-right) orientations with conversion-rate annotations.
+ * Compatibility family for the public FunnelChart contract.
  *
- * @example
- * <FunnelChart
- *   data={[
- *     { label: 'Visitors', value: 5000 },
- *     { label: 'Leads', value: 2500 },
- *     { label: 'Customers', value: 500 },
- *   ]}
- *   showPercentage
- *   showConversion
- *   height={400}
- *   title="Sales Funnel"
- * />
+ * The chart-engine now owns pure taper geometry and React/SVG marks. This
+ * adapter intentionally preserves the established family props, scaffold,
+ * accessible summary, legend, and fallback overlay for existing consumers.
  */
 
-import { memo, useEffect, useRef } from 'react';
-import { select } from 'd3';
+import { memo, useMemo, useRef } from 'react';
 
 import type {
   ChartBaseProps,
@@ -32,10 +18,12 @@ import type {
   DataPoint,
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
-import { useChartDimensions, useChartPersonality } from '../../runtime';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { useChartPersonality } from '../../runtime';
+import { buildSvgFunnelGeometry } from '../../runtime/chart-engine/foundation/renderers/geometry';
+import { SvgFunnelRenderer } from '../../runtime/chart-engine/presentation/react/renderers/funnel';
 
-/** Props for the {@link FunnelChart} component. */
+/** Props for the backward-compatible {@link FunnelChart} family adapter. */
 export interface FunnelChartProps
   extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartMarginProps {
   data: DataPoint[];
@@ -45,10 +33,8 @@ export interface FunnelChartProps
 }
 
 /**
- * Renders a funnel chart as tapering SVG polygons with optional conversion-rate labels.
- *
- * @param props - See {@link FunnelChartProps} for the full option set.
- * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ * Public FunnelChart compatibility adapter. All SVG ownership is delegated to
+ * `SvgFunnelRenderer`, while the family contract remains unchanged.
  */
 export const FunnelChart = memo(function FunnelChart({
   data,
@@ -69,230 +55,86 @@ export const FunnelChart = memo(function FunnelChart({
   tooltip,
   margin = DEFAULT_MARGIN,
 }: FunnelChartProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const { containerRef, dimensions } = useChartDimensions(width, height);
+  const scaffoldRef = useRef<HTMLDivElement>(null);
+  const legacySvgRef = useRef<SVGSVGElement>(null);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = height;
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const hasInvalidValue = data.some((item) => !Number.isFinite(item.value));
-  const hasNegativeValue = data.some((item) => item.value < 0);
-  const maxValue = data.length > 0 && !hasInvalidValue && !hasNegativeValue
-    ? data.reduce((currentMax, item) => Math.max(currentMax, item.value), 0)
-    : 0;
-  const fallbackMessage = data.length === 0
-    ? 'No data to display.'
-    : hasInvalidValue
-      ? 'Funnel charts require finite values.'
-      : hasNegativeValue
-        ? 'Funnel charts cannot represent negative stages.'
-        : maxValue <= 0
-          ? 'Funnel chart has no positive stages.'
-          : null;
+  // Validation and legend colors are resolved from the same pure engine as
+  // the visible renderer. This fixed layout does not own responsive sizing;
+  // the renderer remains the sole normal ResizeObserver owner.
+  const model = useMemo(
+    () => buildSvgFunnelGeometry({
+      data,
+      width: 600,
+      height: 400,
+      orientation,
+      colors: palette,
+      margin,
+    }),
+    [data, margin, orientation, palette],
+  );
+  const fallbackMessage = model.fallbackMessage;
   const canRender = fallbackMessage === null;
-  const summary = {
+  const summary = useMemo(() => ({
     caption: title ? `${title} data summary` : 'Funnel chart data summary',
     headers: ['Stage', 'Value', 'Percentage'],
     rows: data.map((item) => [
       item.label,
       Number.isFinite(item.value) ? item.value : 'Invalid',
-      canRender ? `${((item.value / maxValue) * 100).toFixed(1)}%` : '0%',
+      canRender ? `${((item.value / model.maxValue) * 100).toFixed(1)}%` : '0%',
     ]),
-  };
+  }), [canRender, data, model.maxValue, title]);
+  const description = describeChart(
+    'Funnel chart',
+    data.length,
+    subtitle,
+    [orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.', fallbackMessage]
+      .filter(Boolean)
+      .join(' '),
+  );
   const legendNode = legend && canRender ? (
-    <div data-part="legend" data-orientation={orientation} style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
-      {data.map((d, i) => (
-        <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? palette.at(i % palette.length) ?? '#6366f1', display: 'inline-block' }} />
-          <span data-part="legend-label">{d.label}</span>
+    <div
+      data-part="legend"
+      data-orientation={orientation}
+      style={{
+        display: 'flex',
+        gap: 'var(--ds-chart-legend-gap, 16px)',
+        flexWrap: 'wrap',
+        marginTop: 'var(--ds-chart-legend-margin-top, 8px)',
+        justifyContent: 'center',
+      }}
+    >
+      {model.segments.map((segment) => (
+        <div
+          key={segment.id}
+          data-part="legend-item"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--ds-chart-legend-item-gap, 6px)',
+            fontSize: 'var(--ds-chart-legend-font-size, 12px)',
+          }}
+        >
+          <span
+            data-part="legend-swatch"
+            data-color-source={segment.colorSource}
+            style={{
+              width: 12,
+              height: 12,
+              backgroundColor: segment.color,
+              display: 'inline-block',
+            }}
+          />
+          <span data-part="legend-label">{segment.label}</span>
         </div>
       ))}
     </div>
   ) : null;
 
-  useEffect(() => {
-    if (!svgRef.current) return;
-
-    const svg = select(svgRef.current);
-    svg.selectAll('*').interrupt();
-    svg.selectAll('*').remove();
-    svg.attr('width', chartWidth).attr('height', chartHeight);
-
-    if (!canRender) {
-      return () => {
-        svg.selectAll('*').interrupt();
-      };
-    }
-
-    const innerWidth = Math.max(1, chartWidth - margin.left - margin.right);
-    const innerHeight = Math.max(1, chartHeight - margin.top - margin.bottom);
-
-    const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
-      .append('g')
-      .attr('data-part', 'plot-area')
-      .attr('data-orientation', orientation)
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    const n = data.length;
-
-    if (orientation === 'vertical') {
-      // Each segment occupies an equal vertical slice; the 2px gap prevents
-      // anti-aliasing bleed between adjacent polygon edges.
-      const segmentHeight = innerHeight / n;
-      const gap = 2;
-
-      data.forEach((d, i) => {
-        // widthRatio maps the segment's value to a proportion of innerWidth.
-        const widthRatio = d.value / maxValue;
-        // The bottom edge of the last segment tapers to 80% of its own width
-        // to maintain the funnel visual, since there is no next segment to derive from.
-        const nextValue = data.at(i + 1)?.value;
-        const nextRatio = nextValue !== undefined ? nextValue / maxValue : widthRatio * 0.8;
-        const topWidth = innerWidth * widthRatio;
-        const bottomWidth = innerWidth * nextRatio;
-        const topX = (innerWidth - topWidth) / 2;
-        const bottomX = (innerWidth - bottomWidth) / 2;
-        const yPos = i * segmentHeight;
-        const color = d.color ?? palette.at(i % palette.length) ?? '#6366f1';
-
-        const points = [
-          [topX, yPos + gap],
-          [topX + topWidth, yPos + gap],
-          [bottomX + bottomWidth, yPos + segmentHeight - gap],
-          [bottomX, yPos + segmentHeight - gap],
-        ];
-
-        const polygon = g
-          .append('polygon')
-          .attr('data-part', 'segment')
-          .attr('data-state', 'idle')
-          .attr('data-position', i === 0 ? 'first' : i === n - 1 ? 'last' : 'middle')
-          .attr('points', points.map((p) => p.join(',')).join(' '))
-          .attr('fill', color);
-
-        if (chartPersonality.animate) {
-          polygon
-            .attr('opacity', 0)
-            .transition()
-            .duration(chartPersonality.animationDuration)
-            .delay(i * 100)
-            .attr('opacity', 1);
-        }
-
-        if (chartPersonality.tooltip) {
-          polygon.append('title').text(`${d.label}: ${d.value}`);
-        }
-
-        // Label
-        const centerY = yPos + segmentHeight / 2;
-        g.append('text')
-          .attr('data-part', 'segment-label')
-          .attr('x', innerWidth / 2)
-          .attr('y', centerY - 6)
-          .attr('text-anchor', 'middle')
-          .style('font-size', '13px')
-          .style('font-weight', '600')
-          .style('pointer-events', 'none')
-          .text(d.label);
-
-        // Value / percentage
-        const pct = ((d.value / maxValue) * 100).toFixed(0);
-        const valueText = showPercentage ? `${d.value} (${pct}%)` : String(d.value);
-        g.append('text')
-          .attr('data-part', 'segment-value')
-          .attr('x', innerWidth / 2)
-          .attr('y', centerY + 10)
-          .attr('text-anchor', 'middle')
-          .style('font-size', '11px')
-          .style('pointer-events', 'none')
-          .text(valueText);
-
-        // Conversion rate
-        if (showConversion && i > 0) {
-          const previousValue = data.at(i - 1)?.value ?? 0;
-          const rawRate = previousValue > 0 ? (d.value / previousValue) * 100 : null;
-          const rate = rawRate !== null && Number.isFinite(rawRate)
-            ? `${rawRate.toFixed(1)}%`
-            : d.value === 0
-              ? '0.0%'
-              : 'N/A';
-          g.append('text')
-            .attr('data-part', 'conversion-label')
-            .attr('x', innerWidth + 8)
-            .attr('y', yPos + 4)
-            .attr('dominant-baseline', 'middle')
-            .style('font-size', '10px')
-            .text(rate);
-        }
-      });
-    } else {
-      // Horizontal: the taper logic mirrors the vertical case but operates on
-      // height rather than width, flowing left-to-right through stages.
-      const segmentWidth = innerWidth / n;
-      const gap = 2;
-
-      data.forEach((d, i) => {
-        const heightRatio = d.value / maxValue;
-        const nextValue = data.at(i + 1)?.value;
-        const nextRatio = nextValue !== undefined ? nextValue / maxValue : heightRatio * 0.8;
-        const leftHeight = innerHeight * heightRatio;
-        const rightHeight = innerHeight * nextRatio;
-        const leftY = (innerHeight - leftHeight) / 2;
-        const rightY = (innerHeight - rightHeight) / 2;
-        const xPos = i * segmentWidth;
-        const color = d.color ?? palette.at(i % palette.length) ?? '#6366f1';
-
-        const points = [
-          [xPos + gap, leftY],
-          [xPos + segmentWidth - gap, rightY],
-          [xPos + segmentWidth - gap, rightY + rightHeight],
-          [xPos + gap, leftY + leftHeight],
-        ];
-
-        const polygon = g
-          .append('polygon')
-          .attr('data-part', 'segment')
-          .attr('data-state', 'idle')
-          .attr('data-position', i === 0 ? 'first' : i === n - 1 ? 'last' : 'middle')
-          .attr('points', points.map((p) => p.join(',')).join(' '))
-          .attr('fill', color);
-
-        if (chartPersonality.animate) {
-          polygon
-            .attr('opacity', 0)
-            .transition()
-            .duration(chartPersonality.animationDuration)
-            .delay(i * 100)
-            .attr('opacity', 1);
-        }
-
-        if (chartPersonality.tooltip) {
-          polygon.append('title').text(`${d.label}: ${d.value}`);
-        }
-
-        g.append('text')
-          .attr('data-part', 'segment-label')
-          .attr('x', xPos + segmentWidth / 2)
-          .attr('y', innerHeight / 2)
-          .attr('text-anchor', 'middle')
-          .style('font-size', '12px')
-          .style('font-weight', '600')
-          .style('pointer-events', 'none')
-          .text(d.label);
-      });
-    }
-
-    return () => {
-      svg.selectAll('*').interrupt();
-    };
-  }, [data, chartWidth, chartHeight, orientation, showPercentage, showConversion, chartPersonality, palette, margin, canRender, maxValue]);
-
   return (
     <ChartScaffold
-      containerRef={containerRef}
-      svgRef={svgRef}
+      containerRef={scaffoldRef}
+      svgRef={legacySvgRef}
       width={width}
       height={height}
       className={['ds-chart-funnel', className].filter(Boolean).join(' ')}
@@ -302,14 +144,7 @@ export const FunnelChart = memo(function FunnelChart({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Funnel chart'}
-      ariaDescription={describeChart(
-        'Funnel chart',
-        data.length,
-        subtitle,
-        [orientation === 'horizontal' ? 'Horizontal orientation.' : 'Vertical orientation.', fallbackMessage]
-          .filter(Boolean)
-          .join(' '),
-      )}
+      ariaDescription={description}
       summary={summary}
       legend={legendNode}
       overlay={fallbackMessage ? (
@@ -330,6 +165,23 @@ export const FunnelChart = memo(function FunnelChart({
           {fallbackMessage}
         </div>
       ) : null}
+      plot={({ descriptionId }) => (
+        <SvgFunnelRenderer
+          data={data}
+          ariaLabel={title ?? 'Funnel chart'}
+          ariaDescribedBy={descriptionId}
+          width={width}
+          height={height}
+          responsive={responsive}
+          animate={chartPersonality.animate}
+          orientation={orientation}
+          showPercentage={showPercentage}
+          showConversion={showConversion}
+          colors={palette}
+          margin={margin}
+          showSegmentTitles={chartPersonality.tooltip}
+        />
+      )}
     />
   );
 });

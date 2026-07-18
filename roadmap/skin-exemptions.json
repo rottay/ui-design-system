@@ -43,11 +43,11 @@
         "why": "The exporter copies runtime-computed paint into two CSSStyleDeclaration paths and five SVG presentation-attribute paths, including variable-backed attributes already present on the clone. It preserves rendered chart fidelity for export; a static skin cannot know the property/value pairs."
       },
       "patterns/customization/tenant-preview/engines/modern/index.tsx": {
-        "floor": 22,
+        "floor": 21,
         "why": "buildPaletteSteps() mixes a 10-step palette from the tenant's chosen hex (mixColor(base, '#fff'|'#000', ratio)), then renders it as swatches, buttons and badges."
       },
       "patterns/customization/tenant-preview/engines/rustic/index.tsx": {
-        "floor": 14,
+        "floor": 13,
         "why": "The same 10 palette steps, plus 4 render sites. NOTE: rustic's Button/Input/Badge sections use generic DS scale tokens instead of the tenant's actual colour -- a real cross-engine inconsistency, filed separately, not something the migration may 'fix'."
       },
       "patterns/customization/brand-studio/index.tsx": {
@@ -76,8 +76,7 @@
       },
       "patterns/visualization/charts/families/radar-chart/index.tsx": {
         "floor": 2,
-        "runtimeSvgFloor": 4,
-        "why": "Two inline series-colour value sites (the default series colour and legend swatch) and four D3 polygon, emphasis and point sinks consume runtime palette or caller-supplied series colours."
+        "why": "Two inline series-colour value sites (the default series colour and legend swatch) consume runtime palette or caller-supplied series colours. The four D3 polygon, emphasis and point sinks moved to the chart-engine radar renderer (2026-07-17 recount); its floor lives on that file."
       },
       "patterns/visualization/charts/families/scatter/index.tsx": {
         "floor": 1,
@@ -96,8 +95,7 @@
       },
       "patterns/visualization/charts/families/funnel-chart/index.tsx": {
         "floor": 1,
-        "runtimeSvgFloor": 2,
-        "why": "The legend swatch and two D3 segment paint sinks consume per-datum or caller-palette colours."
+        "why": "The legend swatch consumes per-datum or caller-palette colours. The former two D3 segment sinks were consolidated into ONE segment fill in the chart-engine funnel renderer (2026-07-17 recount); its floor lives on that file."
       },
       "patterns/visualization/charts/families/waterfall/index.tsx": {
         "floor": 4,
@@ -111,8 +109,7 @@
       },
       "patterns/visualization/charts/families/gauge/index.tsx": {
         "floor": 1,
-        "runtimeSvgFloor": 4,
-        "why": "The legend swatch consumes caller-supplied segment colour; four D3 sinks retain segment and caller-overridable needle paint."
+        "why": "The legend swatch consumes caller-supplied segment colour. The four segment/needle sinks moved to the chart-engine gauge renderer (2026-07-17 recount); its floor lives on that file."
       },
       "patterns/visualization/charts/families/bullet/index.tsx": {
         "floor": 12,
@@ -144,6 +141,21 @@
       "patterns/visualization/charts/families/sparkline/index.tsx": {
         "runtimeSvgFloor": 4,
         "why": "Four intrinsic-SVG paint attributes consume caller-overridable line, area and point colours."
+      },
+      "patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/funnel/index.tsx": {
+        "runtimeSvgFloor": 1,
+        "why": "The segment fill (`fill={segment.color}`) paints the per-datum or caller-palette colour the funnel family forwards into the React renderer. Measured 2026-07-17 after the chart-engine refactor moved D3 paint out of families/funnel-chart; the former second D3 sink was consolidated into this single fill.",
+        "$note": "This file also carries a SKIN-EXEMPT-NOT-PAINT entry; its total runtimeSvgFloor is the SUM (1 runtime-value + 1 not-paint = 2)."
+      },
+      "patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/gauge/index.tsx": {
+        "runtimeSvgFloor": 4,
+        "why": "Four intrinsic-SVG JSX paint attributes consume runtime values: the custom segment fill (`fill={segment.color}` when colorSource is 'custom') and the caller-overridable needle paint (needle-mark fill+stroke, needle-cap fill). Measured 2026-07-17 after the chart-engine refactor moved the four D3 sinks out of families/gauge.",
+        "$note": "This file also carries a SKIN-EXEMPT-NOT-PAINT entry; its total runtimeSvgFloor is the SUM (4 runtime-value + 4 not-paint = 8)."
+      },
+      "patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/radar/index.tsx": {
+        "runtimeSvgFloor": 4,
+        "why": "Four intrinsic-SVG JSX paint attributes consume the caller-supplied series colour: polygon fill+stroke, emphasis-line stroke, and point fill. Measured 2026-07-17 after the chart-engine refactor moved the four D3 sinks out of families/radar-chart.",
+        "$note": "This file also carries a SKIN-EXEMPT-NOT-PAINT entry; its total runtimeSvgFloor is the SUM (4 runtime-value + 1 not-paint = 5)."
       },
       "patterns/visualization/charts/presentation/tooltip/index.tsx": {
         "floor": 2,
@@ -207,7 +219,7 @@
     }
   },
   "SKIN-EXEMPT-NOT-PAINT": {
-    "$why": "Paint-shaped property names on objects that never reach a DOM style prop. Not A, not B: migrating them is a category error -- no CSS selector can hold a TypeScript mutation.",
+    "$why": "Paint-shaped property names on objects that never reach a DOM style prop. Not A, not B: migrating them is a category error -- no CSS selector can hold a TypeScript mutation. The same law covers SVG attribute-name collisions: SMIL `fill=\"freeze\"` on `<animate>` is animation timing state, not a colour, yet the AST fill-attribute rule counts it.",
     "files": {
       "patterns/customization/brand-studio/index.tsx": {
         "floor": 8,
@@ -221,6 +233,25 @@
       "patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts": {
         "floor": 4,
         "why": "The four `background` keys build ChartTheme surface data returned by the hook. They never enter a React style object or DOM sink; treating them as CSS paint would be a category error."
+      },
+      "patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts": {
+        "floor": 1,
+        "why": "`color: segment.color` copies the caller's per-segment colour into the immutable gauge geometry output consumed by the React renderer. It is datum forwarding inside a data structure, never a DOM style object."
+      },
+      "patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/funnel/index.tsx": {
+        "floor": 1,
+        "runtimeSvgFloor": 1,
+        "why": "One `color: segment.color` key builds the interaction datum bag forwarded to tooltips/handlers (data, not a style object), and one SMIL `fill=\"freeze\"` on the mount `<animate>` is animation fill mode the fill-attribute rule counts as paint. Measured 2026-07-17."
+      },
+      "patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/gauge/index.tsx": {
+        "floor": 1,
+        "runtimeSvgFloor": 4,
+        "why": "One `color: segment.color` key builds the interaction datum bag (data, not a style object), and four SMIL `fill=\"freeze\"` attributes on the track/segment/needle/value mount `<animate>` elements are animation fill mode the fill-attribute rule counts as paint. Measured 2026-07-17."
+      },
+      "patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/radar/index.tsx": {
+        "floor": 1,
+        "runtimeSvgFloor": 1,
+        "why": "One `color: currentSeries.color` key builds the interaction datum bag (data, not a style object), and one SMIL `fill=\"freeze\"` on the mount `<animate>` is animation fill mode the fill-attribute rule counts as paint. Measured 2026-07-17."
       }
     }
   }

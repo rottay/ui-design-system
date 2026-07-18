@@ -4,10 +4,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import type { ChartPersonalityTokens } from '@/foundation/contracts';
-import {
-  bithireBrandTheme,
-  themanagementmiamiBrandTheme,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
+import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
 import {
   CHART_CATEGORICAL_SIZE,
   resolveChartSeriesVariables,

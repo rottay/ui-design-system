@@ -86,7 +86,9 @@ describe('chart catalog advanced coverage', () => {
     expect(screen.getByRole('img', { name: 'Vertical funnel' })).toBeInTheDocument();
 
     expect(vertical.container.querySelectorAll('polygon').length).toBe(3);
-    expect(vertical.container.querySelectorAll('title').length).toBe(3);
+    // The renderer owns one SVG-level accessible title; these are the three
+    // legacy-native stage titles enabled by the tooltip compatibility flag.
+    expect(vertical.container.querySelectorAll('[data-part="funnel-segment-mark"] > title')).toHaveLength(3);
     expect(screen.getAllByText('62.0%').length).toBeGreaterThan(0);
     expect(screen.getAllByText('29.0%').length).toBeGreaterThan(0);
     expect(screen.getAllByText('1000').length).toBeGreaterThan(0);
@@ -118,7 +120,7 @@ describe('chart catalog advanced coverage', () => {
     expect(screen.getAllByText('Win').length).toBeGreaterThan(0);
 
     expect(horizontal.container.querySelectorAll('polygon').length).toBe(3);
-    expect(horizontal.container.querySelectorAll('title').length).toBe(0);
+    expect(horizontal.container.querySelectorAll('[data-part="funnel-segment-mark"] > title')).toHaveLength(0);
   });
 
   it('covers pie chart donut, percentage labels, legend, tooltip, and hidden-label branches', async () => {
@@ -217,7 +219,9 @@ describe('chart catalog advanced coverage', () => {
 
     expect(container.querySelectorAll('polygon').length).toBeGreaterThan(2);
     expect(container.querySelectorAll('circle').length).toBe(6);
-    expect(container.querySelectorAll('title').length).toBe(6);
+    // The renderer owns one SVG-level accessible title; assert the six
+    // compatibility point titles directly instead of coupling to that shell.
+    expect(container.querySelectorAll('[data-part="radar-point-mark"] > title')).toHaveLength(6);
     expect(container.querySelectorAll('svg text').length).toBe(0);
   });
 

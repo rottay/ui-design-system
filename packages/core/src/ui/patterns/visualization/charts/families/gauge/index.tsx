@@ -1,27 +1,15 @@
 'use client';
 
 /**
- * @fileoverview GaugeChart -- D3-backed gauge/dial chart using `d3.arc()` for
- * segmented arcs and an animated needle that points to the current value.
- * Supports configurable value ranges, threshold segments with semantic colors,
- * custom arc angles, inner radius, and a center value display.
+ * Compatibility family for the public GaugeChart contract.
  *
- * @example
- * <GaugeChart
- *   value={72}
- *   title="System Health"
- *   label="Score"
- *   segments={[
- *     { from: 0, to: 33, color: 'var(--ds-color-error)', label: 'Poor' },
- *     { from: 33, to: 66, color: 'var(--ds-color-warning)', label: 'Fair' },
- *     { from: 66, to: 100, color: 'var(--ds-color-success)', label: 'Good' },
- *   ]}
- *   height={300}
- * />
+ * Geometry and SVG ownership live in the chart-engine `SvgGaugeRenderer`.
+ * This adapter deliberately retains the legacy family API, scaffold, legend,
+ * compactness and accessibility summary so existing product screens migrate
+ * without a consumer rewrite.
  */
 
-import { memo, useEffect, useRef, useMemo } from 'react';
-import { arc, interpolate, select } from 'd3';
+import { memo, useMemo, useRef } from 'react';
 
 import type {
   ChartBaseProps,
@@ -29,75 +17,51 @@ import type {
   ChartCompactProps,
   ChartLegendProps,
 } from '../../contracts';
-import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
+import { useChartCompact, useChartDimensions, useChartPersonality } from '../../runtime';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { SvgGaugeRenderer } from '../../runtime/chart-engine/presentation/react/renderers/gauge';
 
 /** A single threshold segment rendered as a colored arc band on the gauge. */
 export interface GaugeSegment {
-  /** Start value of this segment */
+  /** Start value of this segment. */
   from: number;
-  /** End value of this segment */
+  /** End value of this segment. */
   to: number;
-  /** Fill color for this arc segment */
+  /** Fill color for this arc segment. An empty string remains intentional. */
   color: string;
-  /** Optional label for this segment (used in legend and ARIA summary) */
+  /** Optional label for the legend and accessible summary. */
   label?: string;
 }
 
-/** Props for the {@link GaugeChart} component. */
+/** Props for the backward-compatible {@link GaugeChart} family adapter. */
 export interface GaugeChartProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartCompactProps<ChartCompactCoreConfig> {
-  /** Current value (positioned between min and max) */
+  /** Current value (positioned between min and max). */
   value: number;
-  /** Minimum value. Default: 0 */
+  /** Minimum value. Default: 0. */
   min?: number;
-  /** Maximum value. Default: 100 */
+  /** Maximum value. Default: 100. */
   max?: number;
-  /** Threshold segments with colors. Defaults to red/yellow/green thirds. */
+  /** Threshold segments with colors. Defaults to semantic low/mid/high bands. */
   segments?: GaugeSegment[];
-  /** Show value text in center. Default: true */
+  /** Show value text in center. Default: true. */
   showValue?: boolean;
-  /** Value format function */
+  /** Value format function. */
   formatValue?: (value: number) => string;
-  /** Label below the value */
+  /** Label below the value. */
   label?: string;
-  /** Arc start angle in degrees. Default: -120 */
+  /** Arc start angle in degrees. Default: -120. */
   startAngle?: number;
-  /** Arc end angle in degrees. Default: 120 */
+  /** Arc end angle in degrees. Default: 120. */
   endAngle?: number;
-  /** Inner radius ratio (0-1). Default: 0.7 */
+  /** Inner radius ratio (0-1). Default: 0.7. */
   innerRadius?: number;
-  /** Show needle indicator. Default: true */
+  /** Show needle indicator. Default: true. */
   showNeedle?: boolean;
-  /** Needle color. Default: var(--ds-color-text-primary) */
+  /** Needle color. Default: var(--ds-color-text-primary). */
   needleColor?: string;
-}
-
-/** Converts degrees to radians for D3 arc generators. */
-function degreesToRadians(degrees: number): number {
-  return (degrees * Math.PI) / 180;
-}
-
-function resolveGaugeAngles(startValue: number, endValue: number): [number, number] {
-  const rawStart = Number.isFinite(startValue) ? startValue : -120;
-  const rawEnd = Number.isFinite(endValue) ? endValue : 120;
-  const normalizedStart = rawStart % 360;
-  const start = Object.is(normalizedStart, -0) ? 0 : normalizedStart;
-  const rawSpan = rawEnd - rawStart;
-  if (!Number.isFinite(rawSpan) || rawSpan === 0) return [start, start + 240];
-  const span = Math.max(-360, Math.min(360, rawSpan));
-  return [start, start + span];
-}
-
-function defaultSegments(rangeMin: number, rangeMax: number): Array<Omit<GaugeSegment, 'color'>> {
-  const third = (rangeMax - rangeMin) / 3;
-  return [
-    { from: rangeMin, to: rangeMin + third, label: 'Low' },
-    { from: rangeMin + third, to: rangeMin + third * 2, label: 'Medium' },
-    { from: rangeMin + third * 2, to: rangeMax, label: 'High' },
-  ];
 }
 
 const DEFAULT_SEGMENT_TONES = ['error', 'warning', 'success'] as const;
@@ -107,22 +71,47 @@ const DEFAULT_SEGMENT_COLORS = [
   'var(--ds-color-success)',
 ] as const;
 
-function segmentTone(usesDefaultSegments: boolean, index: number): 'custom' | (typeof DEFAULT_SEGMENT_TONES)[number] {
+function resolveGaugeRange(min: number | undefined, max: number | undefined): readonly [number, number] {
+  const finiteMin = Number.isFinite(min) ? min as number : 0;
+  const finiteMax = Number.isFinite(max) ? max as number : 100;
+  if (finiteMin === finiteMax) return [finiteMin, finiteMin + 1];
+  return finiteMin < finiteMax ? [finiteMin, finiteMax] : [finiteMax, finiteMin];
+}
+
+function defaultSegments(rangeMin: number, rangeMax: number): readonly Omit<GaugeSegment, 'color'>[] {
+  const third = (rangeMax - rangeMin) / 3;
+  return [
+    { from: rangeMin, to: rangeMin + third, label: 'Low' },
+    { from: rangeMin + third, to: rangeMin + third * 2, label: 'Medium' },
+    { from: rangeMin + third * 2, to: rangeMax, label: 'High' },
+  ];
+}
+
+function normalizedSegments(
+  providedSegments: GaugeSegment[] | undefined,
+  rangeMin: number,
+  rangeMax: number,
+): ReadonlyArray<Omit<GaugeSegment, 'color'> & { color?: string; toneIndex: number }> {
+  return (providedSegments ?? defaultSegments(rangeMin, rangeMax)).flatMap((segment, toneIndex) => {
+    if (!Number.isFinite(segment.from) || !Number.isFinite(segment.to)) return [];
+    const from = Math.max(rangeMin, segment.from);
+    const to = Math.min(rangeMax, segment.to);
+    return to > from ? [{ ...segment, from, to, toneIndex }] : [];
+  });
+}
+
+function segmentTone(
+  usesDefaultSegments: boolean,
+  index: number,
+): 'custom' | (typeof DEFAULT_SEGMENT_TONES)[number] {
   if (!usesDefaultSegments) return 'custom';
   return DEFAULT_SEGMENT_TONES[index % DEFAULT_SEGMENT_TONES.length] ?? 'error';
 }
 
 /**
- * Renders a gauge/dial chart with a segmented arc background and an animated
- * needle indicator pointing to the current value.
- *
- * The gauge arc spans from `startAngle` to `endAngle` (in degrees), with the
- * value mapped linearly across that range. Each segment is rendered as a
- * separate arc band with its own fill color. An optional needle rotates to
- * the current value position, and a center label displays the formatted value.
- *
- * @param props - See {@link GaugeChartProps} for the full option set.
- * @returns A `ChartScaffold`-wrapped SVG with accessible summary and legend.
+ * Public GaugeChart compatibility adapter. The component preserves the former
+ * family contract while delegating every SVG mark to the modern React-owned
+ * renderer. No D3 selection, append, transition, or DOM mutation remains here.
  */
 export const GaugeChart = memo(function GaugeChart({
   value,
@@ -153,56 +142,48 @@ export const GaugeChart = memo(function GaugeChart({
   autoCompact,
   compactBreakpoint,
 }: GaugeChartProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const { containerRef, dimensions } = useChartDimensions(width, height);
+  // The modern renderer owns the normal responsive observer. This lightweight
+  // measurement only activates for the legacy `autoCompact` API, which needs
+  // the outer family width to decide whether its legend can collapse.
+  const { containerRef: scaffoldRef, dimensions: scaffoldDimensions } = useChartDimensions(
+    width,
+    height,
+    Boolean(autoCompact),
+  );
+  const legacySvgRef = useRef<SVGSVGElement>(null);
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
-  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
-  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
-  const [rangeMin, rangeMax] = useMemo<[number, number]>(() => {
-    const finiteMin = Number.isFinite(min) ? min : 0;
-    const finiteMax = Number.isFinite(max) ? max : 100;
-    if (finiteMin === finiteMax) return [finiteMin, finiteMin + 1];
-    return finiteMin < finiteMax ? [finiteMin, finiteMax] : [finiteMax, finiteMin];
-  }, [max, min]);
-  // Only the private defaults move their SVG fill to the finite skin. Every
-  // caller-owned array keeps the original fill contract, including an
-  // explicitly empty color string.
+  const compactState = useChartCompact({
+    compact,
+    compactMode,
+    autoCompact,
+    compactBreakpoint,
+    containerWidth: autoCompact ? scaffoldDimensions.width : undefined,
+  });
+  const chartHeight = compactState.isCompact
+    ? Math.max(height, compactState.minHeight)
+    : height;
+  const [rangeMin, rangeMax] = useMemo(
+    () => resolveGaugeRange(min, max),
+    [max, min],
+  );
   const usesDefaultSegments = providedSegments === undefined;
-  const segments = useMemo<ReadonlyArray<Omit<GaugeSegment, 'color'> & { color?: string; toneIndex: number }>>(
-    () => (providedSegments ?? defaultSegments(rangeMin, rangeMax)).flatMap((segment, toneIndex) => {
-      if (!Number.isFinite(segment.from) || !Number.isFinite(segment.to)) return [];
-      const from = Math.max(rangeMin, segment.from);
-      const to = Math.min(rangeMax, segment.to);
-      return to > from ? [{ ...segment, from, to, toneIndex }] : [];
-    }),
+  const resolvedSegments = useMemo(
+    () => normalizedSegments(providedSegments, rangeMin, rangeMax),
     [providedSegments, rangeMax, rangeMin],
   );
-
-  // Clamp value to [min, max] range
   const clampedValue = Number.isFinite(value)
     ? Math.max(rangeMin, Math.min(rangeMax, value))
     : rangeMin;
-  const [resolvedStartAngle, resolvedEndAngle] = useMemo(
-    () => resolveGaugeAngles(startAngle, endAngle),
-    [endAngle, startAngle],
+  const displayValue = useMemo(
+    () => formatValue ? formatValue(clampedValue) : String(clampedValue),
+    [clampedValue, formatValue],
   );
-  const resolvedInnerRadius = Number.isFinite(innerRadius)
-    ? Math.min(0.95, Math.max(0, innerRadius))
-    : 0.7;
-
-  // Build the display string
-  const displayValue = useMemo(() => {
-    if (formatValue) return formatValue(clampedValue);
-    return String(clampedValue);
-  }, [clampedValue, formatValue]);
-
-  // Find the active segment for the current value (used in ARIA description)
-  const activeSegment = useMemo(() => {
-    return segments.find((seg) => clampedValue >= seg.from && clampedValue <= seg.to);
-  }, [clampedValue, segments]);
-
-  // Accessible summary table
+  const activeSegment = useMemo(
+    () => resolvedSegments.find((segment) => (
+      clampedValue >= segment.from && clampedValue <= segment.to
+    )),
+    [clampedValue, resolvedSegments],
+  );
   const summary = useMemo(() => ({
     caption: title ? `${title} data summary` : 'Gauge chart data summary',
     headers: ['Metric', 'Value'],
@@ -210,249 +191,63 @@ export const GaugeChart = memo(function GaugeChart({
       ['Current value', displayValue],
       ['Range', `${rangeMin} - ${rangeMax}`],
       ...(activeSegment?.label ? [['Status', activeSegment.label] as [string, string]] : []),
-      ...segments.map((seg) => [
-        seg.label ?? `${seg.from}-${seg.to}`,
-        `${seg.from} to ${seg.to}`,
+      ...resolvedSegments.map((segment) => [
+        segment.label ?? `${segment.from}-${segment.to}`,
+        `${segment.from} to ${segment.to}`,
       ] as [string, string]),
     ],
-  }), [title, displayValue, rangeMin, rangeMax, activeSegment, segments]);
-
-  // Legend node
+  }), [activeSegment, displayValue, rangeMax, rangeMin, resolvedSegments, title]);
   const legendNode = legend ? (
-    <div data-part="legend" data-variant="gauge" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
-      {segments.map((seg) => (
-        <div key={`${seg.from}-${seg.to}`} data-part="legend-item" data-state={seg === activeSegment ? 'active' : 'inactive'} style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
+    <div
+      data-part="legend"
+      data-variant="gauge"
+      style={{
+        display: 'flex',
+        gap: 'var(--ds-chart-legend-gap, 16px)',
+        flexWrap: 'wrap',
+        marginTop: 'var(--ds-chart-legend-margin-top, 8px)',
+        justifyContent: 'center',
+      }}
+    >
+      {resolvedSegments.map((segment) => (
+        <div
+          key={`${segment.from}-${segment.to}`}
+          data-part="legend-item"
+          data-state={segment === activeSegment ? 'active' : 'inactive'}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--ds-chart-legend-item-gap, 6px)',
+            fontSize: 'var(--ds-chart-legend-font-size, 12px)',
+          }}
+        >
           <span
             data-part="legend-swatch"
             data-color-source={usesDefaultSegments ? 'default' : 'custom'}
-            data-tone={segmentTone(usesDefaultSegments, seg.toneIndex)}
+            data-tone={segmentTone(usesDefaultSegments, segment.toneIndex)}
             style={{
               width: 12,
               height: 12,
-              backgroundColor: usesDefaultSegments ? DEFAULT_SEGMENT_COLORS[seg.toneIndex] : seg.color,
+              backgroundColor: usesDefaultSegments
+                ? DEFAULT_SEGMENT_COLORS[segment.toneIndex]
+                : segment.color,
               display: 'inline-block',
             }}
           />
-          <span data-part="legend-label">{seg.label ?? `${seg.from}-${seg.to}`}</span>
+          <span data-part="legend-label">
+            {segment.label ?? `${segment.from}-${segment.to}`}
+          </span>
         </div>
       ))}
     </div>
   ) : null;
 
-  useEffect(() => {
-    if (!svgRef.current) return;
-
-    const svg = select(svgRef.current);
-    svg.selectAll('*').interrupt().remove();
-
-    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
-    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
-    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
-
-    // Compute radii from the available space. 20px padding prevents clipping.
-    const radius = Math.max(0, Math.min(safeChartWidth, safeChartHeight) / 2 - 20);
-    const inner = radius * resolvedInnerRadius;
-
-    // Convert degree angles to radians for D3 arc generators.
-    const startRad = degreesToRadians(resolvedStartAngle);
-    const endRad = degreesToRadians(resolvedEndAngle);
-    const totalAngle = endRad - startRad;
-
-    // The gauge center is offset downward slightly when the arc is less than
-    // a full circle, so the visual weight feels balanced.
-    const centerY = safeChartHeight / 2 + (resolvedStartAngle < 0 && resolvedEndAngle > 0 ? radius * 0.1 : 0);
-
-    const g = svg
-      .append('g')
-      .attr('data-part', 'plot-area')
-      .attr('data-variant', 'gauge')
-      .attr('data-start-angle', resolvedStartAngle)
-      .attr('data-end-angle', resolvedEndAngle)
-      .attr('transform', `translate(${safeChartWidth / 2},${centerY})`);
-
-    // Background track: a single muted arc spanning the full gauge range.
-    const backgroundArc = arc()
-      .innerRadius(inner)
-      .outerRadius(radius)
-      .startAngle(startRad)
-      .endAngle(endRad)
-      .cornerRadius(2);
-
-    g.append('path')
-      .attr('data-part', 'track')
-      .attr('d', backgroundArc({} as any) as string)
-      .attr('opacity', 0.4);
-
-    // Render each segment as a separate arc band.
-    const range = rangeMax - rangeMin;
-    segments.forEach((seg) => {
-      const segStartFraction = Math.max(0, (seg.from - rangeMin) / range);
-      const segEndFraction = Math.min(1, (seg.to - rangeMin) / range);
-      const segStartAngle = startRad + totalAngle * segStartFraction;
-      const segEndAngle = startRad + totalAngle * segEndFraction;
-
-      const segmentArc = arc()
-        .innerRadius(inner)
-        .outerRadius(radius)
-        .startAngle(segStartAngle)
-        .endAngle(segEndAngle)
-        .cornerRadius(1);
-
-      const segPath = g.append('path')
-        .attr('data-part', 'segment')
-        .attr('data-state', seg === activeSegment ? 'active' : 'inactive')
-        .attr('data-color-source', usesDefaultSegments ? 'default' : 'custom')
-        .attr('data-tone', segmentTone(usesDefaultSegments, seg.toneIndex))
-        .attr('fill', usesDefaultSegments ? null : (seg.color ?? null))
-        .attr('opacity', 0.85);
-
-      if (chartPersonality.animate) {
-        segPath
-          .attr('d', arc()
-            .innerRadius(inner)
-            .outerRadius(radius)
-            .startAngle(segStartAngle)
-            .endAngle(segStartAngle)
-            .cornerRadius(1)({} as any) as string)
-          .transition()
-          .duration(chartPersonality.animationDuration * 0.6)
-          .attrTween('d', () => {
-            const interp = interpolate(segStartAngle, segEndAngle);
-            return (t: number) => {
-              return arc()
-                .innerRadius(inner)
-                .outerRadius(radius)
-                .startAngle(segStartAngle)
-                .endAngle(interp(t))
-                .cornerRadius(1)({} as any) as string;
-            };
-          });
-      } else {
-        segPath.attr('d', segmentArc({} as any) as string);
-      }
-
-      // Tooltip for each segment
-      if (chartPersonality.tooltip && seg.label) {
-        segPath.append('title').text(
-          compactState.compactTooltip
-            ? `${seg.from}-${seg.to}`
-            : `${seg.label}: ${seg.from} to ${seg.to}`
-        );
-      }
-    });
-
-    // Needle indicator: a thin triangle pointing from the center outward.
-    if (showNeedle) {
-      const valueFraction = (clampedValue - rangeMin) / range;
-      const needleAngle = startRad + totalAngle * valueFraction;
-      const needleLength = radius * 0.88;
-      const needleBaseWidth = 4;
-
-      const needleGroup = g.append('g').attr('data-part', 'needle');
-
-      // Needle triangle path: base at center, tip at the needle length.
-      const needlePath = [
-        `M ${-needleBaseWidth} 0`,
-        `L 0 ${-needleLength}`,
-        `L ${needleBaseWidth} 0`,
-        'Z',
-      ].join(' ');
-
-      const needle = needleGroup
-        .append('path')
-        .attr('data-part', 'needle-mark')
-        .attr('d', needlePath)
-        .attr('fill', needleColor)
-        .attr('stroke', needleColor)
-        .attr('stroke-width', 0.5);
-
-      // Center cap circle
-      needleGroup
-        .append('circle')
-        .attr('data-part', 'needle-cap')
-        .attr('cx', 0)
-        .attr('cy', 0)
-        .attr('r', needleBaseWidth + 2)
-        .attr('fill', needleColor);
-
-      if (chartPersonality.animate) {
-        // Animate needle from the start angle to the target angle.
-        // D3 rotation uses degrees, so convert radians back.
-        const startDeg = (startRad * 180) / Math.PI;
-        const targetDeg = (needleAngle * 180) / Math.PI;
-
-        needleGroup
-          .attr('transform', `rotate(${startDeg})`)
-          .transition()
-          .duration(chartPersonality.animationDuration)
-          .delay(chartPersonality.animationDuration * 0.3)
-          .attrTween('transform', () => {
-            const interp = interpolate(startDeg, targetDeg);
-            return (t: number) => `rotate(${interp(t)})`;
-          });
-      } else {
-        const targetDeg = (needleAngle * 180) / Math.PI;
-        needleGroup.attr('transform', `rotate(${targetDeg})`);
-      }
-    }
-
-    // Center value text
-    if (showValue) {
-      const valueText = g.append('text')
-        .attr('data-part', 'value-label')
-        .attr('x', 0)
-        .attr('y', 8)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .style('font-size', `${Math.max(16, radius * 0.22)}px`)
-        .style('font-weight', '600')
-        .text(displayValue);
-
-      if (chartPersonality.animate) {
-        valueText
-          .style('opacity', 0)
-          .transition()
-          .duration(chartPersonality.animationDuration * 0.4)
-          .delay(chartPersonality.animationDuration * 0.6)
-          .style('opacity', 1);
-      }
-    }
-
-    // Label text below the value
-    if (label) {
-      const labelText = g.append('text')
-        .attr('data-part', 'label')
-        .attr('x', 0)
-        .attr('y', showValue ? 32 : 8)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .style('font-size', `${Math.max(11, radius * 0.11)}px`)
-        .text(label);
-
-      if (chartPersonality.animate) {
-        labelText
-          .style('opacity', 0)
-          .transition()
-          .duration(chartPersonality.animationDuration * 0.4)
-          .delay(chartPersonality.animationDuration * 0.7)
-          .style('opacity', 1);
-      }
-    }
-    return () => {
-      svg.selectAll('*').interrupt();
-    };
-  }, [
-    chartWidth, chartHeight, clampedValue, rangeMin, rangeMax, segments, showValue,
-    displayValue, label, resolvedStartAngle, resolvedEndAngle, resolvedInnerRadius, showNeedle,
-    needleColor, chartPersonality, compactState.compactTooltip, usesDefaultSegments,
-  ]);
-
   return (
     <ChartScaffold
-      containerRef={containerRef}
-      svgRef={svgRef}
+      containerRef={scaffoldRef}
+      svgRef={legacySvgRef}
       width={width}
-      height={height}
+      height={chartHeight}
       className={['ds-chart-gauge', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
@@ -462,7 +257,7 @@ export const GaugeChart = memo(function GaugeChart({
       ariaLabel={title ?? `Gauge chart showing ${displayValue}`}
       ariaDescription={describeChart(
         'Gauge chart',
-        segments.length,
+        resolvedSegments.length,
         subtitle,
         `Current value: ${displayValue}${activeSegment?.label ? ` (${activeSegment.label})` : ''}. Range: ${rangeMin} to ${rangeMax}.`,
       )}
@@ -470,6 +265,37 @@ export const GaugeChart = memo(function GaugeChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
+      plot={({ descriptionId }) => (
+        <SvgGaugeRenderer
+          value={value}
+          ariaLabel={title ?? `Gauge chart showing ${displayValue}`}
+          ariaDescription={describeChart(
+            'Gauge chart',
+            resolvedSegments.length,
+            subtitle,
+            `Current value: ${displayValue}${activeSegment?.label ? ` (${activeSegment.label})` : ''}. Range: ${rangeMin} to ${rangeMax}.`,
+          )}
+          ariaDescribedBy={descriptionId}
+          width={width}
+          height={chartHeight}
+          responsive={responsive}
+          animate={chartPersonality.animate}
+          min={min}
+          max={max}
+          segments={providedSegments}
+          showValue={showValue}
+          formatValue={formatValue}
+          label={label}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={innerRadius}
+          showNeedle={showNeedle}
+          needleColor={needleColor}
+          trackCornerRadius={2}
+          segmentCornerRadius={1}
+          showSegmentTitles={chartPersonality.tooltip}
+        />
+      )}
     />
   );
 });
