@@ -1,29 +1,24 @@
 'use client';
 
 /**
- * @fileoverview ScatterChart -- D3-backed scatter/bubble chart using `scaleLinear` for both axes.
- * Each data point is rendered as a circle positioned by its x/y values. Optional bubble mode maps
- * a `size` field to circle radius via `scaleSqrt`. Supports an optional least-squares linear trend
- * line, grid lines, tooltips, and fade-in animation on mount.
+ * Compatibility family for the public ScatterChart contract.
  *
- * @example
- * <ScatterChart
- *   data={[
- *     { x: 10, y: 20, label: 'A' },
- *     { x: 30, y: 50, label: 'B', size: 80 },
- *     { x: 50, y: 40, label: 'C', size: 120 },
- *   ]}
- *   xLabel="Revenue ($K)"
- *   yLabel="Growth (%)"
- *   bubble
- *   trendLine
- *   height={400}
- *   title="Revenue vs Growth"
- * />
+ * The chart-engine now owns pure Cartesian geometry (including the least-squares
+ * trend segment), React/SVG point marks, grid, axis labels, and the governed
+ * series palette. This adapter preserves the established family props, scaffold,
+ * accessible summary, legend, compact behaviour, and the idle tooltip element
+ * for existing consumers while delegating all SVG ownership and colour
+ * resolution to `SvgScatterRenderer`.
+ *
+ * Colour governance note (W5 Class-R migration): per-point `color` and the
+ * `colors[]` prop were arbitrary hex sinks. They are DROPPED here — every mark
+ * now paints through the governed `--ds-chart-paint-N` channel keyed on its
+ * series index (mirrored by the legend swatch through the identical personality
+ * palette chain), so tenant palettes reach scatter plots without a family edit.
+ * The whitelabel-torture fixture re-baselines this governance change at W8.
  */
 
-import { memo, useEffect, useMemo, useRef } from 'react';
-import { axisBottom, axisLeft, extent, max, min, scaleLinear, scaleSqrt, select } from 'd3';
+import { memo, useMemo, useRef } from 'react';
 
 import type {
   ChartBaseProps,
@@ -34,14 +29,19 @@ import type {
   ChartMarginProps,
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
-import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../../runtime';
+import { useChartCompact, useChartDimensions, useChartPersonality, useChartTooltip } from '../../runtime';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
-import { ChartTooltip, TooltipSeries } from '../../presentation/tooltip';
-import { createChartCrosshair, pointerToContainerPosition } from '../../presentation/crosshair';
+import { ChartTooltip } from '../../presentation/tooltip';
+import type {
+  SvgScatterDatum,
+  SvgScatterVariant,
+} from '../../runtime/chart-engine/foundation/renderers/geometry';
+import { SvgScatterRenderer } from '../../runtime/chart-engine/presentation/react/renderers/scatter';
 
 const DEFAULT_SCATTER_SIZE_RANGE: [number, number] = [4, 30];
 const MAX_SCATTER_COORDINATE = Number.MAX_VALUE / 4;
 
+/** Clamp coordinates so an extreme magnitude cannot overflow the scale domain. */
 function clampCoordinate(value: number): number {
   return Math.max(-MAX_SCATTER_COORDINATE, Math.min(MAX_SCATTER_COORDINATE, value));
 }
@@ -89,61 +89,13 @@ export interface ScatterChartProps
 }
 
 /**
- * Computes the slope and intercept for a simple linear regression (least squares)
- * over the provided data points. Returns null if fewer than 2 points.
- */
-function linearRegression(data: ScatterDataPoint[]): { slope: number; intercept: number } | null {
-  if (data.length < 2) return null;
-
-  const n = data.length;
-  let sumX = 0;
-  let sumY = 0;
-  let sumXY = 0;
-  let sumXX = 0;
-
-  for (const point of data) {
-    sumX += point.x;
-    sumY += point.y;
-    sumXY += point.x * point.y;
-    sumXX += point.x * point.x;
-  }
-
-  const denominator = n * sumXX - sumX * sumX;
-  if (!Number.isFinite(denominator) || denominator === 0) return null;
-
-  const slope = (n * sumXY - sumX * sumY) / denominator;
-  const intercept = (sumY - slope * sumX) / n;
-  if (!Number.isFinite(slope) || !Number.isFinite(intercept)) return null;
-  return { slope, intercept };
-}
-
-function paddedDomain(domain: [number, number]): [number, number] {
-  const [minimum, maximum] = domain;
-  if (minimum === maximum) {
-    if (minimum === 0) return [-1, 1];
-    const delta = Math.abs(minimum) * 0.05;
-    const lower = minimum - delta;
-    const upper = maximum + delta;
-    if (Number.isFinite(lower) && Number.isFinite(upper) && lower !== upper) {
-      return [lower, upper];
-    }
-    return minimum > 0 ? [minimum / 2, minimum] : [minimum, minimum / 2];
-  }
-
-  const span = maximum - minimum;
-  if (!Number.isFinite(span)) return [minimum, maximum];
-  const padding = span * 0.05;
-  const lower = minimum - padding;
-  const upper = maximum + padding;
-  return [Number.isFinite(lower) ? lower : minimum, Number.isFinite(upper) ? upper : maximum];
-}
-
-/**
- * Renders a scatter or bubble chart powered by D3's `scaleLinear` for both axes.
- * Optional linear trend line, grid, tooltips, and fade-in animation.
+ * Public ScatterChart compatibility adapter. SVG ownership, Cartesian geometry,
+ * the trend segment, and the governed series palette are delegated to
+ * `SvgScatterRenderer`; the family contract, scaffold shell, accessible summary,
+ * legend, and compact behaviour remain unchanged.
  *
  * @param props - See {@link ScatterChartProps} for the full option set.
- * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ * @returns A `ChartScaffold`-wrapped React renderer with accessible summary table.
  */
 export const ScatterChart = memo(function ScatterChart({
   data,
@@ -165,7 +117,6 @@ export const ScatterChart = memo(function ScatterChart({
   legend = false,
   animate,
   responsive = true,
-  colors,
   tooltip,
   margin = DEFAULT_MARGIN,
   compact,
@@ -173,34 +124,51 @@ export const ScatterChart = memo(function ScatterChart({
   autoCompact,
   compactBreakpoint,
 }: ScatterChartProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const { containerRef, dimensions } = useChartDimensions(width, height);
+  const scaffoldRef = useRef<HTMLDivElement>(null);
+  const legacySvgRef = useRef<SVGSVGElement>(null);
+  const { dimensions } = useChartDimensions(width, height);
+  // The renderer governs motion and native point titles from the resolved
+  // personality; the family retains `animate`/`tooltip` in its contract and
+  // sources the loading label and the governed palette from the hook.
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
+  const palette = chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
-  const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
-  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
-  const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
-  const resolvedPointRadius = Number.isFinite(pointRadius) && pointRadius >= 0 ? pointRadius : 5;
-  const resolvedOpacity = Number.isFinite(opacity) ? Math.min(1, Math.max(0, opacity)) : 0.7;
+  // The idle tooltip element preserves the tooltip-personality/skin contract.
+  // Live crosshair wiring for the migrated renderer lands with the shared
+  // interaction controller (Stage C), not this migration.
+  const { tooltipProps } = useChartTooltip();
+  const variant: SvgScatterVariant = bubble ? 'bubble' : 'scatter';
   const resolvedSizeRange = useMemo<[number, number]>(() => {
     const first = Number.isFinite(sizeRange[0]) && sizeRange[0] >= 0 ? sizeRange[0] : 4;
     const second = Number.isFinite(sizeRange[1]) && sizeRange[1] >= 0 ? sizeRange[1] : 30;
     return first <= second ? [first, second] : [second, first];
   }, [sizeRange]);
-  const finiteData = useMemo(() => data
-    .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y))
-    .map((point) => ({
-      ...point,
+  const resolvedOpacity = Number.isFinite(opacity) ? Math.min(1, Math.max(0, opacity)) : 0.7;
+
+  const finiteData = useMemo(
+    () => data.filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y)),
+    [data],
+  );
+
+  // Each point is its own governed series so the migrated plot preserves the
+  // legacy per-point colour distinction, now sourced from the tenant-governed
+  // `--ds-chart-paint-N` channel instead of arbitrary per-point hex. Coordinates
+  // are clamped so an extreme magnitude cannot overflow the scale domain to NaN.
+  const rendererData = useMemo<SvgScatterDatum[]>(
+    () => finiteData.map((point, index) => ({
+      id: String(index),
+      label: point.label ?? `Point ${index + 1}`,
       x: clampCoordinate(point.x),
       y: clampCoordinate(point.y),
-      ...(point.size == null || (Number.isFinite(point.size) && point.size >= 0)
-        ? {}
-        : { size: undefined }),
-    })), [data]);
+      series: String(index),
+      ...(bubble && point.size != null && Number.isFinite(point.size) && point.size >= 0
+        ? { size: point.size }
+        : {}),
+    })),
+    [bubble, finiteData],
+  );
 
-  const summary = {
+  const summary = useMemo(() => ({
     caption: title ? `${title} data summary` : 'Scatter chart data summary',
     headers: ['Label', 'X', 'Y', ...(bubble ? ['Size'] : [])],
     rows: finiteData.map((point) => [
@@ -209,278 +177,55 @@ export const ScatterChart = memo(function ScatterChart({
       point.y,
       ...(bubble ? [point.size ?? '-'] : []),
     ]),
-  };
+  }), [bubble, finiteData, title]);
 
-  // Collect unique colors for a legend when points have explicit colors
   const legendNode = legend ? (
-    <div data-part="legend" data-variant={bubble ? 'bubble' : 'scatter'} style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
+    <div
+      data-part="legend"
+      data-variant={variant}
+      style={{
+        display: 'flex',
+        gap: 'var(--ds-chart-legend-gap, 16px)',
+        flexWrap: 'wrap',
+        marginTop: 'var(--ds-chart-legend-margin-top, 8px)',
+        justifyContent: 'center',
+      }}
+    >
       {finiteData
-        .filter((d) => d.label)
-        .slice(0, 10) // Limit legend to 10 items to avoid clutter
-        .map((d, i) => (
-          <div key={d.label ?? i} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
+        .map((point, index) => ({ point, index }))
+        .filter(({ point }) => point.label)
+        .slice(0, 10)
+        .map(({ point, index }) => (
+          <div
+            key={point.label ?? index}
+            data-part="legend-item"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--ds-chart-legend-item-gap, 6px)',
+              fontSize: 'var(--ds-chart-legend-font-size, 12px)',
+            }}
+          >
             <span
               data-part="legend-swatch"
+              data-series-index={index % 10}
               style={{
                 width: 10,
                 height: 10,
-                backgroundColor: d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)',
+                backgroundColor: palette[index % palette.length] ?? 'var(--ds-color-primary)',
                 display: 'inline-block',
               }}
             />
-            <span data-part="legend-label">{d.label}</span>
+            <span data-part="legend-label">{point.label}</span>
           </div>
         ))}
     </div>
   ) : null;
 
-  useEffect(() => {
-    const svgNode = svgRef.current;
-    if (!svgNode) return;
-
-    const svg = select(svgNode);
-    svg.selectAll('*').interrupt().remove();
-    if (finiteData.length === 0) return;
-
-    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
-    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
-    const rawInnerWidth = safeChartWidth - margin.left - margin.right;
-    const rawInnerHeight = safeChartHeight - margin.top - margin.bottom;
-    const innerWidth = Number.isFinite(rawInnerWidth) ? Math.max(0, rawInnerWidth) : 0;
-    const innerHeight = Number.isFinite(rawInnerHeight) ? Math.max(0, rawInnerHeight) : 0;
-    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
-    if (innerWidth === 0 || innerHeight === 0) return;
-
-    const g = svg
-      .append('g')
-      .attr('data-part', 'plot-area')
-      .attr('data-variant', bubble ? 'bubble' : 'scatter')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // X scale with 5% padding on each side so points don't sit on axes
-    const xExtent = extent(finiteData, (d) => d.x) as [number, number];
-    const x = scaleLinear()
-      .domain(paddedDomain(xExtent))
-      .nice()
-      .range([0, innerWidth]);
-
-    // Y scale with 5% padding
-    const yExtent = extent(finiteData, (d) => d.y) as [number, number];
-    const y = scaleLinear()
-      .domain(paddedDomain(yExtent))
-      .nice()
-      .range([innerHeight, 0]);
-
-    // Bubble size scale (sqrt so area scales linearly with value)
-    const sizeScale = bubble
-      ? scaleSqrt()
-          .domain([min(finiteData, (d) => d.size ?? 1) ?? 1, max(finiteData, (d) => d.size ?? 1) ?? 1])
-          .range(resolvedSizeRange)
-      : null;
-
-    // X axis
-    g.append('g')
-      .attr('data-part', 'axis')
-      .attr('data-axis', 'x')
-      .attr('transform', `translate(0,${innerHeight})`)
-      .call(axisBottom(x).ticks(tickCount))
-      .selectAll('text')
-      .attr('data-part', 'axis-tick-label')
-      .style('font-size', '12px');
-
-    // Y axis
-    g.append('g')
-      .attr('data-part', 'axis')
-      .attr('data-axis', 'y')
-      .call(axisLeft(y).ticks(tickCount))
-      .selectAll('text')
-      .attr('data-part', 'axis-tick-label')
-      .style('font-size', '12px');
-
-    // Grid lines
-    if (grid) {
-      // Horizontal grid
-      g.append('g')
-        .attr('class', 'grid-h')
-        .attr('data-part', 'grid')
-        .attr('data-axis', 'y')
-        .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
-        .selectAll('line')
-        .attr('data-part', 'grid-line')
-        .style('stroke-opacity', 0.5);
-
-      g.selectAll('.grid-h .domain').remove();
-
-      // Vertical grid
-      g.append('g')
-        .attr('class', 'grid-v')
-        .attr('data-part', 'grid')
-        .attr('data-axis', 'x')
-        .attr('transform', `translate(0,${innerHeight})`)
-        .call(axisBottom(x).ticks(tickCount).tickSize(-innerHeight).tickFormat(() => ''))
-        .selectAll('line')
-        .attr('data-part', 'grid-line')
-        .style('stroke-opacity', 0.5);
-
-      g.selectAll('.grid-v .domain').remove();
-    }
-
-    // Trend line (rendered behind points)
-    if (trendLine) {
-      const regression = linearRegression(finiteData);
-      if (regression) {
-        const xDomain = x.domain();
-        const x1 = xDomain[0];
-        const x2 = xDomain[1];
-        const y1 = regression.slope * x1 + regression.intercept;
-        const y2 = regression.slope * x2 + regression.intercept;
-
-        const line = g
-          .append('line')
-          .attr('data-part', 'trend-line')
-          .attr('x1', x(x1))
-          .attr('x2', x(x2))
-          .attr('y1', y(y1))
-          .attr('y2', y(y2))
-          .style('stroke-width', 1.5)
-          .style('stroke-dasharray', '6,4')
-          .style('opacity', 0.6);
-
-        if (chartPersonality.animate) {
-          line
-            .style('opacity', 0)
-            .transition()
-            .duration(chartPersonality.animationDuration)
-            .delay(finiteData.length * 20)
-            .style('opacity', 0.6);
-        }
-      }
-    }
-
-    // Data points
-    const circles = g
-      .selectAll('.scatter-point')
-      .data(finiteData)
-      .enter()
-      .append('circle')
-      .attr('class', 'scatter-point')
-      .attr('data-part', 'series-point')
-      .attr('data-state', 'idle')
-      .attr('cx', (d) => x(d.x))
-      .attr('cy', (d) => y(d.y))
-      .attr('r', (d) => {
-        if (bubble && sizeScale && d.size != null) {
-          return sizeScale(d.size);
-        }
-        return resolvedPointRadius;
-      })
-      .attr('fill', (d, i) => d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)')
-      .attr('fill-opacity', resolvedOpacity)
-      .attr('stroke', (d, i) => d.color ?? palette[i % palette.length] ?? 'var(--ds-color-primary)')
-      .attr('stroke-width', 1)
-      .attr('stroke-opacity', 0.9);
-
-    // Crosshair + tooltip, attached per-point (scatter points are already
-    // discrete hit targets -- unlike line/bar there is no "nearest x" to
-    // snap to between them) -- replaces the native <title> tooltip so hover
-    // feedback is consistent with the rest of the chart family.
-    if (chartPersonality.tooltip) {
-      const crosshair = createChartCrosshair(g, innerWidth, innerHeight);
-
-      circles
-        .style('cursor', 'pointer')
-        .on('mouseenter mousemove', (event: MouseEvent, d) => {
-          select(event.currentTarget as SVGCircleElement).attr('data-state', 'hovered');
-          const cx = x(d.x);
-          const cy = y(d.y);
-          const color = String(select(event.currentTarget as SVGCircleElement).attr('fill'));
-
-          crosshair.show(cx, [{ y: cy, color }], cy);
-
-          const pos = pointerToContainerPosition(event, containerRef.current);
-          if (!pos) return;
-
-          const compact = compactState.compactTooltip;
-          showTooltip(
-            pos.x,
-            pos.y,
-            <TooltipSeries
-              title={compact ? undefined : d.label}
-              items={[
-                { name: compact ? '' : 'x', value: d.x, color },
-                { name: compact ? '' : 'y', value: d.y, color },
-                ...(bubble && d.size != null ? [{ name: compact ? '' : 'size', value: d.size, color }] : []),
-              ]}
-            />
-          );
-        })
-        .on('mouseleave', (event: MouseEvent) => {
-          select(event.currentTarget as SVGCircleElement).attr('data-state', 'idle');
-          crosshair.hide();
-          hideTooltip();
-        });
-    }
-
-    // Fade-in animation
-    if (chartPersonality.animate) {
-      circles
-        .attr('opacity', 0)
-        .attr('r', 0)
-        .transition()
-        .duration(chartPersonality.animationDuration)
-        .delay((_, i) => i * 20)
-        .attr('opacity', 1)
-        .attr('r', (d) => {
-          if (bubble && sizeScale && d.size != null) {
-            return sizeScale(d.size);
-          }
-          return resolvedPointRadius;
-        });
-    }
-
-    // Axis labels
-    if (xLabel) {
-      svg
-        .append('text')
-        .attr('data-part', 'axis-label')
-        .attr('data-axis', 'x')
-        .attr('x', safeChartWidth / 2)
-        .attr('y', safeChartHeight - 4)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
-        .text(xLabel);
-    }
-
-    if (yLabel) {
-      svg
-        .append('text')
-        .attr('data-part', 'axis-label')
-        .attr('data-axis', 'y')
-        .attr('transform', 'rotate(-90)')
-        .attr('x', -safeChartHeight / 2)
-        .attr('y', 14)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
-        .text(yLabel);
-    }
-
-    // Style axis lines
-    svg.selectAll('.domain').attr('data-part', 'axis-domain');
-    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-
-    // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
-    // above), which would otherwise leave a stale React-side tooltip pointing at
-    // removed nodes.
-    return () => {
-      svg.selectAll('*').interrupt();
-      hideTooltip();
-    };
-  }, [finiteData, chartWidth, chartHeight, resolvedPointRadius, bubble, resolvedSizeRange, grid, resolvedOpacity, trendLine, chartPersonality, palette, margin, xLabel, yLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
-
   return (
     <ChartScaffold
-      containerRef={containerRef}
-      svgRef={svgRef}
+      containerRef={scaffoldRef}
+      svgRef={legacySvgRef}
       width={width}
       height={height}
       className={['ds-chart-scatter', className].filter(Boolean).join(' ')}
@@ -502,6 +247,30 @@ export const ScatterChart = memo(function ScatterChart({
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
       overlay={<ChartTooltip {...tooltipProps} variant={chartPersonality.tooltipStyle} />}
+      plot={({ descriptionId }) => (
+        <SvgScatterRenderer
+          data={rendererData}
+          ariaLabel={title ?? 'Scatter chart'}
+          ariaDescribedBy={descriptionId}
+          width={typeof width === 'number' ? width : undefined}
+          height={height}
+          responsive={responsive}
+          variant={variant}
+          insets={margin}
+          pointRadius={pointRadius}
+          bubbleRadiusRange={resolvedSizeRange}
+          grid={grid}
+          pointOpacity={resolvedOpacity}
+          {...(xLabel ? { xLabel } : {})}
+          {...(yLabel ? { yLabel } : {})}
+          trendLine={trendLine}
+          // The caller's style carries any provider palette variables the
+          // governed series channel resolves against. Placing it on the
+          // renderer's own owner keeps resolution correct even where a host
+          // cannot resolve an inherited custom property from an ancestor scope.
+          style={style}
+        />
+      )}
     />
   );
 });

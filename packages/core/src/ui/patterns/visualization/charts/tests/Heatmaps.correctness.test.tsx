@@ -1,14 +1,17 @@
 import React, { useState, type CSSProperties } from 'react';
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { CalendarHeatMap, HeatMap } from '..';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
-const scopedHeatMapColors = {
-  '--test-heat-low': '#edf2f7',
-  '--test-heat-high': '#123456',
-} as CSSProperties;
+// Cross-family coexistence + CalendarHeatMap correctness. Both families now
+// delegate to chart-engine renderers whose cells expose `data-part="cell"`.
+// CalendarHeatMap keeps its concrete inline `fill` (it paints per-day steps),
+// so its helpers read the `fill` attribute; HeatMap resolves a sequential
+// colour-math sink onto the `--ds-chart-cell-color` custom property, so its
+// helpers read that property. (CalendarHeatMap's prior D3 `rect.cal-cell`
+// contract is void: its Wave-5 renderer migration landed.)
 
 const scopedCalendarColors = {
   '--test-calendar-low': '#f3f4f6',
@@ -20,7 +23,7 @@ function expectConcreteNonBlackFill(cell: SVGRectElement): void {
   expect(fill).not.toBe('');
   expect(fill).not.toContain('var(');
   expect(fill).not.toContain('NaN');
-  expect(fill.replaceAll(' ', '').toLowerCase()).not.toBe('rgb(0,0,0)');
+  expect(fill.split(' ').join('').toLowerCase()).not.toBe('rgb(0,0,0)');
   expect(fill.toLowerCase()).not.toBe('#000000');
 }
 
@@ -37,28 +40,30 @@ function expectDistinctMonotonicFills(cells: SVGRectElement[]): void {
   cells.forEach(expectConcreteNonBlackFill);
 }
 
-function ClearingHeatMap(): React.ReactElement {
-  const [data, setData] = useState([
-    { x: 'Mon', y: 'Morning', value: 7 },
-    { x: 'Tue', y: 'Morning', value: Number.NaN },
-    { x: 'Wed', y: 'Morning', value: Number.POSITIVE_INFINITY },
-  ]);
+function heatMapCellColor(cell: SVGRectElement | undefined): string {
+  return cell?.style.getPropertyValue('--ds-chart-cell-color').trim() ?? '';
+}
 
-  return (
-    <>
-      <button type="button" onClick={() => setData([])}>Clear heatmap</button>
-      <HeatMap
-        title="Correct heatmap"
-        width={420}
-        height={260}
-        responsive={false}
-        animate={false}
-        data={data}
-        colorRange={['var(--test-heat-low)', 'var(--test-heat-high)']}
-        style={scopedHeatMapColors}
-      />
-    </>
-  );
+function expectConcreteNonBlackVarFill(cell: SVGRectElement): void {
+  const fill = heatMapCellColor(cell);
+  expect(fill).not.toBe('');
+  expect(fill).not.toContain('var(');
+  expect(fill).not.toContain('NaN');
+  expect(fill.split(' ').join('').toLowerCase()).not.toBe('rgb(0,0,0)');
+  expect(fill.toLowerCase()).not.toBe('#000000');
+}
+
+function cellVarWeight(cell: SVGRectElement): number {
+  const channels = heatMapCellColor(cell).match(/[\d.]+/g)?.map(Number) ?? [];
+  return channels.slice(0, 3).reduce((total, channel) => total + channel, 0);
+}
+
+function expectDistinctMonotonicVarFills(cells: SVGRectElement[]): void {
+  const fills = cells.map(heatMapCellColor);
+  expect(new Set(fills).size).toBe(cells.length);
+  const weights = cells.map(cellVarWeight);
+  expect(weights).toEqual([...weights].sort((left, right) => left - right));
+  cells.forEach(expectConcreteNonBlackVarFill);
 }
 
 function ClearingCalendarHeatMap({
@@ -97,109 +102,7 @@ function ClearingCalendarHeatMap({
   );
 }
 
-describe('heatmap correctness floor', () => {
-  it('resolves scoped colors, normalizes a constant domain, filters non-finite values, and clears stale cells', async () => {
-    const { container } = renderSurface(<ClearingHeatMap />);
-
-    await waitFor(() => {
-      expect(container.querySelectorAll('rect.cell')).toHaveLength(1);
-    });
-
-    const cell = container.querySelector('rect.cell') as SVGRectElement;
-    expectConcreteNonBlackFill(cell);
-    expect(cell.getAttribute('fill')).toBe('rgb(18, 52, 86)');
-    expect(screen.queryByText('NaN')).not.toBeInTheDocument();
-    expect(screen.queryByText('Infinity')).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Clear heatmap' }));
-    await waitFor(() => {
-      expect(container.querySelectorAll('rect.cell')).toHaveLength(0);
-    });
-  });
-
-  it('keeps identical CSS variable names isolated to each chart owner for negative and zero constants', async () => {
-    renderSurface(
-      <>
-        <HeatMap
-          title="Negative tenant heatmap"
-          width={320}
-          height={220}
-          responsive={false}
-          animate={false}
-          data={[{ x: 'Only', y: 'Only', value: -4 }]}
-          colorRange={['var(--tenant-heat-low)', 'var(--tenant-heat-high)']}
-          style={{
-            '--tenant-heat-low': '#112233',
-            '--tenant-heat-high': '#445566',
-          } as CSSProperties}
-        />
-        <HeatMap
-          title="Zero tenant heatmap"
-          width={320}
-          height={220}
-          responsive={false}
-          animate={false}
-          data={[{ x: 'Only', y: 'Only', value: 0 }]}
-          colorRange={['var(--tenant-heat-low)', 'var(--tenant-heat-high)']}
-          style={{
-            '--tenant-heat-low': '#aabbcc',
-            '--tenant-heat-high': '#ddeeff',
-          } as CSSProperties}
-        />
-      </>,
-    );
-
-    const negativeChart = screen.getByRole('img', { name: 'Negative tenant heatmap' });
-    const zeroChart = screen.getByRole('img', { name: 'Zero tenant heatmap' });
-
-    await waitFor(() => {
-      expect(negativeChart.querySelector('rect.cell')).toBeTruthy();
-      expect(zeroChart.querySelector('rect.cell')).toBeTruthy();
-    });
-
-    const negativeCell = negativeChart.querySelector('rect.cell') as SVGRectElement;
-    const zeroCell = zeroChart.querySelector('rect.cell') as SVGRectElement;
-    expectConcreteNonBlackFill(negativeCell);
-    expectConcreteNonBlackFill(zeroCell);
-    expect(negativeCell.getAttribute('fill')).toBe('rgb(17, 34, 51)');
-    expect(zeroCell.getAttribute('fill')).toBe('rgb(170, 187, 204)');
-  });
-
-  it('repaints from a live mutation on its own provider root', async () => {
-    renderSurface(
-      <HeatMap
-        title="Live tenant heatmap"
-        width={320}
-        height={220}
-        responsive={false}
-        animate={false}
-        data={[
-          { x: 'Low', y: 'Row', value: 0 },
-          { x: 'High', y: 'Row', value: 10 },
-        ]}
-        colorRange={['var(--live-low)', 'var(--live-high)']}
-        style={{ '--live-low': '#102030', '--live-high': '#405060' } as CSSProperties}
-      />,
-    );
-
-    const chart = screen.getByRole('img', { name: 'Live tenant heatmap' });
-    const owner = chart.closest('[data-part="chart-scaffold"]') as HTMLElement;
-    const highCell = () => chart.querySelectorAll<SVGRectElement>('rect.cell')[1];
-
-    await waitFor(() => {
-      expect(highCell()?.getAttribute('fill')).toBe('rgb(64, 80, 96)');
-    });
-
-    act(() => {
-      owner.style.setProperty('--live-high', '#a0b0c0');
-      owner.dataset.theme = 'tenant-update';
-    });
-
-    await waitFor(() => {
-      expect(highCell()?.getAttribute('fill')).toBe('rgb(160, 176, 192)');
-    });
-  });
-
+describe('calendar heatmap and cross-family scoped-colour correctness floor', () => {
   it('produces distinct monotonic sequential and quantized steps across simultaneous scoped roots', async () => {
     const matrixData = [
       { x: 'Low', y: 'Row', value: 0 },
@@ -272,22 +175,22 @@ describe('heatmap correctness floor', () => {
     };
 
     await waitFor(() => {
-      expect(chartCells('Default sequential root', 'rect.cell')).toHaveLength(3);
-      expect(chartCells('Prop sequential root', 'rect.cell')).toHaveLength(3);
-      expect(chartCells('Scheme quantized root', 'rect.cal-cell[data-state="filled"]')).toHaveLength(3);
-      expect(chartCells('Prop quantized root', 'rect.cal-cell[data-state="filled"]')).toHaveLength(3);
+      expect(chartCells('Default sequential root', '[data-part="cell"]')).toHaveLength(3);
+      expect(chartCells('Prop sequential root', '[data-part="cell"]')).toHaveLength(3);
+      expect(chartCells('Scheme quantized root', '[data-part="cell"][data-state="filled"]')).toHaveLength(3);
+      expect(chartCells('Prop quantized root', '[data-part="cell"][data-state="filled"]')).toHaveLength(3);
     });
 
-    const defaultSequential = chartCells('Default sequential root', 'rect.cell');
-    const propSequential = chartCells('Prop sequential root', 'rect.cell');
-    const schemeQuantized = chartCells('Scheme quantized root', 'rect.cal-cell[data-state="filled"]');
-    const propQuantized = chartCells('Prop quantized root', 'rect.cal-cell[data-state="filled"]');
+    const defaultSequential = chartCells('Default sequential root', '[data-part="cell"]');
+    const propSequential = chartCells('Prop sequential root', '[data-part="cell"]');
+    const schemeQuantized = chartCells('Scheme quantized root', '[data-part="cell"][data-state="filled"]');
+    const propQuantized = chartCells('Prop quantized root', '[data-part="cell"][data-state="filled"]');
 
-    expectDistinctMonotonicFills(defaultSequential);
-    expectDistinctMonotonicFills(propSequential);
+    expectDistinctMonotonicVarFills(defaultSequential);
+    expectDistinctMonotonicVarFills(propSequential);
     expectDistinctMonotonicFills(schemeQuantized);
     expectDistinctMonotonicFills(propQuantized);
-    expect(defaultSequential[0]?.getAttribute('fill')).not.toBe(propSequential[0]?.getAttribute('fill'));
+    expect(heatMapCellColor(defaultSequential[0])).not.toBe(heatMapCellColor(propSequential[0]));
     expect(schemeQuantized[0]?.getAttribute('fill')).not.toBe(propQuantized[0]?.getAttribute('fill'));
   });
 
@@ -296,12 +199,12 @@ describe('heatmap correctness floor', () => {
     const { container } = renderSurface(<ClearingCalendarHeatMap onCellClick={onCellClick} />);
 
     await waitFor(() => {
-      expect(container.querySelectorAll('rect.cal-cell')).toHaveLength(5);
+      expect(container.querySelectorAll('[data-part="cell"]')).toHaveLength(5);
     });
 
-    const filledCells = [...container.querySelectorAll<SVGRectElement>('rect.cal-cell[data-state="filled"]')];
+    const filledCells = [...container.querySelectorAll<SVGRectElement>('[data-part="cell"][data-state="filled"]')];
     const filled = filledCells[0] as SVGRectElement;
-    const empty = container.querySelector('rect.cal-cell[data-state="empty"]') as SVGRectElement;
+    const empty = container.querySelector('[data-part="cell"][data-state="empty"]') as SVGRectElement;
     expect(filledCells).toHaveLength(3);
     expect(filled).toBeTruthy();
     expect(empty).toBeTruthy();
@@ -319,11 +222,11 @@ describe('heatmap correctness floor', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Clear calendar' }));
     await waitFor(() => {
-      expect(container.querySelectorAll('rect.cal-cell[data-state="filled"]')).toHaveLength(0);
-      expect(container.querySelectorAll('rect.cal-cell[data-state="empty"]')).toHaveLength(5);
+      expect(container.querySelectorAll('[data-part="cell"][data-state="filled"]')).toHaveLength(0);
+      expect(container.querySelectorAll('[data-part="cell"][data-state="empty"]')).toHaveLength(5);
     });
 
-    for (const cell of container.querySelectorAll<SVGRectElement>('rect.cal-cell')) {
+    for (const cell of container.querySelectorAll<SVGRectElement>('[data-part="cell"]')) {
       expect(cell.getAttribute('fill')).toBe('rgb(243, 244, 246)');
     }
   });

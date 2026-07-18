@@ -36,6 +36,8 @@ export interface SvgHeatMapRendererProps {
   readonly data: readonly SvgHeatMapDatum[];
   readonly ariaLabel: string;
   readonly ariaDescription?: string;
+  /** ID of a family- or app-owned description (e.g. the scaffold summary). */
+  readonly ariaDescribedBy?: string;
   readonly width?: number;
   readonly height?: number;
   /** Recompute geometry from the container width. Defaults to true. */
@@ -99,6 +101,7 @@ export function SvgHeatMapRenderer({
   data,
   ariaLabel,
   ariaDescription,
+  ariaDescribedBy,
   width = 640,
   height = 360,
   responsive = true,
@@ -171,6 +174,7 @@ export function SvgHeatMapRenderer({
       rendererId="svg.heatmap"
       ariaLabel={ariaLabel}
       ariaDescription={ariaDescription}
+      ariaDescribedBy={ariaDescribedBy}
       width={geometry.width}
       height={geometry.height}
       responsive={responsive}

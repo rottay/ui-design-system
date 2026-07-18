@@ -20,6 +20,8 @@ export interface SvgScatterRendererProps {
   readonly data: readonly SvgScatterDatum[];
   readonly ariaLabel: string;
   readonly ariaDescription?: string;
+  /** ID of a family- or app-owned description (e.g. the scaffold summary). */
+  readonly ariaDescribedBy?: string;
   readonly width?: number;
   readonly height?: number;
   /** Recompute Cartesian geometry from the container width. Defaults to true. */
@@ -30,6 +32,15 @@ export interface SvgScatterRendererProps {
   readonly pointRadius?: number;
   readonly bubbleRadiusRange?: readonly [number, number];
   readonly showLabels?: boolean;
+  /** Render the background grid lines. Defaults to true. */
+  readonly grid?: boolean;
+  /** Fill opacity applied to each point mark; omit to inherit the skin default. */
+  readonly pointOpacity?: number;
+  /** Axis titles rendered outside the plot area (skin owns their paint). */
+  readonly xLabel?: string;
+  readonly yLabel?: string;
+  /** Overlay a least-squares regression segment across the plotted points. */
+  readonly trendLine?: boolean;
   /** Static, app-authored annotation specs. */
   readonly insights?: readonly ChartInsightSpec[];
   readonly interaction?: ChartInteraction<SvgScatterDatum>;
@@ -55,6 +66,7 @@ export function SvgScatterRenderer({
   data,
   ariaLabel,
   ariaDescription,
+  ariaDescribedBy,
   width = 640,
   height = 360,
   responsive = true,
@@ -64,6 +76,11 @@ export function SvgScatterRenderer({
   pointRadius,
   bubbleRadiusRange,
   showLabels = false,
+  grid = true,
+  pointOpacity,
+  xLabel,
+  yLabel,
+  trendLine = false,
   insights,
   interaction,
   className,
@@ -87,6 +104,7 @@ export function SvgScatterRenderer({
       maxTicks,
       pointRadius: pointRadius ?? grammarRadius,
       bubbleRadiusRange,
+      trendLine,
     }),
     [
       bubbleRadiusRange,
@@ -97,6 +115,7 @@ export function SvgScatterRenderer({
       insets,
       maxTicks,
       pointRadius,
+      trendLine,
       variant,
     ],
   );
@@ -154,6 +173,7 @@ export function SvgScatterRenderer({
       rendererId="svg.scatter"
       ariaLabel={ariaLabel}
       ariaDescription={ariaDescription}
+      ariaDescribedBy={ariaDescribedBy}
       width={geometry.width}
       height={geometry.height}
       responsive={responsive}
@@ -171,30 +191,34 @@ export function SvgScatterRenderer({
         y: activePoint.yPosition - activePoint.radius,
       } : undefined}
     >
-      <g data-part="grid" data-axis="x" aria-hidden="true">
-        {geometry.xTicks.map((tick) => (
-          <line
-            key={tick.id}
-            data-part="grid-line"
-            x1={tick.x}
-            x2={tick.x}
-            y1={geometry.plot.y}
-            y2={geometry.plot.y + geometry.plot.height}
-          />
-        ))}
-      </g>
-      <g data-part="grid" data-axis="y" aria-hidden="true">
-        {geometry.yTicks.map((tick) => (
-          <line
-            key={tick.id}
-            data-part="grid-line"
-            x1={geometry.plot.x}
-            x2={geometry.plot.x + geometry.plot.width}
-            y1={tick.y}
-            y2={tick.y}
-          />
-        ))}
-      </g>
+      {grid ? (
+        <>
+          <g data-part="grid" data-axis="x" aria-hidden="true">
+            {geometry.xTicks.map((tick) => (
+              <line
+                key={tick.id}
+                data-part="grid-line"
+                x1={tick.x}
+                x2={tick.x}
+                y1={geometry.plot.y}
+                y2={geometry.plot.y + geometry.plot.height}
+              />
+            ))}
+          </g>
+          <g data-part="grid" data-axis="y" aria-hidden="true">
+            {geometry.yTicks.map((tick) => (
+              <line
+                key={tick.id}
+                data-part="grid-line"
+                x1={geometry.plot.x}
+                x2={geometry.plot.x + geometry.plot.width}
+                y1={tick.y}
+                y2={tick.y}
+              />
+            ))}
+          </g>
+        </>
+      ) : null}
 
       <g data-part="axis" data-axis="x" aria-hidden="true">
         {geometry.xTicks.map((tick) => (
@@ -241,6 +265,17 @@ export function SvgScatterRenderer({
         y1={geometry.plot.y}
         y2={geometry.plot.y + geometry.plot.height}
       />
+
+      {geometry.trend ? (
+        <line
+          data-part="trend-line"
+          aria-hidden="true"
+          x1={geometry.trend.x1}
+          y1={geometry.trend.y1}
+          x2={geometry.trend.x2}
+          y2={geometry.trend.y2}
+        />
+      ) : null}
 
       <g data-part="scatter-plot" data-variant={geometry.variant}>
         {geometry.points.map((point, pointIndex) => {
@@ -295,6 +330,7 @@ export function SvgScatterRenderer({
                 cx={point.xPosition}
                 cy={point.yPosition}
                 r={point.radius}
+                fillOpacity={pointOpacity}
                 aria-hidden={interactive ? true : undefined}
               />
               {showLabels ? (
@@ -323,6 +359,31 @@ export function SvgScatterRenderer({
           );
         })}
       </g>
+      {xLabel ? (
+        <text
+          data-part="axis-label"
+          data-axis="x"
+          x={geometry.width / 2}
+          y={geometry.height - 4}
+          textAnchor="middle"
+          aria-hidden="true"
+        >
+          {xLabel}
+        </text>
+      ) : null}
+      {yLabel ? (
+        <text
+          data-part="axis-label"
+          data-axis="y"
+          transform="rotate(-90)"
+          x={-geometry.height / 2}
+          y={14}
+          textAnchor="middle"
+          aria-hidden="true"
+        >
+          {yLabel}
+        </text>
+      ) : null}
       <ChartInsightLayer
         insights={insights}
         plot={geometry.plot}
