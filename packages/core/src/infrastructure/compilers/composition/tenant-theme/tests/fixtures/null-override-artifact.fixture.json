@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "tenantId": "tenant_fixture",
+  "slug": "fixture-tenant",
+  "verticalKey": "bithire",
+  "rowVersion": 1,
+  "compilerVersion": "tenant-theme-compiler@3",
+  "verticalEnvelopeDigest": "sha256-dcd102e9b78c41f14ebbd3962ea098b9da26bf14213ee1af91706f542d051333",
+  "digest": "sha256-cb09d878eca2e578f6170629f402bef746902f7df4be369e4714a0acda3660a3",
+  "normalizedAppearance": {
+    "general": {}
+  },
+  "variables": {},
+  "css": "/* TenantThemeArtifact v1 | tenant-theme-compiler@3 | sha256-cb09d878eca2e578f6170629f402bef746902f7df4be369e4714a0acda3660a3 */\n[data-ds-root][data-vertical=\"bithire\"][data-tenant][data-tenant=\"fixture-tenant\"] {\n\n}\n",
+  "scopes": {
+    "root": {
+      "attribute": "data-ds-root",
+      "selector": ":where([data-ds-root])"
+    },
+    "vertical": {
+      "attribute": "data-vertical",
+      "value": "bithire",
+      "selector": ":where([data-ds-root][data-vertical=\"bithire\"])"
+    },
+    "tenant": {
+      "attribute": "data-tenant",
+      "value": "fixture-tenant",
+      "selector": ":where([data-ds-root][data-tenant=\"fixture-tenant\"])"
+    },
+    "combinedSelector": "[data-ds-root][data-vertical=\"bithire\"][data-tenant][data-tenant=\"fixture-tenant\"]"
+  }
+}

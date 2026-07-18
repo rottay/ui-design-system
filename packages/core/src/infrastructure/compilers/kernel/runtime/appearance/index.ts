@@ -31,6 +31,11 @@ import {
   normalizeHexColor,
 } from '../../foundation/css/color-math';
 import { chromeToVariables } from '../../foundation/css/chrome-variables';
+import { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../foundation/schemas/tenant-theme';
+
+/** Raw tokenOverrides entry cap; the schema limits object is the sole authority. */
+const MAX_TOKEN_OVERRIDES: number =
+  TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxTokenOverrides;
 
 // ── Validation helpers ──────────────────────────────────────
 
@@ -271,28 +276,18 @@ export function appearanceAdvancedToVariables(
 ): Record<string, string> {
   const vars: Record<string, string> = {};
 
-  if (!advanced.chrome) {
-    // Only raw token overrides
-    if (advanced.tokenOverrides) {
-      for (const [key, value] of Object.entries(advanced.tokenOverrides)) {
-        if (key.startsWith('--ds-') && value != null) {
-          vars[key] = String(value);
-        }
-      }
-    }
-    return vars;
+  if (advanced.chrome) {
+    // Chrome mapping is shared with runtime/brand-theme via
+    // kernel/css/chrome-variables — TenantAppearanceAdvanced.chrome and
+    // BrandTheme.chrome are the same shape.
+    Object.assign(vars, chromeToVariables(advanced.chrome));
   }
 
-  // Chrome mapping is shared with runtime/brand-theme via
-  // kernel/css/chrome-variables — TenantAppearanceAdvanced.chrome and
-  // BrandTheme.chrome are the same shape.
-  Object.assign(vars, chromeToVariables(advanced.chrome));
-
-  // ── Raw token overrides (allowlisted, max 200) ──
+  // ── Raw token overrides (allowlisted, capped by the schema limits object) ──
   if (advanced.tokenOverrides) {
     let count = 0;
     for (const [key, value] of Object.entries(advanced.tokenOverrides)) {
-      if (count >= 200) break;
+      if (count >= MAX_TOKEN_OVERRIDES) break;
       if (key.startsWith('--ds-') && value != null) {
         vars[key] = String(value);
         count++;

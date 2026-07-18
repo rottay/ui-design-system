@@ -8,6 +8,7 @@
 
 import { MOTION_DIAL_BOUNDS } from "@/foundation/contracts/runtime/motion";
 import {
+  TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1,
   TENANT_THEME_OVERRIDE_TOKENS_V1,
   TENANT_THEME_REFERENCE_TOKENS_V1,
   TENANT_THEME_FONT_PACK_IDS_V1,
@@ -544,10 +545,15 @@ const chrome = object({
   ),
 });
 
+const NEUTRAL_OVERRIDE_TOKENS = new Set<string>(
+  TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1
+);
+
 const tokenValueRules: Readonly<Record<string, TenantThemeSchemaNode>> =
   Object.fromEntries(
     TENANT_THEME_OVERRIDE_TOKENS_V1.map((token) => {
       if (token.startsWith("--ds-chart-category-")) return [token, HEX_COLOR];
+      if (NEUTRAL_OVERRIDE_TOKENS.has(token)) return [token, HEX_COLOR];
       if (token.startsWith("--ds-color-") || token.startsWith("--ds-overlay-"))
         return [token, COLOR];
       if (token.startsWith("--ds-font-family-"))
@@ -672,6 +678,10 @@ export const TENANT_THEME_CONFIG_V1_SCHEMA = deepFreeze({
     // while remaining a hard SSR/hydration ceiling.
     maxCompiledVariables: 512,
     maxCompiledVariableBytes: 90_112,
+    // Single authority for the raw tokenOverrides entry cap. The appearance
+    // compiler and the skin-pack registrar import this value; a second literal
+    // 200 anywhere is a cascade-integrity defect.
+    maxTokenOverrides: 200,
     maxStringLength: 512,
     maxFontFamilyLength: 200,
     maxShadowLayers: 4,

@@ -223,6 +223,14 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return prototype === Object.prototype || prototype === null;
 }
 
+/**
+ * UTF-16 code-unit comparator. Canonical digests and emitted variable order
+ * must not depend on host locale/ICU data, so every ordering in this module
+ * routes through this single comparator.
+ */
+const compareCodeUnits = (left: string, right: string): number =>
+  left < right ? -1 : left > right ? 1 : 0;
+
 function normalizeCanonicalValue(value: unknown): unknown {
   if (
     value === null ||
@@ -243,7 +251,7 @@ function normalizeCanonicalValue(value: unknown): unknown {
     throw new TypeError("Canonical tenant theme values must be JSON objects");
 
   const result: Record<string, unknown> = {};
-  for (const key of Object.keys(value).sort()) {
+  for (const key of Object.keys(value).sort(compareCodeUnits)) {
     const child = value[key];
     if (
       child === undefined ||
@@ -1194,7 +1202,7 @@ function sortedVariables(
 ): Record<string, string> {
   return Object.fromEntries(
     Object.entries(variables).sort(([left], [right]) =>
-      left.localeCompare(right)
+      compareCodeUnits(left, right)
     )
   );
 }

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "tenantId": "tenant_fixture",
+  "slug": "fixture-tenant",
+  "verticalKey": "bithire",
+  "rowVersion": 1,
+  "compilerVersion": "tenant-theme-compiler@3",
+  "verticalEnvelopeDigest": "sha256-dcd102e9b78c41f14ebbd3962ea098b9da26bf14213ee1af91706f542d051333",
+  "digest": "sha256-18106d62984ad79f3893d3cd9bf9e39b221c6786bc6e74eeb4ab4ff129d5d533",
+  "normalizedAppearance": {
+    "general": {
+      "density": "normal",
+      "motion": {
+        "ambient": "subtle",
+        "durationScale": 1.15,
+        "intensity": 0.62
+      },
+      "navigation": {
+        "sidebarTone": "subtle"
+      },
+      "palette": {
+        "accent": "#E2725B",
+        "backgroundMode": "light",
+        "primary": "#0F766E",
+        "secondary": "#8C6D46"
+      },
+      "shape": {
+        "buttonStyle": "soft"
+      },
+      "surfaces": {
+        "elevation": "elevated"
+      },
+      "typography": {
+        "fontFamilyBase": "Optima, Candara, 'Noto Sans', sans-serif",
+        "fontFamilyHeading": "'Fraunces', Georgia, 'Times New Roman', serif"
+      }
+    }
+  },
+  "variables": {
+    "--ds-color-accent": "#E2725B",
+    "--ds-color-accent-100": "#FFD1C7",
+    "--ds-color-accent-200": "#FFA491",
+    "--ds-color-accent-300": "#EA816B",
+    "--ds-color-accent-400": "#CE614B",
+    "--ds-color-accent-50": "#FFFBFA",
+    "--ds-color-accent-500": "#AF4530",
+    "--ds-color-accent-600": "#8C2C1A",
+    "--ds-color-accent-700": "#681809",
+    "--ds-color-accent-800": "#430A02",
+    "--ds-color-accent-900": "#1E0401",
+    "--ds-color-primary": "#0F766E",
+    "--ds-color-primary-100": "#B7E9E3",
+    "--ds-color-primary-200": "#8BCEC6",
+    "--ds-color-primary-300": "#63B3AA",
+    "--ds-color-primary-400": "#3F978E",
+    "--ds-color-primary-50": "#F2FFFD",
+    "--ds-color-primary-500": "#1B7B73",
+    "--ds-color-primary-600": "#005F58",
+    "--ds-color-primary-700": "#00433E",
+    "--ds-color-primary-800": "#002925",
+    "--ds-color-primary-900": "#00110F",
+    "--ds-color-secondary": "#8C6D46",
+    "--ds-color-secondary-100": "#EFDAC0",
+    "--ds-color-secondary-200": "#D6BB9A",
+    "--ds-color-secondary-300": "#BB9D77",
+    "--ds-color-secondary-400": "#A08059",
+    "--ds-color-secondary-50": "#FFFBF6",
+    "--ds-color-secondary-500": "#84653F",
+    "--ds-color-secondary-600": "#674C29",
+    "--ds-color-secondary-700": "#4A3417",
+    "--ds-color-secondary-800": "#2E1F0A",
+    "--ds-color-secondary-900": "#130C03",
+    "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
+    "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
+    "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
+    "--ds-font-family-base": "Optima, Candara, 'Noto Sans', sans-serif",
+    "--ds-font-family-heading": "'Fraunces', Georgia, 'Times New Roman', serif",
+    "--ds-motion-ambient": "subtle",
+    "--ds-motion-duration-scale": "1.15",
+    "--ds-motion-intensity": "0.62",
+    "--ds-radius-button": "var(--ds-radius-md, 8px)",
+    "--ds-sidebar-bg": "var(--ds-color-bg-secondary)",
+    "--ds-sidebar-item-bg-active": "var(--ds-color-primary-100)",
+    "--ds-sidebar-item-bg-hover": "var(--ds-color-bg-hover)",
+    "--ds-sidebar-item-color-active": "var(--ds-color-primary)",
+    "--ds-sidebar-text": "var(--ds-color-text-primary)",
+    "--ds-sidebar-text-muted": "var(--ds-color-text-muted)"
+  },
+  "css": "/* TenantThemeArtifact v1 | tenant-theme-compiler@3 | sha256-18106d62984ad79f3893d3cd9bf9e39b221c6786bc6e74eeb4ab4ff129d5d533 */\n[data-ds-root][data-vertical=\"bithire\"][data-tenant][data-tenant=\"fixture-tenant\"] {\n  --ds-color-accent: #E2725B;\n  --ds-color-accent-100: #FFD1C7;\n  --ds-color-accent-200: #FFA491;\n  --ds-color-accent-300: #EA816B;\n  --ds-color-accent-400: #CE614B;\n  --ds-color-accent-50: #FFFBFA;\n  --ds-color-accent-500: #AF4530;\n  --ds-color-accent-600: #8C2C1A;\n  --ds-color-accent-700: #681809;\n  --ds-color-accent-800: #430A02;\n  --ds-color-accent-900: #1E0401;\n  --ds-color-primary: #0F766E;\n  --ds-color-primary-100: #B7E9E3;\n  --ds-color-primary-200: #8BCEC6;\n  --ds-color-primary-300: #63B3AA;\n  --ds-color-primary-400: #3F978E;\n  --ds-color-primary-50: #F2FFFD;\n  --ds-color-primary-500: #1B7B73;\n  --ds-color-primary-600: #005F58;\n  --ds-color-primary-700: #00433E;\n  --ds-color-primary-800: #002925;\n  --ds-color-primary-900: #00110F;\n  --ds-color-secondary: #8C6D46;\n  --ds-color-secondary-100: #EFDAC0;\n  --ds-color-secondary-200: #D6BB9A;\n  --ds-color-secondary-300: #BB9D77;\n  --ds-color-secondary-400: #A08059;\n  --ds-color-secondary-50: #FFFBF6;\n  --ds-color-secondary-500: #84653F;\n  --ds-color-secondary-600: #674C29;\n  --ds-color-secondary-700: #4A3417;\n  --ds-color-secondary-800: #2E1F0A;\n  --ds-color-secondary-900: #130C03;\n  --ds-elevation-1: 0 2px 4px rgba(0,0,0,0.08);\n  --ds-elevation-2: 0 4px 8px rgba(0,0,0,0.1);\n  --ds-elevation-3: 0 8px 16px rgba(0,0,0,0.12);\n  --ds-font-family-base: Optima, Candara, 'Noto Sans', sans-serif;\n  --ds-font-family-heading: 'Fraunces', Georgia, 'Times New Roman', serif;\n  --ds-motion-ambient: subtle;\n  --ds-motion-duration-scale: 1.15;\n  --ds-motion-intensity: 0.62;\n  --ds-radius-button: var(--ds-radius-md, 8px);\n  --ds-sidebar-bg: var(--ds-color-bg-secondary);\n  --ds-sidebar-item-bg-active: var(--ds-color-primary-100);\n  --ds-sidebar-item-bg-hover: var(--ds-color-bg-hover);\n  --ds-sidebar-item-color-active: var(--ds-color-primary);\n  --ds-sidebar-text: var(--ds-color-text-primary);\n  --ds-sidebar-text-muted: var(--ds-color-text-muted);\n}\n",
+  "scopes": {
+    "root": {
+      "attribute": "data-ds-root",
+      "selector": ":where([data-ds-root])"
+    },
+    "vertical": {
+      "attribute": "data-vertical",
+      "value": "bithire",
+      "selector": ":where([data-ds-root][data-vertical=\"bithire\"])"
+    },
+    "tenant": {
+      "attribute": "data-tenant",
+      "value": "fixture-tenant",
+      "selector": ":where([data-ds-root][data-tenant=\"fixture-tenant\"])"
+    },
+    "combinedSelector": "[data-ds-root][data-vertical=\"bithire\"][data-tenant][data-tenant=\"fixture-tenant\"]"
+  }
+}

@@ -2036,8 +2036,13 @@ html[data-theme='dark'],
 html.dark {
   color-scheme: dark;
 
-  --ds-color-bg-primary: #0b1220;
-  --ds-color-bg-secondary: #111827;
+  /* Semantic neutrals reference the dark neutral ramp below wherever a ramp
+     step carries the exact same value, so a ramp override cascades here.
+     Values without an exact step (#172033, #182235, #101826, #152033,
+     #f3f4f6, #1e293b) stay literal until the ramp itself grows a matching
+     step; approximating to a near step would be a visual change. */
+  --ds-color-bg-primary: var(--ds-color-neutral-50);
+  --ds-color-bg-secondary: var(--ds-color-neutral-100);
   --ds-color-bg-tertiary: #172033;
   --ds-color-bg-elevated: #182235;
   --ds-color-bg-overlay: rgba(2, 6, 23, 0.88);
@@ -2045,13 +2050,13 @@ html.dark {
   --ds-color-surface-muted: #152033;
 
   --ds-color-text-primary: #f3f4f6;
-  --ds-color-text-secondary: #cbd5e1;
-  --ds-color-text-tertiary: #94a3b8;
-  --ds-color-text-muted: #94a3b8;
+  --ds-color-text-secondary: var(--ds-color-neutral-700);
+  --ds-color-text-tertiary: var(--ds-color-neutral-600);
+  --ds-color-text-muted: var(--ds-color-neutral-600);
   --ds-color-text-on-primary: #ffffff;
-  --ds-color-text-inverse: #020617;
+  --ds-color-text-inverse: var(--ds-color-neutral-0);
 
-  --ds-color-border-primary: #334155;
+  --ds-color-border-primary: var(--ds-color-neutral-300);
   --ds-color-border-secondary: #1e293b;
   --ds-color-border-focus: var(--ds-color-primary-400);
   /* Dark-surface focus ring must read >=3:1 on the dark canvas; the primary-400

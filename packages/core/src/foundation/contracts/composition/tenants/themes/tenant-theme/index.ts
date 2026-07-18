@@ -61,6 +61,11 @@ export const TENANT_THEME_OVERRIDE_TOKENS_V1 = [
   "--ds-color-bg-primary",
   "--ds-color-bg",
   "--ds-color-background",
+  "--ds-color-text-primary",
+  "--ds-color-text-secondary",
+  "--ds-color-text-muted",
+  "--ds-color-border-primary",
+  "--ds-color-border-secondary",
   "--ds-font-family-base",
   "--ds-font-family-heading",
   "--ds-font-family-mono",
@@ -97,6 +102,19 @@ export const TENANT_THEME_OVERRIDE_TOKENS_V1 = [
 
 export type TenantThemeOverrideTokenV1 =
   (typeof TENANT_THEME_OVERRIDE_TOKENS_V1)[number];
+
+/**
+ * Neutral text/border overrides admit opaque hex only. They anchor global
+ * reading surfaces, so functional colors, var() references and alpha channels
+ * stay out of the tenant-authored channel.
+ */
+export const TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS_V1 = [
+  "--ds-color-text-primary",
+  "--ds-color-text-secondary",
+  "--ds-color-text-muted",
+  "--ds-color-border-primary",
+  "--ds-color-border-secondary",
+] as const satisfies readonly TenantThemeOverrideTokenV1[];
 
 const TENANT_THEME_COLOR_ROLES_V1 = [
   "primary",

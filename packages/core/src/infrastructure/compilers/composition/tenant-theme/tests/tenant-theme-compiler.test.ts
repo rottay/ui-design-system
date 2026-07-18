@@ -166,10 +166,10 @@ describe("TenantThemeConfig v1 server contract", () => {
 
   it("publishes immutable schema/document drift sentinels", () => {
     expect(TENANT_THEME_DOCUMENT_V1_SCHEMA_DIGEST).toBe(
-      "sha256-25adbc4337c442131632da1c3b3c1fc94e3c0ca7aedf80f41a1e6d1db998582a"
+      "sha256-a8db4e88221d0d5067732acc774ccf39a85969a1ad7f441eb8cd814ef47b35d1"
     );
     expect(TENANT_THEME_CONFIG_V1_SCHEMA_DIGEST).toBe(
-      "sha256-34fcdf673e923ed3493dce5ea0424088cb123c24f113640fe8dc7d93d110bf0b"
+      "sha256-cd0cd8c02fbed2b4ad4bf2e3ea67f9a237a109a5d94a94e5348aaf61e1cc97bb"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_V1_SCHEMA)).toBe(true);
     expect(
@@ -180,6 +180,7 @@ describe("TenantThemeConfig v1 server contract", () => {
     expect(TENANT_THEME_CONFIG_V1_SCHEMA.limits).toMatchObject({
       maxCompiledVariables: 512,
       maxCompiledVariableBytes: 90_112,
+      maxTokenOverrides: 200,
     });
     expect(TENANT_THEME_CONFIG_V1_SCHEMA.scopeAttributes).toEqual([
       "data-ds-root",
@@ -870,6 +871,78 @@ describe("closed schema and hostile input rejection", () => {
         },
       })
     ).toThrow(/unique non-empty/i);
+  });
+
+  it("admits the bounded neutral text/border override group as opaque hex only", () => {
+    const neutralOverrides = {
+      "--ds-color-text-primary": "#E8E6E1",
+      "--ds-color-text-secondary": "#A39F98",
+      "--ds-color-text-muted": "#6E6A63",
+      "--ds-color-border-primary": "#26231F",
+      "--ds-color-border-secondary": "#33302B",
+    };
+    const document = {
+      schemaVersion: 1,
+      mode: "advanced" as const,
+      visualFoundation: { advanced: { tokenOverrides: neutralOverrides } },
+    };
+    expect(validateTenantThemeDocument(document).success).toBe(true);
+    const artifact = compileTenantThemeConfig(hydrate(document), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+    for (const [token, value] of Object.entries(neutralOverrides)) {
+      expect(artifact.variables[token]).toBe(value);
+      expect(artifact.css).toContain(`${token}: ${value};`);
+    }
+  });
+
+  it.each([
+    ["url() exfiltration", "url(https://evil.invalid/x)"],
+    ["var() reference", "var(--ds-color-neutral-800)"],
+    ["functional color", "rgb(232 230 225)"],
+    ["named color", "white"],
+    ["hex with alpha channel", "#E8E6E1CC"],
+    ["gradient", "linear-gradient(#000, #fff)"],
+    ["declaration breakout", "#fff; } html { color: hotpink"],
+  ])("rejects %s in the neutral override group", (_name, value) => {
+    for (const token of [
+      "--ds-color-text-primary",
+      "--ds-color-text-secondary",
+      "--ds-color-text-muted",
+      "--ds-color-border-primary",
+      "--ds-color-border-secondary",
+    ]) {
+      const result = validateTenantThemeDocument({
+        schemaVersion: 1,
+        mode: "advanced",
+        visualFoundation: { advanced: { tokenOverrides: { [token]: value } } },
+      });
+      expect(result.success, `${token} <- ${value}`).toBe(false);
+    }
+  });
+
+  it("keeps neutral overrides behind the vertical allowTokenOverrides policy", () => {
+    const config = hydrate({
+      schemaVersion: 1,
+      mode: "advanced",
+      visualFoundation: {
+        advanced: {
+          tokenOverrides: { "--ds-color-text-primary": "#E8E6E1" },
+        },
+      },
+    });
+    expect(() =>
+      compileTenantThemeConfig(config, {
+        verticalEnvelope: {
+          ...BITHIRE_TEST_ENVELOPE,
+          advanced: {
+            chromeFamilies:
+              BITHIRE_TEST_ENVELOPE.advanced?.chromeFamilies ?? [],
+            allowTokenOverrides: false,
+          },
+        },
+      })
+    ).toThrow(/Token overrides are disabled/i);
   });
 
   it("parses into a detached canonical value rather than retaining tainted references", () => {

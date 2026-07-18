@@ -16,6 +16,7 @@ import {
   type SkinPack,
 } from '..';
 import { clearCustomRegistry, getCustomComponent, hasCustomComponent } from '../..';
+import { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../../../../../../compilers/kernel/foundation/schemas/tenant-theme';
 import type { BrandTheme } from '../../../../../../../../foundation/contracts/composition/tenants/themes';
 
 function resetDom(): void {
@@ -112,6 +113,21 @@ describe('SkinPack bounded token-override contract', () => {
     for (let i = 0; i < 200; i++) tokenOverrides[`--ds-example-${i}`] = '1px';
 
     expect(() => registerSkinPack({ id: 'acme', css: '', tokenOverrides })).not.toThrow();
+  });
+
+  it('derives its bound from the tenant-theme schema limits object (single authority)', () => {
+    const cap = TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxTokenOverrides;
+    expect(cap).toBe(200);
+
+    const atCap: Record<string, string> = {};
+    for (let i = 0; i < cap; i++) atCap[`--ds-example-${i}`] = '1px';
+    expect(() => registerSkinPack({ id: 'acme-cap', css: '', tokenOverrides: atCap })).not.toThrow();
+
+    const overCap = { ...atCap, '--ds-example-overflow': '1px' };
+    expect(() =>
+      registerSkinPack({ id: 'acme-over', css: '', tokenOverrides: overCap })
+    ).toThrow(new RegExp(String(cap)));
+    expect(getRegisteredSkinPack('acme-over')).toBeUndefined();
   });
 });
 

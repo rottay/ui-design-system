@@ -13,6 +13,7 @@ import {
   deriveAppearanceColorRamps,
 } from '..';
 import { RAMP_STEPS } from '@/foundation/kernel/color/oklch/ramp';
+import { TENANT_THEME_CONFIG_V1_SCHEMA } from '../../../foundation/schemas/tenant-theme';
 import type {
   TenantAppearanceGeneral,
   TenantAppearanceAdvanced,
@@ -255,6 +256,29 @@ describe('appearanceAdvancedToVariables', () => {
     expect(vars['--ds-color-success']).toBe('#00FF00');
     expect(vars['--ds-radius-md']).toBe('12px');
   });
+
+  it.each([
+    ['without chrome', undefined],
+    ['with chrome', { sidebar: { bg: '#1a1a2e' } }],
+  ])(
+    'caps raw tokenOverrides at the schema limits authority %s',
+    (_name, chrome) => {
+      const cap = TENANT_THEME_CONFIG_V1_SCHEMA.limits.maxTokenOverrides;
+      expect(cap).toBe(200);
+      const tokenOverrides: Record<string, string> = {};
+      for (let index = 0; index < cap + 25; index++) {
+        tokenOverrides[`--ds-example-${String(index).padStart(3, '0')}`] = '1px';
+      }
+      const vars = appearanceAdvancedToVariables({
+        ...(chrome ? { chrome } : {}),
+        tokenOverrides,
+      });
+      const emitted = Object.keys(vars).filter((key) =>
+        key.startsWith('--ds-example-')
+      );
+      expect(emitted.length).toBe(cap);
+    }
+  );
 });
 
 describe('appearanceToVariables', () => {
