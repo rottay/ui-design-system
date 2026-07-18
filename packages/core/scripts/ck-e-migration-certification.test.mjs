@@ -29,7 +29,7 @@ const sources = [
   // Charts A+B.
   { slice: 'chartsAB', path: 'patterns/visualization/charts/families/area-chart/index.tsx', inline: 2, runtimeSvg: 8 },
   { slice: 'chartsAB', path: 'patterns/visualization/charts/families/bar-chart/index.tsx', inline: 2, runtimeSvg: 6 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/radar-chart/index.tsx', inline: 2, runtimeSvg: 4 },
+  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/radar-chart/index.tsx', inline: 2, runtimeSvg: 0 },
   { slice: 'chartsAB', path: 'patterns/visualization/charts/families/treemap/index.tsx', inline: 1, runtimeSvg: 1 },
   { slice: 'chartsAB', path: 'patterns/visualization/charts/families/pie-chart/index.tsx', inline: 1, runtimeSvg: 1 },
   { slice: 'chartsAB', path: 'patterns/visualization/charts/families/bullet/index.tsx', inline: 12, runtimeSvg: 8 },
@@ -42,10 +42,10 @@ const sources = [
   // Charts C.
   { slice: 'chartC', path: 'patterns/visualization/charts/families/histogram/index.tsx', inline: 2, runtimeSvg: 5 },
   { slice: 'chartC', path: 'patterns/visualization/charts/families/scatter/index.tsx', inline: 1, runtimeSvg: 2 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/gauge/index.tsx', inline: 1, runtimeSvg: 4 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/gauge/index.tsx', inline: 1, runtimeSvg: 0 },
   { slice: 'chartC', path: 'patterns/visualization/charts/families/sankey/index.tsx', inline: 3, runtimeSvg: 2 },
   { slice: 'chartC', path: 'patterns/visualization/charts/families/sparkline/index.tsx', inline: 0, runtimeSvg: 4 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/funnel-chart/index.tsx', inline: 1, runtimeSvg: 2 },
+  { slice: 'chartC', path: 'patterns/visualization/charts/families/funnel-chart/index.tsx', inline: 1, runtimeSvg: 0 },
   { slice: 'chartC', path: 'patterns/visualization/charts/families/network-graph/index.tsx', inline: 1, runtimeSvg: 1 },
 
   // Shared chart foundation.
@@ -60,8 +60,8 @@ const sources = [
 
 const sliceTargets = {
   noncharts: { files: 10, inline: 6, runtimeSvg: 0, combined: 6 },
-  chartsAB: { files: 11, inline: 26, runtimeSvg: 39, combined: 65 },
-  chartC: { files: 7, inline: 9, runtimeSvg: 20, combined: 29 },
+  chartsAB: { files: 11, inline: 26, runtimeSvg: 35, combined: 61 },
+  chartC: { files: 7, inline: 9, runtimeSvg: 14, combined: 23 },
   foundation: { files: 7, inline: 8, runtimeSvg: 6, combined: 14 },
 };
 
@@ -212,7 +212,7 @@ test('CK-E paint migration holds every per-file, slice, and global post-migratio
   assert.deepEqual(actualSlices, sliceTargets, 'CK-E slice floors drifted');
   assert.deepEqual(
     { inline, runtimeSvg, combined: inline + runtimeSvg, unclassified },
-    { inline: 49, runtimeSvg: 65, combined: 114, unclassified: 0 },
+    { inline: 49, runtimeSvg: 55, combined: 104, unclassified: 0 },
     'CK-E global post-migration target drifted',
   );
 });

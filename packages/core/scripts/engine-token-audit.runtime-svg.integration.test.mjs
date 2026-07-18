@@ -33,9 +33,9 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     `runtime SVG CLI failed\nstdout:\n${censusRun.stdout}\nstderr:\n${censusRun.stderr}`
   );
   const census = JSON.parse(censusRun.stdout);
-  assert.equal(Object.keys(census.files).length, 1079);
-  assert.equal(census.total, 104);
-  assert.equal(census.classifiedPaint, 104);
+  assert.equal(Object.keys(census.files).length, 1085);
+  assert.equal(census.total, 109);
+  assert.equal(census.classifiedPaint, 109);
   assert.equal(census.unclassified, 0);
   assert.equal(census.ignoredStructural, 387);
 
@@ -50,7 +50,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     `embedded CSS CLI failed\nstdout:\n${embeddedRun.stdout}\nstderr:\n${embeddedRun.stderr}`
   );
   const embedded = JSON.parse(embeddedRun.stdout);
-  assert.equal(Object.keys(embedded.files).length, 1079);
+  assert.equal(Object.keys(embedded.files).length, 1085);
   assert.equal(embedded.total, 7);
   assert.equal(embedded.classifiedPaint, 7);
   assert.equal(embedded.unclassified, 0);
@@ -90,8 +90,8 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   ]);
   const embeddedPerFileKeys = baselineEmbeddedKeys.filter((key) => !embeddedAggregateKeys.has(key));
 
-  assert.equal(baseline['runtimeSvgPaint.filesScanned'], 1079);
-  assert.equal(baseline['runtimeSvgPaint.total'], 104);
+  assert.equal(baseline['runtimeSvgPaint.filesScanned'], 1085);
+  assert.equal(baseline['runtimeSvgPaint.total'], 109);
   assert.equal(baseline['runtimeSvgPaint.unclassified'], 0);
   assert.equal(baseline['runtimeSvgPaint.ignoredStructural'], 387);
   assert.equal(baseline['runtimeSvgPaint.patterns/communication/presence/index.tsx'], 1);
@@ -110,15 +110,15 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     ['patterns/visualization/charts/families/bar-chart/index.tsx', 6],
     ['patterns/visualization/charts/families/bullet/index.tsx', 8],
     ['patterns/visualization/charts/families/calendar-heatmap/index.tsx', 1],
-    ['patterns/visualization/charts/families/funnel-chart/index.tsx', 2],
+    ['patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/funnel/index.tsx', 1],
     ['patterns/visualization/charts/families/gantt-chart/index.tsx', 2],
-    ['patterns/visualization/charts/families/gauge/index.tsx', 4],
+    ['patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/gauge/index.tsx', 4],
     ['patterns/visualization/charts/families/heatmap/index.tsx', 1],
     ['patterns/visualization/charts/families/histogram/index.tsx', 5],
     ['patterns/visualization/charts/families/line-chart/index.tsx', 5],
     ['patterns/visualization/charts/families/network-graph/index.tsx', 1],
     ['patterns/visualization/charts/families/pie-chart/index.tsx', 1],
-    ['patterns/visualization/charts/families/radar-chart/index.tsx', 4],
+    ['patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/radar/index.tsx', 4],
     ['patterns/visualization/charts/families/sankey/index.tsx', 2],
     ['patterns/visualization/charts/families/scatter/index.tsx', 2],
     ['patterns/visualization/charts/families/sparkline/index.tsx', 4],
@@ -132,7 +132,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
       assert.equal(runtimeExemptions[path]?.runtimeSvgFloor, floor, `${path} runtime SVG floor drifted`);
       return sum + floor;
     }, 0),
-    65
+    64
   );
   assert.equal(
     exemptions['SKIN-EXEMPT-NOT-PAINT'].files[
@@ -149,7 +149,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   assert.equal(perFileKeys.length, baseline['runtimeSvgPaint.filesScanned']);
   assert.deepEqual(collectMissingPrefixedCounters(counters, baseline, 'runtimeSvgPaint.'), []);
 
-  assert.equal(baseline['embeddedCssPaint.filesScanned'], 1079);
+  assert.equal(baseline['embeddedCssPaint.filesScanned'], 1085);
   assert.equal(baseline['embeddedCssPaint.total'], 7);
   assert.equal(baseline['embeddedCssPaint.classifiedPaint'], 7);
   assert.equal(baseline['embeddedCssPaint.unclassified'], 0);
@@ -181,8 +181,8 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     perFileKeys.reduce((sum, key) => sum + baseline[key], 0)
   );
 
-  assert.equal(baseline['fleet.inlinePaint.filesScanned'], 778);
-  assert.equal(baseline['fleet.inlinePaint.total'], 195);
+  assert.equal(baseline['fleet.inlinePaint.filesScanned'], 784);
+  assert.equal(baseline['fleet.inlinePaint.total'], 203);
   assert.equal(fleetPerFileKeys.length, baseline['fleet.inlinePaint.filesScanned']);
   assert.equal(
     counters['fleet.inlinePaint.total'],

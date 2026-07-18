@@ -134,8 +134,10 @@ test('the fourteen static sites live in wired skins with byte-exact values', () 
   const accent = component('surfaces/runtime/profile-defaults/personality/index.tsx');
   assert.equal(countArc09PaintInFile(accent.source, accent.file), 0);
   assert.doesNotMatch(accent.source, /baseStyle\.backgroundSize\s*=/);
+  const accentSkin = stylesheet('presentation/components/skin/surface-accent-bar.css');
+  assert.doesNotMatch(accentSkin, /background-size: 200% 100%;/);
   assert.match(
-    stylesheet('presentation/components/skin/surface-accent-bar.css'),
-    /\[data-style='animated'\][^{]*\{[^}]*background-size: 200% 100%;/
+    accentSkin,
+    /\.ds-surface\.ds-accent-bar\[data-part='bar'\]\s*\{\s*display: none;\s*\}/
   );
 });

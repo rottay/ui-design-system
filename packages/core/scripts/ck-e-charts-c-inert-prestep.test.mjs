@@ -13,6 +13,7 @@ import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const chartsRoot = join(packageRoot, 'src/ui/patterns/visualization/charts/families');
+const renderersRoot = join(packageRoot, 'src/ui/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers');
 const skinPath = join(packageRoot, 'src/foundation/tokens/css/presentation/components/skin/chart-c.css');
 
 const CHARTS = {
@@ -34,10 +35,11 @@ const CHARTS = {
   },
   gauge: {
     directory: 'gauge',
+    renderer: 'gauge',
     scope: 'ds-chart-gauge',
     start: [6, 7],
-    floor: [1, 4],
-    topology: '62ea150453ef72d39be532c47640b7fb8754b5be9ae8ee45ff1f47752f02b19d',
+    floor: [1, 0],
+    topology: '3283fb658d14feda807f8dba648f37a6e72717aad1ef00b195828ce426bb4ea4',
     parts: ['legend', 'legend-swatch', 'plot-area', 'track', 'segment', 'needle', 'needle-mark', 'needle-cap', 'value-label'],
   },
   sankey: {
@@ -58,10 +60,11 @@ const CHARTS = {
   },
   funnel: {
     directory: 'funnel-chart',
+    renderer: 'funnel',
     scope: 'ds-chart-funnel',
     start: [3, 6],
-    floor: [1, 2],
-    topology: 'a45c53f3bb8f91bb40b4c262baf31d566db52893f36e1104d843678e80d82cec',
+    floor: [1, 0],
+    topology: 'db25b8c3386dfe28b2601c54741db33a7a07ec398ff4d89a27395399f53a78b9',
     parts: ['legend', 'legend-swatch', 'plot-area', 'segment', 'segment-label', 'segment-value', 'conversion-label'],
   },
   network: {
@@ -90,6 +93,21 @@ function authoredParts(text) {
   );
 }
 
+function rendererSource(chart) {
+  return readFileSync(join(renderersRoot, chart.renderer, 'index.tsx'), 'utf8');
+}
+
+// A chart whose plot renders in a React-owned renderer keeps its scope wrapper
+// and legend on the family adapter while the plot anatomy the skin styles lives
+// on the renderer. Live anatomy for such a chart is the union of both files.
+function authoredPartsForChart(chart) {
+  const parts = authoredParts(source(chart));
+  if (chart.renderer) {
+    for (const part of authoredParts(rendererSource(chart))) parts.add(part);
+  }
+  return parts;
+}
+
 function renderAnatomy(text, path) {
   const sourceFile = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const anatomy = [];
@@ -115,7 +133,7 @@ function renderAnatomy(text, path) {
   return anatomy.join('\n');
 }
 
-test('CK-E chart slice C lands its exact 9 inline + 20 runtime Stage-1 target', () => {
+test('CK-E chart slice C lands its exact 9 inline + 14 runtime Stage-1 target', () => {
   let inlineTotal = 0;
   let runtimeTotal = 0;
   for (const [name, chart] of Object.entries(CHARTS)) {
@@ -129,13 +147,13 @@ test('CK-E chart slice C lands its exact 9 inline + 20 runtime Stage-1 target', 
     inlineTotal += inline;
     runtimeTotal += runtime.count;
   }
-  assert.deepEqual([inlineTotal, runtimeTotal], [9, 20]);
+  assert.deepEqual([inlineTotal, runtimeTotal], [9, 14]);
 });
 
 test('CK-E chart slice C exposes every planned scope, part and finite state', () => {
   for (const [name, chart] of Object.entries(CHARTS)) {
     const text = source(chart);
-    const parts = authoredParts(text);
+    const parts = authoredPartsForChart(chart);
     assert.match(text, new RegExp(`className=\\{\\['${chart.scope}', className\\]`), `${name} lacks its scope`);
     for (const part of chart.parts) assert.ok(parts.has(part), `${name} lacks data-part="${part}"`);
   }
@@ -144,10 +162,10 @@ test('CK-E chart slice C exposes every planned scope, part and finite state', ()
   assert.match(source(CHARTS.histogram), /\.tick line:not\(\[data-part\]\)/);
   assert.match(source(CHARTS.scatter), /\.attr\('data-state',\s*'hovered'\)/);
   assert.match(source(CHARTS.scatter), /\.tick line:not\(\[data-part\]\)/);
-  assert.match(source(CHARTS.gauge), /\.attr\('data-state',\s*seg === activeSegment \? 'active' : 'inactive'\)/);
+  assert.match(source(CHARTS.gauge), /data-state=\{segment === activeSegment \? 'active' : 'inactive'\}/);
   assert.match(source(CHARTS.sankey), /\.attr\('data-state',\s*'hovered'\)/);
   assert.match(source(CHARTS.sparkline), /data-state="ready"/);
-  assert.match(source(CHARTS.funnel), /\.attr\('data-position',\s*i === 0/);
+  assert.match(rendererSource(CHARTS.funnel), /data-position=\{segment\.position\}/);
   assert.match(source(CHARTS.network), /data-variant=\{directed \? 'directed' : 'undirected'\}/);
 });
 
@@ -202,9 +220,10 @@ test('CK-E chart slice C preserves the three adversarial cascade/runtime contrac
   assert.doesNotMatch(histogram, /rightAxis\.select\('\.domain'\)\.style\('stroke', cumulativeColor\)/);
 
   const gauge = source(CHARTS.gauge);
+  const gaugeRenderer = rendererSource(CHARTS.gauge);
   const publicSegmentContract = gauge.slice(
     gauge.indexOf('export interface GaugeSegment'),
-    gauge.indexOf('/** Props for the {@link GaugeChart} component.'),
+    gauge.indexOf('/** Props for the backward-compatible {@link GaugeChart} family adapter. */'),
   );
   assert.match(publicSegmentContract, /color: string;/);
   assert.doesNotMatch(publicSegmentContract, /color\?: string;/);
@@ -212,13 +231,15 @@ test('CK-E chart slice C preserves the three adversarial cascade/runtime contrac
   assert.match(gauge, /const usesDefaultSegments = providedSegments === undefined;/);
   assert.match(gauge, /providedSegments \?\? defaultSegments\(rangeMin, rangeMax\)/);
   assert.match(gauge, /data-color-source=\{usesDefaultSegments \? 'default' : 'custom'\}/);
-  assert.match(gauge, /\.attr\('data-color-source', usesDefaultSegments \? 'default' : 'custom'\)/);
-  assert.match(gauge, /\.attr\('fill', usesDefaultSegments \? null : \(seg\.color \?\? null\)\)/);
-  assert.match(gauge, /backgroundColor: usesDefaultSegments \? DEFAULT_SEGMENT_COLORS\[seg\.toneIndex\] : seg\.color/);
-  assert.doesNotMatch(gauge, /seg\.color\s*\?(?!\?)/);
+  // The segment mark's color-source and its custom-only fill live on the
+  // React renderer that owns the plot; default segments carry no inline fill.
+  assert.match(gaugeRenderer, /data-color-source=\{segment\.colorSource\}/);
+  assert.match(gaugeRenderer, /fill=\{segment\.colorSource === 'custom' \? segment\.color : undefined\}/);
+  assert.match(gauge, /backgroundColor: usesDefaultSegments\s*\?\s*DEFAULT_SEGMENT_COLORS\[segment\.toneIndex\]\s*:\s*segment\.color/);
+  assert.doesNotMatch(gauge, /segment\.color\s*\?(?!\?)/);
   const defaultSegmentBlock = gauge.slice(
     gauge.indexOf('function defaultSegments('),
-    gauge.indexOf('const DEFAULT_SEGMENT_TONES')
+    gauge.indexOf('function normalizedSegments(')
   );
   assert.equal(
     defaultSegmentBlock.match(/label: '(?:Low|Medium|High)'/g)?.length,
@@ -249,10 +270,10 @@ test('CK-E chart slice C preserves the three adversarial cascade/runtime contrac
   assert.doesNotMatch(sankey, /select\('rect'\)\.attr\('stroke'/);
 });
 
-test('CK-E chart slice C reconciles the exact Stage-1 boundary 82 -> 29', () => {
+test('CK-E chart slice C reconciles the exact Stage-1 boundary 82 -> 23', () => {
   const start = Object.values(CHARTS).reduce((sum, chart) => sum + chart.start[0] + chart.start[1], 0);
   const floor = Object.values(CHARTS).reduce((sum, chart) => sum + chart.floor[0] + chart.floor[1], 0);
   assert.equal(start, 82);
-  assert.equal(floor, 29);
-  assert.equal(start - floor, 53);
+  assert.equal(floor, 23);
+  assert.equal(start - floor, 59);
 });

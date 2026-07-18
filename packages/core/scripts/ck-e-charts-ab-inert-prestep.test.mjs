@@ -12,6 +12,7 @@ import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const chartsRoot = join(packageRoot, 'src/ui/patterns/visualization/charts/families');
+const renderersRoot = join(packageRoot, 'src/ui/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers');
 const skinsRoot = join(packageRoot, 'src/foundation/tokens/css/presentation/components/skin');
 
 const CHARTS = {
@@ -35,11 +36,12 @@ const CHARTS = {
   },
   radar: {
     directory: 'radar-chart',
+    renderer: 'radar',
     skin: 'chart-radar.css',
     scope: 'ds-chart-radar',
     start: [5, 7],
-    floor: [2, 4],
-    topology: '9e56a6918b13774d076a74b865cc45e6f1dba3b0970a9ea5e522758c067ce979',
+    floor: [2, 0],
+    topology: '6345023782424eaf4f5f30b912e9be9cb30b1d8a7657748384a75470e589b648',
     parts: ['legend-swatch', 'legend-label', 'plot-area', 'grid-level', 'axis-line', 'axis-label', 'series-area', 'series-point'],
   },
   treemap: {
@@ -135,6 +137,18 @@ function authoredParts(text) {
   ].map((match) => match[1]));
 }
 
+// A chart whose plot renders in a React-owned renderer keeps its scope wrapper
+// and legend on the family adapter while the plot anatomy the skin styles lives
+// on the renderer. Live anatomy for such a chart is the union of both files.
+function authoredPartsForChart(chart) {
+  const parts = authoredParts(source(chart));
+  if (chart.renderer) {
+    const rendererText = readFileSync(join(renderersRoot, chart.renderer, 'index.tsx'), 'utf8');
+    for (const part of authoredParts(rendererText)) parts.add(part);
+  }
+  return parts;
+}
+
 function renderAnatomy(text, path) {
   const sourceFile = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const anatomy = [];
@@ -160,7 +174,7 @@ function renderAnatomy(text, path) {
   return anatomy.join('\n');
 }
 
-test('CK-E chart slices A+B reach their exact 26 + 39 Stage-1 floors', () => {
+test('CK-E chart slices A+B reach their exact 26 + 35 Stage-1 floors', () => {
   const totals = { inline: 0, runtime: 0 };
 
   for (const [name, chart] of Object.entries(CHARTS)) {
@@ -176,13 +190,13 @@ test('CK-E chart slices A+B reach their exact 26 + 39 Stage-1 floors', () => {
     totals.runtime += runtime.count;
   }
 
-  assert.deepEqual(totals, { inline: 26, runtime: 39 });
+  assert.deepEqual(totals, { inline: 26, runtime: 35 });
 });
 
 test('CK-E chart slices A+B expose every planned scope and anatomy hook', () => {
   for (const [name, chart] of Object.entries(CHARTS)) {
     const text = source(chart);
-    const parts = authoredParts(text);
+    const parts = authoredPartsForChart(chart);
 
     assert.match(text, new RegExp(`className=\\{\\['${chart.scope}', className\\]`), `${name} lacks its unique chart scope`);
     for (const part of chart.parts) {
@@ -203,7 +217,7 @@ test('CK-E chart slices A+B skins are scope-anchored and reference live anatomy'
   for (const [name, chart] of Object.entries(CHARTS)) {
     const css = skin(chart);
     const cssWithoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
-    const parts = authoredParts(source(chart));
+    const parts = authoredPartsForChart(chart);
 
     assert.doesNotMatch(css, /!important/, `${name} skin must not use !important`);
     for (const match of cssWithoutComments.matchAll(/([^{}]+)\{/g)) {
@@ -250,8 +264,8 @@ test('CK-E chart slices A+B reconcile the planned Stage-1 boundaries exactly', (
   const floors = Object.values(CHARTS).reduce((total, chart) => total + chart.floor[0] + chart.floor[1], 0);
 
   assert.equal(starts, 159);
-  assert.equal(floors, 65);
-  assert.equal(starts - floors, 94);
+  assert.equal(floors, 61);
+  assert.equal(starts - floors, 98);
 
   const chartA = ['area', 'bar', 'radar', 'treemap', 'pie'];
   const chartB = ['bullet', 'waterfall', 'line', 'gantt', 'heatmap', 'calendarHeatmap'];
@@ -260,6 +274,6 @@ test('CK-E chart slices A+B reconcile the planned Stage-1 boundaries exactly', (
     return total + chart.start[0] + chart.start[1] - chart.floor[0] - chart.floor[1];
   }, 0);
 
-  assert.equal(migrate(chartA), 52);
+  assert.equal(migrate(chartA), 56);
   assert.equal(migrate(chartB), 42);
 });
