@@ -4,12 +4,15 @@ import { useEffect, type ReactNode } from 'react';
 import {
   DesignSystemProvider,
   getKnownTenantConfig,
-  themanagementmiamiBrandTheme,
-  tortureDarkBrandTheme,
-  tortureLightBrandTheme,
   type BrandTheme,
   type TenantConfig,
 } from '@rottay/design-system';
+
+import {
+  themanagementmiamiBrandTheme,
+  tortureDarkBrandTheme,
+  tortureLightBrandTheme,
+} from './fixtures';
 
 // ---------------------------------------------------------------------------
 // Torture surface (WO-GAT-03 hostile-tenant whitelabel proof)
