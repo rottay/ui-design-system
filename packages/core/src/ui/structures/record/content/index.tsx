@@ -53,12 +53,12 @@
  * Checkpoint F if no consumers remain).
  */
 
-import { type CSSProperties, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 import {
   ArrowUpRightIcon as ArrowUpRight,
-  CopyIcon as Copy,
 } from '../../../../graphics/icons';
+import { CopyToCheck } from '../../../../graphics/motion';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
@@ -264,6 +264,26 @@ export function RecordField({
   copyValue?: string;
 }) {
   const NavLink = useNavigationLink();
+
+  // Copy-to-clipboard confirm feedback: the icon morphs copy -> check on click,
+  // then reverts. CopyToCheck is opacity/transform-only and honors reduced
+  // motion (crossfade collapses to an instant swap), so no bespoke guard here.
+  const [copied, setCopied] = useState(false);
+  const copyRevertTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (copyRevertTimer.current) clearTimeout(copyRevertTimer.current);
+    },
+    [],
+  );
+  const handleCopy = useCallback(() => {
+    if (!copyValue) return;
+    void navigator.clipboard?.writeText(copyValue);
+    setCopied(true);
+    if (copyRevertTimer.current) clearTimeout(copyRevertTimer.current);
+    copyRevertTimer.current = setTimeout(() => setCopied(false), 1400);
+  }, [copyValue]);
+
   const resolved = renderFieldValue(value, emptyLabel);
   const primitiveValue = typeof resolved.content === 'string' || typeof resolved.content === 'number';
   const valueNode = primitiveValue ? (
@@ -343,15 +363,15 @@ export function RecordField({
         <Flex align="start" justify="between" gap={12}>
           <Box style={{ minWidth: 0, flex: 1 }}>{maybeLinkedValue}</Box>
           {copyValue ? (
-            <Tooltip content={`Copy ${label.toLowerCase()}`}>
+            <Tooltip content={copied ? 'Copied' : `Copy ${label.toLowerCase()}`}>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigator.clipboard.writeText(copyValue)}
+                onClick={handleCopy}
                 style={{ flexShrink: 0 }}
-                aria-label={`Copy ${label.toLowerCase()}`}
+                aria-label={copied ? `Copied ${label.toLowerCase()}` : `Copy ${label.toLowerCase()}`}
               >
-                <Copy style={{ width: 13, height: 13 }} />
+                <CopyToCheck copied={copied} size={13} />
               </Button>
             </Tooltip>
           ) : null}

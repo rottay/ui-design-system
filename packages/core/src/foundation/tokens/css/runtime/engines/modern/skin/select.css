@@ -51,6 +51,20 @@
   }
 }
 
+/* Trigger state choreography: the border/background/focus-ring shifts between
+   rest, hover, open, and status states settle on the motion canon instead of
+   snapping. One unqualified [data-part='trigger'] rule carries the transition
+   for BOTH the native <select> and the custom <div> trigger; it sets no border
+   color, so it never contests the element-qualified state rules below. The
+   --ds-motion-fast token zeroes under reduced motion (final-state, no tween). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] {
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
 /* ============================================================================
    CUSTOM TRIGGER (div) — buildTriggerStyle state machine
    ============================================================================ */
@@ -186,10 +200,13 @@
   color: inherit;
 }
 
-/* chevron: color + open-driven rotation (state transform is paint) */
+/* chevron: color + open-driven rotation (state transform is paint). The
+   rotation ticks over on --ds-motion-fast rather than snapping; the token
+   zeroes under reduced motion so the chevron flips to its final angle at once. */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'] {
   color: var(--ds-color-text-muted);
   transform: rotate(0deg);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
   transform: rotate(180deg);

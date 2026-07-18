@@ -55,6 +55,14 @@
   transform: translateX(var(--ds-switch-thumb-x));
 }
 
+/* press: the thumb dips while holding its travel position, extending the
+   interaction-state choreography (--ds-state-press-scale) to the switch. The
+   thumb already transitions transform (engine index) on --ds-motion-normal,
+   which zeroes under reduced motion, so the dip settles back on release. */
+.ds-switch.ds-switch--modern:active:not([data-disabled='true']) [data-part='thumb'] {
+  transform: translateX(var(--ds-switch-thumb-x)) scale(var(--ds-state-press-scale));
+}
+
 /* label ------------------------------------------------------------------- */
 .ds-switch.ds-switch--modern [data-part='label'] {
   color: var(--ds-color-text-primary);

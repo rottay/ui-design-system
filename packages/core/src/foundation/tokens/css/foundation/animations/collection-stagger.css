@@ -1,0 +1,60 @@
+/**
+ * Collection insert stagger preset — Rottay Design System.
+ *
+ * The CSS half of the `collection.insert` motion recipe
+ * (infrastructure/runtime/foundation/motion/policy/recipes: staggerStepMs 30,
+ * staggerMaxMs 240, both capped by MAX_TOTAL_STAGGER_MS 320). A collection
+ * surface stamps `.ds-collection-stagger` on a freshly mounted batch and sets
+ * `--ds-stagger-index` on each row/card; every item reveals with a
+ * compositor-only opacity+transform entrance whose start is delayed by
+ * `index * step`, clamped to `max`, so a large batch never staggers longer than
+ * the cap (150-300ms total by design). The `useCollectionStagger` hook
+ * (ui/patterns/foundation/motion) resolves the SAME recipe through the active
+ * motion policy, stamps the class only when the policy animates, and writes
+ * `--ds-stagger-step`/`--ds-stagger-max` from the resolved recipe so a tenant's
+ * durationScale moves the CSS and the JS in lockstep.
+ *
+ * Compositor-only (modern engine spec section 2, WO-CRA-06): opacity + transform
+ * only, never a layout property. Under reduced motion every item resolves to its
+ * final state with no delay -- the media guard below is load-bearing because the
+ * step/max tokens are not zeroed by the foundation reduced-motion block (a bare
+ * duration zero would still leave each item delayed and briefly hidden).
+ */
+
+:root {
+  /* collection.insert recipe bounds. A stamping container overrides these inline
+     from the resolved recipe; these defaults keep the class self-sufficient when
+     stamped without the hook (e.g. a static server-rendered batch). */
+  --ds-stagger-step: 30ms;
+  --ds-stagger-max: 240ms;
+}
+
+@keyframes ds-collection-insert {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ds-collection-stagger [data-ds-stagger-item] {
+  animation-name: ds-collection-insert;
+  animation-duration: var(--ds-motion-normal);
+  animation-timing-function: var(--ds-motion-ease-out);
+  /* `both` holds the from-state through the delay so an item stays hidden until
+     its turn instead of flashing in and then animating out. */
+  animation-fill-mode: both;
+  animation-delay: min(
+    var(--ds-stagger-index, 0) * var(--ds-stagger-step),
+    var(--ds-stagger-max)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-collection-stagger [data-ds-stagger-item] {
+    animation: none;
+  }
+}

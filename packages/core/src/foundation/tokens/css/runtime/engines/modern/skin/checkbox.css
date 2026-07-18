@@ -24,10 +24,33 @@
  * wins unlayered at (0,3,0) or higher.
  */
 
+/* checkmark settle: the tick pops in from a slightly smaller scale each time the
+   box becomes active. Compositor-only (opacity + transform), reduced-motion-safe
+   below. The checkmark SVG is mounted only while active, so this replays on
+   every check rather than looping. */
+@keyframes ds-checkbox-settle {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .ds-checkbox.ds-checkbox--modern [data-part='box'] {
   border-radius: var(--ds-radius-sm);
   background-color: transparent;
   transform: scale(1);
+}
+
+/* press: the box dips on pointer-press, extending the interaction-state
+   choreography (--ds-state-press-scale) to the checkbox. The box already
+   transitions transform on --ds-motion-fast (engine index), which zeroes under
+   reduced motion, so the dip settles back on release without a bespoke rule. */
+.ds-checkbox.ds-checkbox--modern:active:not([data-disabled='true']) [data-part='box'] {
+  transform: scale(var(--ds-state-press-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-standalone='true'] [data-part='box'] {
   border-radius: 999px;
@@ -67,6 +90,12 @@
 
 .ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
   transform: scale(1);
+  animation: ds-checkbox-settle var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
+    animation: none;
+  }
 }
 
 .ds-checkbox.ds-checkbox--modern [data-part='label'] {

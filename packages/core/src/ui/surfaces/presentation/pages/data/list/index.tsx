@@ -15,7 +15,8 @@ import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../../../../primi
 import { PatternDataTable, PatternFilterPanel, resolveRowKey } from '../../../../../patterns';
 import { PatternListToolbar } from '../../../../../patterns/data/list-toolbar';
 import type { ViewMode } from '../../../../../patterns/data/list-toolbar';
-import { FadeIn, StaggerChildren, recordTransitionName } from '@/graphics/motion';
+import { FadeIn, recordTransitionName } from '@/graphics/motion';
+import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import {
   countActiveFilters,
@@ -121,8 +122,6 @@ function DefaultCardView<TView>({
   cardMinWidth,
   cardVariant,
   animateEntrance,
-  staggerDelay,
-  entranceDuration,
 }: {
   items: TView[];
   config: ListSurfaceConfig<TView>;
@@ -131,10 +130,13 @@ function DefaultCardView<TView>({
   cardMinWidth: number;
   cardVariant: 'outlined' | 'elevated' | 'filled' | 'ghost';
   animateEntrance: boolean;
-  staggerDelay: number;
-  entranceDuration: number;
 }): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
+  // Per-card entrance choreography (collection.insert recipe). Gated by BOTH the
+  // product profile's animateEntrance flag AND the active motion policy, so a
+  // reduced/calm/hidden context renders every card at its final state.
+  const stagger = useCollectionStagger(items.length);
+  const applyStagger = animateEntrance && stagger.animated;
 
   if (items.length === 0) {
     return (
@@ -151,8 +153,17 @@ function DefaultCardView<TView>({
     );
   }
 
-  const gridContent = (
-    <Grid templateColumns={`repeat(auto-fit, minmax(${cardMinWidth}px, 1fr))`} gap="lg">
+  return (
+    <Grid
+      templateColumns={`repeat(auto-fit, minmax(${cardMinWidth}px, 1fr))`}
+      gap="lg"
+      className={applyStagger ? stagger.containerClassName : undefined}
+      style={
+        applyStagger
+          ? ({ '--ds-stagger-step': stagger.stepCss, '--ds-stagger-max': stagger.maxCss } as React.CSSProperties)
+          : undefined
+      }
+    >
       {items.map((item, index) => {
         // Give apps a full escape hatch before falling back to the stock card rendering.
         const customCard = config.presentation.renderCard?.(item, index);
@@ -169,7 +180,15 @@ function DefaultCardView<TView>({
 
         if (customCard) {
           return (
-            <Box key={index} style={{ viewTransitionName: itemTransitionName }}>
+            <Box
+              key={index}
+              data-ds-stagger-item={applyStagger ? '' : undefined}
+              style={
+                applyStagger
+                  ? ({ viewTransitionName: itemTransitionName, '--ds-stagger-index': index } as React.CSSProperties)
+                  : { viewTransitionName: itemTransitionName }
+              }
+            >
               {customCard}
             </Box>
           );
@@ -182,7 +201,12 @@ function DefaultCardView<TView>({
             hoverable={!!config.behavior.onRowClick}
             clickable={!!config.behavior.onRowClick}
             onClick={() => config.behavior.onRowClick?.(item, index)}
-            style={{ viewTransitionName: itemTransitionName }}
+            data-ds-stagger-item={applyStagger ? '' : undefined}
+            style={
+              applyStagger
+                ? ({ viewTransitionName: itemTransitionName, '--ds-stagger-index': index } as React.CSSProperties)
+                : { viewTransitionName: itemTransitionName }
+            }
           >
             <Card.Body>
               <Stack spacing="md">
@@ -236,16 +260,6 @@ function DefaultCardView<TView>({
       })}
     </Grid>
   );
-
-  if (animateEntrance) {
-    return (
-      <StaggerChildren staggerDelayMs={staggerDelay} durationMs={entranceDuration}>
-        {gridContent}
-      </StaggerChildren>
-    );
-  }
-
-  return gridContent;
 }
 
 export interface ListSurfaceProps<TRaw, TView extends object> {
@@ -545,8 +559,6 @@ export function ListSurface<TRaw, TView extends object>({
           cardMinWidth={resolvedCardMinWidth}
           cardVariant={profileDefaults.cardVariant}
           animateEntrance={profileDefaults.animateEntrance}
-          staggerDelay={profileDefaults.staggerDelay}
-          entranceDuration={profileDefaults.entranceDuration}
         />
       )}
     </Stack>

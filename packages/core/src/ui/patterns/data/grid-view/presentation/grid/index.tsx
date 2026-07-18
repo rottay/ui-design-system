@@ -25,6 +25,7 @@ import {
 } from '../../../../../primitives';
 import type { GridViewProps } from '../../contracts';
 import { resolveGridRowKey } from '../../runtime/item-identity';
+import { useCollectionStagger } from '../../../../foundation/motion';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -77,6 +78,7 @@ function SelectableCard<T>({
   selected,
   onToggle,
   renderCard,
+  staggered,
 }: {
   item: T;
   itemKey: string;
@@ -84,14 +86,18 @@ function SelectableCard<T>({
   selected: boolean;
   onToggle: (key: string) => void;
   renderCard: (item: T, index: number) => React.ReactNode;
+  staggered: boolean;
 }): React.ReactElement {
   return (
     <Box
       data-part="card-shell"
       data-selected={selected ? 'true' : 'false'}
-      style={{
-        position: 'relative',
-      }}
+      data-ds-stagger-item={staggered ? '' : undefined}
+      style={
+        staggered
+          ? ({ position: 'relative', '--ds-stagger-index': index } as React.CSSProperties)
+          : { position: 'relative' }
+      }
     >
       {/* Checkbox overlay */}
       <Box
@@ -203,6 +209,11 @@ export function PatternGridView<T>(
     [rowKey],
   );
 
+  // Entrance choreography for the mounted batch, resolved through the active
+  // motion policy (collection.insert recipe). Renders final-state under reduced/
+  // calm/hidden/constrained policies, so the grid never blocks or flashes.
+  const stagger = useCollectionStagger(data.length);
+
   const toggleSelection = useCallback(
     (key: string) => {
       const nextKeys = selectedKeys.includes(key)
@@ -225,16 +236,22 @@ export function PatternGridView<T>(
   const normalizedGap = useMemo(() => normalizeGap(gap), [gap]);
 
   const gridStyle: React.CSSProperties = useMemo(
-    () => ({
-      display: 'grid',
-      gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
-      gap: normalizedGap,
-      padding: '1px 1px var(--ds-listing-grid-bottom-bleed, 8px)',
-      overflow: 'visible',
-      boxSizing: 'border-box',
-      ...style,
-    }),
-    [columns, minColumnWidth, normalizedGap, style],
+    () =>
+      ({
+        display: 'grid',
+        gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
+        gap: normalizedGap,
+        padding: '1px 1px var(--ds-listing-grid-bottom-bleed, 8px)',
+        overflow: 'visible',
+        boxSizing: 'border-box',
+        ...style,
+        // Publish the policy-resolved stagger bounds so the .ds-collection-stagger
+        // preset's per-item clamp reflects the tenant durationScale. Absent when the
+        // batch renders final-state.
+        '--ds-stagger-step': stagger.animated ? stagger.stepCss : undefined,
+        '--ds-stagger-max': stagger.animated ? stagger.maxCss : undefined,
+      }) as React.CSSProperties,
+    [columns, minColumnWidth, normalizedGap, style, stagger.animated, stagger.stepCss, stagger.maxCss],
   );
 
   // -------------------------------------------------------------------------
@@ -283,7 +300,7 @@ export function PatternGridView<T>(
   return (
     <Stack spacing="md">
       <Box
-        className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
+        className={['ds-pattern-grid-view', className, stagger.containerClassName].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="false"
@@ -303,7 +320,23 @@ export function PatternGridView<T>(
                 selected={selectedKeys.includes(key)}
                 onToggle={toggleSelection}
                 renderCard={renderCard}
+                staggered={stagger.animated}
               />
+            );
+          }
+
+          // Only when the policy actually animates does a stagger cell wrap the
+          // card, so the resting DOM stays identical to the un-staggered grid.
+          if (stagger.animated) {
+            return (
+              <Box
+                key={key}
+                data-part="cell"
+                data-ds-stagger-item=""
+                style={{ '--ds-stagger-index': index } as React.CSSProperties}
+              >
+                {renderCard(item, index)}
+              </Box>
             );
           }
 
