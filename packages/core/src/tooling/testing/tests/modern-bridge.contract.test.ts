@@ -8,8 +8,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const TOKENS_ROOT = join(process.cwd(), 'src', 'tokens', 'css');
-const MODERN_THEME = join(TOKENS_ROOT, 'engines', 'modern', 'theme.css');
+const TOKENS_ROOT = join(process.cwd(), 'src', 'foundation', 'tokens', 'css');
+const MODERN_THEME = join(TOKENS_ROOT, 'runtime', 'engines', 'modern', 'theme.css');
 
 /** Legacy DaisyUI 4 short-hand variable names that must NOT appear as definitions. */
 const LEGACY_DAISY4_VARS = [
@@ -85,7 +85,7 @@ describe('modern engine bridge contract', () => {
     const tenants = ['rottay', 'bithire', 'evnto'];
 
     for (const tenant of tenants) {
-      const tenantFile = join(TOKENS_ROOT, 'tenants', tenant, 'index.css');
+      const tenantFile = join(TOKENS_ROOT, 'facade', 'artifacts', tenant, 'index.css');
 
       it(`${tenant}/index.css should not define legacy DaisyUI 4 variables`, () => {
         if (!existsSync(tenantFile)) return;

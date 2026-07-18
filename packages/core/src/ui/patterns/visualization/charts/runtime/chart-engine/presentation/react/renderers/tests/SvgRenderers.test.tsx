@@ -19,7 +19,7 @@ import { SvgScatterRenderer } from '../scatter';
 
 const defaultResizeObserver = globalThis.ResizeObserver;
 const CHART_FOUNDATION_CSS = readFileSync(
-  join(__dirname, '../../../../../../../../../foundation/tokens/css/presentation/components/skin/chart-foundation.css'),
+  join(__dirname, '../../../../../../../../../../foundation/tokens/css/presentation/components/skin/chart-foundation.css'),
   'utf8',
 );
 

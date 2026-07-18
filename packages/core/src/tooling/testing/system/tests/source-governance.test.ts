@@ -301,8 +301,14 @@ describe('folder structure', () => {
   });
 
   it('should classify internal owners by architectural weight', () => {
-    expect(existsSync(join(SRC_ROOT, 'foundation', 'internal', 'kernel'))).toBe(true);
-    expect(existsSync(join(SRC_ROOT, 'foundation', 'internal', 'runtime'))).toBe(true);
+    // foundation owners that declare the kernel -> runtime dependency-order
+    // split (CLAUDE.md: "foundation|kernel|contracts..." -> "runtime" -> ...);
+    // each must physically separate its kernel-weight primitives from its
+    // runtime-weight behavior instead of flattening them as tree peers.
+    for (const owner of ['behavior', 'contracts', 'i18n']) {
+      expect(existsSync(join(SRC_ROOT, 'foundation', owner, 'kernel'))).toBe(true);
+      expect(existsSync(join(SRC_ROOT, 'foundation', owner, 'runtime'))).toBe(true);
+    }
     expect(existsSync(join(
       INFRASTRUCTURE_RUNTIME_ROOT,
       'adapters',

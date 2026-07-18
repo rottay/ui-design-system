@@ -158,8 +158,8 @@ describe('Badge hover transform (P-43)', () => {
       const entry = readFileSync(join(__dirname, '../../../../../foundation/tokens/css/facade/entrypoints/styles.css'), 'utf-8');
 
       for (const sheet of [base, entry]) {
-        expect(sheet).toContain("@import '../engines/modern/skin/badge.css';");
-        expect(sheet).toContain("@import '../engines/rustic/skin/badge.css';");
+        expect(sheet).toContain("@import '../../runtime/engines/modern/skin/badge.css';");
+        expect(sheet).toContain("@import '../../runtime/engines/rustic/skin/badge.css';");
       }
     });
   });

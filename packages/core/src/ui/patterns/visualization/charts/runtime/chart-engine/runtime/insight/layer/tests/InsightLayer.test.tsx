@@ -13,7 +13,7 @@ import { SvgLineRenderer } from '../../../../presentation/react/renderers/line';
 import { ChartInsightSummary } from '../../../../presentation/react/insight/summary';
 
 const CHART_FOUNDATION_CSS = readFileSync(
-  join(__dirname, '../../../../../../../../../foundation/tokens/css/presentation/components/skin/chart-foundation.css'),
+  join(__dirname, '../../../../../../../../../../foundation/tokens/css/presentation/components/skin/chart-foundation.css'),
   'utf8',
 );
 
