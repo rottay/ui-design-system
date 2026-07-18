@@ -241,6 +241,7 @@
         "MOBILE_HEADER_DEFAULTS",
         "MODAL_MAX_HEIGHT_MAP",
         "MODAL_PADDING_MAP",
+        "MODAL_PROMOTE_TRANSITION_NAME",
         "MODAL_RADIUS_MAP",
         "MODAL_SIZE_MAP",
         "Magnetic",
@@ -360,6 +361,7 @@
         "RATE_DEFAULTS",
         "RATE_SIZE_MAP",
         "RATIO_PRESETS",
+        "RECORD_MORPH_TRANSITION_CLASS",
         "RESPONSIVE_BREAKPOINTS",
         "RESPONSIVE_BREAKPOINT_ORDER",
         "RadarChart",
@@ -462,6 +464,7 @@
         "SurfaceSummaryStrip",
         "Switch",
         "SystemCssVariablesBridge",
+        "TAB_PANEL_TRANSITION_CLASS",
         "TAGINPUT_DEFAULTS",
         "TENANT_THEME_CHROME_FAMILIES_V1",
         "TENANT_THEME_COMPILER_VERSION",
@@ -520,6 +523,7 @@
         "UPLOAD_DEFAULTS",
         "Upload",
         "VERTICAL_REGISTRY",
+        "VIEW_TRANSITION_DIRECTION_ATTRIBUTE",
         "ViewModeSwitcher",
         "VisualizationSurface",
         "VoiceInputButton",
@@ -585,6 +589,7 @@
         "defaultViewModeLabels",
         "deriveTenantColorRamps",
         "deserializeBrandTheme",
+        "directionFromIndexDelta",
         "en",
         "errorInDev",
         "es",
@@ -672,6 +677,7 @@
         "pickOAuthTransitionVariant",
         "preloadTenantConfig",
         "pt",
+        "recordMorphStyle",
         "recordTransitionName",
         "registerCustomComponent",
         "registerCustomComponents",
@@ -711,8 +717,11 @@
         "serializeBrandTheme",
         "setServerHeaders",
         "sha256TenantThemeValue",
+        "startDirectionalViewTransition",
         "startDsViewTransition",
         "stringifySurfaceValue",
+        "tabPanelTransitionName",
+        "tabPanelTransitionStyle",
         "tenantThemeArtifactRootAttributes",
         "toBreakpoint",
         "toLegacySize",
@@ -746,6 +755,7 @@
         "useCustomStatus",
         "useDataTable",
         "useDeferredPending",
+        "useDirectionalViewTransition",
         "useDraftSave",
         "useDsFocusMode",
         "useEngineContext",
@@ -1134,6 +1144,9 @@
           "d3",
           "motion"
         ],
+        "directionFromIndexDelta": [
+          "motion"
+        ],
         "Divider": [
           "antd"
         ],
@@ -1441,6 +1454,9 @@
         ],
         "Modal": [
           "antd"
+        ],
+        "MODAL_PROMOTE_TRANSITION_NAME": [
+          "motion"
         ],
         "MoreFieldsToggle": [
           "@phosphor-icons/react",
@@ -1752,6 +1768,9 @@
         "Rate": [
           "antd"
         ],
+        "RECORD_MORPH_TRANSITION_CLASS": [
+          "motion"
+        ],
         "RecordActionBar": [
           "@phosphor-icons/react",
           "antd",
@@ -1765,6 +1784,9 @@
         "RecordFieldGrid": [
           "@phosphor-icons/react",
           "antd",
+          "motion"
+        ],
+        "recordMorphStyle": [
           "motion"
         ],
         "RecordPanel": [
@@ -1917,6 +1939,9 @@
           "antd",
           "motion"
         ],
+        "startDirectionalViewTransition": [
+          "motion"
+        ],
         "startDsViewTransition": [
           "motion"
         ],
@@ -2030,6 +2055,9 @@
         "SystemCssVariablesBridge": [
           "antd"
         ],
+        "TAB_PANEL_TRANSITION_CLASS": [
+          "motion"
+        ],
         "Table": [
           "antd"
         ],
@@ -2038,8 +2066,15 @@
           "antd",
           "motion"
         ],
+        "tabPanelTransitionName": [
+          "motion"
+        ],
+        "tabPanelTransitionStyle": [
+          "motion"
+        ],
         "Tabs": [
-          "antd"
+          "antd",
+          "motion"
         ],
         "Tag": [
           "antd"
@@ -2137,6 +2172,9 @@
         "useDeferredPending": [
           "motion"
         ],
+        "useDirectionalViewTransition": [
+          "motion"
+        ],
         "useFlipLayout": [
           "motion"
         ],
@@ -2185,6 +2223,9 @@
           "antd"
         ],
         "useViewTransition": [
+          "motion"
+        ],
+        "VIEW_TRANSITION_DIRECTION_ATTRIBUTE": [
           "motion"
         ],
         "ViewModeSwitcher": [

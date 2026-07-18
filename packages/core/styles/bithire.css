@@ -3101,7 +3101,7 @@ html.dark {
      Skeleton/loading appearance
      ======================================================================== */
   --ds-avatar-loading-bg: var(--ds-color-neutral-100);
-  --ds-avatar-loading-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --ds-avatar-loading-animation: ds-foundation-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   /* ========================================================================
      TOUCH TARGETS
@@ -4108,7 +4108,7 @@ html.dark {
     rgba(255, 255, 255, 0.5) 50%,
     transparent 100%
   );
-  --ds-card-loading-animation: shimmer 2s infinite;
+  --ds-card-loading-animation: ds-foundation-shimmer 2s infinite;
 
   /* ========================================================================
      DIVIDER
@@ -5660,7 +5660,7 @@ html.dark {
      ======================================================================== */
 
   --ds-timeline-pending-dot-color: var(--ds-color-primary, #1890ff);
-  --ds-timeline-pending-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --ds-timeline-pending-animation: ds-foundation-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   /* ========================================================================
      TIMELINE TRANSITIONS
@@ -11866,7 +11866,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border: 2px solid var(--ds-border-color);
   border-top-color: var(--ds-color-primary-600);
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  animation: ds-foundation-spin 0.6s linear infinite;
 }
 
 /* =============================================================================
@@ -13170,14 +13170,10 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   }
 }
 
-@keyframes ds-skeleton-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
+/* The legacy `.ds-skeleton` block above references ds-skeleton-pulse, now the
+   canon keyframe in foundation/animations/keyframes.css (same bundle via
+   base.css). A local duplicate here is removed so exactly one ds-skeleton-pulse
+   exists workspace-wide (CRA-12 duplicate-keyframe rule). */
 
 /* =============================================================================
    UTILITY CLASSES
@@ -14100,6 +14096,28 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transform: scale(var(--ds-state-press-scale));
 }
 
+/* feedback.press recipe: when the engine stamps the recipe contract, press
+   geometry and the transform channel's timing resolve from the --ds-recipe-*
+   variables. Under reduced motion the resolver emits scale 1 / 0ms and
+   data-recipe-state='final', whose rule below removes interpolation so the
+   settled state renders directly. */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='animated'] {
+  transition:
+    transform var(--ds-recipe-enter, var(--ds-motion-fast)) var(--ds-recipe-curve, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    filter var(--ds-motion-fast) var(--ds-motion-ease-out),
+    text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='final'] {
+  transition: none;
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-state~='pressed'] {
+  transform: scale(var(--ds-recipe-scale-from, var(--ds-state-press-scale)));
+}
+
 /* resting elevation on a raised button; hover lifts it a step via the hover rule */
 .rottay-button.rottay-button--modern[data-part='trigger'].rottay-button--shadow:not([data-state~='hovered']) {
   box-shadow: var(--ds-elevation-1);
@@ -14444,6 +14462,29 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transform: var(--ds-button-active-transform, scale(0.97));
 }
 
+/* feedback.press recipe: press geometry defaults to the recipe's scale and the
+   transform channel's timing to the recipe's enter duration/curve; a tenant's
+   --ds-button-active-transform / --ds-button-transition still win. Under
+   reduced motion the resolver stamps data-recipe-state='final' with scale 1
+   and 0ms, and the final rule removes interpolation entirely. */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='animated'] {
+  transition: var(
+    --ds-button-transition,
+    transform var(--ds-recipe-enter, 150ms) var(--ds-recipe-curve, ease),
+    box-shadow 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease
+  );
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='final'] {
+  transition: none;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-recipe='feedback.press'][data-state~='pressed'] {
+  transform: var(--ds-button-active-transform, scale(var(--ds-recipe-scale-from, 0.97)));
+}
+
 /* a full-width button outranks a circle's box */
 .rottay-button.rottay-button--rustic[data-part='trigger'][data-full-width='true'] {
   width: 100%;
@@ -14452,7 +14493,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 /* attention */
 .rottay-button.rottay-button--rustic[data-part='trigger'][data-pulse='true'] {
-  animation: rottay-button-pulse 2s infinite;
+  animation: ds-button-pulse 2s infinite;
 }
 
 /* inert postures. `pending` refuses activation without refusing the cursor:
@@ -16551,8 +16592,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border-color: var(--ds-color-neutral-300);
 }
 
-/* ---- action spinner (loading): the `animation: spin` reference stays inline
-        (sanctioned residual); its border ring moves here. ---- */
+/* ---- action spinner (loading): the `animation: ds-foundation-spin` reference
+        stays inline (sanctioned residual); its border ring moves here. ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='action-spinner'][data-part='action-spinner'] {
   border: 2px solid currentColor;
   border-top-color: transparent;
@@ -16662,8 +16703,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* ---- skeleton parts: per-part radius (was PULSE_STYLE + per-instance override)
-        + shared pulse background. The `animation: pulse` reference to the global
-        keyframes stays inline (sanctioned residual). ---- */
+        + shared pulse background. The `animation: ds-foundation-pulse` reference
+        to the global keyframes stays inline (sanctioned residual). ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-breadcrumb'] {
   border-radius: var(--ds-radius-sm);
   background: var(--ds-color-neutral-100);
@@ -16736,9 +16777,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  */
 
 /* ---- pulse keyframes: rustic's skeleton dims to opacity .4 (dimmer than the
-        global keyframes.css `pulse`, which bottoms at .5). Renamed off `pulse`
-        so this globally-loaded definition does not redefine the shared one; the
-        skeleton's inline `animation` references this name. ---- */
+        global keyframes.css `ds-foundation-pulse`, which bottoms at .5). Renamed
+        off `pulse` so this local definition does not redefine the globally-loaded
+        one; the skeleton's inline `animation` references this name. ---- */
 @keyframes ds-detail-panel-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
@@ -18346,6 +18387,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   transform: translateX(var(--ds-switch-thumb-x));
 }
 
+/* press: the thumb dips while holding its travel position, extending the
+   interaction-state choreography (--ds-state-press-scale) to the switch. The
+   thumb already transitions transform (engine index) on --ds-motion-normal,
+   which zeroes under reduced motion, so the dip settles back on release. */
+.ds-switch.ds-switch--modern:active:not([data-disabled='true']) [data-part='thumb'] {
+  transform: translateX(var(--ds-switch-thumb-x)) scale(var(--ds-state-press-scale));
+}
+
 /* label ------------------------------------------------------------------- */
 .ds-switch.ds-switch--modern [data-part='label'] {
   color: var(--ds-color-text-primary);
@@ -18379,8 +18428,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * The loading spinner's `@keyframes spin` was injected per-mount via a
  * `<style>` tag; it is renamed `ds-switch-spin` here so it does not redefine
- * the globally-loaded `spin`, and the svg's inline `animation` references the
- * new name.
+ * the globally-loaded `ds-foundation-spin`, and the svg's inline `animation`
+ * references the new name.
  *
  * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
  * unlayered at (0,3,0) or higher.
@@ -18695,10 +18744,33 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * wins unlayered at (0,3,0) or higher.
  */
 
+/* checkmark settle: the tick pops in from a slightly smaller scale each time the
+   box becomes active. Compositor-only (opacity + transform), reduced-motion-safe
+   below. The checkmark SVG is mounted only while active, so this replays on
+   every check rather than looping. */
+@keyframes ds-checkbox-settle {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .ds-checkbox.ds-checkbox--modern [data-part='box'] {
   border-radius: var(--ds-radius-sm);
   background-color: transparent;
   transform: scale(1);
+}
+
+/* press: the box dips on pointer-press, extending the interaction-state
+   choreography (--ds-state-press-scale) to the checkbox. The box already
+   transitions transform on --ds-motion-fast (engine index), which zeroes under
+   reduced motion, so the dip settles back on release without a bespoke rule. */
+.ds-checkbox.ds-checkbox--modern:active:not([data-disabled='true']) [data-part='box'] {
+  transform: scale(var(--ds-state-press-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-standalone='true'] [data-part='box'] {
   border-radius: 999px;
@@ -18738,6 +18810,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
   transform: scale(1);
+  animation: ds-checkbox-settle var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
+    animation: none;
+  }
 }
 
 .ds-checkbox.ds-checkbox--modern [data-part='label'] {
@@ -19149,7 +19227,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * The four per-mount `<style>` keyframes are moved here renamed
  * `ds-form-rustic-*` (engine-namespaced: the modern Form's `feedback-in` has
- * different content, and the local `spin` shadowed the global one). The inline
+ * different content, and the local `spin` shadowed the global
+ * `ds-foundation-spin`). The inline
  * `animation` references the new names.
  *
  * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
@@ -19469,7 +19548,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * The two per-mount `<style>` keyframes are moved here renamed
  * `ds-voice-input-button-pulse` / `-spin`; the inline `animation` references the
- * new names, and `-spin` no longer shadows the global `spin`.
+ * new names, and `-spin` no longer shadows the global `ds-foundation-spin`.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1); with only ONE root class, the border rules reach (0,4,0) via a
@@ -21520,6 +21599,20 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
 }
 
+/* Trigger state choreography: the border/background/focus-ring shifts between
+   rest, hover, open, and status states settle on the motion canon instead of
+   snapping. One unqualified [data-part='trigger'] rule carries the transition
+   for BOTH the native <select> and the custom <div> trigger; it sets no border
+   color, so it never contests the element-qualified state rules below. The
+   --ds-motion-fast token zeroes under reduced motion (final-state, no tween). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] {
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
 /* ============================================================================
    CUSTOM TRIGGER (div) — buildTriggerStyle state machine
    ============================================================================ */
@@ -21655,10 +21748,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: inherit;
 }
 
-/* chevron: color + open-driven rotation (state transform is paint) */
+/* chevron: color + open-driven rotation (state transform is paint). The
+   rotation ticks over on --ds-motion-fast rather than snapping; the token
+   zeroes under reduced motion so the chevron flips to its final angle at once. */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'] {
   color: var(--ds-color-text-muted);
   transform: rotate(0deg);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
   transform: rotate(180deg);
@@ -22080,8 +22176,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `<style dangerouslySetInnerHTML>` re-injected on every open, is moved here
  * renamed `ds-tree-select-slide-in`; the dropdown's `animation:` reference
  * (an inline, non-paint key) is updated to match. The loading spinner's bare
- * `animation: 'spin …'` has no local `@keyframes` in the source and resolves
- * against the global foundation `spin` keyframe -- left inline, untouched.
+ * `animation: 'ds-foundation-spin …'` has no local `@keyframes` in the source
+ * and resolves against the global foundation `ds-foundation-spin` keyframe --
+ * left inline, untouched.
  */
 
 @keyframes ds-tree-select-slide-in {
@@ -22445,9 +22542,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * 0`). Both are moved here renamed `ds-cascader-slide-in` /
  * `ds-cascader-panel-in`; the `<style>` tag is deleted and both inline
  * `animation:` references (non-paint keys, left inline) are updated to match.
- * The loading spinner's bare `animation: 'spin ...'` has no local `@keyframes`
- * in the source and resolves against the global foundation `spin` keyframe --
- * left inline, untouched.
+ * The loading spinner's bare `animation: 'ds-foundation-spin ...'` has no local
+ * `@keyframes` in the source and resolves against the global foundation
+ * `ds-foundation-spin` keyframe -- left inline, untouched.
  *
  * WON'T-TRANSCRIBE / NOT INVENTED: the option row's dead `active`/`disabled`
  * className tokens (no in-file stylesheet target) and the search-mode result
@@ -23229,48 +23326,71 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
- * Modern Skeleton skin (WO-SKIN-03 checkpoint S).
+ * Modern Skeleton skin (TASK S canon-shimmer pass; supersedes the WO-SKIN-03
+ * DaisyUI-owned split).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer and DaisyUI's own
  * `.skeleton` sort before Tailwind's base layer, so a layered rule cannot paint
  * these blocks. Unlayered outranks preflight + DaisyUI and still yields to a
  * caller's inline `style`.
  *
- * The 4-way Skeleton animation split is PRESERVED mechanism-by-mechanism: modern
- * stays DaisyUI-owned (the `.skeleton` class supplies animation-name; the engine
- * keeps animation-duration/-easing inline). Only the moved paint lives here:
- *  - Every skeleton block reads the tenant background. It is a `background`
- *    SHORTHAND (not `background-color`) because the engine used the shorthand,
- *    which wipes DaisyUI's shimmer GRADIENT down to a flat fill — reproduce that
- *    exactly or the gradient reappears.
- *  - The shape-variant root and the avatar carry a variant/shape-conditional
- *    corner radius, so each rides a custom-property hatch stamped inline
- *    (--ds-skeleton-shape-radius / --ds-skeleton-avatar-radius). Title/line have
- *    no radius (DaisyUI's `.skeleton` default), so none is set here.
+ * The modern Skeleton no longer rides DaisyUI's `.skeleton` class -- that class
+ * is gone from the engine, so this file decrements daisy.classConsumers. Anatomy
+ * now mirrors the rustic skin: the shape-variant root carries `.rottay-skeleton`
+ * directly; the text/default avatar/title/line are blocks inside
+ * `.rottay-skeleton-wrapper` (a flex container, not itself a block). The
+ * animation is the shared canon set (foundation/animations/keyframes.css)
+ * selected through --ds-skeleton-animation-name -- the engine sets it from the
+ * personality-resolved skeletonStyle -- and ridden on the
+ * --ds-skeleton-animation-duration token so pulseSpeed still drives cadence.
+ *
+ * BACKGROUND: base is the flat tenant fill (--ds-skeleton-bg). The moving
+ * ('shimmer') style swaps in the sweeping gradient at higher specificity, keyed
+ * on data-animation='shimmer' -- exactly the rustic model. pulse animates opacity
+ * over the flat fill; shimmer sweeps background-position over the gradient. An
+ * inactive skeleton carries no data-animation and --ds-skeleton-animation-name:
+ * none, so it holds a static flat block.
  *
  * SPECIFICITY (P-48): background and border-radius are non-border paint, so
- * (0,2,0)+ unlayered clears preflight; unlayered clears DaisyUI (layered)
- * regardless. None touches the tenant `* { border-color }` floor.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * (0,3,0)+ unlayered clears preflight and DaisyUI regardless; none touches the
+ * tenant `* { border-color }` floor. The gradient override buys (0,4,0) via the
+ * extra data-animation attribute so it wins over the flat base.
  */
 
-/* ---- tenant fill on every DaisyUI skeleton block: the shape-variant root
-        carries `.skeleton` directly, the text/default avatar/title/line carry it
-        as descendants. `background` shorthand mirrors the inline wipe. ---- */
-.rottay-skeleton--modern.skeleton,
-.rottay-skeleton--modern .skeleton {
+/* ---- base flat fill + canon animation on every modern skeleton block ---- */
+.rottay-skeleton.rottay-skeleton--modern[data-part='root'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
   background: var(--ds-skeleton-bg, var(--ds-color-neutral-100));
+  animation: var(--ds-skeleton-animation-name, ds-skeleton-shimmer)
+    var(--ds-skeleton-animation-duration, 1.5s)
+    var(--ds-skeleton-animation-easing, ease-in-out) infinite;
+}
+
+/* ---- shimmer style: sweeping gradient (higher specificity via data-animation) ---- */
+.rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
+  background: var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%));
+  background-size: 200% 100%;
 }
 
 /* ---- shape-variant root radius (circular/rounded/rectangular) ---- */
-.rottay-skeleton--modern.skeleton[data-part='root'] {
+.rottay-skeleton.rottay-skeleton--modern[data-part='root'] {
   border-radius: var(--ds-skeleton-shape-radius);
 }
 
 /* ---- avatar radius (circle/rounded) ---- */
-.rottay-skeleton--modern .skeleton[data-part='avatar'] {
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'] {
   border-radius: var(--ds-skeleton-avatar-radius);
+}
+
+/* ---- title/line corner radius (DaisyUI's `.skeleton` no longer supplies it) ---- */
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
+  border-radius: 4px;
 }
 
 /**
@@ -23280,14 +23400,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * layer and loses to preflight; unlayered outranks it and still yields to the
  * caller's inline `style`.
  *
- * The 4-way Skeleton animation split is PRESERVED mechanism-by-mechanism. This
- * file owns ONLY the rustic engine's local pulse + wave. The two keyframes moved
- * out of the engine's per-mount <style> and are RENAMED + engine-namespaced:
- * `ds-skeleton-pulse-rustic` (opacity floor 0.4) MUST NOT collide with the DEAD
- * `ds-skeleton-pulse` (floor 0.5) in engines/rustic/theme.css, which is left
- * untouched; `ds-skeleton-wave-rustic` is likewise a fresh name. The engine keeps
- * the `animation` reference inline (non-paint) and stamps `data-animation` so the
- * wave gradient can be applied here without a foreign inline value.
+ * This file owns ONLY the rustic engine's fill + wave GRADIENT paint. The pulse
+ * and wave keyframes are the shared canon set (ds-skeleton-pulse /
+ * ds-skeleton-wave) in foundation/animations/keyframes.css, referenced inline by
+ * the engine (non-paint); no engine-local keyframe survives here. The engine
+ * stamps `data-animation` so the wave gradient can be applied here without a
+ * foreign inline value.
  *
  * SCOPE: the shape-variant root carries the block on itself
  * (`.rottay-skeleton[data-part='root']`); the text/default avatar/title/line are
@@ -23301,25 +23419,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * so (0,3,0)+ unlayered clears preflight; none touches the tenant
  * `* { border-color }` floor. Values transcribed verbatim from `engines/rustic.tsx`.
  */
-
-@keyframes ds-skeleton-pulse-rustic {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
-
-@keyframes ds-skeleton-wave-rustic {
-  0% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0 50%;
-  }
-}
 
 /* ---- base fill on every rustic skeleton block ---- */
 .rottay-skeleton.rottay-skeleton--rustic[data-part='root'],
@@ -23360,9 +23459,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * Every compound shares ONE shimmer: the sweeping gradient `background` + its
  * `200% 100%` sizing (identical across all eight, so one selector list owns it);
- * the `skeleton-loading` animation reference stays inline on each block (the
- * global keyframe is reused as-is — that reference is a contract-exempt residual,
- * not migrated). Corner radii are per-part static values except Avatar/Button,
+ * the `ds-skeleton-shimmer` animation reference (the shared canon keyframe in
+ * foundation/animations/keyframes.css) stays inline on each block. Corner radii
+ * are per-part static
+ * values except Avatar/Button,
  * whose shape-conditional radius rides a hatch stamped inline
  * (--ds-skeleton-avatar-radius / --ds-skeleton-button-radius).
  *
@@ -26422,13 +26522,24 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   from { opacity: 1; }
   to   { opacity: 0; }
 }
+/* Panel geometry resolves from the overlay.modal recipe variables the engine
+   stamps on the <dialog> root (inherited here by the animated surface). The
+   fallbacks reproduce the pre-recipe values for a tree without the contract.
+   Under reduced motion the engine declares no animation at all, so these
+   keyframes never run with settled 0-values. */
 @keyframes ds-overlay-modal-enter-modern {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-recipe-y, 0px)) scale(var(--ds-recipe-scale-from, 0.95));
+  }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes ds-overlay-modal-exit-modern {
-  from { opacity: 1; transform: scale(1); }
-  to   { opacity: 0; transform: scale(0.95); }
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   {
+    opacity: 0;
+    transform: translateY(var(--ds-recipe-y, 0px)) scale(var(--ds-recipe-scale-from, 0.95));
+  }
 }
 
 /* ---- root: the native <dialog>, stripped of its UA chrome ---- */
@@ -28488,7 +28599,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   display: none;
 }
 
-@keyframes rottay-tabs-fade-in {
+@keyframes ds-tabs-fade-in {
   from {
     opacity: 0;
     transform: translateY(2px);
@@ -30616,11 +30727,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * because preflight zeroes `border-width` on every element.
  *
  * KEYFRAME: this engine injected a per-mount `<style>` redefining the GLOBAL
- * `spin` (`foundation/animations/keyframes.css`) with byte-identical content —
- * a global name shadowed for the whole document while any rustic QRCode is
- * mounted. The copy is renamed and engine-namespaced here so it can never diverge
- * from, or shadow, the global one; the modern engine's spinner keeps reading the
- * global `spin`, which is the asymmetry that already shipped.
+ * `ds-foundation-spin` (`foundation/animations/keyframes.css`) with
+ * byte-identical content — a global name shadowed for the whole document while
+ * any rustic QRCode is mounted. The copy is renamed and engine-namespaced here
+ * so it can never diverge from, or shadow, the global one; the modern engine's
+ * spinner keeps reading the global `ds-foundation-spin`, which is the asymmetry
+ * that already shipped.
  *
  * Values transcribed verbatim from `engines/rustic.tsx`.
  */
@@ -33343,8 +33455,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * here as `:hover, :focus` rules. The skeleton blocks share one `data-part` but
  * differ in radius, so each block carries its radius on an inline
  * `--ds-cockpit-header-skeleton-radius` custom property (uncounted); the uniform
- * pulse background lives here. The `animation: pulse` reference to the global
- * keyframe stays inline (sanctioned residual).
+ * pulse background lives here. The `animation: ds-foundation-pulse` reference to
+ * the global keyframe stays inline (sanctioned residual).
  *
  * Values are transcribed verbatim from `engines/modern.tsx`.
  */
@@ -33474,7 +33586,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * until a tenant sets `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks
  * share one `data-part` but differ in radius, so each carries its radius on an
  * inline `--ds-page-shell-skeleton-radius` custom property (default sm). The
- * `animation: pulse` reference to the global keyframe stays inline.
+ * `animation: ds-foundation-pulse` reference to the global keyframe stays inline.
  *
  * Values are transcribed verbatim from `engines/modern.tsx`.
  */
@@ -33591,7 +33703,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`. Skeleton
  * blocks share one `data-part` but differ in radius, so each carries its radius on
  * an inline `--ds-workbench-header-skeleton-radius` custom property (default sm).
- * The `animation: pulse` reference to the global keyframe stays inline.
+ * The `animation: ds-foundation-pulse` reference to the global keyframe stays inline.
  *
  * Values are transcribed verbatim from `engines/modern.tsx`.
  */
@@ -43368,17 +43480,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     var(--ds-surface-panel) 75%
   );
   background-size: 200% 100%;
-  animation: ds-stats-shimmer 1.5s ease-in-out infinite;
+  animation: ds-skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: var(--ds-radius-sm);
-}
-
-@keyframes ds-stats-shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }
 
 /**
@@ -44367,7 +44470,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-surface-card);
 }
 
-.ds-surface.ds-collection-workspace [data-part='preview-accordion-trigger'] {
+.ds-surface.ds-collection-workspace [data-part='preview-accordion'] > [data-part='trigger'] {
   min-block-size: var(--ds-size-touch-target, 44px);
   border-radius: 0;
   text-align: start;
@@ -44378,7 +44481,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.ds-surface.ds-collection-workspace [data-part='preview-accordion-trigger'][data-expanded='true'] [data-part='preview-accordion-icon'] {
+.ds-surface.ds-collection-workspace [data-part='preview-accordion'] > [data-part='trigger'][data-expanded='true'] [data-part='preview-accordion-icon'] {
   transform: rotate(180deg);
 }
 
@@ -51414,6 +51517,9 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   /* Entrance geometry — the start offsets a reveal animates FROM (paired with the durations). */
   --ds-motion-scale-in: 0.98;
   --ds-motion-offset-in: -2px;
+  /* Horizontal travel for the direction-aware panel slide (view transitions).
+     Kept small: the slide is a cue, not a carousel. */
+  --ds-motion-panel-offset: 12px;
 
   /* Pre-composed per-component transitions, re-expressed on the canon primitives.
      These are the ONLY thing modern components reference for multi-property
@@ -51757,6 +51863,154 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 }
 
 /* =========================================================================
+   VIEW TRANSITIONS V2 - PANEL + MORPH CHOREOGRAPHY
+   Runtime counterpart: graphics/motion/react/runtime/view-transition
+   (startDirectionalViewTransition stamps html[data-ds-vt-direction] for the
+   lifetime of one transition; tabPanelTransitionStyle / recordMorphStyle
+   declare the names and view-transition-classes these rules key on).
+
+   All rules resolve on the --ds-motion-* canon and animate only opacity and
+   transform (compositor-friendly). Browsers without view-transition-class
+   ignore the *.class selectors and fall back to the default named-group
+   crossfade; browsers without the View Transitions API never create these
+   pseudo-elements at all.
+   ========================================================================= */
+
+/* Directionless fallback for in-place panel swaps (also what a `direction:
+   none` transition renders): the panel crossfades as its own group instead of
+   riding the root crossfade. */
+::view-transition-group(*.ds-vt-tab-panel) {
+  animation-duration: var(--ds-motion-normal);
+  animation-timing-function: var(--ds-motion-ease-out);
+}
+
+::view-transition-old(*.ds-vt-tab-panel) {
+  animation: ds-view-transition-fade-out var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+}
+
+::view-transition-new(*.ds-vt-tab-panel) {
+  animation: ds-view-transition-fade-in var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
+/* Direction-aware slide: old exits toward, new enters from. Each keyframe set
+   carries opacity + transform so the animation-name override below fully
+   replaces the crossfade instead of compounding with it. */
+@keyframes ds-vt-panel-exit-toward-start {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+  }
+}
+
+@keyframes ds-vt-panel-exit-toward-end {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(var(--ds-motion-panel-offset));
+  }
+}
+
+@keyframes ds-vt-panel-enter-from-end {
+  from {
+    opacity: 0;
+    transform: translateX(var(--ds-motion-panel-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-vt-panel-enter-from-start {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* The :where() wrapper zeroes the html-side specificity so these tie with the
+   class-selector rules above and win purely by source order -- and, critically,
+   so the reduced-motion neutralization block below can out-cascade them the
+   same way. Do not replace :where() with a bare attribute selector. */
+:where(html[data-ds-vt-direction='forward'])::view-transition-old(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-exit-toward-start var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+}
+
+:where(html[data-ds-vt-direction='forward'])::view-transition-new(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-enter-from-end var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
+:where(html[data-ds-vt-direction='backward'])::view-transition-old(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-exit-toward-end var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+}
+
+:where(html[data-ds-vt-direction='backward'])::view-transition-new(*.ds-vt-tab-panel) {
+  animation: ds-vt-panel-enter-from-start var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
+/* Record morphs (kanban card -> detail, row -> detail): the browser's default
+   group animation already interpolates geometry between the paired elements;
+   these rules only put its timing on the canon. */
+::view-transition-group(*.ds-vt-record) {
+  animation-duration: var(--ds-motion-slow);
+  animation-timing-function: var(--ds-motion-ease-out);
+}
+
+/* Modal -> full-page promote morph (named pair ds-vt-modal-promote; see
+   MODAL_PROMOTE_TRANSITION_NAME in the view-transition runtime for the wiring
+   contract). */
+::view-transition-group(ds-vt-modal-promote),
+::view-transition-old(ds-vt-modal-promote),
+::view-transition-new(ds-vt-modal-promote) {
+  animation-duration: var(--ds-motion-slow);
+  animation-timing-function: var(--ds-motion-ease-out);
+}
+
+/* Reduced-motion neutralization for every group this section styles. The
+   generic ::view-transition-*(*) block above already matches these names, but
+   the directional rules tie or beat it on specificity; these selectors mirror
+   the styled groups exactly and sit later in source order, so they win the
+   tie. The runtime backstop is stronger still: under reduced motion
+   startDsViewTransition takes the immediate path and no pseudo-elements are
+   created. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*.ds-vt-tab-panel),
+  ::view-transition-old(*.ds-vt-tab-panel),
+  ::view-transition-new(*.ds-vt-tab-panel),
+  ::view-transition-group(*.ds-vt-record),
+  ::view-transition-old(*.ds-vt-record),
+  ::view-transition-new(*.ds-vt-record),
+  ::view-transition-group(ds-vt-modal-promote),
+  ::view-transition-old(ds-vt-modal-promote),
+  ::view-transition-new(ds-vt-modal-promote) {
+    animation: none;
+  }
+}
+
+/* Provider-owned reduce seam: MotionProvider stamps html[data-ds-motion=
+   'reduced'] when reduced motion is forced without the OS media query (see
+   runtime/personality.css). View transitions started by non-DS code (an app
+   router) bypass the runtime gate, so the CSS neutralization must also hold
+   on this seam. html + attribute out-specifies every :where()-wrapped
+   directional rule above. */
+html[data-ds-motion='reduced']::view-transition-group(*),
+html[data-ds-motion='reduced']::view-transition-old(*),
+html[data-ds-motion='reduced']::view-transition-new(*) {
+  animation: none;
+}
+
+/* =========================================================================
    DATA-CHANGED PULSE (.ds-pulse-changed)
    A single, non-looping flash for live-updating cells/rows (data-table live
    cells, live-feed rows). Uses an inset box-shadow rather than
@@ -51803,7 +52057,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Opacity-based entrance and exit animations
    ======================================================================== */
 
-@keyframes fade-in {
+@keyframes ds-foundation-fade-in {
   from {
     opacity: 0;
   }
@@ -51812,7 +52066,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes fade-out {
+@keyframes ds-foundation-fade-out {
   from {
     opacity: 1;
   }
@@ -51821,7 +52075,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes fade-in-up {
+@keyframes ds-foundation-fade-in-up {
   from {
     opacity: 0;
     transform: translateY(1rem);
@@ -51832,7 +52086,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes fade-in-down {
+@keyframes ds-foundation-fade-in-down {
   from {
     opacity: 0;
     transform: translateY(-1rem);
@@ -51843,7 +52097,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes fade-in-left {
+@keyframes ds-foundation-fade-in-left {
   from {
     opacity: 0;
     transform: translateX(-1rem);
@@ -51854,7 +52108,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes fade-in-right {
+@keyframes ds-foundation-fade-in-right {
   from {
     opacity: 0;
     transform: translateX(1rem);
@@ -51870,7 +52124,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Grow and shrink effects
    ======================================================================== */
 
-@keyframes scale-in {
+@keyframes ds-foundation-scale-in {
   from {
     opacity: 0;
     transform: scale(0.95);
@@ -51881,7 +52135,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes scale-out {
+@keyframes ds-foundation-scale-out {
   from {
     opacity: 1;
     transform: scale(1);
@@ -51892,7 +52146,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes scale-up {
+@keyframes ds-foundation-scale-up {
   from {
     transform: scale(0);
   }
@@ -51901,7 +52155,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes scale-down {
+@keyframes ds-foundation-scale-down {
   from {
     transform: scale(1);
   }
@@ -51910,7 +52164,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes zoom-in {
+@keyframes ds-foundation-zoom-in {
   from {
     opacity: 0;
     transform: scale(0.3);
@@ -51924,7 +52178,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes zoom-out {
+@keyframes ds-foundation-zoom-out {
   from {
     opacity: 1;
     transform: scale(1);
@@ -51943,7 +52197,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Directional sliding effects
    ======================================================================== */
 
-@keyframes slide-in-up {
+@keyframes ds-foundation-slide-in-up {
   from {
     transform: translateY(100%);
   }
@@ -51952,7 +52206,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes slide-in-down {
+@keyframes ds-foundation-slide-in-down {
   from {
     transform: translateY(-100%);
   }
@@ -51961,7 +52215,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes slide-in-left {
+@keyframes ds-foundation-slide-in-left {
   from {
     transform: translateX(-100%);
   }
@@ -51970,7 +52224,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes slide-in-right {
+@keyframes ds-foundation-slide-in-right {
   from {
     transform: translateX(100%);
   }
@@ -51979,7 +52233,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes slide-out-up {
+@keyframes ds-foundation-slide-out-up {
   from {
     transform: translateY(0);
   }
@@ -51988,7 +52242,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes slide-out-down {
+@keyframes ds-foundation-slide-out-down {
   from {
     transform: translateY(0);
   }
@@ -51997,7 +52251,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes slide-out-left {
+@keyframes ds-foundation-slide-out-left {
   from {
     transform: translateX(0);
   }
@@ -52006,7 +52260,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes slide-out-right {
+@keyframes ds-foundation-slide-out-right {
   from {
     transform: translateX(0);
   }
@@ -52020,7 +52274,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Spinning and rotation effects
    ======================================================================== */
 
-@keyframes spin {
+@keyframes ds-foundation-spin {
   from {
     transform: rotate(0deg);
   }
@@ -52029,7 +52283,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes spin-reverse {
+@keyframes ds-foundation-spin-reverse {
   from {
     transform: rotate(360deg);
   }
@@ -52038,7 +52292,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes rotate-in {
+@keyframes ds-foundation-rotate-in {
   from {
     opacity: 0;
     transform: rotate(-180deg);
@@ -52049,7 +52303,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes rotate-out {
+@keyframes ds-foundation-rotate-out {
   from {
     opacity: 1;
     transform: rotate(0deg);
@@ -52065,7 +52319,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Playful bouncing effects
    ======================================================================== */
 
-@keyframes bounce {
+@keyframes ds-foundation-bounce {
   0%, 100% {
     transform: translateY(0);
   }
@@ -52074,7 +52328,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes bounce-in {
+@keyframes ds-foundation-bounce-in {
   0% {
     opacity: 0;
     transform: scale(0.3);
@@ -52091,7 +52345,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes bounce-out {
+@keyframes ds-foundation-bounce-out {
   0% {
     transform: scale(1);
   }
@@ -52113,7 +52367,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Error indication and attention grabbers
    ======================================================================== */
 
-@keyframes shake {
+@keyframes ds-foundation-shake {
   0%, 100% {
     transform: translateX(0);
   }
@@ -52125,7 +52379,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes shake-vertical {
+@keyframes ds-foundation-shake-vertical {
   0%, 100% {
     transform: translateY(0);
   }
@@ -52142,7 +52396,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Attention and loading indicators
    ======================================================================== */
 
-@keyframes pulse {
+@keyframes ds-foundation-pulse {
   0%, 100% {
     opacity: 1;
   }
@@ -52151,7 +52405,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes pulse-scale {
+@keyframes ds-foundation-pulse-scale {
   0%, 100% {
     transform: scale(1);
   }
@@ -52160,7 +52414,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes pulse-ring {
+@keyframes ds-foundation-pulse-ring {
   0% {
     transform: scale(1);
     opacity: 1;
@@ -52176,7 +52430,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Skeleton loaders and loading states
    ======================================================================== */
 
-@keyframes shimmer {
+@keyframes ds-foundation-shimmer {
   0% {
     background-position: -100% 0;
   }
@@ -52185,7 +52439,25 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes skeleton-loading {
+/* Canon skeleton loading set (TASK S). ONE ds- namespaced set shared by every
+   engine's Skeleton skin plus the skeleton-shimmer consumers (compounds,
+   stats-grid), replacing the piecemeal per-engine keyframes. Members map 1:1 to
+   the skeletonStyle personality ('pulse'|'shimmer'|'wave'); a consumer selects
+   one through --ds-skeleton-animation-name and rides the
+   --ds-skeleton-animation-duration token. Each animates only opacity or
+   background-position (compositor-friendly, no layout tokens); the global
+   reduced-motion guard in runtime/personality.css neutralizes all three. */
+@keyframes ds-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes ds-skeleton-shimmer {
   0% {
     background-position: -200% 0;
   }
@@ -52194,7 +52466,16 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes progress-indeterminate {
+@keyframes ds-skeleton-wave {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@keyframes ds-foundation-progress-indeterminate {
   0% {
     transform: translateX(-100%);
   }
@@ -52208,7 +52489,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Card flip and rotation effects
    ======================================================================== */
 
-@keyframes flip-horizontal {
+@keyframes ds-foundation-flip-horizontal {
   0% {
     transform: rotateY(0deg);
   }
@@ -52217,7 +52498,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-@keyframes flip-vertical {
+@keyframes ds-foundation-flip-vertical {
   0% {
     transform: rotateX(0deg);
   }
@@ -52231,7 +52512,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Pendulum and hanging effects
    ======================================================================== */
 
-@keyframes swing {
+@keyframes ds-foundation-swing {
   0%, 100% {
     transform: rotate(0deg);
   }
@@ -52254,7 +52535,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Playful attention grabbers
    ======================================================================== */
 
-@keyframes wiggle {
+@keyframes ds-foundation-wiggle {
   0%, 100% {
     transform: rotate(0deg);
   }
@@ -52271,7 +52552,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Like/favorite indication
    ======================================================================== */
 
-@keyframes heartbeat {
+@keyframes ds-foundation-heartbeat {
   0%, 100% {
     transform: scale(1);
   }
@@ -52294,7 +52575,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Cursor and attention indication
    ======================================================================== */
 
-@keyframes blink {
+@keyframes ds-foundation-blink {
   0%, 100% {
     opacity: 1;
   }
@@ -52308,7 +52589,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Loading indicator with dots
    ======================================================================== */
 
-@keyframes typing-dots {
+@keyframes ds-foundation-typing-dots {
   0%, 60%, 100% {
     transform: translateY(0);
   }
@@ -52322,7 +52603,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Material-style ripple effect
    ======================================================================== */
 
-@keyframes ripple {
+@keyframes ds-foundation-ripple {
   0% {
     transform: scale(0);
     opacity: 1;
@@ -52338,7 +52619,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Glowing effect for emphasis
    ======================================================================== */
 
-@keyframes glow {
+@keyframes ds-foundation-glow {
   0%, 100% {
     box-shadow: 0 0 0.5rem rgba(var(--ds-color-primary-rgb, 0, 102, 204), 0.5);
   }
@@ -52354,7 +52635,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    ======================================================================== */
 
 /* Button spinner - used by Rustic and Modern engines */
-@keyframes rottay-button-spin {
+@keyframes ds-button-spin {
   from {
     transform: rotate(0deg);
   }
@@ -52364,7 +52645,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 }
 
 /* Button pulse - used by Rustic engine */
-@keyframes rottay-button-pulse {
+@keyframes ds-button-pulse {
   0%, 100% {
     box-shadow: 0 0 0 0 rgba(var(--ds-color-primary-rgb, 59, 130, 246), 0.5);
   }
@@ -52373,8 +52654,9 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-/* Modal entrance - used by Modern engine */
-@keyframes rottay-modal-enter {
+/* Modal entrance - currently unreferenced (superseded by the modern engine's
+   own ds-overlay-modal-enter-modern / ds-modal-panel-enter-modern keyframes). */
+@keyframes ds-foundation-modal-scale-in {
   from {
     opacity: 0;
     transform: scale(0.95);
@@ -52385,8 +52667,9 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-/* Modal backdrop entrance - used by Modern engine */
-@keyframes rottay-modal-backdrop-enter {
+/* Modal backdrop entrance - currently unreferenced (superseded by the modern
+   engine's own ds-overlay-modal-backdrop-enter-modern keyframe). */
+@keyframes ds-foundation-modal-backdrop-enter {
   from {
     opacity: 0;
   }
@@ -52395,8 +52678,10 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   }
 }
 
-/* Select dropdown slide-in - used by Modern engine */
-@keyframes rottay-select-slide-in {
+/* Select dropdown slide-in - currently unreferenced (superseded by the
+   picker/select family's own ds-select-dropdown-in / ds-date-picker-slide-in /
+   ds-time-picker-slide-in / ds-tree-select-slide-in keyframes). */
+@keyframes ds-foundation-select-slide-in {
   from {
     opacity: 0;
     transform: scaleY(0.95);
@@ -52410,7 +52695,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 }
 
 /* Tabs panel fade-in - used by Modern engine */
-@keyframes rottay-tabs-fade-in {
+@keyframes ds-tabs-fade-in {
   from {
     opacity: 0;
     transform: translateY(2px);
@@ -52426,12 +52711,12 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
    Shared keyframes for modal entrance and backdrop fade.
    ======================================================================== */
 
-@keyframes ds-modal-enter {
+@keyframes ds-foundation-modal-enter {
   from { opacity: 0; transform: scale(0.95) translateY(8px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes ds-backdrop-fade {
+@keyframes ds-foundation-backdrop-fade {
   from { opacity: 0; }
   to { opacity: 1; }
 }
@@ -52541,6 +52826,67 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
     --ds-glass-blur-xl: 0px;
     --ds-glass-backdrop-filter: none;
     --ds-shadow-glow-primary: none;
+  }
+}
+
+/**
+ * Collection insert stagger preset — Rottay Design System.
+ *
+ * The CSS half of the `collection.insert` motion recipe
+ * (infrastructure/runtime/foundation/motion/policy/recipes: staggerStepMs 30,
+ * staggerMaxMs 240, both capped by MAX_TOTAL_STAGGER_MS 320). A collection
+ * surface stamps `.ds-collection-stagger` on a freshly mounted batch and sets
+ * `--ds-stagger-index` on each row/card; every item reveals with a
+ * compositor-only opacity+transform entrance whose start is delayed by
+ * `index * step`, clamped to `max`, so a large batch never staggers longer than
+ * the cap (150-300ms total by design). The `useCollectionStagger` hook
+ * (ui/patterns/foundation/motion) resolves the SAME recipe through the active
+ * motion policy, stamps the class only when the policy animates, and writes
+ * `--ds-stagger-step`/`--ds-stagger-max` from the resolved recipe so a tenant's
+ * durationScale moves the CSS and the JS in lockstep.
+ *
+ * Compositor-only (modern engine spec section 2, WO-CRA-06): opacity + transform
+ * only, never a layout property. Under reduced motion every item resolves to its
+ * final state with no delay -- the media guard below is load-bearing because the
+ * step/max tokens are not zeroed by the foundation reduced-motion block (a bare
+ * duration zero would still leave each item delayed and briefly hidden).
+ */
+
+:root {
+  /* collection.insert recipe bounds. A stamping container overrides these inline
+     from the resolved recipe; these defaults keep the class self-sufficient when
+     stamped without the hook (e.g. a static server-rendered batch). */
+  --ds-stagger-step: 30ms;
+  --ds-stagger-max: 240ms;
+}
+
+@keyframes ds-collection-insert {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ds-collection-stagger [data-ds-stagger-item] {
+  animation-name: ds-collection-insert;
+  animation-duration: var(--ds-motion-normal);
+  animation-timing-function: var(--ds-motion-ease-out);
+  /* `both` holds the from-state through the delay so an item stays hidden until
+     its turn instead of flashing in and then animating out. */
+  animation-fill-mode: both;
+  animation-delay: min(
+    var(--ds-stagger-index, 0) * var(--ds-stagger-step),
+    var(--ds-stagger-max)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-collection-stagger [data-ds-stagger-item] {
+    animation: none;
   }
 }
 

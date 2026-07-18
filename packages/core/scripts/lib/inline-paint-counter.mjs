@@ -304,6 +304,51 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
       ],
     ]),
   ],
+  [
+    // Motion recipe canon (WO-CRA-15): `variables` carries only `--ds-recipe-*`
+    // custom properties (durations/distances/curve identity) and `attributes`
+    // only `data-recipe`/`data-recipe-state`; the engine skin owns the paint
+    // that consumes them. zeroPaint is verified against the hook's source.
+    "infrastructure/runtime/foundation/motion/composition/react/preference/recipe/index",
+    new Map([
+      [
+        "useMotionRecipePresentation",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["variables"]),
+          nonStylePaths: new Set(["attributes"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    // View-transition vocabulary: these return only `viewTransitionName`/
+    // `viewTransitionClass` identity declarations; the VT keyframes in
+    // foundation/animations/transitions.css own the paint.
+    "graphics/motion/react/runtime/index",
+    new Map([
+      [
+        "tabPanelTransitionStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "recordMorphStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
 ]);
 
 const certifiedProducerCache = new Map();
@@ -1342,9 +1387,17 @@ function countScopedStylePaintInFile(text, fileName) {
       const contract = callable?.entry
         ? certifiedProducerContract(callable.entry, fileName)
         : null;
+      if (!contract) return false;
+      if (contract.kind === "nonStylePropBag") {
+        return contract.nonStylePaths.has(path.join("."));
+      }
+      // A zero-paint style producer may declare sibling non-style paths (e.g.
+      // a hook returning { variables, attributes }): its whole source is
+      // verified paint-free, so any declared non-style path is safe here too.
       return Boolean(
-        contract?.kind === "nonStylePropBag" &&
-          contract.nonStylePaths.has(path.join("."))
+        contract.kind === "style" &&
+          contract.ownership === "zeroPaint" &&
+          contract.nonStylePaths?.has(path.join("."))
       );
     }
     return false;

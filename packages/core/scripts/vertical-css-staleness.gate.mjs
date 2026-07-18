@@ -169,10 +169,59 @@ function firstDiffLine(committed, generated) {
   return '(files differ only in trailing length)';
 }
 
+// --- spring-precompute tail (TASK S) ---------------------------------------
+//
+// build-vertical-css.mjs appends a tenant-scoped `--ds-motion-spring: linear()`
+// override derived from each BrandTheme's tension/friction (useSpring-gated).
+// That derivation imports compiled theme modules from dist/, which this
+// pre-build gate cannot execute. The prefix of every bundle stays byte-pinned
+// here; the tail may only be the strict spring grammar below, scoped to the
+// bundle's OWN tenant root. The tail's exact bytes are pinned post-build by
+// `build-vertical-css.mjs --check` (chained into pretest and lint), so a
+// hand-edited spring value still fails CI — just one step later.
+
+const SPRING_LINEAR_SOURCE = String.raw`linear\((?:-?\d+(?:\.\d+)?, )*1\)`;
+
+function springBlockSource(name, slug) {
+  return (
+    String.raw`/\* === ${name} spring easing \(precomputed linear\(\) from the BrandTheme, useSpring\) === \*/\n`.replace(/\//g, '\\/') +
+    String.raw`:is\(html\[data-tenant='${slug}'\], :where\(\[data-ds-root\]\[data-vertical='${name}'\]\)\) \{\n` +
+    String.raw`  --ds-motion-spring: ${SPRING_LINEAR_SOURCE};\n\}`
+  );
+}
+
+const SPRING_TENANTS = [
+  { name: 'platform', slug: 'rottay' },
+  { name: 'bithire', slug: 'bithire' },
+  { name: 'evnto', slug: 'evnto' },
+];
+
+/** Allowed tail after the byte-pinned prefix, per committed bundle. */
+function springTailRe(rel) {
+  if (rel === 'styles/index.css') {
+    const anyBlock = SPRING_TENANTS.map(({ name, slug }) => springBlockSource(name, slug)).join('|');
+    return new RegExp(
+      String.raw`^\n\n/\* === Precomputed spring easings \(per-tenant, useSpring\) === \*/\n(?:${anyBlock})(?:\n\n(?:${anyBlock}))*$`.replace('/\\*', '\\/\\*'),
+    );
+  }
+  const tenant = SPRING_TENANTS.find(({ name, slug }) => rel === `styles/${name}.css` || (name === 'platform' && rel === 'styles/rottay.css'));
+  if (!tenant) return null;
+  return new RegExp(`^\\n\\n${springBlockSource(tenant.name, tenant.slug)}$`);
+}
+
 for (const [rel, content] of expected) {
   test(`${rel} is in sync with its build inputs`, () => {
     const path = resolve(root, rel);
     const committed = existsSync(path) ? readFileSync(path, 'utf-8') : '';
+    if (committed !== content && committed.startsWith(content)) {
+      const tail = committed.slice(content.length);
+      const tailRe = springTailRe(rel);
+      assert.ok(
+        tailRe !== null && tailRe.test(tail),
+        `${rel} carries a tail beyond its recomposed prefix that is not the sanctioned spring-precompute block (regenerate with: pnpm -C packages/core build:vertical-css). tail: ${JSON.stringify(tail.slice(0, 300))}`,
+      );
+      return;
+    }
     assert.equal(
       committed,
       content,
