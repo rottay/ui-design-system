@@ -49,9 +49,24 @@ const GROUP_META: Record<
     note: 'Check responsive posture, focus continuity, and whether dismissal stays clear across modal, drawer, and sheet containers.',
     minHeight: 220,
   },
-  misc: {
-    label: 'Composite pattern',
-    note: 'Check cohesion, brand fit, and whether the component feels ready to anchor a real screen without showroom-only chrome.',
+  commerce: {
+    label: 'Commerce pattern',
+    note: 'Check comparison clarity, plan differentiation, and whether the call to action stays confident across engines.',
+    minHeight: 220,
+  },
+  customization: {
+    label: 'Customization pattern',
+    note: 'Check live-preview fidelity and whether edits stay safely scoped to the surface being customized.',
+    minHeight: 220,
+  },
+  identity: {
+    label: 'Identity pattern',
+    note: 'Check recognizability and whether density changes still keep the person legible.',
+    minHeight: 220,
+  },
+  shell: {
+    label: 'Shell pattern',
+    note: 'Check chrome consistency and whether the frame stays coherent before content, data, or permissions resolve.',
     minHeight: 220,
   },
 };

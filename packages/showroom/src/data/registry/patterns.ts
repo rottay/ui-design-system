@@ -2,20 +2,24 @@
  * Patterns Registry
  *
  * Catalog of all pattern components in the design system.
- * Grouped by: data, forms, visualization, communication, workflow, navigation, misc.
+ * Grouped by: commerce, communication, customization, data, feedback, forms,
+ * identity, navigation, shell, visualization, workflow.
  */
 
 import type { EngineName } from './primitives';
 
 export type PatternGroup =
-  | 'data'
-  | 'forms'
-  | 'visualization'
+  | 'commerce'
   | 'communication'
-  | 'workflow'
-  | 'navigation'
+  | 'customization'
+  | 'data'
   | 'feedback'
-  | 'misc';
+  | 'forms'
+  | 'identity'
+  | 'navigation'
+  | 'shell'
+  | 'visualization'
+  | 'workflow';
 
 export interface PatternEntry {
   slug: string;
@@ -39,6 +43,7 @@ const data: PatternEntry[] = [
   { slug: 'detail-panel', name: 'DetailPanel', group: 'data', description: 'Expandable row detail panel for inline record preview', engines: allEngines },
   { slug: 'gallery-view', name: 'PatternGalleryView', group: 'data', description: 'Image-centric grid view with aspect ratio and captions', engines: allEngines },
   { slug: 'grid-view', name: 'PatternGridView', group: 'data', description: 'CSS grid card view with selection and pagination', engines: allEngines },
+  { slug: 'file-manager', name: 'FileManager', group: 'data', description: 'File browser with tree navigation and preview', engines: allEngines },
   { slug: 'list-toolbar', name: 'ListToolbar', group: 'data', description: 'Toolbar for list-level actions and search', engines: allEngines },
   { slug: 'saved-views', name: 'SavedViews', group: 'data', description: 'Saved filter/sort presets management', engines: allEngines },
   { slug: 'stats-grid', name: 'PatternStatsGrid', group: 'data', description: 'Grid of statistic cards with trend indicators', engines: allEngines },
@@ -112,23 +117,43 @@ const navigation: PatternEntry[] = [
 
 const feedback: PatternEntry[] = [
   { slug: 'adaptive-overlay', name: 'AdaptiveOverlay', group: 'feedback', description: 'Responsive feedback flow that selects modal, drawer, or sheet posture', engines: allEngines },
+  { slug: 'empty-state', name: 'EmptyState', group: 'feedback', description: 'Illustrated empty state with call-to-action', engines: allEngines },
 ];
 
 // ---------------------------------------------------------------------------
-// Misc
+// Commerce
 // ---------------------------------------------------------------------------
 
-const misc: PatternEntry[] = [
-  { slug: 'branding-preview-sandbox', name: 'BrandingPreviewSandbox', group: 'misc', description: 'Live preview sandbox for brand theme changes', engines: allEngines },
-  { slug: 'cockpit-header', name: 'CockpitHeader', group: 'misc', description: 'Dense header for operational dashboards', engines: allEngines },
-  { slug: 'empty-state', name: 'EmptyState', group: 'misc', description: 'Illustrated empty state with call-to-action', engines: allEngines },
-  { slug: 'file-manager', name: 'FileManager', group: 'misc', description: 'File browser with tree navigation and preview', engines: allEngines },
-  { slug: 'page-shell', name: 'PageShell', group: 'misc', description: 'Page-level shell with sidebar and header slots', engines: allEngines },
-  { slug: 'pricing-table', name: 'PricingTable', group: 'misc', description: 'Plan comparison table with feature matrix', engines: allEngines },
-  { slug: 'tenant-preview', name: 'TenantPreview', group: 'misc', description: 'Tenant branding preview card', engines: allEngines },
-  { slug: 'token-inspector', name: 'TokenInspector', group: 'misc', description: 'Developer tool for inspecting active design tokens', engines: allEngines },
-  { slug: 'user-profile-card', name: 'UserProfileCard', group: 'misc', description: 'Compact user profile card with avatar and actions', engines: allEngines },
-  { slug: 'workbench-header', name: 'WorkbenchHeader', group: 'misc', description: 'Header for workbench-style pages with tabs and actions', engines: allEngines },
+const commerce: PatternEntry[] = [
+  { slug: 'pricing-table', name: 'PricingTable', group: 'commerce', description: 'Plan comparison table with feature matrix', engines: allEngines },
+];
+
+// ---------------------------------------------------------------------------
+// Customization
+// ---------------------------------------------------------------------------
+
+const customization: PatternEntry[] = [
+  { slug: 'branding-preview-sandbox', name: 'BrandingPreviewSandbox', group: 'customization', description: 'Live preview sandbox for brand theme changes', engines: allEngines },
+  { slug: 'tenant-preview', name: 'TenantPreview', group: 'customization', description: 'Tenant branding preview card', engines: allEngines },
+  { slug: 'token-inspector', name: 'TokenInspector', group: 'customization', description: 'Developer tool for inspecting active design tokens', engines: allEngines },
+];
+
+// ---------------------------------------------------------------------------
+// Identity
+// ---------------------------------------------------------------------------
+
+const identity: PatternEntry[] = [
+  { slug: 'user-profile-card', name: 'UserProfileCard', group: 'identity', description: 'Compact user profile card with avatar and actions', engines: allEngines },
+];
+
+// ---------------------------------------------------------------------------
+// Shell
+// ---------------------------------------------------------------------------
+
+const shell: PatternEntry[] = [
+  { slug: 'cockpit-header', name: 'CockpitHeader', group: 'shell', description: 'Dense header for operational dashboards', engines: allEngines },
+  { slug: 'page-shell', name: 'PageShell', group: 'shell', description: 'Page-level shell with sidebar and header slots', engines: allEngines },
+  { slug: 'workbench-header', name: 'WorkbenchHeader', group: 'shell', description: 'Header for workbench-style pages with tabs and actions', engines: allEngines },
 ];
 
 // ---------------------------------------------------------------------------
@@ -136,34 +161,43 @@ const misc: PatternEntry[] = [
 // ---------------------------------------------------------------------------
 
 export const patterns: PatternEntry[] = [
-  ...data,
-  ...forms,
-  ...visualization,
+  ...commerce,
   ...communication,
-  ...workflow,
-  ...navigation,
+  ...customization,
+  ...data,
   ...feedback,
-  ...misc,
+  ...forms,
+  ...identity,
+  ...navigation,
+  ...shell,
+  ...visualization,
+  ...workflow,
 ];
 
 export const patternsByGroup: Record<PatternGroup, PatternEntry[]> = {
-  data,
-  forms,
-  visualization,
+  commerce,
   communication,
-  workflow,
-  navigation,
+  customization,
+  data,
   feedback,
-  misc,
+  forms,
+  identity,
+  navigation,
+  shell,
+  visualization,
+  workflow,
 };
 
 export const patternGroups: { slug: PatternGroup; label: string; count: number }[] = [
-  { slug: 'data', label: 'Data', count: data.length },
-  { slug: 'forms', label: 'Forms', count: forms.length },
-  { slug: 'visualization', label: 'Visualization', count: visualization.length },
+  { slug: 'commerce', label: 'Commerce', count: commerce.length },
   { slug: 'communication', label: 'Communication', count: communication.length },
-  { slug: 'workflow', label: 'Workflow', count: workflow.length },
-  { slug: 'navigation', label: 'Navigation', count: navigation.length },
+  { slug: 'customization', label: 'Customization', count: customization.length },
+  { slug: 'data', label: 'Data', count: data.length },
   { slug: 'feedback', label: 'Feedback', count: feedback.length },
-  { slug: 'misc', label: 'Misc', count: misc.length },
+  { slug: 'forms', label: 'Forms', count: forms.length },
+  { slug: 'identity', label: 'Identity', count: identity.length },
+  { slug: 'navigation', label: 'Navigation', count: navigation.length },
+  { slug: 'shell', label: 'Shell', count: shell.length },
+  { slug: 'visualization', label: 'Visualization', count: visualization.length },
+  { slug: 'workflow', label: 'Workflow', count: workflow.length },
 ];

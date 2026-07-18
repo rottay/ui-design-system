@@ -85,12 +85,37 @@ const GROUP_PROFILES: Record<
     structures: ["LoadingOverlay", "ActionDock", "MobileHeader"],
     surfaces: ["FormSurface", "DetailSurface", "CommandCenterSurface"],
   },
-  misc: {
+  commerce: {
     summary:
-      "Misc patterns collect high-signal composite pieces that still need strong documentation because they shape perceived polish fast.",
-    evaluate: ["cohesion", "surface readiness", "brand adaptability"],
-    structures: ["PageShell", "DashboardInsights", "DetailHeader"],
-    surfaces: ["MarketingSurface", "ProfileSurface", "PricingSurface"],
+      "Commerce patterns prove the design system can carry pricing and plan decisions with the same rigor as data or forms.",
+    evaluate: ["comparison clarity", "plan differentiation", "purchase confidence"],
+    structures: ["DetailHeader", "StatsHeader", "PageShell"],
+    surfaces: ["PricingSurface", "BillingSurface", "MarketingSurface"],
+  },
+  customization: {
+    summary:
+      "Customization patterns demonstrate live brand and token editing without breaking the surface being edited.",
+    evaluate: ["live-preview fidelity", "control discoverability", "safe experimentation"],
+    structures: ["DetailHeader", "FormSections", "PageShell"],
+    surfaces: ["SettingsSurface", "PreviewSurface", "DetailFormSurface"],
+  },
+  identity: {
+    summary:
+      "Identity patterns prove a person can be represented consistently across dense lists, mentions, and detail views.",
+    evaluate: ["recognizability", "density tolerance", "cross-context consistency"],
+    structures: ["CollectionHeader", "DetailHeader", "TableToolbar"],
+    surfaces: ["ListSurface", "DetailSurface", "CollectionWorkspaceSurface"],
+  },
+  shell: {
+    summary:
+      "Shell patterns prove a page can be framed consistently before any content, data, or permissions resolve.",
+    evaluate: ["chrome consistency", "loading-state grace", "cross-density adaptability"],
+    structures: ["PageShell", "WorkbenchHeader", "DashboardHeader"],
+    surfaces: [
+      "DashboardSurface",
+      "CollectionWorkspaceSurface",
+      "RecordWorkbenchSurface",
+    ],
   },
 };
 

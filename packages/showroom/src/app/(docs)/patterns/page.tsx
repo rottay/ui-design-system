@@ -11,11 +11,14 @@ import { charts } from "@/data/registry/charts";
 import {
   ActivityIcon,
   BarChart3Icon,
+  CreditCardIcon,
   GitCompareIcon,
+  LayoutDashboardIcon,
   MessageSquareIcon,
+  PaletteIcon,
   ScanSearchIcon,
   SparklesIcon,
-  ZapIcon,
+  UsersRoundIcon,
 } from "@rottay/design-system/icons";
 
 interface PatternEditorial {
@@ -121,20 +124,53 @@ const PATTERN_EDITORIAL: Record<PatternGroup, PatternEditorial> = {
     accent: "var(--ds-color-error-700)",
     icon: <MessageSquareIcon size={20} />,
   },
-  misc: {
-    promise: "House specialised product modules that still deserve reuse.",
+  commerce: {
+    promise: "Turn pricing and transactional decisions into a coherent surface.",
     description:
-      "Misc is where branded or niche but still repeatable modules live, from pricing tables and file managers to token inspectors and workbench headers.",
+      "Commerce patterns package the comparison and decision structures that sit in front of a purchase or plan choice, from feature matrices to structured plan tiers.",
     bestFor:
-      "Product-specific widgets that appear in more than one app or screen",
-    pairedSurfaces: [
-      "PricingSurface",
-      "RecordWorkbenchSurface",
-      "MarketingSurface",
-    ],
+      "Pricing pages, plan comparison, upsell and billing decision points",
+    pairedSurfaces: ["PricingSurface", "BillingSurface", "MarketingSurface"],
+    tint: "var(--ds-color-success-50)",
+    accent: "var(--ds-color-success-700)",
+    icon: <CreditCardIcon size={20} />,
+  },
+  customization: {
+    promise: "Let a tenant see and shape their own visual identity live.",
+    description:
+      "Customization patterns expose tenant branding and token surfaces themselves: live preview sandboxes, inspection tools, and the reusable card that shows what a tenant's theme actually looks like.",
+    bestFor:
+      "Brand editors, live theme preview, developer and token inspection tools",
+    pairedSurfaces: ["BrandStudioSurface", "PreviewSurface", "SettingsSurface"],
     tint: "var(--ds-color-primary-50)",
     accent: "var(--ds-color-primary-600)",
-    icon: <ZapIcon size={20} />,
+    icon: <PaletteIcon size={20} />,
+  },
+  identity: {
+    promise: "Give people a consistent, reusable face across the product.",
+    description:
+      "Identity patterns package how a person is represented: compact profile cards, avatars, and identity chrome that stays consistent wherever a user needs to be recognized.",
+    bestFor:
+      "User lists, mentions, assignee pickers, profile summaries",
+    pairedSurfaces: ["DetailSurface", "ListSurface", "TeamSurface"],
+    tint: "var(--ds-color-neutral-100)",
+    accent: "var(--ds-color-text-primary, #111827)",
+    icon: <UsersRoundIcon size={20} />,
+  },
+  shell: {
+    promise: "Frame a page consistently before any content loads.",
+    description:
+      "Shell patterns own the outer chrome of a screen: page-level layout, dense operational headers, and workbench framing that hosts everything else without knowing what it contains.",
+    bestFor:
+      "App shells, operational dashboards, workbench-style multi-panel pages",
+    pairedSurfaces: [
+      "DashboardSurface",
+      "CollectionWorkspaceSurface",
+      "RecordWorkbenchSurface",
+    ],
+    tint: "var(--ds-color-warning-50)",
+    accent: "var(--ds-color-warning-700)",
+    icon: <LayoutDashboardIcon size={20} />,
   },
 };
 

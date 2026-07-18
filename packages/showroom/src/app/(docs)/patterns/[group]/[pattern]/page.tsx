@@ -94,16 +94,53 @@ const GROUP_GUIDANCE: Record<
     structures: ['LoadingOverlay', 'ActionDock', 'MobileHeader'],
     surfaces: ['FormSurface', 'DetailSurface', 'CommandCenterSurface'],
   },
-  misc: {
+  commerce: {
     promise:
-      'Misc patterns still need premium documentation because they often ship as the most visible branded moments in the product.',
+      'Commerce patterns should make plan and pricing comparison decisive without turning into a spreadsheet.',
     evaluate: [
-      'surface readiness',
-      'brand flexibility',
-      'clarity of call to action',
+      'comparison clarity',
+      'plan differentiation',
+      'call-to-action confidence',
     ],
-    structures: ['PageShell', 'DashboardInsights', 'DetailHeader'],
-    surfaces: ['ProfileSurface', 'PricingSurface', 'MarketingSurface'],
+    structures: ['DetailHeader', 'StatsHeader', 'PageShell'],
+    surfaces: ['PricingSurface', 'BillingSurface', 'MarketingSurface'],
+  },
+  customization: {
+    promise:
+      'Customization patterns should let a tenant experiment with their own brand without any risk of breaking the surface being edited.',
+    evaluate: [
+      'live-preview fidelity',
+      'control discoverability',
+      'safe experimentation',
+    ],
+    structures: ['DetailHeader', 'FormSections', 'PageShell'],
+    surfaces: ['SettingsSurface', 'PreviewSurface', 'DetailFormSurface'],
+  },
+  identity: {
+    promise:
+      'Identity patterns should make a person instantly recognizable whether they appear in a dense list or a full detail view.',
+    evaluate: [
+      'recognizability',
+      'density tolerance',
+      'cross-context consistency',
+    ],
+    structures: ['CollectionHeader', 'DetailHeader', 'TableToolbar'],
+    surfaces: ['ListSurface', 'DetailSurface', 'CollectionWorkspaceSurface'],
+  },
+  shell: {
+    promise:
+      'Shell patterns should frame a page consistently before any content, data, or permissions have resolved.',
+    evaluate: [
+      'chrome consistency',
+      'loading-state grace',
+      'cross-density adaptability',
+    ],
+    structures: ['PageShell', 'WorkbenchHeader', 'DashboardHeader'],
+    surfaces: [
+      'DashboardSurface',
+      'CollectionWorkspaceSurface',
+      'RecordWorkbenchSurface',
+    ],
   },
 };
 
@@ -515,30 +552,111 @@ function getPlaceholderProps(entry: PatternEntry): PropDefinition[] {
           'Feedback content rendered inside the resolved overlay posture.',
       },
     ],
-    misc: [
+    commerce: [
+      {
+        name: 'plans',
+        type: 'PricingPlan[]',
+        required: true,
+        description: 'Plan tiers or pricing options compared by the pattern.',
+      },
+      {
+        name: 'billingCycle',
+        type: 'string',
+        required: false,
+        description: 'Selected billing interval, such as monthly or annual, shown across plans.',
+      },
+      {
+        name: 'highlightedPlanId',
+        type: 'string',
+        required: false,
+        description: 'Plan visually emphasized as the recommended option.',
+      },
+      {
+        name: 'onSelectPlan',
+        type: '(planId) => void',
+        required: false,
+        description: 'Called when a plan or tier is selected.',
+      },
+    ],
+    customization: [
+      {
+        name: 'value',
+        type: 'BrandTheme | TenantThemeDocument',
+        required: true,
+        description: 'Current theme or token document being previewed or edited.',
+      },
+      {
+        name: 'scope',
+        type: 'string',
+        required: false,
+        description: 'Preview scope, such as a single surface or the full shell.',
+      },
+      {
+        name: 'readOnly',
+        type: 'boolean',
+        defaultValue: 'false',
+        required: false,
+        description: 'Renders the preview without exposing edit controls.',
+      },
+      {
+        name: 'onChange',
+        type: '(value) => void',
+        required: false,
+        description: 'Called when a customization control updates the theme.',
+      },
+    ],
+    identity: [
+      {
+        name: 'person',
+        type: 'PersonSummary',
+        required: true,
+        description: 'Name, avatar, and role information rendered by the pattern.',
+      },
+      {
+        name: 'density',
+        type: '"compact" | "comfortable"',
+        defaultValue: '"comfortable"',
+        required: false,
+        description: 'Controls how much identity detail is shown.',
+      },
+      {
+        name: 'badge',
+        type: 'ReactNode',
+        required: false,
+        description: 'Supplemental status or role indicator shown beside the identity.',
+      },
+      {
+        name: 'onSelect',
+        type: '(personId) => void',
+        required: false,
+        description: 'Called when the identity card or row is activated.',
+      },
+    ],
+    shell: [
       {
         name: 'children',
         type: 'ReactNode',
-        required: false,
-        description: 'Supplemental content rendered inside the composite pattern.',
+        required: true,
+        description: 'Page content framed by the shell.',
       },
       {
-        name: 'actions',
+        name: 'header',
         type: 'ReactNode',
         required: false,
-        description: 'Action rail or button group placed within the pattern shell.',
+        description: 'Header slot rendered above the framed content.',
       },
       {
-        name: 'tone',
-        type: 'string',
-        required: false,
-        description: 'Visual treatment or brand emphasis applied to the pattern.',
-      },
-      {
-        name: 'emptyState',
+        name: 'sidebar',
         type: 'ReactNode',
         required: false,
-        description: 'Fallback content when the pattern has nothing meaningful to render.',
+        description: 'Sidebar or rail slot rendered beside the framed content.',
+      },
+      {
+        name: 'density',
+        type: '"compact" | "comfortable"',
+        defaultValue: '"comfortable"',
+        required: false,
+        description: "Controls the shell's default spacing.",
       },
     ],
   };

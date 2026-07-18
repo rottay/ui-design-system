@@ -198,6 +198,7 @@ const patterns: NavSection = {
         { slug: 'cell-renderers', label: 'CellRenderers', path: '/patterns/data/cell-renderers' },
         { slug: 'column-settings', label: 'ColumnSettings', path: '/patterns/data/column-settings' },
         { slug: 'detail-panel', label: 'DetailPanel', path: '/patterns/data/detail-panel' },
+        { slug: 'file-manager', label: 'FileManager', path: '/patterns/data/file-manager' },
         { slug: 'gallery-view', label: 'GalleryView', path: '/patterns/data/gallery-view' },
         { slug: 'grid-view', label: 'GridView', path: '/patterns/data/grid-view' },
         { slug: 'list-toolbar', label: 'ListToolbar', path: '/patterns/data/list-toolbar' },
@@ -250,6 +251,7 @@ const patterns: NavSection = {
       path: '/patterns/feedback',
       children: [
         { slug: 'adaptive-overlay', label: 'AdaptiveOverlay', path: '/patterns/feedback/adaptive-overlay' },
+        { slug: 'empty-state', label: 'EmptyState', path: '/patterns/feedback/empty-state' },
       ],
     },
     {
@@ -277,20 +279,39 @@ const patterns: NavSection = {
       ],
     },
     {
-      slug: 'misc',
-      label: 'Misc',
-      path: '/patterns/misc',
+      slug: 'commerce',
+      label: 'Commerce',
+      path: '/patterns/commerce',
       children: [
-        { slug: 'branding-preview-sandbox', label: 'BrandingPreviewSandbox', path: '/patterns/misc/branding-preview-sandbox' },
-        { slug: 'cockpit-header', label: 'CockpitHeader', path: '/patterns/misc/cockpit-header' },
-        { slug: 'empty-state', label: 'EmptyState', path: '/patterns/misc/empty-state' },
-        { slug: 'file-manager', label: 'FileManager', path: '/patterns/misc/file-manager' },
-        { slug: 'page-shell', label: 'PageShell', path: '/patterns/misc/page-shell' },
-        { slug: 'pricing-table', label: 'PricingTable', path: '/patterns/misc/pricing-table' },
-        { slug: 'tenant-preview', label: 'TenantPreview', path: '/patterns/misc/tenant-preview' },
-        { slug: 'token-inspector', label: 'TokenInspector', path: '/patterns/misc/token-inspector' },
-        { slug: 'user-profile-card', label: 'UserProfileCard', path: '/patterns/misc/user-profile-card' },
-        { slug: 'workbench-header', label: 'WorkbenchHeader', path: '/patterns/misc/workbench-header' },
+        { slug: 'pricing-table', label: 'PricingTable', path: '/patterns/commerce/pricing-table' },
+      ],
+    },
+    {
+      slug: 'customization',
+      label: 'Customization',
+      path: '/patterns/customization',
+      children: [
+        { slug: 'branding-preview-sandbox', label: 'BrandingPreviewSandbox', path: '/patterns/customization/branding-preview-sandbox' },
+        { slug: 'tenant-preview', label: 'TenantPreview', path: '/patterns/customization/tenant-preview' },
+        { slug: 'token-inspector', label: 'TokenInspector', path: '/patterns/customization/token-inspector' },
+      ],
+    },
+    {
+      slug: 'identity',
+      label: 'Identity',
+      path: '/patterns/identity',
+      children: [
+        { slug: 'user-profile-card', label: 'UserProfileCard', path: '/patterns/identity/user-profile-card' },
+      ],
+    },
+    {
+      slug: 'shell',
+      label: 'Shell',
+      path: '/patterns/shell',
+      children: [
+        { slug: 'cockpit-header', label: 'CockpitHeader', path: '/patterns/shell/cockpit-header' },
+        { slug: 'page-shell', label: 'PageShell', path: '/patterns/shell/page-shell' },
+        { slug: 'workbench-header', label: 'WorkbenchHeader', path: '/patterns/shell/workbench-header' },
       ],
     },
   ],
