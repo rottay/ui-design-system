@@ -14,11 +14,17 @@ export type {
   ChartSeriesLabelCompactConfig,
   ChartCompactConfig,
   ChartCompactProps,
+  ChartEmptyStateProps,
+  ChartErrorStateProps,
   ChartLegendProps,
   ChartColorsProps,
   ChartColorSchemeProps,
   ChartMargin,
   ChartMarginProps,
+  ChartNeutralStateProps,
+  ChartScaffoldState,
+  ChartStateProps,
+  ChartSummaryTable,
   DataPoint,
   SeriesDataPoint,
   Series,
@@ -35,6 +41,9 @@ export {
   useChartTheme,
   useChartTooltip,
   useChartBrush,
+  useChartViewport,
+  useChartStream,
+  applyStreamCommit,
   useChartExport,
 } from './runtime';
 export type {
@@ -49,6 +58,24 @@ export type {
   BrushSelection,
   UseChartBrushOptions,
   UseChartBrushReturn,
+  ChartDimensions,
+  ChartDimensionsOptions,
+  UseChartDimensionsResult,
+  ChartAxisInterval,
+  ChartDomain,
+  ChartViewportAxis,
+  ChartViewportBrushAxis,
+  ChartViewportBrushConfig,
+  ChartViewportBrushScale,
+  ChartViewportConfig,
+  ChartViewportPlotRect,
+  ChartViewportResetButtonProps,
+  ChartViewportRootProps,
+  ChartViewportState,
+  ChartViewportZoomConfig,
+  ChartStreamOptions,
+  ChartStreamState,
+  ChartStreamWindow,
   UseChartExportReturn,
 } from './runtime';
 
@@ -56,8 +83,43 @@ export type {
 export { exportChart } from './runtime/exporting';
 export type { ChartExportOptions } from './runtime/exporting';
 
+// Scaffold shell shared by every family (the Wave-0 delegation template)
+export { ChartScaffold, describeChart, resolveChartScaffoldState } from './presentation/scaffold';
+export type {
+  ChartScaffoldProps,
+  ChartScaffoldStateResolution,
+} from './presentation/scaffold';
+
+// Opt-in semantic-projection door for families
+export { ChartFamilyFrame } from './presentation/family-frame';
+export type {
+  ChartFamilyFrameProps,
+  ChartFamilyFrameStateProps,
+} from './presentation/family-frame';
+
 // Responsive chart experience kernel
 export { ChartFrame, resolveChartProjection } from './runtime/chart-engine';
+export {
+  CHART_METRIC_TREND_RENDERER_ID,
+  CHART_RANKED_ROWS_RENDERER_ID,
+  ChartImperativePlot,
+  ChartMetricTrendView,
+  ChartRankedRowsView,
+  buildChartTrendPoints,
+  projectChartSummaryRows,
+} from './runtime/chart-engine';
+export type {
+  ChartImperativePlotContext,
+  ChartImperativePlotDraw,
+  ChartImperativePlotProps,
+  ChartMetricTrendContent,
+  ChartMetricTrendTone,
+  ChartMetricTrendViewProps,
+  ChartRankedRowsColumn,
+  ChartRankedRowsProjection,
+  ChartRankedRowsSource,
+  ChartRankedRowsViewProps,
+} from './runtime/chart-engine';
 export type {
   ChartAlternateProjectionView,
   ChartDeviceClass,

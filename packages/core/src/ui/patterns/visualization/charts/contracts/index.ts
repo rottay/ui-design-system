@@ -164,6 +164,82 @@ export type ChartColorScheme =
   | 'accessible';
 
 /**
+ * Accessible summary table every scaffold-backed family builds for screen
+ * readers. It doubles as the source of the ranked-rows phone projection, so
+ * it lives at the contracts tier where scaffold, families, and the frame
+ * adapter can all consume it without peer imports.
+ */
+export interface ChartSummaryTable {
+  caption?: string;
+  headers: string[];
+  rows: Array<Array<string | number>>;
+}
+
+/**
+ * Lifecycle states shared by the chart scaffold and every family shell.
+ * Non-ready states never mount the plot, so stale or misleading marks can
+ * never remain visible or interactive beneath feedback copy.
+ *
+ * This state machine is distinct from the family-computed `data-fallback`
+ * overlay: that overlay is the INVALID-DATA semantic (unrenderable geometry
+ * such as negative or NaN values), while `empty` is the zero-data semantic
+ * and `loading`/`error` are caller-declared lifecycle facts.
+ */
+export type ChartScaffoldState = 'ready' | 'loading' | 'empty' | 'error';
+
+/**
+ * Neutral arm of the state contract: `ready` (default) and `loading` need no
+ * state-specific copy beyond the always-required loading label. The optional
+ * empty copy enables the automatic zero-data empty state: the design system
+ * hardcodes no locale, so that state can only activate when the application
+ * supplied the copy.
+ */
+export interface ChartNeutralStateProps {
+  state?: 'ready' | 'loading';
+  /** App-supplied copy that arms the automatic zero-data empty state. */
+  emptyLabel?: ReactNode;
+  emptyDescription?: ReactNode;
+  emptyAction?: ReactNode;
+  errorLabel?: never;
+  errorDescription?: never;
+  errorAction?: never;
+}
+
+/** Explicit empty state; the visible and announced copy is app-required. */
+export interface ChartEmptyStateProps {
+  state: 'empty';
+  /** Required visible and announced copy; the DS never hardcodes a locale. */
+  emptyLabel: ReactNode;
+  emptyDescription?: ReactNode;
+  emptyAction?: ReactNode;
+  errorLabel?: never;
+  errorDescription?: never;
+  errorAction?: never;
+}
+
+/** Explicit error state; the visible and announced copy is app-required. */
+export interface ChartErrorStateProps {
+  state: 'error';
+  /** Required visible and announced copy; the DS never hardcodes a locale. */
+  errorLabel: ReactNode;
+  errorDescription?: ReactNode;
+  errorAction?: ReactNode;
+  emptyLabel?: never;
+  emptyDescription?: never;
+  emptyAction?: never;
+}
+
+/**
+ * Typed-required state copy union threaded by the scaffold and, as families
+ * migrate, by every family contract: declaring `state='empty'` without
+ * `emptyLabel` (or `state='error'` without `errorLabel`) is a type error.
+ */
+export type ChartStateProps =
+  | ChartNeutralStateProps
+  | ChartEmptyStateProps
+  | ChartErrorStateProps;
+
+/**
  * A single categorical data point used by pie, donut, and bar charts.
  * Additional arbitrary properties are forwarded to tooltip/render callbacks.
  */

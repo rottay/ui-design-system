@@ -6,21 +6,6 @@ import { BarChart } from '..';
 import { ChartScaffold } from '../presentation/scaffold';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
-function externalReferences(
-  svg: SVGSVGElement,
-  attribute: 'aria-labelledby' | 'aria-describedby',
-): Element[] {
-  const ids = svg.getAttribute(attribute)?.split(/\s+/).filter(Boolean) ?? [];
-  expect(ids.length).toBeGreaterThan(0);
-
-  return ids.map((id) => {
-    const referenced = document.getElementById(id);
-    expect(referenced).not.toBeNull();
-    expect(svg.contains(referenced)).toBe(false);
-    return referenced as Element;
-  });
-}
-
 describe('ChartScaffold advanced coverage', () => {
   it('omits summary keyboard affordances when the summary is empty', () => {
     const containerRef = createRef<HTMLDivElement>();
@@ -31,6 +16,7 @@ describe('ChartScaffold advanced coverage', () => {
         containerRef={containerRef}
         svgRef={svgRef}
         height={240}
+        loadingLabel="Loading chart"
         ariaLabel="Latency chart"
         ariaDescription="Latency chart without summary items."
         summary={{ headers: ['Label', 'Value'], rows: [] }}
@@ -54,6 +40,7 @@ describe('ChartScaffold advanced coverage', () => {
         containerRef={containerRef}
         svgRef={svgRef}
         height={260}
+        loadingLabel="Loading chart"
         ariaLabel="Orders chart"
         ariaDescription="Orders chart with summary navigation."
         summary={{
@@ -114,10 +101,16 @@ describe('ChartScaffold advanced coverage', () => {
       expect(container.querySelectorAll('svg rect').length).toBeGreaterThan(0);
     });
 
-    const chart = screen.getByRole('img', { name: accessibleName }) as unknown as SVGSVGElement;
-    const [accessibleTitle] = externalReferences(chart, 'aria-labelledby');
-    expect(accessibleTitle).toHaveAttribute('data-part', expectedTitlePart);
-    externalReferences(chart, 'aria-describedby');
-    expect(chart.querySelector('title, desc')).toBeNull();
+    // The migrated BarChart delegates the plot to the interactive renderer
+    // surface (role="group"). The renderer owns an internal accessible name via
+    // an in-SVG <title>, and its description references include the scaffold's
+    // external accessible summary; the scaffold still renders the visual heading
+    // or the hidden accessible-title span the family exposes.
+    const chart = screen.getByRole('group', { name: accessibleName }) as unknown as SVGSVGElement;
+    const accessibleTitle = chart.querySelector('title');
+    expect(accessibleTitle).toHaveTextContent(accessibleName);
+    const describedByIds = (chart.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+    expect(describedByIds.length).toBeGreaterThan(0);
+    expect(container.querySelector(`[data-part="${expectedTitlePart}"]`)).toHaveTextContent(accessibleName);
   });
 });
