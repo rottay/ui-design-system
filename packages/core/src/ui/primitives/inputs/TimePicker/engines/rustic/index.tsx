@@ -114,9 +114,28 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
 
   const displayValue = isControlled ? parseTime(value) : internalValue;
 
+  // step=1 shows second spinners in the native picker; step=60 hides them
+  const showSeconds = format.includes('ss') || format.includes('s');
+
+  // The native control may report "HH:mm" even when the configured format
+  // includes seconds; the emitted string must honor the format's seconds
+  // component. Returns '' unchanged so an empty value stays a clear signal.
+  const normalizeTimeStr = (raw: string): string => {
+    if (!raw) return '';
+    const [hours, minutes, seconds = '00'] = raw.split(':');
+    return showSeconds ? `${hours}:${minutes}:${seconds}` : `${hours}:${minutes}`;
+  };
+
   // Build a full Date anchored to today so the caller receives a usable Date object
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const timeStr = e.target.value;
+    const timeStr = normalizeTimeStr(e.target.value);
+    if (!timeStr) {
+      if (!isControlled) {
+        setInternalValue('');
+      }
+      onChange?.(null, '');
+      return;
+    }
     const today = new Date();
     const [hours, minutes, seconds = '00'] = timeStr.split(':');
     today.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
@@ -136,8 +155,6 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   };
 
   const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
-  // step=1 shows second spinners in the native picker; step=60 hides them
-  const showSeconds = format.includes('ss') || format.includes('s');
 
   // BEM class names for external CSS targeting and state-driven modifiers
   const containerClasses = [
@@ -279,9 +296,21 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     return today;
   };
 
+  // step=1 shows second spinners in the native picker; step=60 hides them
+  const showSeconds = format.includes('ss') || format.includes('s');
+
+  // The native control may report "HH:mm" even when the configured format
+  // includes seconds; the emitted string must honor the format's seconds
+  // component. Returns '' unchanged so an empty value stays a clear signal.
+  const normalizeTimeStr = (raw: string): string => {
+    if (!raw) return '';
+    const [hours, minutes, seconds = '00'] = raw.split(':');
+    return showSeconds ? `${hours}:${minutes}:${seconds}` : `${hours}:${minutes}`;
+  };
+
   // Start input change preserves the current end value
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const timeStr = e.target.value;
+    const timeStr = normalizeTimeStr(e.target.value);
     const newValue: [string, string] = [timeStr, displayValue[1]];
 
     if (!isControlled) {
@@ -295,7 +324,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
 
   // End input change preserves the current start value
   const handleEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const timeStr = e.target.value;
+    const timeStr = normalizeTimeStr(e.target.value);
     const newValue: [string, string] = [displayValue[0], timeStr];
 
     if (!isControlled) {
@@ -308,7 +337,6 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
   };
 
   const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
-  const showSeconds = format.includes('ss') || format.includes('s');
 
   // BEM class names for external CSS targeting and state-driven modifiers
   const containerClasses = [

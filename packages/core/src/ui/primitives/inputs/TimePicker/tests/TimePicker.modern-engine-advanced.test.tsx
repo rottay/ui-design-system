@@ -82,19 +82,19 @@ describe('TimePicker modern advanced coverage', () => {
     expect(screen.getByText('through')).toBeInTheDocument();
 
     fireEvent.click(rangeInputs[0]);
-    // Default HH:mm format: hour and minute columns only.
-    expect(columns()).toHaveLength(2);
+    // Contract default HH:mm:ss format: hour, minute, and second columns.
+    expect(columns()).toHaveLength(3);
     fireEvent.click(optionsOf(columns()[1])[15]);
     expect(handleChange).toHaveBeenLastCalledWith(
       [expect.any(Date), expect.any(Date)],
-      ['08:15', '17:00']
+      ['08:15:00', '17:00:00']
     );
 
     fireEvent.click(rangeInputs[1]);
     fireEvent.click(optionsOf(columns()[0])[18]);
     expect(handleChange).toHaveBeenLastCalledWith(
       [expect.any(Date), expect.any(Date)],
-      ['08:15', '18:00']
+      ['08:15:00', '18:00:00']
     );
   });
 

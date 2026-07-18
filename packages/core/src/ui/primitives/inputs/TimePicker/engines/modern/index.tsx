@@ -235,7 +235,9 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   const {
     value,
     defaultValue,
-    format = 'HH:mm',
+    // Default must match TIME_PICKER_DEFAULTS.format so all engines emit the
+    // same string shape when the caller does not configure a format.
+    format = 'HH:mm:ss',
     disabled = false,
     size = 'default',
     status,
@@ -352,6 +354,20 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     onChange?.(null, '');
   }, [isControlled, onChange]);
 
+  // readOnly blocks keystroke editing only; change events still reach the
+  // input (autofill, form libraries, programmatic dispatch) and must commit
+  // through the same path as a panel selection.
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    if (!raw) {
+      if (!isControlled) setInternalTime(null);
+      onChange?.(null, '');
+      return;
+    }
+    const parsed = parseTime(raw);
+    if (parsed) handleSelect(parsed.h, parsed.m, parsed.s);
+  }, [isControlled, onChange, handleSelect]);
+
   const sizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
 
   return (
@@ -375,6 +391,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           autoFocus={autoFocus}
           id={id}
           name={name}
+          onChange={handleInputChange}
           onClick={() => !disabled && setIsOpen(!isOpen)}
           onKeyDown={(e) => {
             if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
@@ -438,7 +455,9 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
   const {
     value,
     defaultValue,
-    format = 'HH:mm',
+    // Default must match TIME_PICKER_DEFAULTS.format so all engines emit the
+    // same string shape when the caller does not configure a format.
+    format = 'HH:mm:ss',
     disabled = false,
     size = 'default',
     status,
@@ -536,11 +555,10 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     return () => document.removeEventListener('keydown', handler);
   }, [isOpen]);
 
-  const handleSelect = useCallback((h: number, m: number, s: number) => {
-    const newTime = { h, m, s };
-    const newValue = activeInput === 'start'
-      ? [newTime, displayValue[1]] as TimeTuple
-      : [displayValue[0], newTime] as TimeTuple;
+  const commitTime = useCallback((which: 'start' | 'end', time: { h: number; m: number; s: number }) => {
+    const newValue = which === 'start'
+      ? [time, displayValue[1]] as TimeTuple
+      : [displayValue[0], time] as TimeTuple;
     if (!isControlled) setInternalValue(newValue);
     onChange?.(
       [createDate(newValue[0]), createDate(newValue[1])],
@@ -549,7 +567,20 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         newValue[1] ? formatTimeStr(newValue[1].h, newValue[1].m, newValue[1].s) : '',
       ]
     );
-  }, [activeInput, displayValue, isControlled, onChange, showSeconds]);
+  }, [displayValue, isControlled, onChange, showSeconds]);
+
+  const handleSelect = useCallback((h: number, m: number, s: number) => {
+    commitTime(activeInput, { h, m, s });
+  }, [activeInput, commitTime]);
+
+  // readOnly blocks keystroke editing only; change events still reach each
+  // input and must commit against that specific input, not the panel's
+  // activeInput, so an end-input change never lands on the start slot.
+  const handleInputChange = (which: 'start' | 'end') =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const parsed = parseTime(e.target.value);
+      if (parsed) commitTime(which, parsed);
+    };
 
   const handleNowClick = useCallback(() => {
     const now = new Date();
@@ -591,6 +622,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           value={startText}
           disabled={disabled}
           placeholder={placeholder[0]}
+          onChange={handleInputChange('start')}
           onClick={() => {
             if (!disabled) { setActiveInput('start'); setIsOpen(true); }
           }}
@@ -610,6 +642,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           value={endText}
           disabled={disabled}
           placeholder={placeholder[1]}
+          onChange={handleInputChange('end')}
           onClick={() => {
             if (!disabled) { setActiveInput('end'); setIsOpen(true); }
           }}
