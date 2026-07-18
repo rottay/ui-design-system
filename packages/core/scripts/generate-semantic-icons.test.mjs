@@ -7,7 +7,7 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import {
-  EXPECTED_COMPAT_V3_IDS,
+  EXPECTED_COMPAT_CORPUS_IDS,
   ICON_PACK_COUNTS,
   buildGeneratedFiles,
   checkGeneratedFiles,
@@ -63,7 +63,7 @@ test('authored corpus is the exact 263-role v6 governed set', async () => {
   assert.equal(corpus.entries.filter(({ since }) => since === 6).length, 2);
   assert.deepEqual(
     corpus.entries.filter(({ status }) => status === 'stable').map(({ id }) => id),
-    EXPECTED_COMPAT_V3_IDS,
+    EXPECTED_COMPAT_CORPUS_IDS,
   );
   assert.equal(new Set(corpus.entries.map(({ id }) => id)).size, 263);
   assert.equal(new Set(corpus.entries.map(({ componentName }) => componentName)).size, 263);

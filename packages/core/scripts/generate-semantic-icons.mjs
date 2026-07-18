@@ -42,7 +42,7 @@ const GENERATED_SCAN_ROOTS = Object.freeze([
 const PHOSPHOR_ROOT = resolve(CORE_ROOT, 'node_modules/@phosphor-icons/react');
 const PHOSPHOR_SSR_ROOT = resolve(PHOSPHOR_ROOT, 'dist/ssr');
 
-export const EXPECTED_COMPAT_V3_IDS = Object.freeze([
+export const EXPECTED_COMPAT_CORPUS_IDS = Object.freeze([
   'action.add',
   'action.edit',
   'action.delete',
@@ -277,7 +277,7 @@ export function validateCorpusManifest(manifest) {
     const actual = manifest.entries.filter((entry) => entry.pack === pack).length;
     if (actual !== count) errors.push(`${pack} pack must contain ${count} entries; received ${actual}`);
   }
-  if (!sameArray(stableIds, EXPECTED_COMPAT_V3_IDS)) errors.push('stable entries must preserve the exact ordered 50-name v3 compatibility corpus');
+  if (!sameArray(stableIds, EXPECTED_COMPAT_CORPUS_IDS)) errors.push('stable entries must preserve the exact ordered 50-name v3 compatibility corpus');
   if (candidateCount !== 213) errors.push(`candidate set must contain 213 entries; received ${candidateCount}`);
   if (fingerprint(manifest.entries.slice(0, V4_PREFIX_COUNT)) !== V4_CORPUS_PREFIX_FINGERPRINT) {
     errors.push('the exact ordered 126-role v4 corpus prefix must remain unchanged');
