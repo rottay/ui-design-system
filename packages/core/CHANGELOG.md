@@ -42,6 +42,44 @@
   while layout code, raw CSS, icon glyphs and motion recipes remain governed by
   the vertical; SSR now exposes the resolved profile as a root attribute.
 
+## 2.19.31
+
+### Patch Changes
+
+- Certify the explanatory feature-pictogram asset facade, wiring its governed
+  skin entrypoint, catalog and provenance so the pictogram corpus renders from
+  a single first-party source.
+- Expose the governed semantic corpus through a generated facade map, retiring
+  the inline Phosphor SSR adapter and slimming the semantic-icon registry and
+  component so roles resolve from provenance-backed generated output.
+
+## 2.19.30
+
+### Patch Changes
+
+- Make the adaptive contracts truthful by moving responsive presentation into
+  governed skins for the chat, kanban, scheduler, header and visualization
+  surfaces, reconciling the chart families' responsive props and adding a
+  fail-closed adaptive-contract census so declared adaptive behavior cannot
+  drift from what renders.
+
+## 2.19.29
+
+### Patch Changes
+
+- Enforce the declarative owner-boundary contract so barrels stop sharing a
+  level with authored production peers: give the `Collapse` layout primitive its
+  own folder owner, drain the collection-workspace kit barrel and guard the
+  result with a fail-closed owner-boundaries test.
+- Make surface pages resolve presentation access through the consuming app
+  instead of reaching across the boundary, backed by a surface-capability
+  census and a presentation-boundary test that record per-app capabilities for
+  BitHire, Evnto and Platform.
+- Certify the code-owned Evnto tenant theme source, consolidating its
+  experience baseline, product profile, vertical preset and brand theme into a
+  single first-party source with expanded brand- and tenant-theme compiler
+  coverage.
+
 ## 2.19.28
 
 ### Patch Changes
