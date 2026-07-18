@@ -55,6 +55,7 @@
 'use client';
 
 import React, { forwardRef, useId } from 'react';
+import { stampDataPart } from '@/infrastructure/runtime/dom/foundation/data-part';
 import { Button as AntButton } from 'antd';
 import type { ButtonProps, ButtonSize } from '../../contracts';
 import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP, resolveButtonBusyState } from '../../contracts';
@@ -112,6 +113,22 @@ const SHAPE_MAP: Record<string, 'default' | 'circle' | 'round'> = {
  * @returns An Ant Design Button with DS class-name hooks for external styling.
  */
 const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
+  // Ant's Button owns the root DOM node, so the engine part is stamped through
+  // the canonical imperative boundary; the stamp re-runs after every commit so
+  // a caller-supplied data-part can never rename this engine's anatomy.
+  const rootRef = React.useRef<HTMLElement | null>(null);
+  React.useLayoutEffect(() => {
+    if (rootRef.current) stampDataPart(rootRef.current, 'trigger');
+  });
+  const mergedRef = React.useCallback(
+    (node: HTMLElement | null) => {
+      rootRef.current = node;
+      if (node) stampDataPart(node, 'trigger');
+      if (typeof ref === 'function') ref(node);
+      else if (ref) (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+    },
+    [ref],
+  );
   const {
     children,
     variant = BUTTON_DEFAULTS.variant,
@@ -217,7 +234,7 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
       )}
       <AntButton
         {...passthroughProps}
-        ref={ref}
+        ref={mergedRef}
         {...variantProps}
         size={SIZE_MAP[size || 'md']}
         shape={SHAPE_MAP[shape || 'default']}
@@ -239,9 +256,6 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
         tabIndex={tabIndex}
         aria-busy={loading || undefined}
         {...(responsive ? responsive.attrs : {})}
-        // The engine owns data-part: it lands after the caller passthrough so a
-        // caller-supplied data-part can never rename this engine's anatomy.
-        data-part="trigger"
       >
         {loading && resolvedBusyLabel != null ? resolvedBusyLabel : children}
         {/* End icon / suffix is rendered outside Ant's icon slot because Ant
