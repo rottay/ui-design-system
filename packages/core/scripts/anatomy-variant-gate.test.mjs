@@ -69,7 +69,7 @@ function fixture() {
 
 test('parseAnatomyVocabulary reads the as-const object literal', () => {
   const source = `
-export const TENANT_THEME_ANATOMY_VARIANTS_V1 = {
+export const TENANT_THEME_ANATOMY_VARIANTS = {
   cardComponent: ["default", "framed", "underline", "ghost"],
   table: ["default", "ruled", "zebra", "open"],
   sidebar: ["default", "rail", "panel"],

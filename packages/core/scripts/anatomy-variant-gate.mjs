@@ -3,7 +3,7 @@
  * anatomy-variant-gate — the white-label anatomy-variant gate (W4-A).
  *
  * Anatomy variants are DATA: a closed enum per participating chrome family
- * (`TENANT_THEME_ANATOMY_VARIANTS_V1`, the CONTRACT single source) that selects
+ * (`TENANT_THEME_ANATOMY_VARIANTS`, the CONTRACT single source) that selects
  * among code-owned skin variants. The tenant compiler projects a non-`default`
  * value onto a `data-anatomy-<attr>` attribute on the DS root; the engine skins
  * carry the matching `[data-anatomy-<attr>='<variant>']` selector blocks. A
@@ -13,7 +13,7 @@
  * owns no first-party skin CSS), asserts an explicit support manifest instead.
  *
  * Algorithm (design 1.5):
- *   1. Read TENANT_THEME_ANATOMY_VARIANTS_V1 from the CONTRACT (single source).
+ *   1. Read TENANT_THEME_ANATOMY_VARIANTS from the CONTRACT (single source).
  *   2. Forward: for every (family, variant != 'default') x (modern, rustic),
  *      assert at least one `[data-anatomy-<attr>='<variant>']` selector exists
  *      in that engine's skin dir. Missing = FAIL.
@@ -59,7 +59,7 @@ const DEFAULT_PATHS = {
   manifest: join(ENGINES_ROOT, 'classic/classic-anatomy-support.json'),
 };
 
-const VOCABULARY_EXPORT = 'TENANT_THEME_ANATOMY_VARIANTS_V1';
+const VOCABULARY_EXPORT = 'TENANT_THEME_ANATOMY_VARIANTS';
 const DEFAULT_VARIANT = 'default';
 const SUPPORT_LEVELS = ['supported', 'approximated', 'unsupported'];
 
@@ -83,7 +83,7 @@ export function attributeToFamily() {
 }
 
 /**
- * Parse the `TENANT_THEME_ANATOMY_VARIANTS_V1 = { ... } as const` object literal
+ * Parse the `TENANT_THEME_ANATOMY_VARIANTS = { ... } as const` object literal
  * out of the CONTRACT source. Returns { familyKey: [variant, ...] } or null when
  * the export is absent (a partial/missing landlord landing).
  */

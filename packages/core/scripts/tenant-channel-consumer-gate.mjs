@@ -14,7 +14,7 @@
  * always allowed and is surfaced as a tightening opportunity.
  *
  * Channel inventory (never a hand-list of outputs):
- *   1. TENANT_THEME_OVERRIDE_TOKENS_V1            (the contract's override dials)
+ *   1. TENANT_THEME_OVERRIDE_TOKENS            (the contract's override dials)
  *   2. Object.keys(chromeToVariables(<fully-populated chrome>))  (the REAL
  *      emitter, executed against a recursive Proxy so every optional field is
  *      truthy and every emitted name appears — refactors of the emitter are
@@ -252,11 +252,11 @@ async function main() {
     'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.js',
   );
 
-  const overrideTokens = contract.TENANT_THEME_OVERRIDE_TOKENS_V1;
+  const overrideTokens = contract.TENANT_THEME_OVERRIDE_TOKENS;
   if (!Array.isArray(overrideTokens) || overrideTokens.length === 0) {
-    throw new Error('TENANT_THEME_OVERRIDE_TOKENS_V1 not found in dist contract.');
+    throw new Error('TENANT_THEME_OVERRIDE_TOKENS not found in dist contract.');
   }
-  const anatomyVariants = contract.TENANT_THEME_ANATOMY_VARIANTS_V1 ?? null;
+  const anatomyVariants = contract.TENANT_THEME_ANATOMY_VARIANTS ?? null;
 
   const emittedNames = collectEmittedChannelNames(emitterModule.chromeToVariables);
   if (emittedNames.length < EMITTER_CHANNEL_FLOOR) {
