@@ -162,3 +162,42 @@
 @keyframes ds-card-spin-rustic {
   to { transform: rotate(360deg); }
 }
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `cardComponent.anatomy` compiles to a
+ * `data-anatomy-card` attribute on the DS root; vocabulary in
+ * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * `default`/absent = base rendering above, no rule needed.
+ *
+ * The anatomy attribute prefixes the base root chain and REPEATS
+ * `[data-part='root']`, reaching (0,5,0): one attribute over the (0,4,0)
+ * variant/tone/radius rules, winning unlayered without `!important`. Rustic
+ * gates hover on `data-hoverable` (no `data-interactive`), preserved below.
+ * ======================================================================== */
+
+/* framed: full border + shadow uniform across variants; toned cards keep tone. */
+[data-anatomy-card='framed'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-card-radius, 12px);
+  box-shadow: var(--ds-card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+[data-anatomy-card='framed'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root']:not([data-tone]) {
+  border: var(--ds-card-border-width, 1px) solid var(--ds-card-border, #e5e5e5);
+}
+
+/* underline: no side/top borders, one bottom hairline, tighter radius, no lift. */
+[data-anatomy-card='underline'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'] {
+  border: 0;
+  border-bottom: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, #e5e5e5);
+  border-radius: var(--ds-card-radius-sm, 4px);
+  box-shadow: none;
+}
+
+/* ghost: no frame at rest; a hoverable ghost card tints only on hover. */
+[data-anatomy-card='ghost'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'] {
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+[data-anatomy-card='ghost'] .rottay-card.rottay-card--rustic[data-part='root'][data-part='root'][data-hoverable='true'][data-state~='hovered'] {
+  background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
+}

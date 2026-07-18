@@ -206,3 +206,47 @@
   border-top: 1px solid var(--ds-card-footer-border, var(--ds-color-border));
   background-color: var(--ds-card-footer-bg, transparent);
 }
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `cardComponent.anatomy` in the tenant chrome compiles
+ * to a `data-anatomy-card` attribute on the DS root; the closed vocabulary lives
+ * in TENANT_THEME_ANATOMY_VARIANTS_V1 and is enforced by anatomy-variant-gate.mjs.
+ * `default`/absent selects the base rendering above and needs no rule here.
+ *
+ * Each block prefixes the anatomy attribute onto the base root chain and REPEATS
+ * `[data-part='root']`, reaching (0,5,0): one attribute over the (0,4,0)
+ * variant/tone/radius rules it governs, so it wins in the same unlayered origin
+ * without `!important`. Anatomy is a cross-variant frame treatment; the
+ * per-instance variant still colours within the frame the anatomy defines. State
+ * rules (hover/focus at (0,6,0)+) intentionally still react on top of the frame.
+ * ======================================================================== */
+
+/* framed: an explicit full border + surface shadow, uniform across variants. The
+   shadow/radius reach every framed card; the neutral border is added only to an
+   untoned card, so a toned card keeps its tone frame. */
+[data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-card-radius, 12px);
+  box-shadow: var(--ds-card-shadow, var(--ds-elevation-1));
+}
+[data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root']:not([data-tone]) {
+  border: var(--ds-card-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+}
+
+/* underline: no side/top borders, one bottom hairline, tighter radius, no lift. */
+[data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
+  border: 0;
+  border-bottom: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border-radius: var(--ds-card-radius-sm, 4px);
+  box-shadow: none;
+}
+
+/* ghost: no frame at rest; an interactive ghost card tints only on hover. */
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
+  background-image: none;
+}
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered'] {
+  background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
+}

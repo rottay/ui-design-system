@@ -291,3 +291,50 @@
 .ds-pattern-data-table.ds-engine-modern [data-part='virtual-spacer'] {
   border: none;
 }
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `table.anatomy` in the tenant chrome compiles to a
+ * `data-anatomy-table` attribute on the DS root; vocabulary in
+ * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * `default`/absent = the base rows/rules above, no rule needed.
+ *
+ * Row rules prefix the anatomy attribute onto a base row selector, reaching
+ * (0,5,0)/(0,6,0): one attribute over the (0,4,0) stripe/hairline rules they
+ * govern. Selection stays authoritative (its rows are excluded from the zebra
+ * stripe) and hover is re-asserted above the stripe so it still reads.
+ * ======================================================================== */
+
+/* ruled: row hairlines, no stripes. Suppress any striped fill; the not-last
+   divider below reasserts the hairline so the mode is self-contained. */
+[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+  background-color: transparent;
+}
+[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+
+/* zebra: alternating stripe on even rows (independent of the striped prop), no
+   hairlines. Selected rows keep their selection fill; hover re-asserts above. */
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row']:nth-of-type(even):not([data-selected='true']) {
+  background-color: var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+}
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 0;
+}
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-hoverable='true']:not([data-selected='true']):hover {
+  background-color: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
+}
+
+/* open: no row hairlines or stripes, header rule only, roomier vertical rhythm. */
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+  background-color: transparent;
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 0;
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='header-row'][data-part='header-row'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='data-cell'] {
+  padding-block: var(--ds-table-open-cell-padding-block, 0.875rem);
+}

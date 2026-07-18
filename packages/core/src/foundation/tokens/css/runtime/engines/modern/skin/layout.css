@@ -103,3 +103,52 @@
 .rottay-box.rottay-box--modern[data-shadow='2xl'] {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `sidebar.anatomy` and `layout.anatomy` in the tenant
+ * chrome compile to `data-anatomy-sidebar` / `data-anatomy-layout` attributes on
+ * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by
+ * anatomy-variant-gate.mjs. `default`/absent = the base above, no rule needed.
+ *
+ * Sidebar rail/panel governs the sider's interior rhythm and alignment plus the
+ * cascaded `--ds-sidebar-item-*` rhythm tokens a nested nav reads. The sider
+ * container WIDTH is set inline by the component (`Layout.Sider` width prop /
+ * the app-shell `--ds-shell-inline-start-inset`) and is NOT overridable here, so
+ * `inline-size` is best-effort (it wins only where the host drives width from
+ * CSS). Rules REPEAT `[data-part='sider']` to reach (0,5,0), one attribute over
+ * the (0,4,0) theme rules. `data-anatomy-layout` covers this engine's shell
+ * `Layout.Header`; the cockpit-header pattern carries its own copy.
+ * ======================================================================== */
+
+/* sidebar panel: the wide, comfortable default; roomy item rhythm, left-read. */
+[data-anatomy-sidebar='panel'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-part='sider'] {
+  --ds-sidebar-item-padding-inline: var(--ds-spacing-3, 12px);
+  --ds-sidebar-item-gap: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-2, 8px));
+}
+
+/* sidebar rail: narrow, icon-first; tight rhythm, centred, best-effort width. */
+[data-anatomy-sidebar='rail'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-part='sider'] {
+  --ds-sidebar-item-padding-inline: 0px;
+  --ds-sidebar-item-gap: var(--ds-spacing-1, 4px);
+  align-items: center;
+  text-align: center;
+  padding-inline: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-1, 4px));
+  inline-size: var(--ds-sidebar-collapsed-width, 68px);
+}
+
+/* layout flat: the shell header merges with the canvas -- no border, radius or
+   elevation. */
+[data-anatomy-layout='flat'] .rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+  border-bottom: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* layout floating: the shell header lifts into an inset, rounded, elevated card. */
+[data-anatomy-layout='floating'] .rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+  border-bottom: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2);
+  margin: var(--ds-spacing-2, 8px);
+}

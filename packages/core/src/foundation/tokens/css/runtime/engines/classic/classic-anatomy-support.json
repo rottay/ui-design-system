@@ -1,0 +1,58 @@
+{
+  "$comment": "Anatomy-variant support manifest for the classic engine (W4-A). The classic engine wraps Ant Design 5.21 and owns no first-party `/skin/` CSS, so it cannot express anatomy variants as additive skin rules the way modern and rustic do. Instead this manifest declares, per (family, non-default variant), how faithfully the Ant wrapper renders the variant: `supported` (native Ant preset maps 1:1), `approximated` (a bounded Ant prop/style combination gets close but is not identical), or `unsupported` (no honest Ant mapping). anatomy-variant-gate.mjs asserts one row per (family, non-default variant) in TENANT_THEME_ANATOMY_VARIANTS_V1, a valid support level, and a non-empty reason. Declared-and-countable divergence beats silent divergence (the WO-ENG lesson).",
+  "schema": "classic-anatomy-support/v1",
+  "engine": "classic",
+  "supplier": "antd",
+  "supplierVersion": "5.21",
+  "supportLevels": ["supported", "approximated", "unsupported"],
+  "variants": {
+    "cardComponent": {
+      "framed": {
+        "support": "supported",
+        "reason": "Ant Card default renders a full border plus the theme's boxShadow; the framed look maps 1:1 to `bordered`."
+      },
+      "underline": {
+        "support": "approximated",
+        "reason": "Ant Card has no underline preset; `bordered={false}` plus a bottom `borderBottom` via `styles.body`/head approximates the single bottom hairline, without the tighter radius parity."
+      },
+      "ghost": {
+        "support": "approximated",
+        "reason": "Ant Card `bordered={false}` with a transparent body approximates the no-frame rest state; the hover-only background tint is not a native Card behaviour and is only partially reproduced."
+      }
+    },
+    "table": {
+      "ruled": {
+        "support": "supported",
+        "reason": "Ant Table default draws horizontal row bottom-borders and no stripes, which is the ruled look."
+      },
+      "zebra": {
+        "support": "supported",
+        "reason": "Ant Table striped rows via `rowClassName` alternating odd/even maps directly to zebra; the row hairlines are removed with a borderless cell style."
+      },
+      "open": {
+        "support": "approximated",
+        "reason": "Ant Table has no borderless-with-header-rule preset; `bordered={false}` plus a header-only bottom rule and enlarged cell padding approximates the open rhythm."
+      }
+    },
+    "sidebar": {
+      "rail": {
+        "support": "approximated",
+        "reason": "Ant Menu `inlineCollapsed` yields an icon-first rail, but the flyout label parity and exact rail width differ from the modern/rustic rendering."
+      },
+      "panel": {
+        "support": "supported",
+        "reason": "Ant Menu `mode=inline` (expanded) is the wide panel and is the classic default."
+      }
+    },
+    "layout": {
+      "flat": {
+        "support": "supported",
+        "reason": "Ant Layout.Header with no border or boxShadow is flat by default; merging with the canvas needs only removing the theme header shadow."
+      },
+      "floating": {
+        "support": "approximated",
+        "reason": "Ant Layout.Header has no inset-card preset; `margin` plus `borderRadius` and a `boxShadow` style approximates the floating card, but is not a first-class Ant token."
+      }
+    }
+  }
+}

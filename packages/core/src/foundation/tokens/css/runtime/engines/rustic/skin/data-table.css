@@ -180,3 +180,48 @@
 .ds-pattern-data-table.ds-engine-rustic [data-part='expanded-row-content'] {
   background: var(--ds-color-neutral-50);
 }
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `table.anatomy` compiles to a `data-anatomy-table`
+ * attribute on the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1,
+ * enforced by anatomy-variant-gate.mjs. `default`/absent = base above.
+ *
+ * Rustic keys row fill on the `data-state` enum (selected|striped|default) and
+ * draws hairlines on the CELLS, not the row. Anatomy rules prefix the attribute
+ * and REPEAT the cell `data-part` to reach (0,5,0)/(0,6,0), one attribute over
+ * the (0,4,0) base. Rustic paints no row hover, so no hover re-assert is needed.
+ * ======================================================================== */
+
+/* ruled: cell hairlines (the rustic default), no stripes. */
+[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] {
+  background: transparent;
+}
+
+/* zebra: alternating stripe on even rows (independent of data-state), no
+   cell hairlines. Selected rows keep their selection fill. */
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='body-row']:nth-of-type(even):not([data-state='selected']) {
+  background: var(--ds-color-neutral-50);
+}
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='selection-cell'][data-part='selection-cell'],
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='expand-cell'][data-part='expand-cell'],
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='data-cell'][data-part='data-cell'],
+[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-rustic [data-part='actions-cell'][data-part='actions-cell'] {
+  border-bottom: 0;
+}
+
+/* open: no cell hairlines or stripes, header bottom rule only (drop the vertical
+   header rules), roomier vertical rhythm. */
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] {
+  background: transparent;
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='selection-cell'][data-part='selection-cell'],
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='expand-cell'][data-part='expand-cell'],
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='data-cell'][data-part='data-cell'],
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='actions-cell'][data-part='actions-cell'] {
+  border-bottom: 0;
+  padding-block: var(--ds-table-open-cell-padding-block, 0.875rem);
+}
+[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-rustic [data-part='header-cell'][data-part='header-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-200);
+  border-right: 0;
+}

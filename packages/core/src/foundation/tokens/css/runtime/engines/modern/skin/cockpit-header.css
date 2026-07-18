@@ -124,3 +124,31 @@
   border-radius: var(--ds-cockpit-header-skeleton-radius, var(--ds-radius-sm));
   background: var(--ds-color-neutral-100);
 }
+
+/* ===========================================================================
+ * Anatomy variants (W4-A). `layout.anatomy` in the tenant chrome compiles to a
+ * `data-anatomy-layout` attribute on the DS root; vocabulary in
+ * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * `default`/absent = the base header above (surface card + bottom rule).
+ *
+ * The cockpit header is this engine's primary app header. Rules prefix the
+ * anatomy attribute and REPEAT `[data-part='root']`, reaching (0,5,0): one
+ * attribute over the (0,4,0) bottom-border rule and level with the (0,5,0)
+ * sticky-elevation rule, which they follow in source order so the anatomy
+ * treatment wins its box-shadow tie without `!important`.
+ * ======================================================================== */
+
+/* layout flat: header merges with the canvas -- drop the bottom rule and any
+   sticky elevation. */
+[data-anatomy-layout='flat'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 0;
+  box-shadow: none;
+}
+
+/* layout floating: header lifts into an inset, rounded, elevated card. */
+[data-anatomy-layout='floating'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2);
+  margin: var(--ds-spacing-2, 8px);
+}
