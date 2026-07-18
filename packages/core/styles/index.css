@@ -14826,7 +14826,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* ===========================================================================
  * Anatomy variants (W4-A). `cardComponent.anatomy` in the tenant chrome compiles
  * to a `data-anatomy-card` attribute on the DS root; the closed vocabulary lives
- * in TENANT_THEME_ANATOMY_VARIANTS_V1 and is enforced by anatomy-variant-gate.mjs.
+ * in TENANT_THEME_ANATOMY_VARIANTS and is enforced by anatomy-variant-gate.mjs.
  * `default`/absent selects the base rendering above and needs no rule here.
  *
  * Each block prefixes the anatomy attribute onto the base root chain and REPEATS
@@ -15035,7 +15035,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* ===========================================================================
  * Anatomy variants (W4-A). `cardComponent.anatomy` compiles to a
  * `data-anatomy-card` attribute on the DS root; vocabulary in
- * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * TENANT_THEME_ANATOMY_VARIANTS, enforced by anatomy-variant-gate.mjs.
  * `default`/absent = base rendering above, no rule needed.
  *
  * The anatomy attribute prefixes the base root chain and REPEATS
@@ -17411,7 +17411,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* ===========================================================================
  * Anatomy variants (W4-A). `table.anatomy` in the tenant chrome compiles to a
  * `data-anatomy-table` attribute on the DS root; vocabulary in
- * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * TENANT_THEME_ANATOMY_VARIANTS, enforced by anatomy-variant-gate.mjs.
  * `default`/absent = the base rows/rules above, no rule needed.
  *
  * Row rules prefix the anatomy attribute onto a base row selector, reaching
@@ -17640,7 +17640,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 /* ===========================================================================
  * Anatomy variants (W4-A). `table.anatomy` compiles to a `data-anatomy-table`
- * attribute on the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1,
+ * attribute on the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS,
  * enforced by anatomy-variant-gate.mjs. `default`/absent = base above.
  *
  * Rustic keys row fill on the `data-state` enum (selected|striped|default) and
@@ -30645,7 +30645,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ===========================================================================
  * Anatomy variants (W4-A). `sidebar.anatomy` and `layout.anatomy` in the tenant
  * chrome compile to `data-anatomy-sidebar` / `data-anatomy-layout` attributes on
- * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by
+ * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS, enforced by
  * anatomy-variant-gate.mjs. `default`/absent = the base above, no rule needed.
  *
  * Sidebar rail/panel governs the sider's interior rhythm and alignment plus the
@@ -30808,7 +30808,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ===========================================================================
  * Anatomy variants (W4-A). `sidebar.anatomy` and `layout.anatomy` in the tenant
  * chrome compile to `data-anatomy-sidebar` / `data-anatomy-layout` attributes on
- * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by
+ * the DS root; vocabulary in TENANT_THEME_ANATOMY_VARIANTS, enforced by
  * anatomy-variant-gate.mjs. `default`/absent = the base above, no rule needed.
  *
  * Rustic owns no cockpit-header skin, so `data-anatomy-layout` rides this
@@ -33940,7 +33940,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ===========================================================================
  * Anatomy variants (W4-A). `layout.anatomy` in the tenant chrome compiles to a
  * `data-anatomy-layout` attribute on the DS root; vocabulary in
- * TENANT_THEME_ANATOMY_VARIANTS_V1, enforced by anatomy-variant-gate.mjs.
+ * TENANT_THEME_ANATOMY_VARIANTS, enforced by anatomy-variant-gate.mjs.
  * `default`/absent = the base header above (surface card + bottom rule).
  *
  * The cockpit header is this engine's primary app header. Rules prefix the
