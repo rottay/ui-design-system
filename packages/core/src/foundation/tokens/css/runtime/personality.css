@@ -7,6 +7,14 @@
  * These rules apply personality tokens to ALL three engines
  * (Classic/Ant, Modern/DaisyUI, Rustic/Vanilla) via the CSS cascade.
  * Zero engine file changes required.
+ *
+ * This file is imported inside `rottay-personality`, below a Tailwind v4
+ * host's preflight (P-76). Its preflight-killable channels (card padding,
+ * divider border-style/color) live in personality-paint.css, unlayered. The
+ * box-shadow / scrollbar / ::selection paint remaining here is not
+ * preflight-resettable on its targets, and the layered position is
+ * load-bearing: unlayered skins must keep beating personality (P-87);
+ * declared residue in css-layer-paint-gate.allowlist.json.
  */
 
 /* ========================================================================
@@ -21,16 +29,6 @@
   transition: box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
               transform var(--ds-personality-animation-entrance-duration, 300ms),
               background-color var(--ds-personality-animation-entrance-duration, 300ms);
-}
-
-.ant-card .ant-card-head,
-.card .card-title {
-  padding-inline: var(--ds-card-header-padding);
-}
-
-.ant-card .ant-card-body,
-.card .card-body {
-  padding: var(--ds-card-body-padding);
 }
 
 .ant-card:hover,
@@ -106,13 +104,6 @@ h1, h2, h3, h4, h5, h6,
    DIVIDER PERSONALITY
    Applies personality-driven border-style to dividers.
    ======================================================================== */
-
-.ant-divider,
-.divider,
-[data-engine] .ds-divider {
-  border-style: var(--ds-divider-style);
-  border-color: var(--ds-divider-color);
-}
 
 /* ========================================================================
    SKELETON PERSONALITY

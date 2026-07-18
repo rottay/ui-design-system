@@ -1,0 +1,633 @@
+/**
+ * Pattern Chrome Paint - Rottay Design System
+ *
+ * The preflight-killable paint channels (padding, margin, border, background,
+ * box-shadow) of the pattern styling contract. The token contract itself
+ * (every `--ds-*` custom property), the keyframes, and the `!important`
+ * declarations stay in presentation/components/patterns.css inside
+ * `rottay-components`; selectors here are byte-identical to their layered
+ * originals and keep their source order.
+ *
+ * DELIBERATELY UNLAYERED. Tailwind v4 hosts declare their unnamed `base`
+ * layer after every `rottay-*` layer, so preflight's universal
+ * margin/padding/border reset outranks ANY specificity inside those layers
+ * (measured; see P-47/P-76). These declarations only paint in a Tailwind
+ * host from outside the layer statement, and they still yield to a
+ * consumer's inline `style` prop.
+ *
+ * Cascade position: both entrypoints import this file BEFORE every skin
+ * import, so any skin contesting one of these channels keeps winning the
+ * tie exactly as it did while this paint lived inside `rottay-components`.
+ */
+
+:where(.ds-workspace-frame) {
+  border: 1px solid var(--ds-workspace-shell-border, var(--ds-color-border));
+  background: var(--ds-workspace-shell-bg);
+  box-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
+}
+
+:where(.ds-workspace-frame)::before {
+  background: var(--ds-workspace-shell-overlay);
+}
+
+:where(.ds-workspace-frame--padded) > :where(.ds-workspace-frame__inner) {
+  padding: var(--ds-workspace-frame-padding, clamp(16px, 2.2vw, 28px));
+}
+
+:where(.ds-command-grid) {
+  background-image: var(--ds-command-grid-bg-strong);
+  background-size: var(--ds-command-grid-size) var(--ds-command-grid-size);
+}
+
+:where(.ds-surface-hero) {
+  border: 1px solid var(--ds-color-border-secondary);
+  background: var(--ds-workspace-hero-bg);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card) {
+  border: 1px solid var(--ds-premium-card-border);
+  background: var(--ds-premium-card-bg);
+  background-clip: padding-box;
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card)::before,
+:where(.ds-surface-table-card)::before,
+:where(.ds-rich-card)::before {
+  background-image:
+    var(--ds-surface-card-grid-bg),
+    var(--ds-premium-card-sheen);
+  background-size:
+    var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size),
+    auto;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):hover {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover);
+}
+
+:where(.ds-surface-panel) {
+  border: 1px solid var(--ds-color-border);
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 92%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-surface-panel)::before {
+  background-image: var(--ds-surface-card-grid-bg);
+  background-size: var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size);
+}
+
+:where(.ds-surface-panel):focus-within {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
+  box-shadow: var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-surface-control-row) {
+  border: 1px solid var(--ds-color-border-subtle);
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
+}
+
+:where(.ds-surface-table-card) {
+  border: 1px solid var(--ds-premium-card-border);
+  background: var(--ds-premium-card-bg);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-rich-card) {
+  background: var(--ds-premium-card-bg);
+  border: 1px solid var(--ds-premium-card-border);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-rich-card--interactive):hover {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover);
+}
+
+:where(.ds-rich-card--interactive):focus-within {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-card-shadow-hover), var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-rich-card--selected) {
+  border-color: var(--ds-premium-card-selected-border);
+  box-shadow: var(--ds-card-shadow), var(--ds-premium-card-selected-ring);
+}
+
+:where(.ds-rich-card__header) {
+  background: var(--ds-premium-card-header-bg);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section) {
+  background: var(--ds-premium-card-section-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section--alt) {
+  background: var(--ds-premium-card-section-alt-bg);
+}
+
+:where(.ds-rich-card__footer) {
+  background: var(--ds-premium-card-footer-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__icon) {
+  border: 1px solid var(--ds-icon-tile-border);
+  background: var(--ds-icon-tile-bg);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+}
+
+:where(.ds-rich-card--interactive:hover, .ds-rich-card--interactive:focus-within) :where(.ds-rich-card__icon) {
+  border-color: color-mix(in srgb, currentColor 34%, var(--ds-color-border));
+}
+
+:where(.ds-metric-card):where(.ds-rich-card)::before {
+  background-image:
+    var(--ds-surface-card-grid-bg),
+    linear-gradient(115deg, transparent 0%, var(--ds-surface-highlight-faint) 46%, transparent 64%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 5%, transparent),
+      transparent 52%
+    );
+  background-size:
+    18px 18px,
+    18px 18px,
+    auto;
+}
+
+:where(.ds-metric-card__halo) {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent) 0%,
+    transparent 66%
+  );
+}
+
+:where(.ds-metric-card__header) {
+  margin-bottom: 10px;
+}
+
+:where(.ds-metric-card__status-dot) {
+  background: var(--ds-signal-card-accent, var(--ds-color-primary));
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 10%, transparent),
+    0 0 12px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, transparent);
+}
+
+:where(.ds-metric-card__icon) {
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 20%, var(--ds-color-border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card-bg) 84%, transparent), transparent),
+    color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 12%, var(--ds-icon-tile-bg));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, transparent);
+}
+
+:where(.ds-metric-card__trend) {
+  padding: 5px 8px;
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 13%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-surface-panel-bg) 76%, var(--ds-surface-card-bg));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 72%, transparent);
+}
+
+:where(.ds-metric-card__trend--up) {
+  border-color: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card__trend--down) {
+  border-color: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card__footer) {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+:where(.ds-metric-card__progress-meta) {
+  margin-bottom: 7px;
+}
+
+:where(.ds-metric-card__progress) {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border) 70%, transparent), color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 9%, transparent)),
+    color-mix(in srgb, var(--ds-color-border) 58%, transparent);
+  box-shadow:
+    inset 0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ds-surface-card-bg) 62%, transparent);
+}
+
+:where(.ds-metric-card__progress-bar) {
+  background: var(--ds-meter-fill);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 32%, transparent);
+}
+
+:where(.ds-metric-card__progress-bar)::after {
+  background: linear-gradient(90deg, transparent, var(--ds-surface-highlight-medium), transparent);
+}
+
+:where(.ds-metric-card__status-row) {
+  margin-top: 10px;
+}
+
+:where(.ds-metric-card__status-tag) {
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 18%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 8%, var(--ds-surface-card-bg));
+}
+
+:where(.ds-metric-card--interactive):hover {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 24%, var(--ds-color-border));
+  box-shadow: var(--ds-signal-card-shadow-hover);
+}
+
+:where(.ds-metric-card-link):focus-visible :where(.ds-metric-card) {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 42%, var(--ds-color-border));
+  box-shadow: var(--ds-signal-card-shadow-hover), var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-metric-card--interactive:hover, .ds-metric-card-link:focus-visible) :where(.ds-metric-card__icon) {
+  border-color: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 40%, var(--ds-color-border));
+}
+
+:is(.ds-command-home-console) {
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  border: 1px solid var(--ds-command-home-panel-border);
+  background-clip: padding-box;
+  background: var(--ds-command-home-console-bg);
+  box-shadow:
+    var(--ds-command-home-panel-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(.ds-command-home-hero) {
+  padding: 16px 18px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-hero-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 12px 30px color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(.ds-command-home-icon, .ds-command-home-hero__mark, .ds-command-home-message-avatar, .ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  border: 1px solid var(--ds-command-home-icon-border);
+  background: var(--ds-command-home-icon-bg);
+}
+
+:is(.ds-command-home-hero__pill) {
+  padding: 6px 10px;
+  border: 1px solid var(--ds-command-home-control-border);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-title) {
+  margin: 0;
+}
+
+:is(.ds-command-home-status-dot) {
+  background: var(--ds-color-success);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+}
+
+:is(.ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-error) {
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad, .ds-launchpad) {
+  padding: 16px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card) {
+  padding: 13px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-panel-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    0 10px 24px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='green'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='green'] .ds-command-home-capability__icon),
+:is(.ds-command-home-next-move[data-tone='green'] .ds-command-home-prompt-row__icon) {
+  border-color: color-mix(in srgb, var(--ds-color-success) 32%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='teal'] .ds-command-home-capability__icon),
+:is(.ds-command-home-next-move[data-tone='teal'] .ds-command-home-prompt-row__icon) {
+  border-color: color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 7%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon, .ds-launchpad-card[data-tone='amber'] .ds-command-home-capability__icon) {
+  border-color: color-mix(in srgb, var(--ds-color-warning) 36%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-chat-panel, .ds-ai-chat-panel) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 34px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-brief) {
+  padding: 22px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent 46%),
+    var(--ds-command-home-panel-bg);
+}
+
+:is(.ds-command-home-brief__icon) {
+  margin-block-end: 12px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-chat-stream, .ds-ai-chat-stream) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-panel-bg);
+}
+
+:is(.ds-command-home-message-avatar, .ds-ai-chat-message-avatar) {
+  margin-inline-end: 8px;
+}
+
+:is(.ds-command-home-message, .ds-ai-chat-message) {
+  padding: 12px 13px;
+  border: 1px solid var(--ds-color-border-primary);
+  box-shadow: var(--ds-shadow-xs);
+}
+
+:is(.ds-command-home-message--assistant, .ds-ai-chat-message--assistant) {
+  background: color-mix(in srgb, var(--ds-surface-card-bg) 88%, var(--ds-color-primary) 4%);
+}
+
+:is(.ds-command-home-message--user, .ds-ai-chat-message--user) {
+  background: var(--ds-color-primary);
+  border-color: color-mix(in srgb, var(--ds-color-primary) 75%, var(--ds-color-border-primary));
+}
+
+:is(.ds-command-home-tools, .ds-ai-chat-tools) {
+  margin-block-start: 8px;
+}
+
+:is(.ds-command-home-tool-call, .ds-ai-chat-tool-call) {
+  padding: 5px 7px;
+  border: 1px solid var(--ds-command-home-control-border);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-message__error, .ds-ai-chat-message__error) {
+  margin-block-start: 6px;
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row) {
+  padding: 10px 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row):hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 48%, var(--ds-color-border-primary));
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-composer, .ds-ai-composer) {
+  padding: 10px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-panel-bg-strong);
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button) {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select) {
+  padding: 6px 10px;
+}
+
+:is(.ds-command-home-icon-button, .ds-ai-icon-button) {
+  padding: 0;
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select, .ds-command-home-icon-button, .ds-ai-icon-button):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  background: var(--ds-command-home-control-hover-bg);
+}
+
+:is(.ds-command-home-send, .ds-ai-send) {
+  padding-inline: 16px;
+}
+
+:is(.ds-command-home-rail-card, .ds-rail-card) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 32px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-rail-card__badge, .ds-rail-card__badge) {
+  padding: 5px 10px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-primary));
+  background: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-surface-card-bg));
+}
+
+:is(.ds-command-home-meter, .ds-meter) {
+  background: var(--ds-command-home-meter-bg);
+}
+
+:is(.ds-command-home-meter, .ds-meter) > span {
+  background: var(--ds-command-home-meter-fill);
+}
+
+:is(.ds-command-home-next-move) {
+  padding: 11px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-next-move):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-search-lane) {
+  padding: 9px 11px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-search-lane):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-footnote) {
+  padding-inline: 4px;
+}
+
+:is(.ds-command-home-footnote__text, .ds-command-home-footnote__layer p) {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+
+  :is(.ds-command-home-console) {
+    padding: 14px;
+  }
+}
+
+.ds-command-home-shell .ds-command-home-console {
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  border: 1px solid var(--ds-command-home-panel-border);
+  background: var(--ds-command-home-console-bg);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    var(--ds-command-home-panel-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-hero,
+.ds-command-home-shell .ds-launchpad,
+.ds-command-home-shell .ds-command-home-rail-card,
+.ds-command-home-shell .ds-command-home-brief,
+.ds-command-home-shell .ds-ai-composer {
+  border: 1px solid var(--ds-command-home-panel-border);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow:
+    0 1px 2px rgba(22, 42, 67, 0.08),
+    0 12px 28px rgba(22, 42, 67, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.ds-command-home-shell .ds-command-home-hero {
+  padding: 16px 18px;
+  background: var(--ds-command-home-hero-bg);
+}
+
+.ds-command-home-shell .ds-command-home-hero__mark,
+.ds-command-home-shell .ds-command-home-capability__icon,
+.ds-command-home-shell .ds-command-home-prompt-row__icon,
+.ds-command-home-shell .ds-command-home-brief__icon,
+.ds-command-home-shell .ds-ai-chat-message-avatar {
+  border: 1px solid var(--ds-command-home-icon-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-icon-bg);
+}
+
+.ds-command-home-shell .ds-launchpad {
+  padding: 18px;
+}
+
+.ds-command-home-shell .ds-launchpad-card {
+  padding: 14px;
+  background-clip: padding-box;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-launchpad-card:hover {
+  box-shadow: var(--ds-command-home-card-shadow-hover);
+}
+
+.ds-command-home-shell .ds-launchpad-card__arrow {
+  margin-block-start: 2px;
+}
+
+.ds-command-home-shell .ds-ai-chat-panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ds-command-home-shell .ds-command-home-rail-card {
+  padding: 14px;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-brief {
+  padding: 22px;
+}
+
+.ds-command-home-shell .ds-ai-prompt-row {
+  padding: 10px 14px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-command-home-shell .ds-ai-composer {
+  padding: 12px;
+  border-color: var(--ds-command-home-panel-border);
+  background: var(--ds-command-home-panel-bg-strong);
+}
+
+.ds-command-home-shell .ds-ai-context-select,
+.ds-command-home-shell .ds-ai-icon-button {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+}
+
+.ds-command-home-shell .ds-ai-context-select {
+  padding: 6px 10px;
+}
+
+.ds-command-home-shell .ds-ai-icon-button {
+  padding: 0;
+}
+
+.ds-command-home-shell .ds-command-home-search-lane {
+  padding: 9px 11px;
+}
+
+.ds-command-home-shell .ds-command-home-next-move {
+  padding: 11px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote {
+  padding-inline: 4px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote__text,
+.ds-command-home-shell .ds-command-home-footnote__layer p {
+  margin: 0;
+}

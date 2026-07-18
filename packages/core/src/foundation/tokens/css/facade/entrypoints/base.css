@@ -57,6 +57,13 @@
 
 /* Layer 3: Engine themes */
 @import '../../runtime/engines/index.css' layer(rottay-engines);
+
+/* P-76 paint bridges. DELIBERATELY UNLAYERED (same law as the skins below):
+   the preflight-killable paint of the layered patterns/collapse bridges.
+   Imported before every skin so a contesting skin keeps winning the tie. */
+@import '../../presentation/components/patterns-paint.css';
+@import '../../runtime/bridges/collapse-paint.css';
+
 /* Modern engine skins. DELIBERATELY UNLAYERED: every `rottay-*` layer sorts
    before Tailwind's own `base` layer, whose preflight resets `button`'s
    background, radius and border. A layered skin loses to it on layer order,
@@ -475,3 +482,9 @@
 
 /* Animations (unlayered) */
 @import '../../foundation/animations/index.css';
+
+/* Personality paint + reduced-motion token neutralization. DELIBERATELY
+   UNLAYERED and imported AFTER foundation/animations: its guarded :root
+   blocks must win the source-order tie against the foundation's base
+   --ds-motion-* durations. */
+@import '../../runtime/personality-paint.css';

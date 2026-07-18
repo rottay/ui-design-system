@@ -6,9 +6,14 @@
  *
  * Targets:
  * - .ds-collapse: Token wrapper (receives CSS custom properties)
- * - .ant-collapse-*: Ant Design internal classes (Titan engine)
- * - [data-collapse-*]: DaisyUI/custom attributes (Hermes engine)
- * - Native elements: For Apollo (vanilla) engine
+ * - .ant-collapse-*: Ant Design internal classes (classic engine)
+ *
+ * This file is imported inside `rottay-components`, below a Tailwind v4
+ * host's preflight (P-76). The wrapper family's killable paint lives in
+ * collapse-paint.css, unlayered. The `.ant-*` channels here are contested by
+ * antd's unlayered cssinjs runtime and by classic theme.css in
+ * `rottay-engines`; they must stay layered (see collapse-paint.css header)
+ * and are declared residue in css-layer-paint-gate.allowlist.json.
  */
 
 /* =============================================================================
@@ -21,12 +26,7 @@
   box-sizing: border-box;
 
   /* Apply root tokens */
-  background: var(--ds-collapse-root-bg);
-  border-color: var(--ds-collapse-root-border-color);
-  border-width: var(--ds-collapse-root-border-width);
-  border-style: solid;
   border-radius: var(--ds-collapse-root-border-radius);
-  box-shadow: var(--ds-collapse-root-shadow);
 
   /* Ensure full width */
   width: 100%;
@@ -142,12 +142,6 @@
    GHOST VARIANT
    ============================================================================= */
 
-.ds-collapse--ghost {
-  background: var(--ds-collapse-root-ghost-idle-bg);
-  border: none;
-  box-shadow: none;
-}
-
 .ds-collapse--ghost .ant-collapse-header {
   background: var(--ds-collapse-header-ghost-idle-bg) !important;
   color: var(--ds-collapse-header-ghost-idle-color) !important;
@@ -176,11 +170,6 @@
 /* =============================================================================
    BORDERED VARIANT
    ============================================================================= */
-
-.ds-collapse--bordered {
-  background: var(--ds-collapse-root-bordered-idle-bg);
-  border-color: var(--ds-collapse-root-bordered-idle-border-color);
-}
 
 /* =============================================================================
    SIZE VARIANTS

@@ -1,0 +1,32 @@
+[
+  {
+    "file": "src/foundation/tokens/css/presentation/components/card.css",
+    "maxDeclarations": 2,
+    "reason": "background-image/background-size on the .ds-card::before grid overlay. Preflight's universal reset does not touch background on a non-form-control pseudo-element, so this is not part of the P-76 kill vector; the file is a token contract owned outside the CMP-01 bridge set."
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/bridges/collapse.css",
+    "maxDeclarations": 9,
+    "reason": "The .ant-collapse-* channels are contested by antd's unlayered cssinjs runtime (bundle-order-dependent) and by classic theme.css in rottay-engines; unlayering them flips the cascade in tenant contexts. They are dead-or-antd-owned under Tailwind either way. The uncontested .ds-collapse wrapper paint moved to collapse-paint.css."
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/personality.css",
+    "maxDeclarations": 11,
+    "reason": "box-shadow (never reset by preflight), scrollbar pseudo-element backgrounds and ::selection background-color (preflight's universal reset does not match these pseudo-elements), and .ant-card:hover background-color (non-form-control). Layered position is load-bearing: unlayered skins must keep beating personality (P-87). The preflight-killable card padding and divider border channels moved to personality-paint.css."
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/classic/theme.css",
+    "maxDeclarations": 386,
+    "reason": "SKN-05: the engine theme bridge is layered by architecture and known dead on border/margin/padding under Tailwind hosts; the ratified fix (name Tailwind's base layer first + fleet re-baseline) is its own scheduled work order, not a per-declaration move. Ceiling stops further growth until then."
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/modern/theme.css",
+    "maxDeclarations": 161,
+    "reason": "SKN-05: engine theme bridge, same layer-statement work order as classic/theme.css. Modern paint is being drained to unlayered skins by the WO-SKIN program; ceiling is decrease-only."
+  },
+  {
+    "file": "src/foundation/tokens/css/runtime/engines/rustic/theme.css",
+    "maxDeclarations": 174,
+    "reason": "SKN-05: engine theme bridge, same layer-statement work order as classic/theme.css. Rustic paint is being drained to unlayered skins by the WO-SKIN program; ceiling is decrease-only."
+  }
+]
