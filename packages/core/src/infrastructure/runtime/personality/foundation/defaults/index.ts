@@ -46,7 +46,10 @@ export const DEFAULT_PERSONALITY: PersonalityTokens = {
   },
   typography: {
     headingWeightBias: 'normal',
-    headingLetterSpacing: '-0.01em',
+    /* Chains the tenant-document dial (personality.css) with the historical
+       literal as fallback, so the unlayered bridge :root rule no longer
+       shadows a tenant-authored --ds-letter-spacing-heading at rest. */
+    headingLetterSpacing: 'var(--ds-letter-spacing-heading, -0.01em)',
     labelStyle: 'uppercase',
   },
   accent: {

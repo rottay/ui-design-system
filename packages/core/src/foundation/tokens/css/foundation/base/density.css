@@ -1,0 +1,35 @@
+/**
+ * Base Density Attribute Modes - Rottay Design System
+ *
+ * Container-scoped density. A data-density attribute on ANY container sets a
+ * local --ds-density-scale, inherited by descendants, so a compact rail can sit
+ * beside comfortable content without a JS factor. The spacing ramp
+ * (foundation/base/spacing.css) multiplies every step by var(--ds-density-scale,
+ * 1) at its definition site, so these three values scale the whole rhythm of the
+ * subtree they annotate.
+ *
+ * The three factors are numerically identical to the appearance density factor
+ * in the useTokens JS token graph
+ * (infrastructure/runtime/theming/composition/react/tokens/index.ts:
+ * general.density 'compact' -> 0.85, 'spacious' -> 1.15, else -> 1), which stays
+ * for its JS consumers. The css-to-js equality is pinned by
+ * tests/density-scale-parity.test.ts, so the CSS attribute path and the JS
+ * factor path can never drift.
+ *
+ * Absent attribute => --ds-density-scale unset => the ramp's calc fallback 1 =>
+ * byte-identical rendering. --ds-density-scale is produced here (and inline by
+ * resolveDensityStyleVars for JS-driven surfaces); it is never given a :root
+ * default so an annotated container always wins for its own subtree.
+ */
+
+[data-density='compact'] {
+  --ds-density-scale: 0.85;
+}
+
+[data-density='comfortable'] {
+  --ds-density-scale: 1;
+}
+
+[data-density='spacious'] {
+  --ds-density-scale: 1.15;
+}

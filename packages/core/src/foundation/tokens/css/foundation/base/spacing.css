@@ -8,38 +8,56 @@
 :root {
   /* ========================================================================
      SPACING SCALE - 4px Grid System
-     Used for margins, paddings, gaps, and any dimensional spacing
+     Used for margins, paddings, gaps, and any dimensional spacing.
+
+     Each public --ds-spacing-* step is a calc() over its literal times
+     var(--ds-density-scale, 1) — the same definition-site density axis the
+     font-size ramp uses for var(--ds-type-scale, 1). When the density axis is
+     absent the fallback 1 makes every step resolve to its literal byte-for-byte
+     (calc(1rem * 1) computes to 1rem); when a container carries
+     data-density="compact|comfortable|spacious" (foundation/base/density.css)
+     or a tenant emits --ds-density-scale (0.85-1.15) the whole ramp scales at
+     this one definition site, so every var(--ds-spacing-*) consumer — and the
+     named/layout/component aliases below that reference the ramp — scales with
+     no fleet sweep. --ds-spacing-0 stays literal 0 (scaling zero is a no-op).
+
+     NOTE: themes/default.css redefines the common steps (0-64) and wins the
+     rottay-tokens cascade (imported later); it must carry the same calc wrap
+     over its own literals for density to reach those steps — the steps only
+     defined here (7, 9, 11, 14, 28, 36, 44, 52, 56, 60, 72, 80, 96) already
+     scale from this file. The fluid ramp below is a separate opt-in axis and is
+     intentionally NOT density-wrapped.
      ======================================================================== */
   --ds-spacing-0: 0;
-  --ds-spacing-1: 0.25rem;   /* 4px */
-  --ds-spacing-2: 0.5rem;    /* 8px */
-  --ds-spacing-3: 0.75rem;   /* 12px */
-  --ds-spacing-4: 1rem;      /* 16px */
-  --ds-spacing-5: 1.25rem;   /* 20px */
-  --ds-spacing-6: 1.5rem;    /* 24px */
-  --ds-spacing-7: 1.75rem;   /* 28px */
-  --ds-spacing-8: 2rem;      /* 32px */
-  --ds-spacing-9: 2.25rem;   /* 36px */
-  --ds-spacing-10: 2.5rem;   /* 40px */
-  --ds-spacing-11: 2.75rem;  /* 44px */
-  --ds-spacing-12: 3rem;     /* 48px */
-  --ds-spacing-14: 3.5rem;   /* 56px */
-  --ds-spacing-16: 4rem;     /* 64px */
-  --ds-spacing-20: 5rem;     /* 80px */
-  --ds-spacing-24: 6rem;     /* 96px */
-  --ds-spacing-28: 7rem;     /* 112px */
-  --ds-spacing-32: 8rem;     /* 128px */
-  --ds-spacing-36: 9rem;     /* 144px */
-  --ds-spacing-40: 10rem;    /* 160px */
-  --ds-spacing-44: 11rem;    /* 176px */
-  --ds-spacing-48: 12rem;    /* 192px */
-  --ds-spacing-52: 13rem;    /* 208px */
-  --ds-spacing-56: 14rem;    /* 224px */
-  --ds-spacing-60: 15rem;    /* 240px */
-  --ds-spacing-64: 16rem;    /* 256px */
-  --ds-spacing-72: 18rem;    /* 288px */
-  --ds-spacing-80: 20rem;    /* 320px */
-  --ds-spacing-96: 24rem;    /* 384px */
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-scale, 1));   /* 4px */
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-scale, 1));    /* 8px */
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-scale, 1));   /* 12px */
+  --ds-spacing-4: calc(1rem * var(--ds-density-scale, 1));      /* 16px */
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-scale, 1));   /* 20px */
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-scale, 1));    /* 24px */
+  --ds-spacing-7: calc(1.75rem * var(--ds-density-scale, 1));   /* 28px */
+  --ds-spacing-8: calc(2rem * var(--ds-density-scale, 1));      /* 32px */
+  --ds-spacing-9: calc(2.25rem * var(--ds-density-scale, 1));   /* 36px */
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-scale, 1));   /* 40px */
+  --ds-spacing-11: calc(2.75rem * var(--ds-density-scale, 1));  /* 44px */
+  --ds-spacing-12: calc(3rem * var(--ds-density-scale, 1));     /* 48px */
+  --ds-spacing-14: calc(3.5rem * var(--ds-density-scale, 1));   /* 56px */
+  --ds-spacing-16: calc(4rem * var(--ds-density-scale, 1));     /* 64px */
+  --ds-spacing-20: calc(5rem * var(--ds-density-scale, 1));     /* 80px */
+  --ds-spacing-24: calc(6rem * var(--ds-density-scale, 1));     /* 96px */
+  --ds-spacing-28: calc(7rem * var(--ds-density-scale, 1));     /* 112px */
+  --ds-spacing-32: calc(8rem * var(--ds-density-scale, 1));     /* 128px */
+  --ds-spacing-36: calc(9rem * var(--ds-density-scale, 1));     /* 144px */
+  --ds-spacing-40: calc(10rem * var(--ds-density-scale, 1));    /* 160px */
+  --ds-spacing-44: calc(11rem * var(--ds-density-scale, 1));    /* 176px */
+  --ds-spacing-48: calc(12rem * var(--ds-density-scale, 1));    /* 192px */
+  --ds-spacing-52: calc(13rem * var(--ds-density-scale, 1));    /* 208px */
+  --ds-spacing-56: calc(14rem * var(--ds-density-scale, 1));    /* 224px */
+  --ds-spacing-60: calc(15rem * var(--ds-density-scale, 1));    /* 240px */
+  --ds-spacing-64: calc(16rem * var(--ds-density-scale, 1));    /* 256px */
+  --ds-spacing-72: calc(18rem * var(--ds-density-scale, 1));    /* 288px */
+  --ds-spacing-80: calc(20rem * var(--ds-density-scale, 1));    /* 320px */
+  --ds-spacing-96: calc(24rem * var(--ds-density-scale, 1));    /* 384px */
 
   /* ========================================================================
      NAMED SPACING - Semantic Aliases

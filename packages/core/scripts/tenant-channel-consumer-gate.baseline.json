@@ -1,0 +1,831 @@
+{
+  "_comment": "Decrease-only accepted-debt ledger for tenant visual channels with zero source consumers. A NEW dead channel (not listed here) fails tenant-channel-consumer-gate --check. Revive a channel by wiring a var()/selector consumer, or tighten this list once revived.",
+  "generatedFrom": {
+    "overrideTokens": 61,
+    "emittedChromeChannels": 639,
+    "chartSeriesChannels": 10,
+    "anatomyChannels": 0,
+    "anatomyContractPresent": false
+  },
+  "channels": {
+    "--ds-button-error-border-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-error-shadow-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-ghost-shadow-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-info-bg-active": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-info-border-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-info-shadow": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-info-shadow-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-primary-border-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-success-border-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-success-shadow-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-text-border-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-text-shadow-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-warning-border-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-button-warning-shadow-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-card-padding": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-card-padding-xl": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-card-shadow-elevated": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-collection-card-action-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-action-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-action-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-bg-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-body-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-border-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-depth": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-footer-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-footer-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-footer-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-gap": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-glass-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-grid-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-grid-line": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-grid-size": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-hover-transform": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-icon-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-icon-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-icon-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-label-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-meter-fill": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-meter-track": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-meter-track-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-min-height": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-number-font-variant": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-number-min-width": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-overlay": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-padding": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-shadow-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-sheen": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-status-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-status-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-status-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-title-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-transition": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-value-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-collection-card-value-color-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-color-dark-accent": {
+      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
+    },
+    "--ds-color-dark-bg": {
+      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
+    },
+    "--ds-color-dark-primary": {
+      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
+    },
+    "--ds-color-dark-secondary": {
+      "reason": "dark-seed override token; consumed once dual-ramp light-dark derivation lands (W4-C2 / W6)"
+    },
+    "--ds-command-font": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-command-grid-bg": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-command-grid-line-strong": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-command-letter-spacing": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-command-line": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-compact-card-action-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-action-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-action-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-bg-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-body-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-border-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-depth": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-footer-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-footer-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-footer-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-gap": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-glass-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-grid-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-grid-line": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-grid-size": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-hover-transform": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-icon-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-icon-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-icon-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-label-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-meter-fill": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-meter-track": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-meter-track-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-number-font-variant": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-number-min-width": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-overlay": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-selected-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-selected-ring": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-shadow-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-sheen": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-status-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-status-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-status-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-title-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-transition": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-value-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-compact-card-value-color-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-input-addon-border": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-input-filled-bg-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-input-search-clear-color": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-listing-grid-card-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-listing-grid-card-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-listing-grid-card-gap": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-listing-grid-card-shadow": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-listing-grid-min-compact-width": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-listing-grid-min-tall-width": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-listing-grid-selected-ring": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-listing-grid-skeleton-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-action-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-action-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-action-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-bg-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-body-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-depth": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-footer-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-footer-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-footer-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-gap": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-glass-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-grid-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-grid-line": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-grid-size": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-hover-transform": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-meter-fill-neutral": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-overlay": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-selected-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-selected-ring": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-status-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-status-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-status-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-title-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-metric-card-transition": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-shell-active-gradient": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-shell-dropdown-shadow": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-shell-shimmer-medium": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-shell-shimmer-soft": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-shell-shimmer-strong": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-sidebar-item-bg-active": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-sidebar-item-bg-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-sidebar-item-color": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-sidebar-text": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-sidebar-text-muted": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-signal-card-action-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-action-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-action-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-bg-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-depth": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-footer-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-footer-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-footer-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-gap": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-glass-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-grid-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-grid-line": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-grid-size": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-hover-transform": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-icon-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-label-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-meter-fill": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-meter-track": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-meter-track-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-min-height": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-number-font-variant": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-number-min-width": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-overlay": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-padding": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-selected-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-selected-ring": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-sheen": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-status-bg": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-status-border": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-status-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-top-line-display": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-transition": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-value-color": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-signal-card-value-color-hover": {
+      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
+    },
+    "--ds-table-action-bg": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-table-action-border": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-table-header-shadow": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-table-reorder-bg": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-table-resize-bg": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-table-resize-bg-hover": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-table-row-hover-shadow": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-table-sheen": {
+      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
+    },
+    "--ds-tall-card-action-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-action-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-action-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-bg-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-body-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-border-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-depth": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-footer-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-footer-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-footer-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-gap": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-glass-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-grid-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-grid-line": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-grid-size": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-hover-transform": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-icon-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-icon-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-icon-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-label-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-meter-fill": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-meter-track": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-meter-track-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-min-height": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-number-font-variant": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-number-min-width": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-overlay": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-padding": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-radius": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-selected-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-selected-ring": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-shadow": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-shadow-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-sheen": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-status-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-status-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-status-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-title-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-transition": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-value-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-tall-card-value-color-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-action-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-action-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-action-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-bg-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-body-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-border-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-depth": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-footer-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-footer-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-footer-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-gap": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-glass-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-grid-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-grid-line": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-grid-size": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-hover-transform": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-icon-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-icon-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-icon-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-label-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-meter-fill": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-meter-track": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-meter-track-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-min-height": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-number-font-variant": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-number-min-width": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-overlay": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-padding": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-radius": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-selected-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-selected-ring": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-shadow": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-shadow-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-sheen": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-status-bg": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-status-border": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-status-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-title-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-transition": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-value-color": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    },
+    "--ds-workspace-card-value-color-hover": {
+      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
+    }
+  }
+}

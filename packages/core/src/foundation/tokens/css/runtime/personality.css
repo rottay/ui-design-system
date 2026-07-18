@@ -18,6 +18,31 @@
  */
 
 /* ========================================================================
+   TYPOGRAPHY DIAL BRIDGE
+   Chains the personality typography namespace (the vars component skins read)
+   onto the tenant document dials, with a byte-stable literal as the last
+   fallback so absent-dial rendering is unchanged. A consumer that reads
+   --ds-typography-heading-letter-spacing therefore resolves the tenant's
+   --ds-letter-spacing-heading override when one is set and no personality
+   preset value overrides the namespace var.
+
+   SystemCssVariablesBridge writes these same namespace vars into an UNLAYERED
+   :root rule from the resolved personality tokens, so when it is mounted its
+   value wins over this layered default; these defaults govern the SSR /
+   no-JS / compiled-artifact paints and keep the dial in the resolved chain.
+   ======================================================================== */
+
+:root {
+  --ds-typography-heading-letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  --ds-typography-heading-font-weight: var(--ds-font-weight-heading, 600);
+  --ds-typography-body-letter-spacing: var(--ds-letter-spacing-body, normal);
+  --ds-typography-display-letter-spacing: var(--ds-letter-spacing-display, normal);
+  --ds-typography-heading-line-height: var(--ds-line-height-heading, 1.2);
+  --ds-typography-body-line-height: var(--ds-line-height-body, 1.6);
+  --ds-typography-display-line-height: var(--ds-line-height-display, 1);
+}
+
+/* ========================================================================
    CARD PERSONALITY
    Applies personality-driven shadow, padding, and hover to cards.
    ======================================================================== */
