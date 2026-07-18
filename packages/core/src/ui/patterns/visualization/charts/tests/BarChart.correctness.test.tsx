@@ -79,8 +79,8 @@ describe('BarChart correctness floor', () => {
       </>,
     );
 
-    const vertical = screen.getByRole('img', { name: 'Vertical signed bars' });
-    const horizontal = screen.getByRole('img', { name: 'Horizontal signed bars' });
+    const vertical = screen.getByRole('group', { name: 'Vertical signed bars' });
+    const horizontal = screen.getByRole('group', { name: 'Horizontal signed bars' });
 
     await waitFor(() => {
       expect(vertical.querySelectorAll('rect[data-part="bar"]')).toHaveLength(3);
@@ -127,7 +127,7 @@ describe('BarChart correctness floor', () => {
       />,
     );
 
-    const chart = screen.getByRole('img', { name: title });
+    const chart = screen.getByRole('group', { name: title });
     await waitFor(() => {
       expect(chart.querySelectorAll('rect[data-part="bar"]')).toHaveLength(2);
     });
@@ -169,7 +169,7 @@ describe('BarChart correctness floor', () => {
       />,
     );
 
-    const chart = screen.getByRole('img', { name: 'Overflow-safe stack' });
+    const chart = screen.getByRole('group', { name: 'Overflow-safe stack' });
     await waitFor(() => {
       expect(chart.querySelectorAll('rect[data-part="bar"]')).toHaveLength(1);
     });
@@ -193,7 +193,7 @@ describe('BarChart correctness floor', () => {
       />,
     );
 
-    const chart = screen.getByRole('img', { name: 'Duplicate series names' });
+    const chart = screen.getByRole('group', { name: 'Duplicate series names' });
     const bars = await waitFor(() => {
       const current = [...chart.querySelectorAll<SVGRectElement>('rect[data-part="bar"]')];
       expect(current).toHaveLength(2);

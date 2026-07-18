@@ -177,8 +177,14 @@ test('CK-E interactive tooltip, crosshair, sankey hover and brush selection', as
 
   const barCell = charts.locator('[data-chart-fixture="bar"]');
   await barCell.locator('[data-part="bar"]').first().hover();
-  await expect(barCell.locator('.ds-chart-tooltip[data-state="visible"]')).toHaveCount(1);
-  await expect(barCell.locator('[data-part="crosshair"][data-state="visible"]')).toHaveCount(1);
+  // W5 CLASS-R-BAR migration: the bar family now delegates to the React-owned
+  // renderer interaction model (the one system). Hovering a bar activates its
+  // mark and shows the anchored tooltip; the interaction halo replaces the
+  // retired imperative crosshair. The hover PNG re-baselines in this W8 visual
+  // session (pending-rebaseline).
+  await expect(barCell.locator('[data-part="interaction-tooltip"]')).toHaveCount(1);
+  await expect(barCell.locator('[data-part="bar-mark"][data-active="true"]')).toHaveCount(1);
+  await expect(barCell.locator('[data-part="interaction-halo"]').first()).toBeVisible();
   await expect(barCell).toHaveScreenshot('rottay-ck-e-modern-bar-hover-prestep.png');
 
   const sankeyCell = charts.locator('[data-chart-fixture="sankey"]');

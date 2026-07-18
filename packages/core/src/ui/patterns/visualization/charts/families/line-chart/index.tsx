@@ -1,10 +1,15 @@
 'use client';
 
 /**
- * @fileoverview LineChart -- D3-backed multi-series line chart supporting category, time, and
- * linear x-axis types. Uses `scalePoint` (category), `scaleTime`, or `scaleLinear` for x depending
- * on `xType`. Line paths are drawn with D3 `line()` generator and optionally filled with `area()`.
- * Animation uses the stroke-dashoffset "drawing" trick for a progressive reveal effect.
+ * @fileoverview LineChart -- compatibility family for the public LineChart
+ * contract. SVG ownership is delegated to the engine's React-owned
+ * `SvgLineRenderer` (pure `buildSvgLineGeometry` paths/scales); this adapter
+ * preserves the established family props, scaffold, accessible summary, legend,
+ * and the caller-declared lifecycle states.
+ *
+ * Live crosshair/tooltip wiring for the migrated renderers lands with the
+ * shared interaction controller (Stage C); this migration keeps the idle
+ * tooltip element so the tooltip-personality/skin contract is preserved.
  *
  * @example
  * <LineChart
@@ -17,24 +22,8 @@
  * />
  */
 
-import { memo, useEffect, useId, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
-import {
-  area,
-  axisBottom,
-  axisLeft,
-  curveLinear,
-  curveMonotoneX,
-  curveStepAfter,
-  line,
-  scaleLinear,
-  scalePoint,
-  scaleTime,
-  select,
-  type ScaleLinear,
-  type ScalePoint,
-  type ScaleTime,
-} from 'd3';
 
 import type {
   ChartBaseProps,
@@ -44,13 +33,19 @@ import type {
   ChartCompactProps,
   ChartLegendProps,
   ChartMarginProps,
+  ChartStateProps,
   Series,
 } from '../../contracts';
-import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../../runtime';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
-import { ChartTooltip, TooltipSeries } from '../../presentation/tooltip';
-import { createChartCrosshair, nearestIndexByPixel, plotLocalPointerPosition, pointerToContainerPosition } from '../../presentation/crosshair';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
+import { ChartTooltip } from '../../presentation/tooltip';
+import type {
+  SvgLineCurve,
+  SvgLineSeries,
+  SvgLineXType,
+  SvgLineXValue,
+} from '../../runtime/chart-engine/foundation/renderers/geometry';
+import { SvgLineRenderer } from '../../runtime/chart-engine/presentation/react/renderers/line';
 
 type LinePoint = Series['data'][number];
 const FALLBACK_LINE_COLOR = 'var(--ds-color-primary)';
@@ -66,7 +61,7 @@ function timeValue(value: LinePoint['x']): number | null {
   return Number.isFinite(timestamp) ? timestamp : null;
 }
 
-function validPoint(point: LinePoint, xType: LineChartProps['xType']): boolean {
+function validPoint(point: LinePoint, xType: SvgLineXType): boolean {
   if (!Number.isFinite(point.y)) return false;
   if (xType === 'time') return timeValue(point.x) !== null;
   if (xType === 'linear') return typeof point.x === 'number' && Number.isFinite(point.x);
@@ -75,35 +70,19 @@ function validPoint(point: LinePoint, xType: LineChartProps['xType']): boolean {
   return typeof point.x === 'string';
 }
 
-function sameXValue(
-  left: LinePoint['x'],
-  right: LinePoint['x'],
-  xType: LineChartProps['xType'],
-): boolean {
-  if (xType === 'time') return timeValue(left) === timeValue(right);
-  if (xType === 'linear') return left === right;
-  return String(left) === String(right);
+/**
+ * Renderer x-values are `string | number`; a category label is stringified, a
+ * time value collapses a `Date` to its epoch millis (the pure geometry parses
+ * epoch numbers and ISO strings), and a linear value stays numeric.
+ */
+function rendererX(value: LinePoint['x'], xType: SvgLineXType): SvgLineXValue {
+  if (xType === 'time') return value instanceof Date ? value.getTime() : (value as string | number);
+  if (xType === 'linear') return typeof value === 'number' ? value : Number(value);
+  return String(value);
 }
 
-function expandedDomain(minimum: number, maximum: number): [number, number] {
-  if (minimum !== maximum) return [minimum, maximum];
-  const delta = Math.max(Math.abs(minimum) * 0.01, 1);
-  const lower = minimum - delta;
-  const upper = maximum + delta;
-  if (Number.isFinite(lower) && Number.isFinite(upper) && lower < upper) return [lower, upper];
-  if (minimum > 0) return [0, minimum];
-  if (minimum < 0) return [minimum, 0];
-  return [-1, 1];
-}
-
-function zeroAnchoredDomain(values: number[]): [number, number] {
-  const minimum = Math.min(0, ...values);
-  const maximum = Math.max(0, ...values);
-  return expandedDomain(minimum, maximum);
-}
-
-/** Props for the {@link LineChart} component. */
-export interface LineChartProps
+/** Own props for the {@link LineChart} component (state copy is composed below). */
+interface LineChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartColorsProps,
@@ -116,14 +95,18 @@ export interface LineChartProps
   showArea?: boolean;
   xAxisLabel?: string;
   yAxisLabel?: string;
-  xType?: 'category' | 'time' | 'linear';
+  xType?: SvgLineXType;
 }
 
+/** Props for the {@link LineChart} component. */
+export type LineChartProps = LineChartOwnProps & ChartStateProps;
+
 /**
- * Renders a multi-series line chart with optional area fill and interactive dots.
+ * Renders a multi-series line chart through the engine's pure-geometry line
+ * renderer, with optional area fill and data-point markers.
  *
  * @param props - See {@link LineChartProps} for the full option set.
- * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ * @returns A `ChartScaffold`-wrapped renderer with accessible summary table and optional legend.
  */
 export const LineChart = memo(function LineChart({
   series,
@@ -138,6 +121,13 @@ export const LineChart = memo(function LineChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = true,
@@ -146,27 +136,46 @@ export const LineChart = memo(function LineChart({
   colors,
   colorScheme,
   tooltip,
-  margin = DEFAULT_MARGIN,
   compact,
   compactMode,
   autoCompact,
   compactBreakpoint,
 }: LineChartProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const gradientScope = useId().replace(/[^a-zA-Z0-9_-]/g, '');
-  const { containerRef, dimensions } = useChartDimensions(width, height);
+  const scaffoldRef = useRef<HTMLDivElement>(null);
+  const legacySvgRef = useRef<SVGSVGElement>(null);
+  const { dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
-  const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
-  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
-  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
-  const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
+  // The idle tooltip element preserves the tooltip-personality/skin contract.
+  // Live crosshair wiring for the migrated renderers lands with the shared
+  // interaction controller (Stage C), not this migration.
+  const { tooltipProps } = useChartTooltip();
+
   const finiteSeries = useMemo(() => series.map((currentSeries) => ({
     ...currentSeries,
     data: currentSeries.data.filter((point) => validPoint(point, xType)),
   })), [series, xType]);
   const pointCount = finiteSeries.reduce((count, currentSeries) => count + currentSeries.data.length, 0);
+
+  const resolvedCurve: SvgLineCurve = chartPersonality.lineMode === 'step'
+    ? 'step'
+    : chartPersonality.curved
+      ? 'smooth'
+      : 'linear';
+
+  const rendererSeries = useMemo<SvgLineSeries[]>(() => finiteSeries.map((currentSeries, seriesIndex) => ({
+    id: `series-${seriesIndex}`,
+    label: currentSeries.name,
+    color: currentSeries.color ?? lineColor(palette, seriesIndex),
+    points: currentSeries.data.map((point, pointIndex) => ({
+      id: `point-${pointIndex}`,
+      x: rendererX(point.x, xType),
+      value: point.y,
+      xLabel: String(point.x),
+    })),
+  })), [finiteSeries, palette, xType]);
+
   const summary = {
     caption: title ? `${title} data summary` : 'Line chart data summary',
     headers: ['Series', 'X', 'Y'],
@@ -174,6 +183,7 @@ export const LineChart = memo(function LineChart({
       currentSeries.data.map((point) => [currentSeries.name, String(point.x), point.y])
     ),
   };
+
   const legendNode = legend ? (
     <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
       {finiteSeries.map((s, i) => (
@@ -185,317 +195,75 @@ export const LineChart = memo(function LineChart({
     </div>
   ) : null;
 
-  useEffect(() => {
-    const svgNode = svgRef.current;
-    if (!svgNode) return;
-
-    const svg = select(svgNode);
-    svg.selectAll('*').interrupt().remove();
-
-    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
-    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
-    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
-
-    const allPoints = finiteSeries.flatMap((currentSeries) => currentSeries.data);
-    const innerWidth = Math.max(0, safeChartWidth - margin.left - margin.right);
-    const innerHeight = Math.max(0, safeChartHeight - margin.top - margin.bottom);
-    if (allPoints.length === 0 || innerWidth === 0 || innerHeight === 0) {
-      hideTooltip();
-      return;
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: pointCount,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm.
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
     }
-
-    const g = svg
-      .append('g')
-      .attr('data-part', 'plot-area')
-      .attr('data-x-type', xType)
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // X scale -- the type union is necessary because D3's scale factories return
-    // incompatible types; the helper `getX` below unifies access with type guards.
-    let x: ScalePoint<string> | ScaleTime<number, number> | ScaleLinear<number, number>;
-
-    if (xType === 'time') {
-      const timestamps = allPoints.map((point) => timeValue(point.x) as number);
-      const [minimum, maximum] = expandedDomain(Math.min(...timestamps), Math.max(...timestamps));
-      x = scaleTime()
-        .domain([new Date(minimum), new Date(maximum)])
-        .range([0, innerWidth]);
-    } else if (xType === 'linear') {
-      const xValues = allPoints.map((point) => point.x as number);
-      x = scaleLinear()
-        .domain(expandedDomain(Math.min(...xValues), Math.max(...xValues)))
-        .range([0, innerWidth]);
-    } else {
-      const categories = [...new Set(allPoints.map((d) => String(d.x)))];
-      x = scalePoint().domain(categories).range([0, innerWidth]);
-    }
-
-    const y = scaleLinear()
-      .domain(zeroAnchoredDomain(allPoints.map((point) => point.y)))
-      .nice()
-      .range([innerHeight, 0]);
-
-    // Grid
-    g.append('g')
-      .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
-      .selectAll('line')
-      .attr('data-part', 'grid-line')
-      .style('stroke-opacity', 0.5);
-    const domainEl = g.selectAll('.domain').node();
-    if (domainEl) select(domainEl).remove();
-
-    // Axes
-    g.append('g')
-      .attr('transform', `translate(0,${innerHeight})`)
-      .call(axisBottom(x as any).ticks(tickCount))
-      .selectAll('text')
-      .attr('data-part', 'axis-tick-label')
-      .style('font-size', '12px');
-
-    g.append('g')
-      .call(axisLeft(y).ticks(tickCount))
-      .selectAll('text')
-      .attr('data-part', 'axis-tick-label')
-      .style('font-size', '12px');
-
-    // Polymorphic accessor that narrows the scale type so each data point is
-    // projected through the correct scale without casting at every call site.
-    const getX = (d: (typeof allPoints)[0]): number => {
-      if (xType === 'time') return (x as ScaleTime<number, number>)(new Date(d.x as string | number | Date));
-      if (xType === 'linear') return (x as ScaleLinear<number, number>)(d.x as number);
-      return (x as ScalePoint<string>)(String(d.x)) ?? 0;
-    };
-
-    // Curve selection is personality-driven: "step" for discrete status charts,
-    // monotoneX for smooth data with guaranteed no overshoot, linear as default.
-    const curveType =
-      chartPersonality.lineMode === 'step'
-        ? curveStepAfter
-        : chartPersonality.curved
-          ? curveMonotoneX
-          : curveLinear;
-
-    // Each series is rendered as its own path (not a single multi-path) so that
-    // individual stroke colors, area fills, and tooltip dot sets stay independent.
-    finiteSeries.forEach((s, i) => {
-      if (s.data.length === 0) return;
-      const color = s.color ?? lineColor(palette, i);
-      const gradientId = `line-chart-${gradientScope}-area-${i}`;
-
-      // Area fill: when gradient mode is active, a top-to-bottom linearGradient
-      // fades from 32% opacity to 4%, giving depth without obscuring grid lines.
-      if (showArea) {
-        if (chartPersonality.useGradientFill) {
-          const gradient = svg
-            .append('defs')
-            .append('linearGradient')
-            .attr('id', gradientId)
-            .attr('x1', '0%')
-            .attr('y1', '0%')
-            .attr('x2', '0%')
-            .attr('y2', '100%');
-
-          gradient
-            .append('stop')
-            .attr('data-part', 'gradient-stop')
-            .attr('offset', '0%')
-            .attr('stop-color', color)
-            .attr('stop-opacity', 0.32);
-
-          gradient
-            .append('stop')
-            .attr('data-part', 'gradient-stop')
-            .attr('offset', '100%')
-            .attr('stop-color', color)
-            .attr('stop-opacity', 0.04);
-        }
-
-        const lineArea = area<(typeof s.data)[0]>()
-          .x((d) => getX(d))
-          .y0(y(0))
-          .y1((d) => y(d.y))
-          .curve(curveType);
-
-        g.append('path')
-          .datum(s.data)
-          .attr('data-part', 'area')
-          .attr('fill', chartPersonality.useGradientFill ? `url(#${gradientId})` : color)
-          .attr('fill-opacity', chartPersonality.useGradientFill ? 1 : 0.15)
-          .attr('d', lineArea);
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
       }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      };
 
-      // Line
-      const linePath = line<(typeof s.data)[0]>()
-        .x((d) => getX(d))
-        .y((d) => y(d.y))
-        .curve(curveType);
-
-      const path = g
-        .append('path')
-        .datum(s.data)
-        .attr('data-part', 'series-line')
-        .attr('fill', 'none')
-        .attr('stroke', color)
-        .attr('stroke-width', 2)
-        .attr('d', linePath);
-
-      // "Drawing" animation using the stroke-dashoffset trick: start with the
-      // entire path hidden behind a dash gap, then animate the offset to zero.
-      // getTotalLength guard handles JSDOM/test environments where SVG methods
-      // may not exist.
-      if (chartPersonality.animate) {
-        const pathNode = path.node() as SVGPathElement | null;
-        const totalLength =
-          pathNode && typeof pathNode.getTotalLength === 'function'
-            ? pathNode.getTotalLength()
-            : 0;
-
-        if (totalLength > 0) {
-          path
-            .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
-            .attr('stroke-dashoffset', totalLength)
-            .transition()
-            .duration(chartPersonality.animationDuration)
-            .attr('stroke-dashoffset', 0);
-        }
-      }
-
-      // Dots
-      if (chartPersonality.showDots) {
-        g
-          .selectAll(`.dot-${i}`)
-          .data(s.data)
-          .enter()
-          .append('circle')
-          .attr('data-part', 'series-point')
-          .attr('cx', (d) => getX(d))
-          .attr('cy', (d) => y(d.y))
-          .attr('r', 4)
-          .attr('fill', color)
-          .attr('stroke-width', 2);
-      }
-    });
-
-    // Unified crosshair + tooltip: one full-plot hit target tracks the mouse,
-    // snaps to the nearest x (category tick, or nearest point's x in time/
-    // linear mode), and shows every series' value at that x -- replacing the
-    // per-dot native <title> tooltip so hover feedback is consistent with
-    // every other chart in the family.
-    if (chartPersonality.tooltip) {
-      const crosshair = createChartCrosshair(g, innerWidth, innerHeight);
-      const snapCandidates: Array<{ value: string | number | Date; px: number }> =
-        xType === 'category'
-          ? (x as ScalePoint<string>).domain().map((cat) => ({ value: cat, px: (x as ScalePoint<string>)(cat) ?? 0 }))
-          : allPoints.map((d) => ({ value: d.x, px: getX(d) }));
-
-      g.append('rect')
-        .attr('class', 'chart-hover-overlay')
-        .attr('data-part', 'interaction-overlay')
-        .attr('width', innerWidth)
-        .attr('height', innerHeight)
-        .style('pointer-events', 'all')
-        .on('mousemove', (event: MouseEvent) => {
-          const local = plotLocalPointerPosition(event, svgRef.current, margin);
-          if (!local) return;
-          const idx = nearestIndexByPixel(local.x, snapCandidates.map((c) => c.px));
-          const snapped = arrayValueAt(snapCandidates, idx);
-          if (!snapped) return;
-
-          const focusPoints: Array<{ y: number; color: string }> = [];
-          const rows: Array<{ name: string; value: number; color: string }> = [];
-          finiteSeries.forEach((s, i) => {
-            const color = s.color ?? lineColor(palette, i);
-            const match = s.data.find((d) => sameXValue(d.x, snapped.value, xType));
-            if (!match) return;
-            focusPoints.push({ y: y(match.y), color });
-            rows.push({ name: s.name, value: match.y, color });
-          });
-
-          if (rows.length === 0) {
-            crosshair.hide();
-            hideTooltip();
-            return;
-          }
-
-          crosshair.show(snapped.px, focusPoints, focusPoints.length === 1 ? focusPoints[0].y : undefined);
-
-          const pos = pointerToContainerPosition(event, containerRef.current);
-          if (!pos) return;
-          showTooltip(
-            pos.x,
-            pos.y,
-            <TooltipSeries
-              title={compactState.compactTooltip ? undefined : String(snapped.value)}
-              items={rows.map((row) => ({ name: compactState.compactTooltip ? '' : row.name, value: row.value, color: row.color }))}
-            />
-          );
-        })
-        .on('mouseleave', () => {
-          crosshair.hide();
-          hideTooltip();
-        });
-    }
-
-    // Axis labels
-    if (xAxisLabel) {
-      svg
-        .append('text')
-        .attr('data-part', 'axis-label')
-        .attr('data-axis', 'x')
-        .attr('x', safeChartWidth / 2)
-        .attr('y', safeChartHeight - 4)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
-        .text(xAxisLabel);
-    }
-
-    if (yAxisLabel) {
-      svg
-        .append('text')
-        .attr('data-part', 'axis-label')
-        .attr('data-axis', 'y')
-        .attr('transform', 'rotate(-90)')
-        .attr('x', -safeChartHeight / 2)
-        .attr('y', 14)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
-        .text(yAxisLabel);
-    }
-
-    svg.selectAll('.domain').attr('data-part', 'axis-domain');
-    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-
-    // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
-    // above), which would otherwise leave a stale React-side tooltip pointing at
-    // removed nodes.
-    return () => {
-      svg.selectAll('*').interrupt();
-      hideTooltip();
-    };
-  }, [finiteSeries, chartWidth, chartHeight, showArea, xType, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip, gradientScope]);
+  const description = describeChart('Line chart', pointCount, subtitle, [
+    xAxisLabel ? `X axis: ${xAxisLabel}.` : null,
+    yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
+  ].filter(Boolean).join(' '));
 
   return (
     <ChartScaffold
-      containerRef={containerRef}
-      svgRef={svgRef}
+      containerRef={scaffoldRef}
+      svgRef={legacySvgRef}
       width={width}
       height={height}
       className={['ds-chart-line', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Line chart'}
-      ariaDescription={describeChart('Line chart', pointCount, subtitle, [
-        xAxisLabel ? `X axis: ${xAxisLabel}.` : null,
-        yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
-      ].filter(Boolean).join(' '))}
+      ariaDescription={description}
       summary={summary}
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
       overlay={<ChartTooltip {...tooltipProps} variant={chartPersonality.tooltipStyle} />}
+      plot={({ descriptionId }) => (
+        <SvgLineRenderer
+          series={rendererSeries}
+          ariaLabel={title ?? 'Line chart'}
+          ariaDescribedBy={descriptionId}
+          width={typeof width === 'number' ? width : undefined}
+          height={height}
+          responsive={responsive}
+          xType={xType}
+          curve={resolvedCurve}
+          showArea={showArea}
+          showDots={chartPersonality.showDots}
+          {...(xAxisLabel === undefined ? {} : { xLabel: xAxisLabel })}
+          {...(yAxisLabel === undefined ? {} : { yLabel: yAxisLabel })}
+        />
+      )}
     />
   );
 });

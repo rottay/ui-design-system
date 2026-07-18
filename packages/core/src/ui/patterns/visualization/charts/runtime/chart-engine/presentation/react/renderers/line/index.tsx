@@ -36,6 +36,8 @@ export interface SvgLineRendererProps {
   readonly series: readonly SvgLineSeries[];
   readonly ariaLabel: string;
   readonly ariaDescription?: string;
+  /** ID of family- or app-owned extended description content. */
+  readonly ariaDescribedBy?: string;
   readonly width?: number;
   readonly height?: number;
   /** Recompute geometry from the container width. Defaults to true. */
@@ -46,6 +48,9 @@ export interface SvgLineRendererProps {
   readonly showDots?: boolean;
   readonly insets?: ChartGeometryInsets;
   readonly maxTicks?: number;
+  /** Optional axis captions rendered outside the plot rect. */
+  readonly xLabel?: string;
+  readonly yLabel?: string;
   /** Static, app-authored annotation specs. */
   readonly insights?: readonly ChartInsightSpec[];
   readonly interaction?: ChartInteraction<SvgLineInteractionDatum>;
@@ -58,6 +63,7 @@ export function SvgLineRenderer({
   series,
   ariaLabel,
   ariaDescription,
+  ariaDescribedBy,
   width = 640,
   height = 360,
   responsive = true,
@@ -67,6 +73,8 @@ export function SvgLineRenderer({
   showDots,
   insets,
   maxTicks,
+  xLabel,
+  yLabel,
   insights,
   interaction,
   className,
@@ -191,6 +199,7 @@ export function SvgLineRenderer({
       rendererId="svg.line"
       ariaLabel={ariaLabel}
       ariaDescription={ariaDescription}
+      {...(ariaDescribedBy === undefined ? {} : { ariaDescribedBy })}
       width={geometry.width}
       height={geometry.height}
       responsive={responsive}
@@ -260,7 +269,7 @@ export function SvgLineRenderer({
         {geometry.series.map((currentSeries, seriesIndex) => {
           const paintStyle: ChartPaintStyle = {
             '--ds-chart-mark-color': currentSeries.seriesColor
-              ?? `var(--ds-chart-series-${(seriesIndex % 10) + 1}, var(--ds-color-primary))`,
+              ?? `var(--ds-chart-paint-${(seriesIndex % 10) + 1}, var(--ds-color-primary))`,
           };
 
           return (
@@ -351,6 +360,31 @@ export function SvgLineRenderer({
           );
         })}
       </g>
+      {xLabel ? (
+        <text
+          data-part="axis-label"
+          data-axis="x"
+          x={geometry.width / 2}
+          y={geometry.height - 4}
+          textAnchor="middle"
+          aria-hidden="true"
+        >
+          {xLabel}
+        </text>
+      ) : null}
+      {yLabel ? (
+        <text
+          data-part="axis-label"
+          data-axis="y"
+          transform="rotate(-90)"
+          x={-geometry.height / 2}
+          y={14}
+          textAnchor="middle"
+          aria-hidden="true"
+        >
+          {yLabel}
+        </text>
+      ) : null}
       <ChartInsightLayer
         insights={insights}
         plot={geometry.plot}

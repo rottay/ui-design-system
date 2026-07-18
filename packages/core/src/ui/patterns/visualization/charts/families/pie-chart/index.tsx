@@ -1,10 +1,17 @@
 'use client';
 
 /**
- * @fileoverview PieChart -- D3-backed pie/donut chart using `d3.pie()` and `d3.arc()` generators.
- * Supports donut mode via configurable inner radius ratio, percentage or label display inside
- * slices, and a clockwise "unfurl" animation powered by `d3.interpolate` on arc angles.
- * Slice order is preserved (not sorted by value) for predictable colour assignment.
+ * @fileoverview PieChart -- compatibility family for the public PieChart
+ * contract. SVG ownership is delegated to the engine's React-owned
+ * `SvgPieRenderer` (pure `buildSvgPieGeometry` arcs); this adapter preserves
+ * the established family props, scaffold, accessible summary, legend, and the
+ * INVALID-DATA fallback overlay.
+ *
+ * Three feedback semantics coexist (see scaffold JSDoc):
+ * - `state='loading'|'empty'|'error'` -- caller-declared lifecycle (typed copy).
+ * - `data-fallback` overlay -- the family-computed invalid/zero-data semantic
+ *   (negative, NaN, or no positive total): the renderer is not mounted, so no
+ *   stale marks paint beneath the message (the `canRender` guard).
  *
  * @example
  * <PieChart
@@ -20,8 +27,7 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
-import { arc, interpolate, pie, select, type PieArcDatum } from 'd3';
+import { memo, useMemo, useRef } from 'react';
 
 import type {
   ChartBaseProps,
@@ -30,13 +36,19 @@ import type {
   ChartCompactProps,
   ChartLegendProps,
   ChartSeriesLabelCompactConfig,
+  ChartStateProps,
   DataPoint,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
-import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
+import {
+  buildSvgPieGeometry,
+  type SvgPieDatum,
+} from '../../runtime/chart-engine/foundation/renderers/geometry';
+import { SvgPieRenderer } from '../../runtime/chart-engine/presentation/react/renderers/pie';
 
-/** Props for the {@link PieChart} component. */
-export interface PieChartProps
+/** Own props for the {@link PieChart} component (state copy is composed below). */
+interface PieChartOwnProps
   extends ChartBaseProps,
     ChartLegendProps,
     ChartColorsProps,
@@ -49,11 +61,14 @@ export interface PieChartProps
   showPercentage?: boolean;
 }
 
+/** Props for the {@link PieChart} component. */
+export type PieChartProps = PieChartOwnProps & ChartStateProps;
+
 /**
- * Renders a pie or donut chart using D3's `pie()` + `arc()` generators.
+ * Renders a pie or donut chart through the engine's pure-geometry pie renderer.
  *
  * @param props - See {@link PieChartProps} for the full option set.
- * @returns A `ChartScaffold`-wrapped SVG with accessible summary table and optional legend.
+ * @returns A `ChartScaffold`-wrapped renderer with accessible summary table and optional legend.
  */
 export const PieChart = memo(function PieChart({
   data,
@@ -66,6 +81,13 @@ export const PieChart = memo(function PieChart({
   className,
   style,
   loading = false,
+  state,
+  emptyLabel,
+  emptyDescription,
+  emptyAction,
+  errorLabel,
+  errorDescription,
+  errorAction,
   title,
   subtitle,
   legend = true,
@@ -79,13 +101,13 @@ export const PieChart = memo(function PieChart({
   autoCompact,
   compactBreakpoint,
 }: PieChartProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
+  const scaffoldRef = useRef<HTMLDivElement>(null);
+  const legacySvgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
-  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
-  const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
+
   const hasInvalidValue = data.some((item) => !Number.isFinite(item.value));
   const hasNegativeValue = data.some((item) => item.value < 0);
   const rawTotal = hasInvalidValue || hasNegativeValue
@@ -105,7 +127,8 @@ export const PieChart = memo(function PieChart({
             ? 'Pie chart has no positive values.'
             : null;
   const canRender = fallbackMessage === null;
-  const summary = {
+
+  const summary = useMemo(() => ({
     caption: title ? `${title} data summary` : 'Pie chart data summary',
     headers: ['Label', 'Value', 'Percentage'],
     rows: data.map((item) => [
@@ -113,11 +136,28 @@ export const PieChart = memo(function PieChart({
       Number.isFinite(item.value) ? item.value : 'Invalid',
       canRender ? `${((item.value / total) * 100).toFixed(1)}%` : '0%',
     ]),
-  };
+  }), [canRender, data, total, title]);
+
+  // Renderer datum: a category label shown inside slices maps to `valueLabel`
+  // when percentages are off, so the pure renderer keeps the historic label
+  // choice without owning family copy. Ids are index-scoped to stay unique even
+  // when two categories share a display label.
+  const rendererData = useMemo<SvgPieDatum[]>(
+    () => data.map((item, index) => ({
+      id: `pie-slice-${index}`,
+      label: item.label,
+      value: item.value,
+      ...(showPercentage ? {} : { valueLabel: item.label }),
+    })),
+    [data, showPercentage],
+  );
+
+  const showSliceLabels = showLabels && !compactState.hideSeriesLabels;
+
   const legendNode = legend && canRender ? (
     <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
       {data.map((d, i) => (
-        <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
+        <div key={`${d.label}-${i}`} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
           <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
           <span data-part="legend-label">{d.label}</span>
         </div>
@@ -125,135 +165,57 @@ export const PieChart = memo(function PieChart({
     </div>
   ) : null;
 
-  useEffect(() => {
-    if (!svgRef.current) return;
-
-    const svg = select(svgRef.current);
-    svg.selectAll('*').interrupt();
-    svg.selectAll('*').remove();
-    svg.attr('width', chartWidth).attr('height', chartHeight);
-
-    if (!canRender) {
-      return () => {
-        svg.selectAll('*').interrupt();
+  const resolvedState = resolveChartScaffoldState({
+    state,
+    loading,
+    dataCount: data.length,
+    emptyLabel,
+  });
+  // Rebuild the discriminated state contract from the resolved state so the
+  // typed-required copy correlates with the active arm (runtime guarantees the
+  // label exists whenever the resolver returns 'empty'/'error').
+  const stateProps: ChartStateProps = resolvedState === 'error'
+    ? {
+      state: 'error',
+      errorLabel: errorLabel ?? '',
+      ...(errorDescription === undefined ? {} : { errorDescription }),
+      ...(errorAction === undefined ? {} : { errorAction }),
+    }
+    : resolvedState === 'empty'
+      ? {
+        state: 'empty',
+        emptyLabel: emptyLabel ?? '',
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
+      }
+      : {
+        state: resolvedState,
+        ...(emptyLabel === undefined ? {} : { emptyLabel }),
+        ...(emptyDescription === undefined ? {} : { emptyDescription }),
+        ...(emptyAction === undefined ? {} : { emptyAction }),
       };
-    }
 
-    // The outer radius is derived from the smallest dimension so the chart
-    // stays circular even in non-square containers; 20px padding prevents clipping.
-    const radius = Math.max(1, Math.min(chartWidth, chartHeight) / 2 - 20);
-    // When donut mode is off, inner=0 produces a full pie. In donut mode the
-    // innerRadius prop is a ratio (0-1) of the outer radius.
-    const safeInnerRadius = Number.isFinite(innerRadius)
-      ? Math.min(1, Math.max(0, innerRadius))
-      : 0.6;
-    const inner = donut ? radius * safeInnerRadius : 0;
-
-    const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
-      .append('g')
-      .attr('data-part', 'plot-area')
-      .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
-
-    // sort(null) preserves the data's original order rather than sorting by
-    // value, which keeps the slice arrangement predictable for the consumer.
-    const pieGenerator = pie<DataPoint>()
-      .value((d) => d.value)
-      .sort(null);
-
-    const arcGenerator = arc<PieArcDatum<DataPoint>>()
-      .innerRadius(inner)
-      .outerRadius(radius);
-
-    // labelArc uses a collapsed radius (inner == outer) at 70% of the full
-    // radius so `.centroid()` returns the midpoint along that ring -- this
-    // places text labels at a readable position inside or over the slices.
-    const labelArc = arc<PieArcDatum<DataPoint>>()
-      .innerRadius(radius * 0.7)
-      .outerRadius(radius * 0.7);
-
-    const slices = g
-      .selectAll('.slice')
-      .data(pieGenerator(data))
-      .enter()
-      .append('g')
-      .attr('class', 'slice')
-      .attr('data-part', 'slice');
-
-    const paths = slices
-      .append('path')
-      .attr('data-part', 'slice-surface')
-      .attr('data-variant', donut ? 'donut' : 'pie')
-      .attr('fill', (d, i) => d.data.color ?? palette[i % palette.length])
-      .attr('stroke-width', 2);
-
-    if (chartPersonality.tooltip) {
-      paths.append('title').text((d) => {
-        if (compactState.compactTooltip) {
-          return String(d.data.value);
-        }
-        const pct = ((d.data.value / total) * 100).toFixed(1);
-        return `${d.data.label}: ${d.data.value} (${pct}%)`;
-      });
-    }
-
-    // attrTween interpolates from a zero-area arc (0,0) to each slice's final
-    // angles, producing a clockwise "unfurl" animation around the centre.
-    if (chartPersonality.animate) {
-      paths
-        .transition()
-        .duration(chartPersonality.animationDuration)
-        .attrTween('d', (d) => {
-          const interpolateArc = interpolate({ startAngle: 0, endAngle: 0 }, d);
-          return (t) => arcGenerator(interpolateArc(t) as PieArcDatum<DataPoint>) ?? '';
-        });
-    } else {
-      paths.attr('d', arcGenerator);
-    }
-
-    // Labels (hidden when compact mode has hideSeriesLabels active)
-    if (showLabels && !compactState.hideSeriesLabels) {
-      slices
-        .append('text')
-        .attr('data-part', 'slice-label')
-        .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .style('font-size', '11px')
-        .style('pointer-events', 'none')
-        .text((d) => {
-          if (showPercentage) {
-            return `${((d.data.value / total) * 100).toFixed(0)}%`;
-          }
-          return d.data.label;
-        });
-    }
-
-    return () => {
-      svg.selectAll('*').interrupt();
-    };
-  }, [data, chartWidth, chartHeight, donut, innerRadius, showLabels, showPercentage, chartPersonality, palette, compactState.compactTooltip, compactState.hideSeriesLabels, canRender, total]);
+  const description = describeChart(
+    'Pie chart',
+    data.length,
+    subtitle,
+    [donut ? 'Rendered as a donut chart.' : null, fallbackMessage].filter(Boolean).join(' ') || undefined,
+  );
 
   return (
     <ChartScaffold
       containerRef={containerRef}
-      svgRef={svgRef}
+      svgRef={legacySvgRef}
       width={width}
       height={height}
       className={['ds-chart-pie', className].filter(Boolean).join(' ')}
       style={style}
-      loading={loading}
+      {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Pie chart'}
-      ariaDescription={describeChart(
-        'Pie chart',
-        data.length,
-        subtitle,
-        [donut ? 'Rendered as a donut chart.' : null, fallbackMessage].filter(Boolean).join(' ') || undefined,
-      )}
+      ariaDescription={description}
       summary={summary}
       legend={legendNode}
       hideLegend={compactState.hideLegend}
@@ -276,6 +238,19 @@ export const PieChart = memo(function PieChart({
           {fallbackMessage}
         </div>
       ) : null}
+      plot={canRender ? (() => (
+        <SvgPieRenderer
+          data={rendererData}
+          ariaLabel={title ?? 'Pie chart'}
+          width={typeof width === 'number' ? width : undefined}
+          height={compactState.isCompact ? Math.max(height, compactState.minHeight) : height}
+          responsive={responsive}
+          variant={donut ? 'donut' : 'pie'}
+          {...(donut ? { innerRadiusRatio: Number.isFinite(innerRadius) ? Math.min(1, Math.max(0, innerRadius)) : 0.6 } : {})}
+          showLabels={showSliceLabels}
+          labelPercentageThreshold={0}
+        />
+      )) : undefined}
     />
   );
 });

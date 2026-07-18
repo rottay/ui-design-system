@@ -10,8 +10,13 @@ import { useChartInteraction } from '../../../../runtime/interaction/controller'
 import { useChartDimensions } from '../../../../runtime/dimensions';
 import {
   buildSvgBarGeometry,
+  buildSvgBarSeriesGeometry,
   type ChartGeometryInsets,
   type SvgBarDatum,
+  type SvgBarGeometryDatum,
+  type SvgBarLayout,
+  type SvgBarSeriesGeometryDatum,
+  type SvgBarSeriesInput,
 } from '../../../../foundation/renderers/geometry';
 import { ChartRendererSurface } from '..';
 
@@ -19,10 +24,20 @@ type ChartPaintStyle = CSSProperties & {
   '--ds-chart-mark-color'?: string;
 };
 
+/** A resolved bar mark: single-series data or a series-layout bar share this shape. */
+type BarMark = SvgBarGeometryDatum & Partial<Pick<SvgBarSeriesGeometryDatum, 'seriesIndex' | 'seriesLabel' | 'isTopOfStack'>>;
+
 export interface SvgBarRendererProps {
-  readonly data: readonly SvgBarDatum[];
+  /** Single-series data. Ignored when {@link series} is provided. */
+  readonly data?: readonly SvgBarDatum[];
+  /** Multi-series data for grouped or stacked layouts. */
+  readonly series?: readonly SvgBarSeriesInput[];
+  /** Layout used when {@link series} is provided. Defaults to grouped. */
+  readonly layout?: SvgBarLayout;
   readonly ariaLabel: string;
   readonly ariaDescription?: string;
+  /** ID of family- or app-owned extended description content. */
+  readonly ariaDescribedBy?: string;
   readonly width?: number;
   readonly height?: number;
   /** Recompute geometry from the container width. Defaults to true. */
@@ -30,9 +45,13 @@ export interface SvgBarRendererProps {
   readonly orientation?: 'vertical' | 'horizontal';
   readonly insets?: ChartGeometryInsets;
   readonly bandPadding?: number;
+  readonly groupPadding?: number;
   readonly maxTicks?: number;
   readonly barRadius?: number;
   readonly showValues?: boolean;
+  /** Optional axis captions rendered outside the plot rect. */
+  readonly xLabel?: string;
+  readonly yLabel?: string;
   /** Static, app-authored annotation specs. */
   readonly insights?: readonly ChartInsightSpec[];
   readonly interaction?: ChartInteraction<SvgBarDatum>;
@@ -40,63 +59,95 @@ export interface SvgBarRendererProps {
   readonly style?: CSSProperties;
 }
 
-/** React-owned semantic SVG bar renderer. D3 only calculates geometry. */
+/**
+ * React-owned semantic SVG bar renderer supporting single-series bars plus the
+ * multi-series grouped and stacked modes in both orientations. D3 only
+ * calculates geometry; every visible node stays under React ownership.
+ */
 export function SvgBarRenderer({
   data,
+  series,
+  layout = 'grouped',
   ariaLabel,
   ariaDescription,
+  ariaDescribedBy,
   width = 640,
   height = 360,
   responsive = true,
   orientation = 'vertical',
   insets,
   bandPadding,
+  groupPadding,
   maxTicks,
   barRadius,
   showValues = false,
+  xLabel,
+  yLabel,
   insights,
   interaction,
   className,
   style,
 }: SvgBarRendererProps): React.ReactElement {
   const grammar = useResolvedChartGrammar();
+  const isSeries = series !== undefined && series.length > 0;
   const { containerRef, dimensions } = useChartDimensions(width, height, responsive);
   const geometryWidth = responsive ? dimensions.width : width;
   const geometry = useMemo(
-    () => buildSvgBarGeometry({
-      data,
-      width: geometryWidth,
-      height,
-      orientation,
-      insets,
-      bandPadding,
-      maxTicks,
-    }),
-    [bandPadding, data, geometryWidth, height, insets, maxTicks, orientation],
+    () => (isSeries
+      ? buildSvgBarSeriesGeometry({
+        series: series ?? [],
+        width: geometryWidth,
+        height,
+        orientation,
+        layout,
+        insets,
+        bandPadding,
+        groupPadding,
+        maxTicks,
+      })
+      : buildSvgBarGeometry({
+        data: data ?? [],
+        width: geometryWidth,
+        height,
+        orientation,
+        insets,
+        bandPadding,
+        maxTicks,
+      })),
+    [bandPadding, data, geometryWidth, groupPadding, height, insets, isSeries, layout, maxTicks, orientation, series],
   );
+  const bars = geometry.bars as readonly BarMark[];
   const interactionItems = useMemo(
-    () => {
-      const sourceById = new Map(data.map((datum) => [datum.id, datum]));
-      return geometry.bars.map((bar) => {
-        const label = bar.ariaLabel ?? `${bar.category}: ${bar.valueLabel ?? bar.value}`;
-        const datum: SvgBarDatum = sourceById.get(bar.id) ?? bar;
-        return {
-          key: bar.id,
-          label,
-          datum,
-          x: bar.x + bar.width / 2,
-          y: bar.y + bar.height / 2,
-        };
-      });
-    },
-    [data, geometry.bars],
+    () => bars.map((bar) => {
+      const label = bar.ariaLabel
+        ?? (bar.seriesLabel
+          ? `${bar.seriesLabel}, ${bar.category}: ${bar.valueLabel ?? bar.value}`
+          : `${bar.category}: ${bar.valueLabel ?? bar.value}`);
+      const datum: SvgBarDatum = {
+        id: bar.id,
+        category: bar.category,
+        value: bar.value,
+        ...(bar.valueLabel === undefined ? {} : { valueLabel: bar.valueLabel }),
+        ...(bar.ariaLabel === undefined ? {} : { ariaLabel: bar.ariaLabel }),
+        ...(bar.color === undefined ? {} : { color: bar.color }),
+        ...(bar.series === undefined ? {} : { series: bar.series }),
+      };
+      return {
+        key: bar.id,
+        label,
+        datum,
+        x: bar.x + bar.width / 2,
+        y: bar.y + bar.height / 2,
+      };
+    }),
+    [bars],
   );
   const insightCoordinates = useMemo(() => {
     const valueAxis = geometry.orientation === 'vertical' ? 'y' : 'x';
     const categoryAxis = geometry.orientation === 'vertical' ? 'x' : 'y';
     const valueAnchors = [
       { value: 0, position: geometry.baseline },
-      ...geometry.bars.map((bar) => ({
+      ...bars.map((bar) => ({
         value: bar.value,
         position: geometry.orientation === 'vertical'
           ? bar.value >= 0 ? bar.y : bar.y + bar.height
@@ -109,13 +160,13 @@ export function SvgBarRenderer({
       numericEventAxis: valueAxis,
       numericEventAnchors: valueAnchors,
       categoricalEventAxis: categoryAxis,
-      categoricalEventAnchors: geometry.bars.map((bar) => ({
+      categoricalEventAnchors: bars.map((bar) => ({
         key: bar.category,
         position: geometry.orientation === 'vertical'
           ? bar.x + bar.width / 2
           : bar.y + bar.height / 2,
       })),
-      datumAnchors: geometry.bars.map((bar) => ({
+      datumAnchors: bars.map((bar) => ({
         id: bar.id,
         x: geometry.orientation === 'vertical'
           ? bar.x + bar.width / 2
@@ -125,7 +176,7 @@ export function SvgBarRenderer({
           : bar.y + bar.height / 2,
       })),
     } as const;
-  }, [geometry]);
+  }, [bars, geometry.baseline, geometry.orientation]);
   const interactionState = useChartInteraction({
     items: interactionItems,
     interaction,
@@ -133,7 +184,7 @@ export function SvgBarRenderer({
   });
   const tooltipId = useId();
   const activeBar = interactionState.activeKey
-    ? geometry.bars.find((bar) => bar.id === interactionState.activeKey)
+    ? bars.find((bar) => bar.id === interactionState.activeKey)
     : undefined;
   const tooltip = interactionState.activeDatum && interaction && interaction.mode !== 'static'
     ? interaction.renderTooltip?.(interactionState.activeDatum)
@@ -156,10 +207,11 @@ export function SvgBarRenderer({
       rendererId="svg.bar"
       ariaLabel={ariaLabel}
       ariaDescription={ariaDescription}
+      {...(ariaDescribedBy === undefined ? {} : { ariaDescribedBy })}
       width={geometry.width}
       height={geometry.height}
       responsive={responsive}
-      empty={geometry.bars.length === 0}
+      empty={bars.length === 0}
       className={['ds-chart-renderer-bar', className].filter(Boolean).join(' ')}
       style={style}
       ownerRef={containerRef}
@@ -228,11 +280,14 @@ export function SvgBarRenderer({
       />
 
       <g data-part="marks">
-        {geometry.bars.map((bar, barIndex) => {
+        {bars.map((bar, barIndex) => {
           const paintStyle: ChartPaintStyle = {
-            '--ds-chart-mark-color': bar.color ?? 'var(--ds-chart-series-1, var(--ds-color-primary))',
+            '--ds-chart-mark-color': bar.color ?? 'var(--ds-chart-paint-1, var(--ds-color-primary))',
           };
-          const accessibleLabel = bar.ariaLabel ?? `${bar.category}: ${bar.valueLabel ?? bar.value}`;
+          const accessibleLabel = bar.ariaLabel
+            ?? (bar.seriesLabel
+              ? `${bar.seriesLabel}, ${bar.category}: ${bar.valueLabel ?? bar.value}`
+              : `${bar.category}: ${bar.valueLabel ?? bar.value}`);
           const datumProps = interactionState.getDatumProps(bar.id);
           const interactive = interactionState.mode !== 'static';
           const actionable = interactionState.mode === 'select' || interactionState.mode === 'drill';
@@ -243,6 +298,7 @@ export function SvgBarRenderer({
           const hitHeight = Math.max(24, bar.height);
           const hitX = bar.x - (hitWidth - bar.width) / 2;
           const hitY = bar.y - (hitHeight - bar.height) / 2;
+          const cornerRadius = bar.isTopOfStack === false ? 0 : radius;
 
           return (
             <g
@@ -250,6 +306,9 @@ export function SvgBarRenderer({
               data-part="bar-mark"
               data-datum-id={bar.id}
               data-mark-index={barIndex % 5}
+              data-series-index={bar.seriesIndex === undefined ? undefined : bar.seriesIndex % 10}
+              data-layout={isSeries ? layout : undefined}
+              data-orientation={orientation}
               data-chart-datum-key={datumProps['data-chart-datum-key']}
               data-active={datumProps['data-active']}
               data-focused={datumProps['data-focused']}
@@ -279,7 +338,7 @@ export function SvgBarRenderer({
                     y={hitY}
                     width={hitWidth}
                     height={hitHeight}
-                    rx={Math.max(radius, 4)}
+                    rx={Math.max(cornerRadius, 4)}
                     aria-hidden="true"
                   />
                 </>
@@ -290,7 +349,7 @@ export function SvgBarRenderer({
                 y={bar.y}
                 width={bar.width}
                 height={bar.height}
-                rx={radius}
+                rx={cornerRadius}
               />
               {showValues ? (
                 <text
@@ -319,6 +378,32 @@ export function SvgBarRenderer({
           );
         })}
       </g>
+
+      {xLabel ? (
+        <text
+          data-part="axis-label"
+          data-axis="x"
+          x={geometry.width / 2}
+          y={geometry.height - 4}
+          textAnchor="middle"
+          aria-hidden="true"
+        >
+          {xLabel}
+        </text>
+      ) : null}
+      {yLabel ? (
+        <text
+          data-part="axis-label"
+          data-axis="y"
+          transform="rotate(-90)"
+          x={-geometry.height / 2}
+          y={14}
+          textAnchor="middle"
+          aria-hidden="true"
+        >
+          {yLabel}
+        </text>
+      ) : null}
       <ChartInsightLayer
         insights={insights}
         plot={geometry.plot}

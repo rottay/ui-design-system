@@ -9,7 +9,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
-import { resolveChartSeriesVariables } from '../../../../foundation/grammar/palette';
+import { resolveChartSeriesPaint } from '../../../../foundation/grammar/palette';
 import { ChartFrame } from '../../projection/frame';
 import { SvgBarRenderer } from '../bar';
 import { SvgHeatMapRenderer } from '../heat-map';
@@ -79,10 +79,17 @@ describe('React-owned SVG renderers', () => {
   it('keeps every bounded palette mapped to the same provider-scoped CSS channels', () => {
     for (const scheme of ['default', 'accessible', 'monochrome', 'pastel', 'vibrant'] as const) {
       expect(CHART_FOUNDATION_CSS).toContain(`data-chart-color-scheme='${scheme}'`);
-      for (const [name, value] of Object.entries(resolveChartSeriesVariables(scheme))) {
-        expect(CHART_FOUNDATION_CSS).toContain(`${name}: ${value};`);
-      }
+      resolveChartSeriesPaint(scheme).forEach((paint, index) => {
+        expect(CHART_FOUNDATION_CSS).toContain(`--ds-chart-paint-${index + 1}: ${paint};`);
+      });
     }
+  });
+
+  it('never defines the reserved tenant series channel in the skin', () => {
+    // --ds-chart-series-N is owned exclusively by the tenant appearance
+    // compiler; a skin-level definition would shadow the inherited tenant
+    // palette. The skin may only CONSUME it inside var() chains.
+    expect(CHART_FOUNDATION_CSS).not.toMatch(/--ds-chart-series-\d+\s*:/);
   });
 
   it('mounts as the declared full renderer inside ChartFrame', () => {
