@@ -19,6 +19,7 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { CommandPaletteProps, CommandItem } from '../../contracts';
+import { useCommandArgumentMode } from '../../runtime/argument-mode';
 import { menuSectionTitleStyle } from '../../../../foundation/engine-styles/modern';
 
 // The grouped section label's color is owned by the skin so a tenant's
@@ -53,18 +54,31 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<Element | null>(null);
+  const {
+    mode,
+    pendingItem,
+    argumentValue,
+    argumentError,
+    enterArgumentMode,
+    setArgumentValue,
+    confirmArgument,
+    cancelArgument,
+    resetArgumentMode,
+  } = useCommandArgumentMode();
 
   // Case-insensitive substring match on both label and description so
   // users can search by intent ("delete") not just the exact command name.
+  // With an onSearch handler the parent owns filtering (async sources return
+  // rows whose labels need not contain the query), so items pass through.
   const filtered = useMemo(() => {
-    if (!query) return items;
+    if (!query || onSearch) return items;
     const q = query.toLowerCase();
     return items.filter(
       (item) =>
         item.label.toLowerCase().includes(q) ||
         item.description?.toLowerCase().includes(q)
     );
-  }, [items, query]);
+  }, [items, query, onSearch]);
 
   // Group by the optional `group` field. Items without a group land under
   // the empty-string key and render without a section header.
@@ -78,6 +92,26 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     return groups;
   }, [filtered]);
 
+  const visibleRecent = useMemo(
+    () => (recentItems ?? []).filter((item) => item.kind !== 'error'),
+    [recentItems]
+  );
+  const showRecent = !query && visibleRecent.length > 0;
+
+  // Keyboard rows in RENDER order (recent section first, then grouped
+  // sections), excluding non-selectable error rows -- so activeIndex N is
+  // always the Nth highlighted row on screen.
+  const navigableItems = useMemo(() => {
+    const rows: CommandItem[] = [];
+    if (showRecent) rows.push(...visibleRecent);
+    for (const groupItems of Object.values(grouped)) {
+      for (const item of groupItems) {
+        if (item.kind !== 'error') rows.push(item);
+      }
+    }
+    return rows;
+  }, [showRecent, visibleRecent, grouped]);
+
   // Reset the keyboard cursor to the first item whenever the query changes.
   useEffect(() => { setActiveIndex(0); }, [query]);
 
@@ -89,6 +123,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     if (open) {
       triggerRef.current = document.activeElement;
       setQuery('');
+      resetArgumentMode();
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
       // Return focus to the element that opened the palette
@@ -97,31 +132,49 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       }
       triggerRef.current = null;
     }
-  }, [open]);
+  }, [open, resetArgumentMode]);
 
-  // Execute the item's onSelect callback and close the palette.
-  // Disabled items are silently ignored to prevent accidental invocation.
+  // Execute the item's onSelect callback and close the palette. Disabled
+  // items and error rows are silently ignored; parameterized items enter
+  // argument mode instead of executing (the query is kept for Escape).
   const handleSelect = useCallback(
     (item: CommandItem) => {
-      if (item.disabled) return;
+      if (item.disabled || item.kind === 'error') return;
+      if (item.parameter) {
+        enterArgumentMode(item, query);
+        return;
+      }
       item.onSelect();
       onOpenChange(false);
     },
-    [onOpenChange]
+    [onOpenChange, enterArgumentMode, query]
   );
 
   // Keyboard navigation: ArrowDown/ArrowUp move the cursor, Enter selects,
   // Escape closes. preventDefault on arrows stops the input caret from jumping.
+  // In argument mode, Enter confirms the value and Escape pops back to
+  // search (never closes) -- stopPropagation keeps outer dismiss handlers out.
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (mode === 'argument') {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (confirmArgument()) onOpenChange(false);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        cancelArgument();
+      }
+      return;
+    }
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, filtered.length - 1));
+      setActiveIndex((i) => Math.min(i + 1, navigableItems.length - 1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setActiveIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      const item = activeIndex >= 0 ? arrayValueAt(filtered, activeIndex) : undefined;
+      const item = activeIndex >= 0 ? arrayValueAt(navigableItems, activeIndex) : undefined;
       if (item) handleSelect(item);
     } else if (e.key === 'Escape') {
       onOpenChange(false);
@@ -160,7 +213,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   let itemIndex = -1;
 
   return (
-    <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] ds-pattern-command-palette ds-engine-modern" data-part="root" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
+    <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] ds-pattern-command-palette ds-engine-modern" data-part="root" data-mode={mode} style={style} role="dialog" aria-modal="true" aria-label="Command palette">
       {/* Backdrop: scrim + sanctioned glass layer; painted by the engine skin. */}
       <div
         className="absolute inset-0"
@@ -170,31 +223,69 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       {/* Dialog */}
       <div className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`} data-part="dialog">
         {/* Search */}
-        <div className="p-3" data-part="search">
+        <div className="p-3" data-part="search" style={mode === 'argument' ? { display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-2, 8px)' } : undefined}>
+          {mode === 'argument' && pendingItem && (
+            <span
+              data-part="argument-chip"
+              style={{
+                flexShrink: 0,
+                padding: '2px 8px',
+                fontSize: 'var(--ds-font-size-xs, 12px)',
+                fontWeight: 500,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {pendingItem.label}
+            </span>
+          )}
           <input
             ref={inputRef}
             type="text"
             data-part="input"
             className="w-full text-lg focus:outline-none"
             style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 16px)' }}
-            placeholder={placeholder}
-            value={query}
-            onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}
+            placeholder={mode === 'argument' ? pendingItem?.parameter?.placeholder ?? '' : placeholder}
+            value={mode === 'argument' ? argumentValue : query}
+            onChange={(e) => {
+              if (mode === 'argument') {
+                setArgumentValue(e.target.value);
+                return;
+              }
+              setQuery(e.target.value);
+              onSearch?.(e.target.value);
+            }}
             onKeyDown={handleKeyDown}
             role="combobox"
-            aria-expanded="true"
-            aria-controls="command-palette-listbox"
-            aria-activedescendant={activeIndex >= 0 ? `command-palette-option-${activeIndex}` : undefined}
+            aria-expanded={mode === 'search'}
+            aria-controls={mode === 'search' ? 'command-palette-listbox' : undefined}
+            aria-activedescendant={mode === 'search' && activeIndex >= 0 ? `command-palette-option-${activeIndex}` : undefined}
           />
         </div>
-        {/* Results */}
+        {/* Argument mode replaces the result list with the parameter prompt. */}
+        {mode === 'argument' && pendingItem ? (
+          <div className="px-4 py-3">
+            <div data-part="argument-prompt" className="text-sm">
+              {pendingItem.parameter?.prompt}
+            </div>
+            {argumentError && (
+              <div
+                data-part="argument-error"
+                role="alert"
+                className="text-xs"
+                style={{ marginTop: 'var(--ds-spacing-1, 4px)' }}
+              >
+                {argumentError}
+              </div>
+            )}
+          </div>
+        ) : (
         <div className="overflow-y-auto py-2" style={{ maxHeight }} role="listbox" id="command-palette-listbox">
           {/* Show the "Recent" section only when there is no active query,
               giving users quick access to previously used commands. */}
-          {!query && recentItems && recentItems.length > 0 && (
+          {showRecent && (
             <div className="px-3 pb-2">
               <div style={{ ...menuSectionTitleStyle, marginBottom: 4 }}>Recent</div>
-              {recentItems.map((item) => {
+              {visibleRecent.map((item) => {
                 itemIndex++;
                 const idx = itemIndex;
                 return (
@@ -243,6 +334,21 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
               </div>
             )}
               {groupItems.map((item) => {
+                if (item.kind === 'error') {
+                  return (
+                    <div
+                      key={item.id}
+                      data-part="error"
+                      role="status"
+                      className="px-4 py-2"
+                    >
+                      <div className="font-medium text-sm">{item.label}</div>
+                      {item.description && (
+                        <div className="text-xs" data-part="description">{item.description}</div>
+                      )}
+                    </div>
+                  );
+                }
                 itemIndex++;
                 const idx = itemIndex;
                 return (
@@ -278,6 +384,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             </div>
           )}
         </div>
+        )}
         {/* Footer */}
         {footer && (
           <div className="px-4 py-2 text-xs" data-part="footer">

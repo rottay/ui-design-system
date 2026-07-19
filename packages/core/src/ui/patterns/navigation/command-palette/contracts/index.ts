@@ -23,6 +23,34 @@ import type { ReactNode } from 'react';
 import type { PatternBaseProps } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 
 /**
+ * Interaction state of the palette. `search` is the default command-finding
+ * state; `argument` is entered by selecting an item with a `parameter` --
+ * the input collects the argument behind a breadcrumb chip, Enter confirms
+ * (`onSubmit(value)`), and Escape pops back to `search`. Engines expose the
+ * current mode as `data-mode` on the pattern root.
+ */
+export type CommandPaletteMode = 'search' | 'argument';
+
+/**
+ * Argument specification for a parameterized command item. Selecting an item
+ * that carries a parameter does not fire `onSelect`; the palette switches to
+ * argument mode and calls `onSubmit` with the confirmed value instead.
+ */
+export interface CommandItemParameter {
+  /** Prompt displayed while collecting the argument (e.g. "Branch name"). */
+  prompt: string;
+
+  /** Placeholder for the argument input. */
+  placeholder?: string;
+
+  /**
+   * Validation run on confirm. Return an error message to reject the value
+   * (the palette stays in argument mode and shows it), or null to accept.
+   */
+  validate?: (value: string) => string | null;
+}
+
+/**
  * Represents a single actionable entry in the command palette.
  *
  * Items are rendered as selectable rows. They can be grouped (e.g. "Navigation",
@@ -71,6 +99,30 @@ export interface CommandItem {
    * @default false
    */
   disabled?: boolean;
+
+  /**
+   * Row semantics. `command` (default) is a selectable action row. `error`
+   * renders a non-selectable notice row (`data-part="error"`) -- used by the
+   * registry bridge to surface a failed command source honestly inside that
+   * source's section instead of leaving it silently empty.
+   * @default 'command'
+   */
+  kind?: 'command' | 'error';
+
+  /**
+   * When set, selecting this item enters argument mode instead of firing
+   * `onSelect`: the palette shows a breadcrumb chip with the item label plus
+   * the parameter prompt, and confirms through `onSubmit`.
+   */
+  parameter?: CommandItemParameter;
+
+  /**
+   * Called with the confirmed argument value when this parameterized item is
+   * submitted (Enter in argument mode, after `parameter.validate` accepts).
+   * Required for items that declare `parameter`; items without a parameter
+   * never receive this call.
+   */
+  onSubmit?: (value: string) => void;
 }
 
 /**

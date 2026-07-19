@@ -13,9 +13,24 @@
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { CommandPaletteProps } from './contracts';
 
-export type { CommandPaletteProps, CommandItem } from './contracts';
+export type {
+  CommandPaletteProps,
+  CommandItem,
+  CommandItemParameter,
+  CommandPaletteMode,
+} from './contracts';
 export { useCommandPaletteItems } from './runtime/application-commands';
-export type { UseCommandPaletteItemsReturn } from './runtime/application-commands';
+export type {
+  UseCommandPaletteItemsOptions,
+  UseCommandPaletteItemsReturn,
+} from './runtime/application-commands';
+export {
+  FRECENCY_HALF_LIFE_MS,
+  decayedFrecency,
+  rankByFrecency,
+  recordUse,
+} from './foundation/frecency';
+export type { CommandUsageEntry, CommandUsageMap } from './foundation/frecency';
 
 /** Public command-palette entry point resolved through the engine factory. */
 export const PatternCommandPalette = createEngineComponent<CommandPaletteProps>(

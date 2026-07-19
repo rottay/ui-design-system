@@ -101,3 +101,22 @@
 .ds-pattern-command-palette.ds-engine-modern [data-part='footer'][data-part='footer'] {
   border-top: 1px solid var(--ds-color-border);
 }
+
+/* argument mode: pending-command chip + parameter prompt + validation error.
+   Layout (flex/padding/font) rides inline on the elements; paint lives here. */
+.ds-pattern-command-palette.ds-engine-modern [data-part='argument-chip'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-secondary);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='argument-prompt'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='argument-error'] {
+  color: var(--ds-color-error, var(--ds-color-text-primary));
+}
+
+/* per-section provider error row (kind='error': rendered, never selectable) */
+.ds-pattern-command-palette.ds-engine-modern [data-part='error'] {
+  color: var(--ds-color-error, var(--ds-color-text-secondary));
+}

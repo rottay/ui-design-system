@@ -5,10 +5,12 @@ import { renderHook } from '@testing-library/react';
 import {
   CommandRegistryProvider,
   useRegisterCommands,
+  useRegisterCommandSource,
   useCommands,
+  useCommandSources,
   useExecuteCommand,
 } from '../index';
-import type { Command } from '../index';
+import type { Command, CommandSource } from '../index';
 
 // ---------------------------------------------------------------------------
 // Test helpers
@@ -778,5 +780,219 @@ describe('Category support', () => {
 
     expect(navCommands.length).toBe(2);
     expect(actCommands.length).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Parameterized commands
+// ---------------------------------------------------------------------------
+
+describe('Parameterized commands', () => {
+  it('passes the argument value through execute to the action', async () => {
+    const action = vi.fn();
+    let commandsResult: ReturnType<typeof useCommands> | null = null;
+
+    function Registrar() {
+      useRegisterCommands([
+        {
+          id: 'rename',
+          label: 'Rename',
+          parameter: { prompt: 'New name' },
+          action,
+        },
+      ]);
+      return null;
+    }
+
+    function Reader() {
+      commandsResult = useCommands();
+      return null;
+    }
+
+    render(
+      <CommandRegistryProvider>
+        <Registrar />
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+
+    await act(async () => {
+      await commandsResult!.execute('rename', 'next-name');
+    });
+
+    expect(action).toHaveBeenCalledWith('next-name');
+  });
+
+  it('exposes the parameter spec on registered commands', () => {
+    let commandsResult: ReturnType<typeof useCommands> | null = null;
+
+    function Registrar() {
+      useRegisterCommands([
+        {
+          id: 'rename',
+          label: 'Rename',
+          parameter: { prompt: 'New name', placeholder: 'name' },
+          action: vi.fn(),
+        },
+      ]);
+      return null;
+    }
+
+    function Reader() {
+      commandsResult = useCommands();
+      return null;
+    }
+
+    render(
+      <CommandRegistryProvider>
+        <Registrar />
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+
+    expect(commandsResult!.commands[0].parameter).toEqual({
+      prompt: 'New name',
+      placeholder: 'name',
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Command sources
+// ---------------------------------------------------------------------------
+
+describe('Command sources', () => {
+  function makeSource(overrides: Partial<CommandSource> & { id: string }): CommandSource {
+    return {
+      label: overrides.id,
+      search: async () => [],
+      ...overrides,
+    };
+  }
+
+  it('registers a source and exposes it through useCommandSources', () => {
+    let sourcesResult: CommandSource[] = [];
+
+    function SourceRegistrar() {
+      useRegisterCommandSource(
+        makeSource({ id: 'documents', label: 'Documents', minQuery: 2, debounceMs: 50 }),
+      );
+      return null;
+    }
+
+    function Reader() {
+      sourcesResult = useCommandSources();
+      return null;
+    }
+
+    render(
+      <CommandRegistryProvider>
+        <SourceRegistrar />
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+
+    expect(sourcesResult.map((s) => s.id)).toEqual(['documents']);
+    expect(sourcesResult[0].label).toBe('Documents');
+    expect(sourcesResult[0].minQuery).toBe(2);
+    expect(sourcesResult[0].debounceMs).toBe(50);
+  });
+
+  it('unregisters the source on unmount', () => {
+    let sourcesResult: CommandSource[] = [];
+
+    function SourceRegistrar() {
+      useRegisterCommandSource(makeSource({ id: 'temp-source' }));
+      return null;
+    }
+
+    function Reader() {
+      sourcesResult = useCommandSources();
+      return null;
+    }
+
+    const { rerender } = render(
+      <CommandRegistryProvider>
+        <SourceRegistrar />
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+    expect(sourcesResult.length).toBe(1);
+
+    rerender(
+      <CommandRegistryProvider>
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+    expect(sourcesResult.length).toBe(0);
+  });
+
+  it('keeps sources in registration order', () => {
+    let sourcesResult: CommandSource[] = [];
+
+    function A() {
+      useRegisterCommandSource(makeSource({ id: 'alpha' }));
+      return null;
+    }
+    function B() {
+      useRegisterCommandSource(makeSource({ id: 'beta' }));
+      return null;
+    }
+    function Reader() {
+      sourcesResult = useCommandSources();
+      return null;
+    }
+
+    render(
+      <CommandRegistryProvider>
+        <A />
+        <B />
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+
+    expect(sourcesResult.map((s) => s.id)).toEqual(['alpha', 'beta']);
+  });
+
+  it('delegates search to the latest closure without re-registering', async () => {
+    let sourcesResult: CommandSource[] = [];
+    const firstSearch = vi.fn(async () => []);
+    const secondSearch = vi.fn(async () => []);
+
+    function SourceRegistrar({ search }: { search: CommandSource['search'] }) {
+      useRegisterCommandSource({ id: 'live', label: 'Live', search });
+      return null;
+    }
+
+    function Reader() {
+      sourcesResult = useCommandSources();
+      return null;
+    }
+
+    const { rerender } = render(
+      <CommandRegistryProvider>
+        <SourceRegistrar search={firstSearch} />
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+    const registered = sourcesResult[0];
+
+    rerender(
+      <CommandRegistryProvider>
+        <SourceRegistrar search={secondSearch} />
+        <Reader />
+      </CommandRegistryProvider>,
+    );
+
+    // The registered object is stable across the closure swap...
+    expect(sourcesResult[0]).toBe(registered);
+
+    // ...but invoking it runs the newest closure.
+    const controller = new AbortController();
+    await act(async () => {
+      await registered.search('q', controller.signal);
+    });
+    expect(firstSearch).not.toHaveBeenCalled();
+    expect(secondSearch).toHaveBeenCalledWith('q', controller.signal);
   });
 });

@@ -74,6 +74,24 @@ import { createElement } from 'react';
 // ============================================================================
 
 /**
+ * Argument specification for a parameterized command. A command that declares
+ * a parameter is not executed on selection; the palette switches into
+ * argument mode, prompts for a value, and only then invokes the action with
+ * the confirmed value.
+ */
+export interface CommandParameter {
+  /** Prompt shown while the palette collects the argument (e.g. "Branch name"). */
+  prompt: string;
+  /** Placeholder for the argument input. */
+  placeholder?: string;
+  /**
+   * Validation run on confirm. Return an error message to reject the value
+   * and keep argument mode open, or null to accept.
+   */
+  validate?: (value: string) => string | null;
+}
+
+/**
  * Definition of a command that can be registered in the registry.
  */
 export interface Command {
@@ -89,12 +107,68 @@ export interface Command {
   icon?: ReactNode;
   /** Keyboard shortcut string (e.g. 'ctrl+n', 'g+i'). Auto-registers with ShortcutProvider. */
   shortcut?: string;
-  /** Action to execute when the command is invoked. */
-  action: () => void | Promise<void>;
+  /**
+   * Action to execute when the command is invoked. For parameterized commands
+   * (with `parameter` set) the confirmed argument value is passed; plain
+   * commands may ignore the argument entirely.
+   */
+  action: (value?: string) => void | Promise<void>;
   /** Conditional availability: command only appears/executes when this returns true. */
   when?: () => boolean;
   /** Sort priority in the command palette. Higher numbers appear first. */
   priority?: number;
+  /**
+   * When set, selecting this command collects an argument first (palette
+   * argument mode) and `action` receives the confirmed value.
+   */
+  parameter?: CommandParameter;
+}
+
+/**
+ * A single result produced by a {@link CommandSource} search. Mirrors the
+ * palette's item vocabulary but stays registry-level: the command-palette
+ * bridge converts these into palette items (`action` becomes the selection
+ * callback).
+ */
+export interface CommandSourceItem {
+  /** Unique identifier within the source (e.g. an entity id). */
+  id: string;
+  /** Display label for the result row. */
+  label: string;
+  /** Optional secondary description. */
+  description?: string;
+  /** Optional icon element rendered next to the label. */
+  icon?: ReactNode;
+  /** Display-only keyboard shortcut hint. */
+  shortcut?: string;
+  /** Invoked when the result is selected (receives the argument for parameterized results). */
+  action: (value?: string) => void | Promise<void>;
+  /** When set, selecting this result collects an argument first. */
+  parameter?: CommandParameter;
+}
+
+/**
+ * An async command provider registered alongside static commands. Apps
+ * register domain sources (entity search endpoints and similar) without the
+ * design system knowing their semantics; the palette bridge renders each
+ * source's results as its own section (the source id is the section
+ * identity, `label` is the section heading).
+ */
+export interface CommandSource {
+  /** Unique source id. Also the section identity in the palette. */
+  id: string;
+  /** Human-readable section heading for this source's results. */
+  label: string;
+  /**
+   * Async search. The signal aborts when a newer keystroke supersedes this
+   * request or the source unregisters; implementations should pass it to
+   * fetch and must tolerate late rejections after abort.
+   */
+  search: (query: string, signal: AbortSignal) => Promise<CommandSourceItem[]>;
+  /** Debounce interval before `search` fires. Bridge default applies when omitted. */
+  debounceMs?: number;
+  /** Minimum trimmed query length before this source is consulted. @default 1 */
+  minQuery?: number;
 }
 
 /**
@@ -104,7 +178,7 @@ export interface UseCommandsReturn {
   /** All currently registered and available commands, sorted by priority. */
   commands: Command[];
   /** Execute a command by its ID. Throws if the command is not found. */
-  execute: (commandId: string) => Promise<void>;
+  execute: (commandId: string, value?: string) => Promise<void>;
   /** Fuzzy search over command labels and descriptions. Returns matches sorted by relevance. */
   search: (query: string) => Command[];
 }
@@ -116,8 +190,11 @@ export interface UseCommandsReturn {
 interface CommandRegistryContextValue {
   register: (commands: Command[]) => void;
   unregister: (commandIds: string[]) => void;
+  registerCommandSource: (source: CommandSource) => void;
+  unregisterCommandSource: (sourceId: string) => void;
   getAll: () => Command[];
-  execute: (commandId: string) => Promise<void>;
+  getSources: () => CommandSource[];
+  execute: (commandId: string, value?: string) => Promise<void>;
   /** Incremented on every register/unregister to trigger re-renders in consumers. */
   version: number;
 }
@@ -234,6 +311,10 @@ export function CommandRegistryProvider({ children }: CommandRegistryProviderPro
   // version counter is state, and it only bumps when the set of IDs
   // actually changes, minimizing downstream re-renders.
   const registryRef = useRef<Map<string, Command>>(new Map());
+  // Async command sources live beside static commands. A Map keeps
+  // registration order (section order in the palette) and re-registration
+  // replaces in place without moving the section.
+  const sourcesRef = useRef<Map<string, CommandSource>>(new Map());
   const [version, setVersion] = useState(0);
 
   const register = useCallback((commands: Command[]) => {
@@ -264,6 +345,23 @@ export function CommandRegistryProvider({ children }: CommandRegistryProviderPro
     }
   }, []);
 
+  const registerCommandSource = useCallback((source: CommandSource) => {
+    // Always bump: re-registration replaces the stored source object (fresh
+    // label/limits/search), and consumers must observe the replacement.
+    sourcesRef.current.set(source.id, source);
+    setVersion((v) => v + 1);
+  }, []);
+
+  const unregisterCommandSource = useCallback((sourceId: string) => {
+    if (sourcesRef.current.delete(sourceId)) {
+      setVersion((v) => v + 1);
+    }
+  }, []);
+
+  const getSources = useCallback((): CommandSource[] => {
+    return Array.from(sourcesRef.current.values());
+  }, []);
+
   const getAll = useCallback((): Command[] => {
     const commands: Command[] = [];
     for (const cmd of registryRef.current.values()) {
@@ -281,7 +379,7 @@ export function CommandRegistryProvider({ children }: CommandRegistryProviderPro
     return commands;
   }, []);
 
-  const execute = useCallback(async (commandId: string): Promise<void> => {
+  const execute = useCallback(async (commandId: string, value?: string): Promise<void> => {
     const cmd = registryRef.current.get(commandId);
     if (!cmd) {
       throw new Error(`[Rottay DS] Command "${commandId}" not found in registry.`);
@@ -289,12 +387,21 @@ export function CommandRegistryProvider({ children }: CommandRegistryProviderPro
     if (cmd.when && !cmd.when()) {
       throw new Error(`[Rottay DS] Command "${commandId}" is not available (when() returned false).`);
     }
-    await cmd.action();
+    await cmd.action(value);
   }, []);
 
   const value = useMemo<CommandRegistryContextValue>(
-    () => ({ register, unregister, getAll, execute, version }),
-    [register, unregister, getAll, execute, version],
+    () => ({
+      register,
+      unregister,
+      registerCommandSource,
+      unregisterCommandSource,
+      getAll,
+      getSources,
+      execute,
+      version,
+    }),
+    [register, unregister, registerCommandSource, unregisterCommandSource, getAll, getSources, execute, version],
   );
 
   return createElement(CommandRegistryContext.Provider, { value }, children);
@@ -490,6 +597,80 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
 }
 
 // ============================================================================
+// useRegisterCommandSource / useCommandSources
+// ============================================================================
+
+/**
+ * Register an async command source in the registry. The source is
+ * automatically unregistered when the component unmounts.
+ *
+ * The palette bridge (`useCommandPaletteItems`) consults every registered
+ * source on each keystroke (debounced, abortable) and renders its results as
+ * a dedicated section.
+ *
+ * @param source - Source definition (id, section label, async search)
+ *
+ * @example
+ * ```tsx
+ * useRegisterCommandSource({
+ *   id: 'documents',
+ *   label: 'Documents',
+ *   minQuery: 2,
+ *   search: async (query, signal) => {
+ *     const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal });
+ *     const rows = await res.json();
+ *     return rows.map((row) => ({ id: row.id, label: row.title, action: () => openDoc(row.id) }));
+ *   },
+ * });
+ * ```
+ */
+export function useRegisterCommandSource(source: CommandSource): void {
+  const ctx = useCommandRegistryContext();
+
+  // Same ref discipline as useRegisterCommands: the context ref prevents the
+  // register -> version bump -> new ctx -> re-register loop, and the source
+  // ref lets a re-created `search` closure stay fresh without re-registering.
+  const ctxRef = useRef(ctx);
+  ctxRef.current = ctx;
+
+  const sourceRef = useRef(source);
+  sourceRef.current = source;
+
+  useEffect(() => {
+    const snapshot = sourceRef.current;
+    // The registered object delegates `search` through the ref so the latest
+    // closure always runs, while the registration identity stays stable
+    // until the structural fingerprint below changes.
+    ctxRef.current.registerCommandSource({
+      id: snapshot.id,
+      label: snapshot.label,
+      debounceMs: snapshot.debounceMs,
+      minQuery: snapshot.minQuery,
+      search: (query, signal) => sourceRef.current.search(query, signal),
+    });
+
+    const id = snapshot.id;
+    return () => {
+      ctxRef.current.unregisterCommandSource(id);
+    };
+    // Fingerprint-based dep: re-register only when the source's structural
+    // identity changes, never on search-closure identity churn.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [`${source.id}::${source.label}::${source.debounceMs ?? ''}::${source.minQuery ?? ''}`]);
+}
+
+/**
+ * Get every registered command source in registration order.
+ * Consumed by the command-palette bridge to run sectioned async searches.
+ */
+export function useCommandSources(): CommandSource[] {
+  const ctx = useCommandRegistryContext();
+  // ctx identity changes on every registry version bump, so this memo
+  // refreshes exactly when the source set changes.
+  return useMemo(() => ctx.getSources(), [ctx]);
+}
+
+// ============================================================================
 // useCommands
 // ============================================================================
 
@@ -548,8 +729,8 @@ export function useCommands(): UseCommandsReturn {
   );
 
   const execute = useCallback(
-    async (commandId: string): Promise<void> => {
-      await ctx.execute(commandId);
+    async (commandId: string, value?: string): Promise<void> => {
+      await ctx.execute(commandId, value);
     },
     [ctx],
   );
@@ -573,11 +754,11 @@ export function useCommands(): UseCommandsReturn {
  * await executeCommand('save-draft');
  * ```
  */
-export function useExecuteCommand(): (commandId: string) => Promise<void> {
+export function useExecuteCommand(): (commandId: string, value?: string) => Promise<void> {
   const ctx = useCommandRegistryContext();
   return useCallback(
-    async (commandId: string) => {
-      await ctx.execute(commandId);
+    async (commandId: string, value?: string) => {
+      await ctx.execute(commandId, value);
     },
     [ctx],
   );

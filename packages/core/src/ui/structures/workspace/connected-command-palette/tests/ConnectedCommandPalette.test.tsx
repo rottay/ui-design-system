@@ -2,7 +2,7 @@ import React from 'react';
 import { screen, act, fireEvent } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { ConnectedCommandPalette } from '..';
-import { useRegisterCommands } from '../../../../../infrastructure/runtime/application/commands';
+import { useRegisterCommands, useRegisterCommandSource } from '../../../../../infrastructure/runtime/application/commands';
 import { ShortcutProvider, useGlobalShortcut } from '../../../../../infrastructure/runtime/application/interaction/shortcuts';
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
 
@@ -136,5 +136,77 @@ describe('ConnectedCommandPalette -- keyboard shortcuts cheatsheet (WO-CRA-03)',
 
     const dialog = await screen.findByRole('dialog', { name: 'Keyboard Shortcuts' });
     expect(dialog).toHaveTextContent('Next item');
+  });
+});
+
+describe('ConnectedCommandPalette -- registry sources + frecency (W6-G)', () => {
+  it('records command use through the layout-preference storage when a command is selected', async () => {
+    window.localStorage.clear();
+
+    function AppCommands() {
+      useRegisterCommands([
+        { id: 'go-home', label: 'Go home', category: 'Navigation', action: () => {} },
+      ]);
+      return null;
+    }
+
+    const { unmount } = renderPalette(
+      <>
+        <AppCommands />
+        <ConnectedCommandPalette />
+      </>
+    );
+    await flushEngineLoad();
+
+    act(() => {
+      dispatchKey(document, 'k', { ctrlKey: true });
+    });
+    const row = await screen.findByText('Go home');
+    act(() => {
+      fireEvent.click(row);
+    });
+
+    // The layout-preference mechanism flushes its debounced write on unmount.
+    unmount();
+
+    const raw = window.localStorage.getItem('ds-layout-command-palette');
+    expect(raw).not.toBeNull();
+    const stored = JSON.parse(raw as string);
+    expect(stored.commandUsage['go-home']).toBeDefined();
+    expect(stored.commandUsage['go-home'].score).toBeGreaterThan(0);
+  });
+
+  it('renders a registered command source as its own section once the query reaches it', async () => {
+    window.localStorage.clear();
+
+    function AppSource() {
+      useRegisterCommandSource({
+        id: 'documents',
+        label: 'Documents',
+        debounceMs: 0,
+        search: async () => [
+          { id: 'doc-1', label: 'Quarterly report', action: () => {} },
+        ],
+      });
+      return null;
+    }
+
+    renderPalette(
+      <>
+        <AppSource />
+        <ConnectedCommandPalette />
+      </>
+    );
+    await flushEngineLoad();
+
+    act(() => {
+      dispatchKey(document, 'k', { ctrlKey: true });
+    });
+    const input = await screen.findByPlaceholderText('Type a command or search...');
+    fireEvent.change(input, { target: { value: 'rep' } });
+
+    expect(await screen.findByText('Quarterly report')).toBeInTheDocument();
+    // The source's label is the section heading.
+    expect(screen.getByText('Documents')).toBeInTheDocument();
   });
 });

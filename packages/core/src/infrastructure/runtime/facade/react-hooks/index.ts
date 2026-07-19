@@ -283,11 +283,15 @@ export {
   useRegisterCommands,
   useCommands,
   useExecuteCommand,
+  useRegisterCommandSource,
+  useCommandSources,
 } from '../../application/commands';
 export type {
   Command,
   UseCommandsReturn,
   CommandRegistryProviderProps,
+  CommandSource,
+  CommandSourceItem,
 } from '../../application/commands';
 
 // ============================================================================
