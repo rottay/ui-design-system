@@ -11,6 +11,8 @@ export const BRAND_MARK_NAMES = [
   'x',
   'chrome',
   'microsoft',
+  'greenhouse',
+  'indeed',
 ] as const;
 
 export type BrandMarkName = (typeof BRAND_MARK_NAMES)[number];

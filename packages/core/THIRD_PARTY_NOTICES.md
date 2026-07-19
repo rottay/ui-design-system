@@ -35,6 +35,8 @@ The governed catalog is `thesvg@3.2.6` and the external renderer is
 | X | `x` | CC0-1.0 | https://x.com |
 | Google Chrome | `google-chrome` | CC0-1.0 | https://www.google.com/chrome |
 | Microsoft | `microsoft` | MIT | https://www.microsoft.com/ |
+| Greenhouse | `greenhouse` | CC0-1.0 | https://brand.greenhouse.io/brand-portal/p/6 |
+| Indeed | `indeed` | CC0-1.0 | https://indeed.design/resources |
 
 CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
 

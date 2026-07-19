@@ -82,6 +82,20 @@ const BRAND_VARIANT_REGISTRY: Readonly<Record<BrandMarkName, BrandVariantMap>> =
       dark: { resolved: 'color', sourceVariant: 'default' },
       wordmark: { resolved: 'wordmark', sourceVariant: 'wordmark' },
     }),
+    greenhouse: variants({
+      color: { resolved: 'color', sourceVariant: 'default' },
+      mono: { resolved: 'mono', sourceVariant: 'mono' },
+      light: { resolved: 'mono', sourceVariant: 'mono' },
+      dark: { resolved: 'mono', sourceVariant: 'mono' },
+      wordmark: { resolved: 'color', sourceVariant: 'default' },
+    }),
+    indeed: variants({
+      color: { resolved: 'color', sourceVariant: 'default' },
+      mono: { resolved: 'mono', sourceVariant: 'mono' },
+      light: { resolved: 'mono', sourceVariant: 'mono' },
+      dark: { resolved: 'mono', sourceVariant: 'mono' },
+      wordmark: { resolved: 'color', sourceVariant: 'default' },
+    }),
   });
 
 /** Public supplier-free fallback matrix, useful to preview effective variants. */

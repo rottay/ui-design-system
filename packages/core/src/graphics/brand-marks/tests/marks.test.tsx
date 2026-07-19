@@ -13,6 +13,8 @@ import instagramCatalog from 'thesvg/instagram';
 import xCatalog from 'thesvg/x';
 import chromeCatalog from 'thesvg/google-chrome';
 import microsoftCatalog from 'thesvg/microsoft';
+import greenhouseCatalog from 'thesvg/greenhouse';
+import indeedCatalog from 'thesvg/indeed';
 import lambdaCatalog from 'thesvg/aws-aws-lambda';
 import bedrockCatalog from 'thesvg/aws-amazon-bedrock';
 import s3Catalog from 'thesvg/aws-amazon-simple-storage-service';
@@ -53,6 +55,8 @@ const EXPECTED_BRANDS = [
   'x',
   'chrome',
   'microsoft',
+  'greenhouse',
+  'indeed',
 ] as const;
 const EXPECTED_SERVICES = ['lambda', 'bedrock', 's3', 'rds'] as const;
 
@@ -66,6 +70,8 @@ const RAW_CATALOG_BY_SLUG = {
   x: xCatalog,
   'google-chrome': chromeCatalog,
   microsoft: microsoftCatalog,
+  greenhouse: greenhouseCatalog,
+  indeed: indeedCatalog,
   'aws-aws-lambda': lambdaCatalog,
   'aws-amazon-bedrock': bedrockCatalog,
   'aws-amazon-simple-storage-service': s3Catalog,
@@ -101,7 +107,7 @@ describe('mark corpus and SSR boundary', () => {
       </>,
     );
 
-    expect((html.match(/<svg/g) ?? [])).toHaveLength(13);
+    expect((html.match(/<svg/g) ?? [])).toHaveLength(15);
     for (const name of BRAND_MARK_NAMES) expect(html).toContain(`data-mark-name="${name}"`);
     for (const service of CLOUD_SERVICES) {
       expect(html).toContain(`data-mark-service="${service}"`);
@@ -284,7 +290,7 @@ describe('mark provenance and supplier boundary', () => {
       ...Object.values(CLOUD_SERVICE_MARK_PROVENANCE),
     ];
 
-    expect(records).toHaveLength(13);
+    expect(records).toHaveLength(15);
     for (const record of records) {
       const raw = RAW_CATALOG_BY_SLUG[record.slug as keyof typeof RAW_CATALOG_BY_SLUG];
       expect(raw, record.slug).toBeDefined();
@@ -343,7 +349,7 @@ describe('mark provenance and supplier boundary', () => {
     );
 
     expect(publicSources).not.toMatch(/@thesvg|OpenaiVariant|AwsAmazon/i);
-    expect(imports).toHaveLength(13);
+    expect(imports).toHaveLength(15);
     expect(imports.every((path) => path.startsWith('@thesvg/react/'))).toBe(true);
     expect(imports).not.toContain('@thesvg/react');
     expect(adapter).not.toMatch(/dangerouslySetInnerHTML|<svg[\s>]|https?:\/\/|from ['"]thesvg/i);

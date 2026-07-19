@@ -96,6 +96,14 @@ export const BRAND_MARK_PROVENANCE: Readonly<Record<BrandMarkName, BrandMarkProv
       'MIT',
       'https://www.microsoft.com/',
     ),
+    greenhouse: brand(
+      'greenhouse',
+      'greenhouse',
+      'Greenhouse',
+      'CC0-1.0',
+      'https://brand.greenhouse.io/brand-portal/p/6',
+    ),
+    indeed: brand('indeed', 'indeed', 'Indeed', 'CC0-1.0', 'https://indeed.design/resources'),
   });
 
 export const CLOUD_SERVICE_MARK_PROVENANCE: Readonly<

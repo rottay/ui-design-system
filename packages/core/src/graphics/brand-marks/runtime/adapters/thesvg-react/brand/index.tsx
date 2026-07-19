@@ -8,6 +8,8 @@ import Instagram, { type InstagramVariant } from '@thesvg/react/instagram';
 import X, { type XVariant } from '@thesvg/react/x';
 import GoogleChrome, { type GoogleChromeVariant } from '@thesvg/react/google-chrome';
 import Microsoft, { type MicrosoftVariant } from '@thesvg/react/microsoft';
+import Greenhouse, { type GreenhouseVariant } from '@thesvg/react/greenhouse';
+import Indeed, { type IndeedVariant } from '@thesvg/react/indeed';
 
 import type {
   BrandMarkName,
@@ -29,6 +31,8 @@ const InstagramRenderer = resolveMarkRendererDefault(Instagram);
 const XRenderer = resolveMarkRendererDefault(X);
 const GoogleChromeRenderer = resolveMarkRendererDefault(GoogleChrome);
 const MicrosoftRenderer = resolveMarkRendererDefault(Microsoft);
+const GreenhouseRenderer = resolveMarkRendererDefault(Greenhouse);
+const IndeedRenderer = resolveMarkRendererDefault(Indeed);
 
 interface BrandMarkAdapterProps extends SharedMarkAdapterProps {
   name: BrandMarkName;
@@ -69,6 +73,10 @@ export const TheSvgBrandMarkAdapter = forwardRef<SVGSVGElement, BrandMarkAdapter
         return <GoogleChromeRenderer {...svgProps} variant={sourceVariant as GoogleChromeVariant} />;
       case 'microsoft':
         return <MicrosoftRenderer {...svgProps} variant={sourceVariant as MicrosoftVariant} />;
+      case 'greenhouse':
+        return <GreenhouseRenderer {...svgProps} variant={sourceVariant as GreenhouseVariant} />;
+      case 'indeed':
+        return <IndeedRenderer {...svgProps} variant={sourceVariant as IndeedVariant} />;
       default:
         return null;
     }

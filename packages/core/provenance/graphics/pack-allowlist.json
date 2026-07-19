@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "notice": {
     "path": "THIRD_PARTY_NOTICES.md",
-    "sha256": "75e3ded4d6c577f2ccfabc3069f79764d9b0962968a85942939f7d45d2e7b042"
+    "sha256": "aa292b5951982f8434da34d635f9c450a48ef5cfc989cc1aef83eeb4aa998c5c"
   },
   "runtimePackageAllowlist": [
     "@rottay/design-system",
@@ -45,12 +45,14 @@
     "functionalIcon": {
       "provider": "@phosphor-icons/react",
       "registryPath": "src/graphics/icons/foundation/semantic/adapters/phosphor-2.1.10.json",
-      "registrySha256": "e806df07c4647ad72b83d926b99516e7fd11a4558ce05323a113c15680cd47df",
-      "expectedEntries": 263,
+      "registrySha256": "c2c12ad81b29f8c7809039a77d6d382911a63e01d6262d6abde8e3fda8cd5cbe",
+      "expectedEntries": 282,
       "semanticSourceRoot": "src/graphics/icons/presentation/semantic/generated/roles",
       "compatibilityCatalog": {
         "rootPath": "src/graphics/icons/presentation/catalog",
-        "providers": ["@phosphor-icons/react"],
+        "providers": [
+          "@phosphor-icons/react"
+        ],
         "expectedImportEntries": 330,
         "importInventorySha256": "0430966c6a54680ed8ad74127ae22c845ecf33baec72f750b73878f05a752c12"
       }
@@ -136,6 +138,24 @@
         "license": "MIT",
         "sourceUrl": "https://www.microsoft.com/",
         "sourceSha256": "1af5274fc606d1381b8aa9cd4e649d0f5ec4a9550153ff31eece98eb5b987625"
+      },
+      {
+        "name": "greenhouse",
+        "slug": "greenhouse",
+        "title": "Greenhouse",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://brand.greenhouse.io/brand-portal/p/6",
+        "module": "@thesvg/react/greenhouse",
+        "sourceSha256": "b71dd9d20b8db676558e5943f99e64c82c9ecce55cc152543463b5c32ff20ce6"
+      },
+      {
+        "name": "indeed",
+        "slug": "indeed",
+        "title": "Indeed",
+        "license": "CC0-1.0",
+        "sourceUrl": "https://indeed.design/resources",
+        "module": "@thesvg/react/indeed",
+        "sourceSha256": "e2ed26399fdfe78063b7b65539993a31aefd6b2130c1dc618aff3f230717549d"
       }
     ],
     "cloudServiceMark": [
