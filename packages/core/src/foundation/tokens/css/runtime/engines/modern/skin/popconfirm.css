@@ -34,6 +34,15 @@
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules clip via `overflow: auto`; this surface owns no clip (its
+        border above outranks the UA default, and every text part sets an explicit
+        color). `data-ds-position-strategy` is stamped by the engine alongside
+        data-part. ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  overflow: visible;
+}
+
 /* ---- copy ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='icon'] {
   color: var(--ds-color-warning);

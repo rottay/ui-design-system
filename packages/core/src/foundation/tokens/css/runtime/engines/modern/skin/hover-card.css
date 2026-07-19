@@ -1,5 +1,5 @@
 /**
- * Modern HoverCard skin (WO-SKIN-04 checkpoint P).
+ * Modern HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
@@ -8,9 +8,15 @@
  * DaisyUI's `card` — it does not, and the comment is corrected). Nothing in
  * theme.css or personality.css matches any element here.
  *
- * PORTAL: this engine does NOT portal (rustic DOES) — the card is an in-tree absolute
- * sibling inside the trigger wrapper, two levels down (a Tailwind-positioned wrapper
- * div sits between), so the surface is addressed as a descendant, not a child.
+ * PORTAL: this engine does NOT portal (rustic DOES) — the surface renders in-tree
+ * as a child of the trigger wrapper in BOTH positioning branches: top-layer
+ * promotion (anchor-css branch) is DOM-position-agnostic, so it needs no portal
+ * escape hatch either, and the measured (js) branch keeps this engine's existing
+ * non-portaled posture (checkpoint contract P4).
+ *
+ * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
+ * genuine runtime data, not paint.
  *
  * SPECIFICITY (P-48): the card's colored border repeats its `data-part` to clear the
  * tenant `*` border-color floor at (0,3,1).
@@ -23,4 +29,13 @@
 }
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- top-layer branch: the surface carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither. `data-ds-position-strategy` is stamped by the
+        engine alongside data-part. ---- */
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }

@@ -2,9 +2,13 @@
 
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the Popconfirm overlay component.
- * Uses inline CSS with portal rendering (createPortal to document.body) for proper
- * z-index stacking, getBoundingClientRect-based placement, async-aware confirm
- * handling, and full ARIA dialog attributes.
+ * Portals the panel through the shared portal root and positions it via the
+ * shared overlay positioning runtime (`runtime/overlay/positioning`): this
+ * engine's existing portal posture (checkpoint contract P4: Popconfirm rustic
+ * always portals) is preserved in BOTH branches -- top-layer promotion
+ * (anchor-css branch) is DOM-position-agnostic, so portaling ahead of it
+ * costs nothing. Async-aware confirm handling and full ARIA dialog
+ * attributes are unchanged.
  *
  * @example
  * ```tsx
@@ -14,22 +18,25 @@
  * </Popconfirm>
  * ```
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { PopconfirmProps } from '../../contracts';
-import { POPCONFIRM_DEFAULTS } from '../../contracts';
+import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+} from '../../../../runtime/overlay/positioning';
 
 /**
- * Popconfirm implementation using pure inline CSS and React portals.
+ * Popconfirm implementation using pure inline CSS, portaled through the
+ * shared portal root and positioned by the shared overlay runtime.
  *
- * The popover is portalled to `document.body` and positioned absolutely using
- * the trigger's bounding rect plus scroll offsets. Placement is translated via
- * CSS `transform` for centring. The confirm handler is async-aware: if it
- * returns a Promise, the button enters a loading state automatically.
- * Button colours are resolved from DS semantic tokens (--ds-popconfirm-*).
+ * The confirm handler is async-aware: if it returns a Promise, the button
+ * enters a loading state automatically. Button colours are resolved from DS
+ * semantic tokens (--ds-popconfirm-*).
  *
  * @param props - {@link PopconfirmProps} shared across all engines.
- * @returns A ref-forwarded inline-block trigger plus a portal-rendered popover.
+ * @returns A ref-forwarded inline-block trigger plus a portal-rendered, positioned panel.
  */
 export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
   (props, ref) => {
@@ -56,12 +63,11 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
 
     const [internalOpen, setInternalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [position, setPosition] = useState({ top: 0, left: 0 });
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
 
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const popoverRef = useRef<HTMLDivElement>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (!isControlled) {
@@ -70,40 +76,14 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Recalculate popover position from the trigger's bounding rect
-    useEffect(() => {
-      if (isOpen && triggerRef.current) {
-        const rect = triggerRef.current.getBoundingClientRect();
-        let top = rect.top + window.scrollY;
-        let left = rect.left + window.scrollX;
-
-        if (placement?.includes('bottom')) {
-          top = rect.bottom + window.scrollY + 8;
-        } else {
-          top = rect.top + window.scrollY - 8;
-        }
-
-        if (placement?.includes('Right')) {
-          left = rect.right + window.scrollX;
-        } else if (placement?.includes('Left')) {
-          left = rect.left + window.scrollX;
-        } else {
-          left = rect.left + rect.width / 2 + window.scrollX;
-        }
-
-        setPosition({ top, left });
-      }
-    }, [isOpen, placement]);
-
-    // Dismiss when clicking outside both the trigger and the popover portal
+    // Dismiss when clicking outside both the anchor and the portaled panel.
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
         if (
-          triggerRef.current &&
-          !triggerRef.current.contains(target) &&
-          popoverRef.current &&
-          !popoverRef.current.contains(target)
+          anchorEl &&
+          !anchorEl.contains(target) &&
+          (!surfaceEl || !surfaceEl.contains(target))
         ) {
           handleOpenChange(false);
         }
@@ -116,7 +96,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [isOpen, handleOpenChange]);
+    }, [isOpen, anchorEl, surfaceEl, handleOpenChange]);
 
     const handleTriggerClick = () => {
       if (disabled) return;
@@ -142,6 +122,16 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(false);
     };
 
+    // The trigger is the anchor; the portaled panel is the positioned
+    // overlay. The panel only mounts while open, so element presence drives
+    // the positioning lifecycle.
+    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+      anchor: anchorEl,
+      overlay: surfaceEl,
+      placement: POPCONFIRM_TO_OVERLAY_PLACEMENT[placement ?? 'top'],
+      flip: true,
+    });
+
     // Confirm-button chrome per okType lives in the skin, keyed on `data-ok-type`.
     const okButtonStyle: React.CSSProperties = {
       padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
@@ -150,90 +140,92 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
     };
 
-    const popoverContent = isOpen && typeof document !== 'undefined' ? (
-      createPortal(
-        <div
-          ref={popoverRef}
-          role="dialog"
-          aria-modal="true"
-          data-part="surface"
-          data-open="true"
-          data-placement={placement}
-          className={`rottay-popconfirm--rustic ${overlayClassName || ''}`}
-          style={{
-            position: 'absolute',
-            top: position.top,
-            left: position.left,
-            zIndex: 'var(--ds-popconfirm-z-index, 1050)' as unknown as number,
-            padding: 'var(--ds-popconfirm-padding, 16px)',
-            minWidth: 'var(--ds-popconfirm-min-width, 220px)',
-            maxWidth: 'var(--ds-popconfirm-max-width, 350px)',
-            ...overlayStyle,
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-            {icon && (
-              <span data-part="icon" style={{ marginTop: '2px' }}>
-                {icon}
-              </span>
-            )}
-            <div style={{ flex: 1 }}>
-              <div data-part="title" style={{ fontWeight: 500 }}>{title}</div>
-              {description && (
-                <div data-part="description" style={{ fontSize: '14px', marginTop: '4px' }}>
-                  {description}
-                </div>
-              )}
-            </div>
-          </div>
+    const panelContent = isOpen ? (
+      <Portal>
+        <OverlayPortalBoundary>
           <div
+            ref={setSurfaceEl}
+            role="dialog"
+            aria-modal="true"
+            data-part="surface"
+            data-open="true"
+            data-placement={placement}
+            data-ds-position-strategy={strategy}
+            className={`rottay-popconfirm--rustic ${overlayClassName || ''}`}
             style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: '8px',
-              marginTop: '16px',
+              zIndex: 'var(--ds-popconfirm-z-index, 1050)' as unknown as number,
+              padding: 'var(--ds-popconfirm-padding, 16px)',
+              minWidth: 'var(--ds-popconfirm-min-width, 220px)',
+              maxWidth: 'var(--ds-popconfirm-max-width, 350px)',
+              ...overlayStyle,
+              // Positioning keys come from the shared overlay runtime and
+              // spread last so they win over a caller's overlayStyle.
+              ...positionStyle,
             }}
           >
-            <button
-              type="button"
-              data-part="action"
-              data-action="cancel"
-              onClick={handleCancel}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              {icon && (
+                <span data-part="icon" style={{ marginTop: '2px' }}>
+                  {icon}
+                </span>
+              )}
+              <div style={{ flex: 1 }}>
+                <div data-part="title" style={{ fontWeight: 500 }}>{title}</div>
+                {description && (
+                  <div data-part="description" style={{ fontSize: '14px', marginTop: '4px' }}>
+                    {description}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div
               style={{
-                padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
-                cursor: 'pointer',
-                fontWeight: 500,
-                fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '8px',
+                marginTop: '16px',
               }}
             >
-              {cancelText}
-            </button>
-            <button
-              type="button"
-              data-part="action"
-              data-action="confirm"
-              data-ok-type={okType}
-              data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
-              onClick={handleConfirm}
-              disabled={loading || okButtonLoading}
-              style={{
-                ...okButtonStyle,
-                opacity: loading || okButtonLoading ? 0.7 : 1,
-              }}
-            >
-              {okText}
-            </button>
+              <button
+                type="button"
+                data-part="action"
+                data-action="cancel"
+                onClick={handleCancel}
+                style={{
+                  padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
+                }}
+              >
+                {cancelText}
+              </button>
+              <button
+                type="button"
+                data-part="action"
+                data-action="confirm"
+                data-ok-type={okType}
+                data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
+                onClick={handleConfirm}
+                disabled={loading || okButtonLoading}
+                style={{
+                  ...okButtonStyle,
+                  opacity: loading || okButtonLoading ? 0.7 : 1,
+                }}
+              >
+                {okText}
+              </button>
+            </div>
           </div>
-        </div>,
-        document.body
-      )
+        </OverlayPortalBoundary>
+      </Portal>
     ) : null;
 
     return (
       <>
         <div
           ref={(node) => {
-            (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+            setAnchorEl(node);
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
@@ -242,10 +234,11 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
           className={className}
           style={{ display: 'inline-block', ...style }}
           onClick={handleTriggerClick}
+          {...anchorAttrs}
         >
           {children}
         </div>
-        {popoverContent}
+        {panelContent}
       </>
     );
   }

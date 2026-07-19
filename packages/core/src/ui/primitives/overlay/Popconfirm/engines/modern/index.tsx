@@ -3,7 +3,18 @@
 /**
  * @fileoverview Modern (Token-driven/Tailwind) engine for the Popconfirm overlay component.
  * Uses DS token inline styles for the confirmation panel with async-aware confirm handling
- * (auto-loading state), click-outside dismissal, and Tailwind placement classes.
+ * (auto-loading state), click-outside dismissal, and shared overlay positioning.
+ *
+ * @remarks
+ * **Positioning:**
+ * - `useOverlayPosition` resolves the strategy per instance: `anchor-css`
+ *   promotes the panel to the top layer (popover + CSS anchor positioning)
+ *   in place; `js` pins it at a measured fixed position. Both branches keep
+ *   the panel in-tree as a child of the trigger wrapper -- this engine never
+ *   portals (checkpoint contract P4, `OverlayBatch.contract.test.tsx`); only
+ *   the rustic engine portals.
+ * - The trigger wrapper is the anchor; the panel stamps
+ *   `data-ds-position-strategy` for e2e/debug observability.
  *
  * @example
  * ```tsx
@@ -13,9 +24,10 @@
  * </Popconfirm>
  * ```
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import type { PopconfirmProps } from '../../contracts';
-import { POPCONFIRM_DEFAULTS } from '../../contracts';
+import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../contracts';
+import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
 
 /**
  * Popconfirm implementation using DS token inline styles for card and buttons.
@@ -26,7 +38,7 @@ import { POPCONFIRM_DEFAULTS } from '../../contracts';
  * `okType` prop to DS token inline styles (primary, error, ghost backgrounds).
  *
  * @param props - {@link PopconfirmProps} shared across all engines.
- * @returns A ref-forwarded relatively-positioned container with an absolutely-placed card.
+ * @returns A ref-forwarded relatively-positioned container with an in-tree, positioned panel.
  */
 export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
   (props, ref) => {
@@ -55,7 +67,17 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
 
-    const containerRef = useRef<HTMLDivElement>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+    // The panel renders only after mount: `overlayCapabilities` resolves
+    // false/false server-side (no CSS/HTMLElement), so a capable client's
+    // first hydration pass would otherwise disagree with the server output
+    // for an initially-open, controlled Popconfirm.
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+      setMounted(true);
+    }, []);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (!isControlled) {
@@ -64,10 +86,12 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Dismiss the popconfirm when clicking anywhere outside the container
+    // Dismiss the popconfirm when clicking anywhere outside the trigger. The
+    // panel renders in-tree as a descendant of the anchor, so one containment
+    // check covers both.
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        if (anchorEl && !anchorEl.contains(event.target as Node)) {
           handleOpenChange(false);
         }
       };
@@ -79,7 +103,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [isOpen, handleOpenChange]);
+    }, [isOpen, anchorEl, handleOpenChange]);
 
     const handleTriggerClick = () => {
       if (disabled) return;
@@ -105,92 +129,106 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(false);
     };
 
-    // Translate the engine-agnostic placement prop into Tailwind positioning classes
-    const getPlacementClasses = () => {
-      if (placement?.includes('top')) return 'bottom-full mb-2';
-      if (placement?.includes('bottom')) return 'top-full mt-2';
-      if (placement?.includes('left')) return 'right-full mr-2';
-      if (placement?.includes('right')) return 'left-full ml-2';
-      return 'bottom-full mb-2';
+    // Single-panel overlay: the trigger wrapper is the anchor, the panel is
+    // the positioned overlay. `overlay` is null while closed (the ref
+    // callback below only attaches while the panel is mounted).
+    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+      anchor: anchorEl,
+      overlay: surfaceEl,
+      placement: POPCONFIRM_TO_OVERLAY_PLACEMENT[placement ?? 'top'],
+      flip: true,
+    });
+
+    // Positioning keys come last so they win over the panel's own geometry
+    // and any caller-supplied overlayStyle.
+    const surfaceStyle: React.CSSProperties = {
+      padding: 16,
+      minWidth: 200,
+      zIndex: 'var(--ds-z-popover)',
+      ...overlayStyle,
+      ...positionStyle,
     };
 
     return (
       <div
         ref={(node) => {
-          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          setAnchorEl(node);
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
         data-part="trigger"
         data-open={isOpen ? 'true' : 'false'}
         className={`relative inline-block rottay-popconfirm--modern ${className || ''}`}
+        {...anchorAttrs}
       >
         <div onClick={handleTriggerClick}>{children}</div>
 
-        {isOpen && (
+        {isOpen && mounted && (
           <div
-            className={`absolute z-50 ${getPlacementClasses()} ${overlayClassName || ''}`}
-            style={overlayStyle}
+            ref={setSurfaceEl}
+            data-part="surface"
+            data-open="true"
+            data-ds-position-strategy={strategy}
+            className={overlayClassName || undefined}
+            style={surfaceStyle}
           >
-            <div data-part="surface" data-open="true" style={{ padding: 16, minWidth: 200 }}>
-              <div className="flex items-start gap-2">
-                {icon && <span data-part="icon" className="mt-0.5">{icon}</span>}
-                <div className="flex-1">
-                  <div data-part="title" className="font-medium">{title}</div>
-                  {description && (
-                    <div data-part="description" className="text-sm mt-1">
-                      {description}
-                    </div>
-                  )}
-                </div>
+            <div className="flex items-start gap-2">
+              {icon && <span data-part="icon" className="mt-0.5">{icon}</span>}
+              <div className="flex-1">
+                <div data-part="title" className="font-medium">{title}</div>
+                {description && (
+                  <div data-part="description" className="text-sm mt-1">
+                    {description}
+                  </div>
+                )}
               </div>
-              <div className="flex justify-end gap-2 mt-4">
-                <button
-                  type="button"
-                  data-part="action"
-                  data-action="cancel"
-                  onClick={handleCancel}
-                  style={{
-                    height: 32,
-                    padding: '0 12px',
-                    fontSize: 13,
-                    cursor: 'pointer',
-                  }}
-                >
-                  {cancelText}
-                </button>
-                <button
-                  type="button"
-                  data-part="action"
-                  data-action="confirm"
-                  data-ok-type={okType}
-                  data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
-                  onClick={handleConfirm}
-                  disabled={loading || okButtonLoading}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    height: 32,
-                    padding: '0 12px',
-                    fontSize: 13,
-                    cursor: 'pointer',
-                  }}
-                >
-                  {(loading || okButtonLoading) && (
-                    <span
-                      data-part="spinner"
-                      style={{
-                        display: 'inline-block',
-                        width: 14,
-                        height: 14,
-                        animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
-                      }}
-                    />
-                  )}
-                  {okText}
-                </button>
-              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                type="button"
+                data-part="action"
+                data-action="cancel"
+                onClick={handleCancel}
+                style={{
+                  height: 32,
+                  padding: '0 12px',
+                  fontSize: 13,
+                  cursor: 'pointer',
+                }}
+              >
+                {cancelText}
+              </button>
+              <button
+                type="button"
+                data-part="action"
+                data-action="confirm"
+                data-ok-type={okType}
+                data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
+                onClick={handleConfirm}
+                disabled={loading || okButtonLoading}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  height: 32,
+                  padding: '0 12px',
+                  fontSize: 13,
+                  cursor: 'pointer',
+                }}
+              >
+                {(loading || okButtonLoading) && (
+                  <span
+                    data-part="spinner"
+                    style={{
+                      display: 'inline-block',
+                      width: 14,
+                      height: 14,
+                      animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
+                    }}
+                  />
+                )}
+                {okText}
+              </button>
             </div>
           </div>
         )}

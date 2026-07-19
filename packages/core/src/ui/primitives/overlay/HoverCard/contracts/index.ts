@@ -10,6 +10,7 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
+import type { OverlayPlacement } from '../../../runtime/overlay/positioning';
 
 /** Side where the hover card appears relative to the trigger */
 export type HoverCardSide = 'top' | 'bottom' | 'left' | 'right';
@@ -56,3 +57,17 @@ export const HOVERCARD_DEFAULTS = {
   align: 'center' as HoverCardAlign,
   disabled: false,
 };
+
+/**
+ * Combines the engine-agnostic `side` + `align` props into the shared
+ * overlay-positioning placement vocabulary (`side` or `side-align`) that
+ * `runtime/overlay/positioning`'s `useOverlayPosition` consumes. Shared by
+ * every engine that adopts the positioning runtime, so `align` -- previously
+ * unwired in modern/rustic -- resolves identically across both.
+ */
+export function resolveOverlayPlacement(
+  side: HoverCardSide,
+  align: HoverCardAlign
+): OverlayPlacement {
+  return align === 'center' ? side : (`${side}-${align}` as OverlayPlacement);
+}

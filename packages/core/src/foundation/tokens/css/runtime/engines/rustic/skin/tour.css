@@ -48,8 +48,11 @@
   box-shadow: var(--ds-tour-shadow, 0 8px 24px rgba(0, 0, 0, 0.15));
   transform: translate(-50%, -50%);
 }
+/* Anchored dialogs are placed by the shared overlay positioning runtime (measured
+   branch), which centers them mathematically: the transform must stay `none` or the
+   dialog double-shifts. Unanchored dialogs keep the base viewport-centering translate. */
 .rottay-tour--rustic[data-part='root'] > [data-part='surface'][data-anchored='true'] {
-  transform: translateX(-50%);
+  transform: none;
 }
 .rottay-tour--rustic[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
   border: 2px solid var(--ds-tour-primary-border, var(--ds-color-primary-500, #3b82f6));

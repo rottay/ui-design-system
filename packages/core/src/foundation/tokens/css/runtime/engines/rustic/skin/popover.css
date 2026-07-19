@@ -8,15 +8,16 @@
  * matches nothing today. Popover has NO entrance animation in either engine, and
  * adopting that classname would silently give it one.
  *
- * PORTAL: the panel mounts via a direct `createPortal(…, document.body)`, so it is NOT
- * a descendant of the trigger root. Every rule is STANDALONE on the panel's own class,
- * which it carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
- * the panel's own rules take the COMPOUND form with no descendant space.
+ * PORTAL: the panel portals in the measured (js) branch and renders in-tree in the
+ * top-layer (anchor-css) branch, so it is not reliably a descendant of the trigger
+ * root. Every rule is STANDALONE on the panel's own class, which it carries alongside
+ * `data-part='surface'` — a SELF-CARRYING scope element, so the panel's own rules take
+ * the COMPOUND form with no descendant space.
  *
- * PLACEMENT: unlike the modern engine (which collapses 12 placements to 4), this engine
- * implements all twelve with distinct math. Only 4 of them carry a centering transform,
- * keyed here on `data-placement`; the other 8 legitimately have none. The offsets
- * themselves are runtime (`getBoundingClientRect` + scroll) and stay inline.
+ * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline — genuine
+ * runtime data, not paint. The surface carries NO centering transform here: the shared
+ * engine emits already-centered coordinates, so a skin translate would double-shift it.
  *
  * SPECIFICITY (P-48): the panel's and the title's colored borders repeat their
  * `data-part` to clear the tenant `*` border-color floor at (0,3,1).
@@ -33,14 +34,13 @@
   border: 1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb));
 }
 
-/* ---- the 4 centered placements (the other 8 carry no transform) ---- */
-.rottay-popover--rustic[data-part='surface'][data-placement='top'],
-.rottay-popover--rustic[data-part='surface'][data-placement='bottom'] {
-  transform: translateX(-50%);
-}
-.rottay-popover--rustic[data-part='surface'][data-placement='left'],
-.rottay-popover--rustic[data-part='surface'][data-placement='right'] {
-  transform: translateY(-50%);
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither default. `data-ds-position-strategy` is stamped by
+        the engine alongside data-part. ---- */
+.rottay-popover--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }
 
 /* ---- title ---- */

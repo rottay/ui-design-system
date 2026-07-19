@@ -2,8 +2,19 @@
 
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the Dropdown overlay component.
- * Uses inline CSS with portal rendering (createPortal to document.body) for proper
- * z-index stacking, and getBoundingClientRect-based placement calculation.
+ * Uses inline CSS and the shared overlay positioning runtime
+ * (`runtime/overlay/positioning`) for placement.
+ *
+ * Positioning: `useOverlayPosition` resolves the strategy per instance. The
+ * `anchor-css` branch renders the menu inline and promotes it to the top layer
+ * (popover + CSS anchor positioning); the `js` branch renders it through the
+ * shared overlay portal at a measured fixed position. The trigger wrapper is
+ * the anchor; the menu stamps `data-ds-position-strategy` for e2e/debug
+ * observability.
+ *
+ * The menu keeps the `rottay-dropdown--rustic` scope class plus its
+ * `data-part`/`data-placement`/`data-open` attributes so the unlayered rustic
+ * dropdown skin (surface chrome + the `:hover` item background) still paints.
  *
  * @example
  * ```tsx
@@ -14,13 +25,41 @@
  * ```
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import type { DropdownProps, DropdownMenuItem } from '../../contracts';
+import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../contracts';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+  type OverlayPlacement,
+} from '../../../../runtime/overlay/positioning';
+
+/**
+ * The gap kept between the trigger and the menu. Transcribed from the legacy
+ * measured placement (`rect.bottom + 4` / `rect.top - 4`); preserved so the
+ * shared runtime renders the same 4px offset.
+ */
+const MENU_OFFSET = 4;
+
+/**
+ * Maps the Dropdown placement vocabulary onto the overlay runtime's
+ * side-align vocabulary, reproducing the legacy rustic alignment exactly:
+ * the bare and `*Left` values align the menu's near edge to the trigger's
+ * left edge (`-start`); the `*Right` values align to the right edge (`-end`).
+ */
+const PLACEMENT_MAP: Record<DropdownPlacement, OverlayPlacement> = {
+  top: 'top-start',
+  topLeft: 'top-start',
+  topRight: 'top-end',
+  bottom: 'bottom-start',
+  bottomLeft: 'bottom-start',
+  bottomRight: 'bottom-end',
+};
 
 // Renders a single menu item, divider, or group header. Uses role="separator"
-// for dividers per WAI-ARIA menu pattern. Hover effects are applied via
-// inline style mutations because the rustic engine avoids external CSS.
+// for dividers per WAI-ARIA menu pattern. Resting chrome and the `:hover`
+// background come from the unlayered rustic dropdown skin, keyed on the
+// panel's scope class plus these `data-part`/`data-disabled` attributes.
 const MenuItem: React.FC<{
   item: DropdownMenuItem;
   onClick?: (key: string) => void;
@@ -84,23 +123,25 @@ const MenuItem: React.FC<{
 };
 
 /**
- * Dropdown implementation using pure inline CSS and React portals.
+ * Dropdown implementation using pure inline CSS and the shared overlay
+ * positioning runtime.
  *
- * The menu is portalled to `document.body` so it escapes any ancestor stacking
- * context. Position is recalculated from the trigger's `getBoundingClientRect()`
- * every time the menu opens or placement changes. Supports controlled/uncontrolled
+ * The menu positions against the trigger through `useOverlayPosition`: the
+ * `js` branch renders it through the shared overlay portal (escaping any
+ * ancestor stacking context) at a measured fixed position; the `anchor-css`
+ * branch renders it inline in the top layer. Supports controlled/uncontrolled
  * open state, three trigger modes (click, hover, contextMenu), and vertical/
  * horizontal placement via the shared placement prop.
  *
  * @param props - {@link DropdownProps} shared across all engines.
- * @returns A ref-forwarded inline-block trigger plus a portal-rendered menu.
+ * @returns A ref-forwarded inline-block trigger plus the positioned menu.
  */
 export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
   (props, ref) => {
     const {
       menu,
       trigger = DROPDOWN_DEFAULTS.trigger,
-      placement = DROPDOWN_DEFAULTS.placement,
+      placement = DROPDOWN_DEFAULTS.placement as DropdownPlacement,
       open: controlledOpen,
       onOpenChange,
       disabled,
@@ -109,16 +150,40 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       style,
       overlayClassName,
       overlayStyle,
-      getPopupContainer,
+      autoAdjustOverflow,
     } = props;
 
     const [internalOpen, setInternalOpen] = useState(false);
-    const [position, setPosition] = useState({ top: 0, left: 0 });
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
 
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
+    // The trigger wrapper is the anchor; the menu is the positioned overlay.
+    // Both are tracked as state so the positioning runtime re-resolves when
+    // the elements attach. The refs mirror that state for the click-outside
+    // containment check, which needs the live node regardless of portalling.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
+    const triggerRef = useRef<HTMLDivElement | null>(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+    // The inline top-layer menu must not join server markup, and the portal
+    // needs a client container; gate both render paths on mount.
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+      setMounted(true);
+    }, []);
+
+    const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
+      triggerRef.current = node;
+      setAnchorEl(node);
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    }, [ref]);
+
+    const setMenuNodeRef = useCallback((node: HTMLDivElement | null) => {
+      menuRef.current = node;
+      setMenuEl(node);
+    }, []);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (!isControlled) {
@@ -127,40 +192,18 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Recalculate menu position from the trigger's bounding rect whenever
-    // the menu opens or the placement prop changes
-    useEffect(() => {
-      if (isOpen && triggerRef.current) {
-        const rect = triggerRef.current.getBoundingClientRect();
-        let top = rect.bottom + window.scrollY + 4;
-        let left = rect.left + window.scrollX;
+    // The menu element only exists while open, so element presence drives the
+    // positioning lifecycle. `flip` honors the `autoAdjustOverflow` prop
+    // (default on) -- the runtime reflows to the opposite side on overflow.
+    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+      anchor: anchorEl,
+      overlay: menuEl,
+      placement: PLACEMENT_MAP[placement],
+      offset: MENU_OFFSET,
+      flip: autoAdjustOverflow !== false,
+    });
 
-        // Handle vertical placement
-        switch (placement) {
-          case 'top':
-          case 'topLeft':
-          case 'topRight':
-            top = rect.top + window.scrollY - 4;
-            break;
-        }
-
-        // Handle horizontal alignment
-        switch (placement) {
-          case 'topRight':
-          case 'bottomRight':
-            left = rect.right + window.scrollX - (menuRef.current?.offsetWidth || 0);
-            break;
-          case 'topLeft':
-          case 'bottomLeft':
-            // left already set correctly
-            break;
-        }
-
-        setPosition({ top, left });
-      }
-    }, [isOpen, placement]);
-
-    // Close when clicking outside both the trigger and the portal menu
+    // Close when clicking outside both the trigger and the (portalled) menu.
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
@@ -219,47 +262,51 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       handleOpenChange(false);
     };
 
-    const menuContent = isOpen && menu?.items && typeof document !== 'undefined' ? (
-      createPortal(
-        <div
-          ref={menuRef}
-          role="menu"
-          data-part="surface"
-          data-open="true"
-          data-placement={placement}
-          className={`rottay-dropdown--rustic ${overlayClassName || ''}`}
-          style={{
-            position: 'absolute',
-            top: position.top,
-            left: position.left,
-            zIndex: 'var(--ds-dropdown-z-index, 1050)' as unknown as number,
-            minWidth: 'var(--ds-dropdown-min-width, 160px)',
-            padding: '4px 0',
-            ...overlayStyle,
-          }}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          {menu.items.map((item) => (
-            <MenuItem key={item.key} item={item} onClick={handleItemClick} />
-          ))}
-        </div>,
-        document.body
-      )
-    ) : null;
+    const menuNode = (
+      <div
+        ref={setMenuNodeRef}
+        role="menu"
+        data-part="surface"
+        data-open="true"
+        data-placement={placement}
+        data-ds-position-strategy={strategy}
+        className={`rottay-dropdown--rustic ${overlayClassName || ''}`}
+        style={{
+          zIndex: 'var(--ds-dropdown-z-index, 1050)' as unknown as number,
+          minWidth: 'var(--ds-dropdown-min-width, 160px)',
+          padding: '4px 0',
+          ...overlayStyle,
+          // Positioning keys win over surface + consumer styles.
+          ...positionStyle,
+        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {menu?.items?.map((item) => (
+          <MenuItem key={item.key} item={item} onClick={handleItemClick} />
+        ))}
+      </div>
+    );
+
+    const menuContent = isOpen && menu?.items && mounted
+      ? strategy === 'anchor-css'
+        ? menuNode
+        : (
+          <Portal>
+            <OverlayPortalBoundary>{menuNode}</OverlayPortalBoundary>
+          </Portal>
+        )
+      : null;
 
     return (
       <>
         <div
-          ref={(node) => {
-            (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-          }}
+          ref={setTriggerRef}
           data-part="trigger"
           data-open={isOpen ? 'true' : 'false'}
           className={className}
           style={{ display: 'inline-block', ...style }}
+          {...anchorAttrs}
           onClick={handleClick}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}

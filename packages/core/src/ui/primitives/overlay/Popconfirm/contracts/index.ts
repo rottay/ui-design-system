@@ -35,6 +35,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { OverlayPlacement } from '../../../runtime/overlay/positioning';
 
 /**
  * Placement options for the popconfirm.
@@ -53,6 +54,28 @@ export type PopconfirmPlacement =
   | 'right'
   | 'rightTop'
   | 'rightBottom';
+
+/**
+ * Maps the component's 12-position placement vocabulary onto the shared
+ * overlay positioning engine's side-align vocabulary (`{side}` centers,
+ * `{side}Left`/`{side}Top` and `{side}Right`/`{side}Bottom` become the
+ * engine's `-start`/`-end` edge alignment). Internal to the engines --
+ * the public `PopconfirmPlacement` prop vocabulary is unchanged.
+ */
+export const POPCONFIRM_TO_OVERLAY_PLACEMENT: Record<PopconfirmPlacement, OverlayPlacement> = {
+  top: 'top',
+  topLeft: 'top-start',
+  topRight: 'top-end',
+  bottom: 'bottom',
+  bottomLeft: 'bottom-start',
+  bottomRight: 'bottom-end',
+  left: 'left',
+  leftTop: 'left-start',
+  leftBottom: 'left-end',
+  right: 'right',
+  rightTop: 'right-start',
+  rightBottom: 'right-end',
+};
 
 /**
  * Confirm button type/style options.

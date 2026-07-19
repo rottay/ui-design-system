@@ -1,9 +1,21 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the ContextMenu overlay component.
- * Positions a DaisyUI-styled menu at the cursor location on right-click, with
- * click-outside dismissal and keyboard shortcut display support.
+ * @fileoverview Modern engine for the ContextMenu overlay component. The menu
+ * is positioned by the shared overlay positioning runtime
+ * (`runtime/overlay/positioning`): a right-click captures the cursor's viewport
+ * point, a ZERO-SIZE anchor is rendered there, and `useOverlayPosition` pins
+ * the panel to it with `bottom-start` placement and a zero offset so the
+ * panel's top-left corner lands on the cursor.
+ *
+ * The panel renders INLINE as a direct child of the trigger container in BOTH
+ * strategies: the modern skin scopes every rule under
+ * `.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface']`,
+ * so the panel must stay that descendant. The `anchor-css` strategy promotes it
+ * to the top layer via the popover API -- which leaves its DOM position
+ * unchanged, so the skin still matches -- while the `js` strategy pins it with a
+ * measured `position: fixed`. `data-ds-position-strategy` is stamped for
+ * e2e/debug observability.
  *
  * @example
  * ```tsx
@@ -18,6 +30,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
+import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
 
 const MOTION_DURATION = 'var(--ds-motion-fast)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
@@ -66,14 +79,17 @@ const MenuItem: React.FC<{
 };
 
 /**
- * ContextMenu implementation using DaisyUI menu classes and Tailwind utilities.
+ * ContextMenu implementation for the modern engine.
  *
- * The menu is positioned absolutely within the trigger container using the
- * cursor's offset from the container's bounding rect. A mousedown listener
- * on the document handles click-outside dismissal.
+ * The panel opens at the right-click point via the shared overlay positioning
+ * runtime (zero-size pointer anchor) and dismisses on outside mousedown. It
+ * renders no DaisyUI component classes -- its `<ul>` carries only the
+ * consumer's `overlayClassName` -- so the modern skin owns every rule through
+ * the trigger scope class.
  *
  * @param props - {@link ContextMenuProps} shared across all engines.
- * @returns A relatively-positioned container that intercepts right-click.
+ * @returns The trigger container that intercepts right-click plus the inline,
+ *   shared-positioned menu panel.
  */
 export default function ModernContextMenu(props: ContextMenuProps): React.ReactElement {
   const {
@@ -87,23 +103,37 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   } = props;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLUListElement>(null);
+  // Cursor's viewport point; the zero-size anchor is pinned here with
+  // position: fixed, so these are viewport coordinates (clientX/clientY).
+  const [point, setPoint] = useState({ x: 0, y: 0 });
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const [menuEl, setMenuEl] = useState<HTMLUListElement | null>(null);
+  const menuRef = useRef<HTMLUListElement | null>(null);
   const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen);
 
-  // Capture cursor position relative to the container so the menu appears at
-  // the exact right-click location rather than at a fixed offset
+  // The <ul> is BOTH the presence-animated node and the positioned overlay, so
+  // its ref fans out to presence (exit animation), click-outside, and the
+  // shared positioning hook.
+  const setMenuRef = useCallback((node: HTMLUListElement | null) => {
+    menuRef.current = node;
+    presenceRef(node);
+    setMenuEl(node);
+  }, [presenceRef]);
+
+  const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+    anchor: anchorEl,
+    overlay: menuEl,
+    placement: 'bottom-start',
+    offset: 0,
+    flip: true,
+  });
+
+  // The cursor's viewport point is where the zero-size anchor is pinned; the
+  // shared positioning runtime owns the resulting geometry.
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
     e.preventDefault();
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (rect) {
-      setPosition({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    }
+    setPoint({ x: e.clientX, y: e.clientY });
     setIsOpen(true);
   }, [disabled]);
 
@@ -129,9 +159,24 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     };
   }, [isOpen]);
 
+  const surfaceStyle: React.CSSProperties = {
+    // Tokenized overlay stack (spec section 9): context menus share the popover
+    // tier (matches the canonical --ds-z-index-context-menu alias), not a magic
+    // 50. The top layer ignores z-index; this only orders the js path.
+    zIndex: 'var(--ds-z-popover)',
+    width: 224,
+    padding: 8,
+    listStyle: 'none',
+    margin: 0,
+    animation: `${dataState === 'open' ? 'ds-context-menu-popover-enter-modern' : 'ds-context-menu-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+    // Positioning from the shared runtime; consumer overlayStyle spreads last
+    // and wins.
+    ...positionStyle,
+    ...overlayStyle,
+  };
+
   return (
     <div
-      ref={containerRef}
       data-part="trigger"
       data-open={isOpen ? 'true' : 'false'}
       className={`relative rottay-context-menu--modern ${className || ''}`}
@@ -139,34 +184,27 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     >
       {trigger}
       {shouldRender && (
-        <ul
-          ref={(node) => {
-            menuRef.current = node;
-            presenceRef(node);
-          }}
-          data-part="surface"
-          data-open={dataState === 'open' ? 'true' : 'false'}
-          className={overlayClassName || undefined}
-          style={{
-            position: 'absolute',
-            // Tokenized overlay stack (spec section 9): context menus share
-            // the popover tier (matches the canonical --ds-z-index-context-menu
-            // alias), not a magic 50.
-            zIndex: 'var(--ds-z-popover)',
-            width: 224,
-            padding: 8,
-            listStyle: 'none',
-            margin: 0,
-            left: position.x,
-            top: position.y,
-            animation: `${dataState === 'open' ? 'ds-context-menu-popover-enter-modern' : 'ds-context-menu-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
-            ...overlayStyle,
-          }}
-        >
-          {items.map((item) => (
-            <MenuItem key={item.key} item={item} onClick={handleItemClick} />
-          ))}
-        </ul>
+        <>
+          <div
+            ref={setAnchorEl}
+            data-part="pointer-anchor"
+            aria-hidden="true"
+            style={{ position: 'fixed', left: point.x, top: point.y, width: 0, height: 0, pointerEvents: 'none' }}
+            {...anchorAttrs}
+          />
+          <ul
+            ref={setMenuRef}
+            data-part="surface"
+            data-open={dataState === 'open' ? 'true' : 'false'}
+            data-ds-position-strategy={strategy}
+            className={overlayClassName || undefined}
+            style={surfaceStyle}
+          >
+            {items.map((item) => (
+              <MenuItem key={item.key} item={item} onClick={handleItemClick} />
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );

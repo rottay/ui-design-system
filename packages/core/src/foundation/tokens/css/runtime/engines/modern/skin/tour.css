@@ -24,8 +24,11 @@
  * This engine's default mask colour is `--ds-color-alpha-black-50`; rustic's is the literal
  * `rgba(0, 0, 0, 0.5)`. Both are resolved in JS and preserved.
  *
- * `data-anchored` reproduces the surface's `targetRect ? … : …` transform (the popover
- * centers itself in the viewport when no target was measured).
+ * `data-anchored` gates the surface transform. Anchored surfaces are placed by the shared
+ * overlay positioning runtime (measured branch), which centers them mathematically, so their
+ * transform must stay `none` — a translate here would double-shift the popover. Unanchored
+ * surfaces (no target resolved) center in the viewport via 50%/50% insets plus the base
+ * translate below.
  *
  * NEITHER engine has any hover/focus/active feedback anywhere — no `:hover` rule, no
  * handler, no imperative write. That absence is the shipped behaviour and is preserved; do
@@ -51,7 +54,7 @@
   transform: translate(-50%, -50%);
 }
 .rottay-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='true'] {
-  transform: translateX(-50%);
+  transform: none;
 }
 .rottay-tour--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
   border: 2px solid var(--ds-color-primary);

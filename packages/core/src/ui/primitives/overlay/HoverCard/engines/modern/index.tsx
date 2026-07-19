@@ -1,11 +1,15 @@
 'use client';
 
 /**
- * @fileoverview Modern (Tailwind) engine for the HoverCard overlay component.
- * Positions the card absolutely relative to the trigger using Tailwind
- * transform/translate utilities, with configurable open/close delays.
- * It applies NO DaisyUI class of any kind: the card's chrome comes from this
- * engine's own skin, keyed on `rottay-hover-card--modern`.
+ * @fileoverview Modern engine for the HoverCard overlay component. Positions
+ * the card via the shared overlay positioning runtime
+ * (`runtime/overlay/positioning`): the card renders in-tree, directly beside
+ * the trigger, in BOTH branches -- top-layer promotion (anchor-css branch)
+ * is DOM-position-agnostic, so it needs no portal escape hatch, and the
+ * measured (js) branch keeps this engine's existing non-portaled posture
+ * (checkpoint contract P4: HoverCard modern never portals). It applies NO
+ * DaisyUI class of any kind: the card's chrome comes from this engine's own
+ * skin, keyed on `rottay-hover-card--modern`.
  *
  * @example
  * ```tsx
@@ -17,20 +21,13 @@
  * ```
  */
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { HoverCardProps } from '../../contracts';
-import { HOVERCARD_DEFAULTS } from '../../contracts';
-
-/** Maps each side to Tailwind position + translate classes for card placement. */
-const SIDE_CLASSES: Record<string, string> = {
-  top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-  bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
-  left: 'right-full top-1/2 -translate-y-1/2 mr-2',
-  right: 'left-full top-1/2 -translate-y-1/2 ml-2',
-};
+import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
+import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
 
 /**
- * HoverCard implementation using Tailwind positioning utilities.
+ * HoverCard implementation positioned by the shared overlay runtime.
  *
  * Uses a debounced open/close pattern: entering the trigger starts an open timer,
  * leaving starts a close timer, and entering the card itself cancels the close timer
@@ -38,7 +35,7 @@ const SIDE_CLASSES: Record<string, string> = {
  * visibility regardless of controlled open value.
  *
  * @param props - {@link HoverCardProps} shared across all engines.
- * @returns A relatively-positioned inline-block container with an absolutely-placed card.
+ * @returns A relatively-positioned inline-block container with the positioned card.
  */
 export default function ModernHoverCard(props: HoverCardProps): React.ReactElement {
   const {
@@ -47,6 +44,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     openDelay = HOVERCARD_DEFAULTS.openDelay,
     closeDelay = HOVERCARD_DEFAULTS.closeDelay,
     side = HOVERCARD_DEFAULTS.side,
+    align = HOVERCARD_DEFAULTS.align,
     disabled = HOVERCARD_DEFAULTS.disabled,
     open: controlledOpen,
     onOpenChange,
@@ -59,6 +57,19 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
   const isControlled = controlledOpen !== undefined;
   // Disabled always wins: forces card hidden even if controlled open is true
   const isOpen = disabled ? false : (isControlled ? controlledOpen : internalOpen);
+
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+  // The card never portals, so it must not join server markup:
+  // `overlayCapabilities` resolves against `CSS`/`HTMLElement`, which differ
+  // between the SSR probe (always false) and a capable browser, and
+  // rendering the anchor-css branch's popover-attributed node on the first
+  // client render would mismatch SSR's js-branch-shaped output.
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Timer refs allow cancellation of pending open/close when the cursor
   // moves between the trigger and the card within the delay window
@@ -83,31 +94,48 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     closeTimerRef.current = setTimeout(() => handleOpen(false), closeDelay);
   }, [closeDelay, handleOpen]);
 
-  const positionClass = SIDE_CLASSES[side] || SIDE_CLASSES.bottom;
+  // The trigger wrapper is the anchor; the surface is the positioned
+  // overlay. The surface only mounts while open, so element presence drives
+  // the positioning lifecycle.
+  const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+    anchor: anchorEl,
+    overlay: surfaceEl,
+    placement: resolveOverlayPlacement(side, align),
+  });
+
+  const surfaceStyle: React.CSSProperties = {
+    padding: 16,
+    width: 288,
+    zIndex: 'var(--ds-z-popover)',
+    ...overlayStyle,
+    // Positioning keys come from the shared overlay runtime and spread last
+    // so they win over a caller's overlayStyle.
+    ...positionStyle,
+  };
 
   return (
     <div
+      ref={setAnchorEl}
       data-part="trigger"
       data-open={isOpen ? 'true' : 'false'}
       className={`relative inline-block rottay-hover-card--modern ${className || ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      {...anchorAttrs}
     >
       {trigger}
-      {isOpen && (
+      {isOpen && mounted && (
         <div
-          className={`absolute z-50 ${positionClass}`}
+          ref={setSurfaceEl}
+          data-part="surface"
+          data-open="true"
+          data-ds-position-strategy={strategy}
+          className={overlayClassName || undefined}
+          style={surfaceStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div
-            data-part="surface"
-            data-open="true"
-            className={overlayClassName || undefined}
-            style={{ padding: 16, width: 288, ...overlayStyle }}
-          >
-            {content}
-          </div>
+          {content}
         </div>
       )}
     </div>

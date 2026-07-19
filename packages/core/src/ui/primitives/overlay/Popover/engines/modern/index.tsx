@@ -1,35 +1,33 @@
 'use client';
 
 /**
- * @fileoverview Popover Hermes Engine - Rottay Design System
- * @description Hermes (DaisyUI/Tailwind) implementation of the Popover component.
- * Uses Tailwind CSS utilities with DaisyUI styling conventions.
+ * @fileoverview Modern engine for the Popover overlay component. Positions the
+ * content panel via the shared overlay positioning runtime
+ * (`runtime/overlay/positioning`): the panel renders in-tree, directly beside
+ * the trigger, in BOTH branches -- top-layer promotion (anchor-css branch) is
+ * DOM-position-agnostic, so it needs no portal escape hatch, and the measured
+ * (js) branch keeps this engine's existing non-portaled posture (checkpoint
+ * contract P4: Popover modern never portals; only the rustic engine portals).
+ * It applies NO DaisyUI class of any kind: the panel's chrome comes from this
+ * engine's own skin, keyed on `rottay-popover--modern`.
  *
  * @remarks
- * The Hermes engine provides:
- * - No DaisyUI class of any kind: the panel's chrome comes from this engine's own
- *   skin, keyed on `rottay-popover--modern`. In particular it never renders
- *   `tooltip`/`card`, so nothing in theme.css or personality.css matches it.
- * - Tailwind utility classes for layout and styling
- * - Custom trigger handling for click, hover, and focus
- * - Click-outside dismissal via event listeners
- * - Delay support for hover triggers
+ * **Positioning:**
+ * - `useOverlayPosition` resolves the strategy per instance: `anchor-css`
+ *   promotes the panel to the top layer (popover + CSS anchor positioning) in
+ *   place; `js` pins it at a measured fixed position. Cross-axis centering
+ *   comes from the shared runtime, not a CSS transform.
+ * - The trigger wrapper is the anchor; the panel stamps
+ *   `data-ds-position-strategy` for e2e/debug observability.
  *
- * Implementation details:
- * - Uses controlled/uncontrolled pattern for open state
- * - Placement mapped to inline position styles (only 4 of the 12 typed placements
- *   are actually distinct here; the rest collapse onto their nearest neighbour)
- * - Timeout refs for enter/leave delay management
- * - Arrow styling with rotated div element
- *
- * @example Using Hermes Engine
+ * @example
  * ```tsx
  * import { Popover, Button } from '@rottay/design-system';
  *
  * <Popover
  *   engine="modern"
- *   content="Tailwind styled content"
- *   title="Hermes Popover"
+ *   content="Token styled content"
+ *   title="Popover"
  *   trigger="hover"
  * >
  *   <Button>Hover me</Button>
@@ -37,23 +35,24 @@
  * ```
  *
  * @see {@link Popover} - The main engine-aware component
- * @module Popover/Engines/Hermes
+ * @module Popover/Engines/Modern
  * @category Overlay
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { PopoverProps } from '../../contracts';
-import { POPOVER_DEFAULTS } from '../../contracts';
+import { POPOVER_DEFAULTS, POPOVER_TO_OVERLAY_PLACEMENT } from '../../contracts';
+import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
 
 /**
  * Modern engine implementation of Popover using DS token inline styles.
  *
  * Manages open state internally (controlled/uncontrolled pattern), with
- * debounced hover delays via timeout refs. Renders the popover content
- * inline (not portaled) using absolute positioning for placement.
+ * debounced hover delays via timeout refs. Renders the panel in-tree (never
+ * portaled) and positions it via the shared overlay runtime.
  *
  * @param props - Popover configuration props
- * @param ref - Forwarded ref merged with the internal container ref
+ * @param ref - Forwarded ref merged with the internal anchor ref
  * @returns DS token-styled popover with trigger handling
  */
 export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
@@ -81,9 +80,20 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
 
-    const containerRef = useRef<HTMLDivElement>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+    // The panel renders only after mount: `overlayCapabilities` resolves
+    // false/false server-side (no CSS/HTMLElement), so a capable client's
+    // first hydration pass would otherwise disagree with the server output
+    // for an initially-open Popover.
+    const [mounted, setMounted] = useState(false);
+
     const enterTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+      setMounted(true);
+    }, []);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (!isControlled) {
@@ -100,10 +110,12 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       };
     }, []);
 
-    // Click outside handler
+    // Dismiss the popover when clicking anywhere outside the trigger. The panel
+    // renders in-tree as a descendant of the anchor, so one containment check
+    // covers both.
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        if (anchorEl && !anchorEl.contains(event.target as Node)) {
           handleOpenChange(false);
         }
       };
@@ -115,39 +127,19 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [isOpen, handleOpenChange]);
+    }, [isOpen, anchorEl, handleOpenChange]);
 
     // Normalize trigger to array so multi-trigger combos (e.g. ['click', 'hover']) work uniformly
     const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
 
-    /** Maps the placement prop to CSS positioning styles for the content panel. */
-    const getContentPositionStyles = (): React.CSSProperties => {
-      // Tokenized overlay stack (spec section 9): an explicit numeric
-      // override still wins; otherwise route through the popover tier
-      // instead of a magic 50 (the zIndex prop / POPOVER_DEFAULTS.zIndex
-      // were previously unused by this engine).
-      const base: React.CSSProperties = { position: 'absolute', zIndex: zIndex ?? 'var(--ds-z-popover)' };
-      if (placement?.includes('top')) {
-        Object.assign(base, { bottom: '100%', marginBottom: 8 });
-      } else if (placement?.includes('bottom')) {
-        Object.assign(base, { top: '100%', marginTop: 8 });
-      } else if (placement?.includes('left') || placement?.includes('Left')) {
-        Object.assign(base, { right: '100%', marginRight: 8, top: '50%' });
-      } else if (placement?.includes('right') || placement?.includes('Right')) {
-        Object.assign(base, { left: '100%', marginLeft: 8, top: '50%' });
-      } else {
-        // default: top
-        Object.assign(base, { bottom: '100%', marginBottom: 8 });
-      }
-      // Horizontal centering for top/bottom placements. The paired centering
-      // transform is keyed on `data-placement` in the skin: this engine resolves
-      // to translateY(-50%) for exactly `left`/`right` and translateX(-50%) for
-      // every other value (only 4 of the 12 typed placements are distinct here).
-      if (placement?.includes('top') || placement?.includes('bottom') || !placement) {
-        base.left = '50%';
-      }
-      return base;
-    };
+    // The trigger wrapper is the anchor, the panel is the positioned overlay.
+    // `overlay` is null while closed (the panel only mounts while open).
+    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+      anchor: anchorEl,
+      overlay: surfaceEl,
+      placement: POPOVER_TO_OVERLAY_PLACEMENT[placement ?? 'top'],
+      flip: true,
+    });
 
     const handleClick = () => {
       if (triggerArray.includes('click')) {
@@ -187,10 +179,20 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }
     };
 
+    // Positioning keys come from the shared overlay runtime and spread last so
+    // they win over the panel's own geometry and any caller-supplied overlayStyle.
+    const surfaceStyle: React.CSSProperties = {
+      padding: 12,
+      minWidth: 150,
+      zIndex: zIndex ?? 'var(--ds-z-popover)',
+      ...overlayStyle,
+      ...positionStyle,
+    };
+
     return (
       <div
         ref={(node) => {
-          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          setAnchorEl(node);
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
@@ -203,21 +205,19 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         onMouseLeave={handleMouseLeave}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        {...anchorAttrs}
       >
         {children}
-        {/* Content panel rendered conditionally, absolutely positioned relative to the wrapper */}
-        {isOpen && (
+        {/* Content panel rendered in-tree as a direct child of the trigger wrapper */}
+        {isOpen && mounted && (
           <div
+            ref={setSurfaceEl}
             data-part="surface"
             data-open="true"
             data-placement={placement}
-            className={overlayClassName || ''}
-            style={{
-              ...getContentPositionStyles(),
-              padding: 12,
-              minWidth: 150,
-              ...overlayStyle,
-            }}
+            data-ds-position-strategy={strategy}
+            className={overlayClassName || undefined}
+            style={surfaceStyle}
           >
             {title && (
               <div data-part="title" style={{ fontWeight: 600, marginBottom: 8, paddingBottom: 8 }}>

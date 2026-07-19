@@ -1,21 +1,23 @@
 /**
- * Rustic HoverCard skin (WO-SKIN-04 checkpoint P).
+ * Rustic HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
  *
- * PORTAL: the card mounts via a direct `createPortal(…, document.body)`, so it is NOT
- * a descendant of the trigger root. Every rule is STANDALONE on the card's own class,
- * which it carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
+ * PORTAL: the card mounts via the shared `runtime/overlay/portal` in BOTH
+ * positioning branches (top-layer promotion is DOM-position-agnostic, so
+ * portaling ahead of it costs nothing), so it is NOT a descendant of the
+ * trigger root. Every rule is STANDALONE on the card's own class, which it
+ * carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
  * its rules take the COMPOUND form with no descendant space.
  *
  * TOKENS: this engine has no `--ds-hovercard-*` family of its own — it rides Popover's
  * `--ds-popover-*` namespace wholesale. Transcribed verbatim; forking a dedicated
  * family would change what tenants can override and is not this batch's job.
  *
- * `data-side` carries the centering transform, a 4-way switch on the `side` prop. The
- * `bottom` case and an absent `side` both fall through to the base rule, exactly as the
- * engine's `default:` branch did. The anchor point itself is runtime
- * (`getBoundingClientRect`) and stays inline.
+ * `data-side` is now purely informational: the engine's own `getBoundingClientRect`
+ * copy that the CSS centering transform below depended on is retired. Position,
+ * including cross-axis centering, comes from `runtime/overlay/positioning`'s
+ * `useOverlayPosition` and stays inline — genuine runtime data, not paint.
  *
  * SPECIFICITY (P-48): the card's colored border repeats its `data-part` to clear the
  * tenant `*` border-color floor at (0,3,1).
@@ -26,18 +28,16 @@
   border-radius: var(--ds-popover-radius, var(--ds-radius-lg, 12px));
   box-shadow: var(--ds-popover-shadow, var(--ds-shadow-lg));
   backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
-  transform: translateX(-50%);
 }
 .rottay-hover-card--rustic[data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb));
 }
 
-.rottay-hover-card--rustic[data-part='surface'][data-side='top'] {
-  transform: translate(-50%, -100%);
-}
-.rottay-hover-card--rustic[data-part='surface'][data-side='left'] {
-  transform: translate(-100%, -50%);
-}
-.rottay-hover-card--rustic[data-part='surface'][data-side='right'] {
-  transform: translateY(-50%);
+/* ---- top-layer branch: the card carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither. `data-ds-position-strategy` is stamped by the
+        engine alongside data-part. ---- */
+.rottay-hover-card--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }

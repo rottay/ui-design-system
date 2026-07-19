@@ -1,37 +1,33 @@
 'use client';
 
 /**
- * @fileoverview Popover Apollo Engine - Rottay Design System
- * @description Apollo (Pure HTML/CSS) implementation of the Popover component.
- * Uses inline CSS styles with portal rendering for proper z-index stacking.
+ * @fileoverview Rustic (pure HTML/CSS) engine for the Popover overlay component.
+ * Portals the content panel through the shared portal root and positions it via
+ * the shared overlay positioning runtime (`runtime/overlay/positioning`): this
+ * engine's existing portal posture (checkpoint contract P4: Popover rustic
+ * always portals) is preserved in BOTH branches -- top-layer promotion
+ * (anchor-css branch) is DOM-position-agnostic, so portaling ahead of it costs
+ * nothing.
  *
  * @remarks
- * The Apollo engine provides:
- * - Pure inline CSS with no external dependencies
- * - Portal rendering to document.body via createPortal
- * - Full 12-position placement support with precise positioning
+ * The rustic engine provides:
+ * - Pure inline CSS with no external framework dependencies
+ * - Portal rendering through the shared `#rottay-portal-root`, escaping
+ *   ancestor `overflow: hidden`/`transform` clipping
+ * - Full 12-position placement support, mapped onto the shared engine's
+ *   side-align vocabulary; position (including cross-axis centering) is runtime
+ *   data from `useOverlayPosition`, not paint
  * - Custom trigger handling for click, hover, and focus
- * - Click-outside dismissal via event listeners
+ * - Click-outside dismissal across the trigger and the portaled panel
  *
- * Implementation details:
- * - getPositionStyles calculates absolute positioning for each placement
- * - Uses window scroll offsets for scroll-aware positioning
- * - Timeout refs for enter/leave delay management
- * - Arrow element with CSS rotation and shadow
- *
- * This implementation is ideal for:
- * - Embedded applications without CSS framework dependencies
- * - Server-side rendering without CSS extraction
- * - Maximum browser compatibility scenarios
- *
- * @example Using Apollo Engine
+ * @example Using Rustic Engine
  * ```tsx
  * import { Popover, Button } from '@rottay/design-system';
  *
  * <Popover
  *   engine="rustic"
  *   content="Pure CSS styled content"
- *   title="Apollo Popover"
+ *   title="Popover"
  *   placement="right"
  *   zIndex={2000}
  * >
@@ -40,97 +36,29 @@
  * ```
  *
  * @see {@link Popover} - The main engine-aware component
- * @module Popover/Engines/Apollo
+ * @module Popover/Engines/Rustic
  * @category Overlay
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import type { PopoverProps, PopoverPlacement } from '../../contracts';
-import { POPOVER_DEFAULTS } from '../../contracts';
+import type { PopoverProps } from '../../contracts';
+import { POPOVER_DEFAULTS, POPOVER_TO_OVERLAY_PLACEMENT } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+} from '../../../../runtime/overlay/positioning';
 
 /**
- * Computes fixed-position CSS for the popover content relative to the trigger
- * element's bounding rect. Accounts for scroll offsets so the popover tracks
- * correctly in scrollable containers.
+ * Rustic engine implementation of Popover using pure inline CSS.
  *
- * @param placement - One of 12 placement positions
- * @param triggerRect - DOMRect of the trigger element
- * @returns Inline styles for absolute positioning of the popover
- */
-const getPositionStyles = (
-  placement: PopoverPlacement,
-  triggerRect: DOMRect
-): React.CSSProperties => {
-  // 8px gap between trigger edge and popover content prevents visual collision
-  const gap = 8;
-  const scrollX = window.scrollX;
-  const scrollY = window.scrollY;
-
-  const positions: Record<PopoverPlacement, React.CSSProperties> = {
-    top: {
-      bottom: window.innerHeight - triggerRect.top + gap,
-      left: triggerRect.left + triggerRect.width / 2 + scrollX,
-    },
-    topLeft: {
-      bottom: window.innerHeight - triggerRect.top + gap,
-      left: triggerRect.left + scrollX,
-    },
-    topRight: {
-      bottom: window.innerHeight - triggerRect.top + gap,
-      right: window.innerWidth - triggerRect.right + scrollX,
-    },
-    bottom: {
-      top: triggerRect.bottom + gap + scrollY,
-      left: triggerRect.left + triggerRect.width / 2 + scrollX,
-    },
-    bottomLeft: {
-      top: triggerRect.bottom + gap + scrollY,
-      left: triggerRect.left + scrollX,
-    },
-    bottomRight: {
-      top: triggerRect.bottom + gap + scrollY,
-      right: window.innerWidth - triggerRect.right + scrollX,
-    },
-    left: {
-      top: triggerRect.top + triggerRect.height / 2 + scrollY,
-      right: window.innerWidth - triggerRect.left + gap,
-    },
-    leftTop: {
-      top: triggerRect.top + scrollY,
-      right: window.innerWidth - triggerRect.left + gap,
-    },
-    leftBottom: {
-      bottom: window.innerHeight - triggerRect.bottom,
-      right: window.innerWidth - triggerRect.left + gap,
-    },
-    right: {
-      top: triggerRect.top + triggerRect.height / 2 + scrollY,
-      left: triggerRect.right + gap + scrollX,
-    },
-    rightTop: {
-      top: triggerRect.top + scrollY,
-      left: triggerRect.right + gap + scrollX,
-    },
-    rightBottom: {
-      bottom: window.innerHeight - triggerRect.bottom,
-      left: triggerRect.right + gap + scrollX,
-    },
-  };
-
-  return positions[placement] || positions.top;
-};
-
-/**
- * Rustic (Apollo) engine implementation of Popover using pure inline CSS.
- *
- * Renders the popover content via createPortal into document.body for proper
- * z-index stacking that escapes overflow:hidden ancestors. Position is
- * recalculated from the trigger's bounding rect each time the popover opens.
+ * Renders the popover panel through the shared portal root for z-index
+ * stacking that escapes overflow:hidden ancestors, positioned by the shared
+ * overlay runtime.
  *
  * @param props - Popover configuration props
- * @param ref - Forwarded ref merged with the internal trigger ref
- * @returns Trigger element plus a portaled popover overlay
+ * @param ref - Forwarded ref merged with the internal anchor ref
+ * @returns Trigger element plus a portal-rendered, positioned popover overlay
  */
 export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
   (props, ref) => {
@@ -155,12 +83,11 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
 
     // Controlled/uncontrolled pattern: external `open` prop takes precedence
     const [internalOpen, setInternalOpen] = useState(defaultOpen);
-    const [position, setPosition] = useState<React.CSSProperties>({});
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
 
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const popoverRef = useRef<HTMLDivElement>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
     const enterTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -171,14 +98,6 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Recalculate popover position from trigger rect whenever visibility or placement changes
-    useEffect(() => {
-      if (isOpen && triggerRef.current) {
-        const rect = triggerRef.current.getBoundingClientRect();
-        setPosition(getPositionStyles(placement!, rect));
-      }
-    }, [isOpen, placement]);
-
     // Cleanup timeouts
     useEffect(() => {
       return () => {
@@ -187,16 +106,15 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       };
     }, []);
 
-    // Dismiss on click outside both the trigger AND the popover content, since the
-    // content is portaled to document.body and not a DOM child of the trigger.
+    // Dismiss on click outside both the trigger AND the portaled panel, since the
+    // panel is portaled out of the trigger's subtree.
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
         if (
-          triggerRef.current &&
-          !triggerRef.current.contains(target) &&
-          popoverRef.current &&
-          !popoverRef.current.contains(target)
+          anchorEl &&
+          !anchorEl.contains(target) &&
+          (!surfaceEl || !surfaceEl.contains(target))
         ) {
           handleOpenChange(false);
         }
@@ -209,9 +127,19 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [isOpen, handleOpenChange]);
+    }, [isOpen, anchorEl, surfaceEl, handleOpenChange]);
 
     const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
+
+    // The trigger is the anchor; the portaled panel is the positioned overlay.
+    // The panel only mounts while open, so element presence drives the
+    // positioning lifecycle.
+    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+      anchor: anchorEl,
+      overlay: surfaceEl,
+      placement: POPOVER_TO_OVERLAY_PLACEMENT[placement ?? 'top'],
+      flip: true,
+    });
 
     const handleClick = () => {
       if (triggerArray.includes('click')) {
@@ -249,64 +177,67 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }
     };
 
-    // Portal the popover to document.body so it escapes overflow:hidden ancestors
-    // and participates in the global z-index stacking context.
-    const popoverContent = isOpen && typeof document !== 'undefined' ? (
-      createPortal(
-        <div
-          ref={popoverRef}
-          role="tooltip"
-          data-part="surface"
-          data-open="true"
-          data-placement={placement}
-          className={`rottay-popover--rustic ${overlayClassName || ''}`}
-          style={{
-            position: 'fixed',
-            zIndex,
-            padding: 'var(--ds-popover-padding, 12px 16px)',
-            minWidth: 'var(--ds-popover-min-width, 150px)',
-            maxWidth: 'var(--ds-popover-max-width, 350px)',
-            ...position,
-            ...overlayStyle,
-          }}
-          /* Re-bind hover handlers on the popover itself so moving the cursor
-             from trigger to content does not trigger a premature close. */
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          {title && (
-            <div
-              data-part="title"
-              style={{
-                fontWeight: 600,
-                marginBottom: '8px',
-                paddingBottom: '8px',
-              }}
-            >
-              {title}
-            </div>
-          )}
-          <div>{content}</div>
-          {arrow && (
-            <div
-              data-part="arrow"
-              style={{
-                position: 'absolute',
-                width: 'var(--ds-popover-arrow-size, 10px)',
-                height: 'var(--ds-popover-arrow-size, 10px)',
-              }}
-            />
-          )}
-        </div>,
-        document.body
-      )
+    // Portal the panel through the shared portal root so it escapes
+    // overflow:hidden ancestors and participates in global z-index stacking.
+    const popoverContent = isOpen ? (
+      <Portal>
+        <OverlayPortalBoundary>
+          <div
+            ref={setSurfaceEl}
+            role="tooltip"
+            data-part="surface"
+            data-open="true"
+            data-placement={placement}
+            data-ds-position-strategy={strategy}
+            className={`rottay-popover--rustic ${overlayClassName || ''}`}
+            style={{
+              zIndex,
+              padding: 'var(--ds-popover-padding, 12px 16px)',
+              minWidth: 'var(--ds-popover-min-width, 150px)',
+              maxWidth: 'var(--ds-popover-max-width, 350px)',
+              ...overlayStyle,
+              // Positioning keys come from the shared overlay runtime and
+              // spread last so they win over a caller's overlayStyle.
+              ...positionStyle,
+            }}
+            /* Re-bind hover handlers on the panel itself so moving the cursor
+               from trigger to content does not trigger a premature close. */
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            {title && (
+              <div
+                data-part="title"
+                style={{
+                  fontWeight: 600,
+                  marginBottom: '8px',
+                  paddingBottom: '8px',
+                }}
+              >
+                {title}
+              </div>
+            )}
+            <div>{content}</div>
+            {arrow && (
+              <div
+                data-part="arrow"
+                style={{
+                  position: 'absolute',
+                  width: 'var(--ds-popover-arrow-size, 10px)',
+                  height: 'var(--ds-popover-arrow-size, 10px)',
+                }}
+              />
+            )}
+          </div>
+        </OverlayPortalBoundary>
+      </Portal>
     ) : null;
 
     return (
       <>
         <div
           ref={(node) => {
-            (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+            setAnchorEl(node);
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
@@ -319,6 +250,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           onMouseLeave={handleMouseLeave}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          {...anchorAttrs}
         >
           {children}
         </div>

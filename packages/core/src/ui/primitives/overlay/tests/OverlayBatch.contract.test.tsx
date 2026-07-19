@@ -154,9 +154,9 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
         expect(document.querySelectorAll(`.rottay-tour--${engine}[data-part='root']`).length).toBe(1);
         expect(document.querySelectorAll(`.rottay-tour--${engine} [data-part='backdrop']`).length).toBe(1);
-        // No `target` prop resolves to a real element, so targetRect stays
-        // null and the spotlight (which only renders when targetRect is
-        // truthy) must be absent.
+        // No `target` prop resolves to a real element, so no cutout rect is
+        // measured and the spotlight (which only renders when a cutout was
+        // measured) must be absent.
         expect(document.querySelectorAll(`.rottay-tour--${engine} [data-part='spotlight']`)).toHaveLength(0);
 
         expect(surface.querySelectorAll("[data-part='title']")).toHaveLength(1);

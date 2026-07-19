@@ -3,13 +3,14 @@
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
  *
- * PORTAL: this engine's panel mounts via a direct `createPortal(…, document.body)`,
- * so it is NOT a descendant of the trigger root (and carries no `data-rottay-portal`
- * marker — only the shared `Portal` util stamps that). Every rule is therefore
- * STANDALONE on the panel's own class `.rottay-dropdown--rustic`, which the panel
- * carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so the
- * panel's own rules take the COMPOUND form with no descendant space. The item rows
- * live inside the portaled panel and are its descendants.
+ * PORTAL: this engine's panel mounts via the shared `Portal` util in the measured
+ * (js) branch (which stamps `data-rottay-portal`) and in-tree in the top-layer
+ * (anchor-css) branch, so it is not reliably a descendant of the trigger root.
+ * Every rule is therefore STANDALONE on the panel's own class
+ * `.rottay-dropdown--rustic`, which the panel carries alongside
+ * `data-part='surface'` — a SELF-CARRYING scope element, so the panel's own rules
+ * take the COMPOUND form with no descendant space. The item rows live inside the
+ * panel and are its descendants.
  *
  * Unlike the modern engine, this one renders ZERO DaisyUI classes: `theme.css`'s
  * `.menu li > button` rules do not reach it and its item hover was IMPERATIVE
@@ -24,10 +25,11 @@
  * SCOPE: `rottay-dropdown--rustic`. NOT `ds-dropdown` — that name carries a DORMANT
  * entrance-animation rule in personality.css that matches nothing today (P3).
  *
- * `[data-placement^='top']` reproduces the panel's `placement?.includes('top')`
- * transform: every placement value containing 'top' also starts with it
- * (top/topLeft/topRight vs bottom/bottomLeft/bottomRight), so the prefix match is
- * exact. An absent `placement` matches nothing and leaves the transform unset.
+ * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
+ * genuine runtime data, not paint. The panel carries NO placement transform here:
+ * the shared engine already subtracts overlay height for top placements, so a skin
+ * translate would double-shift it.
  */
 
 /* ---- portaled menu panel ---- */
@@ -36,8 +38,15 @@
   border-radius: var(--ds-dropdown-radius, 12px);
   box-shadow: var(--ds-dropdown-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
 }
-.rottay-dropdown--rustic[data-part='surface'][data-placement^='top'] {
-  transform: translateY(-100%);
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules paint `border: solid`, clip via `overflow: auto`, and force
+        `color: CanvasText` (the item rows read `color: inherit`, so the UA color
+        would reach them); this surface owns none of those. `data-ds-position-strategy`
+        is stamped by the engine alongside data-part. ---- */
+.rottay-dropdown--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
+  color: inherit;
 }
 
 /* ---- structural rows ---- */

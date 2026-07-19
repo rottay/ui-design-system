@@ -1,10 +1,14 @@
 'use client';
 
 /**
- * @fileoverview Rustic (pure HTML/CSS) engine for the HoverCard overlay component.
- * Renders a portal-based card at a position computed from the trigger's bounding
- * rect, styled via token-backed CSS properties and DS custom properties. Supports
- * configurable open/close delays and all four side placements.
+ * @fileoverview Rustic engine for the HoverCard overlay component. Portals
+ * the card through the shared portal root and positions it via the shared
+ * overlay positioning runtime (`runtime/overlay/positioning`): this
+ * engine's existing portal posture (checkpoint contract P4: HoverCard
+ * rustic always portals) is preserved in BOTH branches -- top-layer
+ * promotion (anchor-css branch) is DOM-position-agnostic, so portaling
+ * ahead of it costs nothing. Supports configurable open/close delays and
+ * all placement + alignment combinations.
  *
  * @example
  * ```tsx
@@ -17,19 +21,21 @@
  * ```
  */
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useRef, useCallback } from 'react';
 import type { HoverCardProps } from '../../contracts';
-import { HOVERCARD_DEFAULTS } from '../../contracts';
+import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+} from '../../../../runtime/overlay/positioning';
 
 /**
- * HoverCard implementation using pure inline CSS and React portals.
+ * HoverCard implementation portaled through the shared portal root and
+ * positioned by the shared overlay runtime.
  *
- * The card is portalled to `document.body` and positioned absolutely using
- * the trigger's bounding rect plus scroll offsets. A CSS `transform` based on
- * the `side` prop ensures the card is centred/aligned correctly. Debounced
- * open/close timers allow the user to move the cursor from trigger to card
- * without the card disappearing.
+ * Debounced open/close timers allow the user to move the cursor from
+ * trigger to card without the card disappearing.
  *
  * @param props - {@link HoverCardProps} shared across all engines.
  * @returns The trigger element plus a portal-rendered hover card.
@@ -52,13 +58,13 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
   } = props;
 
   const [internalOpen, setInternalOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
   const isControlled = controlledOpen !== undefined;
   // Disabled always wins: forces card hidden even if controlled open is true
   const isOpen = disabled ? false : (isControlled ? controlledOpen : internalOpen);
 
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const [triggerEl, setTriggerEl] = useState<HTMLDivElement | null>(null);
+  const [cardEl, setCardEl] = useState<HTMLDivElement | null>(null);
+
   // Timer refs enable cancellation when cursor moves between trigger and card
   const openTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -79,77 +85,56 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
     closeTimerRef.current = setTimeout(() => handleOpen(false), closeDelay);
   }, [closeDelay, handleOpen]);
 
-  // Recalculate card position from the trigger's bounding rect each time
-  // the card opens or the side prop changes
-  useEffect(() => {
-    if (isOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      let top = 0;
-      let left = 0;
-      const gap = 8;
+  // The trigger is the anchor; the portaled card is the positioned overlay.
+  // The card only mounts while open, so element presence drives the
+  // positioning lifecycle.
+  const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+    anchor: triggerEl,
+    overlay: cardEl,
+    placement: resolveOverlayPlacement(side, align),
+  });
 
-      switch (side) {
-        case 'top':
-          top = rect.top + window.scrollY - gap;
-          left = rect.left + window.scrollX + rect.width / 2;
-          break;
-        case 'bottom':
-          top = rect.bottom + window.scrollY + gap;
-          left = rect.left + window.scrollX + rect.width / 2;
-          break;
-        case 'left':
-          top = rect.top + window.scrollY + rect.height / 2;
-          left = rect.left + window.scrollX - gap;
-          break;
-        case 'right':
-          top = rect.top + window.scrollY + rect.height / 2;
-          left = rect.right + window.scrollX + gap;
-          break;
-      }
-
-      setPosition({ top, left });
-    }
-  }, [isOpen, side]);
-
-
-  const cardContent = isOpen && typeof document !== 'undefined'
-    ? createPortal(
+  const cardContent = isOpen ? (
+    <Portal>
+      <OverlayPortalBoundary>
         <div
-          ref={cardRef}
+          ref={setCardEl}
           data-part="surface"
           data-open="true"
           data-side={side}
+          data-ds-position-strategy={strategy}
           className={`rottay-hover-card--rustic ${overlayClassName || ''}`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           style={{
-            position: 'absolute',
-            top: position.top,
-            left: position.left,
             zIndex: 1060,
             minWidth: 240,
             maxWidth: 320,
             padding: 16,
             fontFamily: 'var(--ds-font-family-base, inherit)',
             ...overlayStyle,
+            // Positioning keys come from the shared overlay runtime and
+            // spread last so they win over a caller's overlayStyle.
+            ...positionStyle,
           }}
         >
           {content}
-        </div>,
-        document.body
-      )
-    : null;
+        </div>
+      </OverlayPortalBoundary>
+    </Portal>
+  ) : null;
 
   return (
     <>
       <div
-        ref={triggerRef}
+        ref={setTriggerEl}
         data-part="trigger"
         data-open={isOpen ? 'true' : 'false'}
         className={className}
         style={{ display: 'inline-block', ...style }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        {...anchorAttrs}
       >
         {trigger}
       </div>

@@ -1,19 +1,20 @@
 /**
- * Rustic Popconfirm skin (WO-SKIN-04 checkpoint P).
+ * Rustic Popconfirm skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
  *
- * PORTAL: the panel mounts via a direct `createPortal(…, document.body)` (modern does NOT
- * portal). Every rule is STANDALONE on the panel's own class
- * `.rottay-popconfirm--rustic`, which it carries alongside `data-part='surface'` — a
- * SELF-CARRYING scope element, so its own rules take the COMPOUND form with no descendant
- * space.
+ * PORTAL: the panel mounts via the shared `runtime/overlay/portal` in BOTH
+ * positioning branches (top-layer promotion is DOM-position-agnostic, so
+ * portaling ahead of it costs nothing; modern does NOT portal). Every rule is
+ * STANDALONE on the panel's own class `.rottay-popconfirm--rustic`, which it
+ * carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
+ * its own rules take the COMPOUND form with no descendant space.
  *
- * PLACEMENT: `[data-placement^='bottom']` reproduces the panel's
- * `placement?.includes('bottom')` transform exactly. The check is case-sensitive, so the
- * `leftBottom` / `rightBottom` values (capital B) never matched it and still do not — only
- * `bottom`/`bottomLeft`/`bottomRight` do, and all three start with the prefix. Every other
- * placement takes the base rule. The anchor point itself is runtime and stays inline.
+ * `data-placement` is now purely informational: the engine's own
+ * `getBoundingClientRect` copy that the CSS centering transform below
+ * depended on is retired. Position, including cross-axis centering, comes
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stays inline
+ * — genuine runtime data, not paint.
  *
  * OK-TYPE: `data-ok-type` carries the `okType` prop; the engine's `default:` branch is the
  * catch-all, reproduced with a `:not():not()` guard.
@@ -37,13 +38,18 @@
   border-radius: var(--ds-popconfirm-radius, var(--ds-radius-lg, 12px));
   box-shadow: var(--ds-popconfirm-shadow, var(--ds-shadow-lg));
   backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
-  transform: translate(-50%, -100%);
 }
 .rottay-popconfirm--rustic[data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-popconfirm-border-color, var(--ds-color-neutral-200, #e5e7eb));
 }
-.rottay-popconfirm--rustic[data-part='surface'][data-placement^='bottom'] {
-  transform: translateX(-50%);
+
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither. `data-ds-position-strategy` is stamped by the
+        engine alongside data-part. ---- */
+.rottay-popconfirm--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }
 
 /* ---- copy ---- */

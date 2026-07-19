@@ -41,6 +41,14 @@
   border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-neutral-200, #e5e7eb));
 }
 
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules clip via `overflow: auto`; this surface owns no clip (items
+        set their own explicit colors, so no color neutralization is needed).
+        `data-ds-position-strategy` is stamped by the engine alongside data-part. ---- */
+.rottay-context-menu--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  overflow: visible;
+}
+
 /* ---- structural rows ---- */
 .rottay-context-menu--rustic[data-part='surface'] [data-part='divider'] {
   background-color: var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb));

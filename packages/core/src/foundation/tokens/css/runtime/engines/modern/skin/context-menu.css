@@ -43,6 +43,16 @@
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules clip via `overflow: auto` and force `color: CanvasText`;
+        this surface owns neither (its border above is kept — it outranks the UA
+        default). `data-ds-position-strategy` is stamped by the engine alongside
+        data-part. ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  overflow: visible;
+  color: inherit;
+}
+
 /* ---- structural rows ---- */
 .rottay-context-menu--modern[data-part='trigger'] [data-part='divider'] {
   background: var(--ds-color-border-subtle);

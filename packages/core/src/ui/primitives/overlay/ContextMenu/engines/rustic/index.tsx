@@ -1,9 +1,20 @@
 'use client';
 
 /**
- * @fileoverview Rustic (pure HTML/CSS) engine for the ContextMenu overlay component.
- * Renders a portal-based floating menu at the cursor position on right-click,
- * styled via token-backed CSS properties and design-system variables.
+ * @fileoverview Rustic engine for the ContextMenu overlay component. The menu
+ * is positioned by the shared overlay positioning runtime
+ * (`runtime/overlay/positioning`): a right-click captures the cursor's viewport
+ * point, a ZERO-SIZE anchor is rendered there, and `useOverlayPosition` pins
+ * the panel to it with `bottom-start` placement and a zero offset so the
+ * panel's top-left corner lands on the cursor.
+ *
+ * The panel's standalone `.rottay-context-menu--rustic` scope class carries
+ * every skin rule, so either render path styles identically: the `js` strategy
+ * renders the panel through the shared overlay portal (escaping ancestor
+ * `overflow`/`z-index`), while the `anchor-css` strategy promotes it to the top
+ * layer via the popover API and renders it inline. `data-ds-position-strategy`
+ * is stamped for e2e/debug observability. Both click-outside and Escape-key
+ * dismissal are supported.
  *
  * @example
  * ```tsx
@@ -16,8 +27,12 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+} from '../../../../runtime/overlay/positioning';
 
 /**
  * Renders a single menu row -- standard item, divider, or group header.
@@ -101,15 +116,15 @@ const MenuItem: React.FC<{
 };
 
 /**
- * ContextMenu implementation using pure inline CSS and a React portal.
+ * ContextMenu implementation for the rustic engine.
  *
- * The menu is portalled to `document.body` so it is not constrained by any
- * ancestor's `overflow` or `z-index` stacking context. Position is calculated
- * from the cursor's viewport coordinates plus scroll offsets for accuracy in
- * scrollable pages. Both click-outside and Escape-key dismissal are supported.
+ * The menu is positioned by the shared overlay runtime against a zero-size
+ * pointer anchor and rendered through the shared overlay portal (js strategy)
+ * or inline in the top layer (anchor-css strategy). Both click-outside and
+ * Escape-key dismissal are supported.
  *
  * @param props - {@link ContextMenuProps} shared across all engines.
- * @returns The trigger element plus a portal-rendered floating menu.
+ * @returns The trigger element plus the shared-positioned floating menu.
  */
 export default function RusticContextMenu(props: ContextMenuProps): React.ReactElement {
   const {
@@ -124,19 +139,34 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
   } = props;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
+  // Cursor's viewport point; the zero-size anchor is pinned here with
+  // position: fixed, so these are viewport coordinates (clientX/clientY).
+  const [point, setPoint] = useState({ x: 0, y: 0 });
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
-  // Use absolute page coordinates (clientXY + scroll) so the portal menu
-  // appears exactly at the cursor regardless of scroll position
+  // The panel is both the click-outside target and the positioned overlay.
+  const setMenuRef = useCallback((node: HTMLDivElement | null) => {
+    menuRef.current = node;
+    setMenuEl(node);
+  }, []);
+
+  const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+    anchor: anchorEl,
+    overlay: menuEl,
+    placement: 'bottom-start',
+    offset: 0,
+    flip: true,
+  });
+
+  // The cursor's viewport point is where the zero-size anchor is pinned
+  // (position: fixed); the shared positioning runtime owns the geometry.
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
     e.preventDefault();
-    setPosition({
-      top: e.clientY + window.scrollY,
-      left: e.clientX + window.scrollX,
-    });
+    setPoint({ x: e.clientX, y: e.clientY });
     setIsOpen(true);
   }, [disabled]);
 
@@ -169,33 +199,32 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
     };
   }, [isOpen]);
 
-  // Portal the menu to document.body to escape overflow/z-index constraints
-  const menuContent = isOpen && typeof document !== 'undefined'
-    ? createPortal(
-        <div
-          ref={menuRef}
-          role="menu"
-          data-part="surface"
-          data-open="true"
-          className={`rottay-context-menu--rustic ${overlayClassName || ''}`}
-          style={{
-            position: 'absolute',
-            top: position.top,
-            left: position.left,
-            zIndex: 1060,
-            minWidth: 180,
-            padding: '6px',
-            fontFamily: 'var(--ds-font-family-base, inherit)',
-            ...overlayStyle,
-          }}
-        >
-          {items.map((item) => (
-            <MenuItem key={item.key} item={item} onClick={handleItemClick} />
-          ))}
-        </div>,
-        document.body
-      )
-    : null;
+  const surfaceStyle: React.CSSProperties = {
+    zIndex: 1060,
+    minWidth: 180,
+    padding: '6px',
+    fontFamily: 'var(--ds-font-family-base, inherit)',
+    // Positioning from the shared runtime; consumer overlayStyle spreads last
+    // and wins.
+    ...positionStyle,
+    ...overlayStyle,
+  };
+
+  const menuNode = (
+    <div
+      ref={setMenuRef}
+      role="menu"
+      data-part="surface"
+      data-open="true"
+      data-ds-position-strategy={strategy}
+      className={`rottay-context-menu--rustic ${overlayClassName || ''}`}
+      style={surfaceStyle}
+    >
+      {items.map((item) => (
+        <MenuItem key={item.key} item={item} onClick={handleItemClick} />
+      ))}
+    </div>
+  );
 
   return (
     <>
@@ -209,7 +238,24 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
       >
         {trigger}
       </div>
-      {menuContent}
+      {isOpen && (
+        <>
+          <div
+            ref={setAnchorEl}
+            data-part="pointer-anchor"
+            aria-hidden="true"
+            style={{ position: 'fixed', left: point.x, top: point.y, width: 0, height: 0, pointerEvents: 'none' }}
+            {...anchorAttrs}
+          />
+          {strategy === 'anchor-css' ? (
+            menuNode
+          ) : (
+            <Portal>
+              <OverlayPortalBoundary>{menuNode}</OverlayPortalBoundary>
+            </Portal>
+          )}
+        </>
+      )}
     </>
   );
 }
