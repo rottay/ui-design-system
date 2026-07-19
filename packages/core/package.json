@@ -256,7 +256,7 @@
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
     "engine-audit:relocate-paths": "node scripts/relocate-engine-token-baseline.mjs",
     "cra14:check": "node scripts/cra-14-public-barrel-gate.mjs",
-    "cra15:gate": "node scripts/cra-15-runtime-hardening-gate.mjs --check",
+    "cra15:gate": "node scripts/cra-15-runtime-hardening-gate.mjs --check --structural",
     "cra15:write": "node scripts/cra-15-runtime-hardening-gate.mjs --write",
     "cra17:licenses": "node scripts/cra-17-packaging-license-gate.mjs",
     "cra17:declarations": "node scripts/cra-17-public-declaration-gate.mjs",
@@ -310,7 +310,8 @@
     "lint:integration": "node scripts/audit-integration.mjs",
     "lint:vertical": "node scripts/audit-vertical-compliance.mjs",
     "docs:taxonomy": "node scripts/generate-taxonomy.mjs",
-    "build:fonts": "node scripts/build-font-packs.mjs"
+    "build:fonts": "node scripts/build-font-packs.mjs",
+    "cra15:gate:final": "node scripts/cra-15-runtime-hardening-gate.mjs --check"
   },
   "releaseSync": {
     "sourceEntrypoints": {
