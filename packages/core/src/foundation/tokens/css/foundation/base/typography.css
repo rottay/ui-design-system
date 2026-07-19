@@ -260,8 +260,15 @@
    * `container-type`, `cqi` resolves against the small viewport, which is the
    * behaviour a `vw` ramp would have had.
    *
-   * Opt-in. Nothing consumes these by default; a skin or surface reaches for one
-   * where a static step is cramped at 360px or oversized at 1280px.
+   * Opt-in. A skin or surface reaches for one where a static step is cramped at
+   * 360px or oversized at 1280px, and only where a `container-type` ancestor
+   * exists to resolve `cqi` against -- currently the page-shell root
+   * (`runtime/engines/{modern,rustic}/skin/page-shell.css`, container name
+   * `ds-page`), consumed by the page-shell title
+   * (`ui/patterns/shell/page-shell/engines/{modern,rustic}/index.tsx`, `--ds-font-size-fluid-2xl`).
+   * Reaching for one of these outside a `container-type` ancestor silently
+   * resolves against the small viewport instead -- verify the ancestor chain
+   * before adopting a new consumer.
    * ------------------------------------------------------------------------ */
   --ds-font-size-fluid-sm: clamp(0.75rem, 0.7011rem + 0.2174cqi, 0.875rem);
   --ds-font-size-fluid-base: clamp(0.875rem, 0.8261rem + 0.2174cqi, 1rem);

@@ -32,6 +32,15 @@
  * Values are transcribed verbatim from `engines/modern.tsx`.
  */
 
+/* ---- named container (W6-A): the shell root owns the width every descendant
+        adapts to -- command-home chrome and the cqi fluid type ramp both resolve
+        against it. Declared on the bare data-part='root' match so it holds across
+        both the loading and main roots; never on a scroll container. ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-page;
+}
+
 /* ---- shell-grid background: non-loading root only (main root had it, the loading
         root did not). Invisible until a tenant sets the grid tokens. ---- */
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'][data-loading='false'] {

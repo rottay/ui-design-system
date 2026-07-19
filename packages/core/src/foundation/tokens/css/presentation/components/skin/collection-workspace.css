@@ -5,6 +5,19 @@
  * Caller styles remain inline and therefore retain their original precedence.
  */
 
+/* NAMED CONTAINER (W6-A): `ds-collection` is declared on the `[data-part='collection']`
+   flex ITEM (`flex: 1 1 0%; min-width: 0`), not on its `[data-part='content']` flex-row
+   parent. The row's own inline-size stays ~constant whether or not a preview rail is
+   showing -- flexbox only reallocates space AMONG its children -- so a container there
+   would just re-measure page width, duplicating `ds-page`. The `[data-part='collection']`
+   item is the box that actually shrinks when a rail claims space beside it, so it is the
+   element descendants (table/grid cells) need to query. Present under both the legacy
+   (`!isPremium`) and premium (`WorkspaceShell`-wrapped) render paths. */
+.ds-surface.ds-collection-workspace .ds-collection-workspace__collection[data-part='collection'] {
+  container-type: inline-size;
+  container-name: ds-collection;
+}
+
 /* ENHANCED_CSS moved byte-for-byte from the conditional runtime style tag.
    The ds-collection-enhanced class preserves its original condition. */
 .ds-collection-enhanced tr[data-row-key]:hover td {

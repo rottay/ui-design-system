@@ -50,6 +50,13 @@
   box-shadow: var(--ds-card-shadow, none);
 }
 
+/* ---- named container (W6-A): the panel root owns the width every descendant
+        adapts to. Never on a scroll container. ---- */
+.ds-pattern-detail-panel.ds-engine-rustic[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-detail;
+}
+
 /* ---- breadcrumbs ---- */
 .ds-pattern-detail-panel.ds-engine-rustic [data-part='breadcrumbs'] {
   color: var(--ds-color-neutral-500);

@@ -30,6 +30,12 @@
  * caller props, so the landing hook is `className` (the FFP __control mechanism),
  * and the suppression rule escalates to (0,6,0) by repeating the close class four
  * times so it outranks rest AND hover exactly as the inline object did.
+ *
+ * NAMED CONTAINER (W6-A): `container-name: ds-rail` is declared on BOTH roots
+ * with the identical value -- exactly one of the two ever renders per instance,
+ * so there is no shadowing risk the TWO ROOTS law above warns about; a `ds-rail`
+ * container-query descendant works unconditionally regardless of which branch
+ * is live.
  */
 
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
@@ -37,11 +43,15 @@
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] {
   border-left: 1px solid var(--ds-color-border-subtle);
   background: transparent;
+  container-type: inline-size;
+  container-name: ds-rail;
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
   border-left: 1px solid var(--ds-color-border-subtle);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), var(--ds-surface-card));
+  container-type: inline-size;
+  container-name: ds-rail;
 }
 
 /* customPreview branch ------------------------------------------------------- */

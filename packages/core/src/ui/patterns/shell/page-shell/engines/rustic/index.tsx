@@ -146,7 +146,9 @@ export default function RusticPageShell(props: PageShellProps) {
           <div data-part="titles">
             {/* Title + badge inline; lineHeight 1.3 prevents badge vertical misalignment */}
             <div data-part="title-row" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <h1 data-part="title" style={{ margin: 0, fontSize: 24, fontWeight: 600, lineHeight: 1.3 }}>
+              {/* W6-A cqi proof consumer: see the modern engine's title style for the
+                  fluid-ramp rationale (resolves against the page-shell root container). */}
+              <h1 data-part="title" style={{ margin: 0, fontSize: 'var(--ds-font-size-fluid-2xl, 1.5rem)', fontWeight: 600, lineHeight: 1.3 }}>
                 {title}
               </h1>
               {badge}

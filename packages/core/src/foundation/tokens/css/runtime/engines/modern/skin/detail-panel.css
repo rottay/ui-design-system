@@ -36,6 +36,14 @@
   border-radius: var(--ds-radius-lg);
 }
 
+/* ---- named container (W6-A): the panel root owns the width every descendant
+        adapts to, matching both the content and loading roots. Never on a scroll
+        container. ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-detail;
+}
+
 /* ---- action-button: shared chrome + per-variant base and merged hover/focus.
         The JSX merged `vs.hover` over `vs.base` when `isInteractive`
         (`(hovered || focused) && !disabled && !loading`); the button is natively

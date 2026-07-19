@@ -1650,7 +1650,7 @@
   animation: ds-command-home-spin 900ms linear infinite;
 }
 
-@media (max-width: 980px) {
+@container ds-page (max-width: 980px) {
   :is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1665,7 +1665,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@container ds-page (max-width: 640px) {
   :is(.ds-command-home-hero) {
     align-items: flex-start;
     flex-direction: column;
@@ -2095,13 +2095,13 @@
   white-space: nowrap;
 }
 
-@media (max-width: 860px) {
+@container ds-page (max-width: 860px) {
   .ds-command-home-shell .ds-command-home-command-grid {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 760px) {
+@container ds-page (max-width: 760px) {
   .ds-command-home-shell .ds-launchpad__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2113,7 +2113,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@container ds-page (max-width: 640px) {
   .ds-command-home-shell .ds-command-home-hero {
     grid-template-columns: 1fr;
     align-items: flex-start;

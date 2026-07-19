@@ -414,7 +414,12 @@ export default function ModernPageShell(props: PageShellProps) {
                   data-part="title"
                   style={{
                     margin: 0,
-                    fontSize: 24,
+                    // W6-A cqi proof consumer: the fluid ramp only resolves against a
+                    // `container-type` ancestor (the page-shell root, declared in the
+                    // engine skin). At full container width this equals the prior
+                    // static 24px exactly; it steps down toward 20px as the shell is
+                    // squeezed by a sibling rail/chat panel.
+                    fontSize: 'var(--ds-font-size-fluid-2xl, 1.5rem)',
                     fontWeight: 700,
                     lineHeight: 1.2,
                     letterSpacing: '-0.025em',

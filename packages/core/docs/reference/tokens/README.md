@@ -220,6 +220,36 @@ var(--ds-font-weight-medium)  /* 500 */
 var(--ds-line-height-normal)  /* 1.5 */
 ```
 
+##### Fluid type ramp (`--ds-font-size-fluid-*`, cqi-based)
+
+`--ds-font-size-fluid-sm` through `--ds-font-size-fluid-5xl` interpolate between
+the same two static steps with `clamp(<360px-value>, <slope> + <rate>cqi, <1280px-value>)`
+-- no new magnitudes, only the path between two that already exist. The
+interpolation unit is **`cqi`** (container inline-size), not `vw`: a component
+can render at rail width, half width, or full width inside one viewport, and a
+viewport unit cannot tell those apart. `cqi` only resolves against a real
+container -- **without a `container-type` ancestor it silently falls back to
+resolving against the small viewport**, which is why this ramp is opt-in, not a
+default.
+
+As of W6-A, `container-type: inline-size; container-name: ds-page;` is declared
+on the page-shell root (`foundation/tokens/css/runtime/engines/{modern,rustic}/skin/page-shell.css`),
+so any descendant of a page shell can now consume the ramp. The one activated
+proof consumer is the page-shell title (`ui/patterns/shell/page-shell/engines/{modern,rustic}/index.tsx`),
+which reads `--ds-font-size-fluid-2xl` in place of a static `24px`: at full
+container width it resolves to the same 24px as before (zero visual change at
+a full-width page), and steps down toward 20px as the page shell is squeezed
+by a sibling rail or chat panel. This is a deliberate single-consumer
+activation, not a mass migration -- picking a fluid step for every other
+static heading/body size across the system is a typography-scale decision,
+not a mechanical sweep.
+
+```css
+.my-title {
+  font-size: var(--ds-font-size-fluid-2xl); /* only resolves inside a container-type ancestor */
+}
+```
+
 #### Shadows (`css/foundation/base/shadows.css`)
 
 Elevation scale from xs to 3xl:
