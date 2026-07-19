@@ -53,7 +53,11 @@ describe('Descriptions rustic engine advanced coverage', () => {
     const item = screen.getByRole('listitem');
 
     expect(region).toBeInTheDocument();
-    expect(item).toHaveStyle({ display: 'flex' });
+    // Vertical mode is signalled by data-layout on the root; the label/value
+    // column layout itself resolves from the rustic skin (flex fallback +
+    // @supports subgrid), so it is asserted in the visual fixture, not here.
+    expect(region).toHaveAttribute('data-layout', 'vertical');
+    expect(item).toHaveTextContent('Status');
     expect(screen.getByText('Status')).toBeInTheDocument();
     expect(screen.queryByText('Status:')).toBeNull();
   });

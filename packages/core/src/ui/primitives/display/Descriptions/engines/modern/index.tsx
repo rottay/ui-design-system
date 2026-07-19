@@ -74,6 +74,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         style={style}
         data-part="root"
         data-engine="modern"
+        data-layout={layout}
         data-bordered={bordered ? 'true' : 'false'}
       >
         {/* Header section with title and extra content */}

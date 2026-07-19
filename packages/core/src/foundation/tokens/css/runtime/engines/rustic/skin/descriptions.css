@@ -63,3 +63,45 @@
 .rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
   color: var(--ds-descriptions-content-color, var(--ds-color-text-primary, #333));
 }
+
+/* ---- vertical layout: label/value columns + subgrid alignment (W6-D) ----
+   The vertical layout's `[label | value]` column split lives here, not inline on
+   the engine's row nodes: an inline `display`/`width`/`flex` outranks this
+   unlayered skin and would pin the fallback, defeating the `@supports` subgrid
+   upgrade below. These three rules ARE the fallback split (row flex, label
+   one-third, value flush). Under `@supports` the row is a padded/bordered box, so
+   the 2-track grid on `[data-part='rows']` is re-exposed to each row via subgrid
+   -- lifting label and value into a shared grid without dropping the box -- so
+   every value column aligns to the widest label across all rows. Per-item
+   `styles.label`/`styles.content` still land inline and still win. HORIZONTAL
+   layout stacks label above value (no label column) and is excluded by scope;
+   subgrid inherits the parent `column-gap`, declared once on the grid. */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  display: flex;
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+  width: 33%;
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+  flex: 1 1 auto;
+}
+
+@supports (grid-template-columns: subgrid) {
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
+    display: grid;
+    grid-template-columns: minmax(120px, max-content) 1fr;
+    column-gap: 24px;
+  }
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: start;
+  }
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+    width: auto;
+  }
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+    min-width: 0;
+  }
+}

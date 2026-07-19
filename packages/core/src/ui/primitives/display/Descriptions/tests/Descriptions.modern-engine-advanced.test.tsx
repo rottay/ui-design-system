@@ -52,6 +52,8 @@ describe('Descriptions modern advanced coverage', () => {
     expect(screen.getByText('Status')).toBeInTheDocument();
     expect(screen.queryByText('Status:')).not.toBeInTheDocument();
     expect(container.querySelector('.divide-y')).toBeTruthy();
+    // Vertical mode carries the data-layout hook the W6-D subgrid skin scopes to.
+    expect(container.querySelector('[data-part="root"][data-layout="vertical"]')).toBeTruthy();
     expect(screen.getByText('Standalone')).toBeInTheDocument();
   });
 });

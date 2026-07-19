@@ -50,3 +50,35 @@
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
   color: var(--ds-color-text-primary);
 }
+
+/* ---- vertical layout: subgrid label/value column alignment (W6-D) ----
+   The vertical layout renders each row as `[label | value]` columns. The row is
+   a padded/bordered box, so `display: contents` cannot lift its label and value
+   into a shared parent grid without dropping the box -- a subgrid can. The
+   2-track grid lives on `[data-part='rows']`; every row spans it and re-exposes
+   the tracks via subgrid, so each value column aligns to the widest label across
+   ALL rows (content-aware) instead of the fixed one-third split. `@supports`
+   gates the upgrade: with subgrid absent the Tailwind `flex`/`w-1/3` utilities
+   still on these nodes paint today's per-row split unchanged. HORIZONTAL layout
+   stacks label above value -- no label column exists -- so it is excluded by the
+   `[data-layout='vertical']` scope. Subgrid inherits the parent `column-gap`, so
+   the 24px gutter is declared once on the grid. */
+@supports (grid-template-columns: subgrid) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
+    display: grid;
+    grid-template-columns: minmax(120px, max-content) 1fr;
+    column-gap: 24px;
+  }
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: start;
+  }
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+    width: auto;
+  }
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+    min-width: 0;
+  }
+}

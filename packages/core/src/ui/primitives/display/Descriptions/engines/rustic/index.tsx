@@ -149,6 +149,13 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
     /**
      * Renders items in vertical stacked layout.
+     *
+     * The label/value column split (row flex, label 33%, value flush) is owned
+     * by the rustic descriptions skin, not by inline styles: the skin resolves a
+     * flex fallback and upgrades to `grid-template-columns: subgrid` under
+     * `@supports`, and an inline `display`/`width`/`flex` would outrank that
+     * unlayered rule and pin the fallback. Per-item `styles.label`/`styles.content`
+     * still land inline and still win, as before.
      */
     const renderVerticalLayout = () => (
       <div data-part="rows" role="list">
@@ -161,14 +168,12 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               data-part="row"
               role="listitem"
               style={{
-                display: 'flex',
                 padding: '12px 16px',
               }}
             >
               <div
                 data-part="label"
                 style={{
-                  width: '33%',
                   ...labelBaseStyle,
                   ...itemProps.styles?.label,
                 }}
@@ -179,7 +184,6 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               <div
                 data-part="content"
                 style={{
-                  flex: 1,
                   ...contentBaseStyle,
                   ...itemProps.styles?.content,
                 }}
@@ -199,6 +203,7 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         style={containerStyle}
         data-part="root"
         data-engine="rustic"
+        data-layout={layout}
         data-bordered={bordered ? 'true' : 'false'}
         role="region"
         aria-label={typeof title === 'string' ? title : 'Description list'}
