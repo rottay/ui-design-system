@@ -98,10 +98,10 @@ export const EXPECTED_COMPAT_CORPUS_IDS = Object.freeze([
 const VALID_ROLES = new Set(['control', 'navigation', 'feature', 'status', 'illustration']);
 const VALID_TONES = new Set(['default', 'muted', 'primary', 'success', 'warning', 'error', 'info']);
 export const ICON_PACK_COUNTS = Object.freeze({
-  foundation: 122,
+  foundation: 139,
   bithire: 6,
-  identity: 45,
-  intelligence: 45,
+  identity: 46,
+  intelligence: 46,
   operations: 45,
 });
 export const ICON_PACKS = Object.freeze(Object.keys(ICON_PACK_COUNTS));
@@ -278,7 +278,7 @@ export function validateCorpusManifest(manifest) {
     if (actual !== count) errors.push(`${pack} pack must contain ${count} entries; received ${actual}`);
   }
   if (!sameArray(stableIds, EXPECTED_COMPAT_CORPUS_IDS)) errors.push('stable entries must preserve the exact ordered 50-name v3 compatibility corpus');
-  if (candidateCount !== 213) errors.push(`candidate set must contain 213 entries; received ${candidateCount}`);
+  if (candidateCount !== 232) errors.push(`candidate set must contain 232 entries; received ${candidateCount}`);
   if (fingerprint(manifest.entries.slice(0, V4_PREFIX_COUNT)) !== V4_CORPUS_PREFIX_FINGERPRINT) {
     errors.push('the exact ordered 126-role v4 corpus prefix must remain unchanged');
   }

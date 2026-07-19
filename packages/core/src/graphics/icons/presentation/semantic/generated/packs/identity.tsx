@@ -47,6 +47,7 @@ import { PrivacyVisibilityIcon } from '../roles/privacy-visibility';
 import { PrivacyMaskedIcon } from '../roles/privacy-masked';
 import { PrivacyRequestIcon } from '../roles/privacy-request';
 import { PrivacyDeleteRequestIcon } from '../roles/privacy-delete-request';
+import { IdentityDeactivatedIcon } from '../roles/identity-deactivated';
 import type { IdentityIconName } from '../../../../foundation/semantic/corpus/generated';
 
 export type IdentityIconProps = SemanticIconProps & {
@@ -99,6 +100,7 @@ export const IDENTITY_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
   "privacy.masked": PrivacyMaskedIcon,
   "privacy.request": PrivacyRequestIcon,
   "privacy.delete-request": PrivacyDeleteRequestIcon,
+  "identity.deactivated": IdentityDeactivatedIcon,
 } as const satisfies Record<IdentityIconName, SemanticIconComponent>);
 
 export function isIdentityIconName(value: unknown): value is IdentityIconName {
@@ -162,4 +164,5 @@ export {
   PrivacyMaskedIcon,
   PrivacyRequestIcon,
   PrivacyDeleteRequestIcon,
+  IdentityDeactivatedIcon,
 };

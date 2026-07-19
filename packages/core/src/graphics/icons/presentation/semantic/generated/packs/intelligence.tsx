@@ -47,6 +47,7 @@ import { AiEvaluationIcon } from '../roles/ai-evaluation';
 import { AiFeedbackIcon } from '../roles/ai-feedback';
 import { AiAnomalyIcon } from '../roles/ai-anomaly';
 import { AiExperimentIcon } from '../roles/ai-experiment';
+import { AnalyticsBalanceIcon } from '../roles/analytics-balance';
 import type { IntelligenceIconName } from '../../../../foundation/semantic/corpus/generated';
 
 export type IntelligenceIconProps = SemanticIconProps & {
@@ -99,6 +100,7 @@ export const INTELLIGENCE_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
   "ai.feedback": AiFeedbackIcon,
   "ai.anomaly": AiAnomalyIcon,
   "ai.experiment": AiExperimentIcon,
+  "analytics.balance": AnalyticsBalanceIcon,
 } as const satisfies Record<IntelligenceIconName, SemanticIconComponent>);
 
 export function isIntelligenceIconName(value: unknown): value is IntelligenceIconName {
@@ -162,4 +164,5 @@ export {
   AiFeedbackIcon,
   AiAnomalyIcon,
   AiExperimentIcon,
+  AnalyticsBalanceIcon,
 };

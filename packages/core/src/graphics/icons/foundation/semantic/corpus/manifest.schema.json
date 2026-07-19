@@ -14,18 +14,18 @@
       "additionalProperties": false,
       "required": ["foundation", "bithire", "identity", "intelligence", "operations", "global"],
       "properties": {
-        "foundation": { "const": 122 },
+        "foundation": { "const": 139 },
         "bithire": { "const": 6 },
-        "identity": { "const": 45 },
-        "intelligence": { "const": 45 },
+        "identity": { "const": 46 },
+        "intelligence": { "const": 46 },
         "operations": { "const": 45 },
-        "global": { "const": 263 }
+        "global": { "const": 282 }
       }
     },
     "entries": {
       "type": "array",
-      "minItems": 263,
-      "maxItems": 263,
+      "minItems": 282,
+      "maxItems": 282,
       "items": {
         "type": "object",
         "additionalProperties": false,

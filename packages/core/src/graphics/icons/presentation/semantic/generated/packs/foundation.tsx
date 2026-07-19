@@ -124,6 +124,23 @@ import { EntityTaskIcon } from '../roles/entity-task';
 import { EntityTagIcon } from '../roles/entity-tag';
 import { ConnectivityWebIcon } from '../roles/connectivity-web';
 import { AppearanceThemeIcon } from '../roles/appearance-theme';
+import { ActionFocusIcon } from '../roles/action-focus';
+import { ActionReorderIcon } from '../roles/action-reorder';
+import { ActionVoteIcon } from '../roles/action-vote';
+import { CommunicationMuteIcon } from '../roles/communication-mute';
+import { CommunicationReplyIcon } from '../roles/communication-reply';
+import { ContentNoteIcon } from '../roles/content-note';
+import { ContentQuoteIcon } from '../roles/content-quote';
+import { ContentTranslationIcon } from '../roles/content-translation';
+import { EntityEducationIcon } from '../roles/entity-education';
+import { EntityPersonaIcon } from '../roles/entity-persona';
+import { StatusPriorityIcon } from '../roles/status-priority';
+import { StatusAchievementIcon } from '../roles/status-achievement';
+import { StatusFeaturedIcon } from '../roles/status-featured';
+import { StatusPremiumIcon } from '../roles/status-premium';
+import { StatusNeutralIcon } from '../roles/status-neutral';
+import { StatusInstantIcon } from '../roles/status-instant';
+import { TimeLeaveIcon } from '../roles/time-leave';
 import type { FoundationIconName } from '../../../../foundation/semantic/corpus/generated';
 
 export type FoundationIconProps = SemanticIconProps & {
@@ -253,6 +270,23 @@ export const FOUNDATION_ICON_COMPONENTS = /* @__PURE__ */ Object.freeze({
   "entity.tag": EntityTagIcon,
   "connectivity.web": ConnectivityWebIcon,
   "appearance.theme": AppearanceThemeIcon,
+  "action.focus": ActionFocusIcon,
+  "action.reorder": ActionReorderIcon,
+  "action.vote": ActionVoteIcon,
+  "communication.mute": CommunicationMuteIcon,
+  "communication.reply": CommunicationReplyIcon,
+  "content.note": ContentNoteIcon,
+  "content.quote": ContentQuoteIcon,
+  "content.translation": ContentTranslationIcon,
+  "entity.education": EntityEducationIcon,
+  "entity.persona": EntityPersonaIcon,
+  "status.priority": StatusPriorityIcon,
+  "status.achievement": StatusAchievementIcon,
+  "status.featured": StatusFeaturedIcon,
+  "status.premium": StatusPremiumIcon,
+  "status.neutral": StatusNeutralIcon,
+  "status.instant": StatusInstantIcon,
+  "time.leave": TimeLeaveIcon,
 } as const satisfies Record<FoundationIconName, SemanticIconComponent>);
 
 export function isFoundationIconName(value: unknown): value is FoundationIconName {
@@ -393,4 +427,21 @@ export {
   EntityTagIcon,
   ConnectivityWebIcon,
   AppearanceThemeIcon,
+  ActionFocusIcon,
+  ActionReorderIcon,
+  ActionVoteIcon,
+  CommunicationMuteIcon,
+  CommunicationReplyIcon,
+  ContentNoteIcon,
+  ContentQuoteIcon,
+  ContentTranslationIcon,
+  EntityEducationIcon,
+  EntityPersonaIcon,
+  StatusPriorityIcon,
+  StatusAchievementIcon,
+  StatusFeaturedIcon,
+  StatusPremiumIcon,
+  StatusNeutralIcon,
+  StatusInstantIcon,
+  TimeLeaveIcon,
 };

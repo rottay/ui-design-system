@@ -7,7 +7,7 @@ export const GENERATED_PHOSPHOR_PROVENANCE = Object.freeze({
   packageName: "@phosphor-icons/react",
   packageVersion: "2.1.10",
   rendering: "local-ssr",
-  manifestFingerprint: "02e9ad41c9ba686d72cc244d38f94c1bdee29b345184baf12166d14b5c47f26f",
+  manifestFingerprint: "ef5bd474b9ac7e275689478cf3a7f257f9c7e305dd6032cdf1e871011e94addf",
 } as const);
 
 export interface GeneratedPhosphorAdapterEntry {
@@ -280,6 +280,25 @@ export const GENERATED_PHOSPHOR_ADAPTER = [
   { id: "operations.support", module: "@phosphor-icons/react/dist/ssr/Headset", exportName: "HeadsetIcon" },
   { id: "connectivity.web", module: "@phosphor-icons/react/dist/ssr/GlobeSimple", exportName: "GlobeSimpleIcon" },
   { id: "appearance.theme", module: "@phosphor-icons/react/dist/ssr/Palette", exportName: "PaletteIcon" },
+  { id: "action.focus", module: "@phosphor-icons/react/dist/ssr/CrosshairSimple", exportName: "CrosshairSimpleIcon" },
+  { id: "action.reorder", module: "@phosphor-icons/react/dist/ssr/DotsSixVertical", exportName: "DotsSixVerticalIcon" },
+  { id: "action.vote", module: "@phosphor-icons/react/dist/ssr/Notepad", exportName: "NotepadIcon" },
+  { id: "communication.mute", module: "@phosphor-icons/react/dist/ssr/MicrophoneSlash", exportName: "MicrophoneSlashIcon" },
+  { id: "communication.reply", module: "@phosphor-icons/react/dist/ssr/ArrowBendUpLeft", exportName: "ArrowBendUpLeftIcon" },
+  { id: "content.note", module: "@phosphor-icons/react/dist/ssr/Note", exportName: "NoteIcon" },
+  { id: "content.quote", module: "@phosphor-icons/react/dist/ssr/Quotes", exportName: "QuotesIcon" },
+  { id: "content.translation", module: "@phosphor-icons/react/dist/ssr/Translate", exportName: "TranslateIcon" },
+  { id: "entity.education", module: "@phosphor-icons/react/dist/ssr/Student", exportName: "StudentIcon" },
+  { id: "entity.persona", module: "@phosphor-icons/react/dist/ssr/MaskHappy", exportName: "MaskHappyIcon" },
+  { id: "status.priority", module: "@phosphor-icons/react/dist/ssr/Flag", exportName: "FlagIcon" },
+  { id: "status.achievement", module: "@phosphor-icons/react/dist/ssr/Trophy", exportName: "TrophyIcon" },
+  { id: "status.featured", module: "@phosphor-icons/react/dist/ssr/Star", exportName: "StarIcon" },
+  { id: "status.premium", module: "@phosphor-icons/react/dist/ssr/CrownSimple", exportName: "CrownSimpleIcon" },
+  { id: "status.neutral", module: "@phosphor-icons/react/dist/ssr/Minus", exportName: "MinusIcon" },
+  { id: "status.instant", module: "@phosphor-icons/react/dist/ssr/Rocket", exportName: "RocketIcon" },
+  { id: "time.leave", module: "@phosphor-icons/react/dist/ssr/Island", exportName: "IslandIcon" },
+  { id: "analytics.balance", module: "@phosphor-icons/react/dist/ssr/Scales", exportName: "ScalesIcon" },
+  { id: "identity.deactivated", module: "@phosphor-icons/react/dist/ssr/UserCircleMinus", exportName: "UserCircleMinusIcon" },
 ] as const satisfies readonly GeneratedPhosphorAdapterEntry[];
 
 const GENERATED_PHOSPHOR_ADAPTER_BY_ID = new Map<GeneratedIconName, GeneratedPhosphorAdapterEntry>(

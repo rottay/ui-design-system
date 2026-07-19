@@ -50,23 +50,23 @@ async function listFiles(root, current = root) {
   return files;
 }
 
-test('authored corpus is the exact 263-role v6 governed set', async () => {
+test('authored corpus is the exact 282-role v6 governed set', async () => {
   const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
-  assert.equal(corpus.entries.length, 263);
+  assert.equal(corpus.entries.length, 282);
   for (const [pack, count] of Object.entries(ICON_PACK_COUNTS)) {
     assert.equal(corpus.entries.filter((entry) => entry.pack === pack).length, count);
   }
   assert.equal(corpus.entries.filter(({ status }) => status === 'stable').length, 50);
-  assert.equal(corpus.entries.filter(({ status }) => status === 'candidate').length, 213);
+  assert.equal(corpus.entries.filter(({ status }) => status === 'candidate').length, 232);
   assert.equal(corpus.entries.filter(({ since }) => since === 4).length, 76);
-  assert.equal(corpus.entries.filter(({ since }) => since === 5).length, 135);
-  assert.equal(corpus.entries.filter(({ since }) => since === 6).length, 2);
+  assert.equal(corpus.entries.filter(({ since }) => since === 5).length, 137);
+  assert.equal(corpus.entries.filter(({ since }) => since === 6).length, 19);
   assert.deepEqual(
     corpus.entries.filter(({ status }) => status === 'stable').map(({ id }) => id),
     EXPECTED_COMPAT_CORPUS_IDS,
   );
-  assert.equal(new Set(corpus.entries.map(({ id }) => id)).size, 263);
-  assert.equal(new Set(corpus.entries.map(({ componentName }) => componentName)).size, 263);
+  assert.equal(new Set(corpus.entries.map(({ id }) => id)).size, 282);
+  assert.equal(new Set(corpus.entries.map(({ componentName }) => componentName)).size, 282);
   for (const entry of corpus.entries) {
     assert.equal(entry.componentName, componentNameForId(entry.id));
     assert.equal(roleFileName(entry.id), `${entry.id.replaceAll('.', '-')}.ts`);
@@ -77,10 +77,10 @@ test('Phosphor 2.1.10 adapter is ordered, exhaustive, and locally resolvable', a
   const corpus = validateCorpusManifest(await readJson(CORPUS_PATH));
   const adapter = validateAdapterManifest(await readJson(ADAPTER_PATH), corpus);
   const result = await validateLocalPhosphor(adapter);
-  assert.deepEqual(result, { checked: 263, packageVersion: '2.1.10' });
+  assert.deepEqual(result, { checked: 282, packageVersion: '2.1.10' });
   assert.deepEqual(adapter.entries.map(({ id }) => id), corpus.entries.map(({ id }) => id));
-  assert.equal(new Set(adapter.entries.map(({ module }) => module)).size, 263);
-  assert.equal(new Set(adapter.entries.map(({ exportName }) => exportName)).size, 263);
+  assert.equal(new Set(adapter.entries.map(({ module }) => module)).size, 282);
+  assert.equal(new Set(adapter.entries.map(({ exportName }) => exportName)).size, 282);
 });
 
 test('BitHire preset is the exact bounded productive Icon inventory', async () => {
@@ -134,8 +134,8 @@ test('generation is deterministic and emits bounded per-role and pack outputs', 
     structuredClone(bithirePreset),
   );
   assert.deepEqual([...first], [...second]);
-  assert.equal(first.size, 274);
-  assert.equal([...first.keys()].filter((path) => path.startsWith('roles/')).length, 263);
+  assert.equal(first.size, 293);
+  assert.equal([...first.keys()].filter((path) => path.startsWith('roles/')).length, 282);
   assert.match(
     first.get('roles/action-add.ts'),
     /import \{ PlusIcon as SsrGlyph \} from "@phosphor-icons\/react\/dist\/ssr\/Plus";/u,
@@ -255,7 +255,7 @@ test('a named pack import tree-shakes to one exact supplier glyph', () => {
   assert.doesNotMatch(bundle, /IdentityDirectoryIcon|IDENTITY_ICON_COMPONENTS/u);
 });
 
-test('the canonical Icon facade reaches all 263 roles through SSR-only supplier entries', () => {
+test('the canonical Icon facade reaches all 282 roles through SSR-only supplier entries', () => {
   const bundle = execFileSync(
     resolve(CORE_ROOT, 'node_modules/.bin/esbuild'),
     [
@@ -278,8 +278,8 @@ test('the canonical Icon facade reaches all 263 roles through SSR-only supplier 
   const supplierModules = [...bundle.matchAll(/@phosphor-icons\/react\/dist\/ssr\/[A-Za-z0-9]+/gu)]
     .map((match) => match[0]);
 
-  assert.equal(supplierModules.length, 263);
-  assert.equal(new Set(supplierModules).size, 263);
+  assert.equal(supplierModules.length, 282);
+  assert.equal(new Set(supplierModules).size, 282);
   assert.doesNotMatch(bundle, /@phosphor-icons\/react\/dist\/(?!ssr\/)/u);
 });
 
