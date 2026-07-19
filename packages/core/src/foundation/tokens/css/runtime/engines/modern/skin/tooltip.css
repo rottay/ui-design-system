@@ -67,6 +67,15 @@
   color: var(--ds-color-text-on-primary);
 }
 
+/* ---- top-layer branch: the bubble carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        the bubble surface owns neither. `data-ds-position-strategy` is stamped
+        by the engine alongside data-part. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
+}
+
 /* ---- shortcut chips: built on `currentColor` so they track whichever tone the
         bubble is painting, with no second color map. ---- */
 .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] [data-part='shortcut-key'] {

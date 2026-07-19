@@ -28,7 +28,8 @@ describe('ModernTooltip', () => {
       writingMode: 'horizontal-tb',
       zIndex: '2700',
     });
-    expect(tooltip.parentElement).toBe(document.body);
+    // The measured branch renders through the shared overlay portal root.
+    expect(tooltip.closest('[data-rottay-portal]')).not.toBeNull();
   });
 
   it('uses a tokenized high z-index fallback', () => {

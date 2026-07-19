@@ -349,6 +349,26 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
       ],
     ]),
   ],
+  [
+    // Shared overlay positioning engine: `style` carries only positioning
+    // declarations (position/top/left/visibility/inset/margins plus the CSS
+    // anchor-positioning properties) and `anchorAttrs` only `data-ds-anchor`;
+    // overlay paint stays with the component skins. zeroPaint is verified
+    // against the hook's source.
+    "ui/primitives/runtime/overlay/positioning/index",
+    new Map([
+      [
+        "useOverlayPosition",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["style"]),
+          nonStylePaths: new Set(["anchorAttrs"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
 ]);
 
 const certifiedProducerCache = new Map();

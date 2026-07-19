@@ -4,21 +4,23 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine renders a custom tooltip bubble via absolutely-positioned divs
- * with DS token inline styles. No DaisyUI classes are used.
+ * This engine renders a custom tooltip bubble positioned by the shared
+ * overlay positioning runtime (`runtime/overlay/positioning`). No DaisyUI
+ * classes are used.
  *
  * **Enhancements:**
  * - Multi-trigger support: hover, focus, click, manual
  * - Show/hide delay with setTimeout for smooth UX
  * - Controlled visibility via `visible` prop
- * - Scale entrance animation (0.95 -> 1 with opacity)
  * - `onVisibleChange` callback for external state sync
  *
- * **Implementation Details:**
- * - Wrapper uses `position: relative; display: inline-flex`
- * - Tooltip bubble is absolutely positioned with DS token colors
- * - Placement uses top/bottom/left/right with translate transforms
- * - Color variants map to DS token CSS variables
+ * **Positioning:**
+ * - `useOverlayPosition` resolves the strategy per instance:
+ *   `anchor-css` renders the bubble inline and promotes it to the top layer
+ *   (popover + CSS anchor positioning); `js` renders it through the shared
+ *   overlay portal at a measured fixed position.
+ * - The wrapper is the anchor; the bubble stamps
+ *   `data-ds-position-strategy` for e2e/debug observability.
  *
  * @example Basic Usage
  * ```tsx
@@ -44,11 +46,15 @@
 
 'use client';
 
-import React, { forwardRef, useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { forwardRef, useState, useEffect, useCallback, useRef } from 'react';
 import type { TooltipProps } from '../../contracts';
 import { TOOLTIP_DEFAULTS } from '../../contracts';
 import { formatShortcutKey } from '../../../../../../infrastructure/runtime/application/interaction/shortcuts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+} from '../../../../runtime/overlay/positioning';
 
 /**
  * Layout styles for the optional `shortcut` prop. The chips' own surface is
@@ -86,75 +92,6 @@ function resolveMaxWidth(maxWidth: TooltipProps['maxWidth']): string | number {
   return maxWidth ?? 'var(--ds-tooltip-max-width, 300px)';
 }
 
-const TOOLTIP_OFFSET = 8;
-const VIEWPORT_MARGIN = 8;
-const FALLBACK_TOOLTIP_WIDTH = 240;
-const FALLBACK_TOOLTIP_HEIGHT = 40;
-
-interface PortalPosition {
-  top: number;
-  left: number;
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(value, max));
-}
-
-function getPortalPosition(
-  triggerRect: DOMRect,
-  tooltipRect: DOMRect | undefined,
-  placement: NonNullable<TooltipProps['placement']>,
-): PortalPosition {
-  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const width = tooltipRect?.width || FALLBACK_TOOLTIP_WIDTH;
-  const height = tooltipRect?.height || FALLBACK_TOOLTIP_HEIGHT;
-  const [side, align = 'center'] = placement.split('-') as [string, string?];
-
-  let top = triggerRect.bottom + TOOLTIP_OFFSET;
-  let left = triggerRect.left + triggerRect.width / 2 - width / 2;
-
-  if (side === 'top' || side === 'bottom') {
-    top = side === 'top'
-      ? triggerRect.top - TOOLTIP_OFFSET - height
-      : triggerRect.bottom + TOOLTIP_OFFSET;
-
-    if (align === 'start') {
-      left = triggerRect.left;
-    } else if (align === 'end') {
-      left = triggerRect.right - width;
-    }
-
-    if (side === 'top' && top < VIEWPORT_MARGIN) {
-      top = triggerRect.bottom + TOOLTIP_OFFSET;
-    } else if (side === 'bottom' && top + height > viewportHeight - VIEWPORT_MARGIN) {
-      top = triggerRect.top - TOOLTIP_OFFSET - height;
-    }
-  } else {
-    left = side === 'left'
-      ? triggerRect.left - TOOLTIP_OFFSET - width
-      : triggerRect.right + TOOLTIP_OFFSET;
-    top = triggerRect.top + triggerRect.height / 2 - height / 2;
-
-    if (align === 'start') {
-      top = triggerRect.top;
-    } else if (align === 'end') {
-      top = triggerRect.bottom - height;
-    }
-
-    if (side === 'left' && left < VIEWPORT_MARGIN) {
-      left = triggerRect.right + TOOLTIP_OFFSET;
-    } else if (side === 'right' && left + width > viewportWidth - VIEWPORT_MARGIN) {
-      left = triggerRect.left - TOOLTIP_OFFSET - width;
-    }
-  }
-
-  return {
-    left: clamp(left, VIEWPORT_MARGIN, Math.max(VIEWPORT_MARGIN, viewportWidth - width - VIEWPORT_MARGIN)),
-    top: clamp(top, VIEWPORT_MARGIN, Math.max(VIEWPORT_MARGIN, viewportHeight - height - VIEWPORT_MARGIN)),
-  };
-}
-
 /**
  * Modern (DS token inline-styled) implementation of the Tooltip component.
  *
@@ -162,7 +99,7 @@ function getPortalPosition(
  * - Multi-trigger support (hover, focus, click, manual)
  * - Show/hide delay with setTimeout
  * - Controlled visibility via `visible` prop
- * - Scale entrance animation
+ * - Shared overlay positioning (anchor-css top layer, or measured portal)
  * - DS token color variants
  * - Smooth transitions
  *
@@ -187,6 +124,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       hideDelay = TOOLTIP_DEFAULTS.hideDelay,
       onVisibleChange,
       maxWidth = TOOLTIP_DEFAULTS.maxWidth,
+      offset = TOOLTIP_DEFAULTS.offset,
       zIndex,
       className = '',
       style,
@@ -200,14 +138,21 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     // Internal state only used in uncontrolled mode
     const [internalVisible, setInternalVisible] = useState(false);
-    const [portalPosition, setPortalPosition] = useState<PortalPosition | null>(null);
-    const wrapperRef = useRef<HTMLDivElement | null>(null);
-    const tooltipRef = useRef<HTMLDivElement | null>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const [bubbleEl, setBubbleEl] = useState<HTMLDivElement | null>(null);
+    // Both render paths attach on the client after mount (the portal needs a
+    // container; the inline top-layer bubble must not join server markup, or
+    // hydration would mismatch for initially-visible tooltips).
+    const [mounted, setMounted] = useState(false);
     const showTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Single source of truth: controlled prop wins over internal state
     const isVisible = isControlled ? visible : internalVisible;
+
+    useEffect(() => {
+      setMounted(true);
+    }, []);
 
     // Prevent stale timeouts from firing after the component unmounts
     useEffect(() => {
@@ -218,7 +163,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     }, []);
 
     const setWrapperRef = useCallback((node: HTMLDivElement | null) => {
-      wrapperRef.current = node;
+      setAnchorEl(node);
       if (typeof ref === 'function') {
         ref(node);
       } else if (ref) {
@@ -226,30 +171,16 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }
     }, [ref]);
 
-    const updatePortalPosition = useCallback(() => {
-      if (!wrapperRef.current) return;
-      const triggerRect = wrapperRef.current.getBoundingClientRect();
-      const tooltipRect = tooltipRef.current?.getBoundingClientRect();
-      setPortalPosition(getPortalPosition(triggerRect, tooltipRect, placement));
-    }, [placement]);
-
-    useLayoutEffect(() => {
-      if (!isVisible || disabled || typeof document === 'undefined') {
-        setPortalPosition(null);
-        return undefined;
-      }
-
-      updatePortalPosition();
-      const frame = window.requestAnimationFrame(updatePortalPosition);
-      window.addEventListener('resize', updatePortalPosition);
-      window.addEventListener('scroll', updatePortalPosition, true);
-
-      return () => {
-        window.cancelAnimationFrame(frame);
-        window.removeEventListener('resize', updatePortalPosition);
-        window.removeEventListener('scroll', updatePortalPosition, true);
-      };
-    }, [disabled, isVisible, updatePortalPosition, content, maxWidth]);
+    // The wrapper is the anchor; the bubble is the positioned overlay. The
+    // bubble only mounts while visible, so element presence drives the
+    // positioning lifecycle.
+    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+      anchor: anchorEl,
+      overlay: bubbleEl,
+      placement,
+      offset,
+      flip: true,
+    });
 
     const show = useCallback(() => {
       if (disabled) return;
@@ -311,12 +242,9 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     }
 
     // Tooltip bubble geometry. Surface, radius, shadow and the open/closed
-    // scale are keyed on data-tone/data-open in the skin; top/left are measured
-    // from the trigger on every reposition, so they stay here.
+    // scale are keyed on data-tone/data-open in the skin; the positioning
+    // keys come from the shared overlay runtime and spread last so they win.
     const bubbleStyle: React.CSSProperties = {
-      position: 'fixed',
-      top: portalPosition?.top ?? 0,
-      left: portalPosition?.left ?? 0,
       padding: '6px 10px',
       fontSize: 12,
       width: 'max-content',
@@ -332,14 +260,15 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       textOrientation: 'mixed',
       pointerEvents: 'none',
       // Tokenized overlay stack (spec section 9): route through the canonical
-      // scale instead of the dead --ds-z-index-tooltip/--ds-tooltip-z-index
-      // fallback chain (neither name was ever defined, so it silently
-      // resolved to the magic 1070 literal every time).
+      // scale. The top layer ignores z-index; this only orders the portal
+      // branch.
       zIndex: zIndex ?? 'var(--ds-z-tooltip)',
       opacity: isVisible ? 1 : 0,
-      visibility: portalPosition ? 'visible' : 'hidden',
       transformOrigin: 'center',
       transition: 'opacity var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease',
+      // The skin neutralizes UA [popover] border/overflow for the top-layer
+      // branch, keyed on data-ds-position-strategy.
+      ...positionStyle,
     };
 
     const wrapperStyle: React.CSSProperties = {
@@ -349,44 +278,53 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       ...style,
     };
 
+    const bubbleNode = (
+      <div
+        ref={setBubbleEl}
+        role="tooltip"
+        className="rottay-tooltip-bubble rottay-tooltip-bubble--modern"
+        data-part="bubble"
+        data-tone={color}
+        data-placement={placement}
+        data-open={isVisible ? 'true' : 'false'}
+        data-ds-position-strategy={strategy}
+        style={bubbleStyle}
+        aria-hidden={!isVisible}
+      >
+        {shortcut ? (
+          <span data-part="shortcut-row" style={SHORTCUT_ROW_STYLE}>
+            <span>{content}</span>
+            <span data-part="shortcut-chips" style={SHORTCUT_CHIPS_STYLE}>
+              {formatShortcutKey(shortcut).map((segment, i) => (
+                <kbd key={i} data-part="shortcut-key" style={SHORTCUT_KBD_STYLE}>
+                  {segment}
+                </kbd>
+              ))}
+            </span>
+          </span>
+        ) : (
+          content
+        )}
+      </div>
+    );
+
     return (
       <div
         ref={setWrapperRef}
         className={className || undefined}
         data-part="root"
         style={wrapperStyle}
+        {...anchorAttrs}
         {...eventHandlers}
       >
         {children}
-        {!disabled && content && isVisible && typeof document !== 'undefined'
-          ? createPortal(
-              <div
-                ref={tooltipRef}
-                role="tooltip"
-                className="rottay-tooltip-bubble rottay-tooltip-bubble--modern"
-                data-part="bubble"
-                data-tone={color}
-                data-placement={placement}
-                data-open={isVisible ? 'true' : 'false'}
-                style={bubbleStyle}
-                aria-hidden={!isVisible}
-              >
-                {shortcut ? (
-                  <span data-part="shortcut-row" style={SHORTCUT_ROW_STYLE}>
-                    <span>{content}</span>
-                    <span data-part="shortcut-chips" style={SHORTCUT_CHIPS_STYLE}>
-                      {formatShortcutKey(shortcut).map((segment, i) => (
-                        <kbd key={i} data-part="shortcut-key" style={SHORTCUT_KBD_STYLE}>
-                          {segment}
-                        </kbd>
-                      ))}
-                    </span>
-                  </span>
-                ) : (
-                  content
-                )}
-              </div>,
-              document.body,
+        {!disabled && content && isVisible && mounted
+          ? strategy === 'anchor-css'
+            ? bubbleNode
+            : (
+              <Portal>
+                <OverlayPortalBoundary>{bubbleNode}</OverlayPortalBoundary>
+              </Portal>
             )
           : null}
       </div>
