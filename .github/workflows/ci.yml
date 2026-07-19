@@ -139,7 +139,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: rottay/docs-engineering
-          ref: f22f92170862228c6dd8f3556d8b9df9b75fb5be
+          ref: 9865c253eca40093515f6662630280aef2818f13
           path: .gat07/docs-engineering
           token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
 
