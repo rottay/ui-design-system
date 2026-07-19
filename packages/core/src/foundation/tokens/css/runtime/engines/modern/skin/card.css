@@ -31,10 +31,17 @@
   position: relative;
   overflow: hidden;
   transform: translateY(0);
+  /* --ds-elevation-lift (registered <number>) rises to 1 on hover;
+     --ds-card-elevation-surface reads it so the elevated surface tint cross-fades
+     instead of snapping. Both are inert while --ds-elevation-lift-strength is 0
+     (light surfaces), so this paints nothing until a dark surface raises the dial. */
+  --ds-elevation-lift: 0;
+  --ds-card-elevation-surface: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * (1 + var(--ds-elevation-lift)) * 1%), transparent);
   transition:
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
     transform var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    --ds-elevation-lift var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* a card that paints a pointer; a card that is actually operable */
@@ -65,7 +72,7 @@
 /* variant, at rest */
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
   background-color: var(--ds-card-bg, var(--ds-card-elevated-bg, var(--ds-surface-card)));
-  background-image: var(--ds-gradient-surface);
+  background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-gradient-surface, none);
   border: var(--ds-card-elevated-border-width, 0) solid var(--ds-card-border, transparent);
   box-shadow: var(--ds-card-shadow);
 }
@@ -92,6 +99,7 @@
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered'] {
   box-shadow: var(--ds-card-shadow-hover);
   transform: var(--ds-card-interactive-transform-hover, translateY(-1px));
+  --ds-elevation-lift: 1;
 }
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]) {
   border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));

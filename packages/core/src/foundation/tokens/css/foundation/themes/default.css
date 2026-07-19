@@ -374,6 +374,24 @@
   --ds-elevation-4: 0 4px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.03), 0 16px 32px rgba(0, 0, 0, 0.04), 0 32px 64px rgba(0, 0, 0, 0.06);
   --ds-elevation-5: 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.06), 0 32px 64px rgba(0, 0, 0, 0.08);
 
+  /* Surface luminance lift (additive beside the --ds-elevation-1..5 shadow ramp,
+     which stays the sole tenant-overridable depth channel). On a dark surface the
+     black shadows above are nearly invisible, so a translucent
+     --ds-color-bg-elevated overlay carries depth. --ds-elevation-lift-strength is
+     the per-step dial: at 0 every surface step resolves to transparent, so light
+     surfaces rely on the shadow ramp and composing a surface layer is inert;
+     [data-theme='dark'] raises it so dark card/modal/popover surfaces lift.
+     --ds-elevation-lift (registered <number> in foundation/base/properties.css) is
+     the interpolable hover dial the card skin drives and must not be declared at
+     rest in this file. */
+  --ds-elevation-lift-strength: 0;
+  --ds-elevation-surface-0: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 0%), transparent);
+  --ds-elevation-surface-1: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 1%), transparent);
+  --ds-elevation-surface-2: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 2%), transparent);
+  --ds-elevation-surface-3: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 3%), transparent);
+  --ds-elevation-surface-4: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 4%), transparent);
+  --ds-elevation-surface-5: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 5%), transparent);
+
   --ds-shadow-none: var(--ds-elevation-0);
   --ds-shadow-xs: var(--ds-elevation-1);
   --ds-shadow-sm: var(--ds-elevation-1);
@@ -383,8 +401,12 @@
   --ds-shadow-2xl: var(--ds-elevation-5);
   --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
 
-  /* Colored Shadows */
-  --ds-shadow-primary: 0 4px 14px 0 rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+  /* Colored shadows. --ds-shadow-primary is derived from --ds-color-primary so it
+     tracks the tenant accent; it is for primary-action emphasis only (primary
+     button hover, active selection ring) and must never dress the neutral
+     --ds-elevation ramp. The alpha stays low so this reads as a colored ambient
+     shadow, not a glow. */
+  --ds-shadow-primary: 0 4px 14px 0 color-mix(in oklch, var(--ds-color-primary) 25%, transparent), 0 8px 24px color-mix(in oklch, var(--ds-color-primary) 12%, transparent);
   --ds-shadow-success: 0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08);
   --ds-shadow-warning: 0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08);
   --ds-shadow-error: 0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08);
@@ -2111,6 +2133,12 @@ html.dark {
   --ds-card-border-default: var(--ds-color-border-secondary);
   --ds-card-shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.35);
   --ds-card-shadow-md: 0 10px 24px rgba(2, 6, 23, 0.35);
+
+  /* Dark surfaces carry depth by luminance: the black elevation shadows are
+     near-invisible here, so raise the surface-lift dial and let
+     --ds-elevation-surface-* resolve to a visible translucent
+     --ds-color-bg-elevated overlay. */
+  --ds-elevation-lift-strength: 6;
 
   --ds-input-bg: var(--ds-color-bg-tertiary);
   --ds-input-color: var(--ds-color-text-primary);

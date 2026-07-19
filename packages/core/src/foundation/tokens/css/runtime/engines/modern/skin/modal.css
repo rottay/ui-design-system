@@ -38,9 +38,13 @@
   -webkit-backdrop-filter: var(--ds-modal-scrim-filter, none);
 }
 
-/* ---- panel surface ---- */
+/* ---- panel surface. The surface-lift overlay is a separate background-image
+        layer so the background-color fallback chain is untouched; it stays
+        transparent until a dark surface raises --ds-elevation-lift-strength, where
+        the near-invisible shadow ramp needs the luminance step. ---- */
 .rottay-modal-root--modern > [data-part='surface'] {
   background-color: var(--ds-modal-bg, var(--ds-surface-card));
+  background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));
   border-radius: var(--ds-modal-surface-radius);
   box-shadow: var(--ds-modal-surface-shadow);
   outline: none;

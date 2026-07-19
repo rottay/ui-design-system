@@ -69,7 +69,13 @@ const BUTTON_STYLE_RADIUS: Record<string, string> = {
   pill: '9999px',
 };
 
-/** Elevation presets map to shadow scales. */
+/**
+ * Elevation presets map to shadow scales. These override --ds-elevation-1..5,
+ * which stay the tenant-overridable shadow ramp. The surface-lift channel in the
+ * default theme (--ds-elevation-lift-strength / --ds-elevation-surface-*) is an
+ * additive luminance overlay composed beside this ramp, not through it, so these
+ * presets carry no surface entries and their behavior is unchanged by it.
+ */
 const ELEVATION_PRESET: Record<string, Record<string, string>> = {
   flat: {
     '--ds-elevation-1': 'none',
