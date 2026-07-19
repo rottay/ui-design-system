@@ -72,6 +72,30 @@
   transform: rotate(180deg);
 }
 
+/* Panel: the grid-template-rows track (0fr collapsed / 1fr expanded),
+ * mirroring Collapse's technique verbatim -- see
+ * Collapse/engines/modern/index.tsx:26-37 (`.rottay-collapse-content` /
+ * `-content-inner`). `.rottay-menu-submenu__content` (the `<ul role="menu">`)
+ * is the row's grid item and needs `min-height:0` because grid items default
+ * to `min-height:auto`, which would keep the nested menu's intrinsic height
+ * as a floor and prevent the track from ever reaching 0fr; `overflow:hidden`
+ * clips it collapsed and mid-transition. The duration/easing are unchanged
+ * from the JS `height` transition this replaces.
+ */
+.rottay-menu-submenu__panel {
+  display: grid;
+  transition: grid-template-rows 0.2s ease;
+}
+.rottay-menu-submenu__content {
+  min-height: 0;
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rottay-menu-submenu__panel {
+    transition: none;
+  }
+}
+
 /* ---- Menu.Group --------------------------------------------------------- */
 .rottay-menu-group [data-part='group-label'] {
   color: var(--ds-menu-group-title-color, var(--ds-color-text-muted));

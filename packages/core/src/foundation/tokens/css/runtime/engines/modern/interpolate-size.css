@@ -1,0 +1,21 @@
+/**
+ * Modern-engine `interpolate-size` enabler (W6-E).
+ *
+ * No-op until a rule opts a property into an `auto`/keyword transition
+ * (e.g. `transition: height var(--ds-motion-fast); height: auto;`). Scoped to
+ * the modern engine root (`[data-engine='modern']`, stamped on `<html>` by the
+ * engine provider) rather than `:root`, so classic and rustic stay unaffected.
+ * `interpolate-size` is inherited, so this reaches every modern-engine
+ * descendant. Enabler only — no component consumes it yet; see the
+ * modern-engine README for the adoption contract before wiring a
+ * per-component `height: auto` transition to it.
+ *
+ * Lives in its own sheet beside theme.css: theme.css is a ratcheted legacy
+ * sheet (engine-token-audit themeCss.lineCount is decrease-only), so new
+ * engine-level platform declarations must not land inside it.
+ */
+@supports (interpolate-size: allow-keywords) {
+  [data-engine='modern'] {
+    interpolate-size: allow-keywords;
+  }
+}

@@ -53,7 +53,7 @@
 
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { MenuSubMenuProps } from '../../contracts';
 
@@ -69,7 +69,7 @@ import type { MenuSubMenuProps } from '../../contracts';
  * Supports icons, disabled state, and custom expand icons.
  *
  * @remarks
- * - Smooth expand/collapse animations with height transition
+ * - Smooth expand/collapse animation via a `grid-template-rows` track
  * - Full keyboard navigation (Enter, Space, Arrow keys)
  * - ARIA attributes for screen reader support
  * - Rotate animation on expand icon
@@ -98,31 +98,11 @@ export function MenuSubMenu({
   style,
 }: MenuSubMenuProps): React.ReactElement {
   // ========================================================================
-  // State & Refs
+  // State
   // ========================================================================
 
   /** Controls the open/closed state of the submenu */
   const [isOpen, setIsOpen] = useState(false);
-
-  /** Reference to the content container for height calculation */
-  const contentRef = useRef<HTMLUListElement>(null);
-
-  /** Animated height value for smooth transitions */
-  const [contentHeight, setContentHeight] = useState<number | 'auto'>('auto');
-
-  // ========================================================================
-  // Effects
-  // ========================================================================
-
-  /**
-   * Updates the content height for smooth animation
-   * when the open state or children change.
-   */
-  useEffect(() => {
-    if (contentRef.current) {
-      setContentHeight(isOpen ? contentRef.current.scrollHeight : 0);
-    }
-  }, [isOpen, children]);
 
   // ========================================================================
   // Event Handlers
@@ -199,16 +179,26 @@ export function MenuSubMenu({
   };
 
   /**
-   * Content container styles with height animation.
+   * Panel track styles: the grid-template-rows value is the only per-render
+   * dynamic piece (0fr collapsed / 1fr expanded); `display:grid` and the
+   * `transition`/reduced-motion rules live in menu-compounds.css on
+   * `.rottay-menu-submenu__panel` (mirrors Collapse -- see
+   * Collapse/engines/modern/index.tsx:26-37).
+   */
+  const panelStyle: CSSProperties = {
+    gridTemplateRows: isOpen ? '1fr' : '0fr',
+  };
+
+  /**
+   * Content (nested `<ul>`) styles. `min-height:0` and `overflow:hidden`
+   * live in menu-compounds.css on `.rottay-menu-submenu__content` -- they are
+   * static, not per-render.
    */
   const contentStyle: CSSProperties = {
     listStyle: 'none',
     padding: 0,
     paddingLeft: 'var(--ds-menu-submenu-indent, 24px)',
     margin: 0,
-    height: typeof contentHeight === 'number' ? `${contentHeight}px` : contentHeight,
-    overflow: 'hidden',
-    transition: 'height 0.2s ease',
   };
 
   // ========================================================================
@@ -273,17 +263,22 @@ export function MenuSubMenu({
         </span>
       </div>
 
-      {/* Nested content */}
-      <ul
-        ref={contentRef}
-        className="rottay-menu-submenu__content"
-        style={contentStyle}
-        role="menu"
-        data-part="panel"
-        aria-hidden={!isOpen}
-      >
-        {children}
-      </ul>
+      {/* Panel: the grid-template-rows track (0fr collapsed / 1fr expanded).
+          The nested `<ul role="menu">` stays the `data-part="panel"` element
+          (the documented "submenu's flyout/nested list" contract); this div
+          is a structural wrapper only, mirroring Collapse's outer/inner split
+          -- see Collapse/engines/modern/index.tsx:26-37. */}
+      <div className="rottay-menu-submenu__panel" data-open={isOpen} style={panelStyle}>
+        <ul
+          className="rottay-menu-submenu__content"
+          style={contentStyle}
+          role="menu"
+          data-part="panel"
+          aria-hidden={!isOpen}
+        >
+          {children}
+        </ul>
+      </div>
     </li>
   );
 }
