@@ -467,8 +467,15 @@
    * `container-type`, `cqi` resolves against the small viewport, which is the
    * behaviour a `vw` ramp would have had.
    *
-   * Opt-in. Nothing consumes these by default; a skin or surface reaches for one
-   * where a static step is cramped at 360px or oversized at 1280px.
+   * Opt-in. A skin or surface reaches for one where a static step is cramped at
+   * 360px or oversized at 1280px, and only where a `container-type` ancestor
+   * exists to resolve `cqi` against -- currently the page-shell root
+   * (`runtime/engines/{modern,rustic}/skin/page-shell.css`, container name
+   * `ds-page`), consumed by the page-shell title
+   * (`ui/patterns/shell/page-shell/engines/{modern,rustic}/index.tsx`, `--ds-font-size-fluid-2xl`).
+   * Reaching for one of these outside a `container-type` ancestor silently
+   * resolves against the small viewport instead -- verify the ancestor chain
+   * before adopting a new consumer.
    * ------------------------------------------------------------------------ */
   --ds-font-size-fluid-sm: clamp(0.75rem, 0.7011rem + 0.2174cqi, 0.875rem);
   --ds-font-size-fluid-base: clamp(0.875rem, 0.8261rem + 0.2174cqi, 1rem);
@@ -1245,6 +1252,24 @@
   --ds-elevation-4: 0 4px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.03), 0 16px 32px rgba(0, 0, 0, 0.04), 0 32px 64px rgba(0, 0, 0, 0.06);
   --ds-elevation-5: 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.06), 0 32px 64px rgba(0, 0, 0, 0.08);
 
+  /* Surface luminance lift (additive beside the --ds-elevation-1..5 shadow ramp,
+     which stays the sole tenant-overridable depth channel). On a dark surface the
+     black shadows above are nearly invisible, so a translucent
+     --ds-color-bg-elevated overlay carries depth. --ds-elevation-lift-strength is
+     the per-step dial: at 0 every surface step resolves to transparent, so light
+     surfaces rely on the shadow ramp and composing a surface layer is inert;
+     [data-theme='dark'] raises it so dark card/modal/popover surfaces lift.
+     --ds-elevation-lift (registered <number> in foundation/base/properties.css) is
+     the interpolable hover dial the card skin drives and must not be declared at
+     rest in this file. */
+  --ds-elevation-lift-strength: 0;
+  --ds-elevation-surface-0: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 0%), transparent);
+  --ds-elevation-surface-1: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 1%), transparent);
+  --ds-elevation-surface-2: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 2%), transparent);
+  --ds-elevation-surface-3: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 3%), transparent);
+  --ds-elevation-surface-4: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 4%), transparent);
+  --ds-elevation-surface-5: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * 5%), transparent);
+
   --ds-shadow-none: var(--ds-elevation-0);
   --ds-shadow-xs: var(--ds-elevation-1);
   --ds-shadow-sm: var(--ds-elevation-1);
@@ -1254,8 +1279,12 @@
   --ds-shadow-2xl: var(--ds-elevation-5);
   --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
 
-  /* Colored Shadows */
-  --ds-shadow-primary: 0 4px 14px 0 rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+  /* Colored shadows. --ds-shadow-primary is derived from --ds-color-primary so it
+     tracks the tenant accent; it is for primary-action emphasis only (primary
+     button hover, active selection ring) and must never dress the neutral
+     --ds-elevation ramp. The alpha stays low so this reads as a colored ambient
+     shadow, not a glow. */
+  --ds-shadow-primary: 0 4px 14px 0 color-mix(in oklch, var(--ds-color-primary) 25%, transparent), 0 8px 24px color-mix(in oklch, var(--ds-color-primary) 12%, transparent);
   --ds-shadow-success: 0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08);
   --ds-shadow-warning: 0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08);
   --ds-shadow-error: 0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08);
@@ -2982,6 +3011,12 @@ html.dark {
   --ds-card-border-default: var(--ds-color-border-secondary);
   --ds-card-shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.35);
   --ds-card-shadow-md: 0 10px 24px rgba(2, 6, 23, 0.35);
+
+  /* Dark surfaces carry depth by luminance: the black elevation shadows are
+     near-invisible here, so raise the surface-lift dial and let
+     --ds-elevation-surface-* resolve to a visible translucent
+     --ds-color-bg-elevated overlay. */
+  --ds-elevation-lift-strength: 6;
 
   --ds-input-bg: var(--ds-color-bg-tertiary);
   --ds-input-color: var(--ds-color-text-primary);
@@ -7661,7 +7696,7 @@ html.dark {
   animation: ds-command-home-spin 900ms linear infinite;
 }
 
-@media (max-width: 980px) {
+@container ds-page (max-width: 980px) {
   :is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -7676,7 +7711,7 @@ html.dark {
   }
 }
 
-@media (max-width: 640px) {
+@container ds-page (max-width: 640px) {
   :is(.ds-command-home-hero) {
     align-items: flex-start;
     flex-direction: column;
@@ -8106,13 +8141,13 @@ html.dark {
   white-space: nowrap;
 }
 
-@media (max-width: 860px) {
+@container ds-page (max-width: 860px) {
   .ds-command-home-shell .ds-command-home-command-grid {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 760px) {
+@container ds-page (max-width: 760px) {
   .ds-command-home-shell .ds-launchpad__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -8124,7 +8159,7 @@ html.dark {
   }
 }
 
-@media (max-width: 640px) {
+@container ds-page (max-width: 640px) {
   .ds-command-home-shell .ds-command-home-hero {
     grid-template-columns: 1fr;
     align-items: flex-start;
@@ -12221,6 +12256,28 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /**
+ * Modern-engine `interpolate-size` enabler (W6-E).
+ *
+ * No-op until a rule opts a property into an `auto`/keyword transition
+ * (e.g. `transition: height var(--ds-motion-fast); height: auto;`). Scoped to
+ * the modern engine root (`[data-engine='modern']`, stamped on `<html>` by the
+ * engine provider) rather than `:root`, so classic and rustic stay unaffected.
+ * `interpolate-size` is inherited, so this reaches every modern-engine
+ * descendant. Enabler only — no component consumes it yet; see the
+ * modern-engine README for the adoption contract before wiring a
+ * per-component `height: auto` transition to it.
+ *
+ * Lives in its own sheet beside theme.css: theme.css is a ratcheted legacy
+ * sheet (engine-token-audit themeCss.lineCount is decrease-only), so new
+ * engine-level platform declarations must not land inside it.
+ */
+@supports (interpolate-size: allow-keywords) {
+  [data-engine='modern'] {
+    interpolate-size: allow-keywords;
+  }
+}
+
+/**
  * Rustic Engine Theme - Rottay Design System
  *
  * Vanilla CSS implementation using .ds-* class naming convention.
@@ -13983,6 +14040,82 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 
+/* Typed custom-property registrations (@property). DELIBERATELY UNLAYERED: an
+   @property at-rule is not layerable content and registers document-wide
+   regardless of placement, so it sits beside the unlayered skins (P-76 posture).
+   Registration only adds typed interpolation + inheritance control; unset values
+   still resolve to today's tokens, so no paint changes. */
+/**
+ * Typed custom-property registrations (@property) - Rottay Design System.
+ *
+ * Registration adds two runtime behaviors to a --ds-* custom property: typed
+ * interpolation (the value can be transitioned/animated smoothly instead of
+ * swapping discretely) and explicit inheritance control. Only the animatable
+ * core is registered; inert string tokens gain nothing from typing.
+ *
+ * Placement law: an @property at-rule is not layerable content and registers
+ * document-wide regardless of where it appears, so this file is imported
+ * UNLAYERED beside the skins (P-76 posture) rather than through the layered
+ * foundation/base/index.css.
+ *
+ * At-rest law: each initial-value is the value the token resolves to at rest in
+ * the shipped default (no tenant). A registered property that is unset resolves
+ * to its initial-value, NOT to a var() fallback, so a wrong initial-value would
+ * silently change unset rendering. The colocated
+ * tests/property-registration-drift.test.ts parses this file against the shipped
+ * sources and fails on any drift.
+ *
+ * --ds-chart-series-1..10 are deliberately NOT registered here. Their paint
+ * chain in presentation/components/skin/chart-foundation.css is
+ * var(--ds-chart-category-N, var(--ds-chart-series-N, var(--ds-chart-<scheme>-N, <literal>)))
+ * and the tenant appearance compiler emits --ds-chart-series-N only when a tenant
+ * has compiled; the default/rottay path relies on --ds-chart-series-N being
+ * guaranteed-invalid so the per-scheme literal fallback wins. Registering it with
+ * any valid <color> initial (transparent, or a fixed hex) defeats that fallback
+ * for every uncompiled render. Registration is blocked until that chain is
+ * restructured in the chart lane.
+ */
+
+/* Effect-intensity dial. Shipped at-rest default: foundation/animations/premium.css. */
+@property --ds-effect-intensity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+/* Entrance geometry. Shipped at-rest defaults: foundation/animations/transitions.css. */
+@property --ds-motion-scale-in {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.98;
+}
+
+@property --ds-motion-offset-in {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: -2px;
+}
+
+/* Hover elevation lift. inherits:false so depth does not cascade to descendants;
+   unset it resolves to 0 (flat), the baseline a lift transition starts from. Its
+   :root/skin consumption is owned by the elevation lane. */
+@property --ds-elevation-lift {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+/* Accent color. Always set at :root (foundation/themes/default.css) and by
+   tenants, so the transparent initial only applies where the property is unset;
+   it never surfaces in normal rendering. transparent is used because an
+   @property initial-value cannot be a var() chain. */
+@property --ds-color-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+
 /* Modern engine skins. DELIBERATELY UNLAYERED: every `rottay-*` layer sorts
    before Tailwind's own `base` layer, whose preflight resets `button`'s
    background, radius and border. A layered skin loses to it on layer order,
@@ -14646,10 +14779,17 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   position: relative;
   overflow: hidden;
   transform: translateY(0);
+  /* --ds-elevation-lift (registered <number>) rises to 1 on hover;
+     --ds-card-elevation-surface reads it so the elevated surface tint cross-fades
+     instead of snapping. Both are inert while --ds-elevation-lift-strength is 0
+     (light surfaces), so this paints nothing until a dark surface raises the dial. */
+  --ds-elevation-lift: 0;
+  --ds-card-elevation-surface: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * (1 + var(--ds-elevation-lift)) * 1%), transparent);
   transition:
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
     transform var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    --ds-elevation-lift var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* a card that paints a pointer; a card that is actually operable */
@@ -14680,7 +14820,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* variant, at rest */
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
   background-color: var(--ds-card-bg, var(--ds-card-elevated-bg, var(--ds-surface-card)));
-  background-image: var(--ds-gradient-surface);
+  background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-gradient-surface, none);
   border: var(--ds-card-elevated-border-width, 0) solid var(--ds-card-border, transparent);
   box-shadow: var(--ds-card-shadow);
 }
@@ -14707,6 +14847,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered'] {
   box-shadow: var(--ds-card-shadow-hover);
   transform: var(--ds-card-interactive-transform-hover, translateY(-1px));
+  --ds-elevation-lift: 1;
 }
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]) {
   border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
@@ -15765,11 +15906,11 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* ---- keyframes: referenced by the inline `animation` shorthands the engine
         sets on the spinner and the expanded-row cell (sanctioned inline
         residuals, WO-ARC-09). Defined globally here, not per table instance. ---- */
-@keyframes rottay-table-spin {
+@keyframes ds-table-spin-modern {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-@keyframes rottay-table-expand {
+@keyframes ds-table-expand-modern {
   from { opacity: 0; max-height: 0; transform: translateY(-8px); }
   to { opacity: 1; max-height: 500px; transform: translateY(0); }
 }
@@ -15956,7 +16097,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* ---- keyframes: referenced by the inline `animation` shorthand the engine
         sets on the expanded-row cell (a sanctioned inline residual,
         WO-ARC-09). Defined globally here, not per table instance. ---- */
-@keyframes rottay-table-expand-in {
+@keyframes ds-table-expand-in-rustic {
   from { opacity: 0; max-height: 0; }
   to { opacity: 1; max-height: 500px; }
 }
@@ -16600,6 +16741,12 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * caller props, so the landing hook is `className` (the FFP __control mechanism),
  * and the suppression rule escalates to (0,6,0) by repeating the close class four
  * times so it outranks rest AND hover exactly as the inline object did.
+ *
+ * NAMED CONTAINER (W6-A): `container-name: ds-rail` is declared on BOTH roots
+ * with the identical value -- exactly one of the two ever renders per instance,
+ * so there is no shadowing risk the TWO ROOTS law above warns about; a `ds-rail`
+ * container-query descendant works unconditionally regardless of which branch
+ * is live.
  */
 
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
@@ -16607,11 +16754,15 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] {
   border-left: 1px solid var(--ds-color-border-subtle);
   background: transparent;
+  container-type: inline-size;
+  container-name: ds-rail;
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
   border-left: 1px solid var(--ds-color-border-subtle);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), var(--ds-surface-card));
+  container-type: inline-size;
+  container-name: ds-rail;
 }
 
 /* customPreview branch ------------------------------------------------------- */
@@ -16724,6 +16875,14 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] {
   background: var(--ds-surface-card);
   border-radius: var(--ds-radius-lg);
+}
+
+/* ---- named container (W6-A): the panel root owns the width every descendant
+        adapts to, matching both the content and loading roots. Never on a scroll
+        container. ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-detail;
 }
 
 /* ---- action-button: shared chrome + per-variant base and merged hover/focus.
@@ -16982,6 +17141,13 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border: 1px solid var(--ds-color-neutral-200);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-card-shadow, none);
+}
+
+/* ---- named container (W6-A): the panel root owns the width every descendant
+        adapts to. Never on a scroll container. ---- */
+.ds-pattern-detail-panel.ds-engine-rustic[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-detail;
 }
 
 /* ---- breadcrumbs ---- */
@@ -22454,13 +22620,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * tree list never carried a border regardless of `treeLine` and is left
  * unmatched.
  *
- * KEYFRAMES: `@keyframes rottay-select-slide-in`, previously an inline
- * `<style dangerouslySetInnerHTML>` re-injected on every open, is moved here
- * renamed `ds-tree-select-slide-in`; the dropdown's `animation:` reference
- * (an inline, non-paint key) is updated to match. The loading spinner's bare
- * `animation: 'ds-foundation-spin …'` has no local `@keyframes` in the source
- * and resolves against the global foundation `ds-foundation-spin` keyframe --
- * left inline, untouched.
+ * KEYFRAMES: `ds-tree-select-slide-in` backs the dropdown's inline
+ * `animation:` reference (a non-paint key). The loading spinner's bare
+ * `animation: 'ds-foundation-spin …'` has no local `@keyframes` in this
+ * file and resolves against the global foundation `ds-foundation-spin`
+ * keyframe.
  */
 
 @keyframes ds-tree-select-slide-in {
@@ -22621,12 +22785,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (tree-line indent, non-`treeLine` nested case), `rgba(22, 119, 255, 0.15)`
  * + `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
  *
- * KEYFRAMES: `@keyframes rottay-treeselect-spin` /
- * `rottay-treeselect-dropdown-in`, previously imperatively injected into
- * `document.head` by a `useEffect` (deleted), are moved here renamed
- * `ds-tree-select-spin` / `ds-tree-select-dropdown-in`; the loading
- * spinner's and dropdown's inline `animation:` references (non-paint keys)
- * are updated to match.
+ * KEYFRAMES: `ds-tree-select-spin` / `ds-tree-select-dropdown-in` back the
+ * loading spinner's and dropdown's inline `animation:` references
+ * (non-paint keys).
  */
 
 @keyframes ds-tree-select-spin {
@@ -23003,12 +23164,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * selected/hover border-left), `rgba(22, 119, 255, 0.15)` +
  * `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
  *
- * KEYFRAMES: `@keyframes rottay-cascader-spin` / `rottay-cascader-dropdown-in`,
- * previously a plain `<style>` tag rendered inside the portal (remounting on
- * every open), are moved here renamed `ds-cascader-spin` /
- * `ds-cascader-dropdown-in`; the `<style>` tag is deleted and the spinner's
- * and dropdown's inline `animation:` references (non-paint keys) are updated
- * to match.
+ * KEYFRAMES: `ds-cascader-spin` / `ds-cascader-dropdown-in` back the
+ * spinner's and dropdown's inline `animation:` references (non-paint keys).
  */
 
 @keyframes ds-cascader-spin {
@@ -23884,9 +24041,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   -webkit-backdrop-filter: var(--ds-modal-scrim-filter, none);
 }
 
-/* ---- panel surface ---- */
+/* ---- panel surface. The surface-lift overlay is a separate background-image
+        layer so the background-color fallback chain is untouched; it stays
+        transparent until a dark surface raises --ds-elevation-lift-strength, where
+        the near-invisible shadow ramp needs the luminance step. ---- */
 .rottay-modal-root--modern > [data-part='surface'] {
   background-color: var(--ds-modal-bg, var(--ds-surface-card));
+  background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));
   border-radius: var(--ds-modal-surface-radius);
   box-shadow: var(--ds-modal-surface-shadow);
   outline: none;
@@ -24270,7 +24431,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* ---- slide + fade keyframes, engine-namespaced (rustic has none, and must not
         acquire one by name collision). ---- */
-@keyframes rottay-drawer-backdrop-fade-modern {
+@keyframes ds-drawer-backdrop-fade-modern {
   from {
     opacity: 0;
   }
@@ -24278,7 +24439,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     opacity: 1;
   }
 }
-@keyframes rottay-drawer-backdrop-fade-out-modern {
+@keyframes ds-drawer-backdrop-fade-out-modern {
   from {
     opacity: 1;
   }
@@ -24286,7 +24447,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     opacity: 0;
   }
 }
-@keyframes rottay-drawer-slide-left-modern {
+@keyframes ds-drawer-slide-left-modern {
   from {
     transform: translateX(-100%);
   }
@@ -24294,7 +24455,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateX(0);
   }
 }
-@keyframes rottay-drawer-slide-out-left-modern {
+@keyframes ds-drawer-slide-out-left-modern {
   from {
     transform: translateX(0);
   }
@@ -24302,7 +24463,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateX(-100%);
   }
 }
-@keyframes rottay-drawer-slide-right-modern {
+@keyframes ds-drawer-slide-right-modern {
   from {
     transform: translateX(100%);
   }
@@ -24310,7 +24471,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateX(0);
   }
 }
-@keyframes rottay-drawer-slide-out-right-modern {
+@keyframes ds-drawer-slide-out-right-modern {
   from {
     transform: translateX(0);
   }
@@ -24318,7 +24479,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateX(100%);
   }
 }
-@keyframes rottay-drawer-slide-top-modern {
+@keyframes ds-drawer-slide-top-modern {
   from {
     transform: translateY(-100%);
   }
@@ -24326,7 +24487,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateY(0);
   }
 }
-@keyframes rottay-drawer-slide-out-top-modern {
+@keyframes ds-drawer-slide-out-top-modern {
   from {
     transform: translateY(0);
   }
@@ -24334,7 +24495,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateY(-100%);
   }
 }
-@keyframes rottay-drawer-slide-bottom-modern {
+@keyframes ds-drawer-slide-bottom-modern {
   from {
     transform: translateY(100%);
   }
@@ -24342,7 +24503,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateY(0);
   }
 }
-@keyframes rottay-drawer-slide-out-bottom-modern {
+@keyframes ds-drawer-slide-out-bottom-modern {
   from {
     transform: translateY(0);
   }
@@ -26000,6 +26161,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules clip via `overflow: auto` and force `color: CanvasText`;
+        this surface owns neither (its border above is kept — it outranks the UA
+        default). `data-ds-position-strategy` is stamped by the engine alongside
+        data-part. ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  overflow: visible;
+  color: inherit;
+}
+
 /* ---- structural rows ---- */
 .rottay-context-menu--modern[data-part='trigger'] [data-part='divider'] {
   background: var(--ds-color-border-subtle);
@@ -26052,6 +26223,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-context-menu--rustic[data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-neutral-200, #e5e7eb));
+}
+
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules clip via `overflow: auto`; this surface owns no clip (items
+        set their own explicit colors, so no color neutralization is needed).
+        `data-ds-position-strategy` is stamped by the engine alongside data-part. ---- */
+.rottay-context-menu--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  overflow: visible;
 }
 
 /* ---- structural rows ---- */
@@ -26164,13 +26343,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
  *
- * PORTAL: this engine's panel mounts via a direct `createPortal(…, document.body)`,
- * so it is NOT a descendant of the trigger root (and carries no `data-rottay-portal`
- * marker — only the shared `Portal` util stamps that). Every rule is therefore
- * STANDALONE on the panel's own class `.rottay-dropdown--rustic`, which the panel
- * carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so the
- * panel's own rules take the COMPOUND form with no descendant space. The item rows
- * live inside the portaled panel and are its descendants.
+ * PORTAL: this engine's panel mounts via the shared `Portal` util in the measured
+ * (js) branch (which stamps `data-rottay-portal`) and in-tree in the top-layer
+ * (anchor-css) branch, so it is not reliably a descendant of the trigger root.
+ * Every rule is therefore STANDALONE on the panel's own class
+ * `.rottay-dropdown--rustic`, which the panel carries alongside
+ * `data-part='surface'` — a SELF-CARRYING scope element, so the panel's own rules
+ * take the COMPOUND form with no descendant space. The item rows live inside the
+ * panel and are its descendants.
  *
  * Unlike the modern engine, this one renders ZERO DaisyUI classes: `theme.css`'s
  * `.menu li > button` rules do not reach it and its item hover was IMPERATIVE
@@ -26185,10 +26365,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * SCOPE: `rottay-dropdown--rustic`. NOT `ds-dropdown` — that name carries a DORMANT
  * entrance-animation rule in personality.css that matches nothing today (P3).
  *
- * `[data-placement^='top']` reproduces the panel's `placement?.includes('top')`
- * transform: every placement value containing 'top' also starts with it
- * (top/topLeft/topRight vs bottom/bottomLeft/bottomRight), so the prefix match is
- * exact. An absent `placement` matches nothing and leaves the transform unset.
+ * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
+ * genuine runtime data, not paint. The panel carries NO placement transform here:
+ * the shared engine already subtracts overlay height for top placements, so a skin
+ * translate would double-shift it.
  */
 
 /* ---- portaled menu panel ---- */
@@ -26197,8 +26378,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: var(--ds-dropdown-radius, 12px);
   box-shadow: var(--ds-dropdown-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
 }
-.rottay-dropdown--rustic[data-part='surface'][data-placement^='top'] {
-  transform: translateY(-100%);
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules paint `border: solid`, clip via `overflow: auto`, and force
+        `color: CanvasText` (the item rows read `color: inherit`, so the UA color
+        would reach them); this surface owns none of those. `data-ds-position-strategy`
+        is stamped by the engine alongside data-part. ---- */
+.rottay-dropdown--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
+  color: inherit;
 }
 
 /* ---- structural rows ---- */
@@ -26388,7 +26576,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
- * Modern HoverCard skin (WO-SKIN-04 checkpoint P).
+ * Modern HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
@@ -26397,9 +26585,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * DaisyUI's `card` — it does not, and the comment is corrected). Nothing in
  * theme.css or personality.css matches any element here.
  *
- * PORTAL: this engine does NOT portal (rustic DOES) — the card is an in-tree absolute
- * sibling inside the trigger wrapper, two levels down (a Tailwind-positioned wrapper
- * div sits between), so the surface is addressed as a descendant, not a child.
+ * PORTAL: this engine does NOT portal (rustic DOES) — the surface renders in-tree
+ * as a child of the trigger wrapper in BOTH positioning branches: top-layer
+ * promotion (anchor-css branch) is DOM-position-agnostic, so it needs no portal
+ * escape hatch either, and the measured (js) branch keeps this engine's existing
+ * non-portaled posture (checkpoint contract P4).
+ *
+ * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
+ * genuine runtime data, not paint.
  *
  * SPECIFICITY (P-48): the card's colored border repeats its `data-part` to clear the
  * tenant `*` border-color floor at (0,3,1).
@@ -26414,24 +26608,35 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* ---- top-layer branch: the surface carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither. `data-ds-position-strategy` is stamped by the
+        engine alongside data-part. ---- */
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
+}
+
 /**
- * Rustic HoverCard skin (WO-SKIN-04 checkpoint P).
+ * Rustic HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
  *
- * PORTAL: the card mounts via a direct `createPortal(…, document.body)`, so it is NOT
- * a descendant of the trigger root. Every rule is STANDALONE on the card's own class,
- * which it carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
+ * PORTAL: the card mounts via the shared `runtime/overlay/portal` in BOTH
+ * positioning branches (top-layer promotion is DOM-position-agnostic, so
+ * portaling ahead of it costs nothing), so it is NOT a descendant of the
+ * trigger root. Every rule is STANDALONE on the card's own class, which it
+ * carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
  * its rules take the COMPOUND form with no descendant space.
  *
  * TOKENS: this engine has no `--ds-hovercard-*` family of its own — it rides Popover's
  * `--ds-popover-*` namespace wholesale. Transcribed verbatim; forking a dedicated
  * family would change what tenants can override and is not this batch's job.
  *
- * `data-side` carries the centering transform, a 4-way switch on the `side` prop. The
- * `bottom` case and an absent `side` both fall through to the base rule, exactly as the
- * engine's `default:` branch did. The anchor point itself is runtime
- * (`getBoundingClientRect`) and stays inline.
+ * `data-side` is now purely informational: the engine's own `getBoundingClientRect`
+ * copy that the CSS centering transform below depended on is retired. Position,
+ * including cross-axis centering, comes from `runtime/overlay/positioning`'s
+ * `useOverlayPosition` and stays inline — genuine runtime data, not paint.
  *
  * SPECIFICITY (P-48): the card's colored border repeats its `data-part` to clear the
  * tenant `*` border-color floor at (0,3,1).
@@ -26442,20 +26647,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: var(--ds-popover-radius, var(--ds-radius-lg, 12px));
   box-shadow: var(--ds-popover-shadow, var(--ds-shadow-lg));
   backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
-  transform: translateX(-50%);
 }
 .rottay-hover-card--rustic[data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb));
 }
 
-.rottay-hover-card--rustic[data-part='surface'][data-side='top'] {
-  transform: translate(-50%, -100%);
-}
-.rottay-hover-card--rustic[data-part='surface'][data-side='left'] {
-  transform: translate(-100%, -50%);
-}
-.rottay-hover-card--rustic[data-part='surface'][data-side='right'] {
-  transform: translateY(-50%);
+/* ---- top-layer branch: the card carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither. `data-ds-position-strategy` is stamped by the
+        engine alongside data-part. ---- */
+.rottay-hover-card--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }
 
 /**
@@ -27177,6 +27380,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
+        [popover] rules clip via `overflow: auto`; this surface owns no clip (its
+        border above outranks the UA default, and every text part sets an explicit
+        color). `data-ds-position-strategy` is stamped by the engine alongside
+        data-part. ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  overflow: visible;
+}
+
 /* ---- copy ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='icon'] {
   color: var(--ds-color-warning);
@@ -27222,21 +27434,22 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
- * Rustic Popconfirm skin (WO-SKIN-04 checkpoint P).
+ * Rustic Popconfirm skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
  *
- * PORTAL: the panel mounts via a direct `createPortal(…, document.body)` (modern does NOT
- * portal). Every rule is STANDALONE on the panel's own class
- * `.rottay-popconfirm--rustic`, which it carries alongside `data-part='surface'` — a
- * SELF-CARRYING scope element, so its own rules take the COMPOUND form with no descendant
- * space.
+ * PORTAL: the panel mounts via the shared `runtime/overlay/portal` in BOTH
+ * positioning branches (top-layer promotion is DOM-position-agnostic, so
+ * portaling ahead of it costs nothing; modern does NOT portal). Every rule is
+ * STANDALONE on the panel's own class `.rottay-popconfirm--rustic`, which it
+ * carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
+ * its own rules take the COMPOUND form with no descendant space.
  *
- * PLACEMENT: `[data-placement^='bottom']` reproduces the panel's
- * `placement?.includes('bottom')` transform exactly. The check is case-sensitive, so the
- * `leftBottom` / `rightBottom` values (capital B) never matched it and still do not — only
- * `bottom`/`bottomLeft`/`bottomRight` do, and all three start with the prefix. Every other
- * placement takes the base rule. The anchor point itself is runtime and stays inline.
+ * `data-placement` is now purely informational: the engine's own
+ * `getBoundingClientRect` copy that the CSS centering transform below
+ * depended on is retired. Position, including cross-axis centering, comes
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stays inline
+ * — genuine runtime data, not paint.
  *
  * OK-TYPE: `data-ok-type` carries the `okType` prop; the engine's `default:` branch is the
  * catch-all, reproduced with a `:not():not()` guard.
@@ -27260,13 +27473,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: var(--ds-popconfirm-radius, var(--ds-radius-lg, 12px));
   box-shadow: var(--ds-popconfirm-shadow, var(--ds-shadow-lg));
   backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
-  transform: translate(-50%, -100%);
 }
 .rottay-popconfirm--rustic[data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-popconfirm-border-color, var(--ds-color-neutral-200, #e5e7eb));
 }
-.rottay-popconfirm--rustic[data-part='surface'][data-placement^='bottom'] {
-  transform: translateX(-50%);
+
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither. `data-ds-position-strategy` is stamped by the
+        engine alongside data-part. ---- */
+.rottay-popconfirm--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }
 
 /* ---- copy ---- */
@@ -27326,32 +27544,37 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * and hand Popover an entrance animation it has never had — a visual change disguised
  * as a naming choice. The same trap exists for `.ds-dropdown` and Dropdown.
  *
- * PORTAL: this engine does NOT portal (rustic DOES) — the panel is an in-tree absolute
- * child of the trigger wrapper. The scope class anchors every rule regardless.
+ * PORTAL: this engine does NOT portal (rustic DOES) — the panel renders in-tree as a
+ * child of the trigger wrapper in BOTH positioning branches. The scope class anchors
+ * every rule regardless.
  *
- * PLACEMENT: this engine silently collapses the 12 typed placements to 4 — its JS
- * branches on `.includes('top'|'bottom'|'left'|'right')` and then unconditionally
- * re-centers every top/bottom placement, so `topLeft`/`leftTop`/`rightBottom`/… all
- * resolve to the centered case. The centering transform is therefore keyed here:
- * translateY(-50%) for EXACTLY `left` and `right`, translateX(-50%) for every other
- * value (and for an absent placement). That reproduces the collapse verbatim — it is a
- * pre-existing behaviour, not a bug to fix inside a byte-exact migration. The paired
- * offsets (bottom/top/left/margin) stay inline, where the placement math lives.
+ * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
+ * genuine runtime data, not paint. The surface carries NO centering transform here:
+ * the shared engine emits already-centered coordinates, so a skin translate would
+ * double-shift it.
  *
  * SPECIFICITY (P-48): the title's colored border repeats its `data-part` to clear the
  * tenant `*` border-color floor at (0,3,1).
  */
 
-/* ---- content panel ---- */
+/* ---- content panel. The surface-lift gradient is the top background layer over
+        the card fill; it is transparent until a dark surface raises
+        --ds-elevation-lift-strength, where the elevation-2 shadow reads too faint
+        to carry depth. The arrow keeps the flat fill. ---- */
 .rottay-popover--modern[data-part='trigger'] > [data-part='surface'] {
   border-radius: var(--ds-radius-lg);
-  background: var(--ds-surface-card);
+  background: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)), var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
-  transform: translateX(-50%);
 }
-.rottay-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement='left'],
-.rottay-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement='right'] {
-  transform: translateY(-50%);
+
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither. `data-ds-position-strategy` is stamped by the
+        engine alongside data-part. ---- */
+.rottay-popover--modern[data-part='trigger'] > [data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }
 
 /* ---- title divider ---- */
@@ -27375,15 +27598,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * matches nothing today. Popover has NO entrance animation in either engine, and
  * adopting that classname would silently give it one.
  *
- * PORTAL: the panel mounts via a direct `createPortal(…, document.body)`, so it is NOT
- * a descendant of the trigger root. Every rule is STANDALONE on the panel's own class,
- * which it carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so
- * the panel's own rules take the COMPOUND form with no descendant space.
+ * PORTAL: the panel portals in the measured (js) branch and renders in-tree in the
+ * top-layer (anchor-css) branch, so it is not reliably a descendant of the trigger
+ * root. Every rule is STANDALONE on the panel's own class, which it carries alongside
+ * `data-part='surface'` — a SELF-CARRYING scope element, so the panel's own rules take
+ * the COMPOUND form with no descendant space.
  *
- * PLACEMENT: unlike the modern engine (which collapses 12 placements to 4), this engine
- * implements all twelve with distinct math. Only 4 of them carry a centering transform,
- * keyed here on `data-placement`; the other 8 legitimately have none. The offsets
- * themselves are runtime (`getBoundingClientRect` + scroll) and stay inline.
+ * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
+ * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline — genuine
+ * runtime data, not paint. The surface carries NO centering transform here: the shared
+ * engine emits already-centered coordinates, so a skin translate would double-shift it.
  *
  * SPECIFICITY (P-48): the panel's and the title's colored borders repeat their
  * `data-part` to clear the tenant `*` border-color floor at (0,3,1).
@@ -27400,14 +27624,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb));
 }
 
-/* ---- the 4 centered placements (the other 8 carry no transform) ---- */
-.rottay-popover--rustic[data-part='surface'][data-placement='top'],
-.rottay-popover--rustic[data-part='surface'][data-placement='bottom'] {
-  transform: translateX(-50%);
-}
-.rottay-popover--rustic[data-part='surface'][data-placement='left'],
-.rottay-popover--rustic[data-part='surface'][data-placement='right'] {
-  transform: translateY(-50%);
+/* ---- top-layer branch: the panel carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        this surface owns neither default. `data-ds-position-strategy` is stamped by
+        the engine alongside data-part. ---- */
+.rottay-popover--rustic[data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }
 
 /* ---- title ---- */
@@ -28335,8 +28558,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * This engine's default mask colour is `--ds-color-alpha-black-50`; rustic's is the literal
  * `rgba(0, 0, 0, 0.5)`. Both are resolved in JS and preserved.
  *
- * `data-anchored` reproduces the surface's `targetRect ? … : …` transform (the popover
- * centers itself in the viewport when no target was measured).
+ * `data-anchored` gates the surface transform. Anchored surfaces are placed by the shared
+ * overlay positioning runtime (measured branch), which centers them mathematically, so their
+ * transform must stay `none` — a translate here would double-shift the popover. Unanchored
+ * surfaces (no target resolved) center in the viewport via 50%/50% insets plus the base
+ * translate below.
  *
  * NEITHER engine has any hover/focus/active feedback anywhere — no `:hover` rule, no
  * handler, no imperative write. That absence is the shipped behaviour and is preserved; do
@@ -28362,7 +28588,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   transform: translate(-50%, -50%);
 }
 .rottay-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='true'] {
-  transform: translateX(-50%);
+  transform: none;
 }
 .rottay-tour--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
   border: 2px solid var(--ds-color-primary);
@@ -28462,8 +28688,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   box-shadow: var(--ds-tour-shadow, 0 8px 24px rgba(0, 0, 0, 0.15));
   transform: translate(-50%, -50%);
 }
+/* Anchored dialogs are placed by the shared overlay positioning runtime (measured
+   branch), which centers them mathematically: the transform must stay `none` or the
+   dialog double-shifts. Unanchored dialogs keep the base viewport-centering translate. */
 .rottay-tour--rustic[data-part='root'] > [data-part='surface'][data-anchored='true'] {
-  transform: translateX(-50%);
+  transform: none;
 }
 .rottay-tour--rustic[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
   border: 2px solid var(--ds-tour-primary-border, var(--ds-color-primary-500, #3b82f6));
@@ -28835,6 +29064,30 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-menu-submenu [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
   transform: rotate(180deg);
+}
+
+/* Panel: the grid-template-rows track (0fr collapsed / 1fr expanded),
+ * mirroring Collapse's technique verbatim -- see
+ * Collapse/engines/modern/index.tsx:26-37 (`.rottay-collapse-content` /
+ * `-content-inner`). `.rottay-menu-submenu__content` (the `<ul role="menu">`)
+ * is the row's grid item and needs `min-height:0` because grid items default
+ * to `min-height:auto`, which would keep the nested menu's intrinsic height
+ * as a floor and prevent the track from ever reaching 0fr; `overflow:hidden`
+ * clips it collapsed and mid-transition. The duration/easing are unchanged
+ * from the JS `height` transition this replaces.
+ */
+.rottay-menu-submenu__panel {
+  display: grid;
+  transition: grid-template-rows 0.2s ease;
+}
+.rottay-menu-submenu__content {
+  min-height: 0;
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rottay-menu-submenu__panel {
+    transition: none;
+  }
 }
 
 /* ---- Menu.Group --------------------------------------------------------- */
@@ -30037,6 +30290,38 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-primary);
 }
 
+/* ---- vertical layout: subgrid label/value column alignment (W6-D) ----
+   The vertical layout renders each row as `[label | value]` columns. The row is
+   a padded/bordered box, so `display: contents` cannot lift its label and value
+   into a shared parent grid without dropping the box -- a subgrid can. The
+   2-track grid lives on `[data-part='rows']`; every row spans it and re-exposes
+   the tracks via subgrid, so each value column aligns to the widest label across
+   ALL rows (content-aware) instead of the fixed one-third split. `@supports`
+   gates the upgrade: with subgrid absent the Tailwind `flex`/`w-1/3` utilities
+   still on these nodes paint today's per-row split unchanged. HORIZONTAL layout
+   stacks label above value -- no label column exists -- so it is excluded by the
+   `[data-layout='vertical']` scope. Subgrid inherits the parent `column-gap`, so
+   the 24px gutter is declared once on the grid. */
+@supports (grid-template-columns: subgrid) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
+    display: grid;
+    grid-template-columns: minmax(120px, max-content) 1fr;
+    column-gap: 24px;
+  }
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: start;
+  }
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+    width: auto;
+  }
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+    min-width: 0;
+  }
+}
+
 /**
  * Rustic Descriptions skin (WO-SKIN-05 checkpoint D2).
  *
@@ -30101,6 +30386,48 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
   color: var(--ds-descriptions-content-color, var(--ds-color-text-primary, #333));
+}
+
+/* ---- vertical layout: label/value columns + subgrid alignment (W6-D) ----
+   The vertical layout's `[label | value]` column split lives here, not inline on
+   the engine's row nodes: an inline `display`/`width`/`flex` outranks this
+   unlayered skin and would pin the fallback, defeating the `@supports` subgrid
+   upgrade below. These three rules ARE the fallback split (row flex, label
+   one-third, value flush). Under `@supports` the row is a padded/bordered box, so
+   the 2-track grid on `[data-part='rows']` is re-exposed to each row via subgrid
+   -- lifting label and value into a shared grid without dropping the box -- so
+   every value column aligns to the widest label across all rows. Per-item
+   `styles.label`/`styles.content` still land inline and still win. HORIZONTAL
+   layout stacks label above value (no label column) and is excluded by scope;
+   subgrid inherits the parent `column-gap`, declared once on the grid. */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  display: flex;
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+  width: 33%;
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+  flex: 1 1 auto;
+}
+
+@supports (grid-template-columns: subgrid) {
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
+    display: grid;
+    grid-template-columns: minmax(120px, max-content) 1fr;
+    column-gap: 24px;
+  }
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: start;
+  }
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+    width: auto;
+  }
+  .rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+    min-width: 0;
+  }
 }
 
 /**
@@ -31708,8 +32035,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * shows through without overlap.
  *
  * The collision-safe `@keyframes rottay-timeline-pulse` driving the pending dot
- * now lives once in `components/skin/primitive-motion.css`; the animation name
- * and frame body remain unchanged.
+ * is declared once in `components/skin/primitive-motion.css`, not duplicated
+ * here.
  *
  * SPECIFICITY (P-48): the dot's `border` shorthand clears the tenant's unlayered
  * (0,3,1) `*` border-color floor at (0,5,0). Values transcribed verbatim from
@@ -31816,6 +32143,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='error'] {
   background: var(--ds-color-error);
   color: var(--ds-color-text-on-primary);
+}
+
+/* ---- top-layer branch: the bubble carries the `popover` attribute there, and
+        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
+        the bubble surface owns neither. `data-ds-position-strategy` is stamped
+        by the engine alongside data-part. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
 }
 
 /* ---- shortcut chips: built on `currentColor` so they track whichever tone the
@@ -33998,6 +34334,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Values are transcribed verbatim from `engines/modern.tsx`.
  */
 
+/* ---- named container (W6-A): the shell root owns the width every descendant
+        adapts to -- command-home chrome and the cqi fluid type ramp both resolve
+        against it. Declared on the bare data-part='root' match so it holds across
+        both the loading and main roots; never on a scroll container. ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-page;
+}
+
 /* ---- shell-grid background: non-loading root only (main root had it, the loading
         root did not). Invisible until a tenant sets the grid tokens. ---- */
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'][data-loading='false'] {
@@ -34329,6 +34674,25 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='footer'][data-part='footer'] {
   border-top: 1px solid var(--ds-color-border);
+}
+
+/* argument mode: pending-command chip + parameter prompt + validation error.
+   Layout (flex/padding/font) rides inline on the elements; paint lives here. */
+.ds-pattern-command-palette.ds-engine-modern [data-part='argument-chip'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-secondary);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='argument-prompt'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='argument-error'] {
+  color: var(--ds-color-error, var(--ds-color-text-primary));
+}
+
+/* per-section provider error row (kind='error': rendered, never selectable) */
+.ds-pattern-command-palette.ds-engine-modern [data-part='error'] {
+  color: var(--ds-color-error, var(--ds-color-text-secondary));
 }
 
 /**
@@ -35348,6 +35712,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Values are transcribed verbatim from `engines/rustic.tsx`.
  */
 
+/* ---- named container (W6-A): the shell root owns the width every descendant
+        adapts to -- command-home chrome and the cqi fluid type ramp both resolve
+        against it. Declared on the bare data-part='root' match so it holds across
+        both the loading and main roots; never on a scroll container. ---- */
+.ds-pattern-page-shell.ds-engine-rustic[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-page;
+}
+
 /* ---- shell-grid background: both roots spread `containerStyle`, so it applies to
         loading and main alike. Invisible until a tenant sets the grid tokens. ---- */
 .ds-pattern-page-shell.ds-engine-rustic[data-part='root'] {
@@ -35535,6 +35908,27 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-pattern-command-palette.ds-engine-rustic [data-part='footer'][data-part='footer'] {
   border-top: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+}
+
+/* argument mode: pending-command chip + parameter prompt + validation error.
+   Layout (flex/padding/font) rides inline on the elements; paint lives here.
+   Generic tokens, matching the engine's values verbatim — these parts predate any
+   --ds-command-palette-* channel, so none is invented for them. */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='argument-chip'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-secondary);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='argument-prompt'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='argument-error'] {
+  color: var(--ds-color-error, var(--ds-color-text-primary));
+}
+
+/* per-section provider error row (kind='error': rendered, never selectable) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='error'] {
+  color: var(--ds-color-error, var(--ds-color-text-secondary));
 }
 
 /**
@@ -44539,6 +44933,19 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * anatomy uses data parts; composed primitives keep their BEM landing hooks.
  * Caller styles remain inline and therefore retain their original precedence.
  */
+
+/* NAMED CONTAINER (W6-A): `ds-collection` is declared on the `[data-part='collection']`
+   flex ITEM (`flex: 1 1 0%; min-width: 0`), not on its `[data-part='content']` flex-row
+   parent. The row's own inline-size stays ~constant whether or not a preview rail is
+   showing -- flexbox only reallocates space AMONG its children -- so a container there
+   would just re-measure page width, duplicating `ds-page`. The `[data-part='collection']`
+   item is the box that actually shrinks when a rail claims space beside it, so it is the
+   element descendants (table/grid cells) need to query. Present under both the legacy
+   (`!isPremium`) and premium (`WorkspaceShell`-wrapped) render paths. */
+.ds-surface.ds-collection-workspace .ds-collection-workspace__collection[data-part='collection'] {
+  container-type: inline-size;
+  container-name: ds-collection;
+}
 
 /* ENHANCED_CSS moved byte-for-byte from the conditional runtime style tag.
    The ds-collection-enhanced class preserves its original condition. */
@@ -56010,9 +56417,6 @@ html[data-ds-motion='reduced'] {
   }
   .right-8 {
     right: calc(var(--spacing) * 8);
-  }
-  .right-full {
-    right: 100%;
   }
   .bottom-0 {
     bottom: calc(var(--spacing) * 0);

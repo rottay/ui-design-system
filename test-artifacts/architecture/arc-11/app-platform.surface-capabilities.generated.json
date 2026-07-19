@@ -2962,14 +2962,14 @@
       "kind": "tab",
       "id": "actions",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 2329
     },
     {
       "kind": "tab",
       "id": "actions",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 4326
     },
     {
@@ -2997,7 +2997,7 @@
       "kind": "tab",
       "id": "branding",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 208,
+      "line": 185,
       "column": 7
     },
     {
@@ -3032,7 +3032,7 @@
       "kind": "tab",
       "id": "content",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 255,
+      "line": 232,
       "column": 318
     },
     {
@@ -3081,7 +3081,7 @@
       "kind": "tab",
       "id": "createdAt",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 4016
     },
     {
@@ -3116,7 +3116,7 @@
       "kind": "tab",
       "id": "events",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 1849
     },
     {
@@ -3172,7 +3172,7 @@
       "kind": "tab",
       "id": "general",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 207,
+      "line": 184,
       "column": 7
     },
     {
@@ -3200,7 +3200,7 @@
       "kind": "tab",
       "id": "integrations",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 7
     },
     {
@@ -3214,14 +3214,14 @@
       "kind": "tab",
       "id": "lastUsed",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 4156
     },
     {
       "kind": "tab",
       "id": "name",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 3805
     },
     {
@@ -3249,7 +3249,7 @@
       "kind": "tab",
       "id": "notifications",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 240,
+      "line": 217,
       "column": 7
     },
     {
@@ -3305,7 +3305,7 @@
       "kind": "tab",
       "id": "prefix",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 3856
     },
     {
@@ -3382,7 +3382,7 @@
       "kind": "tab",
       "id": "security",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 239,
+      "line": 216,
       "column": 7
     },
     {
@@ -3403,7 +3403,7 @@
       "kind": "tab",
       "id": "status",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 2131
     },
     {
@@ -3487,7 +3487,7 @@
       "kind": "tab",
       "id": "url",
       "source": "features/organization/settings/screens/overview.tsx",
-      "line": 241,
+      "line": 218,
       "column": 1628
     },
     {

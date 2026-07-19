@@ -468,6 +468,13 @@ jobs:
       - name: CSS layer paint gate (P-76)
         run: pnpm --filter @rottay/design-system run csspaint:check
 
+      # W6-A: every @container <name> query must name a container some skin
+      # actually declares (dead-name protection), and presentation/components/**
+      # may not regrow @media (max-width|min-width) breakpoints past the
+      # decrease-only residual baseline.
+      - name: Container query gate (W6-A)
+        run: pnpm --filter @rottay/design-system run containerquery:check
+
       - name: Integration audit (brand-compiler emitter closure)
         run: pnpm --filter @rottay/design-system run lint:integration
 

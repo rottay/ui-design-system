@@ -7,9 +7,9 @@
     "field": 172,
     "column": 71,
     "tab": 25,
-    "action": 203
+    "action": 207
   },
-  "total": 570,
+  "total": 574,
   "entries": [
     {
       "kind": "action",
@@ -127,22 +127,36 @@
       "kind": "action",
       "id": "artist.cancel",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 170,
+      "line": 171,
       "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "artist.cancel",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 184,
+      "column": 7
     },
     {
       "kind": "action",
       "id": "artist.create",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 99,
+      "line": 100,
       "column": 45
     },
     {
       "kind": "action",
       "id": "artist.create",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 162,
+      "line": 163,
       "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "artist.create",
+      "source": "features/events/artists/screens/create/index.tsx",
+      "line": 183,
+      "column": 7
     },
     {
       "kind": "action",
@@ -1366,22 +1380,36 @@
       "kind": "action",
       "id": "venue.cancel",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 317,
+      "line": 318,
       "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "venue.cancel",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 331,
+      "column": 7
     },
     {
       "kind": "action",
       "id": "venue.create",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 169,
+      "line": 170,
       "column": 45
     },
     {
       "kind": "action",
       "id": "venue.create",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 309,
+      "line": 310,
       "column": 21
+    },
+    {
+      "kind": "action",
+      "id": "venue.create",
+      "source": "features/venue/venues/screens/create/index.tsx",
+      "line": 330,
+      "column": 7
     },
     {
       "kind": "action",
@@ -1933,7 +1961,7 @@
       "kind": "field",
       "id": "artist.bio",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 48,
+      "line": 49,
       "column": 3
     },
     {
@@ -1947,14 +1975,14 @@
       "kind": "field",
       "id": "artist.genre",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 41,
+      "line": 42,
       "column": 3
     },
     {
       "kind": "field",
       "id": "artist.imageUrl",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 55,
+      "line": 56,
       "column": 3
     },
     {
@@ -1968,7 +1996,7 @@
       "kind": "field",
       "id": "artist.name",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 29,
+      "line": 30,
       "column": 3
     },
     {
@@ -1982,14 +2010,14 @@
       "kind": "field",
       "id": "artist.socialLinks",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 62,
+      "line": 63,
       "column": 3
     },
     {
       "kind": "field",
       "id": "artist.socialLinks",
       "source": "features/events/artists/screens/create/index.tsx",
-      "line": 69,
+      "line": 70,
       "column": 3
     },
     {
@@ -3032,14 +3060,14 @@
       "kind": "field",
       "id": "venue.address",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 73,
+      "line": 74,
       "column": 3
     },
     {
       "kind": "field",
       "id": "venue.amenities",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 133,
+      "line": 134,
       "column": 3
     },
     {
@@ -3053,7 +3081,7 @@
       "kind": "field",
       "id": "venue.capacity",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 99,
+      "line": 100,
       "column": 3
     },
     {
@@ -3067,14 +3095,14 @@
       "kind": "field",
       "id": "venue.city",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 82,
+      "line": 83,
       "column": 3
     },
     {
       "kind": "field",
       "id": "venue.country",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 89,
+      "line": 90,
       "column": 3
     },
     {
@@ -3088,7 +3116,7 @@
       "kind": "field",
       "id": "venue.name",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 60,
+      "line": 61,
       "column": 3
     },
     {
@@ -3109,14 +3137,14 @@
       "kind": "field",
       "id": "venue.status",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 111,
+      "line": 112,
       "column": 3
     },
     {
       "kind": "field",
       "id": "venue.venueType",
       "source": "features/venue/venues/screens/create/index.tsx",
-      "line": 124,
+      "line": 125,
       "column": 3
     },
     {

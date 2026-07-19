@@ -280,6 +280,8 @@
     "typecheck": "tsc --noEmit",
     "typecheck:tests": "node scripts/typecheck-tests-ratchet.mjs --label core --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json",
     "csspaint:check": "node scripts/css-layer-paint-gate.mjs",
+    "containerquery:check": "node scripts/container-query-gate.mjs --check",
+    "containerquery:seed": "node scripts/container-query-gate.mjs --seed",
     "size-axis:check": "node scripts/size-axis-law-gate.mjs --check",
     "gate:styles-css": "node --test scripts/vertical-css-staleness.gate.mjs",
     "packinv:check": "node scripts/pack-inventory-gate.mjs --check",

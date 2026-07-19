@@ -2567,9 +2567,6 @@
   .right-8 {
     right: calc(var(--spacing) * 8);
   }
-  .right-full {
-    right: 100%;
-  }
   .bottom-0 {
     bottom: calc(var(--spacing) * 0);
   }

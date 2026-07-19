@@ -1,0 +1,18 @@
+{
+  "_comment": "Decrease-only accepted-debt ledger for container-query-gate.mjs. (a) deadContainerNames: @container <name> queries with no matching container-name declaration anywhere in src css -- a NEW dead name (not listed here) fails --check; revive a name by declaring container-name on some skin. (b) viewportQueries: per-file count of @media (max-width|min-width) declarations under presentation/components/** -- growth past a file's ceiling, or a NEW file with any count, fails --check; a file dropping below its ceiling is a tighten opportunity via --seed.",
+  "deadContainerNames": {
+    "ds-table": {
+      "reason": "pre-existing at W6-A landing: patterns.css queries @container ds-table for the data-table column-priority-collapse rule, but no engine skin (checked runtime/engines/{modern,rustic}/skin/{table,data-table}.css) declares container-name: ds-table -- only a patterns.css comment claims it does. The rule has been silently inert since it landed. W6-A was told to keep ds-table as-is; this is disclosed debt for a follow-up, not something this lane fixes."
+    }
+  },
+  "viewportQueries": {
+    "src/foundation/tokens/css/presentation/components/patterns-paint.css": {
+      "count": 1,
+      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
+    },
+    "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css": {
+      "count": 1,
+      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
+    }
+  }
+}

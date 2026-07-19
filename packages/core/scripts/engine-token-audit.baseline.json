@@ -3120,5 +3120,17 @@
   "embeddedCssPaint.primitives/display/MarkdownView/index.tsx": 0,
   "embeddedCssPaint.primitives/display/MarkdownView/runtime/link-safety/index.ts": 0,
   "embeddedCssPaint.primitives/display/MarkdownView/runtime/parser/index.ts": 0,
-  "embeddedCssPaint.primitives/runtime/overlay/layer-stack/index.ts": 0
+  "embeddedCssPaint.primitives/runtime/overlay/layer-stack/index.ts": 0,
+  "fleet.inlinePaint.patterns/navigation/command-palette/runtime/argument-mode/index.ts": 0,
+  "fleet.inlinePaint.primitives/runtime/overlay/positioning/index.tsx": 0,
+  "runtimeSvgPaint.patterns/navigation/command-palette/runtime/argument-mode/index.ts": 0,
+  "runtimeSvgPaint.primitives/runtime/overlay/positioning/index.tsx": 0,
+  "embeddedCssPaint.patterns/navigation/command-palette/runtime/argument-mode/index.ts": 0,
+  "embeddedCssPaint.primitives/runtime/overlay/positioning/index.tsx": 0,
+  "fleet.inlinePaint.patterns/navigation/command-palette/foundation/frecency/index.ts": 0,
+  "fleet.inlinePaint.primitives/overlay/Tour/runtime/spotlight-rect/index.ts": 0,
+  "runtimeSvgPaint.patterns/navigation/command-palette/foundation/frecency/index.ts": 0,
+  "runtimeSvgPaint.primitives/overlay/Tour/runtime/spotlight-rect/index.ts": 0,
+  "embeddedCssPaint.patterns/navigation/command-palette/foundation/frecency/index.ts": 0,
+  "embeddedCssPaint.primitives/overlay/Tour/runtime/spotlight-rect/index.ts": 0
 }

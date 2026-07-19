@@ -7,9 +7,9 @@
     "field": 433,
     "column": 524,
     "tab": 153,
-    "action": 478
+    "action": 473
   },
-  "total": 1812,
+  "total": 1807,
   "entries": [
     {
       "kind": "action",
@@ -295,7 +295,7 @@
       "kind": "action",
       "id": "admin.audit",
       "source": "features/governance/surface/screens/workflows/audit-center/index.tsx",
-      "line": 104,
+      "line": 106,
       "column": 29
     },
     {
@@ -316,21 +316,21 @@
       "kind": "action",
       "id": "advance",
       "source": "features/applications/surface/components/pipeline/kanban/mobile/board/index.tsx",
-      "line": 167,
+      "line": 169,
       "column": 9
     },
     {
       "kind": "action",
       "id": "advance",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 169,
+      "line": 161,
       "column": 5
     },
     {
       "kind": "action",
       "id": "advance",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 275,
+      "line": 259,
       "column": 5
     },
     {
@@ -344,7 +344,7 @@
       "kind": "action",
       "id": "agent.create",
       "source": "features/agents/surface/screens/record/create/index.tsx",
-      "line": 121,
+      "line": 122,
       "column": 29
     },
     {
@@ -379,14 +379,14 @@
       "kind": "action",
       "id": "agents.manage",
       "source": "features/agents/surface/screens/record/detail/index.tsx",
-      "line": 222,
+      "line": 223,
       "column": 29
     },
     {
       "kind": "action",
       "id": "analytics.export",
       "source": "features/insights/surface/screens/workflows/analytics/overview/index.tsx",
-      "line": 63,
+      "line": 56,
       "column": 45
     },
     {
@@ -400,112 +400,112 @@
       "kind": "action",
       "id": "application",
       "source": "features/applications/surface/components/pipeline/kanban/mobile/board/index.tsx",
-      "line": 140,
+      "line": 142,
       "column": 9
     },
     {
       "kind": "action",
       "id": "application",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 137,
+      "line": 139,
       "column": 3
     },
     {
       "kind": "action",
       "id": "application.add_note",
       "source": "features/applications/surface/screens/record/detail/view/sections/client-view/index.tsx",
-      "line": 131,
+      "line": 133,
       "column": 30
     },
     {
       "kind": "action",
       "id": "application.advance",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 210,
+      "line": 212,
       "column": 30
     },
     {
       "kind": "action",
       "id": "application.advance",
       "source": "features/applications/surface/screens/record/detail/view/sections/client-view/index.tsx",
-      "line": 105,
+      "line": 107,
       "column": 30
     },
     {
       "kind": "action",
       "id": "application.advance",
       "source": "features/candidates/surface/screens/workflows/compare/index.tsx",
-      "line": 127,
+      "line": 120,
       "column": 29
     },
     {
       "kind": "action",
       "id": "application.client_decision",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 237,
+      "line": 239,
       "column": 29
     },
     {
       "kind": "action",
       "id": "application.client_decision",
       "source": "features/applications/surface/screens/record/detail/view/sections/client-view/index.tsx",
-      "line": 124,
+      "line": 126,
       "column": 29
     },
     {
       "kind": "action",
       "id": "application.create_offer",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 231,
+      "line": 233,
       "column": 29
     },
     {
       "kind": "action",
       "id": "application.create_offer",
       "source": "features/applications/surface/screens/record/detail/view/sections/client-view/index.tsx",
-      "line": 118,
+      "line": 120,
       "column": 29
     },
     {
       "kind": "action",
       "id": "application.edit",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 183,
+      "line": 185,
       "column": 30
     },
     {
       "kind": "action",
       "id": "application.edit",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 196,
+      "line": 198,
       "column": 31
     },
     {
       "kind": "action",
       "id": "application.reject",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 218,
+      "line": 220,
       "column": 30
     },
     {
       "kind": "action",
       "id": "application.reject",
       "source": "features/candidates/surface/screens/workflows/compare/index.tsx",
-      "line": 133,
+      "line": 126,
       "column": 29
     },
     {
       "kind": "action",
       "id": "application.schedule",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 225,
+      "line": 227,
       "column": 29
     },
     {
       "kind": "action",
       "id": "application.schedule",
       "source": "features/applications/surface/screens/record/detail/view/sections/client-view/index.tsx",
-      "line": 112,
+      "line": 114,
       "column": 29
     },
     {
@@ -519,21 +519,21 @@
       "kind": "action",
       "id": "application.view",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 203,
+      "line": 205,
       "column": 29
     },
     {
       "kind": "action",
       "id": "applications",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 315,
+      "line": 271,
       "column": 5
     },
     {
       "kind": "action",
       "id": "approve",
       "source": "features/offers/surface/screens/workflows/approval-center/index.tsx",
-      "line": 112,
+      "line": 110,
       "column": 3
     },
     {
@@ -547,14 +547,14 @@
       "kind": "action",
       "id": "approve",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 781,
+      "line": 711,
       "column": 3
     },
     {
       "kind": "action",
       "id": "approve",
       "source": "ui/tables/bulk-actions/index.tsx",
-      "line": 276,
+      "line": 257,
       "column": 12
     },
     {
@@ -582,7 +582,7 @@
       "kind": "action",
       "id": "archive",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 1128,
+      "line": 1108,
       "column": 5
     },
     {
@@ -610,7 +610,7 @@
       "kind": "action",
       "id": "assign",
       "source": "features/governance/surface/screens/workflows/compliance/dsr-queue/index.tsx",
-      "line": 156,
+      "line": 158,
       "column": 3
     },
     {
@@ -631,28 +631,28 @@
       "kind": "action",
       "id": "assign-team",
       "source": "features/positions/surface/screens/record/listing/index.tsx",
-      "line": 1090,
+      "line": 1059,
       "column": 19
     },
     {
       "kind": "action",
       "id": "assignment.create",
       "source": "features/agents/surface/screens/record/create/index.tsx",
-      "line": 684,
+      "line": 676,
       "column": 29
     },
     {
       "kind": "action",
       "id": "assignment.create",
       "source": "features/agents/surface/screens/workflows/assignments/index.tsx",
-      "line": 573,
+      "line": 568,
       "column": 29
     },
     {
       "kind": "action",
       "id": "assignment.edit",
       "source": "features/agents/surface/screens/workflows/assignments/index.tsx",
-      "line": 579,
+      "line": 574,
       "column": 29
     },
     {
@@ -666,21 +666,21 @@
       "kind": "action",
       "id": "automation",
       "source": "features/applications/surface/components/pipeline/kanban/mobile/board/index.tsx",
-      "line": 158,
+      "line": 160,
       "column": 9
     },
     {
       "kind": "action",
       "id": "automation",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 139,
+      "line": 141,
       "column": 3
     },
     {
       "kind": "action",
       "id": "buy",
       "source": "features/governance/surface/screens/workflows/token-billing/metrics/index.tsx",
-      "line": 408,
+      "line": 341,
       "column": 5
     },
     {
@@ -694,28 +694,28 @@
       "kind": "action",
       "id": "cancel",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 630,
+      "line": 566,
       "column": 3
     },
     {
       "kind": "action",
       "id": "candidate",
       "source": "app/(dashboard)/layout.tsx",
-      "line": 97,
+      "line": 98,
       "column": 3
     },
     {
       "kind": "action",
       "id": "candidate",
       "source": "features/applications/surface/components/pipeline/kanban/mobile/board/index.tsx",
-      "line": 149,
+      "line": 151,
       "column": 9
     },
     {
       "kind": "action",
       "id": "candidate",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 138,
+      "line": 140,
       "column": 3
     },
     {
@@ -729,7 +729,7 @@
       "kind": "action",
       "id": "candidate-360",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 307,
+      "line": 263,
       "column": 5
     },
     {
@@ -743,14 +743,14 @@
       "kind": "action",
       "id": "candidate.create",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 362,
+      "line": 359,
       "column": 45
     },
     {
       "kind": "action",
       "id": "candidate.create",
       "source": "features/candidates/surface/screens/workflows/compare/index.tsx",
-      "line": 139,
+      "line": 132,
       "column": 29
     },
     {
@@ -764,7 +764,7 @@
       "kind": "action",
       "id": "candidate.edit",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 368,
+      "line": 365,
       "column": 45
     },
     {
@@ -820,7 +820,7 @@
       "kind": "action",
       "id": "candidate.schedule",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 374,
+      "line": 371,
       "column": 56
     },
     {
@@ -841,49 +841,49 @@
       "kind": "action",
       "id": "client.contact",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 223,
+      "line": 224,
       "column": 29
     },
     {
       "kind": "action",
       "id": "client.create",
       "source": "features/clients/surface/screens/record/listing/index.tsx",
-      "line": 139,
+      "line": 138,
       "column": 45
     },
     {
       "kind": "action",
       "id": "client.create_position",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 216,
+      "line": 217,
       "column": 30
     },
     {
       "kind": "action",
       "id": "client.deactivate",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 208,
+      "line": 209,
       "column": 30
     },
     {
       "kind": "action",
       "id": "client.edit",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 201,
+      "line": 202,
       "column": 29
     },
     {
       "kind": "action",
       "id": "client.manage_contacts",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 235,
+      "line": 236,
       "column": 29
     },
     {
       "kind": "action",
       "id": "client.view_open_work",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 229,
+      "line": 230,
       "column": 29
     },
     {
@@ -897,14 +897,14 @@
       "kind": "action",
       "id": "clone",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 142,
+      "line": 140,
       "column": 3
     },
     {
       "kind": "action",
       "id": "clone",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 1122,
+      "line": 1102,
       "column": 5
     },
     {
@@ -918,14 +918,14 @@
       "kind": "action",
       "id": "close",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 143,
+      "line": 141,
       "column": 3
     },
     {
       "kind": "action",
       "id": "close",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 783,
+      "line": 713,
       "column": 3
     },
     {
@@ -946,7 +946,7 @@
       "kind": "action",
       "id": "compare",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 1423,
+      "line": 1412,
       "column": 13
     },
     {
@@ -960,7 +960,7 @@
       "kind": "action",
       "id": "complete",
       "source": "features/governance/surface/screens/workflows/compliance/dsr-queue/index.tsx",
-      "line": 157,
+      "line": 159,
       "column": 3
     },
     {
@@ -981,7 +981,7 @@
       "kind": "action",
       "id": "copy",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 142,
+      "line": 141,
       "column": 3
     },
     {
@@ -1086,21 +1086,14 @@
       "kind": "action",
       "id": "debrief",
       "source": "features/interviews/surface/screens/workflows/agenda/listing/index.tsx",
-      "line": 99,
-      "column": 3
-    },
-    {
-      "kind": "action",
-      "id": "debrief",
-      "source": "features/interviews/surface/screens/workflows/agenda/listing/wiring/styles/index.ts",
-      "line": 295,
+      "line": 98,
       "column": 3
     },
     {
       "kind": "action",
       "id": "decline",
       "source": "features/offers/surface/screens/workflows/approval-center/index.tsx",
-      "line": 113,
+      "line": 111,
       "column": 3
     },
     {
@@ -1121,21 +1114,21 @@
       "kind": "action",
       "id": "delete",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 144,
+      "line": 142,
       "column": 3
     },
     {
       "kind": "action",
       "id": "delete",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 155,
+      "line": 156,
       "column": 3
     },
     {
       "kind": "action",
       "id": "delete",
       "source": "ui/tables/bulk-actions/index.tsx",
-      "line": 262,
+      "line": 243,
       "column": 11
     },
     {
@@ -1149,7 +1142,7 @@
       "kind": "action",
       "id": "detail",
       "source": "features/governance/surface/screens/workflows/compliance/dsr-queue/index.tsx",
-      "line": 155,
+      "line": 157,
       "column": 3
     },
     {
@@ -1184,7 +1177,7 @@
       "kind": "action",
       "id": "detail",
       "source": "features/settings/surface/screens/integrations/vendors/listing/index.tsx",
-      "line": 151,
+      "line": 143,
       "column": 3
     },
     {
@@ -1212,7 +1205,7 @@
       "kind": "action",
       "id": "details",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 140,
+      "line": 139,
       "column": 3
     },
     {
@@ -1226,7 +1219,7 @@
       "kind": "action",
       "id": "details",
       "source": "features/sourcing/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 129,
+      "line": 128,
       "column": 3
     },
     {
@@ -1240,7 +1233,7 @@
       "kind": "action",
       "id": "details",
       "source": "features/sourcing/surface/screens/workflows/talent-community/overview/index.tsx",
-      "line": 114,
+      "line": 116,
       "column": 3
     },
     {
@@ -1254,7 +1247,7 @@
       "kind": "action",
       "id": "details",
       "source": "features/sourcing/surface/screens/workflows/talent-community/segments/index.tsx",
-      "line": 144,
+      "line": 145,
       "column": 3
     },
     {
@@ -1268,14 +1261,14 @@
       "kind": "action",
       "id": "distribution",
       "source": "features/governance/surface/screens/workflows/token-billing/metrics/index.tsx",
-      "line": 436,
+      "line": 369,
       "column": 11
     },
     {
       "kind": "action",
       "id": "draft",
       "source": "features/sourcing/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 130,
+      "line": 129,
       "column": 3
     },
     {
@@ -1303,7 +1296,7 @@
       "kind": "action",
       "id": "duplicate",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 154,
+      "line": 155,
       "column": 3
     },
     {
@@ -1331,7 +1324,7 @@
       "kind": "action",
       "id": "efficiency",
       "source": "features/governance/surface/screens/workflows/token-billing/metrics/index.tsx",
-      "line": 416,
+      "line": 349,
       "column": 5
     },
     {
@@ -1352,7 +1345,7 @@
       "kind": "action",
       "id": "email",
       "source": "features/settings/surface/screens/integrations/vendors/listing/index.tsx",
-      "line": 152,
+      "line": 144,
       "column": 3
     },
     {
@@ -1373,14 +1366,14 @@
       "kind": "action",
       "id": "email",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 187,
+      "line": 179,
       "column": 5
     },
     {
       "kind": "action",
       "id": "email",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 298,
+      "line": 282,
       "column": 5
     },
     {
@@ -1408,7 +1401,7 @@
       "kind": "action",
       "id": "export",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 1431,
+      "line": 1420,
       "column": 13
     },
     {
@@ -1422,7 +1415,7 @@
       "kind": "action",
       "id": "export",
       "source": "ui/tables/bulk-actions/index.tsx",
-      "line": 271,
+      "line": 252,
       "column": 11
     },
     {
@@ -1443,14 +1436,14 @@
       "kind": "action",
       "id": "history",
       "source": "features/governance/surface/screens/workflows/token-billing/metrics/index.tsx",
-      "line": 425,
+      "line": 358,
       "column": 5
     },
     {
       "kind": "action",
       "id": "interview",
       "source": "app/(dashboard)/layout.tsx",
-      "line": 111,
+      "line": 112,
       "column": 3
     },
     {
@@ -1471,7 +1464,7 @@
       "kind": "action",
       "id": "interview.cancel",
       "source": "features/interviews/surface/screens/record/listing/index.tsx",
-      "line": 120,
+      "line": 116,
       "column": 45
     },
     {
@@ -1492,7 +1485,7 @@
       "kind": "action",
       "id": "interview.join",
       "source": "features/interviews/surface/screens/workflows/live-scoring/index.tsx",
-      "line": 1668,
+      "line": 1522,
       "column": 30
     },
     {
@@ -1520,21 +1513,21 @@
       "kind": "action",
       "id": "interview.submit_scorecard",
       "source": "features/interviews/surface/screens/workflows/debrief/index.tsx",
-      "line": 1973,
+      "line": 1695,
       "column": 29
     },
     {
       "kind": "action",
       "id": "interview.submit_scorecard",
       "source": "features/interviews/surface/screens/workflows/live-scoring/index.tsx",
-      "line": 1674,
+      "line": 1528,
       "column": 30
     },
     {
       "kind": "action",
       "id": "interview.update",
       "source": "features/interviews/surface/screens/record/listing/index.tsx",
-      "line": 125,
+      "line": 121,
       "column": 45
     },
     {
@@ -1555,126 +1548,126 @@
       "kind": "action",
       "id": "job",
       "source": "app/(dashboard)/layout.tsx",
-      "line": 104,
+      "line": 105,
       "column": 3
     },
     {
       "kind": "action",
       "id": "job.add_application",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 329,
+      "line": 333,
       "column": 53
     },
     {
       "kind": "action",
       "id": "job.clone",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 323,
+      "line": 327,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.clone",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 216,
+      "line": 214,
       "column": 44
     },
     {
       "kind": "action",
       "id": "job.close",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 315,
+      "line": 319,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.close",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 222,
+      "line": 220,
       "column": 44
     },
     {
       "kind": "action",
       "id": "job.create",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 204,
+      "line": 202,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.delete",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 228,
+      "line": 226,
       "column": 45
     },
     {
       "kind": "action",
       "id": "job.distribute_boards",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 375,
+      "line": 381,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.edit",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 250,
+      "line": 254,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.edit",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 263,
+      "line": 267,
       "column": 31
     },
     {
       "kind": "action",
       "id": "job.edit",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 210,
+      "line": 208,
       "column": 45
     },
     {
       "kind": "action",
       "id": "job.find_candidates",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 367,
+      "line": 373,
       "column": 53
     },
     {
       "kind": "action",
       "id": "job.pause",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 299,
+      "line": 303,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.pipeline",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 335,
+      "line": 339,
       "column": 54
     },
     {
       "kind": "action",
       "id": "job.publish",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 291,
+      "line": 295,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.reactivate",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 307,
+      "line": 311,
       "column": 29
     },
     {
       "kind": "action",
       "id": "job.review_candidates",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 360,
+      "line": 366,
       "column": 31
     },
     {
@@ -1737,7 +1730,7 @@
       "kind": "action",
       "id": "matching",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 331,
+      "line": 287,
       "column": 5
     },
     {
@@ -1751,7 +1744,7 @@
       "kind": "action",
       "id": "move",
       "source": "features/applications/surface/components/pipeline/kanban/mobile/board/index.tsx",
-      "line": 189,
+      "line": 191,
       "column": 9
     },
     {
@@ -1765,7 +1758,7 @@
       "kind": "action",
       "id": "move-to-pipeline",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 1602,
+      "line": 1439,
       "column": 15
     },
     {
@@ -1842,49 +1835,42 @@
       "kind": "action",
       "id": "next",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 628,
+      "line": 564,
       "column": 3
     },
     {
       "kind": "action",
       "id": "next",
       "source": "features/interviews/surface/screens/workflows/agenda/listing/index.tsx",
-      "line": 95,
-      "column": 3
-    },
-    {
-      "kind": "action",
-      "id": "next",
-      "source": "features/interviews/surface/screens/workflows/agenda/listing/wiring/styles/index.ts",
-      "line": 291,
+      "line": 94,
       "column": 3
     },
     {
       "kind": "action",
       "id": "note",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 196,
+      "line": 188,
       "column": 5
     },
     {
       "kind": "action",
       "id": "note",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 304,
+      "line": 288,
       "column": 5
     },
     {
       "kind": "action",
       "id": "nurture",
       "source": "features/sourcing/surface/screens/workflows/talent-community/segments/index.tsx",
-      "line": 145,
+      "line": 146,
       "column": 3
     },
     {
       "kind": "action",
       "id": "offer",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 205,
+      "line": 197,
       "column": 5
     },
     {
@@ -1905,14 +1891,14 @@
       "kind": "action",
       "id": "offer.approve",
       "source": "features/offers/surface/screens/workflows/approval-center/index.tsx",
-      "line": 196,
+      "line": 194,
       "column": 29
     },
     {
       "kind": "action",
       "id": "offer.create",
       "source": "features/offers/surface/screens/record/listing/index.tsx",
-      "line": 125,
+      "line": 122,
       "column": 29
     },
     {
@@ -1933,7 +1919,7 @@
       "kind": "action",
       "id": "offer.edit",
       "source": "features/offers/surface/screens/record/listing/index.tsx",
-      "line": 132,
+      "line": 129,
       "column": 29
     },
     {
@@ -1954,14 +1940,14 @@
       "kind": "action",
       "id": "offer.revoke",
       "source": "features/offers/surface/screens/record/listing/index.tsx",
-      "line": 118,
+      "line": 115,
       "column": 45
     },
     {
       "kind": "action",
       "id": "offer.revoke",
       "source": "features/offers/surface/screens/workflows/approval-center/index.tsx",
-      "line": 203,
+      "line": 201,
       "column": 29
     },
     {
@@ -1975,7 +1961,7 @@
       "kind": "action",
       "id": "offer.send",
       "source": "features/offers/surface/screens/record/listing/index.tsx",
-      "line": 112,
+      "line": 109,
       "column": 43
     },
     {
@@ -1996,21 +1982,14 @@
       "kind": "action",
       "id": "open",
       "source": "features/interviews/surface/screens/workflows/agenda/listing/index.tsx",
-      "line": 96,
-      "column": 3
-    },
-    {
-      "kind": "action",
-      "id": "open",
-      "source": "features/interviews/surface/screens/workflows/agenda/listing/wiring/styles/index.ts",
-      "line": 292,
+      "line": 95,
       "column": 3
     },
     {
       "kind": "action",
       "id": "open",
       "source": "features/offers/surface/screens/workflows/approval-center/index.tsx",
-      "line": 111,
+      "line": 109,
       "column": 3
     },
     {
@@ -2031,7 +2010,7 @@
       "kind": "action",
       "id": "open",
       "source": "features/sourcing/surface/screens/workflows/talent-community/overview/index.tsx",
-      "line": 115,
+      "line": 117,
       "column": 3
     },
     {
@@ -2101,7 +2080,7 @@
       "kind": "action",
       "id": "pause",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 782,
+      "line": 712,
       "column": 3
     },
     {
@@ -2122,7 +2101,7 @@
       "kind": "action",
       "id": "pipeline",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 323,
+      "line": 279,
       "column": 5
     },
     {
@@ -2136,7 +2115,7 @@
       "kind": "action",
       "id": "pipeline",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 141,
+      "line": 139,
       "column": 3
     },
     {
@@ -2157,28 +2136,28 @@
       "kind": "action",
       "id": "pipeline.manage",
       "source": "features/applications/surface/screens/workflows/pipeline/board/index.tsx",
-      "line": 65,
+      "line": 68,
       "column": 45
     },
     {
       "kind": "action",
       "id": "playbook.create",
       "source": "features/agents/surface/screens/record/create/index.tsx",
-      "line": 252,
+      "line": 253,
       "column": 29
     },
     {
       "kind": "action",
       "id": "playbook.create",
       "source": "features/agents/surface/screens/workflows/playbooks/index.tsx",
-      "line": 621,
+      "line": 607,
       "column": 29
     },
     {
       "kind": "action",
       "id": "playbook.edit",
       "source": "features/agents/surface/screens/workflows/playbooks/index.tsx",
-      "line": 627,
+      "line": 613,
       "column": 29
     },
     {
@@ -2192,7 +2171,7 @@
       "kind": "action",
       "id": "pool",
       "source": "features/sourcing/surface/screens/workflows/talent-community/segments/index.tsx",
-      "line": 146,
+      "line": 147,
       "column": 3
     },
     {
@@ -2206,7 +2185,7 @@
       "kind": "action",
       "id": "position.approve",
       "source": "features/positions/surface/screens/record/listing/index.tsx",
-      "line": 153,
+      "line": 149,
       "column": 46
     },
     {
@@ -2220,14 +2199,14 @@
       "kind": "action",
       "id": "position.close",
       "source": "features/positions/surface/screens/record/listing/index.tsx",
-      "line": 147,
+      "line": 143,
       "column": 44
     },
     {
       "kind": "action",
       "id": "position.create",
       "source": "features/positions/surface/screens/record/listing/index.tsx",
-      "line": 135,
+      "line": 131,
       "column": 45
     },
     {
@@ -2262,21 +2241,14 @@
       "kind": "action",
       "id": "position.edit",
       "source": "features/positions/surface/screens/record/listing/index.tsx",
-      "line": 141,
+      "line": 137,
       "column": 45
     },
     {
       "kind": "action",
       "id": "prep",
       "source": "features/interviews/surface/screens/workflows/agenda/listing/index.tsx",
-      "line": 97,
-      "column": 3
-    },
-    {
-      "kind": "action",
-      "id": "prep",
-      "source": "features/interviews/surface/screens/workflows/agenda/listing/wiring/styles/index.ts",
-      "line": 293,
+      "line": 96,
       "column": 3
     },
     {
@@ -2332,7 +2304,7 @@
       "kind": "action",
       "id": "profile",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 141,
+      "line": 140,
       "column": 3
     },
     {
@@ -2367,7 +2339,7 @@
       "kind": "action",
       "id": "publish",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 1116,
+      "line": 1096,
       "column": 5
     },
     {
@@ -2444,63 +2416,63 @@
       "kind": "action",
       "id": "recruiter.create",
       "source": "features/recruiters/surface/screens/record/create/index.tsx",
-      "line": 85,
+      "line": 86,
       "column": 29
     },
     {
       "kind": "action",
       "id": "recruiter.create",
       "source": "features/recruiters/surface/screens/record/listing/index.tsx",
-      "line": 120,
+      "line": 116,
       "column": 45
     },
     {
       "kind": "action",
       "id": "recruiter.deactivate",
       "source": "features/recruiters/surface/screens/record/detail/index.tsx",
-      "line": 179,
+      "line": 181,
       "column": 29
     },
     {
       "kind": "action",
       "id": "recruiter.edit",
       "source": "features/recruiters/surface/screens/record/detail/index.tsx",
-      "line": 186,
+      "line": 188,
       "column": 29
     },
     {
       "kind": "action",
       "id": "recruiter.edit",
       "source": "features/recruiters/surface/screens/record/detail/index.tsx",
-      "line": 198,
+      "line": 200,
       "column": 31
     },
     {
       "kind": "action",
       "id": "recruiter.open_candidates",
       "source": "features/recruiters/surface/screens/record/detail/index.tsx",
-      "line": 220,
+      "line": 222,
       "column": 29
     },
     {
       "kind": "action",
       "id": "recruiter.open_interviews",
       "source": "features/recruiters/surface/screens/record/detail/index.tsx",
-      "line": 227,
+      "line": 229,
       "column": 29
     },
     {
       "kind": "action",
       "id": "recruiter.open_jobs",
       "source": "features/recruiters/surface/screens/record/detail/index.tsx",
-      "line": 213,
+      "line": 215,
       "column": 29
     },
     {
       "kind": "action",
       "id": "recruiter.update",
       "source": "features/recruiters/surface/screens/record/listing/index.tsx",
-      "line": 126,
+      "line": 122,
       "column": 45
     },
     {
@@ -2535,7 +2507,7 @@
       "kind": "action",
       "id": "reject",
       "source": "features/applications/surface/components/pipeline/kanban/mobile/board/index.tsx",
-      "line": 218,
+      "line": 220,
       "column": 9
     },
     {
@@ -2549,28 +2521,28 @@
       "kind": "action",
       "id": "reject",
       "source": "features/governance/surface/screens/workflows/compliance/dsr-queue/index.tsx",
-      "line": 158,
+      "line": 160,
       "column": 3
     },
     {
       "kind": "action",
       "id": "reject",
       "source": "ui/tables/bulk-actions/index.tsx",
-      "line": 281,
+      "line": 262,
       "column": 11
     },
     {
       "kind": "action",
       "id": "reject",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 214,
+      "line": 206,
       "column": 5
     },
     {
       "kind": "action",
       "id": "reject",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 282,
+      "line": 266,
       "column": 5
     },
     {
@@ -2647,7 +2619,7 @@
       "kind": "action",
       "id": "schedule",
       "source": "features/applications/surface/components/pipeline/kanban/mobile/board/index.tsx",
-      "line": 202,
+      "line": 204,
       "column": 9
     },
     {
@@ -2682,14 +2654,14 @@
       "kind": "action",
       "id": "schedule",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 178,
+      "line": 170,
       "column": 5
     },
     {
       "kind": "action",
       "id": "schedule",
       "source": "vertical/showcase/applications/actions-variants/index.tsx",
-      "line": 292,
+      "line": 276,
       "column": 5
     },
     {
@@ -2703,21 +2675,14 @@
       "kind": "action",
       "id": "score",
       "source": "features/interviews/surface/screens/workflows/agenda/listing/index.tsx",
-      "line": 98,
-      "column": 3
-    },
-    {
-      "kind": "action",
-      "id": "score",
-      "source": "features/interviews/surface/screens/workflows/agenda/listing/wiring/styles/index.ts",
-      "line": 294,
+      "line": 97,
       "column": 3
     },
     {
       "kind": "action",
       "id": "scoring.approve",
       "source": "features/scoring/surface/screens/workflows/evaluation-detail/index.tsx",
-      "line": 174,
+      "line": 171,
       "column": 31
     },
     {
@@ -2731,14 +2696,14 @@
       "kind": "action",
       "id": "scoring.calibration.edit",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/index.tsx",
-      "line": 149,
+      "line": 151,
       "column": 31
     },
     {
       "kind": "action",
       "id": "scoring.override",
       "source": "features/scoring/surface/screens/workflows/evaluation-detail/index.tsx",
-      "line": 183,
+      "line": 180,
       "column": 31
     },
     {
@@ -2815,28 +2780,28 @@
       "kind": "action",
       "id": "sprint_task.assign",
       "source": "features/sprints/surface/screens/workflows/task-board/index.tsx",
-      "line": 144,
+      "line": 145,
       "column": 29
     },
     {
       "kind": "action",
       "id": "sprint_task.create",
       "source": "features/sprints/surface/screens/workflows/task-board/index.tsx",
-      "line": 126,
+      "line": 127,
       "column": 29
     },
     {
       "kind": "action",
       "id": "sprint_task.move",
       "source": "features/sprints/surface/screens/workflows/task-board/index.tsx",
-      "line": 138,
+      "line": 139,
       "column": 29
     },
     {
       "kind": "action",
       "id": "sprint_task.update",
       "source": "features/sprints/surface/screens/workflows/task-board/index.tsx",
-      "line": 132,
+      "line": 133,
       "column": 29
     },
     {
@@ -2864,7 +2829,7 @@
       "kind": "action",
       "id": "sprint.create",
       "source": "features/sprints/surface/screens/record/create/index.tsx",
-      "line": 80,
+      "line": 77,
       "column": 29
     },
     {
@@ -2962,21 +2927,21 @@
       "kind": "action",
       "id": "squad.add_member",
       "source": "features/agents/surface/screens/record/create/index.tsx",
-      "line": 1117,
+      "line": 1109,
       "column": 29
     },
     {
       "kind": "action",
       "id": "squad.add_member",
       "source": "features/agents/surface/screens/workflows/squads/index.tsx",
-      "line": 578,
+      "line": 570,
       "column": 29
     },
     {
       "kind": "action",
       "id": "squad.edit_member",
       "source": "features/agents/surface/screens/workflows/squads/index.tsx",
-      "line": 584,
+      "line": 576,
       "column": 29
     },
     {
@@ -3074,77 +3039,77 @@
       "kind": "action",
       "id": "team.create",
       "source": "features/teams/surface/screens/record/create/index.tsx",
-      "line": 89,
+      "line": 78,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.create",
       "source": "features/teams/surface/screens/record/listing/index.tsx",
-      "line": 104,
+      "line": 97,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.deactivate",
       "source": "features/teams/surface/screens/record/detail/index.tsx",
-      "line": 233,
+      "line": 234,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.edit",
       "source": "features/teams/surface/screens/record/detail/index.tsx",
-      "line": 213,
+      "line": 214,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.edit",
       "source": "features/teams/surface/screens/record/detail/index.tsx",
-      "line": 225,
+      "line": 226,
       "column": 31
     },
     {
       "kind": "action",
       "id": "team.edit",
       "source": "features/teams/surface/screens/record/detail/index.tsx",
-      "line": 246,
+      "line": 247,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.edit",
       "source": "features/teams/surface/screens/record/edit/index.tsx",
-      "line": 157,
+      "line": 154,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.edit",
       "source": "features/teams/surface/screens/record/listing/index.tsx",
-      "line": 110,
+      "line": 103,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.edit",
       "source": "features/teams/surface/screens/workflows/capacity-risks/index.tsx",
-      "line": 122,
+      "line": 108,
       "column": 29
     },
     {
       "kind": "action",
       "id": "team.manage_members",
       "source": "features/teams/surface/screens/record/detail/index.tsx",
-      "line": 239,
+      "line": 240,
       "column": 29
     },
     {
       "kind": "action",
       "id": "templates",
       "source": "features/sourcing/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 131,
+      "line": 130,
       "column": 3
     },
     {
@@ -3158,7 +3123,7 @@
       "kind": "action",
       "id": "terminate",
       "source": "features/settings/surface/screens/integrations/vendors/listing/index.tsx",
-      "line": 153,
+      "line": 145,
       "column": 3
     },
     {
@@ -3172,14 +3137,14 @@
       "kind": "action",
       "id": "toggle",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 153,
+      "line": 154,
       "column": 3
     },
     {
       "kind": "action",
       "id": "toggle",
       "source": "features/sourcing/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 132,
+      "line": 131,
       "column": 3
     },
     {
@@ -3242,7 +3207,7 @@
       "kind": "action",
       "id": "view",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 629,
+      "line": 565,
       "column": 3
     },
     {
@@ -3256,7 +3221,7 @@
       "kind": "action",
       "id": "view",
       "source": "features/jobs/surface/screens/record/listing/index.tsx",
-      "line": 140,
+      "line": 138,
       "column": 3
     },
     {
@@ -3284,7 +3249,7 @@
       "kind": "action",
       "id": "view",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 780,
+      "line": 710,
       "column": 3
     },
     {
@@ -3361,35 +3326,35 @@
       "kind": "column",
       "id": "actionCount",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 227,
+      "line": 228,
       "column": 3
     },
     {
       "kind": "column",
       "id": "actions",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 586,
+      "line": 514,
       "column": 5
     },
     {
       "kind": "column",
       "id": "actions",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 1010,
+      "line": 990,
       "column": 5
     },
     {
       "kind": "column",
       "id": "actions",
       "source": "ui/tables/collection/preview/render/index.tsx",
-      "line": 1087,
+      "line": 1090,
       "column": 3
     },
     {
       "kind": "column",
       "id": "active",
       "source": "features/teams/surface/screens/workflows/capacity-risks/view/sections/widgets/index.tsx",
-      "line": 178,
+      "line": 172,
       "column": 3
     },
     {
@@ -3403,42 +3368,42 @@
       "kind": "column",
       "id": "activeJobs",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 394,
+      "line": 323,
       "column": 3
     },
     {
       "kind": "column",
       "id": "activeJobs",
       "source": "features/teams/surface/components/members/team-member-listing/index.tsx",
-      "line": 442,
+      "line": 416,
       "column": 3
     },
     {
       "kind": "column",
       "id": "activityType",
       "source": "features/settings/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 407,
+      "line": 374,
       "column": 3
     },
     {
       "kind": "column",
       "id": "activityType",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 607,
+      "line": 554,
       "column": 3
     },
     {
       "kind": "column",
       "id": "addedAt",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 385,
+      "line": 340,
       "column": 3
     },
     {
       "kind": "column",
       "id": "agreement",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/samples/index.tsx",
-      "line": 131,
+      "line": 133,
       "column": 3
     },
     {
@@ -3459,35 +3424,35 @@
       "kind": "column",
       "id": "allocated",
       "source": "features/governance/surface/screens/workflows/token-billing/distribution/index.tsx",
-      "line": 1102,
+      "line": 915,
       "column": 5
     },
     {
       "kind": "column",
       "id": "allocation",
       "source": "features/sprints/surface/components/board/detail/sprint-workspace/tabs/team/index.tsx",
-      "line": 114,
+      "line": 103,
       "column": 3
     },
     {
       "kind": "column",
       "id": "allocation",
       "source": "features/teams/surface/components/members/team-member-listing/index.tsx",
-      "line": 396,
+      "line": 370,
       "column": 3
     },
     {
       "kind": "column",
       "id": "applicants",
       "source": "features/positions/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 103,
+      "line": 100,
       "column": 3
     },
     {
       "kind": "column",
       "id": "applications",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 85,
+      "line": 95,
       "column": 3
     },
     {
@@ -3501,42 +3466,42 @@
       "kind": "column",
       "id": "appliedAt",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 462,
+      "line": 343,
       "column": 3
     },
     {
       "kind": "column",
       "id": "appliedAt",
       "source": "features/applications/surface/screens/record/listing/view/sections/client-view/index.tsx",
-      "line": 26,
+      "line": 28,
       "column": 3
     },
     {
       "kind": "column",
       "id": "appliedAt",
       "source": "features/positions/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 108,
+      "line": 114,
       "column": 3
     },
     {
       "kind": "column",
       "id": "approver",
       "source": "features/offers/surface/screens/record/detail/view/sections/approvals-collection/index.tsx",
-      "line": 74,
+      "line": 71,
       "column": 3
     },
     {
       "kind": "column",
       "id": "artifacts",
       "source": "features/applications/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 156,
+      "line": 150,
       "column": 75
     },
     {
       "kind": "column",
       "id": "assignmentType",
       "source": "features/agents/surface/screens/record/detail/view/tabs/assignments/index.tsx",
-      "line": 80,
+      "line": 90,
       "column": 3
     },
     {
@@ -3550,14 +3515,14 @@
       "kind": "column",
       "id": "avgCostPerRun",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1135,
+      "line": 1120,
       "column": 7
     },
     {
       "kind": "column",
       "id": "bias",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/dimensions/index.tsx",
-      "line": 98,
+      "line": 106,
       "column": 3
     },
     {
@@ -3571,21 +3536,21 @@
       "kind": "column",
       "id": "blockers",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 160,
+      "line": 169,
       "column": 3
     },
     {
       "kind": "column",
       "id": "bottleneck",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 103,
+      "line": 105,
       "column": 3
     },
     {
       "kind": "column",
       "id": "burnout",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 533,
+      "line": 547,
       "column": 3
     },
     {
@@ -3599,14 +3564,14 @@
       "kind": "column",
       "id": "burnoutRisk",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 378,
+      "line": 307,
       "column": 3
     },
     {
       "kind": "column",
       "id": "cadence",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 55,
+      "line": 59,
       "column": 3
     },
     {
@@ -3627,63 +3592,63 @@
       "kind": "column",
       "id": "candidate",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 50,
+      "line": 52,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidate",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 50,
+      "line": 52,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateConfidence",
       "source": "features/offers/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 155,
+      "line": 147,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateCount",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 646,
+      "line": 576,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateName",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 320,
+      "line": 232,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateName",
       "source": "features/applications/surface/screens/record/listing/view/sections/client-view/index.tsx",
-      "line": 22,
+      "line": 24,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateName",
       "source": "features/applications/surface/screens/workflows/pipeline/stalled/view/sections/column-defs/index.tsx",
-      "line": 23,
+      "line": 25,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateName",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 28,
+      "line": 30,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateName",
       "source": "features/clients/surface/screens/record/detail/view/sections/pipeline/index.tsx",
-      "line": 63,
+      "line": 58,
       "column": 3
     },
     {
@@ -3697,7 +3662,7 @@
       "kind": "column",
       "id": "candidateName",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 571,
+      "line": 507,
       "column": 3
     },
     {
@@ -3711,7 +3676,7 @@
       "kind": "column",
       "id": "candidateName",
       "source": "features/jobs/surface/screens/record/detail/view/sections/candidates-collection/index.tsx",
-      "line": 71,
+      "line": 72,
       "column": 3
     },
     {
@@ -3739,28 +3704,28 @@
       "kind": "column",
       "id": "candidateName",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 36,
+      "line": 38,
       "column": 3
     },
     {
       "kind": "column",
       "id": "candidateName",
       "source": "features/positions/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 53,
+      "line": 55,
       "column": 3
     },
     {
       "kind": "column",
       "id": "capabilities",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 470,
+      "line": 461,
       "column": 5
     },
     {
       "kind": "column",
       "id": "capabilities",
       "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 608,
+      "line": 574,
       "column": 3
     },
     {
@@ -3774,105 +3739,105 @@
       "kind": "column",
       "id": "capacityUtilization",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 323,
+      "line": 265,
       "column": 3
     },
     {
       "kind": "column",
       "id": "category",
       "source": "features/interviews/surface/screens/workflows/templates/listing/view/sections/widgets/index.tsx",
-      "line": 834,
+      "line": 814,
       "column": 3
     },
     {
       "kind": "column",
       "id": "category",
       "source": "features/my-work/surface/screens/workflows/work-queue/listing/index.tsx",
-      "line": 152,
+      "line": 151,
       "column": 3
     },
     {
       "kind": "column",
       "id": "category",
       "source": "features/offers/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 625,
+      "line": 590,
       "column": 3
     },
     {
       "kind": "column",
       "id": "changedBy",
       "source": "features/applications/surface/screens/record/detail/view/sections/stage-history-collection/index.tsx",
-      "line": 95,
+      "line": 96,
       "column": 3
     },
     {
       "kind": "column",
       "id": "channel",
       "source": "features/settings/surface/components/templates/manager/index.tsx",
-      "line": 362,
+      "line": 355,
       "column": 3
     },
     {
       "kind": "column",
       "id": "channel",
       "source": "features/settings/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 420,
+      "line": 387,
       "column": 3
     },
     {
       "kind": "column",
       "id": "channel",
       "source": "features/settings/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 204,
+      "line": 193,
       "column": 3
     },
     {
       "kind": "column",
       "id": "channel",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 617,
+      "line": 564,
       "column": 3
     },
     {
       "kind": "column",
       "id": "checklistName",
       "source": "features/offers/surface/screens/record/detail/view/sections/onboarding-collection/index.tsx",
-      "line": 76,
+      "line": 70,
       "column": 3
     },
     {
       "kind": "column",
       "id": "checklistName",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 69,
+      "line": 59,
       "column": 3
     },
     {
       "kind": "column",
       "id": "circuitState",
       "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
-      "line": 598,
+      "line": 555,
       "column": 3
     },
     {
       "kind": "column",
       "id": "closedThisSprint",
       "source": "features/teams/surface/components/members/team-member-listing/index.tsx",
-      "line": 457,
+      "line": 431,
       "column": 3
     },
     {
       "kind": "column",
       "id": "code",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 79,
+      "line": 83,
       "column": 3
     },
     {
       "kind": "column",
       "id": "company",
       "source": "features/governance/surface/screens/workflows/token-billing/distribution/index.tsx",
-      "line": 1054,
+      "line": 879,
       "column": 5
     },
     {
@@ -3886,21 +3851,21 @@
       "kind": "column",
       "id": "completedAt",
       "source": "features/candidates/surface/screens/record/detail/view/sections/references/index.tsx",
-      "line": 104,
+      "line": 100,
       "column": 3
     },
     {
       "kind": "column",
       "id": "completion",
       "source": "features/teams/surface/screens/record/detail/view/sections/sprints/index.tsx",
-      "line": 107,
+      "line": 93,
       "column": 3
     },
     {
       "kind": "column",
       "id": "completionPercentage",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 109,
+      "line": 113,
       "column": 3
     },
     {
@@ -3914,28 +3879,28 @@
       "kind": "column",
       "id": "completionRate",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1153,
+      "line": 1132,
       "column": 7
     },
     {
       "kind": "column",
       "id": "confidencePercent",
       "source": "features/scoring/surface/screens/workflows/rubrics/detail/view/sections/usage/index.tsx",
-      "line": 125,
+      "line": 126,
       "column": 3
     },
     {
       "kind": "column",
       "id": "contextWindow",
       "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 618,
+      "line": 584,
       "column": 3
     },
     {
       "kind": "column",
       "id": "correlation",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/dimensions/index.tsx",
-      "line": 58,
+      "line": 63,
       "column": 3
     },
     {
@@ -3949,14 +3914,14 @@
       "kind": "column",
       "id": "createdAt",
       "source": "features/agents/surface/screens/record/detail/view/tabs/identity/index.tsx",
-      "line": 149,
+      "line": 167,
       "column": 3
     },
     {
       "kind": "column",
       "id": "createdAt",
       "source": "features/agents/surface/screens/record/detail/view/tabs/versions/index.tsx",
-      "line": 85,
+      "line": 95,
       "column": 3
     },
     {
@@ -3970,14 +3935,14 @@
       "kind": "column",
       "id": "createdAt",
       "source": "features/candidates/surface/screens/record/detail/view/sections/documents/index.tsx",
-      "line": 83,
+      "line": 79,
       "column": 3
     },
     {
       "kind": "column",
       "id": "createdAt",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 321,
+      "line": 318,
       "column": 3
     },
     {
@@ -3991,21 +3956,21 @@
       "kind": "column",
       "id": "createdAt",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 448,
+      "line": 364,
       "column": 3
     },
     {
       "kind": "column",
       "id": "createdAt",
       "source": "features/offers/surface/screens/record/detail/view/sections/documents-collection/index.tsx",
-      "line": 99,
+      "line": 97,
       "column": 3
     },
     {
       "kind": "column",
       "id": "createdAt",
       "source": "features/offers/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 684,
+      "line": 649,
       "column": 3
     },
     {
@@ -4026,28 +3991,28 @@
       "kind": "column",
       "id": "createdAt",
       "source": "features/settings/surface/screens/integrations/api-keys/listing/index.tsx",
-      "line": 166,
+      "line": 157,
       "column": 3
     },
     {
       "kind": "column",
       "id": "createdAt",
       "source": "features/settings/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 433,
-      "column": 3
-    },
-    {
-      "kind": "column",
-      "id": "createdAt",
-      "source": "features/settings/surface/screens/workflows/team/index.tsx",
       "line": 400,
       "column": 3
     },
     {
       "kind": "column",
       "id": "createdAt",
+      "source": "features/settings/surface/screens/workflows/team/index.tsx",
+      "line": 389,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "createdAt",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 627,
+      "line": 574,
       "column": 3
     },
     {
@@ -4061,14 +4026,14 @@
       "kind": "column",
       "id": "cycle",
       "source": "features/teams/surface/screens/record/detail/view/sections/performance/index.tsx",
-      "line": 159,
+      "line": 153,
       "column": 3
     },
     {
       "kind": "column",
       "id": "cycle",
       "source": "features/teams/surface/screens/record/detail/view/sections/performance/index.tsx",
-      "line": 175,
+      "line": 169,
       "column": 3
     },
     {
@@ -4082,14 +4047,14 @@
       "kind": "column",
       "id": "daysInStage",
       "source": "features/applications/surface/screens/workflows/pipeline/stalled/view/sections/column-defs/index.tsx",
-      "line": 77,
+      "line": 79,
       "column": 3
     },
     {
       "kind": "column",
       "id": "daysInStage",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 87,
+      "line": 97,
       "column": 3
     },
     {
@@ -4103,28 +4068,28 @@
       "kind": "column",
       "id": "deadline",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 714,
+      "line": 644,
       "column": 3
     },
     {
       "kind": "column",
       "id": "decidedAt",
       "source": "features/offers/surface/screens/record/detail/view/sections/approvals-collection/index.tsx",
-      "line": 110,
+      "line": 104,
       "column": 3
     },
     {
       "kind": "column",
       "id": "decisionWindow",
       "source": "features/offers/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 133,
+      "line": 125,
       "column": 3
     },
     {
       "kind": "column",
       "id": "deliveries",
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-      "line": 476,
+      "line": 453,
       "column": 3
     },
     {
@@ -4145,77 +4110,77 @@
       "kind": "column",
       "id": "department",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 304,
+      "line": 220,
       "column": 3
     },
     {
       "kind": "column",
       "id": "department",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 590,
+      "line": 520,
       "column": 3
     },
     {
       "kind": "column",
       "id": "deviation",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/samples/index.tsx",
-      "line": 113,
+      "line": 111,
       "column": 3
     },
     {
       "kind": "column",
       "id": "dimension",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/dimensions/index.tsx",
-      "line": 45,
+      "line": 46,
       "column": 3
     },
     {
       "kind": "column",
       "id": "dimensionCount",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 970,
+      "line": 950,
       "column": 5
     },
     {
       "kind": "column",
       "id": "dimensionName",
       "source": "features/scoring/surface/screens/workflows/evaluation-detail/view/tabs/evidence/table/index.tsx",
-      "line": 76,
+      "line": 77,
       "column": 3
     },
     {
       "kind": "column",
       "id": "disclosure",
       "source": "features/agents/surface/screens/record/detail/view/tabs/identity/index.tsx",
-      "line": 103,
+      "line": 117,
       "column": 3
     },
     {
       "kind": "column",
       "id": "displayName",
       "source": "features/agents/surface/screens/record/detail/view/tabs/identity/index.tsx",
-      "line": 58,
+      "line": 60,
       "column": 3
     },
     {
       "kind": "column",
       "id": "displayName",
       "source": "features/teams/surface/screens/record/detail/view/sections/clients/index.tsx",
-      "line": 64,
+      "line": 61,
       "column": 3
     },
     {
       "kind": "column",
       "id": "documentType",
       "source": "features/candidates/surface/screens/record/detail/view/sections/documents/index.tsx",
-      "line": 52,
+      "line": 48,
       "column": 3
     },
     {
       "kind": "column",
       "id": "documentType",
       "source": "features/offers/surface/screens/record/detail/view/sections/documents-collection/index.tsx",
-      "line": 63,
+      "line": 64,
       "column": 3
     },
     {
@@ -4229,28 +4194,28 @@
       "kind": "column",
       "id": "dueAt",
       "source": "features/sprints/surface/screens/record/detail/view/sections/tasks/index.tsx",
-      "line": 159,
+      "line": 158,
       "column": 3
     },
     {
       "kind": "column",
       "id": "dueDate",
       "source": "features/offers/surface/screens/record/detail/view/sections/onboarding-collection/index.tsx",
-      "line": 157,
+      "line": 144,
       "column": 3
     },
     {
       "kind": "column",
       "id": "dueDate",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 135,
+      "line": 125,
       "column": 3
     },
     {
       "kind": "column",
       "id": "duration",
       "source": "features/applications/surface/screens/record/detail/view/sections/stage-history-collection/index.tsx",
-      "line": 78,
+      "line": 79,
       "column": 3
     },
     {
@@ -4264,21 +4229,21 @@
       "kind": "column",
       "id": "duration",
       "source": "features/interviews/surface/screens/workflows/templates/listing/view/sections/widgets/index.tsx",
-      "line": 883,
+      "line": 863,
       "column": 3
     },
     {
       "kind": "column",
       "id": "durationWeeks",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 96,
+      "line": 100,
       "column": 3
     },
     {
       "kind": "column",
       "id": "efficiencyScore",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 515,
+      "line": 452,
       "column": 5
     },
     {
@@ -4292,7 +4257,7 @@
       "kind": "column",
       "id": "email",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 211,
+      "line": 208,
       "column": 3
     },
     {
@@ -4306,28 +4271,28 @@
       "kind": "column",
       "id": "email",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 228,
+      "line": 191,
       "column": 3
     },
     {
       "kind": "column",
       "id": "email",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 312,
+      "line": 267,
       "column": 3
     },
     {
       "kind": "column",
       "id": "enteredAt",
       "source": "features/applications/surface/screens/record/detail/view/sections/stage-history-collection/index.tsx",
-      "line": 58,
+      "line": 59,
       "column": 3
     },
     {
       "kind": "column",
       "id": "entityName",
       "source": "features/my-work/surface/screens/workflows/approvals/listing/index.tsx",
-      "line": 109,
+      "line": 108,
       "column": 3
     },
     {
@@ -4341,21 +4306,21 @@
       "kind": "column",
       "id": "errorRate",
       "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
-      "line": 625,
+      "line": 582,
       "column": 3
     },
     {
       "kind": "column",
       "id": "eventTypes",
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-      "line": 466,
+      "line": 443,
       "column": 3
     },
     {
       "kind": "column",
       "id": "executionCount",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 240,
+      "line": 241,
       "column": 3
     },
     {
@@ -4369,56 +4334,56 @@
       "kind": "column",
       "id": "expiresAt",
       "source": "features/settings/surface/screens/integrations/api-keys/listing/index.tsx",
-      "line": 182,
+      "line": 173,
       "column": 3
     },
     {
       "kind": "column",
       "id": "failureCount",
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-      "line": 514,
+      "line": 490,
       "column": 3
     },
     {
       "kind": "column",
       "id": "fields",
       "source": "ui/tables/collection/preview/render/index.tsx",
-      "line": 1069,
+      "line": 1072,
       "column": 3
     },
     {
       "kind": "column",
       "id": "focus",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 552,
+      "line": 480,
       "column": 5
     },
     {
       "kind": "column",
       "id": "followUp",
       "source": "features/candidates/surface/screens/record/detail/view/sections/applications/index.tsx",
-      "line": 165,
+      "line": 147,
       "column": 3
     },
     {
       "kind": "column",
       "id": "followUp",
       "source": "features/jobs/surface/screens/record/detail/view/sections/candidates-collection/index.tsx",
-      "line": 149,
+      "line": 158,
       "column": 3
     },
     {
       "kind": "column",
       "id": "health",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 285,
+      "line": 239,
       "column": 3
     },
     {
       "kind": "column",
       "id": "human",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/samples/index.tsx",
-      "line": 77,
+      "line": 67,
       "column": 3
     },
     {
@@ -4439,14 +4404,14 @@
       "kind": "column",
       "id": "identity",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 77,
+      "line": 68,
       "column": 3
     },
     {
       "kind": "column",
       "id": "impact",
       "source": "features/scoring/surface/screens/workflows/evaluation-detail/view/tabs/evidence/table/index.tsx",
-      "line": 94,
+      "line": 95,
       "column": 3
     },
     {
@@ -4460,28 +4425,28 @@
       "kind": "column",
       "id": "industry",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 962,
+      "line": 942,
       "column": 5
     },
     {
       "kind": "column",
       "id": "inputCostPer1k",
       "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 644,
+      "line": 610,
       "column": 3
     },
     {
       "kind": "column",
       "id": "inputPrice",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 495,
+      "line": 486,
       "column": 5
     },
     {
       "kind": "column",
       "id": "interviewerName",
       "source": "features/candidates/surface/screens/record/detail/view/sections/interviews/index.tsx",
-      "line": 101,
+      "line": 96,
       "column": 3
     },
     {
@@ -4495,56 +4460,56 @@
       "kind": "column",
       "id": "interviewers",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 596,
+      "line": 532,
       "column": 3
     },
     {
       "kind": "column",
       "id": "interviews",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 98,
+      "line": 108,
       "column": 3
     },
     {
       "kind": "column",
       "id": "interviewType",
       "source": "features/candidates/surface/screens/record/detail/view/sections/interviews/index.tsx",
-      "line": 62,
+      "line": 57,
       "column": 3
     },
     {
       "kind": "column",
       "id": "interviewType",
       "source": "features/interviews/surface/screens/workflows/templates/listing/view/sections/widgets/index.tsx",
-      "line": 848,
+      "line": 828,
       "column": 3
     },
     {
       "kind": "column",
       "id": "isActive",
       "source": "features/settings/surface/screens/workflows/ai/providers/index.tsx",
-      "line": 677,
+      "line": 664,
       "column": 5
     },
     {
       "kind": "column",
       "id": "isDefault",
       "source": "features/settings/surface/screens/workflows/ai/providers/index.tsx",
-      "line": 702,
+      "line": 689,
       "column": 5
     },
     {
       "kind": "column",
       "id": "isPublished",
       "source": "features/offers/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 655,
+      "line": 620,
       "column": 3
     },
     {
       "kind": "column",
       "id": "isValidated",
       "source": "features/scoring/surface/screens/workflows/evaluation-detail/view/tabs/evidence/table/index.tsx",
-      "line": 112,
+      "line": 113,
       "column": 3
     },
     {
@@ -4558,28 +4523,28 @@
       "kind": "column",
       "id": "jobTitle",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 329,
+      "line": 241,
       "column": 3
     },
     {
       "kind": "column",
       "id": "jobTitle",
       "source": "features/applications/surface/screens/workflows/pipeline/stalled/view/sections/column-defs/index.tsx",
-      "line": 53,
+      "line": 55,
       "column": 3
     },
     {
       "kind": "column",
       "id": "jobTitle",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 58,
+      "line": 60,
       "column": 3
     },
     {
       "kind": "column",
       "id": "jobTitle",
       "source": "features/candidates/surface/screens/record/detail/view/sections/applications/index.tsx",
-      "line": 56,
+      "line": 58,
       "column": 3
     },
     {
@@ -4607,28 +4572,28 @@
       "kind": "column",
       "id": "laneCommitment",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 133,
+      "line": 137,
       "column": 3
     },
     {
       "kind": "column",
       "id": "lastActive",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 577,
+      "line": 505,
       "column": 5
     },
     {
       "kind": "column",
       "id": "lastActiveAt",
       "source": "features/settings/surface/screens/workflows/team/index.tsx",
-      "line": 384,
+      "line": 373,
       "column": 3
     },
     {
       "kind": "column",
       "id": "lastCheckAt",
       "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
-      "line": 662,
+      "line": 613,
       "column": 3
     },
     {
@@ -4642,49 +4607,49 @@
       "kind": "column",
       "id": "lastRunAt",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1180,
+      "line": 1157,
       "column": 7
     },
     {
       "kind": "column",
       "id": "lastTriggeredAt",
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-      "line": 537,
+      "line": 508,
       "column": 3
     },
     {
       "kind": "column",
       "id": "lastUsedAt",
       "source": "features/settings/surface/screens/integrations/api-keys/listing/index.tsx",
-      "line": 150,
+      "line": 141,
       "column": 3
     },
     {
       "kind": "column",
       "id": "latencyMs",
       "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
-      "line": 612,
+      "line": 569,
       "column": 3
     },
     {
       "kind": "column",
       "id": "lifecycleStatus",
       "source": "features/candidates/surface/screens/record/detail/view/sections/documents/index.tsx",
-      "line": 70,
+      "line": 66,
       "column": 3
     },
     {
       "kind": "column",
       "id": "lifecycleStatus",
       "source": "features/offers/surface/screens/record/detail/view/sections/documents-collection/index.tsx",
-      "line": 82,
+      "line": 80,
       "column": 3
     },
     {
       "kind": "column",
       "id": "llm",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/samples/index.tsx",
-      "line": 95,
+      "line": 89,
       "column": 3
     },
     {
@@ -4698,91 +4663,91 @@
       "kind": "column",
       "id": "location",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 319,
+      "line": 235,
       "column": 3
     },
     {
       "kind": "column",
       "id": "location",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 608,
+      "line": 538,
       "column": 3
     },
     {
       "kind": "column",
       "id": "locations",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 440,
+      "line": 358,
       "column": 3
     },
     {
       "kind": "column",
       "id": "locations",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 430,
+      "line": 443,
       "column": 3
     },
     {
       "kind": "column",
       "id": "mae",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/view/sections/dimensions/index.tsx",
-      "line": 80,
+      "line": 85,
       "column": 3
     },
     {
       "kind": "column",
       "id": "managerId",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 495,
+      "line": 405,
       "column": 3
     },
     {
       "kind": "column",
       "id": "managerId",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 418,
+      "line": 431,
       "column": 3
     },
     {
       "kind": "column",
       "id": "maxOutputTokens",
       "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 631,
+      "line": 597,
       "column": 3
     },
     {
       "kind": "column",
       "id": "media",
       "source": "features/agents/surface/screens/record/detail/view/tabs/identity/index.tsx",
-      "line": 116,
+      "line": 134,
       "column": 3
     },
     {
       "kind": "column",
       "id": "member",
       "source": "features/settings/surface/screens/workflows/team/index.tsx",
-      "line": 352,
+      "line": 341,
       "column": 3
     },
     {
       "kind": "column",
       "id": "members",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 462,
+      "line": 475,
       "column": 3
     },
     {
       "kind": "column",
       "id": "memberSnapshotCount",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 221,
+      "line": 230,
       "column": 3
     },
     {
       "kind": "column",
       "id": "movement",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 85,
+      "line": 87,
       "column": 3
     },
     {
@@ -4810,28 +4775,28 @@
       "kind": "column",
       "id": "name",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 165,
+      "line": 162,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 409,
+      "line": 375,
       "column": 5
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/interviews/surface/screens/workflows/templates/listing/view/sections/widgets/index.tsx",
-      "line": 821,
+      "line": 801,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/offers/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 612,
+      "line": 577,
       "column": 3
     },
     {
@@ -4845,21 +4810,21 @@
       "kind": "column",
       "id": "name",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/candidates-collection/index.tsx",
-      "line": 52,
+      "line": 54,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 215,
+      "line": 178,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 946,
+      "line": 926,
       "column": 5
     },
     {
@@ -4873,217 +4838,217 @@
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/components/templates/manager/index.tsx",
-      "line": 349,
+      "line": 342,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 169,
+      "line": 170,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/screens/integrations/api-keys/listing/index.tsx",
-      "line": 114,
+      "line": 105,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 426,
+      "line": 417,
       "column": 5
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/screens/workflows/ai/providers/index.tsx",
-      "line": 636,
+      "line": 623,
       "column": 5
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 574,
+      "line": 540,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
-      "line": 310,
+      "line": 274,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-      "line": 429,
+      "line": 406,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/settings/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 190,
+      "line": 179,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 291,
+      "line": 246,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/sprints/surface/components/board/detail/sprint-workspace/tabs/team/index.tsx",
-      "line": 58,
+      "line": 60,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 21,
+      "line": 25,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/teams/surface/components/members/team-member-listing/index.tsx",
-      "line": 358,
+      "line": 334,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/teams/surface/screens/record/detail/view/sections/sprints/index.tsx",
-      "line": 56,
+      "line": 46,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 392,
+      "line": 405,
       "column": 3
     },
     {
       "kind": "column",
       "id": "name",
       "source": "features/teams/surface/screens/workflows/capacity-risks/view/sections/widgets/index.tsx",
-      "line": 112,
+      "line": 104,
       "column": 3
     },
     {
       "kind": "column",
       "id": "negotiationNextStep",
       "source": "features/offers/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 162,
+      "line": 154,
       "column": 3
     },
     {
       "kind": "column",
       "id": "nextAction",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1120,
+      "line": 1105,
       "column": 7
     },
     {
       "kind": "column",
       "id": "nextAction",
       "source": "features/applications/surface/screens/record/listing/view/sections/client-view/index.tsx",
-      "line": 25,
+      "line": 27,
       "column": 3
     },
     {
       "kind": "column",
       "id": "nextTouch",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 684,
+      "line": 631,
       "column": 3
     },
     {
       "kind": "column",
       "id": "notes",
       "source": "features/applications/surface/screens/record/detail/view/sections/stage-history-collection/index.tsx",
-      "line": 113,
+      "line": 114,
       "column": 3
     },
     {
       "kind": "column",
       "id": "openings",
       "source": "features/clients/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 94,
+      "line": 89,
       "column": 3
     },
     {
       "kind": "column",
       "id": "openings",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 667,
+      "line": 597,
       "column": 3
     },
     {
       "kind": "column",
       "id": "openings",
       "source": "features/teams/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 95,
+      "line": 92,
       "column": 3
     },
     {
       "kind": "column",
       "id": "openPositions",
       "source": "features/teams/surface/screens/record/detail/view/sections/clients/index.tsx",
-      "line": 108,
+      "line": 105,
       "column": 3
     },
     {
       "kind": "column",
       "id": "openSlots",
       "source": "features/teams/surface/screens/workflows/capacity-risks/view/sections/widgets/index.tsx",
-      "line": 192,
+      "line": 186,
       "column": 3
     },
     {
       "kind": "column",
       "id": "operationsCount",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 467,
+      "line": 409,
       "column": 5
     },
     {
       "kind": "column",
       "id": "order",
       "source": "ui/tables/collection/preview/render/index.tsx",
-      "line": 1075,
+      "line": 1078,
       "column": 3
     },
     {
       "kind": "column",
       "id": "outcomeLabel",
       "source": "features/sprints/surface/screens/record/detail/view/sections/tasks/index.tsx",
-      "line": 138,
+      "line": 137,
       "column": 3
     },
     {
       "kind": "column",
       "id": "outputCostPer1k",
       "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 657,
+      "line": 623,
       "column": 3
     },
     {
       "kind": "column",
       "id": "outputPrice",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 504,
+      "line": 495,
       "column": 5
     },
     {
@@ -5097,7 +5062,7 @@
       "kind": "column",
       "id": "overallScore",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 607,
+      "line": 543,
       "column": 3
     },
     {
@@ -5118,7 +5083,7 @@
       "kind": "column",
       "id": "overallScore",
       "source": "features/scoring/surface/screens/workflows/rubrics/detail/view/sections/usage/index.tsx",
-      "line": 89,
+      "line": 90,
       "column": 3
     },
     {
@@ -5132,77 +5097,77 @@
       "kind": "column",
       "id": "owner",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1101,
+      "line": 1089,
       "column": 7
     },
     {
       "kind": "column",
       "id": "owner",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 154,
+      "line": 144,
       "column": 3
     },
     {
       "kind": "column",
       "id": "owner",
       "source": "features/positions/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 123,
+      "line": 120,
       "column": 3
     },
     {
       "kind": "column",
       "id": "pins",
       "source": "ui/tables/collection/preview/render/index.tsx",
-      "line": 1081,
+      "line": 1084,
       "column": 3
     },
     {
       "kind": "column",
       "id": "placements",
       "source": "features/teams/surface/screens/record/detail/view/sections/performance/index.tsx",
-      "line": 164,
+      "line": 158,
       "column": 3
     },
     {
       "kind": "column",
       "id": "placements",
       "source": "features/teams/surface/screens/record/detail/view/sections/sprints/index.tsx",
-      "line": 140,
+      "line": 126,
       "column": 3
     },
     {
       "kind": "column",
       "id": "placementsMade",
       "source": "features/sprints/surface/components/board/detail/sprint-workspace/tabs/team/index.tsx",
-      "line": 162,
+      "line": 151,
       "column": 3
     },
     {
       "kind": "column",
       "id": "playbookFit",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1078,
+      "line": 1066,
       "column": 7
     },
     {
       "kind": "column",
       "id": "positions",
       "source": "features/teams/surface/screens/record/detail/view/sections/sprints/index.tsx",
-      "line": 128,
+      "line": 114,
       "column": 3
     },
     {
       "kind": "column",
       "id": "positions",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 475,
+      "line": 488,
       "column": 3
     },
     {
       "kind": "column",
       "id": "positionsHandled",
       "source": "features/sprints/surface/components/board/detail/sprint-workspace/tabs/team/index.tsx",
-      "line": 150,
+      "line": 139,
       "column": 3
     },
     {
@@ -5216,7 +5181,7 @@
       "kind": "column",
       "id": "pricing",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 82,
+      "line": 73,
       "column": 3
     },
     {
@@ -5230,21 +5195,21 @@
       "kind": "column",
       "id": "primaryUseCase",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1038,
+      "line": 1026,
       "column": 7
     },
     {
       "kind": "column",
       "id": "priority",
       "source": "features/agents/surface/screens/record/detail/view/tabs/assignments/index.tsx",
-      "line": 107,
+      "line": 117,
       "column": 3
     },
     {
       "kind": "column",
       "id": "priority",
       "source": "features/my-work/surface/screens/workflows/approvals/listing/index.tsx",
-      "line": 111,
+      "line": 110,
       "column": 3
     },
     {
@@ -5258,84 +5223,84 @@
       "kind": "column",
       "id": "priority",
       "source": "features/my-work/surface/screens/workflows/work-queue/listing/index.tsx",
-      "line": 161,
+      "line": 160,
       "column": 3
     },
     {
       "kind": "column",
       "id": "priority",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 567,
+      "line": 497,
       "column": 3
     },
     {
       "kind": "column",
       "id": "profile",
       "source": "features/settings/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 398,
+      "line": 365,
       "column": 3
     },
     {
       "kind": "column",
       "id": "profile",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 579,
+      "line": 526,
       "column": 3
     },
     {
       "kind": "column",
       "id": "progress",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 414,
+      "line": 295,
       "column": 3
     },
     {
       "kind": "column",
       "id": "progress",
       "source": "features/applications/surface/screens/record/listing/view/sections/client-view/index.tsx",
-      "line": 24,
+      "line": 26,
       "column": 3
     },
     {
       "kind": "column",
       "id": "progress",
       "source": "features/offers/surface/screens/record/detail/view/sections/onboarding-collection/index.tsx",
-      "line": 121,
+      "line": 108,
       "column": 3
     },
     {
       "kind": "column",
       "id": "progress",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 101,
+      "line": 91,
       "column": 3
     },
     {
       "kind": "column",
       "id": "provider",
       "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 582,
+      "line": 548,
       "column": 3
     },
     {
       "kind": "column",
       "id": "provider",
       "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
-      "line": 335,
+      "line": 299,
       "column": 3
     },
     {
       "kind": "column",
       "id": "providerId",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 450,
+      "line": 441,
       "column": 5
     },
     {
       "kind": "column",
       "id": "providerName",
       "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
-      "line": 576,
+      "line": 533,
       "column": 3
     },
     {
@@ -5349,42 +5314,42 @@
       "kind": "column",
       "id": "quarterlyRevenueTarget",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 551,
+      "line": 565,
       "column": 3
     },
     {
       "kind": "column",
       "id": "questionCount",
       "source": "features/interviews/surface/screens/workflows/templates/listing/view/sections/widgets/index.tsx",
-      "line": 870,
+      "line": 850,
       "column": 3
     },
     {
       "kind": "column",
       "id": "queuedWork",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1067,
+      "line": 1055,
       "column": 7
     },
     {
       "kind": "column",
       "id": "quote",
       "source": "features/scoring/surface/screens/workflows/evaluation-detail/view/tabs/evidence/table/index.tsx",
-      "line": 56,
+      "line": 57,
       "column": 3
     },
     {
       "kind": "column",
       "id": "rating",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 376,
+      "line": 331,
       "column": 3
     },
     {
       "kind": "column",
       "id": "readiness",
       "source": "features/offers/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 89,
+      "line": 81,
       "column": 3
     },
     {
@@ -5405,42 +5370,42 @@
       "kind": "column",
       "id": "refereeName",
       "source": "features/candidates/surface/screens/record/detail/view/sections/references/index.tsx",
-      "line": 53,
+      "line": 49,
       "column": 3
     },
     {
       "kind": "column",
       "id": "relationship",
       "source": "features/candidates/surface/screens/record/detail/view/sections/references/index.tsx",
-      "line": 78,
+      "line": 74,
       "column": 3
     },
     {
       "kind": "column",
       "id": "reliability",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1056,
+      "line": 1044,
       "column": 7
     },
     {
       "kind": "column",
       "id": "remaining",
       "source": "features/governance/surface/screens/workflows/token-billing/distribution/index.tsx",
-      "line": 1176,
+      "line": 991,
       "column": 5
     },
     {
       "kind": "column",
       "id": "replyQuality",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 636,
+      "line": 583,
       "column": 3
     },
     {
       "kind": "column",
       "id": "requestedAt",
       "source": "features/my-work/surface/screens/workflows/approvals/listing/index.tsx",
-      "line": 114,
+      "line": 113,
       "column": 3
     },
     {
@@ -5454,14 +5419,14 @@
       "kind": "column",
       "id": "requestedAt",
       "source": "features/positions/surface/screens/record/detail/view/sections/approvals-timeline/index.tsx",
-      "line": 155,
+      "line": 148,
       "column": 3
     },
     {
       "kind": "column",
       "id": "requestedBy",
       "source": "features/my-work/surface/screens/workflows/approvals/listing/index.tsx",
-      "line": 113,
+      "line": 112,
       "column": 3
     },
     {
@@ -5475,77 +5440,77 @@
       "kind": "column",
       "id": "requestedBy",
       "source": "features/positions/surface/screens/record/detail/view/sections/approvals-timeline/index.tsx",
-      "line": 142,
+      "line": 135,
       "column": 3
     },
     {
       "kind": "column",
       "id": "responseRate",
       "source": "features/settings/surface/components/templates/manager/index.tsx",
-      "line": 423,
+      "line": 416,
       "column": 3
     },
     {
       "kind": "column",
       "id": "responseRate",
       "source": "features/settings/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 264,
+      "line": 253,
       "column": 3
     },
     {
       "kind": "column",
       "id": "responseReceived",
       "source": "features/settings/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 446,
+      "line": 413,
       "column": 3
     },
     {
       "kind": "column",
       "id": "responseReceived",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 727,
+      "line": 662,
       "column": 3
     },
     {
       "kind": "column",
       "id": "responseTimeHours",
       "source": "features/settings/surface/screens/workflows/outreach/listing/index.tsx",
-      "line": 455,
+      "line": 422,
       "column": 3
     },
     {
       "kind": "column",
       "id": "responseTimeHours",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 737,
+      "line": 672,
       "column": 3
     },
     {
       "kind": "column",
       "id": "revenue",
       "source": "features/teams/surface/screens/record/detail/view/sections/sprints/index.tsx",
-      "line": 152,
+      "line": 138,
       "column": 3
     },
     {
       "kind": "column",
       "id": "revenue-usd",
       "source": "features/teams/surface/screens/record/detail/view/sections/performance/index.tsx",
-      "line": 180,
+      "line": 174,
       "column": 3
     },
     {
       "kind": "column",
       "id": "revenueGenerated",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 181,
+      "line": 190,
       "column": 3
     },
     {
       "kind": "column",
       "id": "revenueTarget",
       "source": "features/sprints/surface/screens/record/listing/view/sections/column-defs/index.tsx",
-      "line": 195,
+      "line": 204,
       "column": 3
     },
     {
@@ -5559,14 +5524,14 @@
       "kind": "column",
       "id": "rights",
       "source": "features/agents/surface/screens/record/detail/view/tabs/media/index.tsx",
-      "line": 94,
+      "line": 97,
       "column": 3
     },
     {
       "kind": "column",
       "id": "riskLabel",
       "source": "features/teams/surface/screens/workflows/capacity-risks/view/sections/widgets/index.tsx",
-      "line": 135,
+      "line": 127,
       "column": 3
     },
     {
@@ -5580,7 +5545,7 @@
       "kind": "column",
       "id": "role",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1026,
+      "line": 1014,
       "column": 7
     },
     {
@@ -5594,28 +5559,28 @@
       "kind": "column",
       "id": "role",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 237,
+      "line": 200,
       "column": 3
     },
     {
       "kind": "column",
       "id": "role",
       "source": "features/settings/surface/screens/workflows/team/index.tsx",
-      "line": 361,
+      "line": 350,
       "column": 3
     },
     {
       "kind": "column",
       "id": "role",
       "source": "features/sprints/surface/components/board/detail/sprint-workspace/tabs/team/index.tsx",
-      "line": 105,
+      "line": 94,
       "column": 3
     },
     {
       "kind": "column",
       "id": "role",
       "source": "features/teams/surface/components/members/team-member-listing/index.tsx",
-      "line": 381,
+      "line": 355,
       "column": 3
     },
     {
@@ -5636,7 +5601,7 @@
       "kind": "column",
       "id": "salary",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 425,
+      "line": 341,
       "column": 3
     },
     {
@@ -5650,21 +5615,21 @@
       "kind": "column",
       "id": "salary",
       "source": "features/offers/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 96,
+      "line": 88,
       "column": 3
     },
     {
       "kind": "column",
       "id": "scheduledAt",
       "source": "features/applications/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 99,
+      "line": 97,
       "column": 3
     },
     {
       "kind": "column",
       "id": "scheduledAt",
       "source": "features/candidates/surface/screens/record/detail/view/sections/interviews/index.tsx",
-      "line": 85,
+      "line": 80,
       "column": 3
     },
     {
@@ -5678,7 +5643,7 @@
       "kind": "column",
       "id": "scheduledAt",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 580,
+      "line": 516,
       "column": 3
     },
     {
@@ -5692,63 +5657,63 @@
       "kind": "column",
       "id": "scheduledAt",
       "source": "features/jobs/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 104,
+      "line": 112,
       "column": 3
     },
     {
       "kind": "column",
       "id": "scheduledAt",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 81,
+      "line": 91,
       "column": 3
     },
     {
       "kind": "column",
       "id": "scorableId",
       "source": "features/scoring/surface/screens/workflows/rubrics/detail/view/sections/usage/index.tsx",
-      "line": 63,
+      "line": 64,
       "column": 3
     },
     {
       "kind": "column",
       "id": "scorableType",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 954,
+      "line": 934,
       "column": 5
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/applications/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 112,
+      "line": 110,
       "column": 3
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 94,
+      "line": 96,
       "column": 3
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/candidates/surface/screens/record/detail/view/sections/applications/index.tsx",
-      "line": 137,
+      "line": 123,
       "column": 3
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/candidates/surface/screens/record/detail/view/sections/interviews/index.tsx",
-      "line": 130,
+      "line": 125,
       "column": 3
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/clients/surface/screens/record/detail/view/sections/pipeline/index.tsx",
-      "line": 101,
+      "line": 96,
       "column": 3
     },
     {
@@ -5762,70 +5727,70 @@
       "kind": "column",
       "id": "score",
       "source": "features/jobs/surface/screens/record/detail/view/sections/candidates-collection/index.tsx",
-      "line": 129,
+      "line": 138,
       "column": 3
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/jobs/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 117,
+      "line": 125,
       "column": 3
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/positions/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 91,
+      "line": 101,
       "column": 3
     },
     {
       "kind": "column",
       "id": "score",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 100,
+      "line": 110,
       "column": 3
     },
     {
       "kind": "column",
       "id": "scorecard",
       "source": "features/applications/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 131,
+      "line": 129,
       "column": 3
     },
     {
       "kind": "column",
       "id": "scoringMode",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 986,
+      "line": 966,
       "column": 5
     },
     {
       "kind": "column",
       "id": "searchSignal",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 535,
+      "line": 473,
       "column": 3
     },
     {
       "kind": "column",
       "id": "segment",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 304,
+      "line": 259,
       "column": 3
     },
     {
       "kind": "column",
       "id": "seniorityLevels",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 460,
+      "line": 374,
       "column": 3
     },
     {
       "kind": "column",
       "id": "seniorityLevels",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 446,
+      "line": 459,
       "column": 3
     },
     {
@@ -5846,63 +5811,63 @@
       "kind": "column",
       "id": "signal",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 191,
+      "line": 188,
       "column": 3
     },
     {
       "kind": "column",
       "id": "signal",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 272,
+      "line": 188,
       "column": 3
     },
     {
       "kind": "column",
       "id": "signal",
       "source": "features/my-work/surface/screens/workflows/work-queue/listing/index.tsx",
-      "line": 179,
+      "line": 178,
       "column": 3
     },
     {
       "kind": "column",
       "id": "signals",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 422,
+      "line": 303,
       "column": 3
     },
     {
       "kind": "column",
       "id": "skills",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 286,
+      "line": 283,
       "column": 3
     },
     {
       "kind": "column",
       "id": "skills",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/candidates-collection/index.tsx",
-      "line": 87,
+      "line": 97,
       "column": 3
     },
     {
       "kind": "column",
       "id": "skills",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 346,
+      "line": 301,
       "column": 3
     },
     {
       "kind": "column",
       "id": "sla",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 163,
+      "line": 153,
       "column": 3
     },
     {
       "kind": "column",
       "id": "source",
       "source": "features/agents/surface/screens/record/detail/view/tabs/media/index.tsx",
-      "line": 110,
+      "line": 113,
       "column": 3
     },
     {
@@ -5916,7 +5881,7 @@
       "kind": "column",
       "id": "source",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 453,
+      "line": 334,
       "column": 3
     },
     {
@@ -5930,28 +5895,28 @@
       "kind": "column",
       "id": "source",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 256,
+      "line": 253,
       "column": 3
     },
     {
       "kind": "column",
       "id": "source",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 358,
+      "line": 313,
       "column": 3
     },
     {
       "kind": "column",
       "id": "sourceMix",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 588,
+      "line": 535,
       "column": 3
     },
     {
       "kind": "column",
       "id": "specializations",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 420,
+      "line": 342,
       "column": 3
     },
     {
@@ -5965,84 +5930,84 @@
       "kind": "column",
       "id": "stage",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 375,
+      "line": 265,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stage",
       "source": "features/applications/surface/screens/record/detail/view/sections/stage-history-collection/index.tsx",
-      "line": 40,
+      "line": 41,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stage",
       "source": "features/applications/surface/screens/record/listing/view/sections/client-view/index.tsx",
-      "line": 23,
+      "line": 25,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stage",
       "source": "features/candidates/surface/screens/record/detail/view/sections/applications/index.tsx",
-      "line": 102,
+      "line": 88,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stage",
       "source": "features/clients/surface/screens/record/detail/view/sections/pipeline/index.tsx",
-      "line": 81,
+      "line": 76,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stage",
       "source": "features/jobs/surface/screens/record/detail/view/sections/candidates-collection/index.tsx",
-      "line": 101,
+      "line": 110,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stage",
       "source": "features/positions/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 71,
+      "line": 81,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stage",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/pipeline-collection/index.tsx",
-      "line": 68,
+      "line": 78,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stageLabel",
       "source": "features/applications/surface/screens/workflows/pipeline/stalled/view/sections/column-defs/index.tsx",
-      "line": 66,
+      "line": 68,
       "column": 3
     },
     {
       "kind": "column",
       "id": "stageLabel",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 71,
+      "line": 73,
       "column": 3
     },
     {
       "kind": "column",
       "id": "startDate",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 122,
+      "line": 112,
       "column": 3
     },
     {
       "kind": "column",
       "id": "state",
       "source": "features/governance/surface/screens/workflows/token-billing/distribution/index.tsx",
-      "line": 1116,
+      "line": 929,
       "column": 5
     },
     {
@@ -6063,35 +6028,35 @@
       "kind": "column",
       "id": "status",
       "source": "features/agents/surface/screens/record/detail/view/tabs/assignments/index.tsx",
-      "line": 93,
+      "line": 103,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/agents/surface/screens/record/detail/view/tabs/identity/index.tsx",
-      "line": 89,
+      "line": 103,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/agents/surface/screens/record/detail/view/tabs/media/index.tsx",
-      "line": 80,
+      "line": 83,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/agents/surface/screens/record/detail/view/tabs/versions/index.tsx",
-      "line": 71,
+      "line": 81,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/agents/surface/screens/record/listing/index.tsx",
-      "line": 1089,
+      "line": 1077,
       "column": 7
     },
     {
@@ -6105,21 +6070,21 @@
       "kind": "column",
       "id": "status",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 433,
+      "line": 314,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/applications/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 86,
+      "line": 84,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/applications/surface/screens/workflows/pipeline/stalled/view/sections/column-defs/index.tsx",
-      "line": 97,
+      "line": 99,
       "column": 3
     },
     {
@@ -6133,28 +6098,28 @@
       "kind": "column",
       "id": "status",
       "source": "features/candidates/surface/screens/record/detail/view/sections/interviews/index.tsx",
-      "line": 117,
+      "line": 112,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/candidates/surface/screens/record/detail/view/sections/references/index.tsx",
-      "line": 91,
+      "line": 87,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 229,
+      "line": 226,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/clients/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 80,
+      "line": 75,
       "column": 3
     },
     {
@@ -6175,14 +6140,14 @@
       "kind": "column",
       "id": "status",
       "source": "features/interviews/surface/screens/record/listing/view/sections/widgets/sections/index.tsx",
-      "line": 615,
+      "line": 551,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/interviews/surface/screens/workflows/templates/listing/view/sections/widgets/index.tsx",
-      "line": 905,
+      "line": 885,
       "column": 3
     },
     {
@@ -6196,21 +6161,21 @@
       "kind": "column",
       "id": "status",
       "source": "features/jobs/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 87,
+      "line": 95,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 337,
+      "line": 253,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/my-work/surface/screens/workflows/approvals/listing/index.tsx",
-      "line": 112,
+      "line": 111,
       "column": 3
     },
     {
@@ -6224,7 +6189,7 @@
       "kind": "column",
       "id": "status",
       "source": "features/my-work/surface/screens/workflows/work-queue/listing/index.tsx",
-      "line": 170,
+      "line": 169,
       "column": 3
     },
     {
@@ -6238,49 +6203,49 @@
       "kind": "column",
       "id": "status",
       "source": "features/offers/surface/screens/record/detail/view/sections/approvals-collection/index.tsx",
-      "line": 93,
+      "line": 87,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/offers/surface/screens/record/detail/view/sections/onboarding-collection/index.tsx",
-      "line": 104,
+      "line": 91,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/offers/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 65,
+      "line": 57,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/offers/surface/screens/workflows/onboarding/listing/view/sections/table-columns/index.tsx",
-      "line": 81,
+      "line": 71,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/positions/surface/screens/record/detail/view/sections/approvals-timeline/index.tsx",
-      "line": 120,
+      "line": 113,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/positions/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 84,
+      "line": 81,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 685,
+      "line": 615,
       "column": 3
     },
     {
@@ -6294,35 +6259,35 @@
       "kind": "column",
       "id": "status",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/candidates-collection/index.tsx",
-      "line": 70,
+      "line": 80,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 94,
+      "line": 104,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 68,
+      "line": 78,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 263,
+      "line": 217,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 994,
+      "line": 974,
       "column": 5
     },
     {
@@ -6343,7 +6308,7 @@
       "kind": "column",
       "id": "status",
       "source": "features/scoring/surface/screens/workflows/rubrics/detail/view/sections/usage/index.tsx",
-      "line": 106,
+      "line": 107,
       "column": 3
     },
     {
@@ -6357,182 +6322,182 @@
       "kind": "column",
       "id": "status",
       "source": "features/settings/surface/components/templates/manager/index.tsx",
-      "line": 450,
-      "column": 3
-    },
-    {
-      "kind": "column",
-      "id": "status",
-      "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 193,
-      "column": 3
-    },
-    {
-      "kind": "column",
-      "id": "status",
-      "source": "features/settings/surface/screens/integrations/api-keys/listing/index.tsx",
-      "line": 137,
-      "column": 3
-    },
-    {
-      "kind": "column",
-      "id": "status",
-      "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
-      "line": 594,
-      "column": 3
-    },
-    {
-      "kind": "column",
-      "id": "status",
-      "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
-      "line": 584,
-      "column": 3
-    },
-    {
-      "kind": "column",
-      "id": "status",
-      "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
-      "line": 347,
-      "column": 3
-    },
-    {
-      "kind": "column",
-      "id": "status",
-      "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
       "line": 442,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
+      "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
+      "line": 194,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/settings/surface/screens/integrations/api-keys/listing/index.tsx",
+      "line": 128,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/settings/surface/screens/workflows/ai/studio/model-catalog/index.tsx",
+      "line": 560,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
+      "line": 541,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
+      "line": 311,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
+      "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
+      "line": 419,
+      "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "status",
       "source": "features/settings/surface/screens/workflows/team/index.tsx",
-      "line": 372,
+      "line": 361,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/settings/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 288,
+      "line": 279,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/sourcing/surface/screens/workflows/talent-pool/listing/index.tsx",
-      "line": 328,
+      "line": 283,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/sprints/surface/components/board/detail/sprint-workspace/tabs/team/index.tsx",
-      "line": 178,
+      "line": 167,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/sprints/surface/screens/record/detail/view/sections/tasks/index.tsx",
-      "line": 121,
+      "line": 120,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/teams/surface/components/members/team-member-listing/index.tsx",
-      "line": 472,
+      "line": 446,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/teams/surface/screens/record/detail/view/sections/clients/index.tsx",
-      "line": 95,
+      "line": 92,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/teams/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 82,
+      "line": 79,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/teams/surface/screens/record/detail/view/sections/sprints/index.tsx",
-      "line": 94,
+      "line": 80,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 572,
+      "line": 586,
       "column": 3
     },
     {
       "kind": "column",
       "id": "status",
       "source": "features/teams/surface/screens/workflows/capacity-risks/view/sections/widgets/index.tsx",
-      "line": 206,
+      "line": 200,
       "column": 3
     },
     {
       "kind": "column",
       "id": "step",
       "source": "features/offers/surface/screens/record/detail/view/sections/approvals-collection/index.tsx",
-      "line": 57,
+      "line": 58,
       "column": 3
     },
     {
       "kind": "column",
       "id": "storageRef",
       "source": "features/agents/surface/screens/record/detail/view/tabs/media/index.tsx",
-      "line": 125,
+      "line": 128,
       "column": 58
     },
     {
       "kind": "column",
       "id": "subject",
       "source": "features/offers/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 638,
+      "line": 603,
       "column": 3
     },
     {
       "kind": "column",
       "id": "successRate",
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-      "line": 489,
+      "line": 466,
       "column": 3
     },
     {
       "kind": "column",
       "id": "target",
       "source": "features/agents/surface/screens/record/detail/view/tabs/assignments/index.tsx",
-      "line": 54,
+      "line": 56,
       "column": 3
     },
     {
       "kind": "column",
       "id": "targetContext",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 180,
+      "line": 177,
       "column": 3
     },
     {
       "kind": "column",
       "id": "teamId",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 480,
+      "line": 390,
       "column": 3
     },
     {
       "kind": "column",
       "id": "tier",
       "source": "features/teams/surface/screens/record/detail/view/sections/clients/index.tsx",
-      "line": 82,
+      "line": 79,
       "column": 3
     },
     {
@@ -6546,7 +6511,7 @@
       "kind": "column",
       "id": "title",
       "source": "features/clients/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 62,
+      "line": 57,
       "column": 3
     },
     {
@@ -6560,49 +6525,49 @@
       "kind": "column",
       "id": "title",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 257,
+      "line": 173,
       "column": 3
     },
     {
       "kind": "column",
       "id": "title",
       "source": "features/my-work/surface/screens/workflows/work-queue/listing/index.tsx",
-      "line": 133,
+      "line": 132,
       "column": 3
     },
     {
       "kind": "column",
       "id": "title",
       "source": "features/positions/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 57,
+      "line": 54,
       "column": 3
     },
     {
       "kind": "column",
       "id": "title",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 520,
+      "line": 458,
       "column": 3
     },
     {
       "kind": "column",
       "id": "title",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 50,
+      "line": 52,
       "column": 3
     },
     {
       "kind": "column",
       "id": "title",
       "source": "features/sprints/surface/screens/record/detail/view/sections/tasks/index.tsx",
-      "line": 81,
+      "line": 76,
       "column": 3
     },
     {
       "kind": "column",
       "id": "title",
       "source": "features/teams/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 64,
+      "line": 61,
       "column": 3
     },
     {
@@ -6616,21 +6581,21 @@
       "kind": "column",
       "id": "tokensPerHire",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 486,
+      "line": 428,
       "column": 5
     },
     {
       "kind": "column",
       "id": "tokensUsed",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 452,
+      "line": 394,
       "column": 5
     },
     {
       "kind": "column",
       "id": "topProvider",
       "source": "features/governance/surface/screens/workflows/token-billing/efficiency/index.tsx",
-      "line": 568,
+      "line": 496,
       "column": 5
     },
     {
@@ -6651,7 +6616,7 @@
       "kind": "column",
       "id": "totalApplications",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 301,
+      "line": 298,
       "column": 3
     },
     {
@@ -6665,7 +6630,7 @@
       "kind": "column",
       "id": "totalApplications",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 404,
+      "line": 320,
       "column": 3
     },
     {
@@ -6679,7 +6644,7 @@
       "kind": "column",
       "id": "totalPlacements",
       "source": "features/recruiters/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 510,
+      "line": 420,
       "column": 3
     },
     {
@@ -6693,21 +6658,21 @@
       "kind": "column",
       "id": "trigger",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 214,
+      "line": 215,
       "column": 3
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/agents/surface/screens/record/detail/view/tabs/media/index.tsx",
-      "line": 56,
+      "line": 58,
       "column": 3
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/applications/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 61,
+      "line": 59,
       "column": 3
     },
     {
@@ -6721,7 +6686,7 @@
       "kind": "column",
       "id": "type",
       "source": "features/my-work/surface/screens/workflows/approvals/listing/index.tsx",
-      "line": 110,
+      "line": 109,
       "column": 3
     },
     {
@@ -6735,238 +6700,238 @@
       "kind": "column",
       "id": "type",
       "source": "features/positions/surface/screens/record/detail/view/sections/approvals-timeline/index.tsx",
-      "line": 97,
+      "line": 90,
       "column": 3
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/positions/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 626,
+      "line": 556,
       "column": 3
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
-      "line": 68,
+      "line": 78,
       "column": 3
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/settings/surface/screens/workflows/ai/model-catalog/index.tsx",
-      "line": 461,
+      "line": 452,
       "column": 5
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/settings/surface/screens/workflows/ai/providers/index.tsx",
-      "line": 666,
+      "line": 653,
       "column": 5
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
-      "line": 323,
+      "line": 287,
       "column": 3
     },
     {
       "kind": "column",
       "id": "type",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 405,
+      "line": 418,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/applications/surface/components/listing/columns/index.tsx",
-      "line": 475,
+      "line": 356,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/applications/surface/screens/workflows/pipeline/stalled/view/sections/column-defs/index.tsx",
-      "line": 111,
+      "line": 113,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/applications/surface/screens/workflows/pipeline/visual/view/sections/column-defs/index.tsx",
-      "line": 112,
+      "line": 114,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/clients/surface/screens/record/detail/view/sections/pipeline/index.tsx",
-      "line": 114,
+      "line": 109,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/clients/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 114,
+      "line": 109,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/interviews/surface/screens/workflows/templates/listing/view/sections/widgets/index.tsx",
-      "line": 925,
+      "line": 905,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/offers/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 668,
+      "line": 633,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/positions/surface/screens/record/detail/view/sections/jobs-collection/index.tsx",
-      "line": 136,
+      "line": 133,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 1002,
+      "line": 982,
       "column": 5
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/settings/surface/components/templates/manager/index.tsx",
-      "line": 461,
+      "line": 453,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/settings/surface/components/workflows/workflow-listing/index.tsx",
-      "line": 253,
+      "line": 254,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
-      "line": 385,
+      "line": 349,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
-      "line": 549,
+      "line": 520,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/settings/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 301,
+      "line": 292,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/teams/surface/screens/record/detail/view/sections/clients/index.tsx",
-      "line": 121,
+      "line": 118,
       "column": 3
     },
     {
       "kind": "column",
       "id": "updatedAt",
       "source": "features/teams/surface/screens/record/detail/view/sections/positions/index.tsx",
-      "line": 115,
+      "line": 112,
       "column": 3
     },
     {
       "kind": "column",
       "id": "uptime",
       "source": "features/settings/surface/screens/workflows/ai/studio/provider-health/index.tsx",
-      "line": 649,
+      "line": 600,
       "column": 3
     },
     {
       "kind": "column",
       "id": "usage",
       "source": "features/governance/surface/screens/workflows/token-billing/distribution/index.tsx",
-      "line": 1206,
+      "line": 1022,
       "column": 5
     },
     {
       "kind": "column",
       "id": "usageCount",
       "source": "features/settings/surface/components/templates/manager/index.tsx",
-      "line": 410,
+      "line": 403,
       "column": 3
     },
     {
       "kind": "column",
       "id": "usageCount",
       "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
-      "line": 372,
+      "line": 336,
       "column": 3
     },
     {
       "kind": "column",
       "id": "usageCount",
       "source": "features/settings/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 251,
+      "line": 240,
       "column": 3
     },
     {
       "kind": "column",
       "id": "useCase",
       "source": "features/settings/surface/components/templates/manager/index.tsx",
-      "line": 393,
+      "line": 386,
       "column": 3
     },
     {
       "kind": "column",
       "id": "useCase",
       "source": "features/settings/surface/screens/workflows/templates/listing/index.tsx",
-      "line": 234,
+      "line": 223,
       "column": 3
     },
     {
       "kind": "column",
       "id": "used",
       "source": "features/governance/surface/screens/workflows/token-billing/distribution/index.tsx",
-      "line": 1142,
+      "line": 956,
       "column": 5
     },
     {
       "kind": "column",
       "id": "utilization",
       "source": "features/teams/surface/screens/record/listing/view/sections/widgets/index.tsx",
-      "line": 503,
+      "line": 520,
       "column": 3
     },
     {
       "kind": "column",
       "id": "utilization",
       "source": "features/teams/surface/screens/workflows/capacity-risks/view/sections/widgets/index.tsx",
-      "line": 148,
+      "line": 140,
       "column": 3
     },
     {
       "kind": "column",
       "id": "version",
       "source": "features/scoring/surface/components/scorecards/rubrics/listing/index.tsx",
-      "line": 978,
+      "line": 958,
       "column": 5
     },
     {
@@ -6980,28 +6945,28 @@
       "kind": "column",
       "id": "version",
       "source": "features/settings/surface/screens/workflows/ai/studio/voice-agents/index.tsx",
-      "line": 359,
+      "line": 323,
       "column": 3
     },
     {
       "kind": "column",
       "id": "versionNumber",
       "source": "features/agents/surface/screens/record/detail/view/tabs/versions/index.tsx",
-      "line": 41,
+      "line": 43,
       "column": 3
     },
     {
       "kind": "column",
       "id": "warmLead",
       "source": "features/sourcing/surface/components/outreach/board/index.tsx",
-      "line": 660,
+      "line": 607,
       "column": 3
     },
     {
       "kind": "column",
       "id": "workflow",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 200,
+      "line": 197,
       "column": 3
     },
     {
@@ -7022,14 +6987,14 @@
       "kind": "column",
       "id": "workMode",
       "source": "features/jobs/surface/screens/record/listing/view/sections/table-columns/index.tsx",
-      "line": 377,
+      "line": 293,
       "column": 3
     },
     {
       "kind": "field",
       "id": "agents.operational_internals",
       "source": "features/agents/surface/screens/record/detail/index.tsx",
-      "line": 215,
+      "line": 216,
       "column": 31
     },
     {
@@ -7050,7 +7015,7 @@
       "kind": "field",
       "id": "application.score",
       "source": "features/applications/surface/screens/record/detail/view/sections/client-view/index.tsx",
-      "line": 138,
+      "line": 140,
       "column": 29
     },
     {
@@ -7071,7 +7036,7 @@
       "kind": "field",
       "id": "assignedRecruiterId",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1013,
+      "line": 1015,
       "column": 5
     },
     {
@@ -7092,21 +7057,21 @@
       "kind": "field",
       "id": "availability",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 112,
+      "line": 113,
       "column": 5
     },
     {
       "kind": "field",
       "id": "availableFrom",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1103,
+      "line": 1105,
       "column": 5
     },
     {
       "kind": "field",
       "id": "availableFrom",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1308,
+      "line": 1310,
       "column": 17
     },
     {
@@ -7267,7 +7232,7 @@
       "kind": "field",
       "id": "candidate.compensation",
       "source": "features/candidates/surface/screens/record/edit/index.tsx",
-      "line": 310,
+      "line": 296,
       "column": 54
     },
     {
@@ -7414,7 +7379,7 @@
       "kind": "field",
       "id": "candidate.sensitive_profile",
       "source": "features/candidates/surface/screens/record/edit/index.tsx",
-      "line": 317,
+      "line": 303,
       "column": 54
     },
     {
@@ -7498,21 +7463,21 @@
       "kind": "field",
       "id": "client.commercial",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 241,
+      "line": 242,
       "column": 29
     },
     {
       "kind": "field",
       "id": "client.internal_notes",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 247,
+      "line": 248,
       "column": 29
     },
     {
       "kind": "field",
       "id": "client.internal_ownership",
       "source": "features/clients/surface/screens/record/detail/index.tsx",
-      "line": 253,
+      "line": 254,
       "column": 29
     },
     {
@@ -7568,7 +7533,7 @@
       "kind": "field",
       "id": "coverLetter",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1032,
+      "line": 1034,
       "column": 5
     },
     {
@@ -7617,7 +7582,7 @@
       "kind": "field",
       "id": "customResponses",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1050,
+      "line": 1052,
       "column": 5
     },
     {
@@ -7708,14 +7673,14 @@
       "kind": "field",
       "id": "description",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/index.tsx",
-      "line": 361,
+      "line": 363,
       "column": 5
     },
     {
       "kind": "field",
       "id": "description",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/index.tsx",
-      "line": 407,
+      "line": 409,
       "column": 17
     },
     {
@@ -7778,28 +7743,28 @@
       "kind": "field",
       "id": "email",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 508,
+      "line": 504,
       "column": 3
     },
     {
       "kind": "field",
       "id": "email",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 704,
+      "line": 690,
       "column": 13
     },
     {
       "kind": "field",
       "id": "email",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 95,
+      "line": 96,
       "column": 5
     },
     {
       "kind": "field",
       "id": "email",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 136,
+      "line": 137,
       "column": 7
     },
     {
@@ -7855,21 +7820,21 @@
       "kind": "field",
       "id": "expectedSalary",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1060,
+      "line": 1062,
       "column": 5
     },
     {
       "kind": "field",
       "id": "expectedSalary",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1307,
+      "line": 1309,
       "column": 17
     },
     {
       "kind": "field",
       "id": "expectedSalaryCurrency",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1068,
+      "line": 1070,
       "column": 5
     },
     {
@@ -7890,7 +7855,7 @@
       "kind": "field",
       "id": "expectedSalaryPeriod",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1078,
+      "line": 1080,
       "column": 5
     },
     {
@@ -7995,7 +7960,7 @@
       "kind": "field",
       "id": "hiringManagerNotes",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1179,
+      "line": 1181,
       "column": 5
     },
     {
@@ -8037,14 +8002,14 @@
       "kind": "field",
       "id": "internalNotes",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1166,
+      "line": 1168,
       "column": 5
     },
     {
       "kind": "field",
       "id": "internalNotes",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1310,
+      "line": 1312,
       "column": 17
     },
     {
@@ -8149,7 +8114,7 @@
       "kind": "field",
       "id": "interview.artifacts",
       "source": "features/applications/surface/screens/record/detail/view/sections/client-view/index.tsx",
-      "line": 144,
+      "line": 146,
       "column": 29
     },
     {
@@ -8219,7 +8184,7 @@
       "kind": "field",
       "id": "interview.score",
       "source": "features/interviews/surface/screens/workflows/debrief/index.tsx",
-      "line": 1967,
+      "line": 1689,
       "column": 29
     },
     {
@@ -8310,14 +8275,14 @@
       "kind": "field",
       "id": "job.commercial",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 277,
+      "line": 281,
       "column": 29
     },
     {
       "kind": "field",
       "id": "job.compensation",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 271,
+      "line": 275,
       "column": 29
     },
     {
@@ -8436,7 +8401,7 @@
       "kind": "field",
       "id": "linkedin",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 111,
+      "line": 112,
       "column": 5
     },
     {
@@ -8457,21 +8422,21 @@
       "kind": "field",
       "id": "location",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 515,
+      "line": 511,
       "column": 3
     },
     {
       "kind": "field",
       "id": "location",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 705,
+      "line": 691,
       "column": 13
     },
     {
       "kind": "field",
       "id": "location",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 110,
+      "line": 111,
       "column": 5
     },
     {
@@ -8618,35 +8583,35 @@
       "kind": "field",
       "id": "motivation",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1041,
+      "line": 1043,
       "column": 5
     },
     {
       "kind": "field",
       "id": "name",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 501,
+      "line": 497,
       "column": 3
     },
     {
       "kind": "field",
       "id": "name",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 703,
+      "line": 689,
       "column": 13
     },
     {
       "kind": "field",
       "id": "name",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 93,
+      "line": 94,
       "column": 5
     },
     {
       "kind": "field",
       "id": "name",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 134,
+      "line": 135,
       "column": 7
     },
     {
@@ -8667,14 +8632,14 @@
       "kind": "field",
       "id": "name",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/index.tsx",
-      "line": 328,
+      "line": 330,
       "column": 5
     },
     {
       "kind": "field",
       "id": "name",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/index.tsx",
-      "line": 405,
+      "line": 407,
       "column": 17
     },
     {
@@ -8709,7 +8674,7 @@
       "kind": "field",
       "id": "noticePeriodDays",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1111,
+      "line": 1113,
       "column": 5
     },
     {
@@ -8954,7 +8919,7 @@
       "kind": "field",
       "id": "portfolioUrl",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1023,
+      "line": 1025,
       "column": 5
     },
     {
@@ -9031,14 +8996,14 @@
       "kind": "field",
       "id": "priority",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 972,
+      "line": 974,
       "column": 5
     },
     {
       "kind": "field",
       "id": "priority",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1304,
+      "line": 1306,
       "column": 17
     },
     {
@@ -9220,14 +9185,14 @@
       "kind": "field",
       "id": "remotePreference",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1121,
+      "line": 1123,
       "column": 5
     },
     {
       "kind": "field",
       "id": "remotePreference",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1309,
+      "line": 1311,
       "column": 17
     },
     {
@@ -9262,14 +9227,14 @@
       "kind": "field",
       "id": "requiresRelocation",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1142,
+      "line": 1144,
       "column": 5
     },
     {
       "kind": "field",
       "id": "requiresVisaSponsorship",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1130,
+      "line": 1132,
       "column": 5
     },
     {
@@ -9297,14 +9262,14 @@
       "kind": "field",
       "id": "resumeVersionUrl",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 988,
+      "line": 990,
       "column": 5
     },
     {
       "kind": "field",
       "id": "resumeVersionUrl",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1305,
+      "line": 1307,
       "column": 17
     },
     {
@@ -9360,14 +9325,14 @@
       "kind": "field",
       "id": "salaryExpectation",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 535,
+      "line": 531,
       "column": 3
     },
     {
       "kind": "field",
       "id": "salaryExpectation",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 707,
+      "line": 693,
       "column": 13
     },
     {
@@ -9402,7 +9367,7 @@
       "kind": "field",
       "id": "salaryNegotiable",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1091,
+      "line": 1093,
       "column": 5
     },
     {
@@ -9451,14 +9416,14 @@
       "kind": "field",
       "id": "seniority",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 521,
+      "line": 517,
       "column": 3
     },
     {
       "kind": "field",
       "id": "seniority",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 706,
+      "line": 692,
       "column": 13
     },
     {
@@ -9500,28 +9465,28 @@
       "kind": "field",
       "id": "skills",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 544,
+      "line": 540,
       "column": 3
     },
     {
       "kind": "field",
       "id": "skills",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 708,
+      "line": 694,
       "column": 13
     },
     {
       "kind": "field",
       "id": "skills",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 107,
+      "line": 108,
       "column": 5
     },
     {
       "kind": "field",
       "id": "skills",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 138,
+      "line": 139,
       "column": 7
     },
     {
@@ -9577,14 +9542,14 @@
       "kind": "field",
       "id": "stage",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 96,
+      "line": 97,
       "column": 5
     },
     {
       "kind": "field",
       "id": "stage",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 137,
+      "line": 138,
       "column": 7
     },
     {
@@ -9605,7 +9570,7 @@
       "kind": "field",
       "id": "status",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 528,
+      "line": 524,
       "column": 3
     },
     {
@@ -9626,14 +9591,14 @@
       "kind": "field",
       "id": "status",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/index.tsx",
-      "line": 342,
+      "line": 344,
       "column": 5
     },
     {
       "kind": "field",
       "id": "status",
       "source": "features/scoring/surface/screens/workflows/calibration-detail/index.tsx",
-      "line": 406,
+      "line": 408,
       "column": 17
     },
     {
@@ -9647,28 +9612,28 @@
       "kind": "field",
       "id": "summary",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 551,
+      "line": 547,
       "column": 3
     },
     {
       "kind": "field",
       "id": "summary",
       "source": "app/(public)/design-preview/page.tsx",
-      "line": 709,
+      "line": 695,
       "column": 13
     },
     {
       "kind": "field",
       "id": "summary",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 108,
+      "line": 109,
       "column": 5
     },
     {
       "kind": "field",
       "id": "summary",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 139,
+      "line": 140,
       "column": 7
     },
     {
@@ -9696,14 +9661,14 @@
       "kind": "field",
       "id": "tags",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1001,
+      "line": 1003,
       "column": 5
     },
     {
       "kind": "field",
       "id": "tags",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1306,
+      "line": 1308,
       "column": 17
     },
     {
@@ -9899,14 +9864,14 @@
       "kind": "field",
       "id": "title",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 94,
+      "line": 95,
       "column": 5
     },
     {
       "kind": "field",
       "id": "title",
       "source": "app/(public)/design-preview/wo-des-16/page.tsx",
-      "line": 135,
+      "line": 136,
       "column": 7
     },
     {
@@ -10032,7 +9997,7 @@
       "kind": "field",
       "id": "willingToRelocate",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
-      "line": 1154,
+      "line": 1156,
       "column": 5
     },
     {
@@ -11649,14 +11614,14 @@
       "kind": "tab",
       "id": "activity",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/controls/index.tsx",
-      "line": 53,
+      "line": 54,
       "column": 3
     },
     {
       "kind": "tab",
       "id": "activity",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/index.tsx",
-      "line": 114,
+      "line": 113,
       "column": 3
     },
     {
@@ -11677,14 +11642,14 @@
       "kind": "tab",
       "id": "ai-providers",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 108,
+      "line": 96,
       "column": 3
     },
     {
       "kind": "tab",
       "id": "all",
       "source": "ui/forms/template-modal/index.tsx",
-      "line": 601,
+      "line": 589,
       "column": 5
     },
     {
@@ -11698,7 +11663,7 @@
       "kind": "tab",
       "id": "api-keys",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 109,
+      "line": 97,
       "column": 3
     },
     {
@@ -11754,7 +11719,7 @@
       "kind": "tab",
       "id": "billing",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 106,
+      "line": 94,
       "column": 3
     },
     {
@@ -11782,7 +11747,7 @@
       "kind": "tab",
       "id": "candidates",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 347,
+      "line": 351,
       "column": 59
     },
     {
@@ -12034,28 +11999,28 @@
       "kind": "tab",
       "id": "flow",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/controls/index.tsx",
-      "line": 46,
+      "line": 47,
       "column": 3
     },
     {
       "kind": "tab",
       "id": "flow",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/index.tsx",
-      "line": 107,
+      "line": 106,
       "column": 3
     },
     {
       "kind": "tab",
       "id": "focus",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/controls/index.tsx",
-      "line": 32,
+      "line": 33,
       "column": 3
     },
     {
       "kind": "tab",
       "id": "focus",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/index.tsx",
-      "line": 93,
+      "line": 92,
       "column": 3
     },
     {
@@ -12069,7 +12034,7 @@
       "kind": "tab",
       "id": "general",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 104,
+      "line": 92,
       "column": 3
     },
     {
@@ -12342,7 +12307,7 @@
       "kind": "tab",
       "id": "pipeline",
       "source": "features/candidates/surface/screens/record/overview/wiring/controller/index.tsx",
-      "line": 79,
+      "line": 80,
       "column": 3
     },
     {
@@ -12363,7 +12328,7 @@
       "kind": "tab",
       "id": "pipeline",
       "source": "features/jobs/surface/screens/record/detail/index.tsx",
-      "line": 341,
+      "line": 345,
       "column": 57
     },
     {
@@ -12398,7 +12363,7 @@
       "kind": "tab",
       "id": "queue",
       "source": "features/candidates/surface/screens/record/overview/wiring/controller/index.tsx",
-      "line": 78,
+      "line": 79,
       "column": 3
     },
     {
@@ -12503,7 +12468,7 @@
       "kind": "tab",
       "id": "security",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 105,
+      "line": 93,
       "column": 3
     },
     {
@@ -12531,21 +12496,21 @@
       "kind": "tab",
       "id": "signals",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/controls/index.tsx",
-      "line": 39,
+      "line": 40,
       "column": 3
     },
     {
       "kind": "tab",
       "id": "signals",
       "source": "features/insights/surface/components/section-dashboard/section-operating-dashboard/index.tsx",
-      "line": 100,
+      "line": 99,
       "column": 3
     },
     {
       "kind": "tab",
       "id": "snapshot",
       "source": "features/candidates/surface/screens/record/overview/wiring/controller/index.tsx",
-      "line": 77,
+      "line": 78,
       "column": 3
     },
     {
@@ -12580,7 +12545,7 @@
       "kind": "tab",
       "id": "team",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 107,
+      "line": 95,
       "column": 3
     },
     {
@@ -12601,7 +12566,7 @@
       "kind": "tab",
       "id": "templates",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 112,
+      "line": 100,
       "column": 3
     },
     {
@@ -12615,7 +12580,7 @@
       "kind": "tab",
       "id": "token-billing",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 111,
+      "line": 99,
       "column": 3
     },
     {
@@ -12643,7 +12608,7 @@
       "kind": "tab",
       "id": "usage",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 110,
+      "line": 98,
       "column": 3
     },
     {
@@ -12657,7 +12622,7 @@
       "kind": "tab",
       "id": "vendors",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 120,
+      "line": 108,
       "column": 3
     },
     {
@@ -12678,7 +12643,7 @@
       "kind": "tab",
       "id": "webhooks",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 119,
+      "line": 107,
       "column": 3
     },
     {
@@ -12692,7 +12657,7 @@
       "kind": "tab",
       "id": "workflows",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
-      "line": 118,
+      "line": 106,
       "column": 3
     }
   ]
