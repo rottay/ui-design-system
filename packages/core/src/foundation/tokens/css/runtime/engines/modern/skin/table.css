@@ -36,11 +36,11 @@
 /* ---- keyframes: referenced by the inline `animation` shorthands the engine
         sets on the spinner and the expanded-row cell (sanctioned inline
         residuals, WO-ARC-09). Defined globally here, not per table instance. ---- */
-@keyframes rottay-table-spin {
+@keyframes ds-table-spin-modern {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-@keyframes rottay-table-expand {
+@keyframes ds-table-expand-modern {
   from { opacity: 0; max-height: 0; transform: translateY(-8px); }
   to { opacity: 1; max-height: 500px; transform: translateY(0); }
 }

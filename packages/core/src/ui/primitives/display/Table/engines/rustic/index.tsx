@@ -175,7 +175,7 @@ const baseStyles = {
   },
   expandedRowCell: {
     padding: '16px',
-    animation: 'var(--ds-personality-animation-entrance-duration, 0.2s) cubic-bezier(0.16, 1, 0.3, 1) rottay-table-expand-in',
+    animation: 'var(--ds-personality-animation-entrance-duration, 0.2s) cubic-bezier(0.16, 1, 0.3, 1) ds-table-expand-in-rustic',
   },
   // Fixed (sticky) columns need an opaque background to obscure scrolling
   // content underneath; that background is painted by the rustic table skin's

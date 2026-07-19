@@ -578,7 +578,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           {/* Expanded row content */}
           {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
             <tr data-part="expanded-row">
-              <td colSpan={totalColSpan} style={{ padding: 16, animation: 'rottay-table-expand var(--ds-motion-slow) ease-out' }}>
+              <td colSpan={totalColSpan} style={{ padding: 16, animation: 'ds-table-expand-modern var(--ds-motion-slow) ease-out' }}>
                 {expandable.expandedRowRender(record, actualIndex, expandable.indentSize || 0, true)}
               </td>
             </tr>
@@ -713,7 +713,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               display: 'inline-block',
               width: 24,
               height: 24,
-              animation: 'rottay-table-spin var(--ds-motion-glacial) linear infinite',
+              animation: 'ds-table-spin-modern var(--ds-motion-glacial) linear infinite',
             }}
             role="status"
             aria-label="Loading"

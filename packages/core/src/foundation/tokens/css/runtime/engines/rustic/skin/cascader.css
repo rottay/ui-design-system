@@ -83,12 +83,8 @@
  * selected/hover border-left), `rgba(22, 119, 255, 0.15)` +
  * `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
  *
- * KEYFRAMES: `@keyframes rottay-cascader-spin` / `rottay-cascader-dropdown-in`,
- * previously a plain `<style>` tag rendered inside the portal (remounting on
- * every open), are moved here renamed `ds-cascader-spin` /
- * `ds-cascader-dropdown-in`; the `<style>` tag is deleted and the spinner's
- * and dropdown's inline `animation:` references (non-paint keys) are updated
- * to match.
+ * KEYFRAMES: `ds-cascader-spin` / `ds-cascader-dropdown-in` back the
+ * spinner's and dropdown's inline `animation:` references (non-paint keys).
  */
 
 @keyframes ds-cascader-spin {

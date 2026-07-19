@@ -1,0 +1,27 @@
+[
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+    "maxUnnamespaced": 20,
+    "reason": "OAuth transition scene keyframes (rottay-transition-*/rottay-progress-*/rottay-phase-trace-*/rottay-flow-*), pre-existing at the W6-H scope-extension boundary (that lane owns only the 7 runtime/engines/{modern,rustic}/skin files). Ratchet ceiling only, never raise."
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/primitive-motion.css",
+    "maxUnnamespaced": 4,
+    "reason": "Shared Timeline/Tree primitive keyframes (rottay-timeline-pulse, rottay-drop-indicator, rottay-tree-spin, rottay-tree-drop-line-in), pre-existing at the W6-H scope-extension boundary (that lane owns only the 7 runtime/engines/{modern,rustic}/skin files). Ratchet ceiling only, never raise."
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/data-terminal-card-keyframes.css",
+    "maxUnnamespaced": 14,
+    "reason": "Data-terminal card keyframes (dtc-*), pre-existing at the W6-H scope-extension boundary (that lane owns only the 7 runtime/engines/{modern,rustic}/skin files). Ratchet ceiling only, never raise."
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/toast-animation-keyframes.css",
+    "maxUnnamespaced": 11,
+    "reason": "Toast slide/fade/progress keyframes (toast-*), pre-existing at the W6-H scope-extension boundary (that lane owns only the 7 runtime/engines/{modern,rustic}/skin files). Ratchet ceiling only, never raise."
+  },
+  {
+    "file": "src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css",
+    "maxUnnamespaced": 2,
+    "reason": "Stats-header skeleton/dot keyframes (pulse-card-skeleton, pulse-dot-ping), pre-existing at the W6-H scope-extension boundary (that lane owns only the 7 runtime/engines/{modern,rustic}/skin files). Ratchet ceiling only, never raise."
+  }
+]

@@ -29,13 +29,11 @@
  * tree list never carried a border regardless of `treeLine` and is left
  * unmatched.
  *
- * KEYFRAMES: `@keyframes rottay-select-slide-in`, previously an inline
- * `<style dangerouslySetInnerHTML>` re-injected on every open, is moved here
- * renamed `ds-tree-select-slide-in`; the dropdown's `animation:` reference
- * (an inline, non-paint key) is updated to match. The loading spinner's bare
- * `animation: 'ds-foundation-spin …'` has no local `@keyframes` in the source
- * and resolves against the global foundation `ds-foundation-spin` keyframe --
- * left inline, untouched.
+ * KEYFRAMES: `ds-tree-select-slide-in` backs the dropdown's inline
+ * `animation:` reference (a non-paint key). The loading spinner's bare
+ * `animation: 'ds-foundation-spin …'` has no local `@keyframes` in this
+ * file and resolves against the global foundation `ds-foundation-spin`
+ * keyframe.
  */
 
 @keyframes ds-tree-select-slide-in {

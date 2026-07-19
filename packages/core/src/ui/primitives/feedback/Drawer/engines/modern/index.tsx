@@ -31,18 +31,18 @@ const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
 /** Enter animation name lookup by placement. Keyframes ship in the modern Drawer skin. */
 const SLIDE_ANIMATION: Record<string, string> = {
-  left: 'rottay-drawer-slide-left-modern',
-  right: 'rottay-drawer-slide-right-modern',
-  top: 'rottay-drawer-slide-top-modern',
-  bottom: 'rottay-drawer-slide-bottom-modern',
+  left: 'ds-drawer-slide-left-modern',
+  right: 'ds-drawer-slide-right-modern',
+  top: 'ds-drawer-slide-top-modern',
+  bottom: 'ds-drawer-slide-bottom-modern',
 };
 
 /** Exit animation name lookup by placement -- mirrors SLIDE_ANIMATION. */
 const SLIDE_OUT_ANIMATION: Record<string, string> = {
-  left: 'rottay-drawer-slide-out-left-modern',
-  right: 'rottay-drawer-slide-out-right-modern',
-  top: 'rottay-drawer-slide-out-top-modern',
-  bottom: 'rottay-drawer-slide-out-bottom-modern',
+  left: 'ds-drawer-slide-out-left-modern',
+  right: 'ds-drawer-slide-out-right-modern',
+  top: 'ds-drawer-slide-out-top-modern',
+  bottom: 'ds-drawer-slide-out-bottom-modern',
 };
 
 /** Premium size presets shared with the public Drawer contract. */
@@ -284,8 +284,8 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             animation: motionIsFinal
               ? undefined
               : dataState === 'open'
-                ? `rottay-drawer-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
-                : `rottay-drawer-backdrop-fade-out-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
+                ? `ds-drawer-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
+                : `ds-drawer-backdrop-fade-out-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
           }}
         />
       )}

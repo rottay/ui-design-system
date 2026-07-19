@@ -66,12 +66,9 @@
  * (tree-line indent, non-`treeLine` nested case), `rgba(22, 119, 255, 0.15)`
  * + `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
  *
- * KEYFRAMES: `@keyframes rottay-treeselect-spin` /
- * `rottay-treeselect-dropdown-in`, previously imperatively injected into
- * `document.head` by a `useEffect` (deleted), are moved here renamed
- * `ds-tree-select-spin` / `ds-tree-select-dropdown-in`; the loading
- * spinner's and dropdown's inline `animation:` references (non-paint keys)
- * are updated to match.
+ * KEYFRAMES: `ds-tree-select-spin` / `ds-tree-select-dropdown-in` back the
+ * loading spinner's and dropdown's inline `animation:` references
+ * (non-paint keys).
  */
 
 @keyframes ds-tree-select-spin {

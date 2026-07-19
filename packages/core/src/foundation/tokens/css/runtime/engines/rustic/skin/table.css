@@ -54,7 +54,7 @@
 /* ---- keyframes: referenced by the inline `animation` shorthand the engine
         sets on the expanded-row cell (a sanctioned inline residual,
         WO-ARC-09). Defined globally here, not per table instance. ---- */
-@keyframes rottay-table-expand-in {
+@keyframes ds-table-expand-in-rustic {
   from { opacity: 0; max-height: 0; }
   to { opacity: 1; max-height: 500px; }
 }
