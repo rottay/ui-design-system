@@ -64,6 +64,13 @@
 @import '../../presentation/components/patterns-paint.css';
 @import '../../runtime/bridges/collapse-paint.css';
 
+/* Typed custom-property registrations (@property). DELIBERATELY UNLAYERED: an
+   @property at-rule is not layerable content and registers document-wide
+   regardless of placement, so it sits beside the unlayered skins (P-76 posture).
+   Registration only adds typed interpolation + inheritance control; unset values
+   still resolve to today's tokens, so no paint changes. */
+@import '../../foundation/base/properties.css';
+
 /* Modern engine skins. DELIBERATELY UNLAYERED: every `rottay-*` layer sorts
    before Tailwind's own `base` layer, whose preflight resets `button`'s
    background, radius and border. A layered skin loses to it on layer order,

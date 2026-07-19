@@ -1,0 +1,69 @@
+/**
+ * Typed custom-property registrations (@property) - Rottay Design System.
+ *
+ * Registration adds two runtime behaviors to a --ds-* custom property: typed
+ * interpolation (the value can be transitioned/animated smoothly instead of
+ * swapping discretely) and explicit inheritance control. Only the animatable
+ * core is registered; inert string tokens gain nothing from typing.
+ *
+ * Placement law: an @property at-rule is not layerable content and registers
+ * document-wide regardless of where it appears, so this file is imported
+ * UNLAYERED beside the skins (P-76 posture) rather than through the layered
+ * foundation/base/index.css.
+ *
+ * At-rest law: each initial-value is the value the token resolves to at rest in
+ * the shipped default (no tenant). A registered property that is unset resolves
+ * to its initial-value, NOT to a var() fallback, so a wrong initial-value would
+ * silently change unset rendering. The colocated
+ * tests/property-registration-drift.test.ts parses this file against the shipped
+ * sources and fails on any drift.
+ *
+ * --ds-chart-series-1..10 are deliberately NOT registered here. Their paint
+ * chain in presentation/components/skin/chart-foundation.css is
+ * var(--ds-chart-category-N, var(--ds-chart-series-N, var(--ds-chart-<scheme>-N, <literal>)))
+ * and the tenant appearance compiler emits --ds-chart-series-N only when a tenant
+ * has compiled; the default/rottay path relies on --ds-chart-series-N being
+ * guaranteed-invalid so the per-scheme literal fallback wins. Registering it with
+ * any valid <color> initial (transparent, or a fixed hex) defeats that fallback
+ * for every uncompiled render. Registration is blocked until that chain is
+ * restructured in the chart lane.
+ */
+
+/* Effect-intensity dial. Shipped at-rest default: foundation/animations/premium.css. */
+@property --ds-effect-intensity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+/* Entrance geometry. Shipped at-rest defaults: foundation/animations/transitions.css. */
+@property --ds-motion-scale-in {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.98;
+}
+
+@property --ds-motion-offset-in {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: -2px;
+}
+
+/* Hover elevation lift. inherits:false so depth does not cascade to descendants;
+   unset it resolves to 0 (flat), the baseline a lift transition starts from. Its
+   :root/skin consumption is owned by the elevation lane. */
+@property --ds-elevation-lift {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+/* Accent color. Always set at :root (foundation/themes/default.css) and by
+   tenants, so the transparent initial only applies where the property is unset;
+   it never surfaces in normal rendering. transparent is used because an
+   @property initial-value cannot be a var() chain. */
+@property --ds-color-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
