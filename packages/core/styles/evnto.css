@@ -44049,6 +44049,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-on-primary);
 }
 
+/* The headline is tenant typography: an editorial tenant's heading face must
+ * reach empty states, not only page titles. */
+.ds-pattern-empty-state.ds-engine-modern [data-part='title'][data-part='title'] {
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+}
+
 /**
  * Rustic EmptyState skin (WO-SKIN-06 checkpoint CK-H2).
  *

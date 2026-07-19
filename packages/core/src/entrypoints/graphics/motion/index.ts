@@ -5,16 +5,21 @@ export {
   MOTION_PROFILE_DEFAULTS,
   MOTION_PROFILE_ENVELOPES,
   MotionProvider,
+  motionRecipeCssVariables,
   normalizeTenantMotionDial,
   resolveMotionPolicy,
   resolveMotionRecipe,
   useMotionPolicy,
   useMotionPreference,
   useMotionRecipe,
+  useMotionRecipePresentation,
 } from '../../../infrastructure/runtime/motion';
 export type {
   MotionContextValue,
   MotionProviderProps,
+  MotionRecipeCssVariables,
+  MotionRecipeDataAttributes,
+  MotionRecipePresentation,
 } from '../../../infrastructure/runtime/motion';
 export {
   MOTION_DIAL_BOUNDS,

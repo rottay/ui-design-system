@@ -182,6 +182,7 @@
         "FLEX_JUSTIFY_MAP",
         "FLOAT_BUTTON_DEFAULTS",
         "FORMFIELD_DEFAULTS",
+        "FRECENCY_HALF_LIFE_MS",
         "FadeIn",
         "FeatureContext",
         "FeatureGate",
@@ -612,6 +613,7 @@
         "createRecipeVariant",
         "createSubComponent",
         "createTenantConfig",
+        "decayedFrecency",
         "deepMergeTokenOverrides",
         "defaultViewModeIcons",
         "defaultViewModeLabels",
@@ -711,8 +713,10 @@
         "probeTenantThemePackWarnings",
         "projectChartSummaryRows",
         "pt",
+        "rankByFrecency",
         "recordMorphStyle",
         "recordTransitionName",
+        "recordUse",
         "registerCustomComponent",
         "registerCustomComponents",
         "registerHighlighter",
@@ -791,6 +795,7 @@
         "useCollectionWorkspace",
         "useColorTokens",
         "useCommandPaletteItems",
+        "useCommandSources",
         "useCommands",
         "useCreateTenant",
         "useCrossTabSync",
@@ -847,6 +852,7 @@
         "useProductProfileContext",
         "usePulseOnChange",
         "useReducedMotion",
+        "useRegisterCommandSource",
         "useRegisterCommands",
         "useRegisteredShortcuts",
         "useResponsive",
@@ -2433,6 +2439,7 @@
         "FLEX_JUSTIFY_MAP",
         "FLOAT_BUTTON_DEFAULTS",
         "FORMFIELD_DEFAULTS",
+        "FRECENCY_HALF_LIFE_MS",
         "FeatureContext",
         "FeatureGate",
         "FeatureProvider",
@@ -2632,6 +2639,7 @@
         "createRecipeVariant",
         "createSubComponent",
         "createTenantConfig",
+        "decayedFrecency",
         "deepMergeTokenOverrides",
         "deriveTenantColorRamps",
         "describeChart",
@@ -2724,6 +2732,8 @@
         "probeTenantThemePackWarnings",
         "projectChartSummaryRows",
         "pt",
+        "rankByFrecency",
+        "recordUse",
         "registerCustomComponent",
         "registerCustomComponents",
         "registerHighlighter",
@@ -2788,6 +2798,7 @@
         "useCollapseTokens",
         "useCollectionWorkspace",
         "useCommandPaletteItems",
+        "useCommandSources",
         "useCommands",
         "useCreateTenant",
         "useCrossTabSync",
@@ -2833,6 +2844,7 @@
         "useProductProfile",
         "useProductProfileContext",
         "usePulseOnChange",
+        "useRegisterCommandSource",
         "useRegisterCommands",
         "useRegisteredShortcuts",
         "useResponsive",
@@ -4401,12 +4413,14 @@
         "ActionDownloadIcon",
         "ActionEditIcon",
         "ActionFilterIcon",
+        "ActionFocusIcon",
         "ActionOpenExternalIcon",
         "ActionPauseIcon",
         "ActionPlayIcon",
         "ActionPrintIcon",
         "ActionRedoIcon",
         "ActionRefreshIcon",
+        "ActionReorderIcon",
         "ActionRetryIcon",
         "ActionRevealIcon",
         "ActionSaveIcon",
@@ -4416,6 +4430,7 @@
         "ActionStopIcon",
         "ActionUndoIcon",
         "ActionUploadIcon",
+        "ActionVoteIcon",
         "ActionZoomInIcon",
         "ActionZoomOutIcon",
         "AiAssistantIcon",
@@ -4432,7 +4447,9 @@
         "CommunicationEmailIcon",
         "CommunicationInboxIcon",
         "CommunicationMessageIcon",
+        "CommunicationMuteIcon",
         "CommunicationNotificationIcon",
+        "CommunicationReplyIcon",
         "CommunicationSendIcon",
         "CommunicationVoiceIcon",
         "ConnectivityNetworkIcon",
@@ -4444,6 +4461,9 @@
         "ContentFolderIcon",
         "ContentImageIcon",
         "ContentLinkIcon",
+        "ContentNoteIcon",
+        "ContentQuoteIcon",
+        "ContentTranslationIcon",
         "ContentVideoIcon",
         "DataChartIcon",
         "DataDatabaseIcon",
@@ -4460,9 +4480,11 @@
         "DeviceMicrophoneIcon",
         "DeviceMobileIcon",
         "DeviceTabletIcon",
+        "EntityEducationIcon",
         "EntityGroupIcon",
         "EntityOrganizationIcon",
         "EntityPersonIcon",
+        "EntityPersonaIcon",
         "EntityTagIcon",
         "EntityTaskIcon",
         "FOUNDATION_ICON_COMPONENTS",
@@ -4494,15 +4516,21 @@
         "NavigationRouteIcon",
         "NavigationSettingsIcon",
         "NavigationUpIcon",
+        "StatusAchievementIcon",
         "StatusBlockedIcon",
         "StatusDraftIcon",
         "StatusErrorIcon",
+        "StatusFeaturedIcon",
         "StatusInfoIcon",
+        "StatusInstantIcon",
         "StatusLiveIcon",
         "StatusLoadingIcon",
+        "StatusNeutralIcon",
         "StatusOfflineIcon",
         "StatusPausedIcon",
         "StatusPendingIcon",
+        "StatusPremiumIcon",
+        "StatusPriorityIcon",
         "StatusScheduledIcon",
         "StatusSecureIcon",
         "StatusSuccessIcon",
@@ -4515,6 +4543,7 @@
         "SystemWorkflowIcon",
         "TimeDateIcon",
         "TimeDeadlineIcon",
+        "TimeLeaveIcon",
         "TimeScheduleIcon",
         "TimeTimestampIcon",
         "isFoundationIconName",
@@ -4554,6 +4583,9 @@
         "ActionFilterIcon": [
           "@phosphor-icons/react"
         ],
+        "ActionFocusIcon": [
+          "@phosphor-icons/react"
+        ],
         "ActionOpenExternalIcon": [
           "@phosphor-icons/react"
         ],
@@ -4570,6 +4602,9 @@
           "@phosphor-icons/react"
         ],
         "ActionRefreshIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionReorderIcon": [
           "@phosphor-icons/react"
         ],
         "ActionRetryIcon": [
@@ -4597,6 +4632,9 @@
           "@phosphor-icons/react"
         ],
         "ActionUploadIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionVoteIcon": [
           "@phosphor-icons/react"
         ],
         "ActionZoomInIcon": [
@@ -4647,7 +4685,13 @@
         "CommunicationMessageIcon": [
           "@phosphor-icons/react"
         ],
+        "CommunicationMuteIcon": [
+          "@phosphor-icons/react"
+        ],
         "CommunicationNotificationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationReplyIcon": [
           "@phosphor-icons/react"
         ],
         "CommunicationSendIcon": [
@@ -4681,6 +4725,15 @@
           "@phosphor-icons/react"
         ],
         "ContentLinkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentNoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentQuoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentTranslationIcon": [
           "@phosphor-icons/react"
         ],
         "ContentVideoIcon": [
@@ -4731,10 +4784,16 @@
         "DeviceTabletIcon": [
           "@phosphor-icons/react"
         ],
+        "EntityEducationIcon": [
+          "@phosphor-icons/react"
+        ],
         "EntityGroupIcon": [
           "@phosphor-icons/react"
         ],
         "EntityOrganizationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityPersonaIcon": [
           "@phosphor-icons/react"
         ],
         "EntityPersonIcon": [
@@ -4830,6 +4889,9 @@
         "resolveFoundationIcon": [
           "@phosphor-icons/react"
         ],
+        "StatusAchievementIcon": [
+          "@phosphor-icons/react"
+        ],
         "StatusBlockedIcon": [
           "@phosphor-icons/react"
         ],
@@ -4839,13 +4901,22 @@
         "StatusErrorIcon": [
           "@phosphor-icons/react"
         ],
+        "StatusFeaturedIcon": [
+          "@phosphor-icons/react"
+        ],
         "StatusInfoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusInstantIcon": [
           "@phosphor-icons/react"
         ],
         "StatusLiveIcon": [
           "@phosphor-icons/react"
         ],
         "StatusLoadingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusNeutralIcon": [
           "@phosphor-icons/react"
         ],
         "StatusOfflineIcon": [
@@ -4855,6 +4926,12 @@
           "@phosphor-icons/react"
         ],
         "StatusPendingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPremiumIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPriorityIcon": [
           "@phosphor-icons/react"
         ],
         "StatusScheduledIcon": [
@@ -4891,6 +4968,9 @@
           "@phosphor-icons/react"
         ],
         "TimeDeadlineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeLeaveIcon": [
           "@phosphor-icons/react"
         ],
         "TimeScheduleIcon": [
@@ -4988,6 +5068,7 @@
         "IDENTITY_ICON_NAMES",
         "IdentityBadgeIcon",
         "IdentityCredentialRotationIcon",
+        "IdentityDeactivatedIcon",
         "IdentityDirectoryIcon",
         "IdentityFederationIcon",
         "IdentityIcon",
@@ -5083,6 +5164,9 @@
           "@phosphor-icons/react"
         ],
         "IdentityCredentialRotationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityDeactivatedIcon": [
           "@phosphor-icons/react"
         ],
         "IdentityDirectoryIcon": [
@@ -5189,6 +5273,7 @@
         "AiVisionIcon",
         "AnalyticsActivityIcon",
         "AnalyticsAreaIcon",
+        "AnalyticsBalanceIcon",
         "AnalyticsBarIcon",
         "AnalyticsCohortIcon",
         "AnalyticsCompareIcon",
@@ -5275,6 +5360,9 @@
           "@phosphor-icons/react"
         ],
         "AnalyticsAreaIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsBalanceIcon": [
           "@phosphor-icons/react"
         ],
         "AnalyticsBarIcon": [
@@ -5868,12 +5956,14 @@
         "MOTION_PROFILE_ENVELOPES",
         "MOTION_RECIPE_NAMES",
         "MotionProvider",
+        "motionRecipeCssVariables",
         "normalizeTenantMotionDial",
         "resolveMotionPolicy",
         "resolveMotionRecipe",
         "useMotionPolicy",
         "useMotionPreference",
-        "useMotionRecipe"
+        "useMotionRecipe",
+        "useMotionRecipePresentation"
       ],
       "symbols": {
         "MotionProvider": [
@@ -5885,12 +5975,14 @@
         "MOTION_PROFILE_DEFAULTS",
         "MOTION_PROFILE_ENVELOPES",
         "MOTION_RECIPE_NAMES",
+        "motionRecipeCssVariables",
         "normalizeTenantMotionDial",
         "resolveMotionPolicy",
         "resolveMotionRecipe",
         "useMotionPolicy",
         "useMotionPreference",
-        "useMotionRecipe"
+        "useMotionRecipe",
+        "useMotionRecipePresentation"
       ]
     },
     "./effects": {

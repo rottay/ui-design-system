@@ -229,7 +229,7 @@ Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated art
 
 New product code uses supplier-independent semantic roles. The stable default
 `Icon` facade currently accepts the governed 50-role compatibility corpus;
-generated pack entrypoints expose the broader 263-role corpus. Do not conflate
+generated pack entrypoints expose the broader 282-role corpus. Do not conflate
 those two contracts. Phosphor is the pinned default supplier and is confined to
 the icon adapter/generator boundary under `packages/core/src/graphics/icons/`; apps
 MUST NOT import Phosphor, Lucide, Ant icons, or another functional supplier
@@ -384,7 +384,7 @@ pnpm typecheck    # TypeScript check
 /                          Commercial landing page (Tailwind, marketing exception)
 /foundations/              Tokens, themes, engines, icons
   /tokens/{colors,spacing,typography,radius,shadows,motion}
-  /icons                   Stable 50-role facade plus generated 263-role packs
+  /icons                   Stable 50-role facade plus generated 282-role packs
   /engines                 Side-by-side engine comparison
   /themes                  3 brand themes with live preview
 /primitives/[category]/[component]   Generated primitive reference pages
