@@ -164,6 +164,83 @@ describe('useCollectionWorkspace', () => {
     expect(result.current.searchValue).toBe('external');
   });
 
+  it('does not clobber a fast typing burst while the debounce is pending', () => {
+    vi.useFakeTimers();
+    try {
+      const onChange = vi.fn();
+      // The parent holds the committed value. It starts empty and only updates
+      // when onChange fires, which will not happen until the debounce elapses.
+      let controlledValue = '';
+      const { result, rerender } = renderHook(() =>
+        useCollectionWorkspace({
+          config: {
+            ...baseConfig,
+            controls: {
+              search: {
+                enabled: true,
+                value: controlledValue,
+                debounceMs: 200,
+                onChange,
+              },
+            },
+          },
+        }),
+      );
+
+      // Type "a", "ab", "abc" in a burst. After each keystroke React re-renders
+      // with the STILL-STALE parent value (the parent has not been notified
+      // yet). The displayed value must track what was typed, not the stale prop.
+      act(() => result.current.setSearchValue('a'));
+      rerender();
+      expect(result.current.searchValue).toBe('a');
+
+      act(() => result.current.setSearchValue('ab'));
+      rerender();
+      expect(result.current.searchValue).toBe('ab');
+
+      act(() => result.current.setSearchValue('abc'));
+      rerender();
+      expect(result.current.searchValue).toBe('abc');
+
+      // Nothing has been committed yet: the debounce is still pending.
+      expect(onChange).not.toHaveBeenCalled();
+
+      // After the debounce window the commit fires exactly once with the final
+      // value, and the displayed value is preserved.
+      act(() => {
+        vi.advanceTimersByTime(200);
+      });
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith('abc');
+      expect(result.current.searchValue).toBe('abc');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('syncs the field from an external reset of the controlled value', () => {
+    let controlledValue = 'alice';
+    const { result, rerender } = renderHook(() =>
+      useCollectionWorkspace({
+        config: {
+          ...baseConfig,
+          controls: {
+            search: { enabled: true, value: controlledValue, debounceMs: 200 },
+          },
+        },
+      }),
+    );
+
+    expect(result.current.searchValue).toBe('alice');
+
+    // The parent clears the query (e.g. "clear filters") without the change
+    // originating from this input. The field must follow the external reset.
+    controlledValue = '';
+    rerender();
+
+    expect(result.current.searchValue).toBe('');
+  });
+
   it('respects presentation.responsive.mobileBreakpoint', () => {
     const config: CollectionWorkspaceConfig<{ id: string }> = {
       ...baseConfig,

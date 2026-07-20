@@ -94,7 +94,12 @@ export function useCollectionWorkspace<T>(
     controls?.search?.value ?? '',
   );
 
-  const searchValue = controls?.search?.value ?? internalSearchValue;
+  // The displayed value is always driven by internal state so every keystroke
+  // is reflected immediately. When the search is controlled *and* debounced,
+  // the parent `value` only catches up after the debounce fires; reading it
+  // here would reset the field to the stale parent value on each keystroke of
+  // a fast typing burst (only the last character would survive).
+  const searchValue = internalSearchValue;
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -106,6 +111,7 @@ export function useCollectionWorkspace<T>(
       if (debounceMs && debounceMs > 0) {
         if (debounceRef.current) clearTimeout(debounceRef.current);
         debounceRef.current = setTimeout(() => {
+          debounceRef.current = null;
           controls?.search?.onChange?.(value);
         }, debounceMs);
       } else {
@@ -114,6 +120,21 @@ export function useCollectionWorkspace<T>(
     },
     [controls?.search?.onChange, controls?.search?.debounceMs],
   );
+
+  // Sync internal state from a genuine external change to the controlled value
+  // (e.g. the parent clears filters or resets the query). This runs only when
+  // the controlled `value` prop itself changes. It is skipped while a debounced
+  // commit is still pending so an in-flight typing burst is never clobbered,
+  // and skipped entirely in the uncontrolled case where internal state is the
+  // sole owner of the field.
+  const controlledSearchValue = controls?.search?.value;
+  useEffect(() => {
+    if (controlledSearchValue === undefined) return;
+    if (debounceRef.current) return;
+    setInternalSearchValue((current) =>
+      current === controlledSearchValue ? current : controlledSearchValue,
+    );
+  }, [controlledSearchValue]);
 
   useEffect(() => {
     return () => {
