@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "workOrder": "WO-CRA-15",
-  "package": "@rottay/design-system@2.19.35",
+  "package": "@rottay/design-system@2.19.36",
   "sourceFingerprint": "41ed296f39ba99d5fca99e2436b470c4763b7a489a6601abcba3c944c7ba9937",
   "runner": {
     "productionBuild": true,
@@ -19,7 +19,7 @@
     "distinctProviderColors": 2,
     "maxConcurrentContinuousRuntimes": 1,
     "maxSuspendedRafCallbacks": 0,
-    "maxLongTaskMs": 1.2,
+    "maxLongTaskMs": 0.6,
     "rapidMountUnmountCleanup": true,
     "bundle": {
       "cleanBuild": true,
@@ -77,18 +77,18 @@
     "longTaskMetric": "runtime-phase long tasks only: max synchronous rAF callback duration + PerformanceObserver longtask entries attributed to the runtime phase by the first-frame boundary; one-time page hydration is excluded and recorded under pageBootstrapContext",
     "flaky": 0,
     "tree": {
-      "headCommit": "9c616e2b7953c4178fd720921fd2f36c2387f614",
+      "headCommit": "f87faec7a1b9cb6fa9e782e916a7a0cddc666e1a",
       "workingTreeClean": true,
       "uncommittedFiles": 0,
-      "showroomBuildId": "ZmIAOTOlXqAZHwtLm0Au1",
+      "showroomBuildId": "GqWgVCXRMz69i00b2uMa5",
       "note": "built from a clean working tree"
     }
   },
   "pageBootstrapContext": {
     "note": "Probe-page hydration long tasks, outside the certified runtime. Recorded so a reader can reconcile the raw trace (e.g. a ~52 ms cold-hydration task) with the certified runtime-phase result.",
     "boundaryDefinition": "runtime phase begins at the runtime's first requestAnimationFrame request (React hydration never schedules rAF); a long task counts as runtime when start+duration >= boundary, so runtime init/first-frame is included and only tasks that fully completed before the runtime came up are excluded",
-    "probePageHydrationMaxLongTaskMs": 65,
-    "probePageHydrationLongTaskEntries": 1,
-    "runtimePhaseBoundaryMs": 592.6999999880791
+    "probePageHydrationMaxLongTaskMs": 0,
+    "probePageHydrationLongTaskEntries": 0,
+    "runtimePhaseBoundaryMs": 452
   }
 }
