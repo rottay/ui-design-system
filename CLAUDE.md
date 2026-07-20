@@ -6,6 +6,7 @@ Apps, verticals, and modules must never query tables owned by another module/sch
 
 ## AI Documentation
 
+- **Capability Map (read first)**: `/docs-engineering/engineering/design-system/capability-map/README.md` — the full DS surface in two orientations (what a tenant can white-label; what an app can consume, with the app-bithire reference adoption per row). Read it BEFORE building new UI, adding a tenant knob, or hand-rolling anything the DS already ships.
 - **Catálogo Central**: `/docs-engineering/README.md`
 - **Component Reference**: `/docs-engineering/engineering/design-system/`
 

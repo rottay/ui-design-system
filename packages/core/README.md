@@ -8,6 +8,12 @@ Internal multi-tenant, multi-engine React component library powering all Rottay 
 
 ---
 
+## Capability discovery
+
+Before building UI or reaching for a raw element, read the **[Design System Capability Map](../../../docs-engineering/engineering/design-system/capability-map/README.md)** — the full surface in two orientations: what a tenant can white-label (customization axes with their DB document fields) and what an app can consume (components and runtime, each with the app-bithire reference adoption).
+
+---
+
 ## Features
 
 - **Primitives** -- engine-switched leaf components across 6 categories (display, inputs, feedback, layout, navigation, overlay)
