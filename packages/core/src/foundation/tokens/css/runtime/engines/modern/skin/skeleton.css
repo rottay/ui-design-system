@@ -60,8 +60,40 @@
   border-radius: var(--ds-skeleton-avatar-radius);
 }
 
+/* ---- text/default-variant layout (was `flex gap-4` / `flex-1 space-y-2`
+        utilities + inline geometry literals in the engine): density tokens
+        can now retune the whole anatomy from one place. ---- */
+.rottay-skeleton-wrapper.rottay-skeleton--modern[data-part='root'] {
+  display: flex;
+  gap: var(--ds-skeleton-gap, var(--ds-spacing-md, 1rem));
+}
+
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='content'] {
+  display: grid;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  align-content: start;
+  gap: var(--ds-skeleton-line-gap, var(--ds-spacing-xs, 0.5rem));
+}
+
+/* Title line is 60% width to visually distinguish it from body text. */
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'] {
+  inline-size: 60%;
+  block-size: var(--ds-skeleton-title-height, 1.25rem);
+}
+
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
+  block-size: var(--ds-skeleton-line-height, 1rem);
+}
+
+/* Last paragraph line is 80% width to simulate a natural text ending,
+   preventing the skeleton from looking like a uniform block. */
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line']:last-child {
+  inline-size: 80%;
+}
+
 /* ---- title/line corner radius (DaisyUI's `.skeleton` no longer supplies it) ---- */
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
-  border-radius: 4px;
+  border-radius: var(--ds-skeleton-line-radius, var(--ds-radius-sm, 4px));
 }

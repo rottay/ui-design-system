@@ -9,7 +9,7 @@
  * Unknown preset names degrade to `neutral` rather than throwing.
  */
 
-import type { PersonalityTokens } from '../../../../../../foundation/contracts/kernel/tokens/personality';
+import type { PersonalityTokens } from "../../../../../../foundation/contracts/kernel/tokens/personality";
 
 /**
  * Named personality keywords that map to full PersonalityTokens objects.
@@ -19,7 +19,7 @@ import type { PersonalityTokens } from '../../../../../../foundation/contracts/k
  * admins pick a starting point by keyword and optionally override
  * individual fields, greatly simplifying the tenant creation flow.
  */
-export type PersonalityPreset = 'formal' | 'neutral' | 'playful' | 'expressive';
+export type PersonalityPreset = "formal" | "neutral" | "playful" | "expressive";
 
 /**
  * Formal: modeled after recruiting.operator / BitHire.
@@ -32,48 +32,48 @@ export type PersonalityPreset = 'formal' | 'neutral' | 'playful' | 'expressive';
  */
 const FORMAL_PERSONALITY: PersonalityTokens = {
   animation: {
-    intensity: 0.35,       // Even lower than BitHire registry -- pure formal baseline
+    intensity: 0.35, // Even lower than BitHire registry -- pure formal baseline
     staggerDelay: 20,
     staggerMax: 120,
-    entrance: 'fade',
+    entrance: "fade",
     entranceDuration: 160,
-    hoverLift: 0,          // No lift -- maximum groundedness
+    hoverLift: 0, // No lift -- maximum groundedness
     hoverScale: 1.0,
     useSpring: false,
     springTension: 170,
     springFriction: 24,
-    pulseSpeed: 'slow',
-    skeletonStyle: 'pulse',
+    pulseSpeed: "slow",
+    skeletonStyle: "pulse",
     countUpEnabled: true,
   },
   chart: {
     animateOnMount: true,
     mountDuration: 600,
-    lineStyle: 'sharp',
+    lineStyle: "sharp",
     showDots: true,
     useGradientFill: false,
-    tooltipStyle: 'detailed',
-    colorScheme: 'default',
+    tooltipStyle: "detailed",
+    colorScheme: "default",
   },
   typography: {
-    headingWeightBias: 'heavier',
-    headingLetterSpacing: '-0.01em',
-    labelStyle: 'uppercase',
+    headingWeightBias: "heavier",
+    headingLetterSpacing: "-0.01em",
+    labelStyle: "uppercase",
   },
   accent: {
-    barPosition: 'left',
-    barThickness: 3,
-    barStyle: 'solid',
-    iconContainerShape: 'square', // WHY square: more structured than rounded
-    badgeShape: 'pill',
-    dividerStyle: 'solid',
+    barPosition: "none",
+    barThickness: 0,
+    barStyle: "solid",
+    iconContainerShape: "square", // WHY square: more structured than rounded
+    badgeShape: "pill",
+    dividerStyle: "solid",
   },
   card: {
-    defaultElevation: 'sm',
-    hoverElevation: 'none',     // No elevation change -- flat and stable
+    defaultElevation: "sm",
+    hoverElevation: "none", // No elevation change -- flat and stable
     showBorder: true,
     hoverTint: false,
-    paddingDensity: 'compact',
+    paddingDensity: "compact",
   },
 };
 
@@ -87,48 +87,48 @@ const FORMAL_PERSONALITY: PersonalityTokens = {
  */
 const NEUTRAL_PERSONALITY: PersonalityTokens = {
   animation: {
-    intensity: 0.45,       // Mild -- noticeable but not distracting
+    intensity: 0.45, // Mild -- noticeable but not distracting
     staggerDelay: 40,
     staggerMax: 220,
-    entrance: 'fade',
+    entrance: "fade",
     entranceDuration: 220,
-    hoverLift: 1,          // Minimal lift for interactive feedback
+    hoverLift: 1, // Minimal lift for interactive feedback
     hoverScale: 1.0,
     useSpring: false,
     springTension: 170,
     springFriction: 22,
-    pulseSpeed: 'normal',
-    skeletonStyle: 'shimmer',
+    pulseSpeed: "normal",
+    skeletonStyle: "shimmer",
     countUpEnabled: true,
   },
   chart: {
     animateOnMount: true,
     mountDuration: 700,
-    lineStyle: 'sharp',
+    lineStyle: "sharp",
     showDots: true,
     useGradientFill: false,
-    tooltipStyle: 'detailed',
-    colorScheme: 'default',
+    tooltipStyle: "detailed",
+    colorScheme: "default",
   },
   typography: {
-    headingWeightBias: 'normal',
-    headingLetterSpacing: '-0.01em',
-    labelStyle: 'sentence', // WHY sentence: most universally readable casing
+    headingWeightBias: "normal",
+    headingLetterSpacing: "-0.01em",
+    labelStyle: "sentence", // WHY sentence: most universally readable casing
   },
   accent: {
-    barPosition: 'top',
+    barPosition: "top",
     barThickness: 3,
-    barStyle: 'solid',
-    iconContainerShape: 'rounded',
-    badgeShape: 'rounded',
-    dividerStyle: 'solid',
+    barStyle: "solid",
+    iconContainerShape: "rounded",
+    badgeShape: "rounded",
+    dividerStyle: "solid",
   },
   card: {
-    defaultElevation: 'sm',
-    hoverElevation: 'lift-one',
+    defaultElevation: "sm",
+    hoverElevation: "lift-one",
     showBorder: true,
     hoverTint: false,
-    paddingDensity: 'normal',
+    paddingDensity: "normal",
   },
 };
 
@@ -142,48 +142,48 @@ const NEUTRAL_PERSONALITY: PersonalityTokens = {
  */
 const PLAYFUL_PERSONALITY: PersonalityTokens = {
   animation: {
-    intensity: 1.2,        // High but not exaggerated
+    intensity: 1.2, // High but not exaggerated
     staggerDelay: 65,
     staggerMax: 480,
-    entrance: 'bounce',
+    entrance: "bounce",
     entranceDuration: 400,
     hoverLift: 4,
     hoverScale: 1.03,
     useSpring: true,
     springTension: 200,
     springFriction: 18,
-    pulseSpeed: 'fast',
-    skeletonStyle: 'wave',
+    pulseSpeed: "fast",
+    skeletonStyle: "wave",
     countUpEnabled: true,
   },
   chart: {
     animateOnMount: true,
     mountDuration: 1000,
-    lineStyle: 'smooth',
+    lineStyle: "smooth",
     showDots: true,
     useGradientFill: true,
-    tooltipStyle: 'detailed',
-    colorScheme: 'vibrant', // WHY vibrant: playful tenants benefit from saturated palettes
+    tooltipStyle: "detailed",
+    colorScheme: "vibrant", // WHY vibrant: playful tenants benefit from saturated palettes
   },
   typography: {
-    headingWeightBias: 'heavier',
-    headingLetterSpacing: '-0.02em',
-    labelStyle: 'capitalize',
+    headingWeightBias: "heavier",
+    headingLetterSpacing: "-0.02em",
+    labelStyle: "capitalize",
   },
   accent: {
-    barPosition: 'top',
+    barPosition: "top",
     barThickness: 4,
-    barStyle: 'animated',
-    iconContainerShape: 'circle',
-    badgeShape: 'pill',
-    dividerStyle: 'dashed', // WHY dashed: adds visual rhythm without heaviness
+    barStyle: "animated",
+    iconContainerShape: "circle",
+    badgeShape: "pill",
+    dividerStyle: "dashed", // WHY dashed: adds visual rhythm without heaviness
   },
   card: {
-    defaultElevation: 'md',
-    hoverElevation: 'lift-two',
+    defaultElevation: "md",
+    hoverElevation: "lift-two",
     showBorder: false,
     hoverTint: true,
-    paddingDensity: 'spacious',
+    paddingDensity: "spacious",
   },
 };
 
@@ -200,45 +200,45 @@ const EXPRESSIVE_PERSONALITY: PersonalityTokens = {
     intensity: 1.0,
     staggerDelay: 50,
     staggerMax: 400,
-    entrance: 'spring',
+    entrance: "spring",
     entranceDuration: 300,
     hoverLift: 2,
     hoverScale: 1.01,
     useSpring: true,
     springTension: 170,
     springFriction: 26,
-    pulseSpeed: 'normal',
-    skeletonStyle: 'shimmer',
+    pulseSpeed: "normal",
+    skeletonStyle: "shimmer",
     countUpEnabled: true,
   },
   chart: {
     animateOnMount: true,
     mountDuration: 800,
-    lineStyle: 'smooth',
+    lineStyle: "smooth",
     showDots: false,
     useGradientFill: true,
-    tooltipStyle: 'glass',
-    colorScheme: 'default',
+    tooltipStyle: "glass",
+    colorScheme: "default",
   },
   typography: {
-    headingWeightBias: 'normal',
-    headingLetterSpacing: '-0.025em',
-    labelStyle: 'sentence',
+    headingWeightBias: "normal",
+    headingLetterSpacing: "-0.025em",
+    labelStyle: "sentence",
   },
   accent: {
-    barPosition: 'top',
+    barPosition: "top",
     barThickness: 2,
-    barStyle: 'gradient',
-    iconContainerShape: 'rounded',
-    badgeShape: 'rounded',
-    dividerStyle: 'solid',
+    barStyle: "gradient",
+    iconContainerShape: "rounded",
+    badgeShape: "rounded",
+    dividerStyle: "solid",
   },
   card: {
-    defaultElevation: 'md',
-    hoverElevation: 'lift-two',
+    defaultElevation: "md",
+    hoverElevation: "lift-two",
     showBorder: false,
     hoverTint: true,
-    paddingDensity: 'normal',
+    paddingDensity: "normal",
   },
 };
 
@@ -268,7 +268,9 @@ const PRESET_MAP: Record<PersonalityPreset, PersonalityTokens> = {
  * @param preset - One of `'formal'`, `'neutral'`, `'playful'`, `'expressive'`.
  * @returns A complete PersonalityTokens object typed as Partial for spread ergonomics.
  */
-export function resolvePersonalityPreset(preset: string): Partial<PersonalityTokens> {
+export function resolvePersonalityPreset(
+  preset: string
+): Partial<PersonalityTokens> {
   const resolved = PRESET_MAP[preset as PersonalityPreset];
   if (resolved) {
     return resolved;

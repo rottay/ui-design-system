@@ -116,11 +116,16 @@ export default function ClassicLink(props: LinkProps): React.ReactElement {
     disabled = LINK_DEFAULTS.disabled,
     underline = LINK_DEFAULTS.underline,
     external = LINK_DEFAULTS.external,
+    externalIcon: _externalIcon,
     className,
     style,
     onClick,
     ...rest
   } = props;
+
+  // externalIcon is consumed by the modern engine only; swallowed here so it
+  // never leaks onto the DOM through rest.
+  void _externalIcon;
 
   // ========================================================================
   // Event Handlers

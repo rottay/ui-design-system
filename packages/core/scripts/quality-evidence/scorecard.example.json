@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "componentId": "DS-P032",
+  "evidenceRevision": "unassigned",
+  "pass1": {
+    "dimensions": {
+      "anatomySemantics": { "status": "pending", "evidence": [], "reason": "" },
+      "variantsRecipes": { "status": "pending", "evidence": [], "reason": "" },
+      "stateCompleteness": { "status": "pending", "evidence": [], "reason": "" },
+      "tokenWhitelabelContract": { "status": "pending", "evidence": [], "reason": "" },
+      "responsiveContent": { "status": "pending", "evidence": [], "reason": "" },
+      "inputParity": { "status": "pending", "evidence": [], "reason": "" },
+      "accessibilityI18n": { "status": "pending", "evidence": [], "reason": "" },
+      "behavioralEvidence": { "status": "pending", "evidence": [], "reason": "" }
+    },
+    "hardFailures": []
+  },
+  "pass2": {
+    "scores": {
+      "defaultVisualQuality": 0,
+      "tokenWhitelabelCraft": 0,
+      "motionQuality": 0,
+      "documentationVisual": 0
+    },
+    "evidence": {
+      "contact-sheet": [],
+      "contrasting-brand-comparison": [],
+      "narrow-rtl-content-stress": [],
+      "live-exemplar": [],
+      "normal-motion-recording": []
+    },
+    "review": {
+      "status": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "notes": "A green Pass 1 does not approve craft. Complete a sighted Pass 2 review."
+    }
+  }
+}

@@ -108,7 +108,7 @@ import type { AnchorLinkProps } from '../contracts';
 export const AnchorLink = createEngineComponent<AnchorLinkProps>('Anchor.Link', {
   /** Ant Design link implementation */
   classic: () => import('../engines/classic').then(m => ({ default: m.Link })),
-  /** DaisyUI/Tailwind link implementation */
+  /** Token-driven link implementation (skin-owned paint and rhythm) */
   modern: () => import('../engines/modern').then(m => ({ default: m.Link })),
   /** Vanilla HTML/CSS link implementation */
   rustic: () => import('../engines/rustic').then(m => ({ default: m.Link })),

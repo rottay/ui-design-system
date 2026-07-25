@@ -49,7 +49,8 @@
     "page": "Página {current} de {total}",
     "go_to": "Ir a página",
     "items_per_page": "{count} por página",
-    "total_items": "Total {total} elementos"
+    "total_items": "Total {total} elementos",
+    "navigation": "Paginación"
   },
   "table": {
     "empty": "Sin datos",
@@ -85,7 +86,8 @@
     "drop_hint": "Arrastra archivos aquí o haz clic para subir",
     "max_size": "Tamaño máximo: {size}",
     "accepted_formats": "Formatos aceptados: {formats}",
-    "progress": "Progreso de subida: {percent}%"
+    "progress": "Progreso de subida: {percent}%",
+    "file_list": "Archivos subidos"
   },
   "datepicker": {
     "placeholder": "Seleccionar fecha",
@@ -148,6 +150,85 @@
   "alert": {
     "close": "Cerrar"
   },
+  "carousel": {
+    "previousSlide": "Diapositiva anterior",
+    "nextSlide": "Siguiente diapositiva",
+    "navigation": "Navegación del carrusel",
+    "goToSlide": "Ir a la diapositiva {index}",
+    "slideOf": "Diapositiva {index} de {total}"
+  },
+  "codeBlock": {
+    "regionLabel": "Bloque de código"
+  },
+  "voiceInput": {
+    "speak": "Hablar",
+    "listeningStop": "Escuchando… clic para detener",
+    "transcribing": "Transcribiendo…",
+    "blocked": "Micrófono bloqueado. Permite el acceso en la configuración del navegador.",
+    "unavailable": "Entrada de voz no disponible",
+    "start": "Iniciar entrada de voz",
+    "stop": "Detener entrada de voz",
+    "error": {
+      "notAllowed": "El acceso al micrófono está bloqueado para este sitio. Permite el micrófono en la configuración del navegador y reintenta.",
+      "noSpeech": "No se detectó voz. Reintenta o escribe tu consulta.",
+      "audioCapture": "No se encontró ningún micrófono. Aún puedes escribir tu consulta.",
+      "network": "La transcripción de voz tuvo un problema de red. Reintenta o escribe tu consulta.",
+      "generic": "La entrada de voz no está disponible. Aún puedes escribir tu consulta."
+    }
+  },
+  "calendar": {
+    "weekdays": {
+      "sun": "dom",
+      "mon": "lun",
+      "tue": "mar",
+      "wed": "mié",
+      "thu": "jue",
+      "fri": "vie",
+      "sat": "sáb"
+    },
+    "months": {
+      "january": "enero",
+      "february": "febrero",
+      "march": "marzo",
+      "april": "abril",
+      "may": "mayo",
+      "june": "junio",
+      "july": "julio",
+      "august": "agosto",
+      "september": "septiembre",
+      "october": "octubre",
+      "november": "noviembre",
+      "december": "diciembre"
+    },
+    "yearToggle": "Año",
+    "navPrevYear": "Año anterior",
+    "navPrevMonth": "Mes anterior",
+    "navNextMonth": "Mes siguiente",
+    "navNextYear": "Año siguiente"
+  },
+  "colorpicker": {
+    "clear": "Limpiar",
+    "chooseColor": "Elegir color",
+    "hexLabel": "Color hexadecimal",
+    "selectColor": "Seleccionar color {color}"
+  },
+  "qrcode": {
+    "loading": "Cargando",
+    "expired": "Expirado",
+    "refresh": "Actualizar",
+    "refreshLabel": "Actualizar código QR",
+    "scanned": "Escaneado",
+    "contains": "Código QR que contiene: {value}"
+  },
+  "markdownView": {
+    "taskChecked": "Tarea completada",
+    "taskUnchecked": "Tarea no completada"
+  },
+  "mentions": {
+    "not_found": "Sin resultados",
+    "suggestions_label": "Sugerencias de menciones",
+    "input_label": "Menciones"
+  },
   "transfer": {
     "source_title": "Origen",
     "target_title": "Destino",
@@ -169,6 +250,57 @@
   },
   "empty": {
     "description": "Sin datos"
+  },
+  "progress": {
+    "percent_complete": "{percent}% completado",
+    "indeterminate": "En curso"
+  },
+  "scrollArea": {
+    "region_label": "Contenido desplazable"
+  },
+  "backTop": {
+    "back_to_top": "Volver arriba"
+  },
+  "floatbutton": {
+    "actionLabel": "Botón de acción flotante",
+    "openGroup": "Abrir grupo de acciones",
+    "closeGroup": "Cerrar grupo de acciones",
+    "backTop": "Volver arriba"
+  },
+  "splitter": {
+    "resize_gutter": "Redimensionar paneles"
+  },
+  "input_number": {
+    "increase": "Aumentar",
+    "decrease": "Disminuir"
+  },
+  "slider": {
+    "label": "Control deslizante",
+    "start_value": "Valor mínimo",
+    "end_value": "Valor máximo"
+  },
+  "rate": {
+    "label": "Calificación",
+    "star": "{count} estrella",
+    "stars": "{count} estrellas"
+  },
+  "actionDock": {
+    "overflow": {
+      "label": "Más acciones"
+    },
+    "topLabel": "Acciones superiores",
+    "bottomLabel": "Acciones inferiores"
+  },
+  "stepper": {
+    "navigation": "Pasos del progreso"
+  },
+  "tree": {
+    "collapse": "Contraer",
+    "expand": "Expandir",
+    "select_node": "Seleccionar {title}"
+  },
+  "descriptions": {
+    "region_label": "Lista de descripción"
   },
   "chart": {
     "loading": "Cargando grafico..."
@@ -273,5 +405,11 @@
       "empty_title": "No hay visualizaciones configuradas",
       "empty_description": "Agrega una o mas vistas para renderizar esta surface."
     }
+  },
+  "checkbox": {
+    "group": "Grupo de casillas de verificación"
+  },
+  "radio": {
+    "group": "Grupo de botones de opción"
   }
 }

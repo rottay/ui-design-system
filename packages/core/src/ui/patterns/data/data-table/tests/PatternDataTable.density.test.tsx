@@ -1,9 +1,9 @@
 /**
  * @fileoverview Density-mode tests for PatternDataTable.
  *
- * Proves the `density` prop resolves the two design-language §3 presets:
- * the pattern emits `--ds-density-cell-padding` on the engine root, carrying
- * the comfortable (`0.875rem 1rem`) vs compact (`0.5rem 0.75rem`) value.
+ * Proves the `density` prop resolves the two design-language §3 presets as
+ * neutral anatomy. Stable padding remains in the Modern skin so a tenant can
+ * replace it through tokens instead of receiving a frozen inline value.
  */
 
 import React, { Suspense } from 'react';
@@ -63,13 +63,15 @@ async function renderTableRoot(density: 'comfortable' | 'compact'): Promise<HTML
 describe('PatternDataTable density', () => {
   it('emits the comfortable cell-padding preset', async () => {
     const root = await renderTableRoot('comfortable');
-    expect(root.style.getPropertyValue('--ds-density-cell-padding')).toContain('0.875rem 1rem');
+    expect(root).toHaveAttribute('data-density', 'comfortable');
+    expect(root.style.getPropertyValue('--ds-density-cell-padding')).toBe('');
     expect(root.className).toContain('ds-table-density-comfortable');
   }, 20000);
 
   it('emits the compact cell-padding preset', async () => {
     const root = await renderTableRoot('compact');
-    expect(root.style.getPropertyValue('--ds-density-cell-padding')).toContain('0.5rem 0.75rem');
+    expect(root).toHaveAttribute('data-density', 'compact');
+    expect(root.style.getPropertyValue('--ds-density-cell-padding')).toBe('');
     expect(root.className).toContain('ds-table-density-compact');
   }, 20000);
 
@@ -88,6 +90,7 @@ describe('PatternDataTable density', () => {
     );
     await screen.findByText('Name', undefined, { timeout: 15000 });
     const root = container.querySelector('.ds-pattern-data-table') as HTMLElement;
-    expect(root.style.getPropertyValue('--ds-density-cell-padding')).toContain('0.875rem 1rem');
+    expect(root).toHaveAttribute('data-density', 'comfortable');
+    expect(root.style.getPropertyValue('--ds-density-cell-padding')).toBe('');
   }, 20000);
 });

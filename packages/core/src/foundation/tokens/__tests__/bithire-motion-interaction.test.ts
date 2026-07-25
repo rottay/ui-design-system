@@ -79,7 +79,7 @@ describe('bithire artifact carries the ledger interaction defaults (§8.2)', () 
 
   it('renders the tooltip as a level-2 paper overlay', () => {
     expect(artifact).toContain('.ant-tooltip .ant-tooltip-inner');
-    expect(artifact).toContain('background: var(--ds-color-bg-primary, #FFFFFF)');
+    expect(artifact).toMatch(/background: var\(--ds-color-bg-primary, #ffffff\)/i);
     expect(artifact).toContain('border-radius: var(--ds-radius-sm, 6px)');
   });
 

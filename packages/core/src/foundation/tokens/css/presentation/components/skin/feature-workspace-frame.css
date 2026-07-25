@@ -1,0 +1,172 @@
+/*
+ * FeatureWorkspaceFrame
+ *
+ * A deliberately quiet placement primitive. It centralizes the geometry that
+ * feature pages previously reimplemented with one-off width calculations while
+ * leaving all product-specific paint to the composed surfaces. Every scalar is
+ * overridable by vertical/tenant token artifacts.
+ */
+
+.ds-pattern-feature-workspace-frame {
+  --_ds-feature-workspace-max-width: 100%;
+
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  container: ds-feature-workspace / inline-size;
+  isolation: isolate;
+}
+
+.ds-pattern-feature-workspace-frame[data-width="wide"] {
+  --_ds-feature-workspace-max-width: var(
+    --ds-feature-workspace-max-width-wide,
+    100rem
+  );
+}
+
+.ds-pattern-feature-workspace-frame[data-width="content"] {
+  --_ds-feature-workspace-max-width: var(
+    --ds-feature-workspace-max-width-content,
+    80rem
+  );
+}
+
+.ds-feature-workspace-frame__frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ds-feature-workspace-section-gap, var(--ds-spacing-3));
+  width: 100%;
+  max-width: var(--_ds-feature-workspace-max-width);
+  min-width: 0;
+  box-sizing: border-box;
+  margin-inline: auto;
+  padding: var(--ds-feature-workspace-gutter-block-start, var(--ds-spacing-3))
+    var(
+      --ds-feature-workspace-gutter-inline,
+      clamp(var(--ds-spacing-3), 2.25vw, var(--ds-spacing-6))
+    )
+    var(--ds-feature-workspace-gutter-block-end, var(--ds-spacing-6));
+}
+
+.ds-feature-workspace-frame__navigation {
+  position: relative;
+  z-index: var(--ds-feature-workspace-navigation-z-index, 2);
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+}
+
+.ds-feature-workspace-frame__navigation[data-sticky="true"] {
+  position: sticky;
+  top: var(--ds-feature-workspace-sticky-offset, 0px);
+}
+
+.ds-feature-workspace-frame__navigation-viewport {
+  width: 100%;
+  min-width: 0;
+  /* Reserve breathing room for tab focus rings and tray shadow. Horizontal
+     scrolling still owns clipping; the content can no longer visually fuse
+     with the first workspace panel. */
+  padding-block: 2px 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: var(--ds-spacing-2);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ds-feature-workspace-frame__navigation-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.ds-feature-workspace-frame__navigation-viewport > * {
+  min-width: 100%;
+}
+
+.ds-feature-workspace-frame__content {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ds-feature-workspace-frame__content > * {
+  max-width: 100%;
+}
+
+.ds-feature-workspace-frame__skeleton {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--ds-spacing-3);
+  width: 100%;
+  min-height: var(--ds-feature-workspace-skeleton-min-height, 24rem);
+}
+
+.ds-feature-workspace-frame__skeleton > span {
+  grid-column: span 4;
+  min-height: var(--ds-feature-workspace-skeleton-card-height, 9rem);
+  border: 1px solid
+    var(--ds-surface-card-border, var(--ds-color-border-secondary));
+  border-radius: var(--ds-surface-card-radius, var(--ds-radius-xl));
+  background: linear-gradient(
+    105deg,
+    var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 20%,
+    color-mix(
+        in srgb,
+        var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 76%,
+        var(--ds-color-primary) 24%
+      )
+      42%,
+    var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 64%
+  );
+  background-size: 240% 100%;
+  animation: ds-feature-workspace-skeleton-shimmer
+    var(--ds-motion-duration-slow, 1200ms) linear infinite;
+}
+
+@keyframes ds-feature-workspace-skeleton-shimmer {
+  to {
+    background-position-x: -240%;
+  }
+}
+
+@container ds-feature-workspace (max-width: 50rem) {
+  .ds-feature-workspace-frame__frame {
+    gap: var(--ds-feature-workspace-section-gap-compact, var(--ds-spacing-2));
+    padding-inline: var(
+      --ds-feature-workspace-gutter-inline-compact,
+      var(--ds-spacing-3)
+    );
+  }
+
+  .ds-feature-workspace-frame__skeleton > span {
+    grid-column: span 6;
+  }
+}
+
+@container ds-feature-workspace (max-width: 32rem) {
+  .ds-feature-workspace-frame__frame {
+    padding-block-start: var(
+      --ds-feature-workspace-gutter-block-start-mobile,
+      var(--ds-spacing-2)
+    );
+    padding-inline: var(
+      --ds-feature-workspace-gutter-inline-mobile,
+      var(--ds-spacing-2)
+    );
+  }
+
+  .ds-feature-workspace-frame__skeleton > span {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-feature-workspace-frame__skeleton > span {
+    animation: none;
+  }
+}

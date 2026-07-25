@@ -33,10 +33,16 @@
    ======================================================================== */
 
 :root {
-  --ds-typography-heading-letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  --ds-typography-heading-letter-spacing: var(
+    --ds-letter-spacing-heading,
+    -0.01em
+  );
   --ds-typography-heading-font-weight: var(--ds-font-weight-heading, 600);
   --ds-typography-body-letter-spacing: var(--ds-letter-spacing-body, normal);
-  --ds-typography-display-letter-spacing: var(--ds-letter-spacing-display, normal);
+  --ds-typography-display-letter-spacing: var(
+    --ds-letter-spacing-display,
+    normal
+  );
   --ds-typography-heading-line-height: var(--ds-line-height-heading, 1.2);
   --ds-typography-body-line-height: var(--ds-line-height-body, 1.6);
   --ds-typography-display-line-height: var(--ds-line-height-display, 1);
@@ -51,9 +57,10 @@
 .card:where(:not(.card-compact)),
 [data-engine] .ds-card {
   box-shadow: var(--ds-card-shadow);
-  transition: box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
-              transform var(--ds-personality-animation-entrance-duration, 300ms),
-              background-color var(--ds-personality-animation-entrance-duration, 300ms);
+  transition: box-shadow
+      var(--ds-personality-animation-entrance-duration, 300ms),
+    transform var(--ds-personality-animation-entrance-duration, 300ms),
+    background-color var(--ds-personality-animation-entrance-duration, 300ms);
 }
 
 .ant-card:hover,
@@ -80,7 +87,12 @@
    Applies personality-driven heading weight, spacing, and label casing.
    ======================================================================== */
 
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 .ant-typography h1,
 .ant-typography h2,
 .ant-typography h3,
@@ -107,10 +119,10 @@ h1, h2, h3, h4, h5, h6,
 .btn,
 [data-engine] .ds-button {
   transition: transform var(--ds-personality-animation-entrance-duration, 300ms),
-              box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
-              background-color var(--ds-personality-animation-entrance-duration, 300ms),
-              border-color var(--ds-personality-animation-entrance-duration, 300ms),
-              color var(--ds-personality-animation-entrance-duration, 300ms);
+    box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
+    background-color var(--ds-personality-animation-entrance-duration, 300ms),
+    border-color var(--ds-personality-animation-entrance-duration, 300ms),
+    color var(--ds-personality-animation-entrance-duration, 300ms);
 }
 
 .ant-btn:hover,
@@ -162,7 +174,8 @@ h1, h2, h3, h4, h5, h6,
 .ant-btn-primary:hover:not(:disabled),
 .btn-primary:hover:not(:disabled),
 [data-engine] .ds-button-primary:hover:not(:disabled) {
-  box-shadow: var(--ds-card-shadow-hover), 0 0 20px rgba(var(--ds-color-primary-rgb, 99, 102, 241), 0.15);
+  box-shadow: var(--ds-card-shadow-hover),
+    0 0 20px rgba(var(--ds-color-primary-rgb, 99, 102, 241), 0.15);
 }
 
 /* ========================================================================
@@ -174,7 +187,8 @@ h1, h2, h3, h4, h5, h6,
 .btn:focus-visible,
 [data-engine] .ds-button:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8);
+  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
+    0 0 0 4px var(--ds-color-primary-400, #818cf8);
 }
 
 .ant-input:focus-visible,
@@ -182,7 +196,8 @@ h1, h2, h3, h4, h5, h6,
 input:focus-visible,
 [data-engine] .ds-input:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8);
+  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
+    0 0 0 4px var(--ds-color-primary-400, #818cf8);
 }
 
 /* ========================================================================
@@ -273,9 +288,13 @@ input:focus-visible,
 .ant-input,
 .input,
 [data-engine] .ds-input {
-  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: border-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    background-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -286,9 +305,13 @@ input:focus-visible,
 .ant-select .ant-select-selector,
 .select,
 [data-engine] .ds-select {
-  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-select-transition-timing, ease-in-out),
-              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-select-transition-timing, ease-in-out),
-              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-select-transition-timing, ease-in-out);
+  transition: border-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-select-transition-timing, ease-in-out),
+    box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-select-transition-timing, ease-in-out),
+    background-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-select-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -299,14 +322,19 @@ input:focus-visible,
 .ant-checkbox .ant-checkbox-inner,
 .checkbox,
 [data-engine] .ds-checkbox {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-checkbox-transition-timing, ease-in-out),
-              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-checkbox-transition-timing, ease-in-out),
-              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-checkbox-transition-timing, ease-in-out);
+  transition: background-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-checkbox-transition-timing, ease-in-out),
+    border-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-checkbox-transition-timing, ease-in-out),
+    box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-checkbox-transition-timing, ease-in-out);
 }
 
 .ant-checkbox-checked .ant-checkbox-inner::after,
 [data-engine] .ds-checkbox-check {
-  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.12, 0.4, 0.29, 1.46);
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
+    cubic-bezier(0.12, 0.4, 0.29, 1.46);
 }
 
 /* ========================================================================
@@ -316,15 +344,21 @@ input:focus-visible,
 
 .ant-radio .ant-radio-inner,
 [data-engine] .ds-radio {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out),
-              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out),
-              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out);
+  transition: background-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-radio-transition-timing, ease-in-out),
+    border-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-radio-transition-timing, ease-in-out),
+    box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-radio-transition-timing, ease-in-out);
 }
 
 .ant-radio-checked .ant-radio-inner::after,
 [data-engine] .ds-radio-dot {
-  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.12, 0.4, 0.29, 1.46),
-              opacity var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-radio-transition-timing, ease-in-out);
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
+      cubic-bezier(0.12, 0.4, 0.29, 1.46),
+    opacity var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-radio-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -335,14 +369,18 @@ input:focus-visible,
 .ant-switch,
 [data-engine] .ds-toggle,
 [data-engine] .ds-switch {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-toggle-transition-timing, ease-in-out),
-              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-toggle-transition-timing, ease-in-out);
+  transition: background-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-toggle-transition-timing, ease-in-out),
+    border-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-toggle-transition-timing, ease-in-out);
 }
 
 .ant-switch-handle,
 [data-engine] .ds-toggle-dot,
 [data-engine] .ds-switch-handle {
-  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
+    cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ========================================================================
@@ -353,23 +391,32 @@ input:focus-visible,
 .ant-slider .ant-slider-rail,
 .rottay-slider__rail,
 [data-engine] .ds-slider-rail {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: background-color
+    var(--ds-personality-animation-entrance-duration, 200ms)
+    var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-slider .ant-slider-track,
 .rottay-slider__track,
 [data-engine] .ds-slider-track {
-  transition: width var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              height var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: width var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    height var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    background-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-slider .ant-slider-handle,
 .rottay-slider__handle,
 [data-engine] .ds-slider-handle {
-  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              transform var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: border-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    transform var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-slider .ant-slider-handle:hover,
@@ -385,19 +432,27 @@ input:focus-visible,
 
 .ant-picker,
 [data-engine] .ds-datepicker {
-  transition: border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: border-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-picker-dropdown,
 [data-engine] .ds-datepicker-panel {
-  animation: ds-dropdown-enter var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ds-dropdown-enter
+    var(--ds-personality-animation-entrance-duration, 200ms)
+    cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ant-picker-cell-inner,
 [data-engine] .ds-datepicker-cell {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: background-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -415,13 +470,17 @@ input:focus-visible,
 .ant-table-tbody > tr,
 .table tbody tr,
 [data-engine] .ds-table-row {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: background-color
+    var(--ds-personality-animation-entrance-duration, 200ms)
+    var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-table-tbody > tr:hover > td,
 .table tbody tr:hover,
 [data-engine] .ds-table-row:hover {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: background-color
+    var(--ds-personality-animation-entrance-duration, 200ms)
+    var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -431,14 +490,18 @@ input:focus-visible,
 
 .ant-tabs-ink-bar,
 [data-engine] .ds-tabs-indicator {
-  transition: left var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.35, 0, 0.25, 1),
-              width var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.35, 0, 0.25, 1);
+  transition: left var(--ds-personality-animation-entrance-duration, 300ms)
+      cubic-bezier(0.35, 0, 0.25, 1),
+    width var(--ds-personality-animation-entrance-duration, 300ms)
+      cubic-bezier(0.35, 0, 0.25, 1);
 }
 
 .ant-tabs-tab,
 [data-engine] .ds-tab {
-  transition: color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    background-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -449,13 +512,16 @@ input:focus-visible,
 .ant-progress-bg,
 .progress,
 [data-engine] .ds-progress-bar {
-  transition: width var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.08, 0.82, 0.17, 1);
+  transition: width var(--ds-personality-animation-entrance-duration, 300ms)
+    cubic-bezier(0.08, 0.82, 0.17, 1);
 }
 
 .ant-progress-circle-path,
 .radial-progress,
 [data-engine] .ds-progress-circle {
-  transition: stroke-dashoffset var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.08, 0.82, 0.17, 1);
+  transition: stroke-dashoffset
+    var(--ds-personality-animation-entrance-duration, 300ms)
+    cubic-bezier(0.08, 0.82, 0.17, 1);
 }
 
 /* ========================================================================
@@ -467,7 +533,9 @@ input:focus-visible,
 .tooltip::before,
 .rottay-tooltip,
 [data-engine] .ds-tooltip {
-  animation: ds-tooltip-enter var(--ds-personality-animation-entrance-duration, 150ms) cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ds-tooltip-enter
+    var(--ds-personality-animation-entrance-duration, 150ms)
+    cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes ds-tooltip-enter {
@@ -490,14 +558,16 @@ input:focus-visible,
 .drawer-side,
 .rottay-drawer,
 [data-engine] .ds-drawer {
-  transition: transform var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--ds-personality-animation-entrance-duration, 300ms)
+    cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ant-drawer-mask,
 .drawer-overlay,
 .rottay-drawer-overlay,
 [data-engine] .ds-drawer-overlay {
-  transition: opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: opacity var(--ds-personality-animation-entrance-duration, 300ms)
+    var(--ds-input-transition-timing, ease-in-out);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
@@ -509,11 +579,12 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-alert,
-.alert,
 .rottay-alert,
 [data-engine] .ds-alert {
-  transition: opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out),
-              transform var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: opacity var(--ds-personality-animation-entrance-duration, 300ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    transform var(--ds-personality-animation-entrance-duration, 300ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -524,8 +595,10 @@ input:focus-visible,
 .ant-tag,
 [data-engine] .ds-tag {
   border-radius: var(--ds-badge-radius, var(--ds-tag-default-radius));
-  transition: opacity var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: opacity var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    background-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -535,8 +608,10 @@ input:focus-visible,
 
 .ant-avatar,
 [data-engine] .ds-avatar {
-  transition: transform var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              box-shadow var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    box-shadow var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-avatar:hover,
@@ -555,7 +630,9 @@ input:focus-visible,
 [data-engine] .ds-toast,
 [data-engine] .ds-message,
 [data-engine] .ds-notification {
-  animation: ds-toast-enter var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ds-toast-enter
+    var(--ds-personality-animation-entrance-duration, 300ms)
+    cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes ds-toast-enter {
@@ -577,15 +654,21 @@ input:focus-visible,
 .ant-collapse-content,
 .collapse-content,
 [data-engine] .ds-collapse-content {
-  transition: max-height var(--ds-personality-animation-entrance-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1),
-              opacity var(--ds-personality-animation-entrance-duration, 300ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: max-height
+      var(--ds-personality-animation-entrance-duration, 300ms)
+      cubic-bezier(0.4, 0, 0.2, 1),
+    opacity var(--ds-personality-animation-entrance-duration, 300ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 .ant-collapse-header,
 .collapse-title,
 [data-engine] .ds-collapse-header {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: background-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -596,7 +679,9 @@ input:focus-visible,
 .ant-popover,
 .popover,
 [data-engine] .ds-popover {
-  animation: ds-dropdown-enter var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ds-dropdown-enter
+    var(--ds-personality-animation-entrance-duration, 200ms)
+    cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ========================================================================
@@ -607,9 +692,13 @@ input:focus-visible,
 .ant-pagination-item,
 .join .btn,
 [data-engine] .ds-pagination-item {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              border-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: background-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    border-color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -621,8 +710,11 @@ input:focus-visible,
 .menu li > a,
 .menu li > button,
 [data-engine] .ds-menu-item {
-  transition: background-color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out),
-              color var(--ds-personality-animation-entrance-duration, 200ms) var(--ds-input-transition-timing, ease-in-out);
+  transition: background-color
+      var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out),
+    color var(--ds-personality-animation-entrance-duration, 200ms)
+      var(--ds-input-transition-timing, ease-in-out);
 }
 
 /* ========================================================================
@@ -677,6 +769,23 @@ html {
    motion. */
 html[data-ds-motion='reduced'] {
   scroll-behavior: auto;
+
+  /* Runtime policy mirrors the OS media-query authority in transitions.css.
+     Important is deliberate: accessibility must beat static and DB-authored
+     tenant cadence, including inline custom-property hydration. */
+  --ds-motion-instant: 0s !important;
+  --ds-motion-calm: 0s !important;
+  --ds-motion-deliberate: 0s !important;
+  --ds-motion-fast: 0s !important;
+  --ds-motion-normal: 0s !important;
+  --ds-motion-slow: 0s !important;
+  --ds-motion-glacial: 0s !important;
+  --ds-motion-feedback: 0s !important;
+  --ds-motion-reveal: 0s !important;
+  --ds-motion-disclosure: 0s !important;
+  --ds-motion-resize: 0s !important;
+  --ds-motion-rearrange: 0s !important;
+  --ds-motion-attention: 0s !important;
 }
 
 html[data-ds-motion='reduced'] *,

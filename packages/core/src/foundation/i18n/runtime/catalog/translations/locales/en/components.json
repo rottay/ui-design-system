@@ -49,7 +49,8 @@
     "page": "Page {current} of {total}",
     "go_to": "Go to page",
     "items_per_page": "{count} per page",
-    "total_items": "Total {total} items"
+    "total_items": "Total {total} items",
+    "navigation": "Pagination"
   },
   "table": {
     "empty": "No data",
@@ -85,7 +86,8 @@
     "drop_hint": "Drop files here or click to upload",
     "max_size": "Max size: {size}",
     "accepted_formats": "Accepted formats: {formats}",
-    "progress": "Upload progress: {percent}%"
+    "progress": "Upload progress: {percent}%",
+    "file_list": "Uploaded files"
   },
   "datepicker": {
     "placeholder": "Select date",
@@ -148,6 +150,85 @@
   "alert": {
     "close": "Close"
   },
+  "carousel": {
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "navigation": "Carousel navigation",
+    "goToSlide": "Go to slide {index}",
+    "slideOf": "Slide {index} of {total}"
+  },
+  "codeBlock": {
+    "regionLabel": "Code block"
+  },
+  "voiceInput": {
+    "speak": "Speak",
+    "listeningStop": "Listening… click to stop",
+    "transcribing": "Transcribing…",
+    "blocked": "Microphone blocked. Allow access in browser settings.",
+    "unavailable": "Voice input unavailable",
+    "start": "Start voice input",
+    "stop": "Stop voice input",
+    "error": {
+      "notAllowed": "Microphone access is blocked for this site. Allow the microphone in your browser settings and retry.",
+      "noSpeech": "No speech detected. Try again or type your query.",
+      "audioCapture": "No microphone was found. You can still type your query.",
+      "network": "Voice transcription had a network issue. Try again or type your query.",
+      "generic": "Voice input was unavailable. You can still type your query."
+    }
+  },
+  "calendar": {
+    "weekdays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "yearToggle": "Year",
+    "navPrevYear": "Previous year",
+    "navPrevMonth": "Previous month",
+    "navNextMonth": "Next month",
+    "navNextYear": "Next year"
+  },
+  "colorpicker": {
+    "clear": "Clear",
+    "chooseColor": "Choose color",
+    "hexLabel": "Hex color",
+    "selectColor": "Select color {color}"
+  },
+  "qrcode": {
+    "loading": "Loading",
+    "expired": "Expired",
+    "refresh": "Refresh",
+    "refreshLabel": "Refresh QR code",
+    "scanned": "Scanned",
+    "contains": "QR code containing: {value}"
+  },
+  "markdownView": {
+    "taskChecked": "Task completed",
+    "taskUnchecked": "Task not completed"
+  },
+  "mentions": {
+    "not_found": "No results",
+    "suggestions_label": "Mention suggestions",
+    "input_label": "Mentions"
+  },
   "transfer": {
     "source_title": "Source",
     "target_title": "Target",
@@ -169,6 +250,57 @@
   },
   "empty": {
     "description": "No data"
+  },
+  "progress": {
+    "percent_complete": "{percent}% complete",
+    "indeterminate": "In progress"
+  },
+  "scrollArea": {
+    "region_label": "Scrollable content"
+  },
+  "backTop": {
+    "back_to_top": "Back to top"
+  },
+  "floatbutton": {
+    "actionLabel": "Floating action button",
+    "openGroup": "Open action group",
+    "closeGroup": "Close action group",
+    "backTop": "Back to top"
+  },
+  "splitter": {
+    "resize_gutter": "Resize panels"
+  },
+  "input_number": {
+    "increase": "Increase",
+    "decrease": "Decrease"
+  },
+  "slider": {
+    "label": "Slider",
+    "start_value": "Minimum value",
+    "end_value": "Maximum value"
+  },
+  "rate": {
+    "label": "Rating",
+    "star": "{count} star",
+    "stars": "{count} stars"
+  },
+  "actionDock": {
+    "overflow": {
+      "label": "More actions"
+    },
+    "topLabel": "Top actions",
+    "bottomLabel": "Bottom actions"
+  },
+  "stepper": {
+    "navigation": "Progress steps"
+  },
+  "tree": {
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "select_node": "Select {title}"
+  },
+  "descriptions": {
+    "region_label": "Description list"
   },
   "chart": {
     "loading": "Loading chart..."
@@ -273,5 +405,11 @@
       "empty_title": "No visualizations configured",
       "empty_description": "Add one or more views to render this surface."
     }
+  },
+  "checkbox": {
+    "group": "Checkbox group"
+  },
+  "radio": {
+    "group": "Radio group"
   }
 }

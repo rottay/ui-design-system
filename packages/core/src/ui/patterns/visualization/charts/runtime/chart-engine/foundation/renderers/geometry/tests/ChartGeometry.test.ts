@@ -231,6 +231,33 @@ describe('React-owned chart geometry', () => {
     expect(geometry.plot.y + geometry.plot.height).toBeLessThanOrEqual(geometry.height);
   });
 
+  it('keeps every categorical label by default while preserving compact tick limits', () => {
+    const data = Array.from({ length: 6 }, (_, index) => ({
+      id: `candidate-${index}`,
+      category: `Candidate ${index}`,
+      value: 70 + index,
+    }));
+
+    const fullGeometry = buildSvgBarGeometry({
+      width: 640,
+      height: 360,
+      orientation: 'horizontal',
+      data,
+    });
+    const compactGeometry = buildSvgBarGeometry({
+      width: 320,
+      height: 220,
+      orientation: 'horizontal',
+      maxTicks: 3,
+      data,
+    });
+
+    expect(fullGeometry.categoryTicks.map((tick) => tick.label)).toEqual(
+      data.map((datum) => datum.category),
+    );
+    expect(compactGeometry.categoryTicks).toHaveLength(3);
+  });
+
   it('returns distinct monotonic provider-resolved heatmap fills', () => {
     const geometry = buildSvgHeatMapGeometry({
       width: 420,

@@ -30,7 +30,7 @@ Transfer component for moving items between two lists.
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | Custom (skin) | Vanilla CSS |
 | Search | Built-in | Custom | Custom |
 | Pagination | Built-in | Manual | Custom |
 | Custom Render | Full | Limited | Full |
@@ -256,7 +256,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Transfer rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Transfer rendered by Classic (Ant Design), Modern (custom, skin-painted), and Rustic (Vanilla CSS).',
       },
     },
   },

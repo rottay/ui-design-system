@@ -33,7 +33,7 @@ export {
 const AnchorBase = createEngineComponent<AnchorProps>('Anchor', {
   /** Ant Design implementation - full-featured with animations */
   classic: () => import('./engines/classic').then(m => ({ default: m.Anchor })),
-  /** DaisyUI/Tailwind implementation - utility-first styling */
+  /** Token-driven implementation - skin-owned paint, rhythm and structure */
   modern: () => import('./engines/modern').then(m => ({ default: m.Anchor })),
   /** Vanilla HTML/CSS implementation - zero dependencies */
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Anchor })),
@@ -43,7 +43,7 @@ const AnchorBase = createEngineComponent<AnchorProps>('Anchor', {
 const Link = createEngineComponent<AnchorLinkProps>('Anchor.Link', {
   /** Ant Design link implementation */
   classic: () => import('./engines/classic').then(m => ({ default: m.Link })),
-  /** DaisyUI/Tailwind link implementation */
+  /** Token-driven link implementation - logical accent rail, skin-owned rhythm */
   modern: () => import('./engines/modern').then(m => ({ default: m.Link })),
   /** Vanilla HTML/CSS link implementation */
   rustic: () => import('./engines/rustic').then(m => ({ default: m.Link })),

@@ -1,0 +1,1248 @@
+{
+  "_comment": "Decrease-only baseline for the independently reported DS-Q006 partial application-boundary categories. New or growing signatures fail; removals stay visible as tightening opportunities.",
+  "definition": {
+    "engineClasses": ".rottay-*",
+    "dsBem": "DS-shipped .ds-x__ blocks only",
+    "dataPart": "excluded (public hook)"
+  },
+  "categoryDefinitions": {
+    "native-reconstruction": "Native button/input/select/textarea markup anywhere in production application TSX/JSX.",
+    "raw-shared-chrome-literals": "Raw color, radius, duration, font-family or shadow literals only in shared app chrome roots: src/styles, src/ui, src/vertical/surface and src/features/_shared.",
+    "undocumented-ds-writes": "Application declarations in the reserved --ds-* namespace that are not shipped by production DS CSS or compiler output.",
+    "supplier-imports": "Direct imports/requires of visual or behavior suppliers instead of public Rottay contracts.",
+    "tenant-style-branch": "CSS selectors that bind visual behavior to a concrete tenant identity.",
+    "i18n-bypass": "Declared but not yet implemented; this file does not claim i18n-boundary coverage."
+  },
+  "reaches": {
+    "app-bithire/src/app/(dashboard)/scoring/skill-gaps/styles/index.css :: .rottay-stack": {
+      "count": 1,
+      "owner": "app/(dashboard)/scoring/skill-gaps",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/clients/surface/screens/record/listing/wiring/styles/index.css :: .rottay-stack": {
+      "count": 2,
+      "owner": "features/clients/surface/screens/record/listing/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/home/surface/screens/workflows/chat/wiring/styles/index.css :: .rottay-button": {
+      "count": 1,
+      "owner": "features/home/surface/screens/workflows/chat/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/interviews/surface/screens/workflows/ai/wiring/styles/index.css :: .rottay-stack": {
+      "count": 1,
+      "owner": "features/interviews/surface/screens/workflows/ai/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/jobs/surface/screens/record/create/wiring/styles/index.css :: .rottay-flex": {
+      "count": 4,
+      "owner": "features/jobs/surface/screens/record/create/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/jobs/surface/screens/record/create/wiring/styles/index.css :: .rottay-stack": {
+      "count": 8,
+      "owner": "features/jobs/surface/screens/record/create/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/scoring/surface/screens/workflows/calibration/listing/wiring/styles/index.css :: .rottay-stack": {
+      "count": 1,
+      "owner": "features/scoring/surface/screens/workflows/calibration/listing/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/scoring/surface/screens/workflows/surveys/listing/wiring/styles/index.css :: .rottay-box": {
+      "count": 6,
+      "owner": "features/scoring/surface/screens/workflows/surveys/listing/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/scoring/surface/screens/workflows/surveys/listing/wiring/styles/index.css :: .rottay-stack": {
+      "count": 3,
+      "owner": "features/scoring/surface/screens/workflows/surveys/listing/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/sourcing/surface/screens/workflows/referrals/listing/wiring/styles/index.css :: .rottay-box": {
+      "count": 6,
+      "owner": "features/sourcing/surface/screens/workflows/referrals/listing/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/features/sourcing/surface/screens/workflows/referrals/listing/wiring/styles/index.css :: .rottay-stack": {
+      "count": 3,
+      "owner": "features/sourcing/surface/screens/workflows/referrals/listing/wiring",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/cards-surfaces.css :: .ds-empty-state__": {
+      "count": 2,
+      "owner": "styles/cards-surfaces.css :: .ds-empty-state__",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/cards-surfaces.css :: .ds-rich-card__": {
+      "count": 9,
+      "owner": "styles/cards-surfaces.css :: .ds-rich-card__",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-box": {
+      "count": 3,
+      "owner": "styles/detail-chrome.css :: .rottay-box",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-button--danger": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-button--danger",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-button--default": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-button--default",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-button--ghost": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-button--ghost",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-button--outline": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-button--outline",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-button--secondary": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-button--secondary",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-flex": {
+      "count": 13,
+      "owner": "styles/detail-chrome.css :: .rottay-flex",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-grid": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-grid",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-input": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-input",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-select": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-select",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-stack": {
+      "count": 4,
+      "owner": "styles/detail-chrome.css :: .rottay-stack",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-chrome.css :: .rottay-text": {
+      "count": 1,
+      "owner": "styles/detail-chrome.css :: .rottay-text",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/interaction-animations.css :: .ds-rich-card__": {
+      "count": 2,
+      "owner": "styles/interaction-animations.css :: .ds-rich-card__",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/motion-utilities.css :: .ds-workspace-frame__": {
+      "count": 1,
+      "owner": "styles/motion-utilities.css :: .ds-workspace-frame__",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/motion-utilities.css :: .ds-workspace-grid__": {
+      "count": 1,
+      "owner": "styles/motion-utilities.css :: .ds-workspace-grid__",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/surfaces.css :: .ds-workspace-frame__": {
+      "count": 3,
+      "owner": "styles/surfaces.css :: .ds-workspace-frame__",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/surfaces.css :: .ds-workspace-grid__": {
+      "count": 3,
+      "owner": "styles/surfaces.css :: .ds-workspace-grid__",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/details/surface-shell/mobile-tray/styles.css :: .rottay-action-dock": {
+      "count": 3,
+      "owner": "ui/details/surface-shell/mobile-tray",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/forms/form-layout/control-width-styles/styles/index.css :: .rottay-flex": {
+      "count": 1,
+      "owner": "ui/forms/form-layout/control-width-styles",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/forms/form-layout/control-width-styles/styles/index.css :: .rottay-grid": {
+      "count": 1,
+      "owner": "ui/forms/form-layout/control-width-styles",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/forms/form-layout/control-width-styles/styles/index.css :: .rottay-input": {
+      "count": 1,
+      "owner": "ui/forms/form-layout/control-width-styles",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/forms/form-layout/control-width-styles/styles/index.css :: .rottay-select": {
+      "count": 1,
+      "owner": "ui/forms/form-layout/control-width-styles",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/forms/form-layout/control-width-styles/styles/index.css :: .rottay-stack": {
+      "count": 1,
+      "owner": "ui/forms/form-layout/control-width-styles",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/forms/form-layout/control-width-styles/styles/index.css :: .rottay-textarea": {
+      "count": 1,
+      "owner": "ui/forms/form-layout/control-width-styles",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/forms/form-layout/control-width-styles/styles/index.css :: .rottay-textarea-wrapper": {
+      "count": 1,
+      "owner": "ui/forms/form-layout/control-width-styles",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/surfaces/styles/index.css :: .ds-workspace-frame__": {
+      "count": 1,
+      "owner": "ui/surfaces",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: .rottay-box": {
+      "count": 1,
+      "owner": "ui/tables/collection/preview/render",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: .rottay-flex": {
+      "count": 14,
+      "owner": "ui/tables/collection/preview/render",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: .rottay-stack": {
+      "count": 47,
+      "owner": "ui/tables/collection/preview/render",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/tables/collection/workspace/view/styles/index.css :: .rottay-box": {
+      "count": 1,
+      "owner": "ui/tables/collection/workspace/view",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/tables/collection/workspace/view/styles/index.css :: .rottay-flex": {
+      "count": 1,
+      "owner": "ui/tables/collection/workspace/view",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/ui/tables/collection/workspace/view/styles/index.css :: .rottay-stack": {
+      "count": 1,
+      "owner": "ui/tables/collection/workspace/view",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/vertical/surface/shell/app-layout/styles/index.css :: .rottay-app-shell": {
+      "count": 2,
+      "owner": "vertical/surface/shell/app-layout",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css :: .rottay-app-shell": {
+      "count": 1,
+      "owner": "vertical/surface/shell/sidebar",
+      "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    }
+  },
+  "categories": {
+    "native-reconstruction": {
+      "app-bithire/src/app/(auth)/callback/page.tsx :: <button": {
+        "count": 1,
+        "owner": "app-bithire/src/app/(auth)/callback/page.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/applications/surface/screens/record/create/view/sections/import-cv/index.tsx :: <input": {
+        "count": 1,
+        "owner": "app-bithire/src/features/applications/surface/screens/record/create/view/sections/import-cv/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/candidates/surface/screens/record/create/index.tsx :: <input": {
+        "count": 1,
+        "owner": "app-bithire/src/features/candidates/surface/screens/record/create/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/index.tsx :: <input": {
+        "count": 2,
+        "owner": "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/clients/surface/components/quick-create/index.tsx :: <input": {
+        "count": 2,
+        "owner": "app-bithire/src/features/clients/surface/components/quick-create/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/portals/surface/components/action-button/index.tsx :: <button": {
+        "count": 1,
+        "owner": "app-bithire/src/features/portals/surface/components/action-button/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/portals/surface/components/candidate/apply-resume-intake/index.tsx :: <input": {
+        "count": 1,
+        "owner": "app-bithire/src/features/portals/surface/components/candidate/apply-resume-intake/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/portals/surface/components/candidate/replace-cv/index.tsx :: <input": {
+        "count": 1,
+        "owner": "app-bithire/src/features/portals/surface/components/candidate/replace-cv/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/scoring/surface/screens/workflows/rubrics/create/view/sections/review/submit-section/index.tsx :: <input": {
+        "count": 1,
+        "owner": "app-bithire/src/features/scoring/surface/screens/workflows/rubrics/create/view/sections/review/submit-section/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/features/settings/surface/screens/integrations/ats-integrations/candidate-schedule/index.tsx :: <button": {
+        "count": 2,
+        "owner": "app-bithire/src/features/settings/surface/screens/integrations/ats-integrations/candidate-schedule/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/ui/forms/ai/create-page-shell/index.tsx :: <button": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/ai/create-page-shell/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/ui/forms/create/mode-toggle/index.tsx :: <button": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/create/mode-toggle/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/ui/forms/create/page-shell/components/index.tsx :: <button": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/create/page-shell/components/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      },
+      "app-bithire/src/ui/tables/inline-editor/index.tsx :: <button": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/inline-editor/index.tsx",
+        "reason": "Pre-OLA-5 native shared-control reconstruction; migrate to the canonical DS primitive or record a reviewed native-only exception."
+      }
+    },
+    "raw-shared-chrome-literals": {
+      "app-bithire/src/features/_shared/surface/components/filter-summary-pills/styles/index.css :: font-family-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/features/_shared/surface/components/filter-summary-pills/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/components/filter-summary-pills/styles/index.css :: radius-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/features/_shared/surface/components/filter-summary-pills/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/components/filter-summary-pills/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/features/_shared/surface/components/filter-summary-pills/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/components/quick-create/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/features/_shared/surface/components/quick-create/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/components/quick-create/styles/index.css :: shadow-literal": {
+        "count": 5,
+        "owner": "app-bithire/src/features/_shared/surface/components/quick-create/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/components/state-panel/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/features/_shared/surface/components/state-panel/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/components/table-cell-renderers/styles/index.css :: radius-literal": {
+        "count": 8,
+        "owner": "app-bithire/src/features/_shared/surface/components/table-cell-renderers/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/components/table-cell-renderers/styles/index.css :: shadow-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/features/_shared/surface/components/table-cell-renderers/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/screens/workflows/action-preview/wiring/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/features/_shared/surface/screens/workflows/action-preview/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/screens/workflows/entity-related-pivots/wiring/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/features/_shared/surface/screens/workflows/entity-related-pivots/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/screens/workflows/entity-related-pivots/wiring/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/features/_shared/surface/screens/workflows/entity-related-pivots/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/screens/workflows/entity-timeline/wiring/styles/index.css :: font-family-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/features/_shared/surface/screens/workflows/entity-timeline/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/screens/workflows/entity-timeline/wiring/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/features/_shared/surface/screens/workflows/entity-timeline/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/features/_shared/surface/screens/workflows/follow-up-draft-preview/wiring/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/features/_shared/surface/screens/workflows/follow-up-draft-preview/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/cards-surfaces.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/styles/cards-surfaces.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/cards-surfaces.css :: raw-duration": {
+        "count": 13,
+        "owner": "app-bithire/src/styles/cards-surfaces.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/cards-surfaces.css :: shadow-literal": {
+        "count": 16,
+        "owner": "app-bithire/src/styles/cards-surfaces.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/detail-chrome.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/detail-chrome.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/detail-chrome.css :: shadow-literal": {
+        "count": 31,
+        "owner": "app-bithire/src/styles/detail-chrome.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/forms.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/forms.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/forms.css :: raw-duration": {
+        "count": 6,
+        "owner": "app-bithire/src/styles/forms.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/forms.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/styles/forms.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/foundation.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/foundation.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/insight-surfaces.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/insight-surfaces.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/insight-surfaces.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/insight-surfaces.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/interaction-animations.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/interaction-animations.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/interaction-animations.css :: raw-duration": {
+        "count": 23,
+        "owner": "app-bithire/src/styles/interaction-animations.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/motion-utilities.css :: raw-duration": {
+        "count": 7,
+        "owner": "app-bithire/src/styles/motion-utilities.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/surfaces.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/styles/surfaces.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/surfaces.css :: shadow-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/styles/surfaces.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/tab-transitions.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/tab-transitions.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/tables-collections.css :: radius-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/styles/tables-collections.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/tables-collections.css :: raw-duration": {
+        "count": 10,
+        "owner": "app-bithire/src/styles/tables-collections.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/tables-collections.css :: shadow-literal": {
+        "count": 10,
+        "owner": "app-bithire/src/styles/tables-collections.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/career-coach/candidate-portal/styles/index.css :: color:rgba": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/career-coach/candidate-portal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/career-coach/candidate-portal/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/career-coach/candidate-portal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/career-coach/candidate-portal/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/career-coach/candidate-portal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/charts/styles/index.css :: radius-literal": {
+        "count": 17,
+        "owner": "app-bithire/src/ui/charts/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/charts/styles/index.css :: raw-duration": {
+        "count": 8,
+        "owner": "app-bithire/src/ui/charts/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/charts/styles/index.css :: shadow-literal": {
+        "count": 8,
+        "owner": "app-bithire/src/ui/charts/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/field-coverage-panel/styles/index.css :: radius-literal": {
+        "count": 7,
+        "owner": "app-bithire/src/ui/details/field-coverage-panel/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/field-coverage-panel/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/field-coverage-panel/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/field-coverage-panel/styles/index.css :: shadow-literal": {
+        "count": 5,
+        "owner": "app-bithire/src/ui/details/field-coverage-panel/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/inline-editor/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/inline-editor/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/smart-controls/styles/index.css :: radius-literal": {
+        "count": 11,
+        "owner": "app-bithire/src/ui/details/smart-controls/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/smart-controls/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/smart-controls/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css :: font-family-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css :: shadow-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/details/surface-shell/details-mode/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/header/styles/index.css :: font-family-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/hero-metric/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/details/surface-shell/hero-metric/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/hero-metric/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/hero-metric/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/rail/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/rail/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css :: color:rgb": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/related-card/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/section-surface/styles/index.css :: color:rgba": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/section-surface/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/section-surface/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/section-surface/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/section-surface/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/section-surface/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/status-pill/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/details/surface-shell/status-pill/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/details/surface-shell/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/tabs-overflow/styles/index.css :: radius-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/details/surface-shell/tabs-overflow/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/tabs-overflow/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/details/surface-shell/tabs-overflow/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/tabs-overflow/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/details/surface-shell/tabs-overflow/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/details/surface-shell/timeline/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/details/surface-shell/timeline/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/feedback/completeness-bar/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/feedback/completeness-bar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/feedback/completeness-bar/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/feedback/completeness-bar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/feedback/data-state/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/feedback/data-state/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/feedback/empty-state/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/feedback/empty-state/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/feedback/skeleton-loader/styles/index.css :: radius-literal": {
+        "count": 6,
+        "owner": "app-bithire/src/ui/feedback/skeleton-loader/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/feedback/skeleton-loader/styles/index.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/feedback/skeleton-loader/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/ai/create-flow-header/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/ai/create-flow-header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/ai/create-page-shell/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/ai/create-page-shell/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/ai/create-page-shell/styles/index.css :: shadow-literal": {
+        "count": 6,
+        "owner": "app-bithire/src/ui/forms/ai/create-page-shell/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/ai/draft-header-action/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/ai/draft-header-action/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/ai/draft-header-action/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/ai/draft-header-action/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/ai/suggestion-button/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/ai/suggestion-button/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/ai/suggestion-button/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/ai/suggestion-button/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/add-item-modal/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/create/add-item-modal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/flow-modal/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/create/flow-modal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/mode-toggle/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/create/mode-toggle/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/mode-toggle/styles/index.css :: shadow-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/forms/create/mode-toggle/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/page-shell/components/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/create/page-shell/components/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/page-shell/components/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/create/page-shell/components/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/page-shell/components/styles/index.css :: shadow-literal": {
+        "count": 5,
+        "owner": "app-bithire/src/ui/forms/create/page-shell/components/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/create/page-shell/styles/anatomy.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/create/page-shell/styles/anatomy.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/draft-recovery-banner/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/draft-recovery-banner/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/form-layout/accordion-section/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/forms/form-layout/accordion-section/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/form-layout/status-bar/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/form-layout/status-bar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/form-layout/status-bar/styles/index.css :: raw-duration": {
+        "count": 4,
+        "owner": "app-bithire/src/ui/forms/form-layout/status-bar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/template-modal/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/template-modal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/template-modal/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/template-modal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/forms/workflow-form-layout/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/forms/workflow-form-layout/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/layout-parts/ambient-backdrop/styles.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/layout-parts/ambient-backdrop/styles.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/navigation/return-navigation/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/navigation/return-navigation/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/navigation/return-navigation/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/navigation/return-navigation/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/primitives/animated-grid-background/styles/index.css :: raw-duration": {
+        "count": 4,
+        "owner": "app-bithire/src/ui/primitives/animated-grid-background/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/primitives/animated-grid-background/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/primitives/animated-grid-background/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/primitives/check-item/styles/index.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/primitives/check-item/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/primitives/focus-hideable/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/primitives/focus-hideable/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/search/global-search/styles/index.css :: font-family-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/search/global-search/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/search/global-search/styles/index.css :: radius-literal": {
+        "count": 8,
+        "owner": "app-bithire/src/ui/search/global-search/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/search/global-search/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/search/global-search/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/signals/signal-card/styles/index.css :: color:rgb": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/signals/signal-card/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/action-cluster/styles/index.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/action-cluster/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/action-cluster/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/action-cluster/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/action-cluster/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/action-cluster/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/anatomy.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/anatomy.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: color:rgba": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: raw-duration": {
+        "count": 14,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: shadow-literal": {
+        "count": 37,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/preview/styles/index.css :: radius-literal": {
+        "count": 5,
+        "owner": "app-bithire/src/ui/tables/collection/preview/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/workspace/insight-deck/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/collection/workspace/insight-deck/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/workspace/insight-deck/styles/index.css :: shadow-literal": {
+        "count": 7,
+        "owner": "app-bithire/src/ui/tables/collection/workspace/insight-deck/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/workspace/view/styles/index.css :: radius-literal": {
+        "count": 4,
+        "owner": "app-bithire/src/ui/tables/collection/workspace/view/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/collection/workspace/view/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/collection/workspace/view/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/data-table/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/data-table/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/data-table/styles/index.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/tables/data-table/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/data-table/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/data-table/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/expanded-panel-layout/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/expanded-panel-layout/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/inline-editor/styles/index.css :: radius-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/ui/tables/inline-editor/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/inline-editor/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/inline-editor/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/inline-editor/styles/index.css :: shadow-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/inline-editor/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/listing/signal-card/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/listing/signal-card/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/listing/signal-card/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/listing/signal-card/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/row-identity-cell/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/row-identity-cell/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/tables/saved-views/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/saved-views/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/upgrade/feature-lock/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/upgrade/feature-lock/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/upgrade/modal/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/upgrade/modal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/upgrade/plan-badge/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/upgrade/plan-badge/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/upgrade/quota/exceeded/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/upgrade/quota/exceeded/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/upgrade/quota/indicator/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/upgrade/quota/indicator/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/ui/upgrade/quota/warning/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/upgrade/quota/warning/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/branding/brand-mark/styles/index.css :: color:#fff": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/branding/brand-mark/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/branding/brand-mark/styles/index.css :: radius-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/branding/brand-mark/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css :: color:#f5f7fb": {
+        "count": 2,
+        "owner": "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css :: color:#f7f9fc": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css :: color:#fff": {
+        "count": 9,
+        "owner": "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css :: raw-duration": {
+        "count": 25,
+        "owner": "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css :: shadow-literal": {
+        "count": 11,
+        "owner": "app-bithire/src/vertical/surface/public/landing/product-story/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/app-layout/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/app-layout/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/breadcrumbs/bar/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/breadcrumbs/bar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/breadcrumbs/bar/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/breadcrumbs/bar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/breadcrumbs/navigation/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/breadcrumbs/navigation/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/activity/cards/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/activity/cards/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/activity/compact/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/activity/compact/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/activity/ticker/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/activity/ticker/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/activity/timeline/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/activity/timeline/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/metrics/cards/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/metrics/cards/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/metrics/chart/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/metrics/chart/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/metrics/minimal/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/metrics/minimal/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/metrics/rows/styles/index.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/metrics/rows/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/styles/index.css :: radius-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/command-header/styles/index.css :: shadow-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/command-header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/form-header/styles/index.css :: shadow-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/form-header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/header/styles/index.css :: radius-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/header/styles/index.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/header/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/main-content/styles/index.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/vertical/surface/shell/main-content/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css :: radius-literal": {
+        "count": 2,
+        "owner": "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/role-switcher/styles/index.css :: font-family-literal": {
+        "count": 1,
+        "owner": "app-bithire/src/vertical/surface/shell/role-switcher/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/role-switcher/styles/index.css :: raw-duration": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/role-switcher/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css :: font-family-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css :: radius-literal": {
+        "count": 7,
+        "owner": "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css :: raw-duration": {
+        "count": 9,
+        "owner": "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css :: shadow-literal": {
+        "count": 3,
+        "owner": "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css",
+        "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      }
+    },
+    "undocumented-ds-writes": {
+      "app-bithire/src/features/candidates/surface/screens/record/detail/wiring/styles/index.css :: --ds-button-secondary-text": {
+        "count": 1,
+        "owner": "app-bithire/src/features/candidates/surface/screens/record/detail/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css :: --ds-button-ghost-text": {
+        "count": 1,
+        "owner": "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css :: --ds-button-secondary-text": {
+        "count": 1,
+        "owner": "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/features/candidates/surface/screens/workflows/compare/wiring/styles/index.css :: --ds-button-secondary-text": {
+        "count": 1,
+        "owner": "app-bithire/src/features/candidates/surface/screens/workflows/compare/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/features/candidates/surface/screens/workflows/matching/wiring/styles/index.css :: --ds-button-secondary-text": {
+        "count": 1,
+        "owner": "app-bithire/src/features/candidates/surface/screens/workflows/matching/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/features/candidates/surface/screens/workflows/three-sixty/wiring/styles/index.css :: --ds-button-secondary-text": {
+        "count": 1,
+        "owner": "app-bithire/src/features/candidates/surface/screens/workflows/three-sixty/wiring/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/styles/foundation.css :: --ds-button-primary-text": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/foundation.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/styles/foundation.css :: --ds-button-secondary-text": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/foundation.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-control-width": {
+        "count": 1,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-flex": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-min-width": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-wrap": {
+        "count": 2,
+        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      },
+      "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css :: --ds-sheet-max-height": {
+        "count": 2,
+        "owner": "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css",
+        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
+      }
+    },
+    "supplier-imports": {},
+    "tenant-style-branch": {}
+  }
+}

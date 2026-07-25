@@ -140,6 +140,8 @@ describe('CK-I foundation anatomy (I-1)', () => {
         />
         <SurfaceTabbedLabel view={{ label: 'Tab label', badge: <span>3</span> }} />
         <SurfaceSectionCard
+          eyebrow="Section context"
+          icon={<span data-testid="section-icon">I</span>}
           title="Section title"
           description="Section description"
           actions={<button type="button">Section action</button>}
@@ -183,6 +185,12 @@ describe('CK-I foundation anatomy (I-1)', () => {
     expect(q(container, '[data-surface-action="disabled"]')).toHaveLength(1);
     expect(q(container, '.ds-section-card__body')).toHaveLength(1);
     expect(q(container, '[data-part="header"][data-has-actions="true"]')).toHaveLength(1);
+    expect(q(container, '[data-part="header-icon"] [data-testid="section-icon"]')).toHaveLength(1);
+    expect(
+      q(container, '.ds-section-card__eyebrow[data-part="root"]'),
+    ).toHaveLength(1);
+    expect(q(container, '[data-part="header-actions"]')).toHaveLength(1);
+    expect(q(container, '[data-part="section-content"]')).toHaveLength(1);
     expect(q(container, '.ds-loading-state__skeleton')).toHaveLength(1);
     expect(q(container, '.ds-error-state__alert')).toHaveLength(1);
     expect(q(container, '.ds-error-state__retry')).toHaveLength(1);
@@ -243,7 +251,7 @@ describe('CK-I layout and workspace anatomy (I-3)', () => {
     ]);
     expect(q(container, '.ds-collection-shell__overlay[data-part="overlay"]')).toHaveLength(1);
     expect(q(container, '.ds-collection-shell__content[data-part="content"]')).toHaveLength(1);
-    expect(q(container, '.ds-header__muted-text[data-part="muted-text"]')).toHaveLength(1);
+    expect(q(container, '.ds-header__muted-text[data-part="root"]')).toHaveLength(1);
     expect(q(container, '.ds-sidebar__panel')).toHaveLength(1);
     expect(q(container, '.ds-sidebar__toggle[data-collapsed="true"]')).toHaveLength(1);
     expect(q(container, '.ds-sidebar__navigation[data-part="navigation"]')).toHaveLength(1);
@@ -603,29 +611,29 @@ describe('CK-I admin/data thin-tail anatomy (I-4)', () => {
     ]);
 
     for (const selector of [
-      '.ds-audit__muted-text[data-part="muted-text"]',
-      '.ds-billing__muted-text[data-part="muted-text"]',
+      '.ds-audit__muted-text[data-part="root"]',
+      '.ds-billing__muted-text[data-part="root"]',
       '.ds-billing__divider',
       '.ds-import-export__dropzone',
-      '.ds-import-export__muted-text[data-part="muted-text"]',
+      '.ds-import-export__muted-text[data-part="root"]',
       '.ds-integration__divider',
-      '.ds-integration__muted-text[data-part="muted-text"]',
+      '.ds-integration__muted-text[data-part="root"]',
       '.ds-profile__section-card',
-      '.ds-profile__muted-text[data-part="muted-text"]',
-      '.ds-settings__muted-text[data-part="muted-text"]',
+      '.ds-profile__muted-text[data-part="root"]',
+      '.ds-settings__muted-text[data-part="root"]',
       '.ds-team__divider',
-      '.ds-team__muted-text[data-part="muted-text"]',
-      '.ds-compare__section-heading[data-part="section-heading"]',
-      '.ds-compare__muted-text[data-part="muted-text"]',
-      '.ds-dashboard__muted-text[data-part="muted-text"]',
-      '.ds-list__card-label[data-part="card-label"]',
-      '.ds-list__card-value[data-part="card-value"]',
+      '.ds-team__muted-text[data-part="root"]',
+      '.ds-compare__section-heading',
+      '.ds-compare__muted-text[data-part="root"]',
+      '.ds-dashboard__muted-text[data-part="root"]',
+      '.ds-list__card-label[data-part="root"]',
+      '.ds-list__card-value[data-part="root"]',
       '.ds-report__template-card--selected',
-      '.ds-report__muted-text[data-part="muted-text"]',
+      '.ds-report__muted-text[data-part="root"]',
       '.ds-search__result-card--selected',
-      '.ds-search__result-title[data-part="result-title"]',
-      '.ds-search__result-meta[data-part="result-meta"]',
-      '.ds-visualization__muted-text[data-part="muted-text"]',
+      '.ds-search__result-title[data-part="root"]',
+      '.ds-search__result-meta[data-part="root"]',
+      '.ds-visualization__muted-text[data-part="root"]',
     ]) {
       expect(container.querySelector(selector), selector).not.toBeNull();
     }
@@ -780,32 +788,32 @@ describe('CK-I experience/operations thin-tail anatomy (I-5)', () => {
     await waitForSelectors(container, [
       '.ds-auth__form-panel',
       '.ds-auth__hero-panel',
-      '.ds-auth__muted-text[data-part="muted-text"]',
+      '.ds-auth__muted-text[data-part="root"]',
       '.ds-chat__transcript[data-part="transcript"]',
       '.ds-chat__typing[data-part="typing-indicator"]',
       '.ds-chat__composer-input',
       '.ds-chat__send-button',
       '.ds-chat__sidebar',
-      '.ds-editor__muted-text[data-part="muted-text"]',
+      '.ds-editor__muted-text[data-part="root"]',
       '.ds-editor__input',
       '.ds-editor__preview',
       '.ds-marketing__hero[data-part="hero"]',
-      '.ds-marketing__muted-text[data-part="muted-text"]',
-      '.ds-marketing__description[data-part="description"]',
+      '.ds-marketing__muted-text[data-part="root"]',
+      '.ds-marketing__description[data-part="root"]',
       '.ds-media__item[data-part="media-item"][data-selected="true"]',
       '.ds-media__item[data-part="media-item"][data-selected="false"]',
       '.ds-media__card',
-      '.ds-media__muted-text[data-part="muted-text"]',
+      '.ds-media__muted-text[data-part="root"]',
       '.ds-notification__list[data-part="notification-list"]',
       '.ds-notification__item--unread',
       '.ds-notification__item--read',
       '.ds-notification__icon[data-part="icon"]',
       '.ds-notification__item-action[data-part="item-action"]',
-      '.ds-notification__destructive-text[data-part="destructive-text"]',
+      '.ds-notification__destructive-text[data-part="root"]',
       '.ds-notification__preferences[data-part="preferences"]',
-      '.ds-pricing__muted-text[data-part="muted-text"]',
+      '.ds-pricing__muted-text[data-part="root"]',
       '.ds-activity__pagination[data-part="pagination"]',
-      '.ds-surface.ds-activity.ds-activity__pagination .ds-activity__muted-text[data-part="muted-text"]',
+      '.ds-surface.ds-activity.ds-activity__pagination .ds-activity__muted-text[data-part="root"]',
       '.ds-kanban__filters',
     ]);
   });

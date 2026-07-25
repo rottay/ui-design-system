@@ -1,72 +1,318 @@
 /**
- * Modern Form skin (WO-SKIN-02 checkpoint A, fields batch).
- *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements; unlayered outranks
- * preflight and still yields to a caller's inline `style` (the error-list keeps
- * its caller `...style` spread, which still wins).
- *
- * SCOPE: the field-level parts are scoped on the FORM ITEM's own class
- * `.ds-form-item.ds-form-item--modern` (a FormItem can render outside a `<form>`).
- * `feedback-icon` carries `data-status` ('success'|'error'|'warning'|'validating'),
- * added for this migration; `label-text` is the label's inner text span (a
- * `data-part` added for this migration); `help-text` carries `data-error`. The
- * error list is a separate component with its own `.ds-form-error-list--modern`
- * class (added so this skin can reach it without a form ancestor).
- *
- * The two per-mount `<style>` keyframes are moved here renamed
- * `ds-form-modern-*` (engine-namespaced: the rustic Form defines a
- * `feedback-in` with different content, so a bare `ds-form-feedback-in` would
- * collide across the two globally-imported skins). The inline `animation`
- * references the new names.
- *
- * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
- * unlayered at (0,3,0) or higher.
+ * Modern Form skin.
+ * Self-contained form composition with framed fields, explicit messages,
+ * semantic feedback icon wells and token-controlled interaction depth.
  */
+
+.ds-form.ds-form--modern[data-part='root'] {
+  width: 100%;
+  color: var(--ds-color-text-primary);
+  container-type: inline-size;
+  container-name: ds-form;
+}
+
+.ds-form.ds-form--modern[data-part='root'][data-layout='vertical'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-form-gap, var(--ds-spacing-4, 16px));
+}
+
+.ds-form.ds-form--modern[data-part='root'][data-layout='horizontal'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-form-gap, var(--ds-spacing-4, 16px));
+}
+
+.ds-form.ds-form--modern[data-part='root'][data-layout='inline'] {
+  display: flex;
+  align-items: flex-end;
+  flex-flow: row wrap;
+  gap: var(--ds-form-gap, var(--ds-spacing-3, 12px));
+}
+
+.ds-form.ds-form--modern[data-part='root'][data-disabled='true'] {
+  opacity: var(--ds-disabled-opacity, 0.58);
+}
+
+.ds-form-item.ds-form-item--modern[data-part='item'] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  inline-size: 100%;
+  gap: var(--ds-form-item-gap, var(--ds-spacing-2, 8px));
+  padding: var(--ds-form-item-padding, var(--ds-spacing-3, 12px));
+  border-radius: var(--ds-form-item-radius, var(--ds-radius-lg, 12px));
+  background: var(
+    --ds-form-item-bg,
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, var(--ds-color-primary) 3%), var(--ds-surface-card))
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent);
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Layout split (owned here since K2-V; previously inline, which silently
+   defeated the 620px container-query collapse below). */
+.ds-form-item.ds-form-item--modern[data-part='item'][data-layout='horizontal'] {
+  flex-direction: row;
+  align-items: center;
+}
+.ds-form-item.ds-form-item--modern[data-part='item'][data-layout='horizontal'] > [data-part='label'] {
+  inline-size: 25%;
+}
+.ds-form-item.ds-form-item--modern[data-part='item'][data-layout='horizontal'] > [data-part='field'] {
+  flex: 1;
+  inline-size: auto;
+}
+
+.ds-form-item.ds-form-item--modern[data-part='item'][data-part='item'] {
+  border: 1px solid var(--ds-form-item-border, var(--ds-color-border-subtle));
+}
+
+.ds-form-item.ds-form-item--modern[data-part='item']:hover {
+  border-color: var(--ds-form-item-border-hover, var(--ds-color-border-primary));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    var(--ds-form-item-shadow-hover, var(--ds-shadow-xs));
+}
+
+.ds-form-item.ds-form-item--modern[data-part='item']:focus-within {
+  border-color: var(--ds-form-item-border-focus, color-mix(in srgb, var(--ds-color-primary) 46%, var(--ds-color-border-primary)));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    var(--ds-form-item-shadow-focus, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
+  transform: translateY(-1px);
+}
+
+.ds-form-item.ds-form-item--modern[data-part='item'][data-validation='error'] {
+  border-color: color-mix(in srgb, var(--ds-color-error) 38%, var(--ds-color-border-subtle));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-card)), var(--ds-surface-card));
+}
+
+.ds-form-item.ds-form-item--modern[data-part='item'][data-validation='warning'] {
+  border-color: color-mix(in srgb, var(--ds-color-warning) 38%, var(--ds-color-border-subtle));
+}
+
+.ds-form-item.ds-form-item--modern[data-part='item'][data-validation='success'] {
+  border-color: color-mix(in srgb, var(--ds-color-success) 28%, var(--ds-color-border-subtle));
+}
+
+.ds-form-item.ds-form-item--modern [data-part='label'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 8px);
+  min-width: 0;
+  padding-block-end: var(--ds-form-label-gap, 4px);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='label-text'] {
+  min-width: 0;
+  color: var(--ds-form-label-color, var(--ds-color-text-primary));
+  font-family: var(--ds-form-label-font-family, var(--ds-font-family-heading, var(--ds-font-family-base)));
+  font-weight: var(--ds-form-label-font-weight, 500);
+  letter-spacing: var(--ds-form-label-letter-spacing, -0.01em);
+  line-height: 1.35;
+}
+
+/* Label size follows the form-level data-size channel. */
+.ds-form.ds-form--modern[data-size='sm'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
+  font-size: var(--ds-form-label-font-size-sm, 14px);
+}
+.ds-form.ds-form--modern[data-size='md'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
+  font-size: var(--ds-form-label-font-size-md, 16px);
+}
+.ds-form.ds-form--modern[data-size='lg'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
+  font-size: var(--ds-form-label-font-size-lg, 18px);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='required'] {
+  margin-inline-start: var(--ds-spacing-1, 4px);
+  color: var(--ds-color-error);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional'] {
+  margin-inline-start: auto;
+  padding: 2px 7px;
+  border-radius: var(--ds-radius-full);
+  color: var(--ds-color-text-muted);
+  background: var(--ds-surface-inset, var(--ds-surface-panel));
+  font-family: var(--ds-font-family-mono, var(--ds-font-family-base));
+  font-size: var(--ds-form-badge-font-size, 10px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.055em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional'][data-part='required-mark'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='tooltip-icon'] {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  inline-size: 16px;
+  block-size: 16px;
+  margin-inline-start: var(--ds-spacing-1, 4px);
+  border-radius: var(--ds-radius-full);
+  color: var(--ds-color-text-muted);
+  background: var(--ds-surface-inset, var(--ds-surface-panel));
+  font-size: var(--ds-form-tooltip-font-size, 11px);
+  font-weight: 600;
+  cursor: help;
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='tooltip-icon'][data-part='tooltip-icon'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:hover {
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
+  transform: translateY(-1px);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='field'] {
+  min-width: 0;
+  inline-size: 100%;
+}
+
+.ds-form-item.ds-form-item--modern [data-part='control-row'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  min-width: 0;
+}
+
+.ds-form-item.ds-form-item--modern [data-part='control'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'] {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, currentColor 8%, var(--ds-surface-card));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 58%, transparent);
+  animation: ds-form-modern-feedback-in var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-part='feedback-icon'] {
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
 
 .ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='success'] {
   color: var(--ds-color-success);
 }
+
 .ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='error'] {
   color: var(--ds-color-error);
 }
+
 .ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='warning'] {
   color: var(--ds-color-warning);
 }
+
 .ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='validating'] {
   color: var(--ds-color-primary);
+  animation:
+    ds-form-modern-feedback-in var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
+    ds-form-modern-spin 0.9s linear infinite;
 }
 
-.ds-form-item.ds-form-item--modern [data-part='label-text'] {
-  color: var(--ds-color-text-primary);
+.ds-form-item.ds-form-item--modern [data-part='message'] {
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+  padding-block-start: var(--ds-form-message-gap, 4px);
 }
-.ds-form-item.ds-form-item--modern [data-part='required-mark'] {
-  color: var(--ds-color-error);
+
+/* Error entrance animation, keyed on the help-text error state (previously an
+   inline `animation` conditional). */
+.ds-form-item.ds-form-item--modern [data-part='message']:has([data-part='help-text'][data-error='true']) {
+  animation: ds-form-modern-error-slide var(--ds-motion-normal) ease-out;
 }
-.ds-form-item.ds-form-item--modern [data-part='tooltip-icon'] {
-  border-radius: 50%;
-  background: var(--ds-color-alpha-black-100);
-  color: var(--ds-color-text-secondary);
+
+.ds-form-item.ds-form-item--modern [data-part='help-text'],
+.ds-form-item.ds-form-item--modern [data-part='extra-text'] {
+  color: var(--ds-form-supporting-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: 1.45;
 }
-.ds-form-item.ds-form-item--modern [data-part='help-text'] {
-  color: var(--ds-color-text-secondary);
-}
+
 .ds-form-item.ds-form-item--modern [data-part='help-text'][data-error='true'] {
   color: var(--ds-color-error);
-}
-.ds-form-item.ds-form-item--modern [data-part='extra-text'] {
-  color: var(--ds-color-text-secondary);
+  font-weight: var(--ds-font-weight-medium, 500);
 }
 
 .ds-form-error-list.ds-form-error-list--modern[data-part='error-list'] {
+  display: grid;
+  gap: var(--ds-spacing-2, 8px);
+  margin: 0;
+  padding: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-lg, 12px);
   color: var(--ds-color-error);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-error) 6%, var(--ds-surface-card)), var(--ds-surface-card));
+  list-style: none;
+}
+
+.ds-form-error-list.ds-form-error-list--modern[data-part='error-list'][data-part='error-list'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 28%, var(--ds-color-border-subtle));
+}
+
+.ds-form-error-list.ds-form-error-list--modern [data-part='error-item'] {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-spacing-2, 8px);
+  font-size: var(--ds-font-size-sm, 14px);
+  line-height: 1.45;
 }
 
 @keyframes ds-form-modern-error-slide {
   from { opacity: 0; transform: translateY(-4px); max-height: 0; }
-  to { opacity: 1; transform: translateY(0); max-height: 40px; }
+  to { opacity: 1; transform: translateY(0); max-height: 56px; }
 }
+
 @keyframes ds-form-modern-feedback-in {
-  from { opacity: 0; transform: scale(0.5); }
+  from { opacity: 0; transform: scale(0.72); }
   to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ds-form-modern-spin {
+  to { transform: rotate(360deg); }
+}
+
+@container ds-form (max-width: 620px) {
+  .ds-form-item.ds-form-item--modern[data-part='item'][data-layout='horizontal'] {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ds-form-item.ds-form-item--modern[data-part='item'][data-layout='horizontal'] > [data-part='label'] {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-form-item.ds-form-item--modern[data-part='item'],
+  .ds-form-item.ds-form-item--modern [data-part='feedback-icon'],
+  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon'],
+  .ds-form-item.ds-form-item--modern [data-part='message'] {
+    animation: none;
+    transition: none;
+  }
 }

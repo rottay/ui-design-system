@@ -237,6 +237,6 @@ describe('Toast integration', () => {
     expect(alert).toHaveTextContent('Needs review');
     expect(alert).toHaveTextContent('Check the generated summary.');
     expect(await screen.findByRole('button', { name: 'Resolve' })).toBeInTheDocument();
-    expect(alert.querySelector('.h-1')).toBeTruthy();
+    expect(alert.querySelector('[data-part="progress-bar"]')).toBeTruthy();
   });
 });

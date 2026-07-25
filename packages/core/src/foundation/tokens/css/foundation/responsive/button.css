@@ -1,252 +1,46 @@
 /**
- * Button Responsive Tokens - Rottay Design System
+ * Button responsive policy.
  *
- * Responsive overrides for Button component tokens.
- * Adjusts sizes, spacing, and interactions for different screen sizes.
+ * Responsive CSS may tune ergonomics and composition, but it must never
+ * rewrite tenant-authored palette, radius, typography or elevation. Explicit
+ * responsive `size` props are resolved by the component itself; this file
+ * provides only environment-level accessibility policy and group layout.
  */
 
-/* ========================================================================
-   MOBILE (< 640px)
-   Larger touch targets and adjusted sizing on mobile
-   ======================================================================== */
-@media (max-width: 639px) {
+/* Coarse input needs a generous hit area regardless of the visual size. The
+   Modern skin consumes this as min-block-size, so compact UI keeps its optical
+   density while the interactive target remains safe. */
+@media (hover: none), (pointer: coarse) {
   :root {
-    /* Increase default button size for better touch targets */
-    --ds-button-default-height: var(--ds-button-lg-height);
-    --ds-button-default-padding-x: var(--ds-button-lg-padding-x);
-    --ds-button-default-font-size: var(--ds-button-lg-font-size);
-
-    /* Ensure minimum touch target */
-    --ds-button-xs-height: max(var(--ds-button-xs-height), 2.75rem); /* 44px minimum */
-    --ds-button-sm-height: max(var(--ds-button-sm-height), 2.75rem);
-
-    /* Full-width buttons on mobile by default */
-    --ds-button-mobile-width: 100%;
-
-    /* Reduce icon gaps for better fit */
-    --ds-button-sm-gap: 0.25rem;
-    --ds-button-md-gap: 0.375rem;
-
-    /* Adjust icon-only sizes */
-    --ds-button-icon-only-md-size: 2.75rem; /* Ensure touch target */
-    --ds-button-icon-only-lg-size: 3rem;
+    --ds-button-touch-target-min: 2.75rem;
   }
 }
 
-/* ========================================================================
-   TABLET (640px - 1023px)
-   Moderate sizes for tablet devices
-   ======================================================================== */
-@media (min-width: 640px) and (max-width: 1023px) {
-  :root {
-    /* Standard sizes on tablet */
-    --ds-button-default-height: var(--ds-button-md-height);
-    --ds-button-default-padding-x: var(--ds-button-md-padding-x);
-
-    /* Normal gaps */
-    --ds-button-md-gap: 0.5rem;
-    --ds-button-lg-gap: 0.625rem;
-  }
-}
-
-/* ========================================================================
-   DESKTOP (>= 1024px)
-   Full sizes and effects for desktop devices
-   ======================================================================== */
-@media (min-width: 1024px) {
-  :root {
-    /* Full default sizes */
-    --ds-button-default-height: var(--ds-button-md-height);
-
-    /* Enable all hover effects */
-    --ds-button-hover-enabled: 1;
-
-    /* Full shadows */
-    --ds-button-primary-shadow-hover: var(--ds-shadow-button-hover);
-  }
-}
-
-/* ========================================================================
-   TOUCH DEVICES
-   Optimize for touch-based interactions
-   ======================================================================== */
-@media (hover: none) and (pointer: coarse) {
-  :root {
-    /* Ensure all buttons meet minimum touch target */
-    --ds-button-touch-target-min: 2.75rem; /* 44px - WCAG AAA */
-
-    /* Larger buttons by default */
-    --ds-button-default-height: max(var(--ds-button-md-height), 2.75rem);
-
-    /* Disable hover states (use active instead) */
-    --ds-button-primary-bg-hover: var(--ds-button-primary-bg);
-    --ds-button-secondary-bg-hover: var(--ds-button-secondary-bg);
-    --ds-button-default-bg-hover: var(--ds-button-default-bg);
-    --ds-button-ghost-bg-hover: transparent;
-    --ds-button-text-bg-hover: transparent;
-
-    /* Enhanced active states for touch feedback */
-    --ds-button-active-opacity: 0.8;
-
-    /* Remove hover shadows */
-    --ds-button-primary-shadow-hover: var(--ds-button-primary-shadow);
-    --ds-button-secondary-shadow-hover: var(--ds-button-secondary-shadow);
-
-    /* Larger icon sizes for better visibility */
-    --ds-button-md-icon-size: 1.5rem;
-    --ds-button-lg-icon-size: 1.75rem;
-  }
-}
-
-/* ========================================================================
-   MOUSE/PRECISION POINTER
-   Optimize for mouse and trackpad interactions
-   ======================================================================== */
-@media (hover: hover) and (pointer: fine) {
-  :root {
-    /* Enable all hover effects */
-    --ds-button-hover-enabled: 1;
-
-    /* Smooth transitions */
-    --ds-button-transition-duration: 0.2s;
-
-    /* Full hover shadows */
-    --ds-button-primary-shadow-hover: var(--ds-shadow-button-hover);
-    --ds-button-default-shadow-hover: var(--ds-shadow-sm);
-  }
-}
-
-/* ========================================================================
-   SMALL SCREENS (< 375px)
-   Very small mobile devices
-   ======================================================================== */
-@media (max-width: 374px) {
-  :root {
-    /* Reduce padding on very small screens */
-    --ds-button-sm-padding-x: 0.5rem;
-    --ds-button-md-padding-x: 0.75rem;
-    --ds-button-lg-padding-x: 1rem;
-
-    /* Smaller font sizes */
-    --ds-button-md-font-size: 0.875rem;
-    --ds-button-lg-font-size: 1rem;
-
-    /* Compact icon gaps */
-    --ds-button-md-gap: 0.25rem;
-    --ds-button-lg-gap: 0.375rem;
-  }
-}
-
-/* ========================================================================
-   LARGE DESKTOP (>= 1280px)
-   Wide screens with more space
-   ======================================================================== */
-@media (min-width: 1280px) {
-  :root {
-    /* Allow larger button variants */
-    --ds-button-xl-height: 4rem;           /* 64px */
-    --ds-button-xl-padding-x: 2.5rem;      /* 40px */
-    --ds-button-xl-font-size: 1.375rem;    /* 22px */
-
-    /* More generous spacing */
-    --ds-button-xl-gap: 1rem;
-  }
-}
-
-/* ========================================================================
-   REDUCED MOTION
-   Respect user's motion preferences
-   ======================================================================== */
+/* Motion preference is a platform policy, not a tenant personality. */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    /* Instant transitions */
-    --ds-button-transition-duration: 0.01s;
-    --ds-button-transition-timing: linear;
+    --ds-button-transition-duration: 0s;
+    --ds-button-transition-timing: var(--ds-motion-ease-out);
     --ds-button-transition: none;
-
-    /* Remove loading animations */
     --ds-button-loading-opacity: 1;
   }
 }
 
-/* ========================================================================
-   HIGH CONTRAST MODE
-   Enhance visibility in high contrast mode
-   ======================================================================== */
-@media (prefers-contrast: high) {
+/* Increased contrast strengthens geometry only. Colors stay variant/tenant
+   owned, while forced-colors paint is handled in the component skin. */
+@media (prefers-contrast: more) {
   :root {
-    /* Stronger borders */
     --ds-button-border-width: 2px;
     --ds-button-border-width-focus: 3px;
-
-    /* Higher contrast colors */
-    --ds-button-default-border-color: var(--ds-color-neutral-900);
-    --ds-button-ghost-color: var(--ds-color-neutral-900);
-
-    /* Thicker focus rings */
     --ds-button-focus-ring-offset: 3px;
   }
 }
 
-/* ========================================================================
-   LANDSCAPE ORIENTATION (Mobile)
-   Specific adjustments for landscape mode
-   ======================================================================== */
-@media (max-width: 1023px) and (orientation: landscape) {
-  :root {
-    /* Reduce button heights in landscape to save vertical space */
-    --ds-button-default-height: var(--ds-button-sm-height);
-    --ds-button-lg-height: var(--ds-button-md-height);
-
-    /* Compact padding */
-    --ds-button-md-padding-y: 0.375rem;
-    --ds-button-lg-padding-y: 0.5rem;
-  }
-}
-
-/* ========================================================================
-   PRINT
-   Adjustments for print media
-   ======================================================================== */
 @media print {
   :root {
-    /* Remove shadows for print */
+    --ds-button-transition-duration: 0s;
     --ds-button-primary-shadow: none;
     --ds-button-secondary-shadow: none;
     --ds-button-default-shadow: none;
-    --ds-button-primary-shadow-hover: none;
-
-    /* Ensure borders are visible */
-    --ds-button-border-width: 1px;
-    --ds-button-default-border-color: var(--ds-color-neutral-900);
-
-    /* Print-friendly colors */
-    --ds-button-primary-bg: var(--ds-color-white);
-    --ds-button-primary-color: var(--ds-color-neutral-900);
-    --ds-button-primary-border-color: var(--ds-color-neutral-900);
-
-    /* Remove background colors to save ink */
-    --ds-button-ghost-bg: transparent;
-    --ds-button-ghost-bg-hover: transparent;
-    --ds-button-text-bg: transparent;
-  }
-}
-
-/* ========================================================================
-   BUTTON GROUP RESPONSIVE
-   Adjustments for button groups on different screens
-   ======================================================================== */
-@media (max-width: 639px) {
-  :root {
-    /* Stack button groups vertically on mobile */
-    --ds-button-group-mobile-direction: column;
-    --ds-button-group-mobile-gap: 0.5rem;
-
-    /* Full width buttons in groups */
-    --ds-button-group-mobile-width: 100%;
-
-    /* Adjust border radius for stacked layout */
-    --ds-button-group-border-radius-first: var(--ds-radius-md) var(--ds-radius-md) 0 0;
-    --ds-button-group-border-radius-last: 0 0 var(--ds-radius-md) var(--ds-radius-md);
   }
 }

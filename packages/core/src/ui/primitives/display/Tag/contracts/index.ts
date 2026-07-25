@@ -100,6 +100,13 @@ export interface TagProps extends BaseComponentProps, EngineAwareProps, WithChil
   onClose?: () => void;
 
   /**
+   * Localized accessible name for the close button. When omitted, the engine
+   * resolves the `common.remove` catalogue entry (EN/ES/AR/FR/PT) and only then
+   * falls back to a documented English default.
+   */
+  closeLabel?: string;
+
+  /**
    * Whether the tag is clickable.
    */
   clickable?: boolean;

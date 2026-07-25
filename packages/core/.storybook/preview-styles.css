@@ -3,6 +3,32 @@
  * Styles for engine comparison and variant matrix components
  */
 
+html,
+body,
+#storybook-root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ds-color-background, #f7f8fb);
+}
+
+.storybook-canvas {
+  min-height: 100vh;
+  padding: clamp(12px, 1.4vw, 24px);
+}
+
+.storybook-mobile-viewport {
+  width: min(100%, 390px);
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid var(--ds-color-border-primary, #d8dee6);
+  border-radius: var(--ds-radius-xl, 18px);
+  background: var(--ds-layout-bg, var(--ds-color-bg-primary, #fff));
+  box-shadow: var(--ds-shadow-xl, 0 30px 80px rgba(20, 40, 59, 0.18));
+}
+
 /* Engine Comparison Container */
 .storybook-engine-comparison {
   margin: 16px 0;

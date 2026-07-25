@@ -35,13 +35,15 @@ describe('MetricsCards density', () => {
     const cardPadding = panel.style.getPropertyValue('--ds-density-card-padding');
     expect(cardPadding).toContain('1rem');
     expect(cardPadding).not.toContain('0.75rem');
-    expect(panel.style.getPropertyValue('--ds-density-scale')).toBe('0.98');
+    expect(panel.style.getPropertyValue('--ds-density-local-factor')).toBe('1');
+    expect(panel.style.getPropertyValue('--ds-density-mode-factor')).toBe('');
+    expect(panel.style.getPropertyValue('--ds-density-scale')).toBe('');
   });
 
   it('emits the compact card-padding preset (0.75rem)', async () => {
     const panel = await renderPanel('compact');
     expect(panel.style.getPropertyValue('--ds-density-card-padding')).toContain('0.75rem');
-    expect(panel.style.getPropertyValue('--ds-density-scale')).toBe('0.9');
+    expect(panel.style.getPropertyValue('--ds-density-local-factor')).toBe('0.85');
   });
 
   it('defaults to the comfortable preset when density is omitted', async () => {

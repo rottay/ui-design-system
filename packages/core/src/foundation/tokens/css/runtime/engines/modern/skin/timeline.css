@@ -1,48 +1,131 @@
 /**
- * Modern Timeline skin (WO-SKIN-05 checkpoint D2).
+ * Modern Timeline skin (WO-SKIN-05 checkpoint D2; K3-A Pass 1: Daisy drain,
+ * single paint owner).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule loses to preflight regardless of specificity.
  * Unlayered outranks preflight and still yields to a caller's inline `style`.
  *
- * SCOPE ROOT carries `rottay-timeline rottay-timeline--modern` alongside the
- * DaisyUI `timeline timeline-vertical` classes + `data-part='root'`. The engine
- * suffix is load-bearing: rustic carries the same base class.
+ * SINGLE PAINT OWNER (K3-A). The engine no longer emits the DaisyUI
+ * `timeline` / `timeline-start` / `timeline-middle` / `timeline-end` classes,
+ * so this file now owns EVERY painted and geometric channel of the component:
+ * the item grid (a direction-aware re-implementation of the DaisyUI
+ * `timeline-vertical` geometry on `data-part` hooks), the connectors, the
+ * dots, the label, and the pending spinner. The two theme.css bridges the
+ * old header documented are DEAD for this engine:
+ *   - `[data-tenant] .timeline::before` -- was already inert (a ::before
+ *     with no `content` never generates), and the class is gone;
+ *   - `[data-tenant] .timeline-start/-middle/-end { color }` -- the classes
+ *     are gone; the text color moved here (content + dot rules below),
+ *     keeping `var(--ds-text-primary)` in the fallback chain so the painted
+ *     value is unchanged.
+ * Both are listed in the lane ficha for the coordinator's theme.css cleanup.
  *
- * TWO LAYERED BRIDGES STAY LIVE, AND NEITHER IS RESTATED HERE.
- * `engines/modern/theme.css` declares `.timeline::before { background-color }`
- * (DaisyUI's own connector pseudo-element) and `.timeline-start/-middle/-end
- * { color: var(--ds-text-primary) }`. The latter genuinely paints every item's
- * text today: the root's `color` is only INHERITED by those divs, and an
- * explicit rule on a descendant beats an inherited value from an ancestor no
- * matter how the ancestor's rule is layered. Moving the root's `color` here
- * changes nothing about that -- it is still an ancestor. Declaring a color on
- * `.timeline-start` here WOULD change it, so this file does not.
+ * SCOPE ROOT carries `rottay-timeline rottay-timeline--modern` +
+ * `data-part='root'`. The engine suffix is load-bearing: rustic carries the
+ * same base class.
+ *
+ * RTL: the item grid's column lines and `place-self: flex-start/flex-end`
+ * follow the inline direction, so start/end content flips sides in RTL with
+ * no extra rules.
  *
  * THE `>` CHAINS ARE LOAD-BEARING. `data-part` is a shared vocabulary and
  * `[data-part='body']` holds arbitrary caller content -- a descendant selector
  * for `[data-part='label']` would reach a label belonging to whatever component
- * an item renders. The label sits under the item's `.timeline-start` /
- * `.timeline-end` div, so the chain steps through it explicitly.
+ * an item renders. The label sits under the item's `[data-part='content']`
+ * div, so the chain steps through it explicitly.
  *
  * SPECIFICITY (P-48): the spinner's border color and the dot's border width
  * clear the tenant's unlayered (0,3,1) `*` border-color floor at (0,5,0)+.
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * Values transcribed verbatim from `engines/modern.tsx` and from the DaisyUI
+ * `timeline-vertical` geometry the drain retired.
  */
 
 .rottay-timeline.rottay-timeline--modern[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   color: var(--ds-timeline-content-color, inherit);
+  font-size: var(--ds-timeline-content-font-size, inherit);
+  line-height: var(--ds-timeline-content-line-height, normal);
 }
 
-/* ---- connector rules (the component's own <hr>s, not DaisyUI's ::before) ---- */
+/* ---- item grid: [start content | dot | end content] tracks, with the
+        connectors occupying rows 1 and 3 of the middle track. Column lines
+        are direction-aware, so RTL mirrors the layout for free. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* ---- connectors: the component's own <hr>s. width came from the retired
+        inline style; border:none is a colorless reset (preflight gives hr a
+        top border). ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'] {
+  width: var(--ds-timeline-line-width, 2px);
+  height: 100%;
+  border: none;
   background: var(--ds-timeline-line-color, var(--ds-surface-panel));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'][data-edge='leading'] {
+  grid-row-start: 1;
+  grid-column-start: 2;
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'][data-edge='trailing'] {
+  grid-area: 3 / 2;
+}
+
+/* ---- content placement: start side aligns toward the dot, end side away
+        from it; both margins were Daisy's 0.25rem. The text color takes over
+        the dead theme.css bridge, keeping its token in the chain. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] {
+  margin: 0.25rem;
+  color: var(--ds-timeline-content-color, var(--ds-text-primary, var(--ds-color-text-primary)));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'][data-side='start'] {
+  grid-area: 1 / 1 / 4 / 2;
+  place-self: center flex-end;
+  /* K3-A Pass 2 (sighted): content before the rail must align TOWARD it --
+     the start-aligned label used to float a full text-width away from the
+     dot, leaving a ragged rail edge in alternate mode. `end` is logical, so
+     the toward-the-rail alignment mirrors with direction. */
+  text-align: end;
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'][data-side='end'] {
+  grid-area: 1 / 3 / 4 / 4;
+  place-self: center flex-start;
+}
+
+/* ---- dot: middle track, same text color takeover as the content ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='dot'] {
+  grid-row-start: 2;
+  grid-column-start: 2;
+  color: var(--ds-timeline-content-color, var(--ds-text-primary, var(--ds-color-text-primary)));
 }
 
 /* ---- per-item label ---- */
-.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > .timeline-start > [data-part='label'],
-.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > .timeline-end > [data-part='label'] {
-  color: var(--ds-timeline-label-color, var(--ds-color-text-secondary));
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] > [data-part='label'] {
+  /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious on BOTH sources):
+     the resolved label channel fails AA (bithire's #888d9e = 3.10:1 on
+     #F4F8FB; TMM's #737373 = 4.40:1 on #FBF6EC). The ink deepens 30% toward
+     the source's own primary text ink -- hue-faithful (measured worst
+     source: bithire 70% = 4.75:1). A tenant's explicit
+     `--ds-timeline-label-ink` stays raw. */
+  color: var(
+    --ds-timeline-label-ink,
+    color-mix(
+      in srgb,
+      var(--ds-timeline-label-color, var(--ds-color-text-secondary)) 70%,
+      var(--ds-color-text-primary) 30%
+    )
+  );
+  font-size: var(--ds-timeline-label-font-size, 12px);
+  margin-bottom: 0.25rem;
 }
 
 /* ---- dot marker: default fill + ring width. The unqualified rule carries the
@@ -52,6 +135,9 @@
         marker never declared one, and a tenant that sets
         `--ds-timeline-dot-border-width` must not grow a border there. ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:not([data-pending='true']) > [data-part='dot'] > [data-part='dot-marker'] {
+  width: var(--ds-timeline-dot-size, 12px);
+  height: var(--ds-timeline-dot-size, 12px);
+  border-radius: 9999px;
   background: var(--ds-timeline-color-primary, var(--ds-color-primary));
   border-width: var(--ds-timeline-dot-border-width, 0);
 }
@@ -80,11 +166,26 @@
   background: var(--ds-timeline-color-error, var(--ds-color-error));
 }
 
-/* ---- pending row: dot fill + the spinner ring (animation stays inline) ---- */
+/* ---- pending row: dot fill + pulse, and the spinner ring. The pulse default
+        moved off Tailwind's `pulse` keyframe (gone with the drained classes)
+        onto the foundation's ds-foundation-pulse. ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
+  width: var(--ds-timeline-dot-size, 12px);
+  height: var(--ds-timeline-dot-size, 12px);
+  border-radius: 9999px;
   background: var(--ds-timeline-line-color, var(--ds-surface-panel));
+  animation: var(
+    --ds-timeline-pending-animation,
+    ds-foundation-pulse 2s var(--ds-motion-ease-in-out) infinite
+  );
 }
-.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='body'] > [data-part='spinner'] {
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-inline-end: 8px;
+  vertical-align: middle;
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-timeline-pending-dot-color, var(--ds-color-primary));
   border-radius: 50%;

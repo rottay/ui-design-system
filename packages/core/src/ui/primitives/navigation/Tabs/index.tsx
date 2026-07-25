@@ -37,7 +37,13 @@ export {
   type TabsProps,
   type TabItem,
   type TabsType,
+  type TabsRecipe,
   type TabsSize,
+  type TabsOverflow,
+  type TabsActivationMode,
+  type TabsIndicator,
+  type TabsPanelVariant,
+  type TabsAccessibilityLabels,
   TABS_DEFAULTS,
 } from './contracts';
 

@@ -8,21 +8,23 @@
  * @package @rottay/design-system
  */
 
-import type { EngineName } from '../../../runtime/engine';
-import type { TenantMotionDial } from '../../../runtime/motion';
+import type { EngineName } from "../../../runtime/engine";
+import type { TenantMotionDial } from "../../../runtime/motion";
 import type {
   SurfaceTokens,
   ChartPersonalityTokens,
   CardPersonalityTokens,
   AccentPersonalityTokens,
   PersonalityTokens,
-} from '../../../kernel/tokens';
+  SemanticSurfaceRoleMap,
+  SemanticTypographyTokens,
+} from "../../../kernel/tokens";
 import type {
   TenantGlassTokens,
   TenantGradientTokens,
   TenantOverlayTokens,
   TenantTokenOverrides,
-} from '..';
+} from "..";
 
 export interface ThemeConfig {
   name: string;
@@ -57,6 +59,21 @@ export interface ThemeContextValue {
 // PersonalityTokens (animation/chart/typography/accent/card). It does NOT include
 // tenant identity (logos, company name, plan, features) — those stay in TenantConfig.
 
+/**
+ * Governed recipe-profile selection (DS-S001). The id must exist in the
+ * closed first-party registry
+ * (`foundation/tokens/ts/presentation/recipe-profiles`); the compiler
+ * validates fail-closed, so an unknown id or foreign schema version compiles
+ * to engine defaults instead of painting garbage. Contracts stay `string`
+ * here because foundation contracts cannot depend on the registry module.
+ */
+export interface BrandRecipeSelection {
+  /** Selection-contract version; see RECIPE_PROFILE_SCHEMA_VERSION. */
+  schemaVersion: number;
+  /** Namespaced versioned id, e.g. `rottay/technical-sharp@1`. */
+  profile: string;
+}
+
 export interface BrandTheme {
   /** Unique identifier for this brand theme */
   id: string;
@@ -75,6 +92,8 @@ export interface BrandTheme {
   motion?: BrandMotion;
   /** Chart palette posture, line style, tooltip style */
   charts?: Partial<ChartPersonalityTokens>;
+  /** Governed recipe-profile selection (DS-S001). */
+  recipes?: BrandRecipeSelection;
   /** Card and accent visual chrome */
   chrome?: BrandChrome;
   /** DaisyUI variables, engine-specific values */
@@ -85,6 +104,18 @@ export interface BrandPalette {
   primaryColor: string;
   secondaryColor?: string;
   accentColor?: string;
+  /** Global reading ink used on the tenant canvas and neutral surfaces. */
+  textPrimaryColor?: string;
+  /** Supporting copy that must remain readable at normal text sizes. */
+  textSecondaryColor?: string;
+  /** Quiet metadata/captions; still expected to meet accessible text contrast. */
+  textMutedColor?: string;
+  /** Disabled ink. Components remain responsible for non-color disabled cues. */
+  textDisabledColor?: string;
+  /** Default neutral separator on cards, controls, rows and page regions. */
+  borderPrimaryColor?: string;
+  /** Quieter nested separator used inside already-bounded surfaces. */
+  borderSecondaryColor?: string;
   darkPrimaryColor?: string;
   darkSecondaryColor?: string;
   darkAccentColor?: string;
@@ -107,9 +138,11 @@ export interface BrandTypography {
   fontFamilyHeading?: string;
   fontFamilyMono?: string;
   fontFamilyDisplay?: string;
-  headingWeightBias?: 'lighter' | 'normal' | 'heavier';
+  headingWeightBias?: "lighter" | "normal" | "heavier";
   headingLetterSpacing?: string;
-  labelStyle?: 'uppercase' | 'sentence' | 'capitalize';
+  labelStyle?: "uppercase" | "sentence" | "capitalize";
+  /** Per-role type system consumed by components instead of ad-hoc triples. */
+  roles?: SemanticTypographyTokens;
   /** Per-context letter spacing */
   letterSpacing?: {
     display?: string;
@@ -129,8 +162,15 @@ export interface BrandTypography {
 
 export interface BrandSurfaces {
   surface?: Partial<SurfaceTokens>;
-  borderRadius?: Partial<Record<'sm' | 'md' | 'lg' | 'xl', string>>;
-  shadows?: Partial<Record<'sm' | 'md' | 'lg' | 'xl', string>>;
+  /** Coordinated semantic surface roles shared by every component family. */
+  surfaceRoles?: SemanticSurfaceRoleMap;
+  /**
+   * @deprecated Use `surfaceRoles`. Read-only compatibility for schema v1;
+   * new static themes and DB payloads must not author this field.
+   */
+  materials?: SemanticSurfaceRoleMap;
+  borderRadius?: Partial<Record<"sm" | "md" | "lg" | "xl", string>>;
+  shadows?: Partial<Record<"sm" | "md" | "lg" | "xl", string>>;
   glass?: TenantGlassTokens;
   gradients?: TenantGradientTokens;
   overlays?: TenantOverlayTokens;
@@ -138,8 +178,9 @@ export interface BrandSurfaces {
   /**
    * Premium effect-intensity dial. Emitted as `--ds-effect-intensity` and
    * multiplies the gradient/glass/glow layer (engines/modern spec section 5):
-   * `1` = full Quiet Premium (DS/rottay default), `0` = flat/zero-decoration
-   * (BitHire's Evidence-Ledger law). Defaults to `1` when unset.
+   * `1` = full Quiet Premium (DS/rottay default), `0` = flat/zero-decoration.
+   * First-party verticals may choose a restrained nonzero value; customer
+   * tenant overrides remain bounded by their compiled policy. Defaults to `1`.
    */
   effectIntensity?: number;
 }
@@ -152,15 +193,15 @@ export interface BrandSurfaces {
  */
 export interface BrandMotion {
   intensity?: number;
-  entrance?: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
+  entrance?: "none" | "fade" | "slideUp" | "spring" | "bounce";
   entranceDuration?: number;
   hoverLift?: number;
   hoverScale?: number;
   useSpring?: boolean;
   springTension?: number;
   springFriction?: number;
-  pulseSpeed?: 'none' | 'slow' | 'normal' | 'fast';
-  skeletonStyle?: 'pulse' | 'shimmer' | 'wave';
+  pulseSpeed?: "none" | "slow" | "normal" | "fast";
+  skeletonStyle?: "pulse" | "shimmer" | "wave";
   staggerDelay?: number;
   staggerMax?: number;
   countUpEnabled?: boolean;
@@ -181,6 +222,8 @@ export interface BrandChrome {
   toolbar?: BrandToolbarChrome;
   /** Filter pill/toggle chrome used by dense list filters */
   filterPill?: BrandFilterPillChrome;
+  /** Badge / Chip / Pill microchannel chrome. */
+  badge?: BrandBadgeChrome;
   /** Breadcrumb and breadcrumb-bar chrome */
   breadcrumb?: BrandBreadcrumbChrome;
   /** Global/local search chrome */
@@ -207,6 +250,10 @@ export interface BrandChrome {
   listingGrid?: BrandListingGridChrome;
   /** Modal/dialog chrome */
   modal?: BrandModalChrome;
+  /** Tooltip micro-overlay chrome */
+  tooltip?: BrandTooltipChrome;
+  /** Popover contextual-surface chrome */
+  popover?: BrandPopoverChrome;
   /** Tabs chrome */
   tabs?: BrandTabsChrome;
 }
@@ -243,6 +290,43 @@ export interface BrandLayoutChrome {
   headerBorder?: string;
   siderBg?: string;
   siderBorder?: string;
+  /** Optional finish for the structural Container primitive. */
+  containerBackground?: string;
+  containerBorder?: string;
+  containerRadius?: string;
+  containerShadow?: string;
+  containerMotionDuration?: string;
+  containerMotionEasing?: string;
+  /** Optional finish for responsive media frames. */
+  aspectRatioBackground?: string;
+  aspectRatioBorder?: string;
+  aspectRatioRadius?: string;
+  aspectRatioShadow?: string;
+  aspectRatioOverflow?: string;
+  aspectRatioMotionDuration?: string;
+  aspectRatioMotionEasing?: string;
+  /** Divider rhythm, line and localized label craft. */
+  dividerColor?: string;
+  dividerThicknessThin?: string;
+  dividerThicknessMedium?: string;
+  dividerThicknessThick?: string;
+  dividerContentGap?: string;
+  dividerEdgeSegment?: string;
+  dividerMinSegment?: string;
+  dividerLabelMaxWidth?: string;
+  dividerLabelFontSize?: string;
+  dividerLabelFontWeight?: string;
+  dividerLabelLineHeight?: string;
+  dividerLabelTransform?: string;
+  dividerLabelTracking?: string;
+  dividerMotionDuration?: string;
+  dividerMotionEasing?: string;
+  /** Stack separators and Space transitions share the layout personality. */
+  stackDividerSize?: string;
+  stackDividerColor?: string;
+  stackDividerOpacity?: string;
+  spaceMotionDuration?: string;
+  spaceMotionEasing?: string;
 }
 
 export interface BrandShellChrome {
@@ -334,6 +418,124 @@ export interface BrandFilterPillChrome {
   countActiveRing?: string;
 }
 
+/**
+ * Dedicated compact-label chrome for Badge, Chip and Pill.
+ *
+ * This family is intentionally independent from `filterPill`: a badge can be
+ * passive, semantic, removable, identity-bearing or an anchored count. DB
+ * tenants therefore need one bounded, compiler-owned channel that covers the
+ * complete anatomy without product CSS or inline paint.
+ */
+export interface BrandBadgeChrome {
+  fontFamily?: string;
+  fontWeight?: string | number;
+  lineHeight?: string;
+  letterSpacing?: string;
+  gap?: string;
+  maxInlineSize?: string;
+  chipMaxInlineSize?: string;
+  pillMaxInlineSize?: string;
+  frameWidth?: string;
+  radius?: string;
+  chipRadius?: string;
+  pillRadius?: string;
+  surface?: string;
+  ink?: string;
+  frame?: string;
+  highlight?: string;
+  shadow?: string;
+  solidBg?: string;
+  solidColor?: string;
+  solidBorder?: string;
+  softBg?: string;
+  softColor?: string;
+  softBorder?: string;
+  ghostBg?: string;
+  ghostColor?: string;
+  ghostBorder?: string;
+  ghostShadow?: string;
+  outlineBg?: string;
+  outlineColor?: string;
+  outlineBorder?: string;
+  outlineShadow?: string;
+  surfaceHover?: string;
+  inkHover?: string;
+  frameHover?: string;
+  highlightHover?: string;
+  shadowHover?: string;
+  hoverTransform?: string;
+  surfacePressed?: string;
+  inkPressed?: string;
+  framePressed?: string;
+  shadowPressed?: string;
+  pressTransform?: string;
+  focusRing?: string;
+  selectedSurface?: string;
+  selectedInk?: string;
+  selectedFrame?: string;
+  selectedShadow?: string;
+  borderedRing?: string;
+  iconSize?: string;
+  iconColor?: string;
+  iconBg?: string;
+  iconBorder?: string;
+  iconBorderWidth?: string;
+  iconRadius?: string;
+  iconShadow?: string;
+  avatarSize?: string;
+  avatarBleed?: string;
+  avatarBg?: string;
+  avatarBorder?: string;
+  avatarBorderWidth?: string;
+  avatarRadius?: string;
+  avatarShadow?: string;
+  dotSize?: string;
+  dotBg?: string;
+  dotBorder?: string;
+  dotBorderWidth?: string;
+  dotShadow?: string;
+  countMinSize?: string;
+  countSize?: string;
+  countPaddingInline?: string;
+  countBg?: string;
+  countColor?: string;
+  countBorder?: string;
+  countBorderWidth?: string;
+  countRadius?: string;
+  countRing?: string;
+  countFontFamily?: string;
+  countFontSize?: string;
+  countFontWeight?: string | number;
+  countSelectedBg?: string;
+  countSelectedBorder?: string;
+  countSelectedRing?: string;
+  removeSize?: string;
+  removeTouchSize?: string;
+  removeBleed?: string;
+  removeBg?: string;
+  removeColor?: string;
+  removeBorder?: string;
+  removeBorderWidth?: string;
+  removeRadius?: string;
+  removeOpacity?: number;
+  removeHoverBg?: string;
+  removeHoverTransform?: string;
+  removeFocusRing?: string;
+  disabledOpacity?: number;
+  disabledFilter?: string;
+  loadingOpacity?: number;
+  motionDuration?: string;
+  motionEasing?: string;
+  pulseDuration?: string;
+  pulseTiming?: string;
+  pulseScale?: number;
+  spinnerDuration?: string;
+  touchTarget?: string;
+  containerPaddingInline?: string;
+  indicatorMaxInlineSize?: string;
+  indicatorRadius?: string;
+}
+
 export interface BrandBreadcrumbChrome {
   bg?: string;
   border?: string;
@@ -376,14 +578,153 @@ export interface BrandButtonVariantChrome {
   bgHover?: string;
   bgActive?: string;
   color?: string;
+  colorHover?: string;
+  colorActive?: string;
   text?: string;
   border?: string;
   borderHover?: string;
+  borderActive?: string;
   shadow?: string;
   shadowHover?: string;
+  shadowActive?: string;
+}
+
+/**
+ * Optical geometry for one control size. Unlike palette chrome, these values
+ * tune the actual rhythm of a product: control height, horizontal economy and
+ * the type/icon relationship. Keeping them in BrandTheme makes a vertical's
+ * density authored instead of being frozen inside an engine implementation.
+ */
+export interface BrandControlSizeChrome {
+  height?: string;
+  paddingX?: string;
+  paddingY?: string;
+  fontSize?: string;
+  lineHeight?: string;
+  iconSize?: string;
+  gap?: string;
+  radius?: string;
+}
+
+/** Shared geometry for Button across its five public sizes. */
+export interface BrandButtonGeometryChrome {
+  fontFamily?: string;
+  fontWeight?: string | number;
+  letterSpacing?: string;
+  textTransform?: string;
+  gap?: string;
+  radius?: string;
+  borderWidth?: string;
+  touchTargetMin?: string;
+  groupGap?: string;
+  groupMobileDirection?: "row" | "column";
+  groupMobileGap?: string;
+  groupMobileWidth?: string;
+  hoverTransform?: string;
+  activeTransform?: string;
+  iconHoverTransform?: string;
+  iconActiveTransform?: string;
+  labelOffsetY?: string;
+  hoverFilter?: string;
+  activeFilter?: string;
+  focusRingOffset?: string;
+  spinnerDuration?: string;
+  surfaceHighlight?: string;
+  surfaceHighlightOpacity?: string;
+  surfaceHighlightHoverOpacity?: string;
+  surfaceHighlightActiveOpacity?: string;
+  gradient?: string;
+  aiTexture?: string;
+  transitionDuration?: string;
+  transitionTiming?: string;
+  xs?: BrandControlSizeChrome;
+  sm?: BrandControlSizeChrome;
+  md?: BrandControlSizeChrome;
+  lg?: BrandControlSizeChrome;
+  xl?: BrandControlSizeChrome;
+}
+
+/** Shared geometry for field-like controls across their public sizes. */
+export interface BrandFieldGeometryChrome {
+  gap?: string;
+  radius?: string;
+  fontFamily?: string;
+  fontWeight?: string | number;
+  letterSpacing?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  messageGap?: string;
+  groupGap?: string;
+  groupGapSeparated?: string;
+  groupOverlap?: string;
+  groupMinItemWidth?: string;
+  formFieldGap?: string;
+  horizontalGap?: string;
+  labelOffsetY?: string;
+  requiredGap?: string;
+  formFieldDisabledOpacity?: number;
+  labelFontSize?: string;
+  labelFontWeight?: string | number;
+  labelFontFamily?: string;
+  labelLetterSpacing?: string;
+  labelLineHeight?: string;
+  helperFontSize?: string;
+  helperLineHeight?: string;
+  affixSize?: string;
+  affixSizeCompact?: string;
+  affixRadius?: string;
+  actionSize?: string;
+  actionRadius?: string;
+  touchTargetMin?: string;
+  loadingSize?: string;
+  loadingStroke?: string;
+  loadingDuration?: string;
+  textareaMinHeight?: string;
+  textareaMaxHeight?: string;
+  textareaPaddingX?: string;
+  textareaPaddingY?: string;
+  textareaRadius?: string;
+  textareaResize?: string;
+  transitionDuration?: string;
+  transitionTiming?: string;
+  xs?: BrandControlSizeChrome;
+  sm?: BrandControlSizeChrome;
+  md?: BrandControlSizeChrome;
+  lg?: BrandControlSizeChrome;
+  xl?: BrandControlSizeChrome;
+}
+
+/** Refined grouped-choice chrome for the Modern Segmented primitive. */
+export interface BrandSegmentedChrome {
+  bg?: string;
+  border?: string;
+  radius?: string;
+  padding?: string;
+  gap?: string;
+  shadow?: string;
+  itemBg?: string;
+  itemBgHover?: string;
+  itemBgSelected?: string;
+  itemColor?: string;
+  itemColorHover?: string;
+  itemColorSelected?: string;
+  itemRadius?: string;
+  itemShadowSelected?: string;
+  itemFontWeight?: string | number;
+  itemFontWeightSelected?: string | number;
+  focusRing?: string;
+  sm?: BrandControlSizeChrome;
+  md?: BrandControlSizeChrome;
+  lg?: BrandControlSizeChrome;
 }
 
 export interface BrandControlsChrome {
+  /** Button optical geometry. Paint stays in the variant blocks below. */
+  buttonGeometry?: BrandButtonGeometryChrome;
+  /** Input/select optical geometry shared by field-like controls. */
+  fieldGeometry?: BrandFieldGeometryChrome;
+  /** Grouped-choice geometry and paint for Segmented. */
+  segmented?: BrandSegmentedChrome;
   /** Primary button chrome */
   buttonPrimary?: BrandButtonVariantChrome;
   /** Secondary button chrome */
@@ -394,8 +735,10 @@ export interface BrandControlsChrome {
   buttonGhost?: BrandButtonVariantChrome;
   /** Text button chrome */
   buttonText?: BrandButtonVariantChrome;
+  /** Dashed-outline button chrome */
+  buttonDashed?: BrandButtonVariantChrome;
   /** Link button chrome */
-  buttonLink?: { color?: string; colorHover?: string; colorActive?: string };
+  buttonLink?: BrandButtonVariantChrome;
   /** Success semantic button */
   buttonSuccess?: BrandButtonVariantChrome;
   /** Warning semantic button */
@@ -404,8 +747,16 @@ export interface BrandControlsChrome {
   buttonError?: BrandButtonVariantChrome;
   /** Info semantic button */
   buttonInfo?: BrandButtonVariantChrome;
+  /** AI-assisted action. Palette is authored independently from primary. */
+  buttonAI?: BrandButtonVariantChrome;
   /** Disabled state treatment (shared across control types) */
-  disabled?: { opacity?: number; bg?: string; text?: string; border?: string; borderColor?: string };
+  disabled?: {
+    opacity?: number;
+    bg?: string;
+    text?: string;
+    border?: string;
+    borderColor?: string;
+  };
   /** Focus ring */
   focusRing?: string;
   /** Input field chrome */
@@ -425,23 +776,65 @@ export interface BrandInputChrome {
   borderFocus?: string;
   borderDisabled?: string;
   disabledOpacity?: number;
+  shadowRest?: string;
+  shadowHover?: string;
   shadowFocus?: string;
+  insetShadow?: string;
+  caretColor?: string;
+  selectionBg?: string;
+  selectionColor?: string;
+  placeholderOpacity?: number;
   /** Filled variant */
-  filled?: { bg?: string; bgHover?: string; bgFocus?: string };
+  filled?: { bg?: string; bgHover?: string; bgFocus?: string; border?: string };
   /** Addon (prefix/suffix) */
-  addon?: { bg?: string; color?: string; border?: string };
+  addon?: {
+    bg?: string;
+    color?: string;
+    border?: string;
+    radius?: string;
+    fontWeight?: string | number;
+  };
+  /** Inline prefix/suffix treatment inside the field shell. */
+  affix?: { bg?: string; color?: string; border?: string; paddingX?: string };
   /** Label */
-  label?: { color?: string };
-  /** Helper text */
-  helper?: { color?: string };
+  label?: { color?: string; requiredColor?: string; disabledColor?: string };
+  /** Helper and validation message text */
+  helper?: {
+    color?: string;
+    errorColor?: string;
+    errorFontWeight?: string | number;
+  };
   /** Clear button */
-  clear?: { color?: string; colorHover?: string };
+  clear?: {
+    color?: string;
+    colorHover?: string;
+    bg?: string;
+    bgHover?: string;
+    border?: string;
+    borderHover?: string;
+    shadowHover?: string;
+    focusRing?: string;
+    activeTransform?: string;
+  };
+  readOnly?: {
+    bg?: string;
+    color?: string;
+    border?: string;
+    borderStyle?: string;
+    cursor?: string;
+  };
+  loadingColor?: string;
+  autofill?: { bg?: string; color?: string; caret?: string };
+  count?: { color?: string; colorWarning?: string; colorError?: string };
   /** Validation states */
   successBorder?: string;
+  successBg?: string;
   successShadowFocus?: string;
   warningBorder?: string;
+  warningBg?: string;
   warningShadowFocus?: string;
   errorBorder?: string;
+  errorBg?: string;
   errorShadowFocus?: string;
   errorColor?: string;
 }
@@ -471,6 +864,10 @@ export interface BrandTableChrome {
   rowHoverShadow?: string;
   /** Cells */
   cellPadding?: string;
+  /** Density-specific cell padding. These win over the legacy global value. */
+  cellPaddingCompact?: string;
+  cellPaddingComfortable?: string;
+  cellPaddingSpacious?: string;
   cellFontSize?: string;
   cellColor?: string;
   /** Filter/header utilities */
@@ -496,41 +893,150 @@ export interface BrandCardChrome {
   paddingXl?: string;
   bg?: string;
   bgHover?: string;
+  bgActive?: string;
+  bgSelected?: string;
+  bgDisabled?: string;
   color?: string;
+  colorHover?: string;
+  colorActive?: string;
+  colorSelected?: string;
+  colorDisabled?: string;
   colorMuted?: string;
   border?: string;
   borderColor?: string;
+  borderWidth?: string;
+  borderStyle?: string;
   borderHover?: string;
   borderColorHover?: string;
+  borderActive?: string;
+  borderSelected?: string;
+  borderDisabled?: string;
   borderAccentHover?: string;
   radius?: string;
+  radiusSm?: string;
+  radiusLg?: string;
+  radiusXl?: string;
   shadow?: string;
   shadowHover?: string;
+  shadowActive?: string;
+  shadowSelected?: string;
   shadowElevated?: string;
   focusRing?: string;
+  focusRingColor?: string;
+  focusRingWidth?: string;
+  focusRingOffset?: string;
+  selectedOutlineWidth?: string;
   hoverTransform?: string;
+  activeTransform?: string;
+  transitionDuration?: string;
+  transitionTiming?: string;
+  disabledOpacity?: number;
+  texture?: string;
+  textureSize?: string;
+  textureOpacity?: number;
+  overlay?: string;
+  surfaceGradient?: string;
+  stateOverlay?: string;
+  stateOverlayHoverOpacity?: number;
+  stateOverlayActiveOpacity?: number;
+  stateOverlaySelectedOpacity?: number;
+  /** Per-material variant channels. */
+  elevatedBg?: string;
+  elevatedBorderWidth?: string;
+  elevatedShadow?: string;
+  elevatedShadowHover?: string;
+  outlinedBg?: string;
+  outlinedBorderWidth?: string;
+  outlinedBorderColor?: string;
+  outlinedShadow?: string;
+  filledBg?: string;
+  filledBorderWidth?: string;
+  filledShadow?: string;
+  ghostBg?: string;
+  ghostBorderColor?: string;
+  ghostShadow?: string;
   /** Header */
   headerBorder?: string;
   headerBorderColor?: string;
+  headerBorderWidth?: string;
   headerBg?: string;
   headerColor?: string;
   headerPadding?: string;
+  headerPaddingSm?: string;
+  headerPaddingLg?: string;
+  headerGap?: string;
+  headerActionsGap?: string;
+  headerMinHeight?: string;
+  headerCopyMaxWidth?: string;
+  headerEyebrowSize?: string;
+  headerEyebrowTracking?: string;
+  headerIconSize?: string;
+  headerIconRadius?: string;
+  headerIconBg?: string;
+  headerIconBorder?: string;
+  headerIconColor?: string;
+  headerExtraBg?: string;
+  headerExtraBorder?: string;
+  headerExtraRadius?: string;
+  headerExtraPadding?: string;
   titleColor?: string;
   titleFontSize?: string;
   titleFontWeight?: string | number;
+  titleLineHeight?: string;
+  titleLetterSpacing?: string;
   subtitleColor?: string;
+  subtitleFontSize?: string;
+  subtitleMarginTop?: string;
   /** Body */
   bodyColor?: string;
   bodyPadding?: string;
+  bodyPaddingSm?: string;
+  bodyPaddingLg?: string;
+  bodyFontSize?: string;
+  bodyLineHeight?: string;
   /** Footer */
   footerBorder?: string;
   footerBorderColor?: string;
+  footerBorderWidth?: string;
   footerBg?: string;
   footerColor?: string;
   footerPadding?: string;
+  footerPaddingSm?: string;
+  footerPaddingLg?: string;
+  footerActionsGap?: string;
+  actionsGap?: string;
+  actionsMarginTop?: string;
+  actionsPaddingTop?: string;
   /** Image */
+  coverInlineSize?: string;
+  coverInlineMinSize?: string;
+  coverBlockMinSize?: string;
+  coverAspectRatio?: string;
+  coverObjectPosition?: string;
+  coverObjectFit?: string;
+  bodyInlineMinSize?: string;
   imagePlaceholderBg?: string;
   imagePlaceholderColor?: string;
+  imageHeight?: string;
+  imageLoadingTrack?: string;
+  imageLoadingActive?: string;
+  imageLoadingSize?: string;
+  imageLoadingStroke?: string;
+  imageLoadingDuration?: string;
+  imageErrorIconSize?: string;
+  spinnerSize?: string;
+  spinnerStroke?: string;
+  spinnerTrack?: string;
+  spinnerColor?: string;
+  spinnerDuration?: string;
+  loadingOverlayBg?: string;
+  loadingBackdropBlur?: string;
+  loadingCoverOpacity?: number;
+  loadingSkeletonOpacity?: number;
+  skeletonBg?: string;
+  skeletonHighlight?: string;
+  skeletonRadius?: string;
+  skeletonDuration?: string;
 }
 
 export interface BrandPremiumCardChrome {
@@ -642,13 +1148,300 @@ export interface BrandModalChrome {
   closeBgHover?: string;
 }
 
+/**
+ * Tooltip visual contract shared by static vertical themes and DB appearance.
+ * The component owns behavior and anatomy; tenants tune reviewed material,
+ * density, geometry and motion channels only.
+ */
+export interface BrandTooltipChrome {
+  borderedBackground?: string;
+  borderedForeground?: string;
+  borderedBorder?: string;
+  borderedBorderWidth?: string;
+  borderedShadow?: string;
+  borderedTexture?: string;
+  borderedHighlight?: string;
+  borderedRadius?: string;
+  borderedMaxWidth?: string;
+  borderedPaddingBlock?: string;
+  borderedPaddingInline?: string;
+  minimalBackground?: string;
+  minimalForeground?: string;
+  minimalBorder?: string;
+  minimalBorderWidth?: string;
+  minimalShadow?: string;
+  minimalTexture?: string;
+  minimalHighlight?: string;
+  minimalRadius?: string;
+  minimalMaxWidth?: string;
+  minimalPaddingBlock?: string;
+  minimalPaddingInline?: string;
+  inverseBackground?: string;
+  inverseForeground?: string;
+  inverseBorder?: string;
+  inverseBorderWidth?: string;
+  inverseShadow?: string;
+  inverseTexture?: string;
+  inverseHighlight?: string;
+  inverseRadius?: string;
+  inverseMaxWidth?: string;
+  inversePaddingBlock?: string;
+  inversePaddingInline?: string;
+  richBackground?: string;
+  richForeground?: string;
+  richBorder?: string;
+  richBorderWidth?: string;
+  richShadow?: string;
+  richTexture?: string;
+  richHighlight?: string;
+  richRadius?: string;
+  richMaxWidth?: string;
+  richPaddingBlock?: string;
+  richPaddingInline?: string;
+  richType?: string;
+  richLetterSpacing?: string;
+  compactPaddingBlock?: string;
+  compactPaddingInline?: string;
+  compactType?: string;
+  comfortablePaddingBlock?: string;
+  comfortablePaddingInline?: string;
+  spaciousPaddingBlock?: string;
+  spaciousPaddingInline?: string;
+  spaciousType?: string;
+  arrowSize?: string;
+  arrowHalfSize?: string;
+  arrowOverlap?: string;
+  viewportGap?: string;
+  touchTarget?: string;
+  shortcutGap?: string;
+  shortcutChipGap?: string;
+  shortcutKeyBackground?: string;
+  shortcutKeyBorder?: string;
+  shortcutKeyBorderWidth?: string;
+  shortcutKeyRadius?: string;
+  shortcutKeyShadow?: string;
+  shortcutKeyType?: string;
+  motionDistance?: string;
+  motionScale?: string;
+  enterDuration?: string;
+  enterEasing?: string;
+  exitDuration?: string;
+  exitEasing?: string;
+}
+
+/**
+ * Popover visual contract. It deliberately excludes positioning, focus and
+ * dismissal behavior: those remain engine-owned and consistent per tenant.
+ */
+export interface BrandPopoverChrome {
+  borderedBackground?: string;
+  borderedForeground?: string;
+  borderedMutedForeground?: string;
+  borderedBorder?: string;
+  borderedBorderWidth?: string;
+  borderedShadow?: string;
+  borderedTexture?: string;
+  borderedHighlight?: string;
+  borderedRadius?: string;
+  borderedMaxWidth?: string;
+  borderedPaddingBlock?: string;
+  borderedPaddingInline?: string;
+  borderedTitleGap?: string;
+  minimalBackground?: string;
+  minimalForeground?: string;
+  minimalMutedForeground?: string;
+  minimalBorder?: string;
+  minimalBorderWidth?: string;
+  minimalShadow?: string;
+  minimalTexture?: string;
+  minimalHighlight?: string;
+  minimalRadius?: string;
+  minimalMaxWidth?: string;
+  minimalPaddingBlock?: string;
+  minimalPaddingInline?: string;
+  inverseBackground?: string;
+  inverseForeground?: string;
+  inverseMutedForeground?: string;
+  inverseBorder?: string;
+  inverseShadow?: string;
+  inverseTexture?: string;
+  inverseHighlight?: string;
+  inverseRadius?: string;
+  richBackground?: string;
+  richForeground?: string;
+  richMutedForeground?: string;
+  richBorder?: string;
+  richShadow?: string;
+  richTexture?: string;
+  richHighlight?: string;
+  richRadius?: string;
+  richMaxWidth?: string;
+  richPaddingBlock?: string;
+  richPaddingInline?: string;
+  compactPaddingBlock?: string;
+  compactPaddingInline?: string;
+  compactTitleGap?: string;
+  compactMaxHeight?: string;
+  comfortablePaddingBlock?: string;
+  comfortablePaddingInline?: string;
+  spaciousPaddingBlock?: string;
+  spaciousPaddingInline?: string;
+  spaciousTitleGap?: string;
+  minWidth?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+  bodyMaxHeight?: string;
+  viewportGap?: string;
+  touchTarget?: string;
+  arrowSize?: string;
+  titleBackground?: string;
+  titleColor?: string;
+  titleDivider?: string;
+  titleDividerWidth?: string;
+  titlePaddingBlock?: string;
+  titlePaddingInline?: string;
+  titleGap?: string;
+  titleType?: string;
+  titleLetterSpacing?: string;
+  bodyType?: string;
+  motionDistance?: string;
+  motionScale?: string;
+  enterDuration?: string;
+  enterEasing?: string;
+  exitDuration?: string;
+  exitEasing?: string;
+}
+
 export interface BrandTabsChrome {
+  /** Shared root and destination colors. */
   border?: string;
   color?: string;
   colorHover?: string;
   colorActive?: string;
   bgHover?: string;
   borderActive?: string;
+  /** Recipe trays. `listBg` remains the shared fallback. */
+  listBg?: string;
+  underlineListBg?: string;
+  containedListBg?: string;
+  segmentedListBg?: string;
+  pillsListBg?: string;
+  underlineHoverBg?: string;
+  underlineActiveBg?: string;
+  underlineItemRadius?: string;
+  listBorder?: string;
+  listRadius?: string;
+  listPadding?: string;
+  listWidth?: string;
+  listMaxWidth?: string;
+  underlineListWidth?: string;
+  listShadow?: string;
+  listBlur?: string;
+  /** Optional, subtle material grain. Kept separate from list paint. */
+  listTexture?: string;
+  listTextureOpacity?: number;
+  listTextureSize?: string;
+  /** Optical highlight painted inside the tray without changing its border. */
+  listHighlight?: string;
+  gap?: string;
+  /** Destination anatomy and typography. */
+  itemGap?: string;
+  itemRadius?: string;
+  itemMaxWidth?: string;
+  itemFontFamily?: string;
+  itemLineHeight?: string;
+  itemLetterSpacing?: string;
+  itemFontWeight?: string | number;
+  itemFontWeightActive?: string | number;
+  activeBg?: string;
+  activeShadow?: string;
+  activeTransform?: string;
+  /** One-shot selection clarity layer; never a looping decoration. */
+  activeHighlight?: string;
+  activeHighlightOpacity?: number;
+  pressedTransform?: string;
+  containedActiveBg?: string;
+  containedActiveShadow?: string;
+  segmentedActiveBg?: string;
+  segmentedActiveShadow?: string;
+  pillsActiveBg?: string;
+  pillsActiveColor?: string;
+  pillsActiveBorder?: string;
+  pillsActiveShadow?: string;
+  /** Disabled destinations remain legible while clearly unavailable. */
+  disabledColor?: string;
+  disabledBg?: string;
+  disabledOpacity?: number;
+  /** Icon container. */
+  iconColor?: string;
+  iconBg?: string;
+  iconBgActive?: string;
+  iconPadding?: string;
+  iconRadius?: string;
+  iconShadow?: string;
+  iconShadowActive?: string;
+  iconTransformActive?: string;
+  /** Component-owned compact badge. */
+  badgeBg?: string;
+  badgeColor?: string;
+  badgeBorder?: string;
+  badgeRadius?: string;
+  badgeHeight?: string;
+  badgeMinWidth?: string;
+  badgePadding?: string;
+  badgeFontSize?: string;
+  badgeFontWeight?: string | number;
+  badgeBgActive?: string;
+  badgeColorActive?: string;
+  badgeBorderActive?: string;
+  /** Active indicator. */
+  indicatorHeight?: string;
+  indicatorGradient?: string;
+  indicatorRadius?: string;
+  indicatorShadow?: string;
+  /** Tab panel framing and focus. */
+  panelPadding?: string;
+  panelGap?: string;
+  panelBg?: string;
+  panelBorder?: string;
+  panelRadius?: string;
+  panelShadow?: string;
+  panelFocusRing?: string;
+  panelTexture?: string;
+  panelHighlight?: string;
+  panelMotionDistance?: string;
+  /** Overflow affordances and edge fades. */
+  overflowControlSize?: string;
+  overflowControlBg?: string;
+  overflowControlColor?: string;
+  overflowControlBorder?: string;
+  overflowControlShadow?: string;
+  overflowControlBgHover?: string;
+  overflowControlShadowHover?: string;
+  overflowFadeWidth?: string;
+  overflowFadeColor?: string;
+  mobilePadding?: string;
+  mobileGap?: string;
+  mobileItemMaxWidth?: string;
+  /** Intent motion, independently tenant-tunable and reduced-motion safe. */
+  motionDuration?: string;
+  motionEasing?: string;
+  activeRevealDuration?: string;
+  panelMotionDuration?: string;
+  panelMotionEasing?: string;
+  /** Per-size control geometry. */
+  smHeight?: string;
+  smPadding?: string;
+  smFontSize?: string;
+  smIconSize?: string;
+  mdHeight?: string;
+  mdPadding?: string;
+  mdFontSize?: string;
+  mdIconSize?: string;
+  lgHeight?: string;
+  lgPadding?: string;
+  lgFontSize?: string;
+  lgIconSize?: string;
 }
 
 // ── Vertical Theme ──────────────────────────────────────
@@ -689,8 +1482,22 @@ export interface TenantAppearanceGeneral {
     primary?: string;
     secondary?: string;
     accent?: string;
+    /** Clear-scheme page canvas. Advanced remains available for nested surfaces. */
+    background?: string;
+    /** Global reading hierarchy for ordinary tenant-authored surfaces. */
+    foreground?: {
+      primary?: string;
+      secondary?: string;
+      muted?: string;
+      disabled?: string;
+    };
+    /** Neutral separator hierarchy; component-specific borders stay in chrome. */
+    border?: {
+      primary?: string;
+      secondary?: string;
+    };
     /** Feeds ThemeProvider theme resolution (not a CSS variable). */
-    backgroundMode?: 'light' | 'dark' | 'auto';
+    backgroundMode?: "light" | "dark" | "auto";
     /**
      * Optional dark-scheme seeds. Under backgroundMode `auto` they enable
      * dual-ramp `light-dark()` emission; under `light`/`dark` they are inert
@@ -701,6 +1508,16 @@ export interface TenantAppearanceGeneral {
       secondary?: string;
       accent?: string;
       background?: string;
+      foreground?: {
+        primary?: string;
+        secondary?: string;
+        muted?: string;
+        disabled?: string;
+      };
+      border?: {
+        primary?: string;
+        secondary?: string;
+      };
     };
   };
   typography?: {
@@ -710,27 +1527,34 @@ export interface TenantAppearanceGeneral {
      * Compiler-owned font pairing preset applied before the free-form
      * families; explicit fontFamilyBase/Heading always win.
      */
-    typePairing?: 'sober' | 'editorial' | 'geometric' | 'technical';
+    typePairing?: "sober" | "editorial" | "geometric" | "technical";
     /** Multiplies the font-size ramp through `--ds-type-scale`. */
     scale?: number;
   };
   shape?: {
-    buttonStyle?: 'sharp' | 'soft' | 'pill';
+    buttonStyle?: "sharp" | "soft" | "pill";
     /** Multiplies the radius ramp through `--ds-radius-scale`. */
     radiusScale?: number;
   };
-  /** Multiplies the spacing array in useTokens(). Not a CSS variable. */
-  density?: 'compact' | 'normal' | 'spacious';
+  /** Semantic spacing mode shared by CSS and numeric useTokens consumers. */
+  density?: "compact" | "normal" | "spacious";
   /**
    * Tenant-owned motion preference. Values are clamped by the runtime policy;
    * tenants cannot inject choreography, loops, keyframes or spring physics.
    */
   motion?: TenantMotionDial;
   surfaces?: {
-    elevation?: 'flat' | 'soft' | 'elevated';
+    elevation?: "flat" | "soft" | "elevated";
+    /**
+     * Coordinated visual-detail dial consumed by every Modern material.
+     * `0` produces flat operational chrome; `1` enables the full reviewed
+     * gradient, glass, glow and texture layer. The tenant compiler clamps it
+     * to both the global safety bounds and the owning vertical envelope.
+     */
+    effectIntensity?: number;
   };
   navigation?: {
-    sidebarTone?: 'subtle' | 'strong' | 'inverse';
+    sidebarTone?: "subtle" | "strong" | "inverse";
   };
 }
 
@@ -756,6 +1580,8 @@ export interface TenantAppearanceAdvanced {
     toolbar?: Partial<BrandToolbarChrome>;
     /** Filter pill/toggle chrome used by dense list filters */
     filterPill?: Partial<BrandFilterPillChrome>;
+    /** Badge / Chip / Pill microchannel chrome */
+    badge?: Partial<BrandBadgeChrome>;
     /** Breadcrumb and breadcrumb-bar chrome */
     breadcrumb?: Partial<BrandBreadcrumbChrome>;
     /** Global/local search chrome */
@@ -782,6 +1608,10 @@ export interface TenantAppearanceAdvanced {
     listingGrid?: Partial<BrandListingGridChrome>;
     /** Modal/dialog chrome (bg, overlay, header/body/footer, close) */
     modal?: Partial<BrandModalChrome>;
+    /** Tooltip material, geometry, density and motion chrome */
+    tooltip?: Partial<BrandTooltipChrome>;
+    /** Popover material, geometry, density and motion chrome */
+    popover?: Partial<BrandPopoverChrome>;
     /** Tabs chrome (border, color states) */
     tabs?: Partial<BrandTabsChrome>;
   };
@@ -793,6 +1623,12 @@ export interface TenantAppearanceAdvanced {
 export interface TenantAppearance {
   general?: TenantAppearanceGeneral;
   advanced?: TenantAppearanceAdvanced;
+  /**
+   * Governed recipe-profile selection compiled from the DB-owned appearance
+   * document. The value is validated against the closed DS registry before it
+   * reaches this runtime-facing shape.
+   */
+  recipeProfile?: string;
 }
 
 // ── Brand Compiler Contract ─────────────────────────────
@@ -817,7 +1653,7 @@ export interface BrandCompilerInput {
   /** Resolved vertical baseline token overrides (layered before BrandTheme) */
   verticalTokenOverrides?: TenantTokenOverrides;
   /** Light or dark base theme */
-  baseTheme?: 'light' | 'dark';
+  baseTheme?: "light" | "dark";
 }
 
 export interface CompiledBrand {
@@ -831,6 +1667,8 @@ export interface CompiledBrand {
   tokenOverrides: Partial<TenantTokenOverrides>;
   /** Resolved engine-specific values (DaisyUI vars, Ant Design overrides, etc.) */
   engineBridge: Partial<Record<EngineName, Record<string, unknown>>>;
+  /** Validated recipe-profile id (DS-S001); absent when none or invalid. */
+  recipeProfile?: string;
 }
 
 /**

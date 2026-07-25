@@ -44,7 +44,6 @@ export function MarketingSurface({
           {config.presentation.eyebrow ? (
             <Text
               className="ds-marketing__muted-text"
-              data-part="muted-text"
               style={{
                 fontSize: 12,
                 fontWeight: 700,
@@ -78,7 +77,6 @@ export function MarketingSurface({
         {config.presentation.description ? (
           <Text
             className="ds-marketing__description"
-            data-part="description"
             style={{
               fontSize: isMobile ? 16 : 18,
               lineHeight: isMobile ? 1.75 : 1.85,

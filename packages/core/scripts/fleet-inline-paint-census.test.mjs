@@ -18,9 +18,7 @@ import {
 } from "./lib/fleet-inline-paint-census.mjs";
 import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
 
-const COMPONENTS_DIR = fileURLToPath(
-  new URL("../src/ui/", import.meta.url)
-);
+const COMPONENTS_DIR = fileURLToPath(new URL("../src/ui/", import.meta.url));
 
 function write(root, path) {
   const full = join(root, path);
@@ -229,6 +227,24 @@ test(
   }
 );
 
+test("canonical density attributes are certified as a non-paint prop bag", () => {
+  const markdownView = join(
+    COMPONENTS_DIR,
+    "primitives/display/MarkdownView/index.tsx"
+  );
+  const canonical = `
+    import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
+    const node = <div {...densityScopeAttributes('compact')} />;
+  `;
+  assert.equal(countArc09PaintInFile(canonical, markdownView), 0);
+
+  const sameNameWrongOwner = `
+    import { densityScopeAttributes } from './local-density';
+    const node = <div {...densityScopeAttributes('compact')} />;
+  `;
+  assert.equal(countArc09PaintInFile(sameNameWrongOwner, markdownView), 1);
+});
+
 test("certified style producers expose every transparent style input", () => {
   const toolbar = join(
     COMPONENTS_DIR,
@@ -266,10 +282,10 @@ test("certified style producers expose every transparent style input", () => {
   assert.equal(
     countArc09PaintInFile(
       `
-      import { buildStackStyles } from '../../runtime/responsive';
+      import { resolveStackPresentation } from '../../runtime/presentation';
       const color = 'red';
       const props = { style: { color } };
-      const node = <div style={buildStackStyles(props)} />;
+      const node = <div style={resolveStackPresentation(props).style} />;
     `,
       stack
     ),
@@ -503,6 +519,10 @@ test("counter pins the productive recovered residuals", () => {
     ["primitives/layout/Box/engines/modern/index.tsx", 8],
     ["primitives/layout/Box/engines/rustic/index.tsx", 8],
     ["primitives/inputs/Input/compound/Group/index.tsx", 0],
+    ["primitives/layout/Flex/engines/modern/index.tsx", 0],
+    ["primitives/layout/Flex/engines/rustic/index.tsx", 0],
+    ["primitives/layout/Stack/engines/modern/index.tsx", 0],
+    ["primitives/layout/Stack/engines/rustic/index.tsx", 0],
     ["surfaces/runtime/profile-defaults/personality/index.tsx", 0],
     ["primitives/display/Card/engines/rustic/index.tsx", 1],
   ]);

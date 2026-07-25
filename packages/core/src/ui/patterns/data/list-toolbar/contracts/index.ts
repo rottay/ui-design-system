@@ -5,19 +5,55 @@
  * density control, view mode toggle, and settings dropdown.
  */
 
-import type { ReactNode } from 'react';
-import type { PatternBaseProps } from '../../../../../foundation/contracts/runtime/components/patterns/core';
+import type { ReactNode } from "react";
+import type { PatternBaseProps } from "../../../../../foundation/contracts/runtime/components/patterns/core";
 import type {
   DensityKey,
   FilterPillConfig,
   ViewMode,
-} from '@/foundation/contracts/runtime/components/patterns/data';
+} from "@/foundation/contracts/runtime/components/patterns/data";
 
 export type {
   DensityKey,
   FilterPillConfig,
   ViewMode,
-} from '@/foundation/contracts/runtime/components/patterns/data';
+} from "@/foundation/contracts/runtime/components/patterns/data";
+
+/** Localizable copy owned by the toolbar chrome, rather than by its data. */
+export interface ListToolbarMessages {
+  compact: string;
+  comfortable: string;
+  spacious: string;
+  densitySuffix: string;
+  rowDensity: string;
+  viewMode: string;
+  listView: string;
+  cardView: string;
+  columns: string;
+  density: string;
+  views: string;
+  noColumnSettings: string;
+  noSavedViews: string;
+  columnSettings: string;
+  settings: string;
+  moreOptions: string;
+  export: string;
+  active: string;
+  clearAll: string;
+  /**
+   * Accessible name for the search input. Optional; both engines fall back to
+   * `searchPlaceholder` so existing callers keep their current behavior.
+   */
+  searchLabel?: string;
+  /**
+   * Supporting copy under each density option in the classic engine's
+   * radio-style density list. Optional; the modern engine renders no
+   * descriptions, so it ignores these keys.
+   */
+  compactDescription?: string;
+  comfortableDescription?: string;
+  spaciousDescription?: string;
+}
 
 /** Props for the ListToolbar pattern component. */
 export interface ListToolbarProps extends PatternBaseProps {
@@ -38,6 +74,8 @@ export interface ListToolbarProps extends PatternBaseProps {
   onSearchChange: (value: string) => void;
   /** Placeholder for the search input */
   searchPlaceholder?: string;
+  /** Localized toolbar chrome. Defaults preserve the historical English copy. */
+  messages?: Partial<ListToolbarMessages>;
 
   // Filters
   /** Segmented filter pill definitions */

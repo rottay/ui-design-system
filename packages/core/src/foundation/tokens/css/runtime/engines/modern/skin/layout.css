@@ -14,12 +14,32 @@
  * so each one carries ITS OWN engine-suffixed pair
  * (`rottay-layout-header rottay-layout-header--modern`, etc., added in this
  * migration) rather than relying on a `.rottay-layout[data-part='root']`
- * ancestor that may not exist. `Content` paints nothing on this engine, so
- * it keeps its bare `rottay-layout-content` class untouched.
+ * ancestor that may not exist. `Content` gained its own pair in K3-C
+ * (`rottay-layout-content rottay-layout-content--modern`) when its structure
+ * moved here from engine utilities.
  *
  * INLINE-RECOVERY ADDENDUM: Box shares this engine-level layout skin. Its
  * engine pair plus `data-radius` / `data-shadow` selects the same token values
  * that the engine previously assigned inline; caller inline style still wins.
+ *
+ * K3-C ADDENDUM (pass 1): the shell STRUCTURE moved here from the modern
+ * engine's Tailwind utilities (`flex flex-col min-h-screen`, `md:flex-row`,
+ * `px-4`, `p-4`, `shrink-0`, `overflow-y-auto`, `transition-all
+ * duration-300`) so paint and structure share one owner. Values are
+ * parity-transcribed: 100vh min block size, the 768px `md` breakpoint,
+ * spacing via the density-scaled `--ds-spacing-*` channels, and the sider
+ * collapse motion rides the canonical `--ds-motion-slow` (320ms, the canon
+ * neighbor of the drained `duration-300`). `Content` now carries
+ * `rottay-layout-content--modern` (minted in K3-C) so its structure rules
+ * never touch rustic. The sider collapse trigger's sizing also moved here
+ * (was a 32px inline style) and gains the 44px coarse-pointer floor.
+ *
+ * K3-C PASS-2 REMEDIATION (TMM contrast): the sider surface/ink pairing
+ * moved from the raw `--ds-surface-panel`/`--ds-surface-card` +
+ * `--ds-color-text-primary` channels to the governed `chrome.layout.siderBg`
+ * + material panel/card channels (see the sider rules' comment). Header and
+ * footer keep `--ds-surface-inset`: measured coherent on both governed
+ * sources (TMM #FBF3E7 with #2E261C ink), so they are not in scope.
  *
  * SPECIFICITY (P-48): the one border-color-bearing declaration in this file
  * lives in the rustic skin (Sider's light-theme `border-right`), not here --
@@ -35,16 +55,30 @@
 }
 
 /* ---- sider: background + color, keyed on the already-stamped `data-theme`.
-        The light branch sets no `color` at all in the source -- an inherited
-        text color, not an omission -- so no rule is written for it here;
-        writing one would introduce a color this engine's light Sider has
-        never painted. ---- */
+        The K3-C pass-2 contrast remediation moves the pairing onto the
+        governed layout/sidebar chrome channels: the raw `--ds-surface-panel`
+        is the brand's DARK chrome surface on some tenants (TMM: #141417),
+        which pairs incoherently with `--ds-color-text-primary` (TMM:
+        #2E261C, measured 1.23:1). `chrome.layout.siderBg` is the tenant's
+        own sider surface declaration (TMM: #FFFEFB, BitHire: #fff), and the
+        material panel foreground is the coherent ink for it. The light
+        branch sets no `color` at all -- an inherited text color, not an
+        omission. ---- */
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='dark'] {
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-primary);
+  background: var(
+    --ds-layout-sider-bg,
+    var(--ds-material-panel-background, var(--ds-surface-panel))
+  );
+  color: var(
+    --ds-layout-sider-color,
+    var(--ds-material-panel-foreground, var(--ds-color-text-primary))
+  );
 }
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='light'] {
-  background: var(--ds-surface-card);
+  background: var(
+    --ds-layout-sider-light-bg,
+    var(--ds-layout-sider-bg, var(--ds-material-card-background, var(--ds-surface-card)))
+  );
 }
 
 /* ---- sider collapse-trigger: static token chrome (was the inline `style`
@@ -60,6 +94,90 @@
 /* ---- footer: static token background (was the inline `style`). ---- */
 .rottay-layout-footer.rottay-layout-footer--modern[data-part='footer'] {
   background: var(--ds-surface-inset);
+}
+
+/* ===========================================================================
+ * K3-C: shell structure (was Tailwind utilities in the engine). Parity values:
+ * `min-h-screen` -> 100vh block size; `md:flex-row` -> 768px breakpoint;
+ * `px-4`/`p-4` -> density-scaled --ds-spacing-4; `duration-300` -> the
+ * canonical --ds-motion-slow (320ms). Logical properties are used wherever
+ * the drained utility had a physical axis (`px-4` -> padding-inline).
+ * ======================================================================== */
+
+/* ---- root: full-height flex column; row with sider at the md breakpoint. ---- */
+.rottay-layout.rottay-layout--modern[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  min-block-size: var(--ds-layout-root-min-block-size, 100vh);
+}
+/* With a sider the shell goes row and COLLAPSES BY CONTENT, not by viewport:
+   no width-driven query (the audit's viewportMqInSkins law). The content asks
+   for a 480px basis — when the shell is narrower than sider + basis, flex-wrap
+   stacks it below the sider. Equivalent collapse point to the drained
+   `md:flex-row` (768px with the default sider), but driven by the shell's own
+   inline size, so embedded shells behave identically. */
+.rottay-layout.rottay-layout--modern[data-part='root'][data-has-sider='true'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.rottay-layout.rottay-layout--modern[data-part='root'][data-has-sider='true']
+  > .rottay-layout-content[data-part='content'],
+.rottay-layout.rottay-layout--modern[data-part='root'][data-has-sider='true']
+  > [data-part='content'] {
+  flex: 1 1 var(--ds-layout-content-min-basis, 480px);
+  min-inline-size: 0;
+}
+
+/* ---- header: horizontal bar, centered items, no shrink, spacing rhythm. ---- */
+.rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-inline: var(--ds-layout-header-padding-inline, var(--ds-spacing-4, 16px));
+}
+
+/* ---- sider: no shrink, own scroll, token-motion collapse transition. ---- */
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
+  flex-shrink: 0;
+  overflow-y: auto;
+  transition: width var(--ds-layout-sider-collapse-duration, var(--ds-motion-slow, 320ms))
+    var(--ds-layout-sider-collapse-timing, var(--ds-motion-ease-out));
+}
+
+/* ---- sider collapse-trigger: sizing + interaction cursor (was a 32px
+        inline style); the chrome colors stay in the paint rule above. The
+        coarse-pointer floor is 44px -- PHYSICAL px, never a rem, because the
+        fluid root scales rems down on small viewports. ---- */
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: var(--ds-layout-sider-trigger-block-size, 32px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  margin-block-start: var(--ds-spacing-2, 8px);
+  font-size: var(--ds-layout-sider-trigger-font-size, 13px);
+  cursor: pointer;
+}
+@media (pointer: coarse) {
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
+    min-block-size: 44px;
+  }
+}
+
+/* ---- content: flex-growing scrollable main with the spacing rhythm. ---- */
+.rottay-layout-content.rottay-layout-content--modern[data-part='content'] {
+  flex: 1 1 0%;
+  min-inline-size: 0;
+  padding: var(--ds-layout-content-padding, var(--ds-spacing-4, 16px));
+  overflow: auto;
+}
+
+/* ---- footer: no shrink, spacing rhythm. ---- */
+.rottay-layout-footer.rottay-layout-footer--modern[data-part='footer'] {
+  flex-shrink: 0;
+  padding-inline: var(--ds-layout-footer-padding-inline, var(--ds-spacing-4, 16px));
+  padding-block: var(--ds-layout-footer-padding-block, var(--ds-spacing-2, 8px));
 }
 
 /* ---- Box: token radius/shadow selected by engine-stamped attributes. ---- */

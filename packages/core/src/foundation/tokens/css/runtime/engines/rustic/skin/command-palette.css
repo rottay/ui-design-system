@@ -75,14 +75,10 @@
   color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
 }
 
-/* row — rest. Both channels are explicit in the source ternary's inactive branch;
-   the transparent 3px left rail reserves space so the row does not shift when the
-   selection moves, and must hold (0,4,0) against the tenant border-color floor. */
+/* row — rest. Selected and hover states use an all-around inset focus ring. */
 .ds-pattern-command-palette.ds-engine-rustic [data-part='item'] {
   background: transparent;
-}
-.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item'] {
-  border-left: 3px solid transparent;
+  box-shadow: none;
 }
 
 /* row — keyboard-active (data-active) */
@@ -90,7 +86,7 @@
   background: var(--ds-command-palette-item-active-bg, var(--ds-color-primary-50));
 }
 .ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item'][data-active='true'] {
-  border-left-color: var(--ds-command-palette-item-active-border, var(--ds-color-primary-500));
+  box-shadow: inset 0 0 0 1px var(--ds-command-palette-item-active-border, var(--ds-color-primary-500));
 }
 
 /* row — pointer hover, only while NOT keyboard-active (the !isSelected guard) */
@@ -98,7 +94,7 @@
   background: var(--ds-command-palette-item-hover-bg, var(--ds-color-bg-hover));
 }
 .ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item']:hover:not([data-active='true']) {
-  border-left-color: var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300));
+  box-shadow: inset 0 0 0 1px var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300));
 }
 
 /* row description */

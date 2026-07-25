@@ -16,11 +16,10 @@ describe('Statistic modern advanced engine coverage', () => {
   it('covers loading, formatter, invalid values, prefixes, suffixes, and fallback value colors', () => {
     const { rerender, container } = render(<Statistic title="Revenue" loading />);
 
-    expect(container.firstElementChild).toHaveStyle({
-      // The fallback is the motion canon, not a literal: WO-ENG-01 moved every
-      // inline duration onto --ds-motion-*.
-      animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
-    });
+    // K3-A Pass 1: the skeleton pulse moved from an inline animation to the
+    // modern skin, keyed on data-loading -- the DOM carries the hook only.
+    expect(container.firstElementChild).toHaveAttribute('data-loading', 'true');
+    expect((container.firstElementChild as HTMLElement).style.animationDuration).toBe('');
 
     rerender(
       <Statistic
@@ -36,8 +35,13 @@ describe('Statistic modern advanced engine coverage', () => {
     expect(screen.getByText('not-a-number')).toBeInTheDocument();
     expect(screen.getByText('$')).toBeInTheDocument();
     expect(screen.getByText('USD')).toBeInTheDocument();
-    expect(container.querySelector('.stat-title')).toHaveTextContent('Revenue');
-    expect(container.querySelector('.stat-value')).toHaveTextContent('$not-a-numberUSD');
+    expect(container.querySelector('[data-part="title"]')).toHaveTextContent('Revenue');
+    expect(container.querySelector('[data-part="value"]')).toHaveTextContent('$not-a-numberUSD');
+    expect(container.firstElementChild).toHaveAttribute('data-has-title', 'true');
+    expect(container.firstElementChild).toHaveAttribute('data-has-prefix', 'true');
+    expect(container.firstElementChild).toHaveAttribute('data-has-suffix', 'true');
+    expect(container.firstElementChild).toHaveAttribute('data-countdown', 'false');
+    expect(container.querySelector('[data-part="number"]')).toHaveTextContent('not-a-number');
 
     rerender(
       <Statistic
@@ -50,8 +54,8 @@ describe('Statistic modern advanced engine coverage', () => {
     );
 
     expect(screen.getByText('≈42.378')).toBeInTheDocument();
-    expect(container.querySelector('.stat-title')).toHaveTextContent('Orders');
-    expect(container.querySelector('.stat-value')).toHaveTextContent('≈42.378');
+    expect(container.querySelector('[data-part="title"]')).toHaveTextContent('Orders');
+    expect(container.querySelector('[data-part="value"]')).toHaveTextContent('≈42.378');
   });
 
   it('covers countdown updates, completion, numeric targets, and reset-on-rerender branches', async () => {
@@ -75,8 +79,10 @@ describe('Statistic modern advanced engine coverage', () => {
 
     expect(screen.getByText('Launch')).toBeInTheDocument();
     expect(screen.getByText(/T-/)).toBeInTheDocument();
-    expect(document.querySelector('.stat-title')).toHaveTextContent('Launch');
-    expect(document.querySelector('.stat-value')).toHaveTextContent(/T-/);
+    expect(document.querySelector('[data-part="title"]')).toHaveTextContent('Launch');
+    expect(document.querySelector('[data-part="value"]')).toHaveTextContent(/T-/);
+    expect(document.querySelector('.rottay-statistic--modern')).toHaveAttribute('data-countdown', 'true');
+    expect(document.querySelector('[data-part="number"]')).toBeInTheDocument();
 
     await act(async () => {
       vi.advanceTimersByTime(2100);

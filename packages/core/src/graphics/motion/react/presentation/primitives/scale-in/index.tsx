@@ -137,7 +137,7 @@ export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
           : once
           ? {
               whileInView: { opacity: 1, scale: 1 },
-              viewport: { once: true, amount: 0.3 },
+              viewport: { once: true, amount: "some" as const },
             }
           : { animate: { opacity: 1, scale: 1 } })}
         transition={transition}

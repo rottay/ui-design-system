@@ -15,21 +15,40 @@
  * `onMouseEnter`/`onMouseLeave` and cleared it with `''`; the `:hover` rule below
  * reproduces it, with `:not()` guards standing in for the handlers' own
  * `!isSelected && !isDisabled` gate. Nav buttons and mode toggles had NO hover in
- * this engine (rustic's nav buttons do) -- the asymmetry is transcribed, not
- * levelled.
+ * this engine (rustic's nav buttons do) -- the absence was originally transcribed
+ * with the asymmetry documented; K4-B Pass 2 LEVELLED it to the certified
+ * ghost-button hover grammar (same law as Transfer's move/pagination buttons):
+ * `--ds-button-ghost-bg-hover` (the tenant's brand tint over its control
+ * surface) with a `--ds-surface-inset` floor, gated `:not(:disabled)`, family
+ * escape hatch `--ds-calendar-nav-bg-hover`, and the active mode toggle
+ * excluded so selected > rest stays discernible. The cell-hover SURFACE moved
+ * off `--ds-surface-inset` in the K4-B remediation (invisible against
+ * surface-card on governed sources) onto the canonical
+ * `--ds-color-interactive-bg-hover` chain -- see the rule's comment.
  *
- * BORDER WIDTHS ARE NOT HERE. The today-ring's width comes from the Tailwind
- * `border` utility, which the component emits ONLY in the today-and-not-selected
- * state (utilities sort after preflight, so they paint); only the color was ever
- * inline. The `border: none` on the buttons is a color-free reset (exempt from
- * the P-48 (0,4,0) floor).
+ * BORDER WIDTHS LIVE HERE (K4-B Pass 1). The today-ring's 1px width used to come
+ * from the Tailwind `border` utility, which the component emitted ONLY in the
+ * today-and-not-selected state; that width is now the `border` shorthand in the
+ * same rule that owns the ring color, so the skin is the single paint owner for
+ * the ring and the state matrix is unchanged (today AND NOT selected, in both
+ * the month grid and the year grid). The `border: none` on the header buttons is
+ * a color-free reset (exempt from the P-48 (0,4,0) floor).
+ *
+ * HEADER-CONTROL GEOMETRY MOVED HERE (K4-B Pass 1): the four nav arrows and two
+ * mode toggles carried the same inline `height: 32 / padding: 0 12px /
+ * font-size: 13 / cursor: pointer` six times in the engine; it is transcribed
+ * verbatim into the shared rule below (logical `padding-inline`), so the
+ * component ships zero inline paint. The nav glyphs (`«`/`‹`/`›`/`»`) are
+ * direction-hardcoded characters: under `[dir='rtl']` the flip rule mirrors
+ * them with `scaleX(-1)`, so previous/next point outward in both writing
+ * directions without a markup branch (same pattern as breadcrumb/menu skins).
  *
  * `>` CHAINS THROUGHOUT: `data-part` is a shared vocabulary and `dateCellRender`
  * / `monthCellRender` inject arbitrary caller content inside the cells, so a
  * descendant selector could reach a nested component's own parts.
  *
- * SPECIFICITY (P-48): the today-ring's `border-color` clears the tenant's
- * unlayered (0,3,1) `*` border-color floor at (0,7,0). Values transcribed
+ * SPECIFICITY (P-48): the today-ring's `border` shorthand clears the tenant's
+ * unlayered (0,3,1) `*` border floor at (0,7,0). Values transcribed
  * verbatim from `engines/modern.tsx`.
  */
 
@@ -38,9 +57,18 @@
 }
 
 /* ---- header: the four nav arrows and the two mode toggles share one resting
-        surface; only the active toggle diverges. ---- */
+        surface and one geometry (transcribed verbatim from the engine's old
+        inline styles: 32px block, 12px inline padding, 13px font); only the
+        active toggle diverges. `white-space: nowrap` keeps the month label
+        ("July 2026") on one line inside the 32px control (Pass 2 capture
+        evidence: it wrapped to two lines under bithire metrics). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'] {
+  block-size: 32px;
+  padding-inline: 12px;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
@@ -48,7 +76,45 @@
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
   background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
+  /* CONTRAST LAW (K4-B round 2, axe color-contrast): the ink cannot ride
+     --ds-color-text-on-primary -- the foundation base value #0C0C0E fails on
+     the TMM teal (3.57:1) and bithire blue (3.80:1) primaries. White ink
+     clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
+     TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
+     --ds-color-white falls back to literal white when undeclared. */
+  color: var(--ds-calendar-active-ink, var(--ds-color-white, #fff));
+}
+
+/* ---- RTL: the «/‹/›/» nav glyphs are direction-hardcoded characters; mirror
+        them so previous/next point outward in RTL too. ---- */
+[dir='rtl'] .rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='nav-button'] {
+  transform: scaleX(-1);
+}
+
+/* ---- coarse pointers (K4-B Pass 2: touch targets >= 44px on day cells).
+        Only the sizing channels live here; the compact root's width grows via
+        the engine's `pointer-coarse:` utility (utilities layer, same tier as
+        `w-80`) so 7x44px tracks + gaps + padding fit without clipping. ---- */
+@media (pointer: coarse) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+    min-block-size: 44px;
+    min-inline-size: 44px;
+  }
+}
+
+/* ---- header chrome hover (K4-B Pass 2, levelled to the certified ghost-button
+        grammar -- same law as Transfer's move/pagination buttons): the brand
+        tint over the tenant's control surface, gated off disabled (a disabled
+        control must not tease interactivity; this engine never disables its
+        chrome, but the gate is part of the grammar). The ACTIVE mode toggle is
+        excluded so selected > rest stays discernible. Measured on the same
+        surfaces as Transfer: bithire ≈ #EBF1F7 over #F4F8FB (ΔRGB 9/7/4),
+        TMM ≈ #E7F0ED over #FBF6EC (ΔRGB 20/6/1); glyph ink stays
+        `--ds-color-text-primary` (>= 12:1 on both hover surfaces). No
+        transition: the paint is instant (see the cell note below). ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover,
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover {
+  background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
 }
 
 /* ---- weekday column headers ---- */
@@ -60,11 +126,53 @@
         is identical, only their geometry differs). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'] {
   background: var(--ds-color-primary);
-  color: var(--ds-color-text-inverse);
+  /* CONTRAST LAW (K4-B round 2, axe color-contrast): the old
+     --ds-color-text-inverse ink is UNDECLARED in the bithire light context,
+     so the declaration went IACVT and the cell inherited dark body ink on the
+     primary fill (3.80:1 on #3A6FB0). White ink clears AA on BOTH raw tenant
+     primaries (5.15:1 bithire, 5.47:1 TMM #0F766E); the raw fill is
+     preserved. Escape hatch stays raw; --ds-color-white falls back to literal
+     white when undeclared. */
+  color: var(--ds-calendar-selected-ink, var(--ds-color-white, #fff));
+}
+
+/* ---- forced colors: arbitrary fills are overridden by the system palette, so
+        the state channels re-map to system colors -- selected = Highlight
+        (with the active toggle), today-ring = Highlight edge, disabled keeps
+        the opacity channel (GrayText below). ---- */
+@media (forced-colors: active) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'],
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+    border-color: Highlight;
+  }
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
+    /* opacity-30 is a utilities-layer rule and cannot be overridden from this
+       layer; the disabled channel in forced colors is GrayText ON TOP of it. */
+    color: GrayText;
+  }
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
-  border-color: var(--ds-color-primary);
+  border: 1px solid var(--ds-color-primary);
 }
+/* K4-B remediation (spec: day-cell hover painted nothing): the resting cell
+   is TRANSPARENT over the root's surface-card, and the old
+   `var(--ds-surface-inset)` hover was visually indistinguishable from that
+   card on governed sources (bithire light #FFFFFF vs #EDF3F7 ≈ 1.05:1). The
+   hover now rides the canonical interactive-hover token (bithire light:
+   primary-tinted rgba(10,102,194,0.06); dark: rgba(255,255,255,0.04)), which
+   differs from the transparent rest by construction on every source; the
+   color-mix fallback covers tenants without the token, and a tenant's
+   explicit `--ds-calendar-cell-hover` stays raw (escape hatch). Selector
+   re-verified against the rendered DOM: root carries both classes, grid is a
+   direct child, cells are direct children carrying data-selected/data-today
+   and data-disabled only when disabled. */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
-  background: var(--ds-surface-inset);
+  background: var(
+    --ds-calendar-cell-hover,
+    var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
+  );
 }

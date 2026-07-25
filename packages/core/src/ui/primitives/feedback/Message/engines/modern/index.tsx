@@ -4,10 +4,11 @@
  * Provides lightweight, utility-first message functionality with modern styling.
  *
  * @remarks
- * The Modern engine uses DS token inline styles and toast structural classes for a lightweight,
- * utility-first implementation:
+ * The Modern engine is a self-contained `rottay-message--modern` tree:
  *
- * - **Tailwind Classes**: Uses Tailwind utilities with DS token inline styles
+ * - **No DaisyUI Classes**: the stack container's toast placement classes
+ *   were drained; the unlayered skin `message.css` owns fixed placement,
+ *   stacking and item surface paint outright
  * - **Provider Required**: Unlike Classic, requires MessageProvider context
  * - **Lightweight**: Minimal bundle size with CSS-based styling
  * - **Accessible**: Full ARIA support with semantic HTML
@@ -67,6 +68,12 @@ import type {
 } from '../../contracts';
 import { MESSAGE_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Internal Types
@@ -103,6 +110,14 @@ const MessageContext = createContext<MessageInstance | null>(null);
 let messageId = 0;
 
 /**
+ * Exit-lifecycle cadence in milliseconds. Kept in lockstep with the skin's
+ * `--ds-motion-fast` exit animation (skin/message.css, data-state='exit'):
+ * the node stays mounted for exactly one cadence so the exit can paint.
+ * @internal
+ */
+const MESSAGE_EXIT_DURATION_MS = 160;
+
+/**
  * Generates a unique message ID.
  * @internal
  */
@@ -116,16 +131,16 @@ const generateId = () => `modern-message-${++messageId}`;
  * MessageProvider - Modern Engine
  *
  * @description
- * Provides message context and renders the toast container for Modern messages.
- * Must wrap any components that use the useMessage hook.
+ * Provides message context and renders the stack container for Modern
+ * messages. Must wrap any components that use the useMessage hook.
  *
  * @remarks
- * The Modern provider manages message state internally and renders messages
- * using toast positioning classes. Messages are automatically
- * positioned and stacked within the toast container.
+ * The Modern provider manages message state internally. Placement and
+ * surface paint are owned by the unlayered skin `message.css`, keyed on
+ * the stamped `data-placement` attribute.
  *
  * @param props - {@link MessageProviderProps}
- * @returns Provider component with toast container
+ * @returns Provider component with stack container
  *
  * @example
  * ```tsx
@@ -247,23 +262,35 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     },
   };
 
-  // Toast classes handle fixed positioning and stacking natively,
-  // avoiding manual z-index/position CSS. Only top/bottom are supported
-  // (unlike Notification which supports 6 placements) because messages
-  // are brief, centered alerts by convention.
-  const placementClasses = {
-    top: 'toast toast-top toast-center',
-    bottom: 'toast toast-bottom toast-center',
-  };
+  // Fixed placement and stacking are owned outright by the unlayered skin
+  // message.css, keyed on the stamped data-placement attribute -- no DaisyUI
+  // toast placement classes are emitted (Notification K4-A pattern). Only
+  // top/bottom are supported (unlike Notification which supports 6
+  // placements) because messages are brief, centered alerts by convention.
+  //
+  // The provider's `top` prop is a block-axis offset from the viewport edge
+  // (pixel number per the contracts). The engine stamps the dynamic value on
+  // the --ds-message-stack-offset channel and the skin declares the `top`
+  // property that consumes it, keeping the skin the single paint owner while
+  // preserving the configurable-offset public API.
+  const stackOffset: React.CSSProperties | undefined =
+    placement === 'top'
+      ? ({ '--ds-message-stack-offset': `${top}px` } as React.CSSProperties)
+      : undefined;
 
   return (
     <MessageContext.Provider value={messageApi}>
       {children}
+      {/* role="log" + aria-live="polite" mirrors the rustic stack: assistive
+          technologies announce arriving messages without interrupting the
+          user's current task. The items themselves keep role="alert". */}
       <div
         data-part="stack-container"
         data-placement={placement}
-        className={`${placementClasses[placement]} rottay-message-stack--modern`}
-        style={{ marginTop: placement === 'top' ? top : undefined }}
+        className="rottay-message-stack--modern"
+        style={stackOffset}
+        role="log"
+        aria-live="polite"
       >
         {messages.map(({ key: _messageKey, ...msg }) => (
           <MessageItem key={msg.id} {...msg} onRemove={removeMessage} />
@@ -336,7 +363,7 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
   }
 
   // Second tuple element is null because Modern renders messages inside
-  // the provider's toast container -- no contextHolder injection needed
+  // the provider's stack container -- no contextHolder injection needed
   // (unlike Classic which requires Ant Design's contextHolder in the tree).
   return [context, null];
 }
@@ -388,23 +415,39 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   closeIcon,
   onRemove,
 }) => {
+  const { t } = useTranslation('common');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Exit lifecycle (parity with the rustic engine): close/auto-expiry first
+  // plays the skin's exit animation, then removes the node, so the stack
+  // never witnesses an abrupt disappearance.
+  const [exiting, setExiting] = useState(false);
+
+  const beginExit = useCallback(() => {
+    if (exitTimerRef.current) return; // exit already in flight
+    setExiting(true);
+    exitTimerRef.current = setTimeout(() => {
+      onRemove?.(id);
+      onClose?.();
+    }, MESSAGE_EXIT_DURATION_MS);
+  }, [id, onRemove, onClose]);
 
   // Auto-close timer
   useEffect(() => {
     if (duration > 0) {
-      timerRef.current = setTimeout(() => {
-        onRemove?.(id);
-        onClose?.();
-      }, duration * 1000);
+      timerRef.current = setTimeout(beginExit, duration * 1000);
     }
 
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
+      if (exitTimerRef.current) {
+        clearTimeout(exitTimerRef.current);
+      }
     };
-  }, [id, duration, onRemove, onClose]);
+  }, [id, duration, beginExit]);
 
   // Manual close must cancel the auto-close timer first to prevent
   // a double-removal race condition (user clicks close, then timer fires).
@@ -412,41 +455,19 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    onRemove?.(id);
-    onClose?.();
+    beginExit();
   };
 
   // Per-type fill and text colour are keyed on `data-tone` in the unlayered
-  // modern Message skin. Unlayered is load-bearing: the root carries DaisyUI's
-  // `alert` class, whose base rule paints a border-color, and personality.css
-  // adds a `border-left-width` accent bar on the same class -- both are layered,
-  // and an unlayered rule (or the former element-style site) out-ranks them.
+  // modern Message skin; the exit lifecycle rides `data-state` there. The
+  // stack container's placement is skin-owned as well: the provider emits no
+  // DaisyUI placement classes (drained alongside the theme.css toast bridge).
 
-  // Inline SVG icons instead of an icon library to keep the Modern engine's
-  // bundle lightweight. Each icon uses stroke-based paths for consistent
-  // rendering at small sizes (h-5 w-5 = 20px). The loading type uses
-  // loading-spinner class for native animation support.
   const icons: Record<MessageType, ReactNode> = {
-    success: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    error: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    info: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-5 h-5">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    warning: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-      </svg>
-    ),
+    success: <StatusSuccessIcon decorative size={18} />,
+    error: <StatusErrorIcon decorative size={18} />,
+    info: <StatusInfoIcon decorative size={18} />,
+    warning: <StatusWarningIcon decorative size={18} />,
     // `data-icon` marks the built-in spinner so the skin's ring rule cannot also
     // paint a consumer-supplied `icon` rendered into the same slot.
     loading: (
@@ -454,16 +475,22 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     ),
   };
 
-  // role="alert" triggers screen reader announcement on appearance.
-  // DS token alert styles provide semantic color coding that respects
-  // the active tenant theme (light/dark/custom).
+  // role="alert" triggers screen reader announcement on appearance, inside the
+  // stack's polite role="log" live region; aria-live="polite" on the item
+  // mirrors the rustic engine's announcement posture.
   return (
     <div
       data-part="root"
       data-tone={type}
-      className={`alert rottay-message--modern ${className}`}
-      style={style}
+      data-state={exiting ? 'exit' : 'enter'}
+      data-closable={closable ? 'true' : 'false'}
+      className={`rottay-message--modern ${className}`}
+      style={{
+        '--ds-message-duration': duration > 0 ? `${duration}s` : undefined,
+        ...style,
+      } as React.CSSProperties}
       role="alert"
+      aria-live="polite"
     >
       <span data-part="icon">{icon || icons[type]}</span>
       <span data-part="body">{content}</span>
@@ -471,18 +498,15 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           label -- only an SVG icon. */}
       {closable && (
         <button
+          type="button"
           data-part="close-button"
-          style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
           onClick={handleClose}
-          aria-label="Close"
+          aria-label={t('close')}
         >
-          {closeIcon || (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          )}
+          {closeIcon || <ActionCloseIcon decorative size={14} />}
         </button>
       )}
+      {duration > 0 && <span data-part="progress" aria-hidden="true" />}
     </div>
   );
 };

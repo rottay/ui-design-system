@@ -22,17 +22,14 @@
  * is gone with it.
  */
 
-.rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'][data-part='item'] {
-  border-left: 2px solid transparent;
-}
-
 .rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'] {
   color: var(--ds-anchor-link-color, var(--ds-color-neutral-600, #595959));
 }
 
 .rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'][data-selected='true'] {
   color: var(--ds-anchor-link-active-color, var(--ds-color-primary-500, #1890ff));
-  border-left-color: var(--ds-anchor-link-active-border, var(--ds-color-primary-500, #1890ff));
+  border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: inset 0 0 0 1px var(--ds-anchor-link-active-border, var(--ds-color-primary-500, #1890ff));
 }
 
 .rottay-anchor-link.rottay-anchor-link--rustic[data-part='item']:hover:not([data-selected='true']) {

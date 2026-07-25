@@ -33,8 +33,12 @@
  * @package @rottay/design-system
  */
 
-import type React from 'react';
-import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../foundation/contracts';
+import type React from "react";
+import type {
+  EngineAwareProps,
+  WithChildrenProps,
+  BaseComponentProps,
+} from "../../../../../foundation/contracts";
 
 /**
  * Responsive breakpoint object for grid properties
@@ -51,13 +55,27 @@ export interface ResponsiveValue<T> {
   /** Extra large screens (large desktops) */
   xl?: T;
   /** 2x Extra large screens */
-  '2xl'?: T;
+  "2xl"?: T;
 }
 
 /**
  * Number of columns or rows in the grid
  */
-export type GridColumnsValue = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'auto' | 'none';
+export type GridColumnsValue =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | "auto"
+  | "none";
 
 /**
  * Grid columns prop type - can be a number, 'auto', or responsive object
@@ -72,7 +90,16 @@ export type GridRows = GridColumnsValue | ResponsiveValue<GridColumnsValue>;
 /**
  * Gap/spacing preset values
  */
-export type GridGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+export type GridGap =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl";
 
 /**
  * Gap prop type - can be a preset or number (pixels)
@@ -82,32 +109,59 @@ export type GridGapValue = GridGap | number;
 /**
  * Auto flow values for grid-auto-flow property
  */
-export type GridAutoFlow = 'row' | 'column' | 'dense' | 'row dense' | 'column dense';
+export type GridAutoFlow =
+  | "row"
+  | "column"
+  | "dense"
+  | "row dense"
+  | "column dense";
 
 /**
  * Alignment values for items within the grid
  */
-export type GridAlignItems = 'start' | 'end' | 'center' | 'stretch' | 'baseline';
+export type GridAlignItems =
+  | "start"
+  | "end"
+  | "center"
+  | "stretch"
+  | "baseline";
 
 /**
  * Justification values for items within the grid
  */
-export type GridJustifyItems = 'start' | 'end' | 'center' | 'stretch';
+export type GridJustifyItems = "start" | "end" | "center" | "stretch";
 
 /**
  * Content alignment values
  */
-export type GridAlignContent = 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+export type GridAlignContent =
+  | "start"
+  | "end"
+  | "center"
+  | "stretch"
+  | "space-between"
+  | "space-around"
+  | "space-evenly";
 
 /**
  * Content justification values
  */
-export type GridJustifyContent = 'start' | 'end' | 'center' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+export type GridJustifyContent =
+  | "start"
+  | "end"
+  | "center"
+  | "stretch"
+  | "space-between"
+  | "space-around"
+  | "space-evenly";
 
 /**
  * Place items shorthand values
  */
-export type GridPlaceItems = 'start' | 'end' | 'center' | 'stretch';
+export type GridPlaceItems = "start" | "end" | "center" | "stretch";
+
+/** Token-driven transition for deliberate track/item rearrangement. */
+export type GridMotion = "none" | "rearrange";
 
 /**
  * Props for the Grid component.
@@ -138,7 +192,10 @@ export type GridPlaceItems = 'start' | 'end' | 'center' | 'stretch';
  * </Grid>
  * ```
  */
-export interface GridProps extends EngineAwareProps, WithChildrenProps, BaseComponentProps {
+export interface GridProps
+  extends EngineAwareProps,
+    WithChildrenProps,
+    BaseComponentProps {
   /**
    * Number of columns in the grid
    * Can be a number (1-12), 'auto', or a responsive object
@@ -198,6 +255,12 @@ export interface GridProps extends EngineAwareProps, WithChildrenProps, BaseComp
   templateAreas?: string;
 
   /**
+   * Minimum responsive track width. When present (and no templateColumns is
+   * supplied), Modern creates an overflow-safe auto-fit grid.
+   */
+  minColumnWidth?: React.CSSProperties["minWidth"];
+
+  /**
    * CSS grid-auto-flow value
    * Controls how auto-placed items are inserted
    * @default 'row'
@@ -255,22 +318,28 @@ export interface GridProps extends EngineAwareProps, WithChildrenProps, BaseComp
   /**
    * Width of the grid container
    */
-  width?: React.CSSProperties['width'];
+  width?: React.CSSProperties["width"];
 
   /**
    * Height of the grid container
    */
-  height?: React.CSSProperties['height'];
+  height?: React.CSSProperties["height"];
 
   /**
    * Minimum height of the grid container
    */
-  minHeight?: React.CSSProperties['minHeight'];
+  minHeight?: React.CSSProperties["minHeight"];
 
   /**
    * Maximum width of the grid container
    */
-  maxWidth?: React.CSSProperties['maxWidth'];
+  maxWidth?: React.CSSProperties["maxWidth"];
+
+  /** Minimum width of the grid formatting context. */
+  minWidth?: React.CSSProperties["minWidth"];
+
+  /** Overflow policy for content that cannot shrink further. */
+  overflow?: React.CSSProperties["overflow"];
 
   /**
    * Additional CSS class name
@@ -287,6 +356,24 @@ export interface GridProps extends EngineAwareProps, WithChildrenProps, BaseComp
    * @default false
    */
   inline?: boolean;
+
+  /** Animate deliberate track rearrangement through the global motion tokens. */
+  motion?: GridMotion;
+
+  /** Semantic role for landmark/list/grid composition. */
+  role?: React.AriaRole;
+
+  /** Keyboard focus order when the grid itself is interactive. */
+  tabIndex?: number;
+
+  /** Native advisory title. */
+  title?: string;
+
+  /** Content language inherited by descendants. */
+  lang?: string;
+
+  /** Writing direction; logical tracks and safe sizing remain RTL-aware. */
+  dir?: React.HTMLAttributes<HTMLElement>["dir"];
 }
 
 /**
@@ -326,22 +413,22 @@ export interface GridItemProps extends WithChildrenProps, BaseComponentProps {
   /**
    * Starting column line
    */
-  colStart?: number | 'auto';
+  colStart?: number | "auto";
 
   /**
    * Ending column line
    */
-  colEnd?: number | 'auto';
+  colEnd?: number | "auto";
 
   /**
    * Starting row line
    */
-  rowStart?: number | 'auto';
+  rowStart?: number | "auto";
 
   /**
    * Ending row line
    */
-  rowEnd?: number | 'auto';
+  rowEnd?: number | "auto";
 
   /**
    * Grid area name (when using template-areas)
@@ -352,18 +439,18 @@ export interface GridItemProps extends WithChildrenProps, BaseComponentProps {
    * CSS align-self property
    * Aligns this item along the block axis
    */
-  alignSelf?: 'start' | 'end' | 'center' | 'stretch' | 'baseline';
+  alignSelf?: "start" | "end" | "center" | "stretch" | "baseline";
 
   /**
    * CSS justify-self property
    * Aligns this item along the inline axis
    */
-  justifySelf?: 'start' | 'end' | 'center' | 'stretch';
+  justifySelf?: "start" | "end" | "center" | "stretch";
 
   /**
    * CSS place-self shorthand
    */
-  placeSelf?: 'start' | 'end' | 'center' | 'stretch';
+  placeSelf?: "start" | "end" | "center" | "stretch";
 
   /**
    * Z-index for stacking context
@@ -385,6 +472,21 @@ export interface GridItemProps extends WithChildrenProps, BaseComponentProps {
    * Additional inline styles
    */
   style?: React.CSSProperties;
+
+  /** Optional semantic role for the item. */
+  role?: React.AriaRole;
+
+  /** Optional keyboard focus order. */
+  tabIndex?: number;
+
+  /** Native advisory title. */
+  title?: string;
+
+  /** Content language inherited by descendants. */
+  lang?: string;
+
+  /** Writing direction for item content. */
+  dir?: React.HTMLAttributes<HTMLElement>["dir"];
 }
 
 /**
@@ -392,9 +494,9 @@ export interface GridItemProps extends WithChildrenProps, BaseComponentProps {
  */
 export const GRID_DEFAULTS: Partial<GridProps> = {
   columns: 12,
-  gap: 'md',
-  autoFlow: 'row',
-  as: 'div',
+  gap: "md",
+  autoFlow: "row",
+  as: "div",
   inline: false,
 };
 
@@ -402,7 +504,7 @@ export const GRID_DEFAULTS: Partial<GridProps> = {
  * Default values for GridItem props
  */
 export const GRID_ITEM_DEFAULTS: Partial<GridItemProps> = {
-  as: 'div',
+  as: "div",
 };
 
 /**
@@ -410,34 +512,34 @@ export const GRID_ITEM_DEFAULTS: Partial<GridItemProps> = {
  * tenant overrides can adjust the spacing scale.
  */
 export const GAP_MAP: Record<GridGap, string> = {
-  none: '0',
-  xs: 'var(--ds-spacing-1, 0.25rem)',     // 4px
-  sm: 'var(--ds-spacing-2, 0.5rem)',      // 8px
-  md: 'var(--ds-spacing-4, 1rem)',        // 16px
-  lg: 'var(--ds-spacing-6, 1.5rem)',      // 24px
-  xl: 'var(--ds-spacing-8, 2rem)',        // 32px
-  '2xl': 'var(--ds-spacing-10, 2.5rem)',  // 40px
-  '3xl': 'var(--ds-spacing-12, 3rem)',    // 48px
-  '4xl': 'var(--ds-spacing-16, 4rem)',    // 64px
+  none: "0",
+  xs: "var(--ds-spacing-1, 0.25rem)", // 4px
+  sm: "var(--ds-spacing-2, 0.5rem)", // 8px
+  md: "var(--ds-spacing-4, 1rem)", // 16px
+  lg: "var(--ds-spacing-6, 1.5rem)", // 24px
+  xl: "var(--ds-spacing-8, 2rem)", // 32px
+  "2xl": "var(--ds-spacing-10, 2.5rem)", // 40px
+  "3xl": "var(--ds-spacing-12, 3rem)", // 48px
+  "4xl": "var(--ds-spacing-16, 4rem)", // 64px
 };
 
 /**
  * CSS align-items value mapping
  */
 export const ALIGN_ITEMS_MAP: Record<GridAlignItems, string> = {
-  start: 'start',
-  end: 'end',
-  center: 'center',
-  stretch: 'stretch',
-  baseline: 'baseline',
+  start: "start",
+  end: "end",
+  center: "center",
+  stretch: "stretch",
+  baseline: "baseline",
 };
 
 /**
  * CSS justify-items value mapping
  */
 export const JUSTIFY_ITEMS_MAP: Record<GridJustifyItems, string> = {
-  start: 'start',
-  end: 'end',
-  center: 'center',
-  stretch: 'stretch',
+  start: "start",
+  end: "end",
+  center: "center",
+  stretch: "stretch",
 };

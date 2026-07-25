@@ -86,9 +86,24 @@
   --ds-input-border-color-focus: var(--ds-color-primary-500);
   --ds-input-border-color-disabled: var(--ds-color-neutral-200);
 
+  /* Canonical runtime aliases. Kept separate from the legacy `*-color`
+     names so BrandTheme/TenantTheme can override the complete control without
+     an application selector. */
+  --ds-input-border: var(--ds-input-border-color);
+  --ds-input-border-hover: var(--ds-input-border-color-hover);
+  --ds-input-border-focus: var(--ds-input-border-color-focus);
+  --ds-input-border-disabled: var(--ds-input-border-color-disabled);
+
   --ds-input-border-width: 1px;
   --ds-input-border-width-focus: 2px;
   --ds-input-border-style: solid;
+  --ds-input-radius: var(--ds-radius-input, var(--ds-radius-md));
+  --ds-input-gap: var(--ds-input-affix-gap, var(--ds-spacing-2));
+  --ds-input-message-gap: var(--ds-spacing-1);
+  --ds-input-caret-color: var(--ds-input-border-focus);
+  --ds-input-selection-bg: color-mix(in srgb, var(--ds-input-border-focus) 20%, transparent);
+  --ds-input-selection-color: var(--ds-input-color);
+  --ds-input-placeholder-opacity: 1;
 
   /* ========================================================================
      VARIANTS - Semantic States
@@ -100,24 +115,32 @@
   --ds-input-success-border-color-focus: var(--ds-color-success-600);
   --ds-input-success-shadow-focus: var(--ds-shadow-focus-ring-success);
   --ds-input-success-icon-color: var(--ds-color-success-500);
+  --ds-input-success-border: var(--ds-input-success-border-color);
+  --ds-input-success-bg: color-mix(in srgb, var(--ds-input-success-border) 4%, var(--ds-input-bg));
 
   /* Warning variant */
   --ds-input-warning-border-color: var(--ds-color-warning-500);
   --ds-input-warning-border-color-focus: var(--ds-color-warning-600);
   --ds-input-warning-shadow-focus: var(--ds-shadow-focus-ring-warning);
   --ds-input-warning-icon-color: var(--ds-color-warning-500);
+  --ds-input-warning-border: var(--ds-input-warning-border-color);
+  --ds-input-warning-bg: color-mix(in srgb, var(--ds-input-warning-border) 4%, var(--ds-input-bg));
 
   /* Error variant */
   --ds-input-error-border-color: var(--ds-color-error-500);
   --ds-input-error-border-color-focus: var(--ds-color-error-600);
   --ds-input-error-shadow-focus: var(--ds-shadow-focus-ring-error);
   --ds-input-error-icon-color: var(--ds-color-error-500);
+  --ds-input-error-border: var(--ds-input-error-border-color);
+  --ds-input-error-color: var(--ds-input-color);
+  --ds-input-error-bg: color-mix(in srgb, var(--ds-input-error-border) 4%, var(--ds-input-bg));
 
   /* ========================================================================
      SHADOWS
      Focus and state shadows
      ======================================================================== */
   --ds-input-shadow-rest: var(--ds-shadow-input-rest);
+  --ds-input-shadow-hover: var(--ds-input-shadow-rest);
   --ds-input-shadow-focus: var(--ds-shadow-input-focus);
   --ds-input-shadow-error-focus: var(--ds-shadow-input-error);
 
@@ -128,10 +151,17 @@
   --ds-input-addon-bg: var(--ds-color-neutral-50);
   --ds-input-addon-color: var(--ds-color-neutral-600);
   --ds-input-addon-border-color: var(--ds-color-neutral-300);
+  --ds-input-addon-border: var(--ds-input-addon-border-color);
   --ds-input-addon-padding-x: 0.75rem;
 
   --ds-input-affix-gap: 0.5rem;            /* Gap between affix and input text */
   --ds-input-affix-color: var(--ds-color-neutral-500);
+  --ds-input-affix-size: var(--ds-input-md-icon-size);
+  --ds-input-affix-size-compact: var(--ds-input-sm-icon-size);
+  --ds-input-affix-padding-x: 0;
+  --ds-input-affix-bg: transparent;
+  --ds-input-affix-border: 0 solid transparent;
+  --ds-input-affix-radius: var(--ds-radius-sm);
 
   /* ========================================================================
      ICONS - Prefix/Suffix Icons
@@ -149,7 +179,22 @@
   --ds-input-clear-color: var(--ds-color-neutral-400);
   --ds-input-clear-color-hover: var(--ds-color-neutral-600);
   --ds-input-clear-bg-hover: var(--ds-color-neutral-100);
+  --ds-input-clear-bg: transparent;
+  --ds-input-clear-border: 1px solid transparent;
+  --ds-input-clear-border-hover: var(--ds-input-border);
+  --ds-input-action-shadow-hover: none;
+  --ds-input-action-focus-ring: var(--ds-focus-ring);
   --ds-input-clear-radius: var(--ds-radius-full);
+  --ds-input-action-size: var(--ds-input-md-icon-size);
+  --ds-input-action-radius: var(--ds-input-clear-radius);
+  --ds-input-action-active-transform: scale(0.94);
+  --ds-input-touch-target-min: 2.75rem;
+
+  /* Loading */
+  --ds-input-loading-size: var(--ds-input-md-icon-size);
+  --ds-input-loading-stroke: 2;
+  --ds-input-loading-color: var(--ds-input-border-focus);
+  --ds-input-loading-duration: 720ms;
 
   /* ========================================================================
      PASSWORD TOGGLE
@@ -197,6 +242,7 @@
   --ds-input-error-message-font-size: var(--ds-font-size-sm);
   --ds-input-error-message-margin-top: 0.25rem;
   --ds-input-error-message-icon-size: 1rem;
+  --ds-input-error-message-font-weight: var(--ds-font-weight-medium);
 
   /* ========================================================================
      SUCCESS MESSAGE
@@ -211,6 +257,9 @@
      Settings for input groups
      ======================================================================== */
   --ds-input-group-gap: 0;
+  --ds-input-group-gap-separated: var(--ds-spacing-2);
+  --ds-input-group-overlap: -1px;
+  --ds-input-group-min-item-width: 12rem;
   --ds-input-group-border-radius-first: var(--ds-radius-md) 0 0 var(--ds-radius-md);
   --ds-input-group-border-radius-last: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
   --ds-input-group-border-radius-middle: 0;
@@ -249,6 +298,19 @@
   --ds-input-transition-timing: ease-in-out;
   --ds-input-transition: all var(--ds-input-transition-duration) var(--ds-input-transition-timing);
 
+  /* FormField composition */
+  --ds-form-field-gap: var(--ds-input-label-margin-bottom);
+  --ds-form-field-horizontal-gap: var(--ds-spacing-4);
+  --ds-form-field-label-offset-y: 0;
+  --ds-form-field-required-gap: 0.25em;
+  --ds-form-field-disabled-opacity: var(--ds-input-disabled-opacity);
+
+  /* Textarea composition */
+  --ds-textarea-padding-x: var(--ds-input-md-padding-x);
+  --ds-textarea-padding-y: var(--ds-input-md-padding-y);
+  --ds-textarea-radius: var(--ds-radius-input);
+  --ds-textarea-resize: vertical;
+
   /* ========================================================================
      TYPOGRAPHY
      Font settings for input text
@@ -269,6 +331,8 @@
      Appearance when read-only
      ======================================================================== */
   --ds-input-readonly-bg: var(--ds-color-neutral-50);
+  --ds-input-readonly-color: var(--ds-input-color);
+  --ds-input-readonly-border: var(--ds-input-border);
   --ds-input-readonly-cursor: default;
   --ds-input-readonly-border-style: dashed;
 
@@ -278,4 +342,5 @@
      ======================================================================== */
   --ds-input-autofill-bg: var(--ds-color-primary-50);
   --ds-input-autofill-color: var(--ds-color-neutral-900);
+  --ds-input-autofill-caret: var(--ds-input-caret-color);
 }

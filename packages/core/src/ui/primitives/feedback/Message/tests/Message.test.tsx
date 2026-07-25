@@ -2,9 +2,10 @@
  * Message Component Tests
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { MessageProvider, useMessage } from '..';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 const MessageTester = ({ onMount }: { onMount: (api: any) => void }) => {
   const [messageApi, contextHolder] = useMessage();
@@ -13,6 +14,10 @@ const MessageTester = ({ onMount }: { onMount: (api: any) => void }) => {
 };
 
 describe('Message', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe('MessageProvider', () => {
     it('renders children', () => {
       render(
@@ -124,31 +129,38 @@ describe('Message', () => {
   });
 
   describe('Message Options', () => {
-    // Ant Design's auto-close relies on CSS animation end events that
-    // happy-dom does not fire. This test validates antd internals, not our
-    // wrapper logic. Run manually in a real browser environment.
-    it.skip('auto closes after duration', async () => {
+    // Reactivated against the modern engine: the classic engine delegates
+    // auto-close to Ant Design's CSS-animation-driven removal, which
+    // happy-dom cannot observe. The modern engine runs the lifecycle on
+    // plain timers: expiry stamps data-state='exit' for one 160ms skin exit
+    // cadence, then removes the node.
+    it('auto closes after duration', () => {
+      vi.useFakeTimers();
       let messageApi: any;
-      render(
+      renderWithEngine(
         <MessageProvider>
           <MessageTester onMount={(api) => (messageApi = api)} />
-        </MessageProvider>
+        </MessageProvider>,
+        'modern'
       );
 
       act(() => {
         messageApi.success({ content: 'Quick', duration: 0.5 });
       });
 
-      await waitFor(() => {
-        expect(screen.getByText('Quick')).toBeInTheDocument();
-      });
+      expect(screen.getByText('Quick')).toBeInTheDocument();
 
-      await waitFor(
-        () => {
-          expect(screen.queryByText('Quick')).not.toBeInTheDocument();
-        },
-        { timeout: 1500 }
-      );
+      // Expiry begins the exit lifecycle: the node stays mounted, stamped
+      // data-state='exit', until the skin's 160ms exit cadence elapses.
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+      expect(screen.getByRole('alert')).toHaveAttribute('data-state', 'exit');
+
+      act(() => {
+        vi.advanceTimersByTime(160);
+      });
+      expect(screen.queryByText('Quick')).not.toBeInTheDocument();
     });
 
     it('updates existing message by key', async () => {
@@ -177,14 +189,16 @@ describe('Message', () => {
       });
     });
 
-    // Skipped: Ant Design's destroy() method relies on internal state management
-    // that doesn't work reliably in jsdom. Test in browser environment instead.
-    it.skip('destroys all messages', async () => {
+    // Reactivated against the modern engine, whose destroy() synchronously
+    // clears the stack. (The classic engine routes keyless destroy() to the
+    // global Ant Design singleton, which cannot see hook-instance messages.)
+    it('destroys all messages', () => {
       let messageApi: any;
-      render(
+      renderWithEngine(
         <MessageProvider>
           <MessageTester onMount={(api) => (messageApi = api)} />
-        </MessageProvider>
+        </MessageProvider>,
+        'modern'
       );
 
       act(() => {
@@ -192,40 +206,42 @@ describe('Message', () => {
         messageApi.info({ content: 'Message 2', duration: 0 });
       });
 
-      await waitFor(() => {
-        expect(screen.getByText('Message 1')).toBeInTheDocument();
-        expect(screen.getByText('Message 2')).toBeInTheDocument();
-      });
+      expect(screen.getByText('Message 1')).toBeInTheDocument();
+      expect(screen.getByText('Message 2')).toBeInTheDocument();
 
       act(() => {
         messageApi.destroy();
       });
 
-      await waitFor(() => {
-        expect(screen.queryByText('Message 1')).not.toBeInTheDocument();
-        expect(screen.queryByText('Message 2')).not.toBeInTheDocument();
-      });
+      expect(screen.queryByText('Message 1')).not.toBeInTheDocument();
+      expect(screen.queryByText('Message 2')).not.toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
-    // Skipped: Ant Design's message component renders via portal which
-    // doesn't work reliably in jsdom. Test in browser environment instead.
-    it.skip('message has alert role', async () => {
+    // Reactivated against the modern live-region contract: the stack is a
+    // polite role='log' live region (rustic parity) and each item keeps
+    // role='alert' inside it. Ant Design renders messages without any
+    // landmark role, so the classic engine has no equivalent to assert.
+    it('message has alert role', () => {
       let messageApi: any;
-      render(
+      renderWithEngine(
         <MessageProvider>
           <MessageTester onMount={(api) => (messageApi = api)} />
-        </MessageProvider>
+        </MessageProvider>,
+        'modern'
       );
 
       act(() => {
-        messageApi.success('Alert message');
+        messageApi.success({ content: 'Alert message', duration: 0 });
       });
 
-      await waitFor(() => {
-        expect(screen.getByRole('alert')).toBeInTheDocument();
-      });
+      const alert = screen.getByRole('alert');
+      expect(alert).toHaveTextContent('Alert message');
+
+      const stack = screen.getByRole('log');
+      expect(stack).toHaveAttribute('aria-live', 'polite');
+      expect(stack).toContainElement(alert);
     });
   });
 });

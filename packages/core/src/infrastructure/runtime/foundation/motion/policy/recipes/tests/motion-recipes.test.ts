@@ -27,6 +27,10 @@ describe('resolveMotionRecipe', () => {
     expect(MOTION_RECIPE_NAMES).toEqual([
       'feedback.press',
       'feedback.confirm',
+      'feedback.hover',
+      'feedback.focus',
+      'feedback.error',
+      'disclosure.reveal',
       'state.change',
       'overlay.modal',
       'overlay.sheet',
@@ -70,6 +74,28 @@ describe('resolveMotionRecipe', () => {
     ]) {
       expect(publicKeys).not.toContain(`\"${layoutProperty}\"`);
     }
+  });
+
+  it.each([
+    'feedback.hover',
+    'feedback.focus',
+    'feedback.error',
+    'disclosure.reveal',
+  ] as const)('%s (DS-A008) is bounded, never live, and collapses under reduced motion', (name) => {
+    const animated = resolveMotionRecipe(name, buildPolicy(), { active: true });
+    expect(animated.state).toBe('animated');
+    expect(animated.continuous.maxContinuousLoops).toBe(0);
+    expect(animated.durations.enterMs).toBeLessThanOrEqual(200);
+
+    const reduced = resolveMotionRecipe(
+      name,
+      buildPolicy({ reduce: true }),
+      { active: true }
+    );
+    expect(reduced.state).toBe('final');
+    expect(Object.values(reduced.durations).every((value) => value === 0)).toBe(
+      true
+    );
   });
 
   it('resolves canonical cadence, distance and phone caps', () => {

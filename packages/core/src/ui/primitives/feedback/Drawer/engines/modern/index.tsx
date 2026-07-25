@@ -20,6 +20,9 @@ import { DRAWER_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { LayoutSidebarStartIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-sidebar-start';
 
 // ============================================================================
 // Constants
@@ -58,36 +61,15 @@ const SIZE_MAP: Record<DrawerSize, string> = {
 // Close Button (shared visual with Modal/Sheet)
 // ============================================================================
 
-function CloseButton({ onClick }: { onClick: () => void }) {
+function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <button
       type="button"
       data-part="close-button"
       onClick={onClick}
-      aria-label="Close"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '32px',
-        height: '32px',
-        cursor: 'pointer',
-        flexShrink: 0,
-        transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
-      }}
+      aria-label={label}
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
+      <ActionCloseIcon decorative size={16} />
     </button>
   );
 }
@@ -97,6 +79,7 @@ function CloseButton({ onClick }: { onClick: () => void }) {
 // ============================================================================
 
 export default function ModernDrawer(props: DrawerProps): React.ReactElement {
+  const { t } = useTranslation('common');
   const {
     open,
     placement = DRAWER_DEFAULTS.placement,
@@ -298,6 +281,9 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
         data-part="surface"
         {...overlayMotion.attributes}
         data-placement={placement}
+        data-size={drawerSize}
+        data-has-title={title ? 'true' : 'false'}
+        data-has-footer={!hideFooter && footer ? 'true' : 'false'}
         data-open={dataState === 'open' ? 'true' : 'false'}
         role="dialog"
         aria-modal="true"
@@ -309,61 +295,31 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       >
         {/* ---- Header ---- */}
         {(title || closable) && (
-          <div
-            data-part="header"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '12px',
-              padding: '16px 24px',
-              flexShrink: 0,
-            }}
-          >
-            <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+          <div data-part="header">
+            <div data-part="heading-group">
               {title && (
-                <div
-                  id={titleId}
-                  data-part="title"
-                  style={{
-                    fontSize: '16px',
-                    fontWeight: 600,
-                    lineHeight: '24px',
-                  }}
-                >
-                  {title}
-                </div>
+                <>
+                  <span data-part="header-icon" aria-hidden="true">
+                    <LayoutSidebarStartIcon decorative size={18} />
+                  </span>
+                  <div id={titleId} data-part="title">
+                    {title}
+                  </div>
+                </>
               )}
             </div>
-            {closable && <CloseButton onClick={handleClose} />}
+            {closable && <CloseButton onClick={handleClose} label={t('close')} />}
           </div>
         )}
 
         {/* ---- Body ---- */}
-        <div
-          data-part="body"
-          style={{
-            flex: '1 1 auto',
-            overflowY: 'auto',
-            padding: '24px',
-          }}
-        >
+        <div data-part="body">
           {children}
         </div>
 
         {/* ---- Footer ---- */}
         {!hideFooter && footer && (
-          <div
-            data-part="footer"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              gap: '8px',
-              padding: '16px 24px',
-              flexShrink: 0,
-            }}
-          >
+          <div data-part="footer">
             {footer}
           </div>
         )}

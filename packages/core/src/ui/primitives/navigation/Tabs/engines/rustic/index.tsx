@@ -109,6 +109,12 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     className,
     style,
   } = props;
+  const compatibleType =
+    type === 'underline'
+      ? 'line'
+      : type === 'contained' || type === 'segmented'
+        ? 'card'
+        : type;
   // Strip colons from generated IDs because colons are invalid in
   // CSS selectors and break aria-controls / aria-labelledby references
   const tabsId = useId().replace(/:/g, '');
@@ -249,7 +255,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     // Negative margin pulls the active border over the container's bottom border
-    marginBottom: type === 'line' ? '-1px' : undefined,
+    marginBottom: compatibleType === 'line' ? '-1px' : undefined,
     display: 'flex',
     alignItems: 'center',
     gap: '0.5rem',
@@ -265,7 +271,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
       style={{ ...stateMotion.variables, ...style }}
       data-part="root"
       {...stateMotion.attributes}
-      data-variant={type}
+      data-variant={compatibleType}
     >
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
@@ -292,6 +298,11 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
             onKeyDown={(event) => handleKeyDown(event, item.key)}
           >
             {item.icon} {item.label}
+            {item.badge !== undefined && item.badge !== null && (
+              <span data-part="tab-badge" aria-label={item.badgeAriaLabel}>
+                {item.badge}
+              </span>
+            )}
           </button>
         ))}
       </div>

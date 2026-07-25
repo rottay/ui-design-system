@@ -35,15 +35,24 @@
  * @package @rottay/design-system
  */
 
-import type { CSSProperties, ElementType, HTMLAttributes, ReactNode } from 'react';
-import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../foundation/contracts';
-import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import type {
+  CSSProperties,
+  ElementType,
+  HTMLAttributes,
+  ReactNode,
+} from "react";
+import type {
+  EngineAwareProps,
+  WithChildrenProps,
+  BaseComponentProps,
+} from "../../../../../foundation/contracts";
+import type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 
 /**
  * Direction of the stack layout
  * @default 'vertical'
  */
-export type StackDirection = 'vertical' | 'horizontal';
+export type StackDirection = "vertical" | "horizontal";
 
 /**
  * Alignment of items along the cross axis
@@ -54,7 +63,7 @@ export type StackDirection = 'vertical' | 'horizontal';
  * - 'stretch': Items are stretched to fill the cross axis
  * - 'baseline': Items are aligned along their baselines
  */
-export type StackAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+export type StackAlign = "start" | "center" | "end" | "stretch" | "baseline";
 
 /**
  * Justification of items along the main axis
@@ -66,28 +75,46 @@ export type StackAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
  * - 'space-around': Items are evenly distributed with equal space around them
  * - 'space-evenly': Items are evenly distributed with equal space between them
  */
-export type StackJustify = 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+export type StackJustify =
+  | "start"
+  | "center"
+  | "end"
+  | "space-between"
+  | "space-around"
+  | "space-evenly";
 
 /**
  * Predefined spacing values based on design tokens
  */
-export type StackSpacingPreset = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+export type StackSpacingPreset =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl";
 
 /**
  * Spacing value - can be a preset string or a number (in pixels)
  */
 export type StackSpacing = StackSpacingPreset | number;
 
+/** Token-driven transition for intentional layout rearrangement. */
+export type StackMotion = "none" | "rearrange";
+
 /**
  * Props for the Stack component.
  * A layout primitive that stacks elements vertically or horizontally
  * with configurable spacing and alignment.
  */
-export interface StackProps extends
-  EngineAwareProps,
-  WithChildrenProps,
-  BaseComponentProps,
-  Omit<HTMLAttributes<HTMLElement>, 'style' | 'className'> {
+export interface StackProps
+  extends EngineAwareProps,
+    WithChildrenProps,
+    BaseComponentProps,
+    Omit<HTMLAttributes<HTMLElement>, "style" | "className"> {
   /**
    * The HTML element or React component to render as
    * @default 'div'
@@ -155,6 +182,9 @@ export interface StackProps extends
    */
   fullHeight?: boolean;
 
+  /** Animate deliberate structural rearrangement through the global motion tokens. */
+  motion?: StackMotion;
+
   /**
    * Inline styles to apply to the stack
    */
@@ -169,12 +199,25 @@ export interface StackProps extends
 /**
  * Default values for Stack props
  */
-export const STACK_DEFAULTS: Required<Pick<StackProps, 'as' | 'direction' | 'align' | 'justify' | 'spacing' | 'wrap' | 'reverse' | 'fullWidth' | 'fullHeight'>> = {
-  as: 'div',
-  direction: 'vertical',
-  align: 'stretch',
-  justify: 'start',
-  spacing: 'md',
+export const STACK_DEFAULTS: Required<
+  Pick<
+    StackProps,
+    | "as"
+    | "direction"
+    | "align"
+    | "justify"
+    | "spacing"
+    | "wrap"
+    | "reverse"
+    | "fullWidth"
+    | "fullHeight"
+  >
+> = {
+  as: "div",
+  direction: "vertical",
+  align: "stretch",
+  justify: "start",
+  spacing: "md",
   wrap: false,
   reverse: false,
   fullWidth: false,
@@ -186,38 +229,38 @@ export const STACK_DEFAULTS: Required<Pick<StackProps, 'as' | 'direction' | 'ali
  * tenant overrides can adjust the spacing scale.
  */
 export const SPACING_MAP: Record<StackSpacingPreset, string> = {
-  none: '0',
-  xs: 'var(--ds-spacing-1, 0.25rem)',     // 4px
-  sm: 'var(--ds-spacing-2, 0.5rem)',      // 8px
-  md: 'var(--ds-spacing-4, 1rem)',        // 16px
-  lg: 'var(--ds-spacing-6, 1.5rem)',      // 24px
-  xl: 'var(--ds-spacing-8, 2rem)',        // 32px
-  '2xl': 'var(--ds-spacing-10, 2.5rem)',  // 40px
-  '3xl': 'var(--ds-spacing-12, 3rem)',    // 48px
-  '4xl': 'var(--ds-spacing-16, 4rem)',    // 64px
+  none: "0",
+  xs: "var(--ds-spacing-1, 0.25rem)", // 4px
+  sm: "var(--ds-spacing-2, 0.5rem)", // 8px
+  md: "var(--ds-spacing-4, 1rem)", // 16px
+  lg: "var(--ds-spacing-6, 1.5rem)", // 24px
+  xl: "var(--ds-spacing-8, 2rem)", // 32px
+  "2xl": "var(--ds-spacing-10, 2.5rem)", // 40px
+  "3xl": "var(--ds-spacing-12, 3rem)", // 48px
+  "4xl": "var(--ds-spacing-16, 4rem)", // 64px
 };
 
 /**
  * Alignment value mapping to CSS flexbox values
  */
 export const ALIGN_MAP: Record<StackAlign, string> = {
-  start: 'flex-start',
-  center: 'center',
-  end: 'flex-end',
-  stretch: 'stretch',
-  baseline: 'baseline',
+  start: "flex-start",
+  center: "center",
+  end: "flex-end",
+  stretch: "stretch",
+  baseline: "baseline",
 };
 
 /**
  * Justification value mapping to CSS flexbox values
  */
 export const JUSTIFY_MAP: Record<StackJustify, string> = {
-  start: 'flex-start',
-  center: 'center',
-  end: 'flex-end',
-  'space-between': 'space-between',
-  'space-around': 'space-around',
-  'space-evenly': 'space-evenly',
+  start: "flex-start",
+  center: "center",
+  end: "flex-end",
+  "space-between": "space-between",
+  "space-around": "space-around",
+  "space-evenly": "space-evenly",
 };
 
 /**
@@ -244,7 +287,7 @@ export const JUSTIFY_MAP: Record<StackJustify, string> = {
  * @returns CSS-compatible spacing value string
  */
 export function resolveSpacing(value: StackSpacing | undefined): string {
-  if (value === undefined || value === 'none') return '0';
-  if (typeof value === 'number') return `${value}px`;
-  return SPACING_MAP[value] || '0';
+  if (value === undefined || value === "none") return "0";
+  if (typeof value === "number") return `${value}px`;
+  return SPACING_MAP[value] || "0";
 }

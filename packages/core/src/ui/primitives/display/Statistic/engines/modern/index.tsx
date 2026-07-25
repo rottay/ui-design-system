@@ -4,18 +4,21 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine uses structural utilities with the token-driven modern skin for
- * a lightweight, theme-integrated statistic display.
+ * This engine renders semantic markup with `data-part` hooks; every painted
+ * and static-geometry channel lives in the token-driven modern skin
+ * (`foundation/tokens/css/runtime/engines/modern/skin/statistic.css`).
+ * The DaisyUI `stat-title` / `stat-value` classes are gone -- the skin owns
+ * the title/value typography through the data hooks.
  *
  * **Exported Components:**
  * - `Statistic` - Main statistic component
  * - `Countdown` - Countdown timer component
  *
  * **Implementation Details:**
- * - DS token semantic color styles
- * - Tailwind typography utilities
+ * - DS token semantic color styles (via the skin's data-trend rules)
+ * - Skin-owned typography (no utility-class paint)
  * - Interval-based countdown updates
- * - Loading skeleton with animate-pulse
+ * - Loading skeleton animated by the skin (ds-foundation-pulse)
  *
  * **Token Mappings:**
  * - `var(--ds-statistic-value-color)` - Default value color (falls back to --ds-color-text-primary)
@@ -154,74 +157,61 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     const shouldAnimateValue =
       animateValue && typeof value === 'number' && !formatter && !loading;
 
-    // Loading skeleton with Tailwind animate-pulse
+    // Loading skeleton: the pulse animation and bar geometry are the skin's,
+    // keyed on data-loading + data-part="skeleton-line".
     if (loading) {
       return (
-        <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="true" style={{
-          ...style,
-          animation: 'ds-foundation-pulse 2s var(--ds-motion-ease-in-out) infinite',
-          animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
-        }}>
-          <div
-            data-part="skeleton-line"
-            style={{
-              height: 'var(--ds-spacing-4, 1rem)',
-              width: 'var(--ds-spacing-16, 4rem)',
-              marginBottom: 'var(--ds-spacing-2, 0.5rem)',
-            }}
-          />
-          <div
-            data-part="skeleton-line"
-            style={{
-              height: 'var(--ds-spacing-8, 2rem)',
-              width: 'var(--ds-spacing-24, 6rem)',
-            }}
-          />
+        <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="true" data-has-title={!!title} data-countdown="false" style={style}>
+          <div data-part="skeleton-line" />
+          <div data-part="skeleton-line" />
         </div>
       );
     }
 
     return (
-      <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="false" style={style}>
+      <div
+        ref={ref}
+        className={`${SCOPE_CLASSES} ${className}`.trim()}
+        data-part="root"
+        data-loading="false"
+        data-countdown="false"
+        data-has-title={!!title}
+        data-has-prefix={!!prefix}
+        data-has-suffix={!!suffix}
+        data-animated={shouldAnimateValue}
+        data-value-type={valueType}
+        style={style}
+      >
         {title && (
-          <div
-            className="stat-title"
-            data-part="title"
-            style={{
-              lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
-              marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
-            }}
-          >
+          <div data-part="title">
             {title}
           </div>
         )}
         <div
-          className="stat-value"
           data-part="value"
           data-trend={valueType}
-          style={{
-            lineHeight: 'var(--ds-line-height-2xl, 2rem)',
-            ...valueStyle,
-          }}
+          style={valueStyle}
         >
           {prefix && (
-            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span data-part="prefix">
               {prefix}
             </span>
           )}
           {shouldAnimateValue ? (
-            <CountUp
-              from={countFrom}
-              to={value}
-              formatter={(nextValue) =>
-                formatNumber(nextValue, precision, groupSeparator, decimalSeparator)
-              }
-            />
+            <span data-part="number">
+              <CountUp
+                from={countFrom}
+                to={value}
+                formatter={(nextValue) =>
+                  formatNumber(nextValue, precision, groupSeparator, decimalSeparator)
+                }
+              />
+            </span>
           ) : (
-            <span>{displayValue}</span>
+            <span data-part="number">{displayValue}</span>
           )}
           {suffix && (
-            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span data-part="suffix">
               {suffix}
             </span>
           )}
@@ -331,39 +321,38 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     }, [value]);
 
     return (
-      <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" style={style}>
+      <div
+        ref={ref}
+        className={`${SCOPE_CLASSES} ${className}`.trim()}
+        data-part="root"
+        data-countdown="true"
+        data-has-title={!!title}
+        data-has-prefix={!!prefix}
+        data-has-suffix={!!suffix}
+        data-value-type={valueType}
+        style={style}
+      >
         {title && (
-          <div
-            className="stat-title"
-            data-part="title"
-            style={{
-              lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
-              marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
-            }}
-          >
+          <div data-part="title">
             {title}
           </div>
         )}
-        {/* font-mono ensures digits occupy equal widths so the layout
-            does not shift as numbers change during the countdown. */}
+        {/* The countdown's monospace digits are painted by the skin, keyed on
+            [data-countdown='true'], so the layout does not shift as numbers
+            change during the countdown. */}
         <div
-          className="stat-value"
           data-part="value"
           data-trend={valueType}
-          style={{
-            lineHeight: 'var(--ds-line-height-2xl, 2rem)',
-            fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
-            ...valueStyle,
-          }}
+          style={valueStyle}
         >
           {prefix && (
-            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span data-part="prefix">
               {prefix}
             </span>
           )}
-          <span>{formatTime(timeLeft, format)}</span>
+          <span data-part="number">{formatTime(timeLeft, format)}</span>
           {suffix && (
-            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
+            <span data-part="suffix">
               {suffix}
             </span>
           )}

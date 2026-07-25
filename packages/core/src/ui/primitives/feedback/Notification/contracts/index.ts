@@ -346,6 +346,9 @@ export interface NotificationItemProps {
   /** Whether close button is shown */
   closable?: boolean;
 
+  /** ARIA announcement priority. Defaults to alert for errors/warnings and status otherwise. */
+  role?: 'alert' | 'status';
+
   /** Internal callback to remove notification from state */
   onRemove?: (id: string) => void;
 }

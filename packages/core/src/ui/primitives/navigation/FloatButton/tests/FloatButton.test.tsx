@@ -64,7 +64,11 @@ describe.each(['modern', 'rustic'] as const)('FloatButton group/backtop %s engin
       engine
     );
 
-    const trigger = await screen.findByRole('button', { name: /\?/i });
+    // Modern names the icon-only trigger via the guarded i18n channel (K4-C);
+    // rustic keeps its content-derived name.
+    const trigger = await screen.findByRole('button', {
+      name: engine === 'modern' ? /open action group/i : /\?/i,
+    });
 
     fireEvent.click(trigger);
     expect(onOpenChange).toHaveBeenCalledWith(true);

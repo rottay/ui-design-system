@@ -38,6 +38,23 @@ function buildProps(overrides: Partial<PageShellProps> = {}): PageShellProps {
 }
 
 describe('PatternPageShell advanced engine coverage', () => {
+  it('exposes premium page identity anatomy in the modern engine', () => {
+    const { container } = render(
+      <ModernPageShell
+        {...buildProps({
+          eyebrow: 'Decision workspace',
+          icon: <span data-testid="page-icon">I</span>,
+        })}
+      />
+    );
+
+    expect(container.querySelector('[data-part="header"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="eyebrow"]')).toHaveTextContent('Decision workspace');
+    expect(container.querySelector('[data-part="header-icon"]')).toContainElement(
+      screen.getByTestId('page-icon')
+    );
+  });
+
   it.each(ENGINE_COMPONENTS)(
     'covers loading and child-only branches in the %s engine',
     (engine, Component) => {

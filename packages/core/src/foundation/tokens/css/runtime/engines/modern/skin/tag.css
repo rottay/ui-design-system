@@ -31,8 +31,53 @@
  * token as the fallback, which is exactly what the object's trailing
  * `...(color && { backgroundColor: color })` spread did.
  *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * GEOMETRY owns this file too: layout, per-size height/padding/font-size, anatomy
+ * margins and motion were lifted out of the engine's inline styles so the skin is
+ * the single paint owner. Size fallbacks mirror the canonical
+ * `presentation/components/tag.css` channels; padding scales with the density
+ * engine like every other compact label.
  */
+
+/* ---- base geometry + typography (formerly engine inline styles) ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'] {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  max-inline-size: 100%;
+  overflow: hidden;
+  gap: var(--ds-tag-icon-gap, 0.25rem);
+  font-weight: var(--ds-tag-font-weight, 500);
+  line-height: var(--ds-tag-line-height, 1);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='xs'] {
+  block-size: var(--ds-tag-xs-height, 1rem);
+  padding-inline: calc(var(--ds-tag-xs-padding-inline, 0.375rem) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-tag-xs-font-size, 0.6875rem);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='sm'] {
+  block-size: var(--ds-tag-sm-height, 1.25rem);
+  padding-inline: calc(var(--ds-tag-sm-padding-inline, 0.5rem) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-tag-sm-font-size, 0.75rem);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='md'] {
+  block-size: var(--ds-tag-md-height, var(--ds-tag-default-height, 1.75rem));
+  padding-inline: calc(var(--ds-tag-md-padding-inline, 0.625rem) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-tag-md-font-size, var(--ds-tag-default-font-size, 0.8125rem));
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='lg'] {
+  block-size: var(--ds-tag-lg-height, 1.75rem);
+  padding-inline: calc(var(--ds-tag-lg-padding-inline, 0.75rem) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-tag-lg-font-size, 0.875rem);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='xl'] {
+  block-size: var(--ds-tag-xl-height, 2rem);
+  padding-inline: calc(var(--ds-tag-xl-padding-inline, 1rem) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-tag-xl-font-size, 1rem);
+}
 
 /* ---- radius ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='none'] {
@@ -52,69 +97,240 @@
 }
 
 /* ---- solid fill: the variant map. The bare rule carries `default`, which is the
-        map's own fallback for an unrecognised variant. ---- */
+        map's own fallback for an unrecognised variant.
+
+        CONTRAST LAW (R0/Axe): chromatic solid fills deepen toward black until
+        white ink clears WCAG AA on EVERY governed source -- the raw 500-level
+        hues fail (white on rottay #22C55E = 2.28, on bithire #D6A04E = 2.33)
+        and no static ink survives both light (rottay) and dark (TMM #8A6B00)
+        semantic hues. The mix derives from the tenant's own resolved hue, so
+        the ramp stays hue-faithful with no ramp lookup. Measured white-ink
+        ratios (worst source): success 62% >= 5.41, warning 55% >= 6.20,
+        error 78% >= 5.74, secondary 82% >= 6.51, primary unmixed >= 5.15. ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
   background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100));
   color: var(--ds-color-text-primary);
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-color-primary));
-  color: var(--ds-color-text-on-primary);
+  background: var(--ds-tag-custom-bg, var(--ds-tag-primary-solid-bg, var(--ds-color-primary)));
+  color: var(--ds-tag-primary-ink, var(--ds-color-text-on-primary, var(--ds-color-white, #fff)));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-color-secondary));
-  color: var(--ds-color-text-on-primary);
+  background: var(--ds-tag-custom-bg, var(--ds-tag-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-black, #000) 18%)));
+  color: var(--ds-tag-secondary-ink, var(--ds-color-white, #fff));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-color-success));
-  color: var(--ds-color-text-on-primary);
+  background: var(--ds-tag-custom-bg, var(--ds-tag-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-black, #000) 38%)));
+  color: var(--ds-tag-success-ink, var(--ds-color-white, #fff));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-color-warning));
-  color: var(--ds-color-text-on-primary);
+  background: var(--ds-tag-custom-bg, var(--ds-tag-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%)));
+  color: var(--ds-tag-warning-ink, var(--ds-color-white, #fff));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-color-error));
-  color: var(--ds-color-text-on-primary);
+  background: var(--ds-tag-custom-bg, var(--ds-tag-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%)));
+  color: var(--ds-tag-error-ink, var(--ds-color-white, #fff));
 }
 
-/* ---- outlined: transparent fill, and the variant's fill token becomes the frame
-        and the ink. The bare rule again carries the map's `default` fallback. ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
+  border: 1px solid
+    var(
+      --ds-tag-border,
+      color-mix(in srgb, currentColor 16%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 22%, transparent),
+    var(--ds-tag-shadow, 0 2px 7px color-mix(in srgb, currentColor 8%, transparent));
+}
+
+/* ---- outlined: transparent fill, and the variant's hue becomes the frame and
+        the ink. The bare rule again carries the map's `default` fallback.
+
+        CONTRAST LAW (R0/Axe round 3): on transparent fills the raw hue is the
+        TEXT, so it must clear AA on the page surface itself. Bithire's recipe
+        profile renders outlined by default, and raw hues fail there (success
+        #327CA8 = 4.3:1 on #F4F8FB, warning #D6A04E = 2.4:1). The inks deepen
+        with the same bounded mixes as the solid fills (measured worst source:
+        success 60% = 5.6:1 rottay, warning 55% = 6.2:1 rottay, error 78% =
+        5.74:1 rottay; bithire success 7.5:1). Borders stay raw hue -- frames
+        are decorative, not text. Primary/secondary stay raw: they already
+        clear AA on every governed source (worst 4.78:1). ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-outlined='true'] {
   background: var(--ds-tag-custom-bg, transparent);
   border: 1px solid var(--ds-color-alpha-black-100);
-  color: var(--ds-color-alpha-black-100);
+  /* The old near-transparent alpha-black-100 ink is replaced by the adaptive
+     primary text ink: the outlined default hosts body-size text. */
+  color: var(--ds-tag-outlined-ink, var(--ds-color-text-primary));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
   border: 1px solid var(--ds-color-primary);
-  color: var(--ds-color-primary);
+  color: var(--ds-tag-primary-outlined-ink, var(--ds-color-primary));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-outlined='true'] {
   border: 1px solid var(--ds-color-secondary);
-  color: var(--ds-color-secondary);
+  color: var(--ds-tag-secondary-outlined-ink, var(--ds-color-secondary));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success'][data-outlined='true'] {
   border: 1px solid var(--ds-color-success);
-  color: var(--ds-color-success);
+  color: var(--ds-tag-success-outlined-ink, color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-black, #000) 40%));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning'][data-outlined='true'] {
   border: 1px solid var(--ds-color-warning);
-  color: var(--ds-color-warning);
+  color: var(--ds-tag-warning-outlined-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error'][data-outlined='true'] {
   border: 1px solid var(--ds-color-error);
-  color: var(--ds-color-error);
+  color: var(--ds-tag-error-outlined-ink, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%));
 }
 
 /* ---- bordered: an INSET ring, never a real border, so the frame costs no box
         space next to the outlined variant's real one. ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-bordered='true'] {
-  box-shadow: inset 0 0 0 var(--ds-tag-border-width, 1px) var(--ds-color-border);
+  box-shadow:
+    inset 0 0 0 var(--ds-tag-border-width, 1px) var(--ds-color-border),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 20%, transparent),
+    var(--ds-tag-shadow, 0 2px 7px color-mix(in srgb, currentColor 8%, transparent));
 }
 
-/* ---- close button (`border: none` is a colour-free reset, exempt from the floor) ---- */
-.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'] {
-  background: none;
-  border: none;
+/* ---- inner anatomy + interaction --------------------------------------- */
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='content'] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='icon'][data-part='icon'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-tag-icon-size, 1em);
+  block-size: var(--ds-tag-icon-size, 1em);
+  border: 1px solid color-mix(in srgb, currentColor 13%, transparent);
+  border-radius: var(--ds-tag-icon-radius, 9999px);
+  background: color-mix(in srgb, currentColor 9%, transparent);
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 18%, transparent);
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'][data-part='close'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-tag-close-size, 1rem);
+  block-size: var(--ds-tag-close-size, 1rem);
+  margin-inline-start: var(--ds-tag-close-gap, 0.125rem);
+  padding: 0;
+  border: 1px solid color-mix(in srgb, currentColor 17%, transparent);
+  border-radius: var(--ds-tag-close-radius, 9999px);
+  outline: 0;
+  background: color-mix(in srgb, currentColor 8%, transparent);
   color: inherit;
+  opacity: 0.78;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:hover {
+  opacity: 1;
+  transform: scale(1.06);
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true'] {
+  outline: none;
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    filter var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover {
+  transform: translateY(-1px);
+  filter: saturate(1.06);
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover > [data-part='icon'] {
+  transform: translateY(-1px);
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:focus-visible {
+  box-shadow: var(
+    --ds-tag-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
+  );
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:active {
+  transform: var(--ds-tag-press-transform, translateY(0) scale(0.98));
+  filter: none;
+}
+
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:focus-visible {
+  box-shadow: var(
+    --ds-tag-close-focus-ring,
+    0 0 0 2px color-mix(in srgb, currentColor 26%, transparent)
+  );
+  opacity: 1;
+}
+
+@media (pointer: coarse) {
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true'] {
+    min-block-size: var(--ds-tag-touch-target, 2.75rem);
+  }
+  /* The close control keeps its compact visual size but meets the 44px coarse
+     floor through an invisible centered hit area. */
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'] {
+    position: relative;
+  }
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--ds-tag-close-touch-size, 2.75rem) / 2);
+    border-radius: 9999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'],
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='icon'],
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'] {
+    transition: none;
+  }
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover,
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:active,
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover > [data-part='icon'],
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:hover {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: ButtonText;
+    box-shadow: none;
+    forced-color-adjust: auto;
+  }
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:focus-visible,
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='icon'],
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'] {
+    border-color: ButtonText;
+    background: Canvas;
+  }
 }

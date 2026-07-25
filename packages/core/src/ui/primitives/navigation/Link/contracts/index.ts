@@ -164,6 +164,15 @@ export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
   external?: boolean;
 
   /**
+   * Whether to render the open-external affordance icon after the link content.
+   * Only applies when `external` is true. Engines that cannot render icons may
+   * ignore this; the Modern engine shows the affordance by default.
+   *
+   * @default true
+   */
+  externalIcon?: boolean;
+
+  /**
    * Override the rendering engine for this specific link instance.
    * Useful for mixing engine styles within the same application.
    *
@@ -224,11 +233,12 @@ export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
  * console.log(LINK_DEFAULTS.external);  // false
  * ```
  */
-export const LINK_DEFAULTS: Required<Pick<LinkProps, 'type' | 'disabled' | 'underline' | 'external'>> = {
+export const LINK_DEFAULTS: Required<Pick<LinkProps, 'type' | 'disabled' | 'underline' | 'external' | 'externalIcon'>> = {
   type: 'default',
   disabled: false,
   underline: true,
   external: false,
+  externalIcon: true,
 };
 
 // ============================================================================

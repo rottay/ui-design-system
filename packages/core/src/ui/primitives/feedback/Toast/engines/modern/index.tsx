@@ -1,18 +1,15 @@
 /**
  * @fileoverview Toast Modern Engine - Rottay Design System
- * @description Token-driven Tailwind implementation of the Toast component.
- * Uses DS token inline styles for toast notifications.
+ * @description Token-driven implementation of the Toast component on a
+ * self-contained, skin-owned tree — no DaisyUI or utility-framework classes.
  *
  * @remarks
- * The Modern engine uses DS token inline styles:
- * - `alert` structural class for container styling
- * - DS token inline styles (--ds-color-*) for color variants
- * - Tailwind utilities for layout and spacing
- *
- * This implementation provides:
- * - Utility-first styling with Tailwind CSS
- * - DS token semantic color styles
- * - Consistent animation timing
+ * The Modern engine is a self-contained `rottay-toast--modern` tree:
+ * - No DaisyUI classes: the structural `alert` class was drained (WO-SKIN-03);
+ *   the unlayered skin `toast.css` is the single paint owner, keyed on the
+ *   `data-tone`/`data-radius`/`data-shadow` attributes stamped here
+ * - Enter/exit motion is inline via `getToastAnimationStyle` (token-driven,
+ *   reduced-motion safe); all static surface paint lives in the skin
  * - Full feature parity with other engines
  *
  * @example Basic Usage
@@ -50,6 +47,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../../contracts';
 import { TOAST_DEFAULTS, TOAST_ANIMATION } from '../../contracts';
 import { getToastAnimationStyle } from '../../runtime/animation';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { CommunicationNotificationIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-notification';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Helper Functions
@@ -73,31 +77,15 @@ import { getToastAnimationStyle } from '../../runtime/animation';
 function getDefaultIcon(variant: ToastVariant): React.ReactNode {
   switch (variant) {
     case 'success':
-      return (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      );
+      return <StatusSuccessIcon decorative size={20} />;
     case 'error':
-      return (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      );
+      return <StatusErrorIcon decorative size={20} />;
     case 'warning':
-      return (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-      );
+      return <StatusWarningIcon decorative size={20} />;
     case 'info':
-      return (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      );
+      return <StatusInfoIcon decorative size={20} />;
     default:
-      return null;
+      return <CommunicationNotificationIcon decorative size={20} />;
   }
 }
 
@@ -132,6 +120,7 @@ function getDefaultIcon(variant: ToastVariant): React.ReactNode {
  * ```
  */
 export default function ModernToast(props: ToastProps): React.ReactElement | null {
+  const { t } = useTranslation('common');
   const {
     variant = TOAST_DEFAULTS.variant,
     title,
@@ -240,13 +229,11 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   // ========================================================================
 
   // Variant colouring and elevation are keyed on `data-tone` in the unlayered
-  // modern Toast skin. Unlayered is load-bearing: DaisyUI's `.alert` sets
-  // border-color from `--alert-border-color` as part of its BASE rule (this
-  // engine applies only the structural `alert` class, never an `alert-{variant}`
-  // modifier), and personality.css adds a `border-left-width` accent bar on the
-  // same class. Both are layered; an unlayered rule -- or the former element-style
-  // this replaced -- out-ranks them.
-  const baseClasses = 'alert';
+  // modern Toast skin. This engine applies NO DaisyUI class: the structural
+  // `alert` class was drained in WO-SKIN-03 (Toast.modern-variant-tokens.test
+  // pins its absence), so neither DaisyUI's `.alert` base paint nor
+  // personality.css's `.alert` transition reaches this tree -- the unlayered
+  // skin is the single paint owner.
   // Enter/exit motion comes entirely from the inline `animation` set below via
   // getToastAnimationStyle, which reads --ds-toast-enter/exit-duration/easing
   // and is neutralized by the global prefers-reduced-motion guard. No
@@ -275,7 +262,13 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       role="alert"
       data-part="root"
       data-tone={variant}
-      className={`${baseClasses} rottay-toast--modern ${className}`}
+      data-radius={props.radius ?? 'md'}
+      data-shadow={props.shadow === false ? 'false' : 'true'}
+      data-has-title={title ? 'true' : 'false'}
+      data-has-description={description ? 'true' : 'false'}
+      data-has-action={action ? 'true' : 'false'}
+      data-paused={isPaused ? 'true' : 'false'}
+      className={`rottay-toast--modern ${className}`}
       style={{
         position: 'relative',
         overflow: 'hidden',
@@ -285,32 +278,25 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Icon */}
-      {displayIcon && <span data-part="icon">{displayIcon}</span>}
+      <div data-part="layout">
+        {displayIcon && <span data-part="icon">{displayIcon}</span>}
 
-      {/* Content */}
-      <div className="flex flex-col" data-part="body">
-        {title && <span className="font-semibold">{title}</span>}
-        {description && <span className="text-sm">{description}</span>}
-        {children}
-      </div>
+        <div data-part="body">
+          {title && <span data-part="title">{title}</span>}
+          {description && <span data-part="description">{description}</span>}
+          {children && <div data-part="custom-content">{children}</div>}
+        </div>
 
-      {/* Actions */}
-      <div className="flex-none flex gap-2">
+        <div data-part="actions">
         {action && (
           <button
+            type="button"
             data-part="action"
             onClick={() => {
               action.onClick();
               if (action.closeOnClick !== false) {
                 handleClose();
               }
-            }}
-            style={{
-              height: 32,
-              padding: '0 12px',
-              fontSize: 13,
-              cursor: 'pointer',
             }}
           >
             {action.label}
@@ -319,32 +305,23 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
 
         {closable && (
           <button
+            type="button"
             data-part="close-button"
             onClick={handleClose}
-            aria-label="Close"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 32,
-              height: 32,
-              cursor: 'pointer',
-            }}
+            aria-label={t('close')}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <ActionCloseIcon decorative size={16} />
           </button>
         )}
+        </div>
       </div>
 
       {/* Progress bar shrinks from 100% to 0% matching the auto-dismiss timer.
-          bg-current inherits the alert's text color for consistent theming. */}
+          The skin paints its track from --ds-toast-accent for consistent theming. */}
       {showProgress && duration > 0 && (
         <div
           data-part="progress-bar"
-          className="absolute bottom-0 left-0 h-1 bg-current opacity-30"
-          style={{ width: `${progress}%`, transition: 'width var(--ds-motion-fast) linear' }}
+          style={{ width: `${progress}%` }}
         />
       )}
     </div>

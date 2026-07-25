@@ -4,7 +4,7 @@
   border: 2px dashed var(--ds-color-border);
 }
 
-.ds-surface.ds-import-export .ds-import-export__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-import-export .ds-import-export__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 

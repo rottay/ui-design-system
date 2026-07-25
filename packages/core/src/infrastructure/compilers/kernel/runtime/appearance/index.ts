@@ -13,6 +13,7 @@
  * Advanced produces fine-grained overrides (chrome, raw token overrides).
  */
 
+import { withArabicSafeFallback } from '@/foundation/kernel/typography';
 import type {
   TenantAppearance,
   TenantAppearanceGeneral,
@@ -20,6 +21,7 @@ import type {
 } from '@/foundation/contracts/composition/tenants/themes';
 import { MOTION_DIAL_BOUNDS } from '@/foundation/contracts/runtime/motion';
 import {
+  TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
   TENANT_THEME_RADIUS_SCALE_BOUNDS,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
@@ -29,11 +31,23 @@ import {
   type RampSurface,
 } from '@/foundation/kernel/color/oklch/ramp';
 import { deriveChartSeriesPalette } from '@/foundation/kernel/color/oklch/chart-series';
+import {
+  enforceTextContrast,
+  type TextContrastResult,
+} from '@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect';
+import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import { TYPE_PAIRINGS } from '@/foundation/tokens/ts/presentation/typography/pairings';
 import {
+  DENSITY_MODE_FACTOR_VARIABLE,
+  isDensityPreference,
+  resolveDensityModeFactor,
+} from '@/foundation/tokens/ts/foundation/base/density';
+import {
   clampValue,
+  isDarkSurface,
   isHexColor,
   isValidCssColor,
+  mixColor,
   normalizeHexColor,
 } from '../../foundation/css/color-math';
 import { chromeToVariables } from '../../foundation/css/chrome-variables';
@@ -55,12 +69,47 @@ function setVar(vars: Record<string, string>, key: string, value: string | numbe
   if (value != null) vars[key] = String(value);
 }
 
+function resolveModeColor(
+  light: string | undefined,
+  dark: string | undefined,
+  mode: "light" | "dark" | "auto" | undefined,
+): string | undefined {
+  if (mode === "dark") return dark ?? light;
+  if (mode === "auto" && light && dark) return `light-dark(${light}, ${dark})`;
+  // Under auto a dark-only value belongs to the dark half and must not become
+  // the clear-scheme base. The mode-specific ramp compiler consumes it later.
+  return light;
+}
+
+function setResolvedColor(
+  vars: Record<string, string>,
+  key: string,
+  light: string | undefined,
+  dark: string | undefined,
+  mode: "light" | "dark" | "auto" | undefined,
+): void {
+  const value = resolveModeColor(light, dark, mode);
+  if (value) setVar(vars, key, value);
+}
+
+/**
+ * Best-effort readable ink on a hex seed, chosen by WCAG contrast ratio
+ * between the canonical white and dark inks (WCAG, not APCA: the axe gates
+ * grade these pairs with WCAG math, so the derivation must optimize the same
+ * metric — on light teals APCA favors white where WCAG measures ≈2.5:1).
+ */
+function deriveReadableInk(seedHex: string): string {
+  const normalized = normalizeHexColor(seedHex);
+  const white = '#ffffff';
+  const dark = '#171717';
+  return contrastRatio(white, normalized) >= contrastRatio(dark, normalized) ? white : dark;
+}
+
 // ── General tier ──────────────────────────────────────────
 
-// Density and type-scale are resolved inside useTokens() (hooks/tokens/index.ts)
-// as numeric factors that multiply the spacing array and font sizes. They are NOT
-// emitted as CSS variables because that would require every consumer to use calc(),
-// which is a paradigm shift not justified by the current audience.
+// Type-scale is resolved both through CSS and useTokens. Density follows the
+// same split-runtime contract: appearance emits only the semantic mode factor;
+// the structural engine/vertical/brand/tenant scale remains a separate channel.
 
 /** Button shape presets map to a --ds-radius-button value. */
 const BUTTON_STYLE_RADIUS: Record<string, string> = {
@@ -235,10 +284,150 @@ export function appearanceGeneralToVariables(
   // Palette (validated - invalid colors are silently skipped)
   if (general.palette) {
     const p = general.palette;
-    setColor(vars, '--ds-color-primary', p.primary);
-    setColor(vars, '--ds-color-secondary', p.secondary);
-    setColor(vars, '--ds-color-accent', p.accent);
-    // backgroundMode is consumed by ThemeProvider, not a CSS variable
+    const mode = p.backgroundMode;
+    setColor(
+      vars,
+      '--ds-color-primary',
+      mode === 'dark' ? p.dark?.primary ?? p.primary : p.primary,
+    );
+    setColor(
+      vars,
+      '--ds-color-secondary',
+      mode === 'dark' ? p.dark?.secondary ?? p.secondary : p.secondary,
+    );
+    setColor(
+      vars,
+      '--ds-color-accent',
+      mode === 'dark' ? p.dark?.accent ?? p.accent : p.accent,
+    );
+    const background = resolveModeColor(p.background, p.dark?.background, mode);
+    if (background) {
+      setVar(vars, '--ds-color-bg-primary', background);
+      setVar(vars, '--ds-color-bg', background);
+      setVar(vars, '--ds-color-background', background);
+    }
+    setResolvedColor(
+      vars,
+      '--ds-color-text-primary',
+      p.foreground?.primary,
+      p.dark?.foreground?.primary,
+      mode,
+    );
+    setResolvedColor(
+      vars,
+      '--ds-color-text-secondary',
+      p.foreground?.secondary,
+      p.dark?.foreground?.secondary,
+      mode,
+    );
+    setResolvedColor(
+      vars,
+      '--ds-color-text-muted',
+      p.foreground?.muted,
+      p.dark?.foreground?.muted,
+      mode,
+    );
+    setResolvedColor(
+      vars,
+      '--ds-color-text-disabled',
+      p.foreground?.disabled,
+      p.dark?.foreground?.disabled,
+      mode,
+    );
+    setResolvedColor(
+      vars,
+      '--ds-color-border-primary',
+      p.border?.primary,
+      p.dark?.border?.primary,
+      mode,
+    );
+    setResolvedColor(
+      vars,
+      '--ds-color-border-secondary',
+      p.border?.secondary,
+      p.dark?.border?.secondary,
+      mode,
+    );
+
+    // Surface family + primary ink derivation. Without these channels the
+    // canonical surface/on-primary tokens fall through to the dark base
+    // `:root` values inside a light DB-tenant theme (K4 evidence: measured
+    // 1.19:1 live pairs under a DB appearance). The derivation mirrors the
+    // first-party artifact grammar (dark canvas: 5%/2.5% white lifts, the
+    // default theme's own elevation distances; light canvas: tenant-tinted
+    // near-white, the static artifacts' pure-white card grammar) and still
+    // loses to Advanced tokenOverrides, which merge after General.
+    const resolvedPrimary = mode === 'dark' ? p.dark?.primary ?? p.primary : p.primary;
+    if (
+      mode === 'auto' &&
+      p.primary &&
+      isHexColor(p.primary) &&
+      p.dark?.primary &&
+      isHexColor(p.dark.primary)
+    ) {
+      setVar(
+        vars,
+        '--ds-color-text-on-primary',
+        `light-dark(${deriveReadableInk(p.primary)}, ${deriveReadableInk(p.dark.primary)})`,
+      );
+    } else if (resolvedPrimary && isHexColor(resolvedPrimary)) {
+      setVar(vars, '--ds-color-text-on-primary', deriveReadableInk(resolvedPrimary));
+    }
+
+    const deriveSurfaces = (
+      bg: string,
+    ): { secondary: string; tertiary: string; elevated: string; input: string } =>
+      isDarkSurface(bg)
+        ? {
+            // Mirrors the default dark theme's own ladder distances from its
+            // canvas (#0C0C0E → #0F0F12/#141417/#18181C).
+            secondary: mixColor(bg, '#ffffff', 0.01),
+            tertiary: mixColor(bg, '#ffffff', 0.03),
+            elevated: mixColor(bg, '#ffffff', 0.05),
+            input: mixColor(bg, '#ffffff', 0.01),
+          }
+        : {
+            // Light canvas: sunken areas darken, raised areas lighten — the
+            // first-party artifacts' ladder (#fafafa/#f5f5f5 → pure-white card).
+            secondary: mixColor(bg, '#000000', 0.025),
+            tertiary: mixColor(bg, '#000000', 0.05),
+            elevated: mixColor(bg, '#ffffff', 0.6),
+            input: mixColor(bg, '#ffffff', 0.75),
+          };
+    const emitSurfaces = (
+      light: ReturnType<typeof deriveSurfaces>,
+      dark?: ReturnType<typeof deriveSurfaces>,
+    ): void => {
+      const channel = {
+        secondary: '--ds-color-bg-secondary',
+        tertiary: '--ds-color-bg-tertiary',
+        elevated: '--ds-color-bg-elevated',
+        input: '--ds-color-bg-input',
+      } as const;
+      for (const key of Object.keys(channel) as Array<keyof typeof channel>) {
+        setVar(
+          vars,
+          channel[key],
+          dark ? `light-dark(${light[key]}, ${dark[key]})` : light[key],
+        );
+      }
+    };
+    const lightBg =
+      p.background && isHexColor(p.background) ? normalizeHexColor(p.background) : undefined;
+    const darkBg =
+      p.dark?.background && isHexColor(p.dark.background)
+        ? normalizeHexColor(p.dark.background)
+        : undefined;
+    if (mode === 'auto' && lightBg && darkBg) {
+      emitSurfaces(deriveSurfaces(lightBg), deriveSurfaces(darkBg));
+    } else {
+      const resolvedBg = mode === 'dark' ? darkBg ?? lightBg : lightBg;
+      if (resolvedBg) emitSurfaces(deriveSurfaces(resolvedBg));
+    }
+
+    if (mode === 'auto' && p.dark && Object.keys(p.dark).length > 0) {
+      vars['--ds-color-scheme'] = 'light dark';
+    }
   }
 
   // Typography — font families are real CSS vars consumed by engines.
@@ -248,15 +437,21 @@ export function appearanceGeneralToVariables(
     if (t.typePairing) {
       const pairing = TYPE_PAIRINGS[t.typePairing];
       if (pairing) {
-        vars['--ds-font-family-heading'] = pairing.heading;
-        vars['--ds-font-family-base'] = pairing.base;
+        vars['--ds-font-family-heading'] = withArabicSafeFallback(
+          pairing.heading
+        );
+        vars['--ds-font-family-base'] = withArabicSafeFallback(pairing.base);
         if ('mono' in pairing && pairing.mono) vars['--ds-font-family-mono'] = pairing.mono;
         vars['--ds-letter-spacing-heading'] = pairing.headingLs;
         vars['--ds-line-height-display'] = String(pairing.displayLh);
       }
     }
-    if (t.fontFamilyBase) vars['--ds-font-family-base'] = t.fontFamilyBase;
-    if (t.fontFamilyHeading) vars['--ds-font-family-heading'] = t.fontFamilyHeading;
+    if (t.fontFamilyBase)
+      vars['--ds-font-family-base'] = withArabicSafeFallback(t.fontFamilyBase);
+    if (t.fontFamilyHeading)
+      vars['--ds-font-family-heading'] = withArabicSafeFallback(
+        t.fontFamilyHeading
+      );
     if (typeof t.scale === 'number' && Number.isFinite(t.scale)) {
       setVar(
         vars,
@@ -268,6 +463,15 @@ export function appearanceGeneralToVariables(
         ),
       );
     }
+  }
+
+  // Density — one canonical semantic factor for CSS and numeric token consumers.
+  // Keep this separate from --ds-density-scale, which is the structural
+  // engine/vertical/brand/tenant channel and must remain white-labelable.
+  if (isDensityPreference(general.density)) {
+    vars[DENSITY_MODE_FACTOR_VARIABLE] = String(
+      resolveDensityModeFactor(general.density),
+    );
   }
 
   // Shape — buttonStyle maps to a real CSS var consumed by engines
@@ -359,6 +563,20 @@ export function appearanceGeneralToVariables(
     const preset = ELEVATION_PRESET[general.surfaces.elevation];
     if (preset) Object.assign(vars, preset);
   }
+  if (
+    typeof general.surfaces?.effectIntensity === 'number'
+    && Number.isFinite(general.surfaces.effectIntensity)
+  ) {
+    setVar(
+      vars,
+      '--ds-effect-intensity',
+      clampValue(
+        general.surfaces.effectIntensity,
+        TENANT_THEME_EFFECT_INTENSITY_BOUNDS.min,
+        TENANT_THEME_EFFECT_INTENSITY_BOUNDS.max,
+      ),
+    );
+  }
 
   // media (logo/logoMark/favicon) removed from contract — no CSS reader exists.
   // Re-add when sidebar/header components consume --ds-tenant-logo vars.
@@ -420,6 +638,17 @@ export function appearanceToVariables(
     Object.assign(vars, appearanceAdvancedToVariables(appearance.advanced));
   }
 
+  // Typography safety is a final compiler invariant, not merely a General-tier
+  // convenience. Advanced raw overrides are allowed to replace the front of
+  // these stacks, but cannot remove the Arabic-safe fallback.
+  for (const key of [
+    '--ds-font-family-base',
+    '--ds-font-family-heading',
+    '--ds-font-family-display',
+  ] as const) {
+    if (vars[key]) vars[key] = withArabicSafeFallback(vars[key]);
+  }
+
   // Derived ramps are compiler-owned output. Apply them after Advanced so a
   // broad runtime Appearance object cannot accidentally arbitrate ramp names;
   // TenantTheme's closed schema rejects those names at the DB boundary too.
@@ -453,4 +682,22 @@ export function appearanceToVariables(
   }
 
   return vars;
+}
+
+/**
+ * Compile Appearance for a runtime consumer that will actually paint UI.
+ *
+ * `appearanceToVariables()` intentionally remains the deterministic raw
+ * projection used by low-level compiler tests and composition passes. Runtime
+ * providers and generated tenant CSS must use this function instead so the
+ * exact same APCA autocorrection contract protects both first-party compiled
+ * artifacts and DB-authored Appearance documents.
+ *
+ * Returning the full contrast result keeps adjustments and unverifiable pairs
+ * observable by tenant editors instead of silently mutating authored colors.
+ */
+export function compileAppearanceVariables(
+  appearance: TenantAppearance
+): TextContrastResult {
+  return enforceTextContrast(appearanceToVariables(appearance), appearance);
 }

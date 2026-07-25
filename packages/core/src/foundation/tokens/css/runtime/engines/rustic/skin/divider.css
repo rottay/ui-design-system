@@ -1,15 +1,14 @@
 /**
  * Rustic Divider skin (WO-SKIN-05 checkpoint L).
  *
- * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
- * a layered rule loses to Tailwind's `base` layer regardless of
- * specificity; unlayered outranks preflight and still yields to a caller's
- * inline `style`.
+ * Imported into the owned `rottay-engines` layer. Rustic emits no generic
+ * DaisyUI `.divider` class, so Modern framework pseudo-elements and bridge
+ * paint cannot contaminate this engine.
  *
  * SCOPE ROOT mints `rottay-divider rottay-divider--rustic` (grep-verified
  * free; neither engine carried a first-party scope class before this
- * migration -- this engine's own BEM classes, `divider`/`divider--<axis>`/
- * `divider--<variant>`/etc., stay untouched alongside it) + the
+ * migration -- this engine's own BEM classes, `divider--<axis>`/
+ * `divider--<variant>`/etc., stay alongside it) + the
  * already-stamped `data-part='root'` + `data-orientation` + `data-with-text`.
  *
  * L.2 (checked live, refuted): see the modern skin's header for the full
@@ -39,16 +38,26 @@
 /* ---- line: with-text spans (was lineBeforeStyle/lineAfterStyle's
         borderTop/borderLeft/borderRight/borderBottom, all driven by
         `isHorizontal` except the always-none right/bottom pair). ---- */
-.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'] [data-part='line-before'],
-.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'] [data-part='line-after'] {
-  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+.rottay-divider.rottay-divider--rustic[data-part="root"][data-orientation="horizontal"]
+  [data-part="line-before"],
+.rottay-divider.rottay-divider--rustic[data-part="root"][data-orientation="horizontal"]
+  [data-part="line-after"] {
+  border-top: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, #d9d9d9)
+  );
   border-left: none;
   border-right: none;
   border-bottom: none;
 }
-.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'] [data-part='line-before'],
-.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'] [data-part='line-after'] {
-  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+.rottay-divider.rottay-divider--rustic[data-part="root"][data-orientation="vertical"]
+  [data-part="line-before"],
+.rottay-divider.rottay-divider--rustic[data-part="root"][data-orientation="vertical"]
+  [data-part="line-after"] {
+  border-left: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, #d9d9d9)
+  );
   border-top: none;
   border-right: none;
   border-bottom: none;
@@ -58,14 +67,20 @@
         divider return path's `{ ...containerStyle, ...lineStyle }`). Gated
         to `data-with-text='false'` -- the with-text root never carries this
         channel. ---- */
-.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'][data-with-text='false'] {
-  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+.rottay-divider.rottay-divider--rustic[data-part="root"][data-orientation="horizontal"][data-with-text="false"] {
+  border-top: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, #d9d9d9)
+  );
   border-left: none;
   border-right: none;
   border-bottom: none;
 }
-.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'][data-with-text='false'] {
-  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+.rottay-divider.rottay-divider--rustic[data-part="root"][data-orientation="vertical"][data-with-text="false"] {
+  border-left: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, #d9d9d9)
+  );
   border-top: none;
   border-right: none;
   border-bottom: none;
@@ -76,6 +91,7 @@
         `plain && hasChildren`, so no rule fires here for the plain case and
         the text naturally inherits -- matching the original `'inherit'`
         value exactly). ---- */
-.rottay-divider.rottay-divider--rustic[data-part='root']:not(.divider--plain) [data-part='text'] {
+.rottay-divider.rottay-divider--rustic[data-part="root"]:not(.divider--plain)
+  [data-part="text"] {
   color: var(--ds-divider-text-color, var(--ds-color-neutral-600, #555));
 }

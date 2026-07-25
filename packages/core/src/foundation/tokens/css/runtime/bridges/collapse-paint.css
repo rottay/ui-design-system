@@ -1,19 +1,10 @@
 /**
  * Collapse Bridge Paint - Rottay Design System
  *
- * The preflight-killable paint of the `.ds-collapse` wrapper family. The
- * wrapper element is bridge-owned: no engine theme, tenant artifact, or antd
- * runtime style targets it, so these channels are safe outside the layers.
- *
- * DELIBERATELY UNLAYERED (P-47/P-76): a Tailwind v4 host's preflight resets
- * border/margin/padding above every `rottay-*` layer; wrapper paint only
- * survives from outside the layer statement.
- *
- * The `.ant-collapse-*` channels stay in runtime/bridges/collapse.css inside
- * `rottay-components`: antd cssinjs injects unlayered runtime styles whose
- * position relative to this bundle is host-dependent, and classic
- * theme.css contests the same channels from `rottay-engines`, so unlayering
- * them would flip the cascade in tenant contexts.
+ * Deprecated compatibility source retained temporarily for downstream source
+ * maps. It is not imported by either public entrypoint. Collapse paint now
+ * lives with the wrapper contract in `runtime/bridges/collapse.css` inside
+ * `rottay-components`, after Tailwind's `base` layer.
  */
 
 .ds-collapse {

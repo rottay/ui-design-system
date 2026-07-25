@@ -1,16 +1,37 @@
 /**
- * Modern ContextMenu skin (WO-SKIN-04 checkpoint P).
+ * Modern ContextMenu skin (WO-SKIN-04 checkpoint P; K4-A ownership drain 2026-07-24).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
  *
- * NOT the same widget as Dropdown, despite the near-identical markup (P2b). Dropdown
- * modern renders the DaisyUI `menu` class on its <ul> and therefore inherits a live
- * item-row hover from `modern/theme.css`'s `.menu li > button:hover`. THIS engine
- * renders ZERO DaisyUI classes (its <ul>'s className is the consumer's
- * `overlayClassName` and nothing else), so no theme.css or personality.css rule
- * reaches any element here, and its item rows have NO hover feedback at all.
- * That absence is the shipped behaviour and is preserved: do not add a `:hover`.
+ * SAME WIDGET CLASS as Dropdown, with one paint owner each. Dropdown modern
+ * renders NO DaisyUI class (an earlier revision of this header claimed it
+ * rendered Daisy's `menu` on its <ul> and inherited hover from theme.css --
+ * stale: Dropdown's <ul> carries no class at all and its item hover is owned
+ * by dropdown.css). THIS engine likewise renders ZERO DaisyUI classes -- its
+ * <ul>'s className is the consumer's `overlayClassName` and nothing else -- so
+ * no theme.css or personality.css rule reaches any element here.
+ *
+ * HOVER (leveled in Pass 2, K4-A): the P2b-era zero-hover contract is RETIRED
+ * -- the premium bar requires visible feedback on interactive chrome, and the
+ * coordinator's Pass-2 dispatch leveled the same law for sibling lanes
+ * (Calendar nav, Transfer buttons). Item rows now own hover/focus-visible/
+ * pressed feedback calibrated quieter than Dropdown's (no lift, no border --
+ * a context menu is the flatter sibling), with danger rows tinting toward
+ * error and a forced-colors outline contract.
+ *
+ * GEOMETRY (K4-A): divider thickness/margins, group-label chrome, item-row
+ * layout, shortcut/label tracks, panel width/padding and the trigger's
+ * positioning context all live here, drained from engine inline styles and
+ * Tailwind utilities (`flex items-center justify-between gap-2`, `text-xs
+ * opacity-50`, `relative`). Shipped values are transcribed verbatim; token
+ * channels are family-local `--ds-context-menu-*` with fallbacks.
+ *
+ * COHERENCE (Pass 2, K4-A): the panel shares the lane's overlay material
+ * register with Dropdown and HoverCard (same widget class): the subtle
+ * primary-tinted gradient, tinted border, inset highlight, elevation-3 and
+ * backdrop blur, unified at radius-xl. Previously a flat
+ * `--ds-surface-card`/`border-subtle`/elevation-2 card.
  *
  * PORTAL: this engine does NOT portal — the menu is an in-tree absolute child of the
  * trigger container (rustic DOES portal). The scope class anchors every rule anyway.
@@ -29,18 +50,44 @@
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 @keyframes ds-context-menu-popover-exit-modern {
-  from { opacity: 1; transform: scale(1) translateY(0); }
+  from { opacity: 1; transform: scale(0.96) translateY(-4px); }
   to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
+}
+
+/* ---- positioning context (was the engine's `relative` utility) ---- */
+.rottay-context-menu--modern[data-part='trigger'] {
+  position: relative;
 }
 
 /* ---- floating menu panel (the <ul>) ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] {
-  background: var(--ds-surface-card);
-  border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-2);
+  inline-size: var(--ds-context-menu-width, 14rem);
+  margin: 0;
+  padding: var(--ds-context-menu-padding, var(--ds-spacing-2, 0.5rem));
+  list-style: none;
+  /* Pass-2 coherence: the lane's overlay surfaces share Dropdown's material
+     register (same widget class) -- subtle primary-tinted gradient, tinted
+     border, inset highlight, elevation-3, backdrop blur, radius-xl. */
+  border-radius: var(--ds-context-menu-radius, var(--ds-radius-xl, 16px));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
+      transparent 44%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-surface-card) 98%, white 2%),
+      color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    var(--ds-context-menu-shadow, var(--ds-elevation-3));
+  backdrop-filter: blur(var(--ds-context-menu-backdrop-blur, 16px)) saturate(1.08);
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: 1px solid
+    var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
@@ -53,13 +100,113 @@
   color: inherit;
 }
 
-/* ---- structural rows ---- */
-.rottay-context-menu--modern[data-part='trigger'] [data-part='divider'] {
+/* ---- structural rows (scoped UNDER the surface so consumer trigger content
+        carrying its own data-parts -- e.g. a Badge label -- is never matched) ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='divider'] {
+  block-size: 1px;
+  margin-block: var(--ds-context-menu-divider-margin-block, 4px);
+  margin-inline: 0;
   background: var(--ds-color-border-subtle);
 }
-.rottay-context-menu--modern[data-part='trigger'] [data-part='group-label'] {
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='group-label'] {
+  padding: var(--ds-context-menu-group-padding, 0.375rem 0.75rem);
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-medium, 500);
+  letter-spacing: var(--ds-context-menu-group-letter-spacing, 0.05em);
+  line-height: 1.2;
+  text-transform: uppercase;
 }
-.rottay-context-menu--modern[data-part='trigger'] [data-part='item'][data-tone='danger'] {
+
+/* ---- item rows: layout drained from Tailwind utilities; UA button defaults
+        are reset here so the row is self-contained without preflight. ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 0.5rem);
+  inline-size: 100%;
+  margin: 0;
+  padding: var(--ds-context-menu-item-padding, 0.125rem 0.375rem);
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--ds-context-menu-item-radius, var(--ds-radius-md, 8px));
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    outline-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+}
+
+/* ---- interaction feedback (leveled in Pass 2): quieter than Dropdown's
+        lifted, bordered hover -- this menu is the flatter sibling. ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):hover,
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+  color: var(--ds-context-menu-item-color-hover, var(--ds-color-text-primary));
+  background: var(
+    --ds-context-menu-item-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
+  );
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+  outline: 2px solid var(--ds-context-menu-item-focus-ring, color-mix(in srgb, var(--ds-color-primary) 56%, transparent));
+  outline-offset: -2px;
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):active {
+  background: var(
+    --ds-context-menu-item-bg-active,
+    color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card))
+  );
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):hover,
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):focus-visible {
+  color: var(--ds-context-menu-danger-color-hover, var(--ds-color-error));
+  background: var(
+    --ds-context-menu-danger-bg-hover,
+    color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-surface-card))
+  );
+}
+
+/* forced-colors contract: backgrounds are stripped, so hover/focus must
+   still read -- a plain outline survives the forced palette. */
+@media (forced-colors: active) {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):hover,
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+    outline: 1px solid;
+  }
+}
+
+/* coarse pointers: physical 44px floor, never a rem floor (tabs.css idiom). */
+@media (pointer: coarse) {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'] {
+    min-block-size: max(44px, var(--ds-context-menu-touch-target-min, 2rem));
+  }
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-disabled='true'] {
+  cursor: not-allowed;
+  opacity: var(--ds-opacity-disabled, 0.5);
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger'] {
   color: var(--ds-color-error);
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='label'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  min-inline-size: 0;
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='shortcut'] {
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'],
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'] {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
 }

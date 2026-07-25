@@ -47,6 +47,10 @@ function collectDeclaredValues(css: string): Map<string, Set<string>> {
   return declared;
 }
 
+function normalizeCssValue(value: string): string {
+  return value.trim().replace(/\s+/g, ' ');
+}
+
 describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
   '%s artifact to BrandTheme parity',
   (slug) => {
@@ -79,3 +83,33 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
     });
   },
 );
+
+describe('bithire declared extension authority', () => {
+  const extension = readFileSync(
+    resolve(ARTIFACTS_DIR, 'bithire/_source/extension.css'),
+    'utf8',
+  );
+  const declared = collectDeclaredValues(extension);
+  const expectedValues: Record<string, string> = {
+    '--ds-radius-lg': '14px',
+    '--ds-radius-xl': '18px',
+    '--ds-surface-icon-bg':
+      'color-mix( in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card) )',
+    '--ds-premium-card-bg': 'var(--ds-surface-card)',
+    '--ds-premium-card-sheen': 'none',
+    '--ds-table-sheen': 'none',
+    '--ds-shell-breadcrumb-bg':
+      'color-mix( in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card) )',
+    '--ds-workspace-shell-shadow': '0 1px 2px rgba(20, 40, 59, 0.06)',
+    '--ds-command-glow': 'none',
+  };
+
+  it.each(Object.entries(expectedValues))(
+    'does not shadow the compiled %s contract with stale paint',
+    (property, expected) => {
+      const values = [...(declared.get(property) ?? [])].map(normalizeCssValue);
+      expect(values.length).toBeGreaterThan(0);
+      expect(new Set(values)).toEqual(new Set([normalizeCssValue(expected)]));
+    },
+  );
+});

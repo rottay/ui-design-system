@@ -40,7 +40,6 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
             {config.presentation.eyebrow && (
               <Text
                 className="ds-auth__muted-text"
-                data-part="muted-text"
                 style={{
                   fontSize: 12,
                   fontWeight: 700,
@@ -53,7 +52,7 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
             )}
             <Text style={{ fontSize: 28, fontWeight: 700 }}>{config.presentation.title}</Text>
             {config.presentation.subtitle && (
-              <Text className="ds-auth__muted-text" data-part="muted-text">
+              <Text className="ds-auth__muted-text">
                 {config.presentation.subtitle}
               </Text>
             )}

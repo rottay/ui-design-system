@@ -95,9 +95,24 @@ function normalizePath(value) {
 
 const scheduleCssBuild = debounce(runCssBuild, 150);
 
-const cssWatcher = watch(resolve(root, 'src/foundation/tokens/css'), { recursive: true }, () => {
-  scheduleCssBuild();
-});
+const cssWatcher = watch(
+  resolve(root, 'src/foundation/tokens/css'),
+  { recursive: true },
+  (_eventType, filename) => {
+    const normalized = normalizePath(String(filename || ''));
+    if (!normalized) return;
+
+    // `build:vertical-css` regenerates these facade artifacts. Watching the
+    // generated output turns one source edit into an infinite build loop and
+    // can leave `dist` half-written when the watcher is interrupted.
+    const isGeneratedVerticalArtifact = normalized.startsWith('facade/artifacts/')
+      || normalized.includes('/facade/artifacts/');
+
+    if (!isGeneratedVerticalArtifact) {
+      scheduleCssBuild();
+    }
+  }
+);
 
 const modernEngineWatcher = watch(resolve(root, 'src/ui'), { recursive: true }, (_eventType, filename) => {
   const normalized = normalizePath(String(filename || ''));

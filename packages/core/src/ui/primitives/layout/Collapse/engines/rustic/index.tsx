@@ -165,11 +165,13 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     };
 
     // Rotation on expand lives in engines/rustic/skin/collapse.css, keyed on
-    // [data-part='arrow'][data-expanded='true'].
+    // [data-part='arrow'][data-expanded='true'] -- the attribute must be
+    // stamped here; without it the skin rule never fired (K3-C falsification).
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
         data-part="arrow"
+        data-expanded={isActive ? 'true' : 'false'}
         style={styles.arrow}
       >
         ▶

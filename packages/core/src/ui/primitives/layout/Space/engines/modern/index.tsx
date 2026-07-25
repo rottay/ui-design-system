@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Space Modern Engine - Rottay Design System
@@ -31,17 +31,17 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { Children, Fragment } from 'react';
-import type { SpaceProps } from '../../contracts';
-import { SPACE_DEFAULTS, SPACE_SIZE_MAP } from '../../contracts';
-import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+import React, { Children } from "react";
+import type { SpaceProps } from "../../contracts";
+import { SPACE_DEFAULTS, SPACE_SIZE_MAP } from "../../contracts";
+import { toLegacySize } from "../../../../../../foundation/contracts/kernel/common";
 
-/** Tailwind utility classes for cross-axis alignment, keyed by SpaceAlign value. */
-const ALIGN_CLASSES: Record<string, string> = {
-  start: 'items-start',
-  end: 'items-end',
-  center: 'items-center',
-  baseline: 'items-baseline',
+function safeGap(value: number): string {
+  return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
+}
+
+type SpaceInstanceStyle = React.CSSProperties & {
+  "--ds-space-instance-gap": string;
 };
 
 /**
@@ -67,65 +67,73 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       ...rest
     } = props;
 
-    // Build Tailwind layout classes: inline-flex base + direction axis
-    const isVertical = direction === 'vertical';
-    const classes: string[] = [
-      'inline-flex',
-      isVertical ? 'flex-col' : 'flex-row',
-    ];
-
-    if (wrap) {
-      classes.push('flex-wrap');
-    }
-
-    // Fall back to center alignment when an unrecognized align value is provided
-    if (align) {
-      classes.push(ALIGN_CLASSES[align] || ALIGN_CLASSES.center);
-    }
+    const classes = ["rottay-space", "rottay-space--modern"];
 
     // Resolve the gap as an inline CSS value rather than a Tailwind class because
     // the size prop can be a number, an array tuple, or a CSS variable token string --
     // none of which map cleanly to static Tailwind gap-* classes.
     let gapValue: string;
-    if (typeof size === 'number') {
-      gapValue = `${size}px`;
+    if (typeof size === "number") {
+      gapValue = safeGap(size);
     } else if (Array.isArray(size)) {
       // CSS gap shorthand: row-gap first, then column-gap
-      gapValue = `${size[1]}px ${size[0]}px`;
+      gapValue = `${safeGap(size[1])} ${safeGap(size[0])}`;
     } else {
       // SPACE_SIZE_MAP is keyed by the legacy 'small' | 'middle' | 'large' spelling;
       // toLegacySize resolves either spelling to it.
       const legacySize = toLegacySize(size);
-      gapValue = `${SPACE_SIZE_MAP[legacySize || 'small'] || SPACE_SIZE_MAP.small}px`;
+      gapValue = SPACE_SIZE_MAP[legacySize || "small"] || SPACE_SIZE_MAP.small;
     }
 
-    const customStyle: React.CSSProperties = {
-      gap: gapValue,
+    const customStyle: SpaceInstanceStyle = {
+      "--ds-space-instance-gap": gapValue,
       ...style,
     };
 
-    const combinedClassName = [classes.join(' '), className]
+    const combinedClassName = [classes.join(" "), className]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     // When a split separator is provided, interleave it between each child.
     // Otherwise pass children through unmodified to avoid unnecessary array conversion.
-    const childArray = Children.toArray(children).filter(Boolean);
+    const childArray = Children.toArray(children);
     const renderedChildren = split
       ? childArray.map((child, index) => (
-          <Fragment key={index}>
+          <React.Fragment
+            key={
+              React.isValidElement(child) && child.key != null
+                ? child.key
+                : index
+            }
+          >
             {child}
-            {index < childArray.length - 1 && split}
-          </Fragment>
+            {index < childArray.length - 1 && (
+              <span
+                aria-hidden="true"
+                role="presentation"
+                data-part="separator"
+                className="rottay-space-separator"
+              >
+                {split}
+              </span>
+            )}
+          </React.Fragment>
         ))
       : children;
 
     return (
       <div
         ref={ref}
+        {...rest}
         className={combinedClassName}
         style={customStyle}
-        {...rest}
+        data-part="root"
+        data-direction={direction}
+        data-align={align}
+        data-wrap={wrap || undefined}
+        data-size={Array.isArray(size) ? size.join(":") : size}
+        data-with-split={split ? "true" : "false"}
+        data-component="space"
       >
         {renderedChildren}
       </div>
@@ -133,6 +141,6 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   }
 );
 
-Space.displayName = 'Space.Modern';
+Space.displayName = "Space.Modern";
 
 export default Space;

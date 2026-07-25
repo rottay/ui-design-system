@@ -71,7 +71,7 @@ export function ActivitySurface({
           own data fetching -- the app controls page boundaries. */}
       {config.behavior.pagination && (
         <Flex className="ds-surface ds-activity ds-activity__pagination" data-part="pagination" justify="end" style={{ marginTop: 16 }}>
-          <Text className="ds-activity__muted-text" data-part="muted-text" style={{ fontSize: 12 }}>
+          <Text className="ds-activity__muted-text" style={{ fontSize: 12 }}>
             Page {config.behavior.pagination.current} - {config.behavior.pagination.total} total entries
           </Text>
         </Flex>

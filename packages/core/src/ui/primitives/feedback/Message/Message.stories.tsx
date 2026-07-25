@@ -144,3 +144,70 @@ export const WithCallback: Story = {
     );
   },
 };
+
+// ============================================================================
+// Modern Engine Craft Stories
+// ============================================================================
+
+/**
+ * Modern lifecycle: items enter on the skin's calm entrance, announce through
+ * the stack's polite log live region, and exit with a short fade/slide before
+ * removal -- including the async loading → success key-update pattern.
+ */
+export const ModernLifecycle: Story = {
+  name: '🔁 Modern Lifecycle',
+  render: () => {
+    const message = useMessage();
+
+    return (
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <button
+          onClick={() => {
+            message.loading({ content: 'Uploading evidence package…', key: 'lc-upload', duration: 0 });
+            setTimeout(() => {
+              message.success({ content: 'Evidence package uploaded and queued for review.', key: 'lc-upload', duration: 4 });
+            }, 1800);
+          }}
+        >
+          Loading → Success (same key)
+        </button>
+        <button
+          onClick={() =>
+            message.warning({
+              content:
+                'Your session certificate expires in 10 minutes. Save in-progress work before renewing it from the security console.',
+              duration: 6,
+              closable: true,
+            })
+          }
+        >
+          Long warning (closable)
+        </button>
+        <button onClick={() => message.error({ content: 'Synchronization failed. Retry from the operations dashboard.', duration: 0, closable: true })}>
+          Persistent error
+        </button>
+      </div>
+    );
+  },
+};
+
+/**
+ * Bottom placement on the modern stack.
+ */
+export const ModernBottomPlacement: Story = {
+  name: '⬇️ Modern Bottom Placement',
+  render: () => (
+    <MessageProvider placement="bottom">
+      <BottomDemo />
+    </MessageProvider>
+  ),
+};
+
+const BottomDemo = () => {
+  const message = useMessage();
+  return (
+    <button onClick={() => message.info('Bottom-placed modern message', 3)}>
+      Show bottom message
+    </button>
+  );
+};

@@ -28,9 +28,21 @@
   }
 }
 
+/* Root layout (was inline in the engine): column stack with a token gap so
+   density retunes the indicator/label rhythm from one place. */
+.rottay-spinner.rottay-spinner--modern[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-spinner-label-gap, var(--ds-spacing-sm, 0.5rem));
+}
+
 .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
   border: var(--ds-spinner-ring-width) solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
+  /* A soft second segment gives the sweep premium depth instead of a flat
+     single-pixel head. */
+  border-right-color: color-mix(in srgb, var(--ds-color-primary) 45%, var(--ds-color-border));
   border-radius: 50%;
 }
 

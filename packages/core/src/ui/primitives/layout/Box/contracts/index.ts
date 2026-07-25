@@ -34,46 +34,74 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../foundation/contracts';
-import type { CSSProperties, ElementType, HTMLAttributes } from 'react';
-import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import type {
+  EngineAwareProps,
+  WithChildrenProps,
+  BaseComponentProps,
+} from "../../../../../foundation/contracts";
+import type { CSSProperties, ElementType, HTMLAttributes } from "react";
+import type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 
 /**
  * Spacing values for padding and margin
  */
-export type BoxSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+export type BoxSpacing =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl";
 
 /**
  * Border radius values
  */
-export type BoxBorderRadius = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
+export type BoxBorderRadius =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "full";
 
 /**
  * Shadow values
  */
-export type BoxShadow = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+export type BoxShadow = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
 /**
  * Display values
  */
-export type BoxDisplay = CSSProperties['display'];
+export type BoxDisplay = CSSProperties["display"];
 
 /**
  * Position values
  */
-export type BoxPosition = CSSProperties['position'];
+export type BoxPosition = CSSProperties["position"];
 
 /**
  * Overflow values
  */
-export type BoxOverflow = CSSProperties['overflow'];
+export type BoxOverflow = CSSProperties["overflow"];
+
+/** Token-driven motion presets for structural layout changes. */
+export type BoxMotion = "none" | "resize" | "rearrange";
 
 /**
  * Props for the Box component.
  * A versatile container component that provides a styled box with configurable spacing,
  * borders, shadows, and other layout properties.
  */
-export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseComponentProps, Omit<HTMLAttributes<HTMLElement>, 'style' | 'className' | 'color'> {
+export interface BoxProps
+  extends EngineAwareProps,
+    WithChildrenProps,
+    BaseComponentProps,
+    Omit<HTMLAttributes<HTMLElement>, "style" | "className" | "color"> {
   /**
    * The HTML element or React component to render as
    * @default 'div'
@@ -90,6 +118,17 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   htmlFor?: string;
 
   /**
+   * Button behavior type. Meaningful only when `as="button"`.
+   *
+   * Same polymorphic-`as` limitation as {@link BoxProps.htmlFor}: the generic
+   * `HTMLAttributes<HTMLElement>` union has no button-specific attributes, so
+   * the explicit behavior type is surfaced here. Defaults to the UA behavior
+   * (`submit` inside forms) when omitted — pass `type="button"` for controls
+   * that must never submit.
+   */
+  type?: 'button' | 'submit' | 'reset';
+
+  /**
    * Padding on all sides. Accepts a responsive object for breakpoint-aware values.
    * @default 'none'
    */
@@ -103,42 +142,60 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   /**
    * Padding on top
    */
-  paddingTop?: BoxSpacing;
+  paddingTop?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingTop
    */
-  pt?: BoxSpacing;
+  pt?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Padding on right
    */
-  paddingRight?: BoxSpacing;
+  paddingRight?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingRight
    */
-  pr?: BoxSpacing;
+  pr?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Padding on bottom
    */
-  paddingBottom?: BoxSpacing;
+  paddingBottom?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingBottom
    */
-  pb?: BoxSpacing;
+  pb?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Padding on left
    */
-  paddingLeft?: BoxSpacing;
+  paddingLeft?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingLeft
    */
-  pl?: BoxSpacing;
+  pl?: ResponsiveValue<BoxSpacing>;
+
+  /** Logical inline-axis padding. Prefer this over physical left/right in bidi layouts. */
+  paddingInline?: ResponsiveValue<BoxSpacing>;
+
+  /** Logical block-axis padding. */
+  paddingBlock?: ResponsiveValue<BoxSpacing>;
+
+  /** Padding at the writing-mode-aware inline start edge. */
+  paddingInlineStart?: ResponsiveValue<BoxSpacing>;
+
+  /** Padding at the writing-mode-aware inline end edge. */
+  paddingInlineEnd?: ResponsiveValue<BoxSpacing>;
+
+  /** Padding at the writing-mode-aware block start edge. */
+  paddingBlockStart?: ResponsiveValue<BoxSpacing>;
+
+  /** Padding at the writing-mode-aware block end edge. */
+  paddingBlockEnd?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Padding on horizontal axis (left and right). Accepts a responsive object.
@@ -174,42 +231,60 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   /**
    * Margin on top
    */
-  marginTop?: BoxSpacing;
+  marginTop?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginTop
    */
-  mt?: BoxSpacing;
+  mt?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Margin on right
    */
-  marginRight?: BoxSpacing;
+  marginRight?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginRight
    */
-  mr?: BoxSpacing;
+  mr?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Margin on bottom
    */
-  marginBottom?: BoxSpacing;
+  marginBottom?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginBottom
    */
-  mb?: BoxSpacing;
+  mb?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Margin on left
    */
-  marginLeft?: BoxSpacing;
+  marginLeft?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginLeft
    */
-  ml?: BoxSpacing;
+  ml?: ResponsiveValue<BoxSpacing>;
+
+  /** Logical inline-axis margin. Prefer this over physical left/right in bidi layouts. */
+  marginInline?: ResponsiveValue<BoxSpacing>;
+
+  /** Logical block-axis margin. */
+  marginBlock?: ResponsiveValue<BoxSpacing>;
+
+  /** Margin at the writing-mode-aware inline start edge. */
+  marginInlineStart?: ResponsiveValue<BoxSpacing>;
+
+  /** Margin at the writing-mode-aware inline end edge. */
+  marginInlineEnd?: ResponsiveValue<BoxSpacing>;
+
+  /** Margin at the writing-mode-aware block start edge. */
+  marginBlockStart?: ResponsiveValue<BoxSpacing>;
+
+  /** Margin at the writing-mode-aware block end edge. */
+  marginBlockEnd?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Margin on horizontal axis (left and right). Accepts a responsive object.
@@ -239,102 +314,102 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   /**
    * Width of the box. Accepts a responsive object for breakpoint-aware values.
    */
-  width?: ResponsiveValue<CSSProperties['width']>;
+  width?: ResponsiveValue<CSSProperties["width"]>;
 
   /**
    * Shorthand for width. Accepts a responsive object for breakpoint-aware values.
    */
-  w?: ResponsiveValue<CSSProperties['width']>;
+  w?: ResponsiveValue<CSSProperties["width"]>;
 
   /**
    * Height of the box
    */
-  height?: CSSProperties['height'];
+  height?: ResponsiveValue<CSSProperties["height"]>;
 
   /**
    * Shorthand for height
    */
-  h?: CSSProperties['height'];
+  h?: ResponsiveValue<CSSProperties["height"]>;
 
   /**
    * Minimum width of the box. Accepts a responsive object for breakpoint-aware values.
    */
-  minWidth?: ResponsiveValue<CSSProperties['minWidth']>;
+  minWidth?: ResponsiveValue<CSSProperties["minWidth"]>;
 
   /**
    * Shorthand for minWidth. Accepts a responsive object for breakpoint-aware values.
    */
-  minW?: ResponsiveValue<CSSProperties['minWidth']>;
+  minW?: ResponsiveValue<CSSProperties["minWidth"]>;
 
   /**
    * Maximum width of the box. Accepts a responsive object for breakpoint-aware values.
    */
-  maxWidth?: ResponsiveValue<CSSProperties['maxWidth']>;
+  maxWidth?: ResponsiveValue<CSSProperties["maxWidth"]>;
 
   /**
    * Shorthand for maxWidth. Accepts a responsive object for breakpoint-aware values.
    */
-  maxW?: ResponsiveValue<CSSProperties['maxWidth']>;
+  maxW?: ResponsiveValue<CSSProperties["maxWidth"]>;
 
   /**
    * Minimum height of the box
    */
-  minHeight?: CSSProperties['minHeight'];
+  minHeight?: ResponsiveValue<CSSProperties["minHeight"]>;
 
   /**
    * Shorthand for minHeight
    */
-  minH?: CSSProperties['minHeight'];
+  minH?: ResponsiveValue<CSSProperties["minHeight"]>;
 
   /**
    * Maximum height of the box
    */
-  maxHeight?: CSSProperties['maxHeight'];
+  maxHeight?: ResponsiveValue<CSSProperties["maxHeight"]>;
 
   /**
    * Shorthand for maxHeight
    */
-  maxH?: CSSProperties['maxHeight'];
+  maxH?: ResponsiveValue<CSSProperties["maxHeight"]>;
 
   /**
    * Background color or CSS background value
    */
-  background?: CSSProperties['background'];
+  background?: CSSProperties["background"];
 
   /**
    * Shorthand for background
    */
-  bg?: CSSProperties['background'];
+  bg?: CSSProperties["background"];
 
   /**
    * Background color
    */
-  backgroundColor?: CSSProperties['backgroundColor'];
+  backgroundColor?: CSSProperties["backgroundColor"];
 
   /**
    * Shorthand for backgroundColor
    */
-  bgColor?: CSSProperties['backgroundColor'];
+  bgColor?: CSSProperties["backgroundColor"];
 
   /**
    * Border shorthand (e.g., '1px solid #ccc')
    */
-  border?: CSSProperties['border'];
+  border?: CSSProperties["border"];
 
   /**
    * Border width
    */
-  borderWidth?: CSSProperties['borderWidth'];
+  borderWidth?: CSSProperties["borderWidth"];
 
   /**
    * Border color
    */
-  borderColor?: CSSProperties['borderColor'];
+  borderColor?: CSSProperties["borderColor"];
 
   /**
    * Border style
    */
-  borderStyle?: CSSProperties['borderStyle'];
+  borderStyle?: CSSProperties["borderStyle"];
 
   /**
    * Border radius
@@ -356,17 +431,20 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   /**
    * Overflow behavior
    */
-  overflow?: BoxOverflow;
+  overflow?: ResponsiveValue<BoxOverflow>;
 
   /**
    * Overflow behavior on X axis
    */
-  overflowX?: CSSProperties['overflowX'];
+  overflowX?: ResponsiveValue<CSSProperties["overflowX"]>;
 
   /**
    * Overflow behavior on Y axis
    */
-  overflowY?: CSSProperties['overflowY'];
+  overflowY?: ResponsiveValue<CSSProperties["overflowY"]>;
+
+  /** Optional token-driven transition for structural size/rearrangement changes. */
+  motion?: BoxMotion;
 
   /**
    * CSS position property
@@ -376,98 +454,98 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   /**
    * Top position (requires position to be set)
    */
-  top?: CSSProperties['top'];
+  top?: CSSProperties["top"];
 
   /**
    * Right position (requires position to be set)
    */
-  right?: CSSProperties['right'];
+  right?: CSSProperties["right"];
 
   /**
    * Bottom position (requires position to be set)
    */
-  bottom?: CSSProperties['bottom'];
+  bottom?: CSSProperties["bottom"];
 
   /**
    * Left position (requires position to be set)
    */
-  left?: CSSProperties['left'];
+  left?: CSSProperties["left"];
 
   /**
    * Z-index for stacking context
    */
-  zIndex?: CSSProperties['zIndex'];
+  zIndex?: CSSProperties["zIndex"];
 
   /**
    * Opacity of the box
    */
-  opacity?: CSSProperties['opacity'];
+  opacity?: CSSProperties["opacity"];
 
   /**
    * CSS transform
    */
-  transform?: CSSProperties['transform'];
+  transform?: CSSProperties["transform"];
 
   /**
    * CSS transition
    */
-  transition?: CSSProperties['transition'];
+  transition?: CSSProperties["transition"];
 
   /**
    * Cursor style
    */
-  cursor?: CSSProperties['cursor'];
+  cursor?: CSSProperties["cursor"];
 
   /**
    * Flex properties
    */
-  flex?: CSSProperties['flex'];
-  flexGrow?: CSSProperties['flexGrow'];
-  flexShrink?: CSSProperties['flexShrink'];
-  flexBasis?: CSSProperties['flexBasis'];
+  flex?: CSSProperties["flex"];
+  flexGrow?: CSSProperties["flexGrow"];
+  flexShrink?: CSSProperties["flexShrink"];
+  flexBasis?: CSSProperties["flexBasis"];
 
   /**
    * Grid properties
    */
-  gridColumn?: CSSProperties['gridColumn'];
-  gridRow?: CSSProperties['gridRow'];
-  gridArea?: CSSProperties['gridArea'];
+  gridColumn?: CSSProperties["gridColumn"];
+  gridRow?: CSSProperties["gridRow"];
+  gridArea?: CSSProperties["gridArea"];
 
   /**
    * Text alignment
    */
-  textAlign?: CSSProperties['textAlign'];
+  textAlign?: CSSProperties["textAlign"];
 
   /**
    * Color (text color)
    */
-  color?: CSSProperties['color'];
+  color?: CSSProperties["color"];
 
   /**
    * Visibility
    */
-  visibility?: CSSProperties['visibility'];
+  visibility?: CSSProperties["visibility"];
 
   /**
    * Pointer events
    */
-  pointerEvents?: CSSProperties['pointerEvents'];
+  pointerEvents?: CSSProperties["pointerEvents"];
 
   /**
    * User select behavior
    */
-  userSelect?: CSSProperties['userSelect'];
+  userSelect?: CSSProperties["userSelect"];
 }
 
 /**
  * Default values for Box props
  */
 export const BOX_DEFAULTS: Partial<BoxProps> = {
-  as: 'div',
-  padding: 'none',
-  margin: 'none',
-  borderRadius: 'none',
-  shadow: 'none',
+  as: "div",
+  padding: "none",
+  margin: "none",
+  borderRadius: "none",
+  shadow: "none",
 };
 
 /**
@@ -478,42 +556,42 @@ export const BOX_DEFAULTS: Partial<BoxProps> = {
  * CSS loads.
  */
 export const SPACING_MAP: Record<BoxSpacing, string> = {
-  none: '0',
-  xs: 'var(--ds-spacing-1, 0.25rem)',     // 4px
-  sm: 'var(--ds-spacing-2, 0.5rem)',      // 8px
-  md: 'var(--ds-spacing-4, 1rem)',        // 16px
-  lg: 'var(--ds-spacing-6, 1.5rem)',      // 24px
-  xl: 'var(--ds-spacing-8, 2rem)',        // 32px
-  '2xl': 'var(--ds-spacing-10, 2.5rem)',  // 40px
-  '3xl': 'var(--ds-spacing-12, 3rem)',    // 48px
-  '4xl': 'var(--ds-spacing-16, 4rem)',    // 64px
+  none: "0",
+  xs: "var(--ds-spacing-1, 0.25rem)", // 4px
+  sm: "var(--ds-spacing-2, 0.5rem)", // 8px
+  md: "var(--ds-spacing-4, 1rem)", // 16px
+  lg: "var(--ds-spacing-6, 1.5rem)", // 24px
+  xl: "var(--ds-spacing-8, 2rem)", // 32px
+  "2xl": "var(--ds-spacing-10, 2.5rem)", // 40px
+  "3xl": "var(--ds-spacing-12, 3rem)", // 48px
+  "4xl": "var(--ds-spacing-16, 4rem)", // 64px
 };
 
 /**
  * Border radius value mapping — resolves through DS CSS custom properties.
  */
 export const RADIUS_MAP: Record<BoxBorderRadius, string> = {
-  none: '0',
-  xs: 'var(--ds-radius-xs, 0.1875rem)',   // 3px
-  sm: 'var(--ds-radius-sm, 0.375rem)',    // 6px
-  md: 'var(--ds-radius-md, 0.5rem)',      // 8px
-  lg: 'var(--ds-radius-lg, 0.75rem)',     // 12px
-  xl: 'var(--ds-radius-xl, 1rem)',        // 16px
-  '2xl': 'var(--ds-radius-2xl, 1.25rem)', // 20px
-  full: 'var(--ds-radius-full, 9999px)',
+  none: "0",
+  xs: "var(--ds-radius-xs, 0.1875rem)", // 3px
+  sm: "var(--ds-radius-sm, 0.375rem)", // 6px
+  md: "var(--ds-radius-md, 0.5rem)", // 8px
+  lg: "var(--ds-radius-lg, 0.75rem)", // 12px
+  xl: "var(--ds-radius-xl, 1rem)", // 16px
+  "2xl": "var(--ds-radius-2xl, 1.25rem)", // 20px
+  full: "var(--ds-radius-full, 9999px)",
 };
 
 /**
  * Shadow value mapping — resolves through DS CSS custom properties.
  */
 export const SHADOW_MAP: Record<BoxShadow, string> = {
-  none: 'none',
-  xs: 'var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))',
-  sm: 'var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1))',
-  md: 'var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))',
-  lg: 'var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1))',
-  xl: 'var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))',
-  '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+  none: "none",
+  xs: "var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))",
+  sm: "var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1))",
+  md: "var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))",
+  lg: "var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1))",
+  xl: "var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))",
+  "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
 };
 
 /**
@@ -528,21 +606,21 @@ export const SHADOW_MAP: Record<BoxShadow, string> = {
  * argument. See {@link isVoidElement}.
  */
 export const VOID_ELEMENTS: ReadonlySet<string> = new Set([
-  'area',
-  'base',
-  'br',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'keygen',
-  'link',
-  'meta',
-  'param',
-  'source',
-  'track',
-  'wbr',
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "keygen",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr",
 ]);
 
 /**
@@ -553,5 +631,5 @@ export const VOID_ELEMENTS: ReadonlySet<string> = new Set([
  * its own children contract, so those always return `false`.
  */
 export function isVoidElement(as: ElementType | undefined): boolean {
-  return typeof as === 'string' && VOID_ELEMENTS.has(as);
+  return typeof as === "string" && VOID_ELEMENTS.has(as);
 }

@@ -123,8 +123,8 @@ describe("modern skins honor the surface layer they declare", () => {
   });
 
   it("modal composes the elevation-surface layer without touching its bg fill", () => {
-    expect(MODAL_CSS).toContain(
-      "background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4))",
+    expect(MODAL_CSS).toMatch(
+      /background-image:\s*linear-gradient\(var\(--ds-elevation-surface-4\), var\(--ds-elevation-surface-4\)\)/,
     );
     expect(MODAL_CSS).toContain(
       "background-color: var(--ds-modal-bg, var(--ds-surface-card))",
@@ -133,7 +133,10 @@ describe("modern skins honor the surface layer they declare", () => {
 
   it("popover composes the elevation-surface layer over its card fill", () => {
     expect(POPOVER_CSS).toContain(
-      "background: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)), var(--ds-surface-card)",
+      "background-color: var(--ds-popover-bg, var(--ds-surface-card))",
+    );
+    expect(POPOVER_CSS).toMatch(
+      /background-image:\s*linear-gradient\(var\(--ds-elevation-surface-3\), var\(--ds-elevation-surface-3\)\)/,
     );
   });
 });

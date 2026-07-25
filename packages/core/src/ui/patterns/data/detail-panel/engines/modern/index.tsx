@@ -22,6 +22,9 @@
 
 import React, { useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../../contracts';
+import Button from '../../../../../primitives/inputs/Button/engines/modern';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 /* ------------------------------------------------------------------ */
 /* Shared style constants                                              */
@@ -96,45 +99,36 @@ function ActionButton({ action }: { action: DetailAction }) {
   const variant = action.variant ?? 'default';
 
   return (
-    <button
-      type="button"
+    <span
       data-part="action-button"
       data-variant={variant}
       data-loading={action.loading ? 'true' : 'false'}
-      disabled={action.disabled || action.loading}
-      onClick={action.onClick}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 6,
-        padding: '6px 14px',
-        fontSize: 13,
-        fontWeight: 500,
-        lineHeight: 1.4,
-        cursor: action.disabled || action.loading ? 'not-allowed' : 'pointer',
-        opacity: action.disabled ? 0.5 : 1,
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
-      }}
+      style={{ display: 'contents' }}
     >
-      {action.loading && (
-        <span
-          data-part="action-spinner"
-          style={{
-            display: 'inline-block',
-            width: 14,
-            height: 14,
-            animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
-            flexShrink: 0,
-          }}
-        />
-      )}
-      {action.icon && !action.loading && (
-        <span style={{ display: 'inline-flex', fontSize: 14, flexShrink: 0 }}>
-          {action.icon}
-        </span>
-      )}
-      {action.label}
-    </button>
+      <Button
+        htmlType="button"
+        size="sm"
+        variant={variant}
+        disabled={action.disabled || action.loading}
+        aria-busy={action.loading ? 'true' : 'false'}
+        onClick={action.onClick}
+        style={{ flexShrink: 0 }}
+        icon={action.loading ? (
+          <span
+            data-part="action-spinner"
+            style={{
+              display: 'inline-block',
+              width: 'var(--ds-button-sm-icon-size)',
+              height: 'var(--ds-button-sm-icon-size)',
+              animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
+              flexShrink: 0,
+            }}
+          />
+        ) : action.icon}
+      >
+        {action.label}
+      </Button>
+    </span>
   );
 }
 
@@ -147,38 +141,22 @@ function ActionButton({ action }: { action: DetailAction }) {
  */
 function BackButton({ onClick }: { onClick: () => void }) {
   return (
-    <button
-      type="button"
-      data-part="back-button"
-      onClick={onClick}
-      aria-label="Go back"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 32,
-        height: 32,
-        flexShrink: 0,
-        cursor: 'pointer',
-        padding: 0,
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}`,
-      }}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-        style={{ width: 16, height: 16 }}
+    <span data-part="back-button" style={{ display: 'contents' }}>
+      <Button
+        htmlType="button"
+        variant="ghost"
+        size="sm"
+        shape="circle"
+        onClick={onClick}
+        aria-label="Go back"
+        style={{ flexShrink: 0 }}
+        icon={(
+          <NavigationBackIcon size={15} decorative />
+        )}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-        />
-      </svg>
-    </button>
+        <span className="ds-sr-only">Go back</span>
+      </Button>
+    </span>
   );
 }
 
@@ -224,19 +202,21 @@ function TabButton({
         position: 'relative',
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 6,
-        padding: '8px 16px',
-        fontSize: 13,
-        fontWeight: isActive ? 600 : 500,
-        lineHeight: 1.4,
-        marginBottom: -1,
+        gap: 'var(--ds-tabs-item-gap)',
+        minHeight: 'var(--ds-tabs-md-height)',
+        padding: 'var(--ds-tabs-md-padding)',
+        fontSize: 'var(--ds-tabs-md-font-size)',
+        fontWeight: isActive
+          ? 'var(--ds-tabs-item-font-weight-active)'
+          : 'var(--ds-tabs-item-font-weight)',
+        lineHeight: 'var(--ds-line-height-body)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
+        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
       }}
     >
       {icon && (
-        <span style={{ display: 'inline-flex', fontSize: 14, flexShrink: 0 }}>
+        <span style={{ display: 'inline-flex', fontSize: 'var(--ds-tabs-md-icon-size)', flexShrink: 0 }}>
           {icon}
         </span>
       )}
@@ -281,10 +261,10 @@ function Breadcrumbs({
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 6,
-        marginBottom: 12,
-        fontSize: 12,
-        lineHeight: 1.4,
+        gap: 'var(--ds-spacing-2, 8px)',
+        marginBottom: 'var(--ds-spacing-3, 12px)',
+        fontSize: 'var(--ds-font-size-xs)',
+        lineHeight: 'var(--ds-line-height-body)',
       }}
     >
       {items.map((crumb, idx) => {
@@ -302,7 +282,7 @@ function Breadcrumbs({
                 }}
                 aria-hidden="true"
               >
-                /
+                <NavigationForwardIcon size={10} decorative />
               </span>
             )}
             {crumb.href && !isLast ? (
@@ -407,7 +387,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         data-loading="true"
         style={style}
       >
-        <div style={{ padding: '20px 24px' }}>
+        <div style={{ padding: 'var(--ds-detail-panel-padding)' }}>
           {/* Breadcrumb skeleton */}
           <SkeletonBlock part="skeleton-breadcrumb" width={180} height={12} style={{ marginBottom: 14 }} />
 
@@ -454,14 +434,14 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           </div>
 
           {/* Tab bar skeleton */}
-          <div style={{ marginTop: 20, display: 'flex', gap: 4 }}>
+          <div style={{ marginTop: 'var(--ds-detail-panel-section-gap)', display: 'flex', gap: 'var(--ds-tabs-gap)' }}>
             <SkeletonBlock part="skeleton-tab" width={72} height={34} />
             <SkeletonBlock part="skeleton-tab" width={72} height={34} />
             <SkeletonBlock part="skeleton-tab" width={72} height={34} />
           </div>
 
           {/* Content skeleton */}
-          <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
+          <div style={{ marginTop: 'var(--ds-detail-panel-section-gap)', display: 'flex', gap: 'var(--ds-detail-panel-content-gap)' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
               <SkeletonBlock part="skeleton-content" width="100%" height={120} />
               <SkeletonBlock part="skeleton-content" width="100%" height={80} />
@@ -489,7 +469,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
       data-part="root"
       style={style}
     >
-      <div style={{ padding: '20px 24px' }}>
+      <div style={{ padding: 'var(--ds-detail-panel-padding)' }}>
         {/* ---- Breadcrumbs ---- */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <Breadcrumbs items={breadcrumbs} />
@@ -498,19 +478,21 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         {/* ---- Header ---- */}
         <div
           data-part="header"
+          data-has-actions={actions || headerExtra ? 'true' : 'false'}
           style={{
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between',
-            gap: 16,
+            gap: 'var(--ds-detail-panel-content-gap)',
           }}
         >
           {/* Left: back + avatar + title group */}
           <div
+            data-part="identity"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
+              gap: 'var(--ds-detail-panel-item-gap)',
               flex: 1,
               minWidth: 0,
             }}
@@ -518,15 +500,16 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
             {onBack && <BackButton onClick={onBack} />}
 
             {avatar && (
-              <div style={{ flexShrink: 0 }}>{avatar}</div>
+              <div data-part="avatar" style={{ flexShrink: 0 }}>{avatar}</div>
             )}
 
             <div style={{ minWidth: 0, flex: 1 }}>
               <div
+                data-part="title-row"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 10,
+                  gap: 'var(--ds-detail-panel-item-gap)',
                   flexWrap: 'wrap',
                 }}
               >
@@ -538,13 +521,11 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                     data-part="title"
                     style={{
                       margin: 0,
-                      fontSize: 20,
-                      fontWeight: 600,
-                      lineHeight: 1.3,
-                      letterSpacing: '-0.02em',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
+                      fontSize: 'var(--ds-font-size-xl)',
+                      fontWeight: 'var(--ds-font-weight-semibold)',
+                      lineHeight: 'var(--ds-line-height-heading)',
+                      letterSpacing: 'var(--ds-letter-spacing-heading)',
+                      textWrap: 'balance',
                     }}
                   >
                     {title}
@@ -559,9 +540,9 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                       display: 'inline-flex',
                       alignItems: 'center',
                       padding: '2px 10px',
-                      fontSize: 12,
-                      fontWeight: 600,
-                      lineHeight: 1.5,
+                      fontSize: 'var(--ds-font-size-xs)',
+                      fontWeight: 'var(--ds-font-weight-semibold)',
+                      lineHeight: 'var(--ds-line-height-body)',
                       whiteSpace: 'nowrap',
                     }}
                   >
@@ -576,11 +557,9 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                   data-part="subtitle"
                   style={{
                     margin: '4px 0 0',
-                    fontSize: 13,
-                    lineHeight: 1.4,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    fontSize: 'var(--ds-font-size-sm)',
+                    lineHeight: 'var(--ds-line-height-body)',
+                    textWrap: 'pretty',
                   }}
                 >
                   {subtitle}
@@ -592,10 +571,11 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           {/* Right: actions + headerExtra */}
           {(actions || headerExtra) && (
             <div
+              data-part="actions"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
+                gap: 'var(--ds-detail-panel-item-gap)',
                 flexShrink: 0,
               }}
             >
@@ -607,15 +587,16 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
 
         {/* ---- Body: tabs + content + sidebar ---- */}
         <div
+          data-part="body"
           style={{
             display: 'flex',
-            gap: 16,
-            marginTop: 20,
+            gap: 'var(--ds-detail-panel-content-gap)',
+            marginTop: 'var(--ds-detail-panel-section-gap)',
             flexDirection: sidebarPosition === 'left' ? 'row-reverse' : 'row',
           }}
         >
           {/* Main content area */}
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div data-part="main" style={{ flex: 1, minWidth: 0 }}>
             {/* Tab navigation */}
             {tabs && tabs.length > 0 && (
               <>
@@ -626,8 +607,8 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 0,
-                    marginBottom: 16,
+                    gap: 'var(--ds-tabs-gap)',
+                    marginBottom: 'var(--ds-detail-panel-content-gap)',
                   }}
                   onKeyDown={(e) => {
                     const enabledTabs = tabs.filter((t) => !t.disabled);
@@ -690,7 +671,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               <div
                 data-part="sidebar"
                 style={{
-                  padding: 16,
+                  padding: 'var(--ds-workspace-card-padding)',
                 }}
               >
                 {sidebar}
@@ -704,8 +685,8 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           <div
             data-part="footer"
             style={{
-              marginTop: 20,
-              paddingTop: 16,
+              marginTop: 'var(--ds-detail-panel-section-gap)',
+              paddingTop: 'var(--ds-detail-panel-content-gap)',
             }}
           >
             {footer}

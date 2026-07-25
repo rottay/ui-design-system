@@ -56,8 +56,22 @@ describe.each([
     expect(screen.getByTestId('wrapped-uploading')).toBeInTheDocument();
     expect(itemRender).toHaveBeenCalledTimes(2);
 
-    const progressbar = screen.getByRole('progressbar', { name: /42%/ });
-    expect(progressbar.style.getPropertyValue('--ds-upload-progress-fill')).toBe('linear-gradient(to right, #111111, #999999)');
+    const progressbar = await screen.findByRole('progressbar');
+    if (engine === 'modern') {
+      // DS Progress composition: the meter is the public Progress primitive
+      // (native <progress> element), the gradient stroke reaches its governed
+      // --ds-progress-arc-color channel, and the legacy strokeWidth+4 track
+      // geometry rides --ds-progress-height.
+      expect(progressbar).toHaveAttribute('value', '42');
+      expect(progressbar.style.getPropertyValue('--ds-progress-arc-color')).toBe('linear-gradient(to right, #111111, #999999)');
+      const progressShell = progressbar.closest('[data-part="root"]');
+      expect(progressShell).not.toBeNull();
+      expect((progressShell as HTMLElement).style.getPropertyValue('--ds-progress-height')).toBe('8px');
+    } else {
+      // Rustic keeps its own bar (contract parity; modern-only composition).
+      expect(progressbar).toHaveAttribute('aria-valuenow', '42');
+      expect(progressbar.style.getPropertyValue('--ds-upload-progress-fill')).toBe('linear-gradient(to right, #111111, #999999)');
+    }
 
     const imageItem = screen.getByRole('listitem', { name: 'avatar.png' });
     fireEvent.mouseEnter(imageItem);

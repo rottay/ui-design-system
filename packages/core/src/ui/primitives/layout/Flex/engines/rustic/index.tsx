@@ -1,80 +1,60 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Flex Rustic Engine - Rottay Design System
  * @description Rustic (Pure HTML/CSS) implementation of the Flex component.
- * Uses inline CSS styles for maximum compatibility without external dependencies.
+ * Uses the shared declarative layout skin without external dependencies.
  *
  * @module Flex/Engines/Rustic
  * @category Layout
  * @package @rottay/design-system
  */
 
-import React, { useId } from 'react';
-import type { FlexProps, FlexDirection, FlexWrap, FlexJustify, FlexAlign } from '../../contracts';
-import { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from '../../contracts';
+import React, { useId } from "react";
+import type { FlexProps } from "../../contracts";
+import { generateResponsiveCSS } from "@/infrastructure/runtime/responsive/runtime/style-properties";
 import {
-  generateResponsiveCSS,
-  isResponsiveValue,
-  scalarOrDefault,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import { collectFlexResponsiveEntries } from '../../runtime/responsive';
+  resolveFlexAttributes,
+  resolveFlexParameterStyle,
+} from "../../runtime/presentation";
+import { collectFlexResponsiveEntries } from "../../runtime/responsive";
 
 /**
- * Rustic Flex component using pure inline CSS styles.
+ * Rustic Flex component using neutral attributes and bounded parameters.
  */
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {
     const {
-      direction,
-      wrap,
-      justify,
-      align,
-      gap,
-      flex,
-      inline = FLEX_DEFAULTS.inline,
+      direction: _direction,
+      wrap: _wrap,
+      justify: _justify,
+      align: _align,
+      gap: _gap,
+      flex: _flex,
+      inline: _inline,
       children,
       className,
-      style,
+      style: consumerStyle,
       ...rest
     } = props;
+
+    const presentationAttributes = resolveFlexAttributes(props);
+    const parameterStyle = resolveFlexParameterStyle(props);
+    const resolvedStyle =
+      parameterStyle || consumerStyle
+        ? { ...parameterStyle, ...consumerStyle }
+        : undefined;
 
     const reactId = useId();
     const responsiveEntries = collectFlexResponsiveEntries(props);
     const needsResponsiveCSS = responsiveEntries.length > 0;
 
-    const elementId = needsResponsiveCSS ? `flex-${reactId.replace(/:/g, '')}` : '';
+    const elementId = needsResponsiveCSS
+      ? `flex-${reactId.replace(/:/g, "")}`
+      : "";
     const responsive = needsResponsiveCSS
       ? generateResponsiveCSS(elementId, responsiveEntries)
       : null;
-
-    // Scalar values for inline styles
-    const scalarDirection = scalarOrDefault<FlexDirection>(direction, 'row');
-    const scalarWrap = scalarOrDefault<FlexWrap>(wrap, 'nowrap');
-    const scalarJustify = scalarOrDefault<FlexJustify>(justify, 'start');
-    const scalarAlign = scalarOrDefault<FlexAlign>(align, 'stretch');
-
-    const flexStyle: React.CSSProperties = {
-      display: inline ? 'inline-flex' : 'flex',
-      // Only set inline values for non-responsive props
-      ...(!isResponsiveValue(direction) && { flexDirection: scalarDirection }),
-      ...(!isResponsiveValue(wrap) && { flexWrap: scalarWrap }),
-      ...(!isResponsiveValue(justify) && { justifyContent: FLEX_JUSTIFY_MAP[scalarJustify] }),
-      ...(!isResponsiveValue(align) && { alignItems: FLEX_ALIGN_MAP[scalarAlign] }),
-      ...(flex !== undefined && { flex }),
-      ...style,
-    };
-
-    // Gap supports both uniform (number) and asymmetric ([column, row]) spacing
-    const scalarGap = isResponsiveValue(gap) ? undefined : gap;
-    if (scalarGap !== undefined) {
-      if (Array.isArray(scalarGap)) {
-        flexStyle.columnGap = `${scalarGap[0]}px`;
-        flexStyle.rowGap = `${scalarGap[1]}px`;
-      } else {
-        flexStyle.gap = `${scalarGap}px`;
-      }
-    }
 
     return (
       <>
@@ -83,8 +63,11 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
         )}
         <div
           ref={ref}
-          className={className}
-          style={flexStyle}
+          className={["rottay-flex", "rottay-flex--rustic", className]
+            .filter(Boolean)
+            .join(" ")}
+          style={resolvedStyle}
+          {...presentationAttributes}
           {...(responsive ? responsive.attrs : {})}
           {...rest}
         >
@@ -95,6 +78,6 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   }
 );
 
-Flex.displayName = 'Flex.Rustic';
+Flex.displayName = "Flex.Rustic";
 
 export default Flex;

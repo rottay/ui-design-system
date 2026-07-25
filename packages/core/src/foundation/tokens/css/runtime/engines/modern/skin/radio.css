@@ -1,67 +1,252 @@
 /**
- * Modern Radio skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern Radio skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements; unlayered outranks
- * preflight and still yields to a caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision through documented `--ds-radio-*` channels so a
+ * vertical or DB-backed tenant never needs private selectors. Geometry
+ * consumes the canonical `--ds-radio-{size}-*` scale multiplied by the
+ * three-plane density channel `--ds-density-effective-scale`.
  *
  * SCOPE ROOT is `.ds-radio.ds-radio--modern[data-part='root']` (a `<label>`),
- * carrying `data-checked` and `data-disabled`. `circle`, `dot`, `label`,
- * `description` are descendants; the hidden `<input>` is a sibling of `circle`.
+ * carrying `data-size`, `data-color`, `data-checked`, `data-error`,
+ * `data-disabled`, and `data-label-placement`. `circle`, `dot`, `text`,
+ * `label`, `description` are descendants; the hidden `<input>` is a sibling
+ * of `circle`.
  *
- * Hover (the removed `isHovered` state, driven by onMouseEnter/onMouseLeave on
- * the root) -> `:hover`, gated `:not([data-disabled='true'])` exactly where the
- * JS gated `!disabled`. The focus ring (removed `isFocusVisible`) was set from
- * the input's `:focus-visible` -> `input:focus-visible ~ [data-part='circle']`.
- * The dot scale is keyed on `data-checked`.
+ * CHECKED GRAMMAR (documented defect fix): the indicator is a bordered ring
+ * with a filled dot. The dot paints `--ds-radio-checked-bg` (primary by
+ * default) -- before this pass it painted `--ds-color-text-on-primary` on a
+ * transparent circle, which made the checked state invisible on light
+ * surfaces. Color-independent clarity: the dot also scales 0 -> 1, so state
+ * never relies on hue alone.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
- * every border-color rule reaches (0,4,0) via `[data-checked]` (+ `:hover`)
- * beyond the two root classes + `[data-part='circle']`. Non-border paint wins
- * unlayered at (0,3,0) or higher.
+ * Hover lives on `:hover` gated `:not([data-disabled='true'])`; the focus
+ * ring derives from `input:focus-visible ~ [data-part='circle']`.
+ *
+ * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via
+ * `[data-checked]` (+ `:hover`) beyond the two root classes +
+ * `[data-part='circle']`.
  */
 
+/* Root row ------------------------------------------------------------- */
+.ds-radio.ds-radio--modern[data-part='root'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-radio-label-gap, var(--ds-spacing-2));
+  max-inline-size: 100%;
+  padding-block: var(--ds-radio-row-padding-block, var(--ds-spacing-1));
+  /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
+     root at narrow widths (measured on the live bundle, Axe R0) — the 44px
+     coarse-touch law is physical. */
+  min-block-size: var(--ds-radio-touch-target-min, 44px);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  line-height: var(--ds-line-height-snug);
+}
+
+.ds-radio.ds-radio--modern[data-part='root'][data-label-placement='start'] {
+  flex-direction: row-reverse;
+}
+
+.ds-radio.ds-radio--modern[data-part='root'][data-disabled='true'] {
+  cursor: var(--ds-radio-disabled-cursor, not-allowed);
+}
+
+/* Indicator ------------------------------------------------------------ */
 .ds-radio.ds-radio--modern [data-part='circle'] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: 50%;
   background-color: transparent;
+  transition:
+    border-color var(--ds-radio-transition-duration, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    box-shadow var(--ds-radio-transition-duration, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    transform var(--ds-radio-transition-duration, var(--ds-motion-fast)) var(--ds-motion-ease-out);
 }
+
+/* Size geometry on the canonical radio scale + density plane. */
+.ds-radio.ds-radio--modern[data-part='root'][data-size='xs'] [data-part='circle'] {
+  inline-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale, 1));
+  min-inline-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale, 1));
+}
+.ds-radio.ds-radio--modern[data-part='root'][data-size='sm'] [data-part='circle'] {
+  inline-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale, 1));
+  min-inline-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale, 1));
+}
+.ds-radio.ds-radio--modern[data-part='root'][data-size='md'] [data-part='circle'] {
+  inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale, 1));
+  min-inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale, 1));
+}
+.ds-radio.ds-radio--modern[data-part='root'][data-size='lg'] [data-part='circle'] {
+  inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale, 1));
+  min-inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale, 1));
+}
+.ds-radio.ds-radio--modern[data-part='root'][data-size='xl'] [data-part='circle'] {
+  inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale, 1));
+  min-inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale, 1));
+}
+
+/* press: the circle dips on pointer-press, mirroring the checkbox. */
+.ds-radio.ds-radio--modern:active:not([data-disabled='true']) [data-part='circle'] {
+  transform: scale(var(--ds-state-press-scale));
+}
+
+/* ring border: unchecked, checked. */
 .ds-radio.ds-radio--modern[data-checked='false'] [data-part='circle'] {
-  border: 2px solid var(--ds-radio-border, var(--ds-color-border-secondary));
+  border: var(--ds-radio-border-width, 2px) solid var(--ds-radio-border, var(--ds-color-border-secondary));
 }
 .ds-radio.ds-radio--modern[data-checked='true'] [data-part='circle'] {
-  border: 2px solid var(--ds-radio-checked-bg, var(--ds-color-primary));
+  border: var(--ds-radio-border-width, 2px) solid var(--ds-radio-checked-bg, var(--ds-color-primary));
 }
+
+/* Color grammar: the color prop picks the canonical per-variant channels. */
+.ds-radio.ds-radio--modern[data-color='default'][data-checked='true'] [data-part='circle'] {
+  border-color: var(--ds-radio-default-bg, var(--ds-color-neutral-600));
+}
+.ds-radio.ds-radio--modern[data-color='secondary'][data-checked='true'] [data-part='circle'] {
+  border-color: var(--ds-radio-secondary-bg, var(--ds-color-secondary));
+}
+.ds-radio.ds-radio--modern[data-color='success'][data-checked='true'] [data-part='circle'] {
+  border-color: var(--ds-radio-success-bg, var(--ds-color-success));
+}
+.ds-radio.ds-radio--modern[data-color='warning'][data-checked='true'] [data-part='circle'] {
+  border-color: var(--ds-radio-warning-bg, var(--ds-color-warning));
+}
+.ds-radio.ds-radio--modern[data-color='error'][data-checked='true'] [data-part='circle'] {
+  border-color: var(--ds-radio-error-bg, var(--ds-color-error));
+}
+
+/* Error frame on an unchecked ring; aria-invalid carries the semantics. */
+.ds-radio.ds-radio--modern[data-error='true'][data-checked='false'] [data-part='circle'] {
+  border-color: var(--ds-radio-error-border-color, var(--ds-color-error));
+}
+
+/* hover (not disabled): unchecked, checked. */
 .ds-radio.ds-radio--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='circle'] {
   border-color: var(--ds-radio-border, var(--ds-color-border));
 }
 .ds-radio.ds-radio--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
   border-color: var(--ds-color-primary-hover);
 }
+
+/* focus ring from the hidden input's :focus-visible. */
 .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
-  outline: 2px solid var(--ds-color-primary);
-  outline-offset: 2px;
+  outline: var(--ds-radio-focus-ring-width, 2px) solid var(--ds-radio-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-radio-focus-ring-offset, 2px);
 }
 
-.ds-radio.ds-radio--modern [data-part='dot'] {
-  border-radius: 50%;
-  background-color: var(--ds-color-text-on-primary);
-  transform: scale(0);
+/* disabled: the indicator quiets, semantics stay on the input. */
+.ds-radio.ds-radio--modern[data-disabled='true'] [data-part='circle'] {
+  opacity: var(--ds-radio-disabled-opacity, 0.5);
 }
+
+/* Dot: scales in with the checked state; color follows the same channel the
+   ring uses, so the two can never drift apart. */
+.ds-radio.ds-radio--modern [data-part='dot'] {
+  inline-size: var(--ds-radio-dot-scale, 40%);
+  block-size: var(--ds-radio-dot-scale, 40%);
+  border-radius: 50%;
+  background-color: var(--ds-radio-checked-bg, var(--ds-color-primary));
+  transform: scale(0);
+  transition: transform var(--ds-radio-transition-duration, var(--ds-motion-fast)) var(--ds-motion-ease-out);
+}
+.ds-radio.ds-radio--modern[data-color='default'] [data-part='dot'] { background-color: var(--ds-radio-default-bg, var(--ds-color-neutral-600)); }
+.ds-radio.ds-radio--modern[data-color='secondary'] [data-part='dot'] { background-color: var(--ds-radio-secondary-bg, var(--ds-color-secondary)); }
+.ds-radio.ds-radio--modern[data-color='success'] [data-part='dot'] { background-color: var(--ds-radio-success-bg, var(--ds-color-success)); }
+.ds-radio.ds-radio--modern[data-color='warning'] [data-part='dot'] { background-color: var(--ds-radio-warning-bg, var(--ds-color-warning)); }
+.ds-radio.ds-radio--modern[data-color='error'] [data-part='dot'] { background-color: var(--ds-radio-error-bg, var(--ds-color-error)); }
 .ds-radio.ds-radio--modern[data-checked='true'] [data-part='dot'] {
   transform: scale(1);
 }
 
-.ds-radio.ds-radio--modern [data-part='label'] {
-  color: var(--ds-color-text-primary);
+@media (prefers-reduced-motion: reduce) {
+  .ds-radio.ds-radio--modern [data-part='circle'],
+  .ds-radio.ds-radio--modern [data-part='dot'] {
+    transition-duration: 0.01ms;
+  }
 }
+
+/* Text column ------------------------------------------------------------ */
+.ds-radio.ds-radio--modern [data-part='text'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-radio-text-gap, 0.125rem);
+  /* Never crushable below the longest word: with `min-inline-size: 0` the
+     column's min-content is a single character under `overflow-wrap`, and any
+     narrow flex parent (a horizontal Stack, a toolbar row) would wrap the
+     label per character. Word-boundary wrapping keeps multi-line labels
+     readable in every parent shape. */
+  min-inline-size: min-content;
+}
+
+.ds-radio.ds-radio--modern [data-part='label'] {
+  color: var(--ds-radio-label-color, var(--ds-color-text-primary));
+  font-size: var(--ds-radio-label-font-size, var(--ds-font-size-sm));
+  line-height: var(--ds-radio-label-line-height, var(--ds-line-height-snug));
+  /* No `hyphens: auto` here: with hyphenation the column's min-content shrinks
+     to a hyphenated segment and the label breaks mid-word under a squeeze. */
+  overflow-wrap: break-word;
+}
+
+/* Label type scales with the indicator size, on the canonical channels. */
+.ds-radio.ds-radio--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-xs-font-size)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-sm-font-size)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-md-font-size)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-lg-font-size)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-xl-font-size)); }
 .ds-radio.ds-radio--modern[data-disabled='true'] [data-part='label'] {
   color: var(--ds-color-text-disabled);
 }
+
 .ds-radio.ds-radio--modern [data-part='description'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-radio-description-color, var(--ds-color-text-muted));
+  font-size: var(--ds-radio-description-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-radio-description-line-height, var(--ds-line-height-snug));
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+.ds-radio.ds-radio--modern[data-disabled='true'] [data-part='description'] {
+  color: var(--ds-color-text-disabled);
 }
 
 /* hidden accessibility input (visually clipped): no border. */
 .ds-radio.ds-radio--modern input {
   border: 0;
+}
+
+@media (pointer: coarse) {
+  .ds-radio.ds-radio--modern[data-part='root'] {
+    /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
+     root at narrow widths (measured on the live bundle, Axe R0) — the 44px
+     coarse-touch law is physical. */
+  min-block-size: var(--ds-radio-touch-target-min, 44px);
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-radio.ds-radio--modern[data-checked='false'] [data-part='circle'],
+  .ds-radio.ds-radio--modern[data-checked='true'] [data-part='circle'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+    background-color: Field;
+  }
+  .ds-radio.ds-radio--modern[data-checked='true'] [data-part='circle'] {
+    border-color: Highlight;
+  }
+  .ds-radio.ds-radio--modern [data-part='dot'] {
+    background-color: Highlight;
+  }
+  .ds-radio.ds-radio--modern[data-disabled='true'] [data-part='circle'] {
+    border-color: GrayText;
+  }
 }

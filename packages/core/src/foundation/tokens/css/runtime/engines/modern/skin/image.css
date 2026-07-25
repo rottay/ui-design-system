@@ -34,12 +34,17 @@
 }
 
 /* ---- loading: the panel, and the default pulse block inside it (a consumer's own
-        `placeholder` node never carries the pulse class) ---- */
+        `placeholder` node never carries the pulse class). K4-C drained the raw
+        Tailwind `animate-pulse` utility: the pulse now rides the global
+        `ds-foundation-pulse` keyframes (same 1 -> 0.5 opacity swing, same 2s
+        cubic-bezier(0.4,0,0.6,1) timing Tailwind used), and the global
+        reduced-motion guard in runtime/personality.css neutralizes it. ---- */
 .rottay-image.rottay-image--modern > [data-part='placeholder'] {
   background: var(--ds-surface-inset);
 }
 .rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse {
   background: var(--ds-surface-panel);
+  animation: ds-foundation-pulse var(--ds-image-pulse-duration, 2s) cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* ---- error: the default icon reads this `color` through `fill="currentColor"`,

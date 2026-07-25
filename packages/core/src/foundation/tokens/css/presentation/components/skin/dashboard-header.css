@@ -1,118 +1,307 @@
 /**
- * DashboardHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: foundation/tokens/css/presentation/components/skin/dashboard-header.css — DashboardHeader renders
- * one DOM tree under every engine (no engines/ split), so it has a single skin.
- *
- * SCOPE ROOT is the header's outer element, which carries the pair
- * `ds-structure ds-dashboard-header` + `data-part='root'` + `data-compact`
- * (both the compact and full renders share the class pair and part).
- *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * `border-color` on every element. A rule that paints a border COLOR must reach
- * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED or a real contract
- * attribute (`data-compact`) for the remaining (0,2,0). Non-border paint wins
- * unlayered at (0,3,0).
- *
- * Text color is a special case: the modern/rustic typography skins paint every
- * `Text` at `.rottay-typography.rottay-typography--<engine>.rottay-typography--<engine>[data-color='…']`
- * = (0,4,0), unlayered. A color rule on a composed `Text` must therefore exceed
- * (0,4,0); it buys (0,5,0) from the two root classes + the target `data-part`
- * repeated three times. Box/icon color has no such competitor and wins at (0,3,0)
- * (the icon inherits `currentColor` from the Box the rule paints).
- *
- * STATE: `STATUS_COLORS[state]` and the change-direction ternary are
- * STATE-SELECTED over static tokens, so each becomes a rule keyed on the stamped
- * `data-state` / `data-direction`. `data-compact` selects between the two header
- * shells.
+ * DashboardHeader skin.
+ * A framed operational header with clear identity, action and metric zones.
+ * All chroma and intensity resolve through tenant-owned tokens.
  */
 
-/* status dot — pill background is the status colour at 12% -------------------- */
+.ds-structure.ds-dashboard-header[data-part='root'] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(
+    --ds-dashboard-header-bg,
+    linear-gradient(
+      118deg,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
+      var(--ds-surface-card) 52%,
+      color-mix(in srgb, var(--ds-surface-panel) 82%, var(--ds-surface-card))
+    )
+  );
+  background-position: 0% 50%;
+  background-size: 180% 180%;
+  border-radius: var(--ds-dashboard-header-radius, var(--ds-radius-xl, 16px));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    var(--ds-dashboard-header-shadow, var(--ds-elevation-1));
+  transition:
+    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  animation: ds-dashboard-header-enter var(--ds-motion-calm, 220ms) var(--ds-motion-ease-out, ease-out) both;
+  container-type: inline-size;
+  container-name: ds-dashboard-header;
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-dashboard-header-border, var(--ds-color-border-primary));
+}
+
+.ds-structure.ds-dashboard-header[data-part='root']::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  opacity: var(--ds-dashboard-header-sheen-opacity, 0.24);
+  background: linear-gradient(
+    108deg,
+    transparent 24%,
+    color-mix(in srgb, var(--ds-color-bg-elevated) 76%, var(--ds-color-primary) 6%) 48%,
+    transparent 72%
+  );
+  background-position: 130% 50%;
+  background-size: 240% 100%;
+  animation: ds-dashboard-header-sheen var(--ds-dashboard-header-sheen-duration, 16s) ease-in-out infinite;
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'] > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ds-structure.ds-dashboard-header[data-part='root']:hover {
+  background-position: 100% 50%;
+  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-dashboard-header-border, var(--ds-color-border-primary)));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 92%, transparent),
+    var(--ds-dashboard-header-shadow-hover, var(--ds-elevation-2));
+}
+
+.ds-structure.ds-dashboard-header [data-part='header-row'] {
+  position: relative;
+}
+
+.ds-structure.ds-dashboard-header [data-part='identity'] {
+  min-width: 0;
+}
+
+.ds-structure.ds-dashboard-header [data-part='icon'] {
+  display: inline-grid;
+  width: var(--ds-dashboard-header-icon-size, 42px);
+  height: var(--ds-dashboard-header-icon-size, 42px);
+  place-items: center;
+  border-radius: var(--ds-radius-lg, 12px);
+  color: var(--ds-dashboard-header-icon-color, var(--ds-color-primary));
+  background: var(--ds-dashboard-header-icon-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    0 8px 20px -15px color-mix(in srgb, var(--ds-color-primary) 72%, transparent);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-spring, ease-out);
+}
+
+.ds-structure.ds-dashboard-header [data-part='icon'][data-part='icon'] {
+  border: 1px solid var(--ds-dashboard-header-icon-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle)));
+}
+
+.ds-structure.ds-dashboard-header[data-part='root']:hover [data-part='icon'] {
+  transform: translateY(-1px) scale(1.025);
+}
+
+.ds-structure.ds-dashboard-header [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  letter-spacing: var(--ds-dashboard-header-title-tracking, -0.025em);
+  text-wrap: balance;
+}
+
+.ds-structure.ds-dashboard-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  max-width: 68ch;
+  color: var(--ds-color-text-secondary);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.ds-structure.ds-dashboard-header [data-part='actions'] {
+  min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
+  padding: 3px;
+  border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
+  background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    0 8px 18px -16px color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent);
+  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+}
+
+.ds-structure.ds-dashboard-header [data-part='actions'][data-part='actions'] {
+  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+}
+
+.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='false'] {
+  padding-top: var(--ds-spacing-3, 12px);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='false'][data-part='metrics-row'] {
+  border-top: 1px solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+  min-height: 48px;
+  border-radius: var(--ds-dashboard-metric-radius, var(--ds-radius-lg, 12px));
+  background: var(
+    --ds-dashboard-metric-bg,
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-primary) 6%), var(--ds-surface-card))
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip'][data-part='metric-chip'] {
+  border: 1px solid var(--ds-dashboard-metric-border, var(--ds-color-border-subtle));
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip']:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
+  box-shadow: var(--ds-elevation-1);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-icon'] {
+  display: inline-grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: var(--ds-radius-md, 10px);
+  color: var(--ds-dashboard-metric-icon-color, var(--ds-color-primary));
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-label'][data-part='metric-chip-label'][data-part='metric-chip-label'] {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, var(--ds-font-family-base));
+  font-size: var(--ds-font-size-xs, 12px);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-value'][data-part='metric-chip-value'][data-part='metric-chip-value'] {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'] {
+  padding: 1px 5px;
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='up'] {
+  color: var(--ds-color-success);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='down'] {
+  color: var(--ds-color-error);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='flat'] {
+  color: var(--ds-color-text-muted);
+}
 
 .ds-structure.ds-dashboard-header [data-part='status-dot'] {
-  border-radius: var(--ds-radius-full, 9999px);
-}
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='live'],
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='connected'] {
-  background: color-mix(in srgb, var(--ds-color-success) 12%, transparent);
-}
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='syncing'],
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='warning'] {
-  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
-}
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='offline'] {
-  background: color-mix(in srgb, var(--ds-color-error) 12%, transparent);
+  border-radius: var(--ds-radius-full);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 50%, transparent);
 }
 
-/* status dot glyph — solid status colour ------------------------------------- */
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-part='status-dot'] {
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='connected'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-surface-card));
+}
+
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-surface-card));
+}
+
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='offline'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card));
+}
 
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
   border-radius: 50%;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 10%, transparent);
 }
+
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='connected'] {
   background: var(--ds-color-success);
+  color: var(--ds-color-success);
 }
+
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'],
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='warning'] {
   background: var(--ds-color-warning);
-}
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='offline'] {
-  background: var(--ds-color-error);
+  color: var(--ds-color-warning);
 }
 
-/* status dot text — Text, needs (0,5,0) to beat the typography skin ----------- */
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='offline'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-error);
+}
 
 .ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='live'],
 .ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='connected'] {
   color: var(--ds-color-success);
 }
+
 .ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='syncing'],
 .ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='warning'] {
   color: var(--ds-color-warning);
 }
+
 .ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='offline'] {
   color: var(--ds-color-error);
 }
 
-/* metric chip ---------------------------------------------------------------- */
+@container ds-dashboard-header (max-width: 720px) {
+  .ds-structure.ds-dashboard-header [data-part='header-row'] {
+    align-items: stretch;
+    flex-direction: column;
+  }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip'] {
-  border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-color-bg-secondary);
-}
-.ds-structure.ds-dashboard-header [data-part='metric-chip'][data-part='metric-chip'] {
-  border: 1px solid var(--ds-color-border-secondary);
-}
+  .ds-structure.ds-dashboard-header [data-part='actions'] {
+    width: 100%;
+    overflow-x: auto;
+  }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip-icon'] {
-  color: var(--ds-color-text-muted);
-}
+  .ds-structure.ds-dashboard-header [data-part='metrics-row'] {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
 
-/* metric chip change — Text keyed on direction, (0,5,0) + data-direction ------ */
-
-.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='up'] {
-  color: var(--ds-color-success);
-}
-.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='down'] {
-  color: var(--ds-color-error);
-}
-.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='flat'] {
-  color: var(--ds-color-text-muted);
+  .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+    flex: 0 0 min(72vw, 220px);
+  }
 }
 
-/* leading icon (compact + full share data-part='icon') ----------------------- */
-
-.ds-structure.ds-dashboard-header [data-part='icon'] {
-  color: var(--ds-color-text-muted);
+@keyframes ds-dashboard-header-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* header shells — compact vs full, keyed on data-compact --------------------- */
-
-.ds-structure.ds-dashboard-header [data-part='root'][data-compact='true'] {
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+@keyframes ds-dashboard-header-sheen {
+  0%, 72%, 100% { background-position: 130% 50%; }
+  86% { background-position: -130% 50%; }
 }
-.ds-structure.ds-dashboard-header [data-part='root'][data-compact='false'] {
-  background: var(--ds-color-bg-primary);
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-dashboard-header[data-part='root'],
+  .ds-structure.ds-dashboard-header[data-part='root']::after,
+  .ds-structure.ds-dashboard-header [data-part='icon'],
+  .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+    animation: none;
+    transition: none;
+  }
 }

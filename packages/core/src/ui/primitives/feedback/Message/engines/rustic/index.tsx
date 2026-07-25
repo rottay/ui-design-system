@@ -193,7 +193,7 @@ const styles = {
     marginLeft: '8px',
     fontSize: '14px',
     lineHeight: 1,
-    transition: 'color var(--ds-duration-fast, 150ms)',
+    transition: 'color var(--ds-duration-fast, 120ms)',
   } as React.CSSProperties,
 
   /**

@@ -130,6 +130,21 @@ describe('PatternWorkbenchHeader', () => {
 });
 
 describe('PatternWorkbenchHeader (modern engine)', () => {
+  it('renders premium context anatomy', async () => {
+    const { container } = renderSurface(
+      <PatternWorkbenchHeader
+        eyebrow="Talent intelligence"
+        icon={<span data-testid="workbench-icon">I</span>}
+        title="Modern Hub"
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByText('Talent intelligence')).toBeInTheDocument();
+    expect(screen.getByTestId('workbench-icon')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="header-icon"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+  });
+
   it('renders title with modern engine', async () => {
     renderSurface(
       <PatternWorkbenchHeader title="Modern Hub" />,

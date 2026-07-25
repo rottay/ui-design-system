@@ -29,7 +29,7 @@ import {
   getReadableForegroundColor,
   buildElevationScale,
 } from '@/infrastructure/compilers/kernel/foundation/css/color-math';
-import { appearanceToVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
+import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 import type { VerticalPreset } from '../../../../../foundation/contracts/composition/tenants';
 import { getProductProfile } from '@/foundation/presets/product-profiles';
@@ -469,7 +469,7 @@ export function generateTenantCssFromResolvedVisualConfig(
   // Layered AFTER chrome vars so appearance overrides win when both are
   // present — matching the runtime merge order in ThemeProvider.
   const appearanceVars = effectiveConfig.appearance
-    ? appearanceToVariables(effectiveConfig.appearance)
+    ? compileAppearanceVariables(effectiveConfig.appearance).variables
     : {};
 
   // Base declarations without chrome (shared across light + dark base)
@@ -484,8 +484,17 @@ export function generateTenantCssFromResolvedVisualConfig(
   // appearance stays the highest-priority CSS layer.
   const lightDeclarations = { ...compiledBrandVars, ...baseDeclarations, ...appearanceVars };
 
-  // Block 1: light-theme tenant variables (always generated)
-  const blocks = [toCssBlock(selector, lightDeclarations)];
+  // Block 1: light-theme tenant variables (always generated).
+  // Scoped to the html element (page-wide) AND directly to the DS-root wrapper
+  // (`html[data-tenant] [data-ds-root]`): vertical artifacts declare their own
+  // values directly on that wrapper via `:where([data-ds-root][data-vertical])`,
+  // and a directly-matched declaration always beats the tenant values the
+  // wrapper would otherwise inherit from the html element — silently shadowing
+  // DB-appearance typography/surfaces for tenants under a vertical (measured
+  // live: a DB tenant's Optima body font lost to the vertical's font pack).
+  // The documented merge order puts Appearance above the vertical artifact;
+  // the wrapper-scoped selector is what makes the cascade implement it.
+  const blocks = [toCssBlock(`${selector}, ${selector} [data-ds-root]`, lightDeclarations)];
 
   if (includeDarkSelector) {
     // chrome.controls (buttons + full input chrome), chrome.cardComponent, and

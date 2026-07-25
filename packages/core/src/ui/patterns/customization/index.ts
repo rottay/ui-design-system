@@ -6,6 +6,7 @@ export {
   PatternBrandStudio,
   serializeBrandTheme,
   deserializeBrandTheme,
+  brandThemeToTenantAppearance,
   brandThemeToTenantAppearanceAdvanced,
 } from './brand-studio';
 export type {

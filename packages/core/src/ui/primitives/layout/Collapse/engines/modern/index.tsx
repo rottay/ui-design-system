@@ -2,9 +2,20 @@
 
 /**
  * @fileoverview Collapse Modern Engine - Rottay Design System.
- * Pure inline-style implementation using React Context for shared accordion
- * state between Collapse and Panel. No DaisyUI classes -- uses DS tokens,
- * inline styles, and a <style> block for the expand/collapse transition.
+ * Token-driven implementation using React Context for shared accordion
+ * state between Collapse and Panel. No DaisyUI classes -- paint lives in
+ * the modern skin (`collapse.css`); the engine keeps layout/token-channel
+ * inline styles and a <style> block for the expand/collapse transition.
+ *
+ * Contract coverage (K3-C pass 1):
+ * - `size` (`sm|md|lg`, legacy `small|middle|large` aliases) is normalized
+ *   and stamped as `data-size` on the root; the skin owns the per-size
+ *   header/content padding rhythm.
+ * - `collapsible` (`header|icon|disabled`) gates the toggle affordance:
+ *   `disabled` makes every header inert, `icon` moves the toggle role to
+ *   the arrow alone.
+ * - Headers are real keyboard controls: `role="button"`, `tabIndex`,
+ *   Enter/Space toggle, `aria-expanded` + `aria-disabled`.
  *
  * @example
  * ```tsx
@@ -50,9 +61,26 @@ interface CollapseContextValue {
   expandIconPosition: 'start' | 'end';
   bordered: boolean;
   ghost: boolean;
+  collapsible: 'header' | 'icon' | 'disabled' | undefined;
 }
 
 const CollapseContext = createContext<CollapseContextValue | null>(null);
+
+/** Normalize the canonical `sm|md|lg` scale plus the legacy antd aliases. */
+export function normalizeCollapseSize(
+  size: CollapseProps['size']
+): 'sm' | 'md' | 'lg' {
+  switch (size) {
+    case 'sm':
+    case 'small':
+      return 'sm';
+    case 'lg':
+    case 'large':
+      return 'lg';
+    default:
+      return 'md';
+  }
+}
 
 /**
  * Modern Collapse Panel.
@@ -87,19 +115,64 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     const key = panelKey ?? `panel-${index}`;
     const isActive = context.activeKeys.includes(key);
 
+    // `collapsible='disabled'` renders every header inert; a disabled panel is
+    // inert on its own. `collapsible='icon'` moves the toggle affordance to
+    // the arrow alone (the header keeps no button role in that mode).
+    const inert = disabled || context.collapsible === 'disabled';
+    const iconOnly = context.collapsible === 'icon';
+
     const handleClick = () => {
-      if (!disabled) {
+      if (!inert && !iconOnly) {
         context.toggleKey(key);
       }
     };
 
-    // Arrow indicator rotates 90deg when panel is expanded
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+      if (inert || iconOnly) return;
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        context.toggleKey(key);
+      }
+    };
+
+    const handleArrowClick = (event: React.MouseEvent) => {
+      if (!iconOnly || inert) return;
+      event.stopPropagation();
+      context.toggleKey(key);
+    };
+
+    const handleArrowKeyDown = (event: React.KeyboardEvent) => {
+      if (!iconOnly || inert) return;
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        event.stopPropagation();
+        context.toggleKey(key);
+      }
+    };
+
+    // Arrow indicator rotates 90deg when panel is expanded (skin-owned). In
+    // `collapsible='icon'` mode the arrow IS the toggle control, so it carries
+    // the button role + expanded state; otherwise it is decorative and the
+    // header owns the toggle semantics.
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
         data-part="arrow"
+        data-expanded={isActive ? 'true' : 'false'}
+        {...(iconOnly && !inert
+          ? {
+              role: 'button',
+              tabIndex: 0,
+              'aria-expanded': isActive,
+              onClick: handleArrowClick,
+              onKeyDown: handleArrowKeyDown,
+            }
+          : {})}
         style={{
           fontSize: 12,
+          ...(iconOnly && !inert
+            ? { cursor: 'var(--ds-collapse-header-default-idle-cursor, pointer)' }
+            : {}),
         }}
       >
         {'\u25B6'}
@@ -123,32 +196,55 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
           ...style,
         }}
       >
-        {/* Header row: icon position controlled by expandIconPosition context */}
+        {/* Header row: the TOGGLE (data-part='header', role=button) and the
+            extra actions slot are SIBLINGS inside a plain layout row — an
+            interactive extra must never nest inside the button (axe
+            nested-interactive; K3-C pass-2 remediation). Padding rhythm is
+            skin-owned on the row (collapse.css, keyed on data-size/--ghost);
+            paint never lives here. */}
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: context.ghost
-              ? 'var(--ds-collapse-header-ghost-idle-padding-y, 8px) var(--ds-collapse-header-ghost-idle-padding-x, 12px)'
-              : 'var(--ds-collapse-header-default-idle-padding-y, 12px) var(--ds-collapse-header-default-idle-padding-x, 16px)',
-            cursor: disabled ? 'var(--ds-collapse-header-default-disabled-cursor, not-allowed)' : 'var(--ds-collapse-header-default-idle-cursor, pointer)',
-            userSelect: 'none',
-            fontSize: 'var(--ds-collapse-header-default-idle-font-size, inherit)',
-            fontWeight: 'var(--ds-collapse-header-default-idle-font-weight, 500)',
-            lineHeight: 'var(--ds-collapse-header-default-idle-line-height, normal)',
-          }}
-          onClick={handleClick}
-          role="button"
-          aria-expanded={isActive}
-          data-part="header"
-          data-expanded={isActive ? 'true' : 'false'}
-          data-disabled={disabled ? 'true' : 'false'}
+          data-part="header-row"
+          style={{ display: 'flex', alignItems: 'center' }}
         >
-          {context.expandIconPosition === 'start' && arrowIcon}
-          <span data-part="label" style={{ flex: 1 }}>{header}</span>
-          {extra && <span data-part="extra" style={{ marginLeft: 'auto' }}>{extra}</span>}
-          {context.expandIconPosition === 'end' && arrowIcon}
+          <div
+            style={{
+              flex: '1 1 auto',
+              minWidth: 0,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              cursor: inert
+                ? disabled
+                  ? 'var(--ds-collapse-header-default-disabled-cursor, not-allowed)'
+                  : 'default'
+                : iconOnly
+                  ? 'default'
+                  : 'var(--ds-collapse-header-default-idle-cursor, pointer)',
+              userSelect: 'none',
+              fontSize: 'var(--ds-collapse-header-default-idle-font-size, inherit)',
+              fontWeight: 'var(--ds-collapse-header-default-idle-font-weight, 500)',
+              lineHeight: 'var(--ds-collapse-header-default-idle-line-height, normal)',
+            }}
+            onClick={handleClick}
+            {...(iconOnly
+              ? {}
+              : {
+                  role: 'button',
+                  tabIndex: inert ? -1 : 0,
+                  'aria-expanded': isActive,
+                  'aria-disabled': inert ? true : undefined,
+                  onKeyDown: handleKeyDown,
+                })}
+            data-part="header"
+            data-expanded={isActive ? 'true' : 'false'}
+            data-disabled={disabled ? 'true' : 'false'}
+            data-collapsible={context.collapsible ?? 'header'}
+          >
+            {context.expandIconPosition === 'start' && arrowIcon}
+            <span data-part="label" style={{ flex: 1 }}>{header}</span>
+            {context.expandIconPosition === 'end' && arrowIcon}
+          </div>
+          {extra && <span data-part="extra">{extra}</span>}
         </div>
         {/* Content area: the outer element is the grid-template-rows track
             (0fr collapsed / 1fr expanded); the inner element carries
@@ -170,9 +266,6 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
               opacity: isActive ? 1 : 0,
               fontSize: 'var(--ds-collapse-content-default-idle-font-size, inherit)',
               lineHeight: 'var(--ds-collapse-content-default-idle-line-height, normal)',
-              padding: isActive
-                ? `0 var(--ds-collapse-content-default-idle-padding-x, 16px) var(--ds-collapse-content-default-idle-padding-y, 16px) var(--ds-collapse-content-default-idle-padding-x, 16px)`
-                : '0 var(--ds-collapse-content-default-idle-padding-x, 16px)',
             }}
           >
             {children}
@@ -203,6 +296,8 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       bordered = COLLAPSE_DEFAULTS.bordered,
       ghost = false,
       expandIconPosition = COLLAPSE_DEFAULTS.expandIconPosition,
+      collapsible,
+      size = COLLAPSE_DEFAULTS.size,
       onChange,
       children,
       className = '',
@@ -247,7 +342,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
 
     return (
       <CollapseContext.Provider
-        value={{ activeKeys, toggleKey, accordion, expandIconPosition, bordered, ghost }}
+        value={{ activeKeys, toggleKey, accordion, expandIconPosition, bordered, ghost, collapsible }}
       >
         {/* Inject transition styles -- safe static string */}
         <style dangerouslySetInnerHTML={{ __html: COLLAPSE_STYLES }} />
@@ -255,6 +350,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
           ref={ref}
           className={`rottay-collapse${ghost ? ' rottay-collapse--ghost' : ''}${!bordered ? ' rottay-collapse--borderless' : ''} ${className}`.trim() || undefined}
           data-part="root"
+          data-size={normalizeCollapseSize(size)}
           style={{
             display: 'flex',
             flexDirection: 'column',

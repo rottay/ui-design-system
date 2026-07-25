@@ -6,8 +6,8 @@
  * pagination, and visual density toggles (striped, bordered, compact).
  */
 
-import type { ReactNode } from 'react';
-import type { DataTableMobileCardContext } from '@/foundation/contracts/runtime/components/patterns/data';
+import type { ReactNode } from "react";
+import type { DataTableMobileCardContext } from "@/foundation/contracts/runtime/components/patterns/data";
 import type {
   PatternBaseProps,
   ColumnDef,
@@ -15,12 +15,12 @@ import type {
   FilterDef,
   PaginationConfig,
   BulkAction,
-} from '../../../../../foundation/contracts/runtime/components/patterns/core';
+} from "../../../../../foundation/contracts/runtime/components/patterns/core";
 
 export type {
   DataTableMobileCardContext,
   DataTableMobileCardInteractionEvent,
-} from '@/foundation/contracts/runtime/components/patterns/data';
+} from "@/foundation/contracts/runtime/components/patterns/data";
 
 // ---------------------------------------------------------------------------
 // Aggregation
@@ -31,12 +31,55 @@ export type {
  * function that receives all items in a group and returns a display value.
  */
 export type AggregationFn<T> =
-  | 'count'
-  | 'sum'
-  | 'average'
-  | 'min'
-  | 'max'
+  | "count"
+  | "sum"
+  | "average"
+  | "min"
+  | "max"
   | ((items: T[]) => ReactNode);
+
+/**
+ * Bounded DataTable presentation recipes.
+ *
+ * Recipes alter table rhythm and divider strategy without changing the data,
+ * interaction model, or DOM ownership. They are intentionally finite so a
+ * tenant can restyle a table family without an application rebuilding table
+ * chrome in route CSS.
+ */
+export type DataTableRecipe =
+  | "minimal"
+  | "ruled"
+  | "grid"
+  | "zebra"
+  | "editorial";
+
+/** Product copy owned by the caller/i18n layer rather than the engine. */
+export interface DataTableMessages {
+  /** Accessible name for the grid. */
+  tableLabel?: string;
+  loadingLabel?: string;
+  emptyTitle?: ReactNode;
+  emptyDescription?: ReactNode;
+  errorTitle?: ReactNode;
+  errorDescription?: ReactNode;
+  actionsColumn?: ReactNode;
+  filtersTitle?: string;
+  previousPage?: string;
+  nextPage?: string;
+  saveEdit?: string;
+  savingEdit?: string;
+  cancelEdit?: string;
+  editCell?: (trigger: "click" | "doubleClick") => string;
+  moveColumn?: (column: string) => string;
+  resizeColumn?: (column: string) => string;
+  page?: (page: number) => string;
+  emptyGroup?: ReactNode;
+  selectAll?: string;
+  selectRow?: (rowKey: string) => string;
+  expandRow?: (rowKey: string, expanded: boolean) => string;
+  selectedCount?: (count: number) => ReactNode;
+  paginationRange?: (start: number, end: number, total: number) => ReactNode;
+}
 
 /**
  * Product behavior supplied to a custom mobile-card renderer.
@@ -147,6 +190,19 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   emptyState?: ReactNode;
 
   /**
+   * Shows an error posture in place of rows while preserving the table frame,
+   * header/toolbar context, and retry controls supplied through `errorState`.
+   * @default false
+   */
+  error?: boolean;
+
+  /** Product-authored error recovery content. */
+  errorState?: ReactNode;
+
+  /** Localized product copy and accessible labels used by the table chrome. */
+  messages?: DataTableMessages;
+
+  /**
    * Custom row renderer that wraps (or replaces) the default row output.
    * Useful for adding row-level styling, animations, or wrapper elements.
    *
@@ -232,7 +288,8 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
 
   /**
    * Filter definitions that drive the filter panel UI. Each entry creates one
-   * filter control (text input, select dropdown, date picker, etc.).
+   * filter control (text input, select dropdown, date picker, etc.). The
+   * canonical panel is rendered when `onFilterChange` is supplied.
    */
   filters?: FilterDef[];
 
@@ -264,9 +321,10 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   // ---------------------------------------------------------------------------
 
   /**
-   * Card renderer for the mobile breakpoint. When the viewport width is below
-   * `mobileBreakpoint`, the table switches from a traditional row layout to a
-   * card-based layout using this renderer.
+   * Card renderer for the mobile breakpoint. When the table's own container
+   * width is below `mobileBreakpoint`, it switches from a traditional row
+   * layout to a card-based layout using this renderer. Viewport width is only
+   * used as a fallback where `ResizeObserver` is unavailable.
    *
    * @param row     - The data object for this card.
    * @param index   - Zero-based index in `data`.
@@ -275,19 +333,37 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   mobileCard?: (
     row: T,
     index: number,
-    context: DataTableMobileCardContext<T>,
+    context: DataTableMobileCardContext<T>
   ) => ReactNode;
 
   /**
-   * Viewport width (in pixels) at which the table switches to mobile card
+   * Container width (in pixels) at which the table switches to mobile card
    * layout. Only effective when `mobileCard` is provided.
    * @default 768
    */
   mobileBreakpoint?: number;
 
+  /**
+   * Whether a standalone table may switch itself to the mobile-card renderer.
+   * Collection workspaces disable this because their `AdaptiveConfig` is the
+   * single authority for the active collection posture.
+   * @default true
+   */
+  autoMobileCards?: boolean;
+
   // ---------------------------------------------------------------------------
   // Visual
   // ---------------------------------------------------------------------------
+
+  /**
+   * Finite DS-owned anatomy recipe. Tenant anatomy tokens remain authoritative
+   * over paint; this prop chooses the local information rhythm only.
+   *
+   * Legacy compatibility: `bordered` resolves to `grid`, then `striped`
+   * resolves to `zebra`, when `recipe` is omitted.
+   * @default 'minimal'
+   */
+  recipe?: DataTableRecipe;
 
   /**
    * Alternates row background colors for improved readability.
@@ -296,13 +372,15 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   striped?: boolean;
 
   /**
-   * Adds visible borders around each cell.
+   * Adds visible borders around each cell. Compatibility alias for
+   * `recipe="grid"`; prefer `recipe` for new code.
    * @default false
    */
   bordered?: boolean;
 
   /**
-   * Reduces row padding for higher information density.
+   * Reduces row padding for higher information density. Compatibility alias
+   * for `density="compact"`; an explicit `density` takes precedence.
    * @default false
    */
   compact?: boolean;
@@ -441,7 +519,7 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    *   touch targets); not part of the canonical two-mode density set
    * @default 'comfortable'
    */
-  density?: 'compact' | 'comfortable' | 'spacious';
+  density?: "compact" | "comfortable" | "spacious";
 
   // ---------------------------------------------------------------------------
   // Row Grouping
@@ -484,7 +562,7 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   renderGroupHeader?: (
     groupValue: string,
     items: T[],
-    isExpanded: boolean,
+    isExpanded: boolean
   ) => ReactNode;
 
   // ---------------------------------------------------------------------------
@@ -496,7 +574,12 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    * Receives the full row, the column key, and both old and new values.
    * Supports async operations (e.g., server mutations).
    */
-  onCellEdit?: (row: T, columnKey: string, newValue: unknown, oldValue: unknown) => void | Promise<void>;
+  onCellEdit?: (
+    row: T,
+    columnKey: string,
+    newValue: unknown,
+    oldValue: unknown
+  ) => void | Promise<void>;
 
   /**
    * Called when inline editing starts on a cell.
@@ -521,7 +604,7 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    * - `'click'`: single click enters edit mode
    * @default 'doubleClick'
    */
-  editTrigger?: 'click' | 'doubleClick';
+  editTrigger?: "click" | "doubleClick";
 
   /**
    * Enable Tab key navigation between editable cells in the same row.

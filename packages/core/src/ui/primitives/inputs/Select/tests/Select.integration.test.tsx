@@ -104,7 +104,7 @@ describe('Select integration', () => {
 
       const searchInput =
         container.querySelector('input[type="text"]') ??
-        screen.getByPlaceholderText('Search records');
+        screen.getByPlaceholderText(engine === 'modern' ? 'Search...' : 'Search records');
 
       if (!(searchInput instanceof HTMLInputElement)) {
         throw new Error('Expected live search input for custom select');
@@ -121,7 +121,7 @@ describe('Select integration', () => {
 
       const hiddenInput = container.querySelector('input[type="hidden"][name="records"]');
       expect(hiddenInput).toHaveAttribute('value', 'alpha');
-      expect(screen.getByText('Alpha')).toBeInTheDocument();
+      expect(screen.getAllByText('Alpha').length).toBeGreaterThan(0);
     }
   );
 
@@ -145,7 +145,7 @@ describe('Select integration', () => {
 
       const searchInput =
         container.querySelector('input[type="text"]') ??
-        screen.getByPlaceholderText('Search records');
+        screen.getByPlaceholderText(engine === 'modern' ? 'Search...' : 'Search records');
 
       if (!(searchInput instanceof HTMLInputElement)) {
         throw new Error('Expected live search input for empty state test');

@@ -34,8 +34,8 @@ A versatile button component supporting multiple variants, sizes, and states wit
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
-| Styling | CSS-in-JS | Tailwind | CSS Variables |
+| Library | Ant Design | Rottay anatomy | Vanilla CSS |
+| Styling | CSS-in-JS | Token skin | CSS Variables |
 | Bundle | Heavier | Medium | Lightest |
 | Ripple Effect | Yes | No | No |
 | Icon Animation | Yes | Yes | Basic |
@@ -51,7 +51,7 @@ A versatile button component supporting multiple variants, sizes, and states wit
     },
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'ghost', 'link', 'danger', 'default', 'text', 'dashed'],
+      options: ['primary', 'secondary', 'outline', 'ghost', 'link', 'danger', 'success', 'warning', 'info', 'ai', 'default', 'text', 'dashed'],
       description: 'Visual variant of the button',
     },
     shape: {
@@ -72,6 +72,14 @@ A versatile button component supporting multiple variants, sizes, and states wit
       control: 'boolean',
       description: 'Loading state',
     },
+    pending: {
+      control: 'boolean',
+      description: 'Width-stable busy state for mutation actions',
+    },
+    pendingLabel: {
+      control: 'text',
+      description: 'Localized label announced and shown while pending',
+    },
     danger: {
       control: 'boolean',
       description: 'Danger/destructive button style',
@@ -80,12 +88,40 @@ A versatile button component supporting multiple variants, sizes, and states wit
       control: 'boolean',
       description: 'Full width button',
     },
+    shadow: { control: 'boolean' },
+    gradient: { control: 'boolean' },
+    pulse: { control: 'boolean' },
+    bordered: { control: 'boolean' },
+    radius: {
+      control: 'select',
+      options: ['none', 'sm', 'md', 'lg', 'full'],
+    },
   },
   tags: ['autodocs'],
 };
 
 export default meta;
 type Story = StoryObj<typeof Button>;
+
+const SparklesGlyph = () => (
+  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 2.5c.5 3 2 4.5 5 5-3 .5-4.5 2-5 5-.5-3-2-4.5-5-5 3-.5 4.5-2 5-5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    <path d="M15.5 12.5c.2 1.2.8 1.8 2 2-1.2.2-1.8.8-2 2-.2-1.2-.8-1.8-2-2 1.2-.2 1.8-.8 2-2Z" fill="currentColor" />
+  </svg>
+);
+
+const ArrowGlyph = () => (
+  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const SettingsGlyph = () => (
+  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="2.25" stroke="currentColor" strokeWidth="1.4" />
+    <path d="M10 3v1.5M10 15.5V17M3 10h1.5M15.5 10H17M5.05 5.05l1.06 1.06m7.78 7.78 1.06 1.06m0-9.9-1.06 1.06m-7.78 7.78-1.06 1.06" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+  </svg>
+);
 
 // ============================================================================
 // Default Stories
@@ -114,7 +150,7 @@ export const Sizes: Story = {
 export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
-      {(['primary', 'secondary', 'outline', 'ghost', 'link', 'danger', 'default', 'text', 'dashed'] as const).map((variant) => (
+      {(['primary', 'secondary', 'outline', 'ghost', 'link', 'danger', 'success', 'warning', 'info', 'ai', 'default', 'text', 'dashed'] as const).map((variant) => (
         <Button key={variant} variant={variant}>
           {variant}
         </Button>
@@ -159,6 +195,196 @@ export const DangerButtons: Story = {
       <Button variant="danger">Danger</Button>
       <Button danger variant="primary">Primary Danger</Button>
       <Button danger variant="outline">Outline Danger</Button>
+    </div>
+  ),
+};
+
+export const AIActions: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+      <Button variant="ai">Draft with AI</Button>
+      <Button variant="ai" gradient icon={<span aria-hidden="true">✦</span>}>
+        Generate shortlist
+      </Button>
+      <Button variant="ai" pending pendingLabel="Preparing evidence">
+        Prepare evidence
+      </Button>
+      <Button variant="ai" disabled>
+        Not available
+      </Button>
+    </div>
+  ),
+};
+
+/**
+ * Pass 1 contract evidence: anatomy, long localized copy, RTL, state parity,
+ * responsive size and icon-only naming in one stable review surface.
+ */
+export const ModernContractMatrix: Story = {
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        story:
+          'Technical contract review for Modern. Pass 2 may refine optical craft without changing this anatomy.',
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'grid', gap: 24, maxWidth: 960 }}>
+      <section style={{ display: 'grid', gap: 12 }}>
+        <strong>Hierarchy and states</strong>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+          <Button engine="modern" variant="primary">Primary action</Button>
+          <Button engine="modern" variant="secondary">Secondary action</Button>
+          <Button engine="modern" variant="ghost">Quiet action</Button>
+          <Button engine="modern" variant="danger">Delete permanently</Button>
+          <Button engine="modern" variant="ai" icon={<span aria-hidden="true">✦</span>}>
+            Analyze with AI
+          </Button>
+          <Button engine="modern" pending pendingLabel="Saving">Save changes</Button>
+          <Button engine="modern" disabled>Unavailable</Button>
+        </div>
+      </section>
+
+      <section style={{ display: 'grid', gap: 12 }}>
+        <strong>Localization and resilient layout</strong>
+        <Button engine="modern" block>
+          Review the complete candidate evidence before making the final decision
+        </Button>
+        <div dir="rtl" lang="ar" style={{ display: 'flex', gap: 12, justifyContent: 'flex-start' }}>
+          <Button engine="modern" variant="ai" icon={<span aria-hidden="true">✦</span>}>
+            إنشاء ملخص باستخدام الذكاء الاصطناعي
+          </Button>
+          <Button engine="modern" variant="secondary">إلغاء</Button>
+        </div>
+      </section>
+
+      <section style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+        <Button engine="modern" size={{ base: 'sm', md: 'md', xl: 'lg' }}>
+          Responsive control
+        </Button>
+        <Button.Icon aria-label="Open settings" icon={<span aria-hidden="true">⚙</span>} />
+        <Button engine="modern" href="/docs" target="_blank" variant="link">
+          Open documentation
+        </Button>
+      </section>
+    </div>
+  ),
+};
+
+/**
+ * Pass 2 evidence: optical hierarchy, density, localization, compound
+ * geometry and radically different public-token personalities.
+ */
+export const ModernCraftReview: Story = {
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        story:
+          'Adversarial craft surface for Modern Button. Both personality blocks use only public Button token channels a BrandTheme or DB TenantTheme can emit.',
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'grid', gap: 28, maxWidth: 1040 }}>
+      <section style={{ display: 'grid', gap: 12 }}>
+        <strong>Action hierarchy and complete state language</strong>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
+          <Button engine="modern" variant="primary" icon={<ArrowGlyph />} iconPosition="end">
+            Continue
+          </Button>
+          <Button engine="modern" variant="default">Review evidence</Button>
+          <Button engine="modern" variant="ghost">Not now</Button>
+          <Button engine="modern" variant="danger">Delete permanently</Button>
+          <Button engine="modern" variant="ai" icon={<SparklesGlyph />}>
+            Generate with AI
+          </Button>
+          <Button engine="modern" pending pendingLabel="Saving">Save changes</Button>
+          <Button engine="modern" disabled>Unavailable</Button>
+          <Button.Icon icon={<SettingsGlyph />} aria-label="Open settings" tooltip="Open settings" />
+        </div>
+      </section>
+
+      <section style={{ display: 'grid', gap: 12 }}>
+        <strong>Container density and resilient localization</strong>
+        {(['compact', 'comfortable', 'spacious'] as const).map((density) => (
+          <div key={density} data-density={density} style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+            <span style={{ width: 88 }}>{density}</span>
+            <Button engine="modern" size="sm">Secondary</Button>
+            <Button engine="modern" size="md" variant="primary">Primary action</Button>
+            <Button.Icon size="md" icon={<SettingsGlyph />} aria-label={`${density} settings`} />
+          </div>
+        ))}
+        <Button engine="modern" block icon={<SparklesGlyph />} variant="ai">
+          Review the complete candidate evidence before making the final decision with the hiring team
+        </Button>
+        <div dir="rtl" lang="ar" style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+          <Button engine="modern" variant="ai" icon={<SparklesGlyph />}>
+            إنشاء ملخص باستخدام الذكاء الاصطناعي
+          </Button>
+          <Button engine="modern" variant="default">إلغاء</Button>
+        </div>
+      </section>
+
+      <section style={{ display: 'grid', gap: 12 }}>
+        <strong>Connected compound geometry in both writing directions</strong>
+        <Button.Group connected aria-label="View mode">
+          <Button engine="modern" variant="default">Overview</Button>
+          <Button engine="modern" variant="default">Evidence</Button>
+          <Button engine="modern" variant="default">Activity</Button>
+        </Button.Group>
+        <div dir="rtl">
+          <Button.Group connected aria-label="طريقة العرض">
+            <Button engine="modern" variant="default">نظرة عامة</Button>
+            <Button engine="modern" variant="default">الأدلة</Button>
+            <Button engine="modern" variant="default">النشاط</Button>
+          </Button.Group>
+        </div>
+      </section>
+
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 10,
+            padding: 20,
+            ['--ds-button-md-height' as string]: '36px',
+            ['--ds-button-md-padding-x' as string]: '13px',
+            ['--ds-button-md-radius' as string]: '8px',
+            ['--ds-button-font-weight' as string]: 640,
+            ['--ds-button-letter-spacing' as string]: '-0.012em',
+            ['--ds-button-primary-bg' as string]: '#315f96',
+            ['--ds-button-primary-bg-hover' as string]: '#254f80',
+            ['--ds-button-primary-border' as string]: '#254f80',
+          } as React.CSSProperties}
+        >
+          <Button engine="modern" variant="primary">Precision tenant</Button>
+          <Button engine="modern" variant="default">Secondary</Button>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 12,
+            padding: 20,
+            ['--ds-button-md-height' as string]: '46px',
+            ['--ds-button-md-padding-x' as string]: '22px',
+            ['--ds-button-md-radius' as string]: '999px',
+            ['--ds-button-font-family' as string]: 'Georgia, serif',
+            ['--ds-button-font-weight' as string]: 600,
+            ['--ds-button-letter-spacing' as string]: '0.012em',
+            ['--ds-button-primary-bg' as string]: '#22201d',
+            ['--ds-button-primary-bg-hover' as string]: '#4a433b',
+            ['--ds-button-primary-border' as string]: '#22201d',
+          } as React.CSSProperties}
+        >
+          <Button engine="modern" variant="primary">Editorial tenant</Button>
+          <Button engine="modern" variant="default">Secondary</Button>
+        </div>
+      </section>
     </div>
   ),
 };
@@ -221,7 +447,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Button rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Button rendered by Classic (Ant Design), Modern (Rottay anatomy + token skin), and Rustic (Vanilla CSS).',
       },
     },
   },

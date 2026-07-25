@@ -28,10 +28,10 @@ A multi-line text input component with multi-engine support.
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | DS tokens (skin-painted) | Vanilla CSS |
 | Auto Resize | Built-in | Manual | Custom |
 | Character Count | Built-in | Custom | Custom |
-| Clear Button | Yes | No | Yes |
+| Clear Button | Yes | Yes | Yes |
 `,
       },
     },
@@ -155,7 +155,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Textarea rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Textarea rendered by Classic (Ant Design), Modern (DS tokens), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -195,5 +195,37 @@ export const StatusMatrix: Story = {
       variantProp="status"
       variants={['default', 'error', 'warning', 'success']}
     />
+  ),
+};
+
+/**
+ * Modern-engine state matrix: rest, filled, statuses, disabled, read-only,
+ * clear, count, sizes, and a long Arabic RTL value.
+ */
+export const ModernStateMatrix: Story = {
+  name: 'Modern State Matrix',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 420 }}>
+      <Textarea engine="modern" placeholder="Rest" rows={2} />
+      <Textarea engine="modern" defaultValue="Filled with a longer value that keeps flowing across lines without clipping the clear action." allowClear rows={2} />
+      <Textarea engine="modern" status="error" defaultValue="Invalid entry" rows={2} />
+      <Textarea engine="modern" status="warning" defaultValue="Needs review" rows={2} />
+      <Textarea engine="modern" status="success" defaultValue="Approved" rows={2} />
+      <Textarea engine="modern" defaultValue="Read only value" readOnly rows={2} />
+      <Textarea engine="modern" defaultValue="Disabled value" disabled rows={2} />
+      <Textarea engine="modern" showCount maxLength={120} defaultValue="Counted" rows={2} />
+      <Textarea engine="modern" size="sm" placeholder="Small" rows={2} />
+      <Textarea engine="modern" size="lg" placeholder="Large" rows={2} />
+      <div dir="rtl" lang="ar">
+        <Textarea
+          engine="modern"
+          allowClear
+          showCount
+          maxLength={280}
+          defaultValue="هذه سيرة ذاتية طويلة عمداً لاختبار التفاف النص العربي داخل الحقل دون اقتطاع أو تداخل مع زر المسح أو عداد الأحرف."
+          rows={3}
+        />
+      </div>
+    </div>
   ),
 };

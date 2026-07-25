@@ -37,6 +37,48 @@ export { MotionProvider } from './infrastructure/runtime/motion';
 export type { MotionProviderProps } from './infrastructure/runtime/motion';
 
 // ============================================
+// RECIPE PROFILES (public white-label contract)
+// ============================================
+export {
+  RecipeProfileProvider,
+  useRecipeProfile,
+  useRecipeProfileDefaults,
+  RECIPE_PROFILES,
+  RECIPE_PROFILE_SCHEMA_VERSION,
+  resolveRecipeProfile,
+  validateRecipeProfileSelection,
+} from './infrastructure/runtime/foundation/recipes/profiles';
+export type {
+  RecipeProfileDefinition,
+  RecipeProfileFamily,
+  RecipeProfileFamilyDefaults,
+  RecipeProfileId,
+  RecipeProfileProviderProps,
+  RecipeProfileValidation,
+} from './infrastructure/runtime/foundation/recipes/profiles';
+export {
+  buildRecipeManifest,
+} from './infrastructure/runtime/foundation/recipes/manifest';
+export type {
+  RecipeManifest,
+  RecipeManifestFamily,
+} from './infrastructure/runtime/foundation/recipes/manifest';
+
+// ============================================
+// DENSITY (public scoped visual-density contract)
+// ============================================
+export {
+  DENSITY_POSTURES,
+  DensityScope,
+  useDensity,
+} from './infrastructure/runtime/foundation/density';
+export type {
+  DensityPosture,
+  DensityScopeProps,
+  DensityScopeValue,
+} from './infrastructure/runtime/foundation/density';
+
+// ============================================
 // NAVIGATION (framework-agnostic Link adapter)
 // ============================================
 export * from './infrastructure/runtime/adapters/presentation/react/navigation';

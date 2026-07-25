@@ -1,10 +1,12 @@
 'use client';
 
 /**
- * @fileoverview Transfer Modern Engine -- DaisyUI/Tailwind implementation for
- * the Rottay Design System. Builds a fully custom dual-panel transfer list
- * using Tailwind utility classes, with built-in search, pagination, and
- * select-all support.
+ * @fileoverview Transfer Modern Engine -- custom dual-panel implementation for
+ * the Rottay Design System, with built-in search, pagination, and select-all
+ * support. No DaisyUI classes and no Tailwind utilities: every part is painted
+ * by the modern skin (`skin/transfer.css`) keyed on `data-part`/`data-*`
+ * hooks. Inline styles are reserved for the public `style`/`listStyle`
+ * channels.
  *
  * @example
  * ```tsx
@@ -114,14 +116,14 @@ const TransferList: React.FC<TransferListProps> = ({
   };
 
   return (
-    <div data-part="panel" data-panel={side} className="flex flex-col rounded-lg overflow-hidden" style={{ width: 'var(--ds-transfer-list-width, 200px)', ...listStyle }}>
+    <div data-part="panel" data-panel={side} style={listStyle}>
       {/* Header */}
-      <div data-part="panel-header" className="flex items-center justify-between p-2 font-medium">
+      <div data-part="panel-header">
         {showSelectAll && (
           <input
             type="checkbox"
             data-part="panel-select-all"
-            style={{ width: 16, height: 16, cursor: 'pointer' }}
+            aria-label={t('transfer.select_all')}
             checked={allSelected}
             ref={(el) => {
               if (el) el.indeterminate = someSelected && !allSelected;
@@ -130,19 +132,18 @@ const TransferList: React.FC<TransferListProps> = ({
             disabled={disabled || selectableItems.length === 0}
           />
         )}
-        <span className="font-medium ml-2">{title}</span>
-        <span data-part="panel-count" className="text-sm">
+        <span data-part="panel-title">{title}</span>
+        <span data-part="panel-count">
           {selectedKeys.size}/{items.length}
         </span>
       </div>
 
       {/* Search */}
       {showSearch && (
-        <div className="p-2">
+        <div>
           <input
             type="text"
             data-part="panel-search"
-            style={{ width: '100%', padding: '4px var(--ds-input-sm-padding-x, 10px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', transition: 'border-color var(--ds-motion-normal)' }}
             placeholder={locale?.searchPlaceholder || t('transfer.search_placeholder')}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
@@ -152,26 +153,24 @@ const TransferList: React.FC<TransferListProps> = ({
       )}
 
       {/* Items */}
-      <div data-part="panel-list" className="flex-1 overflow-auto max-h-60">
+      <div data-part="panel-list">
         {paginatedItems.length > 0 ? (
-          <ul style={{ listStyle: 'none', margin: 0, padding: 4 }}>
+          <ul>
             {paginatedItems.map((item) => (
               <li key={item.key}>
                 <label
                   data-part="panel-item"
                   data-selected={selectedKeys.has(item.key) || undefined}
                   data-disabled={item.disabled || undefined}
-                  className={`flex items-center gap-2 cursor-pointer transition-all duration-200 ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <input
                     type="checkbox"
                     data-part="panel-item-checkbox"
-                    style={{ width: 16, height: 16, cursor: 'pointer' }}
                     checked={selectedKeys.has(item.key)}
                     onChange={() => handleSelect(item.key)}
                     disabled={disabled || item.disabled}
                   />
-                  <span className="flex-1">
+                  <span>
                     {render ? render(item) : item.title}
                   </span>
                 </label>
@@ -179,7 +178,7 @@ const TransferList: React.FC<TransferListProps> = ({
             ))}
           </ul>
         ) : (
-          <div data-part="panel-empty" className="p-4 text-center">
+          <div data-part="panel-empty">
             {locale?.notFoundContent || t('transfer.not_found')}
           </div>
         )}
@@ -187,23 +186,21 @@ const TransferList: React.FC<TransferListProps> = ({
 
       {/* Pagination */}
       {pagination && totalPages > 1 && (
-        <div data-part="panel-pagination" className="flex items-center justify-center gap-1 p-2">
+        <div data-part="panel-pagination">
           <button
             type="button"
             data-part="pagination-button"
-            style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
             disabled={currentPage <= 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           >
             ‹
           </button>
-          <span className="text-xs">
+          <span>
             {currentPage} / {totalPages}
           </span>
           <button
             type="button"
             data-part="pagination-button"
-            style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
             disabled={currentPage >= totalPages}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           >
@@ -216,11 +213,13 @@ const TransferList: React.FC<TransferListProps> = ({
 };
 
 /**
- * Modern (DaisyUI/Tailwind) engine for the Transfer component.
+ * Modern engine for the Transfer component.
  *
  * Renders two `TransferList` panels (source and target) with directional
  * move buttons between them. Supports controlled and uncontrolled target
  * keys, search filtering with a configurable filter function, and pagination.
+ * All paint/geometry lives in the modern skin; the engine emits only
+ * `data-part`/`data-*` hooks plus the public `style`/`listStyle` channels.
  *
  * @param props - Standardized TransferProps from the design system contract.
  * @param ref   - Forwarded ref attached to the outer flex container.
@@ -321,7 +320,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
     };
 
     return (
-      <div ref={ref} data-part="root" className={`flex items-center gap-2 rottay-transfer rottay-transfer--modern ${className || ''}`} style={style}>
+      <div ref={ref} data-part="root" className={`rottay-transfer rottay-transfer--modern ${className || ''}`} style={style}>
         <TransferList
           side="source"
           title={titles![0]}
@@ -340,12 +339,11 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           pagination={pagination}
         />
 
-        <div data-part="operations" className="flex flex-col gap-2">
+        <div data-part="operations">
           <button
             type="button"
             data-part="move-button"
             data-direction="right"
-            style={{ width: 'var(--ds-input-sm-height, 32px)', height: 'var(--ds-input-sm-height, 32px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-input-sm-font-size, 13px)', transition: 'all var(--ds-motion-normal)' }}
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
           >
@@ -356,7 +354,6 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
               type="button"
               data-part="move-button"
               data-direction="left"
-              style={{ width: 'var(--ds-input-sm-height, 32px)', height: 'var(--ds-input-sm-height, 32px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-input-sm-font-size, 13px)', transition: 'all var(--ds-motion-normal)' }}
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}
             >

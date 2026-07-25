@@ -97,6 +97,8 @@ secrets/
 # Misc
 *.local
 .turbo
+.tmp/
+packages/showroom/.tmp/
 
 .vercel
 .env*.local

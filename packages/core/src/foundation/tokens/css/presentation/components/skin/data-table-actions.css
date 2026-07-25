@@ -1,0 +1,29 @@
+/**
+ * Engine-neutral DataTable action anatomy.
+ *
+ * Engines stamp the parts; vertical and tenant layers provide the values. The
+ * wrapper makes arbitrary app-authored action renderers align consistently
+ * without depending on the action column's DOM position or accessible copy.
+ */
+
+.ds-pattern-data-table [data-part="actions-content"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: var(--ds-table-action-gap, var(--ds-spacing-2, 0.5rem));
+  width: max-content;
+  min-width: 0;
+  max-width: 100%;
+  margin-inline-start: auto;
+}
+
+.ds-pattern-data-table[data-has-actions="true"]
+  [data-part="header-cell"][data-cell-kind="actions"],
+.ds-pattern-data-table[data-has-actions="true"]
+  [data-part="actions-cell"][data-part="actions-cell"] {
+  background: var(--ds-table-action-bg, var(--ds-surface-card));
+  border-inline-start: 1px solid
+    var(--ds-table-action-border, var(--ds-table-row-border, transparent));
+  box-shadow: var(--ds-table-action-shadow, none);
+}

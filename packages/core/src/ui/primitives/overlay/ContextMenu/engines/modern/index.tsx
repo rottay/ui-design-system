@@ -5,8 +5,12 @@
  * is positioned by the shared overlay positioning runtime
  * (`runtime/overlay/positioning`): a right-click captures the cursor's viewport
  * point, a ZERO-SIZE anchor is rendered there, and `useOverlayPosition` pins
- * the panel to it with `bottom-start` placement and a zero offset so the
- * panel's top-left corner lands on the cursor.
+ * the panel to it with a zero offset so the panel's near corner lands on the
+ * cursor. The runtime's `start`/`end` are physical, so the engine captures the
+ * reading direction at open time and picks `bottom-start` (LTR: top-left
+ * corner on the cursor) or `bottom-end` (RTL: top-right corner on the cursor)
+ * -- the panel always opens toward the reading-start side, like a native
+ * context menu.
  *
  * The panel renders INLINE as a direct child of the trigger container in BOTH
  * strategies: the modern skin scopes every rule under
@@ -40,38 +44,44 @@ const MenuItem: React.FC<{
   item: ContextMenuItem;
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
+  // All row geometry (divider thickness/margins, group-label chrome, item
+  // layout) is skin-owned -- context-menu.css keys on data-part. No utility
+  // classes and no static inline geometry on this tree. Menu semantics mirror
+  // Dropdown's (role=menu/menuitem/separator), so assistive tech and the
+  // shared overlay tests treat both widgets identically.
   if (item.type === 'divider') {
-    return <li data-part="divider" style={{ height: 1, margin: '4px 0' }} />;
+    return <li role="separator" data-part="divider" />;
   }
 
   if (item.type === 'group') {
     return (
-      <li data-part="group-label" style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+      <li role="presentation" data-part="group-label">
         <span>{item.label}</span>
       </li>
     );
   }
 
   return (
-    <li>
+    <li role="none">
       <button
         type="button"
+        role="menuitem"
         data-part="item"
         data-tone={item.danger ? 'danger' : undefined}
         data-disabled={item.disabled ? 'true' : undefined}
-        className={`flex items-center justify-between gap-2 ${item.disabled ? 'disabled opacity-50' : ''}`}
+        aria-disabled={item.disabled || undefined}
         disabled={item.disabled}
         onClick={() => {
           item.onClick?.();
           onClick?.(item.key);
         }}
       >
-        <span className="flex items-center gap-2">
+        <span data-part="label">
           {item.icon}
           {item.label}
         </span>
         {item.shortcut && (
-          <span className="text-xs opacity-50">{item.shortcut}</span>
+          <span data-part="shortcut">{item.shortcut}</span>
         )}
       </button>
     </li>
@@ -83,9 +93,10 @@ const MenuItem: React.FC<{
  *
  * The panel opens at the right-click point via the shared overlay positioning
  * runtime (zero-size pointer anchor) and dismisses on outside mousedown. It
- * renders no DaisyUI component classes -- its `<ul>` carries only the
- * consumer's `overlayClassName` -- so the modern skin owns every rule through
- * the trigger scope class.
+ * renders no DaisyUI component classes and no utility-framework classes --
+ * its `<ul>` carries only the consumer's `overlayClassName` -- so the modern
+ * skin owns every rule through the trigger scope class, including row
+ * geometry drained from inline styles/utility classes in K4-A.
  *
  * @param props - {@link ContextMenuProps} shared across all engines.
  * @returns The trigger container that intercepts right-click plus the inline,
@@ -105,7 +116,12 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const [isOpen, setIsOpen] = useState(false);
   // Cursor's viewport point; the zero-size anchor is pinned here with
   // position: fixed, so these are viewport coordinates (clientX/clientY).
+  // Viewport geometry is PHYSICAL by nature -- the anchor's `left: point.x`
+  // is a measured coordinate, not a declared placement, so it stays physical
+  // in both directions. The READING DIRECTION captured at open time drives
+  // the logical panel alignment below instead.
   const [point, setPoint] = useState({ x: 0, y: 0 });
+  const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr');
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [menuEl, setMenuEl] = useState<HTMLUListElement | null>(null);
   const menuRef = useRef<HTMLUListElement | null>(null);
@@ -123,7 +139,11 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
     anchor: anchorEl,
     overlay: menuEl,
-    placement: 'bottom-start',
+    // `start`/`end` in the shared runtime are PHYSICAL (bottom-start spans
+    // right). The panel must open toward the reading-START side -- leftward
+    // under RTL, like a native context menu -- so the physical placement is
+    // chosen from the direction captured at open time.
+    placement: direction === 'rtl' ? 'bottom-end' : 'bottom-start',
     offset: 0,
     flip: true,
   });
@@ -133,7 +153,14 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
     e.preventDefault();
+    const triggerEl = e.currentTarget as HTMLElement;
     setPoint({ x: e.clientX, y: e.clientY });
+    setDirection(
+      triggerEl.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
+        window.getComputedStyle(triggerEl).direction === 'rtl'
+        ? 'rtl'
+        : 'ltr'
+    );
     setIsOpen(true);
   }, [disabled]);
 
@@ -164,13 +191,10 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     // tier (matches the canonical --ds-z-index-context-menu alias), not a magic
     // 50. The top layer ignores z-index; this only orders the js path.
     zIndex: 'var(--ds-z-popover)',
-    width: 224,
-    padding: 8,
-    listStyle: 'none',
-    margin: 0,
     animation: `${dataState === 'open' ? 'ds-context-menu-popover-enter-modern' : 'ds-context-menu-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
-    // Positioning from the shared runtime; consumer overlayStyle spreads last
-    // and wins.
+    // Panel chrome (width, padding, list reset) is skin-owned. Positioning
+    // comes from the shared runtime; consumer overlayStyle spreads last and
+    // wins.
     ...positionStyle,
     ...overlayStyle,
   };
@@ -179,7 +203,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     <div
       data-part="trigger"
       data-open={isOpen ? 'true' : 'false'}
-      className={`relative rottay-context-menu--modern ${className || ''}`}
+      className={`rottay-context-menu--modern ${className || ''}`}
       onContextMenu={handleContextMenu}
     >
       {trigger}
@@ -194,6 +218,8 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
           />
           <ul
             ref={setMenuRef}
+            role="menu"
+            aria-orientation="vertical"
             data-part="surface"
             data-open={dataState === 'open' ? 'true' : 'false'}
             data-ds-position-strategy={strategy}

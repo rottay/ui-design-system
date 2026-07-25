@@ -1,56 +1,154 @@
-/**
- * Modern Callout skin (WO-SKIN-05 checkpoint D2).
- *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight/DaisyUI regardless of
- * specificity. Unlayered outranks both and still yields to a caller's inline
- * `style`.
- *
- * SCOPE ROOT carries `rottay-callout-shell rottay-callout-shell--modern`
- * alongside the DaisyUI `.alert` class and `data-part='root'` + `data-tone`.
- * The dedicated `-shell` scope is mandatory: bare `.rottay-alert` /
- * `.rottay-alert-shell` are Alert's, and a rule anchored on a classname another
- * component renders repaints that component. `rottay-callout-shell` is
- * grep-verified free across CSS and CSS-in-JS.
- *
- * BORDER CHANNEL: Modern Callout declares no border inline, and DaisyUI's own
- * `.alert { border-width: var(--border) }` (which outranks preflight) is what
- * paints this root's border today. This skin therefore declares no border on the
- * root: a width here would be a border that does not exist today, and a lone
- * `border-color` longhand would leave DaisyUI's `var(--border)` in charge of the
- * width. The `border: none` on the close button is a color-free reset (exempt
- * from the P-48 (0,4,0) border floor).
- *
- * SPECIFICITY (P-48): non-border paint beats preflight unlayered at (0,3,0)+.
- * Values transcribed verbatim from `engines/modern.tsx`.
- */
+/** Modern Callout: rich contextual guidance with semantic visual and action tray. */
 
-/* ---- root surface: per-tone tinted background + matching text color. The
-        unqualified rule carries the info values because the lookup it replaces
-        fell back to info for any unrecognised tone; the three rules below
-        override it. The caller's `style` still wins as inline. ---- */
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] {
-  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
-  color: var(--ds-color-info);
-}
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='warning'] {
-  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
-  color: var(--ds-color-warning);
-}
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
-  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
-  color: var(--ds-color-error);
-}
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
-  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
-  color: var(--ds-color-success);
+@keyframes ds-callout-enter-modern {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-motion-offset-in));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ---- close button: ghost circle. Child combinator keeps the rule off any
-        `data-part='close-button'` a caller's content may bring. ---- */
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'] {
-  background: transparent;
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root'] {
+  --ds-callout-tone: var(--ds-color-info);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  inline-size: 100%;
+  align-items: flex-start;
+  gap: var(--ds-callout-gap, clamp(var(--ds-spacing-sm), 1.4vw, var(--ds-spacing-md)));
+  overflow: hidden;
+  padding: var(--ds-callout-padding, clamp(var(--ds-spacing-md), 2vw, var(--ds-spacing-lg)));
+  border: var(--ds-callout-border-width, 1px) solid color-mix(in srgb, var(--ds-callout-tone) 28%, var(--ds-color-border));
+  border-radius: var(--ds-callout-radius, var(--ds-radius-lg));
+  background-color: color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface));
+  background-image:
+    linear-gradient(135deg, color-mix(in srgb, var(--ds-callout-tone) 7%, transparent), transparent 58%),
+    var(--ds-gradient-surface, none);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 38%, transparent),
+    var(--ds-callout-shadow, var(--ds-shadow-sm));
   color: var(--ds-color-text-primary);
-  border-radius: 50%;
-  border: none;
+  animation: ds-callout-enter-modern var(--ds-motion-calm, 200ms) var(--ds-ease-standard) both;
+  transition:
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root']:hover {
+  border-color: color-mix(in srgb, var(--ds-callout-tone) 40%, var(--ds-color-border));
+  box-shadow: var(--ds-callout-shadow-hover, var(--ds-shadow-md));
+  transform: translateY(-1px);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='warning'] {
+  --ds-callout-tone: var(--ds-color-warning);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
+  --ds-callout-tone: var(--ds-color-error);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
+  --ds-callout-tone: var(--ds-color-success);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern > .rottay-callout-shell__icon[data-part='icon'][data-part='icon'] {
+  display: grid;
+  inline-size: var(--ds-callout-icon-well-size, 2.75rem);
+  block-size: var(--ds-callout-icon-well-size, 2.75rem);
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--ds-callout-tone) 34%, var(--ds-color-border));
+  border-radius: var(--ds-callout-icon-radius, var(--ds-radius-md));
+  background: color-mix(in srgb, var(--ds-callout-tone) 11%, var(--ds-color-surface-raised));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 50%, transparent),
+    0 8px 18px color-mix(in srgb, var(--ds-callout-tone) 11%, transparent);
+  color: var(--ds-callout-tone);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern > .rottay-callout-shell__body[data-part='body'] {
+  display: grid;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  gap: var(--ds-spacing-xs);
+  align-self: center;
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern .rottay-callout-shell__body[data-part='body'] > [data-part='title'] {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-callout-title-size, var(--ds-font-size-base));
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  line-height: var(--ds-line-height-tight);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern .rottay-callout-shell__body[data-part='body'] > [data-part='description'] {
+  max-inline-size: var(--ds-callout-description-width, 72ch);
+  color: var(--ds-color-text-secondary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-callout-description-size, var(--ds-font-size-sm));
+  line-height: var(--ds-line-height-relaxed);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern .rottay-callout-shell__action[data-part='action'][data-part='action'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-sm);
+  margin-block-start: var(--ds-spacing-sm);
+  padding: var(--ds-spacing-sm);
+  border: 1px solid color-mix(in srgb, var(--ds-callout-tone) 20%, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 32%, transparent);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button'] {
+  display: inline-grid;
+  inline-size: var(--ds-control-height-sm, 2rem);
+  block-size: var(--ds-control-height-sm, 2rem);
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--ds-callout-tone) 24%, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  color: var(--ds-color-text-secondary);
+  cursor: pointer;
+  box-shadow: var(--ds-shadow-xs);
+  transition:
+    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button']:hover {
+  border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
+  color: var(--ds-color-text-primary);
+  transform: scale(1.04);
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button']:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ds-callout-tone) 58%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root'] {
+    animation: none;
+    transition: none;
+  }
+
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root']:hover,
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button']:hover {
+    transform: none;
+  }
 }

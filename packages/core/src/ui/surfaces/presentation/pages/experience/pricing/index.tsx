@@ -59,7 +59,7 @@ export function PricingSurface({
         spacing="lg"
       >
         {config.presentation.intro && (
-          <Text className="ds-pricing__muted-text" data-part="muted-text">
+          <Text className="ds-pricing__muted-text">
             {config.presentation.intro}
           </Text>
         )}

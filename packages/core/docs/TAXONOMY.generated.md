@@ -3,22 +3,28 @@
 
 # Component Taxonomy Reference
 
-Generated on 2026-07-17.
+Generated on 2026-07-24.
 
 ## Primitives
 
-> Engine-switched leaf components
+> Engine-switched leaf components. Governed = has a public entry AND is
+> exported by the category barrel; exclusions are reported by rule below.
 
 | Category | Components |
 |---|---|
-| `display/` | 19 (Avatar, Badge, Calendar, Callout, Card, ...) |
+| `display/` | 21 (Avatar, Badge, Calendar, Callout, Card, ...) |
 | `feedback/` | 11 (Alert, Drawer, Message, Modal, Notification, ...) |
 | `inputs/` | 25 (AutoComplete, Button, Cascader, Checkbox, ColorPicker, ...) |
-| `layout/` | 13 (AspectRatio, Box, Collapse, Container, Divider, ...) |
-| `navigation/` | 13 (Affix, Anchor, BackTop, Breadcrumb, FloatButton, ...) |
+| `layout/` | 14 (AspectRatio, Box, Collapse, Container, Divider, ...) |
+| `navigation/` | 12 (Affix, Anchor, BackTop, Breadcrumb, FloatButton, ...) |
 | `overlay/` | 11 (AlertDialog, ConfirmDialog, ContextMenu, Dropdown, HoverCard, ...) |
 
-**Total**: 6 categories containing 92 primitive components.
+**Total**: 6 categories containing 94 governed primitive components.
+
+### Exclusions by rule (not governed components)
+
+- No public entry (placeholder/empty): `layout/MaterialSurface`.
+- Not exported by the category barrel (support/unexposed): `navigation/examples`.
 
 Tier support: `runtime/`.
 
@@ -54,6 +60,7 @@ Tier support: `runtime/`.
 ### shell/
 
 - `shell/bottom-tab-bar/`
+- `shell/styles/`
 
 Support: `shell/contracts/`.
 
@@ -105,15 +112,20 @@ Support: `shell/contracts/`.
 - `data/cell-renderers/`
 - `data/column-settings/`
 - `data/data-table/`
+- `data/decision-comparison/`
+- `data/decision-panorama/`
 - `data/detail-panel/`
 - `data/file-manager/`
 - `data/gallery-view/`
 - `data/grid-view/`
 - `data/list-toolbar/`
+- `data/record-facts/`
 - `data/saved-views/`
 - `data/stats-grid/`
 - `data/status-filter-pills/`
 - `data/table-checkbox-styles/`
+- `data/virtual-list/`
+- `data/widget-board/`
 
 ### feedback/
 
@@ -154,10 +166,12 @@ Support: `shell/contracts/`.
 - `runtime/kanban/`
 - `runtime/pulse/`
 - `runtime/recipes/`
+- `runtime/virtualization/`
 
 ### shell/
 
 - `shell/cockpit-header/`
+- `shell/feature-workspace-frame/`
 - `shell/page-shell/`
 - `shell/workbench-header/`
 
@@ -215,7 +229,6 @@ Support: `shell/contracts/`.
 
 - `foundation/common/`
 - `foundation/contracts/`
-- `foundation/states/`
 
 ### runtime/
 
@@ -290,4 +303,4 @@ Support: `shell/contracts/`.
 
 ---
 
-**Summary**: 6 primitive categories (92 components), 115 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (94 components), 122 families across structures/patterns/surfaces.

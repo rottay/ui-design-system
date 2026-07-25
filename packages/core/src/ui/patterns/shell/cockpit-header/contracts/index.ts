@@ -60,6 +60,10 @@ export interface CockpitStatus {
  * ```
  */
 export interface CockpitHeaderProps extends PatternBaseProps {
+  /** Optional localized context label rendered above the title. */
+  eyebrow?: ReactNode;
+  /** Optional semantic DS icon rendered in a framed identity tile. */
+  icon?: ReactNode;
   /** Page title. */
   title: string;
   /** Optional subtitle displayed below the title. */
@@ -74,4 +78,6 @@ export interface CockpitHeaderProps extends PatternBaseProps {
   sticky?: boolean;
   /** Callback fired when the back button is clicked. */
   onBack?: () => void;
+  /** Localized accessible label for the icon-only back button. */
+  backAriaLabel?: string;
 }

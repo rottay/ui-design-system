@@ -408,11 +408,46 @@ describe('CollectionWorkspaceSurface', () => {
   });
 
   it('renders data rows in the default table view', async () => {
-    renderSurface(<CollectionWorkspaceSurface {...buildProps()} />);
+    const { container } = renderSurface(<CollectionWorkspaceSurface {...buildProps()} />);
 
     expect(await screen.findByText('Alice')).toBeInTheDocument();
     expect(await screen.findByText('Bob')).toBeInTheDocument();
     expect(await screen.findByText('Charlie')).toBeInTheDocument();
+
+    const root = container.querySelector('[data-component="collection-workspace"]');
+    expect(root).toHaveAttribute('data-part', 'root');
+    expect(root).toHaveAttribute('data-density', 'comfortable');
+    expect(root).toHaveAttribute('data-has-actions', 'false');
+    expect(root).toHaveAttribute('data-preview-open', 'false');
+    expect(root).toHaveAttribute('data-selection-enabled', 'false');
+  });
+
+  it('stamps the same neutral component scope and known states in premium mode', async () => {
+    const { container } = renderSurface(
+      <CollectionWorkspaceSurface
+        {...buildProps({
+          density: 'compact',
+          header: {
+            eyebrow: 'Records',
+            title: 'Test Collection',
+          },
+          actions: () => <button type="button">Open</button>,
+          behavior: {
+            selection: {
+              enabled: true,
+            },
+          },
+        })}
+      />,
+    );
+
+    expect(await screen.findByText('Alice')).toBeInTheDocument();
+    const root = container.querySelector('[data-component="collection-workspace"]');
+    expect(root).toHaveAttribute('data-part', 'content');
+    expect(root).toHaveAttribute('data-density', 'compact');
+    expect(root).toHaveAttribute('data-has-actions', 'true');
+    expect(root).toHaveAttribute('data-preview-open', 'false');
+    expect(root).toHaveAttribute('data-selection-enabled', 'true');
   });
 
   it('uses lean chrome defaults in embedded mode without hiding search', async () => {
@@ -867,6 +902,47 @@ describe('CollectionWorkspaceSurface', () => {
   // -------------------------------------------------------------------------
   // Adaptive compact header and action continuity
   // -------------------------------------------------------------------------
+
+  it('compresses the phone page-size control without losing its accessible label', async () => {
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            presentation: { enhancedInteractions: true },
+            controls: {
+              density: {
+                enabled: true,
+                value: 'comfortable',
+                onChange: vi.fn(),
+              },
+            },
+            behavior: {
+              pagination: {
+                current: 1,
+                pageSize: 10,
+                total: 157,
+                pageSizeOptions: [10, 25, 50],
+                onChange: vi.fn(),
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-part="page-size-control"]')).not.toBeNull();
+    });
+    const control = container.querySelector<HTMLElement>('[data-part="page-size-control"]');
+    expect(control).not.toBeNull();
+    expect(control).toHaveAttribute('data-compact', 'true');
+    expect(within(control!).getByText('1-10 of 157')).toBeInTheDocument();
+    expect(within(control!).getByText('10')).toBeInTheDocument();
+    expect(within(control!).queryByText('Rows')).not.toBeInTheDocument();
+    expect(within(control!).queryByText('/ page')).not.toBeInTheDocument();
+    expect(within(control!).getByRole('combobox', { name: 'Rows per page' }))
+      .toBeInTheDocument();
+  });
 
   it('projects phone chrome into a minimal header and one compact action dock', async () => {
     const onAddCandidate = vi.fn();
@@ -1480,6 +1556,65 @@ describe('CollectionWorkspaceSurface', () => {
     await screen.findByText('Test Collection');
     expect(queryButtonByAriaOrText(container, 'List view', /^list$/i)).toBeInTheDocument();
     expect(queryButtonByAriaOrText(container, 'Card view', /^cards$/i)).toBeInTheDocument();
+  });
+
+  it('lets adaptive posture exclusively own the renderer and toolbar mode', async () => {
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
+      matches: true,
+      media: '(max-width: 768px)',
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    try {
+      const { container } = renderSurface(
+        <ResponsiveContext.Provider value={TABLET_RESPONSIVE_CONTEXT}>
+          <CollectionWorkspaceSurface
+            {...buildProps({
+              adaptive: {
+                desktop: { collection: 'table' },
+                tablet: { collection: 'table' },
+                phone: { collection: 'cards' },
+              },
+              presentation: {
+                responsive: {
+                  mobileBreakpoint: 768,
+                  mobileView: 'cards',
+                },
+              },
+              controls: {
+                viewMode: {
+                  enabled: true,
+                  modes: ['table', 'cards'],
+                },
+              },
+              mobileCard: (row) => (
+                <div data-testid={`adaptive-card-${row.id}`}>{row.name}</div>
+              ),
+            })}
+          />
+        </ResponsiveContext.Provider>,
+      );
+
+      await screen.findByText('Test Collection');
+      const root = container.querySelector('[data-component="collection-workspace"]');
+      expect(root).toHaveAttribute('data-view-mode', 'table');
+      expect(container.querySelector('table')).toBeInTheDocument();
+      expect(screen.queryByTestId('adaptive-card-1')).not.toBeInTheDocument();
+      const cardsButton = queryButtonByAriaOrText(container, 'Card view', /^cards$/i);
+      expect(cardsButton).toBeInTheDocument();
+      if (!cardsButton) throw new Error('Cards view button not found');
+      fireEvent.click(cardsButton);
+      expect(root).toHaveAttribute('data-view-mode', 'table');
+      expect(container.querySelector('table')).toBeInTheDocument();
+      expect(screen.queryByTestId('adaptive-card-1')).not.toBeInTheDocument();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it('switches to cards view and renders card content', async () => {
@@ -2133,6 +2268,8 @@ describe('CollectionWorkspaceSurface', () => {
     expect(await screen.findByTestId('inline-preview')).toHaveTextContent(
       'Inline preview Charlie',
     );
+    expect(container.querySelector('[data-component="collection-workspace"]'))
+      .toHaveAttribute('data-preview-open', 'true');
     expect(container.querySelector('[data-part="preview-rail"]')).toBeInTheDocument();
     expect(screen.queryByRole('dialog', { name: 'Test Collection details' }))
       .not.toBeInTheDocument();

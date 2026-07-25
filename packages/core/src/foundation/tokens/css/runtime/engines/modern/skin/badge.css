@@ -1,180 +1,551 @@
 /**
- * Modern Badge skin (P-43 follow-up).
+ * Modern compact-label family: Badge / Chip / Pill.
  *
- * DELIBERATELY UNLAYERED, same reasoning as button.css/card.css/input.css:
- * every `rottay-*` cascade layer sorts before Tailwind's `base`, so a
- * layered rule cannot paint a component at all (measured proof in
- * button.css's header comment; P-47). Unlayered outranks preflight and
- * still yields to a consumer's own inline `style` prop.
- *
- * Badge is not on the interaction-state anatomy contract the way Button
- * (`data-state~='hovered'`, driven by `useInteractionState()`) and Card
- * are -- this keys on a plain `:hover` pseudo-class instead, which is
- * honest for what the component currently publishes rather than a
- * shortcut around a contract that exists for it.
- *
- * `transform` here is the ONLY place this engine's Badge sets it. The
- * indicator badge's per-instance corner offset (top-right/-left/bottom-*)
- * arrives as the `--ds-badge-position-transform` custom property, set
- * inline by the component since the offset varies with the `position`
- * prop and can't be a static rule; the personality hover lift composes
- * onto it at `:hover`. A standalone badge never sets that property, so it
- * falls through to the fallback in both rules below.
- *
- * Neither fallback is the `none` keyword: `none` cannot be combined with a
- * transform function in the same value (`none translateY(-2px)` is invalid
- * CSS and the whole declaration -- not just the invalid part -- is
- * dropped), so a standalone badge falls back to the identity function
- * `translateY(0)` instead, which composes safely with the hover lift.
+ * Unlayered by design so it clears reset/preflight without `!important`.
+ * Every material, geometry, type and motion decision is a `--ds-badge-*`
+ * channel with a semantic/global fallback. Tenant CSS therefore changes the
+ * same component tree; product code never supplies paint.
  */
 
-.rottay-badge.rottay-badge--modern {
-  transform: var(--ds-badge-position-transform, translateY(0));
+.rottay-badge-anchor {
+  position: relative;
+  display: inline-flex;
+  min-inline-size: 0;
+  vertical-align: middle;
 }
-
-.rottay-badge.rottay-badge--modern[data-interactive='true']:hover {
-  transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));
-}
-
-/* ===========================================================================
- * WO-SKIN-05 checkpoint D1 — the rest of the surface. The `transform` rules
- * above were the whole skin until now; fill, ink, frame and the bordered ring
- * were still inline.
- *
- * SPECIFICITY (P-48): every rule below paints a border colour (`transparent` is
- * a colour — only `none`/`0`/`unset`/`inherit` are exempt resets), so each must
- * clear the tenant's unlayered `*` border-color floor at (0,3,1). The repeated
- * `[data-part='root']` buys the fourth unit. Each frame stays a SHORTHAND
- * because preflight zeroes `border-width` on every element.
- *
- * The variant rule alone carries the SOLID style, which is what the object's
- * `switch` fell through to (`case 'solid': default:`); `soft`, `ghost` and
- * `outline` are qualified overrides that outrank it.
- *
- * The indicator render is the only one that rounds fully. It is identified by
- * `[data-position]`, which only that render path stamps.
- * ======================================================================== */
 
 .rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'] {
-  border-radius: var(--ds-radius-sm);
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-position] {
-  border-radius: var(--ds-radius-full);
+  --ds-badge-logical-start-offset: -50%;
+  --ds-badge-logical-end-offset: 50%;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+  max-inline-size: var(--ds-badge-max-inline-size, 18rem);
+  block-size: var(--ds-badge-resolved-height, var(--ds-badge-md-height));
+  padding-inline: calc(
+    var(--ds-badge-resolved-padding-inline, var(--ds-badge-padding-x)) *
+      var(--ds-density-effective-scale, 1)
+  );
+  gap: calc(var(--ds-badge-gap, var(--ds-badge-icon-gap)) * var(--ds-density-effective-scale, 1));
+  box-sizing: border-box;
+  overflow: visible;
+  vertical-align: middle;
+  isolation: isolate;
+  font-family: var(--ds-badge-font-family, var(--ds-font-family-base));
+  font-size: var(--ds-badge-resolved-font-size, var(--ds-badge-md-font-size));
+  font-weight: var(--ds-badge-font-weight, 500);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--ds-badge-line-height, 1);
+  letter-spacing: var(--ds-badge-letter-spacing, -0.01em);
+  border: var(--ds-badge-frame-width, 1px) solid
+    var(--ds-badge-frame, color-mix(in srgb, currentColor 14%, transparent));
+  border-radius: var(--ds-badge-radius, var(--ds-radius-sm));
+  background: var(--ds-badge-surface, var(--ds-color-neutral-200));
+  color: var(--ds-badge-ink, var(--ds-color-text-primary));
+  box-shadow:
+    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, white 46%, transparent)),
+    var(--ds-badge-shadow, 0 1px 2px color-mix(in srgb, currentColor 7%, transparent));
+  transform: var(--ds-badge-position-transform, translateY(0));
+  transform-origin: center;
+  transition:
+    transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    border-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    box-shadow var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out));
 }
 
-/* ---- bordered: a ring the surface colour, so the badge reads as lifted off
-        whatever it sits on ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-kind='chip'] {
+  --ds-badge-max-inline-size: var(--ds-badge-chip-max-inline-size, 22rem);
+  min-block-size: var(--ds-badge-chip-min-height, var(--ds-badge-resolved-height));
+  border-radius: var(--ds-badge-chip-radius, var(--ds-badge-radius, var(--ds-radius-md)));
+}
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-kind='pill'] {
+  --ds-badge-max-inline-size: var(--ds-badge-pill-max-inline-size, 22rem);
+  min-block-size: var(--ds-badge-pill-min-height, var(--ds-badge-resolved-height));
+  border-radius: var(--ds-badge-pill-radius, var(--ds-badge-radius, var(--ds-radius-full)));
+}
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='none'] {
+  border-radius: var(--ds-badge-radius-none, 0);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='sm'] {
+  border-radius: var(--ds-badge-radius-sm, var(--ds-radius-sm));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='md'] {
+  border-radius: var(--ds-badge-radius-md, var(--ds-radius-md));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='lg'] {
+  border-radius: var(--ds-badge-radius-lg, var(--ds-radius-lg));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-radius='full'] {
+  border-radius: var(--ds-badge-radius-full, 9999px);
+}
+
+/* Main control and passive content share one geometry contract. */
+.rottay-badge.rottay-badge--modern > [data-part='trigger'],
+.rottay-badge.rottay-badge--modern > [data-part='content'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  block-size: 100%;
+  gap: inherit;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  appearance: none;
+  cursor: inherit;
+}
+
+.rottay-badge.rottay-badge--modern[data-interactive='true'] {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rottay-badge.rottay-badge--modern[data-disabled='true'],
+.rottay-badge.rottay-badge--modern[data-loading='true'] {
+  cursor: not-allowed;
+}
+
+.rottay-badge.rottay-badge--modern[data-disabled='true'] {
+  opacity: var(--ds-badge-disabled-opacity, 0.48);
+  filter: var(--ds-badge-disabled-filter, saturate(0.62));
+}
+
+.rottay-badge.rottay-badge--modern[data-loading='true'] {
+  opacity: var(--ds-badge-loading-opacity, 0.76);
+}
+
+/* Inner anatomy. All gaps are logical; RTL needs no paint fork. */
+.rottay-badge.rottay-badge--modern [data-part='label'] {
+  min-inline-size: 0;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.rottay-badge.rottay-badge--modern[data-truncate='true'] [data-part='label'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rottay-badge.rottay-badge--modern [data-part='icon'],
+.rottay-badge.rottay-badge--modern [data-part='spinner'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-badge-icon-size, 1em);
+  block-size: var(--ds-badge-icon-size, 1em);
+  color: var(--ds-badge-icon-color, currentColor);
+}
+
+.rottay-badge.rottay-badge--modern[data-kind='chip'] [data-part='icon'],
+.rottay-badge.rottay-badge--modern[data-kind='pill'] [data-part='icon'] {
+  border: var(--ds-badge-icon-border-width, 1px) solid
+    var(--ds-badge-icon-border, color-mix(in srgb, currentColor 16%, transparent));
+  border-radius: var(--ds-badge-icon-radius, 9999px);
+  background: var(--ds-badge-icon-bg, color-mix(in srgb, currentColor 8%, transparent));
+  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, white 32%, transparent));
+}
+
+.rottay-badge.rottay-badge--modern [data-part='avatar'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-badge-avatar-size, calc(var(--ds-badge-resolved-height) - 0.25rem));
+  block-size: var(--ds-badge-avatar-size, calc(var(--ds-badge-resolved-height) - 0.25rem));
+  margin-inline-start: calc(var(--ds-badge-avatar-bleed, 0.125rem) * -1);
+  overflow: hidden;
+  border: var(--ds-badge-avatar-border-width, 1px) solid
+    var(--ds-badge-avatar-border, color-mix(in srgb, currentColor 18%, transparent));
+  border-radius: var(--ds-badge-avatar-radius, 9999px);
+  background: var(--ds-badge-avatar-bg, var(--ds-surface-raised));
+  box-shadow: var(--ds-badge-avatar-shadow, 0 1px 2px color-mix(in srgb, currentColor 12%, transparent));
+}
+
+.rottay-badge.rottay-badge--modern [data-part='avatar'] > * {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.rottay-badge.rottay-badge--modern [data-part='dot'] {
+  flex: 0 0 auto;
+  inline-size: var(--ds-badge-dot-size, 0.45rem);
+  block-size: var(--ds-badge-dot-size, 0.45rem);
+  border: var(--ds-badge-dot-border-width, 1px) solid
+    var(--ds-badge-dot-border, color-mix(in srgb, currentColor 18%, transparent));
+  border-radius: 9999px;
+  background: var(--ds-badge-dot-bg, currentColor);
+  box-shadow: var(--ds-badge-dot-shadow, 0 0 0 2px color-mix(in srgb, currentColor 8%, transparent));
+}
+
+.rottay-badge.rottay-badge--modern [data-part='count'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--ds-badge-count-min-size, 1rem);
+  block-size: var(--ds-badge-count-size, 1rem);
+  padding-inline: var(--ds-badge-count-padding-inline, 0.25rem);
+  border: var(--ds-badge-count-border-width, 1px) solid
+    var(--ds-badge-count-border, var(--ds-filter-pill-count-border, color-mix(in srgb, currentColor 16%, transparent)));
+  border-radius: var(--ds-badge-count-radius, 9999px);
+  /* CONTRAST LAW (R0/Axe): the count is a light chip with dark tone ink, never
+     `currentColor` on a 7% `currentColor` tint -- on solid chromatic badges
+     that pairing collapses toward 1:1 (light chip, light ink). The ink falls
+     back to the variant's dark soft tone (success-700/warning-700/... on a
+     light chip: >= 5.0 on both governed sources); the chip surface falls back
+     to the raised surface, matching the bithire `--ds-filter-pill-count-bg:
+     #ffffff` design exactly. */
+  background: var(--ds-badge-count-bg, var(--ds-filter-pill-count-bg, var(--ds-surface-raised, var(--ds-color-bg-elevated, #fff))));
+  color: var(--ds-badge-count-color, var(--ds-badge-tone-soft-color, currentColor));
+  box-shadow: var(--ds-badge-count-ring, var(--ds-filter-pill-count-ring, none));
+  font-family: var(--ds-badge-count-font-family, var(--ds-font-family-mono, inherit));
+  font-size: var(--ds-badge-count-font-size, 0.82em);
+  font-weight: var(--ds-badge-count-font-weight, 700);
+}
+
+.rottay-badge.rottay-badge--modern[data-selected='true'] [data-part='count'] {
+  background: var(--ds-badge-count-selected-bg, var(--ds-filter-pill-count-active-bg, var(--ds-surface-raised)));
+  border-color: var(--ds-badge-count-selected-border, var(--ds-filter-pill-count-active-border, currentColor));
+  box-shadow: var(--ds-badge-count-selected-ring, var(--ds-filter-pill-count-active-ring, none));
+}
+
+.rottay-badge.rottay-badge--modern > [data-part='close'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-badge-remove-size, 1.125rem);
+  block-size: var(--ds-badge-remove-size, 1.125rem);
+  margin-inline-end: calc(var(--ds-badge-remove-bleed, 0.1875rem) * -1);
+  padding: 0;
+  border: var(--ds-badge-remove-border-width, 1px) solid
+    var(--ds-badge-remove-border, color-mix(in srgb, currentColor 16%, transparent));
+  border-radius: var(--ds-badge-remove-radius, 9999px);
+  outline: 0;
+  background: var(--ds-badge-remove-bg, color-mix(in srgb, currentColor 6%, transparent));
+  color: var(--ds-badge-remove-color, currentColor);
+  opacity: var(--ds-badge-remove-opacity, 0.72);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out));
+}
+
+.rottay-badge.rottay-badge--modern > [data-part='close']:hover {
+  transform: var(--ds-badge-remove-hover-transform, scale(1.06));
+  background: var(--ds-badge-remove-hover-bg, color-mix(in srgb, currentColor 12%, transparent));
+  opacity: 1;
+}
+
+.rottay-badge.rottay-badge--modern > [data-part='close']:focus-visible {
+  box-shadow: var(--ds-badge-remove-focus-ring, 0 0 0 2px color-mix(in srgb, currentColor 24%, transparent));
+}
+
+.rottay-badge.rottay-badge--modern > [data-part='close']:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.rottay-badge.rottay-badge--modern [data-part='spinner'] {
+  animation: ds-badge-spin var(--ds-badge-spinner-duration, 800ms) linear infinite;
+}
+
+@keyframes ds-badge-spin {
+  to { transform: rotate(1turn); }
+}
+
+/* Indicator mode is always compact and anchored. */
+.rottay-badge.rottay-badge--modern[data-indicator='true'] {
+  position: absolute;
+  z-index: var(--ds-badge-z-index, 1);
+  min-inline-size: var(--ds-badge-resolved-height);
+  max-inline-size: var(--ds-badge-indicator-max-inline-size, 6rem);
+  border-radius: var(--ds-badge-indicator-radius, 9999px);
+}
+
+.rottay-badge.rottay-badge--modern[data-indicator='true'][data-has-dot='true'] {
+  inline-size: var(--ds-badge-indicator-dot-size, var(--ds-badge-dot-md-size));
+  min-inline-size: 0;
+  block-size: var(--ds-badge-indicator-dot-size, var(--ds-badge-dot-md-size));
+  padding: 0;
+}
+
+:dir(rtl) .rottay-badge.rottay-badge--modern[data-position$='start'],
+.rottay-badge.rottay-badge--modern[data-position$='start']:dir(rtl) {
+  --ds-badge-logical-start-offset: 50%;
+}
+
+:dir(rtl) .rottay-badge.rottay-badge--modern[data-position$='end'],
+.rottay-badge.rottay-badge--modern[data-position$='end']:dir(rtl) {
+  --ds-badge-logical-end-offset: -50%;
+}
+
+/* Semantic tones: structure stays tenant-owned; colour meaning remains global. */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='default'] {
+  --ds-badge-tone-solid-bg: var(--ds-color-neutral-200);
+  --ds-badge-tone-solid-color: var(--ds-color-text-primary);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-black-100);
+  --ds-badge-tone-soft-color: var(--ds-color-text-secondary);
+  --ds-badge-tone-outline: var(--ds-color-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='primary'] {
+  --ds-badge-tone-solid-bg: var(--ds-color-primary);
+  --ds-badge-tone-solid-color: var(--ds-color-primary-foreground);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-primary-10);
+  --ds-badge-tone-soft-color: var(--ds-color-primary);
+  --ds-badge-tone-outline: var(--ds-color-primary-400, var(--ds-color-primary));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='secondary'] {
+  --ds-badge-tone-solid-bg: var(--ds-color-secondary);
+  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-secondary-10);
+  --ds-badge-tone-soft-color: var(--ds-color-secondary-600);
+  --ds-badge-tone-outline: var(--ds-color-secondary-300, var(--ds-color-secondary));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='success'] {
+  --ds-badge-tone-solid-bg: var(--ds-color-success);
+  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-success-10);
+  --ds-badge-tone-soft-color: var(--ds-color-success-700);
+  --ds-badge-tone-outline: var(--ds-color-success-border, var(--ds-color-success));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='warning'] {
+  --ds-badge-tone-solid-bg: var(--ds-color-warning);
+  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-warning-10);
+  --ds-badge-tone-soft-color: var(--ds-color-warning-700);
+  --ds-badge-tone-outline: var(--ds-color-warning-border, var(--ds-color-warning));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='error'] {
+  --ds-badge-tone-solid-bg: var(--ds-color-error);
+  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-error-10);
+  --ds-badge-tone-soft-color: var(--ds-color-error-700);
+  --ds-badge-tone-outline: var(--ds-color-error-border, var(--ds-color-error));
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-variant='info'] {
+  --ds-badge-tone-solid-bg: var(--ds-color-info);
+  --ds-badge-tone-solid-color: var(--ds-color-text-on-primary);
+  --ds-badge-tone-soft-bg: var(--ds-color-alpha-info-10);
+  --ds-badge-tone-soft-color: var(--ds-color-info-700);
+  --ds-badge-tone-outline: var(--ds-color-info-border, var(--ds-color-info));
+}
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='solid'] {
+  background: var(--ds-badge-solid-bg, var(--ds-badge-tone-solid-bg));
+  color: var(--ds-badge-solid-color, var(--ds-badge-tone-solid-color));
+  border-color: var(--ds-badge-solid-border, transparent);
+}
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='soft'] {
+  background: var(--ds-badge-soft-bg, var(--ds-badge-tone-soft-bg));
+  color: var(--ds-badge-soft-color, var(--ds-badge-tone-soft-color));
+  border-color: var(--ds-badge-soft-border, color-mix(in srgb, currentColor 14%, transparent));
+}
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='ghost'] {
+  background: var(--ds-badge-ghost-bg, transparent);
+  color: var(--ds-badge-ghost-color, var(--ds-badge-tone-soft-color));
+  border-color: var(--ds-badge-ghost-border, transparent);
+  box-shadow: var(--ds-badge-ghost-shadow, none);
+}
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='outline'] {
+  background: var(--ds-badge-outline-bg, transparent);
+  color: var(--ds-badge-outline-color, var(--ds-badge-tone-soft-color));
+  border-color: var(--ds-badge-outline-border, var(--ds-badge-tone-outline));
+  box-shadow: var(--ds-badge-outline-shadow, inset 0 0 0 1px color-mix(in srgb, currentColor 5%, transparent));
+}
+
 .rottay-badge.rottay-badge--modern[data-part='root'][data-bordered='true'] {
-  box-shadow: 0 0 0 2px var(--ds-surface-card);
+  box-shadow: var(--ds-badge-bordered-ring, 0 0 0 2px var(--ds-surface-card));
 }
 
-/* ---- solid (the switch's default) ---- */
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'] {
-  background-color: var(--ds-color-neutral-200);
-  color: var(--ds-color-text-primary);
-  border: 1px solid transparent;
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'] {
-  background-color: var(--ds-color-primary);
-  color: var(--ds-color-primary-foreground);
-  border: 1px solid transparent;
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'] {
-  background-color: var(--ds-color-secondary);
-  color: var(--ds-color-text-on-primary);
-  border: 1px solid transparent;
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'] {
-  background-color: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
-  border: 1px solid transparent;
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'] {
-  background-color: var(--ds-color-warning);
-  color: var(--ds-color-text-on-primary);
-  border: 1px solid transparent;
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'] {
-  background-color: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
-  border: 1px solid transparent;
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'] {
-  background-color: var(--ds-color-info);
-  color: var(--ds-color-text-on-primary);
-  border: 1px solid transparent;
+/* Selection is an interaction state, so it intentionally wins after the
+   structural style (`solid`/`soft`/`ghost`/`outline`) has resolved. */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-selected='true'] {
+  background: var(
+    --ds-badge-selected-surface,
+    var(--ds-filter-pill-active-bg, var(--ds-color-alpha-primary-10))
+  );
+  border-color: var(
+    --ds-badge-selected-frame,
+    var(--ds-filter-pill-active-border, color-mix(in srgb, var(--ds-color-primary) 34%, transparent))
+  );
+  color: var(
+    --ds-badge-selected-ink,
+    var(--ds-filter-pill-active-color, var(--ds-color-primary))
+  );
+  box-shadow: var(
+    --ds-badge-selected-shadow,
+    var(--ds-filter-pill-active-shadow, inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent))
+  );
 }
 
-/* ---- soft and ghost share one branch of the switch ---- */
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='soft'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='ghost'] {
-  background-color: var(--ds-color-alpha-black-100);
-  color: var(--ds-color-text-secondary);
+/* Interaction paint is intentionally ordered after treatment and selection:
+   keyboard focus and pointer feedback must not be flattened by a later skin.
+   The hover/pressed channels fall back to per-treatment mixes of the resolved
+   tone tokens, so a tenant that never configures `chrome.badge` still gets a
+   legible, treatment-faithful hover instead of an unpainted (transparent) one. */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='solid'] {
+  --ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%, var(--ds-color-black, #000) 10%);
+  --ds-badge-hover-ink-fallback: var(--ds-badge-tone-solid-color);
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='soft'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='ghost'] {
-  background-color: var(--ds-color-alpha-primary-10);
-  color: var(--ds-color-primary);
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='soft'] {
+  --ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-soft-bg) 80%, var(--ds-badge-tone-soft-color) 20%);
+  --ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='soft'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='ghost'] {
-  background-color: var(--ds-color-alpha-secondary-10);
-  color: var(--ds-color-secondary-600);
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='soft'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='ghost'] {
-  background-color: var(--ds-color-alpha-success-10);
-  color: var(--ds-color-success-700);
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='soft'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='ghost'] {
-  background-color: var(--ds-color-alpha-warning-10);
-  color: var(--ds-color-warning-700);
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='soft'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='ghost'] {
-  background-color: var(--ds-color-alpha-error-10);
-  color: var(--ds-color-error-700);
-}
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='soft'],
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='ghost'] {
-  background-color: var(--ds-color-alpha-info-10);
-  color: var(--ds-color-info-700);
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='outline'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='ghost'] {
+  --ds-badge-hover-bg-fallback: color-mix(in srgb, currentColor 8%, transparent);
+  --ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);
 }
 
-/* ---- outline: no fill, and the frame carries the hue ---- */
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='outline'] {
-  background-color: transparent;
-  color: var(--ds-color-text-secondary);
-  border: 1px solid var(--ds-color-border);
+.rottay-badge.rottay-badge--modern[data-state~='hovered'] {
+  background: var(--ds-badge-surface-hover, var(--ds-badge-hover-bg-fallback));
+  color: var(--ds-badge-ink-hover, var(--ds-badge-hover-ink-fallback));
+  border-color: var(
+    --ds-badge-frame-hover,
+    color-mix(in srgb, currentColor 24%, transparent)
+  );
+  box-shadow:
+    var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, white 58%, transparent)),
+    var(--ds-badge-shadow-hover, 0 6px 14px -10px color-mix(in srgb, currentColor 42%, transparent));
+  transform: var(--ds-badge-position-transform, translateY(0))
+    var(--ds-badge-hover-transform, translateY(-1px));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='outline'] {
-  background-color: transparent;
-  color: var(--ds-color-primary);
-  border: 1px solid var(--ds-color-primary-400);
+
+.rottay-badge.rottay-badge--modern[data-state~='pressed'] {
+  background: var(--ds-badge-surface-pressed, var(--ds-badge-surface-hover));
+  border-color: var(--ds-badge-frame-pressed, var(--ds-badge-frame-hover));
+  color: var(--ds-badge-ink-pressed, var(--ds-badge-ink-hover));
+  transform: var(--ds-badge-position-transform, translateY(0))
+    var(--ds-badge-press-transform, translateY(0) scale(0.985));
+  box-shadow: var(--ds-badge-shadow-pressed, inset 0 1px 2px color-mix(in srgb, currentColor 12%, transparent));
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='outline'] {
-  background-color: transparent;
-  color: var(--ds-color-secondary-600);
-  border: 1px solid var(--ds-color-secondary-300);
+
+.rottay-badge.rottay-badge--modern[data-state~='focus-visible'] {
+  box-shadow: var(
+    --ds-badge-focus-ring,
+    var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent))
+  );
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='outline'] {
-  background-color: transparent;
-  color: var(--ds-color-success-700);
-  border: 1px solid var(--ds-color-success-border);
+
+.rottay-badge.rottay-badge--modern[data-pulse='true']::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border: 1px solid currentColor;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: ds-badge-pulse var(--ds-badge-pulse-duration, 1.6s)
+    var(--ds-badge-pulse-timing, ease-out) infinite;
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='outline'] {
-  background-color: transparent;
-  color: var(--ds-color-warning-700);
-  border: 1px solid var(--ds-color-warning-border);
+
+@keyframes ds-badge-pulse {
+  0%, 35% { opacity: 0.34; transform: scale(1); }
+  100% { opacity: 0; transform: scale(var(--ds-badge-pulse-scale, 1.18)); }
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='outline'] {
-  background-color: transparent;
-  color: var(--ds-color-error-700);
-  border: 1px solid var(--ds-color-error-border);
+
+@container (max-width: 12rem) {
+  .rottay-badge.rottay-badge--modern[data-kind='chip'],
+  .rottay-badge.rottay-badge--modern[data-kind='pill'] {
+    --ds-badge-max-inline-size: 100%;
+    --ds-badge-resolved-padding-inline: var(--ds-badge-container-padding-inline, 0.5rem);
+  }
 }
-.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='outline'] {
-  background-color: transparent;
-  color: var(--ds-color-info-700);
-  border: 1px solid var(--ds-color-info-border);
+
+@media (pointer: coarse) {
+  .rottay-badge.rottay-badge--modern[data-interactive='true'] {
+    min-block-size: var(--ds-badge-touch-target, 2.75rem);
+  }
+  /* The remove control keeps its compact visual size but meets the 44px coarse
+     floor through an invisible centered hit area -- a physically larger button
+     would overflow the badge's own height and break the row's alignment. */
+  .rottay-badge.rottay-badge--modern > [data-part='close'] {
+    position: relative;
+  }
+  .rottay-badge.rottay-badge--modern > [data-part='close']::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--ds-badge-remove-touch-size, 2.75rem) / 2);
+    border-radius: 9999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-badge.rottay-badge--modern[data-part='root'],
+  .rottay-badge.rottay-badge--modern > [data-part='close'] {
+    transition-duration: 0.01ms;
+  }
+  .rottay-badge.rottay-badge--modern[data-pulse='true']::after,
+  .rottay-badge.rottay-badge--modern [data-part='spinner'] {
+    animation: none;
+  }
+  .rottay-badge.rottay-badge--modern[data-state~='hovered'],
+  .rottay-badge.rottay-badge--modern[data-state~='pressed'],
+  .rottay-badge.rottay-badge--modern > [data-part='close']:hover {
+    transform: var(--ds-badge-position-transform, translateY(0));
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-badge.rottay-badge--modern[data-part='root'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    forced-color-adjust: auto;
+  }
+  .rottay-badge.rottay-badge--modern[data-selected='true'] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+  .rottay-badge.rottay-badge--modern[data-state~='focus-visible'] {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .rottay-badge.rottay-badge--modern > [data-part='close'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .rottay-badge.rottay-badge--modern > [data-part='close']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
 }

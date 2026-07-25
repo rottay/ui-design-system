@@ -24,6 +24,7 @@ import {
   notification as rusticNotification,
   useNotification as useRusticNotification,
 } from '../engines/rustic';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 function ModernHarness({ onReady }: { onReady: (api: ReturnType<typeof useModernNotification>[0]) => void }) {
   const [api] = useModernNotification();
@@ -100,10 +101,11 @@ describe('Notification engine advanced coverage', () => {
   it('covers modern provider grouping, direct item behavior, and static warning helpers', async () => {
     let apiRef: ReturnType<typeof useModernNotification>[0] | undefined;
 
-    render(
+    renderWithEngine(
       <ModernNotificationProvider maxCount={1} placement="topRight" top={12} bottom={20}>
         <ModernHarness onReady={(api) => { apiRef = api; }} />
-      </ModernNotificationProvider>
+      </ModernNotificationProvider>,
+      'modern'
     );
 
     await waitFor(() => {
@@ -137,7 +139,8 @@ describe('Notification engine advanced coverage', () => {
 
     const onRemove = vi.fn();
     const onClose = vi.fn();
-    render(
+    const onClick = vi.fn();
+    renderWithEngine(
       <ModernNotificationItem
         id="modern-notification"
         type="open"
@@ -147,12 +150,21 @@ describe('Notification engine advanced coverage', () => {
         actions={<button type="button">Resolve</button>}
         closable
         duration={1}
+        onClick={onClick}
         onRemove={onRemove}
         onClose={onClose}
-      />
+      />,
+      'modern'
     );
 
     expect(screen.getByText('Resolve')).toBeInTheDocument();
+    const modernItem = screen.getByText('Direct modern').closest('[data-part="root"]');
+    expect(modernItem).toHaveAttribute('data-tone', 'open');
+    expect(modernItem).toHaveAttribute('data-has-actions', 'true');
+    expect(modernItem).toHaveAttribute('data-clickable', 'true');
+    expect(modernItem?.querySelector('[data-part="progress"]')).toBeInTheDocument();
+    fireEvent.keyDown(modernItem as HTMLElement, { key: 'Enter' });
+    expect(onClick).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
 
     expect(onRemove).toHaveBeenCalledWith('modern-notification');

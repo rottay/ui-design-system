@@ -74,7 +74,7 @@ describe('Typography rustic advanced engine coverage', () => {
     expect(text.tagName).toBe('MARK');
     expect(text).toHaveStyle({
       fontStyle: 'italic',
-      fontFamily: 'var(--ds-font-mono, monospace)',
+      fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
       textDecoration: 'underline line-through',
       overflow: 'hidden',
     });

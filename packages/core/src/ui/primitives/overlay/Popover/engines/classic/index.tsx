@@ -68,13 +68,35 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       mouseLeaveDelay,
       destroyTooltipOnHide,
       className,
+      style,
       overlayClassName,
       overlayStyle,
       zIndex,
+      recipe: _recipe,
+      offset: _offset,
+      maxWidth: _maxWidth,
+      touchBehavior: _touchBehavior,
+      closeOnEscape: _closeOnEscape,
+      closeOnInteractOutside: _closeOnInteractOutside,
+      role: _role,
+      'aria-label': _ariaLabel,
+      'aria-labelledby': _ariaLabelledBy,
     } = props;
 
+    // Modern-only coordinated behavior/material channels are consumed here so
+    // they never leak to Ant or the DOM. Classic keeps Ant's native contract.
+    void _recipe;
+    void _offset;
+    void _maxWidth;
+    void _touchBehavior;
+    void _closeOnEscape;
+    void _closeOnInteractOutside;
+    void _role;
+    void _ariaLabel;
+    void _ariaLabelledBy;
+
     return (
-      <div ref={ref} className={className} style={{ display: 'inline-block' }}>
+      <div ref={ref} className={className} style={{ display: 'inline-block', ...style }}>
         <AntPopover
           content={content}
           title={title}

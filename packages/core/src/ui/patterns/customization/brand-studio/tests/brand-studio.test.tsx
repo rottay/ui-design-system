@@ -19,6 +19,7 @@ import {
   serializeBrandTheme,
   deserializeBrandTheme,
   brandThemeToTenantAppearanceAdvanced,
+  brandThemeToTenantAppearance,
 } from '../runtime/file-export';
 
 const TEST_TENANT: TenantConfig = {
@@ -73,6 +74,13 @@ const RICH_THEME: BrandTheme = {
     primaryColor: '#1a56db',
     secondaryColor: '#7c3aed',
     accentColor: '#0ea5e9',
+    textPrimaryColor: '#172033',
+    textSecondaryColor: '#46536b',
+    textMutedColor: '#68758d',
+    textDisabledColor: '#8b95a8',
+    borderPrimaryColor: '#cbd5e1',
+    borderSecondaryColor: '#e2e8f0',
+    backgroundColor: '#f8fafc',
     successColor: '#16a34a',
     warningColor: '#d97706',
     errorColor: '#dc2626',
@@ -195,6 +203,13 @@ describe('PatternBrandStudio export paths', () => {
     // Palette/typography/motion funnel through bounded token overrides.
     const overrides = advanced.tokenOverrides ?? {};
     expect(overrides['--ds-color-primary']).toBe('#1a56db');
+    expect(overrides['--ds-color-bg-primary']).toBe('#f8fafc');
+    expect(overrides['--ds-color-text-primary']).toBe('#172033');
+    expect(overrides['--ds-color-text-secondary']).toBe('#46536b');
+    expect(overrides['--ds-color-text-muted']).toBe('#68758d');
+    expect(overrides['--ds-color-text-disabled']).toBe('#8b95a8');
+    expect(overrides['--ds-color-border-primary']).toBe('#cbd5e1');
+    expect(overrides['--ds-color-border-secondary']).toBe('#e2e8f0');
     expect(overrides['--ds-font-family-base']).toBe('Inter, sans-serif');
     expect(overrides['--ds-motion-calm']).toBe('200ms');
 
@@ -202,6 +217,26 @@ describe('PatternBrandStudio export paths', () => {
     const keys = Object.keys(overrides);
     expect(keys.every((key) => key.startsWith('--ds-'))).toBe(true);
     expect(keys.length).toBeLessThan(30);
+  });
+
+  it('projects global palette foundations into General for DB-owned tenants', () => {
+    const appearance = brandThemeToTenantAppearance(RICH_THEME);
+
+    expect(appearance.general?.palette).toMatchObject({
+      primary: '#1a56db',
+      background: '#f8fafc',
+      foreground: {
+        primary: '#172033',
+        secondary: '#46536b',
+        muted: '#68758d',
+        disabled: '#8b95a8',
+      },
+      border: { primary: '#cbd5e1', secondary: '#e2e8f0' },
+      backgroundMode: 'light',
+    });
+    expect(appearance.general?.typography?.fontFamilyBase).toBe('Inter, sans-serif');
+    expect(appearance.general?.surfaces?.effectIntensity).toBe(1);
+    expect(appearance.advanced?.chrome?.controls).toEqual(RICH_THEME.chrome?.controls);
   });
 });
 

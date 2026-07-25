@@ -157,7 +157,6 @@ export function DashboardSurface({
                           {section.description && (
                             <Text
                               className="ds-dashboard__muted-text"
-                              data-part="muted-text"
                             >
                               {section.description}
                             </Text>

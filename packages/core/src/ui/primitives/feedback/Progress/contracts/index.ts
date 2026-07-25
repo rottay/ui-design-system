@@ -160,9 +160,20 @@ export interface ProgressProps extends BaseComponentProps, EngineAwareProps {
   /**
    * Current progress percentage (0-100).
    * Values outside this range are clamped by engine implementations.
+   * Ignored for display when `indeterminate` is true (the meter reports no value).
    * @required
    */
   percent: number;
+
+  /**
+   * Whether the meter runs in indeterminate mode (ongoing activity with no
+   * measurable completion). The indicator animates a continuous cadence from
+   * the motion authority and `aria-valuenow` is omitted per WAI-ARIA.
+   * Classic engine note: Ant Design has no indeterminate meter, so Classic
+   * keeps rendering the determinate form (documented compatibility gap).
+   * @default false
+   */
+  indeterminate?: boolean;
 
   // ---------------------------------------------------------------------------
   // Display Options
@@ -243,6 +254,9 @@ export const PROGRESS_DEFAULTS: Partial<ProgressProps> = {
 
   /** Show percentage info by default */
   showInfo: true,
+
+  /** Meters are determinate by default */
+  indeterminate: false,
 
   /** Default stroke width in pixels */
   strokeWidth: 8,

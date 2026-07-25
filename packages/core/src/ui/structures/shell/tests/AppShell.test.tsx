@@ -8,6 +8,7 @@ import {
   type ResponsiveContextValue,
 } from '../../../../infrastructure/runtime/responsive';
 import { AppShell, useShellContext, type AppShellProps } from '..';
+import shellStyles from '../../../../foundation/tokens/css/presentation/components/skin/app-shell.css?raw';
 
 const PHONE_CONTEXT: ResponsiveContextValue = {
   deviceClass: 'phone',
@@ -55,10 +56,7 @@ const BASE_PROPS: AppShellProps = {
   children: <div>Page content</div>,
 };
 
-function renderShell(
-  responsive: ResponsiveContextValue,
-  props: Partial<AppShellProps> = {},
-) {
+function renderShell(responsive: ResponsiveContextValue, props: Partial<AppShellProps> = {}) {
   return renderWithEngine(
     <ResponsiveContext.Provider value={responsive}>
       <AppShell {...BASE_PROPS} {...props} />
@@ -68,9 +66,7 @@ function renderShell(
 }
 
 function getShellRoot(container: HTMLElement): HTMLElement {
-  return container.querySelector(
-    '.rottay-app-shell[data-part="root"]',
-  ) as HTMLElement;
+  return container.querySelector('.rottay-app-shell[data-part="root"]') as HTMLElement;
 }
 
 describe('AppShell responsive contract', () => {
@@ -89,15 +85,15 @@ describe('AppShell responsive contract', () => {
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
       'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px)) + var(--ds-shell-safe-area-top))',
     );
-    expect(
-      logo.style.getPropertyValue('--ds-shell-resolved-sidebar-header-block-size'),
-    ).toBe(
+    expect(logo.style.getPropertyValue('--ds-shell-resolved-sidebar-header-block-size')).toBe(
       'var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, 104px))',
     );
-    expect(logo.style.height).toBe(
-      'var(--ds-shell-resolved-sidebar-header-block-size)',
-    );
-    expect(header.style.height).toBe('var(--ds-shell-top-inset)');
+    expect(logo).toHaveClass('rottay-app-shell__navigation-logo');
+    expect(logo.style.height).toBe('');
+    expect(header).toHaveClass('rottay-app-shell__header');
+    expect(header.style.height).toBe('');
+    expect(shellStyles).toContain('height: var(--ds-shell-resolved-sidebar-header-block-size)');
+    expect(shellStyles).toContain('height: var(--ds-shell-top-inset)');
   });
 
   it('keeps the fixed collapsible sidebar exclusively in desktop posture', () => {
@@ -107,25 +103,25 @@ describe('AppShell responsive contract', () => {
     });
 
     const root = getShellRoot(container);
-    const sidebar = container.querySelector(
-      '[data-part="navigation-sidebar"]',
-    ) as HTMLElement;
+    const sidebar = container.querySelector('[data-part="navigation-sidebar"]') as HTMLElement;
     const mainArea = container.querySelector('[data-part="main-area"]') as HTMLElement;
 
     expect(root).toHaveAttribute('data-posture', 'desktop');
-    expect(root.style.minHeight).toBe('100dvh');
+    expect(root).toHaveAttribute('data-collapsed', 'true');
+    expect(root).toHaveAttribute('data-compact', 'false');
+    expect(root.style.minHeight).toBe('');
     expect(sidebar).toHaveAccessibleName('Primary navigation');
+    expect(sidebar).toHaveClass('rottay-app-shell__navigation-sidebar');
+    expect(sidebar).toHaveAttribute('data-collapsed', 'true');
     expect(root.style.getPropertyValue('--ds-shell-inline-start-inset')).toBe(
       'calc(var(--ds-shell-sidebar-collapsed-width, 80px) + var(--ds-shell-safe-area-left))',
     );
-    expect(sidebar.style.width).toBe('var(--ds-shell-inline-start-inset)');
-    expect(mainArea.style.minHeight).toBe('100dvh');
-    expect(mainArea.style.marginLeft).toBe(
-      'var(--ds-shell-inline-start-inset)',
-    );
-    expect(
-      container.querySelector('[data-part="navigation-trigger"]'),
-    ).toBeNull();
+    expect(sidebar.style.width).toBe('');
+    expect(mainArea).toHaveClass('rottay-app-shell__main');
+    expect(mainArea).toHaveAttribute('data-compact', 'false');
+    expect(mainArea.style.minHeight).toBe('');
+    expect(mainArea.style.marginLeft).toBe('');
+    expect(container.querySelector('[data-part="navigation-trigger"]')).toBeNull();
   });
 
   it.each([
@@ -134,36 +130,35 @@ describe('AppShell responsive contract', () => {
   ] as const)('uses compact navigation in %s posture', (posture, responsive) => {
     const { container } = renderShell(responsive);
     const root = getShellRoot(container);
-    const trigger = screen.getByRole('button', { name: 'Open Primary navigation' });
+    const trigger = screen.getByRole('button', {
+      name: 'Open Primary navigation',
+    });
 
     expect(root).toHaveAttribute('data-posture', posture);
-    expect(
-      container.querySelector('[data-part="navigation-sidebar"]'),
-    ).toBeNull();
+    expect(root).toHaveAttribute('data-compact', 'true');
+    expect(container.querySelector('[data-part="navigation-sidebar"]')).toBeNull();
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
-    expect(trigger.style.width).toBe('44px');
-    expect(trigger.style.height).toBe('44px');
+    expect(trigger).toHaveClass('rottay-app-shell__navigation-trigger');
+    expect(trigger.style.width).toBe('');
+    expect(trigger.style.height).toBe('');
   });
 
   it('publishes and reserves one canonical bottom inset by posture', () => {
-    const bottomInset =
-      'calc(58px + env(safe-area-inset-bottom, 0px))';
+    const bottomInset = 'calc(58px + env(safe-area-inset-bottom, 0px))';
     const { container } = renderShell(PHONE_CONTEXT, {
       geometry: { bottomInset: { phone: bottomInset } },
     });
     const root = getShellRoot(container);
     const mainArea = container.querySelector('[data-part="main-area"]') as HTMLElement;
 
-    expect(root.style.getPropertyValue('--ds-shell-bottom-inset')).toBe(
-      bottomInset,
-    );
+    expect(root.style.getPropertyValue('--ds-shell-bottom-inset')).toBe(bottomInset);
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
       'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px)) + var(--ds-shell-safe-area-top))',
     );
-    expect(mainArea.style.paddingBlockEnd).toBe(
-      'var(--ds-shell-bottom-inset)',
-    );
-    expect(mainArea.style.boxSizing).toBe('border-box');
+    expect(mainArea).toHaveClass('rottay-app-shell__main');
+    expect(mainArea).toHaveAttribute('data-compact', 'true');
+    expect(mainArea.style.paddingBlockEnd).toBe('');
+    expect(mainArea.style.boxSizing).toBe('');
   });
 
   it('does not reserve a phone-only bottom navigation on tablet or desktop', () => {
@@ -177,16 +172,12 @@ describe('AppShell responsive contract', () => {
       geometry: { bottomInset: phoneOnlyInset },
     });
 
-    expect(
-      getShellRoot(tablet.container).style.getPropertyValue(
-        '--ds-shell-bottom-inset',
-      ),
-    ).toBe('env(safe-area-inset-bottom, 0px)');
-    expect(
-      getShellRoot(desktop.container).style.getPropertyValue(
-        '--ds-shell-bottom-inset',
-      ),
-    ).toBe('env(safe-area-inset-bottom, 0px)');
+    expect(getShellRoot(tablet.container).style.getPropertyValue('--ds-shell-bottom-inset')).toBe(
+      'env(safe-area-inset-bottom, 0px)',
+    );
+    expect(getShellRoot(desktop.container).style.getPropertyValue('--ds-shell-bottom-inset')).toBe(
+      'env(safe-area-inset-bottom, 0px)',
+    );
   });
 
   it('lets an explicit style variable override geometry resolution', () => {
@@ -198,13 +189,11 @@ describe('AppShell responsive contract', () => {
       style,
     });
 
-    expect(
-      getShellRoot(container).style.getPropertyValue('--ds-shell-bottom-inset'),
-    ).toBe('72px');
+    expect(getShellRoot(container).style.getPropertyValue('--ds-shell-bottom-inset')).toBe('72px');
   });
 
   it('composes compact navigation with the accessible Sheet authority', async () => {
-    const { container } = renderShell(TABLET_CONTEXT, {
+    renderShell(TABLET_CONTEXT, {
       collapsed: true,
       geometry: {
         sidebarWidth: 312,
@@ -212,7 +201,9 @@ describe('AppShell responsive contract', () => {
         sidebarHeaderHeight: 32,
       },
     });
-    const trigger = screen.getByRole('button', { name: 'Open Primary navigation' });
+    const trigger = screen.getByRole('button', {
+      name: 'Open Primary navigation',
+    });
     trigger.focus();
     fireEvent.click(trigger);
 
@@ -227,10 +218,9 @@ describe('AppShell responsive contract', () => {
 
     expect(dialog).toHaveAttribute('aria-modal', 'true');
     expect(dialog).toHaveAttribute('data-placement', 'left');
-    expect(dialog.style.boxSizing).toBe('border-box');
-    expect(
-      dialog.style.getPropertyValue('--ds-shell-resolved-drawer-inline-size'),
-    ).toBe(
+    expect(dialog).toHaveClass('rottay-app-shell__navigation-drawer');
+    expect(dialog.style.boxSizing).toBe('');
+    expect(dialog.style.getPropertyValue('--ds-shell-resolved-drawer-inline-size')).toBe(
       'min(var(--ds-shell-sidebar-width, 312px), 100dvw)',
     );
     expect(dialog.style.width).toBe('var(--ds-shell-resolved-drawer-inline-size)');
@@ -238,26 +228,25 @@ describe('AppShell responsive contract', () => {
       '[data-part="navigation-drawer-header"]',
     ) as HTMLElement;
     expect(
-      drawerHeader.style.getPropertyValue(
-        '--ds-shell-resolved-sidebar-header-min-block-size',
-      ),
+      drawerHeader.style.getPropertyValue('--ds-shell-resolved-sidebar-header-min-block-size'),
     ).toBe(
       'max(var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, 32px)), 44px)',
     );
-    expect(drawerHeader.style.minHeight).toBe(
-      'var(--ds-shell-resolved-sidebar-header-min-block-size)',
+    expect(drawerHeader).toHaveClass('rottay-app-shell__navigation-drawer-header');
+    expect(drawerHeader.style.minHeight).toBe('');
+    expect(shellStyles).toContain(
+      'min-height: var(--ds-shell-resolved-sidebar-header-min-block-size)',
     );
-    expect(close.style.width).toBe('44px');
-    expect(close.style.height).toBe('44px');
+    expect(close).toHaveClass('rottay-app-shell__navigation-close');
+    expect(close.style.width).toBe('');
+    expect(close.style.height).toBe('');
     expect(document.body.style.overflow).toBe('hidden');
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
 
     fireEvent.keyDown(document, { key: 'Escape' });
 
     await waitFor(() => {
-      expect(
-        screen.queryByRole('dialog', { name: 'Primary navigation' }),
-      ).toBeNull();
+      expect(screen.queryByRole('dialog', { name: 'Primary navigation' })).toBeNull();
     });
     await waitFor(() => expect(trigger).toHaveFocus());
     expect(document.body.style.overflow).toBe('');
@@ -278,9 +267,7 @@ describe('AppShell responsive contract', () => {
     fireEvent.click(probe);
 
     await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: 'phone:true:true' }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'phone:true:true' })).toBeInTheDocument();
     });
   });
 
@@ -323,5 +310,36 @@ describe('AppShell responsive contract', () => {
       'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 68px)) + var(--ds-shell-safe-area-top))',
     );
     expect(screen.getByTestId('shell-geometry')).toHaveTextContent('320:76:68');
+  });
+
+  it('publishes neutral shell remapping hooks from the canonical bundled skin', () => {
+    const hooks = [
+      '--ds-shell-navigation-background',
+      '--ds-shell-navigation-border',
+      '--ds-shell-navigation-radius',
+      '--ds-shell-navigation-shadow',
+      '--ds-shell-navigation-body-padding',
+      '--ds-shell-navigation-body-padding-collapsed',
+      '--ds-shell-navigation-footer-padding',
+      '--ds-shell-navigation-footer-padding-collapsed',
+      '--ds-shell-header-padding-inline',
+      '--ds-shell-header-background',
+      '--ds-shell-header-border',
+      '--ds-shell-header-radius',
+      '--ds-shell-header-shadow',
+      '--ds-shell-header-inset-block-start',
+      '--ds-shell-header-inset-inline',
+      '--ds-shell-main-transition',
+      '--ds-shell-main-background',
+      '--ds-shell-main-border',
+      '--ds-shell-footer-padding',
+      '--ds-shell-footer-background',
+      '--ds-shell-footer-border',
+      '--ds-shell-footer-shadow',
+    ];
+
+    for (const hook of hooks) {
+      expect(shellStyles).toContain(hook);
+    }
   });
 });

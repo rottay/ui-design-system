@@ -11,6 +11,9 @@
 
 import type { MouseEvent, ReactNode } from 'react';
 import { Button, Card, Flex, Stack, Text } from '../../../../primitives';
+import type { CardProps } from '../../../../primitives/display/Card/contracts';
+import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 import { filterSurfaceActions, resolveSurfaceButtonVariant } from '..';
 import type { SurfaceAccessInput, SurfaceAction, SurfaceTabbedView } from '../../../foundation/contracts';
 
@@ -90,48 +93,103 @@ export function SurfaceTabbedLabel({ view }: SurfaceTabbedLabelProps): React.Rea
 }
 
 export interface SurfaceSectionCardProps {
+  /** Optional compact context rendered above the title. */
+  eyebrow?: ReactNode;
+  /** Optional semantic illustration for the section header. */
+  icon?: ReactNode;
   title?: ReactNode;
   description?: ReactNode;
   actions?: ReactNode;
   children: ReactNode;
   plain?: boolean;
+  /** Explicit Card material; overrides the active recipe-profile default. */
+  variant?: CardProps['variant'];
 }
+
+/** Governed section-card anatomy exposed through the public recipe manifest. */
+export const surfaceSectionCardRecipe = defineRecipe({
+  name: 'sectionCard',
+  slots: {
+    root: ['ds-surface', 'ds-section-card'],
+    body: 'ds-section-card__body',
+    header: 'ds-section-card__header',
+    content: 'ds-section-card__content',
+  },
+  axes: {
+    variant: {
+      elevated: { root: 'ds-section-card--elevated' },
+      outlined: { root: 'ds-section-card--outlined' },
+      filled: { root: 'ds-section-card--filled' },
+      ghost: { root: 'ds-section-card--ghost' },
+    },
+  },
+  defaults: {},
+});
 
 /** Shared card wrapper for sectioned surfaces with optional title, copy, and actions. */
 export function SurfaceSectionCard({
+  eyebrow,
+  icon,
   title,
   description,
   actions,
   children,
   plain = false,
+  variant: variantProp,
 }: SurfaceSectionCardProps): React.ReactElement {
+  const profileDefaults = useRecipeProfileDefaults('sectionCard');
+  const variant =
+    variantProp ??
+    (typeof profileDefaults.variant === 'string'
+      ? (profileDefaults.variant as CardProps['variant'])
+      : undefined) ??
+    'outlined';
+  const classes = surfaceSectionCardRecipe.resolve({ variant });
+
   if (plain) {
     return <>{children}</>;
   }
 
+  const hasHeader = Boolean(eyebrow || icon || title || description || actions);
+
   return (
-    <Card className="ds-surface ds-section-card" variant="outlined">
-      <Card.Body className="ds-section-card__body">
-        <Stack data-part="content" spacing="md">
+    <Card
+      className={classes.root}
+      variant={variant}
+      data-has-header={hasHeader ? 'true' : 'false'}
+    >
+      <Card.Body className={classes.body} padding="none">
+        <Stack data-part="content" spacing="none">
           {/* The header chrome stays optional so the same wrapper can be used for plain sections. */}
-          {(title || description || actions) && (
+          {hasHeader && (
             <Flex
+              className={classes.header}
               data-part="header"
               data-has-actions={actions ? 'true' : 'false'}
               justify="between"
               align="start"
               gap={12}
             >
-              <Stack data-part="header-copy" spacing="xs">
-                {title && <Text data-part="title" style={{ fontSize: 18, fontWeight: 700 }}>{title}</Text>}
-                {description && (
-                  <Text data-part="description">{description}</Text>
-                )}
-              </Stack>
-              {actions}
+              <Flex data-part="header-main" align="start" gap={12}>
+                {icon && <span data-part="header-icon">{icon}</span>}
+                <Stack data-part="header-copy" spacing="xs">
+                  {eyebrow && (
+                    <Text className="ds-section-card__eyebrow">{eyebrow}</Text>
+                  )}
+                  {title && (
+                    <Text className="ds-section-card__title">{title}</Text>
+                  )}
+                  {description && (
+                    <Text className="ds-section-card__description">
+                      {description}
+                    </Text>
+                  )}
+                </Stack>
+              </Flex>
+              {actions && <div data-part="header-actions">{actions}</div>}
             </Flex>
           )}
-          {children}
+          <div className={classes.content} data-part="section-content">{children}</div>
         </Stack>
       </Card.Body>
     </Card>

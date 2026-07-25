@@ -34,15 +34,40 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode, CSSProperties } from 'react';
-import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import type { ReactNode, CSSProperties, AriaRole, HTMLAttributes } from "react";
+import type { BaseComponentProps } from "@/foundation/contracts/kernel/common";
+import type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 
-export type FlexDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse';
-export type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
-export type FlexJustify = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
-export type FlexAlign = 'start' | 'end' | 'center' | 'baseline' | 'stretch';
+export type FlexDirection = "row" | "row-reverse" | "column" | "column-reverse";
+export type FlexWrap = "nowrap" | "wrap" | "wrap-reverse";
+export type FlexJustify =
+  | "start"
+  | "end"
+  | "center"
+  | "between"
+  | "around"
+  | "evenly";
+export type FlexAlign = "start" | "end" | "center" | "baseline" | "stretch";
+export type FlexGapToken =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl";
+export type FlexGapValue = FlexGapToken | number;
+export type FlexGap = FlexGapValue | [FlexGapValue, FlexGapValue];
+export type FlexMotion = "none" | "rearrange";
 
-export interface FlexProps {
+export interface FlexProps
+  extends BaseComponentProps,
+    Omit<
+      HTMLAttributes<HTMLDivElement>,
+      "style" | "className" | "children" | "role"
+    > {
   /** Flex direction. Accepts a responsive object for breakpoint-aware values. */
   direction?: ResponsiveValue<FlexDirection>;
   /** Flex wrap behavior. Accepts a responsive object for breakpoint-aware values. */
@@ -51,8 +76,8 @@ export interface FlexProps {
   justify?: ResponsiveValue<FlexJustify>;
   /** Align items alignment. Accepts a responsive object for breakpoint-aware values. */
   align?: ResponsiveValue<FlexAlign>;
-  /** Gap between items: number (px) or [horizontal, vertical]. Accepts a responsive object. */
-  gap?: ResponsiveValue<number | [number, number]>;
+  /** Gap between items: token/px value or [column, row]. Accepts a responsive object. */
+  gap?: ResponsiveValue<FlexGap>;
   /** Flex property value */
   flex?: string | number;
   /** Use inline-flex instead of flex */
@@ -64,32 +89,77 @@ export interface FlexProps {
   /** Inline styles */
   style?: CSSProperties;
   /** Rendering engine override */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: "classic" | "modern" | "rustic";
+  /** Semantic landmark or grouping role forwarded to the owned root element. */
+  role?: AriaRole;
+  /** Width of the flex formatting context. */
+  width?: ResponsiveValue<CSSProperties["width"]>;
+  /** Minimum width. Modern defaults to min-inline-size: 0 for safe nesting. */
+  minWidth?: ResponsiveValue<CSSProperties["minWidth"]>;
+  /** Maximum width of the flex formatting context. */
+  maxWidth?: ResponsiveValue<CSSProperties["maxWidth"]>;
+  /** Overflow policy. */
+  overflow?: ResponsiveValue<CSSProperties["overflow"]>;
+  /** Token-driven transition for deliberate layout rearrangement. */
+  motion?: FlexMotion;
 }
 
 export const FLEX_DEFAULTS: Partial<FlexProps> = {
-  direction: 'row',
-  wrap: 'nowrap',
-  justify: 'start',
-  align: 'stretch',
+  direction: "row",
+  wrap: "nowrap",
+  justify: "start",
+  align: "stretch",
   inline: false,
 };
 
 /** CSS justify-content mapping */
 export const FLEX_JUSTIFY_MAP: Record<FlexJustify, string> = {
-  start: 'flex-start',
-  end: 'flex-end',
-  center: 'center',
-  between: 'space-between',
-  around: 'space-around',
-  evenly: 'space-evenly',
+  start: "flex-start",
+  end: "flex-end",
+  center: "center",
+  between: "space-between",
+  around: "space-around",
+  evenly: "space-evenly",
 };
 
 /** CSS align-items mapping */
 export const FLEX_ALIGN_MAP: Record<FlexAlign, string> = {
-  start: 'flex-start',
-  end: 'flex-end',
-  center: 'center',
-  baseline: 'baseline',
-  stretch: 'stretch',
+  start: "flex-start",
+  end: "flex-end",
+  center: "center",
+  baseline: "baseline",
+  stretch: "stretch",
 };
+
+/** Gap token mapping kept on the shared tenant spacing ramp. */
+export const FLEX_GAP_MAP: Record<FlexGapToken, string> = {
+  none: "0",
+  xs: "var(--ds-spacing-1, 0.25rem)",
+  sm: "var(--ds-spacing-2, 0.5rem)",
+  md: "var(--ds-spacing-4, 1rem)",
+  lg: "var(--ds-spacing-6, 1.5rem)",
+  xl: "var(--ds-spacing-8, 2rem)",
+  "2xl": "var(--ds-spacing-10, 2.5rem)",
+  "3xl": "var(--ds-spacing-12, 3rem)",
+  "4xl": "var(--ds-spacing-16, 4rem)",
+};
+
+/**
+ * Resolves one public gap value into deterministic CSS.
+ *
+ * Values can arrive from JavaScript, persisted preferences, or arithmetic even
+ * when TypeScript authoring is strict. Negative and non-finite gaps collapse
+ * to zero instead of leaking `NaNpx`, `Infinitypx`, or invalid negative CSS.
+ */
+export function resolveFlexGapValue(value: FlexGapValue): string {
+  if (typeof value !== "number") return FLEX_GAP_MAP[value];
+  return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
+}
+
+/** Resolves the public `[column, row]` tuple into CSS `row column` order. */
+export function resolveFlexGap(gap: FlexGap): string {
+  if (Array.isArray(gap)) {
+    return `${resolveFlexGapValue(gap[1])} ${resolveFlexGapValue(gap[0])}`;
+  }
+  return resolveFlexGapValue(gap);
+}

@@ -243,7 +243,7 @@ export function buildSvgBarGeometry({
   orientation = 'vertical',
   insets: insetsInput,
   bandPadding = 0.2,
-  maxTicks = 5,
+  maxTicks,
 }: BuildSvgBarGeometryOptions): SvgBarGeometry {
   const width = finiteSize(widthInput, 640);
   const height = finiteSize(heightInput, 360);
@@ -256,10 +256,15 @@ export function buildSvgBarGeometry({
   const padding = Number.isFinite(bandPadding)
     ? Math.min(0.95, Math.max(0, bandPadding))
     : 0.2;
-  const tickCount = Number.isSafeInteger(maxTicks) ? Math.max(2, maxTicks) : 5;
+  const explicitTickCount =
+    typeof maxTicks === 'number' && Number.isSafeInteger(maxTicks)
+      ? Math.max(2, maxTicks)
+      : null;
+  const valueTickCount = explicitTickCount ?? 5;
+  const categoryTickCount = explicitTickCount ?? categories.length;
   const valueScale = scaleLinear()
     .domain(zeroAnchoredDomain(finiteData.map((datum) => datum.value)))
-    .nice(tickCount)
+    .nice(valueTickCount)
     .range(
       orientation === 'vertical'
         ? [plot.y + plot.height, plot.y]
@@ -302,13 +307,13 @@ export function buildSvgBarGeometry({
     };
   });
 
-  const categoryTicks = boundedSample(categories, tickCount).map<ChartGeometryTick>((category) => {
+  const categoryTicks = boundedSample(categories, categoryTickCount).map<ChartGeometryTick>((category) => {
     const position = (categoryScale(category) ?? 0) + categoryScale.bandwidth() / 2;
     return orientation === 'vertical'
       ? { id: `category-${category}`, label: category, value: category, x: position, y: plot.y + plot.height }
       : { id: `category-${category}`, label: category, value: category, x: plot.x, y: position };
   });
-  const valueTicks = boundedSample(valueScale.ticks(tickCount), tickCount).map<ChartGeometryTick>((value) =>
+  const valueTicks = boundedSample(valueScale.ticks(valueTickCount), valueTickCount).map<ChartGeometryTick>((value) =>
     orientation === 'vertical'
       ? { id: `value-${value}`, label: tickLabel(value), value, x: plot.x, y: valueScale(value) }
       : { id: `value-${value}`, label: tickLabel(value), value, x: valueScale(value), y: plot.y + plot.height },
@@ -400,7 +405,7 @@ export function buildSvgBarSeriesGeometry({
   insets: insetsInput,
   bandPadding = 0.2,
   groupPadding = 0.05,
-  maxTicks = 5,
+  maxTicks,
 }: BuildSvgBarSeriesGeometryOptions): SvgBarSeriesGeometry {
   const width = finiteSize(widthInput, 640);
   const height = finiteSize(heightInput, 360);
@@ -413,7 +418,11 @@ export function buildSvgBarSeriesGeometry({
   const innerPadding = Number.isFinite(groupPadding)
     ? Math.min(0.95, Math.max(0, groupPadding))
     : 0.05;
-  const tickCount = Number.isSafeInteger(maxTicks) ? Math.max(2, maxTicks) : 5;
+  const explicitTickCount =
+    typeof maxTicks === 'number' && Number.isSafeInteger(maxTicks)
+      ? Math.max(2, maxTicks)
+      : null;
+  const valueTickCount = explicitTickCount ?? 5;
 
   // Keep only finite points; preserve first-seen category order across series.
   const cleanSeries = series.map((currentSeries) => ({
@@ -431,6 +440,7 @@ export function buildSvgBarSeriesGeometry({
     }
   }
   const seriesCount = cleanSeries.length;
+  const categoryTickCount = explicitTickCount ?? categories.length;
 
   // Resolve the value domain. Grouped keeps zero visible over raw values;
   // stacked accumulates per-category positive and negative extents.
@@ -461,7 +471,7 @@ export function buildSvgBarSeriesGeometry({
 
   const valueScale = scaleLinear()
     .domain(zeroAnchoredDomain(valueValues))
-    .nice(tickCount)
+    .nice(valueTickCount)
     .range(vertical ? [plot.y + plot.height, plot.y] : [plot.x, plot.x + plot.width]);
   const categoryScale = scaleBand<string>()
     .domain(categories)
@@ -553,13 +563,13 @@ export function buildSvgBarSeriesGeometry({
     });
   });
 
-  const categoryTicks = boundedSample(categories, tickCount).map<ChartGeometryTick>((category) => {
+  const categoryTicks = boundedSample(categories, categoryTickCount).map<ChartGeometryTick>((category) => {
     const position = (categoryScale(category) ?? 0) + categoryScale.bandwidth() / 2;
     return vertical
       ? { id: `category-${category}`, label: category, value: category, x: position, y: plot.y + plot.height }
       : { id: `category-${category}`, label: category, value: category, x: plot.x, y: position };
   });
-  const valueTicks = boundedSample(valueScale.ticks(tickCount), tickCount).map<ChartGeometryTick>((value) =>
+  const valueTicks = boundedSample(valueScale.ticks(valueTickCount), valueTickCount).map<ChartGeometryTick>((value) =>
     vertical
       ? { id: `value-${value}`, label: tickLabel(value), value, x: plot.x, y: valueScale(value) }
       : { id: `value-${value}`, label: tickLabel(value), value, x: valueScale(value), y: plot.y + plot.height },
@@ -1070,6 +1080,8 @@ export interface BuildSvgRadarGeometryOptions {
   readonly height: number;
   readonly maxValue?: number;
   readonly levels?: number;
+  /** Plot inset in CSS pixels. Label-free compact radars can reclaim space. */
+  readonly padding?: number;
 }
 
 function radarCoordinate(value: number): number {
@@ -1109,12 +1121,16 @@ export function buildSvgRadarGeometry({
   height: heightInput,
   maxValue,
   levels: levelsInput = 5,
+  padding: paddingInput = 40,
 }: BuildSvgRadarGeometryOptions): SvgRadarGeometry {
   const width = finiteSize(widthInput, 400);
   const height = finiteSize(heightInput, 400);
   const centerX = width / 2;
   const centerY = height / 2;
-  const radius = Math.max(1, Math.min(width, height) / 2 - 40);
+  const padding = Number.isFinite(paddingInput)
+    ? Math.max(8, Math.min(80, paddingInput))
+    : 40;
+  const radius = Math.max(1, Math.min(width, height) / 2 - padding);
   const safeLevels = Number.isFinite(levelsInput)
     ? Math.max(1, Math.floor(levelsInput))
     : 5;

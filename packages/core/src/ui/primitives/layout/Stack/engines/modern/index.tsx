@@ -1,27 +1,26 @@
 /**
  * @fileoverview Stack Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Stack component.
+ * @description Modern, token-aware implementation of the Stack component.
  *
  * @module Stack/Engines/Modern
  * @category Layout
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef, useId, type ElementType, type Ref } from 'react';
-import type { StackProps, StackSpacingPreset, StackDirection } from '../../contracts';
-import { STACK_DEFAULTS, SPACING_MAP } from '../../contracts';
+import React, { forwardRef, useId, type ElementType, type Ref } from "react";
+import type { StackProps, StackDirection } from "../../contracts";
+import { STACK_DEFAULTS } from "../../contracts";
 import {
   generateResponsiveCSS,
-  isResponsiveValue,
   scalarOrDefault,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from "@/infrastructure/runtime/responsive/runtime/style-properties";
 import {
   collectStackResponsiveEntries,
   renderStackChildren,
-  buildStackStyles,
-} from '../../runtime/responsive';
+} from "../../runtime/responsive";
+import { resolveStackPresentation } from "../../runtime/presentation";
 
 /**
  * Modern (Hermes) engine implementation of the Stack component.
@@ -30,10 +29,10 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const {
     as: Component = STACK_DEFAULTS.as,
     direction,
-    spacing,
-    gap,
+    spacing: _spacing,
+    gap: _gap,
     divider,
-    className = '',
+    className = "",
     children,
     align: _align,
     justify: _justify,
@@ -41,6 +40,7 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
     reverse: _reverse,
     fullWidth: _fullWidth,
     fullHeight: _fullHeight,
+    motion: _motion,
     style: _style,
     engine: _engine,
     // StackProps extends HTMLAttributes: the remaining keys are real DOM
@@ -48,37 +48,33 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
     ...htmlAttributes
   } = props;
 
-  const scalarDirection = scalarOrDefault<StackDirection>(direction, 'vertical');
+  const scalarDirection = scalarOrDefault<StackDirection>(
+    direction,
+    "vertical"
+  );
 
-  // Gap is always resolved via inline style using DS CSS custom properties.
-  // This ensures tenant token overrides (--ds-spacing-*) flow through.
-  const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
-  const baseStyle = buildStackStyles(props);
-  if (!isResponsiveValue(spacingValue)) {
-    if (typeof spacingValue === 'string' && spacingValue in SPACING_MAP) {
-      baseStyle.gap = SPACING_MAP[spacingValue as StackSpacingPreset];
-    } else if (typeof spacingValue === 'number') {
-      baseStyle.gap = spacingValue;
-    }
-  }
-  const computedStyle = baseStyle;
-  const renderedChildren = renderStackChildren(children, divider, scalarDirection);
+  const presentation = resolveStackPresentation(props);
+  const renderedChildren = renderStackChildren(
+    children,
+    divider,
+    scalarDirection
+  );
 
   // Responsive CSS generation
   const reactId = useId();
   const responsiveEntries = collectStackResponsiveEntries(props);
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
-  const elementId = needsResponsiveCSS ? `stack-${reactId.replace(/:/g, '')}` : '';
+  const elementId = needsResponsiveCSS
+    ? `stack-${reactId.replace(/:/g, "")}`
+    : "";
   const responsive = needsResponsiveCSS
     ? generateResponsiveCSS(elementId, responsiveEntries)
     : null;
 
-  const classNames = [
-    'rottay-stack',
-    'rottay-stack--modern',
-    className,
-  ].filter(Boolean).join(' ');
+  const classNames = ["rottay-stack", "rottay-stack--modern", className]
+    .filter(Boolean)
+    .join(" ");
 
   const ElementType = Component as ElementType;
 
@@ -93,8 +89,13 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
           ...htmlAttributes,
           ref: ref as Ref<HTMLElement>,
           className: classNames,
-          style: computedStyle,
+          style: {
+            minInlineSize: 0,
+            ...presentation.style,
+          },
+          ...presentation.attributes,
           ...(responsive ? responsive.attrs : {}),
+          "data-component": "stack",
         },
         renderedChildren
       )}
@@ -102,6 +103,6 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   );
 });
 
-HermesStack.displayName = 'ModernStack';
+HermesStack.displayName = "ModernStack";
 
 export default HermesStack;

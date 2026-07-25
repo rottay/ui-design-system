@@ -1,17 +1,29 @@
 /**
  * @fileoverview Stepper Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind-based implementation of the Stepper component.
- * Provides a lightweight, utility-first stepper with modern styling.
+ * @description Token-driven implementation of the Stepper component.
  *
  * @remarks
- * The Modern engine uses DaisyUI's steps component to provide:
- * - Lightweight bundle size
- * - Tailwind CSS utility classes
- * - Modern, clean appearance
- * - Easy customization via Tailwind
+ * The engine stamps anatomy (`data-part` hooks) and step state
+ * (`data-status`, `aria-current="step"`); the modern skin
+ * (`modern/skin/stepper.css`) owns 100% of layout and paint — INCLUDING the
+ * step circle and the connector, which are skin pseudo-elements keyed on
+ * `data-part`/`data-status`, never DaisyUI `.step::before/::after` hooks.
+ * No DaisyUI classes, no Tailwind utilities, no inline style objects.
  *
- * This engine is ideal for projects already using Tailwind CSS or
- * those prioritizing bundle size and customization flexibility.
+ * Contract notes:
+ * - The landmark is a wrapping `<nav>` with a localizable accessible name
+ *   (`components.stepper.navigation`, English fallback "Progress steps"
+ *   until the catalog key lands — K3-B ficha request); the `<ul>` keeps its
+ *   natural list semantics (`role="navigation"` on the `<ul>` itself was
+ *   both an axe `listitem` and an `aria-allowed-role` violation).
+ * - `size` (sm/md/lg) and `variant` (default/simple/circles) ride
+ *   `data-size`/`data-variant` on the root; both were previously accepted
+ *   and silently ignored by this engine.
+ * - Clickable steps render a real `<button data-part="trigger">` inside the
+ *   item — keyboard-reachable by construction.
+ * - Status computation deliberately mirrors the Steps family's
+ *   `getEffectiveStatus` (bounded per-family duplication, no shared helper
+ *   is extracted in this wave — see the K3-B ficha).
  *
  * @example Basic Usage
  * ```tsx
@@ -37,7 +49,6 @@
  *
  * @see {@link Stepper} for the main component
  * @see {@link StepperProps} for prop documentation
- * @see {@link https://daisyui.com/components/steps} DaisyUI Steps documentation
  *
  * @module Stepper/Engines/Modern
  * @category Navigation
@@ -47,45 +58,18 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import type { CSSProperties } from 'react';
 import type { StepperProps, StepItem, StepStatus } from '../../contracts';
 import { STEPPER_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
 
 /**
- * Gets the DaisyUI step class based on step status.
- * @param status - The step status
- * @returns DaisyUI class name for the status
- * @internal
- */
-function getStepClass(status: StepStatus): string {
-  switch (status) {
-    case 'finish':
-    case 'process':
-      // Both finished and active steps use `step-primary` because DaisyUI
-      // does not differentiate between "completed" and "in-progress" visually.
-      // The filled primary color signals that the step has been reached.
-      return 'step-primary';
-    case 'error':
-      return 'step-error';
-    case 'wait':
-    default:
-      // No class yields DaisyUI's neutral (unfilled) step appearance
-      return '';
-  }
-}
-
-/**
- * Returns an inline style object with DS token color overrides for the step.
- * DaisyUI structural classes are kept for layout, but the accent color is
- * driven by DS tokens to support tenant-aware theming.
- * @internal
- */
-/**
  * Computes the status for a step based on its position.
+ * Deliberately mirrors the Steps family's status resolution (bounded
+ * per-family duplication — no shared helper in this wave).
  * @param index - Step index
  * @param current - Current active step
  * @param itemStatus - Optional explicit status
@@ -100,7 +84,7 @@ function computeStatus(index: number, current: number, itemStatus?: StepStatus):
 }
 
 /**
- * Renders DaisyUI step elements from items array.
+ * Renders step elements from an items array.
  * @param items - Array of step items
  * @param current - Current active step
  * @param clickable - Whether steps are clickable
@@ -109,7 +93,7 @@ function computeStatus(index: number, current: number, itemStatus?: StepStatus):
  * @returns Array of step li elements
  * @internal
  */
-function renderDaisySteps(
+function renderModernSteps(
   items: StepItem[],
   current: number,
   clickable: boolean,
@@ -120,35 +104,36 @@ function renderDaisySteps(
     // Priority: explicit item status > global status (only on current step) > positional computation.
     // This lets consumers override specific steps while inheriting defaults elsewhere.
     const status = item.status || (globalStatus && index === current ? globalStatus : computeStatus(index, current));
-    const stepClass = getStepClass(status);
+    const isClickable = clickable && !item.disabled;
+
+    const text = (
+      <>
+        {item.icon && <span data-part="icon">{item.icon}</span>}
+        <span data-part="label">{item.title}</span>
+        {item.description && <span data-part="description">{item.description}</span>}
+      </>
+    );
 
     return (
       <li
         key={index}
-        className={`step ${stepClass}`}
-        onClick={() => {
-          if (clickable && !item.disabled) {
-            onChange?.(index);
-          }
-        }}
-        style={{
-          cursor: clickable && !item.disabled ? 'pointer' : 'default',
-          opacity: item.disabled ? 0.5 : 1,
-        }}
-        // DaisyUI's `data-content` attribute renders text/numbers inside the
-        // step circle indicator. When a custom icon is provided, we skip it
-        // so the icon can be rendered inside the step-content div instead.
-        data-content={item.icon ? undefined : (index + 1).toString()}
         data-part="item"
         data-status={status}
         data-disabled={item.disabled || undefined}
+        data-clickable={isClickable || undefined}
+        aria-current={status === 'process' ? 'step' : undefined}
       >
-        <div className="step-content">
-          <span className="font-medium" data-part="label">{item.title}</span>
-          {item.description && (
-            <span className="text-sm" data-part="description" style={{ opacity: 0.8 }}>{item.description}</span>
-          )}
-        </div>
+        {isClickable ? (
+          <button
+            type="button"
+            data-part="trigger"
+            onClick={() => onChange?.(index)}
+          >
+            {text}
+          </button>
+        ) : (
+          <span data-part="content">{text}</span>
+        )}
       </li>
     );
   });
@@ -159,27 +144,21 @@ function renderDaisySteps(
 // ============================================================================
 
 /**
- * Modern engine Stepper implementation using DaisyUI.
- *
- * @description
- * Provides a lightweight stepper using DaisyUI's steps component.
- * Features include:
- * - Minimal bundle impact
- * - Tailwind CSS styling
- * - Horizontal and vertical layouts
- * - Clickable step navigation
+ * Modern engine Stepper implementation (token-driven, skin-painted).
  *
  * @param props - {@link StepperProps}
- * @returns DaisyUI steps component with Rottay styling
+ * @returns Stepper navigation element rendered for the modern skin
  */
 export default function ModernStepper(props: StepperProps): React.ReactElement {
+  const translation = useOptionalTranslation('components');
+
   const {
     items,
     current: controlledCurrent,
     defaultCurrent = STEPPER_DEFAULTS.defaultCurrent,
     direction = STEPPER_DEFAULTS.direction,
-    size: _size = STEPPER_DEFAULTS.size,
-    variant: _variant = STEPPER_DEFAULTS.variant,
+    size = STEPPER_DEFAULTS.size,
+    variant = STEPPER_DEFAULTS.variant,
     status,
     clickable = STEPPER_DEFAULTS.clickable,
     onChange,
@@ -187,10 +166,6 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     className = '',
     style,
   } = props;
-
-  // Suppress unused - could be used for future customization
-  void _size;
-  void _variant;
 
   // ============================================================================
   // State Management
@@ -224,23 +199,6 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
   );
 
   // ============================================================================
-  // CSS Classes
-  // ============================================================================
-
-  /** DaisyUI steps classes based on direction */
-  const stepsClasses = [
-    'steps',
-    direction === 'vertical' ? 'steps-vertical' : 'steps-horizontal',
-    className,
-  ].filter(Boolean).join(' ');
-
-  /** Container styles */
-  const containerStyle: CSSProperties = {
-    width: '100%',
-    ...style,
-  };
-
-  // ============================================================================
   // Content Rendering
   // ============================================================================
 
@@ -249,9 +207,9 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
 
   if (items) {
     // Render from items prop
-    stepsContent = renderDaisySteps(items, current, clickable, handleChange, status);
+    stepsContent = renderModernSteps(items, current, clickable, handleChange, status);
   } else if (children) {
-    // Convert children to items for DaisyUI rendering
+    // Convert children to items for rendering
     const childItems: StepItem[] = [];
 
     React.Children.forEach(children, (child) => {
@@ -272,7 +230,7 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     });
 
     if (childItems.length > 0) {
-      stepsContent = renderDaisySteps(childItems, current, clickable, handleChange, status);
+      stepsContent = renderModernSteps(childItems, current, clickable, handleChange, status);
     }
   }
 
@@ -280,16 +238,31 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
   // Render
   // ============================================================================
 
+  /**
+   * Localizable landmark name. `components.stepper.navigation` is requested
+   * through the K3-B ficha; until the catalog key lands the provider's
+   * missing-key marker (`i18n:missing:<locale>:<key>`) is detected and the
+   * documented English fallback applies. Without a provider, the fallback
+   * applies directly (the `useOptionalTranslation` standalone contract).
+   */
+  const translatedLabel = translation?.t('stepper.navigation');
+  const navigationLabel =
+    translatedLabel && !translatedLabel.startsWith('i18n:missing:')
+      ? translatedLabel
+      : 'Progress steps';
+
   return (
-    <ul
-      className={`rottay-stepper rottay-stepper--modern ${stepsClasses}`}
-      style={containerStyle}
-      role="navigation"
-      aria-label="Progress steps"
-      data-part="root"
-    >
-      {stepsContent}
-    </ul>
+    <nav aria-label={navigationLabel} className={className || undefined} style={style}>
+      <ul
+        className="rottay-stepper rottay-stepper--modern"
+        data-part="root"
+        data-direction={direction}
+        data-size={size}
+        data-variant={variant}
+      >
+        {stepsContent}
+      </ul>
+    </nav>
   );
 }
 

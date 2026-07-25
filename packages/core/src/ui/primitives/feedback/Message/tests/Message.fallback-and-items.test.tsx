@@ -12,6 +12,7 @@ import {
   MessageProvider as RusticMessageProvider,
   useMessage as useRusticMessage,
 } from '../engines/rustic';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 describe('Message fallback and item coverage', () => {
   afterEach(() => {
@@ -52,10 +53,12 @@ describe('Message fallback and item coverage', () => {
   });
 
   it('covers modern message item custom icon, timerless close, and provider placement branches', () => {
+    vi.useFakeTimers();
+
     const onRemove = vi.fn();
     const onClose = vi.fn();
 
-    const { container } = render(
+    const { container } = renderWithEngine(
       <>
         <ModernMessageProvider placement="bottom" top={18}>
           <div>provider child</div>
@@ -71,15 +74,23 @@ describe('Message fallback and item coverage', () => {
           onRemove={onRemove}
           onClose={onClose}
         />
-      </>
+      </>,
+      'modern'
     );
 
     expect(screen.getByText('provider child')).toBeInTheDocument();
-    expect(container.querySelector('.toast-bottom')).not.toBeNull();
+    expect(
+      container.querySelector('[data-part="stack-container"][data-placement="bottom"]')
+    ).not.toBeNull();
     expect(screen.getByTestId('modern-custom-icon')).toBeInTheDocument();
     expect(screen.getByTestId('modern-close-icon')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    // The modern item plays its skin exit animation first (rustic parity);
+    // removal lands after the 160ms exit cadence.
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
     expect(onRemove).toHaveBeenCalledWith('modern-message');
     expect(onClose).toHaveBeenCalledTimes(1);
   });

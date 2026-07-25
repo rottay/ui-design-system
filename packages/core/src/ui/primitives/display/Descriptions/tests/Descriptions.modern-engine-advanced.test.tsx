@@ -28,12 +28,23 @@ describe('Descriptions modern advanced coverage', () => {
     expect(screen.getByText('Profile')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage' })).toBeInTheDocument();
 
-    const wrapper = container.querySelector('[data-engine="modern"] > div:last-child') as HTMLDivElement;
-    expect(wrapper.className).toContain('border');
-    expect(wrapper.className).toContain('text-sm');
+    // K3-A Pass 1: the bordered/size utility classes are gone from the body --
+    // the skin paints those channels keyed on data-bordered / data-size, so the
+    // DOM carries the hooks only.
+    const wrapper = container.querySelector('[data-engine="modern"] > [data-part="body"]') as HTMLDivElement;
+    expect(wrapper.className).not.toContain('border');
+    expect(wrapper.className).not.toContain('text-sm');
 
-    const grid = container.querySelector('.grid') as HTMLDivElement;
-    expect(grid.style.gridTemplateColumns).toBe('repeat(2, 1fr)');
+    const root = container.querySelector('[data-engine="modern"]') as HTMLDivElement;
+    expect(root).toHaveAttribute('data-bordered', 'true');
+    expect(root).toHaveAttribute('data-size', 'small');
+    const grid = container.querySelector('[data-part="rows"]') as HTMLDivElement;
+    expect(root).toHaveAttribute('data-column-count', '2');
+    expect(root).toHaveAttribute('data-item-count', '2');
+    expect(root).toHaveAttribute('data-has-header', 'true');
+    expect(root.style.getPropertyValue('--ds-descriptions-column-count')).toBe('2');
+    expect(grid).toHaveAttribute('role', 'list');
+    expect(grid.querySelector('[data-part="row"]')).toHaveAttribute('data-span', '2');
     expect(screen.getByText('Name:')).toHaveStyle({ color: 'rgb(255, 0, 0)', fontStyle: 'italic' });
     expect(screen.getByText('Ada Lovelace')).toHaveStyle({ fontWeight: '700' });
   });
@@ -51,7 +62,9 @@ describe('Descriptions modern advanced coverage', () => {
 
     expect(screen.getByText('Status')).toBeInTheDocument();
     expect(screen.queryByText('Status:')).not.toBeInTheDocument();
-    expect(container.querySelector('.divide-y')).toBeTruthy();
+    // The vertical separator was a `divide-y` utility the bundle never
+    // generated (dead class); it is gone -- the skin owns the row chrome.
+    expect(container.querySelector('.divide-y')).toBeNull();
     // Vertical mode carries the data-layout hook the W6-D subgrid skin scopes to.
     expect(container.querySelector('[data-part="root"][data-layout="vertical"]')).toBeTruthy();
     expect(screen.getByText('Standalone')).toBeInTheDocument();

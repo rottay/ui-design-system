@@ -1,8 +1,8 @@
 /**
  * Font pack: humanist-text (Public Sans).
  *
- * Opt-in subpath: @rottay/design-system/fonts/humanist-text.css. NEVER imported
- * by styles.css or any default bundle. Public Sans is a variable humanist sans
+ * Opt-in subpath: @rottay/design-system/fonts/humanist-text.css. It also ships
+ * with the first-party BitHire vertical bundle. Public Sans is a variable humanist sans
  * (OFL-1.1); the latin-subset variable file carries the 400-600 range this pack
  * advertises. The custom property is defined UNCONDITIONALLY so the
  * already-validated var(--ds-font-pack-humanist-text) channel resolves when this

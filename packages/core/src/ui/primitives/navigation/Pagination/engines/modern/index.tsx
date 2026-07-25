@@ -1,17 +1,19 @@
 /**
  * @fileoverview Pagination Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Pagination component.
- * Provides utility-first pagination with join components.
+ * @description Token-driven pagination: the engine stamps anatomy
+ * (`data-part` hooks) and accessibility state, and the modern skin
+ * (`modern/skin/pagination.css`) owns 100% of layout and paint.
+ * No DaisyUI classes, no Tailwind utilities, no inline style objects.
  *
  * @remarks
- * The Modern engine uses DaisyUI's join pattern for pagination:
- * - Lightweight, utility-first approach
- * - Tailwind CSS integration
- * - Responsive by default
- * - Easy customization via classes
- *
- * This engine is ideal for projects already using Tailwind CSS
- * or when you need a lighter-weight pagination solution.
+ * Contract notes:
+ * - The root is a `<nav>` landmark with an accessible name; the current page
+ *   carries `aria-current="page"`; prev/next glyph buttons are named through
+ *   `aria-label` from the `components.pagination.*` i18n keys (English
+ *   fallback when no provider is mounted).
+ * - The ellipsis is an inert `<span>` (never a focusable button).
+ * - Size rides `data-size` on the root; the skin maps sm/md/lg to the
+ *   documented 32/36/44px control heights.
  *
  * @example Basic Usage
  * ```tsx
@@ -28,7 +30,6 @@
  *   total={200}
  *   size="lg"
  *   showTotal
- *   className="my-4"
  *   onChange={handleChange}
  * />
  * ```
@@ -43,28 +44,40 @@
  */
 
 import React from 'react';
-import type { PaginationProps, PaginationSize } from '../../contracts';
+import type { PaginationProps } from '../../contracts';
 import { PAGINATION_DEFAULTS } from '../../contracts';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
-// Size Classes
+// i18n fallback helpers
 // ============================================================================
 
 /**
- * Maps Rottay size variants to DaisyUI button classes.
+ * English fallbacks mirror the `components.pagination.*` catalog keys so the
+ * primitive keeps its documented standalone rendering contract when no
+ * I18nProvider is mounted (the `useOptionalTranslation` rationale).
  *
- * @remarks
- * Uses DaisyUI's join-item pattern with btn size modifiers.
- * - sm: Compact buttons for dense UIs
- * - md: Standard button size (default)
- * - lg: Large buttons for prominent navigation
+ * `pagination.navigation` is NOT yet in the catalog (requested through the
+ * K3-B lane ficha): the missing-key marker the provider returns
+ * (`i18n:missing:<locale>:<key>`) is detected and swapped for the fallback
+ * until the key lands.
  */
-const SIZE_STYLES: Record<PaginationSize, React.CSSProperties> = {
-  sm: { height: 32, padding: '0 12px', fontSize: 13 },
-  md: { height: 36, padding: '0 16px', fontSize: 14 },
-  lg: { height: 44, padding: '0 20px', fontSize: 16 },
-};
+const EN_FALLBACK = {
+  previous: 'Previous',
+  next: 'Next',
+  navigation: 'Pagination',
+  totalItems: 'Total {total} items',
+} as const;
+
+function interpolate(template: string, params?: Record<string, string | number>): string {
+  if (!params) return template;
+  // The i18n kernel's interpolateTranslation pattern (resolution/translation):
+  // a global regex replace — the core tsconfig lib predates es2021, so
+  // `replaceAll` is not available here.
+  return template.replace(/\{(\w+)\}/g, (match, key: string) =>
+    key in params ? String(params[key]) : match
+  );
+}
 
 // ============================================================================
 // Component Implementation
@@ -73,30 +86,11 @@ const SIZE_STYLES: Record<PaginationSize, React.CSSProperties> = {
 /**
  * Modern engine implementation of Pagination.
  *
- * @description
- * Implements pagination using DaisyUI's join component pattern.
- * Features include:
- * - Previous/Next navigation buttons
- * - Numbered page buttons
- * - Ellipsis for large page ranges
- * - Active state styling
- * - Disabled state handling
- *
  * @param props - {@link PaginationProps}
- * @returns DaisyUI styled pagination element
- *
- * @example
- * ```tsx
- * <ModernPagination
- *   current={3}
- *   total={150}
- *   pageSize={10}
- *   onChange={handlePageChange}
- * />
- * ```
+ * @returns Token-driven pagination nav element
  */
 export default function ModernPagination(props: PaginationProps): React.ReactElement {
-  const { t } = useTranslation('components');
+  const translation = useOptionalTranslation('components');
 
   const {
     current,
@@ -109,6 +103,17 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
     className = '',
     style,
   } = props;
+
+  /** Catalog lookup with the English standalone fallback (see EN_FALLBACK). */
+  const translate = (
+    key: string,
+    fallback: string,
+    params?: Record<string, string | number>
+  ): string => {
+    const value = translation?.t(key, params);
+    if (!value || value.startsWith('i18n:missing:')) return interpolate(fallback, params);
+    return value;
+  };
 
   // ============================================================================
   // Computed Values
@@ -184,81 +189,72 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
   };
 
   // ============================================================================
-  // Styling
-  // ============================================================================
-
-  const sizeKey: PaginationSize = size ?? 'md';
-  const btnStyle = SIZE_STYLES[sizeKey];
-  const baseBtnStyle: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    ...btnStyle,
-  };
-
-  // ============================================================================
   // Render
   // ============================================================================
 
   return (
-    <div
+    <nav
       className={`rottay-pagination rottay-pagination--modern ${className}`.trim()}
       style={style}
       data-part="root"
+      data-size={size ?? 'md'}
+      data-disabled={disabled || undefined}
+      aria-label={translate('pagination.navigation', EN_FALLBACK.navigation)}
     >
       {/* Total items display */}
       {showTotal && (
-        <div className="text-sm mb-2" data-part="pagination-range">{t('pagination.total_items', { total })}</div>
+        <div data-part="pagination-range">
+          {translate('pagination.total_items', EN_FALLBACK.totalItems, { total })}
+        </div>
       )}
 
       {/* Pagination controls */}
-      <div style={{ display: 'inline-flex' }}>
-        {/* Previous button */}
+      <div data-part="pagination-controls">
+        {/* Previous button: glyph-only, so the accessible name comes from i18n */}
         <button
-          style={baseBtnStyle}
+          type="button"
           onClick={() => handlePageChange(current - 1)}
           disabled={disabled || current === 1}
           data-part="pagination-nav-button"
           data-direction="prev"
+          aria-label={translate('pagination.previous', EN_FALLBACK.previous)}
         >
           «
         </button>
 
-        {/* Page number buttons */}
+        {/* Page number buttons: the visible number IS the accessible name */}
         {getPageNumbers().map((page, index) =>
           typeof page === 'number' ? (
             <button
               key={page}
-              style={{
-                ...baseBtnStyle,
-                ...(page === current ? { fontWeight: 600 } : {}),
-              }}
+              type="button"
               onClick={() => handlePageChange(page)}
               disabled={disabled}
               data-part="pagination-page-button"
               data-current={page === current}
+              aria-current={page === current ? 'page' : undefined}
             >
               {page}
             </button>
           ) : (
-            <button key={`ellipsis-${index}`} style={{ ...baseBtnStyle, pointerEvents: 'none', opacity: 0.5 }} data-part="ellipsis">
+            <span key={`ellipsis-${index}`} data-part="ellipsis" aria-hidden="true">
               {page}
-            </button>
+            </span>
           )
         )}
 
         {/* Next button */}
         <button
-          style={baseBtnStyle}
+          type="button"
           onClick={() => handlePageChange(current + 1)}
           disabled={disabled || current === totalPages}
           data-part="pagination-nav-button"
           data-direction="next"
+          aria-label={translate('pagination.next', EN_FALLBACK.next)}
         >
           »
         </button>
       </div>
-    </div>
+    </nav>
   );
 }

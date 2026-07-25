@@ -88,10 +88,9 @@
   border-radius: 3px;
 }
 
-/* ---- nested group: primary-tinted left rule + muted fill. `border-left` stays a
-        SHORTHAND (constraint 3). ---- */
+/* ---- nested group: quiet all-around separation + muted fill. ---- */
 .ds-pattern-filter-builder.ds-engine-rustic [data-part='group']:not([data-root]) {
-  border-left: 3px solid var(--ds-color-primary-200, var(--ds-color-border-secondary));
+  border: 1px solid var(--ds-color-primary-200, var(--ds-color-border-secondary));
   background: var(--ds-color-bg-secondary, var(--ds-color-bg-muted));
   border-radius: 4px;
 }

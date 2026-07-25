@@ -26,6 +26,28 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
     expect(cssVariables['--ds-color-background']).toBe('#FDFDFF');
   });
 
+  it('global reading ink and neutral borders are first-class BrandTheme channels', () => {
+    const { cssVariables } = compileBrandTheme({ brandTheme: {
+      ...tortureLightBrandTheme,
+      palette: {
+        ...tortureLightBrandTheme.palette,
+        textPrimaryColor: '#211D18',
+        textSecondaryColor: '#51483D',
+        textMutedColor: '#716658',
+        textDisabledColor: '#8A8176',
+        borderPrimaryColor: '#C8BFB3',
+        borderSecondaryColor: '#E1DBD2',
+      },
+    } });
+
+    expect(cssVariables['--ds-color-text-primary']).toBe('#211D18');
+    expect(cssVariables['--ds-color-text-secondary']).toBe('#51483D');
+    expect(cssVariables['--ds-color-text-muted']).toBe('#716658');
+    expect(cssVariables['--ds-color-text-disabled']).toBe('#8A8176');
+    expect(cssVariables['--ds-color-border-primary']).toBe('#C8BFB3');
+    expect(cssVariables['--ds-color-border-secondary']).toBe('#E1DBD2');
+  });
+
   it('a theme with no clear ground emits none, leaving the DS default in place', () => {
     // Synthetic, not a shipped theme: whether rottay declares a clear ground is
     // a product decision that may change, and an assertion coupled to it would
@@ -53,7 +75,7 @@ describe('the ground field is no longer overloaded', () => {
     // `darkBackgroundColor: '#F8FBFF'` was a near-white: the field was being
     // used as "the ground" regardless of mode. Wiring that value into the dark
     // block would have painted bithire's dark mode white.
-    expect(bithireBrandTheme.palette.backgroundColor).toBe('#F8FBFF');
+    expect(bithireBrandTheme.palette.backgroundColor).toBe('#F4F8FB');
     expect(bithireBrandTheme.palette.darkBackgroundColor).toBeUndefined();
   });
 

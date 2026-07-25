@@ -67,6 +67,47 @@ describe('InputNumber real engine coverage', () => {
     expect(screen.queryByText('▼')).not.toBeInTheDocument();
   });
 
+  it('modern engine stamps skin-owned anatomy with no inline paint and localized stepper names', () => {
+    render(
+      <ModernInputNumber
+        defaultValue={3}
+        min={0}
+        max={10}
+        prefix="$"
+        suffix="kg"
+        size="md"
+      />
+    );
+
+    const input = screen.getByRole('spinbutton');
+    // Skin channels: size + affix presence ride data attributes, not inline styles.
+    expect(input).toHaveAttribute('data-part', 'root');
+    expect(input).toHaveAttribute('data-size', 'md');
+    expect(input).toHaveAttribute('data-has-prefix', 'true');
+    expect(input).toHaveAttribute('data-has-trailing', 'true');
+    // Single paint owner: the root carries no inline style at all.
+    expect(input.getAttribute('style')).toBeNull();
+    // Native-spinbutton ARIA value triad (parity with the rustic engine).
+    expect(input).toHaveAttribute('aria-valuemin', '0');
+    expect(input).toHaveAttribute('aria-valuemax', '10');
+    expect(input).toHaveAttribute('aria-valuenow', '3');
+    // Stepper buttons have accessible names (English fallback without a provider).
+    expect(screen.getByRole('button', { name: 'Increase' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Decrease' })).toBeInTheDocument();
+  });
+
+  it('modern engine size channel follows the canonical size step', () => {
+    const { rerender } = render(<ModernInputNumber defaultValue={1} size="sm" />);
+    expect(screen.getByRole('spinbutton')).toHaveAttribute('data-size', 'sm');
+    rerender(<ModernInputNumber defaultValue={1} size="lg" />);
+    expect(screen.getByRole('spinbutton')).toHaveAttribute('data-size', 'lg');
+  });
+
+  it('modern engine forwards aria-label to the input (axe `label` contract)', () => {
+    render(<ModernInputNumber defaultValue={1} aria-label="Headcount" />);
+    expect(screen.getByRole('spinbutton', { name: 'Headcount' })).toBeInTheDocument();
+  });
+
   it('covers rustic controlled, parsing, focus, and disabled/readOnly guard branches', async () => {
     const handleChange = vi.fn();
     const handleStep = vi.fn();

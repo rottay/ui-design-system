@@ -1,4 +1,4 @@
-/** Static Menu and Tabs rules formerly injected by their modern engines. */
+/** Static Menu rules formerly injected by its modern engine. */
 
 .rottay-menu--modern a:focus-visible,
 .rottay-menu--modern summary:focus-visible {
@@ -6,7 +6,7 @@
   outline-offset: -2px !important;
 }
 
-.rottay-menu--modern details[open] > summary > span:last-child {
+.rottay-menu--modern details[open] > summary > [data-part='arrow-icon'] {
   transform: rotate(90deg);
 }
 
@@ -14,25 +14,4 @@
 .rottay-menu--modern summary::marker {
   display: none;
   content: '';
-}
-
-[data-tabs-id]::-webkit-scrollbar {
-  display: none;
-}
-
-@keyframes ds-tabs-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(2px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-[data-tabs-id] [role='tab']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color) !important;
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px)) !important;
-  border-radius: var(--ds-radius-sm);
 }

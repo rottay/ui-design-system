@@ -1,28 +1,59 @@
 /**
- * Modern Slider skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern Slider skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements; unlayered outranks
- * preflight and still yields to a caller's inline `style` (the runtime position
- * percentages stay inline and are unaffected).
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision through documented `--ds-slider-*` channels so a
+ * vertical or DB-backed tenant never needs private selectors.
+ *
+ * Cascade position (the P-47 preflight fight, current contract): this file is
+ * imported into `layer(rottay-engines)`, which the cross-framework cascade
+ * contract in `entrypoints/base.css` sorts AFTER `rottay-framework` (the
+ * bundled Tailwind artifact, preflight included). Skin rules therefore beat
+ * preflight and every framework utility by layer ownership, while still
+ * yielding to a caller's inline `style` and to the tenant/personality layers
+ * above.
  *
  * SCOPE ROOT is `.ds-slider.ds-slider--modern[data-part='root']`, carrying
- * `data-disabled` and (range mode) `data-orientation` ('vertical'|'horizontal').
- * `rail`, `track`, `handle`, `mark-label` are descendants. This engine has NO
- * interaction paint (no hover/focus state; the native range thumb is styled by
- * the DaisyUI `range` classes) -- a real modern/rustic divergence, preserved.
+ * `data-disabled` and `data-orientation` ('vertical'|'horizontal'). `rail`,
+ * `track`, `handle`, `mark-label`, `native-input` are descendants.
  *
- * The only paint here is the static rail/track/handle colours plus the
- * centering transforms, which differ by orientation (track) or by the per-mark
- * `data-axis` ('x'|'y', reproducing the range-vertical vs range-horizontal/
- * single split exactly). Position percentages are runtime and remain inline.
+ * NATIVE THUMB OWNERSHIP (Daisy drain, K2-V): the single-mode control is a
+ * real `<input type='range'>`; until this wave its thumb/track paint came
+ * from the DaisyUI `range range-primary` classes. That projection is gone --
+ * the thumb and runnable track are painted here via the vendor pseudos, with
+ * `--ds-slider-thumb-*` / `--ds-slider-track-*` channels. The runnable track
+ * paints the antd two-tone grammar (primary fill + rail) as a gradient keyed
+ * on the engine's runtime `--ds-slider-single-percent` hatch, mirrored under
+ * `:dir(rtl)`; Gecko mirrors it through `::-moz-range-progress` (both engines
+ * now show the filled portion -- one paint owner, one channel).
+ * Range mode stacks two `data-variant='overlay'` inputs
+ * at `opacity-0`; they receive no paint, only `pointer-events: auto`.
+ *
+ * RAIL CHANNEL (K2-V sweep, sighted defect): `--ds-slider-rail-bg` floors at
+ * a 12% text-primary mix -- the previous `--ds-surface-panel` rail resolved
+ * within ~1.05:1 of the page background in both governed sources (the single
+ * slider read as a floating dot). The same channel paints the range rail so
+ * both modes share one rail grammar.
+ *
+ * INTERACTION PAINT: thumb hover/press (`:hover`, `:active`) and the keyboard
+ * ring (`:focus-visible` -> thumb box-shadow) live here, gated
+ * `:not(:disabled)`. Runtime position percentages stay inline (rail/track/
+ * handle/mark offsets) and are unaffected.
+ *
+ * RTL (K2-V sweep): the engine's horizontal offsets are logical
+ * (`insetInlineStart`), matching Chromium's flipped native scale under
+ * `dir=rtl`; this file mirrors the centering signs (mark-label, handle
+ * `--tw-translate-x`) and the single-mode fill gradient under `:dir(rtl)`.
+ * Vertical-mode offsets stay physical.
  *
  * SPECIFICITY (P-48): the handle border-color reaches (0,4,0) via the repeated
- * `[data-part='handle']`. Non-border paint wins unlayered at (0,3,0).
+ * `[data-part='handle']`; the thumb border-color reaches it via the doubled
+ * `::-webkit-slider-thumb` pseudo chain. Non-border paint wins unlayered at
+ * (0,3,0).
  */
 
 .ds-slider.ds-slider--modern [data-part='rail'] {
-  background: var(--ds-surface-panel);
+  background: var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
 }
 
 .ds-slider.ds-slider--modern [data-part='track'] {
@@ -37,17 +68,194 @@
 
 .ds-slider.ds-slider--modern [data-part='handle'] {
   background: var(--ds-color-primary);
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='handle'][data-part='handle'] {
   border-color: var(--ds-color-bg-primary, white);
+}
+
+/* Disabled posture (K2-V sweep, sighted defect): the range mode's custom
+   parts carried no muting and read fully enabled while the single-mode input
+   and every other lane family dimmed. The single mode mutes natively via the
+   input's :disabled rule below. */
+.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='rail'],
+.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='track'],
+.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='handle'] {
+  opacity: var(--ds-disabled-opacity, 0.5);
+}
+
+/* RTL centering: the engine's horizontal handle offsets are logical, so the
+   Tailwind v4 `translate` property must mirror its sign under dir=rtl. */
+.ds-slider.ds-slider--modern [data-part='handle']:dir(rtl) {
+  --tw-translate-x: 50%;
 }
 
 .ds-slider.ds-slider--modern [data-part='mark-label'] {
   color: var(--ds-color-text-secondary);
 }
 .ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='x'] {
+  margin-block-start: var(--ds-slider-mark-gap, 8px);
   transform: translateX(-50%);
 }
+/* RTL centering mirror: logical insetInlineStart anchors the label's
+   inline-start edge, so the centering shift flips sign under dir=rtl. */
+.ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='x']:dir(rtl) {
+  transform: translateX(50%);
+}
 .ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='y'] {
+  margin-inline-start: var(--ds-slider-mark-gap, 8px);
   transform: translateY(50%);
+}
+
+/* ---- Native range inputs ------------------------------------------------ */
+
+/* Range-mode overlays: invisible event surfaces only. Each handle is the
+   adjacent next sibling of its input (engine DOM pairing), so the keyboard
+   ring lands on the VISIBLE handle -- a ring on the opacity-0 input itself
+   would be invisible (the K1 checkbox `input:focus-visible ~ part` idiom). */
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay'] {
+  pointer-events: auto;
+  margin: 0;
+}
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:focus-visible + [data-part='handle'] {
+  box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
+}
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):hover + [data-part='handle'] {
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+}
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):active + [data-part='handle'] {
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  /* Scale only: Tailwind v4 centers the handle through the `translate`
+     PROPERTY, which composes with `transform` -- re-applying translateX/Y
+     here double-shifted the handle 8px on press (K2-V sweep, verified on the
+     computed style). Scale around the element's own center is
+     direction-agnostic, so no :dir(rtl) variant is needed. */
+  transform: scale(0.94);
+}
+
+/* Single-mode native input: the skin owns the control box and both vendor
+   thumb/track pseudos. */
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']) {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  block-size: var(--ds-slider-thumb-size, 16px);
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):disabled {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
+}
+
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-runnable-track {
+  block-size: var(--ds-slider-track-size, 4px);
+  border-radius: 9999px;
+  /* antd two-tone grammar: primary fill up to the runtime value hatch, then
+     the rail channel (the engine stamps --ds-slider-single-percent). */
+  background: linear-gradient(
+    to right,
+    var(--ds-color-primary) 0 var(--ds-slider-single-percent, 0%),
+    var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)) var(--ds-slider-single-percent, 0%) 100%
+  );
+}
+/* RTL mirror: Chromium flips the native scale under dir=rtl, so the fill
+   grows from the inline-start (right) side. */
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):dir(rtl)::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to left,
+    var(--ds-color-primary) 0 var(--ds-slider-single-percent, 0%),
+    var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)) var(--ds-slider-single-percent, 0%) 100%
+  );
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-block-start: calc((var(--ds-slider-track-size, 4px) - var(--ds-slider-thumb-size, 16px)) / 2);
+  block-size: var(--ds-slider-thumb-size, 16px);
+  inline-size: var(--ds-slider-thumb-size, 16px);
+  border-radius: 50%;
+  background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
+  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
+  border: 2px solid var(--ds-color-bg-primary, white);
+}
+
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-track {
+  block-size: var(--ds-slider-track-size, 4px);
+  border-radius: 9999px;
+  background: var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
+}
+/* Gecko fill pseudo: primary, mirroring the WebKit gradient (Gecko follows
+   the element's direction for the progress pseudo, so no :dir(rtl) variant
+   is needed). */
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-progress {
+  block-size: var(--ds-slider-track-size, 4px);
+  border-radius: 9999px;
+  background: var(--ds-color-primary);
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
+  block-size: var(--ds-slider-thumb-size, 16px);
+  inline-size: var(--ds-slider-thumb-size, 16px);
+  border-radius: 50%;
+  background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
+  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
+  border: 2px solid var(--ds-color-bg-primary, white);
+}
+
+/* Thumb interaction states (single mode). */
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-webkit-slider-thumb {
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-moz-range-thumb {
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active::-webkit-slider-thumb {
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  transform: scale(0.94);
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active::-moz-range-thumb {
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  transform: scale(0.94);
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-webkit-slider-thumb {
+  box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
+}
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-moz-range-thumb {
+  box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
+}
+
+/* Coarse-pointer floor: the hit area grows, the painted thumb/track geometry
+   does not. Physical px, never rem (the fluid 15px root erodes rem floors at
+   narrow widths -- measured on the live bundle, Axe R0). */
+@media (pointer: coarse) {
+  .ds-slider.ds-slider--modern[data-orientation='horizontal'] {
+    min-block-size: var(--ds-slider-touch-target-min, 44px);
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']) {
+    block-size: var(--ds-slider-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb,
+  .ds-slider.ds-slider--modern [data-part='handle'] {
+    transition: none;
+  }
 }

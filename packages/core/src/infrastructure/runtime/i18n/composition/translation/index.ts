@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Hook for accessing the translation function with optional namespace scoping.
@@ -7,12 +7,12 @@
  * can use short keys like `t('avatar.loading')` instead of `t('components.avatar.loading')`.
  */
 
-import { useCallback } from 'react';
+import { useCallback } from "react";
 import type {
   TranslateFunction,
   TranslationNamespace,
-} from '@/foundation/i18n/kernel/contracts';
-import { useI18nContext } from '@/infrastructure/runtime/i18n/runtime/context';
+} from "@/foundation/i18n/kernel/contracts";
+import { useI18nContext } from "@/infrastructure/runtime/i18n/runtime/context";
 
 /**
  * Valor de retorno del hook useTranslation
@@ -42,7 +42,9 @@ export interface UseTranslationResult {
  * const { t } = useTranslation('components');
  * t('pagination.page', { current: 1, total: 10 }); // => 'Página 1 de 10'
  */
-export function useTranslation(namespace?: TranslationNamespace): UseTranslationResult {
+export function useTranslation(
+  namespace?: TranslationNamespace
+): UseTranslationResult {
   const context = useI18nContext();
 
   // Prefix the key with the namespace so component code can use short keys
@@ -60,4 +62,24 @@ export function useTranslation(namespace?: TranslationNamespace): UseTranslation
     t,
     locale: context.locale,
   };
+}
+
+/**
+ * Non-throwing translation hook for primitives that retain a standalone
+ * rendering contract. Under an I18nProvider it resolves the active locale and
+ * tenant overrides exactly like `useTranslation`; without one it returns
+ * `null`, allowing the primitive to use its documented English accessibility
+ * fallback instead of crashing before an app provider is mounted.
+ */
+export function useOptionalTranslation(
+  namespace?: TranslationNamespace
+): UseTranslationResult | null {
+  // Keep the hook call unconditional. `useTranslation` only throws when its
+  // context is absent, so the catch path is a provider-presence fallback, not
+  // conditional hook execution.
+  try {
+    return useTranslation(namespace);
+  } catch {
+    return null;
+  }
 }

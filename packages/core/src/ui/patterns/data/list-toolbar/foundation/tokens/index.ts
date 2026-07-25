@@ -11,10 +11,13 @@ export const TOOLBAR_GAP = 'var(--ds-toolbar-gap, 10px)';
 export const TOOLBAR_CONTROL_BG = 'var(--ds-toolbar-control-bg, transparent)';
 export const TOOLBAR_CONTROL_BORDER = 'var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)))';
 export const TOOLBAR_CONTROL_COLOR = 'var(--ds-toolbar-control-color, var(--ds-color-text-secondary))';
+export const TOOLBAR_CONTROL_RADIUS = 'var(--ds-toolbar-control-radius, var(--ds-radius-sm, 6px))';
 export const TOOLBAR_DIVIDER = 'var(--ds-toolbar-divider, var(--ds-toolbar-border, var(--ds-color-border)))';
+export const TOOLBAR_DIVIDER_SPACING = 'var(--ds-toolbar-divider-spacing, 4px)';
 
 export const FILTER_PILL_BG = 'var(--ds-filter-pill-bg, transparent)';
 export const FILTER_PILL_BORDER = 'var(--ds-filter-pill-border, transparent)';
+export const FILTER_PILL_RADIUS = 'var(--ds-filter-pill-radius, var(--ds-radius-pill, 20px))';
 export const FILTER_PILL_COLOR = 'var(--ds-filter-pill-color, var(--ds-color-text-secondary))';
 export const FILTER_PILL_SHADOW = 'var(--ds-filter-pill-shadow, none)';
 export const FILTER_PILL_FRAME_BG = 'var(--ds-filter-pill-frame-bg, transparent)';

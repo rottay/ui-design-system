@@ -21,16 +21,19 @@
  * development, Storybook, and CI.
  */
 
-import type { ProductProfile, ProductProfileKey } from '@/foundation/contracts/composition/tenants/product-profiles';
+import type {
+  ProductProfile,
+  ProductProfileKey,
+} from "@/foundation/contracts/composition/tenants/product-profiles";
 import {
   EVNTO_CANONICAL_MOTION,
   EVNTO_CANONICAL_SURFACES,
-} from '@/foundation/presets/policy/experience-baselines/evnto';
+} from "@/foundation/presets/policy/experience-baselines/evnto";
 
 /**
  * A neutral fallback used when no explicit product profile is provided.
  */
-export const DEFAULT_PRODUCT_PROFILE_KEY: ProductProfileKey = 'generic.default';
+export const DEFAULT_PRODUCT_PROFILE_KEY: ProductProfileKey = "generic.default";
 
 /**
  * First-party profiles that cover the initial rollout targets.
@@ -39,94 +42,96 @@ export const DEFAULT_PRODUCT_PROFILE_KEY: ProductProfileKey = 'generic.default';
  * brand harder without forcing the DS to guess the final product tone.
  */
 export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
-  'generic.default': {
-    key: 'generic.default',
-    label: 'Generic Default',
-    description: 'Safe baseline profile for products that have not opted into a domain-specific tone yet.',
+  "generic.default": {
+    key: "generic.default",
+    label: "Generic Default",
+    description:
+      "Safe baseline profile for products that have not opted into a domain-specific tone yet.",
     personality: {
       animation: {
         intensity: 0.45,
         staggerDelay: 40,
         staggerMax: 220,
-        entrance: 'fade',
+        entrance: "fade",
         entranceDuration: 220,
         hoverLift: 1,
         hoverScale: 1.0,
         useSpring: false,
         springTension: 170,
         springFriction: 22,
-        pulseSpeed: 'normal',
-        skeletonStyle: 'shimmer',
+        pulseSpeed: "normal",
+        skeletonStyle: "shimmer",
         countUpEnabled: true,
       },
       chart: {
         animateOnMount: true,
         mountDuration: 700,
-        lineStyle: 'sharp',
+        lineStyle: "sharp",
         showDots: true,
         useGradientFill: false,
-        tooltipStyle: 'detailed',
+        tooltipStyle: "detailed",
       },
       typography: {
-        headingWeightBias: 'normal',
-        headingLetterSpacing: '-0.01em',
-        labelStyle: 'sentence',
+        headingWeightBias: "normal",
+        headingLetterSpacing: "-0.01em",
+        labelStyle: "sentence",
       },
       accent: {
-        barPosition: 'top',
+        barPosition: "top",
         barThickness: 3,
-        barStyle: 'solid',
-        iconContainerShape: 'rounded',
-        badgeShape: 'rounded',
-        dividerStyle: 'solid',
+        barStyle: "solid",
+        iconContainerShape: "rounded",
+        badgeShape: "rounded",
+        dividerStyle: "solid",
       },
       card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
+        defaultElevation: "sm",
+        hoverElevation: "lift-one",
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'normal',
+        paddingDensity: "normal",
       },
     },
     surfaceDefaults: {
-      listView: 'table',
-      density: 'comfortable',
-      schedulerView: 'month',
+      listView: "table",
+      density: "comfortable",
+      schedulerView: "month",
     },
   },
-  'events.organizer': {
-    key: 'events.organizer',
-    label: 'Events Organizer',
-    description: 'An expressive profile for event operations, discovery, and live-status collections.',
+  "events.organizer": {
+    key: "events.organizer",
+    label: "Events Organizer",
+    description:
+      "An expressive profile for event operations, discovery, and live-status collections.",
     personality: {
       animation: EVNTO_CANONICAL_MOTION,
       chart: {
         animateOnMount: true,
         mountDuration: 950,
-        lineStyle: 'smooth',
+        lineStyle: "smooth",
         showDots: false,
         useGradientFill: true,
-        tooltipStyle: 'glass',
+        tooltipStyle: "glass",
       },
       typography: {
-        headingWeightBias: 'heavier',
-        headingLetterSpacing: '-0.02em',
-        labelStyle: 'capitalize',
+        headingWeightBias: "heavier",
+        headingLetterSpacing: "-0.02em",
+        labelStyle: "capitalize",
       },
       accent: {
-        barPosition: 'top',
+        barPosition: "top",
         barThickness: 4,
-        barStyle: 'gradient',
-        iconContainerShape: 'circle',
-        badgeShape: 'pill',
-        dividerStyle: 'solid',
+        barStyle: "gradient",
+        iconContainerShape: "circle",
+        badgeShape: "pill",
+        dividerStyle: "solid",
       },
       card: {
-        defaultElevation: 'md',
-        hoverElevation: 'lift-two',
+        defaultElevation: "md",
+        hoverElevation: "lift-two",
         showBorder: false,
         hoverTint: true,
-        paddingDensity: 'spacious',
+        paddingDensity: "spacious",
       },
     },
     tokenOverrides: {
@@ -135,122 +140,124 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
       shadows: EVNTO_CANONICAL_SURFACES.shadows,
     },
     surfaceDefaults: {
-      listView: 'table',
-      density: 'comfortable',
-      schedulerView: 'week',
+      listView: "table",
+      density: "comfortable",
+      schedulerView: "week",
     },
   },
-  'recruiting.operator': {
-    key: 'recruiting.operator',
-    label: 'Recruiting Operator',
-    description: 'Professional, people-first profile for recruiting workflows with comfortable density.',
+  "recruiting.operator": {
+    key: "recruiting.operator",
+    label: "Recruiting Operator",
+    description:
+      "Professional, people-first profile for recruiting workflows with comfortable density.",
     personality: {
       animation: {
         intensity: 0.35,
         staggerDelay: 20,
         staggerMax: 120,
-        entrance: 'fade',
+        entrance: "fade",
         entranceDuration: 160,
         hoverLift: 0,
         hoverScale: 1.0,
         useSpring: false,
         springTension: 170,
         springFriction: 24,
-        pulseSpeed: 'slow',
-        skeletonStyle: 'pulse',
+        pulseSpeed: "slow",
+        skeletonStyle: "pulse",
         countUpEnabled: false,
       },
       chart: {
         animateOnMount: true,
         mountDuration: 600,
-        lineStyle: 'sharp',
+        lineStyle: "sharp",
         showDots: true,
         useGradientFill: false,
-        tooltipStyle: 'detailed',
+        tooltipStyle: "detailed",
       },
       typography: {
-        headingWeightBias: 'heavier',
-        headingLetterSpacing: '-0.01em',
-        labelStyle: 'sentence',
+        headingWeightBias: "heavier",
+        headingLetterSpacing: "-0.01em",
+        labelStyle: "sentence",
       },
       accent: {
-        barPosition: 'left',
-        barThickness: 3,
-        barStyle: 'solid',
-        iconContainerShape: 'circle',
-        badgeShape: 'pill',
-        dividerStyle: 'solid',
+        barPosition: "none",
+        barThickness: 0,
+        barStyle: "solid",
+        iconContainerShape: "circle",
+        badgeShape: "pill",
+        dividerStyle: "solid",
       },
       card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
+        defaultElevation: "sm",
+        hoverElevation: "lift-one",
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'normal',
+        paddingDensity: "normal",
       },
     },
     tokenOverrides: {
       densityScale: 0.98,
     },
     surfaceDefaults: {
-      listView: 'table',
-      density: 'comfortable',
-      schedulerView: 'week',
+      listView: "table",
+      density: "comfortable",
+      schedulerView: "week",
     },
   },
-  'platform.admin': {
-    key: 'platform.admin',
-    label: 'Platform Admin',
-    description: 'Compact admin profile tuned for breadth, tooling, and operational dashboards.',
+  "platform.admin": {
+    key: "platform.admin",
+    label: "Platform Admin",
+    description:
+      "Compact admin profile tuned for breadth, tooling, and operational dashboards.",
     personality: {
       animation: {
         intensity: 0.25,
         staggerDelay: 18,
         staggerMax: 120,
-        entrance: 'fade',
+        entrance: "fade",
         entranceDuration: 160,
         hoverLift: 1,
         hoverScale: 1.0,
         useSpring: false,
         springTension: 170,
         springFriction: 22,
-        pulseSpeed: 'normal',
-        skeletonStyle: 'shimmer',
+        pulseSpeed: "normal",
+        skeletonStyle: "shimmer",
         countUpEnabled: true,
       },
       chart: {
         animateOnMount: true,
         mountDuration: 720,
-        lineStyle: 'sharp',
+        lineStyle: "sharp",
         showDots: false,
         useGradientFill: false,
-        tooltipStyle: 'detailed',
+        tooltipStyle: "detailed",
       },
       typography: {
-        headingWeightBias: 'normal',
-        headingLetterSpacing: '-0.015em',
-        labelStyle: 'sentence',
+        headingWeightBias: "normal",
+        headingLetterSpacing: "-0.015em",
+        labelStyle: "sentence",
       },
       accent: {
-        barPosition: 'top',
+        barPosition: "top",
         barThickness: 2,
-        barStyle: 'solid',
-        iconContainerShape: 'rounded',
-        badgeShape: 'rounded',
-        dividerStyle: 'solid',
+        barStyle: "solid",
+        iconContainerShape: "rounded",
+        badgeShape: "rounded",
+        dividerStyle: "solid",
       },
       card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
+        defaultElevation: "sm",
+        hoverElevation: "lift-one",
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'compact',
+        paddingDensity: "compact",
       },
     },
     surfaceDefaults: {
-      listView: 'table',
-      density: 'compact',
-      schedulerView: 'month',
+      listView: "table",
+      density: "compact",
+      schedulerView: "month",
     },
   },
   /**
@@ -261,68 +268,69 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
    * polished, contemporary feel. Intended for tenants opting into the modern
    * rendering engine on the Platform vertical.
    */
-  'platform.flagship': {
-    key: 'platform.flagship',
-    label: 'Platform Flagship',
-    description: 'Premium flagship profile for the modern engine showcase on Platform.',
+  "platform.flagship": {
+    key: "platform.flagship",
+    label: "Platform Flagship",
+    description:
+      "Premium flagship profile for the modern engine showcase on Platform.",
     personality: {
       animation: {
         intensity: 0.5,
         staggerDelay: 18,
         staggerMax: 120,
-        entrance: 'slideUp',
+        entrance: "slideUp",
         entranceDuration: 160,
         hoverLift: 1,
         hoverScale: 1.0,
         useSpring: false,
         springTension: 170,
         springFriction: 22,
-        pulseSpeed: 'normal',
-        skeletonStyle: 'shimmer',
+        pulseSpeed: "normal",
+        skeletonStyle: "shimmer",
         countUpEnabled: true,
       },
       chart: {
         animateOnMount: true,
         mountDuration: 720,
-        lineStyle: 'sharp',
+        lineStyle: "sharp",
         showDots: false,
         useGradientFill: false,
-        tooltipStyle: 'detailed',
+        tooltipStyle: "detailed",
       },
       typography: {
-        headingWeightBias: 'normal',
-        headingLetterSpacing: '-0.015em',
-        labelStyle: 'sentence',
+        headingWeightBias: "normal",
+        headingLetterSpacing: "-0.015em",
+        labelStyle: "sentence",
       },
       accent: {
-        barPosition: 'top',
+        barPosition: "top",
         barThickness: 2,
-        barStyle: 'solid',
-        iconContainerShape: 'rounded',
-        badgeShape: 'rounded',
-        dividerStyle: 'solid',
+        barStyle: "solid",
+        iconContainerShape: "rounded",
+        badgeShape: "rounded",
+        dividerStyle: "solid",
       },
       card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
+        defaultElevation: "sm",
+        hoverElevation: "lift-one",
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'compact',
+        paddingDensity: "compact",
       },
     },
     tokenOverrides: {
       densityScale: 0.95,
       borderRadius: {
-        sm: '6px',
-        md: '8px',
-        lg: '12px',
-        xl: '16px',
+        sm: "6px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
       },
     },
     surfaceDefaults: {
-      listView: 'table',
-      density: 'compact',
-      schedulerView: 'month',
+      listView: "table",
+      density: "compact",
+      schedulerView: "month",
     },
   },
 };
@@ -333,12 +341,17 @@ export const PRODUCT_PROFILES: Record<string, ProductProfile> = {
  * Unknown keys fall back to the generic profile so the caller never has to
  * handle an undefined profile branch.
  */
-export function getProductProfile(profileKey?: ProductProfileKey | null): ProductProfile {
+export function getProductProfile(
+  profileKey?: ProductProfileKey | null
+): ProductProfile {
   if (!profileKey) {
     return PRODUCT_PROFILES[DEFAULT_PRODUCT_PROFILE_KEY];
   }
 
   // Product profiles always resolve to something concrete so consumers never
   // need optional chaining just to access token defaults.
-  return PRODUCT_PROFILES[profileKey] ?? PRODUCT_PROFILES[DEFAULT_PRODUCT_PROFILE_KEY];
+  return (
+    PRODUCT_PROFILES[profileKey] ??
+    PRODUCT_PROFILES[DEFAULT_PRODUCT_PROFILE_KEY]
+  );
 }

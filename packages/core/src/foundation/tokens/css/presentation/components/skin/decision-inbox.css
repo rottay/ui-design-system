@@ -1,6 +1,6 @@
 /** DecisionInboxSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 

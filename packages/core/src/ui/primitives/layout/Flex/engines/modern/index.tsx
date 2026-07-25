@@ -1,99 +1,73 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Flex Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Flex component.
- * Generates Tailwind CSS utility classes for flexbox layouts.
+ * @description Modern token-backed implementation of the Flex component.
  *
  * @module Flex/Engines/Modern
  * @category Layout
  * @package @rottay/design-system
  */
 
-import React, { useId } from 'react';
-import type { FlexProps, FlexDirection, FlexWrap, FlexJustify, FlexAlign } from '../../contracts';
-import { FLEX_ALIGN_MAP, FLEX_DEFAULTS, FLEX_JUSTIFY_MAP } from '../../contracts';
+import React, { useId } from "react";
+import type { FlexProps } from "../../contracts";
+import { generateResponsiveCSS } from "@/infrastructure/runtime/responsive/runtime/style-properties";
 import {
-  generateResponsiveCSS,
-  isResponsiveValue,
-  scalarOrDefault,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import { collectFlexResponsiveEntries } from '../../runtime/responsive';
+  resolveFlexAttributes,
+  resolveFlexParameterStyle,
+} from "../../runtime/presentation";
+import { collectFlexResponsiveEntries } from "../../runtime/responsive";
 
 /**
- * Modern Flex component using Tailwind CSS utility classes.
+ * Modern Flex component using declarative skin attributes and bounded tokens.
  */
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (props, ref) => {
     const {
-      direction,
-      wrap,
-      justify,
-      align,
-      gap,
-      flex,
-      inline = FLEX_DEFAULTS.inline,
+      direction: _direction,
+      wrap: _wrap,
+      justify: _justify,
+      align: _align,
+      gap: _gap,
+      flex: _flex,
+      inline: _inline,
+      width: _width,
+      minWidth: _minWidth,
+      maxWidth: _maxWidth,
+      overflow: _overflow,
+      motion: _motion,
+      engine: _engine,
       children,
       className,
-      style,
+      style: consumerStyle,
       ...rest
     } = props;
+
+    const presentationAttributes = resolveFlexAttributes(props);
+    const parameterStyle = resolveFlexParameterStyle(props);
+    const resolvedStyle =
+      parameterStyle || consumerStyle
+        ? { ...parameterStyle, ...consumerStyle }
+        : undefined;
 
     const reactId = useId();
     const responsiveEntries = collectFlexResponsiveEntries(props);
     const needsResponsiveCSS = responsiveEntries.length > 0;
 
-    const elementId = needsResponsiveCSS ? `flex-${reactId.replace(/:/g, '')}` : '';
+    const elementId = needsResponsiveCSS
+      ? `flex-${reactId.replace(/:/g, "")}`
+      : "";
     const responsive = needsResponsiveCSS
       ? generateResponsiveCSS(elementId, responsiveEntries)
       : null;
 
-    // The showroom can render the modern engine without Tailwind loaded, so
-    // layout primitives must resolve their scalar behavior into real inline
-    // styles instead of utility classes.
-    const scalarDirection = scalarOrDefault<FlexDirection>(direction, 'row');
-    const scalarWrap = scalarOrDefault<FlexWrap>(wrap, 'nowrap');
-    const scalarJustify = scalarOrDefault<FlexJustify>(justify, 'start');
-    const scalarAlign = scalarOrDefault<FlexAlign>(align, 'stretch');
-
-    const customStyle: React.CSSProperties = {
-      display: inline ? 'inline-flex' : 'flex',
-      ...style,
-    };
-
-    if (!isResponsiveValue(direction)) {
-      customStyle.flexDirection = scalarDirection;
-    }
-
-    if (!isResponsiveValue(wrap)) {
-      customStyle.flexWrap = scalarWrap;
-    }
-
-    if (!isResponsiveValue(justify)) {
-      customStyle.justifyContent = FLEX_JUSTIFY_MAP[scalarJustify];
-    }
-
-    if (!isResponsiveValue(align)) {
-      customStyle.alignItems = FLEX_ALIGN_MAP[scalarAlign];
-    }
-
-    const scalarGap = isResponsiveValue(gap) ? undefined : gap;
-    if (scalarGap !== undefined) {
-      if (Array.isArray(scalarGap)) {
-        customStyle.columnGap = `${scalarGap[0]}px`;
-        customStyle.rowGap = `${scalarGap[1]}px`;
-      } else {
-        customStyle.gap = `${scalarGap}px`;
-      }
-    }
-    if (flex !== undefined) {
-      customStyle.flex = flex;
-    }
-
-    const combinedClassName = ['rottay-flex', 'rottay-flex--modern', className]
+    const combinedClassName = ["rottay-flex", "rottay-flex--modern", className]
       .filter(Boolean)
-      .join(' ');
-    const renderedChildren = React.Children.toArray(children);
+      .join(" ");
+    const modernStyle = {
+      minInlineSize: 0,
+      ...resolvedStyle,
+    };
 
     return (
       <>
@@ -101,19 +75,21 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
           <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
         )}
         <div
+          {...rest}
           ref={ref}
           className={combinedClassName}
-          style={Object.keys(customStyle).length > 0 ? customStyle : undefined}
+          style={modernStyle}
+          {...presentationAttributes}
           {...(responsive ? responsive.attrs : {})}
-          {...rest}
+          data-component="flex"
         >
-          {renderedChildren}
+          {children}
         </div>
       </>
     );
   }
 );
 
-Flex.displayName = 'Flex.Modern';
+Flex.displayName = "Flex.Modern";
 
 export default Flex;

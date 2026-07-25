@@ -105,6 +105,26 @@ const ADVANCED_DOCUMENT: TenantThemeDocument = {
           commandHomeIconBg: "#F3EEE5",
           commandHomeIconBorder: "#D8CFC1",
         },
+        badge: {
+          fontFamily: "Optima, Candara, 'Noto Sans', sans-serif",
+          fontWeight: 650,
+          radius: "3px",
+          chipRadius: "4px",
+          pillRadius: "6px",
+          surface: "#FFFEFB",
+          ink: "#2E261C",
+          frame: "#9B8A73",
+          surfaceHover: "#FBF3E7",
+          frameHover: "#0F766E",
+          selectedSurface: "#E7F2EE",
+          selectedFrame: "#0F766E",
+          countRadius: "2px",
+          removeRadius: "2px",
+          removeOpacity: 0.82,
+          pulseScale: 1.2,
+          motionDuration: "190ms",
+          motionEasing: "ease-out",
+        },
         table: {
           bg: "#FFFEFB",
           headerBg: "#FFFFFF",
@@ -155,6 +175,47 @@ const hydrate = (
   identity: TenantThemeConfigIdentity = IDENTITY
 ) => hydrateTenantThemeConfig(document, identity);
 
+describe("DS-S001 DB recipe-profile channel", () => {
+  it("persists a valid selection through normalized Appearance and CSS", () => {
+    const document = structuredClone(ADVANCED_DOCUMENT);
+    if (document.mode !== "advanced") {
+      throw new Error("Expected the advanced fixture");
+    }
+    document.visualFoundation.recipeProfile =
+      "rottay/editorial-round@1";
+
+    expect(validateTenantThemeDocument(document).success).toBe(true);
+    const artifact = compileTenantThemeConfig(hydrate(document), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+
+    expect(artifact.normalizedAppearance.recipeProfile).toBe(
+      "rottay/editorial-round@1"
+    );
+    expect(artifact.variables["--ds-recipe-profile"]).toBe(
+      '"rottay/editorial-round@1"'
+    );
+  });
+
+  it("rejects unpublished ids at the DB schema boundary", () => {
+    const document = structuredClone(ADVANCED_DOCUMENT);
+    if (document.mode !== "advanced") {
+      throw new Error("Expected the advanced fixture");
+    }
+    document.visualFoundation.recipeProfile = "foreign/not-published@9";
+
+    const validation = validateTenantThemeDocument(document);
+    expect(validation.success).toBe(false);
+    expect(validation.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: "$.visualFoundation.recipeProfile",
+        }),
+      ])
+    );
+  });
+});
+
 describe("TenantThemeConfig v1 server contract", () => {
   it("uses a portable SHA-256 implementation with the canonical known vector", () => {
     const expected = createHash("sha256").update("abc").digest("hex");
@@ -166,15 +227,15 @@ describe("TenantThemeConfig v1 server contract", () => {
 
   it("publishes immutable schema/document drift sentinels", () => {
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-85586096e40f9bb976419e92cd83a7a19ff74f68a5afd1c1a258e6473c056242"
+      "sha256-2b898d706c1e5a5baa2fdfa0c09936ea5df5d5d35c213d674f140aaa020b489d"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-722c1a75193ef57ce111b519d3ddb952db256e06387ee55366f0d17c2ad59d9e"
+      "sha256-54ed81d4aff6c676da3b48994eeb225698ec81eefdbb2f89d0b38a28850373bd"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
-    expect(
-      Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)
-    ).toBe(true);
+    expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(
+      true
+    );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.limits)).toBe(true);
     expect(TENANT_THEME_COMPILER_VERSION).toBe("tenant-theme-compiler@3");
     expect(TENANT_THEME_CONFIG_SCHEMA.limits).toMatchObject({
@@ -206,6 +267,7 @@ describe("TenantThemeConfig v1 server contract", () => {
           "shell",
           "toolbar",
           "filterPill",
+          "badge",
           "breadcrumb",
           "search",
           "controls",
@@ -219,6 +281,8 @@ describe("TenantThemeConfig v1 server contract", () => {
           "collectionCard",
           "listingGrid",
           "modal",
+          "tooltip",
+          "popover",
           "tabs",
         ],
         allowTokenOverrides: true,
@@ -602,6 +666,15 @@ describe("deterministic artifact compilation and isolation", () => {
       "--ds-shell-header-block-size": "64px",
       "--ds-command-home-max-width": "1180px",
       "--ds-command-home-console-padding": "20px",
+      "--ds-badge-font-family": "Optima, Candara, 'Noto Sans', sans-serif",
+      "--ds-badge-font-weight": "650",
+      "--ds-badge-radius": "3px",
+      "--ds-badge-chip-radius": "4px",
+      "--ds-badge-pill-radius": "6px",
+      "--ds-badge-surface": "#FFFEFB",
+      "--ds-badge-frame-hover": "#0F766E",
+      "--ds-badge-remove-opacity": "0.82",
+      "--ds-badge-pulse-scale": "1.2",
       "--ds-card-hover-transform": "translateY(-1px)",
       "--ds-metric-card-min-height": "156px",
       "--ds-metric-card-hover-transform": "translateY(-1px)",
@@ -682,6 +755,95 @@ describe("closed schema and hostile input rejection", () => {
       });
       expect(result.success, JSON.stringify(advanced)).toBe(false);
     }
+  });
+
+  it("compiles the complete layout-foundation chrome contract from tenant data", () => {
+    const document = structuredClone(ADVANCED_DOCUMENT);
+    if (document.mode !== "advanced")
+      throw new Error("advanced fixture required");
+    const layout = {
+      containerBackground: "#FFFCF6",
+      containerBorder: "1px solid #C9B89D",
+      containerRadius: "12px",
+      containerShadow: "0 12px 30px rgb(20 34 56 / 20%)",
+      containerMotionDuration: "220ms",
+      containerMotionEasing: "ease-out",
+      aspectRatioBackground: "#FBF3E7",
+      aspectRatioBorder: "1px solid #C9B89D",
+      aspectRatioRadius: "8px",
+      aspectRatioShadow: "inset 0 1px #FFFFFF",
+      aspectRatioOverflow: "hidden",
+      aspectRatioMotionDuration: "220ms",
+      aspectRatioMotionEasing: "ease-out",
+      dividerColor: "#9B8A73",
+      dividerThicknessThin: "1px",
+      dividerThicknessMedium: "2px",
+      dividerThicknessThick: "3px",
+      dividerContentGap: "12px",
+      dividerEdgeSegment: "7%",
+      dividerMinSegment: "7%",
+      dividerLabelMaxWidth: "32rem",
+      dividerLabelFontSize: "12px",
+      dividerLabelFontWeight: "700",
+      dividerLabelLineHeight: "1.3",
+      dividerLabelTransform: "none",
+      dividerLabelTracking: "0.04em",
+      dividerMotionDuration: "160ms",
+      dividerMotionEasing: "ease-out",
+      stackDividerSize: "1px",
+      stackDividerColor: "#C9B89D",
+      stackDividerOpacity: "0.82",
+      spaceMotionDuration: "160ms",
+      spaceMotionEasing: "ease-out",
+    } as const;
+    document.visualFoundation.advanced = {
+      ...document.visualFoundation.advanced,
+      chrome: {
+        ...document.visualFoundation.advanced?.chrome,
+        layout,
+      },
+    };
+
+    expect(validateTenantThemeDocument(document).success).toBe(true);
+    const artifact = compileTenantThemeConfig(hydrate(document), {
+      verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+    });
+    const expectedVariables = {
+      "--ds-container-background": layout.containerBackground,
+      "--ds-container-border": layout.containerBorder,
+      "--ds-container-radius": layout.containerRadius,
+      "--ds-container-shadow": layout.containerShadow,
+      "--ds-container-motion-duration": layout.containerMotionDuration,
+      "--ds-container-motion-easing": layout.containerMotionEasing,
+      "--ds-aspect-ratio-background": layout.aspectRatioBackground,
+      "--ds-aspect-ratio-border": layout.aspectRatioBorder,
+      "--ds-aspect-ratio-radius": layout.aspectRatioRadius,
+      "--ds-aspect-ratio-shadow": layout.aspectRatioShadow,
+      "--ds-aspect-ratio-overflow": layout.aspectRatioOverflow,
+      "--ds-aspect-ratio-motion-duration": layout.aspectRatioMotionDuration,
+      "--ds-aspect-ratio-motion-easing": layout.aspectRatioMotionEasing,
+      "--ds-divider-color": layout.dividerColor,
+      "--ds-divider-thickness-thin": layout.dividerThicknessThin,
+      "--ds-divider-thickness-medium": layout.dividerThicknessMedium,
+      "--ds-divider-thickness-thick": layout.dividerThicknessThick,
+      "--ds-divider-content-gap": layout.dividerContentGap,
+      "--ds-divider-edge-segment": layout.dividerEdgeSegment,
+      "--ds-divider-min-segment": layout.dividerMinSegment,
+      "--ds-divider-label-max-width": layout.dividerLabelMaxWidth,
+      "--ds-divider-label-font-size": layout.dividerLabelFontSize,
+      "--ds-divider-label-font-weight": layout.dividerLabelFontWeight,
+      "--ds-divider-label-line-height": layout.dividerLabelLineHeight,
+      "--ds-divider-label-transform": layout.dividerLabelTransform,
+      "--ds-divider-label-tracking": layout.dividerLabelTracking,
+      "--ds-divider-motion-duration": layout.dividerMotionDuration,
+      "--ds-divider-motion-easing": layout.dividerMotionEasing,
+      "--ds-stack-divider-size": layout.stackDividerSize,
+      "--ds-stack-divider-color": layout.stackDividerColor,
+      "--ds-stack-divider-opacity": layout.stackDividerOpacity,
+      "--ds-space-motion-duration": layout.spaceMotionDuration,
+      "--ds-space-motion-easing": layout.spaceMotionEasing,
+    } as const;
+    expect(artifact.variables).toMatchObject(expectedVariables);
   });
 
   it("keeps ramp tokens reference-only while deriving all seven roles from legal base seeds", () => {
@@ -884,7 +1046,7 @@ describe("closed schema and hostile input rejection", () => {
     ).toThrow(/unique non-empty/i);
   });
 
-  it("admits the bounded neutral text/border override group as opaque hex only", () => {
+  it("admits bounded neutral overrides and autocorrects unsafe text on the tenant ground", () => {
     const neutralOverrides = {
       "--ds-color-text-primary": "#E8E6E1",
       "--ds-color-text-secondary": "#A39F98",
@@ -896,9 +1058,9 @@ describe("closed schema and hostile input rejection", () => {
       schemaVersion: 1,
       mode: "advanced" as const,
       visualFoundation: {
-        // The light neutral text set is honest only on this tenant's own dark
-        // canvas; the APCA autocorrect pass otherwise rewrites it against the
-        // default light page ground.
+        // The tenant owns the dark canvas, but the compiler still checks every
+        // authored text role against that real ground and corrects any role
+        // that misses its governed APCA threshold.
         general: { palette: { backgroundMode: "dark" as const } },
         advanced: { tokenOverrides: neutralOverrides },
       },
@@ -907,10 +1069,43 @@ describe("closed schema and hostile input rejection", () => {
     const artifact = compileTenantThemeConfig(hydrate(document), {
       verticalEnvelope: BITHIRE_TEST_ENVELOPE,
     });
-    expect(artifact.adjustments).toBeUndefined();
-    for (const [token, value] of Object.entries(neutralOverrides)) {
-      expect(artifact.variables[token]).toBe(value);
-      expect(artifact.css).toContain(`${token}: ${value};`);
+    expect(artifact.adjustments?.map(({ token }) => token)).toEqual([
+      "--ds-color-text-secondary",
+      "--ds-color-text-muted",
+    ]);
+    expect(artifact.adjustments).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          token: "--ds-color-text-secondary",
+          pairedWith: "default:#0C0C0E",
+          from: neutralOverrides["--ds-color-text-secondary"],
+          to: "#B6B2AB",
+        }),
+        expect.objectContaining({
+          token: "--ds-color-text-muted",
+          pairedWith: "default:#0C0C0E",
+          from: neutralOverrides["--ds-color-text-muted"],
+          to: "#B7B2AB",
+        }),
+      ])
+    );
+
+    expect(artifact.variables["--ds-color-text-primary"]).toBe(
+      neutralOverrides["--ds-color-text-primary"]
+    );
+    expect(artifact.variables["--ds-color-text-secondary"]).toBe("#B6B2AB");
+    expect(artifact.variables["--ds-color-text-muted"]).toBe("#B7B2AB");
+    expect(artifact.variables["--ds-color-border-primary"]).toBe(
+      neutralOverrides["--ds-color-border-primary"]
+    );
+    expect(artifact.variables["--ds-color-border-secondary"]).toBe(
+      neutralOverrides["--ds-color-border-secondary"]
+    );
+
+    for (const [token, value] of Object.entries(artifact.variables)) {
+      if (token in neutralOverrides) {
+        expect(artifact.css).toContain(`${token}: ${value};`);
+      }
     }
   });
 

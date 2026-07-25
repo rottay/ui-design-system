@@ -124,7 +124,9 @@ describe('ModernButton responsive size', () => {
       const styleTag = container.querySelector('style');
       expect(styleTag).not.toBeNull();
       expect(styleTag?.textContent).toContain('height:');
-      expect(styleTag?.textContent).toContain('padding:');
+      expect(styleTag?.textContent).toContain('padding-inline:');
+      expect(styleTag?.textContent).toContain('line-height:');
+      expect(styleTag?.textContent).toContain('--ds-button-resolved-icon-size:');
       expect(styleTag?.textContent).toContain('font-size:');
       expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
       expect(styleTag?.textContent).toContain('@media (min-width: 1280px)');

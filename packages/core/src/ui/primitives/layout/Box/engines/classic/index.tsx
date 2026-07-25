@@ -40,17 +40,29 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { BoxProps, BoxSpacing } from '../../contracts';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP, isVoidElement } from '../../contracts';
+import React, {
+  forwardRef,
+  useId,
+  type ElementType,
+  type Ref,
+  type CSSProperties,
+} from "react";
+import type { BoxProps, BoxSpacing } from "../../contracts";
+import {
+  BOX_DEFAULTS,
+  SPACING_MAP,
+  RADIUS_MAP,
+  SHADOW_MAP,
+  isVoidElement,
+} from "../../contracts";
 import {
   generateResponsiveCSS,
   isResponsiveValue,
   scalarOrUndefined,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import { collectBoxResponsiveEntries } from '../../runtime/responsive';
+} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Classic engine uses the same inline-style approach as rustic for layout props.
 // Even though antd provides some layout utilities, inline styles give us
@@ -59,91 +71,111 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
 
   // Padding - only apply inline when NOT responsive
-  const paddingValue = scalarOrUndefined(props.padding) || scalarOrUndefined(props.p);
-  if (paddingValue && paddingValue !== 'none') {
+  const paddingValue =
+    scalarOrUndefined(props.padding) || scalarOrUndefined(props.p);
+  if (paddingValue && paddingValue !== "none") {
     style.padding = SPACING_MAP[paddingValue];
   }
-  const pxValue = scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
-  if (pxValue && pxValue !== 'none') {
+  const pxValue =
+    scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
+  if (pxValue && pxValue !== "none") {
     style.paddingLeft = SPACING_MAP[pxValue];
     style.paddingRight = SPACING_MAP[pxValue];
   }
-  const pyValue = scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
-  if (pyValue && pyValue !== 'none') {
+  const pyValue =
+    scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
+  if (pyValue && pyValue !== "none") {
     style.paddingTop = SPACING_MAP[pyValue];
     style.paddingBottom = SPACING_MAP[pyValue];
   }
-  const ptValue = scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
-  if (ptValue && ptValue !== 'none') {
+  const ptValue =
+    scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
+  if (ptValue && ptValue !== "none") {
     style.paddingTop = SPACING_MAP[ptValue];
   }
-  const prValue = scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
-  if (prValue && prValue !== 'none') {
+  const prValue =
+    scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
+  if (prValue && prValue !== "none") {
     style.paddingRight = SPACING_MAP[prValue];
   }
-  const pbValue = scalarOrUndefined(props.paddingBottom) || scalarOrUndefined(props.pb);
-  if (pbValue && pbValue !== 'none') {
+  const pbValue =
+    scalarOrUndefined(props.paddingBottom) || scalarOrUndefined(props.pb);
+  if (pbValue && pbValue !== "none") {
     style.paddingBottom = SPACING_MAP[pbValue];
   }
-  const plValue = scalarOrUndefined(props.paddingLeft) || scalarOrUndefined(props.pl);
-  if (plValue && plValue !== 'none') {
+  const plValue =
+    scalarOrUndefined(props.paddingLeft) || scalarOrUndefined(props.pl);
+  if (plValue && plValue !== "none") {
     style.paddingLeft = SPACING_MAP[plValue];
   }
 
   // Margin - only apply inline when NOT responsive
-  const marginValue = scalarOrUndefined(props.margin) || scalarOrUndefined(props.m);
-  if (marginValue && marginValue !== 'none') {
+  const marginValue =
+    scalarOrUndefined(props.margin) || scalarOrUndefined(props.m);
+  if (marginValue && marginValue !== "none") {
     style.margin = SPACING_MAP[marginValue];
   }
-  const mxValue = scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
-  if (mxValue && mxValue !== 'none') {
+  const mxValue =
+    scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
+  if (mxValue && mxValue !== "none") {
     style.marginLeft = SPACING_MAP[mxValue];
     style.marginRight = SPACING_MAP[mxValue];
   }
-  const myValue = scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
-  if (myValue && myValue !== 'none') {
+  const myValue =
+    scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
+  if (myValue && myValue !== "none") {
     style.marginTop = SPACING_MAP[myValue];
     style.marginBottom = SPACING_MAP[myValue];
   }
-  const mtValue = scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
-  if (mtValue && mtValue !== 'none') {
+  const mtValue =
+    scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
+  if (mtValue && mtValue !== "none") {
     style.marginTop = SPACING_MAP[mtValue];
   }
-  const mrValue = scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
-  if (mrValue && mrValue !== 'none') {
+  const mrValue =
+    scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
+  if (mrValue && mrValue !== "none") {
     style.marginRight = SPACING_MAP[mrValue];
   }
-  const mbValue = scalarOrUndefined(props.marginBottom) || scalarOrUndefined(props.mb);
-  if (mbValue && mbValue !== 'none') {
+  const mbValue =
+    scalarOrUndefined(props.marginBottom) || scalarOrUndefined(props.mb);
+  if (mbValue && mbValue !== "none") {
     style.marginBottom = SPACING_MAP[mbValue];
   }
-  const mlValue = scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
-  if (mlValue && mlValue !== 'none') {
+  const mlValue =
+    scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
+  if (mlValue && mlValue !== "none") {
     style.marginLeft = SPACING_MAP[mlValue];
   }
 
   // Dimensions - only apply inline when NOT responsive
-  const widthValue = scalarOrUndefined(props.width) || scalarOrUndefined(props.w);
+  const widthValue =
+    scalarOrUndefined(props.width) || scalarOrUndefined(props.w);
   if (widthValue !== undefined) {
     style.width = widthValue;
   }
-  const heightValue = props.height || props.h;
+  const heightValue =
+    scalarOrUndefined(props.height) ?? scalarOrUndefined(props.h);
   if (heightValue !== undefined) {
     style.height = heightValue;
   }
-  const minWidthValue = scalarOrUndefined(props.minWidth) || scalarOrUndefined(props.minW);
+  const minWidthValue =
+    scalarOrUndefined(props.minWidth) || scalarOrUndefined(props.minW);
   if (minWidthValue !== undefined) {
     style.minWidth = minWidthValue;
   }
-  const maxWidthValue = scalarOrUndefined(props.maxWidth) || scalarOrUndefined(props.maxW);
+  const maxWidthValue =
+    scalarOrUndefined(props.maxWidth) || scalarOrUndefined(props.maxW);
   if (maxWidthValue !== undefined) {
     style.maxWidth = maxWidthValue;
   }
-  const minHeightValue = props.minHeight || props.minH;
+  const minHeightValue =
+    scalarOrUndefined(props.minHeight) ?? scalarOrUndefined(props.minH);
   if (minHeightValue !== undefined) {
     style.minHeight = minHeightValue;
   }
-  const maxHeightValue = props.maxHeight || props.maxH;
+  const maxHeightValue =
+    scalarOrUndefined(props.maxHeight) ?? scalarOrUndefined(props.maxH);
   if (maxHeightValue !== undefined) {
     style.maxHeight = maxHeightValue;
   }
@@ -174,12 +206,12 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
 
   // Border radius
   const radiusValue = props.borderRadius || props.rounded;
-  if (radiusValue && radiusValue !== 'none') {
+  if (radiusValue && radiusValue !== "none") {
     style.borderRadius = RADIUS_MAP[radiusValue];
   }
 
   // Shadow
-  if (props.shadow && props.shadow !== 'none') {
+  if (props.shadow && props.shadow !== "none") {
     style.boxShadow = SHADOW_MAP[props.shadow];
   }
 
@@ -208,14 +240,17 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   }
 
   // Overflow
-  if (props.overflow !== undefined) {
-    style.overflow = props.overflow;
+  const overflowValue = scalarOrUndefined(props.overflow);
+  if (overflowValue !== undefined) {
+    style.overflow = overflowValue;
   }
-  if (props.overflowX !== undefined) {
-    style.overflowX = props.overflowX;
+  const overflowXValue = scalarOrUndefined(props.overflowX);
+  if (overflowXValue !== undefined) {
+    style.overflowX = overflowXValue;
   }
-  if (props.overflowY !== undefined) {
-    style.overflowY = props.overflowY;
+  const overflowYValue = scalarOrUndefined(props.overflowY);
+  if (overflowYValue !== undefined) {
+    style.overflowY = overflowYValue;
   }
 
   // Visual
@@ -290,7 +325,7 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
 const ClassicBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const {
     as: Component = BOX_DEFAULTS.as,
-    className = '',
+    className = "",
     children,
     // Extract all known Box props to separate from HTML attributes
     engine: _engine,
@@ -383,17 +418,17 @@ const ClassicBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const responsiveEntries = collectBoxResponsiveEntries(props);
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
-  const elementId = needsResponsiveCSS ? `box-${reactId.replace(/:/g, '')}` : '';
+  const elementId = needsResponsiveCSS
+    ? `box-${reactId.replace(/:/g, "")}`
+    : "";
   const responsive = needsResponsiveCSS
     ? generateResponsiveCSS(elementId, responsiveEntries)
     : null;
 
   // Build class names with Classic-specific prefixes
-  const classNames = [
-    'rottay-box',
-    'rottay-box--classic',
-    className,
-  ].filter(Boolean).join(' ');
+  const classNames = ["rottay-box", "rottay-box--classic", className]
+    .filter(Boolean)
+    .join(" ");
 
   const ElementType = Component as ElementType;
   const elementProps = {
@@ -420,6 +455,6 @@ const ClassicBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   );
 });
 
-ClassicBox.displayName = 'ClassicBox';
+ClassicBox.displayName = "ClassicBox";
 
 export default ClassicBox;

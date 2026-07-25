@@ -16,6 +16,7 @@ import {
 } from "../manifest/index";
 
 const packsDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const coreRoot = resolve(packsDir, "../../../../../../../");
 
 const EXPECTED_IDS = [
   "editorial-display",
@@ -97,6 +98,31 @@ describe("font-pack css", () => {
       const urls = [...css.matchAll(/url\(\s*'([^']+)'\s*\)/g)].map((m) => m[1]);
       const declared = FONT_PACK_MANIFEST[id].files.map((f) => f.path);
       expect(new Set(urls)).toEqual(new Set(declared));
+    }
+  });
+});
+
+describe("first-party vertical font ownership", () => {
+  const readBundle = (name: string): string =>
+    readFileSync(resolve(coreRoot, "styles", name), "utf8");
+
+  it("ships the BitHire-authored font packs inside the BitHire vertical bundle", () => {
+    const css = readBundle("bithire.css");
+
+    expect(css).toContain("font-family: 'Public Sans'");
+    expect(css).toContain("font-family: 'Space Grotesk'");
+    expect(css).toContain("font-family: 'IBM Plex Mono'");
+    expect(css).toContain("url('./fonts/public-sans-latin-variable.woff2')");
+    expect(css).toContain("url('./fonts/space-grotesk-latin-variable.woff2')");
+    expect(css).toContain("url('./fonts/ibm-plex-mono-latin-400.woff2')");
+  });
+
+  it("does not contaminate other vertical bundles with BitHire font ownership", () => {
+    for (const name of ["platform.css", "evnto.css"]) {
+      const css = readBundle(name);
+      expect(css, name).not.toContain("font-family: 'Public Sans'");
+      expect(css, name).not.toContain("font-family: 'Space Grotesk'");
+      expect(css, name).not.toContain("font-family: 'IBM Plex Mono'");
     }
   });
 });

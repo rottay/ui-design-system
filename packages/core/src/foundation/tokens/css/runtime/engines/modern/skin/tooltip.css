@@ -1,87 +1,725 @@
 /**
- * Modern Tooltip skin (WO-SKIN-05 checkpoint D2).
+ * Modern Tooltip — token-owned micro-overlay.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
- *
- * PORTALED, THEREFORE STANDALONE. The bubble mounts via
- * `createPortal(document.body)`, so it is NOT a descendant of the tenant-scoped
- * tree and no ancestor selector can reach it. Its rules hang off its own class
- * pair `rottay-tooltip-bubble rottay-tooltip-bubble--modern` (grep-verified
- * free), never a bare `[data-part='bubble']` -- `data-part` is a shared
- * vocabulary, and a bare part selector would claim every bubble in the fleet.
- * The wrapper root keeps NO scope class: it paints nothing, and `rottay-tooltip`
- * is a live personality/tenant hook (entrance animation, z-index) that modern's
- * wrapper does not carry today.
- *
- * `top`/`left` STAY INLINE: they come from `getBoundingClientRect()` on every
- * frame the tooltip is positioned -- genuine runtime data, and not paint.
- *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * border-color on every element. The shortcut chip's border is the only border
- * here; it reaches (0,5,0) via the two bubble classes + `[data-part='bubble']` +
- * the target's own `[data-part]` REPEATED (the standalone-scope idiom -- there
- * is no root attribute to buy the fourth unit from). Values transcribed verbatim
- * from `engines/modern.tsx`.
+ * The wrapper owns anchoring only. Bubble paint, type, density, geometry and
+ * choreography are coordinated through tooltip/material/type/motion tokens so
+ * applications never need to reconstruct tooltip chrome.
  */
 
-/* ---- bubble: shared surface + the open/closed scale ---- */
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] {
-  border-radius: var(--ds-radius-md);
-  box-shadow: var(--ds-elevation-2);
-}
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-open='true'] {
-  transform: scale(1);
-}
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-open='false'] {
-  transform: scale(0.95);
+.rottay-tooltip-root.rottay-tooltip-root--modern[data-part="root"] {
+  position: relative;
+  display: inline-flex;
+  max-inline-size: 100%;
 }
 
-/* ---- per-tone surface. The unqualified rule carries the `default` pair because
-        the lookup it replaces fell back to default for an unrecognised color;
-        the tone rules below override it. ---- */
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] {
-  background: var(--ds-surface-card);
-  color: var(--ds-color-text-primary);
-}
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='primary'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-}
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='secondary'] {
-  background: var(--ds-color-secondary);
-  color: var(--ds-color-text-on-primary);
-}
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='success'] {
-  background: var(--ds-color-success);
-  color: var(--ds-color-text-on-primary);
-}
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='warning'] {
-  background: var(--ds-color-warning);
-  color: var(--ds-color-text-on-primary);
-}
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='error'] {
-  background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
-}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"] {
+  --ds-tooltip-surface: var(
+    --ds-tooltip-bordered-background,
+    var(
+      --ds-material-overlay-background,
+      var(--ds-surface-overlay, var(--ds-surface-card))
+    )
+  );
+  --ds-tooltip-ink: var(
+    --ds-tooltip-bordered-foreground,
+    var(--ds-material-overlay-foreground, var(--ds-color-text-primary))
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-bordered-border,
+    var(
+      --ds-material-overlay-border,
+      var(--ds-color-border-primary, var(--ds-color-border))
+    )
+  );
+  --ds-tooltip-edge-width: var(--ds-tooltip-bordered-border-width, 1px);
+  --ds-tooltip-shadow-current: var(
+    --ds-tooltip-bordered-shadow,
+    var(
+      --ds-material-overlay-shadow,
+      var(--ds-elevation-3, var(--ds-shadow-lg))
+    )
+  );
+  --ds-tooltip-texture-current: var(
+    --ds-tooltip-bordered-texture,
+    var(--ds-material-overlay-texture, none)
+  );
+  --ds-tooltip-highlight-current: var(
+    --ds-tooltip-bordered-highlight,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, currentColor 5%, transparent),
+      transparent 48%
+    )
+  );
+  --ds-tooltip-padding-block-current: var(
+    --ds-tooltip-bordered-padding-block,
+    0.4375rem
+  );
+  --ds-tooltip-padding-inline-current: var(
+    --ds-tooltip-bordered-padding-inline,
+    0.6875rem
+  );
+  --ds-tooltip-radius-current: var(
+    --ds-tooltip-bordered-radius,
+    var(--ds-radius-md)
+  );
+  --ds-tooltip-max-width-current: var(
+    --ds-tooltip-bordered-max-width,
+    var(--ds-tooltip-max-width, 18.75rem)
+  );
+  --ds-tooltip-arrow-half-size-current: var(
+    --ds-tooltip-arrow-half-size,
+    0.25rem
+  );
+  --ds-tooltip-closed-transform: translateY(
+      var(--ds-tooltip-motion-distance, 0.1875rem)
+    )
+    scale(var(--ds-tooltip-motion-scale, 0.97));
+  --ds-tooltip-enter-transition-current: var(
+    --ds-tooltip-enter-transition,
+    opacity var(--ds-tooltip-enter-duration, var(--ds-motion-feedback))
+      var(--ds-tooltip-enter-easing, var(--ds-motion-ease-enter)),
+    transform var(--ds-tooltip-enter-duration, var(--ds-motion-feedback))
+      var(--ds-tooltip-enter-easing, var(--ds-motion-ease-enter))
+  );
+  --ds-tooltip-exit-transition-current: var(
+    --ds-tooltip-exit-transition,
+    opacity var(--ds-tooltip-exit-duration, var(--ds-motion-feedback))
+      var(--ds-tooltip-exit-easing, var(--ds-motion-ease-exit)),
+    transform var(--ds-tooltip-exit-duration, var(--ds-motion-feedback))
+      var(--ds-tooltip-exit-easing, var(--ds-motion-ease-exit))
+  );
 
-/* ---- top-layer branch: the bubble carries the `popover` attribute there, and
-        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
-        the bubble surface owns neither. `data-ds-position-strategy` is stamped
-        by the engine alongside data-part. ---- */
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-ds-position-strategy='anchor-css'] {
-  border: 0;
+  position: relative;
+  isolation: isolate;
+  z-index: var(
+    --ds-tooltip-instance-z-index,
+    var(--ds-z-tooltip, var(--ds-z-index-tooltip, 1700))
+  );
+  box-sizing: border-box;
+  inline-size: max-content;
+  max-inline-size: min(
+    var(--ds-tooltip-instance-max-width, var(--ds-tooltip-max-width-current)),
+    calc(
+      100vw - var(--ds-tooltip-viewport-gap, 0.5rem) -
+        var(--ds-tooltip-viewport-gap, 0.5rem)
+    )
+  );
+  max-inline-size: min(
+    var(--ds-tooltip-instance-max-width, var(--ds-tooltip-max-width-current)),
+    calc(
+      100dvi - var(--ds-tooltip-viewport-gap, 0.5rem) -
+        var(--ds-tooltip-viewport-gap, 0.5rem)
+    )
+  );
+  padding-block: var(--ds-tooltip-padding-block-current);
+  padding-inline: var(--ds-tooltip-padding-inline-current);
   overflow: visible;
+  border: var(--ds-tooltip-edge-width) solid var(--ds-tooltip-edge);
+  border-radius: var(--ds-tooltip-radius-current);
+  background: var(--ds-tooltip-surface);
+  box-shadow: var(--ds-tooltip-shadow-current);
+  color: var(--ds-tooltip-ink);
+  font: var(
+    --ds-type-caption,
+    var(--ds-font-weight-medium) var(--ds-font-size-xs) /
+      var(--ds-line-height-snug) var(--ds-font-family-base)
+  );
+  font-variant-numeric: var(--ds-type-caption-font-variant-numeric, normal);
+  letter-spacing: var(
+    --ds-type-caption-letter-spacing,
+    var(--ds-letter-spacing-normal, 0)
+  );
+  text-align: start;
+  text-transform: var(--ds-type-caption-text-transform, none);
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: normal;
+  direction: inherit;
+  unicode-bidi: plaintext;
+  opacity: 0;
+  pointer-events: none;
+  transform: var(--ds-tooltip-closed-transform);
+  transform-origin: center bottom;
+  transition: var(
+    --ds-tooltip-transition,
+    var(--ds-tooltip-exit-transition-current)
+  );
+  will-change: opacity, transform;
 }
 
-/* ---- shortcut chips: built on `currentColor` so they track whichever tone the
-        bubble is painting, with no second color map. ---- */
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] [data-part='shortcut-key'] {
-  border-radius: var(--ds-radius-sm);
-  background: color-mix(in srgb, currentColor 12%, transparent);
+/* A code-owned material layer preserves the recipe background while allowing
+   brands to add quiet grain/light without app-authored pseudo chrome. */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"]::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--ds-tooltip-texture-current),
+    var(--ds-tooltip-highlight-current);
+  content: "";
+  opacity: var(--ds-tooltip-texture-opacity, 1);
+  pointer-events: none;
 }
-.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] [data-part='shortcut-key'][data-part='shortcut-key'] {
-  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  > [data-part="content"],
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  > [data-part="shortcut-row"] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Bounded recipes keep one anatomy while giving white-label themes a useful
+   material/density vocabulary. Every recipe facet remains overrideable. */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-recipe="minimal"] {
+  --ds-tooltip-surface: var(
+    --ds-tooltip-minimal-background,
+    var(--ds-material-overlay-background, var(--ds-surface-overlay))
+  );
+  --ds-tooltip-ink: var(
+    --ds-tooltip-minimal-foreground,
+    var(--ds-color-text-primary)
+  );
+  --ds-tooltip-edge: var(--ds-tooltip-minimal-border, transparent);
+  --ds-tooltip-edge-width: var(--ds-tooltip-minimal-border-width, 1px);
+  --ds-tooltip-shadow-current: var(
+    --ds-tooltip-minimal-shadow,
+    var(--ds-shadow-sm, none)
+  );
+  --ds-tooltip-texture-current: var(--ds-tooltip-minimal-texture, none);
+  --ds-tooltip-highlight-current: var(--ds-tooltip-minimal-highlight, none);
+  --ds-tooltip-padding-block-current: var(
+    --ds-tooltip-minimal-padding-block,
+    0.3125rem
+  );
+  --ds-tooltip-padding-inline-current: var(
+    --ds-tooltip-minimal-padding-inline,
+    0.5rem
+  );
+  --ds-tooltip-radius-current: var(
+    --ds-tooltip-minimal-radius,
+    var(--ds-radius-sm)
+  );
+  --ds-tooltip-max-width-current: var(--ds-tooltip-minimal-max-width, 16rem);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-recipe="inverse"] {
+  --ds-tooltip-surface: var(
+    --ds-tooltip-inverse-background,
+    var(--ds-color-text-primary, var(--ds-tooltip-bg))
+  );
+  --ds-tooltip-ink: var(
+    --ds-tooltip-inverse-foreground,
+    var(--ds-color-bg-base, var(--ds-tooltip-color))
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-inverse-border,
+    color-mix(in srgb, var(--ds-tooltip-ink) 18%, transparent)
+  );
+  --ds-tooltip-edge-width: var(--ds-tooltip-inverse-border-width, 1px);
+  --ds-tooltip-shadow-current: var(
+    --ds-tooltip-inverse-shadow,
+    var(--ds-shadow-lg)
+  );
+  --ds-tooltip-texture-current: var(--ds-tooltip-inverse-texture, none);
+  --ds-tooltip-highlight-current: var(
+    --ds-tooltip-inverse-highlight,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, currentColor 7%, transparent),
+      transparent 52%
+    )
+  );
+  --ds-tooltip-padding-block-current: var(
+    --ds-tooltip-inverse-padding-block,
+    0.375rem
+  );
+  --ds-tooltip-padding-inline-current: var(
+    --ds-tooltip-inverse-padding-inline,
+    0.625rem
+  );
+  --ds-tooltip-radius-current: var(
+    --ds-tooltip-inverse-radius,
+    var(--ds-radius-md)
+  );
+  --ds-tooltip-max-width-current: var(--ds-tooltip-inverse-max-width, 18rem);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-recipe="rich"] {
+  --ds-tooltip-surface: var(
+    --ds-tooltip-rich-background,
+    var(
+      --ds-material-raised-background,
+      var(--ds-surface-raised, var(--ds-surface-card))
+    )
+  );
+  --ds-tooltip-ink: var(
+    --ds-tooltip-rich-foreground,
+    var(--ds-color-text-primary)
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-rich-border,
+    var(--ds-material-raised-border, var(--ds-color-border-secondary))
+  );
+  --ds-tooltip-edge-width: var(--ds-tooltip-rich-border-width, 1px);
+  --ds-tooltip-shadow-current: var(
+    --ds-tooltip-rich-shadow,
+    var(--ds-material-raised-shadow, var(--ds-shadow-xl, var(--ds-elevation-4)))
+  );
+  --ds-tooltip-texture-current: var(
+    --ds-tooltip-rich-texture,
+    var(--ds-material-raised-texture, none)
+  );
+  --ds-tooltip-highlight-current: var(
+    --ds-tooltip-rich-highlight,
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, currentColor 7%, transparent),
+      transparent 56%
+    )
+  );
+  --ds-tooltip-padding-block-current: var(
+    --ds-tooltip-rich-padding-block,
+    0.6875rem
+  );
+  --ds-tooltip-padding-inline-current: var(
+    --ds-tooltip-rich-padding-inline,
+    0.8125rem
+  );
+  --ds-tooltip-radius-current: var(
+    --ds-tooltip-rich-radius,
+    var(--ds-radius-lg)
+  );
+  --ds-tooltip-max-width-current: var(--ds-tooltip-rich-max-width, 24rem);
+  font: var(--ds-tooltip-rich-type, var(--ds-type-supporting));
+  letter-spacing: var(
+    --ds-tooltip-rich-letter-spacing,
+    var(--ds-type-supporting-letter-spacing)
+  );
+}
+
+/* Density is a bounded tenant/app choice, independent from material recipe.
+ * Explicit data-density travels with the portaled bubble; inherited tenant
+ * density remains addressable in the inline top-layer branch. */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-density="compact"] {
+  --ds-tooltip-padding-block-current: var(
+    --ds-tooltip-compact-padding-block,
+    0.25rem
+  );
+  --ds-tooltip-padding-inline-current: var(
+    --ds-tooltip-compact-padding-inline,
+    0.5rem
+  );
+  font: var(--ds-tooltip-compact-type, var(--ds-type-caption));
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-density="comfortable"] {
+  --ds-tooltip-padding-block-current: var(
+    --ds-tooltip-comfortable-padding-block,
+    0.4375rem
+  );
+  --ds-tooltip-padding-inline-current: var(
+    --ds-tooltip-comfortable-padding-inline,
+    0.6875rem
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-density="spacious"] {
+  --ds-tooltip-padding-block-current: var(
+    --ds-tooltip-spacious-padding-block,
+    0.6875rem
+  );
+  --ds-tooltip-padding-inline-current: var(
+    --ds-tooltip-spacious-padding-inline,
+    0.875rem
+  );
+  font: var(--ds-tooltip-spacious-type, var(--ds-type-supporting));
+}
+
+/* Collision is observable without introducing an alarming state color. Brands
+ * may tune the settling shadow while the measured geometry owns placement. */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-collision-adjusted="true"] {
+  box-shadow: var(
+    --ds-tooltip-collision-shadow,
+    var(--ds-tooltip-shadow-current)
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-radius="none"] {
+  --ds-tooltip-radius-current: 0;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-radius="sm"] {
+  --ds-tooltip-radius-current: var(--ds-radius-sm);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-radius="md"] {
+  --ds-tooltip-radius-current: var(--ds-radius-md);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-radius="lg"] {
+  --ds-tooltip-radius-current: var(--ds-radius-lg);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement^="bottom"] {
+  --ds-tooltip-closed-transform: translateY(
+      calc(0px - var(--ds-tooltip-motion-distance, 0.1875rem))
+    )
+    scale(var(--ds-tooltip-motion-scale, 0.97));
+  transform-origin: center top;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement^="left"] {
+  --ds-tooltip-closed-transform: translateX(
+      var(--ds-tooltip-motion-distance, 0.1875rem)
+    )
+    scale(var(--ds-tooltip-motion-scale, 0.97));
+  transform-origin: right center;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement^="right"] {
+  --ds-tooltip-closed-transform: translateX(
+      calc(0px - var(--ds-tooltip-motion-distance, 0.1875rem))
+    )
+    scale(var(--ds-tooltip-motion-scale, 0.97));
+  transform-origin: left center;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-open="true"] {
+  opacity: 1;
+  transform: translate(0) scale(1);
+  transition: var(
+    --ds-tooltip-transition,
+    var(--ds-tooltip-enter-transition-current)
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-open="false"] {
+  opacity: 0;
+  pointer-events: none;
+  transform: var(--ds-tooltip-closed-transform);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-open="true"][data-interactive="true"] {
+  pointer-events: auto;
+}
+
+@starting-style {
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-open="true"] {
+    opacity: 0;
+    transform: var(--ds-tooltip-closed-transform);
+  }
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-interactive="true"]:focus-within {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* Semantic tones tune the coordinated local material. The arrow consumes the
+   same variables, so it can never drift to a different paint. */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-tone="primary"] {
+  --ds-tooltip-surface: var(--ds-tooltip-primary-bg, var(--ds-color-primary));
+  --ds-tooltip-ink: var(
+    --ds-tooltip-primary-color,
+    var(--ds-color-text-on-primary)
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-primary-border,
+    color-mix(in srgb, currentColor 20%, transparent)
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-tone="secondary"] {
+  --ds-tooltip-surface: var(
+    --ds-tooltip-secondary-bg,
+    var(--ds-color-secondary)
+  );
+  --ds-tooltip-ink: var(
+    --ds-tooltip-secondary-color,
+    var(--ds-color-text-on-primary)
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-secondary-border,
+    color-mix(in srgb, currentColor 20%, transparent)
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-tone="success"] {
+  --ds-tooltip-surface: var(--ds-tooltip-success-bg, var(--ds-color-success));
+  --ds-tooltip-ink: var(
+    --ds-tooltip-success-color,
+    var(--ds-color-text-on-primary)
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-success-border,
+    color-mix(in srgb, currentColor 20%, transparent)
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-tone="warning"] {
+  --ds-tooltip-surface: var(--ds-tooltip-warning-bg, var(--ds-color-warning));
+  --ds-tooltip-ink: var(
+    --ds-tooltip-warning-color,
+    var(--ds-color-text-on-primary)
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-warning-border,
+    color-mix(in srgb, currentColor 20%, transparent)
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-tone="error"] {
+  --ds-tooltip-surface: var(--ds-tooltip-error-bg, var(--ds-color-error));
+  --ds-tooltip-ink: var(
+    --ds-tooltip-error-color,
+    var(--ds-color-text-on-primary)
+  );
+  --ds-tooltip-edge: var(
+    --ds-tooltip-error-border,
+    color-mix(in srgb, currentColor 20%, transparent)
+  );
+}
+
+/* Top-layer popovers neutralize UA overflow while retaining DS-owned chrome. */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"][data-ds-position-strategy="anchor-css"] {
+  overflow: visible;
+  border: var(--ds-tooltip-edge-width) solid var(--ds-tooltip-edge);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  [data-part="shortcut-row"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-tooltip-shortcut-gap, var(--ds-spacing-sm));
+  min-inline-size: 0;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  [data-part="content"] {
+  min-inline-size: 0;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  [data-part="shortcut-chips"] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--ds-tooltip-shortcut-chip-gap, 0.1875rem);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  [data-part="shortcut-key"][data-part="shortcut-key"] {
+  min-inline-size: var(--ds-tooltip-shortcut-key-min-size, 1.35rem);
+  padding-block: var(--ds-tooltip-shortcut-key-padding-block, 0.0625rem);
+  padding-inline: var(--ds-tooltip-shortcut-key-padding-inline, 0.3125rem);
+  border: var(--ds-tooltip-shortcut-key-border-width, 1px) solid
+    var(
+      --ds-tooltip-shortcut-key-border,
+      color-mix(in srgb, currentColor 28%, transparent)
+    );
+  border-radius: var(--ds-tooltip-shortcut-key-radius, var(--ds-radius-sm));
+  background: var(
+    --ds-tooltip-shortcut-key-background,
+    color-mix(in srgb, currentColor 10%, transparent)
+  );
+  box-shadow: var(
+    --ds-tooltip-shortcut-key-shadow,
+    inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)
+  );
+  color: currentColor;
+  font: var(--ds-tooltip-shortcut-key-type, var(--ds-type-code));
+  line-height: 1.25;
+  text-align: center;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  > [data-part="arrow"][data-part="arrow"] {
+  position: absolute;
+  z-index: 0;
+  inline-size: var(--ds-tooltip-arrow-size, 0.375rem);
+  block-size: var(--ds-tooltip-arrow-size, 0.375rem);
+  border: var(--ds-tooltip-edge-width) solid var(--ds-tooltip-edge);
+  background: var(--ds-tooltip-surface);
+  background-image: var(--ds-tooltip-texture-current);
+  transform: rotate(45deg);
+  transition: inset-block-start var(--ds-motion-feedback)
+      var(--ds-motion-ease-move),
+    inset-block-end var(--ds-motion-feedback) var(--ds-motion-ease-move),
+    inset-inline-start var(--ds-motion-feedback) var(--ds-motion-ease-move),
+    inset-inline-end var(--ds-motion-feedback) var(--ds-motion-ease-move);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-has-arrow="true"][data-placement*="-"] {
+  min-inline-size: var(--ds-tooltip-arrow-safe-min-inline-size, 2.5rem);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement^="top"]
+  > [data-part="arrow"] {
+  inset-block-end: var(
+    --ds-tooltip-arrow-overlap,
+    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+  );
+  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
+  border-block-start: 0;
+  border-inline-start: 0;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-block-start: var(
+    --ds-tooltip-arrow-overlap,
+    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+  );
+  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
+  border-block-end: 0;
+  border-inline-end: 0;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement^="left"]
+  > [data-part="arrow"] {
+  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
+  inset-inline-end: var(
+    --ds-tooltip-arrow-overlap,
+    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+  );
+  border-block-end: 0;
+  border-inline-start: 0;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
+  inset-inline-start: var(
+    --ds-tooltip-arrow-overlap,
+    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+  );
+  border-block-start: 0;
+  border-inline-end: 0;
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-start"][data-placement^="top"]
+  > [data-part="arrow"],
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-start"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-inline-start: var(--ds-tooltip-arrow-edge-offset, 1rem);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-end"][data-placement^="top"]
+  > [data-part="arrow"],
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-end"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-inline: auto var(--ds-tooltip-arrow-edge-offset, 1rem);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-start"][data-placement^="left"]
+  > [data-part="arrow"],
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-start"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block-start: var(--ds-tooltip-arrow-edge-offset, 1rem);
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-end"][data-placement^="left"]
+  > [data-part="arrow"],
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-placement$="-end"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block: auto var(--ds-tooltip-arrow-edge-offset, 1rem);
+}
+
+/* Keep the arrow aimed at the anchor after viewport shifting, side flips and
+ * RTL alignment changes. The measured center remains corner-safe. */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-arrow-tracked="true"][data-placement^="top"]
+  > [data-part="arrow"],
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-arrow-tracked="true"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-inline: auto;
+  inset-inline-start: clamp(
+    var(--ds-tooltip-arrow-edge-offset, 1rem),
+    calc(
+      var(--ds-tooltip-arrow-anchor-offset) -
+        var(--ds-tooltip-arrow-half-size-current)
+    ),
+    calc(
+      100% - var(--ds-tooltip-arrow-edge-offset, 1rem) -
+        var(--ds-tooltip-arrow-half-size-current) -
+        var(--ds-tooltip-arrow-half-size-current)
+    )
+  );
+}
+
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-arrow-tracked="true"][data-placement^="left"]
+  > [data-part="arrow"],
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-arrow-tracked="true"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block: auto;
+  inset-block-start: clamp(
+    var(--ds-tooltip-arrow-edge-offset, 1rem),
+    calc(
+      var(--ds-tooltip-arrow-anchor-offset) -
+        var(--ds-tooltip-arrow-half-size-current)
+    ),
+    calc(
+      100% - var(--ds-tooltip-arrow-edge-offset, 1rem) -
+        var(--ds-tooltip-arrow-half-size-current) -
+        var(--ds-tooltip-arrow-half-size-current)
+    )
+  );
+}
+
+@media (pointer: coarse) {
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-interactive="true"]
+    :where(button, [role="button"], a, input, select, textarea) {
+    min-block-size: var(--ds-tooltip-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"] {
+    transition: none;
+    will-change: auto;
+  }
+
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-open] {
+    transform: none;
+  }
+
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+    > [data-part="arrow"] {
+    transition: none;
+  }
+}
+
+html[data-ds-motion="reduced"]
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"] {
+  transition: none;
+  transform: none;
+  will-change: auto;
+}
+
+html[data-ds-motion="reduced"]
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+  > [data-part="arrow"] {
+  transition: none;
+}
+
+@media (forced-colors: active) {
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"] {
+    --ds-tooltip-highlight-current: none;
+    --ds-tooltip-texture-current: none;
+
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
+    > [data-part="arrow"] {
+    border-color: CanvasText;
+    background: Canvas;
+  }
 }

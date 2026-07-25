@@ -12,15 +12,18 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps } from '../../../../../foundation/contracts';
-import type { ReactNode, CSSProperties } from 'react';
+import type {
+  BaseComponentProps,
+  EngineAwareProps,
+} from "../../../../../foundation/contracts";
+import type { ReactNode, CSSProperties } from "react";
 
 /**
  * Orientation of the divider line.
  * - 'horizontal': Creates a horizontal line across the container width
  * - 'vertical': Creates a vertical line across the container height
  */
-export type DividerOrientation = 'horizontal' | 'vertical';
+export type DividerOrientation = "horizontal" | "vertical";
 
 /**
  * Visual style of the divider line.
@@ -28,16 +31,19 @@ export type DividerOrientation = 'horizontal' | 'vertical';
  * - 'dashed': Series of short dashes
  * - 'dotted': Series of dots
  */
-export type DividerVariant = 'solid' | 'dashed' | 'dotted';
+export type DividerVariant = "solid" | "dashed" | "dotted";
 
 /**
  * Position of the text content within the divider.
  * Only applies when children are provided.
- * - 'left': Text aligned to the left
+ * - 'start': Text aligned to logical inline start (recommended)
  * - 'center': Text centered (default)
- * - 'right': Text aligned to the right
+ * - 'end': Text aligned to logical inline end (recommended)
+ * - 'left'/'right': Deprecated aliases retained for source compatibility;
+ *   they resolve to start/end so RTL never requires application-side inversion.
  */
-export type DividerTextPosition = 'left' | 'center' | 'right';
+export type DividerLogicalTextPosition = "start" | "center" | "end";
+export type DividerTextPosition = DividerLogicalTextPosition | "left" | "right";
 
 /**
  * Thickness preset for the divider line.
@@ -45,7 +51,7 @@ export type DividerTextPosition = 'left' | 'center' | 'right';
  * - 'medium': 2px line (default)
  * - 'thick': 3px line
  */
-export type DividerThicknessPreset = 'thin' | 'medium' | 'thick';
+export type DividerThicknessPreset = "thin" | "medium" | "thick";
 
 /**
  * Thickness of the divider line - can be a preset or custom pixel value.
@@ -61,12 +67,12 @@ export type DividerThickness = DividerThicknessPreset | number;
  * - 'lg': Large margin (1.5rem)
  * - 'xl': Extra large margin (2rem)
  */
-export type DividerSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type DividerSpacing = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
 /**
  * Props for the Divider component.
  */
-export interface DividerProps extends EngineAwareProps {
+export interface DividerProps extends BaseComponentProps, EngineAwareProps {
   /**
    * Orientation of the divider.
    * @default 'horizontal'
@@ -95,6 +101,7 @@ export interface DividerProps extends EngineAwareProps {
   /**
    * Position of the text content.
    * Only applies when children are provided.
+   * Prefer logical `start`/`end`; `left`/`right` are compatibility aliases.
    * @default 'center'
    */
   textPosition?: DividerTextPosition;
@@ -141,41 +148,45 @@ export interface DividerProps extends EngineAwareProps {
   /**
    * Test ID for testing purposes.
    */
-  'data-testid'?: string;
+  "data-testid"?: string;
+  /** BCP 47 language metadata for an optional textual divider label. */
+  lang?: string;
+  /** Logical reading direction inherited by label placement. */
+  dir?: "ltr" | "rtl" | "auto";
 }
 
 /**
  * Default values for the Divider component.
  */
 export const DIVIDER_DEFAULTS: Partial<DividerProps> = {
-  orientation: 'horizontal',
-  variant: 'solid',
+  orientation: "horizontal",
+  variant: "solid",
   dashed: false,
-  textPosition: 'center',
+  textPosition: "center",
   plain: false,
-  thickness: 'thin',
-  spacing: 'md',
+  thickness: "thin",
+  spacing: "md",
 };
 
 /**
  * Mapping of spacing presets — resolves through DS CSS custom properties.
  */
 export const SPACING_MAP: Record<DividerSpacing, string> = {
-  none: '0',
-  xs: 'var(--ds-spacing-1, 0.25rem)',
-  sm: 'var(--ds-spacing-2, 0.5rem)',
-  md: 'var(--ds-spacing-4, 1rem)',
-  lg: 'var(--ds-spacing-6, 1.5rem)',
-  xl: 'var(--ds-spacing-8, 2rem)',
+  none: "0",
+  xs: "var(--ds-spacing-1, 0.25rem)",
+  sm: "var(--ds-spacing-2, 0.5rem)",
+  md: "var(--ds-spacing-4, 1rem)",
+  lg: "var(--ds-spacing-6, 1.5rem)",
+  xl: "var(--ds-spacing-8, 2rem)",
 };
 
 /**
  * Mapping of thickness presets to CSS values.
  */
 export const THICKNESS_MAP: Record<DividerThicknessPreset, string> = {
-  thin: '1px',
-  medium: '2px',
-  thick: '3px',
+  thin: "var(--ds-divider-thickness-thin, 1px)",
+  medium: "var(--ds-divider-thickness-medium, 2px)",
+  thick: "var(--ds-divider-thickness-thick, 3px)",
 };
 
 /**
@@ -185,17 +196,38 @@ export const THICKNESS_MAP: Record<DividerThicknessPreset, string> = {
  * @param thickness - Thickness value: preset name or number in pixels
  * @returns CSS-compatible thickness value string
  */
-export function getThicknessValue(thickness: DividerThickness | undefined): string {
+export function getThicknessValue(
+  thickness: DividerThickness | undefined
+): string {
   if (thickness === undefined) return THICKNESS_MAP.thin;
-  if (typeof thickness === 'number') return `${thickness}px`;
+  if (typeof thickness === "number") {
+    return Number.isFinite(thickness) && thickness >= 0
+      ? `${thickness}px`
+      : THICKNESS_MAP.thin;
+  }
   return THICKNESS_MAP[thickness] || THICKNESS_MAP.thin;
+}
+
+/**
+ * Normalizes legacy physical labels onto the logical positioning contract.
+ * Flexbox then mirrors `start`/`end` automatically through the inherited
+ * writing direction, so consumers never branch on locale or `dir`.
+ */
+export function resolveDividerTextPosition(
+  position: DividerTextPosition | undefined
+): DividerLogicalTextPosition {
+  if (position === "left") return "start";
+  if (position === "right") return "end";
+  return position ?? "center";
 }
 
 /**
  * Default colors for different themes/engines.
  */
 export const DEFAULT_COLORS = {
-  classic: 'var(--ds-divider-color, var(--ds-color-border, rgba(5, 5, 5, 0.06)))',
-  modern: 'var(--ds-divider-color, oklch(0.746 0 0))',
-  rustic: 'var(--ds-divider-color, #d9d9d9)',
+  classic:
+    "var(--ds-divider-color, var(--ds-color-border, rgba(5, 5, 5, 0.06)))",
+  modern:
+    "var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))",
+  rustic: "var(--ds-divider-color, #d9d9d9)",
 };

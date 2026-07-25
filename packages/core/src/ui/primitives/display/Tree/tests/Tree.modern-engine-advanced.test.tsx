@@ -3,6 +3,7 @@ import { createEvent, fireEvent, render, screen, waitFor, within } from '@testin
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernTree from '../engines/modern';
+import type { TreeDataNode } from '../contracts';
 
 const TREE_DATA = [
   {
@@ -110,7 +111,7 @@ describe('Tree modern engine advanced coverage', () => {
   });
 
   it('covers async loading, strict checking, keyboard selection, and drag-drop positions', async () => {
-    const loadData = vi.fn(async () => undefined);
+    const loadData = vi.fn(async (_node: TreeDataNode): Promise<TreeDataNode[]> => []);
     const handleExpand = vi.fn();
     const handleCheck = vi.fn();
     const handleSelect = vi.fn();
@@ -144,16 +145,20 @@ describe('Tree modern engine advanced coverage', () => {
     );
 
     const tree = screen.getByRole('tree');
+    // The roving-stop anchor: with no focusedKey, the first visible node
+    // ('root') is the position, so the first ArrowDown MOVES to 'child'
+    // (K3-A Pass 2 — previously the keystroke was swallowed to initialize
+    // state and this test's expectations encoded that bug).
     fireEvent.keyDown(tree, { key: 'ArrowDown' });
     fireEvent.keyDown(tree, { key: 'Enter' });
     fireEvent.keyDown(tree, { key: ' ' });
 
     expect(handleSelect).toHaveBeenCalledWith(
-      ['root'],
+      ['child'],
       expect.objectContaining({ selected: true })
     );
     expect(handleCheck).toHaveBeenCalledWith(
-      expect.arrayContaining(['root']),
+      expect.arrayContaining(['child']),
       expect.objectContaining({ checked: true })
     );
 
@@ -165,7 +170,7 @@ describe('Tree modern engine advanced coverage', () => {
       throw new Error('Expected lazy tree item');
     }
 
-    fireEvent.click(within(lazyItem).getByLabelText('Expand'));
+    fireEvent.click(within(lazyItem as HTMLElement).getByLabelText('Expand'));
     await waitFor(() => {
       expect(loadData).toHaveBeenCalledWith(expect.objectContaining({ key: 'lazy' }));
     });

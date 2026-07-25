@@ -23,6 +23,7 @@
 
 import { type ReactNode } from 'react';
 import { Box, Button, Flex, Text } from '../../../primitives';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -78,6 +79,9 @@ export interface DashboardHeaderProps {
 // ---------------------------------------------------------------------------
 
 function StatusDot({ state, label }: { state: DashboardStatusState; label?: string }) {
+  const { t } = useTranslation('common');
+  const resolvedLabel = label ?? t(`dashboard_status_${state}` as any);
+
   return (
     <Flex
       data-part="status-dot"
@@ -99,7 +103,7 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
         }}
       />
       <Text data-part="status-dot-text" data-state={state} size="xs" style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>
-        {label ?? state.charAt(0).toUpperCase() + state.slice(1)}
+        {resolvedLabel}
       </Text>
     </Flex>
   );
@@ -159,6 +163,8 @@ export function DashboardHeader({
   compact,
   icon,
 }: DashboardHeaderProps) {
+  const { t } = useTranslation('common');
+
   // ---------- Compact mode (phone) ----------
   if (compact) {
     return (
@@ -185,7 +191,7 @@ export function DashboardHeader({
             <Box
               data-part="actions"
               role="toolbar"
-              aria-label="Actions"
+              aria-label={t('actions')}
               style={{ display: 'flex', gap: 4 }}
             >
               {actions.slice(0, 2).map((action) => (
@@ -209,7 +215,7 @@ export function DashboardHeader({
             data-part="metrics-row"
             data-compact="true"
             role="group"
-            aria-label="Key metrics"
+            aria-label={t('key_metrics')}
             style={{
               display: 'flex',
               gap: 8,
@@ -242,11 +248,11 @@ export function DashboardHeader({
       }}
     >
       {/* Row 1: title + status + actions */}
-      <Flex justify="between" align="center" gap={4} style={{ marginBottom: metrics || searchSlot || timeRangeSlot ? 12 : 0 }}>
-        <Box style={{ flex: 1, minWidth: 0 }}>
+      <Flex data-part="header-row" justify="between" align="center" gap={4} style={{ marginBottom: metrics || searchSlot || timeRangeSlot ? 12 : 0 }}>
+        <Box data-part="identity" style={{ flex: 1, minWidth: 0 }}>
           <Flex align="center" gap={3}>
             {icon && <Box data-part="icon" aria-hidden="true" style={{ flexShrink: 0 }}>{icon}</Box>}
-            <Box>
+            <Box data-part="copy">
               <Flex align="center" gap={2}>
                 <Text data-part="title" size="xl" weight="semibold">{title}</Text>
                 {status && <StatusDot state={status.state} label={status.label} />}
@@ -278,7 +284,7 @@ export function DashboardHeader({
 
       {/* Row 2: metric chips */}
       {metrics && metrics.length > 0 && (
-        <Box data-part="metrics-row" data-compact="false" role="group" aria-label="Key metrics" style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Box data-part="metrics-row" data-compact="false" role="group" aria-label={t('key_metrics')} style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           {metrics.map((m) => (
             <MetricChip key={m.key} metric={m} />
           ))}

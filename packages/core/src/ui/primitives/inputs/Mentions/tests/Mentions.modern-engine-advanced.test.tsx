@@ -129,4 +129,38 @@ describe('Mentions modern advanced coverage', () => {
     expect(input).toBeDisabled();
     expect(input).toHaveAttribute('readonly');
   });
+
+  it('keyboard selection honors the disabled option gate (Enter/Tab)', async () => {
+    const handleSelect = vi.fn();
+    const handleChange = vi.fn();
+    render(
+      <ModernMentions
+        options={OPTIONS}
+        filterOption={false}
+        onSelect={handleSelect}
+        onChange={handleChange}
+      />
+    );
+
+    const input = screen.getByRole('textbox');
+    Object.defineProperty(input, 'selectionStart', { configurable: true, writable: true, value: 1 });
+    fireEvent.change(input, { target: { value: '@' } });
+    await screen.findByRole('listbox');
+
+    // OPTIONS[1] ('archer') is disabled: ArrowDown onto it, then Enter and
+    // Tab must NOT select it (the pointer path is guarded by the disabled
+    // attribute; the keyboard path now matches).
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    fireEvent.keyDown(input, { key: 'Tab' });
+    expect(handleSelect).not.toHaveBeenCalled();
+    expect(handleChange).not.toHaveBeenCalledWith(expect.stringContaining('archer'));
+
+    // ArrowDown once more lands on 'backend' (enabled) and selects.
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    await waitFor(() => {
+      expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({ value: 'backend' }), '@');
+    });
+  });
 });

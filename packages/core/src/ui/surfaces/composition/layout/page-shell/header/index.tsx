@@ -80,7 +80,6 @@ export function HeaderSurface({
         {config.presentation.description && (
           <Text
             className="ds-header__muted-text"
-            data-part="muted-text"
           >
             {config.presentation.description}
           </Text>
@@ -101,7 +100,6 @@ export function HeaderSurface({
                   {tab.description && (
                     <Text
                       className="ds-header__muted-text"
-                      data-part="muted-text"
                     >{tab.description}</Text>
                   )}
                   <Box>{tab.content}</Box>

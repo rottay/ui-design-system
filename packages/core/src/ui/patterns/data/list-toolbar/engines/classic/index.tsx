@@ -9,7 +9,10 @@
  * action button.
  *
  * Uses only DS primitives (Box, Flex, Text, Button, Badge, Input, Popover,
- * Tabs, Tag, Tooltip) so the implementation is identical across all engines.
+ * Tabs, Tag) and paints inline through the shared `--ds-toolbar-*` /
+ * `--ds-filter-pill-*` token channels (foundation/tokens), which tenant
+ * bundles define. Honors the full ListToolbarProps contract, including
+ * `messages` chrome localization and `showTitleSection`.
  */
 
 import { useState, useCallback, useMemo } from 'react';
@@ -39,8 +42,14 @@ import {
   AlignLeftIcon as AlignLeft,
 } from '../../../../../../graphics/icons';
 
-import type { ListToolbarProps, FilterPillConfig, DensityKey } from '../../contracts';
+import type {
+  ListToolbarProps,
+  ListToolbarMessages,
+  FilterPillConfig,
+  DensityKey,
+} from '../../contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useEngineContext } from '@/infrastructure/runtime/engines/composition/react/provider';
 import { PATTERN_TRANSITION } from '@/ui/patterns/foundation/motion';
 import {
   FILTER_PILL_ACTIVE_BG,
@@ -55,6 +64,7 @@ import {
   FILTER_PILL_FRAME_SHADOW,
   FILTER_PILL_HOVER_BG,
   FILTER_PILL_HOVER_BORDER,
+  FILTER_PILL_RADIUS,
   FILTER_PILL_SHADOW,
   SEARCH_ICON_COLOR,
   TOOLBAR_BG,
@@ -64,7 +74,9 @@ import {
   TOOLBAR_CONTROL_BG,
   TOOLBAR_CONTROL_BORDER,
   TOOLBAR_CONTROL_COLOR,
+  TOOLBAR_CONTROL_RADIUS,
   TOOLBAR_DIVIDER,
+  TOOLBAR_DIVIDER_SPACING,
   TOOLBAR_GAP,
   TOOLBAR_PADDING,
   TOOLBAR_RADIUS,
@@ -78,29 +90,78 @@ import {
 
 const TRANSITION_FAST = PATTERN_TRANSITION;
 
+/**
+ * Historical English chrome copy. Callers localize every string through the
+ * `messages` prop; the modern engine keeps the same defaults so both engines
+ * resolve identical copy for identical overrides.
+ */
+const DEFAULT_MESSAGES: ListToolbarMessages = {
+  compact: 'Compact',
+  comfortable: 'Comfortable',
+  spacious: 'Spacious',
+  densitySuffix: 'density',
+  rowDensity: 'Row density',
+  viewMode: 'View mode',
+  listView: 'List',
+  cardView: 'Cards',
+  columns: 'Columns',
+  density: 'Density',
+  views: 'Views',
+  noColumnSettings: 'No column settings available.',
+  noSavedViews: 'No saved views available.',
+  columnSettings: 'Column settings',
+  settings: 'Settings',
+  moreOptions: 'More options',
+  export: 'Export',
+  active: 'active',
+  clearAll: 'Clear all',
+  compactDescription: 'Tighter row spacing',
+  comfortableDescription: 'Default spacing',
+  spaciousDescription: 'More breathing room',
+};
+
+/**
+ * Focus-ring handlers for the inline-style interactive elements of this
+ * engine. The ring only engages when the browser reports `:focus-visible`
+ * (keyboard modality), so mouse users never see a persistent ring after
+ * click, while keyboard users always get the token-painted indicator.
+ */
+function focusVisibleRingHandlers(baseShadow: string) {
+  return {
+    onFocus: (event: React.FocusEvent<HTMLElement>) => {
+      if (event.currentTarget.matches(':focus-visible')) {
+        event.currentTarget.style.boxShadow = FILTER_PILL_FOCUS_RING;
+      }
+    },
+    onBlur: (event: React.FocusEvent<HTMLElement>) => {
+      event.currentTarget.style.boxShadow = baseShadow;
+    },
+  };
+}
+
 const DENSITY_OPTIONS: {
   key: DensityKey;
   icon: React.ReactNode;
-  label: string;
-  description: string;
+  labelKey: 'compact' | 'comfortable' | 'spacious';
+  descriptionKey: 'compactDescription' | 'comfortableDescription' | 'spaciousDescription';
 }[] = [
   {
     key: 'compact',
     icon: <AlignJustify size={14} />,
-    label: 'Compact',
-    description: 'Tighter row spacing',
+    labelKey: 'compact',
+    descriptionKey: 'compactDescription',
   },
   {
     key: 'comfortable',
     icon: <AlignCenter size={14} />,
-    label: 'Comfortable',
-    description: 'Default spacing',
+    labelKey: 'comfortable',
+    descriptionKey: 'comfortableDescription',
   },
   {
     key: 'spacious',
     icon: <AlignLeft size={14} />,
-    label: 'Spacious',
-    description: 'More breathing room',
+    labelKey: 'spacious',
+    descriptionKey: 'spaciousDescription',
   },
 ];
 
@@ -125,13 +186,15 @@ function FilterPill({
   return (
     <Box
       as="button"
+      type="button"
       onClick={onClick}
+      aria-pressed={isActive}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '4px 14px',
-        borderRadius: 20,
+        borderRadius: FILTER_PILL_RADIUS,
         border: `1.5px solid ${isActive ? FILTER_PILL_ACTIVE_BORDER : FILTER_PILL_BORDER}`,
         background: isActive ? FILTER_PILL_ACTIVE_BG : FILTER_PILL_BG,
         color: isActive ? FILTER_PILL_ACTIVE_COLOR : FILTER_PILL_COLOR,
@@ -155,12 +218,7 @@ function FilterPill({
           event.currentTarget.style.borderColor = FILTER_PILL_BORDER;
         }
       }}
-      onFocus={(event) => {
-        event.currentTarget.style.boxShadow = FILTER_PILL_FOCUS_RING;
-      }}
-      onBlur={(event) => {
-        event.currentTarget.style.boxShadow = isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW;
-      }}
+      {...focusVisibleRingHandlers(isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW)}
     >
       {label}
     </Box>
@@ -198,21 +256,25 @@ function FilterPillsRow({
 function ViewModeToggle({
   viewMode,
   onViewModeChange,
+  messages,
 }: {
   viewMode: 'list' | 'cards';
   onViewModeChange: (mode: 'list' | 'cards') => void;
+  messages: ListToolbarMessages;
 }) {
   const modes: { key: 'list' | 'cards'; label: string; icon: React.ReactNode }[] = [
-    { key: 'list', label: 'List', icon: <List size={14} /> },
-    { key: 'cards', label: 'Cards', icon: <LayoutGrid size={14} /> },
+    { key: 'list', label: messages.listView, icon: <List size={14} /> },
+    { key: 'cards', label: messages.cardView, icon: <LayoutGrid size={14} /> },
   ];
 
   return (
     <Box
+      role="group"
+      aria-label={messages.viewMode}
       style={{
         display: 'inline-flex',
         border: `1px solid ${TOOLBAR_CONTROL_BORDER}`,
-        borderRadius: 6,
+        borderRadius: TOOLBAR_CONTROL_RADIUS,
         overflow: 'hidden',
         flexShrink: 0,
         background: TOOLBAR_CONTROL_BG,
@@ -220,13 +282,15 @@ function ViewModeToggle({
         boxShadow: FILTER_PILL_FRAME_SHADOW,
       }}
     >
-      {modes.map((mode) => {
+      {modes.map((mode, index) => {
         const isActive = viewMode === mode.key;
         return (
           <Box
             key={mode.key}
             as="button"
+            type="button"
             onClick={() => onViewModeChange(mode.key)}
+            aria-pressed={isActive}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -234,14 +298,16 @@ function ViewModeToggle({
               padding: '4px 10px',
               border: 'none',
               background: isActive ? FILTER_PILL_ACTIVE_BG : 'transparent',
-              borderRight:
-                mode.key === 'list' ? `1px solid ${TOOLBAR_DIVIDER}` : 'none',
+              borderInlineEnd:
+                index === 0 ? `1px solid ${TOOLBAR_DIVIDER}` : 'none',
               color: isActive ? FILTER_PILL_ACTIVE_COLOR : TOOLBAR_CONTROL_COLOR,
               fontWeight: isActive ? 500 : 400,
               fontSize: 12,
               cursor: 'pointer',
-              transition: `background ${TRANSITION_FAST}, color ${TRANSITION_FAST}`,
+              outline: 'none',
+              transition: `background ${TRANSITION_FAST}, color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
             }}
+            {...focusVisibleRingHandlers('none')}
           >
             {mode.icon}
             {mode.label}
@@ -259,34 +325,40 @@ function ViewModeToggle({
 function DensitySection({
   density,
   onDensityChange,
+  messages,
 }: {
   density: DensityKey;
   onDensityChange: (d: DensityKey) => void;
+  messages: ListToolbarMessages;
 }) {
   return (
-    <Flex direction="column" gap={4}>
+    <Flex direction="column" gap={4} role="group" aria-label={messages.rowDensity}>
       {DENSITY_OPTIONS.map((opt) => {
         const isActive = density === opt.key;
         return (
           <Box
             key={opt.key}
             as="button"
+            type="button"
             onClick={() => onDensityChange(opt.key)}
+            aria-pressed={isActive}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 10,
               padding: '8px 10px',
-              borderRadius: 6,
+              borderRadius: TOOLBAR_CONTROL_RADIUS,
               border: isActive
                 ? `1px solid ${FILTER_PILL_ACTIVE_BORDER}`
                 : `1px solid ${TOOLBAR_CONTROL_BORDER}`,
               background: isActive ? FILTER_PILL_ACTIVE_BG : TOOLBAR_CONTROL_BG,
               cursor: 'pointer',
-              transition: `background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
+              outline: 'none',
+              transition: `background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
               width: '100%',
-              textAlign: 'left' as const,
+              textAlign: 'start' as const,
             }}
+            {...focusVisibleRingHandlers('none')}
           >
             <Box
               style={{
@@ -319,7 +391,7 @@ function DensitySection({
                     lineHeight: 1.2,
                   }}
                 >
-                  {opt.label}
+                  {messages[opt.labelKey]}
                 </Text>
                 <Text
                   style={{
@@ -328,7 +400,7 @@ function DensitySection({
                     lineHeight: 1.2,
                   }}
                 >
-                  {opt.description}
+                  {messages[opt.descriptionKey]}
                 </Text>
               </Flex>
             </Box>
@@ -347,11 +419,13 @@ function SettingsDropdownContent({
   savedViewsContent,
   density,
   onDensityChange,
+  messages,
 }: {
   columnSettingsContent?: React.ReactNode;
   savedViewsContent?: React.ReactNode;
   density: DensityKey;
   onDensityChange: (d: DensityKey) => void;
+  messages: ListToolbarMessages;
 }) {
   return (
     <Box style={{ width: 320 }}>
@@ -361,7 +435,7 @@ function SettingsDropdownContent({
         items={[
           {
             key: 'columns',
-            label: 'Columns',
+            label: messages.columns,
             children: columnSettingsContent ?? (
               <Text
                 style={{
@@ -370,23 +444,24 @@ function SettingsDropdownContent({
                   padding: '12px 0',
                 }}
               >
-                No column settings available.
+                {messages.noColumnSettings}
               </Text>
             ),
           },
           {
             key: 'density',
-            label: 'Density',
+            label: messages.density,
             children: (
               <DensitySection
                 density={density}
                 onDensityChange={onDensityChange}
+                messages={messages}
               />
             ),
           },
           {
             key: 'views',
-            label: 'Views',
+            label: messages.views,
             children: savedViewsContent ?? (
               <Text
                 style={{
@@ -395,7 +470,7 @@ function SettingsDropdownContent({
                   padding: '12px 0',
                 }}
               >
-                No saved views available.
+                {messages.noSavedViews}
               </Text>
             ),
           },
@@ -417,11 +492,13 @@ function SettingsDropdownContent({
  */
 export default function ClassicListToolbar({
   title,
+  showTitleSection = true,
   icon,
   totalCount,
   search,
   onSearchChange,
   searchPlaceholder = 'Search...',
+  messages: messageOverrides,
   filterPills,
   activeFilters,
   onFilterChange,
@@ -440,6 +517,14 @@ export default function ClassicListToolbar({
 }: ListToolbarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { isMobile } = useBreakpoints();
+  // The rustic engine re-exports this implementation; the scope class must
+  // name the engine that is actually rendering, not the file that owns it.
+  const { engine } = useEngineContext();
+  const messages = useMemo(
+    () => ({ ...DEFAULT_MESSAGES, ...messageOverrides }),
+    [messageOverrides],
+  );
+  const searchAriaLabel = messages.searchLabel ?? searchPlaceholder;
 
   const handleSearchChange = useCallback(
     (value: string) => {
@@ -468,7 +553,10 @@ export default function ClassicListToolbar({
 
   return (
     <Box
-      className={className}
+      data-part="root"
+      data-mobile={isMobile}
+      data-has-title={showTitleSection}
+      className={`ds-pattern-list-toolbar ds-engine-${engine} ${className ?? ''}`}
       style={{
         background: TOOLBAR_BG,
         border: `1px solid ${TOOLBAR_BORDER}`,
@@ -483,42 +571,46 @@ export default function ClassicListToolbar({
         <>
           <Stack spacing="md" style={{ padding: 'var(--ds-toolbar-padding, 14px 14px 12px)' }}>
             <Flex align="center" justify="between" gap={12}>
-              <Flex align="center" gap={10} style={{ minWidth: 0 }}>
-                {icon && (
-                  <Box
-                    style={{
-                      color: TOOLBAR_CONTROL_COLOR,
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {icon}
-                  </Box>
-                )}
-                <Flex direction="column" gap={2} style={{ minWidth: 0 }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 600,
-                      color: TOOLBAR_COLOR,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {title}
-                  </Text>
-                  <Badge variant="secondary">{totalCount.toLocaleString()}</Badge>
+              {showTitleSection && (
+                <Flex align="center" gap={10} style={{ minWidth: 0 }}>
+                  {icon && (
+                    <Box
+                      style={{
+                        color: TOOLBAR_CONTROL_COLOR,
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {icon}
+                    </Box>
+                  )}
+                  <Flex direction="column" gap={2} style={{ minWidth: 0 }}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: 600,
+                        color: TOOLBAR_COLOR,
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {title}
+                    </Text>
+                    <Badge variant="secondary">{totalCount.toLocaleString()}</Badge>
+                  </Flex>
                 </Flex>
-              </Flex>
+              )}
 
               <ViewModeToggle
                 viewMode={viewMode}
                 onViewModeChange={onViewModeChange}
+                messages={messages}
               />
             </Flex>
 
             <Input
               size="sm"
+              aria-label={searchAriaLabel}
               placeholder={searchPlaceholder}
               value={search}
               onChange={handleSearchChange}
@@ -564,13 +656,16 @@ export default function ClassicListToolbar({
                     savedViewsContent={savedViewsContent}
                     density={density}
                     onDensityChange={onDensityChange}
+                    messages={messages}
                   />
                 }
               >
                 <Button
                   variant="ghost"
                   size="sm"
-                  aria-label="Settings"
+                  aria-label={messages.settings}
+                  aria-expanded={settingsOpen}
+                  aria-haspopup="dialog"
                   icon={<Settings2 size={15} />}
                   style={{
                     minWidth: 36,
@@ -586,7 +681,7 @@ export default function ClassicListToolbar({
                   variant="ghost"
                   size="sm"
                   onClick={onExport}
-                  aria-label="Export"
+                  aria-label={messages.export}
                   icon={<Download size={15} />}
                   style={{
                     minWidth: 36,
@@ -652,7 +747,7 @@ export default function ClassicListToolbar({
                     color: FILTER_PILL_COLOR,
                   }}
                 >
-                  Clear All
+                  {messages.clearAll}
                 </Button>
               )}
             </Flex>
@@ -674,29 +769,31 @@ export default function ClassicListToolbar({
         }}
       >
         {/* Left: Title + count */}
-        <Flex align="center" gap={10} style={{ flexShrink: 0 }}>
-          {icon && (
-            <Box
+        {showTitleSection && (
+          <Flex align="center" gap={10} style={{ flexShrink: 0 }}>
+            {icon && (
+              <Box
+                style={{
+                  color: TOOLBAR_CONTROL_COLOR,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {icon}
+              </Box>
+            )}
+            <Text
               style={{
-                color: TOOLBAR_CONTROL_COLOR,
-                display: 'flex',
-                alignItems: 'center',
+                fontSize: 15,
+                fontWeight: 600,
+                color: TOOLBAR_COLOR,
               }}
             >
-              {icon}
-            </Box>
-          )}
-          <Text
-            style={{
-              fontSize: 15,
-              fontWeight: 600,
-              color: TOOLBAR_COLOR,
-            }}
-          >
-            {title}
-          </Text>
-          <Badge variant="secondary">{totalCount.toLocaleString()}</Badge>
-        </Flex>
+              {title}
+            </Text>
+            <Badge variant="secondary">{totalCount.toLocaleString()}</Badge>
+          </Flex>
+        )}
 
         {/* Spacer: pushes filter pills + view toggle to the right */}
         <Box style={{ flex: 1 }} />
@@ -710,7 +807,7 @@ export default function ClassicListToolbar({
                 height: 16,
                 background: TOOLBAR_DIVIDER,
                 flexShrink: 0,
-                marginRight: 4,
+                marginInlineEnd: TOOLBAR_DIVIDER_SPACING,
               }}
             />
             {filterPills.map((pill) => (
@@ -726,7 +823,7 @@ export default function ClassicListToolbar({
                 height: 16,
                 background: TOOLBAR_DIVIDER,
                 flexShrink: 0,
-                marginLeft: 4,
+                marginInlineStart: TOOLBAR_DIVIDER_SPACING,
               }}
             />
           </Flex>
@@ -736,6 +833,7 @@ export default function ClassicListToolbar({
         <ViewModeToggle
           viewMode={viewMode}
           onViewModeChange={onViewModeChange}
+          messages={messages}
         />
       </Flex>
 
@@ -756,6 +854,7 @@ export default function ClassicListToolbar({
           <Box style={{ flex: 1, maxWidth: 480, minWidth: 0 }}>
             <Input
               size="sm"
+              aria-label={searchAriaLabel}
               placeholder={searchPlaceholder}
               value={search}
               onChange={handleSearchChange}
@@ -784,13 +883,16 @@ export default function ClassicListToolbar({
                 savedViewsContent={savedViewsContent}
                 density={density}
                 onDensityChange={onDensityChange}
+                messages={messages}
               />
             }
           >
             <Button
               variant="ghost"
               size="sm"
-              aria-label="Settings"
+              aria-label={messages.settings}
+              aria-expanded={settingsOpen}
+              aria-haspopup="dialog"
               style={{
                 minWidth: 32,
                 height: 32,
@@ -810,7 +912,7 @@ export default function ClassicListToolbar({
               variant="ghost"
               size="sm"
               onClick={onExport}
-              aria-label="Export"
+              aria-label={messages.export}
               style={{
                 minWidth: 32,
                 height: 32,
@@ -881,7 +983,7 @@ export default function ClassicListToolbar({
                 color: FILTER_PILL_COLOR,
               }}
             >
-              Clear All
+              {messages.clearAll}
             </Button>
           )}
         </Flex>

@@ -18,11 +18,12 @@
  * component the caller nested there. The DOM chain root > body > rows > row >
  * label|content is fixed, so `>` costs nothing and closes that hole.
  *
- * BORDER WIDTHS ARE NOT HERE. Bordered mode gets its width from the Tailwind
- * `border` / `border-b` utilities (utilities sort after preflight, so they
- * paint); only the COLOR was ever inline. In borderless mode no utility class is
- * emitted, so the width stays at preflight's 0 and no color can show -- which is
- * why there is no borderless counterpart to these two rules.
+ * BORDER WIDTHS LIVE HERE. Bordered mode used to lean on Tailwind `border` /
+ * `border-b` utilities for widths while only the color was skin-owned; the
+ * utilities are gone from the engine and this file paints the full shorthands
+ * on the `[data-bordered='true']` hooks. The dead `divide-y` separator in the
+ * vertical layout (a utility the bundle never generated -- rows are padded
+ * cards with a grid gap, so a divider never showed) was removed with it.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
@@ -30,25 +31,199 @@
  * Values transcribed verbatim from `engines/modern.tsx`.
  */
 
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] {
+  min-width: 0;
+  container-type: inline-size;
+  color: var(--ds-descriptions-color, var(--ds-color-text-primary));
+  animation: ds-descriptions-enter var(--ds-motion-calm, 220ms)
+    var(--ds-motion-ease-out, ease-out) both;
+}
+
 /* ---- header title ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header'][data-part='header'] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--ds-descriptions-header-min-height, 3.5rem);
+  margin: 0 0 var(--ds-descriptions-section-gap, 0.625rem);
+  padding: var(--ds-descriptions-header-padding, 0.75rem 1rem);
+  border: 1px solid
+    var(--ds-descriptions-header-border, var(--ds-color-border));
+  border-radius: var(--ds-descriptions-header-radius, var(--ds-radius-lg));
+  background: var(
+    --ds-descriptions-header-bg,
+    linear-gradient(
+      118deg,
+      color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-primary) 6%),
+      var(--ds-surface-card) 52%,
+      color-mix(in srgb, var(--ds-surface-inset) 70%, var(--ds-surface-card))
+    )
+  );
+  background-size: 170% 170%;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent),
+    var(--ds-descriptions-header-shadow, var(--ds-elevation-1));
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-position var(--ds-motion-deliberate, 360ms)
+      var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
+  background-position: 100% 50%;
+  border-color: var(
+    --ds-descriptions-header-border-hover,
+    color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    var(--ds-descriptions-header-shadow-hover, var(--ds-elevation-2));
+}
+
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='header'] > [data-part='title'] {
   color: var(--ds-color-text-primary);
+  margin: 0;
+  font-family: var(--ds-descriptions-title-font-family, var(--ds-font-family-heading));
+  font-size: var(--ds-descriptions-title-font-size, var(--ds-font-size-lg));
+  font-weight: var(--ds-descriptions-title-font-weight, var(--ds-font-weight-semibold, 600));
+  line-height: var(--ds-descriptions-title-line-height, 1.25);
+  letter-spacing: var(--ds-descriptions-title-letter-spacing, -0.02em);
+  text-wrap: balance;
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-extra='true'] > [data-part='header'] > [data-part='extra'][data-part='extra'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  padding: var(--ds-descriptions-extra-padding, 0.1875rem);
+  border: 1px solid
+    var(--ds-descriptions-extra-border, var(--ds-color-border-subtle));
+  border-radius: var(--ds-descriptions-extra-radius, var(--ds-radius-md));
+  background: color-mix(in srgb, var(--ds-surface-card) 82%, transparent);
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 78%, transparent);
 }
 
 /* ---- bordered container + bordered row separator (color only; see header) ---- */
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] {
-  border-color: var(--ds-color-border);
+  overflow: hidden;
+  border: 1px solid var(--ds-descriptions-border, var(--ds-color-border));
+  border-radius: var(--ds-descriptions-radius, var(--ds-radius-xl, 14px));
+  background: var(
+    --ds-descriptions-bg,
+    linear-gradient(
+      160deg,
+      var(--ds-surface-card),
+      color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-surface-inset) 5%)
+    )
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    var(--ds-descriptions-shadow, var(--ds-elevation-1));
 }
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
-  border-color: var(--ds-color-border);
+  border: 1px solid var(--ds-descriptions-row-border, var(--ds-color-border-subtle));
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--ds-descriptions-column-count, 3),
+    minmax(0, 1fr)
+  );
+  gap: var(--ds-descriptions-grid-gap, 0.625rem);
+  padding: var(--ds-descriptions-grid-padding, 0.75rem);
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  min-width: 0;
+  grid-column: span var(--ds-descriptions-item-span, 1);
+  padding: var(--ds-descriptions-row-padding, 0.75rem 0.875rem);
+  border-radius: var(--ds-descriptions-row-radius, var(--ds-radius-md));
+  background: var(
+    --ds-descriptions-row-bg,
+    color-mix(in srgb, var(--ds-surface-inset) 46%, transparent)
+  );
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 68%, transparent);
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover {
+  transform: translateY(-1px);
+  border-color: var(
+    --ds-descriptions-row-border-hover,
+    color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
+  );
+  background: var(
+    --ds-descriptions-row-bg-hover,
+    color-mix(in srgb, var(--ds-surface-card) 91%, var(--ds-color-primary) 9%)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
+    0 7px 18px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
 }
 
 /* ---- label + value (both layouts share one rule pair) ---- */
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
-  color: var(--ds-color-text-secondary);
+  margin: 0 0 var(--ds-descriptions-label-gap, 0.3125rem);
+  /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious on BOTH sources):
+     the DS-default label channel #737373 fails AA on the tinted row surface
+     (~4.3-4.4:1 on bithire #F1F5F8 and TMM #F8F1E4). The ink deepens 30%
+     toward the source's own primary text ink -- hue-faithful (measured worst
+     source: TMM 70% = 5.26:1). A tenant's explicit
+     `--ds-descriptions-label-ink` stays raw. */
+  color: var(
+    --ds-descriptions-label-ink,
+    color-mix(
+      in srgb,
+      var(--ds-descriptions-label-color, var(--ds-color-text-secondary)) 70%,
+      var(--ds-color-text-primary) 30%
+    )
+  );
+  font-size: var(--ds-descriptions-label-font-size, var(--ds-font-size-xs));
+  font-weight: var(--ds-descriptions-label-font-weight, var(--ds-font-weight-medium, 500));
+  line-height: var(--ds-descriptions-label-line-height, 1.25);
+  letter-spacing: var(--ds-descriptions-label-letter-spacing, 0.045em);
+  text-transform: var(--ds-descriptions-label-transform, uppercase);
 }
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
-  color: var(--ds-color-text-primary);
+  min-width: 0;
+  color: var(--ds-descriptions-content-color, var(--ds-color-text-primary));
+  font-size: var(--ds-descriptions-content-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-descriptions-content-font-weight, var(--ds-font-weight-medium, 500));
+  line-height: var(--ds-descriptions-content-line-height, 1.45);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'][data-empty='true']::before {
+  content: '—';
+  color: var(--ds-color-text-muted);
+  font-weight: var(--ds-font-weight-regular, 400);
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
+  display: grid;
+  gap: var(--ds-descriptions-grid-gap, 0.5rem);
+  padding: var(--ds-descriptions-grid-padding, 0.75rem);
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.36fr) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--ds-descriptions-column-gap, 1.5rem);
+}
+
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+  width: auto;
+  margin: 0;
 }
 
 /* ---- vertical layout: subgrid label/value column alignment (W6-D) ----
@@ -58,11 +233,11 @@
    2-track grid lives on `[data-part='rows']`; every row spans it and re-exposes
    the tracks via subgrid, so each value column aligns to the widest label across
    ALL rows (content-aware) instead of the fixed one-third split. `@supports`
-   gates the upgrade: with subgrid absent the Tailwind `flex`/`w-1/3` utilities
-   still on these nodes paint today's per-row split unchanged. HORIZONTAL layout
-   stacks label above value -- no label column exists -- so it is excluded by the
-   `[data-layout='vertical']` scope. Subgrid inherits the parent `column-gap`, so
-   the 24px gutter is declared once on the grid. */
+   gates the upgrade: with subgrid absent the unconditional track rule above
+   (minmax(7.5rem, 0.36fr) minmax(0, 1fr)) still paints the per-row split.
+   HORIZONTAL layout stacks label above value -- no label column exists -- so it
+   is excluded by the `[data-layout='vertical']` scope. Subgrid inherits the
+   parent `column-gap`, so the 24px gutter is declared once on the grid. */
 @supports (grid-template-columns: subgrid) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
     display: grid;
@@ -80,5 +255,51 @@
   }
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
     min-width: 0;
+  }
+}
+
+@container (max-width: 860px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal']:not([data-column-count='1']) > [data-part='body'] > [data-part='rows'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 560px) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+    grid-column: 1 / -1;
+  }
+
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--ds-spacing-2, 0.5rem);
+  }
+
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header'] {
+    align-items: flex-start;
+    gap: var(--ds-spacing-3, 0.75rem);
+  }
+}
+
+@keyframes ds-descriptions-enter {
+  from {
+    opacity: 0;
+    transform: translateY(7px) scale(0.998);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'],
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='header'],
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+    animation: none;
+    transition: none;
   }
 }

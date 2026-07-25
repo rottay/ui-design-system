@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Flex Component - Rottay Design System
@@ -18,7 +18,7 @@
  *
  * This component supports the Rottay multi-engine architecture:
  * - **Classic**: Uses Ant Design's Flex component for consistent styling
- * - **Modern**: Generates Tailwind CSS utility classes (flex, flex-row, justify-*, items-*)
+ * - **Modern**: Deterministic flex structure with token-aware gaps and motion
  * - **Rustic**: Pure inline CSS with no external dependencies
  *
  * @example Basic Horizontal Layout
@@ -110,9 +110,9 @@
  * ```tsx
  * import { Flex } from '@rottay/design-system';
  *
- * // Force Modern engine for Tailwind classes
+ * // Force Modern engine for responsive, token-aware structure
  * <Flex engine="modern" justify="between" align="center">
- *   Outputs: class="flex justify-between items-center"
+ *   Keeps alignment deterministic across consumer bundles
  * </Flex>
  * ```
  *
@@ -125,8 +125,8 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { FlexProps } from './contracts';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { FlexProps } from "./contracts";
 
 // ============================================================================
 // TYPE AND CONSTANT EXPORTS
@@ -141,12 +141,17 @@ export {
   type FlexWrap,
   type FlexJustify,
   type FlexAlign,
+  type FlexGapToken,
+  type FlexGapValue,
+  type FlexGap,
+  type FlexMotion,
   FLEX_DEFAULTS,
   FLEX_JUSTIFY_MAP,
   FLEX_ALIGN_MAP,
-} from './contracts';
+  FLEX_GAP_MAP,
+} from "./contracts";
 
-export type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+export type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT
@@ -172,15 +177,15 @@ export type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/v
  * </Flex>
  *
  * // With engine override
- * <Flex engine="modern" direction="column" gap={16}>
- *   Uses Tailwind classes
+ * <Flex engine="modern" direction="column" gap="md">
+ *   Uses DS spacing and responsive layout contracts
  * </Flex>
  * ```
  */
-export const Flex = createEngineComponent<FlexProps>('Flex', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+export const Flex = createEngineComponent<FlexProps>("Flex", {
+  classic: () => import("./engines/classic"),
+  modern: () => import("./engines/modern"),
+  rustic: () => import("./engines/rustic"),
 });
 
 export default Flex;

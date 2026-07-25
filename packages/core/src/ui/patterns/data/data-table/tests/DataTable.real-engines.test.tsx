@@ -64,6 +64,10 @@ const CARD_CSS = [
   readFileSync(tokens('runtime/engines/rustic/skin/card.css'), 'utf8'),
 ];
 const INTERACTION_CSS = readFileSync(tokens('presentation/components/skin/data-table-interactions.css'), 'utf8');
+const normalizedQuotes = (css: string) => css.replaceAll('"', "'");
+const MODERN_CONTRACT_CSS = normalizedQuotes(SKINS.modern);
+const MOBILE_CONTRACT_CSS = normalizedQuotes(SKINS.mobile);
+const INTERACTION_CONTRACT_CSS = normalizedQuotes(INTERACTION_CSS);
 
 /** Strip comments and `@keyframes` blocks, then return every `{selector, body}` rule. */
 function cssRules(css: string): Array<{ selector: string; body: string }> {
@@ -148,38 +152,38 @@ describe.each(['modern', 'rustic', 'mobile'] as const)('DataTable %s skin — st
 describe('DataTable modern skin — engine-specific rules', () => {
   it('replaces both imperative row-hover handler pairs with ONE hover rule, gated on hoverable and not-selected', () => {
     expect(
-      /\[data-part='body-row'\]\[data-hoverable='true'\]:not\(\[data-selected='true'\]\):hover/.test(SKINS.modern),
+      /\[data-part='body-row'\]\[data-hoverable='true'\]:not\(\s*\[data-selected='true'\]\s*\):hover/.test(MODERN_CONTRACT_CSS),
       'the modern body-row hover rule (hoverable && !selected) is missing'
     ).toBe(true);
   });
 
   it('carries the rest fill rules for selected and striped rows', () => {
-    expect(/\[data-part='body-row'\]\[data-selected='true'\]/.test(SKINS.modern)).toBe(true);
-    expect(/\[data-part='body-row'\]\[data-striped='true'\]/.test(SKINS.modern)).toBe(true);
+    expect(/\[data-part='body-row'\]\[data-selected='true'\]/.test(MODERN_CONTRACT_CSS)).toBe(true);
+    expect(/\[data-part='body-row'\]\[data-striped='true'\]/.test(MODERN_CONTRACT_CSS)).toBe(true);
   });
 
   it('keys the header-cell 3-way background on data-pinned and data-drag-over', () => {
-    expect(/\[data-part='header-cell'\]\[data-pinned='true'\]/.test(SKINS.modern)).toBe(true);
-    expect(/\[data-part='header-cell'\]\[data-drag-over='true'\]/.test(SKINS.modern)).toBe(true);
+    expect(/\[data-part='header-cell'\]\[data-pinned='true'\]/.test(MODERN_CONTRACT_CSS)).toBe(true);
+    expect(/\[data-part='header-cell'\]\[data-drag-over='true'\]/.test(MODERN_CONTRACT_CSS)).toBe(true);
   });
 
   it('rotates the group chevron on data-collapsed and paints the current page button on data-current', () => {
     expect(
       /\[data-part='group-header-chevron'\]\[data-collapsed='true'\][^{]*\{[^}]*transform:\s*rotate\(-90deg\)/.test(
-        SKINS.modern
+        MODERN_CONTRACT_CSS
       )
     ).toBe(true);
-    expect(/\[data-part='pagination-page-button'\]\[data-current='true'\]/.test(SKINS.modern)).toBe(true);
+    expect(/\[data-part='pagination-page-button'\]\[data-current='true'\]/.test(MODERN_CONTRACT_CSS)).toBe(true);
   });
 
   it('carries the bulk-action per-variant rules and the sticky thead shadow', () => {
     for (const variant of ['default', 'danger', 'primary']) {
       expect(
-        new RegExp(`\\[data-part='bulk-bar-action'\\]\\[data-variant='${variant}'\\]`).test(SKINS.modern),
+        new RegExp(`\\[data-part='bulk-bar-action'\\]\\[data-variant='${variant}'\\]`).test(MODERN_CONTRACT_CSS),
         `missing bulk-bar-action data-variant='${variant}' rule`
       ).toBe(true);
     }
-    expect(/\[data-part='table-head'\]\[data-sticky='true'\][^{]*\{[^}]*box-shadow/.test(SKINS.modern)).toBe(true);
+    expect(/\[data-part='table-head'\]\[data-sticky='true'\][^{]*\{[^}]*box-shadow/.test(MODERN_CONTRACT_CSS)).toBe(true);
   });
 });
 
@@ -220,9 +224,10 @@ describe('DataTable mobile skin — suppression + editor', () => {
     const cardMaxB = Math.max(...CARD_CSS.flatMap((css) => cssRules(css)).map((r) => maxB(r.selector)));
     expect(cardMaxB).toBeGreaterThanOrEqual(9); // guards the measurement itself
 
-    const suppression = cssRules(SKINS.mobile).find(
+    const suppressions = cssRules(SKINS.mobile).filter(
       (r) => r.selector.includes('.ds-data-table__mobile-card') && !r.selector.includes('--selected')
     );
+    const suppression = suppressions.sort((left, right) => maxB(right.selector) - maxB(left.selector))[0];
     expect(suppression, 'the mobile card suppression rule is missing').toBeDefined();
     expect(
       maxB(suppression!.selector),
@@ -232,12 +237,12 @@ describe('DataTable mobile skin — suppression + editor', () => {
 
   it('carries the --selected modifier rule and the shared mobile-state-panel rule', () => {
     expect(cssRules(SKINS.mobile).some((r) => r.selector.includes('.ds-data-table__mobile-card--selected'))).toBe(true);
-    expect(/\[data-part='mobile-state-panel'\]/.test(SKINS.mobile)).toBe(true);
+    expect(/\[data-part='mobile-state-panel'\]/.test(MOBILE_CONTRACT_CSS)).toBe(true);
   });
 
   it('paints the editor error border on data-invalid at (0,4,0)', () => {
     const invalid = cssRules(SKINS.mobile).find(
-      (r) => r.selector.includes("[data-invalid='true']") && paintsBorder(r.body)
+      (r) => normalizedQuotes(r.selector).includes("[data-invalid='true']") && paintsBorder(r.body)
     );
     expect(invalid, 'the editor data-invalid border rule is missing').toBeDefined();
     expect(bColumn(invalid!.selector)).toBeGreaterThanOrEqual(4);
@@ -256,8 +261,8 @@ describe('DataTable engines — embedded CSS recovery contract', () => {
   it('moves modern inline-edit/shimmer and dirty-cell rules to the canonical skin', () => {
     expect(INTERACTION_CSS).toContain('@keyframes ds-inline-edit-enter');
     expect(INTERACTION_CSS).toContain('@keyframes ds-data-table-shimmer');
-    expect(INTERACTION_CSS).toContain("td[data-cell-dirty='true']::before");
-    expect(INTERACTION_CSS).toContain('background: var(--ds-color-primary) !important');
+    expect(INTERACTION_CONTRACT_CSS).toContain("td[data-cell-dirty='true']::before");
+    expect(INTERACTION_CSS).toContain('background: var(--ds-table-resize-bg-hover, var(--ds-color-primary))');
     expect(modernSrc).not.toContain('<style>');
     expect(modernSrc).not.toContain('dangerouslySetInnerHTML');
   });

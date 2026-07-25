@@ -28,7 +28,7 @@ A radio button component for single selection from a set of options with multi-e
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | DS tokens (skin-painted) | Vanilla CSS |
 | Animation | Smooth | CSS | Basic |
 | Button Style | Full | Partial | Full |
 | Group | Built-in | Custom | Custom |
@@ -123,7 +123,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Radio rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Radio rendered by Classic (Ant Design), Modern (DS tokens), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -178,6 +178,43 @@ export const StatesComparison: Story = {
         component={Radio}
         props={{ children: 'Disabled', disabled: true }}
       />
+    </div>
+  ),
+};
+
+/**
+ * Modern-engine state matrix: unchecked/checked, error, disabled,
+ * description, label placement, colors, sizes, and long Arabic RTL copy.
+ */
+export const ModernStateMatrix: Story = {
+  name: 'Modern State Matrix',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 420 }}>
+      <Radio engine="modern" label="Unchecked" value="a" name="m1" />
+      <Radio engine="modern" label="Checked" value="b" name="m1" defaultChecked />
+      <Radio engine="modern" label="Error" value="c" name="m2" error />
+      <Radio engine="modern" label="Disabled" value="d" name="m2" disabled />
+      <Radio engine="modern" label="Disabled checked" value="e" name="m3" disabled defaultChecked />
+      <Radio
+        engine="modern"
+        label="With description"
+        description="Long supporting copy that wraps across lines without pushing the ring out of alignment."
+        value="f"
+        name="m4"
+        defaultChecked
+      />
+      <Radio engine="modern" label="Label at start" labelPlacement="start" value="g" name="m5" />
+      <Radio engine="modern" label="Success color" color="success" value="h" name="m6" defaultChecked />
+      <Radio engine="modern" label="Large" size="lg" value="i" name="m7" defaultChecked />
+      <div dir="rtl" lang="ar">
+        <Radio
+          engine="modern"
+          label="الفوترة السنوية مع تجديد تلقائي ونسخ احتياطي كامل للبيانات طوال مدة الاشتراك الطويلة"
+          value="annual"
+          name="m8"
+          defaultChecked
+        />
+      </div>
     </div>
   ),
 };

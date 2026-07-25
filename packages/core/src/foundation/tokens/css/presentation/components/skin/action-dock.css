@@ -1,5 +1,5 @@
 /**
- * ActionDock skin (WO-SKIN-04 checkpoint N).
+ * ActionDock skin (WO-SKIN-04 checkpoint N; P1 elevation 2026-07-24).
  *
  * ENGINE-AGNOSTIC: ActionDock has no `engines/` split — it composes Box/Flex,
  * which resolve through the engine system themselves. One skin file, no engine
@@ -16,6 +16,33 @@
  *
  * SPECIFICITY (P-48): `background` and `box-shadow` are non-border paint;
  * selectors remain rooted in the component class plus explicit state data.
+ *
+ * PRIORITY GRAMMAR: structured actions carry the dock-owned
+ * `rottay-action-dock__action` class + `data-priority`. The grammar paints
+ * LAYOUT ONLY (flex growth, separation margin, shrink guard); the composed
+ * Button keeps full ownership of its own paint. Danger actions lead the DOM
+ * order and get an auto inline-end margin, which pushes the secondary+primary
+ * cluster to the end edge — destructive separation that mirrors for free in
+ * RTL. Primary actions grow to fill; every row child gets `min-inline-size: 0`
+ * so long labels ellipsize inside the Button label contract instead of
+ * overflowing the row.
+ *
+ * DENSITY: the dock honors the canonical density boundary contract — when the
+ * root carries `data-density` (or an ancestor does), the foundation
+ * re-projects `--ds-spacing-*` and `--ds-density-effective-scale`, so the
+ * token-fallback padding and gap below track the active posture with no
+ * dock-owned density math.
+ *
+ * EDGE: separation is carried by a structural hairline
+ * (`--ds-action-dock-edge-color`, defaulting to the semantic border token) —
+ * the elevation shadow alone cannot do it: `--ds-shadow-navbar` casts
+ * DOWNWARD (correct for top navbars, invisible under a bottom dock), and
+ * shadow + background collapse entirely under forced colors. The hairline is
+ * logical, tokenized, and forced-colors mode inherits it (the UA forces the
+ * border color to CanvasText), so no forced-colors retouch exists here.
+ *
+ * RTL: every rule is logical (inset-inline, padding-inline, margin-inline,
+ * gap), so the row, the safe areas, and the priority grammar all mirror.
  */
 
 .rottay-action-dock[data-part='root'][data-placement][data-mode] {
@@ -42,6 +69,7 @@
     var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
     var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px)))
   );
+  border-block-start: 1px solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent));
   box-shadow: var(--ds-action-dock-shadow-bottom, var(--ds-shadow-navbar));
 }
 
@@ -64,10 +92,42 @@
     var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
   );
   padding-block-end: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
+  border-block-end: 1px solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent));
   box-shadow: var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
 }
 
 .rottay-action-dock__actions {
   width: 100%;
   gap: var(--ds-action-dock-gap, var(--ds-spacing-3, 0.75rem));
+}
+
+/* Shrink guard: row children may shrink below content width so labels
+ * ellipsize (Button label contract) instead of overflowing the dock. */
+.rottay-action-dock__actions > * {
+  min-inline-size: 0;
+}
+
+/* Priority grammar (layout only — Button owns its paint):
+ * primary grows into the freed space; danger hugs the start edge and the auto
+ * margin separates it from the action cluster at the end edge. */
+.rottay-action-dock__actions > .rottay-action-dock__action[data-priority='primary'] {
+  flex: 1 1 auto;
+}
+
+.rottay-action-dock__actions > .rottay-action-dock__action[data-priority='danger'] {
+  margin-inline-end: auto;
+}
+
+.rottay-action-dock__actions > .rottay-action-dock__overflow-trigger {
+  flex: 0 0 auto;
+}
+
+/* Coarse pointers: every direct action in the row meets the 44px physical
+ * floor. min-block-size composes with Button's own height instead of
+ * fighting its specificity. */
+@media (pointer: coarse) {
+  .rottay-action-dock__actions > :where(button, a),
+  .rottay-action-dock__overflow-trigger {
+    min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
 }

@@ -59,7 +59,8 @@
   /* Active state */
   --ds-qrcode-status-active-opacity: 1;
 
-  /* Loading state */
+  /* Loading state — the opacity mutes the QR CANVAS via the modern skin
+     (chrome stays full opacity; same K4-C round-2/Pass-2 treatment as expired) */
   --ds-qrcode-status-loading-opacity: 0.5;
   --ds-qrcode-status-loading-bg: var(--ds-color-neutral-100, #f3f4f6);
 
@@ -68,23 +69,39 @@
   --ds-qrcode-loading-bg: var(--ds-qrcode-status-loading-bg);
 
   /* Expired state */
+  /* `--ds-qrcode-status-expired-opacity` mutes the QR CANVAS only (via the
+     modern skin's `[data-part='canvas']` rule). It previously muted the whole
+     component through the theme.css bridge plus the engine's overlay inline
+     style (0.3 x 0.3 = 0.09 effective chrome opacity), which made every
+     overlay ink fail WCAG AA (K4-C round 2, axe color-contrast). The scrim
+     below deepened 0.5 -> 0.6 so white status text on it clears AA on both
+     governed sources at full chrome opacity (measured: bithire 6.02:1 on the
+     #F4F8FB canvas, TMM 6.09:1 on #FBF6EC; 0.5 measured only 4.19/4.22). */
   --ds-qrcode-status-expired-opacity: 0.3;
-  --ds-qrcode-status-expired-overlay-bg: rgba(0, 0, 0, 0.5);
+  --ds-qrcode-status-expired-overlay-bg: rgba(0, 0, 0, 0.6);
   --ds-qrcode-status-expired-text-color: #ffffff;
 
-  /* Scanned state */
+  /* Scanned state — opacity mutes the CANVAS via the modern skin (Pass 2) */
   --ds-qrcode-status-scanned-opacity: 0.7;
   --ds-qrcode-status-scanned-overlay-bg: rgba(82, 196, 26, 0.1);
   --ds-qrcode-status-scanned-icon-color: var(--ds-color-success, #52c41a);
 
   /* ========================================================================
      REFRESH BUTTON - For expired state
+     Solid primary chip with light ink: white on primary measures 5.15:1
+     (bithire) / 5.47:1 (TMM) — AA on both governed sources (K4-C verified).
      ======================================================================== */
 
+  /* flex-shrink: 0 lives in the skin rule (K4-C Pass 2): on QRs smaller than
+     ~96px the two-line status text + gap + 32px button overflow the overlay
+     and the default flex-shrink compressed the control (measured 26.5px on a
+     72px cell) — a control never shrinks; the text wraps instead. */
   --ds-qrcode-refresh-button-bg: var(--ds-color-primary, #1890ff);
   --ds-qrcode-refresh-button-color: #ffffff;
   --ds-qrcode-refresh-button-size: 32px;
-  --ds-qrcode-refresh-button-radius: 50%;
+  /* Stadium pill, not a 50% ellipse: the button is wider than tall, so 50%
+     produced an accidental-looking oval (K4-C Pass 2 sighted review). */
+  --ds-qrcode-refresh-button-radius: var(--ds-radius-full, 9999px);
 
   /* ========================================================================
      ICON SETTINGS - Center icon/logo

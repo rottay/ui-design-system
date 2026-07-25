@@ -11,50 +11,81 @@
  * with ShimmerText's global producer.
  */
 
-.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:hover .ds-resize-handle__bar,
-.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:focus-visible .ds-resize-handle__bar {
-  width: 3px !important;
-  background: var(--ds-color-primary) !important;
+.ds-engine-modern:where(.ds-pattern-data-table)
+  .ds-resize-handle:hover
+  .ds-resize-handle__bar,
+.ds-engine-modern:where(.ds-pattern-data-table)
+  .ds-resize-handle:focus-visible
+  .ds-resize-handle__bar {
+  width: var(--ds-table-resize-bar-width-active, 0.1875rem);
+  height: var(--ds-table-resize-bar-height-active, 74%);
+  background: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:focus-visible {
+.ds-engine-modern:where(.ds-pattern-data-table)
+  .ds-resize-handle:focus-visible {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
-  border-radius: 2px;
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover {
-  background-color: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+  background-color: var(
+    --ds-table-header-bg-hover,
+    color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
+  );
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key][data-sortable='true']:focus-visible {
+.ds-engine-modern:where(.ds-pattern-data-table)
+  th[data-col-key][data-sortable="true"]:focus-visible {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
-  border-radius: 2px;
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible {
+.ds-engine-modern:where(.ds-pattern-data-table)
+  tr[data-row-index]:focus-visible {
   outline: none;
-  box-shadow: inset 3px 0 0 0 var(--ds-color-primary);
-  background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent) !important;
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
+  background-color: var(
+    --ds-table-row-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
+  );
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true'] {
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"] {
   cursor: text;
-  transition: background-color var(--ds-motion-fast) ease, box-shadow var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease;
+  transition: background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease);
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover {
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover {
   background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) td[data-editing='true'] {
-  overflow: visible !important;
-  padding: 4px 6px !important;
-  background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)) !important;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent), 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-  animation: ds-inline-edit-enter var(--ds-motion-normal) var(--ds-motion-ease-out);
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"] {
+  overflow: visible;
+  padding: 4px 6px;
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 7%,
+    var(--ds-surface-card)
+  );
+  box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
+    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  animation: ds-inline-edit-enter
+    var(--ds-motion-reveal, var(--ds-motion-normal))
+    var(--ds-motion-ease-enter, var(--ds-motion-ease-out));
 }
 
 @keyframes ds-inline-edit-enter {
@@ -68,23 +99,38 @@
   }
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) td[data-cell-dirty='true']::before {
-  content: '';
+.ds-engine-modern:where(.ds-pattern-data-table)
+  td[data-cell-dirty="true"]::before {
+  content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
+  inset-block-start: 5px;
+  inset-inline-end: 5px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--ds-surface-card, var(--ds-color-bg-elevated));
+  border-radius: 999px;
   background: var(--ds-color-warning);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--ds-color-warning) 16%, transparent);
   pointer-events: none;
 }
 
 @keyframes ds-data-table-shimmer {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
     opacity: 0.35;
+  }
+}
+
+@keyframes ds-data-table-skeleton-scan {
+  from {
+    background-position: 100% 50%;
+  }
+  to {
+    background-position: -100% 50%;
   }
 }
 
@@ -102,5 +148,39 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"],
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"],
+  .ds-engine-modern:where(.ds-pattern-data-table) .ds-skeleton-row,
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    [data-part="skeleton-header-col"],
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    [data-part="skeleton-cell"] {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    .ds-resize-handle:hover
+    .ds-resize-handle__bar,
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    .ds-resize-handle:focus-visible
+    .ds-resize-handle__bar {
+    background: Highlight;
+    box-shadow: none;
+  }
+
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    th[data-col-key][data-sortable="true"]:focus-visible,
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    tr[data-row-index]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    box-shadow: none;
   }
 }

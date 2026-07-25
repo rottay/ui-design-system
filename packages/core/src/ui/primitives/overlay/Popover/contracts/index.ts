@@ -43,6 +43,18 @@ import type { OverlayPlacement } from '../../../runtime/overlay/positioning';
  */
 export type PopoverTrigger = 'click' | 'hover' | 'focus';
 
+/** Bounded Modern material recipes; anatomy remains stable across recipes. */
+export type PopoverRecipe = 'minimal' | 'bordered' | 'inverse' | 'rich';
+
+/** Explicit local density override; omitted values inherit the tenant scope. */
+export type PopoverDensity = 'compact' | 'comfortable' | 'spacious';
+
+/** Coarse-pointer fallback for hover/focus-only popovers. */
+export type PopoverTouchBehavior = 'toggle' | 'none';
+
+/** Supported non-modal popup semantics. */
+export type PopoverRole = 'dialog' | 'menu' | 'listbox';
+
 /**
  * Placement options for the popover.
  * Supports 12 positions around the trigger element.
@@ -116,12 +128,32 @@ export interface PopoverProps {
   onOpenChange?: (open: boolean) => void;
   /** Whether to show arrow */
   arrow?: boolean | { pointAtCenter: boolean };
+  /** Coordinated material and density recipe. @default 'bordered' */
+  recipe?: PopoverRecipe;
+  /** Local density override; omitted values inherit the active tenant density. */
+  density?: PopoverDensity;
   /** The trigger element */
   children: ReactNode;
   /** Mouse enter delay in ms */
   mouseEnterDelay?: number;
   /** Mouse leave delay in ms */
   mouseLeaveDelay?: number;
+  /** Gap in pixels between trigger and surface. @default 10 */
+  offset?: number;
+  /** Maximum inline size, additionally clamped to the viewport. @default 384 */
+  maxWidth?: number | string;
+  /** Coarse-pointer fallback for hover/focus-only popovers. @default 'toggle' */
+  touchBehavior?: PopoverTouchBehavior;
+  /** Close an open popover when Escape is pressed. @default true */
+  closeOnEscape?: boolean;
+  /** Close an open popover on pointer interaction outside. @default true */
+  closeOnInteractOutside?: boolean;
+  /** Semantic role for the non-modal popup surface. @default 'dialog' */
+  role?: PopoverRole;
+  /** Accessible label when no visible title labels the surface. */
+  'aria-label'?: string;
+  /** External accessible label id. Takes precedence over the visible title. */
+  'aria-labelledby'?: string;
   /** Destroy tooltip when hidden */
   destroyTooltipOnHide?: boolean;
   /** Additional class name */
@@ -147,10 +179,24 @@ export const POPOVER_DEFAULTS: Partial<PopoverProps> = {
   placement: 'top',
   /** Show arrow by default */
   arrow: true,
+  /** Token-coordinated default material */
+  recipe: 'bordered',
   /** Delay before showing on hover (ms) */
   mouseEnterDelay: 100,
   /** Delay before hiding on mouse leave (ms) */
   mouseLeaveDelay: 100,
+  /** Default trigger-to-surface gap */
+  offset: 10,
+  /** Viewport-safe default measure */
+  maxWidth: 384,
+  /** Taps expose hover-only content on coarse pointers */
+  touchBehavior: 'toggle',
+  /** Escape is a universal non-modal dismiss affordance */
+  closeOnEscape: true,
+  /** Pointer-down outside performs light dismiss */
+  closeOnInteractOutside: true,
+  /** Rich contextual content is announced as a non-modal dialog */
+  role: 'dialog',
   /** Keep popover mounted when hidden */
   destroyTooltipOnHide: false,
   /** Default z-index */

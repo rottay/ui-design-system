@@ -1,8 +1,8 @@
 /**
  * Font pack: plex-mono (IBM Plex Mono).
  *
- * Opt-in subpath: @rottay/design-system/fonts/plex-mono.css. NEVER imported by
- * styles.css or any default bundle. IBM Plex Mono ships as static latin-subset
+ * Opt-in subpath: @rottay/design-system/fonts/plex-mono.css. It also ships with
+ * the first-party BitHire vertical bundle. IBM Plex Mono ships as static latin-subset
  * instances (OFL-1.1), one file per weight. The custom property is defined
  * UNCONDITIONALLY so the already-validated var(--ds-font-pack-plex-mono) channel
  * resolves when this css is present.

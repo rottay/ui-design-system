@@ -141,6 +141,7 @@ export function createSemanticIcon(
       state,
       size = 'md',
       tone,
+      color,
       label,
       decorative,
       mirrored,
@@ -149,6 +150,7 @@ export function createSemanticIcon(
       id,
       'aria-describedby': ariaDescribedBy,
       'data-testid': testId,
+      'data-part': dataPart,
     } = props;
 
     const normalizedLabel = typeof label === 'string' ? label.trim() : '';
@@ -186,7 +188,7 @@ export function createSemanticIcon(
         ref={ref}
         id={id}
         size={resolveSize(size)}
-        color="currentColor"
+        color={color ?? 'currentColor'}
         weight={weight}
         mirrored={resolvedMirroring === true}
         alt={isLabeled ? normalizedLabel : undefined}
@@ -198,7 +200,7 @@ export function createSemanticIcon(
         aria-describedby={ariaDescribedBy}
         aria-hidden={isLabeled ? undefined : true}
         data-testid={testId}
-        data-part="icon"
+        data-part={dataPart}
         data-asset-class="semantic-icon"
         data-icon-name={name}
         data-icon-role={resolvedRole}

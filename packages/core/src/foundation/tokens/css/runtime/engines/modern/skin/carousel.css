@@ -1,15 +1,38 @@
 /**
- * Modern Carousel skin (WO-SKIN-05 checkpoint D1).
+ * Modern Carousel skin (WO-SKIN-05 checkpoint D1; K4-C Pass 1 consolidation).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
  * Tailwind's base layer, so a layered rule cannot paint a component at all.
  * Unlayered outranks preflight and still yields to a caller's inline `style`.
  *
- * SCOPE ROOT carries `rottay-carousel rottay-carousel--modern` (fresh mints,
- * grep-verified free) alongside DaisyUI's structural `carousel` class, which is
- * left in place: `engines/modern/theme.css:798` paints `border-radius` and
- * `overflow` through it uncontested, and border-radius is a preflight-SAFE channel,
- * so dropping the class would remove a radius that renders today.
+ * SINGLE PAINT OWNER (K4-C): the engine previously emitted DaisyUI's
+ * `carousel` / `carousel-vertical` / `carousel-inner` / `carousel-item`
+ * literals, and `engines/modern/theme.css` (`.carousel` / `.carousel-item`
+ * bridge rules) co-painted the root frame through them. Those classes were
+ * never structural — the engine positions slides by inline transform, not
+ * scroll-snap — so K4-C drained them and this file now owns ALL paint,
+ * including the root frame below. The theme.css `.carousel` bridge rules are
+ * dead once the drain lands and are listed for coordinator removal.
+ *
+ * FALSIFIED (K4-C): the old header claimed theme.css "paints border-radius
+ * ... so dropping the class would remove a radius that renders today". False
+ * on both counts — `--ds-carousel-radius` is declared NOWHERE in the DS
+ * (verified by grep across src and dist), so the bridge's `border-radius:
+ * var(--ds-carousel-radius)` was invalid at computed-value time and the root
+ * rendered square. The `0px` fallback below preserves that current render
+ * while keeping the token hook live; declaring the token DS-wide is a
+ * foundation gap handed to the coordinator, not something a skin may invent.
+ *
+ * RTL (K4-C): the engine positions arrows and lateral dots with LOGICAL
+ * utilities (`start-2`/`end-2`), so they mirror under `:dir(rtl)` for free.
+ * Two pieces cannot be logical utilities and live here instead:
+ *   1. `--ds-carousel-rtl-factor` multiplies the horizontal slide offset so
+ *      the travel direction mirrors (translateY is direction-invariant and
+ *      untouched). It is declared on the ROOT so the per-slide inline
+ *      `translateX(calc(... * var(--ds-carousel-rtl-factor, 1)))` inherits it.
+ *   2. Horizontal arrow glyphs are text (`←`/`→`), so the buttons flip via
+ *      `scaleX(-1)`. The buttons' `-translate-y-1/2` rides the standalone
+ *      `translate` property (Tailwind v4), which composes with `transform`.
  *
  * Every rule uses a CHILD combinator. `data-part` is a shared vocabulary and each
  * slide holds arbitrary consumer content, which may itself be a component that
@@ -24,27 +47,61 @@
  * * 100%`), so it cannot be enumerated as a rule; it rides the
  * `--ds-carousel-slide-transform` custom property, set inline per slide. Its
  * fallback is `none`, the same value the fade branch produces.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
  */
+
+/* ---- root frame: consolidated from the drained theme.css `.carousel` bridge ---- */
+.rottay-carousel.rottay-carousel--modern[data-part='root'] {
+  border-radius: var(--ds-carousel-radius, 0px);
+  overflow: hidden;
+}
+
+/* ---- RTL: mirror horizontal travel + horizontal arrow glyphs ---- */
+:dir(rtl) .rottay-carousel.rottay-carousel--modern,
+.rottay-carousel.rottay-carousel--modern:dir(rtl) {
+  --ds-carousel-rtl-factor: -1;
+}
+:dir(rtl) .rottay-carousel.rottay-carousel--modern > [data-part='arrow'],
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow']:dir(rtl) {
+  transform: scaleX(-1);
+}
 
 .rottay-carousel.rottay-carousel--modern > [data-part='track'] > [data-part='slide'] {
   transform: var(--ds-carousel-slide-transform, none);
 }
 
-/* ---- arrows: both buttons carried the same object ---- */
+/* ---- arrows: both buttons carried the same object. K4-C Pass 2: size moved
+        here from the engine's inline style so the coarse-pointer floor can
+        apply — an inline var() cannot see a media query, and !important is
+        banned. Size participates in the canonical density scale (the
+        Button-skin `--ds-density-effective-scale` idiom). Touch targets meet
+        the 44px coarse law, which stays an absolute unscaled floor. ---- */
 .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-part='arrow'] {
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: 1px solid var(--ds-color-border);
   box-shadow: var(--ds-elevation-1);
+  inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-font-size-xs, 12px);
+}
+@media (pointer: coarse) {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-part='arrow'] {
+    inline-size: var(--ds-carousel-arrow-size-coarse, 44px);
+    block-size: var(--ds-carousel-arrow-size-coarse, 44px);
+  }
 }
 
-/* ---- dots ---- */
+/* ---- dots. K4-C Pass 2: the selected dot was `--ds-color-primary` on a
+        primary slide — invisible (measured rgb(15,118,110) dot on the same
+        teal slide). Dots now carry a halo ring so they read on ANY slide
+        background: white halo for the selected primary dot, a subtle dark
+        ring for the unselected surface dot. ---- */
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
   background: var(--ds-color-primary);
+  box-shadow: 0 0 0 1px var(--ds-carousel-dot-halo, var(--ds-color-alpha-white-70));
 }
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
-  background: var(--ds-surface-panel);
+  background: var(--ds-carousel-dot-bg, var(--ds-surface-card));
+  box-shadow: 0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20));
 }

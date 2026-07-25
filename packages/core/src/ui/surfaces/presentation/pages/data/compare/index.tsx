@@ -57,7 +57,6 @@ export function CompareSurface({
             {row.description && (
               <Text
                 className="ds-compare__muted-text"
-                data-part="muted-text"
               >
                 {row.description}
               </Text>
@@ -74,7 +73,6 @@ export function CompareSurface({
           {subject.description && (
             <Text
               className="ds-compare__muted-text"
-              data-part="muted-text"
             >
               {subject.description}
             </Text>
@@ -120,7 +118,6 @@ export function CompareSurface({
               {(section.title || section.description) && (
                 <Box
                   className="ds-compare__section-heading"
-                  data-part="section-heading"
                   style={{
                     padding: '16px',
                   }}
@@ -130,7 +127,6 @@ export function CompareSurface({
                     {section.description && (
                       <Text
                         className="ds-compare__muted-text"
-                        data-part="muted-text"
                       >
                         {section.description}
                       </Text>
@@ -153,7 +149,6 @@ export function CompareSurface({
                             {row.description && (
                               <Text
                                 className="ds-compare__muted-text"
-                                data-part="muted-text"
                               >
                                 {row.description}
                               </Text>

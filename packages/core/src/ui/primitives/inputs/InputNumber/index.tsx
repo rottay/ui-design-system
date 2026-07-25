@@ -37,7 +37,7 @@ export {
 export const InputNumber = createEngineComponent<InputNumberProps>('InputNumber', {
   /** Ant Design InputNumber with full step controls and addons */
   classic: () => import('./engines/classic'),
-  /** DaisyUI input with custom increment/decrement buttons */
+  /** Token-skinned input with custom increment/decrement steppers */
   modern: () => import('./engines/modern'),
   /** Native HTML number input with inline styling */
   rustic: () => import('./engines/rustic'),

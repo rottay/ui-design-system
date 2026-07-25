@@ -11,6 +11,7 @@
   "back": "Volver",
   "next": "Siguiente",
   "previous": "Anterior",
+  "finish": "Finalizar",
   "submit": "Enviar",
   "search": "Buscar",
   "filter": "Filtrar",
@@ -58,5 +59,16 @@
   "settings": "Configuración",
   "help": "Ayuda",
   "logout": "Cerrar sesión",
-  "login": "Iniciar sesión"
+  "login": "Iniciar sesión",
+  "breadcrumb": "Ruta de navegación",
+  "key_metrics": "Métricas clave",
+  "shortcuts": "Atajos",
+  "dashboard_status_live": "En vivo",
+  "dashboard_status_connected": "Conectado",
+  "dashboard_status_syncing": "Sincronizando",
+  "dashboard_status_offline": "Sin conexión",
+  "dashboard_status_warning": "Advertencia",
+  "show_password": "Mostrar contraseña",
+  "hide_password": "Ocultar contraseña",
+  "password_strength": "Seguridad de la contraseña"
 }

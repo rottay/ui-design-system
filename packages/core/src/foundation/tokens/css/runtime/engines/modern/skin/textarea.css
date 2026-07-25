@@ -1,96 +1,284 @@
 /**
- * Modern Textarea skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern Textarea skin.
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
- * rule can't paint these elements at all; unlayered outranks preflight and
- * still yields to a caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision through documented `--ds-textarea-*` /
+ * `--ds-input-*` channels so a vertical or DB-backed tenant never needs
+ * private selectors. Geometry consumes the canonical `--ds-textarea-{size}-*`
+ * scale multiplied by the three-plane density channel
+ * `--ds-density-effective-scale`.
  *
  * SCOPE ROOT is the `<textarea>` itself: `.ds-textarea.ds-textarea--modern
  * [data-part='root']`, carrying `data-variant` ('outlined'|'filled'|
- * 'borderless'), `data-status` ('default'|'error'|'warning'|'success') and
- * `data-disabled`.
+ * 'borderless'), `data-size`, `data-status` ('default'|'error'|'warning'|
+ * 'success'), `data-disabled`, `data-readonly`, and `data-filled`. The
+ * `field` wrapper positions the optional clear action (logical inset, so RTL
+ * is a non-branch) and flows the optional character count.
  *
- * FOCUS is native `:focus`, not `:focus-visible`: `isFocused` is set
- * unconditionally in `onFocus`/`onBlur`, so the ring shows on any focus,
- * mouse or keyboard. The file's own JSDoc previously claimed ":focus-visible
- * only", which was stale relative to the actual handler and is corrected in
- * the same pass.
+ * FOCUS is native `:focus`, not `:focus-visible`: a text field's border is
+ * not a keyboard-only affordance, so the ring shows on any focus, mouse or
+ * keyboard.
  *
- * BORDER COLOR reproduces the `computedBorderColor` chain: `variant=borderless`
- * resolves FIRST (-> transparent, wins over status and focus); otherwise a
- * focused, non-disabled field maps the DEFAULT status to primary while
- * error/warning/success keep their own color (identical focused or not, so
- * only default needs a focus override); at rest each status paints its own
- * color. Every non-borderless rule carries `:not([data-variant='borderless'])`
- * so at most one rule wins per (variant x status x focus) combination.
- *
- * BACKGROUND reproduces the `backgroundColor` chain: disabled (checked FIRST in
- * the JS) > filled > default. The disabled rule is ordered after filled so it
- * wins the (0,4,0) tie when a field is both.
- *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` border floor at (0,3,1);
- * every border-color rule below reaches (0,4,0) via a variant/status attribute
- * beyond the two root classes + `[data-part='root']`. Non-border paint
- * (background, color, outline, border-radius) wins unlayered at (0,3,0).
+ * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via a
+ * variant/status attribute beyond the two root classes + `[data-part='root']`.
  */
 
-.ds-textarea.ds-textarea--modern[data-part='root'] {
-  color: var(--ds-color-text-primary);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: var(--ds-radius-md);
-  background-color: var(--ds-color-bg-input, var(--ds-surface-control, transparent));
-  outline: none;
+.ds-textarea-field[data-part='field'] {
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: var(--ds-textarea-message-gap, var(--ds-input-message-gap, var(--ds-spacing-1)));
 }
 
-/* background: filled, then disabled (disabled is checked first in the JS, so
-   it is ordered last here to win the tie against filled). */
+.ds-textarea.ds-textarea--modern[data-part='root'] {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--ds-textarea-min-block-size, 2.75rem);
+  color: var(--ds-textarea-color, var(--ds-color-text-primary));
+  caret-color: var(--ds-textarea-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
+  border-width: var(--ds-input-border-width, 1px);
+  border-style: solid;
+  border-radius: var(--ds-textarea-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  background-color: var(--ds-textarea-bg, var(--ds-color-bg-input, var(--ds-surface-control, transparent)));
+  font-family: var(--ds-input-font-family, inherit);
+  font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
+  letter-spacing: var(--ds-input-letter-spacing, normal);
+  outline: none;
+  resize: var(--ds-textarea-resize, vertical);
+  transition:
+    border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    background-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    opacity var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
+}
+
+/* Leave breathing room for the clear action so long values never slide
+   underneath it; the padding is logical, so RTL mirrors for free. */
+.ds-textarea-field[data-part='field'][data-has-clear='true'] > .ds-textarea.ds-textarea--modern[data-part='root'] {
+  padding-block-start: calc(var(--ds-textarea-clear-clearance, 1.75rem));
+}
+
+/* Size geometry on the canonical textarea scale (density scales the spacing
+   tokens these channels compose). */
+.ds-textarea.ds-textarea--modern[data-part='root'][data-size='sm'] {
+  padding: var(--ds-textarea-sm-padding);
+  font-size: var(--ds-textarea-sm-font-size);
+  line-height: var(--ds-textarea-sm-line-height, var(--ds-line-height-snug));
+}
+
+.ds-textarea.ds-textarea--modern[data-part='root'][data-size='md'] {
+  padding: var(--ds-textarea-md-padding);
+  font-size: var(--ds-textarea-md-font-size);
+  line-height: var(--ds-textarea-md-line-height, var(--ds-line-height-normal));
+}
+
+.ds-textarea.ds-textarea--modern[data-part='root'][data-size='lg'] {
+  padding: var(--ds-textarea-lg-padding);
+  font-size: var(--ds-textarea-lg-font-size);
+  line-height: var(--ds-textarea-lg-line-height, var(--ds-line-height-normal));
+}
+
+.ds-textarea.ds-textarea--modern[data-part='root']::placeholder {
+  color: var(--ds-textarea-color-placeholder, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
+  opacity: var(--ds-input-placeholder-opacity, 1);
+}
+
+.ds-textarea.ds-textarea--modern[data-part='root']::selection {
+  color: var(--ds-input-selection-color, var(--ds-textarea-color, var(--ds-color-text-primary)));
+  background: var(--ds-input-selection-bg, Highlight);
+}
+
+/* background: filled, then disabled (disabled wins the tie when both). */
 .ds-textarea.ds-textarea--modern[data-part='root'][data-variant='filled'] {
-  background-color: var(--ds-color-bg-input, var(--ds-surface-control, var(--ds-color-bg-secondary)));
+  background-color: var(--ds-textarea-filled-bg, var(--ds-color-bg-input, var(--ds-surface-inset)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
-  background-color: var(--ds-color-bg-disabled, var(--ds-color-bg-secondary));
+  background-color: var(--ds-textarea-bg-disabled, var(--ds-surface-disabled));
+  cursor: var(--ds-input-disabled-cursor, not-allowed);
+  opacity: var(--ds-input-disabled-opacity, 0.6);
+  resize: none;
 }
 
 /* border color: borderless (transparent, wins over all), then per-status rest,
-   then the default-status focus override. */
+   then hover, then the default-status focus override. */
 .ds-textarea.ds-textarea--modern[data-part='root'][data-variant='borderless'] {
   border-color: transparent;
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default'] {
-  border-color: var(--ds-color-border);
+  border-color: var(--ds-textarea-border, var(--ds-color-border));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='error'] {
-  border-color: var(--ds-color-error);
+  border-color: var(--ds-textarea-error-border, var(--ds-color-error));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='warning'] {
-  border-color: var(--ds-color-warning);
+  border-color: var(--ds-textarea-warning-border, var(--ds-color-warning));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='success'] {
-  border-color: var(--ds-color-success);
+  border-color: var(--ds-textarea-success-border, var(--ds-color-success));
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:hover:not([data-disabled='true']):not([data-readonly='true']):not(:focus) {
+  border-color: var(--ds-textarea-border-hover, var(--ds-color-border-hover));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:focus:not([data-disabled='true']) {
-  border-color: var(--ds-color-primary);
+  border-color: var(--ds-textarea-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
 }
 
-/* Focus ring: base (status=default) + per-status override. `outline-offset`
-   is constant across every branch; only the color channel varies. */
+/* Read-only: value stays fully legible, chrome quiets down. */
+.ds-textarea.ds-textarea--modern[data-part='root'][data-readonly='true']:not([data-disabled='true']) {
+  background-color: var(--ds-input-readonly-bg, var(--ds-textarea-bg, var(--ds-surface-control)));
+  cursor: var(--ds-input-readonly-cursor, text);
+}
+
+/* Focus ring: a status-aware halo (same grammar as Modern Input), never an
+   inset outline that chews the border. */
 .ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true']) {
-  outline: 2px solid var(--ds-color-primary);
-  outline-offset: -1px;
+  box-shadow: var(--ds-textarea-shadow-focus, var(--ds-input-shadow-focus, var(--ds-focus-ring)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='error'] {
-  outline: 2px solid var(--ds-color-error);
-  outline-offset: -1px;
+  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-textarea-shadow-focus, var(--ds-focus-ring)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='warning'] {
-  outline: 2px solid var(--ds-color-warning);
-  outline-offset: -1px;
+  box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-textarea-shadow-focus, var(--ds-focus-ring)));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='success'] {
-  outline: 2px solid var(--ds-color-success);
-  outline-offset: -1px;
+  box-shadow: var(--ds-input-success-shadow-focus, var(--ds-textarea-shadow-focus, var(--ds-focus-ring)));
+}
+
+/* Clear action: pinned to the field's logical top-inline-end corner. */
+.ds-textarea-field[data-part='field'] > [data-part='clear-button'][data-part='clear-button'] {
+  position: absolute;
+  inset-block-start: var(--ds-textarea-clear-offset, 0.375rem);
+  inset-inline-end: var(--ds-textarea-clear-offset, 0.375rem);
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: var(--ds-input-action-size, var(--ds-input-md-icon-size));
+  block-size: var(--ds-input-action-size, var(--ds-input-md-icon-size));
+  padding: 0;
+  color: var(--ds-input-clear-color, var(--ds-color-text-muted));
+  background: var(--ds-input-clear-bg, transparent);
+  border: var(--ds-input-clear-border, 1px solid transparent);
+  border-radius: var(--ds-input-action-radius, var(--ds-input-clear-radius, var(--ds-radius-full)));
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  transition:
+    color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    background-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    transform var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
+}
+
+.ds-textarea-field[data-part='field'] > [data-part='clear-button']:hover {
+  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
+  background: var(--ds-input-clear-bg-hover, var(--ds-surface-inset));
+  border-color: var(--ds-input-clear-border-hover, var(--ds-color-border-subtle));
+}
+
+.ds-textarea-field[data-part='field'] > [data-part='clear-button']:focus-visible {
+  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
+  background: var(--ds-input-clear-bg-hover, var(--ds-surface-inset));
+  border-color: var(--ds-input-clear-border-hover, var(--ds-color-border-subtle));
+  outline: 0;
+  box-shadow: var(--ds-input-action-focus-ring, var(--ds-focus-ring));
+}
+
+.ds-textarea-field[data-part='field'] > [data-part='clear-button']:active {
+  transform: var(--ds-input-action-active-transform, scale(0.94));
+}
+
+/* Character count stays in logical flow: no absolute text, no collisions in
+   long locales, and correct alignment in RTL.
+
+   CONTRAST LAW (R0/Axe): the muted counter ink fails WCAG AA on the control
+   surface on governed sources (bithire `--ds-input-count-color: #71869A` =
+   3.75:1 on white; the rottay fallback muted #808088 = 3.82:1). The channel
+   below deepens the resolved muted ink 35% toward the source's own primary
+   text ink: hue-neutral, tenant-faithful, and it converges to a pairing the
+   source already passes. Measured after: bithire 5.34:1 on #F4F5F7,
+   rottay-fallback 5.6:1, TMM >= 6.4:1. A tenant's explicit
+   `--ds-textarea-count-color` stays untouched. */
+.ds-textarea-field[data-part='field'] > [data-part='count'] {
+  justify-self: end;
+  margin: 0;
+  color: var(--ds-textarea-count-color, color-mix(in srgb, var(--ds-input-count-color, var(--ds-color-text-muted)) 65%, var(--ds-color-text-primary) 35%));
+  font-size: var(--ds-textarea-count-font-size, var(--ds-input-helper-font-size, var(--ds-font-size-xs)));
+  line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
+  font-variant-numeric: tabular-nums;
+}
+
+/* State hues use the solid-fill grammar from the Tag/Avatar contrast pass:
+   raw 500-level hues fail on light surfaces (warning #F59E0B = 2.15:1, error
+   #EF4444 = 3.76:1), so each deepens toward black until it clears AA on every
+   governed source -- warning 55% >= 5.5:1, error 78% >= 5.7:1 (worst source). */
+.ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='error'] {
+  color: var(--ds-input-count-color-error, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%));
+}
+
+.ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='warning'] {
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
+}
+
+.ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
+  font-weight: var(--ds-input-count-limit-font-weight, var(--ds-font-weight-semibold));
+}
+
+/* Browser chrome: keep autofill legible and on-surface. */
+.ds-textarea.ds-textarea--modern[data-part='root']:-webkit-autofill {
+  -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-textarea-color, var(--ds-color-text-primary)));
+  caret-color: var(--ds-input-autofill-caret, var(--ds-textarea-caret-color));
+  box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-textarea-bg, var(--ds-surface-control))) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
+@media (pointer: coarse) {
+  .ds-textarea.ds-textarea--modern[data-part='root'] {
+    /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
+       fluid root at narrow widths (measured on the live bundle, Axe R0). */
+    min-block-size: var(--ds-input-touch-target-min, 44px);
+  }
+
+  .ds-textarea-field[data-part='field'] > [data-part='clear-button'] {
+    min-inline-size: var(--ds-input-touch-target-min, 44px);
+    /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
+       fluid root at narrow widths (measured on the live bundle, Axe R0). */
+    min-block-size: var(--ds-input-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-textarea.ds-textarea--modern[data-part='root'],
+  .ds-textarea-field[data-part='field'] > [data-part='clear-button'] {
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-textarea.ds-textarea--modern[data-part='root'] {
+    forced-color-adjust: auto;
+    background: Field;
+    color: FieldText;
+    border-color: ButtonText;
+  }
+
+  .ds-textarea.ds-textarea--modern[data-part='root']:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
+    color: GrayText;
+    border-color: GrayText;
+  }
+
+  .ds-textarea-field[data-part='field'] > [data-part='clear-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
 }

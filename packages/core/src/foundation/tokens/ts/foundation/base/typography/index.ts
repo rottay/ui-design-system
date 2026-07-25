@@ -194,6 +194,27 @@ export const textWrap = {
   pretty: 'var(--ds-text-wrap-pretty)',
 } as const;
 
+/** Premium typography channels exposed to component and tenant authors. */
+export const typeCraft = {
+  opticalSizing: 'var(--ds-type-optical-sizing)',
+  fontSynthesis: 'var(--ds-type-font-synthesis)',
+  fontVariationSettings: 'var(--ds-type-font-variation-settings)',
+  rendering: 'var(--ds-type-rendering)',
+  decorationThickness: 'var(--ds-type-decoration-thickness)',
+  decorationOffset: 'var(--ds-type-decoration-offset)',
+  motionDuration: 'var(--ds-type-motion-duration)',
+  motionDistance: 'var(--ds-type-motion-distance)',
+  motionEasing: 'var(--ds-type-motion-easing)',
+} as const;
+
+export const typeContrast = {
+  strong: 'var(--ds-type-color-strong)',
+  default: 'var(--ds-type-color-default)',
+  muted: 'var(--ds-type-color-muted)',
+  subtle: 'var(--ds-type-color-subtle)',
+  inverse: 'var(--ds-type-color-inverse)',
+} as const;
+
 // Atomic references (named for direct consumption; see WO-CRA-01).
 export const numericTabular = numeric.tabular;
 export const numericProportional = numeric.proportional;
@@ -217,6 +238,8 @@ export const typography = {
   textStyles,
   numeric,
   textWrap,
+  typeCraft,
+  typeContrast,
 } as const;
 
 // Type exports

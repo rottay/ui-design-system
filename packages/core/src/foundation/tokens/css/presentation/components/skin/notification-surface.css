@@ -4,10 +4,11 @@
  * communicated by content and actions rather than a decorative edge rail.
  */
 
-.ds-surface.ds-notification .ds-notification__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-notification .ds-notification__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-notification .ds-notification__destructive-text[data-part='destructive-text'][data-part='destructive-text'] {
+.ds-surface.ds-notification
+  .ds-notification__destructive-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-error-500);
 }

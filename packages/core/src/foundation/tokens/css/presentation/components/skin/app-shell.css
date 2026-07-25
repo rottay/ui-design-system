@@ -1,11 +1,315 @@
 /**
- * AppShell paint contract.
+ * AppShell structure and paint contract.
  *
- * The structure owns responsive geometry inline because it is calculated from
- * posture and consumer-provided dimensions. Stable paint lives here so tenant
- * tokens remain authoritative and the same shell DOM can be fully white-labelled.
+ * Stable geometry and paint live in the canonical CSS bundle so every vertical
+ * and DB-authored tenant receives the same shell engine. React emits only
+ * runtime custom properties derived from posture and consumer dimensions.
  * This file is deliberately unlayered with the rest of the component skins.
  */
+
+.rottay-app-shell {
+  min-height: 100dvh;
+  display: flex;
+  background: var(--ds-shell-background, var(--ds-surface-canvas));
+}
+.rottay-app-shell__navigation-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--ds-shell-inline-start-inset);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-inline-start: var(--ds-shell-safe-area-left);
+  padding-block-start: var(--ds-shell-safe-area-top);
+  padding-block-end: var(--ds-shell-safe-area-bottom);
+  transition: width var(--ds-shell-collapse-transition);
+  background: var(
+    --ds-shell-navigation-background,
+    var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))
+  );
+  border: var(--ds-shell-navigation-border, 0);
+  border-inline-end: var(
+    --ds-shell-navigation-border-inline-end,
+    var(
+      --ds-shell-navigation-border,
+      1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))
+    )
+  );
+  border-radius: var(--ds-shell-navigation-radius, 0);
+  box-shadow: var(--ds-shell-navigation-shadow, none);
+}
+
+.rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer[data-part="surface"] {
+  width: var(--ds-shell-resolved-drawer-inline-size);
+  max-width: 100dvw;
+  height: 100dvh;
+  max-height: 100dvh;
+  box-sizing: border-box;
+  padding-block-start: env(safe-area-inset-top, 0px);
+  padding-block-end: env(safe-area-inset-bottom, 0px);
+  padding-inline-start: env(safe-area-inset-left, 0px);
+  background: var(
+    --ds-shell-navigation-background,
+    var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))
+  );
+  border: var(--ds-shell-navigation-border, 0);
+  border-inline-end: var(
+    --ds-shell-navigation-border-inline-end,
+    var(
+      --ds-shell-navigation-border,
+      1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))
+    )
+  );
+  border-radius: var(--ds-shell-navigation-radius, 0);
+  box-shadow: var(--ds-shell-navigation-shadow, var(--ds-elevation-3));
+}
+
+.rottay-app-shell__navigation-drawer-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* Sheet engines own these two declarations inline. The shell body is a slot
+     compositor rather than a scroll region, so its contract must win here. */
+  padding: var(--ds-shell-navigation-drawer-body-padding, 0) !important;
+  overflow: hidden !important;
+}
+
+.rottay-app-shell__navigation-drawer-header {
+  min-height: var(--ds-shell-resolved-sidebar-header-min-block-size);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3, 12px);
+  padding: var(
+    --ds-shell-navigation-drawer-header-padding,
+    0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px)
+  );
+  overflow: hidden;
+  background: var(--ds-shell-navigation-header-background, transparent);
+  border-block-end: var(--ds-shell-navigation-header-border, 0);
+}
+
+.rottay-app-shell__navigation-drawer-logo {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.rottay-app-shell__navigation-close,
+.rottay-app-shell__navigation-trigger {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  color: var(--ds-color-text-primary);
+  cursor: pointer;
+}
+
+.rottay-app-shell__navigation-close {
+  background: transparent;
+  border: 0;
+}
+
+.rottay-app-shell__navigation-logo {
+  height: var(--ds-shell-resolved-sidebar-header-block-size);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--ds-shell-navigation-logo-padding, 0 var(--ds-spacing-5, 20px));
+  overflow: hidden;
+  background: var(--ds-shell-navigation-header-background, transparent);
+  border-block-end: var(
+    --ds-shell-navigation-header-border,
+    1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))
+  );
+}
+
+.rottay-app-shell__navigation-logo[data-collapsed="true"] {
+  justify-content: center;
+  padding: var(--ds-shell-navigation-logo-padding-collapsed, 0);
+}
+
+.rottay-app-shell__navigation-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(
+    --ds-shell-navigation-body-padding,
+    var(
+      --ds-sidebar-shell-padding-inline,
+      var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px)
+        calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px)
+    )
+  );
+  scroll-padding-block-end: var(
+    --ds-shell-navigation-body-scroll-padding-block-end,
+    calc(var(--ds-spacing-6, 24px) + 76px)
+  );
+}
+
+.rottay-app-shell__navigation-body[data-collapsed="true"] {
+  padding: var(
+    --ds-shell-navigation-body-padding-collapsed,
+    var(
+      --ds-sidebar-shell-padding-collapsed,
+      var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)
+    )
+  );
+}
+
+.rottay-app-shell__navigation-footer {
+  flex-shrink: 0;
+  padding: var(--ds-shell-navigation-footer-padding, var(--ds-spacing-3, 12px));
+  background: var(
+    --ds-shell-navigation-footer-background,
+    var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))
+  );
+  border-block-start: var(
+    --ds-shell-navigation-footer-border,
+    1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))
+  );
+}
+
+.rottay-app-shell__navigation-footer[data-collapsed="true"] {
+  padding: var(
+    --ds-shell-navigation-footer-padding-collapsed,
+    var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)
+  );
+}
+
+.rottay-app-shell__main {
+  flex: 1;
+  margin-inline-start: var(--ds-shell-inline-start-inset);
+  transition: var(
+    --ds-shell-main-transition,
+    var(--ds-shell-resolved-main-transition)
+  );
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-block-start: var(--ds-shell-main-padding-block-start, 0);
+  padding-block-end: var(
+    --ds-shell-main-padding-block-end,
+    var(--ds-shell-bottom-inset)
+  );
+  padding-inline-start: var(--ds-shell-main-padding-inline-start, 0);
+  padding-inline-end: var(
+    --ds-shell-main-padding-inline-end,
+    var(--ds-shell-safe-area-right)
+  );
+  background: var(--ds-shell-main-background, transparent);
+  border: var(--ds-shell-main-border, 0);
+  box-shadow: var(--ds-shell-main-shadow, none);
+}
+
+.rottay-app-shell__main[data-has-header="false"] {
+  padding-block-start: var(
+    --ds-shell-main-padding-block-start,
+    var(--ds-shell-safe-area-top)
+  );
+}
+
+.rottay-app-shell__main[data-compact="true"] {
+  margin-inline-start: 0;
+  padding-inline-start: var(
+    --ds-shell-main-padding-inline-start,
+    var(--ds-shell-safe-area-left)
+  );
+}
+
+.rottay-app-shell__header {
+  position: sticky;
+  inset-block-start: var(--ds-shell-header-inset-block-start, 0);
+  inset-inline: var(--ds-shell-header-inset-inline, 0);
+  z-index: 50;
+  height: var(--ds-shell-top-inset);
+  box-sizing: border-box;
+  padding-block-start: var(
+    --ds-shell-header-padding-block-start,
+    var(--ds-shell-safe-area-top)
+  );
+  padding-inline: var(
+    --ds-shell-header-padding-inline,
+    var(--ds-spacing-6, 24px)
+  );
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  background: var(
+    --ds-shell-header-background,
+    var(--ds-layout-header-bg, var(--ds-surface-canvas))
+  );
+  border: var(--ds-shell-header-border, 0);
+  border-block-end: var(
+    --ds-shell-header-border-block-end,
+    var(
+      --ds-shell-header-border,
+      1px solid var(--ds-layout-header-border, var(--ds-color-border-subtle))
+    )
+  );
+  border-radius: var(--ds-shell-header-radius, 0);
+  box-shadow: var(--ds-shell-header-shadow, none);
+  backdrop-filter: var(
+    --ds-shell-header-backdrop,
+    var(--ds-layout-header-backdrop, blur(12px))
+  );
+  -webkit-backdrop-filter: var(
+    --ds-shell-header-backdrop,
+    var(--ds-layout-header-backdrop, blur(12px))
+  );
+}
+
+.rottay-app-shell__navigation-trigger {
+  margin-inline-end: var(
+    --ds-shell-navigation-trigger-margin-inline-end,
+    var(--ds-spacing-3, 12px)
+  );
+  background: transparent;
+  border: 0;
+}
+
+.rottay-app-shell__header-slot {
+  flex: 1;
+  min-width: 0;
+}
+
+.rottay-app-shell__header-slot--center {
+  display: flex;
+  justify-content: center;
+}
+
+.rottay-app-shell__header-slot--right {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-shell-header-slot-gap, var(--ds-spacing-1, 4px));
+}
+
+.rottay-app-shell__content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--ds-shell-content-padding, 0);
+  background: var(--ds-shell-content-background, transparent);
+  border: var(--ds-shell-content-border, 0);
+}
+
+.rottay-app-shell__footer {
+  flex-shrink: 0;
+  padding: var(--ds-shell-footer-padding, 0);
+  background: var(--ds-shell-footer-background, transparent);
+  border: var(--ds-shell-footer-border, 0);
+  box-shadow: var(--ds-shell-footer-shadow, none);
+}
+
+/* Interaction and accessibility states. */
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-drawer-header"] {

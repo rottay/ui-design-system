@@ -1,370 +1,546 @@
 /**
- * Modern Select skin (WO-SKIN-02 checkpoint B, dropdown family).
+ * Modern Select skin.
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
- * rule loses to preflight regardless of specificity. Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
- *
- * TWO IMPLEMENTATIONS share this file. The engine renders EITHER a styled
- * native `<select>` (simple case: not searchable/multiple/grouped/virtual) OR a
- * custom `<div>` trigger + PORTALED dropdown (advanced case). Both roots carry
- * the pair `ds-select-shell ds-select-shell--modern` + `data-part='root'`
- * (NOT `ds-select`: that bare class is the legacy rustic/personality select
- * hook carrying `font-size: var(--ds-input-md-font-size)`, which would shrink
- * this wrapper's inherited font and reflow the trigger text -- WO-SKIN-02 B).
- *   - native trigger  -> `select[data-part='trigger']`   (element-qualified)
- *   - custom trigger  -> `div[data-part='trigger']`      (element-qualified)
- * They are mutually exclusive per instance but both stamp `data-part='trigger'`,
- * so the element qualifier keeps their divergent paint apart.
- *
- * PORTAL: the custom dropdown mounts via `createPortal(document.body)`, so it is
- * NOT a descendant of the root. Its rules are STANDALONE on the popup's own
- * class `.ds-select-shell__dropdown[data-part='dropdown']`; parts inside it
- * (search-input, option, group-label, empty) are descendants of THAT.
- *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
- * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). In-tree parts get
- * it from the two root classes (0,2,0) + `[data-part='root']` + descendant
- * `[data-part]`. Standalone portal parts have only one class, so the 4th unit is
- * bought by REPEATING the target `[data-part]` (filter-panel precedent). Pure
- * `border: none` resets carry no color and are exempt. `border: … transparent`
- * DOES paint (it wins the tenant color) and is held to the floor.
- *
- * The trigger state machine mirrors the Input modern skin exactly (Select's
- * `buildTriggerStyle` "matches Input shell exactly"); Select's "focus" is
- * `data-open`, hover is native `:hover`, status lives on `data-status`. Values
- * are transcribed verbatim from `engines/modern.tsx`; the native arrow SVG data
- * URI (stroke `%23A0A0A5`) and its size-parameterised inset are carried byte-
- * exact (the inset rides an inline `--ds-select-native-arrow-inset` custom
- * property, not a paint key).
+ * Native and custom branches share one complete, tenant-tokenized visual
+ * language. The popup is portaled and therefore owns a standalone anatomy.
+ * Full borders and framed states replace side rails or utility paint.
  */
 
 @keyframes ds-select-appear {
   from {
     opacity: 0;
-    transform: scale(var(--ds-motion-scale-in)) translateY(var(--ds-motion-offset-in));
+    transform: translateY(var(--ds-select-enter-y, -5px)) scale(0.975);
+    filter: saturate(0.9);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0) scale(1);
+    filter: saturate(1);
   }
 }
 
-/* Trigger state choreography: the border/background/focus-ring shifts between
-   rest, hover, open, and status states settle on the motion canon instead of
-   snapping. One unqualified [data-part='trigger'] rule carries the transition
-   for BOTH the native <select> and the custom <div> trigger; it sets no border
-   color, so it never contests the element-qualified state rules below. The
-   --ds-motion-fast token zeroes under reduced motion (final-state, no tween). */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] {
+  font-family: var(--ds-select-font-family, var(--ds-font-family-base));
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    outline-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
 }
 
-/* ============================================================================
-   CUSTOM TRIGGER (div) — buildTriggerStyle state machine
-   ============================================================================ */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
+  color: var(--ds-select-color, var(--ds-color-text-primary));
+  border-radius: var(--ds-select-radius, var(--ds-radius-lg, 12px));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 4%, transparent), transparent 42%),
+    var(--ds-select-bg, var(--ds-surface-control));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 48%, transparent),
+    var(--ds-select-shadow, var(--ds-shadow-xs, 0 1px 2px rgb(15 23 42 / 0.04)));
+  outline: var(--ds-focus-ring-width, 2px) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-part='trigger'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-part='trigger'] {
+  border: var(--ds-select-border-width, 1px) solid
+    var(--ds-select-border-color, var(--ds-color-border));
+}
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'] {
-  color: var(--ds-color-text-primary);
-  background-color: var(--ds-select-bg, var(--ds-surface-control));
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--ds-color-border);
-  border-radius: var(--ds-radius-md, 8px);
-  outline: var(--ds-focus-ring-width, 2px) solid transparent;
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  overflow: hidden;
 }
-
-/* variant at rest (default keeps the base border-color) */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='filled'] {
-  background-color: var(--ds-select-filled-bg, var(--ds-surface-canvas));
-  border-color: transparent;
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='flushed'] {
-  border-radius: 0;
-  border-width: 0;
-  border-color: transparent;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: var(--ds-color-border);
-  background-color: transparent;
-}
-
-/* hover: only where nothing later in the mutation order overwrites it
-   (JS gate: isHovered && !isOpen && !hasError && !hasWarning && !isDisabled). */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger']:hover:not([data-open='true']):not([data-status]):not([data-disabled='true']) {
-  border-color: var(--ds-color-border-hover);
-  background-color: var(--ds-select-bg-hover, var(--ds-select-bg, var(--ds-surface-control)));
-}
-
-/* open (Select's focus) */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'] {
-  border-color: var(--ds-color-primary);
-  background-color: var(--ds-select-bg-focus, var(--ds-select-bg, var(--ds-surface-control)));
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='flushed'][data-open='true'] {
-  outline: none;
-  border-bottom-width: 2px;
-  border-bottom-color: var(--ds-color-primary);
-}
-
-/* error, then warning (JS: hasError, then hasWarning && !hasError) — ordered
-   after open so the status color wins the equal-specificity tie. */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'] {
-  border-color: var(--ds-color-error);
-  background-color: color-mix(in srgb, var(--ds-color-error) 4%, transparent);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'][data-open='true'] {
-  outline: var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-error) 15%, transparent);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'] {
-  border-color: var(--ds-color-warning);
-  background-color: color-mix(in srgb, var(--ds-color-warning) 4%, transparent);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'][data-open='true'] {
-  outline: var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
-}
-
-/* disabled: background only (the JS disabled block never touches border-color);
-   ordered last so it wins the bg tie against filled/error/warning. */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-disabled='true'] {
-  background-color: var(--ds-select-bg-disabled, var(--ds-surface-canvas));
-}
-
-/* ============================================================================
-   NATIVE <select> TRIGGER — nativeSelectStyle state machine + injected focus CSS
-   ============================================================================ */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
-  color: var(--ds-color-text-primary);
-  background-color: var(--ds-select-bg, var(--ds-surface-control));
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--ds-color-border);
-  border-radius: var(--ds-radius-md, 8px);
-  outline: var(--ds-focus-ring-width, 2px) solid transparent;
-  outline-offset: var(--ds-focus-ring-offset, 2px);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A0A0A5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right var(--ds-select-native-arrow-inset, 12px) center;
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-variant='filled'] {
-  background-color: var(--ds-surface-canvas);
-  border-color: transparent;
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-variant='flushed'] {
-  border-radius: 0;
-  border-width: 0;
-  border-color: transparent;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: var(--ds-color-border);
-  background-color: transparent;
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-status='error'] {
-  border-color: var(--ds-color-error);
-  background-color: color-mix(in srgb, var(--ds-color-error) 4%, transparent);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-status='warning'] {
-  border-color: var(--ds-color-warning);
-  background-color: color-mix(in srgb, var(--ds-color-warning) 4%, transparent);
-}
-/* the injected nativeFocusCSS, verbatim */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:focus {
-  border-color: var(--ds-color-primary);
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:hover:not(:focus):not(:disabled) {
-  border-color: var(--ds-color-border-hover);
+  appearance: none;
+  background-image: none;
 }
 
-/* ============================================================================
-   TRIGGER SUB-PARTS (in-tree, custom branch)
-   ============================================================================ */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:not([data-disabled='true']):hover {
+  border-color: var(--ds-select-border-color-hover, var(--ds-color-border-hover));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 6%, transparent), transparent 48%),
+    var(--ds-select-bg-hover, color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-control)));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 56%, transparent),
+    var(--ds-select-shadow-hover, var(--ds-shadow-sm));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:focus-visible {
+  border-color: var(--ds-select-border-color-focus, var(--ds-color-primary));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 4%, white), transparent 52%),
+    var(--ds-select-bg-focus, var(--ds-surface-control));
+  outline-color: var(--ds-select-focus-ring, var(--ds-focus-ring-color));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    var(--ds-select-shadow-focus, var(--ds-shadow-sm));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='filled'] {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 4%, transparent), transparent),
+    var(--ds-select-filled-bg, var(--ds-surface-subtle, var(--ds-surface-canvas)));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='flushed'] {
+  border-width: 0 0 1px;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error'] {
+  border-color: var(--ds-color-error);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-error) 5%, var(--ds-surface-control)), var(--ds-surface-control));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-warning) 5%, var(--ds-surface-control)), var(--ds-surface-control));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success'] {
+  border-color: color-mix(in srgb, var(--ds-color-success) 56%, var(--ds-color-border));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-disabled='true'] {
+  color: var(--ds-color-text-disabled, var(--ds-color-text-muted));
+  background: var(--ds-select-bg-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas)));
+  cursor: not-allowed;
+  opacity: var(--ds-opacity-disabled, 0.54);
+  filter: saturate(0.5);
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger-value'] {
+  display: flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger-actions'] {
+  display: inline-flex;
+  flex: none;
+  gap: 0.25rem;
+  align-items: center;
+  padding-inline-start: 0.2rem;
+}
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='placeholder'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--ds-select-placeholder-color, var(--ds-color-text-muted));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='value'][data-mode='single'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-medium, 500);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='value'][data-mode='multiple'] {
+  display: flex;
+  min-inline-size: 0;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+  align-items: center;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
+  display: inline-flex;
+  min-block-size: 1.42rem;
+  max-inline-size: var(--ds-select-tag-max-width, 10rem);
+  padding: 0.08rem 0.4rem;
+  align-items: center;
+  gap: 0.28rem;
+  color: var(--ds-select-tag-color, var(--ds-color-text-primary));
+  border-radius: var(--ds-select-tag-radius, var(--ds-radius-md, 9px));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card));
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-medium, 500);
+  line-height: 1.2;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'][data-part='tag'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'][data-part='tag-count'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
+  color: var(--ds-color-text-secondary);
+  background: var(--ds-surface-subtle, var(--ds-surface-canvas));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'] {
+  display: inline-grid;
+  flex: none;
+  inline-size: 1.35rem;
+  block-size: 1.35rem;
+  padding: 0;
+  place-items: center;
   color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  cursor: pointer;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
 }
 
-/* the search input rendered INSIDE the trigger (color: inherit) */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] [data-part='search-input'] {
-  border: none;
-  outline: none;
-  background-color: transparent;
-  color: inherit;
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'][data-part='tag-remove'],
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'][data-part='clear-button'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent);
 }
 
-/* chevron: color + open-driven rotation (state transform is paint). The
-   rotation ticks over on --ds-motion-fast rather than snapping; the token
-   zeroes under reduced motion so the chevron flips to its final angle at once. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:hover,
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:hover {
+  color: var(--ds-color-text-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card));
+  transform: scale(1.05);
+}
+
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'] {
+  flex: none;
   color: var(--ds-color-text-muted);
   transform: rotate(0deg);
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
 }
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-open='true'] [data-part='arrow-icon'] {
+  color: var(--ds-color-primary);
   transform: rotate(180deg);
 }
 
-/* clear button: the removed imperative hover becomes a :hover rule */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'] {
-  border: none;
-  border-radius: var(--ds-radius-sm, 6px);
-  background-color: transparent;
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='native-arrow'] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--ds-select-native-arrow-inset, 0.75rem);
+  display: inline-grid;
+  place-items: center;
   color: var(--ds-color-text-muted);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:hover {
-  background-color: var(--ds-surface-canvas);
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
-/* selected-value tag chip + count + its remove button */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'] {
-  background-color: var(--ds-surface-canvas);
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-sm, 6px);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
-  background-color: var(--ds-surface-canvas);
-  color: var(--ds-color-text-muted);
-  border-radius: var(--ds-radius-sm, 6px);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'] {
-  border: none;
-  border-radius: 50%;
-  background-color: transparent;
-  color: var(--ds-color-text-muted);
-}
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:hover {
-  color: var(--ds-color-text-primary);
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-loading='true'] [data-part='native-arrow'] {
+  opacity: 0;
 }
 
-/* native loading wrapper: static vertical centering (a state-free transform) */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading'] {
   transform: translateY(-50%);
 }
 
-/* loading spinner dot — the painted element in both the native branch (an inner
-   span) and the custom branch (the loading span itself) carries
-   `data-part='loading-spinner'`; one rule serves both. */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'] {
-  border: 2px solid var(--ds-color-border);
-  border-top-color: transparent;
+  border: 2px solid color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
+  border-top-color: var(--ds-color-primary);
   border-radius: 50%;
 }
 
-/* ============================================================================
-   PORTALED DROPDOWN + contents (standalone on the popup class)
-   ============================================================================ */
+/* Portaled panel ----------------------------------------------------------- */
 
-.ds-select-shell__dropdown[data-part='dropdown'] {
-  background: var(--ds-select-dropdown-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-color-bg-primary) 22%, var(--ds-surface-card))));
-  border-radius: 14px;
-  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-shadow-popover, var(--ds-shadow-lg, var(--ds-card-shadow))));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-.ds-select-shell__dropdown[data-part='dropdown'][data-part='dropdown'][data-part='dropdown'] {
-  border: 1px solid var(--ds-select-dropdown-border-color, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent));
+.ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'] {
+  --ds-select-enter-y: -5px;
+  isolation: isolate;
+  min-inline-size: min(var(--ds-select-dropdown-min-width, 15rem), calc(100vw - 1rem));
+  max-inline-size: min(var(--ds-select-dropdown-max-width, 28rem), calc(100vw - 1rem));
+  padding: var(--ds-select-dropdown-padding, 0.42rem);
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-select-font-family, var(--ds-font-family-base));
+  border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-xl, 16px));
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 5%, transparent), transparent 46%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, white 2%), color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    var(--ds-select-dropdown-shadow, var(--ds-elevation-3, 0 16px 40px rgb(15 23 42 / 0.14)));
+  backdrop-filter: blur(var(--ds-select-backdrop-blur, 16px)) saturate(1.08);
+  transform-origin: center top;
 }
 
-/* search wrapper + search input inside the dropdown (color: text-primary) */
+.ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'][data-part='dropdown'] {
+  border: var(--ds-select-dropdown-border-width, 1px) solid
+    var(--ds-select-dropdown-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'][data-placement='top'] {
+  --ds-select-enter-y: 5px;
+  transform-origin: center bottom;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.55rem;
+  min-block-size: 2.55rem;
+  margin-block-end: 0.35rem;
+  padding: 0.45rem 0.65rem;
+  align-items: center;
+  color: var(--ds-color-text-secondary);
+  border-radius: var(--ds-radius-lg, 12px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)), var(--ds-surface-card));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 55%, transparent);
+}
+
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 17%, var(--ds-color-border-subtle));
 }
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input'] {
-  border: none;
-  outline: none;
-  background-color: transparent;
-  color: var(--ds-color-text-primary);
-}
+
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-icon'] {
-  color: var(--ds-color-text-muted);
-}
-
-/* group header divider + label color */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'] {
-  color: var(--ds-color-text-muted);
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'][data-part='group-label'][data-divider='true'] {
-  border-top: 1px solid var(--ds-color-border);
-}
-
-/* option rows: base + inset divider + focused + selected. The base border is
-   `1px solid transparent`, which paints (holds the tenant color) so it takes
-   the doubled-[data-part] (0,4,0) form; the focused/selected borders inherit
-   that base and add their state attr. */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
-  color: var(--ds-color-text-primary);
-  background: transparent;
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
-  border-radius: 8px;
-  border: 1px solid transparent;
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:not(:first-child):not([data-selected='true']):not([data-virtual='true']) {
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-border-subtle) 68%, transparent);
-}
-/* non-virtual focused (not selected) */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true']:not([data-selected='true']):not([data-virtual='true']) {
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-active='true']:not([data-selected='true']):not([data-virtual='true']) {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
-}
-/* non-virtual selected */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true']:not([data-virtual='true']) {
-  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
-  box-shadow: inset 2px 0 0 var(--ds-color-primary);
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-selected='true']:not([data-virtual='true']) {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
-}
-/* virtual focused (not selected) — divergent gradient + lift */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-virtual='true'][data-active='true']:not([data-selected='true']) {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-color-bg-primary) 20%, var(--ds-surface-card)));
-  transform: translateY(-1px);
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-virtual='true'][data-active='true']:not([data-selected='true']) {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
-}
-/* virtual selected — divergent gradient */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-virtual='true'][data-selected='true'] {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-virtual='true'][data-selected='true'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
-}
-
-/* option multi-checkbox: border + fill by selected */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-checkbox'] {
-  background-color: transparent;
-  border-radius: 4px;
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-checkbox'][data-part='option-checkbox'] {
-  border: 1px solid var(--ds-color-border);
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'] {
-  background-color: var(--ds-color-primary);
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'][data-part='option-checkbox'] {
-  border: 1px solid var(--ds-color-primary);
-}
-
-/* option description + the single-select checkmark tick */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-description'] {
-  color: var(--ds-color-text-muted);
-}
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-check'] {
   color: var(--ds-color-primary);
 }
 
-/* empty state */
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'] {
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: 0;
+  color: var(--ds-color-text-primary);
+  border: 0;
+  background: transparent;
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-snug);
+  outline: 0;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input']::placeholder {
   color: var(--ds-color-text-muted);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-list'] {
+  display: grid;
+  gap: 0.2rem;
+  overflow-x: hidden;
+  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  scrollbar-width: thin;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-list']::-webkit-scrollbar {
+  inline-size: 6px;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-list']::-webkit-scrollbar-thumb {
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'] {
+  display: flex;
+  min-block-size: 1.8rem;
+  margin-block: 0.3rem 0.05rem;
+  padding: 0.35rem 0.65rem;
+  align-items: center;
+  color: var(--ds-select-group-color, var(--ds-color-text-muted));
+  border-radius: var(--ds-radius-md, 10px);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), transparent 78%);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: var(--ds-letter-spacing-wide);
+  line-height: 1.2;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'][data-divider='true'] {
+  margin-block-start: 0.55rem;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
+  position: relative;
+  display: flex;
+  inline-size: 100%;
+  min-block-size: var(--ds-select-option-height, 2.85rem);
+  padding: var(--ds-select-option-padding-y, 0.48rem) var(--ds-select-option-padding-x, 0.62rem);
+  align-items: center;
+  gap: 0.55rem;
+  overflow: hidden;
+  color: var(--ds-select-option-color, var(--ds-color-text-secondary));
+  border-radius: var(--ds-select-option-radius, var(--ds-radius-lg, 12px));
+  background: transparent;
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-select-option-font-size, var(--ds-font-size-sm));
+  line-height: var(--ds-line-height-snug);
+  text-align: start;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border: 1px solid transparent;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:not([data-disabled='true']):hover,
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true'] {
+  color: var(--ds-select-option-color-hover, var(--ds-color-text-primary));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-card)));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 58%, transparent),
+    var(--ds-shadow-xs);
+  transform: translateY(-1px);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
+  color: var(--ds-select-option-color-selected, var(--ds-color-primary));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 36%, var(--ds-color-border-subtle));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    var(--ds-shadow-xs);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
+  color: var(--ds-color-text-disabled, var(--ds-color-text-muted));
+  cursor: not-allowed;
+  opacity: var(--ds-opacity-disabled, 0.46);
+  filter: saturate(0.45);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'] {
+  display: inline-grid;
+  flex: none;
+  inline-size: 1.05rem;
+  block-size: 1.05rem;
+  place-items: center;
+  color: var(--ds-color-text-on-primary, white);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-surface-card);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 54%, transparent);
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'][data-part='option-checkbox'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-selected='true'] [data-part='option-checkbox'] {
+  border-color: var(--ds-color-primary);
+  background: var(--ds-color-primary);
+  transform: scale(1.03);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-icon'] {
+  display: inline-grid;
+  flex: none;
+  inline-size: var(--ds-select-option-icon-well-size, 1.8rem);
+  block-size: var(--ds-select-option-icon-well-size, 1.8rem);
+  place-items: center;
+  color: var(--ds-color-primary);
+  border-radius: var(--ds-radius-md, 10px);
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:hover [data-part='option-icon'] {
+  background: color-mix(in srgb, currentColor 11%, transparent);
+  transform: scale(1.04);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-content'] {
+  display: flex;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.12rem;
+  overflow: hidden;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-label'],
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-description'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-label'] {
+  color: currentColor;
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-description'] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-regular, 400);
+  line-height: 1.35;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-check'] {
+  display: inline-grid;
+  flex: none;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  place-items: center;
+  color: var(--ds-color-primary);
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'] {
+  display: grid;
+  min-block-size: 4.5rem;
+  padding: 1rem;
+  place-items: center;
+  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-lg, 12px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent), transparent);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-relaxed);
+  text-align: center;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'][data-part='empty'] {
+  border: 1px dashed color-mix(in srgb, var(--ds-color-border) 84%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'],
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'],
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'],
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'],
+  .ds-select-shell__dropdown[data-part='dropdown'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-icon'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'] {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
 }

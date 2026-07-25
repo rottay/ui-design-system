@@ -27,6 +27,7 @@ import {
   message as rusticMessage,
   useMessage as useRusticMessage,
 } from '../engines/rustic';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 function ModernHarness({ onReady }: { onReady: (api: ReturnType<typeof useModernMessage>[0]) => void }) {
   const [api] = useModernMessage();
@@ -234,10 +235,11 @@ describe('Message engine advanced coverage', () => {
   it('covers modern provider updates, direct item behavior, and static warning helpers', async () => {
     let apiRef: ReturnType<typeof useModernMessage>[0] | undefined;
 
-    render(
+    renderWithEngine(
       <ModernMessageProvider maxCount={1} placement="bottom" top={16}>
         <ModernHarness onReady={(api) => { apiRef = api; }} />
-      </ModernMessageProvider>
+      </ModernMessageProvider>,
+      'modern'
     );
 
     await waitFor(() => {
@@ -270,7 +272,7 @@ describe('Message engine advanced coverage', () => {
 
     const onRemove = vi.fn();
     const onClose = vi.fn();
-    render(
+    renderWithEngine(
       <ModernMessageItem
         id="modern-message"
         type="loading"
@@ -280,13 +282,18 @@ describe('Message engine advanced coverage', () => {
         duration={1}
         onRemove={onRemove}
         onClose={onClose}
-      />
+      />,
+      'modern'
     );
 
     expect(screen.getByTestId('modern-icon')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
 
-    expect(onRemove).toHaveBeenCalledWith('modern-message');
+    // The modern item plays its skin exit animation first; removal lands
+    // after the 160ms exit cadence.
+    await waitFor(() => {
+      expect(onRemove).toHaveBeenCalledWith('modern-message');
+    });
     expect(onClose).toHaveBeenCalledTimes(1);
 
     modernMessage.success('x');
@@ -305,10 +312,11 @@ describe('Message engine advanced coverage', () => {
 
     let apiRef: ReturnType<typeof useModernMessage>[0] | undefined;
 
-    render(
+    renderWithEngine(
       <ModernMessageProvider maxCount={5} placement="top" top={20}>
         <ModernHarness onReady={(api) => { apiRef = api; }} />
-      </ModernMessageProvider>
+      </ModernMessageProvider>,
+      'modern'
     );
 
     expect(apiRef).toBeDefined();
@@ -444,11 +452,12 @@ describe('Message engine advanced coverage', () => {
       return null;
     }
 
-    render(
+    renderWithEngine(
       <>
         <ModernNoProviderHarness />
         <RusticNoProviderHarness />
-      </>
+      </>,
+      'modern'
     );
 
     expect(modernApi).toBeDefined();
@@ -475,7 +484,7 @@ describe('Message engine advanced coverage', () => {
     const onRusticRemove = vi.fn();
     const onRusticClose = vi.fn();
 
-    render(
+    renderWithEngine(
       <>
         <ModernMessageItem
           id="modern-auto"
@@ -495,7 +504,8 @@ describe('Message engine advanced coverage', () => {
           onRemove={onRusticRemove}
           onClose={onRusticClose}
         />
-      </>
+      </>,
+      'modern'
     );
 
     expect(screen.getByText('Modern auto')).toBeInTheDocument();
@@ -505,13 +515,14 @@ describe('Message engine advanced coverage', () => {
       vi.advanceTimersByTime(1000);
     });
 
-    expect(onModernRemove).toHaveBeenCalledWith('modern-auto');
-    expect(onModernClose).toHaveBeenCalledTimes(1);
-
+    // Expiry begins each engine's exit lifecycle: modern removes after its
+    // 160ms skin cadence, rustic after its 220ms cadence.
     act(() => {
       vi.advanceTimersByTime(220);
     });
 
+    expect(onModernRemove).toHaveBeenCalledWith('modern-auto');
+    expect(onModernClose).toHaveBeenCalledTimes(1);
     expect(onRusticRemove).toHaveBeenCalledWith('rustic-auto');
     expect(onRusticClose).toHaveBeenCalledTimes(1);
   });

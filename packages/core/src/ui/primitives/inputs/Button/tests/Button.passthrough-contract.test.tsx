@@ -1,10 +1,11 @@
 /**
- * Pass-through honesty law contract (audit SKN-03): engines win on `data-part`;
- * callers win on `id`, `aria-*`, and every other `data-*` attribute. Every
- * engine render path (including rustic's anchor branch) must forward the
- * caller's passthrough to the element it owns and stamp `data-part="trigger"`
- * after it. The law is documented on `BaseComponentProps` in
- * `foundation/contracts/kernel/common`.
+ * Pass-through honesty law contract (audit SKN-03, revised by P-79): callers
+ * win on `id`, `aria-*`, and every other `data-*` attribute INCLUDING an
+ * explicit `data-part` — a composing component owns the parts it names. The
+ * engine stamps its own default root part only when the caller passed none.
+ * Rustic keeps the historical engine-wins behavior until the Classic/Rustic
+ * parity tranche (engine policy 2026-07-25: read-only in this wave). The law
+ * is documented on `BaseComponentProps` in `foundation/contracts/kernel/common`.
  */
 import React from 'react';
 import { describe, expect, it } from 'vitest';
@@ -18,12 +19,12 @@ const passthrough = {
   id: 'caller-button-id',
   'aria-label': 'Caller label',
   'data-custom': 'caller-data',
-  // The one attribute the caller must NOT win: the engine re-stamps its part.
+  // P-79: an explicit caller part names the composing component's own part.
   'data-part': 'caller-part-attempt',
 } as const;
 
 describe('Button pass-through honesty law', () => {
-  it('modern: forwards id/aria-label/data-* and keeps data-part="trigger"', () => {
+  it('modern: forwards id/aria-label/data-* and the caller data-part wins', () => {
     const { container } = render(<ModernButton {...passthrough}>Go</ModernButton>);
 
     const button = container.querySelector('button.rottay-button--modern') as HTMLButtonElement;
@@ -31,6 +32,14 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('id', 'caller-button-id');
     expect(button).toHaveAttribute('aria-label', 'Caller label');
     expect(button).toHaveAttribute('data-custom', 'caller-data');
+    expect(button).toHaveAttribute('data-part', 'caller-part-attempt');
+  });
+
+  it('modern: stamps the default data-part="trigger" when the caller passes none', () => {
+    const { container } = render(<ModernButton>Go</ModernButton>);
+
+    const button = container.querySelector('button.rottay-button--modern') as HTMLButtonElement;
+    expect(button).toBeTruthy();
     expect(button).toHaveAttribute('data-part', 'trigger');
   });
 

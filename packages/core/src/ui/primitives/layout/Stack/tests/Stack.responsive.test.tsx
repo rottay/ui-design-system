@@ -4,130 +4,154 @@
  * for direction, spacing/gap, align, justify, and wrap.
  */
 
-import React from 'react';
-import { render } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
-import ApolloStack from '../engines/rustic';
-import { SPACING_MAP } from '../contracts';
+import ApolloStack from "../engines/rustic";
+import { SPACING_MAP } from "../contracts";
 
-describe('RusticStack responsive props', () => {
-  describe('backward compatibility', () => {
-    it('renders plain scalar direction as inline style', () => {
+describe("RusticStack responsive props", () => {
+  describe("backward compatibility", () => {
+    it("renders plain scalar direction as a declarative attribute", () => {
       const { container } = render(
-        <ApolloStack direction="horizontal" spacing="md">Content</ApolloStack>
+        <ApolloStack direction="horizontal" spacing="md">
+          Content
+        </ApolloStack>
       );
-      const stack = container.querySelector('.rottay-stack--rustic');
+      const stack = container.querySelector(".rottay-stack--rustic");
       expect(stack).toBeInTheDocument();
-      expect(stack).toHaveStyle({ flexDirection: 'row' });
-      expect(container.querySelector('style')).toBeNull();
+      expect(stack).toHaveAttribute("data-direction", "horizontal");
+      expect(stack?.getAttribute("style") ?? "").not.toContain(
+        "flex-direction"
+      );
+      expect(container.querySelector("style")).toBeNull();
     });
 
-    it('renders plain scalar spacing as inline style', () => {
+    it("renders preset spacing as a declarative attribute", () => {
       const { container } = render(
         <ApolloStack spacing="lg">Content</ApolloStack>
       );
-      const stack = container.querySelector('.rottay-stack--rustic');
-      expect(stack?.getAttribute('style')).toContain(`gap: ${SPACING_MAP.lg}`);
-      expect(container.querySelector('style')).toBeNull();
+      const stack = container.querySelector(".rottay-stack--rustic");
+      expect(stack).toHaveAttribute("data-spacing", "lg");
+      expect(stack).not.toHaveAttribute("style");
+      expect(container.querySelector("style")).toBeNull();
+    });
+
+    it("keeps omitted defaults out of the inline style contract", () => {
+      const { container } = render(<ApolloStack>Content</ApolloStack>);
+      const stack = container.querySelector(".rottay-stack--rustic");
+      expect(stack).not.toHaveAttribute("style");
+      expect(stack).not.toHaveAttribute("data-direction");
+      expect(stack).not.toHaveAttribute("data-spacing");
     });
   });
 
-  describe('responsive direction', () => {
-    it('generates CSS media queries for responsive direction', () => {
+  describe("responsive direction", () => {
+    it("generates CSS media queries for responsive direction", () => {
       const { container } = render(
-        <ApolloStack direction={{ xs: 'vertical', lg: 'horizontal' }}>Content</ApolloStack>
+        <ApolloStack direction={{ xs: "vertical", lg: "horizontal" }}>
+          Content
+        </ApolloStack>
       );
-      const styleTag = container.querySelector('style');
-      const stack = container.querySelector('[data-responsive-id]');
+      const styleTag = container.querySelector("style");
+      const stack = container.querySelector("[data-responsive-id]");
 
       expect(styleTag).not.toBeNull();
       expect(stack).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain('flex-direction: column;');
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
-      expect(styleTag?.textContent).toContain('flex-direction: row;');
+      expect(styleTag?.textContent).toContain("flex-direction: column;");
+      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
+      expect(styleTag?.textContent).toContain("flex-direction: row;");
     });
   });
 
-  describe('responsive spacing', () => {
-    it('generates CSS for responsive spacing presets', () => {
+  describe("responsive spacing", () => {
+    it("generates CSS for responsive spacing presets", () => {
       const { container } = render(
-        <ApolloStack spacing={{ xs: 'sm', md: 'lg', xl: '2xl' }}>Content</ApolloStack>
+        <ApolloStack spacing={{ xs: "sm", md: "lg", xl: "2xl" }}>
+          Content
+        </ApolloStack>
       );
-      const styleTag = container.querySelector('style');
+      const styleTag = container.querySelector("style");
       expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.sm};`);
-      expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
+      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
       expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.lg};`);
-      expect(styleTag?.textContent).toContain('@media (min-width: 1280px)');
-      expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP['2xl']};`);
+      expect(styleTag?.textContent).toContain("@media (min-width: 1280px)");
+      expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP["2xl"]};`);
     });
 
-    it('generates CSS for responsive gap with numbers', () => {
+    it("generates CSS for responsive gap with numbers", () => {
       const { container } = render(
         <ApolloStack gap={{ xs: 8, lg: 24 }}>Content</ApolloStack>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('gap: 8px;');
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
-      expect(styleTag?.textContent).toContain('gap: 24px;');
+      const styleTag = container.querySelector("style");
+      expect(styleTag?.textContent).toContain("gap: 8px;");
+      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
+      expect(styleTag?.textContent).toContain("gap: 24px;");
     });
   });
 
-  describe('responsive align', () => {
-    it('generates CSS for responsive align', () => {
+  describe("responsive align", () => {
+    it("generates CSS for responsive align", () => {
       const { container } = render(
-        <ApolloStack align={{ xs: 'stretch', md: 'center' }}>Content</ApolloStack>
+        <ApolloStack align={{ xs: "stretch", md: "center" }}>
+          Content
+        </ApolloStack>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('align-items: stretch;');
-      expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
-      expect(styleTag?.textContent).toContain('align-items: center;');
+      const styleTag = container.querySelector("style");
+      expect(styleTag?.textContent).toContain("align-items: stretch;");
+      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
+      expect(styleTag?.textContent).toContain("align-items: center;");
     });
   });
 
-  describe('responsive justify', () => {
-    it('generates CSS for responsive justify', () => {
+  describe("responsive justify", () => {
+    it("generates CSS for responsive justify", () => {
       const { container } = render(
-        <ApolloStack justify={{ xs: 'start', lg: 'space-between' }}>Content</ApolloStack>
+        <ApolloStack justify={{ xs: "start", lg: "space-between" }}>
+          Content
+        </ApolloStack>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('justify-content: flex-start;');
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
-      expect(styleTag?.textContent).toContain('justify-content: space-between;');
+      const styleTag = container.querySelector("style");
+      expect(styleTag?.textContent).toContain("justify-content: flex-start;");
+      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
+      expect(styleTag?.textContent).toContain(
+        "justify-content: space-between;"
+      );
     });
   });
 
-  describe('responsive wrap', () => {
-    it('generates CSS for responsive wrap', () => {
+  describe("responsive wrap", () => {
+    it("generates CSS for responsive wrap", () => {
       const { container } = render(
         <ApolloStack wrap={{ xs: false, md: true }}>Content</ApolloStack>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag?.textContent).toContain('flex-wrap: nowrap;');
-      expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
-      expect(styleTag?.textContent).toContain('flex-wrap: wrap;');
+      const styleTag = container.querySelector("style");
+      expect(styleTag?.textContent).toContain("flex-wrap: nowrap;");
+      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
+      expect(styleTag?.textContent).toContain("flex-wrap: wrap;");
     });
   });
 
-  describe('alias resolution', () => {
-    it('resolves phone, tablet, desktop aliases', () => {
+  describe("alias resolution", () => {
+    it("resolves phone, tablet, desktop aliases", () => {
       const { container } = render(
         <ApolloStack
-          direction={{ phone: 'vertical', tablet: 'horizontal' }}
-          spacing={{ phone: 'sm', desktop: 'xl' }}
+          direction={{ phone: "vertical", tablet: "horizontal" }}
+          spacing={{ phone: "sm", desktop: "xl" }}
         >
           Content
         </ApolloStack>
       );
-      const styleTag = container.querySelector('style');
+      const styleTag = container.querySelector("style");
       // phone -> xs (no media query)
-      expect(styleTag?.textContent).toContain('flex-direction: column;');
+      expect(styleTag?.textContent).toContain("flex-direction: column;");
       expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.sm};`);
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
-      expect(styleTag?.textContent).toContain('flex-direction: row;');
+      expect(styleTag?.textContent).toContain("@media (min-width: 640px)");
+      expect(styleTag?.textContent).toContain("flex-direction: row;");
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
       expect(styleTag?.textContent).toContain(`gap: ${SPACING_MAP.xl};`);
     });
   });

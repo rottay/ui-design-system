@@ -52,9 +52,9 @@ import type { CardHeaderProps } from '../../contracts';
  */
 const PADDING_MAP: Record<string, string> = {
   none: '0',
-  sm: '12px 16px',
-  md: '16px 24px',
-  lg: '20px 32px',
+  sm: 'var(--ds-card-header-padding-sm, var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px))',
+  md: 'var(--ds-card-header-padding, var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px))',
+  lg: 'var(--ds-card-header-padding-lg, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px))',
 };
 
 /**
@@ -93,7 +93,10 @@ const PADDING_MAP: Record<string, string> = {
  * @returns {React.ReactElement} The rendered CardHeader component
  */
 export function CardHeader({
+  eyebrow,
+  icon,
   title,
+  headingLevel = 3,
   subtitle,
   extra,
   avatar,
@@ -102,12 +105,13 @@ export function CardHeader({
   children,
   className = '',
   style,
+  ...rest
 }: CardHeaderProps): React.ReactElement {
   const headerStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    gap: '12px',
+    gap: 'var(--ds-card-header-gap, var(--ds-spacing-3, 12px))',
     padding: PADDING_MAP[padding],
     ...style,
   };
@@ -115,7 +119,7 @@ export function CardHeader({
   const contentWrapperStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
+    gap: 'var(--ds-card-header-gap, var(--ds-spacing-3, 12px))',
     flex: 1,
     minWidth: 0,
   };
@@ -123,42 +127,39 @@ export function CardHeader({
   const textContentStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    gap: '2px',
+    gap: 'var(--ds-spacing-1, 4px)',
     flex: 1,
     minWidth: 0,
-  };
-
-  const titleStyle: CSSProperties = {
-    margin: 0,
-    fontSize: 'var(--ds-card-title-font-size, 16px)',
-    fontWeight: 600,
-    lineHeight: 1.4,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  };
-
-  const subtitleStyle: CSSProperties = {
-    margin: 0,
-    fontSize: 'var(--ds-card-subtitle-font-size, 14px)',
-    lineHeight: 1.4,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
   };
 
   const extraStyle: CSSProperties = {
     flexShrink: 0,
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: 'var(--ds-card-header-actions-gap, var(--ds-spacing-2, 8px))',
   };
 
-  const hasTextContent = title || subtitle;
+  const hasTextContent = eyebrow || title || subtitle;
+  const Heading = `h${headingLevel}` as keyof React.JSX.IntrinsicElements;
 
   return (
-    <div className={`rottay-card-header ${className}`} data-part="header" data-divider={divider ? 'true' : undefined} style={headerStyle}>
+    <div
+      {...rest}
+      className={`rottay-card-header ${className}`}
+      data-part="header"
+      data-divider={divider ? 'true' : undefined}
+      data-has-icon={icon ? 'true' : undefined}
+      data-has-avatar={avatar ? 'true' : undefined}
+      data-has-eyebrow={eyebrow ? 'true' : undefined}
+      data-has-extra={extra ? 'true' : undefined}
+      style={headerStyle}
+    >
       <div className="rottay-card-header-content" style={contentWrapperStyle}>
+        {icon && (
+          <span className="rottay-card-header-icon" data-part="icon" aria-hidden="true">
+            {icon}
+          </span>
+        )}
         {avatar && (
           <div className="rottay-card-header-avatar" data-part="avatar" style={{ flexShrink: 0 }}>
             {avatar}
@@ -166,8 +167,9 @@ export function CardHeader({
         )}
         {hasTextContent && (
           <div className="rottay-card-header-text" style={textContentStyle}>
-            {title && <h3 data-part="title" style={titleStyle}>{title}</h3>}
-            {subtitle && <p data-part="subtitle" style={subtitleStyle}>{subtitle}</p>}
+            {eyebrow && <span data-part="eyebrow">{eyebrow}</span>}
+            {title && <Heading data-part="title">{title}</Heading>}
+            {subtitle && <p data-part="subtitle">{subtitle}</p>}
           </div>
         )}
         {children}

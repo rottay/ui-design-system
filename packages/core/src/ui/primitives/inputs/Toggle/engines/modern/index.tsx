@@ -1,7 +1,18 @@
 /**
- * @fileoverview Modern engine for Toggle, built with DaisyUI's `toggle` checkbox classes.
- * Uses a native `<input type="checkbox" role="switch">` for full accessibility, with
- * DaisyUI handling the visual track/dot via CSS-only transforms.
+ * @fileoverview Modern engine for Toggle - Rottay Design System
+ * @description Premium toggle painted entirely by the modern skin, with a
+ * native `<input type="checkbox" role="switch">` for accessibility and form
+ * participation.
+ *
+ * @remarks
+ * Every visual decision lives in the modern skin
+ * (`foundation/tokens/css/runtime/engines/modern/skin/toggle.css`), keyed on
+ * the `data-*` contract this component stamps: `data-size`, `data-color`,
+ * `data-checked`, `data-error`, `data-disabled`, `data-loading`, and
+ * `data-label-placement`. Geometry consumes the canonical
+ * `--ds-toggle-{size}-*` channels multiplied by the three-plane density
+ * channel `--ds-density-effective-scale`; the thumb travel is a pure CSS
+ * `calc()` flipped under `:dir(rtl)`, so RTL needs no runtime branch.
  *
  * @example
  * ```tsx
@@ -19,35 +30,16 @@ import React, { useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../../contracts';
 import { TOGGLE_DEFAULTS } from '../../contracts';
 
-/** Toggle track dimensions per size, driven by DS tokens with px fallbacks. */
-const SIZE_DIMS: Record<string, { trackW: string; trackH: string; thumbSize: string }> = {
-  xs: { trackW: 'var(--ds-toggle-xs-width, 28px)', trackH: 'var(--ds-toggle-xs-height, 16px)', thumbSize: 'var(--ds-toggle-xs-dot, 12px)' },
-  sm: { trackW: 'var(--ds-toggle-sm-width, 32px)', trackH: 'var(--ds-toggle-sm-height, 18px)', thumbSize: 'var(--ds-toggle-sm-dot, 14px)' },
-  md: { trackW: 'var(--ds-toggle-md-width, 44px)', trackH: 'var(--ds-toggle-md-height, 24px)', thumbSize: 'var(--ds-toggle-md-dot, 20px)' },
-  lg: { trackW: 'var(--ds-toggle-lg-width, 56px)', trackH: 'var(--ds-toggle-lg-height, 30px)', thumbSize: 'var(--ds-toggle-lg-dot, 26px)' },
-  xl: { trackW: 'var(--ds-toggle-xl-width, 44px)', trackH: 'var(--ds-toggle-xl-height, 24px)', thumbSize: 'var(--ds-toggle-xl-dot, 20px)' },
-};
-
-/** DS token color for checked track per color prop. */
-const COLOR_TOKENS: Record<string, string> = {
-  default: 'var(--ds-color-primary)',
-  primary: 'var(--ds-color-primary)',
-  secondary: 'var(--ds-color-secondary)',
-  success: 'var(--ds-color-success)',
-  warning: 'var(--ds-color-warning)',
-  error: 'var(--ds-color-error)',
-};
-
 /**
- * Modern (DaisyUI) implementation of Toggle.
+ * Modern (pure DS tokens) implementation of Toggle.
  *
- * Renders a native checkbox with `role="switch"` styled via DaisyUI utility classes.
- * Supports controlled and uncontrolled modes, label placement (start/end), and an
- * optional description line beneath the label. Error state forces `toggle-error`
- * regardless of the color prop to ensure visual consistency.
+ * Supports controlled and uncontrolled modes, label placement (start/end), a
+ * description line beneath the label, helper and error text anatomy, state
+ * labels, and a loading indicator. The error state repaints the track through
+ * `data-error` and wires `aria-describedby`, never through inline paint.
  *
  * @param props - Standard ToggleProps shared across all engines.
- * @returns A form-control wrapper containing a labeled checkbox toggle.
+ * @returns A field wrapper containing the labeled switch anatomy.
  */
 export default function ModernToggle(props: ToggleProps): React.ReactElement {
   const {
@@ -55,11 +47,17 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     color = TOGGLE_DEFAULTS.color,
     labelPlacement = TOGGLE_DEFAULTS.labelPlacement,
     label,
+    checkedLabel,
+    uncheckedLabel,
     description,
+    helperText,
     checked: controlledChecked,
     defaultChecked = false,
     disabled = TOGGLE_DEFAULTS.disabled,
+    required = TOGGLE_DEFAULTS.required,
+    loading = TOGGLE_DEFAULTS.loading,
     error = TOGGLE_DEFAULTS.error,
+    errorMessage,
     onChange,
     children,
     className = '',
@@ -72,12 +70,15 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
   } = props;
 
   const generatedId = useId();
-  const inputId = providedId || `toggle-modern-${generatedId}`;
+  const inputId = providedId || `toggle-modern-${generatedId.replace(/:/g, '')}`;
+  const helperId = `${inputId}-helper`;
+  const errorId = `${inputId}-error`;
 
   // Dual-mode state: controlled when `checked` prop is provided, uncontrolled otherwise
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
+  const isDisabled = disabled || loading;
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isControlled) {
@@ -86,47 +87,30 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     onChange?.(e.target.checked, e);
   }, [isControlled, onChange]);
 
-  // Error state overrides the color class to ensure the toggle is visually marked
-  const dims = SIZE_DIMS[size] || SIZE_DIMS.md;
-  const trackColor = error ? 'var(--ds-color-error)' : (isChecked ? (COLOR_TOKENS[color] || COLOR_TOKENS.default) : 'var(--ds-color-border-secondary)');
-
-  // Use CSS calc() for thumb positioning so dimensions stay token-driven.
-  // thumbInset = (trackH - thumbSize) / 2
-  // thumbTravel = trackW - thumbSize - thumbInset * 2 = trackW - thumbSize - (trackH - thumbSize)
-  //             = trackW - trackH
-  const trackStyle: React.CSSProperties = {
-    position: 'relative',
-    display: 'inline-block',
-    width: dims.trackW,
-    height: dims.trackH,
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    transition: 'background var(--ds-motion-normal) var(--ds-motion-ease-out)',
-    flexShrink: 0,
-    ...({ '--ds-toggle-track-r': dims.trackH, '--ds-toggle-track-fill': trackColor } as React.CSSProperties),
-  };
-
-  const thumbStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: `calc((${dims.trackH} - ${dims.thumbSize}) / 2)`,
-    left: `calc((${dims.trackH} - ${dims.thumbSize}) / 2)`,
-    width: dims.thumbSize,
-    height: dims.thumbSize,
-    transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
-    ...({ '--ds-toggle-thumb-x': isChecked ? `calc(${dims.trackW} - ${dims.trackH})` : '0' } as React.CSSProperties),
-  };
-
   const displayLabel = label || children;
+  const stateLabel = isChecked ? checkedLabel : uncheckedLabel;
+  const hasText = Boolean(displayLabel || description || stateLabel);
+  const describedBy = [
+    error && errorMessage ? errorId : undefined,
+    !error && helperText ? helperId : undefined,
+  ].filter(Boolean).join(' ') || undefined;
 
   return (
-    <div className={className || ''} style={{ display: 'flex', flexDirection: 'column', width: '100%', ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}), ...style }}>
+    <div
+      className={`ds-toggle-field ${className}`.trim()}
+      data-part="field"
+      style={style}
+    >
       <label
-        htmlFor={inputId}
         className="ds-toggle ds-toggle--modern"
         data-part="root"
+        data-size={size}
+        data-color={color}
         data-checked={isChecked ? 'true' : 'false'}
-        data-disabled={disabled ? 'true' : 'false'}
         data-error={error ? 'true' : 'false'}
-        style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: 8, ...(labelPlacement === 'start' ? { flexDirection: 'row-reverse', justifyContent: 'flex-end' } : { justifyContent: 'flex-start' }) }}
+        data-disabled={isDisabled ? 'true' : 'false'}
+        data-loading={loading ? 'true' : 'false'}
+        data-label-placement={labelPlacement}
       >
         <input
           id={inputId}
@@ -135,32 +119,66 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
           name={name}
           value={value}
           checked={isChecked}
-          style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}
-          disabled={disabled}
+          disabled={isDisabled}
+          required={required}
           onChange={handleChange}
           autoFocus={autoFocus}
           aria-checked={isChecked}
-          aria-invalid={error}
+          aria-invalid={error || undefined}
+          aria-required={required || undefined}
+          aria-busy={loading || undefined}
+          aria-describedby={describedBy}
+          style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap' }}
           {...rest}
         />
-        <span data-part="track" style={trackStyle} aria-hidden="true">
-          <span data-part="thumb" style={thumbStyle} />
+        <span data-part="track" aria-hidden="true">
+          <span data-part="thumb" />
         </span>
-        {(displayLabel || description) && (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {hasText && (
+          <span data-part="text">
             {displayLabel && (
-              <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 500 }}>
-                {displayLabel}
-              </span>
+              <span data-part="label">{displayLabel}</span>
+            )}
+            {stateLabel && (
+              <span data-part="state-label">{stateLabel}</span>
             )}
             {description && (
-              <span data-part="description" style={{ fontSize: 'var(--ds-font-size-xs, 12px)' }}>
-                {description}
-              </span>
+              <span data-part="description">{description}</span>
             )}
-          </div>
+          </span>
+        )}
+        {loading && (
+          <span data-part="loading-indicator" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle
+                data-part="loading-track"
+                cx="7"
+                cy="7"
+                r="5.5"
+                strokeWidth="1.5"
+              />
+              <path
+                data-part="loading-arc"
+                d="M12.5 7A5.5 5.5 0 0 0 7 1.5"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </span>
         )}
       </label>
+
+      {error && errorMessage && (
+        <p id={errorId} data-part="error-message" role="alert">
+          {errorMessage}
+        </p>
+      )}
+
+      {!error && helperText && (
+        <p id={helperId} data-part="helper-text">
+          {helperText}
+        </p>
+      )}
     </div>
   );
 }

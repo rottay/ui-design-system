@@ -26,16 +26,23 @@ describe('Rate runtime engine coverage', () => {
     );
 
     const rate = screen.getByTestId('rate');
-    const firstStar = screen.getAllByRole('radio', { name: 'Awful' }).find((node) => node.tagName === 'LABEL');
-    const secondStar = screen.getAllByRole('radio', { name: 'Poor' }).find((node) => node.tagName === 'LABEL');
+    const firstStar = screen.getAllByRole('radio', { name: 'Awful' }).find((node) => node.tagName === 'SPAN');
+    const secondStar = screen.getAllByRole('radio', { name: 'Poor' }).find((node) => node.tagName === 'SPAN');
     if (!(firstStar instanceof HTMLElement) || !(secondStar instanceof HTMLElement)) {
       throw new Error('Expected visible modern rate stars');
     }
 
-    fireEvent.focus(rate);
-    fireEvent.keyDown(rate, { key: 'ArrowRight' });
-    fireEvent.keyDown(rate, { key: 'End' });
-    fireEvent.keyDown(rate, { key: 'Home' });
+    // Roving tabindex (W6): keyboard interaction lives on the tabbable star,
+    // never on the radiogroup root.
+    const tabbableStar = () =>
+      screen
+        .getAllByRole('radio')
+        .find((node) => node.getAttribute('tabindex') === '0') as HTMLElement;
+
+    fireEvent.focus(tabbableStar());
+    fireEvent.keyDown(tabbableStar(), { key: 'ArrowRight' });
+    fireEvent.keyDown(tabbableStar(), { key: 'End' });
+    fireEvent.keyDown(tabbableStar(), { key: 'Home' });
 
     const halfHitArea = firstStar.querySelector('span');
     if (!(halfHitArea instanceof HTMLElement)) {
@@ -54,7 +61,9 @@ describe('Rate runtime engine coverage', () => {
     expect(handleChange).toHaveBeenCalledWith(2.5);
     expect(handleChange).toHaveBeenCalledWith(0);
     expect(screen.getByTestId('modern-char-0')).toBeInTheDocument();
-    expect(rate).toHaveAttribute('aria-valuemax', '5');
+    // APG radiogroup purity: the value mirror lives on data-* (the legacy
+    // aria-valuemax on a radiogroup was an axe aria-allowed-attr critical).
+    expect(rate).toHaveAttribute('data-count', '5');
   });
 
   it('covers rustic engine disabled/readOnly guards, half clicks, keyboard commit, and hover state branches', () => {

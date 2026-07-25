@@ -35,7 +35,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Size, WithChildren, ClickableProps, ShadowedProps, BorderedProps } from '../../../../../foundation/contracts/kernel/common';
+import type { BaseComponentProps, Size, WithChildren, ClickableProps, ShadowedProps, BorderedProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
@@ -49,14 +49,15 @@ export type CardVariant = 'elevated' | 'outlined' | 'filled' | 'ghost';
 
 /**
  * Card color variants for semantic styling.
- * Applies a colored left border and subtle background tint.
+ * Applies a complete semantic frame and subtle background tint. A tone must
+ * never be expressed as a one-sided chromatic rail.
  */
 export type CardColorVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
 
 /**
  * Card component props.
  */
-export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChildren, ClickableProps, ShadowedProps, BorderedProps {
+export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChildren, ClickableProps, ShadowedProps, BorderedProps, DisableableProps {
   /**
    * Card size.
    * @default 'md'
@@ -71,7 +72,7 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
 
   /**
    * Card color variant for semantic styling.
-   * Applies a colored left border and subtle background tint.
+   * Applies a complete semantic frame and subtle background tint.
    * @default 'default'
    */
   colorVariant?: CardColorVariant;
@@ -80,6 +81,9 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
    * Card title.
    */
   title?: ReactNode;
+
+  /** Semantic heading level for the shorthand `title` slot. */
+  titleHeadingLevel?: 2 | 3 | 4 | 5 | 6;
 
   /**
    * Card description/subtitle.
@@ -92,10 +96,16 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
   cover?: string;
 
   /**
+   * Accessible alternative text for the shorthand `cover` image. When omitted,
+   * a string title is reused; non-text titles produce a decorative empty alt.
+   */
+  coverAlt?: string;
+
+  /**
    * Cover image position.
    * @default 'top'
    */
-  coverPosition?: 'top' | 'bottom' | 'left' | 'right';
+  coverPosition?: 'top' | 'bottom' | 'start' | 'end' | 'left' | 'right';
 
   /**
    * Card actions (buttons, links, etc).
@@ -158,6 +168,9 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
 
   /**
    * Card background color.
+   * @deprecated Prefer BrandTheme/TenantTheme card chrome or a scoped
+   * `--ds-card-bg` custom property. This escape hatch is retained for source
+   * compatibility and must not be used for product-level theming.
    */
   backgroundColor?: string;
 }
@@ -167,9 +180,25 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
  */
 export interface CardHeaderProps extends BaseComponentProps, WithChildren {
   /**
+   * Compact context label rendered above the title.
+   */
+  eyebrow?: ReactNode;
+
+  /**
+   * Semantic icon rendered in a framed icon well.
+   */
+  icon?: ReactNode;
+
+  /**
    * Header title.
    */
   title?: ReactNode;
+
+  /**
+   * Semantic heading level used when `title` is present.
+   * @default 3
+   */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
 
   /**
    * Header subtitle.
@@ -177,7 +206,7 @@ export interface CardHeaderProps extends BaseComponentProps, WithChildren {
   subtitle?: ReactNode;
 
   /**
-   * Header avatar or icon.
+   * Header avatar. Use `icon` for a semantic pictogram.
    */
   avatar?: ReactNode;
 
@@ -258,6 +287,13 @@ export interface CardCoverProps extends BaseComponentProps {
   height?: number | string;
 
   /**
+   * Responsive media ratio. When present it owns the image frame geometry and
+   * the default fixed height is omitted.
+   * @example '16 / 9'
+   */
+  aspectRatio?: string;
+
+  /**
    * Whether the image covers full width.
    * @default true
    */
@@ -314,11 +350,24 @@ export interface CardImageProps extends BaseComponentProps {
    */
   alt: string;
 
+  /** Accessible status label used only after the image fails to load. */
+  errorLabel?: string;
+
+  /** Accessible status label used while the image is loading. */
+  loadingLabel?: string;
+
   /**
    * Image height.
    * @default 200
    */
   height?: number | string;
+
+  /**
+   * Responsive image-frame ratio. When present it owns the geometry and the
+   * default fixed height is omitted.
+   * @example '16 / 9'
+   */
+  aspectRatio?: string;
 
   /**
    * Object fit behavior.
@@ -330,7 +379,7 @@ export interface CardImageProps extends BaseComponentProps {
    * Image position relative to card.
    * @default 'top'
    */
-  position?: 'top' | 'bottom' | 'cover';
+  position?: 'top' | 'bottom' | 'start' | 'end' | 'left' | 'right' | 'cover';
 
   /**
    * Overlay content to show on top of the image.
@@ -401,9 +450,9 @@ export const CARD_DEFAULTS = {
  */
 export const PADDING_MAP: Record<string, string> = {
   none: '0',
-  sm: 'var(--ds-card-sm-padding, 12px)',
-  md: 'var(--ds-card-md-padding, 16px)',
-  lg: 'var(--ds-card-lg-padding, 24px)',
+  sm: 'var(--ds-card-padding-sm, var(--ds-card-sm-padding, 12px))',
+  md: 'var(--ds-card-padding-md, var(--ds-card-md-padding, 16px))',
+  lg: 'var(--ds-card-padding-lg, var(--ds-card-lg-padding, 24px))',
 };
 
 /**
@@ -455,7 +504,7 @@ export const COLOR_VARIANT_MAP: Record<string, { borderColor: string; background
     borderColor: 'transparent',
     background: 'transparent',
   },
-  /** Primary brand accent - left border + subtle tinted background. */
+  /** Primary brand accent - complete frame + subtle tinted background. */
   primary: {
     borderColor: 'var(--ds-color-primary-500, #3b82f6)',
     background: 'var(--ds-color-primary-50, rgba(59, 130, 246, 0.05))',

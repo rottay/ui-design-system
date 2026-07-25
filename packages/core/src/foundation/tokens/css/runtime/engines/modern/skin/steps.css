@@ -1,75 +1,387 @@
 /**
- * Modern Steps skin (WO-SKIN-04 checkpoint N).
+ * Modern Steps skin (K3-B Pass 1: single paint owner, Daisy drained).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all. Unlayered
  * still yields to a caller's inline `style`.
  *
  * ============================================================================
- * N1 — DAISYUI PAINTS THE CIRCLE AND THE CONNECTOR, AND IT MUST KEEP PAINTING.
+ * SINGLE PAINT OWNER — THE SKIN NOW PAINTS THE CIRCLE AND THE CONNECTOR.
  * ============================================================================
- * The step circle and the line between steps are DaisyUI `.step::after` /
- * `.step::before` PSEUDO-ELEMENTS — no inline style can reach them, and this
- * skin must not either. Adjudicated live with CDP `CSS.getMatchedStylesForNode`
- * (P-73): both bridge rules in `engines/modern/theme.css` are DEAD, for two
- * different reasons.
+ * Until this wave, DaisyUI painted `.step::after` (the circle) and
+ * `.step::before` (the connector), `theme.css` carried two DEAD bridge rules
+ * against those selectors (P-73), and this file only redirected DaisyUI's own
+ * `--step-*` custom properties. The engine no longer renders any DaisyUI class
+ * (`steps`/`step`/`step-primary`/`step-error` are gone from the render, and the
+ * `daisy.classConsumers` ratchet drops accordingly), so the circle and the
+ * connector are REBORN HERE as `[data-part='item']::after` / `::before`, keyed
+ * on `data-status` — one owner, no pseudo-element fight. The theme.css STEPS
+ * block (`[data-tenant] .steps .step::before/::after`) is left with zero
+ * consumers; the K3-B ficha lists it for coordinator removal at integration
+ * (`themeCss.unreferencedSelectors` must stay 0).
  *
- *   - `.steps .step::before` (the connector): theme.css's rule OUT-RANKS DaisyUI
- *     (0,3,1 vs 0,2,1), but its value is `var(--ds-steps-line-color)` and that
- *     token is defined NOWHERE — the declaration is invalid-at-computed-value
- *     and is dropped. DaisyUI's `var(--step-bg)` paints.
- *   - `.steps .step::after` (the circle): the two rules TIE at (0,3,1) —
- *     DaisyUI's `:not(:has(.step-icon))` carries a class's worth of specificity
- *     — so source order decides, and DaisyUI, emitted later, wins.
+ * SCOPE ROOT carries `rottay-steps rottay-steps--modern` + `data-part='root'`
+ * with `data-direction`, `data-size`, `data-progress-dot`.
  *
- * THEREFORE, and this is load-bearing, not stylistic: this file MUST NOT declare
- * `background-color` on `.step::before` / `.step::after` at ANY specificity, and
- * MUST NOT define `--ds-steps-line-color`. Either one would newly out-rank
- * DaisyUI and silently repaint the circle and the line — a visual change wearing
- * a cleanup's clothes. Fixing that bridge is P-73's job, with its own baselines.
- *
- * What this file DOES own is the component's own token redirection, moved
- * VERBATIM: `--step-color` / `--step-neutral` (DaisyUI's own custom properties,
- * which its pseudo-element rules read) and `accent-color`, all keyed on the
- * `data-status` the item carries. That is exactly what the inline style did, at
- * the same effective priority — unlayered beats DaisyUI's layered `.step-primary`
- * / `.step-error`, just as inline did.
- *
- * SCOPE ROOT carries `rottay-steps rottay-steps--modern` alongside the DaisyUI
- * `.steps` class (KEPT — it is the pseudo-elements' only hook).
- *
- * SPECIFICITY (P-48): nothing here paints a border color, so the (0,4,0) floor
- * does not apply; custom properties and `color` win unlayered at (0,3,0).
+ * SPECIFICITY (P-48): the circle's `border` shorthand carries a real color and
+ * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1), so
+ * the base rule reaches (0,4,1) via scope class + root attr + a REPEATED
+ * `data-part` on the item + the pseudo-element, and stays a SHORTHAND. The
+ * per-status `border-color` repaints tie it at (0,4,1) and win on source
+ * order. Backgrounds, colors and custom properties are exempt from the floor.
  */
 
-/* ---- the DaisyUI token bridge: base neutral, then the per-status overrides.
-        `--step-neutral` is re-declared by finish/process at higher specificity,
-        reproducing the JS `{ ...base, '--step-neutral': primary }` spread. ---- */
+/* ---- root: flex track + the step counter namespace. ---- */
+.rottay-steps--modern[data-part='root'] {
+  display: flex;
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ds-step;
+  --ds-steps-current-item-size: var(--ds-steps-item-size, 32px);
+  --ds-steps-current-item-font-size: var(--ds-steps-item-font-size, var(--ds-font-size-sm, 14px));
+  --ds-steps-current-label-font-size: var(--ds-steps-label-font-size, var(--ds-font-size-sm, 14px));
+}
+
+.rottay-steps--modern[data-part='root'][data-size='small'] {
+  --ds-steps-current-item-size: var(--ds-steps-item-size-sm, 24px);
+  --ds-steps-current-item-font-size: var(--ds-steps-item-font-size-sm, var(--ds-font-size-xs, 12px));
+  --ds-steps-current-label-font-size: var(--ds-steps-label-font-size-sm, var(--ds-font-size-xs, 12px));
+}
+
+/* ---- item: the grid the circle (row 1) and the text column (row 2) live in. ---- */
 .rottay-steps--modern[data-part='root'] [data-part='item'] {
-  --step-neutral: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
+  position: relative;
+  display: grid;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  grid-template-rows: auto 1fr;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='finish'],
-.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='process'] {
-  --step-color: var(--ds-color-primary);
-  --step-neutral: var(--ds-color-primary);
-  accent-color: var(--ds-color-primary);
+/* ---- the connector: a hairline between this circle and the previous one,
+        positioned with logical insets so RTL mirrors it for free. ---- */
+.rottay-steps--modern[data-part='root'] [data-part='item']::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
+  inset-inline-start: calc(-50% + var(--ds-steps-current-item-size) / 2 + 4px);
+  inset-inline-end: calc(50% + var(--ds-steps-current-item-size) / 2 + 4px);
+  block-size: var(--ds-steps-connector-width, 2px);
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
 }
 
-.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='error'] {
-  --step-color: var(--ds-color-error);
-  accent-color: var(--ds-color-error);
+/* A connector leads INTO its step: finished and in-progress steps paint the
+   line behind them with the primary ink (the pre-drain `--step-neutral`
+   mapping, preserved). */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='finish']::before,
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='process']::before {
+  background: var(--ds-steps-connector-color-active, var(--ds-color-primary));
 }
 
-/* ---- the text column (real elements; DaisyUI owns nothing here). ---- */
+/* Horizontal connectors lead into their step: the first one has none. Vertical
+   connectors drop OUT of their step: the last one has none. */
+.rottay-steps--modern[data-part='root'][data-direction='horizontal'] [data-part='item']:first-child::before,
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='item']:last-child::before {
+  content: none;
+}
+
+/* ---- the circle: numbered by CSS counter, re-glyphed by status. (0,4,1) ---- */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-part='item']::after {
+  border: 1px solid var(--ds-steps-item-border, var(--ds-color-border));
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item']::after {
+  content: counter(ds-step);
+  counter-increment: ds-step;
+  grid-row: 1;
+  display: flex;
+  block-size: var(--ds-steps-current-item-size);
+  inline-size: var(--ds-steps-current-item-size);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-steps-item-bg, var(--ds-card-bg, var(--ds-surface-card)));
+  color: var(--ds-steps-item-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-steps-current-item-font-size);
+  font-weight: var(--ds-steps-item-font-weight, 600);
+  line-height: 1;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+}
+
+/* ---- status paint for the circle (border-color repaints tie (0,4,1), later). ---- */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='process']::after {
+  background: var(--ds-steps-item-bg-process, var(--ds-color-primary));
+  color: var(--ds-steps-item-color-process, var(--ds-color-text-on-primary));
+  border-color: var(--ds-steps-item-border-process, var(--ds-color-primary));
+  box-shadow: 0 0 0 var(--ds-steps-process-ring-width, 4px)
+    color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='finish']::after {
+  background: var(
+    --ds-steps-item-bg-finish,
+    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))
+  );
+  color: var(--ds-steps-item-color-finish, var(--ds-color-primary));
+  border-color: var(
+    --ds-steps-item-border-finish,
+    color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border))
+  );
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='error']::after {
+  background: var(
+    --ds-steps-item-bg-error,
+    color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-card-bg, var(--ds-surface-card)))
+  );
+  color: var(--ds-steps-item-color-error, var(--ds-color-error));
+  border-color: var(
+    --ds-steps-item-border-error,
+    color-mix(in srgb, var(--ds-color-error) 36%, var(--ds-color-border))
+  );
+}
+
+/* ---- status glyphs: finished steps check, errored steps cross (the rustic
+        engine's long-standing semantics; Daisy showed the raw number). ---- */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='finish']::after {
+  content: '✓';
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='error']::after {
+  content: '✕';
+}
+
+/* ---- boolean progressDot mode: the circle shrinks to a filled status dot.
+        These rules must come AFTER the glyph overrides (tied (0,4,1)). ---- */
+.rottay-steps--modern[data-part='root'][data-progress-dot='true'] {
+  --ds-steps-current-item-size: var(--ds-steps-dot-size, 8px);
+}
+
+.rottay-steps--modern[data-part='root'][data-progress-dot='true'] [data-part='item']::after {
+  content: '';
+  padding: 0;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.rottay-steps--modern[data-part='root'][data-progress-dot='true'] [data-part='item'][data-status='wait']::after {
+  background: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
+}
+
+/* ---- custom progressDot render slot: replaces the circle outright. ---- */
+.rottay-steps--modern[data-part='root'] [data-part='dot-slot'] {
+  grid-row: 1;
+  display: inline-flex;
+  block-size: var(--ds-steps-current-item-size);
+  inline-size: var(--ds-steps-current-item-size);
+  align-items: center;
+  justify-content: center;
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item']:has([data-part='dot-slot'])::after {
+  content: none;
+}
+
+/* ---- the text column (real elements): trigger button OR inert content span. ---- */
+.rottay-steps--modern[data-part='root'] [data-part='content'],
+.rottay-steps--modern[data-part='root'] [data-part='trigger'] {
+  grid-row: 2;
+  display: flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-steps-text-gap, 2px);
+  margin-block-start: var(--ds-steps-text-margin-block-start, 8px);
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  appearance: none;
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='trigger'] {
+  cursor: pointer;
+  border-radius: var(--ds-radius-md, 10px);
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='icon'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-end: var(--ds-steps-icon-margin-block-end, 4px);
+  color: var(--ds-steps-icon-color, var(--ds-color-text-secondary));
+}
+
 .rottay-steps--modern[data-part='root'] [data-part='label'] {
-  color: var(--ds-color-text-primary);
+  color: var(--ds-steps-label-color, var(--ds-color-text-primary));
+  font-size: var(--ds-steps-current-label-font-size);
+  font-weight: var(--ds-steps-label-font-weight, 500);
+  line-height: 1.3;
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='process'] [data-part='label'] {
+  font-weight: var(--ds-steps-label-font-weight-process, 600);
+}
+
+/* Error parity with the rustic engine: the errored step's label inks red. */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='error'] [data-part='label'] {
+  color: var(--ds-steps-label-color-error, var(--ds-color-error));
 }
 
 .rottay-steps--modern[data-part='root'] [data-part='subtitle'] {
-  color: var(--ds-color-text-tertiary);
+  color: var(--ds-steps-subtitle-color, var(--ds-color-text-tertiary));
+  font-size: var(--ds-steps-subtitle-font-size, var(--ds-font-size-xs, 12px));
+  line-height: 1.3;
 }
 
 .rottay-steps--modern[data-part='root'] [data-part='description'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-steps-description-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-steps-description-font-size, var(--ds-font-size-xs, 12px));
+  line-height: 1.4;
+}
+
+/* ---- clickable steps: lift the circle and ink the label on hover. ---- */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover::after {
+  transform: translateY(-1px);
+  box-shadow: var(--ds-shadow-xs);
+}
+
+/* A held press settles the circle back with a tactile dip. */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-clickable='true']:active::after {
+  transform: translateY(0) scale(0.96);
+  box-shadow: none;
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover [data-part='label'] {
+  color: var(--ds-steps-label-color-hover, var(--ds-color-primary));
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- disabled steps dim and refuse interaction. ---- */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-disabled='true']::before,
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-disabled='true']::after,
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='icon'] {
+  opacity: var(--ds-steps-disabled-opacity, 0.5);
+}
+
+/* Disabled text keeps an AA-legible ink instead of riding the chrome's
+   opacity: measured text-secondary on the page background = 5.33:1
+   (BitHire) / 7.38:1 (TMM); the 0.5-opacity composite measured 3.05:1 and
+   2.04:1 (axe color-contrast, both sources). */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='label'] {
+  color: var(--ds-steps-disabled-label-color, var(--ds-color-text-secondary));
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='subtitle'],
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='description'] {
+  color: var(--ds-steps-disabled-description-color, var(--ds-color-text-secondary));
+}
+
+/* ============================================================================
+   VERTICAL DIRECTION — circle column + text column, connector drops down.
+   ============================================================================ */
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] {
+  flex-direction: column;
+}
+
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='item'] {
+  grid-template-columns: auto 1fr;
+  grid-template-rows: none;
+  column-gap: var(--ds-steps-vertical-gap, 12px);
+  justify-items: start;
+  padding-block-end: var(--ds-steps-vertical-item-gap, 16px);
+}
+
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='item']:last-child {
+  padding-block-end: 0;
+}
+
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='item']::after {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='item']::before {
+  inset-block-start: calc(var(--ds-steps-current-item-size) + 4px);
+  inset-block-end: 2px;
+  inset-inline-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
+  inset-inline-end: auto;
+  block-size: auto;
+  inline-size: var(--ds-steps-connector-width, 2px);
+}
+
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='dot-slot'] {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='content'],
+.rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='trigger'] {
+  grid-column: 2;
+  grid-row: 1;
+  align-items: flex-start;
+  margin-block-start: 0;
+  /* optically centers a single-line label against the circle */
+  padding-block-start: calc((var(--ds-steps-current-item-size) - 1.3em) / 2);
+  text-align: start;
+}
+
+/* ---- reduced motion: every transition collapses. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-steps--modern[data-part='root'] [data-part='item']::before,
+  .rottay-steps--modern[data-part='root'] [data-part='item']::after {
+    transition: none;
+  }
+}
+
+/* ---- coarse pointers: the trigger meets the physical 44px floor. ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-steps--modern[data-part='root'] [data-part='trigger'] {
+    min-block-size: var(--ds-steps-touch-target-min, 44px);
+  }
+}
+
+/* ---- forced colors: circle frame, current step, and connector survive.
+        Doubled data-part ties the (0,4,1) border shorthand, later source wins. ---- */
+@media (forced-colors: active) {
+  .rottay-steps--modern[data-part='root'] [data-part='item'][data-part='item']::after {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+    background: Canvas;
+    color: ButtonText;
+    box-shadow: none;
+  }
+
+  .rottay-steps--modern[data-part='root'] [data-part='item'][data-status='process']::after {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .rottay-steps--modern[data-part='root'] [data-part='item'][data-status='error']::after {
+    border-color: ButtonText;
+    color: ButtonText;
+  }
+
+  .rottay-steps--modern[data-part='root'] [data-part='item']::before {
+    background: ButtonText;
+  }
 }

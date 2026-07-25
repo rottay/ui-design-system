@@ -55,7 +55,7 @@
  */
 
 import type { ReactNode, MouseEvent, ButtonHTMLAttributes } from 'react';
-import type { BaseComponentProps, Size, Variant, LoadableProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
+import type { BaseComponentProps, Variant, LoadableProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
@@ -63,13 +63,26 @@ import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/v
 // TYPE DEFINITIONS
 // ============================================================================
 
-/** Button size type alias derived from the global Size scale. */
-export type ButtonSize = Size;
+/**
+ * Button size steps backed by the public Button token contract and both
+ * first-party skins. Larger display-scale steps belong to components that
+ * actually publish `2xl`/`3xl` geometry rather than falling back silently.
+ */
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * Button variants.
  */
-export type ButtonVariant = Variant | 'text' | 'link' | 'ghost' | 'dashed' | 'danger';
+export type ButtonVariant =
+  | Variant
+  | 'outline'
+  | 'info'
+  | 'text'
+  | 'link'
+  | 'ghost'
+  | 'dashed'
+  | 'danger'
+  | 'ai';
 
 /**
  * Button shapes.
@@ -152,8 +165,12 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
   children?: ReactNode;
 
   /**
-   * Whether the button should render as a different component.
-   * Useful for composition (e.g., render as <Link>).
+   * Reserved for the future cross-engine Slot contract.
+   *
+   * @deprecated No engine clones an arbitrary child today. Use `href` for a
+   * semantic anchor button or compose Button through a product-owned wrapper.
+   * The prop is consumed (never leaked to DOM) for published-package
+   * compatibility.
    */
   asChild?: boolean;
 
@@ -166,6 +183,12 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
    * Target if the button acts as a link.
    */
   target?: '_blank' | '_self' | '_parent' | '_top';
+
+  /**
+   * Relationship hints for link buttons. When `target="_blank"` is used and
+   * no value is provided, Modern adds `noopener noreferrer` defensively.
+   */
+  rel?: string;
 
   /**
    * Button border radius.
@@ -451,13 +474,15 @@ export const SIZE_MAP = {
 
 // ============================================================================
 // VARIANT MAPPING
-// Maps visual variants to CSS custom properties with fallback values
+// Maps visual variants to the same canonical CSS custom properties consumed by
+// the engine skins. Defaults belong to the token bundle, never to this TS map:
+// otherwise an unmounted stylesheet silently paints a non-tenant fallback.
 // ============================================================================
 
 /**
  * Variant color configuration mapping to CSS custom properties.
  * Each variant defines background, text color, border, and hover states
- * with sensible fallback values for when CSS variables are not defined.
+ * without embedding a second palette in TypeScript.
  *
  * @constant
  * @type {Record<string, { bg: string; color: string; borderColor: string; hoverBg: string }>}
@@ -473,58 +498,94 @@ export const SIZE_MAP = {
  */
 export const VARIANT_MAP = {
   primary: {
-    bg: 'var(--ds-button-primary-bg, #0066CC)',
-    color: 'var(--ds-button-primary-color, #FFFFFF)',
-    borderColor: 'var(--ds-button-primary-border, transparent)',
-    hoverBg: 'var(--ds-button-primary-hover-bg, #0052A3)',
+    bg: 'var(--ds-button-primary-bg)',
+    color: 'var(--ds-button-primary-color)',
+    borderColor: 'var(--ds-button-primary-border)',
+    hoverBg: 'var(--ds-button-primary-bg-hover)',
   },
   secondary: {
-    bg: 'var(--ds-button-secondary-bg, #F5F5F5)',
-    color: 'var(--ds-button-secondary-color, #333333)',
-    borderColor: 'var(--ds-button-secondary-border, #D9D9D9)',
-    hoverBg: 'var(--ds-button-secondary-hover-bg, #E8E8E8)',
+    bg: 'var(--ds-button-secondary-bg)',
+    color: 'var(--ds-button-secondary-color)',
+    borderColor: 'var(--ds-button-secondary-border)',
+    hoverBg: 'var(--ds-button-secondary-bg-hover)',
   },
   outline: {
-    bg: 'var(--ds-button-outline-bg, transparent)',
-    color: 'var(--ds-button-outline-color, #0066CC)',
-    borderColor: 'var(--ds-button-outline-border, #0066CC)',
-    hoverBg: 'var(--ds-button-outline-hover-bg, rgba(0, 102, 204, 0.1))',
+    bg: 'var(--ds-button-default-bg)',
+    color: 'var(--ds-button-default-color)',
+    borderColor: 'var(--ds-button-default-border)',
+    hoverBg: 'var(--ds-button-default-bg-hover)',
   },
   ghost: {
-    bg: 'var(--ds-button-ghost-bg, transparent)',
-    color: 'var(--ds-button-ghost-color, #333333)',
-    borderColor: 'var(--ds-button-ghost-border, transparent)',
-    hoverBg: 'var(--ds-button-ghost-hover-bg, rgba(0, 0, 0, 0.05))',
+    bg: 'var(--ds-button-ghost-bg)',
+    color: 'var(--ds-button-ghost-color)',
+    borderColor: 'var(--ds-button-ghost-border)',
+    hoverBg: 'var(--ds-button-ghost-bg-hover)',
   },
   link: {
-    bg: 'var(--ds-button-link-bg, transparent)',
-    color: 'var(--ds-button-link-color, #0066CC)',
-    borderColor: 'var(--ds-button-link-border, transparent)',
-    hoverBg: 'var(--ds-button-link-hover-bg, transparent)',
+    bg: 'var(--ds-button-link-bg)',
+    color: 'var(--ds-button-link-color)',
+    borderColor: 'var(--ds-button-link-border)',
+    hoverBg: 'var(--ds-button-link-bg-hover)',
   },
   danger: {
-    bg: 'var(--ds-button-danger-bg, #EF4444)',
-    color: 'var(--ds-button-danger-color, #FFFFFF)',
-    borderColor: 'var(--ds-button-danger-border, transparent)',
-    hoverBg: 'var(--ds-button-danger-hover-bg, #DC2626)',
+    bg: 'var(--ds-button-error-bg)',
+    color: 'var(--ds-button-error-color)',
+    borderColor: 'var(--ds-button-error-border)',
+    hoverBg: 'var(--ds-button-error-bg-hover)',
+  },
+  error: {
+    bg: 'var(--ds-button-error-bg)',
+    color: 'var(--ds-button-error-color)',
+    borderColor: 'var(--ds-button-error-border)',
+    hoverBg: 'var(--ds-button-error-bg-hover)',
+  },
+  success: {
+    bg: 'var(--ds-button-success-bg)',
+    color: 'var(--ds-button-success-color)',
+    borderColor: 'var(--ds-button-success-border)',
+    hoverBg: 'var(--ds-button-success-bg-hover)',
+  },
+  warning: {
+    bg: 'var(--ds-button-warning-bg)',
+    color: 'var(--ds-button-warning-color)',
+    borderColor: 'var(--ds-button-warning-border)',
+    hoverBg: 'var(--ds-button-warning-bg-hover)',
+  },
+  info: {
+    bg: 'var(--ds-button-info-bg)',
+    color: 'var(--ds-button-info-color)',
+    borderColor: 'var(--ds-button-info-border)',
+    hoverBg: 'var(--ds-button-info-bg-hover)',
+  },
+  ai: {
+    bg: 'var(--ds-button-ai-bg)',
+    color: 'var(--ds-button-ai-color)',
+    borderColor: 'var(--ds-button-ai-border)',
+    hoverBg: 'var(--ds-button-ai-bg-hover)',
   },
   default: {
-    bg: 'var(--ds-button-default-bg, #FFFFFF)',
-    color: 'var(--ds-button-default-color, #333333)',
-    borderColor: 'var(--ds-button-default-border, #D9D9D9)',
-    hoverBg: 'var(--ds-button-default-hover-bg, #F5F5F5)',
+    bg: 'var(--ds-button-default-bg)',
+    color: 'var(--ds-button-default-color)',
+    borderColor: 'var(--ds-button-default-border)',
+    hoverBg: 'var(--ds-button-default-bg-hover)',
   },
   text: {
-    bg: 'var(--ds-button-text-bg, transparent)',
-    color: 'var(--ds-button-text-color, #333333)',
-    borderColor: 'var(--ds-button-text-border, transparent)',
-    hoverBg: 'var(--ds-button-text-hover-bg, rgba(0, 0, 0, 0.05))',
+    bg: 'var(--ds-button-text-bg)',
+    color: 'var(--ds-button-text-color)',
+    borderColor: 'var(--ds-button-text-border)',
+    hoverBg: 'var(--ds-button-text-bg-hover)',
   },
   dashed: {
-    bg: 'var(--ds-button-dashed-bg, transparent)',
-    color: 'var(--ds-button-dashed-color, #333333)',
-    borderColor: 'var(--ds-button-dashed-border, #D9D9D9)',
-    hoverBg: 'var(--ds-button-dashed-hover-bg, rgba(0, 0, 0, 0.02))',
+    bg: 'var(--ds-button-dashed-bg)',
+    color: 'var(--ds-button-dashed-color)',
+    borderColor: 'var(--ds-button-dashed-border)',
+    hoverBg: 'var(--ds-button-dashed-bg-hover)',
+  },
+  gradient: {
+    bg: 'var(--ds-button-gradient)',
+    color: 'var(--ds-button-primary-color)',
+    borderColor: 'var(--ds-button-primary-border)',
+    hoverBg: 'var(--ds-button-gradient)',
   },
 };
 
@@ -540,21 +601,20 @@ export const VARIANT_MAP = {
  * @constant
  * @type {Record<string, string>}
  *
- * @property {string} default - Standard rounded corners (6px)
+ * @property {string} default - Tenant-authored standard corners
  * @property {string} round - Fully rounded ends (pill shape)
  * @property {string} circle - Perfect circle for icon-only buttons
  *
  * @example
  * ```css
  * :root {
- *   --ds-button-border-radius: 6px;
- *   --ds-button-border-radius-round: 9999px;
- *   --ds-button-border-radius-circle: 50%;
+ *   --ds-button-md-radius: var(--ds-radius-md);
+ *   --ds-radius-full: 9999px;
  * }
  * ```
  */
 export const SHAPE_MAP = {
-  default: 'var(--ds-button-radius, 6px)',
-  round: 'var(--ds-button-radius-round, 9999px)',
-  circle: 'var(--ds-button-radius-circle, 50%)',
+  default: 'var(--ds-button-md-radius)',
+  round: 'var(--ds-radius-full)',
+  circle: 'var(--ds-radius-full)',
 };

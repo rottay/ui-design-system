@@ -54,6 +54,7 @@ export {
   cloneBrandTheme,
   serializeBrandTheme,
   deserializeBrandTheme,
+  brandThemeToTenantAppearance,
   brandThemeToTenantAppearanceAdvanced,
 } from './runtime/file-export';
 export {

@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import '@rottay/design-system/styles.css';
+// Optional, code-owned font pack used by customer Appearance artifacts. The
+// tenant DB may select only its stable CSS-variable handle; it never owns a
+// font URL or @font-face declaration.
+import '@rottay/design-system/fonts/editorial-display.css';
 import './globals.css';
 
 export const metadata: Metadata = {

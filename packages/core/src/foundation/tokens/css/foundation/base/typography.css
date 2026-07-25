@@ -10,14 +10,39 @@
      FONT FAMILIES
      Define the typeface stacks for different text purposes
      ======================================================================== */
-  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-                      'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-                      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-                      'Noto Color Emoji';
+  /* DS-A007: "Noto Sans Arabic" precedes the generic family so Arabic copy
+     never falls through to a glyph-poor default; tenant-selected families
+     still win because they prepend, never replace, this bounded chain. */
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Noto Sans Arabic", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --ds-font-family-heading: var(--ds-font-family-base);
-  --ds-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
-                      Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ds-font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
   --ds-font-family-display: var(--ds-font-family-base);
+
+  /* Rendering/craft channels. Variable fonts consume optical sizing and
+     variation settings; static fonts ignore them without changing layout. */
+  --ds-type-optical-sizing: auto;
+  --ds-type-font-synthesis: none;
+  --ds-type-font-variation-settings: normal;
+  --ds-type-rendering: optimizeLegibility;
+
+  /* Contrast is a role, not a fixed palette value. A tenant may remap these
+     aliases while preserving one component tree and WCAG-gated semantics. */
+  --ds-type-color-strong: var(--ds-color-text-primary);
+  --ds-type-color-default: var(--ds-color-text-primary);
+  --ds-type-color-muted: var(--ds-color-text-secondary);
+  --ds-type-color-subtle: var(--ds-color-text-tertiary);
+  --ds-type-color-inverse: var(--ds-color-text-inverse);
+
+  /* Fine link/reveal craft. Kept quiet by default and disabled below when the
+     user requests reduced motion. */
+  --ds-type-decoration-thickness: 0.08em;
+  --ds-type-decoration-offset: 0.18em;
+  --ds-type-motion-duration: var(--ds-motion-reveal, var(--ds-duration-normal, 200ms));
+  --ds-type-motion-distance: 0.35rem;
+  --ds-type-motion-easing: var(--ds-motion-ease-enter, cubic-bezier(0.22, 1, 0.36, 1));
 
   /* ========================================================================
      FONT SIZES
@@ -34,46 +59,74 @@
      own -base literals so the winning value scales identically. The steps only
      defined here (md, 7xl-9xl) win from this file.
      ======================================================================== */
-  --ds-font-size-xs-base: 0.75rem;   /* 12px */
-  --ds-font-size-sm-base: 0.875rem;  /* 14px */
-  --ds-font-size-base-base: 1rem;    /* 16px */
-  --ds-font-size-md-base: 1rem;      /* 16px - Alias for base */
-  --ds-font-size-lg-base: 1.125rem;  /* 18px */
-  --ds-font-size-xl-base: 1.25rem;   /* 20px */
-  --ds-font-size-2xl-base: 1.5rem;   /* 24px */
+  --ds-font-size-xs-base: 0.75rem; /* 12px */
+  --ds-font-size-sm-base: 0.875rem; /* 14px */
+  --ds-font-size-base-base: 1rem; /* 16px */
+  --ds-font-size-md-base: 1rem; /* 16px - Alias for base */
+  --ds-font-size-lg-base: 1.125rem; /* 18px */
+  --ds-font-size-xl-base: 1.25rem; /* 20px */
+  --ds-font-size-2xl-base: 1.5rem; /* 24px */
   --ds-font-size-3xl-base: 1.875rem; /* 30px */
-  --ds-font-size-4xl-base: 2.25rem;  /* 36px */
-  --ds-font-size-5xl-base: 3rem;     /* 48px */
-  --ds-font-size-6xl-base: 3.75rem;  /* 60px */
-  --ds-font-size-7xl-base: 4.5rem;   /* 72px */
-  --ds-font-size-8xl-base: 6rem;     /* 96px */
-  --ds-font-size-9xl-base: 8rem;     /* 128px */
+  --ds-font-size-4xl-base: 2.25rem; /* 36px */
+  --ds-font-size-5xl-base: 3rem; /* 48px */
+  --ds-font-size-6xl-base: 3.75rem; /* 60px */
+  --ds-font-size-7xl-base: 4.5rem; /* 72px */
+  --ds-font-size-8xl-base: 6rem; /* 96px */
+  --ds-font-size-9xl-base: 8rem; /* 128px */
 
-  --ds-font-size-xs: calc(var(--ds-font-size-xs-base) * var(--ds-type-scale, 1));
-  --ds-font-size-sm: calc(var(--ds-font-size-sm-base) * var(--ds-type-scale, 1));
-  --ds-font-size-base: calc(var(--ds-font-size-base-base) * var(--ds-type-scale, 1));
-  --ds-font-size-md: calc(var(--ds-font-size-md-base) * var(--ds-type-scale, 1));
-  --ds-font-size-lg: calc(var(--ds-font-size-lg-base) * var(--ds-type-scale, 1));
-  --ds-font-size-xl: calc(var(--ds-font-size-xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-2xl: calc(var(--ds-font-size-2xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-3xl: calc(var(--ds-font-size-3xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-4xl: calc(var(--ds-font-size-4xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-5xl: calc(var(--ds-font-size-5xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-6xl: calc(var(--ds-font-size-6xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-7xl: calc(var(--ds-font-size-7xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-8xl: calc(var(--ds-font-size-8xl-base) * var(--ds-type-scale, 1));
-  --ds-font-size-9xl: calc(var(--ds-font-size-9xl-base) * var(--ds-type-scale, 1));
+  --ds-font-size-xs: calc(
+    var(--ds-font-size-xs-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-sm: calc(
+    var(--ds-font-size-sm-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-base: calc(
+    var(--ds-font-size-base-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-md: calc(
+    var(--ds-font-size-md-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-lg: calc(
+    var(--ds-font-size-lg-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-xl: calc(
+    var(--ds-font-size-xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-2xl: calc(
+    var(--ds-font-size-2xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-3xl: calc(
+    var(--ds-font-size-3xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-4xl: calc(
+    var(--ds-font-size-4xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-5xl: calc(
+    var(--ds-font-size-5xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-6xl: calc(
+    var(--ds-font-size-6xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-7xl: calc(
+    var(--ds-font-size-7xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-8xl: calc(
+    var(--ds-font-size-8xl-base) * var(--ds-type-scale, 1)
+  );
+  --ds-font-size-9xl: calc(
+    var(--ds-font-size-9xl-base) * var(--ds-type-scale, 1)
+  );
 
   /* ========================================================================
      HEADING SIZES
      Predefined sizes for heading elements
      ======================================================================== */
-  --ds-font-size-h1: var(--ds-font-size-4xl);   /* 36px */
-  --ds-font-size-h2: var(--ds-font-size-3xl);   /* 30px */
-  --ds-font-size-h3: var(--ds-font-size-2xl);   /* 24px */
-  --ds-font-size-h4: var(--ds-font-size-xl);    /* 20px */
-  --ds-font-size-h5: var(--ds-font-size-lg);    /* 18px */
-  --ds-font-size-h6: var(--ds-font-size-base);  /* 16px */
+  --ds-font-size-h1: var(--ds-font-size-4xl); /* 36px */
+  --ds-font-size-h2: var(--ds-font-size-3xl); /* 30px */
+  --ds-font-size-h3: var(--ds-font-size-2xl); /* 24px */
+  --ds-font-size-h4: var(--ds-font-size-xl); /* 20px */
+  --ds-font-size-h5: var(--ds-font-size-lg); /* 18px */
+  --ds-font-size-h6: var(--ds-font-size-base); /* 16px */
 
   /* ========================================================================
      FONT WEIGHTS
@@ -106,10 +159,10 @@
   --ds-line-height-loose: 2;
 
   /* Contextual line heights */
-  --ds-line-height-body: 1.6;                               /* Relaxed for readability */
-  --ds-line-height-heading: 1.2;                            /* Tight for premium headings */
-  --ds-line-height-label: 1.4;                              /* Balanced for labels/metadata */
-  --ds-line-height-display: var(--ds-line-height-none);     /* 1 */
+  --ds-line-height-body: 1.6; /* Relaxed for readability */
+  --ds-line-height-heading: 1.2; /* Tight for premium headings */
+  --ds-line-height-label: 1.4; /* Balanced for labels/metadata */
+  --ds-line-height-display: var(--ds-line-height-none); /* 1 */
 
   /* ========================================================================
      LETTER SPACING
@@ -142,6 +195,122 @@
   --ds-text-transform-uppercase: uppercase;
   --ds-text-transform-lowercase: lowercase;
   --ds-text-transform-capitalize: capitalize;
+
+  /* ========================================================================
+     SEMANTIC TYPOGRAPHY ROLES
+     Product components consume these roles; BrandTheme can override every
+     facet without changing component anatomy or application markup.
+     ======================================================================== */
+  --ds-type-display-font-family: var(
+    --ds-font-family-display,
+    var(--ds-font-family-heading)
+  );
+  --ds-type-display-font-size: var(--ds-font-size-fluid-5xl, calc(3rem * var(--ds-type-scale, 1)));
+  --ds-type-display-font-weight: 700;
+  --ds-type-display-line-height: 1.1;
+  --ds-type-display-letter-spacing: var(--ds-letter-spacing-display, -0.03em);
+  --ds-type-display-text-transform: none;
+  --ds-type-display-font-variant-numeric: normal;
+
+  --ds-type-page-title-font-family: var(--ds-font-family-heading);
+  --ds-type-page-title-font-size: var(--ds-font-size-fluid-3xl, calc(1.875rem * var(--ds-type-scale, 1)));
+  --ds-type-page-title-font-weight: 700;
+  --ds-type-page-title-line-height: 1.16;
+  --ds-type-page-title-letter-spacing: var(
+    --ds-letter-spacing-heading,
+    -0.02em
+  );
+  --ds-type-page-title-text-transform: none;
+  --ds-type-page-title-font-variant-numeric: normal;
+
+  --ds-type-section-title-font-family: var(--ds-font-family-heading);
+  --ds-type-section-title-font-size: var(--ds-font-size-fluid-xl, calc(1.25rem * var(--ds-type-scale, 1)));
+  --ds-type-section-title-font-weight: 600;
+  --ds-type-section-title-line-height: 1.3;
+  --ds-type-section-title-letter-spacing: var(
+    --ds-letter-spacing-heading,
+    -0.01em
+  );
+  --ds-type-section-title-text-transform: none;
+  --ds-type-section-title-font-variant-numeric: normal;
+
+  --ds-type-body-font-family: var(--ds-font-family-base);
+  --ds-type-body-font-size: calc(0.875rem * var(--ds-type-scale, 1));
+  --ds-type-body-font-weight: 400;
+  --ds-type-body-line-height: var(--ds-line-height-body, 1.6);
+  --ds-type-body-letter-spacing: var(--ds-letter-spacing-body, 0);
+  --ds-type-body-text-transform: none;
+  --ds-type-body-font-variant-numeric: normal;
+
+  --ds-type-supporting-font-family: var(--ds-font-family-base);
+  --ds-type-supporting-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
+  --ds-type-supporting-font-weight: 400;
+  --ds-type-supporting-line-height: 1.5;
+  --ds-type-supporting-letter-spacing: var(--ds-letter-spacing-body, 0);
+  --ds-type-supporting-text-transform: none;
+  --ds-type-supporting-font-variant-numeric: normal;
+
+  --ds-type-label-font-family: var(--ds-font-family-base);
+  --ds-type-label-font-size: calc(0.75rem * var(--ds-type-scale, 1));
+  --ds-type-label-font-weight: 600;
+  --ds-type-label-line-height: 1.3;
+  --ds-type-label-letter-spacing: 0.04em;
+  --ds-type-label-text-transform: none;
+  --ds-type-label-font-variant-numeric: normal;
+
+  --ds-type-caption-font-family: var(--ds-font-family-base);
+  --ds-type-caption-font-size: calc(0.6875rem * var(--ds-type-scale, 1));
+  --ds-type-caption-font-weight: 400;
+  --ds-type-caption-line-height: 1.35;
+  --ds-type-caption-letter-spacing: 0.01em;
+  --ds-type-caption-text-transform: none;
+  --ds-type-caption-font-variant-numeric: normal;
+
+  --ds-type-code-font-family: var(--ds-font-family-mono);
+  --ds-type-code-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
+  --ds-type-code-font-weight: 400;
+  --ds-type-code-line-height: 1.5;
+  --ds-type-code-letter-spacing: var(--ds-letter-spacing-mono, 0);
+  --ds-type-code-text-transform: none;
+  --ds-type-code-font-variant-numeric: tabular-nums;
+
+  --ds-type-numeric-font-family: var(--ds-font-family-heading);
+  --ds-type-numeric-font-size: calc(1rem * var(--ds-type-scale, 1));
+  --ds-type-numeric-font-weight: 600;
+  --ds-type-numeric-line-height: 1.2;
+  --ds-type-numeric-letter-spacing: -0.01em;
+  --ds-type-numeric-text-transform: none;
+  --ds-type-numeric-font-variant-numeric: tabular-nums lining-nums;
+
+  /* Dynamic shorthand aliases. They reference the facets instead of copying
+     values so a DB tenant can retune one role property without leaving a
+     stale composite token behind. Components may consume either the complete
+     shorthand or the individual facets when they also need transform/tracking. */
+  --ds-type-display: var(--ds-type-display-font-weight)
+    var(--ds-type-display-font-size) / var(--ds-type-display-line-height)
+    var(--ds-type-display-font-family);
+  --ds-type-page-title: var(--ds-type-page-title-font-weight)
+    var(--ds-type-page-title-font-size) / var(--ds-type-page-title-line-height)
+    var(--ds-type-page-title-font-family);
+  --ds-type-section-title: var(--ds-type-section-title-font-weight)
+    var(--ds-type-section-title-font-size) / var(--ds-type-section-title-line-height)
+    var(--ds-type-section-title-font-family);
+  --ds-type-body: var(--ds-type-body-font-weight) var(--ds-type-body-font-size) /
+    var(--ds-type-body-line-height) var(--ds-type-body-font-family);
+  --ds-type-supporting: var(--ds-type-supporting-font-weight)
+    var(--ds-type-supporting-font-size) / var(--ds-type-supporting-line-height)
+    var(--ds-type-supporting-font-family);
+  --ds-type-label: var(--ds-type-label-font-weight)
+    var(--ds-type-label-font-size) / var(--ds-type-label-line-height)
+    var(--ds-type-label-font-family);
+  --ds-type-caption: var(--ds-type-caption-font-weight)
+    var(--ds-type-caption-font-size) / var(--ds-type-caption-line-height)
+    var(--ds-type-caption-font-family);
+  --ds-type-code: var(--ds-type-code-font-weight) var(--ds-type-code-font-size) /
+    var(--ds-type-code-line-height) var(--ds-type-code-font-family);
+  --ds-type-numeric: var(--ds-type-numeric-font-weight)
+    var(--ds-type-numeric-font-size) / var(--ds-type-numeric-line-height)
+    var(--ds-type-numeric-font-family);
 
   /* ========================================================================
      TEXT DECORATION
@@ -280,6 +449,20 @@
   --ds-font-size-fluid-5xl: clamp(2.25rem, 1.9565rem + 1.3043cqi, 3rem);
 }
 
+/*
+ * A nested DS surface is an explicit typography boundary. Hosts such as docs,
+ * portals, embedded widgets, and micro-frontends may own a different body
+ * font; once a consumer stamps `data-ds-root`, tenant typography must win by
+ * declaration instead of depending on host inheritance. Keep this selector
+ * deliberately low-specificity so a product can still opt into a more local
+ * semantic typography role through a DS component contract.
+ */
+:where([data-ds-root]) {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-base);
+  text-rendering: optimizeLegibility;
+}
+
 /* ==========================================================================
    MICRO-TYPOGRAPHY UTILITIES (WO-CRA-01)
    Opt-in classes so data surfaces align digits and prose wraps cleanly. Every
@@ -314,4 +497,45 @@
 /* Automatic hyphenation for narrow measures (honors the element's lang). */
 .ds-hyphenate {
   hyphens: auto;
+}
+
+/* Shared premium craft across every engine. No brand selector appears here:
+   BrandTheme controls the variables while markup and interaction stay fixed. */
+:where(.rottay-typography) {
+  font-optical-sizing: var(--ds-type-optical-sizing, auto);
+  font-synthesis: var(--ds-type-font-synthesis, none);
+  font-variation-settings: var(--ds-type-font-variation-settings, normal);
+  text-rendering: var(--ds-type-rendering, optimizeLegibility);
+  text-decoration-thickness: var(--ds-type-decoration-thickness, 0.08em);
+  text-underline-offset: var(--ds-type-decoration-offset, 0.18em);
+  transition:
+    color var(--ds-type-motion-duration, 180ms)
+      var(--ds-type-motion-easing, ease),
+    text-decoration-color var(--ds-type-motion-duration, 180ms)
+      var(--ds-type-motion-easing, ease),
+    opacity var(--ds-type-motion-duration, 180ms)
+      var(--ds-type-motion-easing, ease);
+}
+
+:where(.rottay-typography[data-motion="enter"]) {
+  animation: ds-typography-enter var(--ds-type-motion-duration, 180ms)
+    var(--ds-type-motion-easing, ease) both;
+}
+
+@keyframes ds-typography-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-type-motion-distance, 0.35rem));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.rottay-typography) {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
 }

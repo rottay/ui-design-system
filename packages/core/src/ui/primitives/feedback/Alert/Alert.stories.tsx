@@ -102,7 +102,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Alert rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Alert rendered by Classic (Ant Design), Modern (token skin), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -127,5 +127,52 @@ export const VariantMatrix: Story = {
       variantProp="type"
       variants={['info', 'success', 'warning', 'error']}
     />
+  ),
+};
+
+// ============================================================================
+// Modern Engine Craft Stories
+// ============================================================================
+
+/**
+ * Compact vs spacious density on the modern engine, both tones dismissible.
+ */
+export const ModernDensity: Story = {
+  name: '🧱 Modern Density',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Alert engine="modern" compact type="success" closable message="Compact success" description="Reduced padding and type for dense toolbars." />
+      <Alert engine="modern" type="warning" closable message="Spacious warning" description="Default posture with the full icon well, governed tint surface and relaxed line-height for long-form guidance copy that wraps across multiple lines without crowding the dismiss control." />
+    </div>
+  ),
+};
+
+/**
+ * Overlong content must wrap cleanly: the icon well and dismiss control stay
+ * pinned to the start edge, the body never slides under either control.
+ */
+export const ModernLongContent: Story = {
+  name: '📏 Modern Long Content',
+  render: () => (
+    <Alert
+      engine="modern"
+      type="error"
+      closable
+      message="Synchronization failed for the quarterly compliance evidence package after three automatic retries"
+      description="The remote archive rejected the transfer because the session certificate expired while the payload was streaming. Renew the certificate from the security console, then resume the synchronization from the operations dashboard — no local changes will be lost in the meantime."
+    />
+  ),
+};
+
+/**
+ * RTL smoke test: logical properties keep icon/text/dismiss order mirrored.
+ */
+export const ModernRTL: Story = {
+  name: '🔄 Modern RTL',
+  render: () => (
+    <div dir="rtl" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Alert engine="modern" type="info" closable message="اكتملت المراجعة" description="تم حفظ جميع التغييرات في مساحة العمل المشتركة ويمكن للفريق الاطلاع عليها الآن." />
+      <Alert engine="modern" type="success" message="تم الرفع بنجاح" description="تم رفع حزمة الأدلة الفصلية وأصبحت جاهزة للمراجعة النهائية من قبل مدير الامتثال." />
+    </div>
   ),
 };

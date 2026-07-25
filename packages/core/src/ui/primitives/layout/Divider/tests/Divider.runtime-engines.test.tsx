@@ -1,11 +1,11 @@
-import React, { createRef } from 'react';
-import { describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import React, { createRef } from "react";
+import { describe, expect, it } from "vitest";
+import { render, screen, within } from "@testing-library/react";
 
-import { DEFAULT_COLORS, SPACING_MAP } from '../contracts';
-import ClassicDivider from '../engines/classic';
-import ModernDivider from '../engines/modern';
-import RusticDivider from '../engines/rustic';
+import { DEFAULT_COLORS, SPACING_MAP } from "../contracts";
+import ClassicDivider from "../engines/classic";
+import ModernDivider from "../engines/modern";
+import RusticDivider from "../engines/rustic";
 
 const ENGINE_COMPONENTS = {
   classic: ClassicDivider,
@@ -13,9 +13,9 @@ const ENGINE_COMPONENTS = {
   rustic: RusticDivider,
 } as const;
 
-describe('Divider runtime engines', () => {
+describe("Divider runtime engines", () => {
   it.each(Object.entries(ENGINE_COMPONENTS))(
-    'renders a text divider through the live %s engine',
+    "renders a text divider through the live %s engine",
     (engine, Component) => {
       const ref = createRef<HTMLDivElement>();
 
@@ -37,41 +37,45 @@ describe('Divider runtime engines', () => {
       );
 
       const divider = screen.getByTestId(`divider-${engine}`);
-      expect(divider).toHaveAttribute('role', 'separator');
-      expect(divider).toHaveAttribute('aria-orientation', 'horizontal');
-      expect(divider).toHaveClass('custom-divider');
-      expect(divider).toHaveStyle({ margin: `${SPACING_MAP.xl} 0`, opacity: '0.9' });
+      expect(divider).toHaveAttribute("role", "separator");
+      expect(divider).toHaveAttribute("aria-orientation", "horizontal");
+      expect(divider).toHaveClass("custom-divider");
+      expect(divider).toHaveStyle({
+        margin: `${SPACING_MAP.xl} 0`,
+        opacity: "0.9",
+      });
       expect(ref.current).toBe(divider);
-      expect(screen.getByText('Section label')).toBeInTheDocument();
+      expect(screen.getByText("Section label")).toBeInTheDocument();
 
-      if (engine === 'classic') {
-        expect(divider).toHaveClass('ant-divider');
-        expect(divider).toHaveClass('ant-divider-horizontal');
-        expect(divider).toHaveClass('ant-divider-dashed');
-        expect(divider).toHaveClass('ant-divider-with-text');
-        expect(divider).toHaveClass('ant-divider-with-text-left');
-        expect(divider).toHaveClass('ant-divider-plain');
+      if (engine === "classic") {
+        expect(divider).toHaveClass("ant-divider");
+        expect(divider).toHaveClass("ant-divider-horizontal");
+        expect(divider).toHaveClass("ant-divider-dashed");
+        expect(divider).toHaveClass("ant-divider-with-text");
+        expect(divider).toHaveClass("ant-divider-with-text-start");
+        expect(divider).toHaveClass("ant-divider-plain");
       }
 
-      if (engine === 'modern') {
-        expect(divider).toHaveClass('divider');
-        expect(divider).toHaveClass('divider-horizontal');
-        expect(divider).toHaveClass('divider-start');
+      if (engine === "modern") {
+        expect(divider).toHaveClass("rottay-divider--modern");
+        expect(divider).not.toHaveClass("divider");
+        expect(divider).toHaveAttribute("data-text-position", "start");
       }
 
-      if (engine === 'rustic') {
-        expect(divider).toHaveClass('divider');
-        expect(divider).toHaveClass('divider--horizontal');
-        expect(divider).toHaveClass('divider--dashed');
-        expect(divider).toHaveClass('divider--with-text');
-        expect(divider).toHaveClass('divider--ds-text-left');
-        expect(divider).toHaveClass('divider--plain');
+      if (engine === "rustic") {
+        expect(divider).toHaveClass("rottay-divider--rustic");
+        expect(divider).not.toHaveClass("divider");
+        expect(divider).toHaveClass("divider--horizontal");
+        expect(divider).toHaveClass("divider--dashed");
+        expect(divider).toHaveClass("divider--with-text");
+        expect(divider).toHaveClass("divider--ds-text-start");
+        expect(divider).toHaveClass("divider--plain");
       }
     }
   );
 
   it.each(Object.entries(ENGINE_COMPONENTS))(
-    'renders a vertical divider without text through the %s engine',
+    "renders a vertical divider without text through the %s engine",
     (engine, Component) => {
       render(
         <Component
@@ -88,35 +92,39 @@ describe('Divider runtime engines', () => {
       );
 
       const divider = screen.getByTestId(`divider-vertical-${engine}`);
-      expect(divider).toHaveAttribute('aria-orientation', 'vertical');
-      expect(divider).toHaveStyle({ margin: `0 ${SPACING_MAP.lg}`, minHeight: '48px' });
-      expect(screen.queryByText('Hidden text')).not.toBeInTheDocument();
+      expect(divider).toHaveAttribute("aria-orientation", "vertical");
+      expect(divider).toHaveStyle({
+        margin: `0 ${SPACING_MAP.lg}`,
+        minHeight: "48px",
+      });
+      expect(screen.queryByText("Hidden text")).not.toBeInTheDocument();
 
       // happy-dom drops `border-left` shorthands that contain CSS custom
       // properties (e.g., `var(--ds-divider-color, ...)`). We verify the
       // engine-specific class names and overall structure instead of the
       // inline border value, which is reliably tested in real browsers.
 
-      if (engine === 'classic') {
-        expect(divider).toHaveClass('ant-divider-vertical');
+      if (engine === "classic") {
+        expect(divider).toHaveClass("ant-divider-vertical");
       }
 
-      if (engine === 'modern') {
-        expect(divider).toHaveClass('divider-vertical');
+      if (engine === "modern") {
+        expect(divider).toHaveClass("rottay-divider--modern");
+        expect(divider).toHaveAttribute("data-orientation", "vertical");
       }
 
-      if (engine === 'rustic') {
-        expect(divider).toHaveClass('divider--vertical');
-        expect(divider).toHaveClass('divider--dotted');
+      if (engine === "rustic") {
+        expect(divider).toHaveClass("divider--vertical");
+        expect(divider).toHaveClass("divider--dotted");
       }
 
       // Verify the divider element is inline-flex and has the expected dimension
-      expect(divider).toHaveStyle({ minHeight: '48px' });
+      expect(divider).toHaveStyle({ minHeight: "48px" });
     }
   );
 
   it.each(Object.entries(ENGINE_COMPONENTS))(
-    'supports alias props and renders line segments in the %s engine',
+    "supports alias props and renders line segments in the %s engine",
     (engine, Component) => {
       render(
         <Component
@@ -130,25 +138,34 @@ describe('Divider runtime engines', () => {
       );
 
       const divider = screen.getByTestId(`divider-alias-${engine}`);
-      expect(divider).toHaveAttribute('aria-orientation', 'horizontal');
+      expect(divider).toHaveAttribute("aria-orientation", "horizontal");
       expect(divider).toHaveStyle({ margin: `${SPACING_MAP.sm} 0` });
 
-      const content = screen.getByText('Aliased');
+      const content = screen.getByText("Aliased");
       expect(content).toBeInTheDocument();
 
-      if (engine === 'classic') {
-        expect(divider).toHaveClass('ant-divider-with-text-right');
-        expect(within(divider).getByText('Aliased')).toHaveStyle({ fontSize: '16px' });
+      if (engine === "classic") {
+        expect(divider).toHaveClass("ant-divider-with-text-end");
+        expect(within(divider).getByText("Aliased")).toHaveStyle({
+          fontSize: "16px",
+        });
       }
 
-      if (engine === 'modern') {
-        expect(divider).toHaveClass('divider-end');
-        expect(within(divider).getByText('Aliased')).toHaveStyle({ textTransform: 'uppercase' });
+      if (engine === "modern") {
+        expect(divider).toHaveClass("rottay-divider--modern");
+        expect(divider).toHaveAttribute("data-text-position", "end");
+        expect(divider).toHaveAttribute("data-plain", "false");
+        expect(within(divider).getByText("Aliased")).toHaveAttribute(
+          "data-part",
+          "text"
+        );
       }
 
-      if (engine === 'rustic') {
-        expect(divider).toHaveClass('divider--ds-text-right');
-        expect(within(divider).getByText('Aliased')).toHaveStyle({ lineHeight: '1.5' });
+      if (engine === "rustic") {
+        expect(divider).toHaveClass("divider--ds-text-end");
+        expect(within(divider).getByText("Aliased")).toHaveStyle({
+          lineHeight: "1.5",
+        });
       }
     }
   );

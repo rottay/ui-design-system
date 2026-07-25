@@ -284,7 +284,10 @@ export function SearchCommandBar({
           ? voiceStatus
           : 'idle';
 
-  const showVoiceBadge = voiceSupported && (voiceStatus !== 'idle' || isVoicePermissionBlocked || needsVoicePermission);
+  // Keep the idle command bar quiet. Permission guidance becomes relevant only
+  // after the user invokes voice; the mic affordance remains available for that
+  // explicit action. Persistent permission badges compete with collection tools.
+  const showVoiceBadge = voiceSupported && (voiceStatus !== 'idle' || isVoicePermissionBlocked);
   const hideInlinePermissionBadge = needsVoicePermission && isCompactViewport;
   const showInlineVoiceBadge = showVoiceBadge && !hideInlinePermissionBadge;
   const hasClearButton = Boolean(command.value.trim()) && !isVoiceActive;

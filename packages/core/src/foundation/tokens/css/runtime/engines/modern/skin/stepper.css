@@ -1,54 +1,373 @@
 /**
- * Modern Stepper skin (WO-SKIN-04 checkpoint N).
+ * Modern Stepper skin (K3-B Pass 1: single paint owner, Daisy drained).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all. Unlayered
  * still yields to a caller's inline `style`.
  *
  * ============================================================================
- * N1 APPLIES HERE TOO — DAISYUI PAINTS THE CIRCLE AND THE CONNECTOR.
+ * SINGLE PAINT OWNER — THE SKIN NOW PAINTS THE CIRCLE AND THE CONNECTOR.
  * ============================================================================
- * Modern Stepper reimplements Steps' DaisyUI bridge verbatim (same
- * `getStepClass` / `getStepTokenStyle`, same `.steps .step` classes), so it is
- * governed by the SAME adjudication (P-73): `theme.css`'s
- * `.steps .step::before` / `::after` bridge rules are both DEAD — the connector's
- * because `--ds-steps-line-color` is defined nowhere (invalid-at-computed-value,
- * dropped), the circle's because it TIES DaisyUI at (0,3,1) and loses on source
- * order. DaisyUI paints both today.
+ * Same adjudication as `steps.css` (P-73): until this wave DaisyUI painted
+ * `.step::after` / `.step::before`, `theme.css` carried two DEAD bridge rules
+ * against `.steps .step`, and this file only redirected DaisyUI's `--step-*`
+ * custom properties. The engine no longer renders any DaisyUI class, so the
+ * circle and the connector are REBORN HERE as `[data-part='item']::after` /
+ * `::before`, keyed on `data-status` — one owner, no pseudo-element fight.
+ * The theme.css STEPS block is left with zero consumers; the K3-B ficha lists
+ * it for coordinator removal at integration.
  *
- * THEREFORE: this file declares NO `background-color` on `.step::before` /
- * `.step::after` at any specificity, and does NOT define `--ds-steps-line-color`.
- * It owns only the component's own token redirection — `--step-color`,
- * `--step-neutral`, `accent-color` — moved verbatim and keyed on `data-status`,
- * plus the real text elements. See `modern/skin/steps.css` for the full finding.
+ * The geometry deliberately duplicates `steps.css` (bounded per-family
+ * duplication — the two families own their skins independently; see the
+ * K3-B ficha for the shared-geometry note).
  *
- * SCOPE ROOT already carried `rottay-stepper rottay-stepper--modern` alongside
- * the DaisyUI `steps` classes; both are KEPT.
+ * SCOPE ROOT carries `rottay-stepper rottay-stepper--modern` +
+ * `data-part='root'` with `data-direction`, `data-size` (sm/md/lg) and
+ * `data-variant` (default/simple/circles).
  *
- * SPECIFICITY (P-48): nothing here paints a border color, so the (0,4,0) floor
- * does not apply; custom properties and `color` win unlayered at (0,3,0).
+ * SPECIFICITY (P-48): the circle's `border` shorthand carries a real color and
+ * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1), so
+ * the base rule reaches (0,4,1) via scope class + root attr + a REPEATED
+ * `data-part` on the item + the pseudo-element, and stays a SHORTHAND. The
+ * per-status `border-color` repaints tie it at (0,4,1) and win on source
+ * order. Backgrounds, colors and custom properties are exempt from the floor.
  */
 
+/* ---- root: flex track + the step counter namespace. ---- */
+.rottay-stepper--modern[data-part='root'] {
+  display: flex;
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ds-stepper;
+  --ds-stepper-current-item-size: var(--ds-stepper-item-size-md, 32px);
+  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-md, var(--ds-font-size-sm, 14px));
+  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-md, var(--ds-font-size-sm, 14px));
+  --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-md, var(--ds-font-size-xs, 12px));
+}
+
+.rottay-stepper--modern[data-part='root'][data-size='sm'] {
+  --ds-stepper-current-item-size: var(--ds-stepper-item-size-sm, 24px);
+  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-sm, var(--ds-font-size-xs, 12px));
+  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-sm, var(--ds-font-size-xs, 12px));
+  --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-sm, 11px);
+}
+
+.rottay-stepper--modern[data-part='root'][data-size='lg'] {
+  --ds-stepper-current-item-size: var(--ds-stepper-item-size-lg, 40px);
+  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-lg, var(--ds-font-size-md, 16px));
+  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-lg, var(--ds-font-size-md, 16px));
+  --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-lg, var(--ds-font-size-sm, 14px));
+}
+
+/* ---- item: the grid the circle (row 1) and the text column (row 2) live in. ---- */
 .rottay-stepper--modern[data-part='root'] [data-part='item'] {
-  --step-neutral: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
+  position: relative;
+  display: grid;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  grid-template-rows: auto 1fr;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='finish'],
-.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process'] {
-  --step-color: var(--ds-color-primary);
-  --step-neutral: var(--ds-color-primary);
-  accent-color: var(--ds-color-primary);
+/* ---- the connector: a hairline between this circle and the previous one,
+        positioned with logical insets so RTL mirrors it for free. ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='item']::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(var(--ds-stepper-current-item-size) / 2 - 1px);
+  inset-inline-start: calc(-50% + var(--ds-stepper-current-item-size) / 2 + 4px);
+  inset-inline-end: calc(50% + var(--ds-stepper-current-item-size) / 2 + 4px);
+  block-size: var(--ds-stepper-connector-width, 2px);
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-stepper-connector-color, var(--ds-color-border-secondary));
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
 }
 
-.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='error'] {
-  --step-color: var(--ds-color-error);
-  accent-color: var(--ds-color-error);
+/* A connector leads INTO its step: finished and in-progress steps paint the
+   line behind them with the primary ink (the pre-drain `--step-neutral`
+   mapping, preserved). */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='finish']::before,
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process']::before {
+  background: var(--ds-stepper-connector-color-active, var(--ds-color-primary));
+}
+
+/* Horizontal connectors lead into their step: the first one has none. Vertical
+   connectors drop OUT of their step: the last one has none. */
+.rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item']:first-child::before,
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='item']:last-child::before {
+  content: none;
+}
+
+/* ---- the circle: numbered by CSS counter, re-glyphed by status. (0,4,1) ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-part='item']::after {
+  border: 1px solid var(--ds-stepper-item-border, var(--ds-color-border));
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item']::after {
+  content: counter(ds-stepper);
+  counter-increment: ds-stepper;
+  grid-row: 1;
+  display: flex;
+  block-size: var(--ds-stepper-current-item-size);
+  inline-size: var(--ds-stepper-current-item-size);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-stepper-item-bg, var(--ds-card-bg, var(--ds-surface-card)));
+  color: var(--ds-stepper-item-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-stepper-current-item-font-size);
+  font-weight: var(--ds-stepper-item-font-weight, 600);
+  line-height: 1;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+}
+
+/* ---- status paint for the circle (border-color repaints tie (0,4,1), later). ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process']::after {
+  background: var(--ds-stepper-item-bg-process, var(--ds-color-primary));
+  color: var(--ds-stepper-item-color-process, var(--ds-color-text-on-primary));
+  border-color: var(--ds-stepper-item-border-process, var(--ds-color-primary));
+  box-shadow: 0 0 0 var(--ds-stepper-process-ring-width, 4px)
+    color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='finish']::after {
+  background: var(
+    --ds-stepper-item-bg-finish,
+    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))
+  );
+  color: var(--ds-stepper-item-color-finish, var(--ds-color-primary));
+  border-color: var(
+    --ds-stepper-item-border-finish,
+    color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border))
+  );
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='error']::after {
+  background: var(
+    --ds-stepper-item-bg-error,
+    color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-card-bg, var(--ds-surface-card)))
+  );
+  color: var(--ds-stepper-item-color-error, var(--ds-color-error));
+  border-color: var(
+    --ds-stepper-item-border-error,
+    color-mix(in srgb, var(--ds-color-error) 36%, var(--ds-color-border))
+  );
+}
+
+/* ---- status glyphs (default + circles variants; the rustic engine's
+        long-standing semantics: finish checks, error crosses). ---- */
+.rottay-stepper--modern[data-part='root']:not([data-variant='simple']) [data-part='item'][data-status='finish']::after {
+  content: '✓';
+}
+
+.rottay-stepper--modern[data-part='root']:not([data-variant='simple']) [data-part='item'][data-status='error']::after {
+  content: '✕';
+}
+
+/* ---- variant tuning: `simple` strips the circle chrome to bare numbered
+        text; `circles` emphasizes the ring around every indicator. ---- */
+.rottay-stepper--modern[data-part='root'][data-variant='simple'] [data-part='item']::after {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.rottay-stepper--modern[data-part='root'][data-variant='simple'] [data-part='item'][data-status='process']::after {
+  color: var(--ds-stepper-item-color-process-simple, var(--ds-color-primary));
+}
+
+.rottay-stepper--modern[data-part='root'][data-variant='circles'] [data-part='item']::after {
+  box-shadow: 0 0 0 var(--ds-stepper-circles-ring-width, 3px)
+    color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+}
+
+/* ---- the text column (real elements): trigger button OR inert content span. ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='content'],
+.rottay-stepper--modern[data-part='root'] [data-part='trigger'] {
+  grid-row: 2;
+  display: flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-stepper-text-gap, 2px);
+  margin-block-start: var(--ds-stepper-text-margin-block-start, 8px);
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  appearance: none;
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='trigger'] {
+  cursor: pointer;
+  border-radius: var(--ds-radius-md, 10px);
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='icon'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-end: var(--ds-stepper-icon-margin-block-end, 4px);
+  color: var(--ds-stepper-icon-color, var(--ds-color-text-secondary));
 }
 
 .rottay-stepper--modern[data-part='root'] [data-part='label'] {
-  color: var(--ds-color-text-primary);
+  color: var(--ds-stepper-label-color, var(--ds-color-text-primary));
+  font-size: var(--ds-stepper-current-label-font-size);
+  font-weight: var(--ds-stepper-label-font-weight, 500);
+  line-height: 1.3;
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process'] [data-part='label'] {
+  font-weight: var(--ds-stepper-label-font-weight-process, 600);
+}
+
+/* Error parity with the rustic engine: the errored step's label inks red. */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='error'] [data-part='label'] {
+  color: var(--ds-stepper-label-color-error, var(--ds-color-error));
 }
 
 .rottay-stepper--modern[data-part='root'] [data-part='description'] {
-  color: var(--ds-color-text-tertiary);
+  color: var(--ds-stepper-description-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-stepper-current-description-font-size);
+  line-height: 1.4;
+}
+
+/* ---- clickable steps: lift the circle and ink the label on hover. ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover::after {
+  transform: translateY(-1px);
+  box-shadow: var(--ds-shadow-xs);
+}
+
+/* A held press settles the circle back with a tactile dip. */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:active::after {
+  transform: translateY(0) scale(0.96);
+  box-shadow: none;
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover [data-part='label'] {
+  color: var(--ds-stepper-label-color-hover, var(--ds-color-primary));
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- disabled steps dim and refuse interaction. ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-disabled='true']::before,
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-disabled='true']::after,
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='icon'] {
+  opacity: var(--ds-stepper-disabled-opacity, 0.5);
+}
+
+/* Disabled text keeps an AA-legible ink instead of riding the chrome's
+   opacity: measured text-secondary on the page background = 5.33:1
+   (BitHire) / 7.38:1 (TMM); the 0.5-opacity composite measured 3.05:1 and
+   2.04:1 (axe color-contrast, both sources). */
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='label'] {
+  color: var(--ds-stepper-disabled-label-color, var(--ds-color-text-secondary));
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='subtitle'],
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-disabled='true'] [data-part='description'] {
+  color: var(--ds-stepper-disabled-description-color, var(--ds-color-text-secondary));
+}
+
+/* ============================================================================
+   VERTICAL DIRECTION — circle column + text column, connector drops down.
+   ============================================================================ */
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] {
+  flex-direction: column;
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='item'] {
+  grid-template-columns: auto 1fr;
+  grid-template-rows: none;
+  column-gap: var(--ds-stepper-vertical-gap, 12px);
+  justify-items: start;
+  padding-block-end: var(--ds-stepper-vertical-item-gap, 16px);
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='item']:last-child {
+  padding-block-end: 0;
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='item']::after {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='item']::before {
+  inset-block-start: calc(var(--ds-stepper-current-item-size) + 4px);
+  inset-block-end: 2px;
+  inset-inline-start: calc(var(--ds-stepper-current-item-size) / 2 - 1px);
+  inset-inline-end: auto;
+  block-size: auto;
+  inline-size: var(--ds-stepper-connector-width, 2px);
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='content'],
+.rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='trigger'] {
+  grid-column: 2;
+  grid-row: 1;
+  align-items: flex-start;
+  margin-block-start: 0;
+  /* optically centers a single-line label against the circle */
+  padding-block-start: calc((var(--ds-stepper-current-item-size) - 1.3em) / 2);
+  text-align: start;
+}
+
+/* ---- reduced motion: every transition collapses. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-stepper--modern[data-part='root'] [data-part='item']::before,
+  .rottay-stepper--modern[data-part='root'] [data-part='item']::after {
+    transition: none;
+  }
+}
+
+/* ---- coarse pointers: the trigger meets the physical 44px floor. ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-stepper--modern[data-part='root'] [data-part='trigger'] {
+    min-block-size: var(--ds-stepper-touch-target-min, 44px);
+  }
+}
+
+/* ---- forced colors: circle frame, current step, and connector survive.
+        Doubled data-part ties the (0,4,1) border shorthand, later source wins. ---- */
+@media (forced-colors: active) {
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-part='item']::after {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+    background: Canvas;
+    color: ButtonText;
+    box-shadow: none;
+  }
+
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process']::after {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='error']::after {
+    border-color: ButtonText;
+    color: ButtonText;
+  }
+
+  .rottay-stepper--modern[data-part='root'] [data-part='item']::before {
+    background: ButtonText;
+  }
 }

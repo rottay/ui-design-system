@@ -293,7 +293,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Notification rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS). Click each button to trigger a notification.',
+        story: 'Compare the same Notification rendered by Classic (Ant Design), Modern (Rottay-native skin), and Rustic (Vanilla CSS). Click each button to trigger a notification.',
       },
     },
   },

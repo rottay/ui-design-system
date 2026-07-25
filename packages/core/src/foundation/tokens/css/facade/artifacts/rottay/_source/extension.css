@@ -2,56 +2,13 @@
    ROTTAY DARK THEME (default for tenant)
    rottayBrandTheme.chrome (sidebar/layout/table/controls) is single-valued
    and dark-authored; it cannot represent both themes, so palette and chrome
-   for this state are declared extension, alongside the DaisyUI oklch bridge.
+   for this state are declared in this governed extension.
    ============================================ */
 html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   color-scheme: dark;
   color: var(--ds-color-text-primary, #F0F0F0);
 
-  /* Tailwind 4 preflight sets border: 0 solid on *, which defaults
-     border-color to currentColor (= white text on dark bg). Override
-     so borders use the tenant's dark border token instead. */
-  *, ::after, ::before, ::backdrop, ::file-selector-button {
-    border-color: var(--ds-color-border);
-  }
-
-  /* ============================================
-     DaisyUI 5 color bridge (oklch format)
-     Maps Rottay flagship colors to DaisyUI 5's --color-* system.
-     These override DaisyUI's default palette so all components
-     (btn, card, badge, table, etc.) render in the flagship palette.
-
-     For whitelabel: the SystemCssVariablesBridge or ThemeProvider must
-     update these --color-* variables when a tenant changes branding.
-     Hex -> oklch conversion is required at runtime.
-     ============================================ */
-  --color-primary: oklch(100% 0 0);                       /* #FFFFFF white - Rottay signature */
-  --color-primary-content: oklch(14.08% 0.004 286);       /* #0C0C0E canvas */
-  --color-secondary: oklch(68% 0.005 286);                /* #A0A0A5 mid gray */
-  --color-secondary-content: oklch(14.08% 0.004 286);     /* #0C0C0E */
-  --color-accent: oklch(68% 0.005 286);                   /* #A0A0A5 neutral */
-  --color-accent-content: oklch(14.08% 0.004 286);        /* #0C0C0E */
-  --color-neutral: oklch(24% 0.006 286);                  /* #2A2A2F border */
-  --color-neutral-content: oklch(94.5% 0.003 106);        /* #ECECEC */
-  --color-base-100: oklch(14.08% 0.004 286);              /* #0C0C0E canvas */
-  --color-base-200: oklch(16.5% 0.005 286);               /* #131316 shell */
-  --color-base-300: oklch(19% 0.005 286);                 /* #1A1A1E panel */
-  --color-base-content: oklch(94.5% 0.003 106);           /* #ECECEC text */
-  --color-success: oklch(62% 0.19 152);                   /* #22C55E */
-  --color-success-content: oklch(14.08% 0.004 286);
-  --color-warning: oklch(70% 0.16 70);                    /* #F59E0B */
-  --color-warning-content: oklch(14.08% 0.004 286);
-  --color-error: oklch(57% 0.22 25);                      /* #EF4444 */
-  --color-error-content: oklch(94.5% 0.003 106);
-  --color-info: oklch(55% 0.2 264);                       /* #3B82F6 */
-  --color-info-content: oklch(14.08% 0.004 286);
-  --rounded-box: 14px;
-  --rounded-btn: 10px;
-  --rounded-badge: 10px;
-  --animation-btn: 0.18s;
-  --animation-input: 0.18s;
-
-  /* ============================================
+/* ============================================
      1. COLOR PRIMITIVES
      ============================================ */
 
@@ -1609,36 +1566,7 @@ html[data-tenant='rottay'][data-theme='light'],
 html[data-tenant='rottay'].light {
   color-scheme: light;
 
-  /* ============================================
-     DaisyUI 5 color bridge (oklch format) - Light mode
-     ============================================ */
-  --color-primary: oklch(13% 0.004 286);             /* #0A0A0A rich black */
-  --color-primary-content: oklch(99% 0.002 106);     /* #FAFAF9 ivory */
-  --color-secondary: oklch(48% 0.005 286);           /* #6B6B6B graphite */
-  --color-secondary-content: oklch(99% 0.002 106);   /* #FAFAF9 */
-  --color-accent: oklch(48% 0.005 286);              /* #6B6B6B neutral */
-  --color-accent-content: oklch(99% 0.002 106);      /* #FAFAF9 */
-  --color-neutral: oklch(91.5% 0.003 106);           /* #E5E5E3 border */
-  --color-neutral-content: oklch(17% 0.004 286);     /* #1A1A1A */
-  --color-base-100: oklch(98.5% 0.002 106);          /* #FAFAF9 canvas */
-  --color-base-200: oklch(96.5% 0.003 106);          /* #F4F4F3 secondary bg */
-  --color-base-300: oklch(94.5% 0.003 106);          /* #EDEDEC tertiary bg */
-  --color-base-content: oklch(17% 0.004 286);        /* #1A1A1A text */
-  --color-success: oklch(63% 0.17 152);              /* #16A34A */
-  --color-success-content: oklch(99% 0.002 106);
-  --color-warning: oklch(67% 0.15 70);               /* #D97706 */
-  --color-warning-content: oklch(13% 0.004 286);
-  --color-error: oklch(55% 0.2 25);                  /* #DC2626 */
-  --color-error-content: oklch(99% 0.002 106);
-  --color-info: oklch(55% 0.2 264);                  /* #2563EB */
-  --color-info-content: oklch(99% 0.002 106);
-  --rounded-box: 14px;
-  --rounded-btn: 10px;
-  --rounded-badge: 10px;
-  --animation-btn: 0.18s;
-  --animation-input: 0.18s;
-
-  /* ============================================
+/* ============================================
      1. COLOR PRIMITIVES
      ============================================ */
 

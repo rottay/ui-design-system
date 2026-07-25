@@ -58,5 +58,16 @@
   "settings": "Paramètres",
   "help": "Aide",
   "logout": "Déconnexion",
-  "login": "Connexion"
+  "login": "Connexion",
+  "breadcrumb": "Fil d’Ariane",
+  "key_metrics": "Indicateurs clés",
+  "shortcuts": "Raccourcis",
+  "dashboard_status_live": "En direct",
+  "dashboard_status_connected": "Connecté",
+  "dashboard_status_syncing": "Synchronisation",
+  "dashboard_status_offline": "Hors ligne",
+  "dashboard_status_warning": "Avertissement",
+  "show_password": "Afficher le mot de passe",
+  "hide_password": "Masquer le mot de passe",
+  "password_strength": "Robustesse du mot de passe"
 }

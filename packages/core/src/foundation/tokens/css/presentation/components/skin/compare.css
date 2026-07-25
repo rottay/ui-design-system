@@ -1,10 +1,10 @@
 /** CompareSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
 
-.ds-surface.ds-compare .ds-compare__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-compare .ds-compare__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-compare .ds-compare__section-heading[data-part='section-heading'] {
+.ds-surface.ds-compare .ds-compare__section-heading {
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-surface-secondary);
 }

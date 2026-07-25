@@ -3,14 +3,17 @@
  * Colocated with component following approved architecture
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
-import { Grid } from './';
-import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
-import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
-import React from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Grid } from "./";
+import { DesignSystemProvider } from "../../../../infrastructure/runtime/bootstrap";
+import {
+  EngineComparison as EngineComparisonHelper,
+  VariantEngineMatrix,
+} from "../../../../../.storybook/helpers";
+import React from "react";
 
 const meta: Meta<typeof Grid> = {
-  title: 'Primitives/Layout/Grid',
+  title: "Primitives/Layout/Grid",
   component: Grid,
   decorators: [
     (Story) => (
@@ -41,51 +44,57 @@ It supports responsive columns, gap spacing, and advanced grid features.
   },
   argTypes: {
     columns: {
-      control: 'select',
-      options: [1, 2, 3, 4, 5, 6, 12, 'auto'],
-      description: 'Number of columns in the grid',
+      control: "select",
+      options: [1, 2, 3, 4, 5, 6, 12, "auto"],
+      description: "Number of columns in the grid",
     },
     gap: {
-      control: 'select',
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'],
-      description: 'Gap between grid items',
+      control: "select",
+      options: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"],
+      description: "Gap between grid items",
     },
     alignItems: {
-      control: 'select',
-      options: ['start', 'end', 'center', 'stretch', 'baseline'],
-      description: 'Alignment of items along the block axis',
+      control: "select",
+      options: ["start", "end", "center", "stretch", "baseline"],
+      description: "Alignment of items along the block axis",
     },
     justifyItems: {
-      control: 'select',
-      options: ['start', 'end', 'center', 'stretch'],
-      description: 'Alignment of items along the inline axis',
+      control: "select",
+      options: ["start", "end", "center", "stretch"],
+      description: "Alignment of items along the inline axis",
     },
     autoFlow: {
-      control: 'select',
-      options: ['row', 'column', 'dense', 'row dense', 'column dense'],
-      description: 'Auto placement algorithm',
+      control: "select",
+      options: ["row", "column", "dense", "row dense", "column dense"],
+      description: "Auto placement algorithm",
     },
     engine: {
-      control: 'select',
-      options: ['classic', 'modern', 'rustic'],
-      description: 'Rendering engine to use',
+      control: "select",
+      options: ["classic", "modern", "rustic"],
+      description: "Rendering engine to use",
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 };
 
 export default meta;
 type Story = StoryObj<typeof Grid>;
 
 // Helper component for grid items
-const GridItemBox = ({ children, bg = '#3b82f6' }: { children: React.ReactNode; bg?: string }) => (
+const GridItemBox = ({
+  children,
+  bg = "#3b82f6",
+}: {
+  children: React.ReactNode;
+  bg?: string;
+}) => (
   <div
     style={{
-      padding: '16px',
+      padding: "16px",
       background: bg,
-      color: 'white',
-      borderRadius: '8px',
-      textAlign: 'center',
+      color: "white",
+      borderRadius: "8px",
+      textAlign: "center",
       fontWeight: 500,
     }}
   >
@@ -97,7 +106,7 @@ const GridItemBox = ({ children, bg = '#3b82f6' }: { children: React.ReactNode; 
 export const Default: Story = {
   args: {
     columns: 3,
-    gap: 'md',
+    gap: "md",
   },
   render: (args) => (
     <Grid {...args}>
@@ -113,12 +122,14 @@ export const Default: Story = {
 
 // Column variations
 export const ColumnVariations: Story = {
-  name: 'Column Counts',
+  name: "Column Counts",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       {[1, 2, 3, 4, 6, 12].map((cols) => (
         <div key={cols}>
-          <h4 style={{ margin: '0 0 8px 0' }}>{cols} Column{cols > 1 ? 's' : ''}</h4>
+          <h4 style={{ margin: "0 0 8px 0" }}>
+            {cols} Column{cols > 1 ? "s" : ""}
+          </h4>
           <Grid columns={cols as any} gap="sm">
             {Array.from({ length: cols }, (_, i) => (
               <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -132,12 +143,12 @@ export const ColumnVariations: Story = {
 
 // Gap variations
 export const GapVariations: Story = {
-  name: 'Gap Sizes',
+  name: "Gap Sizes",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {(['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const).map((gap) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+      {(["none", "xs", "sm", "md", "lg", "xl", "2xl"] as const).map((gap) => (
         <div key={gap}>
-          <h4 style={{ margin: '0 0 8px 0' }}>gap="{gap}"</h4>
+          <h4 style={{ margin: "0 0 8px 0" }}>gap="{gap}"</h4>
           <Grid columns={4} gap={gap}>
             {Array.from({ length: 4 }, (_, i) => (
               <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -151,11 +162,11 @@ export const GapVariations: Story = {
 
 // Separate row and column gaps
 export const SeparateGaps: Story = {
-  name: 'Row and Column Gaps',
+  name: "Row and Column Gaps",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>columnGap="lg" rowGap="sm"</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>columnGap="lg" rowGap="sm"</h4>
         <Grid columns={3} columnGap="lg" rowGap="sm">
           {Array.from({ length: 6 }, (_, i) => (
             <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -163,7 +174,7 @@ export const SeparateGaps: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>columnGap="sm" rowGap="xl"</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>columnGap="sm" rowGap="xl"</h4>
         <Grid columns={3} columnGap="sm" rowGap="xl">
           {Array.from({ length: 6 }, (_, i) => (
             <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -176,11 +187,11 @@ export const SeparateGaps: Story = {
 
 // Grid.Item spanning
 export const ItemSpanning: Story = {
-  name: 'Grid.Item Spanning',
+  name: "Grid.Item Spanning",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>Column Spanning</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>Column Spanning</h4>
         <Grid columns={4} gap="md">
           <Grid.Item span={2}>
             <GridItemBox bg="#8b5cf6">Span 2</GridItemBox>
@@ -200,11 +211,18 @@ export const ItemSpanning: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>Row Spanning</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>Row Spanning</h4>
         <Grid columns={4} gap="md">
           <Grid.Item rowSpan={2}>
-            <GridItemBox bg="#10b981" style={{ height: '100%' }}>
-              <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <GridItemBox bg="#10b981" style={{ height: "100%" }}>
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 Row Span 2
               </div>
             </GridItemBox>
@@ -235,9 +253,9 @@ export const ItemSpanning: Story = {
 
 // Grid.Item positioning
 export const ItemPositioning: Story = {
-  name: 'Grid.Item Positioning',
+  name: "Grid.Item Positioning",
   render: () => (
-    <Grid columns={4} gap="md" style={{ minHeight: '300px' }}>
+    <Grid columns={4} gap="md" style={{ minHeight: "300px" }}>
       <Grid.Item colStart={1} colEnd={3}>
         <GridItemBox bg="#f59e0b">Col 1-2</GridItemBox>
       </Grid.Item>
@@ -259,11 +277,13 @@ export const ItemPositioning: Story = {
 
 // Template columns
 export const TemplateColumns: Story = {
-  name: 'Template Columns',
+  name: "Template Columns",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>Fixed + Fluid: "200px 1fr 200px"</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>
+          Fixed + Fluid: "200px 1fr 200px"
+        </h4>
         <Grid templateColumns="200px 1fr 200px" gap="md">
           <GridItemBox bg="#ef4444">200px</GridItemBox>
           <GridItemBox bg="#3b82f6">1fr</GridItemBox>
@@ -271,7 +291,9 @@ export const TemplateColumns: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>Auto-fit: "repeat(auto-fit, minmax(150px, 1fr))"</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>
+          Auto-fit: "repeat(auto-fit, minmax(150px, 1fr))"
+        </h4>
         <Grid templateColumns="repeat(auto-fit, minmax(150px, 1fr))" gap="md">
           {Array.from({ length: 6 }, (_, i) => (
             <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -279,7 +301,7 @@ export const TemplateColumns: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>Fractional: "1fr 2fr 1fr"</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>Fractional: "1fr 2fr 1fr"</h4>
         <Grid templateColumns="1fr 2fr 1fr" gap="md">
           <GridItemBox bg="#8b5cf6">1fr</GridItemBox>
           <GridItemBox bg="#ec4899">2fr</GridItemBox>
@@ -292,7 +314,7 @@ export const TemplateColumns: Story = {
 
 // Template areas
 export const TemplateAreas: Story = {
-  name: 'Template Areas',
+  name: "Template Areas",
   render: () => (
     <Grid
       templateColumns="200px 1fr 200px"
@@ -322,11 +344,11 @@ export const TemplateAreas: Story = {
 
 // Auto flow
 export const AutoFlowVariations: Story = {
-  name: 'Auto Flow',
+  name: "Auto Flow",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>autoFlow="row" (default)</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>autoFlow="row" (default)</h4>
         <Grid columns={3} gap="md" autoFlow="row">
           <Grid.Item span={2}>
             <GridItemBox bg="#f59e0b">Span 2</GridItemBox>
@@ -339,7 +361,7 @@ export const AutoFlowVariations: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>autoFlow="dense" (fills gaps)</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>autoFlow="dense" (fills gaps)</h4>
         <Grid columns={3} gap="md" autoFlow="dense">
           <Grid.Item span={2}>
             <GridItemBox bg="#f59e0b">Span 2</GridItemBox>
@@ -352,8 +374,13 @@ export const AutoFlowVariations: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>autoFlow="column"</h4>
-        <Grid columns={3} gap="md" autoFlow="column" templateRows="repeat(3, 60px)">
+        <h4 style={{ margin: "0 0 8px 0" }}>autoFlow="column"</h4>
+        <Grid
+          columns={3}
+          gap="md"
+          autoFlow="column"
+          templateRows="repeat(3, 60px)"
+        >
           {Array.from({ length: 6 }, (_, i) => (
             <Grid.Item key={i}>
               <GridItemBox>{i + 1}</GridItemBox>
@@ -367,21 +394,43 @@ export const AutoFlowVariations: Story = {
 
 // Alignment
 export const AlignmentOptions: Story = {
-  name: 'Alignment',
+  name: "Alignment",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {(['start', 'center', 'end', 'stretch'] as const).map((align) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+      {(["start", "center", "end", "stretch"] as const).map((align) => (
         <div key={align}>
-          <h4 style={{ margin: '0 0 8px 0' }}>alignItems="{align}"</h4>
+          <h4 style={{ margin: "0 0 8px 0" }}>alignItems="{align}"</h4>
           <Grid
             columns={3}
             gap="md"
             alignItems={align}
-            style={{ background: '#f3f4f6', padding: '16px', borderRadius: '8px' }}
+            style={{
+              background: "#f3f4f6",
+              padding: "16px",
+              borderRadius: "8px",
+            }}
           >
-            <div style={{ height: '100px', background: '#3b82f6', borderRadius: '8px' }} />
-            <div style={{ height: '60px', background: '#3b82f6', borderRadius: '8px' }} />
-            <div style={{ height: '80px', background: '#3b82f6', borderRadius: '8px' }} />
+            <div
+              style={{
+                height: "100px",
+                background: "#3b82f6",
+                borderRadius: "8px",
+              }}
+            />
+            <div
+              style={{
+                height: "60px",
+                background: "#3b82f6",
+                borderRadius: "8px",
+              }}
+            />
+            <div
+              style={{
+                height: "80px",
+                background: "#3b82f6",
+                borderRadius: "8px",
+              }}
+            />
           </Grid>
         </div>
       ))}
@@ -391,21 +440,46 @@ export const AlignmentOptions: Story = {
 
 // Justify items
 export const JustifyOptions: Story = {
-  name: 'Justify Items',
+  name: "Justify Items",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {(['start', 'center', 'end', 'stretch'] as const).map((justify) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+      {(["start", "center", "end", "stretch"] as const).map((justify) => (
         <div key={justify}>
-          <h4 style={{ margin: '0 0 8px 0' }}>justifyItems="{justify}"</h4>
+          <h4 style={{ margin: "0 0 8px 0" }}>justifyItems="{justify}"</h4>
           <Grid
             columns={3}
             gap="md"
             justifyItems={justify}
-            style={{ background: '#f3f4f6', padding: '16px', borderRadius: '8px' }}
+            style={{
+              background: "#f3f4f6",
+              padding: "16px",
+              borderRadius: "8px",
+            }}
           >
-            <div style={{ width: '80px', height: '60px', background: '#10b981', borderRadius: '8px' }} />
-            <div style={{ width: '100px', height: '60px', background: '#10b981', borderRadius: '8px' }} />
-            <div style={{ width: '60px', height: '60px', background: '#10b981', borderRadius: '8px' }} />
+            <div
+              style={{
+                width: "80px",
+                height: "60px",
+                background: "#10b981",
+                borderRadius: "8px",
+              }}
+            />
+            <div
+              style={{
+                width: "100px",
+                height: "60px",
+                background: "#10b981",
+                borderRadius: "8px",
+              }}
+            />
+            <div
+              style={{
+                width: "60px",
+                height: "60px",
+                background: "#10b981",
+                borderRadius: "8px",
+              }}
+            />
           </Grid>
         </div>
       ))}
@@ -415,28 +489,49 @@ export const JustifyOptions: Story = {
 
 // Place items
 export const PlaceItems: Story = {
-  name: 'Place Items (center)',
+  name: "Place Items (center)",
   render: () => (
     <Grid
       columns={3}
       gap="md"
       placeItems="center"
       height="300px"
-      style={{ background: '#f3f4f6', borderRadius: '8px' }}
+      style={{ background: "#f3f4f6", borderRadius: "8px" }}
     >
-      <div style={{ width: '80px', height: '80px', background: '#ec4899', borderRadius: '8px' }} />
-      <div style={{ width: '60px', height: '60px', background: '#8b5cf6', borderRadius: '8px' }} />
-      <div style={{ width: '100px', height: '100px', background: '#f59e0b', borderRadius: '8px' }} />
+      <div
+        style={{
+          width: "80px",
+          height: "80px",
+          background: "#ec4899",
+          borderRadius: "8px",
+        }}
+      />
+      <div
+        style={{
+          width: "60px",
+          height: "60px",
+          background: "#8b5cf6",
+          borderRadius: "8px",
+        }}
+      />
+      <div
+        style={{
+          width: "100px",
+          height: "100px",
+          background: "#f59e0b",
+          borderRadius: "8px",
+        }}
+      />
     </Grid>
   ),
 };
 
 // Responsive columns
 export const ResponsiveColumns: Story = {
-  name: 'Responsive Columns',
+  name: "Responsive Columns",
   render: () => (
     <div>
-      <p style={{ marginBottom: '16px', color: '#6b7280' }}>
+      <p style={{ marginBottom: "16px", color: "#6b7280" }}>
         Resize the viewport to see columns change (xs: 1, sm: 2, md: 3, lg: 4)
       </p>
       <Grid columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} gap="md">
@@ -450,15 +545,20 @@ export const ResponsiveColumns: Story = {
 
 // Polymorphic as prop
 export const PolymorphicElement: Story = {
-  name: 'Polymorphic Elements',
+  name: "Polymorphic Elements",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       <Grid as="section" columns={3} gap="md">
         <GridItemBox bg="#fee2e2">as="section"</GridItemBox>
         <GridItemBox bg="#fee2e2">Item 2</GridItemBox>
         <GridItemBox bg="#fee2e2">Item 3</GridItemBox>
       </Grid>
-      <Grid as="ul" columns={3} gap="md" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+      <Grid
+        as="ul"
+        columns={3}
+        gap="md"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
         <Grid.Item as="li">
           <GridItemBox bg="#d1fae5">as="ul" / as="li"</GridItemBox>
         </Grid.Item>
@@ -481,11 +581,12 @@ export const PolymorphicElement: Story = {
  * Side-by-side comparison of Grid across all 3 engines.
  */
 export const CompareEngines: Story = {
-  name: '🔄 Engine Comparison',
+  name: "🔄 Engine Comparison",
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Grid rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story:
+          "Compare the same Grid rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).",
       },
     },
   },
@@ -502,7 +603,7 @@ export const CompareEngines: Story = {
           </>
         ),
         columns: 2,
-        gap: 'md',
+        gap: "md",
       }}
       showDescriptions
       direction="vertical"
@@ -512,11 +613,11 @@ export const CompareEngines: Story = {
 
 // Inline grid
 export const InlineGrid: Story = {
-  name: 'Inline Grid',
+  name: "Inline Grid",
   render: () => (
     <div>
       <p>Text before the grid</p>
-      <Grid inline columns={3} gap="sm" style={{ verticalAlign: 'middle' }}>
+      <Grid inline columns={3} gap="sm" style={{ verticalAlign: "middle" }}>
         <GridItemBox>1</GridItemBox>
         <GridItemBox>2</GridItemBox>
         <GridItemBox>3</GridItemBox>
@@ -528,9 +629,14 @@ export const InlineGrid: Story = {
 
 // Grid item self alignment
 export const GridItemSelfAlignment: Story = {
-  name: 'Grid.Item Self Alignment',
+  name: "Grid.Item Self Alignment",
   render: () => (
-    <Grid columns={4} gap="md" height="200px" style={{ background: '#f3f4f6', borderRadius: '8px' }}>
+    <Grid
+      columns={4}
+      gap="md"
+      height="200px"
+      style={{ background: "#f3f4f6", borderRadius: "8px" }}
+    >
       <Grid.Item alignSelf="start">
         <GridItemBox bg="#ef4444">alignSelf: start</GridItemBox>
       </Grid.Item>
@@ -541,7 +647,17 @@ export const GridItemSelfAlignment: Story = {
         <GridItemBox bg="#10b981">alignSelf: end</GridItemBox>
       </Grid.Item>
       <Grid.Item alignSelf="stretch">
-        <div style={{ height: '100%', background: '#3b82f6', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+        <div
+          style={{
+            height: "100%",
+            background: "#3b82f6",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+          }}
+        >
           alignSelf: stretch
         </div>
       </Grid.Item>
@@ -551,7 +667,7 @@ export const GridItemSelfAlignment: Story = {
 
 // Dashboard layout example
 export const DashboardLayout: Story = {
-  name: 'Dashboard Layout',
+  name: "Dashboard Layout",
   render: () => (
     <Grid
       templateColumns="250px 1fr"
@@ -561,16 +677,35 @@ export const DashboardLayout: Story = {
     >
       {/* Header */}
       <Grid.Item colSpan={2}>
-        <div style={{ height: '100%', background: '#1e40af', borderRadius: '8px', display: 'flex', alignItems: 'center', padding: '0 24px', color: 'white', fontWeight: 600 }}>
+        <div
+          style={{
+            height: "100%",
+            background: "#1e40af",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            padding: "0 24px",
+            color: "white",
+            fontWeight: 600,
+          }}
+        >
           Dashboard Header
         </div>
       </Grid.Item>
 
       {/* Sidebar */}
       <Grid.Item>
-        <div style={{ height: '100%', background: '#4f46e5', borderRadius: '8px', padding: '16px', color: 'white' }}>
-          <div style={{ fontWeight: 600, marginBottom: '16px' }}>Sidebar</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div
+          style={{
+            height: "100%",
+            background: "#4f46e5",
+            borderRadius: "8px",
+            padding: "16px",
+            color: "white",
+          }}
+        >
+          <div style={{ fontWeight: 600, marginBottom: "16px" }}>Sidebar</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div>Dashboard</div>
             <div>Analytics</div>
             <div>Reports</div>
@@ -586,7 +721,17 @@ export const DashboardLayout: Story = {
           <GridItemBox bg="#f59e0b">Card 2</GridItemBox>
           <GridItemBox bg="#ef4444">Card 3</GridItemBox>
           <Grid.Item colSpan={2}>
-            <div style={{ height: '200px', background: '#0ea5e9', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+            <div
+              style={{
+                height: "200px",
+                background: "#0ea5e9",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+              }}
+            >
               Chart Area
             </div>
           </Grid.Item>
@@ -599,24 +744,29 @@ export const DashboardLayout: Story = {
 
 // Card grid example
 export const CardGrid: Story = {
-  name: 'Card Grid',
+  name: "Card Grid",
   render: () => (
     <Grid templateColumns="repeat(auto-fill, minmax(280px, 1fr))" gap="lg">
       {Array.from({ length: 6 }, (_, i) => (
         <div
           key={i}
           style={{
-            background: 'white',
-            borderRadius: '12px',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            overflow: 'hidden',
+            background: "white",
+            borderRadius: "12px",
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+            overflow: "hidden",
           }}
         >
-          <div style={{ height: '160px', background: `hsl(${i * 60}, 70%, 60%)` }} />
-          <div style={{ padding: '16px' }}>
-            <h3 style={{ margin: '0 0 8px 0', fontSize: '18px' }}>Card Title {i + 1}</h3>
-            <p style={{ margin: 0, color: '#6b7280', fontSize: '14px' }}>
-              This is a card description with some sample text to show the layout.
+          <div
+            style={{ height: "160px", background: `hsl(${i * 60}, 70%, 60%)` }}
+          />
+          <div style={{ padding: "16px" }}>
+            <h3 style={{ margin: "0 0 8px 0", fontSize: "18px" }}>
+              Card Title {i + 1}
+            </h3>
+            <p style={{ margin: 0, color: "#6b7280", fontSize: "14px" }}>
+              This is a card description with some sample text to show the
+              layout.
             </p>
           </div>
         </div>
@@ -627,11 +777,11 @@ export const CardGrid: Story = {
 
 // Numeric gap values
 export const NumericGap: Story = {
-  name: 'Numeric Gap (Pixels)',
+  name: "Numeric Gap (Pixels)",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>gap={8} (8px)</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>gap={8} (8px)</h4>
         <Grid columns={4} gap={8}>
           {Array.from({ length: 4 }, (_, i) => (
             <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -639,7 +789,7 @@ export const NumericGap: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>gap={24} (24px)</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>gap={24} (24px)</h4>
         <Grid columns={4} gap={24}>
           {Array.from({ length: 4 }, (_, i) => (
             <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -647,7 +797,9 @@ export const NumericGap: Story = {
         </Grid>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0' }}>columnGap={48} rowGap={8}</h4>
+        <h4 style={{ margin: "0 0 8px 0" }}>
+          columnGap={48} rowGap={8}
+        </h4>
         <Grid columns={4} columnGap={48} rowGap={8}>
           {Array.from({ length: 8 }, (_, i) => (
             <GridItemBox key={i}>{i + 1}</GridItemBox>
@@ -660,10 +812,10 @@ export const NumericGap: Story = {
 
 // Using spacing alias
 export const SpacingAlias: Story = {
-  name: 'Spacing Alias',
+  name: "Spacing Alias",
   render: () => (
     <div>
-      <p style={{ marginBottom: '16px', color: '#6b7280' }}>
+      <p style={{ marginBottom: "16px", color: "#6b7280" }}>
         The "spacing" prop is an alias for "gap"
       </p>
       <Grid columns={4} spacing="xl">
@@ -672,5 +824,43 @@ export const SpacingAlias: Story = {
         ))}
       </Grid>
     </div>
+  ),
+};
+
+/** Modern contract stress: auto-fit tracks and intrinsic-overflow resistance. */
+export const ModernAutoFitStress: Story = {
+  name: "Modern · auto-fit + long copy",
+  render: () => (
+    <Grid
+      engine="modern"
+      role="list"
+      aria-label="Decision evidence"
+      minColumnWidth="17rem"
+      gap="md"
+      overflow="clip"
+      motion="rearrange"
+      style={{ width: "100%" }}
+    >
+      {[
+        "Verified portfolio evidence with a deliberately long unbroken-reference-identifier-2026",
+        "Compensation, availability and work authorization",
+        "المقابلة التالية والتوصية المبنية على الأدلة",
+      ].map((label, index) => (
+        <Grid.Item
+          key={label}
+          role="listitem"
+          dir={index === 2 ? "rtl" : "ltr"}
+          style={{
+            padding: "var(--ds-spacing-4)",
+            border: "1px solid var(--ds-color-border-subtle)",
+            borderRadius: "var(--ds-radius-lg)",
+            background: "var(--ds-surface-card)",
+            overflowWrap: "anywhere",
+          }}
+        >
+          {label}
+        </Grid.Item>
+      ))}
+    </Grid>
   ),
 };

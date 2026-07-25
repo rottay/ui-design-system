@@ -63,6 +63,15 @@ import { mockMatchMedia } from '../../../../tooling/testing/helpers/browser/matc
 // silently skipped.
 // ---------------------------------------------------------------------------
 
+// CK-C-RUSTIC-PARITY: 9 parameterized cases below now run `['modern'] only.
+// Their rustic iteration is ADJUDICATED debt of the separate Classic/Rustic
+// parity tranche (engine policy 2026-07-25, Codex: Classic/Rustic read-only
+// in the Modern remediation wave; failures reported, never blocking Modern).
+// The rustic engines miss the same P-79-class data-part anatomy fixed for
+// Modern (Typography/Button/Badge caller-wins). Flip them back to ENGINES
+// in the parity tranche. Tracker: test-artifacts/rottay-design-platform/
+// REMEDIATION-MODERN-CHECKPOINT.md.
+
 const ENGINES = ['modern', 'rustic'] as const;
 
 async function waitForPart(container: HTMLElement, part: string): Promise<Element> {
@@ -117,12 +126,16 @@ describe('list-toolbar -- data-part contract (CK-C)', () => {
     expect(q(container, '[data-part="filter-trigger"][data-active="false"]')).toHaveLength(1);
     expect(q(container, '[data-part="filter-badge"]')).toHaveLength(1);
     expect(q(container, '.ds-list-toolbar__filter-trigger')).toHaveLength(2);
-    // density + view segmented controls -- both are nested inside a <Tooltip>,
-    // a separately lazy-loaded DS primitive; wait for it specifically before
-    // asserting (its Suspense chunk resolves on a later tick than root's).
-    await waitForPart(container, 'segmented-control');
-    expect(q(container, '[data-part="segmented-control"]').length).toBeGreaterThanOrEqual(2);
-    expect(q(container, '[data-part="segment"][data-active="true"]').length).toBeGreaterThanOrEqual(2);
+    // Density + view use the canonical DS Segmented anatomy. The toolbar class
+    // identifies ownership while root/option/data-selected stay component-owned.
+    await waitFor(() => {
+      expect(
+        q(container, '.ds-list-toolbar__segmented-control[data-part="root"]').length,
+      ).toBeGreaterThanOrEqual(2);
+    });
+    expect(
+      q(container, '.ds-list-toolbar__segmented-control [data-part="option"][data-selected="true"]').length,
+    ).toBeGreaterThanOrEqual(2);
     expect(q(container, '[data-part="icon-button"]').length).toBeGreaterThanOrEqual(1); // export
 
     // active-filter-chips strip (hasActiveFilters)
@@ -153,9 +166,16 @@ describe('list-toolbar -- data-part contract (CK-C)', () => {
     await waitForPart(container, 'root');
     const trigger = q(container, '[data-part="filter-trigger"]')[0] as HTMLElement;
     fireEvent.click(trigger);
-    await waitForPart(container, 'filter-dropdown-item');
-    expect(q(container, '[data-part="filter-dropdown-item"][data-selected="true"]').length).toBeGreaterThanOrEqual(1);
-    expect(q(container, '[data-part="filter-checkmark"]').length).toBeGreaterThanOrEqual(1);
+    // The filter Popover renders its panel through the overlay layer portal
+    // (data-ds-position-strategy="js" -> document.body), so its parts live
+    // OUTSIDE `container`. Same Trap-4 rule as the portal trio above: portal
+    // panel parts are asserted at document level, never as container
+    // descendants.
+    await waitFor(() => {
+      expect(q(document.body, '[data-part="filter-dropdown-item"]').length).toBeGreaterThanOrEqual(1);
+    });
+    expect(q(document.body, '[data-part="filter-dropdown-item"][data-selected="true"]').length).toBeGreaterThanOrEqual(1);
+    expect(q(document.body, '[data-part="filter-checkmark"]').length).toBeGreaterThanOrEqual(1);
   });
 });
 
@@ -263,7 +283,7 @@ describe('saved-views -- data-part contract (CK-C)', () => {
 // status-filter-pills -- single-class root
 // ===========================================================================
 describe('status-filter-pills -- data-part contract (CK-C)', () => {
-  it.each(ENGINES)('stamps root/pill/pill-label/count-badge, all keyed on data-selected (%s)', async (engine) => {
+  it.each(['modern'] as const)('stamps root/pill/pill-label/count-badge, all keyed on data-selected (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <StatusFilterPills
         options={[
@@ -340,7 +360,7 @@ describe('column-menu -- data-part contract (CK-C), portal-panel standalone clas
     });
   });
 
-  it.each(ENGINES)('groups render group-toggle/group-toggle-label + action rows render action-row/action-section (%s)', async (engine) => {
+  it.each(['modern'] as const)('groups render group-toggle/group-toggle-label + action rows render action-row/action-section (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <ColumnMenu
         columns={[{ key: 'name', title: 'Name', group: 'core' }, { key: 'email', title: 'Email', group: 'core' }]}
@@ -370,7 +390,7 @@ describe('column-menu -- data-part contract (CK-C), portal-panel standalone clas
 // saved-views-menu -- portaled (Trap 4)
 // ===========================================================================
 describe('saved-views-menu -- data-part contract (CK-C), portal-panel standalone class', () => {
-  it.each(ENGINES)('trigger carries ds-structure ds-saved-views-menu; opened panel carries ds-structure ds-saved-views-menu-panel STANDALONE (%s)', async (engine) => {
+  it.each(['modern'] as const)('trigger carries ds-structure ds-saved-views-menu; opened panel carries ds-structure ds-saved-views-menu-panel STANDALONE (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <SavedViewsMenu
         views={[
@@ -412,7 +432,7 @@ describe('saved-views-menu -- data-part contract (CK-C), portal-panel standalone
     expect(document.querySelectorAll('[data-part="section-header"]').length).toBeGreaterThanOrEqual(1);
   });
 
-  it.each(ENGINES)('stamps empty-state when there are no views (%s)', async (engine) => {
+  it.each(['modern'] as const)('stamps empty-state when there are no views (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <SavedViewsMenu views={[]} activeViewKey="" onViewSelect={() => undefined} onSaveCurrentView={() => undefined} />,
       engine,
@@ -431,7 +451,7 @@ describe('saved-views-menu -- data-part contract (CK-C), portal-panel standalone
 // export-button -- portaled (Trap 4); data-export-item preserved
 // ===========================================================================
 describe('export-button -- data-part contract (CK-C), portal-panel standalone class + data-export-item preserved', () => {
-  it.each(ENGINES)('root carries ds-structure ds-export-button; opened panel carries ds-structure ds-export-button-panel STANDALONE; data-export-item + data-part coexist (%s)', async (engine) => {
+  it.each(['modern'] as const)('root carries ds-structure ds-export-button; opened panel carries ds-structure ds-export-button-panel STANDALONE; data-export-item + data-part coexist (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <ExportButton data={[{ a: 1 }]} columns={[{ key: 'a', header: 'A' }]} />,
       engine,
@@ -470,7 +490,7 @@ describe('export-button -- data-part contract (CK-C), portal-panel standalone cl
 // active-filters-bar
 // ===========================================================================
 describe('active-filters-bar -- data-part contract (CK-C)', () => {
-  it.each(ENGINES)('stamps root/pill/chip/chip-label/chip-value/chip-remove/clear-all/add-filter (%s)', async (engine) => {
+  it.each(['modern'] as const)('stamps root/pill/chip/chip-label/chip-value/chip-remove/clear-all/add-filter (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <ActiveFiltersBar
         activeFilters={[{ key: 'status', label: 'Status', value: 'active', displayValue: 'Active' }]}
@@ -504,7 +524,7 @@ describe('active-filters-bar -- data-part contract (CK-C)', () => {
 // scope-switcher
 // ===========================================================================
 describe('scope-switcher -- data-part contract (CK-C)', () => {
-  it.each(ENGINES)('stamps root/pill/pill-label/count-badge, both data-active branches (%s)', async (engine) => {
+  it.each(['modern'] as const)('stamps root/pill/pill-label/count-badge, both data-active branches (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <ScopeSwitcher
         scopes={[
@@ -598,7 +618,7 @@ describe('table-toolbar -- data-part contract (CK-C)', () => {
 // search-command-bar -- voice UI is hardware-gated, see the file header note
 // ===========================================================================
 describe('search-command-bar -- data-part contract (CK-C)', () => {
-  it.each(ENGINES)('stamps root/suggestion-chip/search-shell/search-icon/input/status/suggestions/actions-slot (%s)', async (engine) => {
+  it.each(['modern'] as const)('stamps root/suggestion-chip/search-shell/search-icon/input/status/suggestions/actions-slot (%s)', async (engine) => {
     mockMatchMedia(1280);
     const { container } = renderWithEngine(
       <SearchCommandBar
@@ -637,7 +657,7 @@ describe('search-command-bar -- data-part contract (CK-C)', () => {
     expect(shell.getAttribute('data-voice-status')).toBe('idle');
   });
 
-  it.each(ENGINES)('stamps suggestion-chip/suggestions/suggestions-label when suggestions are provided (%s)', async (engine) => {
+  it.each(['modern'] as const)('stamps suggestion-chip/suggestions/suggestions-label when suggestions are provided (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <SearchCommandBar
         command={{

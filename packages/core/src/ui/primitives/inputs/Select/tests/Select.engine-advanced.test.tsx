@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
 
@@ -112,11 +112,20 @@ describe('Select advanced engine coverage', () => {
       'modern'
     );
 
+    // The DesignSystemProvider stamps locale/tenant attributes on
+    // documentElement from passive effects that resolve after render's act
+    // scope; the custom dropdown's portal-scope observer re-syncs on those
+    // mutations. Drain that boot inside act so the re-sync does not land as an
+    // unwrapped update (same drain idiom as ListToolbar.behavior).
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
     const trigger = await screen.findByText('Search records');
     expect(trigger).toBeTruthy();
 
     fireEvent.click(trigger!);
-    const searchInput = await screen.findByPlaceholderText('Search records');
+    const searchInput = await screen.findByPlaceholderText('Search...');
 
     fireEvent.change(searchInput, { target: { value: 'zzz' } });
     expect(handleSearch).toHaveBeenCalledWith('zzz');
@@ -131,7 +140,7 @@ describe('Select advanced engine coverage', () => {
       expect(handleChange).toHaveBeenCalled();
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /clear selection/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^clear selection$/i }));
     await waitFor(() => {
       expect(handleChange.mock.calls.length).toBeGreaterThanOrEqual(3);
     });
@@ -155,6 +164,13 @@ describe('Select advanced engine coverage', () => {
     fireEvent.click(lockedTrigger);
     expect(within(lockedRender.container).queryByPlaceholderText('Locked records')).not.toBeInTheDocument();
     lockedRender.unmount();
+
+    // The locked render mounts a second DesignSystemProvider that re-stamps
+    // documentElement; the first select's portal-scope observer re-syncs on
+    // those mutations. Drain the delivery inside act (same idiom as above).
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
   });
 
   it('covers rustic single-select branches for hidden inputs, filled styling, maxTagCount, and loading/disabled guards', async () => {
@@ -251,7 +267,7 @@ describe('Select advanced engine coverage', () => {
     fireEvent.keyDown(trigger, { key: 'End' });
     fireEvent.keyDown(trigger, { key: 'Home' });
 
-    const searchInput = await screen.findByPlaceholderText('Grouped options');
+    const searchInput = await screen.findByPlaceholderText('Search...');
     fireEvent.change(searchInput, { target: { value: 'Bravo,' } });
 
     await waitFor(() => {
@@ -261,7 +277,7 @@ describe('Select advanced engine coverage', () => {
       );
     });
     expect(handleSearch).toHaveBeenLastCalledWith('');
-    expect(screen.getByText('Bravo')).toBeInTheDocument();
+    expect(screen.getAllByText('Bravo').length).toBeGreaterThan(0);
 
     fireEvent.keyDown(trigger, { key: 'Escape' });
     await waitFor(() => {

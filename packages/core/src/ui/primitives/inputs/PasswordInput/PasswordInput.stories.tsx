@@ -28,9 +28,9 @@ A password input component with visibility toggle and optional strength indicato
 
 | Feature | Classic | Modern | Rustic |
 |---------|---------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | DS tokens (skin-painted) | Vanilla CSS |
 | Toggle | Built-in | Custom button | Custom button |
-| Strength Bar | Custom | Custom | Custom |
+| Strength Bar | Custom | Custom (data-strength) | Custom |
 `,
       },
     },
@@ -104,5 +104,34 @@ export const CompareEngines: Story = {
       props={{ placeholder: 'Enter password', strengthIndicator: true, strengthLevel: 'good' }}
       showDescriptions
     />
+  ),
+};
+
+export const ModernStateMatrix: Story = {
+  name: 'Modern State Matrix',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 360 }}>
+      <PasswordInput engine="modern" placeholder="Rest" />
+      <PasswordInput engine="modern" defaultValue="filled-value" placeholder="Filled" />
+      <PasswordInput
+        engine="modern"
+        defaultValue="short"
+        error
+        errorMessage="Password must be at least 8 characters and include one number, one uppercase letter, and one special symbol."
+      />
+      <PasswordInput engine="modern" defaultValue="locked" readOnly />
+      <PasswordInput engine="modern" defaultValue="disabled" disabled />
+      <PasswordInput engine="modern" placeholder="Strength" strengthIndicator strengthLevel="fair" defaultValue="fair-pass" />
+      <PasswordInput engine="modern" size="xs" placeholder="XS" />
+      <PasswordInput engine="modern" size="xl" placeholder="XL" />
+      <div dir="rtl" lang="ar">
+        <PasswordInput
+          engine="modern"
+          defaultValue="كلمة-سر"
+          error
+          errorMessage="كلمة المرور قصيرة جداً ويجب أن تحتوي على ثمانية أحرف على الأقل مع رقم ورمز خاص"
+        />
+      </div>
+    </div>
   ),
 };

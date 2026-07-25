@@ -1,126 +1,348 @@
-/**
- * Input compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Covers the four Input compounds (Addon, Password toggle, Search button,
- * TextArea), each a structurally separate render tree with its own tokens; none
- * is wired into the Input engine, so each carries its own scope here.
- *
- * SCOPES:
- *  - Addon: `.rottay-input-addon.ds-input-addon[data-part='root']`, plus
- *    `data-variant` ('default'|'transparent') added for this migration.
- *  - Password/Search buttons render INSIDE a BaseInput shell as affix slots, so
- *    they are reached as `.rottay-input [data-part='visibility-toggle'|
- *    'search-button']` (descendants of the shared `rottay-input` shell class).
- *  - TextArea: root `.rottay-textarea.ds-input-textarea[data-part='root']` with
- *    the existing rendered classes `rottay-textarea--<variant>` /
- *    `--focused` / `--error`; the `<textarea>` is `[data-part='control']`,
- *    with `count` / `error-message` siblings.
- *
- * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via the two root
- * classes + a variant/state class (or the repeated data-part). Non-border paint
- * wins unlayered at (0,3,0) or higher.
- */
+/** Input compounds: shared public anatomy for Group, Addon and TextArea. */
 
-/* Input.Group ------------------------------------------------------------- */
-/* The old cloneElement mutations deliberately overrode a child's own inline
-   radii. Author-important rules preserve that precedence exactly. */
-.rottay-input-group[data-compact='true'] > :first-child:not(:last-child) {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-.rottay-input-group[data-compact='true'] > :last-child:not(:first-child) {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-}
-.rottay-input-group[data-compact='true'] > :not(:first-child):not(:last-child) {
-  border-top-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
+/* Group ------------------------------------------------------------------ */
+.rottay-input-group[data-part='group'] {
+  display: flex;
+  align-items: stretch;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: var(--ds-input-group-gap-separated, var(--ds-spacing-2));
 }
 
-/* Addon ------------------------------------------------------------------- */
+.rottay-input-group[data-part='group'] > * {
+  min-inline-size: 0;
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] {
+  gap: var(--ds-input-group-gap, 0);
+  flex-wrap: nowrap;
+}
+
+.rottay-input-group[data-part='group'][data-compact='false'] {
+  flex-wrap: wrap;
+}
+
+.rottay-input-group[data-part='group'][data-compact='false'] > * {
+  flex: 1 1 var(--ds-input-group-min-item-width, 12rem);
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > :not(:first-child) {
+  margin-inline-start: var(--ds-input-group-overlap, -1px);
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > *:focus-within {
+  position: relative;
+  z-index: var(--ds-input-group-focus-z, 1);
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > :first-child:not(:last-child),
+.rottay-input-group[data-part='group'][data-compact='true'] > :first-child:not(:last-child) .rottay-input[data-part='root'] {
+  border-start-end-radius: 0 !important;
+  border-end-end-radius: 0 !important;
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > :last-child:not(:first-child),
+.rottay-input-group[data-part='group'][data-compact='true'] > :last-child:not(:first-child) .rottay-input[data-part='root'] {
+  border-start-start-radius: 0 !important;
+  border-end-start-radius: 0 !important;
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > :not(:first-child):not(:last-child),
+.rottay-input-group[data-part='group'][data-compact='true'] > :not(:first-child):not(:last-child) .rottay-input[data-part='root'] {
+  border-radius: 0 !important;
+}
+
+/* Addon ------------------------------------------------------------------ */
 .rottay-input-addon.ds-input-addon[data-part='root'] {
-  background-color: var(--ds-color-bg-secondary);
-  border-radius: 6px;
-  color: var(--ds-color-text-secondary);
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--ds-input-addon-padding-x);
+  color: var(--ds-input-addon-color, var(--ds-color-text-secondary));
+  background: var(--ds-input-addon-bg, var(--ds-surface-inset));
+  /* P-48: width/style ride this base (0,3,0) rule; the COLOR lives on the
+     doubled-anatomy booster below at (0,4,0) so it clears the tenant
+     `html[data-tenant]:not([data-theme]):not(.light) *` border floor (0,3,1). */
+  border-width: var(--ds-input-border-width, 1px);
+  border-style: var(--ds-input-border-style, solid);
+  border-radius: var(--ds-input-addon-radius, var(--ds-radius-input));
+  font-family: var(--ds-input-font-family, inherit);
+  font-weight: var(--ds-input-addon-font-weight, var(--ds-font-weight-medium));
+  letter-spacing: var(--ds-input-letter-spacing, normal);
+  white-space: nowrap;
+  transition:
+    color var(--ds-input-transition-duration) var(--ds-input-transition-timing),
+    background-color var(--ds-input-transition-duration) var(--ds-input-transition-timing),
+    border-color var(--ds-input-transition-duration) var(--ds-input-transition-timing);
 }
-.rottay-input-addon.ds-input-addon[data-part='root'][data-variant='transparent'] {
-  background-color: transparent;
-}
+
+/* Contractual P-48 booster: doubling the anatomy anchor reaches (0,4,0). */
 .rottay-input-addon.ds-input-addon[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  border-color: var(--ds-input-addon-border, var(--ds-input-border));
 }
 
-/* Password toggle + Search button ----------------------------------------- */
-.rottay-input [data-part='visibility-toggle'] {
-  background: none;
-  border: none;
-  color: var(--ds-input-addon-color);
-}
-.rottay-input [data-part='search-button'] {
-  background: none;
-  border: none;
-  color: var(--ds-input-search-icon-color, var(--ds-search-icon-color, var(--ds-input-border-focus)));
+.rottay-input-addon.ds-input-addon[data-part='root'][data-variant='transparent'] {
+  background: transparent;
+  border-color: transparent;
 }
 
-/* TextArea ---------------------------------------------------------------- */
-.rottay-textarea.ds-input-textarea [data-part='control'] {
-  background-color: transparent;
-  border-radius: 6px;
-  outline: none;
+.rottay-input-addon.ds-input-addon[data-part='root'][data-size='xs'] {
+  block-size: var(--ds-input-xs-height); font-size: var(--ds-input-xs-font-size);
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-size='sm'] {
+  block-size: var(--ds-input-sm-height); font-size: var(--ds-input-sm-font-size);
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-size='md'] {
+  block-size: var(--ds-input-md-height); font-size: var(--ds-input-md-font-size);
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-size='lg'] {
+  block-size: var(--ds-input-lg-height); font-size: var(--ds-input-lg-font-size);
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-size='xl'] {
+  block-size: var(--ds-input-xl-height); font-size: var(--ds-input-xl-font-size);
+}
+
+/* TextArea --------------------------------------------------------------- */
+.rottay-textarea.ds-input-textarea[data-part='root'] {
+  position: relative;
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: var(--ds-input-message-gap, var(--ds-spacing-1));
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control'] {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--ds-textarea-min-height);
+  max-block-size: var(--ds-textarea-max-height);
+  padding: var(--ds-textarea-padding-y, var(--ds-input-md-padding-y)) var(--ds-textarea-padding-x, var(--ds-input-md-padding-x));
+  resize: var(--ds-textarea-resize, vertical);
+  color: var(--ds-input-color);
+  caret-color: var(--ds-input-caret-color);
+  background: var(--ds-input-bg);
+  border: var(--ds-input-border-width, 1px) var(--ds-input-border-style, solid) var(--ds-input-border);
+  border-radius: var(--ds-textarea-radius, var(--ds-radius-input));
+  box-shadow: var(--ds-input-shadow-rest, none), var(--ds-input-inset-shadow, none);
+  font-family: var(--ds-input-font-family, inherit);
+  font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
+  letter-spacing: var(--ds-input-letter-spacing, normal);
+  line-height: var(--ds-input-md-line-height);
+  outline: 0;
+  transition:
+    border-color var(--ds-input-transition-duration) var(--ds-input-transition-timing),
+    background-color var(--ds-input-transition-duration) var(--ds-input-transition-timing),
+    box-shadow var(--ds-input-transition-duration) var(--ds-input-transition-timing);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control']::selection {
+  color: var(--ds-input-selection-color, var(--ds-input-color));
+  background: var(--ds-input-selection-bg, Highlight);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-resize='none'] [data-part='control'] {
+  --ds-textarea-resize: none;
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-resize='vertical'] [data-part='control'] { resize: vertical; }
+.rottay-textarea.ds-input-textarea[data-part='root'][data-resize='horizontal'] [data-part='control'] { resize: horizontal; }
+.rottay-textarea.ds-input-textarea[data-part='root'][data-resize='both'] [data-part='control'] { resize: both; }
+.rottay-textarea.ds-input-textarea[data-part='root'][data-resize='block'] [data-part='control'] { resize: block; }
+.rottay-textarea.ds-input-textarea[data-part='root'][data-resize='inline'] [data-part='control'] { resize: inline; }
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-size='xs']:not([data-size-responsive]) [data-part='control'] {
+  padding: var(--ds-input-xs-padding-y) var(--ds-input-xs-padding-x);
+  font-size: var(--ds-input-xs-font-size);
+  line-height: var(--ds-input-xs-line-height);
+}
+.rottay-textarea.ds-input-textarea[data-part='root'][data-size='sm']:not([data-size-responsive]) [data-part='control'] {
+  padding: var(--ds-input-sm-padding-y) var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+  line-height: var(--ds-input-sm-line-height);
+}
+.rottay-textarea.ds-input-textarea[data-part='root'][data-size='md']:not([data-size-responsive]) [data-part='control'] {
+  padding: var(--ds-input-md-padding-y) var(--ds-input-md-padding-x);
+  font-size: var(--ds-input-md-font-size);
+  line-height: var(--ds-input-md-line-height);
+}
+.rottay-textarea.ds-input-textarea[data-part='root'][data-size='lg']:not([data-size-responsive]) [data-part='control'] {
+  padding: var(--ds-input-lg-padding-y) var(--ds-input-lg-padding-x);
+  font-size: var(--ds-input-lg-font-size);
+  line-height: var(--ds-input-lg-line-height);
+}
+.rottay-textarea.ds-input-textarea[data-part='root'][data-size='xl']:not([data-size-responsive]) [data-part='control'] {
+  padding: var(--ds-input-xl-padding-y) var(--ds-input-xl-padding-x);
+  font-size: var(--ds-input-xl-font-size);
+  line-height: var(--ds-input-xl-line-height);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-variant='filled'] [data-part='control'] {
+  background: var(--ds-input-filled-bg, var(--ds-surface-inset));
+  border-color: var(--ds-input-filled-border, transparent);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-variant='flushed'] [data-part='control'] {
+  padding-inline: 0;
+  background: transparent;
+  border-width: 0 0 var(--ds-input-border-width, 1px);
+  border-radius: 0;
   box-shadow: none;
 }
-.rottay-textarea.ds-input-textarea.rottay-textarea--filled [data-part='control'] {
-  background-color: var(--ds-color-bg-secondary);
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--flushed [data-part='control'] {
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-variant='unstyled'] [data-part='control'] {
+  padding: 0;
+  background: transparent;
+  border: 0;
   border-radius: 0;
+  box-shadow: none;
 }
 
-/* border box: outline/filled full 1px (color error>focus>neutral); unstyled
-   none; flushed suppresses sides and keeps a bottom edge that thickens on focus. */
-.rottay-textarea.ds-input-textarea:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled) [data-part='control'] {
-  border: 1px solid var(--ds-color-border-secondary);
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--focused:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled):not(.rottay-textarea--error) [data-part='control'] {
-  border-color: var(--ds-color-primary);
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--error:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled) [data-part='control'] {
-  border-color: var(--ds-color-error);
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--unstyled [data-part='control'] {
-  border: none;
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--flushed [data-part='control'] {
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-bottom: 1px solid var(--ds-color-border-secondary);
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--focused [data-part='control'] {
-  border-bottom-width: 2px;
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--focused:not(.rottay-textarea--error) [data-part='control'] {
-  border-bottom-color: var(--ds-color-primary);
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--error [data-part='control'] {
-  border-bottom-color: var(--ds-color-error);
+.rottay-textarea.ds-input-textarea[data-part='root']:not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):hover [data-part='control'] {
+  background: var(--ds-input-bg-hover, var(--ds-input-bg));
+  border-color: var(--ds-input-border-hover);
+  box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest, none)), var(--ds-input-inset-shadow, none);
 }
 
-/* focus/error ring, suppressed on unstyled (error ring wins over focus). */
-.rottay-textarea.ds-input-textarea.rottay-textarea--focused:not(.rottay-textarea--error):not(.rottay-textarea--unstyled) [data-part='control'] {
-  box-shadow: 0 0 0 2px var(--ds-color-alpha-primary-20);
-}
-.rottay-textarea.ds-input-textarea.rottay-textarea--error:not(.rottay-textarea--unstyled) [data-part='control'] {
-  box-shadow: 0 0 0 2px var(--ds-color-alpha-error-20);
+.rottay-textarea.ds-input-textarea.rottay-textarea--focused[data-part='root']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) [data-part='control'] {
+  background: var(--ds-input-bg-focus, var(--ds-input-bg));
+  border-color: var(--ds-input-border-focus);
+  box-shadow: var(--ds-input-shadow-focus);
 }
 
-.rottay-textarea.ds-input-textarea [data-part='count'] {
-  color: var(--ds-color-text-muted);
+.rottay-textarea.ds-input-textarea[data-part='root'][data-invalid='true'] [data-part='control'] {
+  background: var(--ds-input-error-bg, var(--ds-input-bg));
+  border-color: var(--ds-input-error-border);
 }
-.rottay-textarea.ds-input-textarea.rottay-textarea--error [data-part='count'] {
-  color: var(--ds-color-error);
+.rottay-textarea.ds-input-textarea.rottay-textarea--focused[data-part='root'][data-invalid='true'] [data-part='control'] {
+  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-input-shadow-focus));
 }
-.rottay-textarea.ds-input-textarea [data-part='error-message'] {
-  color: var(--ds-color-error);
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-warning='true'] [data-part='control'] {
+  background: var(--ds-input-warning-bg, var(--ds-input-bg));
+  border-color: var(--ds-input-warning-border);
+}
+.rottay-textarea.ds-input-textarea[data-part='root'][data-success='true'] [data-part='control'] {
+  background: var(--ds-input-success-bg, var(--ds-input-bg));
+  border-color: var(--ds-input-success-border);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-readonly='true'] [data-part='control'] {
+  color: var(--ds-input-readonly-color);
+  background: var(--ds-input-readonly-bg);
+  border-color: var(--ds-input-readonly-border);
+  border-style: var(--ds-input-readonly-border-style);
+  cursor: var(--ds-input-readonly-cursor);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-disabled='true'] [data-part='control'] {
+  color: var(--ds-input-color-disabled);
+  background: var(--ds-input-bg-disabled);
+  border-color: var(--ds-input-border-disabled);
+  cursor: var(--ds-input-disabled-cursor);
+  opacity: var(--ds-input-disabled-opacity);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'][data-loading='true'] [data-part='control'] {
+  padding-inline-end: calc(var(--ds-textarea-padding-x) + var(--ds-input-loading-size) + var(--ds-input-gap));
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='loading-indicator'] {
+  position: absolute;
+  inset-block-start: var(--ds-textarea-padding-y);
+  inset-inline-end: var(--ds-textarea-padding-x);
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--ds-input-loading-size);
+  block-size: var(--ds-input-loading-size);
+  color: var(--ds-input-loading-color);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='loading-indicator'] svg {
+  inline-size: 100%;
+  block-size: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--ds-input-loading-stroke);
+  animation: ds-input-compound-spin var(--ds-input-loading-duration) linear infinite;
+}
+
+@keyframes ds-input-compound-spin { to { transform: rotate(1turn); } }
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'],
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='error-message'] {
+  margin: 0;
+  font-size: var(--ds-input-helper-font-size);
+  line-height: var(--ds-input-helper-line-height);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'] {
+  justify-self: end;
+  color: var(--ds-input-count-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'][data-count-state='warning'] {
+  color: var(--ds-input-count-color-warning);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'][data-count-state='limit'] {
+  color: var(--ds-input-count-color-warning);
+  font-weight: var(--ds-input-count-limit-font-weight, var(--ds-font-weight-semibold));
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'][data-count-state='error'] {
+  color: var(--ds-input-count-color-error);
+}
+
+.rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='error-message'] {
+  color: var(--ds-input-error-message-color, var(--ds-input-error-color));
+  font-weight: var(--ds-input-error-message-font-weight);
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+@container (inline-size < 18rem) {
+  .rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'] {
+    justify-self: start;
+  }
+}
+
+@media (pointer: coarse) {
+  .rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control'] {
+    min-block-size: max(var(--ds-textarea-min-height), var(--ds-input-touch-target-min));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-input-addon.ds-input-addon[data-part='root'],
+  .rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control'] {
+    transition-duration: 0.01ms;
+  }
+
+  .rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='loading-indicator'] svg {
+    animation-duration: 1.8s;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-input-addon.ds-input-addon[data-part='root'],
+  .rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control'] {
+    background: Field;
+    color: FieldText;
+    border-color: ButtonText;
+  }
+
+  .rottay-textarea.ds-input-textarea[data-part='root'].rottay-textarea--focused [data-part='control'] {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .rottay-textarea.ds-input-textarea[data-part='root'][data-disabled='true'] [data-part='control'] {
+    color: GrayText;
+    border-color: GrayText;
+  }
 }

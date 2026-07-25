@@ -1,23 +1,24 @@
 /**
- * Modern Transfer skin (WO-SKIN-02 checkpoint C, pickers batch).
+ * Modern Transfer skin (WO-SKIN-02 checkpoint C, pickers batch;
+ * K4-D Pass 1: geometry/layout drained from the engine's inline styles and
+ * Tailwind utilities).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
  * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
  * rule can't paint these elements at all; unlayered outranks preflight and
  * still yields to a caller's inline `style`.
  *
- * SCOPE ROOT: the outer `<div data-part='root'>` was Tailwind-only before
- * this migration (no component class at all). `rottay-transfer
- * rottay-transfer--modern` is added on it here -- the same
+ * SINGLE PAINT OWNER. SCOPE ROOT: the outer `<div data-part='root'>`, carrying
+ * `rottay-transfer rottay-transfer--modern` (the same
  * `rottay-<comp> rottay-<comp>--modern` idiom the modern Button/Input skins
- * already use, and matching the class family the sibling rustic engine
- * already carries (`rottay-transfer rottay-transfer--rustic`). Every other
- * painted part is a descendant, reached via
+ * already use, matching the class family the sibling rustic engine carries).
+ * Every painted part is a descendant, reached via
  * `.rottay-transfer.rottay-transfer--modern [data-part='...']`. Two wrapper
  * `<div>`s (the search cell, the pagination page-count `<span>`) carry no
  * `data-part` of their own; the search cell is reached structurally via
- * `:has()` (the `input-number.css` idiom), the page-count span via a
- * scoped child combinator off `panel-pagination`.
+ * `:has()` (the `input-number.css` idiom), the page-count span via a scoped
+ * child combinator off `panel-pagination`, the item text via a child
+ * combinator off `panel-item`, the list `<ul>` off `panel-list`.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
@@ -28,15 +29,77 @@
  *
  * The search input's `onFocus`/`onBlur` handlers wrote `borderColor` only;
  * they are replaced by a rest border rule and a `:focus` override -- no
- * other property changed on focus. The move/pagination buttons are static
- * in this engine (no hover in the source); none is invented here.
+ * other property changed on focus. The move/pagination buttons were static
+ * in the source engine (no hover handlers), and WO-SKIN-02 documented the
+ * absence; the premium interaction bar (K4-D remediation round 4) now
+ * gives both the certified ghost-button hover repaint
+ * (`--ds-button-ghost-bg-hover` = the tenant's brand tint over its control
+ * surface), gated `:not(:disabled)`, with the reduced-motion guard.
+ *
+ * GEOMETRY drained from the engine (K4-D): the root flex/gap; the panel's
+ * flex column + `--ds-transfer-list-width` inline-size + radius + overflow
+ * (former utilities + inline width; the public `listStyle` stays inline as
+ * the documented override hatch); header layout/padding/weight; select-all
+ * and item checkbox 16px boxes; the NEW `panel-title` part (its margin is
+ * LOGICAL `margin-inline-start` -- the former `ml-2` was an RTL hazard);
+ * count/page-count font sizes (tokenised `text-sm`/`text-xs`); the search
+ * cell padding + input padding/font/transition; the list flex/overflow/
+ * max-block-size (former `max-h-60`) and `<ul>` reset; item flex/gap/cursor/
+ * transition + disabled posture keyed on `data-disabled`; empty padding/
+ * centering; pagination layout + button sizing; operations column; move
+ * button box (`--ds-input-sm-*` channels). Spacing channels are the
+ * density-scaled `--ds-spacing-*` family. Under `[dir='rtl']` the physical
+ * pagination prev/next glyphs (`‹`/`›`) are mirrored so they keep pointing
+ * at the logical previous/next page.
+ *
+ * K4-D remediation round 2: the search input's background moved to the
+ * certified Input-family `--ds-input-bg` channel (the generic
+ * `--ds-color-bg-input` resolves near-black under the TMM DB projection),
+ * and a `media (pointer: coarse)` block floors the search input, move
+ * buttons and pagination buttons at `--ds-input-touch-target-min` (44px) --
+ * the search input measured 28px on real mobile chromium.
+ *
+ * K4-D Pass 2: panels may shrink under a narrow root (`min-inline-size: 0`,
+ * 390px mobile law); item text and panel titles wrap unbroken words
+ * (`overflow-wrap: anywhere`); item rows repaint on hover (ghost-row
+ * grammar, radius via `--ds-transfer-item-radius`) and the search input
+ * reads the governed placeholder channel; move/pagination buttons carry a
+ * canonical disabled posture (cursor + opacity channels); the item
+ * transition narrowed from `all` to the repainted channels with the
+ * reduced-motion guard extended.
  */
 
+.rottay-transfer.rottay-transfer--modern[data-part='root'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-transfer-gap, 8px);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel'] {
+  display: flex;
+  flex-direction: column;
+  inline-size: var(--ds-transfer-list-width, 200px);
+  /* The width is a ceiling, not a floor: panels must shrink under a narrow
+     root (390px mobile) instead of overflowing it (K4-D Pass 2). */
+  min-inline-size: 0;
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+}
 .rottay-transfer.rottay-transfer--modern [data-part='panel'][data-part='panel'] {
   border: 1px solid var(--ds-color-border);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Long titles get their own line instead of breaking mid-word against the
+     count (K4-D Pass 2 iteration 2: "permissio ns" at 390px, count glued at
+     Optima widths). Desktop width never triggers the wrap. */
+  flex-wrap: wrap;
+  row-gap: var(--ds-spacing-1, 4px);
+  padding: var(--ds-spacing-2, 8px);
+  font-weight: 500;
   background: var(--ds-surface-inset);
 }
 .rottay-transfer.rottay-transfer--modern [data-part='panel-header'][data-part='panel-header'] {
@@ -44,20 +107,52 @@
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-select-all'] {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  cursor: pointer;
   accent-color: var(--ds-color-primary);
 }
 
+.rottay-transfer.rottay-transfer--modern [data-part='panel-title'] {
+  min-inline-size: 0;
+  /* Word-first wrapping: whole words drop to the next line; only a word that
+     alone exceeds the line breaks mid-word (unbreakable slugs still break). */
+  overflow-wrap: break-word;
+  font-weight: 500;
+  margin-inline-start: var(--ds-spacing-2, 8px);
+}
+
 .rottay-transfer.rottay-transfer--modern [data-part='panel-count'] {
+  flex: none;
+  /* Keeps the count hugging the inline-end even when the header wraps, and
+     guarantees a minimum gap when the title fills the whole line (the
+     "permissions0/2" glue seen at Optima widths). */
+  margin-inline-start: auto;
+  padding-inline-start: var(--ds-spacing-2, 8px);
+  font-size: var(--ds-font-size-sm, 14px);
   color: var(--ds-color-text-secondary);
 }
 
+.rottay-transfer.rottay-transfer--modern div:has(> [data-part='panel-search']) {
+  padding: var(--ds-spacing-2, 8px);
+}
 .rottay-transfer.rottay-transfer--modern div:has(> [data-part='panel-search']):has(> [data-part='panel-search']) {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-search'] {
+  inline-size: 100%;
+  padding: 4px var(--ds-input-sm-padding-x, 10px);
+  font-size: var(--ds-input-sm-font-size, 13px);
+  transition: border-color var(--ds-motion-normal);
   border-radius: var(--ds-input-radius, var(--ds-radius-md));
-  background: var(--ds-color-bg-input);
+  /* Certified Input-family channel, never the generic --ds-color-bg-input:
+     the TMM DB projection resolves `--ds-input-bg` to its light control
+     surface (#FFFEFB) while the generic resolves near-black (#0F0F12) under
+     its dark-text theme -- the same K4-D round-2 fix as Mentions/OTPInput,
+     applied here before the same axe pair can form. */
+  background: var(--ds-transfer-search-bg, var(--ds-input-bg, var(--ds-surface-control)));
   color: var(--ds-color-text-primary);
   outline: none;
 }
@@ -67,33 +162,171 @@
 .rottay-transfer.rottay-transfer--modern [data-part='panel-search'][data-part='panel-search']:focus {
   border-color: var(--ds-color-primary);
 }
+/* Governed placeholder channel (K4-D Pass 2), same law as the Mentions
+   textarea: not the UA-default reduced-alpha ink. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search']::placeholder {
+  color: var(--ds-transfer-search-placeholder-color, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
+  opacity: var(--ds-input-placeholder-opacity, 1);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-list'] {
+  flex: 1;
+  overflow: auto;
+  max-block-size: var(--ds-transfer-list-max-height, 240px);
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-list'] > ul {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  border-radius: var(--ds-transfer-item-radius, var(--ds-radius-md));
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
+}
+/* Row hover (K4-D Pass 2): clickable rows must acknowledge the pointer --
+   the rustic sibling has always repainted on hover; same ghost-row grammar
+   as the move/pagination buttons. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item']:not([data-disabled='true']):hover {
+  background: var(--ds-transfer-item-bg-hover, var(--ds-surface-inset));
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item'][data-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item'] > span {
+  flex: 1;
+  /* Unbroken words (tenant slugs, generated names) wrap word-first and only
+     break mid-word when the word alone exceeds the line (K4-D Pass 2). */
+  min-inline-size: 0;
+  overflow-wrap: break-word;
+}
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-item-checkbox'] {
+  inline-size: 16px;
+  block-size: 16px;
+  cursor: pointer;
   accent-color: var(--ds-color-primary);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-empty'] {
+  padding: var(--ds-spacing-4, 16px);
+  text-align: center;
   color: var(--ds-color-text-secondary);
 }
 
+.rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-1, 4px);
+  padding: var(--ds-spacing-2, 8px);
+}
 .rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'][data-part='panel-pagination'] {
   border-top: 1px solid var(--ds-color-border);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
+  block-size: 24px;
+  padding: 0 8px;
+  font-size: 12px;
+  cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
+  transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
+}
+/* Certified ghost-button hover grammar (K4-D round 4): the brand tint over
+   the tenant's control surface -- bithire ≈ #EBF1F7 on its #F4F8FB canvas
+   (ΔRGB 9/7/4), TMM ≈ #E7F0ED on #FBF6EC (ΔRGB 20/6/1); glyph ink stays
+   `--ds-color-text-primary` (>= 12:1 on both hover surfaces). */
+.rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:not(:disabled):hover {
+  background: var(--ds-transfer-pagination-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+}
+/* RTL: the hardcoded ‹/› glyphs are physical; mirror them so prev/next
+ * keep pointing at the logical page direction. */
+[dir='rtl'] .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
+  transform: scaleX(-1);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'] > span {
+  font-size: var(--ds-font-size-xs, 12px);
   color: var(--ds-color-text-secondary);
 }
 
+.rottay-transfer.rottay-transfer--modern [data-part='operations'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2, 8px);
+}
+
 .rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
+  inline-size: var(--ds-input-sm-height, 32px);
+  block-size: var(--ds-input-sm-height, 32px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: var(--ds-input-sm-font-size, 13px);
+  cursor: pointer;
+  transition: all var(--ds-motion-normal);
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
+}
+/* Certified ghost-button hover grammar (K4-D round 4), same repaint as the
+   pagination buttons: brand tint over the tenant's control surface, gated
+   off disabled (a disabled move button must not tease interactivity). */
+.rottay-transfer.rottay-transfer--modern [data-part='move-button']:not(:disabled):hover {
+  background: var(--ds-transfer-move-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+}
+
+/* Disabled posture (K4-D Pass 2 adjudication): until now enabled and
+   disabled buttons were indistinguishable. Canonical Button channels --
+   cursor + opacity (the ghost surface stays transparent; the ink reads
+   through the opacity, which is the ghost-disabled idiom). The native
+   checkboxes get the cursor correction only: dimming rides the item row's
+   own data-disabled posture (a global-disabled dim of the whole panel is a
+   broader contract question, disclosed in the ficha). */
+.rottay-transfer.rottay-transfer--modern [data-part='move-button']:disabled,
+.rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:disabled {
+  cursor: var(--ds-transfer-button-disabled-cursor, var(--ds-button-disabled-cursor, not-allowed));
+  opacity: var(--ds-transfer-button-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-select-all']:disabled,
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-checkbox']:disabled {
+  cursor: var(--ds-transfer-button-disabled-cursor, var(--ds-button-disabled-cursor, not-allowed));
+}
+
+/* Coarse-pointer floor (K4-D remediation round 2): the search input measured
+   28px tall on real mobile chromium; the move (32px) and pagination (24px)
+   buttons fail the same 44px wave floor. Same `media (pointer: coarse)`
+   idiom as the certified Textarea skin; `--ds-input-touch-target-min` is the
+   governed channel (bithire emits 44px). */
+@media (pointer: coarse) {
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-search'] {
+    min-block-size: var(--ds-input-touch-target-min, 44px);
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
+    min-inline-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min, 44px);
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
+    min-inline-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-transfer.rottay-transfer--modern [data-part='move-button'],
+  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item'] {
+    transition-duration: 0.01ms;
+  }
 }

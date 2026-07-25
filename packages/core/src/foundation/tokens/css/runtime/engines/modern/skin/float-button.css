@@ -1,43 +1,52 @@
 /**
- * Modern FloatButton skin (WO-SKIN-04 checkpoint N).
+ * Modern FloatButton skin (WO-SKIN-04 checkpoint N; K4-C Pass 1 consolidation).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight/DaisyUI regardless of
- * specificity. Unlayered outranks DaisyUI's `.btn` / `.btn-primary` /
- * `.btn-ghost` and still yields to a caller's inline `style`.
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule loses to preflight/DaisyUI regardless of
+ * specificity. Unlayered still yields to a caller's inline `style`.
  *
  * ============================================================================
- * N2 — THE HOVER/PRESS SCALE HAS NO INLINE FOOTPRINT. DO NOT ADD A `transform`.
+ * K4-C OWNERSHIP DECISION: THIS FILE IS NOW THE SINGLE PAINT OWNER — INCLUDING
+ * THE HOVER/PRESS SCALE. The DaisyUI class list (`btn`, `btn-circle`,
+ * `btn-primary`, `btn-ghost`, `bg-base-100`, `bg-error`, plus the dead
+ * `shadow-lg`) is DRAINED from the engine.
  * ============================================================================
- * Modern FloatButton's hover-lift and press-shrink are delivered ENTIRELY by a
- * layered `[data-tenant] .btn:hover:not(:disabled) { transform: … }` rule (and
- * its `:active` twin) in `engines/modern/theme.css`. NOTHING inline ever
- * contested them, so they show up in no inline diff and a migration can delete
- * them without noticing. Two consequences, both load-bearing:
+ * History: the hover-lift/press-shrink used to live ONLY in the layered
+ * `[data-tenant] .btn:hover:not(:disabled)` / `:active` rules in
+ * `engines/modern/theme.css`, which is why the old header forbade any
+ * `transform` here — an unlayered transform would have out-ranked the layered
+ * interaction permanently. With `btn` gone, those theme.css rules simply no
+ * longer match the trigger, so the interaction moves here VERBATIM (same
+ * tokens, same fallbacks):
+ *   - `:hover:not(:disabled)` -> `var(--ds-button-hover-transform, translateY(0) scale(1))`
+ *   - `:active:not(:disabled)` -> `var(--ds-button-active-transform, scale(0.98))`
+ *   - `:focus-visible` -> `var(--ds-button-focus-ring)` ring
+ *   - `transition: var(--ds-button-transition)` + `will-change: transform`
+ * The theme.css `.btn` block stays: it still paints the modern Button family;
+ * nothing FloatButton-specific remains there, so no theme.css removal is
+ * requested. Anchor triggers (href) never match `:disabled`, exactly as under
+ * the theme.css regime.
  *
- *   1. `getFloatButtonClassName()` still builds the exact same `btn` /
- *      `btn-circle` / `btn-primary` / `btn-ghost` / `shadow-lg` list. The scope
- *      classes are PREPENDED to it, never substituted for it. Drop a `btn` class
- *      and the interaction dies.
- *   2. This file declares NO `transform`, at any specificity, in any state. An
- *      unlayered `transform` here — even one added for layout — would out-rank
- *      the layered `.btn:hover` rule permanently and pin the button at rest.
+ * Typography parity: the theme.css `.btn` rule also supplied font-family /
+ * font-weight / font-size to the trigger's text glyphs (default `×` / `↑`,
+ * `description`). Those channels move here so the drain is render-neutral.
  *
- * The pre-step photographed a HOVERED FloatButton in both engines precisely so
- * the byte-exact gate catches a violation of either point.
+ * GEOMETRY CONSOLIDATION (K4-C): the circle footprint (40px), square padding
+ * (8px 12px), badge dot offsets/size (-4px, 8px) and badge count geometry
+ * (offsets -8px, padding 1px/6px, font-size 11px, line-height 16px) were raw
+ * inline literals; they are now token-bound rules below with VERBATIM
+ * fallbacks, riding the established `--ds-floatbutton-*` token family. Only
+ * structural layout (inline-flex centering, position: relative) and the Group
+ * trigger's zIndex stay inline in the engine.
+ *
+ * RTL (K4-C): the engine's fixed placement uses the LOGICAL `end-6` utility
+ * (inset-inline-end), so Group and BackTop mirror under RTL. The badge offsets
+ * below are `inset-inline-end`, so badges mirror too.
  *
  * SCOPE: all THREE render sites (`FloatButton`, `Group`'s trigger, `BackTop`)
  * carry `rottay-float-button rottay-float-button--modern` +
- * `data-part='trigger'` + `data-variant` + `data-shape`. The source wrote the
- * shape/type → paint composition out by value three separate times; because the
- * three resolve IDENTICALLY, they collapse to the one rule set below. (The root's
- * `baseStyle` set `background: transparent` for the non-primary case, but
- * `floatStyle` overwrote it with `--ds-surface-card` on the very next spread —
- * so the transparent value was already dead, and all three sites shipped
- * `--ds-surface-card`.)
- *
- * The trigger IS the painted element, so its rules are COMPOUND (no descendant
- * space) — `data-part='trigger'` is shared vocabulary across a dozen components.
+ * `data-part='trigger'` + `data-variant` + `data-shape`. The trigger IS the
+ * painted element, so its rules are COMPOUND (no descendant space).
  *
  * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
  * (0,4,0) border floor. Everything else is non-border paint and wins unlayered
@@ -47,14 +56,47 @@
 .rottay-float-button.rottay-float-button--modern[data-part='trigger'] {
   border: none;
   box-shadow: var(--ds-elevation-2);
+  font-family: var(--ds-font-family-base);
+  font-weight: var(--ds-button-font-weight);
+  font-size: var(--ds-button-md-font-size);
+  transition: var(--ds-button-transition);
+  will-change: transform;
 }
 
-/* ---- shape. ---- */
+/* ---- interaction: consolidated verbatim from the drained theme.css `.btn`
+        hover/press/focus rules (K4-C) ---- */
+.rottay-float-button.rottay-float-button--modern[data-part='trigger']:hover:not(:disabled) {
+  transform: var(--ds-button-hover-transform, translateY(0) scale(1));
+}
+.rottay-float-button.rottay-float-button--modern[data-part='trigger']:active:not(:disabled) {
+  transform: var(--ds-button-active-transform, scale(0.98));
+}
+.rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible {
+  box-shadow: var(--ds-button-focus-ring);
+  outline: none;
+}
+
+/* ---- shape (radius + footprint). Footprint participates in the canonical
+        density scale, the Button-skin idiom (`--ds-density-effective-scale`
+        composes structural scale x appearance mode x local posture). The
+        44px coarse floor is an absolute law floor and stays unscaled. ---- */
 .rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle'] {
   border-radius: 50%;
+  inline-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale, 1));
 }
 .rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle']) {
   border-radius: var(--ds-radius-lg);
+  padding: calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale, 1)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-scale, 1));
+}
+/* K4-C Pass 2: the 40px circle misses the 44px coarse-pointer law; bump the
+   footprint under coarse pointers only (square shape already exceeds it via
+   padding + content). */
+@media (pointer: coarse) {
+  .rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle'] {
+    inline-size: var(--ds-floatbutton-size-coarse, 44px);
+    block-size: var(--ds-floatbutton-size-coarse, 44px);
+  }
 }
 
 /* ---- type. ---- */
@@ -67,14 +109,31 @@
   color: var(--ds-color-text-primary);
 }
 
-/* ---- badges. The dot also carries Tailwind's `bg-error`, which has been dead
-        since the inline background was added; this unlayered rule keeps winning
-        it, so the dot's colour is unchanged. ---- */
+/* ---- badges. The dot's Tailwind `bg-error` and the count's inline literals
+        are drained (K4-C); this file now owns badge paint AND geometry.
+        `inset-inline-end` keeps both badges logical so they mirror in RTL. ---- */
 .rottay-float-button--modern [data-part='badge'] {
+  position: absolute;
   background: var(--ds-color-error);
 }
 
+.rottay-float-button--modern [data-part='badge'][data-variant='dot'] {
+  inset-block-start: var(--ds-floatbutton-dot-offset-block, -4px);
+  inset-inline-end: var(--ds-floatbutton-dot-offset-inline, -4px);
+  inline-size: var(--ds-floatbutton-dot-size, 8px);
+  block-size: var(--ds-floatbutton-dot-size, 8px);
+  border-radius: 9999px;
+}
+
 .rottay-float-button--modern [data-part='badge'][data-variant='count'] {
+  inset-block-start: var(--ds-floatbutton-badge-offset-block, -8px);
+  inset-inline-end: var(--ds-floatbutton-badge-offset-inline, -8px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-floatbutton-badge-padding-block, 1px) var(--ds-floatbutton-badge-padding-inline, 6px);
+  font-size: var(--ds-floatbutton-badge-font-size, 11px);
+  line-height: var(--ds-floatbutton-badge-line-height, 16px);
   border-radius: 9999px;
   color: var(--ds-color-text-on-primary);
 }

@@ -124,6 +124,18 @@
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-select'] {
+  color: inherit;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  outline: none;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:focus-visible {
+  box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+}
+
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item'][data-active='true'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
 }

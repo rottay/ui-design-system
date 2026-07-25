@@ -20,11 +20,15 @@ interface IconVisualProps {
   tone?: IconTone;
   /** `auto` mirrors through CSS logical direction without reading document. */
   mirrored?: IconMirroring;
+  /** Optional local color override; defaults to the inherited currentColor. */
+  color?: string;
   className?: string;
   style?: CSSProperties;
   id?: string;
   'aria-describedby'?: string;
   'data-testid'?: string;
+  /** Optional anatomy marker supplied by the component that owns the icon. */
+  'data-part'?: string;
 }
 
 type LabeledIcon = {

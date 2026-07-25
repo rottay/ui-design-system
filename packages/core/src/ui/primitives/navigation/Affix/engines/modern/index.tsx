@@ -20,21 +20,22 @@
  * function StickyNav() {
  *   return (
  *     <Affix engine="modern" offsetTop={0}>
- *       <nav className="bg-white shadow-lg">Navigation</nav>
+ *       <nav>Navigation</nav>
  *     </Affix>
  *   );
  * }
  * ```
  *
- * @example With Tailwind Customization
+ * @example With Customization
  * ```tsx
+ * // The affixed surface (background, elevation) is token-owned by the
+ * // modern skin -- never hardcode bg/shadow utilities on children.
  * <Affix
  *   engine="modern"
  *   offsetTop={64}
- *   className="transition-all duration-300"
  *   onChange={(affixed) => console.log(affixed)}
  * >
- *   <header className="p-4">Header</header>
+ *   <header>Header</header>
  * </Affix>
  * ```
  *
@@ -321,6 +322,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     // content switches to fixed positioning, preventing layout jumps.
     // The ref callback merges internal and forwarded refs so both the
     // component's measurement logic and parent consumers share the same node.
+    // The affixed surface + transition paint is skin-owned (`affix.css`).
     return (
       <div ref={placeholderRef} style={state.placeholderStyle}>
         <div
@@ -332,7 +334,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
               ref.current = node;
             }
           }}
-          className={`rottay-affix rottay-affix--modern transition-all duration-200 ${zIndexClass} ${className}`.trim()}
+          className={`rottay-affix rottay-affix--modern ${zIndexClass} ${className}`.trim()}
           style={state.affixed ? { ...state.fixedStyle, ...style } : style}
           data-part="root"
           data-sticky={state.affixed || undefined}

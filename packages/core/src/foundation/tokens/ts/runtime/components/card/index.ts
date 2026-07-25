@@ -19,18 +19,29 @@ export const cardDefault = {
   bg: 'var(--ds-card-bg)',
   bgHover: 'var(--ds-card-bg-hover)',
   bgActive: 'var(--ds-card-bg-active)',
+  bgSelected: 'var(--ds-card-bg-selected)',
   bgDisabled: 'var(--ds-card-bg-disabled)',
   color: 'var(--ds-card-color)',
+  colorHover: 'var(--ds-card-color-hover)',
+  colorActive: 'var(--ds-card-color-active)',
+  colorSelected: 'var(--ds-card-color-selected)',
+  colorDisabled: 'var(--ds-card-color-disabled)',
   colorMuted: 'var(--ds-card-color-muted)',
 } as const;
 
 // Card Borders
 export const cardBorder = {
   width: 'var(--ds-card-border-width)',
+  style: 'var(--ds-card-border-style)',
   color: 'var(--ds-card-border-color)',
   colorHover: 'var(--ds-card-border-color-hover)',
-  style: 'var(--ds-card-border-style)',
+  colorActive: 'var(--ds-card-border-active)',
+  colorSelected: 'var(--ds-card-border-selected)',
+  colorDisabled: 'var(--ds-card-border-disabled)',
   radius: 'var(--ds-card-border-radius)',
+  radiusSm: 'var(--ds-card-radius-sm)',
+  radiusLg: 'var(--ds-card-radius-lg)',
+  radiusXl: 'var(--ds-card-radius-xl)',
   borderlessWidth: 'var(--ds-card-borderless-border-width)',
 } as const;
 
@@ -43,17 +54,34 @@ export const cardShadow = {
   xl: 'var(--ds-card-shadow-xl)',
   hover: 'var(--ds-card-shadow-hover)',
   active: 'var(--ds-card-shadow-active)',
+  selected: 'var(--ds-card-shadow-selected)',
   default: 'var(--ds-card-shadow-default)',
 } as const;
 
 // Card Header
 export const cardHeader = {
   padding: 'var(--ds-card-header-padding)',
+  paddingSm: 'var(--ds-card-header-padding-sm)',
+  paddingLg: 'var(--ds-card-header-padding-lg)',
+  gap: 'var(--ds-card-header-gap)',
   paddingBottom: 'var(--ds-card-header-padding-bottom)',
   borderWidth: 'var(--ds-card-header-border-width)',
   borderColor: 'var(--ds-card-header-border-color)',
   bg: 'var(--ds-card-header-bg)',
   actionsGap: 'var(--ds-card-header-actions-gap)',
+  minHeight: 'var(--ds-card-header-min-height)',
+  copyMaxWidth: 'var(--ds-card-header-copy-max-width)',
+  eyebrowSize: 'var(--ds-card-header-eyebrow-size)',
+  eyebrowTracking: 'var(--ds-card-header-eyebrow-tracking)',
+  iconSize: 'var(--ds-card-header-icon-size)',
+  iconRadius: 'var(--ds-card-header-icon-radius)',
+  iconBg: 'var(--ds-card-header-icon-bg)',
+  iconBorder: 'var(--ds-card-header-icon-border)',
+  iconColor: 'var(--ds-card-header-icon-color)',
+  extraBg: 'var(--ds-card-header-extra-bg)',
+  extraBorder: 'var(--ds-card-header-extra-border)',
+  extraRadius: 'var(--ds-card-header-extra-radius)',
+  extraPadding: 'var(--ds-card-header-extra-padding)',
 } as const;
 
 // Card Title
@@ -61,6 +89,7 @@ export const cardTitle = {
   fontSize: 'var(--ds-card-title-font-size)',
   fontWeight: 'var(--ds-card-title-font-weight)',
   lineHeight: 'var(--ds-card-title-line-height)',
+  letterSpacing: 'var(--ds-card-title-letter-spacing)',
   color: 'var(--ds-card-title-color)',
 } as const;
 
@@ -74,6 +103,8 @@ export const cardSubtitle = {
 // Card Body
 export const cardBody = {
   padding: 'var(--ds-card-body-padding)',
+  paddingSm: 'var(--ds-card-body-padding-sm)',
+  paddingLg: 'var(--ds-card-body-padding-lg)',
   color: 'var(--ds-card-body-color)',
   fontSize: 'var(--ds-card-body-font-size)',
   lineHeight: 'var(--ds-card-body-line-height)',
@@ -82,6 +113,8 @@ export const cardBody = {
 // Card Footer
 export const cardFooter = {
   padding: 'var(--ds-card-footer-padding)',
+  paddingSm: 'var(--ds-card-footer-padding-sm)',
+  paddingLg: 'var(--ds-card-footer-padding-lg)',
   paddingTop: 'var(--ds-card-footer-padding-top)',
   borderWidth: 'var(--ds-card-footer-border-width)',
   borderColor: 'var(--ds-card-footer-border-color)',
@@ -91,17 +124,37 @@ export const cardFooter = {
   actionsJustify: 'var(--ds-card-footer-actions-justify)',
 } as const;
 
+export const cardActions = {
+  gap: 'var(--ds-card-actions-gap)',
+  marginTop: 'var(--ds-card-actions-margin-top)',
+  paddingTop: 'var(--ds-card-actions-padding-top)',
+} as const;
+
 // Card Media
 export const cardMedia = {
+  height: 'var(--ds-card-image-height)',
   borderRadiusTop: 'var(--ds-card-media-border-radius-top)',
   borderRadiusBottom: 'var(--ds-card-media-border-radius-bottom)',
   aspectRatio: 'var(--ds-card-media-aspect-ratio)',
   objectFit: 'var(--ds-card-media-object-fit)',
+  loadingTrack: 'var(--ds-card-image-loading-track)',
+  loadingActive: 'var(--ds-card-image-loading-active)',
+  loadingSize: 'var(--ds-card-image-loading-size)',
+  loadingStroke: 'var(--ds-card-image-loading-stroke)',
+  loadingDuration: 'var(--ds-card-image-loading-duration)',
+  errorIconSize: 'var(--ds-card-image-error-icon-size)',
 } as const;
 
 // Card Cover
 export const cardCover = {
   minHeight: 'var(--ds-card-cover-min-height)',
+  inlineSize: 'var(--ds-card-cover-inline-size)',
+  inlineMinSize: 'var(--ds-card-cover-inline-min-size)',
+  blockMinSize: 'var(--ds-card-cover-block-min-size)',
+  aspectRatio: 'var(--ds-card-cover-aspect-ratio)',
+  objectPosition: 'var(--ds-card-cover-object-position)',
+  objectFit: 'var(--ds-card-cover-object-fit)',
+  bodyInlineMinSize: 'var(--ds-card-body-inline-min-size)',
   overlayBg: 'var(--ds-card-cover-overlay-bg)',
   contentColor: 'var(--ds-card-cover-content-color)',
 } as const;
@@ -170,7 +223,38 @@ export const cardSemanticVariant = {
 export const cardInteractive = {
   cursor: 'var(--ds-card-interactive-cursor)',
   transformHover: 'var(--ds-card-interactive-transform-hover)',
+  transformActive: 'var(--ds-card-active-transform)',
   transition: 'var(--ds-card-interactive-transition)',
+  transitionDuration: 'var(--ds-card-transition-duration)',
+  transitionTiming: 'var(--ds-card-transition-timing)',
+  texture: 'var(--ds-card-texture)',
+  textureSize: 'var(--ds-card-texture-size)',
+  textureOpacity: 'var(--ds-card-texture-opacity)',
+  overlay: 'var(--ds-card-overlay)',
+  surfaceGradient: 'var(--ds-card-surface-gradient)',
+  stateOverlay: 'var(--ds-card-state-overlay)',
+  stateOverlayHoverOpacity: 'var(--ds-card-state-overlay-hover-opacity)',
+  stateOverlayActiveOpacity: 'var(--ds-card-state-overlay-active-opacity)',
+  stateOverlaySelectedOpacity: 'var(--ds-card-state-overlay-selected-opacity)',
+} as const;
+
+export const cardSpinner = {
+  size: 'var(--ds-card-spinner-size)',
+  stroke: 'var(--ds-card-spinner-stroke)',
+  track: 'var(--ds-card-spinner-track)',
+  color: 'var(--ds-card-spinner-color)',
+  duration: 'var(--ds-card-spinner-duration)',
+} as const;
+
+export const cardLoading = {
+  overlayBg: 'var(--ds-card-loading-overlay-bg)',
+  backdropBlur: 'var(--ds-card-loading-backdrop-blur)',
+  coverOpacity: 'var(--ds-card-loading-cover-opacity)',
+  skeletonOpacity: 'var(--ds-card-loading-skeleton-opacity)',
+  skeletonBg: 'var(--ds-card-skeleton-bg)',
+  skeletonHighlight: 'var(--ds-card-skeleton-highlight)',
+  skeletonRadius: 'var(--ds-card-skeleton-radius)',
+  skeletonDuration: 'var(--ds-card-skeleton-duration)',
 } as const;
 
 // Card Grid
@@ -194,7 +278,10 @@ export const cardTransition = {
 // Card Accessibility
 export const cardAccessibility = {
   focusRing: 'var(--ds-card-focus-ring)',
+  focusRingColor: 'var(--ds-card-focus-ring-color)',
+  focusRingWidth: 'var(--ds-card-focus-ring-width)',
   focusRingOffset: 'var(--ds-card-focus-ring-offset)',
+  selectedOutlineWidth: 'var(--ds-card-selected-outline-width)',
   focusOutline: 'var(--ds-card-focus-outline)',
 } as const;
 
@@ -216,11 +303,14 @@ export const cardTokens = {
   subtitle: cardSubtitle,
   body: cardBody,
   footer: cardFooter,
+  actions: cardActions,
   media: cardMedia,
   cover: cardCover,
   variant: cardVariant,
   semanticVariant: cardSemanticVariant,
   interactive: cardInteractive,
+  spinner: cardSpinner,
+  loading: cardLoading,
   grid: cardGrid,
   transition: cardTransition,
   accessibility: cardAccessibility,

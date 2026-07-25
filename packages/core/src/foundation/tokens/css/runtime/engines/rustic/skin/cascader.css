@@ -197,9 +197,6 @@
 .rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'] {
   background-color: transparent;
 }
-.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
-  border-left: 3px solid transparent;
-}
 .rottay-cascader__dropdown[data-part='dropdown'] [data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
   background-color: var(--ds-cascader-item-bg-hover);
 }
@@ -207,7 +204,7 @@
   background-color: var(--ds-cascader-item-bg-selected);
 }
 .rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-selected='true'] {
-  border-left: 3px solid var(--ds-color-primary, #1677ff);
+  box-shadow: inset 0 0 0 1px var(--ds-color-primary, #1677ff);
 }
 
 .rottay-cascader__dropdown[data-part='dropdown'] [data-part='menu-item-arrow'] {

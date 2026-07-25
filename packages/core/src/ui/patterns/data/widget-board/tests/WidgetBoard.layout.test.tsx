@@ -1,0 +1,422 @@
+import React from "react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+
+import type { WidgetBoardItem, WidgetBoardLabels } from "../contracts";
+import { WidgetBoardEngine } from "../engines/shared";
+
+const labels: WidgetBoardLabels = {
+  context: "Role workspace",
+  heading: "Decision cockpit",
+  customize: "Customize",
+  done: "Done",
+  addWidget: "Add widget",
+  reset: "Reset",
+  emptyCatalog: "Empty",
+  editHint: "Editing",
+  readHint: "Reading",
+  move: "Move",
+  resize: "Resize",
+  resizeWidth: "Resize width",
+  resizeHeight: "Resize height",
+  autoHeight: "Automatic height",
+  remove: "Remove",
+};
+
+function item(
+  id: string,
+  size: WidgetBoardItem["size"],
+  order: number
+): WidgetBoardItem {
+  return {
+    id,
+    size,
+    order,
+    visible: true,
+    title: id,
+    accessibleTitle: id,
+    content: <span>{id}</span>,
+  };
+}
+
+describe("WidgetBoard product layout", () => {
+  it("renders a localized board header with semantic icon and actions", () => {
+    const { container } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[item("one", "md", 0)]}
+        editable
+      />
+    );
+
+    expect(
+      container.querySelector('[data-part="toolbar"]')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-part="toolbar-icon"] svg')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-part="toolbar-context"]')
+    ).toHaveTextContent("Role workspace");
+    expect(
+      container.querySelector('[data-part="toolbar-title"]')
+    ).toHaveTextContent("Decision cockpit");
+    expect(
+      container.querySelector('[data-part="toolbar-actions"]')
+    ).toBeInTheDocument();
+  });
+
+  it("owns a consistent optional header anatomy without constraining custom content", () => {
+    const headed = {
+      ...item("decision", "md", 0),
+      title: "Decision readiness",
+      header: {
+        eyebrow: "Intelligence",
+        icon: <span data-testid="widget-icon">I</span>,
+        supporting: "Nine sources verified",
+        accessory: <span data-testid="widget-accessory">92</span>,
+      },
+    } satisfies WidgetBoardItem;
+    const plain = item("plain", "md", 1);
+
+    const { container, getByTestId } = render(
+      <WidgetBoardEngine labels={labels} items={[headed, plain]} />
+    );
+
+    const headers = container.querySelectorAll('[data-part="item-header"]');
+    expect(headers).toHaveLength(1);
+    expect(headers[0]).toHaveTextContent("Intelligence");
+    expect(headers[0]).toHaveTextContent("Decision readiness");
+    expect(headers[0]).toHaveTextContent("Nine sources verified");
+    expect(getByTestId("widget-icon")).toBeInTheDocument();
+    expect(getByTestId("widget-accessory")).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-part="cell"]')).toHaveLength(2);
+  });
+
+  it("keeps stored widget sizes honest instead of silently stretching the last cell", () => {
+    const { container } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[
+          item("large", "lg", 0),
+          item("medium", "md", 1),
+          item("small", "sm", 2),
+        ]}
+      />
+    );
+
+    const cells = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+    );
+    expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
+      "1 / span 6",
+      "7 / span 4",
+      "1 / span 3",
+    ]);
+  });
+
+  it("keeps four small widgets in one balanced 3/3/3/3 row", () => {
+    const { container } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[
+          item("one", "sm", 0),
+          item("two", "sm", 1),
+          item("three", "sm", 2),
+          item("four", "sm", 3),
+        ]}
+      />
+    );
+
+    const cells = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+    );
+    expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
+      "1 / span 3",
+      "4 / span 3",
+      "7 / span 3",
+      "10 / span 3",
+    ]);
+  });
+
+  it("backfills an earlier half-width opening instead of leaving dead space", () => {
+    const { container } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[
+          item("priority", "lg", 0),
+          item("pipeline", "wide", 1),
+          item("queue", "lg", 2),
+        ]}
+      />
+    );
+
+    const cells = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+    );
+    expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
+      "1 / span 6",
+      "1 / span 12",
+      "7 / span 6",
+    ]);
+    expect(cells.map((cell) => cell.style.gridRow)).toEqual([
+      "1 / span 1",
+      "2 / span 1",
+      "1 / span 1",
+    ]);
+  });
+
+  it("lets the narrow CSS contract own the single-column layout", () => {
+    const { container } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[item("one", "lg", 0)]}
+        narrow
+      />
+    );
+
+    expect(container.querySelector('[data-part="grid"]')).toHaveAttribute(
+      "data-narrow",
+      "true"
+    );
+    expect(
+      container.querySelector<HTMLElement>('[data-part="cell"]')?.style
+        .gridColumn
+    ).toBe("");
+  });
+
+  it("offers a rich add catalog and a keyboard-operable edge resize handle", async () => {
+    const onItemsChange = vi.fn();
+    const visible = item("pipeline", "lg", 0);
+    const hidden = {
+      ...item("velocity", "md", 1),
+      visible: false,
+      catalog: {
+        category: "Intelligence",
+        description: "Shows pipeline velocity and delayed transitions.",
+        preview: <span>4.2 days</span>,
+        recommended: true,
+      },
+    } satisfies WidgetBoardItem;
+    const richLabels: WidgetBoardLabels = {
+      ...labels,
+      catalogHeading: "Add an operational widget",
+      catalogDescription: "Choose the view that improves this workspace.",
+      recommended: "Recommended",
+      sizeNames: {
+        sm: "Compact",
+        md: "Medium",
+        lg: "Half width",
+        wide: "Full width",
+      },
+    };
+    const { container, findByRole, findByText } = render(
+      <WidgetBoardEngine
+        labels={richLabels}
+        items={[visible, hidden]}
+        editable
+        defaultEditing
+        defaultCatalogOpen
+        onItemsChange={onItemsChange}
+      />
+    );
+
+    expect(
+      await findByText(richLabels.catalogHeading as string)
+    ).toBeInTheDocument();
+    expect(
+      await findByText("Shows pipeline velocity and delayed transitions.")
+    ).toBeInTheDocument();
+    expect(await findByText("4.2 days")).toBeInTheDocument();
+    expect(
+      container.querySelectorAll('[data-part="resize-handle"]')
+    ).toHaveLength(8);
+
+    const resizeHandle = await findByRole("slider", {
+      name: `${labels.resizeWidth}: pipeline`,
+    });
+    fireEvent.keyDown(resizeHandle, { key: "ArrowLeft" });
+    expect(onItemsChange).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "pipeline", size: "md" }),
+      ])
+    );
+
+    const heightHandle = await findByRole("slider", {
+      name: `${labels.resizeHeight}: pipeline`,
+    });
+    fireEvent.keyDown(heightHandle, { key: "ArrowUp" });
+    expect(onItemsChange).toHaveBeenLastCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "pipeline", height: 220 }),
+      ])
+    );
+  });
+
+  it("resizes width and height together from a physical corner", async () => {
+    const onItemsChange = vi.fn();
+    const { container } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[item("pipeline", "lg", 0)]}
+        editable
+        defaultEditing
+        onItemsChange={onItemsChange}
+      />
+    );
+    const grid = container.querySelector<HTMLElement>('[data-part="grid"]');
+    const cell = container.querySelector<HTMLElement>('[data-part="cell"]');
+    const corner = container.querySelector<HTMLButtonElement>(
+      '[data-edge="block-end-inline-end"]'
+    );
+    expect(grid).not.toBeNull();
+    expect(cell).not.toBeNull();
+    expect(corner).not.toBeNull();
+    if (!grid || !cell || !corner) return;
+
+    grid.getBoundingClientRect = () =>
+      ({
+        width: 1200,
+        height: 800,
+        top: 0,
+        right: 1200,
+        bottom: 800,
+        left: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect);
+    cell.getBoundingClientRect = () =>
+      ({
+        width: 600,
+        height: 240,
+        top: 0,
+        right: 600,
+        bottom: 240,
+        left: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect);
+
+    fireEvent.pointerDown(corner, {
+      pointerId: 7,
+      clientX: 600,
+      clientY: 240,
+    });
+    fireEvent.pointerMove(window, {
+      pointerId: 7,
+      clientX: 1000,
+      clientY: 360,
+    });
+    fireEvent.pointerUp(window, {
+      pointerId: 7,
+      clientX: 1000,
+      clientY: 360,
+    });
+
+    await waitFor(() =>
+      expect(onItemsChange).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: "pipeline",
+            size: "wide",
+            height: 360,
+          }),
+        ])
+      )
+    );
+  });
+
+  it("previews neighbouring reflow from the full pointer drag surface and persists on release", async () => {
+    const onItemsChange = vi.fn();
+    const { container, getByRole } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[item("one", "lg", 0), item("two", "lg", 1)]}
+        editable
+        defaultEditing
+        onItemsChange={onItemsChange}
+      />
+    );
+    const move = getByRole("button", { name: `${labels.move}: one` });
+    const grid = container.querySelector<HTMLElement>('[data-part="grid"]');
+    const initialCells = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+    );
+    expect(grid).not.toBeNull();
+    expect(initialCells).toHaveLength(2);
+    if (!grid || initialCells.length !== 2) return;
+
+    grid.getBoundingClientRect = () =>
+      ({
+        width: 1000,
+        height: 320,
+        top: 0,
+        right: 1000,
+        bottom: 320,
+        left: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect);
+    initialCells[0].getBoundingClientRect = () =>
+      ({
+        width: 490,
+        height: 300,
+        top: 0,
+        right: 490,
+        bottom: 300,
+        left: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect);
+    initialCells[1].getBoundingClientRect = () =>
+      ({
+        width: 490,
+        height: 300,
+        top: 0,
+        right: 1000,
+        bottom: 300,
+        left: 510,
+        x: 510,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect);
+
+    fireEvent.pointerDown(move, {
+      pointerId: 13,
+      clientX: 32,
+      clientY: 20,
+    });
+    fireEvent.pointerMove(window, {
+      pointerId: 13,
+      clientX: 760,
+      clientY: 100,
+    });
+
+    await waitFor(() => {
+      const cells = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+      );
+      expect(cells.map((cell) => cell.dataset.widgetId)).toEqual([
+        "two",
+        "one",
+      ]);
+    });
+    expect(onItemsChange).not.toHaveBeenCalled();
+
+    fireEvent.pointerUp(window, {
+      pointerId: 13,
+      clientX: 760,
+      clientY: 100,
+    });
+    expect(onItemsChange).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "two", order: 0 }),
+        expect.objectContaining({ id: "one", order: 1 }),
+      ])
+    );
+  });
+});

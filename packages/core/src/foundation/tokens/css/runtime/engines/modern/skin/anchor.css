@@ -1,5 +1,5 @@
 /**
- * Modern Anchor skin (WO-SKIN-04 checkpoint N).
+ * Modern Anchor skin (WO-SKIN-04 checkpoint N; expanded in K3-C pass 1).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all. Unlayered
@@ -7,28 +7,102 @@
  *
  * SCOPE: the link `<a>` carries `rottay-anchor-link rottay-anchor-link--modern`
  * + `data-part='item'` + `data-selected`. It IS the painted element, so the
- * rules are COMPOUND (no descendant space).
+ * rules are COMPOUND (no descendant space). The container gained its own
+ * canonical pair in K3-C (`rottay-anchor rottay-anchor--modern` +
+ * `data-part='root'` + `data-direction`/`data-affix`) so the root's
+ * sticky/flex structure is skin-owned too.
  *
  * MIXED BORDER MECHANISM — the active accent bar is assembled from two sources
- * and only ONE of them was ever inline. The 2px width comes from Tailwind's
- * `border-l-2` class (always present); the INACTIVE color comes from Tailwind's
- * `border-transparent` class (present only when inactive); the ACTIVE color was
- * the inline `borderColor`. Only the active color moves here. Writing an
- * inactive `border-color` rule would NOT be a no-op: it would newly out-rank the
- * tenant's unlayered `* { border-color }` floor, which today beats the layered
- * `.border-transparent` utility. The inactive channel is therefore left exactly
- * as it is.
+ * and only ONE of them was ever inline. The 2px width comes from the engine's
+ * `border-s-2` class (border-INLINE-start since K3-C — logical, so the bar
+ * flips to the correct side under `dir="rtl"`); the INACTIVE color comes from
+ * the engine's `border-transparent` class (present only when inactive); the
+ * ACTIVE color is the rule below. Writing an inactive `border-color` rule
+ * would NOT be a no-op: it would newly out-rank the tenant's unlayered
+ * `* { border-color }` floor, which today beats the layered
+ * `.border-transparent` utility. The inactive channel is therefore left
+ * exactly as it is.
+ *
+ * K3-C ADDENDUM (pass 1): the engine's remaining rhythm utilities
+ * (`py-1 px-3 text-sm transition-colors block font-medium`, the nested
+ * `ml-4`, the root's `sticky top-0`/`flex gap-2`) moved here. The nested
+ * indent is `margin-inline-start` (logical — the drained `ml-4` stranded
+ * nested links on the physical left in RTL), the hover color + focus ring
+ * are new (the skin painted neither), and the color transition rides the
+ * canonical motion tokens.
  *
  * SPECIFICITY (P-48): the tenant border-color floor sits at (0,3,1), so the
  * active `border-color` must reach (0,4,0) — two scope classes + `data-part` +
  * `data-selected`. `color` is non-border paint and wins at (0,3,0)+.
  */
 
+/* ---- root: sticky affix + horizontal flex structure (was engine utilities).
+        The `top` offset stays inline on the element (runtime prop value). ---- */
+.rottay-anchor.rottay-anchor--modern[data-part='root'][data-affix='true'] {
+  position: sticky;
+}
+.rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] {
+  display: flex;
+  gap: var(--ds-anchor-horizontal-gap, var(--ds-spacing-2, 8px));
+}
+.rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] [data-part='link-wrapper'] {
+  display: inline-block;
+}
+
+/* ---- link: base structure + rhythm (was `block py-1 px-3 text-sm
+        transition-colors`). Logical padding keeps the accent bar reading as
+        an inline-start rail in both writing directions. ---- */
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'] {
+  display: block;
+  padding-block: var(--ds-anchor-item-padding-block, var(--ds-spacing-1, 4px));
+  padding-inline: var(--ds-anchor-item-padding-inline, var(--ds-spacing-3, 12px));
+  font-size: var(--ds-anchor-item-font-size, 14px);
+  line-height: var(--ds-anchor-item-line-height, 1.5715);
+  transition:
+    color var(--ds-anchor-transition-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-anchor-transition-timing, var(--ds-motion-ease-out)),
+    border-color var(--ds-anchor-transition-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-anchor-transition-timing, var(--ds-motion-ease-out));
+}
+
+/* ---- link: state colors. ---- */
 .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-anchor-item-color, var(--ds-color-text-secondary));
 }
 
 .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
-  color: var(--ds-color-primary);
-  border-color: var(--ds-color-primary);
+  color: var(--ds-anchor-item-color-selected, var(--ds-color-primary));
+  border-color: var(--ds-anchor-item-accent-selected, var(--ds-color-primary));
+  font-weight: var(--ds-anchor-item-font-weight-selected, 500);
+}
+
+/* ---- link: hover (new in K3-C — the skin painted no hover at all). The
+        selected link keeps its own color; hover only lifts the idle link. ---- */
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:hover {
+  color: var(--ds-anchor-item-color-hover, var(--ds-color-text-primary));
+}
+
+/* ---- link: keyboard focus ring (new in K3-C). ---- */
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-anchor-focus-ring-offset, 2px);
+  border-radius: var(--ds-anchor-focus-ring-radius, var(--ds-radius-sm));
+}
+
+/* ---- nested links: LOGICAL indent (was the physical `ml-4`, which stranded
+        nested links on the wrong side in RTL). ---- */
+.rottay-anchor.rottay-anchor--modern[data-part='root'] [data-part='nested'] {
+  margin-inline-start: var(--ds-anchor-nested-indent, var(--ds-spacing-4, 16px));
+}
+
+@media (forced-colors: active) {
+  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'] {
+    forced-color-adjust: auto;
+  }
+  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
+    border-color: LinkText;
+  }
+  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible {
+    outline: 2px solid Highlight;
+  }
 }

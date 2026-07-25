@@ -28,7 +28,7 @@ A checkbox component for selecting one or multiple options with multi-engine sup
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | DS tokens (skin-painted) | Vanilla CSS |
 | Animation | Smooth | CSS | Basic |
 | Indeterminate | Full | Partial | Full |
 | Group | Built-in | Custom | Custom |
@@ -133,7 +133,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Checkbox rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Checkbox rendered by Classic (Ant Design), Modern (DS tokens), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -207,6 +207,41 @@ export const StatesComparison: Story = {
         component={Checkbox}
         props={{ children: 'Indeterminate', indeterminate: true }}
       />
+    </div>
+  ),
+};
+
+/**
+ * Modern-engine state matrix: unchecked/checked/indeterminate, error,
+ * disabled, description, label placement, sizes, and long Arabic RTL copy.
+ */
+export const ModernStateMatrix: Story = {
+  name: 'Modern State Matrix',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 420 }}>
+      <Checkbox engine="modern" label="Unchecked" />
+      <Checkbox engine="modern" label="Checked" defaultChecked />
+      <Checkbox engine="modern" label="Indeterminate" indeterminate />
+      <Checkbox engine="modern" label="Error" error />
+      <Checkbox engine="modern" label="Disabled" disabled />
+      <Checkbox engine="modern" label="Disabled checked" disabled defaultChecked />
+      <Checkbox
+        engine="modern"
+        label="With description"
+        description="Long supporting copy that wraps across lines without pushing the indicator out of alignment."
+        defaultChecked
+      />
+      <Checkbox engine="modern" label="Label at start" labelPlacement="start" />
+      <Checkbox engine="modern" label="Success color" color="success" defaultChecked />
+      <Checkbox engine="modern" label="Large" size="lg" defaultChecked />
+      <Checkbox engine="modern" label="Small" size="sm" />
+      <div dir="rtl" lang="ar">
+        <Checkbox
+          engine="modern"
+          label="أوافق على مشاركة ملفي الشخصي مع جهات التوظيف المعتمدة بما في ذلك البيانات الحساسة المحددة في نموذج الموافقة الطويل"
+          defaultChecked
+        />
+      </div>
     </div>
   ),
 };

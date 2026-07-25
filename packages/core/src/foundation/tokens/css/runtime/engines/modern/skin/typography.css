@@ -27,6 +27,143 @@
 
 .rottay-typography.rottay-typography--modern.rottay-typography--modern {
   color: var(--ds-color-text-primary);
+  overflow-wrap: anywhere;
+  font-optical-sizing: var(--ds-type-optical-sizing, auto);
+  font-synthesis: var(--ds-type-font-synthesis, none);
+  font-variation-settings: var(--ds-type-font-variation-settings, normal);
+}
+
+/* Public craft attributes keep the DOM stable while every visual channel is
+   resolved by the active tenant tokens. */
+.rottay-typography.rottay-typography--modern[data-family='body'] {
+  font-family: var(--ds-font-family-base);
+}
+.rottay-typography.rottay-typography--modern[data-family='heading'] {
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+}
+.rottay-typography.rottay-typography--modern[data-family='display'] {
+  font-family: var(--ds-font-family-display, var(--ds-font-family-heading));
+}
+.rottay-typography.rottay-typography--modern[data-family='mono'] {
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+}
+.rottay-typography.rottay-typography--modern[data-family='inherit'] {
+  font-family: inherit;
+}
+
+.rottay-typography.rottay-typography--modern[data-contrast='strong'] {
+  color: var(--ds-type-color-strong, var(--ds-color-text-primary));
+}
+.rottay-typography.rottay-typography--modern[data-contrast='default'] {
+  color: var(--ds-type-color-default, var(--ds-color-text-primary));
+}
+.rottay-typography.rottay-typography--modern[data-contrast='muted'] {
+  color: var(--ds-type-color-muted, var(--ds-color-text-secondary));
+}
+.rottay-typography.rottay-typography--modern[data-contrast='subtle'] {
+  color: var(--ds-type-color-subtle, var(--ds-color-text-tertiary));
+}
+.rottay-typography.rottay-typography--modern[data-contrast='inverse'] {
+  color: var(--ds-type-color-inverse, var(--ds-color-text-inverse));
+}
+
+.rottay-typography.rottay-typography--modern[data-text-style] {
+  font-family: var(--ds-type-body-font-family, var(--ds-font-family-base));
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-base));
+  font-weight: var(--ds-type-body-font-weight, var(--ds-font-weight-normal));
+  line-height: var(--ds-type-body-line-height, var(--ds-line-height-normal));
+  letter-spacing: var(--ds-type-body-letter-spacing, var(--ds-letter-spacing-normal));
+}
+.rottay-typography.rottay-typography--modern[data-text-style='display'] {
+  font: var(--ds-type-display);
+  letter-spacing: var(--ds-type-display-letter-spacing);
+  text-transform: var(--ds-type-display-text-transform);
+  font-variant-numeric: var(--ds-type-display-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='pageTitle'] {
+  font: var(--ds-type-page-title);
+  letter-spacing: var(--ds-type-page-title-letter-spacing);
+  text-transform: var(--ds-type-page-title-text-transform);
+  font-variant-numeric: var(--ds-type-page-title-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='sectionTitle'] {
+  font: var(--ds-type-section-title);
+  letter-spacing: var(--ds-type-section-title-letter-spacing);
+  text-transform: var(--ds-type-section-title-text-transform);
+  font-variant-numeric: var(--ds-type-section-title-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='body'] {
+  font: var(--ds-type-body);
+  letter-spacing: var(--ds-type-body-letter-spacing);
+  text-transform: var(--ds-type-body-text-transform);
+  font-variant-numeric: var(--ds-type-body-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='supporting'] {
+  font: var(--ds-type-supporting);
+  letter-spacing: var(--ds-type-supporting-letter-spacing);
+  text-transform: var(--ds-type-supporting-text-transform);
+  font-variant-numeric: var(--ds-type-supporting-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='label'] {
+  font: var(--ds-type-label);
+  letter-spacing: var(--ds-type-label-letter-spacing);
+  text-transform: var(--ds-type-label-text-transform);
+  font-variant-numeric: var(--ds-type-label-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='caption'] {
+  font: var(--ds-type-caption);
+  letter-spacing: var(--ds-type-caption-letter-spacing);
+  text-transform: var(--ds-type-caption-text-transform);
+  font-variant-numeric: var(--ds-type-caption-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='code'] {
+  font: var(--ds-type-code);
+  letter-spacing: var(--ds-type-code-letter-spacing);
+  text-transform: var(--ds-type-code-text-transform);
+  font-variant-numeric: var(--ds-type-code-font-variant-numeric);
+}
+.rottay-typography.rottay-typography--modern[data-text-style='numeric'] {
+  font: var(--ds-type-numeric);
+  letter-spacing: var(--ds-type-numeric-letter-spacing);
+  text-transform: var(--ds-type-numeric-text-transform);
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, tabular-nums);
+}
+
+.rottay-typography.rottay-typography--modern[data-fluid='true'][data-size='3xl']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-5xl, var(--ds-font-size-5xl));
+}
+.rottay-typography.rottay-typography--modern[data-line-clamp] {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--ds-type-line-clamp, attr(data-line-clamp type(<integer>)));
+}
+
+.rottay-typography.rottay-typography--modern[data-motion='enter'] {
+  animation: ds-type-enter var(--ds-type-motion-duration, var(--ds-motion-calm))
+    var(--ds-type-motion-easing, var(--ds-motion-ease-enter)) both;
+}
+
+@keyframes ds-type-enter {
+  from { opacity: 0; transform: translateY(var(--ds-type-motion-distance, 0.2em)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography roles are first-class theme channels. A heading that merely
+   inherits the body face collapses the hierarchy even when a tenant provides
+   a deliberate pairing. Keep semantics in markup and paint the role here. */
+.rottay-typography.rottay-typography--modern:is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(
+    --ds-font-family-heading,
+    var(--ds-font-family-display, var(--ds-font-family-base))
+  );
+  font-feature-settings: "kern" 1, "liga" 1, "ss01" 1;
+  font-synthesis: none;
+}
+
+.rottay-typography.rottay-typography--modern.font-mono {
+  font-family: var(--ds-font-family-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-variant-ligatures: none;
 }
 
 .rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='default'] {
@@ -58,4 +195,11 @@
 }
 .rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='error'] {
   color: var(--ds-color-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-typography.rottay-typography--modern[data-motion] {
+    animation: none;
+    transition: none;
+  }
 }

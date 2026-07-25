@@ -60,7 +60,6 @@ function ProfileSectionCard({
               {section.description && (
                 <Text
                   className="ds-profile__muted-text"
-                  data-part="muted-text"
                   style={{ fontSize: 13 }}
                 >
                   {section.description}
@@ -83,7 +82,6 @@ function ProfileSectionCard({
               <Stack key={field.key} spacing="xs">
                 <Text
                   className="ds-profile__muted-text"
-                  data-part="muted-text"
                   style={{ fontSize: 13, fontWeight: 500 }}
                 >
                   {field.label}

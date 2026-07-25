@@ -1,7 +1,13 @@
 /**
- * @fileoverview Modern engine for the Descriptions component, backed by DaisyUI/Tailwind.
+ * @fileoverview Modern engine for the Descriptions component.
  * Renders label-value pairs in either a horizontal CSS grid or vertical stacked
- * layout using Tailwind utility classes and DaisyUI's base-content colour tokens.
+ * layout. All paint and static geometry (header chrome, grid tracks, row boxes,
+ * label/content typography) live in the modern skin
+ * (`foundation/tokens/css/runtime/engines/modern/skin/descriptions.css`), keyed
+ * on the `data-part` / `data-layout` / `data-bordered` hooks stamped here.
+ * Inline styles are reserved for the two CSS-variable channels the skin reads
+ * (`--ds-descriptions-column-count`, `--ds-descriptions-item-span`) and the
+ * public `styles.label` / `styles.content` override props.
  *
  * @example
  * ```tsx
@@ -16,6 +22,7 @@
 import React, { forwardRef } from 'react';
 import type { DescriptionsProps, DescriptionsItemProps } from '../../contracts';
 import { DESCRIPTIONS_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Resolves column count from column configuration.
@@ -29,15 +36,15 @@ function resolveColumnCount(column: DescriptionsProps['column']): number {
 }
 
 /**
- * Modern (DaisyUI) implementation of the Descriptions component.
+ * Modern implementation of the Descriptions component.
  *
  * Iterates over children with React.Children.map and extracts their props
- * to build either a CSS grid (horizontal) or a divide-y stack (vertical).
+ * to build either a CSS grid (horizontal) or a stacked (vertical) layout.
  * This is why the companion ModernItem component renders nothing itself.
  *
  * @param props - Unified DescriptionsProps from the design system type contract
  * @param ref - Forwarded ref attached to the outer container div
- * @returns A Tailwind-styled description list
+ * @returns A skin-painted description list
  */
 export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
   (props, ref) => {
@@ -55,33 +62,47 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       style,
     } = props;
 
-    // Map DS size tokens to Tailwind text-size classes for body content
-    const sizeClass = {
-      default: 'text-base',
-      small: 'text-sm',
-      middle: 'text-base',
-    }[size];
+    const i18n = useOptionalTranslation('components');
+    // English fallback when no I18nProvider is mounted or the locale catalog
+    // does not carry the key yet (the translator echoes the full key back for
+    // a miss, which is what the endsWith guard detects).
+    const regionKey = 'descriptions.region_label';
+    const translatedRegion = i18n?.t(regionKey);
+    const regionLabel =
+      translatedRegion && !translatedRegion.endsWith(regionKey)
+        ? translatedRegion
+        : 'Description list';
 
-    // Bordered mode adds a visible container outline using DS border token
-    const borderClass = bordered ? 'border rounded-lg' : '';
     // Resolve responsive column config to a concrete number for CSS grid
     const columnCount = resolveColumnCount(column);
+    const itemElements = React.Children.toArray(children).filter(React.isValidElement);
+    const hasHeader = !!(title || extra);
 
     return (
       <div
         ref={ref}
         className={`rottay-descriptions rottay-descriptions--modern${layout === 'vertical' ? ' rottay-descriptions-vertical' : ''}${!bordered ? ' rottay-descriptions-borderless' : ''} ${className}`}
-        style={style}
+        style={{
+          '--ds-descriptions-column-count': columnCount,
+          ...style,
+        } as React.CSSProperties}
         data-part="root"
         data-engine="modern"
         data-layout={layout}
         data-bordered={bordered ? 'true' : 'false'}
+        data-size={size}
+        data-column-count={columnCount}
+        data-item-count={itemElements.length}
+        data-has-header={hasHeader}
+        data-has-extra={!!extra}
+        role="region"
+        aria-label={typeof title === 'string' ? title : regionLabel}
       >
         {/* Header section with title and extra content */}
         {(title || extra) && (
-          <div className="rottay-descriptions-title flex justify-between items-center mb-4" data-part="header">
+          <div className="rottay-descriptions-title" data-part="header">
             {title && (
-              <h3 className="text-lg font-semibold" data-part="title">
+              <h3 data-part="title">
                 {title}
               </h3>
             )}
@@ -90,31 +111,31 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         )}
 
         {/* Content section */}
-        <div className={`${borderClass} ${sizeClass}`} data-part="body">
+        <div data-part="body">
           {layout === 'horizontal' ? (
             // Horizontal: CSS grid with configurable columns; items can span multiple cells
             <div
-              className="grid gap-4 p-4"
               data-part="rows"
-              style={{ gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}
+              role="list"
             >
-              {React.Children.map(children, (child) => {
-                if (!React.isValidElement(child)) return null;
+              {itemElements.map((child, index) => {
                 const itemProps = child.props as DescriptionsItemProps;
                 const span = itemProps.span || 1;
 
                 return (
                   <div
-                    className={`rottay-descriptions-row${
-                      bordered
-                        ? ' border-b pb-2 last:border-b-0'
-                        : ''
-                    }`}
+                    key={child.key ?? index}
+                    className="rottay-descriptions-row"
                     data-part="row"
-                    style={{ gridColumn: `span ${span}` }}
+                    data-index={index}
+                    data-span={span}
+                    role="listitem"
+                    style={{
+                      '--ds-descriptions-item-span': span,
+                    } as React.CSSProperties}
                   >
                     <div
-                      className="rottay-descriptions-label text-sm mb-1"
+                      className="rottay-descriptions-label"
                       data-part="label"
                       style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
@@ -124,6 +145,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     <div
                       className="rottay-descriptions-content"
                       data-part="content"
+                      data-empty={itemProps.children == null || itemProps.children === ''}
                       style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
@@ -133,16 +155,24 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               })}
             </div>
           ) : (
-            // Vertical: label on the left (1/3 width), value on the right, separated by dividers
-            <div className="divide-y" data-part="rows" style={{ '--tw-divide-color': 'var(--ds-color-border)' } as React.CSSProperties}>
-              {React.Children.map(children, (child) => {
-                if (!React.isValidElement(child)) return null;
+            // Vertical: label column on the inline-start side, value on the
+            // inline-end side; the skin owns the track split (with a subgrid
+            // upgrade where supported).
+            <div data-part="rows" role="list">
+              {itemElements.map((child, index) => {
                 const itemProps = child.props as DescriptionsItemProps;
 
                 return (
-                  <div className="rottay-descriptions-row flex p-3" data-part="row">
+                  <div
+                    key={child.key ?? index}
+                    className="rottay-descriptions-row"
+                    data-part="row"
+                    data-index={index}
+                    data-span={itemProps.span || 1}
+                    role="listitem"
+                  >
                     <div
-                      className="rottay-descriptions-label w-1/3"
+                      className="rottay-descriptions-label"
                       data-part="label"
                       style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
@@ -150,8 +180,9 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                       {colon ? ':' : ''}
                     </div>
                     <div
-                      className="rottay-descriptions-content flex-1"
+                      className="rottay-descriptions-content"
                       data-part="content"
+                      data-empty={itemProps.children == null || itemProps.children === ''}
                       style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}

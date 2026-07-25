@@ -1,5 +1,5 @@
 /**
- * Modern BackTop skin (WO-SKIN-04 checkpoint N).
+ * Modern BackTop skin (WO-SKIN-04 checkpoint N; expanded in K3-C pass 1).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all. Unlayered
@@ -14,15 +14,71 @@
  * null`), so there is no hidden state to paint — the asymmetry against rustic
  * (which stays mounted and animates a scale) is preserved, not reconciled.
  *
+ * K3-C ADDENDUM (pass 1): the K3-C falsification found the button painted with
+ * static chrome ONLY -- zero interaction states (no hover, no pressed, no
+ * focus ring), a 40x40 inline size below the 44px coarse-pointer floor, and a
+ * docblock teaching `hover:scale-110` as raw utility motion (removed). This
+ * file now owns the 44px PHYSICAL-px sizing (never rem -- the fluid root
+ * scales rems down on small viewports), the hover lift + pressed dip on the
+ * canonical motion tokens, and the keyboard focus ring.
+ *
  * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
  * (0,4,0) border floor. All other channels are non-border paint and win
  * unlayered at (0,3,0).
  */
 
 .rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px PHYSICAL coarse-pointer floor (was a 40px inline size). */
+  inline-size: var(--ds-backtop-size, 44px);
+  block-size: var(--ds-backtop-size, 44px);
+  padding: 0;
+  cursor: pointer;
   border-radius: 50%;
   border: none;
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  box-shadow: var(--ds-elevation-2);
+  background: var(--ds-backtop-bg, var(--ds-color-primary));
+  color: var(--ds-backtop-color, var(--ds-color-text-on-primary));
+  box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
+  transition:
+    transform var(--ds-backtop-transition-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-backtop-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-backtop-transition-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-backtop-transition-timing, var(--ds-motion-ease-out)),
+    background-color var(--ds-backtop-transition-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-backtop-transition-timing, var(--ds-motion-ease-out));
+}
+
+/* ---- hover: a quiet lift (the premium reading of the drained
+        `hover:scale-110` docblock) + deepened elevation. ---- */
+.rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover {
+  transform: var(--ds-backtop-hover-transform, translateY(-2px));
+  box-shadow: var(
+    --ds-backtop-shadow-hover,
+    var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))
+  );
+}
+
+/* ---- pressed: the lift releases back to rest. ---- */
+.rottay-backtop.rottay-backtop--modern[data-part='trigger']:active {
+  transform: var(--ds-backtop-pressed-transform, translateY(0));
+  box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
+}
+
+/* ---- keyboard focus ring. ---- */
+.rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-backtop-focus-ring-offset, 2px);
+}
+
+@media (forced-colors: active) {
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
+    /* The circle must keep a visible frame when shadows are forced away. */
+    border: 1px solid ButtonText;
+    forced-color-adjust: auto;
+  }
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible {
+    outline: 2px solid Highlight;
+  }
 }

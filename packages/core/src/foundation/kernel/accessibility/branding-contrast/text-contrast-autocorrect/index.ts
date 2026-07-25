@@ -23,6 +23,9 @@ import { hexToOklch, oklchToHex } from '../../../color/oklch';
 /** Lc floor for primary body text on the page ground (stricter than chrome pairs). */
 export const TEXT_CONTRAST_PRIMARY_TEXT_MIN_LC = 75;
 
+/** Disabled copy remains legible while components provide an additional non-color cue. */
+export const TEXT_CONTRAST_DISABLED_TEXT_MIN_LC = 45;
+
 /** Lightness step per snap iteration, in OKLCH L units. */
 export const TEXT_CONTRAST_SNAP_STEP_L = 0.02;
 
@@ -76,6 +79,16 @@ export interface TextContrastPairing {
 }
 
 const BUTTON_VARIANTS = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
+const MATERIAL_ROLES = [
+  'canvas',
+  'shell',
+  'panel',
+  'card',
+  'inset',
+  'control',
+  'raised',
+  'overlay',
+] as const;
 
 /**
  * The governed pairing list. Variable names mirror the chrome emitter's
@@ -88,6 +101,16 @@ export const TEXT_CONTRAST_PAIRINGS: readonly TextContrastPairing[] = [
     thresholdLc: APCA_BODY_TEXT_MIN_LC,
     pageGroundFallback: false,
   })),
+  {
+    // The semantic on-primary ink (solid buttons, chips, selected cells).
+    // Codex K2/K3 verdict: a DB tenant published a 3.57:1 on-primary pair
+    // that nothing caught. The derived/authored ink must be snapped to the
+    // floor like any other text channel — no tenant publishes below it.
+    token: '--ds-color-text-on-primary',
+    groundChain: ['--ds-color-primary'],
+    thresholdLc: APCA_BODY_TEXT_MIN_LC,
+    pageGroundFallback: false,
+  },
   {
     token: '--ds-table-header-color',
     groundChain: ['--ds-table-header-bg'],
@@ -112,6 +135,44 @@ export const TEXT_CONTRAST_PAIRINGS: readonly TextContrastPairing[] = [
     thresholdLc: TEXT_CONTRAST_PRIMARY_TEXT_MIN_LC,
     pageGroundFallback: true,
   },
+  {
+    token: '--ds-color-text-secondary',
+    groundChain: ['--ds-color-bg-primary', '--ds-color-background', '--ds-color-bg'],
+    thresholdLc: APCA_BODY_TEXT_MIN_LC,
+    pageGroundFallback: true,
+  },
+  {
+    token: '--ds-color-text-muted',
+    groundChain: ['--ds-color-bg-primary', '--ds-color-background', '--ds-color-bg'],
+    thresholdLc: APCA_BODY_TEXT_MIN_LC,
+    pageGroundFallback: true,
+  },
+  {
+    token: '--ds-color-text-disabled',
+    groundChain: ['--ds-color-bg-primary', '--ds-color-background', '--ds-color-bg'],
+    thresholdLc: TEXT_CONTRAST_DISABLED_TEXT_MIN_LC,
+    pageGroundFallback: true,
+  },
+  ...MATERIAL_ROLES.flatMap((role) => [
+    {
+      token: `--ds-material-${role}-foreground`,
+      groundChain: [`--ds-surface-${role}`, `--ds-material-${role}-background`],
+      thresholdLc: APCA_BODY_TEXT_MIN_LC,
+      pageGroundFallback: false,
+    },
+    {
+      token: `--ds-material-${role}-foreground-muted`,
+      groundChain: [`--ds-surface-${role}`, `--ds-material-${role}-background`],
+      thresholdLc: APCA_BODY_TEXT_MIN_LC,
+      pageGroundFallback: false,
+    },
+    {
+      token: `--ds-material-${role}-foreground-disabled`,
+      groundChain: [`--ds-surface-${role}`, `--ds-material-${role}-background`],
+      thresholdLc: TEXT_CONTRAST_DISABLED_TEXT_MIN_LC,
+      pageGroundFallback: false,
+    },
+  ]),
   {
     token: '--ds-card-title-color',
     groundChain: ['--ds-card-bg'],

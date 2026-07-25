@@ -89,7 +89,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
     justifyContent: 'center',
     zIndex: 1000,
     fontFamily: 'var(--ds-font-family-base)',
-    padding: 'var(--ds-space-4, 1rem)',
+    padding: 'var(--ds-spacing-4, 1rem)',
   };
 
   // Card-like dialog container -- consumer `style` prop merges at the end

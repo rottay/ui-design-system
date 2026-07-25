@@ -1,7 +1,9 @@
 /**
  * @fileoverview Modern (DaisyUI/Tailwind) engine for the AlertDialog overlay component.
- * Renders a fully custom modal using DaisyUI's `modal` classes, managing its own
- * Escape-key listener, scroll lock, and backdrop click behaviour without Ant Design.
+ * Renders a native `<dialog>` promoted to the browser top layer via `showModal()`,
+ * portaled through the shared overlay runtime so tenant scope, focus trapping,
+ * background inertness, scroll-lock, Escape routing and focus restore are owned
+ * by the shared substrate instead of ad-hoc per-engine code.
  *
  * @example
  * ```tsx
@@ -17,19 +19,28 @@
 
 'use client';
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { AlertDialogProps } from '../../contracts';
 import { ALERT_DIALOG_DEFAULTS } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
 /**
- * AlertDialog implementation using DaisyUI modal classes and Tailwind utilities.
+ * AlertDialog implementation on the shared overlay substrate.
  *
- * Unlike the Classic engine, this component owns its own lifecycle: it manually
- * locks body scroll, listens for Escape key presses, and conditionally renders
- * (returns empty fragment when closed) to avoid hidden DOM nodes.
+ * - `<Portal>` moves the dialog into `#rottay-portal-root`; `<PortalScope>`
+ *   re-stamps the tenant/locale/DS-variable context of the inline anchor so
+ *   white-labelled shells keep their theme inside the dialog.
+ * - The native `<dialog>` + `showModal()` owns the top layer and the browser
+ *   focus trap; `useModalInertSiblings` hides the page behind it.
+ * - `useOverlayLayer` owns the canonical z band, the single Escape router,
+ *   the scroll-lock refcount and LIFO focus restore.
  *
  * @param props - {@link AlertDialogProps} shared across all engines.
- * @returns A DaisyUI-styled modal element, or an empty fragment when `open` is false.
+ * @returns The portaled modal element (plus an inline scope anchor), or just
+ * the anchor when `open` is false.
  */
 export default function ModernAlertDialog(props: AlertDialogProps): React.ReactElement {
   const {
@@ -45,100 +56,143 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
     'data-testid': dataTestId,
   } = props;
 
+  // Inline anchor: the component's DOM position carries the tenant/locale
+  // lineage that PortalScope re-stamps onto the portaled dialog.
+  const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
+  const portalScope = usePortalScope(anchorEl);
+  // State (not a ref): the Portal mounts the dialog one commit later, and the
+  // promotion effect below must re-run when the element actually appears.
+  const [dialogEl, setDialogEl] = useState<HTMLDialogElement | null>(null);
+
   const handleCancel = useCallback(() => {
     onOpenChange?.(false);
   }, [onOpenChange]);
 
-  // Guard backdrop dismiss behind the closeOnBackdropClick prop
-  const handleBackdropClick = useCallback(() => {
-    if (closeOnBackdropClick) {
+  useModalInertSiblings(open);
+
+  // Shared stack: canonical modal z band, single Escape router (top-most
+  // blocking layer only), scroll-lock refcount and LIFO focus restore. Escape
+  // always closes, matching the engine's previous behaviour.
+  const { layerProps } = useOverlayLayer({
+    kind: 'modal',
+    active: open,
+    modal: true,
+    lockScroll: true,
+    restoreFocus: true,
+    onEscape: handleCancel,
+  });
+
+  // Promote to the native top layer while open. Unmounting on close releases
+  // it; the layer-stack restores focus to the previously focused element.
+  useEffect(() => {
+    if (!dialogEl) return;
+    if (open && !dialogEl.open) {
+      dialogEl.showModal();
+    }
+  }, [open, dialogEl]);
+
+  // The dialog box spans the viewport; clicks landing on the dialog element
+  // itself are backdrop clicks. Guarded by closeOnBackdropClick (default false).
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (e.target === e.currentTarget && closeOnBackdropClick) {
       onOpenChange?.(false);
     }
-  }, [closeOnBackdropClick, onOpenChange]);
+  };
 
-  // Manage keyboard dismissal and scroll lock manually since DaisyUI
-  // modal classes are presentational-only and lack built-in behaviour
-  useEffect(() => {
-    if (!open) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onOpenChange?.(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [open, onOpenChange]);
-
-  // Early return avoids rendering hidden DOM when the dialog is closed
-  if (!open) return <></>;
+  // Native close (e.g. UA-driven) routes through the same open-state contract.
+  const handleDialogClose = () => {
+    if (open) onOpenChange?.(false);
+  };
 
   return (
-    <div
-      data-part="root"
-      className={`modal modal-open rottay-alert-dialog--modern ${className}`}
-      style={style}
-      data-testid={dataTestId}
-    >
-      <div
-        data-part="backdrop"
-        className="modal-backdrop"
-        onClick={handleBackdropClick}
-      />
-      <div
-        data-part="surface"
-        data-open="true"
-        className="modal-box max-w-sm"
-        role="alertdialog"
-        aria-modal="true"
-        style={{
-          padding: 'var(--ds-modal-padding, 1.5rem)',
-        }}
-      >
-        <div className="flex gap-3 items-start">
-          {/* Error-tinted circle with inline SVG warning triangle */}
-          <div data-part="icon" className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-              <line x1="12" y1="9" x2="12" y2="13" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-          </div>
-          <div className="flex-1">
-            {title && (
-              <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
-            )}
-            {description && (
-              <p data-part="description" className="text-sm">{description}</p>
-            )}
-          </div>
-        </div>
-        {/* DaisyUI modal-action aligns buttons to the right by default */}
-        <div data-part="footer" className="modal-action">
-          <button
-            type="button"
-            data-part="action"
-            data-action="cancel"
-            style={{
-              height: 'var(--ds-control-height-sm, 36px)',
-              padding: '0 var(--ds-spacing-md, 16px)',
-              fontSize: 'var(--ds-font-size-sm, 14px)',
-              cursor: 'pointer',
-            }}
-            onClick={handleCancel}
-          >
-            {cancelLabel}
-          </button>
-          {action}
-        </div>
-      </div>
-    </div>
+    <>
+      <span ref={setAnchorEl} data-part="anchor" style={{ display: 'contents' }} />
+      {open ? (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
+            <dialog
+              ref={setDialogEl}
+              {...layerProps}
+              data-part="root"
+              className={`modal modal-open rottay-alert-dialog--modern ${className}`}
+              style={{
+                /* Reset native dialog styling: full-viewport flex container */
+                position: 'fixed',
+                inset: 0,
+                width: '100vw',
+                height: '100vh',
+                maxWidth: '100vw',
+                maxHeight: '100vh',
+                margin: 0,
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                ...layerProps.style,
+                ...style,
+              }}
+              data-testid={dataTestId}
+              onClick={handleBackdropClick}
+              onClose={handleDialogClose}
+            >
+              <div
+                data-part="backdrop"
+                className="modal-backdrop"
+                style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}
+              />
+              <div
+                data-part="surface"
+                data-open="true"
+                className="modal-box max-w-sm"
+                role="alertdialog"
+                aria-modal="true"
+                style={{
+                  position: 'relative',
+                  padding: 'var(--ds-modal-padding, 1.5rem)',
+                }}
+              >
+                <div className="flex gap-3 items-start">
+                  {/* Error-tinted circle with inline SVG warning triangle */}
+                  <div data-part="icon" className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                      <line x1="12" y1="9" x2="12" y2="13" />
+                      <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    {title && (
+                      <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
+                    )}
+                    {description && (
+                      <p data-part="description" className="text-sm">{description}</p>
+                    )}
+                  </div>
+                </div>
+                {/* DaisyUI modal-action aligns buttons to the right by default */}
+                <div data-part="footer" className="modal-action">
+                  <button
+                    type="button"
+                    data-part="action"
+                    data-action="cancel"
+                    style={{
+                      height: 'var(--ds-control-height-sm, 36px)',
+                      padding: '0 var(--ds-spacing-md, 16px)',
+                      fontSize: 'var(--ds-font-size-sm, 14px)',
+                      cursor: 'pointer',
+                    }}
+                    onClick={handleCancel}
+                  >
+                    {cancelLabel}
+                  </button>
+                  {action}
+                </div>
+              </div>
+            </dialog>
+          </PortalScope>
+        </Portal>
+      ) : null}
+    </>
   );
 }
 

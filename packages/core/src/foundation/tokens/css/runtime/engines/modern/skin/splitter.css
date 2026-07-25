@@ -17,9 +17,119 @@
  * `[data-part='gutter']` already reach (0,4,0). No border-color channel
  * exists in this component, so the (0,4,0) floor never applies. Value
  * transcribed verbatim from `engines/modern.tsx`.
+ *
+ * K3-C ADDENDUM (pass 1): the K3-C falsification proved the 25-line skin
+ * owned ONLY the gutter's idle background while the engine carried the
+ * gutter's whole interactive surface as raw utilities (`w-2`/`h-2`,
+ * `cursor-col-resize`/`cursor-row-resize`, `transition-colors`) and the
+ * drag gesture painted NOTHING (no hover, no dragging, no focus ring --
+ * the gutter was not even focusable). This file now owns: root/panel
+ * structure, gutter sizing + cursor per orientation, hover/dragging/
+ * focus-visible paint, the RTL-safe resize cursor pair, `touch-action:
+ * none` for the pointer-event drag, and the coarse-pointer hit expansion
+ * (the ::before reach extends the 8px rail to a 44px PHYSICAL-px target
+ * without changing the visual rhythm).
  */
 
-/* ---- gutter: static token background (was the drag handle's inline `style`). ---- */
+/* ---- root: flex structure per orientation (was engine utilities). ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] {
+  display: flex;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'][data-orientation='horizontal'] {
+  flex-direction: row;
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'][data-orientation='vertical'] {
+  flex-direction: column;
+}
+
+/* ---- panel: own scroll (was the engine's `overflow-auto` utility). ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='panel'] {
+  overflow: auto;
+}
+
+/* ---- gutter: static token background (was the drag handle's inline `style`).
+        The MATERIAL panel channel precedes the raw `--ds-surface-panel`
+        (K3-C pass-2 contrast remediation): the raw channel is the brand's
+        dark chrome surface on some tenants (TMM: #141417), while the
+        material channel is the tenant-tuned content surface (TMM: #FFFCF6,
+        BitHire: #f4f8fd — identical to the raw value there). ---- */
 .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'] {
-  background: var(--ds-surface-panel);
+  background: var(
+    --ds-splitter-gutter-bg,
+    var(--ds-material-panel-background, var(--ds-surface-panel))
+  );
+}
+
+/* ---- gutter: sizing + resize cursor per orientation (was `w-2`/`h-2` +
+        `cursor-*` utilities). `touch-action: none` keeps the browser from
+        hijacking the drag into a scroll gesture. ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'] {
+  position: relative;
+  flex-shrink: 0;
+  touch-action: none;
+  transition: background var(--ds-splitter-gutter-transition-duration, var(--ds-motion-fast, 120ms))
+    var(--ds-splitter-gutter-transition-timing, var(--ds-motion-ease-out));
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal'] {
+  inline-size: var(--ds-splitter-gutter-size, 8px);
+  cursor: col-resize;
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical'] {
+  block-size: var(--ds-splitter-gutter-size, 8px);
+  cursor: row-resize;
+}
+
+/* ---- gutter: hover + dragging affordance (was nothing -- the drag gesture
+        painted no feedback at all). Dragging wins over hover by source
+        order and reads as the tenant primary at full strength. ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:hover {
+  background: var(
+    --ds-splitter-gutter-bg-hover,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 30%,
+      var(--ds-material-panel-background, var(--ds-surface-panel))
+    )
+  );
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true'],
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:hover {
+  background: var(--ds-splitter-gutter-bg-dragging, var(--ds-color-primary));
+}
+
+/* ---- gutter: keyboard focus ring (the K3-C engine made gutters real
+        `role="separator"` tab stops). ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-splitter-gutter-focus-ring-offset, 1px);
+}
+
+/* ---- gutter: coarse-pointer hit expansion. The rail stays 8px in the
+        layout rhythm; an invisible ::before extends the pointer target to
+        a 44px PHYSICAL-px reach (never rem -- the fluid root scales rems
+        down on small viewports). ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']::before {
+  content: '';
+  position: absolute;
+}
+@media (pointer: coarse) {
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal']::before {
+    inset-block: 0;
+    inset-inline: -18px;
+  }
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical']::before {
+    inset-inline: 0;
+    inset-block: -18px;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'] {
+    background: ButtonFace;
+  }
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
+    outline: 2px solid Highlight;
+  }
 }

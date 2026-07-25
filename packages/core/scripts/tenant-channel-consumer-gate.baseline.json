@@ -1,55 +1,13 @@
 {
   "_comment": "Decrease-only accepted-debt ledger for tenant visual channels with zero source consumers. A NEW dead channel (not listed here) fails tenant-channel-consumer-gate --check. Revive a channel by wiring a var()/selector consumer, or tighten this list once revived.",
   "generatedFrom": {
-    "overrideTokens": 61,
-    "emittedChromeChannels": 639,
+    "overrideTokens": 293,
+    "emittedChromeChannels": 1302,
     "chartSeriesChannels": 10,
-    "anatomyChannels": 0,
-    "anatomyContractPresent": false
+    "anatomyChannels": 10,
+    "anatomyContractPresent": true
   },
   "channels": {
-    "--ds-button-error-border-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-error-shadow-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-ghost-shadow-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-info-bg-active": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-info-border-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-info-shadow": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-info-shadow-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-primary-border-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-success-border-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-success-shadow-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-text-border-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-text-shadow-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-warning-border-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-button-warning-shadow-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
     "--ds-card-padding": {
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
     },
@@ -72,9 +30,6 @@
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
     "--ds-collection-card-body-color": {
-      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
-    },
-    "--ds-collection-card-border-hover": {
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
     "--ds-collection-card-depth": {
@@ -141,9 +96,6 @@
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
     "--ds-collection-card-padding": {
-      "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
-    },
-    "--ds-collection-card-shadow-hover": {
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
     "--ds-collection-card-sheen": {
@@ -307,12 +259,6 @@
     },
     "--ds-compact-card-value-color-hover": {
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
-    },
-    "--ds-input-addon-border": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-input-filled-bg-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
     },
     "--ds-input-search-clear-color": {
       "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
@@ -545,30 +491,6 @@
     "--ds-signal-card-value-color-hover": {
       "reason": "premium-card/listing chrome field emitted for tenant authoring; this sub-field has no skin consumer (the namespace is only partly consumed)"
     },
-    "--ds-table-action-bg": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-table-action-border": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-table-header-shadow": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-table-reorder-bg": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-table-resize-bg": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-table-resize-bg-hover": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-table-row-hover-shadow": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
-    "--ds-table-sheen": {
-      "reason": "contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal"
-    },
     "--ds-tall-card-action-bg": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
@@ -707,19 +629,10 @@
     "--ds-workspace-card-action-color": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
-    "--ds-workspace-card-bg": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
     "--ds-workspace-card-bg-hover": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-body-color": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-border": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-border-hover": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-depth": {
@@ -732,9 +645,6 @@
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-footer-color": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-gap": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-glass-bg": {
@@ -750,15 +660,6 @@
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-hover-transform": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-icon-bg": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-icon-border": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-icon-color": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-label-color": {
@@ -785,22 +686,10 @@
     "--ds-workspace-card-overlay": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
-    "--ds-workspace-card-padding": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-radius": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
     "--ds-workspace-card-selected-border": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-selected-ring": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-shadow": {
-      "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
-    },
-    "--ds-workspace-card-shadow-hover": {
       "reason": "premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner"
     },
     "--ds-workspace-card-sheen": {

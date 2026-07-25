@@ -32,8 +32,22 @@
 
 /* ---- root: card surface + radius (was containerStyle) ---- */
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] {
+  --ds-detail-panel-padding: clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px));
+  --ds-detail-panel-section-gap: var(--ds-spacing-5, 20px);
+  --ds-detail-panel-content-gap: var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px));
+  --ds-detail-panel-item-gap: var(--ds-workspace-card-gap, var(--ds-spacing-3, 12px));
+  overflow: hidden;
   background: var(--ds-surface-card);
-  border-radius: var(--ds-radius-lg);
+  border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    var(--ds-workspace-card-shadow, var(--ds-shadow-sm));
+  animation: ds-detail-panel-arrive var(--ds-motion-calm, 220ms)
+    var(--ds-motion-ease-out, ease-out) both;
+}
+
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
 
 /* ---- named container (W6-A): the panel root owns the width every descendant
@@ -44,57 +58,107 @@
   container-name: ds-detail;
 }
 
+.ds-pattern-detail-panel.ds-engine-modern [data-part='header'][data-part='header'] {
+  min-width: 0;
+  padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
+  border: 1px solid var(--ds-card-header-border, var(--ds-color-border));
+  border-radius: var(--ds-card-radius, var(--ds-radius-lg));
+  background: var(
+    --ds-card-header-bg,
+    linear-gradient(
+      112deg,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
+      var(--ds-surface-card) 56%,
+      var(--ds-surface-panel)
+    )
+  );
+  background-position: 0% 50%;
+  background-size: 180% 180%;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    var(--ds-workspace-card-shadow, var(--ds-elevation-1));
+  transition:
+    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='header']:hover {
+  background-position: 100% 50%;
+  border-color: var(--ds-workspace-card-border-hover, var(--ds-card-header-border, var(--ds-color-border)));
+  box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
+}
+
+.ds-pattern-detail-panel.ds-engine-modern [data-part='avatar'][data-part='avatar'] {
+  display: inline-grid;
+  place-items: center;
+  padding: 3px;
+  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-card);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    0 10px 22px -16px color-mix(in srgb, var(--ds-color-primary) 52%, transparent);
+}
+
+.ds-pattern-detail-panel.ds-engine-modern [data-part='actions'][data-part='actions'] {
+  min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
+  padding: 3px;
+  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
+  background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
+}
+
 /* ---- action-button: shared chrome + per-variant base and merged hover/focus.
         The JSX merged `vs.hover` over `vs.base` when `isInteractive`
         (`(hovered || focused) && !disabled && !loading`); the button is natively
         `disabled` on disabled||loading, so `:not(:disabled)` reproduces it. ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'] {
-  border-radius: var(--ds-radius-md);
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'] > .rottay-button {
   outline: none;
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] > .rottay-button {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
   border: 1px solid var(--ds-color-primary);
   box-shadow: var(--ds-elevation-1);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary']:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary']:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] > .rottay-button:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] > .rottay-button:focus:not(:disabled) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
   box-shadow: var(--ds-elevation-2);
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] > .rottay-button {
   background: transparent;
   color: var(--ds-color-error-600);
   border: 1px solid var(--ds-color-error-200);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger']:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger']:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] > .rottay-button:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] > .rottay-button:focus:not(:disabled) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] > .rottay-button {
   background: transparent;
   color: var(--ds-color-text-secondary);
   border: 1px solid transparent;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost']:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost']:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] > .rottay-button:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] > .rottay-button:focus:not(:disabled) {
   background: var(--ds-color-neutral-50);
   color: var(--ds-color-text-primary);
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] > .rottay-button {
   background: transparent;
   color: var(--ds-color-text-secondary);
   border: 1px solid var(--ds-color-border);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default']:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default']:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] > .rottay-button:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] > .rottay-button:focus:not(:disabled) {
   background: var(--ds-color-neutral-50);
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-neutral-300);
@@ -110,15 +174,12 @@
 
 /* ---- back-button: ghost, with the `hovered || focused` treatment (no disabled
         state on this button, so no gate). ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] {
-  border: none;
-  border-radius: var(--ds-radius-sm);
-  background: transparent;
+.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] > .rottay-button {
   color: var(--ds-color-text-secondary);
   outline: none;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button']:hover,
-.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button']:focus {
+.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] > .rottay-button:hover,
+.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] > .rottay-button:focus {
   background: var(--ds-color-neutral-100);
   color: var(--ds-color-text-primary);
 }
@@ -126,24 +187,27 @@
 /* ---- tab-button: base + active underline + disabled + hover. The JSX hover gate
         was `!isActive && !disabled`; disabled is native here. ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-part='tab-button'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-tab-color, var(--ds-color-text-secondary));
   background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  border-radius: 0;
+  border: 1px solid transparent;
+  border-radius: var(--ds-tabs-item-radius, var(--ds-radius-md));
   outline: none;
 }
 .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-active='true'] {
-  color: var(--ds-color-text-primary);
-  border-bottom: 2px solid var(--ds-color-text-primary);
+  color: var(--ds-tab-color-active, var(--ds-color-text-primary));
+  background: var(--ds-tabs-active-bg, var(--ds-surface-card));
+  border-color: var(--ds-tabs-list-border, var(--ds-color-border));
+  box-shadow: var(--ds-tabs-active-shadow, var(--ds-elevation-1));
+  transform: translateY(-1px);
 }
 .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
 }
 .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button']:hover:not([data-active='true']):not(:disabled),
 .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button']:focus:not([data-active='true']):not(:disabled) {
-  color: var(--ds-color-text-primary);
-  background: color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent);
+  color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
+  background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
+  border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
 }
 
 /* ---- tab-badge: active state keyed on the parent tab-button's data-active ---- */
@@ -160,7 +224,20 @@
 /* ---- breadcrumbs: separator, link (+ its hover), current (+ its `isLast`
         emphasis, which is always the last element child of the nav). ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-separator'] {
+  display: inline-flex;
+  align-items: center;
   color: var(--ds-color-text-disabled);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumbs'][data-part='breadcrumbs'] {
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px 9px;
+  overflow-x: auto;
+  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
+  scrollbar-width: none;
 }
 .ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-link'] {
   color: var(--ds-color-text-secondary);
@@ -178,6 +255,9 @@
 /* ---- title ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='title'] {
   color: var(--ds-color-text-primary);
+  max-width: 34ch;
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  text-wrap: balance;
 }
 
 /* ---- status badge (modern ignores status.color — divergence preserved) ---- */
@@ -191,18 +271,62 @@
 /* ---- subtitle ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='subtitle'] {
   color: var(--ds-color-text-secondary);
+  max-width: 72ch;
+  text-wrap: pretty;
 }
 
 /* ---- tab-list bottom border ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-list'][data-part='tab-list'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  padding: var(--ds-tabs-list-padding, 3px);
+  background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
+  border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border));
+  border-radius: var(--ds-tabs-list-radius, var(--ds-radius-lg));
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+}
+
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-panel'][data-part='tab-panel'] {
+  min-width: 0;
+  padding: var(--ds-workspace-card-padding, var(--ds-spacing-4, 16px));
+  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
+  background: var(--ds-workspace-card-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-workspace-card-shadow, var(--ds-elevation-1));
 }
 
 /* ---- sidebar panel ---- */
 .ds-pattern-detail-panel.ds-engine-modern [data-part='sidebar'][data-part='sidebar'] {
-  background: var(--ds-surface-panel);
-  border-radius: var(--ds-radius-lg);
-  border: 1px solid var(--ds-color-border);
+  background: var(--ds-workspace-card-bg, var(--ds-surface-panel));
+  border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
+  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  box-shadow: var(--ds-workspace-card-shadow, none);
+}
+
+@container ds-detail (max-width: 720px) {
+  .ds-pattern-detail-panel.ds-engine-modern [data-part='header'] {
+    flex-direction: column;
+  }
+
+  .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-list'] {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ds-pattern-detail-panel.ds-engine-modern [data-part='body'] {
+    flex-direction: column !important;
+  }
+
+  .ds-pattern-detail-panel.ds-engine-modern [data-part='body'] > div {
+    width: 100% !important;
+  }
+
+  .ds-pattern-detail-panel.ds-engine-modern [data-part='actions'] {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .ds-pattern-detail-panel.ds-engine-modern [data-part='actions'] > * {
+    flex: 1 0 max-content;
+  }
 }
 
 /* ---- footer top border ---- */
@@ -248,4 +372,17 @@
 .ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-sidebar'] {
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-neutral-100);
+}
+
+@keyframes ds-detail-panel-arrive {
+  from { opacity: 0; transform: translateY(8px) scale(0.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'],
+  .ds-pattern-detail-panel.ds-engine-modern [data-part='header'] {
+    animation: none;
+    transition: none;
+  }
 }

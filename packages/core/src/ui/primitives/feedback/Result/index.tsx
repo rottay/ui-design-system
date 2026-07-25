@@ -3,7 +3,7 @@
 /**
  * @fileoverview Result - full-page feedback for operation outcomes and HTTP status pages.
  * Supports statuses: success, error, info, warning, 404, 403, 500, with custom icons.
- * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
+ * Multi-engine: Classic (Ant Design), Modern (token skin), Rustic (Vanilla).
  *
  * @example
  * ```tsx
@@ -37,7 +37,7 @@ export {
  */
 export const Result = createEngineComponent<ResultProps>('Result', {
   classic: () => import('./engines/classic'),  // Ant Design
-  modern: () => import('./engines/modern'),     // DaisyUI / Tailwind
+  modern: () => import('./engines/modern'),     // Token skin (no DaisyUI)
   rustic: () => import('./engines/rustic'),      // Vanilla HTML/CSS
 });
 

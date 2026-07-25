@@ -111,11 +111,13 @@ describe('Display1 (surfaces + media) data-part contract (WO-SKIN-05 checkpoint 
     });
 
     describe('compounds', () => {
-      it('Card.Header stamps header(data-divider)/avatar/title/subtitle/extra', () => {
+      it('Card.Header stamps premium context/header anatomy', () => {
         const { container } = render(
-          <Card.Header title="T" subtitle="S" divider avatar={<span>A</span>} extra={<span>E</span>} />,
+          <Card.Header eyebrow="K" icon={<span>I</span>} title="T" subtitle="S" divider avatar={<span>A</span>} extra={<span>E</span>} />,
         );
         expect(container.querySelector('[data-part="header"][data-divider="true"]')).not.toBeNull();
+        expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+        expect(container.querySelector('[data-part="icon"]')).not.toBeNull();
         expect(container.querySelector('[data-part="avatar"]')).not.toBeNull();
         expect(container.querySelector('[data-part="title"]')).not.toBeNull();
         expect(container.querySelector('[data-part="subtitle"]')).not.toBeNull();

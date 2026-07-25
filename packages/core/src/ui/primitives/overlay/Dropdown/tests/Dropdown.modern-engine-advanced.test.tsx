@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Dropdown as ModernDropdown } from '../engines/modern';
@@ -25,12 +25,19 @@ describe('Dropdown modern engine advanced coverage', () => {
         getPopupContainer={() => document.body}
         menu={{
           onClick: handleMenuClick,
+          selectable: true,
+          selectedKeys: ['edit'],
           items: [
             { key: 'group', type: 'group', label: 'Actions' },
             { key: 'edit', label: 'Edit' },
             { key: 'divider', type: 'divider' },
             { key: 'delete', label: 'Delete', danger: true },
             { key: 'disabled', label: 'Disabled', disabled: true },
+            {
+              key: 'share',
+              label: 'Share',
+              children: [{ key: 'copy-link', label: 'Copy link' }],
+            },
           ],
         }}
       >
@@ -44,26 +51,35 @@ describe('Dropdown modern engine advanced coverage', () => {
     }
 
     expect(ref.current).toBeTruthy();
-    expect(trigger.className).toContain('dropdown-top');
-    expect(trigger.className).toContain('dropdown-end');
+    expect(trigger).toHaveAttribute('data-placement', 'topRight');
+    expect(trigger.className).not.toContain('dropdown-top');
+    expect(trigger.className).not.toContain('dropdown-end');
 
     fireEvent.click(trigger);
-    expect(container.querySelector('ul.dropdown-content')).not.toBeNull();
+    expect(document.body.querySelector('[data-part="surface"]')).not.toBeNull();
+    expect(screen.getByRole('menu')).toHaveAttribute('aria-orientation', 'vertical');
     expect(screen.getByText('Actions')).toBeInTheDocument();
-    expect(screen.getByText('Delete')).toHaveClass('text-error');
+    expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveAttribute('data-tone', 'danger');
+    expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveAttribute('data-selected', 'true');
+    expect(document.body.querySelector('.dropdown-content')).toBeNull();
+    expect(document.body.querySelector('.menu')).toBeNull();
 
-    const editButton = screen.getByRole('button', { name: 'Edit' });
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Share' }));
+    expect(screen.getByRole('menuitem', { name: 'Share' })).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('menuitem', { name: 'Copy link' })).toBeInTheDocument();
+
+    const editButton = screen.getByRole('menuitem', { name: 'Edit' });
     fireEvent.click(editButton);
     expect(handleMenuClick).toHaveBeenCalledWith({ key: 'edit' });
     expect(handleOpenChange).toHaveBeenCalledWith(false);
 
     fireEvent.click(trigger);
-    expect(container.querySelector('ul.dropdown-content')).not.toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Disabled' }));
+    expect(document.body.querySelector('[data-part="surface"]')).not.toBeNull();
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Disabled' }));
     expect(handleMenuClick).toHaveBeenCalledTimes(1);
 
     fireEvent.mouseDown(document.body);
-    expect(container.querySelector('ul.dropdown-content')).toBeNull();
+    expect(document.body.querySelector('[data-part="surface"]')).toBeNull();
 
     rerender(
       <ModernDropdown
@@ -74,11 +90,11 @@ describe('Dropdown modern engine advanced coverage', () => {
       </ModernDropdown>
     );
 
-    expect(container.querySelector('ul.dropdown-content')).not.toBeNull();
+    expect(document.body.querySelector('[data-part="surface"]')).not.toBeNull();
     expect(screen.getByText('Persist')).toBeInTheDocument();
   });
 
-  it('covers hover, context-menu, disabled, and empty-placement branches', () => {
+  it('covers hover, context-menu, disabled, and empty-placement branches', async () => {
     const handleOpenChange = vi.fn();
 
     const { container, rerender } = render(
@@ -98,9 +114,9 @@ describe('Dropdown modern engine advanced coverage', () => {
     }
 
     fireEvent.mouseEnter(trigger);
-    expect(container.querySelector('ul.dropdown-content')).not.toBeNull();
+    expect(container.querySelector('[data-part="surface"]')).not.toBeNull();
     fireEvent.mouseLeave(trigger);
-    expect(container.querySelector('ul.dropdown-content')).toBeNull();
+    await waitFor(() => expect(handleOpenChange).toHaveBeenCalledWith(false));
 
     rerender(
       <ModernDropdown
@@ -113,7 +129,7 @@ describe('Dropdown modern engine advanced coverage', () => {
     );
 
     fireEvent.contextMenu(container.firstElementChild as HTMLElement);
-    expect(container.querySelector('ul.dropdown-content')).not.toBeNull();
+    expect(container.querySelector('[data-part="surface"]')).not.toBeNull();
 
     rerender(
       <ModernDropdown
@@ -130,6 +146,6 @@ describe('Dropdown modern engine advanced coverage', () => {
     fireEvent.click(container.firstElementChild as HTMLElement);
     fireEvent.mouseEnter(container.firstElementChild as HTMLElement);
     fireEvent.contextMenu(container.firstElementChild as HTMLElement);
-    expect(container.querySelector('ul.dropdown-content')).toBeNull();
+    expect(container.querySelector('[data-part="surface"]')).toBeNull();
   });
 });

@@ -123,7 +123,8 @@ Each of these was paid for. They are not style preferences.
 12. **A baseline that never hovers certifies nothing about hover.** The 48 visual
    baselines photograph pages at rest. A skin could lose its entire hover rule, its
    press transform and its focus ring with all of them green. `states.spec.ts`
-   records 132 computed cells across tenant × engine × variant × state, and it found
+   records 216 computed cells across the current tenant × engine × variant ×
+   state matrix (the older Button-only subset contains 132), and it found
    a real bug the moment it existed: the modern Button's hover set `borderColor` as a
    longhand over a `border` shorthand, and once the pointer left, the colour fell
    through to the cascade. Settle by THREE agreeing samples, not two — a spring

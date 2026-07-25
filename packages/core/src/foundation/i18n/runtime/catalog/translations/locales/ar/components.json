@@ -48,7 +48,9 @@
     "next": "التالي",
     "page": "الصفحة {current} من {total}",
     "go_to": "الانتقال إلى الصفحة",
-    "items_per_page": "{count} لكل صفحة"
+    "items_per_page": "{count} لكل صفحة",
+    "navigation": "ترقيم الصفحات",
+    "total_items": "إجمالي {total} عنصر"
   },
   "table": {
     "empty": "لا توجد بيانات",
@@ -56,8 +58,17 @@
     "sort_asc": "ترتيب تصاعدي",
     "sort_desc": "ترتيب تنازلي",
     "filter": "تصفية",
+    "filter_column": "تصفية {column}...",
     "clear_filters": "مسح عوامل التصفية",
     "rows_selected": "تم تحديد {count} صفوف",
+    "select_all": "تحديد كل الصفوف",
+    "select_row": "تحديد الصف {index}",
+    "expand_row": "توسيع الصف",
+    "collapse_row": "طي الصف",
+    "page": "الصفحة {current}",
+    "previous_page": "الصفحة السابقة",
+    "next_page": "الصفحة التالية",
+    "resize_column": "تغيير عرض العمود {column}",
     "edit_cell": "تعديل الخلية"
   },
   "upload": {
@@ -67,15 +78,47 @@
     "error": "حدث خطأ أثناء رفع الملف",
     "remove": "إزالة الملف",
     "max_size": "الحد الأقصى للحجم: {size}",
-    "accepted_formats": "الصيغ المقبولة: {formats}"
+    "accepted_formats": "الصيغ المقبولة: {formats}",
+    "file_list": "الملفات المرفوعة",
+    "button": "رفع",
+    "remove_named": "إزالة {name}",
+    "preview": "معاينة {name}",
+    "close_preview": "إغلاق المعاينة",
+    "add_file": "إضافة ملف",
+    "upload_file": "رفع ملف",
+    "drop_hint": "أسقط الملفات هنا أو انقر للرفع",
+    "progress": "تقدم الرفع: {percent}%"
   },
   "datepicker": {
     "placeholder": "اختر تاريخًا",
     "today": "اليوم",
+    "now": "الآن",
     "clear": "مسح",
+    "clear_date": "مسح التاريخ",
+    "clear_dates": "مسح التواريخ",
     "ok": "حسنًا",
     "month": "الشهر",
-    "year": "السنة"
+    "year": "السنة",
+    "start_date": "تاريخ البدء",
+    "end_date": "تاريخ الانتهاء",
+    "previous_month": "الشهر السابق",
+    "next_month": "الشهر التالي",
+    "previous_year": "السنة السابقة",
+    "next_year": "السنة التالية",
+    "previous_decade": "العقد السابق",
+    "next_decade": "العقد التالي",
+    "date_picker": "منتقي التاريخ",
+    "calendar_dates": "تواريخ التقويم",
+    "hour": "الساعة",
+    "minute": "الدقيقة"
+  },
+  "treeselect": {
+    "placeholder": "يرجى الاختيار",
+    "search_placeholder": "بحث...",
+    "not_found": "لا توجد بيانات",
+    "clear": "مسح",
+    "expand": "توسيع",
+    "collapse": "طي"
   },
   "timepicker": {
     "placeholder": "اختر وقتًا",
@@ -115,8 +158,149 @@
   "alert": {
     "close": "إغلاق"
   },
+  "carousel": {
+    "previousSlide": "الشريحة السابقة",
+    "nextSlide": "الشريحة التالية",
+    "navigation": "التنقل في العرض الدوّار",
+    "goToSlide": "انتقل إلى الشريحة {index}",
+    "slideOf": "الشريحة {index} من {total}"
+  },
+  "codeBlock": {
+    "regionLabel": "كتلة التعليمات البرمجية"
+  },
+  "voiceInput": {
+    "speak": "تحدث",
+    "listeningStop": "جارٍ الاستماع… انقر للإيقاف",
+    "transcribing": "جارٍ النسخ…",
+    "blocked": "الميكروفون محظور. اسمح بالوصول في إعدادات المتصفح.",
+    "unavailable": "الإدخال الصوتي غير متاح",
+    "start": "بدء الإدخال الصوتي",
+    "stop": "إيقاف الإدخال الصوتي",
+    "error": {
+      "notAllowed": "الوصول إلى الميكروفون محظور لهذا الموقع. اسمح بالميكروفون في إعدادات المتصفح وأعد المحاولة.",
+      "noSpeech": "لم يتم اكتشاف كلام. أعد المحاولة أو اكتب استفسارك.",
+      "audioCapture": "لم يتم العثور على ميكروفون. لا يزال بإمكانك كتابة استفسارك.",
+      "network": "حدثت مشكلة في الشبكة أثناء النسخ الصوتي. أعد المحاولة أو اكتب استفسارك.",
+      "generic": "الإدخال الصوتي غير متاح. لا يزال بإمكانك كتابة استفسارك."
+    }
+  },
+  "calendar": {
+    "weekdays": {
+      "sun": "أحد",
+      "mon": "اثنين",
+      "tue": "ثلاثاء",
+      "wed": "أربعاء",
+      "thu": "خميس",
+      "fri": "جمعة",
+      "sat": "سبت"
+    },
+    "months": {
+      "january": "يناير",
+      "february": "فبراير",
+      "march": "مارس",
+      "april": "أبريل",
+      "may": "مايو",
+      "june": "يونيو",
+      "july": "يوليو",
+      "august": "أغسطس",
+      "september": "سبتمبر",
+      "october": "أكتوبر",
+      "november": "نوفمبر",
+      "december": "ديسمبر"
+    },
+    "yearToggle": "سنة",
+    "navPrevYear": "السنة السابقة",
+    "navPrevMonth": "الشهر السابق",
+    "navNextMonth": "الشهر التالي",
+    "navNextYear": "السنة التالية"
+  },
+  "colorpicker": {
+    "clear": "مسح",
+    "chooseColor": "اختر اللون",
+    "hexLabel": "اللون السداسي عشري",
+    "selectColor": "حدد اللون {color}"
+  },
+  "qrcode": {
+    "loading": "جارٍ التحميل",
+    "expired": "منتهي الصلاحية",
+    "refresh": "تحديث",
+    "refreshLabel": "تحديث رمز QR",
+    "scanned": "تم المسح",
+    "contains": "رمز QR يحتوي على: {value}"
+  },
+  "markdownView": {
+    "taskChecked": "مهمة مكتملة",
+    "taskUnchecked": "مهمة غير مكتملة"
+  },
+  "mentions": {
+    "not_found": "لا توجد نتائج",
+    "suggestions_label": "اقتراحات الإشارات",
+    "input_label": "الإشارات"
+  },
+  "transfer": {
+    "source_title": "المصدر",
+    "target_title": "الوجهة",
+    "search_placeholder": "بحث",
+    "not_found": "لا توجد بيانات",
+    "item_unit": "عنصر",
+    "items_unit": "عناصر",
+    "select_all": "تحديد الكل",
+    "move_right": ">",
+    "move_left": "<"
+  },
   "empty": {
     "description": "لا توجد بيانات"
+  },
+  "progress": {
+    "percent_complete": "اكتمل بنسبة {percent}%",
+    "indeterminate": "جارٍ التنفيذ"
+  },
+  "scrollArea": {
+    "region_label": "محتوى قابل للتمرير"
+  },
+  "backTop": {
+    "back_to_top": "العودة إلى الأعلى"
+  },
+  "floatbutton": {
+    "actionLabel": "زر إجراء عائم",
+    "openGroup": "فتح مجموعة الإجراءات",
+    "closeGroup": "إغلاق مجموعة الإجراءات",
+    "backTop": "العودة إلى الأعلى"
+  },
+  "splitter": {
+    "resize_gutter": "تغيير حجم اللوحات"
+  },
+  "input_number": {
+    "increase": "زيادة",
+    "decrease": "إنقاص"
+  },
+  "slider": {
+    "label": "شريط التمرير",
+    "start_value": "القيمة الدنيا",
+    "end_value": "القيمة القصوى"
+  },
+  "rate": {
+    "label": "التقييم",
+    "star": "{count} نجمة",
+    "stars": "{count} نجوم"
+  },
+  "actionDock": {
+    "overflow": {
+      "label": "المزيد من الإجراءات"
+    },
+    "topLabel": "الإجراءات العلوية",
+    "bottomLabel": "الإجراءات السفلية"
+  },
+  "stepper": {
+    "navigation": "خطوات التقدم"
+  },
+  "tree": {
+    "collapse": "طي",
+    "expand": "توسيع",
+    "select_node": "تحديد {title}"
+  },
+  "descriptions": {
+    "region_label": "قائمة الوصف"
   },
   "chart": {
     "loading": "جارٍ تحميل الرسم البياني"
@@ -221,5 +405,11 @@
       "empty_title": "لا توجد تصورات مُعدّة",
       "empty_description": "أضف عرضًا واحدًا أو أكثر لعرض هذه الواجهة."
     }
+  },
+  "checkbox": {
+    "group": "مجموعة خانات الاختيار"
+  },
+  "radio": {
+    "group": "مجموعة أزرار الاختيار"
   }
 }

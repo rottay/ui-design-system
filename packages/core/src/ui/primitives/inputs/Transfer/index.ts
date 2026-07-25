@@ -13,7 +13,7 @@
  * - **Batch operations**: Select multiple items for processing
  *
  * Key features:
- * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (custom, skin-painted), Rustic (Vanilla)
  * - **Search filtering**: Filter items in each list
  * - **One-way mode**: Only allow left-to-right transfer
  * - **Pagination**: Handle large datasets efficiently
@@ -75,7 +75,7 @@
  * // Classic engine (Ant Design - default)
  * <Transfer engine="classic" dataSource={data} showSearch />
  *
- * // Modern engine (DaisyUI/Tailwind)
+ * // Modern engine (custom, skin-painted)
  * <Transfer engine="modern" dataSource={data} />
  *
  * // Rustic engine (Pure HTML/CSS)
@@ -106,7 +106,7 @@ export {
  *
  * Engines:
  * - **classic**: Full-featured implementation using Ant Design (default)
- * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **modern**: Lightweight custom implementation painted by the modern skin
  * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const Transfer = createEngineComponent<TransferProps>('Transfer', {

@@ -3,14 +3,17 @@
  * Comprehensive Storybook stories for the Stack component
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
-import { Stack } from './';
-import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
-import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
-import React from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Stack } from "./";
+import { DesignSystemProvider } from "../../../../infrastructure/runtime/bootstrap";
+import {
+  EngineComparison as EngineComparisonHelper,
+  VariantEngineMatrix,
+} from "../../../../../.storybook/helpers";
+import React from "react";
 
 const meta: Meta<typeof Stack> = {
-  title: 'Primitives/Layout/Stack',
+  title: "Primitives/Layout/Stack",
   component: Stack,
   decorators: [
     (Story) => (
@@ -41,66 +44,79 @@ Stack is a layout primitive for stacking elements vertically or horizontally wit
   },
   argTypes: {
     as: {
-      control: 'select',
-      options: ['div', 'span', 'section', 'article', 'nav', 'ul', 'ol'],
-      description: 'HTML element to render as',
+      control: "select",
+      options: ["div", "span", "section", "article", "nav", "ul", "ol"],
+      description: "HTML element to render as",
     },
     direction: {
-      control: 'radio',
-      options: ['vertical', 'horizontal'],
-      description: 'Stack direction',
+      control: "radio",
+      options: ["vertical", "horizontal"],
+      description: "Stack direction",
     },
     spacing: {
-      control: 'select',
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'],
-      description: 'Spacing between items',
+      control: "select",
+      options: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"],
+      description: "Spacing between items",
     },
     align: {
-      control: 'select',
-      options: ['start', 'center', 'end', 'stretch', 'baseline'],
-      description: 'Cross-axis alignment',
+      control: "select",
+      options: ["start", "center", "end", "stretch", "baseline"],
+      description: "Cross-axis alignment",
     },
     justify: {
-      control: 'select',
-      options: ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'],
-      description: 'Main-axis justification',
+      control: "select",
+      options: [
+        "start",
+        "center",
+        "end",
+        "space-between",
+        "space-around",
+        "space-evenly",
+      ],
+      description: "Main-axis justification",
     },
     wrap: {
-      control: 'boolean',
-      description: 'Enable wrapping',
+      control: "boolean",
+      description: "Enable wrapping",
     },
     reverse: {
-      control: 'boolean',
-      description: 'Reverse item order',
+      control: "boolean",
+      description: "Reverse item order",
     },
     fullWidth: {
-      control: 'boolean',
-      description: 'Take full width of container',
+      control: "boolean",
+      description: "Take full width of container",
     },
     fullHeight: {
-      control: 'boolean',
-      description: 'Take full height of container',
+      control: "boolean",
+      description: "Take full height of container",
     },
     engine: {
-      control: 'select',
-      options: ['classic', 'modern', 'rustic'],
-      description: 'Rendering engine to use',
+      control: "select",
+      options: ["classic", "modern", "rustic"],
+      description: "Rendering engine to use",
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 };
 
 export default meta;
 type Story = StoryObj<typeof Stack>;
 
 // Helper component for visual items
-const Item = ({ children, color = '#6366f1' }: { children: React.ReactNode; color?: string }) => (
+const Item = ({
+  children,
+  color = "#6366f1",
+}: {
+  children: React.ReactNode;
+  color?: string;
+}) => (
   <div
     style={{
-      padding: '12px 24px',
+      padding: "12px 24px",
       backgroundColor: color,
-      color: 'white',
-      borderRadius: '8px',
+      color: "white",
+      borderRadius: "8px",
       fontWeight: 500,
     }}
   >
@@ -111,7 +127,7 @@ const Item = ({ children, color = '#6366f1' }: { children: React.ReactNode; colo
 // Default story
 export const Default: Story = {
   args: {
-    spacing: 'md',
+    spacing: "md",
     children: (
       <>
         <Item>Item 1</Item>
@@ -124,7 +140,7 @@ export const Default: Story = {
 
 // Direction variants
 export const DirectionVertical: Story = {
-  name: 'Direction: Vertical',
+  name: "Direction: Vertical",
   render: () => (
     <Stack direction="vertical" spacing="md">
       <Item>First</Item>
@@ -135,7 +151,7 @@ export const DirectionVertical: Story = {
 };
 
 export const DirectionHorizontal: Story = {
-  name: 'Direction: Horizontal',
+  name: "Direction: Horizontal",
   render: () => (
     <Stack direction="horizontal" spacing="md">
       <Item>First</Item>
@@ -147,32 +163,42 @@ export const DirectionHorizontal: Story = {
 
 // Spacing variants
 export const SpacingSizes: Story = {
-  name: 'Spacing Sizes',
+  name: "Spacing Sizes",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {(['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const).map((spacing) => (
-        <div key={spacing}>
-          <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
-            spacing="{spacing}"
-          </h4>
-          <Stack direction="horizontal" spacing={spacing}>
-            <Item color="#3b82f6">A</Item>
-            <Item color="#3b82f6">B</Item>
-            <Item color="#3b82f6">C</Item>
-          </Stack>
-        </div>
-      ))}
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+      {(["none", "xs", "sm", "md", "lg", "xl", "2xl"] as const).map(
+        (spacing) => (
+          <div key={spacing}>
+            <h4
+              style={{
+                margin: "0 0 8px 0",
+                fontSize: "14px",
+                color: "#6b7280",
+              }}
+            >
+              spacing="{spacing}"
+            </h4>
+            <Stack direction="horizontal" spacing={spacing}>
+              <Item color="#3b82f6">A</Item>
+              <Item color="#3b82f6">B</Item>
+              <Item color="#3b82f6">C</Item>
+            </Stack>
+          </div>
+        )
+      )}
     </div>
   ),
 };
 
 export const NumericSpacing: Story = {
-  name: 'Numeric Spacing (pixels)',
+  name: "Numeric Spacing (pixels)",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       {[8, 16, 24, 32, 48].map((gap) => (
         <div key={gap}>
-          <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+          <h4
+            style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}
+          >
             gap={`{${gap}}`} ({gap}px)
           </h4>
           <Stack direction="horizontal" gap={gap}>
@@ -188,38 +214,64 @@ export const NumericSpacing: Story = {
 
 // Alignment variants
 export const AlignmentOptions: Story = {
-  name: 'Alignment Options',
+  name: "Alignment Options",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['start', 'center', 'end', 'stretch', 'baseline'] as const).map((align) => (
-        <div key={align}>
-          <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
-            align="{align}"
-          </h4>
-          <Stack
-            direction="horizontal"
-            spacing="md"
-            align={align}
-            style={{ height: '100px', backgroundColor: '#f3f4f6', padding: '8px', borderRadius: '8px' }}
-          >
-            <Item color="#8b5cf6">Short</Item>
-            <Item color="#8b5cf6" style={{ padding: '24px' }}>Tall</Item>
-            <Item color="#8b5cf6">Medium</Item>
-          </Stack>
-        </div>
-      ))}
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      {(["start", "center", "end", "stretch", "baseline"] as const).map(
+        (align) => (
+          <div key={align}>
+            <h4
+              style={{
+                margin: "0 0 8px 0",
+                fontSize: "14px",
+                color: "#6b7280",
+              }}
+            >
+              align="{align}"
+            </h4>
+            <Stack
+              direction="horizontal"
+              spacing="md"
+              align={align}
+              style={{
+                height: "100px",
+                backgroundColor: "#f3f4f6",
+                padding: "8px",
+                borderRadius: "8px",
+              }}
+            >
+              <Item color="#8b5cf6">Short</Item>
+              <Item color="#8b5cf6" style={{ padding: "24px" }}>
+                Tall
+              </Item>
+              <Item color="#8b5cf6">Medium</Item>
+            </Stack>
+          </div>
+        )
+      )}
     </div>
   ),
 };
 
 // Justification variants
 export const JustificationOptions: Story = {
-  name: 'Justification Options',
+  name: "Justification Options",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'] as const).map((justify) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      {(
+        [
+          "start",
+          "center",
+          "end",
+          "space-between",
+          "space-around",
+          "space-evenly",
+        ] as const
+      ).map((justify) => (
         <div key={justify}>
-          <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+          <h4
+            style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}
+          >
             justify="{justify}"
           </h4>
           <Stack
@@ -227,7 +279,11 @@ export const JustificationOptions: Story = {
             spacing="md"
             justify={justify}
             fullWidth
-            style={{ backgroundColor: '#f3f4f6', padding: '8px', borderRadius: '8px' }}
+            style={{
+              backgroundColor: "#f3f4f6",
+              padding: "8px",
+              borderRadius: "8px",
+            }}
           >
             <Item color="#ec4899">A</Item>
             <Item color="#ec4899">B</Item>
@@ -241,18 +297,23 @@ export const JustificationOptions: Story = {
 
 // Wrap behavior
 export const WrapBehavior: Story = {
-  name: 'Wrap Behavior',
+  name: "Wrap Behavior",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
-          wrap={'{false}'} (default)
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
+          wrap={"{false}"} (default)
         </h4>
         <Stack
           direction="horizontal"
           spacing="md"
           wrap={false}
-          style={{ maxWidth: '300px', backgroundColor: '#f3f4f6', padding: '8px', borderRadius: '8px' }}
+          style={{
+            maxWidth: "300px",
+            backgroundColor: "#f3f4f6",
+            padding: "8px",
+            borderRadius: "8px",
+          }}
         >
           <Item color="#f59e0b">One</Item>
           <Item color="#f59e0b">Two</Item>
@@ -262,14 +323,19 @@ export const WrapBehavior: Story = {
         </Stack>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
-          wrap={'{true}'}
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
+          wrap={"{true}"}
         </h4>
         <Stack
           direction="horizontal"
           spacing="md"
           wrap
-          style={{ maxWidth: '300px', backgroundColor: '#f3f4f6', padding: '8px', borderRadius: '8px' }}
+          style={{
+            maxWidth: "300px",
+            backgroundColor: "#f3f4f6",
+            padding: "8px",
+            borderRadius: "8px",
+          }}
         >
           <Item color="#f59e0b">One</Item>
           <Item color="#f59e0b">Two</Item>
@@ -284,11 +350,11 @@ export const WrapBehavior: Story = {
 
 // Reverse order
 export const ReverseOrder: Story = {
-  name: 'Reverse Order',
+  name: "Reverse Order",
   render: () => (
-    <div style={{ display: 'flex', gap: '48px' }}>
+    <div style={{ display: "flex", gap: "48px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Vertical (normal)
         </h4>
         <Stack direction="vertical" spacing="sm">
@@ -298,7 +364,7 @@ export const ReverseOrder: Story = {
         </Stack>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Vertical (reversed)
         </h4>
         <Stack direction="vertical" spacing="sm" reverse>
@@ -308,7 +374,7 @@ export const ReverseOrder: Story = {
         </Stack>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Horizontal (normal)
         </h4>
         <Stack direction="horizontal" spacing="sm">
@@ -318,7 +384,7 @@ export const ReverseOrder: Story = {
         </Stack>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Horizontal (reversed)
         </h4>
         <Stack direction="horizontal" spacing="sm" reverse>
@@ -333,11 +399,11 @@ export const ReverseOrder: Story = {
 
 // Dividers
 export const DefaultDivider: Story = {
-  name: 'Default Divider',
+  name: "Default Divider",
   render: () => (
-    <div style={{ display: 'flex', gap: '48px' }}>
+    <div style={{ display: "flex", gap: "48px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Vertical with divider
         </h4>
         <Stack direction="vertical" spacing="md" divider>
@@ -347,10 +413,15 @@ export const DefaultDivider: Story = {
         </Stack>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Horizontal with divider
         </h4>
-        <Stack direction="horizontal" spacing="md" divider style={{ height: '60px' }}>
+        <Stack
+          direction="horizontal"
+          spacing="md"
+          divider
+          style={{ height: "60px" }}
+        >
           <Item color="#14b8a6">A</Item>
           <Item color="#14b8a6">B</Item>
           <Item color="#14b8a6">C</Item>
@@ -361,18 +432,20 @@ export const DefaultDivider: Story = {
 };
 
 export const CustomDivider: Story = {
-  name: 'Custom Divider',
+  name: "Custom Divider",
   render: () => (
-    <div style={{ display: 'flex', gap: '48px' }}>
+    <div style={{ display: "flex", gap: "48px" }}>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Custom React element
         </h4>
         <Stack
           direction="horizontal"
           spacing="md"
           align="center"
-          divider={<span style={{ color: '#9ca3af', fontSize: '20px' }}>|</span>}
+          divider={
+            <span style={{ color: "#9ca3af", fontSize: "20px" }}>|</span>
+          }
         >
           <span>Home</span>
           <span>About</span>
@@ -380,14 +453,14 @@ export const CustomDivider: Story = {
         </Stack>
       </div>
       <div>
-        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#6b7280' }}>
+        <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#6b7280" }}>
           Icon divider
         </h4>
         <Stack
           direction="horizontal"
           spacing="md"
           align="center"
-          divider={<span style={{ color: '#ec4899' }}>{">"}</span>}
+          divider={<span style={{ color: "#ec4899" }}>{">"}</span>}
         >
           <span>Dashboard</span>
           <span>Settings</span>
@@ -400,23 +473,81 @@ export const CustomDivider: Story = {
 
 // Polymorphic elements
 export const PolymorphicElements: Story = {
-  name: 'Polymorphic Elements',
+  name: "Polymorphic Elements",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <Stack as="nav" direction="horizontal" spacing="lg" style={{ padding: '16px', backgroundColor: '#1f2937', borderRadius: '8px' }}>
-        <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Home</a>
-        <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Products</a>
-        <a href="#" style={{ color: 'white', textDecoration: 'none' }}>About</a>
-        <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Contact</a>
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      <Stack
+        as="nav"
+        direction="horizontal"
+        spacing="lg"
+        style={{
+          padding: "16px",
+          backgroundColor: "#1f2937",
+          borderRadius: "8px",
+        }}
+      >
+        <a href="#" style={{ color: "white", textDecoration: "none" }}>
+          Home
+        </a>
+        <a href="#" style={{ color: "white", textDecoration: "none" }}>
+          Products
+        </a>
+        <a href="#" style={{ color: "white", textDecoration: "none" }}>
+          About
+        </a>
+        <a href="#" style={{ color: "white", textDecoration: "none" }}>
+          Contact
+        </a>
       </Stack>
-      <Stack as="ul" direction="vertical" spacing="sm" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        <li style={{ padding: '8px 16px', backgroundColor: '#e0e7ff', borderRadius: '4px' }}>List Item 1</li>
-        <li style={{ padding: '8px 16px', backgroundColor: '#e0e7ff', borderRadius: '4px' }}>List Item 2</li>
-        <li style={{ padding: '8px 16px', backgroundColor: '#e0e7ff', borderRadius: '4px' }}>List Item 3</li>
+      <Stack
+        as="ul"
+        direction="vertical"
+        spacing="sm"
+        style={{ listStyle: "none", margin: 0, padding: 0 }}
+      >
+        <li
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#e0e7ff",
+            borderRadius: "4px",
+          }}
+        >
+          List Item 1
+        </li>
+        <li
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#e0e7ff",
+            borderRadius: "4px",
+          }}
+        >
+          List Item 2
+        </li>
+        <li
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#e0e7ff",
+            borderRadius: "4px",
+          }}
+        >
+          List Item 3
+        </li>
       </Stack>
-      <Stack as="article" direction="vertical" spacing="md" style={{ padding: '24px', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+      <Stack
+        as="article"
+        direction="vertical"
+        spacing="md"
+        style={{
+          padding: "24px",
+          border: "1px solid #e5e7eb",
+          borderRadius: "8px",
+        }}
+      >
         <h3 style={{ margin: 0 }}>Article Title</h3>
-        <p style={{ margin: 0, color: '#6b7280' }}>This is article content rendered inside a Stack component using as="article".</p>
+        <p style={{ margin: 0, color: "#6b7280" }}>
+          This is article content rendered inside a Stack component using
+          as="article".
+        </p>
       </Stack>
     </div>
   ),
@@ -424,23 +555,59 @@ export const PolymorphicElements: Story = {
 
 // Full width and height
 export const FullDimensions: Story = {
-  name: 'Full Width & Height',
+  name: "Full Width & Height",
   render: () => (
-    <div style={{ display: 'flex', gap: '24px', height: '200px' }}>
-      <div style={{ width: '300px', border: '2px dashed #d1d5db', borderRadius: '8px' }}>
-        <Stack fullWidth spacing="md" style={{ backgroundColor: '#fef3c7', padding: '8px' }}>
+    <div style={{ display: "flex", gap: "24px", height: "200px" }}>
+      <div
+        style={{
+          width: "300px",
+          border: "2px dashed #d1d5db",
+          borderRadius: "8px",
+        }}
+      >
+        <Stack
+          fullWidth
+          spacing="md"
+          style={{ backgroundColor: "#fef3c7", padding: "8px" }}
+        >
           <Item color="#f59e0b">Full Width</Item>
           <Item color="#f59e0b">Stack</Item>
         </Stack>
       </div>
-      <div style={{ width: '150px', height: '200px', border: '2px dashed #d1d5db', borderRadius: '8px' }}>
-        <Stack fullHeight spacing="md" justify="space-between" style={{ backgroundColor: '#dcfce7', padding: '8px' }}>
+      <div
+        style={{
+          width: "150px",
+          height: "200px",
+          border: "2px dashed #d1d5db",
+          borderRadius: "8px",
+        }}
+      >
+        <Stack
+          fullHeight
+          spacing="md"
+          justify="space-between"
+          style={{ backgroundColor: "#dcfce7", padding: "8px" }}
+        >
           <Item color="#22c55e">Top</Item>
           <Item color="#22c55e">Bottom</Item>
         </Stack>
       </div>
-      <div style={{ width: '200px', height: '200px', border: '2px dashed #d1d5db', borderRadius: '8px' }}>
-        <Stack fullWidth fullHeight spacing="md" align="center" justify="center" style={{ backgroundColor: '#dbeafe', padding: '8px' }}>
+      <div
+        style={{
+          width: "200px",
+          height: "200px",
+          border: "2px dashed #d1d5db",
+          borderRadius: "8px",
+        }}
+      >
+        <Stack
+          fullWidth
+          fullHeight
+          spacing="md"
+          align="center"
+          justify="center"
+          style={{ backgroundColor: "#dbeafe", padding: "8px" }}
+        >
           <Item color="#3b82f6">Centered</Item>
           <Item color="#3b82f6">Both</Item>
         </Stack>
@@ -451,25 +618,65 @@ export const FullDimensions: Story = {
 
 // Nested stacks
 export const NestedStacks: Story = {
-  name: 'Nested Stacks',
+  name: "Nested Stacks",
   render: () => (
-    <Stack spacing="lg" style={{ padding: '24px', backgroundColor: '#f9fafb', borderRadius: '12px' }}>
+    <Stack
+      spacing="lg"
+      style={{
+        padding: "24px",
+        backgroundColor: "#f9fafb",
+        borderRadius: "12px",
+      }}
+    >
       <h3 style={{ margin: 0 }}>Dashboard</h3>
       <Stack direction="horizontal" spacing="lg" wrap>
-        <Stack spacing="md" style={{ padding: '16px', backgroundColor: 'white', borderRadius: '8px', flex: 1, minWidth: '200px' }}>
-          <h4 style={{ margin: 0, color: '#3b82f6' }}>Revenue</h4>
-          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>$24,500</div>
-          <div style={{ color: '#10b981', fontSize: '14px' }}>+12% from last month</div>
+        <Stack
+          spacing="md"
+          style={{
+            padding: "16px",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            flex: 1,
+            minWidth: "200px",
+          }}
+        >
+          <h4 style={{ margin: 0, color: "#3b82f6" }}>Revenue</h4>
+          <div style={{ fontSize: "24px", fontWeight: "bold" }}>$24,500</div>
+          <div style={{ color: "#10b981", fontSize: "14px" }}>
+            +12% from last month
+          </div>
         </Stack>
-        <Stack spacing="md" style={{ padding: '16px', backgroundColor: 'white', borderRadius: '8px', flex: 1, minWidth: '200px' }}>
-          <h4 style={{ margin: 0, color: '#8b5cf6' }}>Users</h4>
-          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>1,234</div>
-          <div style={{ color: '#10b981', fontSize: '14px' }}>+5% from last month</div>
+        <Stack
+          spacing="md"
+          style={{
+            padding: "16px",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            flex: 1,
+            minWidth: "200px",
+          }}
+        >
+          <h4 style={{ margin: 0, color: "#8b5cf6" }}>Users</h4>
+          <div style={{ fontSize: "24px", fontWeight: "bold" }}>1,234</div>
+          <div style={{ color: "#10b981", fontSize: "14px" }}>
+            +5% from last month
+          </div>
         </Stack>
-        <Stack spacing="md" style={{ padding: '16px', backgroundColor: 'white', borderRadius: '8px', flex: 1, minWidth: '200px' }}>
-          <h4 style={{ margin: 0, color: '#ec4899' }}>Orders</h4>
-          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>856</div>
-          <div style={{ color: '#ef4444', fontSize: '14px' }}>-3% from last month</div>
+        <Stack
+          spacing="md"
+          style={{
+            padding: "16px",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            flex: 1,
+            minWidth: "200px",
+          }}
+        >
+          <h4 style={{ margin: 0, color: "#ec4899" }}>Orders</h4>
+          <div style={{ fontSize: "24px", fontWeight: "bold" }}>856</div>
+          <div style={{ color: "#ef4444", fontSize: "14px" }}>
+            -3% from last month
+          </div>
         </Stack>
       </Stack>
     </Stack>
@@ -484,11 +691,12 @@ export const NestedStacks: Story = {
  * Side-by-side comparison of Stack across all 3 engines.
  */
 export const CompareEngines: Story = {
-  name: '🔄 Engine Comparison',
+  name: "🔄 Engine Comparison",
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Stack rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story:
+          "Compare the same Stack rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).",
       },
     },
   },
@@ -503,9 +711,9 @@ export const CompareEngines: Story = {
             <Item color="#8b5cf6">Item 3</Item>
           </>
         ),
-        direction: 'horizontal',
-        spacing: 'md',
-        align: 'center',
+        direction: "horizontal",
+        spacing: "md",
+        align: "center",
       }}
       showDescriptions
     />
@@ -514,7 +722,7 @@ export const CompareEngines: Story = {
 
 // Real-world examples
 export const NavigationBar: Story = {
-  name: 'Real World: Navigation Bar',
+  name: "Real World: Navigation Bar",
   render: () => (
     <Stack
       as="nav"
@@ -524,27 +732,59 @@ export const NavigationBar: Story = {
       justify="space-between"
       fullWidth
       style={{
-        padding: '16px 24px',
-        backgroundColor: 'white',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderRadius: '8px',
+        padding: "16px 24px",
+        backgroundColor: "white",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+        borderRadius: "8px",
       }}
     >
       <Stack direction="horizontal" spacing="sm" align="center">
-        <div style={{ width: '32px', height: '32px', backgroundColor: '#6366f1', borderRadius: '8px' }} />
-        <span style={{ fontWeight: 600, fontSize: '18px' }}>Brand</span>
+        <div
+          style={{
+            width: "32px",
+            height: "32px",
+            backgroundColor: "#6366f1",
+            borderRadius: "8px",
+          }}
+        />
+        <span style={{ fontWeight: 600, fontSize: "18px" }}>Brand</span>
       </Stack>
       <Stack direction="horizontal" spacing="md" align="center">
-        <a href="#" style={{ color: '#4b5563', textDecoration: 'none' }}>Home</a>
-        <a href="#" style={{ color: '#4b5563', textDecoration: 'none' }}>Features</a>
-        <a href="#" style={{ color: '#4b5563', textDecoration: 'none' }}>Pricing</a>
-        <a href="#" style={{ color: '#4b5563', textDecoration: 'none' }}>About</a>
+        <a href="#" style={{ color: "#4b5563", textDecoration: "none" }}>
+          Home
+        </a>
+        <a href="#" style={{ color: "#4b5563", textDecoration: "none" }}>
+          Features
+        </a>
+        <a href="#" style={{ color: "#4b5563", textDecoration: "none" }}>
+          Pricing
+        </a>
+        <a href="#" style={{ color: "#4b5563", textDecoration: "none" }}>
+          About
+        </a>
       </Stack>
       <Stack direction="horizontal" spacing="sm">
-        <button style={{ padding: '8px 16px', border: '1px solid #e5e7eb', borderRadius: '6px', backgroundColor: 'white', cursor: 'pointer' }}>
+        <button
+          style={{
+            padding: "8px 16px",
+            border: "1px solid #e5e7eb",
+            borderRadius: "6px",
+            backgroundColor: "white",
+            cursor: "pointer",
+          }}
+        >
           Log in
         </button>
-        <button style={{ padding: '8px 16px', border: 'none', borderRadius: '6px', backgroundColor: '#6366f1', color: 'white', cursor: 'pointer' }}>
+        <button
+          style={{
+            padding: "8px 16px",
+            border: "none",
+            borderRadius: "6px",
+            backgroundColor: "#6366f1",
+            color: "white",
+            cursor: "pointer",
+          }}
+        >
           Sign up
         </button>
       </Stack>
@@ -553,37 +793,84 @@ export const NavigationBar: Story = {
 };
 
 export const FormLayout: Story = {
-  name: 'Real World: Form Layout',
+  name: "Real World: Form Layout",
   render: () => (
-    <Stack spacing="lg" style={{ maxWidth: '400px', padding: '24px', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+    <Stack
+      spacing="lg"
+      style={{
+        maxWidth: "400px",
+        padding: "24px",
+        backgroundColor: "white",
+        borderRadius: "12px",
+        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+      }}
+    >
       <h3 style={{ margin: 0 }}>Contact Us</h3>
       <Stack spacing="md">
         <Stack spacing="xs">
-          <label style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}>Name</label>
+          <label
+            style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}
+          >
+            Name
+          </label>
           <input
             type="text"
             placeholder="Enter your name"
-            style={{ padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px' }}
+            style={{
+              padding: "8px 12px",
+              border: "1px solid #d1d5db",
+              borderRadius: "6px",
+              fontSize: "14px",
+            }}
           />
         </Stack>
         <Stack spacing="xs">
-          <label style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}>Email</label>
+          <label
+            style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}
+          >
+            Email
+          </label>
           <input
             type="email"
             placeholder="Enter your email"
-            style={{ padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px' }}
+            style={{
+              padding: "8px 12px",
+              border: "1px solid #d1d5db",
+              borderRadius: "6px",
+              fontSize: "14px",
+            }}
           />
         </Stack>
         <Stack spacing="xs">
-          <label style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}>Message</label>
+          <label
+            style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}
+          >
+            Message
+          </label>
           <textarea
             placeholder="Enter your message"
             rows={4}
-            style={{ padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', resize: 'vertical' }}
+            style={{
+              padding: "8px 12px",
+              border: "1px solid #d1d5db",
+              borderRadius: "6px",
+              fontSize: "14px",
+              resize: "vertical",
+            }}
           />
         </Stack>
       </Stack>
-      <button style={{ padding: '12px 24px', border: 'none', borderRadius: '6px', backgroundColor: '#6366f1', color: 'white', cursor: 'pointer', fontWeight: 500 }}>
+      <button
+        style={{
+          padding: "12px 24px",
+          border: "none",
+          borderRadius: "6px",
+          backgroundColor: "#6366f1",
+          color: "white",
+          cursor: "pointer",
+          fontWeight: 500,
+        }}
+      >
         Send Message
       </button>
     </Stack>
@@ -591,7 +878,7 @@ export const FormLayout: Story = {
 };
 
 export const CardGrid: Story = {
-  name: 'Real World: Card Grid',
+  name: "Real World: Card Grid",
   render: () => (
     <Stack direction="horizontal" spacing="lg" wrap>
       {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -599,34 +886,95 @@ export const CardGrid: Story = {
           key={n}
           spacing="md"
           style={{
-            width: '250px',
-            padding: '16px',
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            width: "250px",
+            padding: "16px",
+            backgroundColor: "white",
+            borderRadius: "12px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           }}
         >
           <div
             style={{
-              height: '120px',
+              height: "120px",
               backgroundColor: `hsl(${n * 40}, 70%, 60%)`,
-              borderRadius: '8px',
+              borderRadius: "8px",
             }}
           />
           <h4 style={{ margin: 0 }}>Card Title {n}</h4>
-          <p style={{ margin: 0, color: '#6b7280', fontSize: '14px' }}>
+          <p style={{ margin: 0, color: "#6b7280", fontSize: "14px" }}>
             This is a card description with some sample text content.
           </p>
           <Stack direction="horizontal" spacing="sm" justify="end">
-            <button style={{ padding: '6px 12px', border: '1px solid #e5e7eb', borderRadius: '4px', backgroundColor: 'white', cursor: 'pointer', fontSize: '12px' }}>
+            <button
+              style={{
+                padding: "6px 12px",
+                border: "1px solid #e5e7eb",
+                borderRadius: "4px",
+                backgroundColor: "white",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
+            >
               Details
             </button>
-            <button style={{ padding: '6px 12px', border: 'none', borderRadius: '4px', backgroundColor: '#6366f1', color: 'white', cursor: 'pointer', fontSize: '12px' }}>
+            <button
+              style={{
+                padding: "6px 12px",
+                border: "none",
+                borderRadius: "4px",
+                backgroundColor: "#6366f1",
+                color: "white",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
+            >
               Action
             </button>
           </Stack>
         </Stack>
       ))}
+    </Stack>
+  ),
+};
+
+/** Modern contract stress: responsive direction and tokenized adaptive dividers. */
+export const ModernResponsiveEvidenceFlow: Story = {
+  name: "Modern · responsive evidence flow",
+  render: () => (
+    <Stack
+      engine="modern"
+      as="section"
+      role="region"
+      aria-label="Evidence timeline"
+      direction={{ xs: "vertical", lg: "horizontal" }}
+      spacing={{ xs: "sm", lg: "lg" }}
+      align="stretch"
+      divider
+      motion="rearrange"
+      style={{
+        padding: "var(--ds-spacing-4)",
+        border: "1px solid var(--ds-color-border-subtle)",
+        borderRadius: "var(--ds-radius-lg)",
+        background: "var(--ds-surface-card)",
+      }}
+    >
+      <Stack spacing="xs" style={{ minWidth: 0, flex: "1 1 0" }}>
+        <strong>Portfolio verified</strong>
+        <span>Three sources · updated today</span>
+      </Stack>
+      <Stack spacing="xs" style={{ minWidth: 0, flex: "1 1 0" }}>
+        <strong>Interview ready</strong>
+        <span>Panel context and scorecard prepared</span>
+      </Stack>
+      <Stack
+        spacing="xs"
+        dir="rtl"
+        lang="ar"
+        style={{ minWidth: 0, flex: "1 1 0" }}
+      >
+        <strong>الخطوة التالية</strong>
+        <span>مراجعة الأدلة واتخاذ القرار</span>
+      </Stack>
     </Stack>
   ),
 };

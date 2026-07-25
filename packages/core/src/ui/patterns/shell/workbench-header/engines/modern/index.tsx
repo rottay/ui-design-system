@@ -22,13 +22,12 @@
 
 import React from 'react';
 import type { WorkbenchHeaderProps, WorkbenchQuickAction } from '../../contracts';
+import Button from '../../../../../primitives/inputs/Button/engines/modern';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 
 /* ------------------------------------------------------------------ */
 /* Shared style constants                                              */
 /* ------------------------------------------------------------------ */
-
-const TRANSITION_FAST =
-  'var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
 /* ------------------------------------------------------------------ */
 /* QuickActionButton                                                   */
@@ -42,75 +41,23 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
   const variant = action.variant ?? 'default';
 
   return (
-    <button
-      type="button"
-      disabled={action.disabled}
-      onClick={action.onClick}
+    <span
       data-part="action"
       data-variant={variant}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 6,
-        padding: '7px 14px',
-        fontSize: 13,
-        fontWeight: 500,
-        lineHeight: 1.4,
-        cursor: action.disabled ? 'not-allowed' : 'pointer',
-        opacity: action.disabled ? 0.5 : 1,
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
-      }}
+      style={{ display: 'contents' }}
     >
-      {action.icon && (
-        <span style={{ display: 'inline-flex', fontSize: 14, flexShrink: 0 }}>
-          {action.icon}
-        </span>
-      )}
-      {action.label}
-    </button>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* BackButton                                                          */
-/* ------------------------------------------------------------------ */
-
-/**
- * Clean back navigation button with ghost styling and hover state.
- */
-function BackButton({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label="Go back"
-      data-part="back"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 32,
-        height: 32,
-        flexShrink: 0,
-        cursor: 'pointer',
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}`,
-      }}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-        style={{ width: 16, height: 16 }}
+      <Button
+        htmlType="button"
+        size="sm"
+        variant={variant}
+        disabled={action.disabled}
+        onClick={action.onClick}
+        style={{ flexShrink: 0 }}
+        icon={action.icon}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-        />
-      </svg>
-    </button>
+        {action.label}
+      </Button>
+    </span>
   );
 }
 
@@ -140,13 +87,15 @@ function SavedViewTab({
       data-active={isActive ? 'true' : 'false'}
       style={{
         position: 'relative',
-        padding: '8px 16px',
-        fontSize: 13,
-        fontWeight: isActive ? 600 : 500,
-        lineHeight: 1.4,
-        marginBottom: -1,
+        minHeight: 'var(--ds-tabs-md-height)',
+        padding: 'var(--ds-tabs-md-padding)',
+        fontSize: 'var(--ds-tabs-md-font-size)',
+        fontWeight: isActive
+          ? 'var(--ds-tabs-item-font-weight-active)'
+          : 'var(--ds-tabs-item-font-weight)',
+        lineHeight: 'var(--ds-line-height-body)',
         cursor: 'pointer',
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
+        transition: 'color var(--ds-motion-fast) var(--ds-motion-ease-out), background var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out), transform var(--ds-motion-fast) var(--ds-motion-ease-out)',
       }}
     >
       {label}
@@ -199,6 +148,8 @@ function SkeletonBlock(props: { width: number | string; height: number; style?: 
  */
 export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
   const {
+    eyebrow,
+    icon,
     title,
     subtitle,
     exceptionCount,
@@ -213,7 +164,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
 
   /* ---- Container styles ---- */
   const containerStyle: React.CSSProperties = {
-    padding: '20px 24px',
+    padding: 'var(--ds-workbench-header-padding)',
     ...style,
   };
 
@@ -233,19 +184,19 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
             justifyContent: 'space-between',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-workbench-header-item-gap)' }}>
             {/* Avatar skeleton */}
             <SkeletonBlock
               width={40}
               height={40}
               style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-full)', flexShrink: 0 } as React.CSSProperties}
             />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
               <SkeletonBlock width={200} height={22} />
               <SkeletonBlock width={300} height={14} />
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 'var(--ds-workbench-header-action-gap)' }}>
             <SkeletonBlock
               width={80}
               height={34}
@@ -261,7 +212,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
         <SkeletonBlock
           width="100%"
           height={36}
-          style={{ marginTop: 16 }}
+          style={{ marginTop: 'var(--ds-workbench-header-section-gap)' }}
         />
       </div>
     );
@@ -273,6 +224,9 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
       className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
       data-part="root"
       data-loading="false"
+      data-has-icon={icon ? 'true' : 'false'}
+      data-has-actions={quickActions && quickActions.length > 0 ? 'true' : 'false'}
+      data-has-tabs={savedViews && savedViews.length > 0 ? 'true' : 'false'}
       style={containerStyle}
     >
       {/* ---- Header row: back + title + badge | quick actions ---- */}
@@ -282,7 +236,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'space-between',
-          gap: 16,
+          gap: 'var(--ds-workbench-header-section-gap)',
           flexWrap: 'wrap',
         }}
       >
@@ -292,32 +246,37 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 12,
+            gap: 'var(--ds-workbench-header-item-gap)',
             minWidth: 0,
             flex: 1,
           }}
         >
+          {icon ? (
+            <span data-part="header-icon" aria-hidden="true">
+              {icon}
+            </span>
+          ) : null}
+
           {/* Title + subtitle column */}
           <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
+            {eyebrow ? <div data-part="eyebrow">{eyebrow}</div> : null}
             <div
               data-part="title-row"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
+                gap: 'var(--ds-workbench-header-item-gap)',
               }}
             >
               <h2
                 data-part="title"
                 style={{
                   margin: 0,
-                  fontSize: 20,
-                  fontWeight: 600,
-                  lineHeight: 1.3,
-                  letterSpacing: '-0.02em',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
+                  fontSize: 'var(--ds-font-size-xl)',
+                  fontWeight: 'var(--ds-font-weight-semibold)',
+                  lineHeight: 'var(--ds-line-height-heading)',
+                  letterSpacing: 'var(--ds-letter-spacing-heading)',
+                  textWrap: 'balance',
                 }}
               >
                 {title}
@@ -332,26 +291,13 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                     alignItems: 'center',
                     gap: 4,
                     padding: '2px 10px',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    lineHeight: 1.5,
+                    fontSize: 'var(--ds-font-size-xs)',
+                    fontWeight: 'var(--ds-font-weight-semibold)',
+                    lineHeight: 'var(--ds-line-height-body)',
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    style={{ width: 12, height: 12, flexShrink: 0 }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                  <StatusWarningIcon size={12} decorative />
                   {exceptionCount}
                 </span>
               )}
@@ -363,11 +309,9 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                 data-part="subtitle"
                 style={{
                   margin: '4px 0 0',
-                  fontSize: 13,
-                  lineHeight: 1.4,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
+                  fontSize: 'var(--ds-font-size-sm)',
+                  lineHeight: 'var(--ds-line-height-body)',
+                  textWrap: 'pretty',
                 }}
               >
                 {subtitle}
@@ -383,7 +327,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
+              gap: 'var(--ds-workbench-header-action-gap)',
               flexShrink: 0,
               flexWrap: 'wrap',
             }}
@@ -404,8 +348,8 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 0,
-            marginTop: 16,
+            gap: 'var(--ds-tabs-gap)',
+            marginTop: 'var(--ds-workbench-header-section-gap)',
           }}
         >
           {savedViews.map((view) => {

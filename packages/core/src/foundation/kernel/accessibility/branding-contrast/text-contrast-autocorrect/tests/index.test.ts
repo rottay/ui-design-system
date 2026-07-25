@@ -238,6 +238,14 @@ describe('enforceTextContrast', () => {
     expect(tokens).toContain('--ds-sidebar-text');
     expect(tokens).toContain('--ds-sidebar-item-color-active');
     expect(tokens).toContain('--ds-color-text-primary');
+    expect(tokens).toContain('--ds-color-text-secondary');
+    expect(tokens).toContain('--ds-color-text-muted');
+    expect(tokens).toContain('--ds-color-text-disabled');
+    for (const role of ['canvas', 'shell', 'panel', 'card', 'inset', 'control', 'raised', 'overlay']) {
+      expect(tokens).toContain(`--ds-material-${role}-foreground`);
+      expect(tokens).toContain(`--ds-material-${role}-foreground-muted`);
+      expect(tokens).toContain(`--ds-material-${role}-foreground-disabled`);
+    }
     expect(tokens).toContain('--ds-card-title-color');
     expect(tokens).toContain('--ds-card-body-color');
   });

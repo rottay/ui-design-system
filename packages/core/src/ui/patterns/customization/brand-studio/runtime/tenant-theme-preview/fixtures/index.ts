@@ -9,7 +9,8 @@
  * -- or its own content -- through the preview galleries slot.
  */
 
-export { ListCollectionPreviewFixture } from './list-collection';
-export { FormDetailPreviewFixture } from './form-detail';
-export { DashboardMetricsPreviewFixture } from './dashboard-metrics';
-export { TenantThemePreviewGallery } from './gallery';
+export { ListCollectionPreviewFixture } from "./list-collection";
+export { FormDetailPreviewFixture } from "./form-detail";
+export { DashboardMetricsPreviewFixture } from "./dashboard-metrics";
+export { VisualExcellencePreviewFixture } from "./visual-excellence";
+export { TenantThemePreviewGallery } from "./gallery";

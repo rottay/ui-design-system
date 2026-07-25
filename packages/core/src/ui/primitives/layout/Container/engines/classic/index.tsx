@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Container Classic Engine - Rottay Design System.
@@ -19,13 +19,13 @@
  * @package @rottay/design-system
  */
 
-import React from 'react';
-import type { ContainerProps } from '../../contracts';
+import React from "react";
+import type { ContainerProps } from "../../contracts";
 import {
   CONTAINER_DEFAULTS,
   CONTAINER_MAX_WIDTHS,
   CONTAINER_PADDINGS,
-} from '../../contracts';
+} from "../../contracts";
 
 /**
  * Classic (Ant Design) Container component.
@@ -53,25 +53,27 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
     // Resolve maxWidth: fluid overrides everything to 100%, numeric values
     // become px strings, and named presets are looked up in the constants map
     const computedMaxWidth = fluid
-      ? '100%'
-      : typeof maxWidth === 'number'
-        ? `${maxWidth}px`
-        : CONTAINER_MAX_WIDTHS[maxWidth as keyof typeof CONTAINER_MAX_WIDTHS] || CONTAINER_MAX_WIDTHS.lg;
+      ? "100%"
+      : typeof maxWidth === "number"
+      ? `${maxWidth}px`
+      : CONTAINER_MAX_WIDTHS[maxWidth as keyof typeof CONTAINER_MAX_WIDTHS] ||
+        CONTAINER_MAX_WIDTHS.lg;
 
     // Resolve padding: numeric values become px, named presets use the map
     const computedPadding =
-      typeof padding === 'number'
+      typeof padding === "number"
         ? `${padding}px`
-        : CONTAINER_PADDINGS[padding as keyof typeof CONTAINER_PADDINGS] || CONTAINER_PADDINGS.md;
+        : CONTAINER_PADDINGS[padding as keyof typeof CONTAINER_PADDINGS] ||
+          CONTAINER_PADDINGS.md;
 
     // Assemble the final style object; centering is achieved via margin auto
     // and box-sizing ensures padding is included within the max-width
     const containerStyle: React.CSSProperties = {
       maxWidth: computedMaxWidth,
-      width: '100%',
+      width: "100%",
       padding: computedPadding,
-      ...(center && { marginLeft: 'auto', marginRight: 'auto' }),
-      boxSizing: 'border-box',
+      ...(center && { marginLeft: "auto", marginRight: "auto" }),
+      boxSizing: "border-box",
       ...style,
     };
 
@@ -83,6 +85,6 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   }
 );
 
-Container.displayName = 'Container.Classic';
+Container.displayName = "Container.Classic";
 
 export default Container;

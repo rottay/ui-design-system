@@ -41,24 +41,47 @@
   border-radius: var(--ds-list-border-radius, var(--ds-radius-lg));
 }
 
+/* size steps: the retired inline sizeFontSize map, keyed on the stamped data-size */
+.rottay-list.rottay-list--modern[data-part='root'][data-size='small'] {
+  font-size: var(--ds-list-sm-font-size, 12px);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-size='default'] {
+  font-size: var(--ds-list-default-font-size, 14px);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-size='large'] {
+  font-size: var(--ds-list-lg-font-size, 16px);
+}
+
+/* loading posture (the skeleton shape utilities stay in the engine) */
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] {
+  opacity: var(--ds-list-loading-opacity, 0.6);
+}
+
 /* loading skeleton: avatar disc + text bars share one fill */
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
   background: var(--ds-list-item-hover-background-color, var(--ds-surface-panel));
 }
 
-/* header + footer: surface always, separator color only when bordered (the
-   width comes from the `border-b` / `border-t` utilities, which are only
-   emitted in bordered mode). */
+/* header + footer: geometry + surface always; the separator line (width,
+   style AND color) only in bordered mode -- this skin is the single owner of
+   those borders (the Tailwind `border-b`/`border-t` utilities are gone). */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='header'] {
+  padding: var(--ds-list-header-padding-vertical, 12px) var(--ds-list-header-padding-horizontal, 16px);
+  font-size: var(--ds-list-header-font-size, inherit);
+  font-weight: var(--ds-list-header-font-weight, 600);
   background: var(--ds-list-header-background-color, transparent);
 }
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer'] {
+  padding: var(--ds-list-footer-padding-vertical, 12px) var(--ds-list-footer-padding-horizontal, 16px);
+  font-size: var(--ds-list-footer-font-size, inherit);
   background: var(--ds-list-footer-background-color, transparent);
 }
-.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header'],
+.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header'] {
+  border-bottom: var(--ds-list-border-width, 1px) solid var(--ds-list-border-color, var(--ds-color-border));
+}
 .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer'] {
-  border-color: var(--ds-list-border-color, var(--ds-color-border));
+  border-top: var(--ds-list-border-width, 1px) solid var(--ds-list-border-color, var(--ds-color-border));
 }
 
 /* split divider between items */
@@ -69,18 +92,48 @@
 /* ============================== List.Item ================================ */
 
 .rottay-list-item.rottay-list-item--modern[data-part='item'] {
+  padding: var(--ds-list-default-padding-vertical, 12px) var(--ds-list-default-padding-horizontal, 16px);
   background: var(--ds-list-item-background-color, transparent);
   color: var(--ds-list-text-color, inherit);
+  transition: background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing, ease-in-out);
+}
+/* extra + actions sit on the inline-END side: logical margins, so the
+   separation flips with direction instead of pinning to the physical left */
+.rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-extra'] {
+  margin-inline-start: var(--ds-list-extra-margin-left, 16px);
 }
 .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] {
+  margin-inline-start: var(--ds-list-extra-margin-left, 16px);
+  gap: var(--ds-list-actions-gap, 8px);
   color: var(--ds-list-actions-color, var(--ds-color-primary));
 }
 
 /* ============================ List.Item.Meta ============================= */
 
+.rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] {
+  gap: var(--ds-list-meta-avatar-margin-right, 12px);
+}
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title'] {
+  font-size: var(--ds-list-meta-title-font-size, inherit);
+  font-weight: var(--ds-list-meta-title-font-weight, 500);
   color: var(--ds-list-meta-title-color, var(--ds-color-text-primary));
 }
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description'] {
-  color: var(--ds-list-meta-description-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-list-meta-description-font-size, 0.875rem);
+  margin-top: var(--ds-list-meta-description-margin-top, 0);
+  /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious): the resolved
+     description channel fails AA on the page surface (bithire's #888d9e =
+     3.31:1 on #fff; TMM's #737373 = 4.74:1 passes but the channel must hold
+     on every governed source). The ink deepens 30% toward the source's own
+     primary text ink -- hue-faithful, no tenant fork (measured worst source:
+     bithire 70% = 5.07:1). A tenant's explicit `--ds-list-meta-description-ink`
+     stays raw. */
+  color: var(
+    --ds-list-meta-description-ink,
+    color-mix(
+      in srgb,
+      var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%,
+      var(--ds-color-text-primary) 30%
+    )
+  );
 }

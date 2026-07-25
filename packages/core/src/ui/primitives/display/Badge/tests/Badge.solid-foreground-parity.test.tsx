@@ -45,23 +45,25 @@ describe('the solid-badge foreground is background-aware, and shared', () => {
   });
 
   it('the modern skin paints the same per-variant foreground', () => {
-    // The two engines must not diverge again. Both skins transcribe the shared map,
-    // so this asserts modern's values match it variant for variant -- an edit to one
-    // skin that forgets the other turns red.
+    // Modern keeps paint in CSS rather than stamping inline style. Its per-tone
+    // channels must still transcribe the shared semantic map exactly; otherwise a
+    // light tenant fill can silently regress to a near-white label again.
     const modern = readFileSync(
       join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/badge.css'),
       'utf-8',
     ).replace(/\/\*[\s\S]*?\*\//g, '');
-    const modernEngine = readFileSync(join(__dirname, '../engines/modern/index.tsx'), 'utf-8');
-    const readsSharedMap =
-      modernEngine.includes('VARIANT_SOLID_TEXT_COLOR_MAP') ||
-      [...modern.matchAll(/color:\s*(var\(--ds-color-[a-z-]*(?:on-primary|primary-foreground|text-primary)\))/g)].length >= 1;
-    expect(readsSharedMap, "modern's solid foreground no longer traces to the shared map").toBe(true);
-    const solidColors: [string, string, string][] = [];
-    for (const [, variant, color] of solidColors) {
-      expect(color, `modern ${variant} diverged from the shared solid foreground`).toBe(
-        VARIANT_SOLID_TEXT_COLOR_MAP[variant]
+
+    for (const variant of ['default', 'primary', 'secondary', 'success', 'warning', 'error', 'info'] as const) {
+      const escapedVariant = variant.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const selectorBlock = modern.match(
+        new RegExp(`\\[data-variant=['"]${escapedVariant}['"]\\]\\s*\\{([\\s\\S]*?)\\}`),
+      )?.[1];
+
+      expect(selectorBlock, `modern ${variant} tone block is missing`).toBeDefined();
+      expect(selectorBlock, `modern ${variant} diverged from the shared solid foreground`).toContain(
+        `--ds-badge-tone-solid-color: ${VARIANT_SOLID_TEXT_COLOR_MAP[variant]};`,
       );
     }
+    expect(modern).toContain('color: var(--ds-badge-solid-color, var(--ds-badge-tone-solid-color));');
   });
 });

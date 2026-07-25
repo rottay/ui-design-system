@@ -14,7 +14,7 @@
  * - Character count display when `showCount` and `maxLength` are set
  * - Inline error message rendering
  * - Focus ring and error ring via CSS box-shadow
- * - Configurable resize behavior
+ * - Theme-driven or explicit logical/physical resize behavior
  * - Enter key handling with `onPressEnter` (Shift+Enter for newline)
  *
  * **Accessibility:**
@@ -64,13 +64,19 @@ import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
-  type CSSProperties,
 } from 'react';
 
 import type { InputTextAreaProps } from '../../contracts';
-import { SIZE_MAP } from '../../contracts';
+import {
+  generateResponsiveCSS,
+  isResponsiveValue,
+  type ResponsivePropEntry,
+} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import type { InputSize } from '../../contracts';
+import { StatusLoadingIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-loading';
 
 /**
  * Multi-line text input component with character counting and error display.
@@ -109,11 +115,17 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       required = false,
       error = false,
       errorMessage,
+      loading = false,
       maxLength,
       minLength,
       rows = 4,
       resize = true,
       showCount = false,
+      inputMode,
+      title,
+      tabIndex,
+      spellCheck,
+      role,
       onChange,
       onFocus,
       onBlur,
@@ -128,6 +140,12 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       'data-testid': dataTestId,
       'aria-label': ariaLabel,
       'aria-describedby': ariaDescribedBy,
+      'aria-invalid': ariaInvalid,
+      'aria-autocomplete': ariaAutocomplete,
+      'aria-controls': ariaControls,
+      'aria-expanded': ariaExpanded,
+      'aria-activedescendant': ariaActiveDescendant,
+      'aria-haspopup': ariaHasPopup,
     } = props;
 
     // Dual-mode value management: when controlledValue is defined the parent
@@ -136,12 +154,41 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
     const [isFocused, setIsFocused] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const reactId = useId();
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : internalValue;
     // Consolidate error detection from both the explicit `error` prop
     // and the status-based API so downstream styling checks are simpler.
-    const hasError = error || status === 'error';
-    const sizeValues = SIZE_MAP[size as keyof typeof SIZE_MAP] || SIZE_MAP.md;
+    const hasError = Boolean(error || status === 'error' || ariaInvalid === true || ariaInvalid === 'true');
+    const hasWarning = !hasError && status === 'warning';
+    const hasSuccess = !hasError && !hasWarning && status === 'success';
+    const sizeIsResponsive = isResponsiveValue<InputSize>(size);
+    const resolvedSize = sizeIsResponsive ? (size.base ?? size.xs ?? size.phone ?? 'md') : size;
+    const currentValueString = String(currentValue ?? '');
+    const controlId = id || `textarea-${reactId.replace(/:/g, '')}`;
+    const errorId = `${controlId}-error`;
+    const describedBy = [ariaDescribedBy, hasError && errorMessage ? errorId : undefined]
+      .filter(Boolean)
+      .join(' ') || undefined;
+
+    const responsiveEntries: ResponsivePropEntry<InputSize>[] = sizeIsResponsive
+      ? [
+          { cssProperty: 'padding', value: size, resolve: (value) => `var(--ds-input-${value}-padding-y) var(--ds-input-${value}-padding-x) !important` },
+          { cssProperty: 'font-size', value: size, resolve: (value) => `var(--ds-input-${value}-font-size) !important` },
+          { cssProperty: 'line-height', value: size, resolve: (value) => `var(--ds-input-${value}-line-height) !important` },
+          { cssProperty: 'border-radius', value: size, resolve: (value) => `var(--ds-input-${value}-radius, var(--ds-input-${value}-border-radius)) !important` },
+          ...(loading
+            ? [{
+                cssProperty: 'padding-inline-end',
+                value: size,
+                resolve: (value: InputSize) => `calc(var(--ds-input-${value}-padding-x) + var(--ds-input-loading-size) + var(--ds-input-gap)) !important`,
+              } as ResponsivePropEntry<InputSize>]
+            : []),
+        ]
+      : [];
+    const responsive = sizeIsResponsive
+      ? generateResponsiveCSS(`textarea-${reactId.replace(/:/g, '')}`, responsiveEntries)
+      : null;
 
     // Synchronize the forwarded ref with our internal textareaRef so the
     // parent can access the DOM node regardless of ref type (callback or object).
@@ -201,32 +248,12 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       [onKeyDown, onPressEnter]
     );
 
-    // Container is relative-positioned so the character counter can be
-    // absolutely positioned at the bottom-right corner.
-    const containerStyle: CSSProperties = {
-      position: 'relative',
-      display: 'block',
-      width: '100%',
-      ...style,
-    };
-
-    const textareaStyle: CSSProperties = {
-      width: '100%',
-      padding: sizeValues.paddingX,
-      fontSize: sizeValues.fontSize,
-      fontFamily: 'inherit',
-      resize: resize ? 'vertical' : 'none',
-      transition: 'all 0.2s ease',
-      opacity: disabled ? 0.6 : 1,
-      cursor: disabled ? 'not-allowed' : 'text',
-    };
-
     // Build BEM-style class list. Boolean entries (e.g. `isFocused && '...'`)
     // produce `false` when inactive, which filter(Boolean) strips out.
     const containerClasses = [
       'rottay-textarea',
       'ds-input-textarea',
-      `rottay-textarea--${size}`,
+      `rottay-textarea--${resolvedSize}`,
       `rottay-textarea--${variant}`,
       isFocused && 'rottay-textarea--focused',
       hasError && 'rottay-textarea--error',
@@ -237,12 +264,29 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       .join(' ');
 
     return (
-      <div className={containerClasses} data-part="root" style={containerStyle}>
+      <div
+        className={containerClasses}
+        data-part="root"
+        data-size={resolvedSize}
+        data-size-responsive={sizeIsResponsive ? 'true' : undefined}
+        data-variant={variant}
+        data-invalid={hasError ? 'true' : undefined}
+        data-warning={hasWarning ? 'true' : undefined}
+        data-success={hasSuccess ? 'true' : undefined}
+        data-disabled={disabled ? 'true' : undefined}
+        data-readonly={readOnly ? 'true' : undefined}
+        data-loading={loading ? 'true' : undefined}
+        data-filled={currentValueString.length > 0 ? 'true' : undefined}
+        data-resize={resize === false ? 'none' : typeof resize === 'string' ? resize : 'theme'}
+        style={style}
+      >
+        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         <textarea
+          {...(responsive?.attrs ?? {})}
           ref={textareaRef}
-          id={id}
+          id={controlId}
           name={name}
-          value={currentValue}
+          value={currentValueString}
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}
@@ -250,43 +294,56 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
           maxLength={maxLength}
           minLength={minLength}
           rows={rows}
+          inputMode={inputMode}
+          title={title}
+          tabIndex={tabIndex}
           autoComplete={autoComplete}
           autoFocus={autoFocus}
+          spellCheck={spellCheck}
+          role={role}
           aria-label={ariaLabel}
-          aria-describedby={ariaDescribedBy}
-          aria-invalid={hasError}
+          aria-describedby={describedBy}
+          aria-invalid={ariaInvalid ?? (hasError || undefined)}
+          aria-busy={loading || undefined}
+          aria-autocomplete={ariaAutocomplete}
+          aria-controls={ariaControls}
+          aria-expanded={ariaExpanded}
+          aria-activedescendant={ariaActiveDescendant}
+          aria-haspopup={ariaHasPopup}
           data-testid={dataTestId}
           data-part="control"
-          style={textareaStyle}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
         />
 
+        {loading && (
+          <span data-part="loading-indicator" aria-hidden="true">
+            <StatusLoadingIcon decorative size="sm" />
+          </span>
+        )}
+
         {showCount && maxLength && (
           <span
             data-part="count"
-            style={{
-              position: 'absolute',
-              right: 8,
-              bottom: -20,
-              fontSize: 12,
-            }}
+            data-count-state={
+              hasError
+                ? 'error'
+                : currentValueString.length >= maxLength
+                  ? 'limit'
+                  : currentValueString.length / maxLength >= 0.9
+                    ? 'warning'
+                    : undefined
+            }
+            aria-live="polite"
           >
-            {currentValue.length}/{maxLength}
+            {currentValueString.length}/{maxLength}
           </span>
         )}
 
         {hasError && errorMessage && (
-          <span
-            data-part="error-message"
-            style={{
-              display: 'block',
-              marginTop: 4,
-              fontSize: 12,
-            }}
-          >
+          <span id={errorId} data-part="error-message" role="alert">
             {errorMessage}
           </span>
         )}

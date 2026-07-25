@@ -2,9 +2,12 @@
 
 /**
  * @fileoverview Mentions Modern Engine - Rottay Design System.
- * Custom DaisyUI/Tailwind CSS implementation with full mention detection,
- * dropdown suggestions, keyboard navigation, and auto-size support --
- * no Ant Design dependency at runtime.
+ * Custom implementation with full mention detection, dropdown suggestions,
+ * keyboard navigation, and auto-size support -- no Ant Design dependency at
+ * runtime and no DaisyUI classes. All static paint and geometry are owned by
+ * the modern skin (`skin/mentions.css`) keyed on `data-part`/`data-*` hooks;
+ * the engine keeps only truly dynamic writes (the auto-size height
+ * measurements) and the public `style` escape hatch.
  *
  * @example
  * ```tsx
@@ -18,6 +21,7 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { MentionsProps, MentionsOption } from '../../contracts';
 import { MENTIONS_DEFAULTS } from '../../contracts';
 
@@ -28,13 +32,21 @@ import { MENTIONS_DEFAULTS } from '../../contracts';
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 /**
- * Modern engine Mentions built with DaisyUI / Tailwind CSS.
- * Implements cursor-aware prefix detection, filtered suggestion dropdown,
- * keyboard list navigation, auto-size textarea, and click-outside dismissal.
+ * Modern engine Mentions: cursor-aware prefix detection, filtered suggestion
+ * dropdown, keyboard list navigation, auto-size textarea, and click-outside
+ * dismissal. Paint belongs to the modern skin; visible strings resolve through
+ * the optional i18n channel with documented English fallbacks.
+ *
+ * ARIA (K4-D remediation): the textarea keeps `role="textbox"` +
+ * `aria-multiline` + `aria-haspopup="listbox"` (all supported by the textbox
+ * role). `aria-expanded` is NOT emitted: the textbox role does not support it
+ * (axe `aria-allowed-attr`/critical), and the combobox role that would carry
+ * it forbids `aria-multiline`, which a textarea requires. The expanded state
+ * remains perceivable through the in-tree labelled listbox.
  *
  * @param props - Unified MentionsProps from the design system contract.
  * @param ref - Forwarded ref attached to the underlying `<textarea>` element.
- * @returns A DaisyUI-styled textarea with a suggestion dropdown overlay.
+ * @returns A skin-painted textarea with a suggestion dropdown overlay.
  */
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
@@ -54,12 +66,27 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       rows = MENTIONS_DEFAULTS.rows,
       status,
       placement = MENTIONS_DEFAULTS.placement,
-      notFoundContent = 'No results',
+      notFoundContent,
       filterOption = MENTIONS_DEFAULTS.filterOption,
       className,
       style,
+      'aria-label': ariaLabel,
       popupClassName,
     } = props;
+
+    // Visible strings: translated when an I18nProvider is mounted, with the
+    // documented English fallbacks otherwise (a missing catalog key echoes
+    // back, which the endsWith guard detects).
+    const i18n = useOptionalTranslation('components');
+    const mentionsLabel = (key: string, fallback: string): string => {
+      const translated = i18n?.t(key);
+      return translated && !translated.endsWith(key) ? translated : fallback;
+    };
+    const emptyContent = notFoundContent ?? mentionsLabel('mentions.not_found', 'No results');
+    const suggestionsLabel = mentionsLabel('mentions.suggestions_label', 'Mention suggestions');
+    // Accessible name: explicit aria-label wins, then the visible placeholder,
+    // then the localized default (axe `label` critical, K4-D remediation).
+    const inputLabel = ariaLabel ?? placeholder ?? mentionsLabel('mentions.input_label', 'Mentions');
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);
@@ -203,7 +230,9 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         case 'Enter':
         case 'Tab': {
           const focusedOption = focusedIndex >= 0 ? arrayValueAt(filteredOptions, focusedIndex) : undefined;
-          if (focusedOption) {
+          // Keyboard selection must honor the same disabled gate as pointer
+          // click (K4-D Pass 2 review: only the pointer path was guarded).
+          if (focusedOption && !focusedOption.disabled) {
             e.preventDefault();
             handleSelect(focusedOption);
           }
@@ -231,7 +260,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     return (
       <div
         ref={containerRef}
-        className={`ds-mentions ds-mentions--modern relative ${className || ''}`}
+        className={`ds-mentions ds-mentions--modern ${className || ''}`}
         style={style}
         data-part="root"
       >
@@ -242,7 +271,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             else if (ref) ref.current = node;
           }}
           className={['rottay-mentions__input', status ? `rottay-mentions__input--${status}` : undefined].filter(Boolean).join(' ')}
-          style={{ width: '100%', padding: 'var(--ds-input-md-padding-y, 8px) var(--ds-input-md-padding-x, 12px)', fontSize: 'var(--ds-input-md-font-size, 14px)', fontFamily: 'inherit', ...(autoSize ? { resize: 'none' as const } : undefined) }}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -253,10 +281,11 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           role="textbox"
           aria-multiline="true"
           aria-haspopup="listbox"
-          aria-expanded={isOpen}
+          aria-label={inputLabel}
           data-part="textarea"
           data-disabled={disabled || undefined}
           data-status={status || undefined}
+          data-autosize={autoSize ? 'true' : undefined}
         />
 
         {isOpen && (
@@ -264,9 +293,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             className={['rottay-mentions__popup', `rottay-mentions__popup--${placement}`, popupClassName].filter(Boolean).join(' ')}
             data-placement={placement}
             data-part="dropdown"
-            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 'var(--ds-dropdown-padding, 6px)', maxHeight: 'var(--ds-dropdown-max-height, 192px)', overflowY: 'auto', ...(placement === 'top' ? { bottom: '100%', marginBottom: 'var(--ds-spacing-1, 4px)' } : { top: '100%', marginTop: 'var(--ds-spacing-1, 4px)' }) }}
             role="listbox"
-            aria-label="Mention suggestions"
+            aria-label={suggestionsLabel}
           >
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
@@ -286,8 +314,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                 </li>
               ))
             ) : (
-              <li className="p-3 text-center" role="option" aria-disabled="true" data-part="empty">
-                {notFoundContent}
+              <li role="option" aria-disabled="true" data-part="empty">
+                {emptyContent}
               </li>
             )}
           </ul>

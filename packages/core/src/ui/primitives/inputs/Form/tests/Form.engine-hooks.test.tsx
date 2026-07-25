@@ -22,16 +22,44 @@ const ENGINE_FORM_SUITES = [
 ] as const;
 
 function renderEngineForm(node: React.ReactElement, engine: 'modern' | 'rustic') {
-  if (engine === 'rustic') {
-    return render(
-      <I18nProvider locale="en" fallbackLocale="en">
-        {node}
-      </I18nProvider>
-    );
-  }
-
-  return render(node);
+  return render(
+    <I18nProvider locale="en" fallbackLocale="en">
+      {node}
+    </I18nProvider>
+  );
 }
+
+describe('Modern Form visual contract', () => {
+  it('stamps layout, framed field anatomy, semantic feedback, and accessible messages', () => {
+    const view = renderEngineForm(
+      <ModernForm layout="vertical" size="large" requiredMark="optional" hasFeedback>
+        <ModernForm.Item
+          name="displayName"
+          label="Display name"
+          tooltip="Shown to teammates"
+          validateStatus="error"
+          help="Choose a display name"
+        >
+          <input aria-label="Display name" />
+        </ModernForm.Item>
+      </ModernForm>,
+      'modern'
+    );
+
+    const form = view.container.querySelector('[data-part="root"]');
+    const item = view.container.querySelector('[data-part="item"]');
+    const input = screen.getByLabelText('Display name');
+
+    expect(form).toHaveAttribute('data-layout', 'vertical');
+    expect(form).toHaveAttribute('data-size', 'lg');
+    expect(item).toHaveAttribute('data-validation', 'error');
+    expect(view.container.querySelector('[data-part="control-row"]')).toBeInTheDocument();
+    expect(view.container.querySelector('[data-part="feedback-icon"]')).toHaveAttribute('data-status', 'error');
+    expect(view.container.querySelector('[data-part="tooltip-icon"] svg')).toBeInTheDocument();
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toHaveAttribute('aria-describedby', 'form-displayName-message');
+  });
+});
 
 describe('Form engine hooks', () => {
   it.each(ENGINE_HOOKS)('covers the %s useForm instance helpers directly', async (_engine, useEngineForm) => {

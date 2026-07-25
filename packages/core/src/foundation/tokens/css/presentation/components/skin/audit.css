@@ -1,5 +1,5 @@
 /** AuditSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
 
-.ds-surface.ds-audit .ds-audit__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-audit .ds-audit__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }

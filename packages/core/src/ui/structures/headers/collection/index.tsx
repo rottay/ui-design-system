@@ -28,6 +28,7 @@ import type { ReactNode } from 'react';
 import { Box, Button, Flex, Text } from '../../../primitives';
 import { KeyboardIcon } from '@/graphics/icons';
 import { useResponsive } from '../../../../infrastructure/runtime/responsive';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
 
 export interface CollectionHeaderQuickAction {
   key: string;
@@ -98,6 +99,7 @@ export function CollectionHeader({
   compact,
   minimal = false,
 }: CollectionHeaderProps) {
+  const { t } = useTranslation('common');
   const { isPhoneOrTablet } = useResponsive();
 
   const embedded = surfaceVariant === 'embedded';
@@ -512,7 +514,7 @@ export function CollectionHeader({
                       }}
                     >
                       <KeyboardIcon data-part="shortcuts-label-icon" style={{ width: 10, height: 10 }} />
-                      Shortcuts
+                      {t('shortcuts')}
                     </Box>
                     {shortcuts.map((shortcut) => (
                       <Box

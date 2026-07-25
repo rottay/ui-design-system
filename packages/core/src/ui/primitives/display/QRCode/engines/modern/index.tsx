@@ -1,6 +1,9 @@
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the QRCode display primitive.
- * Renders a standards-compliant QR symbol with DaisyUI-styled status overlays.
+ * @fileoverview Modern engine for the QRCode display primitive.
+ * Renders a standards-compliant QR symbol with token-driven status overlays
+ * painted solely by the unlayered modern skin (`skin/qrcode.css`). No DaisyUI
+ * classes are emitted (K4-C docblock correction: this engine never painted
+ * through DaisyUI; the overlays are skin-owned).
  *
  * @example
  * ```tsx
@@ -14,13 +17,14 @@ import React, { useRef } from 'react';
 import type { QRCodeProps } from '../../contracts';
 import { QRCODE_DEFAULTS } from '../../contracts';
 import { EncodedQRCodeSymbol } from '../../runtime/encoded-symbol';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Modern QRCode engine. Renders the shared standards-compliant Canvas/SVG
- * symbol and overlays DaisyUI-styled loading/expired/scanned indicators.
+ * symbol and overlays skin-owned loading/expired/scanned indicators.
  *
  * @param props - DS QRCodeProps (value, size, colors, status, icon, etc.).
- * @returns A DaisyUI-styled container with an encoded symbol and status overlay.
+ * @returns A token-styled container with an encoded symbol and status overlay.
  */
 export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
   const {
@@ -41,35 +45,49 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
 
   const paintOwnerRef = useRef<HTMLDivElement>(null);
 
-  // Each status state gets its own DaisyUI-themed overlay on top of the canvas
+  // Status strings: translated when an I18nProvider is mounted, with the
+  // documented English fallbacks otherwise (a missing catalog key echoes the
+  // raw key back, which the endsWith guard detects — K4-C wires the channel
+  // ahead of the locale JSONs, so behavior is byte-identical until they land).
+  const i18n = useOptionalTranslation('components');
+  const qrcodeLabel = (key: string, fallback: string): string => {
+    const translated = i18n?.t(key);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
+
+  // Each status state gets its own skin-painted overlay on top of the canvas.
+  // No per-status opacity lives inline anymore (K4-C round 2 / Pass 2): the
+  // declared opacities muted the CHROME (bridge root x overlay = unreadable
+  // composites). The skin restores full chrome opacity per status and moves
+  // each declared mute onto the CANVAS, which is what should read
+  // loading/expired/scanned. Chrome geometry is skin-owned (single owner).
   const renderOverlay = () => {
     switch (status) {
       case 'loading':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" style={{ opacity: 'var(--ds-qrcode-loading-opacity, 1)' }} role="status" aria-label="Loading QR code">
-            <span data-part="spinner" aria-hidden="true" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }} />
+          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" role="status" aria-label={qrcodeLabel('qrcode.loading', 'Loading QR code')}>
+            <span data-part="spinner" aria-hidden="true" />
           </div>
         );
       case 'expired':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex flex-col items-center justify-center gap-2" style={{ opacity: 'var(--ds-qrcode-status-expired-opacity, 1)' }} role="alert">
-            <span data-part="status-text" className="text-sm">QR Code expired</span>
+          <div data-part="overlay" className="absolute inset-0 flex flex-col items-center justify-center gap-2" role="alert">
+            <span data-part="status-text" className="text-sm">{qrcodeLabel('qrcode.expired', 'QR Code expired')}</span>
             {onRefresh && (
               <button
                 data-part="refresh-button"
                 type="button"
-                aria-label="Refresh QR code"
-                style={{ height: 'var(--ds-qrcode-refresh-button-size, 32px)', padding: '0 12px', fontSize: 13, cursor: 'pointer' }}
+                aria-label={qrcodeLabel('qrcode.refreshLabel', 'Refresh QR code')}
                 onClick={onRefresh}
               >
-                Refresh
+                {qrcodeLabel('qrcode.refresh', 'Refresh')}
               </button>
             )}
           </div>
         );
       case 'scanned':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" style={{ opacity: 'var(--ds-qrcode-status-scanned-opacity, 1)' }} role="status" aria-label="QR code scanned">
+          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" role="status" aria-label={qrcodeLabel('qrcode.scanned', 'QR code scanned')}>
             <svg
               data-part="status-icon"
               className="w-12 h-12"
@@ -124,7 +142,9 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
           <div
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-1 rounded"
             data-part="icon"
-            style={{ width: iconSize, height: iconSize, padding: 'var(--ds-qrcode-icon-padding, 4px)' }}
+            // width/height ride the `iconSize` prop (runtime arithmetic, stays
+            // JS-bound); the padding is owned by the skin (K4-C single owner).
+            style={{ width: iconSize, height: iconSize }}
           >
             <img
               src={icon}

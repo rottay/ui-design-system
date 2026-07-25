@@ -8,8 +8,12 @@
  * is DOM-position-agnostic, so it needs no portal escape hatch, and the
  * measured (js) branch keeps this engine's existing non-portaled posture
  * (checkpoint contract P4: HoverCard modern never portals). It applies NO
- * DaisyUI class of any kind: the card's chrome comes from this engine's own
- * skin, keyed on `rottay-hover-card--modern`.
+ * DaisyUI class and no utility-framework class of any kind: the trigger's
+ * positioning context and the card's chrome come from this engine's own
+ * skin, keyed on `rottay-hover-card--modern` (K4-A drained the last inline
+ * `padding`/`width` geometry and the `relative inline-block` utilities).
+ * `align: start/end` is LOGICAL along the inline axis and mirrors under
+ * `dir="rtl"`.
  *
  * @example
  * ```tsx
@@ -97,15 +101,40 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
   // The trigger wrapper is the anchor; the surface is the positioned
   // overlay. The surface only mounts while open, so element presence drives
   // the positioning lifecycle.
+  //
+  // `start`/`end` in the shared runtime are PHYSICAL. Along the inline axis
+  // (side: top/bottom) a logical `align` mirrors under RTL, so the physical
+  // placement is resolved from the trigger's reading direction (Popover's
+  // toPhysicalPlacement precedent). Left/right sides align on the BLOCK
+  // axis, which does not mirror in RTL.
+  const placement = resolveOverlayPlacement(side, align);
+  const logicalPlacement = React.useMemo<ReturnType<typeof resolveOverlayPlacement>>(() => {
+    if (
+      placement !== 'top-start' && placement !== 'top-end' &&
+      placement !== 'bottom-start' && placement !== 'bottom-end'
+    ) {
+      return placement;
+    }
+    if (!anchorEl) return placement;
+    const isRtl =
+      anchorEl.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
+      window.getComputedStyle(anchorEl).direction === 'rtl';
+    if (!isRtl) return placement;
+    return (placement.endsWith('-start')
+      ? placement.replace('-start', '-end')
+      : placement.replace('-end', '-start')) as ReturnType<typeof resolveOverlayPlacement>;
+  }, [anchorEl, placement]);
+
   const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
     anchor: anchorEl,
     overlay: surfaceEl,
-    placement: resolveOverlayPlacement(side, align),
+    placement: logicalPlacement,
   });
 
+  // Card chrome (width, padding) is skin-owned (hover-card.css); only the
+  // z-index token channel, consumer overrides and measured positioning stay
+  // inline. overlayStyle still wins over the skin via the inline cascade.
   const surfaceStyle: React.CSSProperties = {
-    padding: 16,
-    width: 288,
     zIndex: 'var(--ds-z-popover)',
     ...overlayStyle,
     // Positioning keys come from the shared overlay runtime and spread last
@@ -118,7 +147,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       ref={setAnchorEl}
       data-part="trigger"
       data-open={isOpen ? 'true' : 'false'}
-      className={`relative inline-block rottay-hover-card--modern ${className || ''}`}
+      className={`rottay-hover-card--modern ${className || ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...anchorAttrs}

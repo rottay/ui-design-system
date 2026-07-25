@@ -24,7 +24,8 @@ describe('ButtonIcon', () => {
     fireEvent.click(button);
 
     expect(screen.getByTestId('icon')).toBeInTheDocument();
-    expect(button).toHaveAttribute('title', 'Create');
+    expect(button).not.toHaveAttribute('title');
+    expect(button.closest('.rottay-tooltip-root')).toHaveAttribute('data-part', 'root');
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 

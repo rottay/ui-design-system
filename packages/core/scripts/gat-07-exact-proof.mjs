@@ -820,8 +820,8 @@ function measureStaleComments() {
   if (comments.staleInline.length > 0) errors.push(`${comments.staleInline.length} stale inline-paint comments remain`);
   if (comments.falseTenantFloor.length > 0) errors.push(`${comments.falseTenantFloor.length} false fleet-wide tenant-floor comments remain`);
   for (const error of [...comments.parseErrors, ...floors.parseErrors]) errors.push(`${error.path}: ${error.message}`);
-  if (floors.floors.length !== 1 || floors.owners.length !== 1 || floors.owners[0] !== 'rottay') {
-    errors.push(`expected exactly one structurally parsed Rottay-only authored border floor; found ${JSON.stringify(floors)}`);
+  if (floors.floors.length !== 0 || floors.owners.length !== 0) {
+    errors.push(`universal tenant border floors are forbidden; found ${JSON.stringify(floors)}`);
   }
   return {
     evidence: {

@@ -1,12 +1,18 @@
 /**
  * @fileoverview Segmented Modern Engine - Rottay Design System
- * @description DS token inline-styled implementation of the Segmented component.
+ * @description Token-driven implementation of the Segmented component.
  *
  * @remarks
- * All styling uses DS token CSS custom properties (`--ds-*`). No DaisyUI
- * or Tailwind classes are used in runtime output. Segments render as an
- * inline-flex group with connected border-radius and an active primary
- * indicator.
+ * The engine stamps anatomy (`data-part` hooks) and radiogroup state; the
+ * modern skin (`modern/skin/segmented.css`) owns 100% of layout and paint.
+ * No DaisyUI classes, no Tailwind utilities, no inline style objects.
+ * Segments render as an inline-flex group with connected border-radius and a
+ * framed selected indicator.
+ *
+ * Keyboard contract (hand-rolled per family, APG radiogroup): one roving tab
+ * stop (the selected option, else the first enabled one), Arrow keys move and
+ * select (Left/Right mirror in RTL), Home/End jump to the edges, disabled
+ * options are skipped.
  *
  * @example Basic Usage
  * ```tsx
@@ -45,36 +51,26 @@
  * @see {@link SegmentedProps} - Component props interface
  * @see {@link ClassicSegmented} - Ant Design alternative
  * @see {@link RusticSegmented} - Vanilla alternative
- * @see {@link https://daisyui.com/components/join} - DaisyUI Join docs
  * @module Segmented/Engines/Modern
  * @category Navigation
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import type { SegmentedProps, SegmentedOption } from '../../contracts';
-import { SEGMENTED_DEFAULTS } from '../../contracts';
-
-// ============================================================================
-// Constants
-// ============================================================================
+import React, { useRef, useState } from "react";
+import type { SegmentedProps, SegmentedOption } from "../../contracts";
+import { SEGMENTED_DEFAULTS } from "../../contracts";
 
 /**
- * Size class mappings for Modern engine.
- * Maps semantic size names to DaisyUI button size classes.
- *
- * @internal
+ * Reading-direction probe for the RTL-mirrored arrow contract. The nearest
+ * explicit `dir` wins; otherwise the document direction applies.
  */
-const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  /** Compact size for toolbars */
-  small: { height: 32, padding: '0 12px', fontSize: 13 },
-  /** Standard size (default) */
-  middle: { height: 36, padding: '0 16px', fontSize: 14 },
-  /** Large size for prominent actions */
-  large: { height: 44, padding: '0 20px', fontSize: 16 },
-};
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest("[dir]");
+  if (scoped) return scoped.getAttribute("dir") === "rtl";
+  return document.documentElement.dir === "rtl";
+}
 
 // ============================================================================
 // Component
@@ -84,36 +80,25 @@ const SIZE_STYLES: Record<string, React.CSSProperties> = {
  * Modern Engine implementation of the Segmented component.
  *
  * @description
- * Custom segmented implementation using DaisyUI classes and Tailwind utilities.
- * Uses the "join" component pattern for grouped buttons.
+ * Custom segmented implementation on the token/skin channel: the engine owns
+ * state, anatomy and the radiogroup keyboard contract; `segmented.css` owns
+ * every painted pixel.
  *
  * @remarks
  * **Implementation Details:**
- * - Uses DaisyUI's `join` component for button grouping
  * - Supports both controlled and uncontrolled modes
  * - Normalizes simple options to SegmentedOption objects
  * - Handles individual option disabled states
+ * - Roving tabindex + Arrow/Home/End navigation (RTL-mirrored), hand-rolled
+ *   per family (no shared collection hook exists in this wave)
  *
  * **Accessibility:**
- * - Native button elements for keyboard support
- * - Visual feedback for active and disabled states
- * - Focus styles via Tailwind defaults
+ * - `role="radiogroup"` / `role="radio"` with `aria-checked`
+ * - Single tab stop; arrows move focus AND select
+ * - Focus ring painted by the skin on `:focus-visible`
  *
  * @param props - {@link SegmentedProps}
- * @returns The rendered DaisyUI Segmented control
- *
- * @example
- * ```tsx
- * <ModernSegmented
- *   options={[
- *     { label: 'List', value: 'list', icon: <ListIcon /> },
- *     { label: 'Grid', value: 'grid', icon: <GridIcon /> },
- *   ]}
- *   value={viewMode}
- *   onChange={(val) => setViewMode(val)}
- *   size="middle"
- * />
- * ```
+ * @returns The rendered Segmented control
  */
 export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
   (props, ref) => {
@@ -129,7 +114,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       block = SEGMENTED_DEFAULTS.block,
       disabled = SEGMENTED_DEFAULTS.disabled,
       size = SEGMENTED_DEFAULTS.size,
-      className = '',
+      ariaLabel,
+      className = "",
       style,
     } = props;
 
@@ -157,7 +143,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     // Normalize primitive options (strings/numbers) into full option objects
     // so rendering logic can uniformly access `.label`, `.value`, `.icon`, etc.
     const normalizedOptions: SegmentedOption[] = options.map((opt) =>
-      typeof opt === 'object' ? opt : { label: opt, value: opt }
+      typeof opt === "object" ? opt : { label: opt, value: opt }
     );
 
     // ---------------------------------------------------------------------------
@@ -175,11 +161,65 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     };
 
     // ---------------------------------------------------------------------------
-    // Style Calculations
+    // Roving tabindex + arrow navigation (APG radiogroup)
     // ---------------------------------------------------------------------------
 
-    /** Resolve size-specific inline styles */
-    const sizeStyle = SIZE_STYLES[size!] || SIZE_STYLES.middle;
+    /** Live option buttons, in DOM order, for focus movement. */
+    const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+    /** Indexes of the options the user can actually reach. */
+    const enabledIndexes = normalizedOptions
+      .map((opt, index) => (disabled || opt.disabled ? -1 : index))
+      .filter((index) => index >= 0);
+
+    const selectedIndex = normalizedOptions.findIndex((opt) => opt.value === currentValue);
+
+    /** The one tab stop: the selected option when reachable, else the first enabled. */
+    const tabStopIndex =
+      selectedIndex >= 0 && enabledIndexes.includes(selectedIndex)
+        ? selectedIndex
+        : enabledIndexes[0] ?? -1;
+
+    /** Move focus to an enabled option and select it (arrows select, per APG). */
+    const focusAndSelect = (index: number) => {
+      optionRefs.current[index]?.focus();
+      handleClick(normalizedOptions[index].value);
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+      const position = enabledIndexes.indexOf(index);
+      if (position === -1) return;
+
+      const last = enabledIndexes.length - 1;
+      const rtl = isRtlContext(event.currentTarget);
+      let target: number | undefined;
+
+      switch (event.key) {
+        case "ArrowRight":
+          target = enabledIndexes[position + (rtl ? -1 : 1)] ?? enabledIndexes[rtl ? last : 0];
+          break;
+        case "ArrowLeft":
+          target = enabledIndexes[position + (rtl ? 1 : -1)] ?? enabledIndexes[rtl ? 0 : last];
+          break;
+        case "ArrowDown":
+          target = enabledIndexes[position + 1] ?? enabledIndexes[0];
+          break;
+        case "ArrowUp":
+          target = enabledIndexes[position - 1] ?? enabledIndexes[last];
+          break;
+        case "Home":
+          target = enabledIndexes[0];
+          break;
+        case "End":
+          target = enabledIndexes[last];
+          break;
+        default:
+          return;
+      }
+
+      event.preventDefault();
+      if (target !== undefined && target !== index) focusAndSelect(target);
+    };
 
     // ---------------------------------------------------------------------------
     // Render
@@ -189,35 +229,39 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       <div
         ref={ref}
         className={`rottay-segmented rottay-segmented--modern ${className}`.trim()}
-        style={{ display: 'inline-flex', overflow: 'hidden', ...(block ? { width: '100%' } : {}), ...style }}
+        style={style}
         data-part="root"
+        data-size={size}
+        data-block={block || undefined}
+        data-disabled={disabled || undefined}
+        role="radiogroup"
+        aria-label={ariaLabel}
       >
-        {normalizedOptions.map((opt) => {
+        {normalizedOptions.map((opt, index) => {
           const isActive = currentValue === opt.value;
           const isDisabled = disabled || opt.disabled;
 
           return (
             <button
               key={String(opt.value)}
+              ref={(el) => {
+                optionRefs.current[index] = el;
+              }}
               type="button"
               className={opt.className || undefined}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: isDisabled ? 'not-allowed' : 'pointer',
-                fontWeight: isActive ? 600 : 400,
-                ...sizeStyle,
-                ...(isDisabled ? { opacity: 0.5, pointerEvents: 'none' as const } : {}),
-              }}
               onClick={() => handleClick(opt.value)}
+              onKeyDown={(event) => handleKeyDown(event, index)}
               disabled={isDisabled}
+              tabIndex={index === tabStopIndex ? 0 : -1}
               data-part="option"
               data-selected={isActive}
               data-disabled={isDisabled || undefined}
+              role="radio"
+              aria-checked={isActive}
+              aria-label={opt.ariaLabel}
             >
-              {opt.icon && <span className="mr-1" data-part="icon">{opt.icon}</span>}
-              {opt.label}
+              {opt.icon && <span data-part="icon">{opt.icon}</span>}
+              <span data-part="label">{opt.label}</span>
             </button>
           );
         })}
@@ -227,6 +271,6 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
 );
 
 // Set display name for React DevTools debugging
-Segmented.displayName = 'Segmented.Modern';
+Segmented.displayName = "Segmented.Modern";
 
 export default Segmented;

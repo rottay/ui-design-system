@@ -4,19 +4,15 @@
  * Inspired by Linear/Vercel design language -- crisp geometry, smooth motion.
  *
  * @remarks
- * Uses a hidden native input for accessibility and a custom visual indicator
- * built with inline styles referencing DS CSS custom properties. No DaisyUI
- * dependency -- pure CSS tokens for full theme control.
- *
- * **Visual Spec:**
- * - 18x18 indicator, 2px border, `--ds-radius-sm` corners
- * - Checked: primary fill + white SVG checkmark (2px stroke), smooth scale transition
- * - Indeterminate: primary fill + white dash SVG
- * - Hover: border brightens to `--ds-color-border` / `--ds-color-primary`
- * - Focus: 2px outline `--ds-color-primary` with offset, `:focus-visible` only
- * - Disabled: opacity 0.5, cursor not-allowed
- * - Transitions on bg, border-color, transform (var(--ds-motion-fast) ease-out)
- * - Touch target min 44x44 via padding on the label row
+ * Uses a visually hidden native input for accessibility and form participation
+ * plus a custom visual indicator. Every visual decision lives in the modern
+ * skin (`foundation/tokens/css/runtime/engines/modern/skin/checkbox.css`),
+ * keyed on the `data-*` contract this component stamps: `data-size`,
+ * `data-color`, `data-radius`, `data-checked`, `data-indeterminate`,
+ * `data-active`, `data-standalone`, `data-error`, `data-disabled`, and
+ * `data-label-placement`. Geometry consumes the canonical
+ * `--ds-checkbox-{size}-*` channels multiplied by the three-plane density
+ * channel `--ds-density-effective-scale`.
  *
  * @see {@link Checkbox} for the main component
  * @module ModernCheckbox
@@ -52,7 +48,7 @@ const CheckIcon = ({ size }: { size: number }) => {
     >
       <path
         d="M2.5 6.5L5 9L9.5 3.5"
-        stroke="var(--ds-color-text-on-primary)"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -79,25 +75,12 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
     >
       <path
         d="M3 6H9"
-        stroke="var(--ds-color-text-on-primary)"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
       />
     </svg>
   );
-};
-
-/* ------------------------------------------------------------------ */
-/*  Size tokens                                                        */
-/* ------------------------------------------------------------------ */
-
-/** DS token references for checkbox box dimensions (CSS custom properties with px fallbacks). */
-const CHECKBOX_SIZE_TOKEN_MAP: Record<string, string> = {
-  xs: 'var(--ds-checkbox-size-xs, 14px)',
-  sm: 'var(--ds-checkbox-size-sm, 14px)',
-  md: 'var(--ds-checkbox-size-md, 16px)',
-  lg: 'var(--ds-checkbox-size-lg, 20px)',
-  xl: 'var(--ds-checkbox-size-xl, 24px)',
 };
 
 /* ------------------------------------------------------------------ */
@@ -108,21 +91,28 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   const {
     size = CHECKBOX_DEFAULTS.size,
     color = CHECKBOX_DEFAULTS.color,
+    radius = CHECKBOX_DEFAULTS.radius,
+    labelPlacement = CHECKBOX_DEFAULTS.labelPlacement,
     label,
+    description,
     checked: controlledChecked,
     defaultChecked = CHECKBOX_DEFAULTS.defaultChecked,
     indeterminate = CHECKBOX_DEFAULTS.indeterminate,
     disabled = CHECKBOX_DEFAULTS.disabled,
+    required = CHECKBOX_DEFAULTS.required,
+    error = CHECKBOX_DEFAULTS.error,
     onChange,
     children,
     name,
     value,
+    id: providedId,
+    autoFocus,
     className = '',
     style,
   } = props;
 
   const generatedId = useId();
-  const inputId = `checkbox-modern-${generatedId}`;
+  const inputId = providedId || `checkbox-modern-${generatedId.replace(/:/g, '')}`;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
@@ -143,67 +133,31 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     onChange?.(newChecked, e);
   }, [isControlled, onChange]);
 
-  /* -- Sizes -------------------------------------------------------- */
   // Numeric fallback for SVG icon sizing (cannot use CSS vars in SVG attributes)
-  const boxSizeNumeric = SIZE_MAP_NUMERIC[size] ?? 18;
-  // DS token reference for CSS box dimensions
-  const boxSizeToken = CHECKBOX_SIZE_TOKEN_MAP[size] || CHECKBOX_SIZE_TOKEN_MAP.md;
+  const boxSizeNumeric = SIZE_MAP_NUMERIC[size] ?? SIZE_MAP_NUMERIC.md;
 
-  /* -- Active visual state ------------------------------------------ */
   const active = isChecked || indeterminate;
-
   const displayLabel = label || children;
-  const isStandaloneIndicator = !displayLabel;
-
-  /* -- Styles ------------------------------------------------------- */
-  const transitionTiming = 'var(--ds-motion-fast) ease-out';
-
-  const boxStyle: React.CSSProperties = {
-    position: 'relative',
-    width: boxSizeToken,
-    height: boxSizeToken,
-    minWidth: boxSizeToken,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: `background-color ${transitionTiming}, border-color ${transitionTiming}, transform ${transitionTiming}, box-shadow ${transitionTiming}`,
-    flexShrink: 0,
-    ...(disabled && {
-      opacity: 'var(--ds-checkbox-disabled-opacity, 0.5)' as unknown as number,
-      cursor: 'not-allowed',
-    }),
-  };
-
-  const labelRowStyle: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: displayLabel ? 8 : 0,
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    padding: displayLabel ? '4px 0' : 0,
-    minHeight: displayLabel ? 44 : boxSizeNumeric,
-    userSelect: 'none',
-    WebkitTapHighlightColor: 'transparent',
-    lineHeight: 1,
-  };
-
-  const labelTextStyle: React.CSSProperties = {
-    fontSize: 14,
-    lineHeight: '20px',
-  };
+  const isStandaloneIndicator = !displayLabel && !description;
 
   return (
     <div className={className} style={style}>
       <label
         className="ds-checkbox ds-checkbox--modern"
         data-part="root"
+        data-size={size}
+        data-color={color}
+        data-radius={radius}
         data-checked={isChecked ? 'true' : 'false'}
         data-indeterminate={indeterminate ? 'true' : 'false'}
         data-active={active ? 'true' : 'false'}
         data-standalone={isStandaloneIndicator ? 'true' : 'false'}
+        data-error={error ? 'true' : 'false'}
         data-disabled={disabled ? 'true' : 'false'}
-        style={labelRowStyle}
+        data-label-placement={labelPlacement}
+        htmlFor={inputId}
       >
-        {/* Hidden native input for accessibility + form participation */}
+        {/* Visually hidden native input: accessibility + form participation */}
         <input
           ref={inputRef}
           id={inputId}
@@ -212,8 +166,11 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           value={value}
           checked={isChecked}
           disabled={disabled}
+          required={required}
+          autoFocus={autoFocus}
           onChange={handleChange}
           aria-checked={indeterminate ? 'mixed' : isChecked}
+          aria-invalid={error || undefined}
           style={{
             position: 'absolute',
             width: 1,
@@ -227,7 +184,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
         />
 
         {/* Custom visual indicator */}
-        <span data-part="box" style={boxStyle}>
+        <span data-part="box" aria-hidden="true">
           {active && (
             indeterminate
               ? <IndeterminateIcon size={boxSizeNumeric} />
@@ -235,8 +192,15 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           )}
         </span>
 
-        {displayLabel && (
-          <span data-part="label" style={labelTextStyle}>{displayLabel}</span>
+        {(displayLabel || description) && (
+          <span data-part="text">
+            {displayLabel && (
+              <span data-part="label">{displayLabel}</span>
+            )}
+            {description && (
+              <span data-part="description">{description}</span>
+            )}
+          </span>
         )}
       </label>
     </div>

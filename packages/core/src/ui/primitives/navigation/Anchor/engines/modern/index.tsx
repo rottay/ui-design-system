@@ -1,34 +1,19 @@
 /**
- * @fileoverview Anchor Hermes Engine - Rottay Design System
- * @description Token-driven Tailwind CSS implementation of the Anchor component.
- * A utility-first engine optimized for Tailwind-based projects.
+ * @fileoverview Anchor Modern Engine - Rottay Design System
+ * @description Token-driven implementation of the Anchor component.
+ * Paint, rhythm, and structure live in the modern skin (`anchor.css`);
+ * the engine stamps anatomy and keeps runtime values inline.
  *
  * @remarks
- * **Engine Overview:**
- * Hermes is built on Tailwind CSS and DS tokens, providing a lightweight
- * implementation with utility-first styling. Key characteristics:
- * - Minimal JavaScript, maximum CSS utilities
- * - Tailwind-native class composition
- * - DS token semantic color styles via --ds-* custom properties
- * - Smaller bundle size than Titan
- *
- * **When to Use Hermes:**
- * - Projects using Tailwind CSS as the primary styling solution
- * - When you prefer utility-first CSS approach
- * - For smaller bundle sizes compared to Titan
- * - When Tailwind CSS is already in your stack
- *
- * **Multi-Tenant Theming:**
- * Hermes anchors use DS token inline styles (--ds-color-primary, --ds-color-text-secondary)
- * which automatically adapt to the active tenant theme. This integrates
- * seamlessly with Rottay's multi-tenant theming system.
- *
- * **Tailwind Classes Used:**
- * - `sticky`, `top-0`: Affix positioning
- * - `flex`, `gap-2`: Horizontal direction
- * - `var(--ds-color-primary)` via inline style: Active state
- * - `var(--ds-color-text-secondary)` via inline style: Inactive state
- * - `transition-colors`: Smooth color transitions
+ * **Engine contract (K3-C pass 1):**
+ * - The accent bar is LOGICAL: `border-s-2` (border-inline-start), never a
+ *   physical `border-l-2`, so the bar flips to the correct side in RTL.
+ *   Nested indentation is skin-owned `margin-inline-start` (was `ml-4`).
+ * - The active link carries `aria-current="location"`.
+ * - Click scrolling honors `prefers-reduced-motion` (`behavior: 'auto'`).
+ * - The root mints the canonical `rottay-anchor rottay-anchor--modern`
+ *   pair + `data-direction`/`data-affix`; sticky/flex structure moved to
+ *   the skin.
  *
  * @example Basic Usage
  * ```tsx
@@ -38,18 +23,6 @@
  *   <Anchor.Link href="#section1" title="Section 1" />
  *   <Anchor.Link href="#section2" title="Section 2" />
  * </Anchor>
- * ```
- *
- * @example With Global Engine Provider
- * ```tsx
- * import { EngineProvider, Anchor } from '@rottay/design-system';
- *
- * <EngineProvider engine="modern">
- *   <Anchor>
- *     <Anchor.Link href="#intro" title="Introduction" />
- *     <Anchor.Link href="#features" title="Features" />
- *   </Anchor>
- * </EngineProvider>
  * ```
  *
  * @example Horizontal Layout
@@ -62,10 +35,8 @@
  * ```
  *
  * @see {@link AnchorProps} - Component props interface
- * @see {@link TitanAnchor} - Ant Design alternative
- * @see {@link ApolloAnchor} - Vanilla alternative
  * @see {@link Anchor} for the main component
- * @module Anchor/Engines/Hermes
+ * @module Anchor/Engines/Modern
  * @category Navigation
  * @package @rottay/design-system
  */
@@ -101,37 +72,36 @@ interface AnchorContextValue {
  */
 const AnchorContext = createContext<AnchorContextValue | null>(null);
 
+/** Scroll behavior for the click-to-section jump: instant for users who
+ *  asked the OS for reduced motion, smooth otherwise. */
+function scrollBehavior(): ScrollBehavior {
+  if (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
+    return 'auto';
+  }
+  return 'smooth';
+}
+
 // ============================================================================
 // Link Component
 // ============================================================================
 
 /**
- * Hermes Engine implementation of the Anchor.Link component.
+ * Modern engine implementation of the Anchor.Link component.
  *
  * @description
- * A Tailwind-styled navigation link that scrolls to target sections.
- * Uses utility classes and DS token inline styles for semantic colors.
- *
- * @remarks
- * **Tailwind Classes:**
- * - Active: `font-medium` + inline `color: var(--ds-color-primary)`, `borderColor: var(--ds-color-primary)`
- * - Inactive: `border-transparent` + inline `color: var(--ds-color-text-secondary)`
- * - Base: `block py-1 px-3 text-sm transition-colors`
- *
- * **Features:**
- * - Smooth scroll to target on click
- * - Automatic active state from context
- * - Hover state styling
- * - Support for nested children
+ * A navigation link that scrolls to its target section. Color, accent-bar
+ * paint, padding rhythm and typography are skin-owned (`anchor.css`); the
+ * engine keeps only the border width/color utilities the skin deliberately
+ * does NOT own (see the skin header for the mixed-border rationale) plus
+ * the selected state.
  *
  * @param props - {@link AnchorLinkProps}
  * @param ref - Forwarded ref to the anchor element
- * @returns Styled navigation link element
- *
- * @example
- * ```tsx
- * <Link href="#section" title="Section Title" />
- * ```
+ * @returns Navigation link element
  */
 export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
   (props, ref) => {
@@ -154,7 +124,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
 
     /**
      * Handle link click - scroll to target section.
-     * Calls parent onClick handler and performs smooth scroll.
+     * Calls parent onClick handler and performs the scroll.
      */
     const handleClick = (e: React.MouseEvent) => {
       context?.onClick?.(e, { title, href });
@@ -162,7 +132,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
       if (!e.defaultPrevented) {
         e.preventDefault();
         const element = document.querySelector(href);
-        element?.scrollIntoView({ behavior: 'smooth' });
+        element?.scrollIntoView({ behavior: scrollBehavior() });
       }
     };
 
@@ -171,23 +141,27 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
     // ---------------------------------------------------------------------------
 
     return (
-      <div className={context?.direction === 'horizontal' ? 'inline-block' : ''}>
+      <div data-part="link-wrapper">
         <a
           ref={ref}
           href={href}
           target={target}
           onClick={handleClick}
-          className={`rottay-anchor-link rottay-anchor-link--modern block py-1 px-3 text-sm transition-colors border-l-2 ${
-            isActive ? 'font-medium' : 'border-transparent'
+          // `border-s-2` is the LOGICAL accent-bar width (flips correctly in
+          // RTL); `border-transparent` keeps the inactive bar color at the
+          // tenant floor -- the skin owns only the ACTIVE border color.
+          className={`rottay-anchor-link rottay-anchor-link--modern border-s-2 ${
+            isActive ? '' : 'border-transparent'
           } ${className}`}
           style={style}
           data-part="item"
           data-selected={isActive}
+          aria-current={isActive ? 'location' : undefined}
         >
           {title}
         </a>
         {children && (
-          <div className="ml-4">
+          <div data-part="nested">
             {children}
           </div>
         )}
@@ -195,47 +169,23 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
     );
   }
 );
-Link.displayName = 'Anchor.Link.Hermes';
+Link.displayName = 'Anchor.Link.Modern';
 
 // ============================================================================
 // Anchor Component
 // ============================================================================
 
 /**
- * Hermes Engine implementation of the Anchor component.
+ * Modern engine implementation of the Anchor component.
  *
  * @description
- * A Tailwind-styled anchor navigation container with DS tokens. Tracks scroll
- * position and provides context for child Link components.
- *
- * @remarks
- * **Key Features:**
- * - Automatic scroll-based active link detection
- * - Support for custom scroll containers
- * - Sticky positioning via Tailwind utilities
- * - Vertical and horizontal layouts
- * - Controlled and uncontrolled active state
- *
- * **Tailwind Classes:**
- * - Affix: `sticky top-0`
- * - Horizontal: `flex gap-2`
+ * An anchor navigation container that tracks scroll position and provides
+ * context for child Link components. Sticky/flex structure is skin-owned;
+ * the `offsetTop` runtime value stays inline.
  *
  * @param props - {@link AnchorProps}
  * @param ref - Forwarded ref to the container div
- * @returns Styled anchor navigation container
- *
- * @example
- * ```tsx
- * <Anchor
- *   engine="modern"
- *   offsetTop={80}
- *   affix={true}
- *   direction="vertical"
- * >
- *   <Anchor.Link href="#intro" title="Introduction" />
- *   <Anchor.Link href="#features" title="Features" />
- * </Anchor>
- * ```
+ * @returns Anchor navigation container
  */
 export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
   (props, ref) => {
@@ -347,11 +297,11 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
       <AnchorContext.Provider value={{ activeKey, onClick, direction }}>
         <div
           ref={ref}
-          className={`${affix ? 'sticky top-0' : ''} ${
-            direction === 'horizontal' ? 'flex gap-2' : ''
-          } ${className}`}
+          className={`rottay-anchor rottay-anchor--modern ${className}`}
           style={{ top: affix ? offsetTop : undefined, ...style }}
           data-part="root"
+          data-direction={direction}
+          data-affix={affix ? 'true' : 'false'}
         >
           {children}
         </div>
@@ -359,6 +309,6 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     );
   }
 );
-Anchor.displayName = 'Anchor.Hermes';
+Anchor.displayName = 'Anchor.Modern';
 
 export default Anchor;

@@ -165,7 +165,11 @@ export const FadeIn = forwardRef<HTMLDivElement, FadeInProps>(
           : once
           ? {
               whileInView: { opacity: 1, x: 0, y: 0 },
-              viewport: { once: true, amount: 0.3 },
+              // A proportional threshold can never be met when the animated
+              // wrapper is taller than the scroll viewport (for example a
+              // full record editor on mobile). Reveal as soon as any content
+              // enters so motion can never leave usable UI permanently hidden.
+              viewport: { once: true, amount: "some" as const },
             }
           : { animate: { opacity: 1, x: 0, y: 0 } })}
         transition={transition}

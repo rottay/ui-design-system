@@ -16,11 +16,11 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import type { AspectRatioProps } from '../../contracts';
-import { ASPECT_RATIO_DEFAULTS } from '../../contracts';
+import React from "react";
+import type { AspectRatioProps } from "../../contracts";
+import { ASPECT_RATIO_DEFAULTS } from "../../contracts";
 
 /**
  * Rustic (vanilla CSS) aspect ratio container using the padding-bottom technique.
@@ -32,14 +32,16 @@ import { ASPECT_RATIO_DEFAULTS } from '../../contracts';
  * @param props - {@link AspectRatioProps} including ratio, maxWidth, children, and styling overrides.
  * @returns A React element wrapping children in a self-contained aspect ratio container.
  */
-export default function RusticAspectRatio(props: AspectRatioProps): React.ReactElement {
+export default function RusticAspectRatio(
+  props: AspectRatioProps
+): React.ReactElement {
   const {
     ratio = ASPECT_RATIO_DEFAULTS.ratio,
     children,
-    className = '',
+    className = "",
     style,
     maxWidth,
-    'data-testid': dataTestId,
+    "data-testid": dataTestId,
   } = props;
 
   // Inverse ratio expressed as a percentage for padding-bottom
@@ -48,30 +50,30 @@ export default function RusticAspectRatio(props: AspectRatioProps): React.ReactE
   // Outer wrapper provides width constraint and binds the DS font variable
   // so any text rendered inside stays consistent with tenant theming
   const outerStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
+    position: "relative",
+    width: "100%",
     maxWidth: maxWidth,
-    fontFamily: 'var(--ds-font-family-base)',
+    fontFamily: "var(--ds-font-family-base)",
     ...style,
   };
 
   // Ratio box: height is explicitly 0 and paddingBottom creates the
   // proportional height. Overflow hidden clips any content bleeding out.
   const ratioBoxStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
+    position: "relative",
+    width: "100%",
     height: 0,
     paddingBottom,
-    overflow: 'hidden',
+    overflow: "hidden",
   };
 
   // Absolute positioning fills the ratio box so children stretch to fit
   const contentStyle: React.CSSProperties = {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   };
 
   return (
@@ -81,12 +83,10 @@ export default function RusticAspectRatio(props: AspectRatioProps): React.ReactE
       data-testid={dataTestId}
     >
       <div style={ratioBoxStyle}>
-        <div style={contentStyle}>
-          {children}
-        </div>
+        <div style={contentStyle}>{children}</div>
       </div>
     </div>
   );
 }
 
-RusticAspectRatio.displayName = 'RusticAspectRatio';
+RusticAspectRatio.displayName = "RusticAspectRatio";

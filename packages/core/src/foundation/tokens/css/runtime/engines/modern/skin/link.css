@@ -1,38 +1,160 @@
 /**
- * Modern Link skin (WO-SKIN-04 checkpoint N).
+ * Modern Link skin (WO-SKIN-04 checkpoint N; K1-Lane-A state ownership pass).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule loses to preflight/DaisyUI regardless of
- * specificity. The `color` below must out-rank DaisyUI's `.link-primary` /
- * `.link-error` / … class colors — that suppression is the component's
- * documented design intent, previously carried by an inline `color`. Unlayered
- * beats DaisyUI's layered `.link-*` and still yields to a caller's inline `style`.
+ * specificity. Unlayered also out-ranks any tenant `.link-*` artifact paint and
+ * still yields to a caller's inline `style`.
  *
- * SCOPE ROOT carries `rottay-link-shell rottay-link-shell--modern` alongside the
- * DaisyUI `.link` + `.link-<type>` classes and `data-part='root'` +
- * `data-variant`. The `-shell` scope (not bare `rottay-link`) is required:
- * `rottay-link` is already stamped by display/Typography's rustic engine, and
- * `data-part` is a shared vocabulary, not an identifier.
+ * SCOPE ROOT carries `rottay-link-shell rottay-link-shell--modern` alongside
+ * `data-part='root'` + `data-variant`. The `-shell` scope (not bare
+ * `rottay-link`) is required: `rottay-link` is already stamped by
+ * display/Typography's rustic engine, and `data-part` is a shared vocabulary,
+ * not an identifier.
  *
- * SPECIFICITY (P-48): `color` is non-border paint — (0,3,0) suffices; these rules
- * sit at (0,4,0).
+ * The engine stamps NO DaisyUI `link`/`link-*` classes and no Tailwind
+ * utilities. Every state (hover, pressed, visited, focus-visible, disabled),
+ * the underline treatment, and the external-affordance icon are owned here,
+ * keyed on the `data-*` contract, so identical markup cannot fork between apps
+ * that compile different utility sets.
+ *
+ * Each variant resolves a single `--ds-link-tone` channel; hover/pressed/
+ * visited are color-mixes OF THAT TONE, so a tenant that re-tunes the tone
+ * inherits a coherent state ramp for free.
  */
 
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'] {
+  cursor: pointer;
+  border-radius: var(--ds-link-radius, var(--ds-radius-sm, 2px));
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--ds-link-underline-thickness, 1px);
+  text-underline-offset: var(--ds-link-underline-offset, 2px);
+  text-decoration-skip-ink: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color var(--ds-link-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-link-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    text-underline-offset var(--ds-link-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-link-motion-easing, var(--ds-motion-ease-out, ease-out)),
+    text-decoration-thickness var(--ds-link-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-link-motion-easing, var(--ds-motion-ease-out, ease-out));
+}
+
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-underline='false'] {
+  text-decoration-line: none;
+}
+
+/* Standalone links (underline=false) reveal the underline on hover: the
+   affordance is always one pointer-move away, never hidden for good. */
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-underline='false']:hover {
+  text-decoration-line: underline;
+}
+
+/* ---- variant tones: one channel per variant, states derive from it -------- */
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='default'] {
-  color: var(--ds-color-info, var(--ds-color-primary));
+  --ds-link-tone: var(--ds-color-info, var(--ds-color-primary));
 }
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='primary'] {
-  color: var(--ds-color-primary);
+  --ds-link-tone: var(--ds-color-primary);
 }
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='secondary'] {
-  color: var(--ds-color-secondary);
+  --ds-link-tone: var(--ds-color-secondary);
 }
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='success'] {
-  color: var(--ds-color-success);
+  --ds-link-tone: var(--ds-color-success);
 }
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='warning'] {
-  color: var(--ds-color-warning);
+  --ds-link-tone: var(--ds-color-warning);
 }
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='danger'] {
-  color: var(--ds-color-error);
+  --ds-link-tone: var(--ds-color-error);
+}
+
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'] {
+  /* CONTRAST LAW (R0/Axe): the raw tone fails as body ink on light surfaces
+     (TMM secondary #8C6D46 = 4.44:1 on #FBF6EC). The base ink is a bounded
+     16%-darkened mix of the tone and the state ramp darkens monotonically
+     (16 -> 30 -> 42), so hover/active stay visibly deeper and every source
+     clears AA: secondary/TMM 5.83:1, secondary/bithire 7.78:1,
+     primary/bithire 6.15:1 (was 4.72:1 -- no regression).
+     `--ds-link-color` remains the tenant escape hatch. */
+  color: var(--ds-link-color, color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-black, #000) 16%));
+}
+
+/* ---- states. Visited precedes hover so pointer feedback always wins; the
+        disabled policy is doubled to outrank every state rule above. -------- */
+.rottay-link-shell.rottay-link-shell--modern[data-part='root']:visited {
+  color: var(
+    --ds-link-visited-color,
+    color-mix(in srgb, var(--ds-link-tone) 76%, var(--ds-color-text-secondary, #64748b) 24%)
+  );
+}
+
+.rottay-link-shell.rottay-link-shell--modern[data-part='root']:hover {
+  color: var(
+    --ds-link-hover-color,
+    color-mix(in srgb, var(--ds-link-tone) 70%, var(--ds-color-black, #000) 30%)
+  );
+  text-underline-offset: var(--ds-link-underline-offset-hover, 3px);
+  text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
+}
+
+.rottay-link-shell.rottay-link-shell--modern[data-part='root']:active {
+  color: var(
+    --ds-link-active-color,
+    color-mix(in srgb, var(--ds-link-tone) 58%, var(--ds-color-black, #000) 42%)
+  );
+}
+
+.rottay-link-shell.rottay-link-shell--modern[data-part='root']:focus-visible {
+  outline: var(--ds-link-focus-ring-width, 2px) solid
+    var(--ds-link-focus-ring-color, color-mix(in srgb, var(--ds-link-tone) 60%, transparent));
+  outline-offset: var(--ds-link-focus-ring-offset, 2px);
+}
+
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-disabled='true'][data-disabled='true'] {
+  color: var(--ds-link-disabled-color, var(--ds-color-text-disabled, var(--ds-color-neutral-400, #a3a3a3)));
+  opacity: var(--ds-link-disabled-opacity, 0.62);
+  cursor: not-allowed;
+  pointer-events: none;
+  text-decoration-line: var(--ds-link-disabled-decoration, none);
+}
+
+/* ---- external affordance. The icon sits on the text baseline with a logical
+        gap and mirrors in RTL (autoMirror is off for this glyph by design). ---- */
+.rottay-link-shell.rottay-link-shell--modern > [data-part='external-icon'] {
+  display: inline-flex;
+  margin-inline-start: var(--ds-link-external-icon-gap, 0.2em);
+  vertical-align: var(--ds-link-external-icon-offset, -0.125em);
+}
+
+:dir(rtl) .rottay-link-shell.rottay-link-shell--modern > [data-part='external-icon'] > svg,
+.rottay-link-shell.rottay-link-shell--modern > [data-part='external-icon'] > svg:dir(rtl) {
+  transform: scaleX(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root'] {
+    color: LinkText;
+    text-decoration-line: underline;
+    forced-color-adjust: auto;
+  }
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root']:visited {
+    color: VisitedText;
+  }
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-disabled='true'][data-disabled='true'] {
+    color: GrayText;
+    opacity: 1;
+  }
 }

@@ -147,6 +147,12 @@ export interface InputNumberProps {
   bordered?: boolean;
   /** Visual variant of the input field */
   variant?: 'outlined' | 'borderless' | 'filled';
+  /**
+   * Accessible name for the input when no surrounding label/FormField
+   * provides one. Without it, a standalone InputNumber fails the axe `label`
+   * rule (critical).
+   */
+  'aria-label'?: string;
 }
 
 /**

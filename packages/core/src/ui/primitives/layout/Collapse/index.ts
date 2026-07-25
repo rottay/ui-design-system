@@ -25,7 +25,8 @@
  *
  * This component supports the Rottay multi-engine architecture:
  * - **Classic**: Wraps Ant Design Collapse with full feature parity
- * - **Modern**: Tailwind CSS implementation with custom state management
+ * - **Modern**: Token-driven implementation (skin-owned paint and rhythm)
+ *   with custom state management
  * - **Rustic**: Pure CSS with inline styles and transitions
  *
  * @example Basic Usage

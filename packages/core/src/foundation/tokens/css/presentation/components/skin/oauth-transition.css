@@ -1,6 +1,7 @@
 
 .rottay-transition-root {
   position: relative;
+  container-type: inline-size;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
@@ -2077,7 +2078,7 @@
   50% { transform: translate3d(-12px, 10px, 0); opacity: 0.72; }
 }
 
-@media (max-width: 720px) {
+@container (inline-size <= 720px) {
   .rottay-transition-frame {
     padding: 14px;
   }

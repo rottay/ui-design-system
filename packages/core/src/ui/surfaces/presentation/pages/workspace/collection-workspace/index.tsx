@@ -15,13 +15,15 @@
  * Advanced filters are collapsible -- hidden by default, toggled via button.
  */
 
+import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import {
   directionFromIndexDelta,
-  tabPanelTransitionStyle,
+  tabPanelTransitionName,
+  TAB_PANEL_TRANSITION_CLASS,
   useDirectionalViewTransition,
 } from '@/graphics/motion/react/runtime';
 import {
@@ -79,23 +81,25 @@ import { CollectionFilterDropdown } from './filter-dropdown';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../../foundation/contracts/adaptive/collection';
 import {
   DENSITY_PRESETS,
-  resolveDensityStyleVars,
   normalizeDensityMode,
 } from '../../../../../../foundation/tokens/ts/foundation/base/density';
 import type { DensityMode } from '../../../../../../foundation/tokens/ts/foundation/base/density';
 
-const COLLECTION_WORKSPACE_DENSITY_SCALE_HOOK = '--ds-collection-workspace-density-scale';
+const COLLECTION_WORKSPACE_DENSITY_LOCAL_FACTOR_HOOK =
+  '--ds-collection-workspace-density-local-factor';
 
 /**
  * Keeps the mode preset as the stable fallback while allowing a presentation
- * profile to govern workspace scale through the CSS cascade. The profile hook
- * is intentionally separate from the effective `--ds-density-scale` output so
- * the inline surface contract never shadows its own inherited input.
+ * profile to govern the workspace's local posture through the CSS cascade.
+ * Structural `--ds-density-scale` and appearance
+ * `--ds-density-mode-factor` stay inherited from brand/tenant resolution.
  */
 function resolveCollectionWorkspaceDensityStyleVars(mode: DensityMode): React.CSSProperties {
+  const preset = DENSITY_PRESETS[mode];
   return {
-    ...resolveDensityStyleVars(mode),
-    '--ds-density-scale': `var(${COLLECTION_WORKSPACE_DENSITY_SCALE_HOOK}, ${DENSITY_PRESETS[mode].scale})`,
+    '--ds-density-cell-padding': preset.cellPadding,
+    '--ds-density-card-padding': preset.cardPadding,
+    '--ds-density-local-factor': `var(${COLLECTION_WORKSPACE_DENSITY_LOCAL_FACTOR_HOOK}, ${preset.modeFactor})`,
   } as React.CSSProperties;
 }
 
@@ -137,11 +141,12 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
    * Route-grade listings render `'comfortable'` (the default); embedded /
    * beside-chat collections render `'compact'`. Resolved from tokens — the
    * surface emits `--ds-density-cell-padding` / `--ds-density-card-padding` /
-   * `--ds-density-scale` on its root and threads the mode to the inner table,
-   * so density derives declaratively from each capability's style contract.
-   * Presentation profiles may govern the effective scale through
-   * `--ds-collection-workspace-density-scale`; when absent, the selected mode's
-   * canonical scale remains the fallback.
+   * `--ds-density-local-factor` on its root and threads the mode to the inner
+   * table, so density derives declaratively without replacing either the
+   * tenant's structural `--ds-density-scale` or appearance
+   * `--ds-density-mode-factor`. Presentation profiles may govern the local
+   * factor through `--ds-collection-workspace-density-local-factor`; when
+   * absent, the selected mode's canonical factor remains the fallback.
    *
    * A runtime `controls.density` switcher (`WorkspaceDensityConfig`), when
    * enabled and given a value, still overrides this baseline.
@@ -594,9 +599,11 @@ function formatPaginationRange(pagination?: PaginationConfig | false, visibleCou
 function PageSizeControl({
   pagination,
   visibleCount,
+  compact = false,
 }: {
   pagination?: PaginationConfig | false;
   visibleCount: number;
+  compact?: boolean;
 }) {
   const options = getPageSizeOptions(pagination);
   const rangeLabel = formatPaginationRange(pagination, visibleCount);
@@ -629,13 +636,14 @@ function PageSizeControl({
         className="ds-collection-page-size-control"
         data-part="page-size-control"
         data-load-mode={isIncremental ? 'incremental' : 'paged'}
+        data-compact={compact ? 'true' : 'false'}
         title={isIncremental ? 'Cards per batch' : 'Rows per page'}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: 8,
+          gap: compact ? 6 : 8,
           minHeight: 30,
-          padding: '3px 5px 3px 10px',
+          padding: compact ? '3px 4px 3px 8px' : '3px 5px 3px 10px',
           cursor: 'pointer',
           fontSize: 11,
           fontWeight: 680,
@@ -663,27 +671,29 @@ function PageSizeControl({
             position: 'relative',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 5,
+            gap: compact ? 0 : 5,
             height: 26,
-            minWidth: 104,
-            padding: '0 26px 0 9px',
+            minWidth: compact ? 52 : 104,
+            padding: compact ? '0 22px 0 8px' : '0 26px 0 9px',
           }}
         >
-          <Text
-            className="ds-collection-page-size-control__unit"
-            data-part="page-size-unit"
-            as="span"
-            size="xs"
-            style={{
-              fontSize: 10,
-              fontWeight: 780,
-              letterSpacing: 0,
-              lineHeight: 1,
-              textTransform: 'uppercase',
-            }}
-          >
-            {unitLabel}
-          </Text>
+          {!compact && (
+            <Text
+              className="ds-collection-page-size-control__unit"
+              data-part="page-size-unit"
+              as="span"
+              size="xs"
+              style={{
+                fontSize: 10,
+                fontWeight: 780,
+                letterSpacing: 0,
+                lineHeight: 1,
+                textTransform: 'uppercase',
+              }}
+            >
+              {unitLabel}
+            </Text>
+          )}
           <Text
             as="span"
             className="ds-collection-page-size-control__value"
@@ -697,19 +707,21 @@ function PageSizeControl({
           >
             {pagination.pageSize}
           </Text>
-          <Text
-            className="ds-collection-page-size-control__suffix"
-            data-part="page-size-suffix"
-            as="span"
-            size="xs"
-            style={{
-              fontSize: 10,
-              fontWeight: 760,
-              lineHeight: 1,
-            }}
-          >
-            {suffixLabel}
-          </Text>
+          {!compact && (
+            <Text
+              className="ds-collection-page-size-control__suffix"
+              data-part="page-size-suffix"
+              as="span"
+              size="xs"
+              style={{
+                fontSize: 10,
+                fontWeight: 760,
+                lineHeight: 1,
+              }}
+            >
+              {suffixLabel}
+            </Text>
+          )}
           <select
             aria-label={isIncremental ? 'Cards per batch' : 'Rows per page'}
             className="ds-collection-page-size-control__select"
@@ -808,8 +820,25 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     [columns, surfaceAccess],
   );
 
+  // `adaptive` is the canonical responsive authority for the surface. The
+  // older presentation.responsive contract remains supported when no adaptive
+  // posture is supplied, but it must never run in parallel and resolve a
+  // different view mode at the same viewport.
+  const workspacePresentation = useMemo(
+    () => adaptive && presentation?.responsive
+      ? { ...presentation, responsive: undefined }
+      : presentation,
+    [adaptive, presentation],
+  );
+
   const workspace = useCollectionWorkspace({
-    config: { controls, behavior, presentation, data, columns: capabilityColumns },
+    config: {
+      controls,
+      behavior,
+      presentation: workspacePresentation,
+      data,
+      columns: capabilityColumns,
+    },
     defaultViewMode,
   });
 
@@ -889,7 +918,17 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         metaItemsPlacement: header.metaItemsPlacement ?? 'eyebrow-end',
       }
     : undefined;
-  const isPremium = Boolean(resolvedHeader || resolvedCommand);
+  // Premium rendering is a presentation contract, not a side effect of
+  // mounting page chrome. Headerless operational collections (for example a
+  // list nested under app-owned navigation) must keep the same workspace,
+  // density, filter and preview primitives instead of falling back to the
+  // legacy toolbar merely because their duplicate heading was removed.
+  const isPremium = Boolean(
+    resolvedHeader
+      || resolvedCommand
+      || presentation?.enhancedInteractions
+      || presentation?.shell,
+  );
   const selectionEnabled = behavior?.selection?.enabled ?? false;
   const embeddedSurfaceStyle = surfaceMode === 'embed'
     ? {
@@ -1895,13 +1934,18 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       controls?.density?.enabled ||
       controls?.export?.enabled ||
       (!hasCommandBar && resolvedChrome.command && controls?.search?.enabled);
-    const toolbarViewMode: ViewMode = workspace.activeViewMode === 'table' ? 'list' : 'cards';
+    const toolbarViewMode: ViewMode = effectiveViewMode === 'table' ? 'list' : 'cards';
 
     return (
       <>
         <Stack
         className="ds-surface ds-collection-workspace"
+        data-component="collection-workspace"
+        {...densityScopeAttributes(density)}
+        data-has-actions={actions ? 'true' : 'false'}
         data-part="root"
+        data-preview-open={showPreviewRail || compactPreviewVisible ? 'true' : 'false'}
+        data-selection-enabled={selectionEnabled ? 'true' : 'false'}
         data-surface-mode={surfaceMode}
         data-view-mode={effectiveViewMode}
         data-loading={loading ? 'true' : 'false'}
@@ -1919,7 +1963,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         {!showToolbar && surfaceMode !== 'embed' && (
           <Box className="ds-collection-workspace__header" data-part="header">
             <Text className="ds-collection-workspace__title" data-part="title" size="xl" weight="semibold">{title}</Text>
-            {subtitle && <Text className="ds-collection-workspace__muted-text" data-part="muted-text" size="sm" color="muted">{subtitle}</Text>}
+            {subtitle && <Text className="ds-collection-workspace__muted-text" size="sm" color="muted">{subtitle}</Text>}
           </Box>
         )}
         {showToolbar && (
@@ -1942,7 +1986,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               primaryAction={primaryAction}
               onExport={handleExport}
             />
-            {subtitle && <Text className="ds-collection-workspace__muted-text" data-part="muted-text" size="sm" color="muted">{subtitle}</Text>}
+            {subtitle && <Text className="ds-collection-workspace__muted-text" size="sm" color="muted">{subtitle}</Text>}
           </>
         )}
         {controls?.scopes?.enabled && controls.scopes.scopes.length > 0 && (
@@ -1950,7 +1994,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             scopes={controls.scopes.scopes}
             activeScope={controls.scopes.activeScope ?? controls.scopes.scopes[0]?.key ?? ''}
             onScopeChange={controls.scopes.onScopeChange ?? (() => {})}
-            variant={workspace.isMobile ? 'inline' : 'section'}
+            variant={posture.isPhone ? 'inline' : 'section'}
           />
         )}
         {controls?.savedViews?.enabled && controls.savedViews.views && controls.savedViews.views.length > 0 && (
@@ -1993,8 +2037,15 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             Filters{hasActiveFilters ? ` (${activeFilterCount})` : ''}
           </Button>
         )}
-        <Flex className="ds-collection-workspace__content" data-part="content" gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0, ...tabPanelTransitionStyle(collectionTransitionScope) }}>
+        <Flex className="ds-collection-workspace__content" data-part="content" gap={4}>
+          <Box
+            className="ds-collection-workspace__collection"
+            data-part="collection"
+            style={{
+              viewTransitionName: tabPanelTransitionName(collectionTransitionScope),
+              viewTransitionClass: TAB_PANEL_TRANSITION_CLASS,
+            } as React.CSSProperties}
+          >
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
@@ -2190,7 +2241,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     <Stack
       spacing="none"
       className={['ds-collection-workspace__content', enhanced ? 'ds-collection-enhanced' : undefined].filter(Boolean).join(' ')}
+      data-component="collection-workspace"
+      {...densityScopeAttributes(density)}
+      data-has-actions={actions ? 'true' : 'false'}
       data-part="content"
+      data-preview-open={showPreviewRail || compactPreviewVisible ? 'true' : 'false'}
+      data-selection-enabled={selectionEnabled ? 'true' : 'false'}
       data-surface-mode={surfaceMode}
       data-view-mode={effectiveViewMode}
       data-loading={loading ? 'true' : 'false'}
@@ -2360,7 +2416,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                       <Box
                         as="span"
                         className="ds-collection-workspace__muted-text"
-                        data-part="muted-text"
                         style={{
                           fontSize: 9,
                           fontWeight: 700,
@@ -2543,7 +2598,26 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               <PageSizeControl
                 pagination={behavior?.pagination}
                 visibleCount={data.length}
+                compact={posture.isPhone}
               />
+            )}
+
+            {!resolvedHeader && !usesStickyActionContinuity && primaryAction && (
+              <Button
+                variant="primary"
+                size="sm"
+                icon={primaryAction.icon}
+                disabled={primaryAction.disabled}
+                pending={primaryAction.pending ?? primaryAction.loading}
+                pendingLabel={primaryAction.pendingLabel}
+                aria-label={primaryAction.ariaLabel}
+                onClick={primaryAction.onClick}
+                className="ds-collection-workspace__toolbar-primary-action"
+                data-part="toolbar-primary-action"
+                style={{ flex: '0 0 auto', minWidth: 'max-content', whiteSpace: 'nowrap' }}
+              >
+                {primaryAction.label}
+              </Button>
             )}
           </Flex>
         </Flex>
@@ -2583,7 +2657,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             <Box
               as="span"
               className="ds-collection-workspace__muted-text"
-              data-part="muted-text"
               style={{
                 fontSize: 10,
                 fontWeight: 700,
@@ -2625,8 +2698,15 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             : null),
         }}
       >
-        <Flex className="ds-collection-workspace__body-content" data-part="body-content" gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0, ...tabPanelTransitionStyle(collectionTransitionScope) }}>
+        <Flex className="ds-collection-workspace__body-content" data-part="body-content" gap={4}>
+          <Box
+            className="ds-collection-workspace__collection"
+            data-part="collection"
+            style={{
+              viewTransitionName: tabPanelTransitionName(collectionTransitionScope),
+              viewTransitionClass: TAB_PANEL_TRANSITION_CLASS,
+            } as React.CSSProperties}
+          >
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
@@ -2763,7 +2843,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           {workspace.hasSelection && (
             <Text
               className="ds-collection-workspace__muted-text"
-              data-part="muted-text"
               size="sm"
               color="muted"
               aria-live="polite"

@@ -13,11 +13,14 @@
  * engine-agnostic `compound/Countdown` both carry the bare `rottay-statistic`,
  * and all three paint different values.
  *
- * THE TITLE'S COLOR IS NOT HERE, DELIBERATELY. `engines/modern/theme.css`'s
- * `.stat-title { color: var(--ds-statistic-title-color) }` is uncontested on the
- * title today (its runtime style sets line-height and margin) and `color` is
- * a channel preflight does not touch, so that rule paints. Declaring the same
- * color here would take ownership of a channel this skin never held.
+ * DAISY DRAIN (K3-A Pass 1): the engine no longer emits the `stat-title` /
+ * `stat-value` classes, so this skin is the single paint owner of the
+ * title/value typography through the `data-part` hooks. The `[data-tenant]
+ * .stat-title` / `.stat-value` rules in `engines/modern/theme.css` are now
+ * DEAD for this engine and are listed for the coordinator's theme.css
+ * cleanup (they were layered and lost to this unlayered file anyway).
+ * The title/value geometry (line-height, margins, affix gaps) moved here
+ * from the engine's inline styles; affix gaps are logical properties.
  *
  * SPECIFICITY (P-48): every value here is non-border paint except the skeleton's
  * `border-radius`, which carries no color -- so (0,3,0) clears preflight and the
@@ -26,10 +29,76 @@
  * transcribed verbatim from `engines/modern.tsx`.
  */
 
+.rottay-statistic.rottay-statistic--modern[data-part='root'] {
+  min-width: 0;
+  color: var(--ds-statistic-color, var(--ds-color-text-primary));
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    filter var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='false']:hover {
+  transform: translateY(-1px);
+  filter: saturate(1.025);
+}
+
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='title'] {
+  /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious on BOTH sources):
+     the DS-default title channel #737373 fails AA on the tinted page
+     surfaces (4.44:1 on bithire #F4F8FB, 4.40:1 on TMM #FBF6EC). The ink
+     deepens 30% toward the source's own primary text ink -- hue-faithful
+     (measured worst source: TMM 70% = 5.49:1). A tenant's explicit
+     `--ds-statistic-title-ink` stays raw. */
+  color: var(
+    --ds-statistic-title-ink,
+    color-mix(
+      in srgb,
+      var(--ds-statistic-title-color, var(--ds-color-text-secondary)) 70%,
+      var(--ds-color-text-primary) 30%
+    )
+  );
+  font-family: var(--ds-statistic-title-font-family, var(--ds-font-family-base));
+  font-size: var(--ds-statistic-title-font-size, var(--ds-font-size-xs));
+  font-weight: var(--ds-statistic-title-font-weight, var(--ds-font-weight-medium, 500));
+  letter-spacing: var(--ds-statistic-title-letter-spacing, 0.045em);
+  text-transform: var(--ds-statistic-title-transform, uppercase);
+  text-wrap: balance;
+  line-height: var(--ds-line-height-sm, 1.25rem);
+  margin-bottom: var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem));
+}
+
+/* ---- loading posture: the pulse the engine used to set inline. In the
+        loading branch the root holds exactly the two skeleton bars, so the
+        first/last-of-type geometry split is stable. ---- */
+.rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='true'] {
+  animation: ds-foundation-pulse 2s var(--ds-motion-ease-in-out) infinite;
+  animation-duration: var(--ds-skeleton-animation-duration, 1.5s);
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line']:first-of-type {
+  height: var(--ds-spacing-4, 1rem);
+  width: var(--ds-spacing-16, 4rem);
+  margin-bottom: var(--ds-spacing-2, 0.5rem);
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line']:last-of-type {
+  height: var(--ds-spacing-8, 2rem);
+  width: var(--ds-spacing-24, 6rem);
+}
+
 /* ---- loading skeleton bars (height/width/margin stay inline) ---- */
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
-  background: var(--ds-statistic-loading-bg, var(--ds-surface-panel));
+  background: var(
+    --ds-statistic-loading-bg,
+    linear-gradient(
+      105deg,
+      var(--ds-surface-panel),
+      color-mix(in srgb, var(--ds-surface-panel) 78%, var(--ds-color-bg-elevated)),
+      var(--ds-surface-panel)
+    )
+  );
+  background-size: 180% 100%;
   border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 66%, transparent);
 }
 
 /* ---- value: trend color. The unqualified rule carries the `default` value
@@ -37,6 +106,16 @@
         unrecognised trend; `valueStyle` still wins as inline. ---- */
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] {
   color: var(--ds-statistic-value-color, var(--ds-color-text-primary));
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  flex-wrap: wrap;
+  font-family: var(--ds-statistic-value-font-family, var(--ds-font-family-heading));
+  font-size: var(--ds-statistic-value-font-size, var(--ds-font-size-2xl));
+  font-weight: var(--ds-statistic-value-font-weight, var(--ds-font-weight-bold, 700));
+  letter-spacing: var(--ds-statistic-value-letter-spacing, -0.035em);
+  text-wrap: balance;
+  line-height: var(--ds-line-height-2xl, 2rem);
 }
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='positive'] {
   color: var(--ds-statistic-positive-color, var(--ds-color-success));
@@ -45,14 +124,68 @@
   color: var(--ds-statistic-negative-color, var(--ds-color-error));
 }
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='warning'] {
-  color: var(--ds-statistic-warning-color, var(--ds-color-warning));
+  /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious on bithire): the
+     raw semantic warning fails even large-text AA on the tinted surface
+     (bithire #D6A04E = 2.19:1 on #F4F8FB; TMM's darker #8A6B00 = 4.66:1
+     passes raw and only deepens here). The ink deepens 40% toward black,
+     deriving from the tenant's own resolved hue -- no ramp lookup (measured
+     worst source: bithire 60% = 5.41:1, clears normal-text AA too). */
+  color: var(
+    --ds-statistic-warning-color,
+    color-mix(in srgb, var(--ds-color-warning) 60%, var(--ds-color-black, #000) 40%)
+  );
 }
 
 /* ---- prefix / suffix: `inherit` keeps them on the value's trend color unless a
-        tenant sets the token. ---- */
+        tenant sets the token. The gap to the number is LOGICAL (inline-end /
+        inline-start), so it flips with direction instead of pinning to the
+        physical left/right. ---- */
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='prefix'] {
   color: var(--ds-statistic-prefix-color, inherit);
+  margin-inline-end: var(--ds-spacing-1, 0.25rem);
 }
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='suffix'] {
   color: var(--ds-statistic-suffix-color, inherit);
+  margin-inline-start: var(--ds-spacing-1, 0.25rem);
+}
+
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='number'] {
+  min-width: 0;
+  font-variant-numeric: tabular-nums lining-nums;
+  overflow-wrap: anywhere;
+}
+
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='prefix'][data-part='prefix'],
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='suffix'][data-part='suffix'] {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ds-statistic-affix-height, 1.375rem);
+  padding-inline: var(--ds-statistic-affix-padding-x, 0.375rem);
+  border: 1px solid
+    var(
+      --ds-statistic-affix-border,
+      color-mix(in srgb, currentColor 18%, var(--ds-color-border-subtle))
+    );
+  border-radius: var(--ds-statistic-affix-radius, 9999px);
+  background: var(
+    --ds-statistic-affix-bg,
+    color-mix(in srgb, currentColor 7%, transparent)
+  );
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 62%, transparent);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-statistic-affix-font-size, var(--ds-font-size-xs));
+  font-weight: var(--ds-statistic-affix-font-weight, var(--ds-font-weight-medium, 500));
+  letter-spacing: var(--ds-statistic-affix-letter-spacing, 0);
+}
+
+.rottay-statistic.rottay-statistic--modern[data-part='root'][data-countdown='true'] > [data-part='value'] > [data-part='number'] {
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  letter-spacing: var(--ds-statistic-countdown-letter-spacing, -0.025em);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-statistic.rottay-statistic--modern[data-part='root'] {
+    transition: none;
+  }
 }

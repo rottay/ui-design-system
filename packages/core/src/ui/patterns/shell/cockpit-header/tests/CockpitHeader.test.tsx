@@ -105,6 +105,21 @@ describe('PatternCockpitHeader', () => {
 });
 
 describe('PatternCockpitHeader (modern engine)', () => {
+  it('renders premium context anatomy', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader
+        eyebrow="Active decision"
+        icon={<span data-testid="cockpit-icon">I</span>}
+        title="Modern Test"
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByText('Active decision')).toBeInTheDocument();
+    expect(screen.getByTestId('cockpit-icon')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="header-icon"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+  });
+
   it('renders title with modern engine', async () => {
     renderSurface(
       <PatternCockpitHeader title="Modern Test" />,

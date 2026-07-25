@@ -71,6 +71,7 @@ import React, { createContext, useContext, useState, useCallback, useMemo, useId
 import type { CSSProperties } from 'react';
 import type { CheckboxGroupProps, CheckboxOption, CheckboxSize, CheckboxVariant } from '../../contracts';
 import { CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // Context for checkbox group
 interface CheckboxGroupContextValue {
@@ -105,6 +106,7 @@ export function CheckboxGroup({
 }: CheckboxGroupComponentProps): React.ReactElement {
   const generatedId = useId();
   const groupName = name || `checkbox-group-${generatedId}`;
+  const translation = useOptionalTranslation('components');
 
   // Internal state for uncontrolled mode
   const [internalValue, setInternalValue] = useState<(string | number)[]>(defaultValue);
@@ -246,7 +248,7 @@ export function CheckboxGroup({
         className={`rottay-checkbox-group rottay-checkbox-group--${direction} ${className}`}
         style={containerStyle}
         role="group"
-        aria-label="Checkbox group"
+        aria-label={translation?.t('checkbox.group') ?? 'Checkbox group'}
       >
         {options ? renderOptions() : children}
       </div>

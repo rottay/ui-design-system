@@ -63,6 +63,10 @@ export interface MotionPolicy extends NormalizedTenantMotionDial {
 export const MOTION_RECIPE_NAMES = [
   'feedback.press',
   'feedback.confirm',
+  'feedback.hover',
+  'feedback.focus',
+  'feedback.error',
+  'disclosure.reveal',
   'state.change',
   'overlay.modal',
   'overlay.sheet',

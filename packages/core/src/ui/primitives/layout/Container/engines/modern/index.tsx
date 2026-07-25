@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Container Modern Engine - Rottay Design System.
@@ -19,9 +19,26 @@
  * @package @rottay/design-system
  */
 
-import React from 'react';
-import type { ContainerProps } from '../../contracts';
-import { CONTAINER_DEFAULTS, CONTAINER_MAX_WIDTHS, CONTAINER_PADDINGS } from '../../contracts';
+import React from "react";
+import type { ContainerProps } from "../../contracts";
+import {
+  CONTAINER_DEFAULTS,
+  CONTAINER_MAX_WIDTHS,
+  CONTAINER_PADDINGS,
+} from "../../contracts";
+
+function toSafePixels(value: number, fallback: string): string {
+  return Number.isFinite(value) && value >= 0 ? `${value}px` : fallback;
+}
+
+function isSafeLength(value: number): boolean {
+  return Number.isFinite(value) && value >= 0;
+}
+
+type ContainerInstanceStyle = React.CSSProperties & {
+  "--ds-container-instance-max-width"?: string;
+  "--ds-container-instance-padding"?: string;
+};
 
 /**
  * Modern (Tailwind) Container component.
@@ -47,36 +64,56 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
       ...rest
     } = props;
 
-    // Base layout classes (structural only, not spacing/sizing)
-    const classes: string[] = ['w-full', 'box-border'];
-    if (center) classes.push('mx-auto');
+    const classes = ["rottay-container", "rottay-container--modern"];
 
-    // Max-width and padding resolved via DS CSS custom properties.
-    // This ensures tenant overrides flow through --ds-container-* and --ds-spacing-*.
-    const customStyle: React.CSSProperties = { ...style };
+    // React owns only the instance values. The skin owns structure, paint and
+    // motion so every tenant can restyle the same markup through Appearance.
+    const customStyle: ContainerInstanceStyle = {};
     if (!fluid) {
-      if (typeof maxWidth === 'string') {
-        customStyle.maxWidth = CONTAINER_MAX_WIDTHS[maxWidth] || CONTAINER_MAX_WIDTHS.lg;
-      } else if (typeof maxWidth === 'number') {
-        customStyle.maxWidth = `${maxWidth}px`;
+      if (typeof maxWidth === "string") {
+        customStyle["--ds-container-instance-max-width"] =
+          CONTAINER_MAX_WIDTHS[maxWidth] || CONTAINER_MAX_WIDTHS.lg;
+      } else if (typeof maxWidth === "number") {
+        customStyle["--ds-container-instance-max-width"] = toSafePixels(
+          maxWidth,
+          CONTAINER_MAX_WIDTHS.lg
+        );
       }
     }
-    if (typeof padding === 'string') {
-      customStyle.padding = CONTAINER_PADDINGS[padding] || CONTAINER_PADDINGS.md;
-    } else if (typeof padding === 'number') {
-      customStyle.padding = `${padding}px`;
+    if (typeof padding === "string") {
+      customStyle["--ds-container-instance-padding"] =
+        CONTAINER_PADDINGS[padding] || CONTAINER_PADDINGS.md;
+    } else if (typeof padding === "number") {
+      customStyle["--ds-container-instance-padding"] = toSafePixels(
+        padding,
+        CONTAINER_PADDINGS.md
+      );
     }
 
-    const combinedClassName = [classes.join(' '), className]
+    const combinedClassName = [classes.join(" "), className]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     return (
       <div
         ref={ref}
-        className={combinedClassName}
-        style={Object.keys(customStyle).length > 0 ? customStyle : undefined}
         {...rest}
+        className={combinedClassName}
+        style={{ ...customStyle, ...style }}
+        data-part="root"
+        data-max-width={
+          fluid
+            ? "fluid"
+            : typeof maxWidth === "number" && !isSafeLength(maxWidth)
+            ? "lg"
+            : maxWidth
+        }
+        data-padding={
+          typeof padding === "number" && !isSafeLength(padding) ? "md" : padding
+        }
+        data-centered={center || undefined}
+        data-fluid={fluid || undefined}
+        data-component="container"
       >
         {children}
       </div>
@@ -84,6 +121,6 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   }
 );
 
-Container.displayName = 'Container.Modern';
+Container.displayName = "Container.Modern";
 
 export default Container;

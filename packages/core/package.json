@@ -245,7 +245,7 @@
     "dev": "node scripts/dev.mjs",
     "icons:generate": "node scripts/generate-semantic-icons.mjs",
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
-    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check",
+    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run csssource:check",
     "prepack": "pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
     "postbuild": "pnpm run cra14:check",
@@ -271,7 +271,7 @@
     "gat09:structural": "node scripts/gat-09-full-claim-integrity.mjs --structural",
     "gat09:gate": "node scripts/gat-09-full-claim-integrity.mjs",
     "test:scripts": "node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
-    "pretest": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run contract:check && node scripts/engine-token-audit.mjs --check && node scripts/anatomy-variant-gate.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check && node scripts/tenant-channel-consumer-gate.mjs --check && node scripts/size-axis-law-gate.mjs --check",
+    "pretest": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run contract:check && node --test scripts/daisy-projection-contract.test.mjs && node scripts/engine-token-audit.mjs --check && node scripts/anatomy-variant-gate.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check && node scripts/tenant-channel-consumer-gate.mjs --check && node scripts/size-axis-law-gate.mjs --check && node --test scripts/application-boundary-gate.test.mjs && node scripts/application-boundary-gate.mjs --check && node scripts/theme-channel-parity-gate.mjs --check --quiet && node scripts/pattern-surface-ownership-gate.mjs --check && node scripts/engine-freeze-gate.mjs --check",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",
@@ -280,8 +280,13 @@
     "typecheck": "tsc --noEmit",
     "typecheck:tests": "node scripts/typecheck-tests-ratchet.mjs --label core --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json",
     "csspaint:check": "node scripts/css-layer-paint-gate.mjs",
+    "parity:theme:check": "node scripts/theme-channel-parity-gate.mjs --check",
+    "csssource:check": "node scripts/css-source-integrity-gate.mjs",
     "containerquery:check": "node scripts/container-query-gate.mjs --check",
     "containerquery:seed": "node scripts/container-query-gate.mjs --seed",
+    "ownership:patterns:check": "node scripts/pattern-surface-ownership-gate.mjs --check",
+    "theme-parity:check": "node scripts/theme-channel-parity-gate.mjs --check",
+    "quality-evidence:check": "node scripts/quality-evidence/cli.mjs validate-manifest",
     "size-axis:check": "node scripts/size-axis-law-gate.mjs --check",
     "gate:styles-css": "node --test scripts/vertical-css-staleness.gate.mjs",
     "packinv:check": "node scripts/pack-inventory-gate.mjs --check",
@@ -485,7 +490,8 @@
     }
   },
   "dependencies": {
-    "dayjs": "^1.11.20"
+    "dayjs": "^1.11.20",
+    "tailwind-variants": "3.2.2"
   },
   "devDependencies": {
     "@ant-design/icons": "^5.6.1",
@@ -509,6 +515,7 @@
     "@vitest/ui": "^3.2.4",
     "antd": "^5.29.3",
     "autoprefixer": "^10.5.0",
+    "axe-core": "^4.11.3",
     "d3": "^7.9.0",
     "daisyui": "^5.5.19",
     "happy-dom": "^20.9.0",

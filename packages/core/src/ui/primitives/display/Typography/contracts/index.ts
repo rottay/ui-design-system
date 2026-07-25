@@ -74,6 +74,81 @@ export type TextWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 
 /**
+ * Logical alignment values (`start`/`end`) follow the document direction and
+ * are preferred for localized product UI. Physical values remain available
+ * for editorial compositions that intentionally pin content to one edge.
+ */
+export type TypographyAlign = TextAlign | 'start' | 'end';
+
+/** Semantic, brand-overridable type styles. */
+export type TypographyStyle =
+  | 'display'
+  | 'pageTitle'
+  | 'sectionTitle'
+  | 'body'
+  | 'supporting'
+  | 'label'
+  | 'caption'
+  | 'code'
+  | 'numeric';
+
+/** Typeface channel independent from semantic HTML and visual size. */
+export type TypographyFamily = 'body' | 'heading' | 'display' | 'mono' | 'inherit';
+
+/** Public leading scale; every value resolves through a DS token. */
+export type TypographyLeading = 'none' | 'tight' | 'snug' | 'normal' | 'relaxed' | 'loose';
+
+/** Public tracking scale; every value resolves through a DS token. */
+export type TypographyTracking = 'tighter' | 'tight' | 'normal' | 'wide' | 'wider' | 'widest';
+
+/** Intentional wrapping policy for localized and editorial text. */
+export type TypographyWrap = 'auto' | 'balance' | 'pretty' | 'nowrap';
+
+/** Contrast channel that can be remapped by every tenant. */
+export type TypographyContrast = 'strong' | 'default' | 'muted' | 'subtle' | 'inverse';
+
+/** Opt-in motion. Static content never animates unless explicitly requested. */
+export type TypographyMotion = 'none' | 'enter';
+
+/** Direction and translation metadata supported by every typography root. */
+export interface TypographyLocaleProps {
+  /** BCP 47 language tag used by assistive technology and hyphenation. */
+  lang?: string;
+  /** Reading direction; `auto` is safest for user-authored mixed-script text. */
+  dir?: 'ltr' | 'rtl' | 'auto';
+  /** Prevent machine translation for identifiers, code, and proper nouns. */
+  translate?: 'yes' | 'no';
+}
+
+/**
+ * Cross-engine craft contract. These controls are deliberately orthogonal:
+ * semantic HTML, type style, family, scale, contrast, and motion never need a
+ * tenant-specific component branch.
+ */
+export interface TypographyCraftProps extends TypographyLocaleProps {
+  /** Semantic type style backed by `--ds-type-*` public tokens. */
+  textStyle?: TypographyStyle;
+  /** Explicit font-family channel. Overrides the family from `textStyle`. */
+  family?: TypographyFamily;
+  /** Use the bounded fluid size token corresponding to `size`. */
+  fluid?: boolean;
+  /** Tokenized line-height override. */
+  leading?: TypographyLeading;
+  /** Tokenized letter-spacing override. */
+  tracking?: TypographyTracking;
+  /** Localized wrapping behavior. */
+  wrap?: TypographyWrap;
+  /** Allow language-aware hyphenation. Requires a correct `lang`. */
+  hyphenate?: boolean;
+  /** Tenant-remappable text contrast independent from semantic status color. */
+  contrast?: TypographyContrast;
+  /** Optional, reduced-motion-safe entrance treatment. */
+  motion?: TypographyMotion;
+  /** Native tooltip/fallback disclosure for intentionally truncated copy. */
+  title?: string;
+}
+
+/**
  * Semantic text color options.
  * Maps to design system color tokens for consistent theming.
  */
@@ -92,7 +167,7 @@ export type TextColor = 'default' | 'secondary' | 'tertiary' | 'muted' | 'subtle
  * </Typography.Heading>
  * ```
  */
-export interface HeadingProps extends BaseComponentProps, EngineAwareProps {
+export interface HeadingProps extends BaseComponentProps, EngineAwareProps, TypographyCraftProps {
   /**
    * Semantic heading level (h1-h6).
    * Determines the HTML element rendered.
@@ -121,7 +196,7 @@ export interface HeadingProps extends BaseComponentProps, EngineAwareProps {
    * Text alignment within the container.
    * @default 'left'
    */
-  align?: TextAlign;
+  align?: TypographyAlign;
 
   /**
    * Semantic color variant.
@@ -158,7 +233,7 @@ export interface HeadingProps extends BaseComponentProps, EngineAwareProps {
  * </Typography.Text>
  * ```
  */
-export interface TextProps extends BaseComponentProps, EngineAwareProps {
+export interface TextProps extends BaseComponentProps, EngineAwareProps, TypographyCraftProps {
   /**
    * Text size. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
@@ -186,14 +261,17 @@ export interface TextProps extends BaseComponentProps, EngineAwareProps {
    * Text alignment within the container.
    * @default 'left'
    */
-  align?: TextAlign;
+  align?: TypographyAlign;
 
   /**
    * HTML element to render.
    * Allows semantic flexibility while maintaining consistent styling.
    * @default 'span'
    */
-  as?: 'span' | 'p' | 'div' | 'label';
+  as?: 'span' | 'p' | 'div' | 'label' | 'strong' | 'em' | 'small' | 'code' | 's' | 'mark';
+
+  /** Native label association when `as="label"`. */
+  htmlFor?: string;
 
   /**
    * Enable single-line truncation with ellipsis.
@@ -252,12 +330,12 @@ export interface TextProps extends BaseComponentProps, EngineAwareProps {
  * </Typography.Paragraph>
  * ```
  */
-export interface ParagraphProps extends BaseComponentProps, EngineAwareProps {
+export interface ParagraphProps extends BaseComponentProps, EngineAwareProps, TypographyCraftProps {
   /**
    * Text size.
    * @default 'md'
    */
-  size?: TextSize;
+  size?: ResponsiveValue<TextSize>;
 
   /**
    * Font weight.
@@ -275,7 +353,7 @@ export interface ParagraphProps extends BaseComponentProps, EngineAwareProps {
    * Text alignment within the container.
    * @default 'left'
    */
-  align?: TextAlign;
+  align?: TypographyAlign;
 
   /**
    * Enable single-line truncation with ellipsis.
@@ -305,7 +383,7 @@ export interface ParagraphProps extends BaseComponentProps, EngineAwareProps {
  * <Typography.Link href="https://example.com" target="_blank">External</Typography.Link>
  * ```
  */
-export interface LinkProps extends BaseComponentProps, EngineAwareProps {
+export interface LinkProps extends BaseComponentProps, EngineAwareProps, TypographyCraftProps {
   /**
    * The URL the link points to.
    */
@@ -327,7 +405,7 @@ export interface LinkProps extends BaseComponentProps, EngineAwareProps {
    * Text size.
    * @default 'md'
    */
-  size?: TextSize;
+  size?: ResponsiveValue<TextSize>;
 
   /**
    * Font weight.
@@ -378,7 +456,7 @@ export interface LinkProps extends BaseComponentProps, EngineAwareProps {
  * Combined Typography component props.
  * Used when working with the Typography namespace directly.
  */
-export interface TypographyProps extends BaseComponentProps, EngineAwareProps {
+export interface TypographyProps extends BaseComponentProps, EngineAwareProps, TypographyCraftProps {
   /** Typography variant to render */
   variant?: 'heading' | 'text' | 'paragraph' | 'link';
   /** Children content */
@@ -402,6 +480,10 @@ export const TYPOGRAPHY_DEFAULTS = {
     color: 'default' as const,
     /** No truncation by default; content flows naturally. */
     truncate: false,
+    /** Balanced wrapping prevents awkward display-heading orphans. */
+    wrap: 'balance' as const,
+    /** Motion is opt-in and never surprises assistive technology users. */
+    motion: 'none' as const,
   },
   /** Defaults for `<Typography.Text>`. */
   text: {
@@ -427,6 +509,10 @@ export const TYPOGRAPHY_DEFAULTS = {
     monospace: false,
     /** Proportional (not tabular) figure style by default. */
     numeric: 'proportional' as const,
+    /** Pretty wrapping improves localized supporting copy. */
+    wrap: 'pretty' as const,
+    /** Static by default. */
+    motion: 'none' as const,
   },
   /** Defaults for `<Typography.Paragraph>`. */
   paragraph: {
@@ -440,6 +526,10 @@ export const TYPOGRAPHY_DEFAULTS = {
     color: 'default' as const,
     /** No truncation by default. */
     truncate: false,
+    /** Pretty wrapping improves paragraph rhythm where supported. */
+    wrap: 'pretty' as const,
+    /** Static by default. */
+    motion: 'none' as const,
   },
   /** Defaults for `<Typography.Link>`. */
   link: {
@@ -457,6 +547,10 @@ export const TYPOGRAPHY_DEFAULTS = {
     disabled: false,
     /** Not bold by default. */
     strong: false,
+    /** Links inherit normal wrapping unless a consumer opts in. */
+    wrap: 'auto' as const,
+    /** Static by default; hover transition remains reduced-motion-safe. */
+    motion: 'none' as const,
   },
 } as const;
 

@@ -56,7 +56,7 @@ const anatomyDocument = (
     },
   }) as TenantThemeDocument;
 
-describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", () => {
+describe("W4 schema surface: typography, shape, materials and palette.dark", () => {
   it("performs one coherent schema digest bump for the wave", () => {
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       PRE_CHANGE_DIGESTS.documentSchemaDigest
@@ -80,23 +80,39 @@ describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", 
     ]);
   });
 
-  it("accepts the four new general fields inside their documented bounds", () => {
+  it("accepts the complete General visual foundation inside documented bounds", () => {
     const result = validateTenantThemeDocument({
       schemaVersion: 1,
       mode: "simple",
       appearance: {
         palette: {
           primary: "#2F6B9A",
+          background: "#FBF6EC",
+          foreground: {
+            primary: "#2E261C",
+            secondary: "#5C4F3D",
+            muted: "#6B5B48",
+            disabled: "#74644F",
+          },
+          border: { primary: "#C8B9A5", secondary: "#E2D9CC" },
           backgroundMode: "auto",
           dark: {
             primary: "#7FB2DA",
             secondary: "#C9A96A",
             accent: "#D98874",
             background: "#101014",
+            foreground: {
+              primary: "#FFF8ED",
+              secondary: "#E2D6C4",
+              muted: "#C1B39F",
+              disabled: "#9A8C79",
+            },
+            border: { primary: "#685B4A", secondary: "#40362B" },
           },
         },
         typography: { typePairing: "editorial", scale: 1.04 },
         shape: { buttonStyle: "pill", radiusScale: 1.1 },
+        surfaces: { elevation: "soft", effectIntensity: 0.58 },
       },
     });
     expect(result.success).toBe(true);
@@ -122,6 +138,11 @@ describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", 
       "radius scale above cap",
       { shape: { radiusScale: 2 } },
       "$.appearance.shape.radiusScale",
+    ],
+    [
+      "effect intensity above cap",
+      { surfaces: { effectIntensity: 1.2 } },
+      "$.appearance.surfaces.effectIntensity",
     ],
     [
       "dark seed invalid color",
@@ -153,6 +174,7 @@ describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", 
         appearance: {
           typography: { scale: 0.9 },
           shape: { radiusScale: 0.76 },
+          surfaces: { effectIntensity: 0.9 },
         },
       },
       IDENTITY
@@ -170,6 +192,10 @@ describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", 
         code: "invalid_value",
         path: "$.appearance.shape.radiusScale",
       }),
+      expect.objectContaining({
+        code: "invalid_value",
+        path: "$.appearance.surfaces.effectIntensity",
+      }),
     ]);
 
     const inRange = hydrateTenantThemeConfig(
@@ -179,6 +205,7 @@ describe("W4 schema surface: typePairing / scale / radiusScale / palette.dark", 
         appearance: {
           typography: { scale: 1.02 },
           shape: { radiusScale: 1.05 },
+          surfaces: { effectIntensity: 0.58 },
         },
       },
       IDENTITY

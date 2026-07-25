@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Space Classic Engine - Rottay Design System
@@ -29,11 +29,11 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React from 'react';
-import { Space as AntSpace } from 'antd';
-import type { SpaceProps } from '../../contracts';
-import { SPACE_DEFAULTS } from '../../contracts';
-import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+import React from "react";
+import { Space as AntSpace } from "antd";
+import type { SpaceProps } from "../../contracts";
+import { SPACE_DEFAULTS } from "../../contracts";
+import { toLegacySize } from "../../../../../../foundation/contracts/kernel/common";
 
 /**
  * Classic engine implementation of the Space component.
@@ -62,11 +62,11 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
     // [horizontal, vertical] tuple -- not the canonical 'sm' | 'md' | 'lg' spelling, so a
     // string value is resolved to its legacy spelling before reaching AntSpace.
     const computedSize =
-      typeof size === 'string'
+      typeof size === "string"
         ? toLegacySize(size)
         : Array.isArray(size)
-          ? size
-          : size;
+        ? size
+        : size;
 
     // Ant Design's Space handles all layout, alignment, and separator logic internally,
     // so this engine acts as a thin passthrough with consistent prop defaults.
@@ -88,6 +88,6 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   }
 );
 
-Space.displayName = 'Space.Classic';
+Space.displayName = "Space.Classic";
 
 export default Space;

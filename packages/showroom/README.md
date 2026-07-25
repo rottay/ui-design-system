@@ -59,7 +59,7 @@ Uses `@rottay/design-system` as a `workspace:*` dependency:
 - Live primitive previews with engine comparison (Classic/Modern/Rustic)
 - Pattern pages with interactive demos
 - 18 chart families rendered with real D3 + sample data
-- Stable 50-role `Icon` facade plus the generated 263-role pack corpus
+- Governed 282-name `Icon` facade plus generated vertical packs
 - 6 token explorer pages (colors, spacing, typography, radius, shadows, motion)
 - 9 vertical demo screens (Platform, BitHire, Evnto)
 - Global Cmd+K search across all registries

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rottay.example/schemas/quality-evidence-scorecard-v1.json",
+  "title": "Rottay component quality evidence scorecard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "componentId",
+    "evidenceRevision",
+    "pass1",
+    "pass2"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "componentId": { "type": "string", "pattern": "^DS-P[0-9]{3}$" },
+    "evidenceRevision": { "type": "string", "minLength": 1 },
+    "pass1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimensions", "hardFailures"],
+      "properties": {
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "anatomySemantics",
+            "variantsRecipes",
+            "stateCompleteness",
+            "tokenWhitelabelContract",
+            "responsiveContent",
+            "inputParity",
+            "accessibilityI18n",
+            "behavioralEvidence"
+          ],
+          "properties": {
+            "anatomySemantics": { "$ref": "#/$defs/contractEvidence" },
+            "variantsRecipes": { "$ref": "#/$defs/contractEvidence" },
+            "stateCompleteness": { "$ref": "#/$defs/contractEvidence" },
+            "tokenWhitelabelContract": { "$ref": "#/$defs/contractEvidence" },
+            "responsiveContent": { "$ref": "#/$defs/contractEvidence" },
+            "inputParity": { "$ref": "#/$defs/contractEvidence" },
+            "accessibilityI18n": { "$ref": "#/$defs/contractEvidence" },
+            "behavioralEvidence": { "$ref": "#/$defs/contractEvidence" }
+          }
+        },
+        "hardFailures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "overlap-or-clipping",
+              "invisible-or-pointer-only-action",
+              "focus-indicator-clipped",
+              "shared-chrome-hardcode",
+              "modern-raw-paint-without-exemption",
+              "incoherent-border-radius-grammar",
+              "placeholder-only-state",
+              "unlocalized-copy",
+              "brand-locale-coupling",
+              "tenant-fixtures-visually-identical"
+            ]
+          }
+        }
+      }
+    },
+    "pass2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scores", "evidence", "review"],
+      "properties": {
+        "scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "defaultVisualQuality",
+            "tokenWhitelabelCraft",
+            "motionQuality",
+            "documentationVisual"
+          ],
+          "properties": {
+            "defaultVisualQuality": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 15
+            },
+            "tokenWhitelabelCraft": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 7
+            },
+            "motionQuality": { "type": "number", "minimum": 0, "maximum": 5 },
+            "documentationVisual": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3
+            }
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "description": "Keys are selected by the component contract. Values are repository-relative artifact references.",
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reviewer", "reviewedAt", "notes"],
+          "properties": {
+            "status": {
+              "enum": ["pending", "changes-requested", "approved", "rejected"]
+            },
+            "reviewer": { "type": ["string", "null"] },
+            "reviewedAt": { "type": ["string", "null"], "format": "date-time" },
+            "notes": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "contractEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence", "reason"],
+      "properties": {
+        "status": { "enum": ["pending", "pass", "fail", "not-applicable"] },
+        "evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "reason": { "type": "string" }
+      }
+    }
+  }
+}

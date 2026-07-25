@@ -2,8 +2,13 @@
 
 /**
  * @fileoverview OTPInput Modern Engine - Rottay Design System.
- * DaisyUI/Tailwind CSS implementation rendering a row of individual digit
- * inputs with auto-advance, backspace navigation, and paste distribution.
+ * Custom implementation rendering a row of individual digit inputs with
+ * auto-advance, backspace navigation, and paste distribution -- no DaisyUI
+ * classes. All static paint and geometry (row flex/gap, per-size slot boxes,
+ * monospace slot typography, disabled posture, error gap/typography) are
+ * owned by the modern skin (`skin/otp-input.css`) keyed on
+ * `data-part`/`data-size`/`data-disabled`; no inline styles remain on any
+ * part. The public `style` escape hatch stays on the outer wrapper.
  *
  * @example
  * ```tsx
@@ -20,24 +25,17 @@ import { arrayValueAt, setArrayValueAt } from '@/foundation/kernel/collections';
 import type { OTPInputProps } from '../../contracts';
 import { OTPINPUT_DEFAULTS } from '../../contracts';
 
-/** Maps size tokens to inline dimension and typography styles. */
-const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  sm: { width: 36, height: 36, fontSize: 16 },
-  md: { width: 44, height: 44, fontSize: 20 },
-  lg: { width: 52, height: 52, fontSize: 24 },
-};
-
 function focusInputAt(inputs: readonly (HTMLInputElement | null)[], index: number): void {
   arrayValueAt(inputs, index)?.focus();
 }
 
 /**
- * Modern engine OTPInput built with DaisyUI / Tailwind CSS.
- * Each digit occupies its own `<input maxLength={1}>` box styled with DaisyUI
- * input classes. Focus auto-advances on entry and retreats on backspace.
+ * Modern engine OTPInput: each digit occupies its own
+ * `<input maxLength={1}>` box painted by the modern skin. Focus auto-advances
+ * on entry and retreats on backspace.
  *
  * @param props - Unified OTPInputProps from the design system contract.
- * @returns A DaisyUI-styled flex row of single-character inputs.
+ * @returns A skin-painted flex row of single-character inputs.
  */
 export default function ModernOTPInput(props: OTPInputProps): React.ReactElement {
   const {
@@ -144,11 +142,9 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     focusInputAt(inputRefs.current, focusIndex);
   }, [internalValues, isValidChar, length, updateValue]);
 
-  const sizeStyle = SIZE_STYLES[size] || SIZE_STYLES.md;
-
   return (
     <div className={`${className || ''}`} style={style}>
-      <div className="ds-otp-input ds-otp-input--modern" data-part="root" data-disabled={disabled ? 'true' : 'false'} style={{ display: 'flex', gap: 8 }}>
+      <div className="ds-otp-input ds-otp-input--modern" data-part="root" data-size={size} data-disabled={disabled ? 'true' : 'false'}>
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
@@ -163,7 +159,6 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             value={arrayValueAt(internalValues, index) || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
-            style={{ ...sizeStyle, padding: 0, textAlign: 'center', fontFamily: 'monospace', fontWeight: 700, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
             onFocus={(e) => { e.target.select(); }}
             onChange={(e) => {
               const char = e.target.value.slice(-1);
@@ -176,8 +171,8 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
         ))}
       </div>
       {error && errorMessage && (
-        <div style={{ marginTop: 4 }}>
-          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px' }}>{errorMessage}</span>
+        <div data-part="error-wrapper">
+          <span data-part="error-message">{errorMessage}</span>
         </div>
       )}
     </div>

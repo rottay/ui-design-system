@@ -45,6 +45,11 @@ import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } fro
 import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, LINE_HEIGHT_MAP } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import {
+  resolveFluidTypographySize,
+  resolveTypographyCraftStyle,
+  typographyDataAttributes,
+} from '../../runtime';
 
 /**
  * Scope class carried by all four exports. Text color is selected from
@@ -81,6 +86,19 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       color = TYPOGRAPHY_DEFAULTS.heading.color,
       truncate = TYPOGRAPHY_DEFAULTS.heading.truncate,
       lineClamp,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'balance',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
       className = '',
       style,
@@ -110,7 +128,8 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       responsiveEntries.push({
         cssProperty: 'font-size',
         value: size,
-        resolve: (v: TextSize) => SIZE_MAP.heading[v] || SIZE_MAP.heading.md,
+        resolve: (v: TextSize) =>
+          fluid ? resolveFluidTypographySize('heading', v) : SIZE_MAP.heading[v] || SIZE_MAP.heading.md,
       } as ResponsivePropEntry<any>);
       responsiveEntries.push({
         cssProperty: 'line-height',
@@ -131,10 +150,20 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     // Visual properties use token-backed style objects referencing DS CSS
     // variables (var(--ds-*)) with hardcoded fallbacks, ensuring the heading
     // renders correctly without a theme provider (SSR, email, etc.).
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
     const headingStyle: React.CSSProperties = {
-      textWrap: 'balance',
       // Only set font-size/line-height inline when NOT responsive
-      ...(!sizeIsResponsive && {
+      ...(!sizeIsResponsive && !textStyle && {
         fontSize: SIZE_MAP.heading[effectiveSize] || SIZE_MAP.heading.md,
         lineHeight: 1.2,
       }),
@@ -142,19 +171,14 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       textAlign: align,
       // Reset margin to zero; DS layout components handle spacing.
       margin: 0,
-      // Single-line truncation (ellipsis).
-      ...(truncate && {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      }),
-      // Multi-line truncation uses the -webkit-line-clamp approach, which
-      // is supported in all modern browsers despite the vendor prefix.
-      ...(lineClamp && {
-        display: '-webkit-box',
-        WebkitLineClamp: lineClamp,
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
+      ...resolveTypographyCraftStyle({
+        ...craftProps,
+        kind: 'heading',
+        size: effectiveSize,
+        align,
+        truncate,
+        lineClamp,
+        responsive: sizeIsResponsive,
       }),
       ...style,
     };
@@ -168,11 +192,16 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         <HeadingElement
           ref={ref}
           className={`rottay-heading ${SCOPE_CLASSES} rottay-heading--${level} ${className}`.trim()}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...restProps}
+          {...(responsive ? responsive.attrs : {})}
           data-part="root"
           data-color={color}
+          {...typographyDataAttributes(craftProps)}
           style={headingStyle}
-          {...(responsive ? responsive.attrs : {})}
-          {...restProps}
         >
           {children}
         </HeadingElement>
@@ -204,6 +233,19 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       italic = TYPOGRAPHY_DEFAULTS.text.italic,
       monospace = TYPOGRAPHY_DEFAULTS.text.monospace,
       numeric,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'pretty',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
       className = '',
       style,
@@ -221,7 +263,8 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       responsiveEntries.push({
         cssProperty: 'font-size',
         value: sizeProp,
-        resolve: (v: TextSize) => SIZE_MAP.text[v] || SIZE_MAP.text.md,
+        resolve: (v: TextSize) =>
+          fluid ? resolveFluidTypographySize('text', v) : SIZE_MAP.text[v] || SIZE_MAP.text.md,
       } as ResponsivePropEntry<any>);
       responsiveEntries.push({
         cssProperty: 'line-height',
@@ -245,8 +288,18 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
     if (underline) decorations.push('underline');
     if (strikethrough) decorations.push('line-through');
 
-    const textStyle: React.CSSProperties = {
-      textWrap: 'pretty',
+    const craftProps = {
+      textStyle,
+      family: monospace ? ('mono' as const) : family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
+    const resolvedTextStyle: React.CSSProperties = {
       // Only set font-size inline when NOT responsive
       ...(!sizeIsResponsive && {
         fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
@@ -256,16 +309,14 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       fontStyle: italic ? 'italic' : undefined,
       fontFamily: monospace ? 'var(--ds-font-mono, monospace)' : undefined,
       textDecoration: decorations.length > 0 ? decorations.join(' ') : undefined,
-      ...(truncate && {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      }),
-      ...(lineClamp && {
-        display: '-webkit-box',
-        WebkitLineClamp: lineClamp,
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
+      ...resolveTypographyCraftStyle({
+        ...craftProps,
+        kind: 'text',
+        size,
+        align,
+        truncate,
+        lineClamp,
+        responsive: sizeIsResponsive,
       }),
       ...style,
     };
@@ -279,11 +330,16 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
         <TextElement
           ref={ref}
           className={`rottay-text ${SCOPE_CLASSES}${numeric === 'tabular' ? ' ds-nums-tabular' : ''} ${className}`.trim()}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...restProps}
+          {...(responsive ? responsive.attrs : {})}
           data-part="root"
           data-color={color}
-          style={textStyle}
-          {...(responsive ? responsive.attrs : {})}
-          {...restProps}
+          {...typographyDataAttributes(craftProps)}
+          style={resolvedTextStyle}
         >
           {children}
         </TextElement>
@@ -303,52 +359,108 @@ ApolloText.displayName = 'ApolloText';
 export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   (props, ref) => {
     const {
-      size = TYPOGRAPHY_DEFAULTS.paragraph.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.paragraph.size,
       weight = TYPOGRAPHY_DEFAULTS.paragraph.weight,
       color = TYPOGRAPHY_DEFAULTS.paragraph.color,
       align = TYPOGRAPHY_DEFAULTS.paragraph.align,
       truncate = TYPOGRAPHY_DEFAULTS.paragraph.truncate,
       lineClamp,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'pretty',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
       className = '',
       style,
       ...restProps
     } = props;
 
+    const reactId = useId();
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    if (sizeIsResponsive) {
+      responsiveEntries.push(
+        {
+          cssProperty: 'font-size',
+          value: sizeProp,
+          resolve: (value: TextSize) =>
+            fluid ? resolveFluidTypographySize('text', value) : SIZE_MAP.text[value] || SIZE_MAP.text.md,
+        } as ResponsivePropEntry<any>,
+        {
+          cssProperty: 'line-height',
+          value: sizeProp,
+          resolve: (value: TextSize) => LINE_HEIGHT_MAP.text[value] || '1.5',
+        } as ResponsivePropEntry<any>,
+      );
+    }
+    const responsive = responsiveEntries.length
+      ? generateResponsiveCSS(`paragraph-${reactId.replace(/:/g, '')}`, responsiveEntries)
+      : null;
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
+
     // Paragraphs use a relaxed line-height (1.625) for readability in
     // longer text blocks. Margin is reset to zero so DS layout components
     // (Stack, Flex) are solely responsible for vertical rhythm.
     const paragraphStyle: React.CSSProperties = {
-      fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
+      ...(!sizeIsResponsive && !textStyle
+        ? { fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md }
+        : {}),
       fontWeight: WEIGHT_MAP[weight] || WEIGHT_MAP.normal,
       textAlign: align,
       lineHeight: 'var(--ds-line-height-relaxed, 1.625)',
       margin: 0,
-      ...(truncate && {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      }),
-      ...(lineClamp && {
-        display: '-webkit-box',
-        WebkitLineClamp: lineClamp,
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
+      ...resolveTypographyCraftStyle({
+        ...craftProps,
+        kind: 'text',
+        size,
+        align,
+        truncate,
+        lineClamp,
+        responsive: sizeIsResponsive,
       }),
       ...style,
     };
 
     return (
-      <p
-        ref={ref}
-        className={`rottay-paragraph ${SCOPE_CLASSES} ${className}`.trim()}
-        data-part="root"
-        data-color={color}
-        style={paragraphStyle}
-        {...restProps}
-      >
-        {children}
-      </p>
+      <>
+        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+        <p
+          ref={ref}
+          className={`rottay-paragraph ${SCOPE_CLASSES} ${className}`.trim()}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...restProps}
+          {...(responsive ? responsive.attrs : {})}
+          data-part="root"
+          data-color={color}
+          {...typographyDataAttributes(craftProps)}
+          style={paragraphStyle}
+        >
+          {children}
+        </p>
+      </>
     );
   }
 );
@@ -367,13 +479,26 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
       href,
       target,
       rel,
-      size = TYPOGRAPHY_DEFAULTS.link.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.link.size,
       weight,
       color = TYPOGRAPHY_DEFAULTS.link.color,
       underlineOnHover = TYPOGRAPHY_DEFAULTS.link.underlineOnHover,
       underline = TYPOGRAPHY_DEFAULTS.link.underline,
       disabled = TYPOGRAPHY_DEFAULTS.link.disabled,
       strong = TYPOGRAPHY_DEFAULTS.link.strong,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'auto',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       onClick,
       children,
       className = '',
@@ -385,16 +510,61 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
     // opened page from accessing the opener's window.opener reference.
     const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
 
+    const reactId = useId();
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    if (sizeIsResponsive) {
+      responsiveEntries.push(
+        {
+          cssProperty: 'font-size',
+          value: sizeProp,
+          resolve: (value: TextSize) =>
+            fluid ? resolveFluidTypographySize('text', value) : SIZE_MAP.text[value] || SIZE_MAP.text.md,
+        } as ResponsivePropEntry<any>,
+        {
+          cssProperty: 'line-height',
+          value: sizeProp,
+          resolve: (value: TextSize) => LINE_HEIGHT_MAP.text[value] || '1.5',
+        } as ResponsivePropEntry<any>,
+      );
+    }
+    const responsive = responsiveEntries.length
+      ? generateResponsiveCSS(`link-${reactId.replace(/:/g, '')}`, responsiveEntries)
+      : null;
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
+
     // Link color defaults to the primary accent (not default text color)
     // because links should be visually distinguishable from surrounding text.
     const linkStyle: React.CSSProperties = {
-      fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
+      ...(!sizeIsResponsive && !textStyle
+        ? { fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md }
+        : {}),
       // `strong` prop takes precedence over `weight` for bold link text.
       fontWeight: strong ? WEIGHT_MAP.semibold : (weight ? WEIGHT_MAP[weight] : WEIGHT_MAP.normal),
       textDecoration: underline ? 'underline' : 'none',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
-      transition: 'color 0.2s, text-decoration 0.2s',
+      transition:
+        'color var(--ds-type-motion-duration, 160ms) var(--ds-type-motion-easing, ease), text-decoration-color var(--ds-type-motion-duration, 160ms) var(--ds-type-motion-easing, ease)',
+      textDecorationThickness: 'var(--ds-type-decoration-thickness, 0.08em)',
+      textUnderlineOffset: 'var(--ds-type-decoration-offset, 0.18em)',
+      ...resolveTypographyCraftStyle({
+        ...craftProps,
+        kind: 'text',
+        size,
+        responsive: sizeIsResponsive,
+      }),
       ...style,
     };
 
@@ -410,22 +580,31 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
     };
 
     return (
-      <a
-        ref={ref}
-        href={disabled ? undefined : href}
-        target={target}
-        rel={computedRel}
-        onClick={handleClick}
-        className={`rottay-link ${SCOPE_CLASSES} rottay-typography--link ${className}`.trim()}
-        data-part="root"
-        data-color={color}
-        data-disabled={disabled || undefined}
-        style={linkStyle}
-        aria-disabled={disabled}
-        {...restProps}
-      >
-        {children}
-      </a>
+      <>
+        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+        <a
+          ref={ref}
+          href={disabled ? undefined : href}
+          target={target}
+          rel={computedRel}
+          onClick={handleClick}
+          className={`rottay-link ${SCOPE_CLASSES} rottay-typography--link ${className}`.trim()}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...restProps}
+          {...(responsive ? responsive.attrs : {})}
+          data-part="root"
+          data-color={color}
+          data-disabled={disabled || undefined}
+          {...typographyDataAttributes(craftProps)}
+          style={linkStyle}
+          aria-disabled={disabled || undefined}
+        >
+          {children}
+        </a>
+      </>
     );
   }
 );

@@ -1,21 +1,31 @@
 /**
- * Modern TagInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern TagInput skin.
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
- * rule can't paint these elements at all; unlayered outranks preflight and
- * still yields to a caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns the container's visual decisions so a vertical or DB-backed tenant
+ * never needs private selectors. Chip paint is NOT owned here: tags are the
+ * composed public `Tag` primitive (`tag.css` owns their fill/frame/close
+ * chrome, one paint owner per part).
+ *
+ * Cascade position (the P-47 preflight fight, current contract): this file is
+ * imported into `layer(rottay-engines)`, which the cross-framework cascade
+ * contract in `entrypoints/base.css` sorts AFTER `rottay-framework` (the
+ * bundled Tailwind artifact, preflight included). Skin rules therefore beat
+ * preflight and every framework utility by layer ownership, while still
+ * yielding to a caller's inline `style` and to the tenant/personality layers
+ * above.
  *
  * SCOPE ROOT is `.ds-tag-input.ds-tag-input--modern[data-part='root']`,
- * carrying `data-error` ('true'|'false') and `data-disabled`. `tag-chip`,
- * `tag-remove`, and `input` are descendants of root. `error-message` is a
- * DOM NEPHEW of root, not a descendant: the JSX wraps it in an unclassed
- * `<div style={{marginTop:4}}>` that is itself a sibling of root (both
- * children of the component's outer wrapper) -- selected via the general
- * sibling combinator plus one descendant hop through that wrapper.
+ * carrying `data-size` ('sm'|'md'|'lg'), `data-error` ('true'|'false') and
+ * `data-disabled`. `input` is a descendant of root; the composed chips are
+ * `Tag` subtrees. `error-message` is a DOM NEPHEW of root: the JSX wraps it
+ * in a `[data-part='error-wrapper']` div that is itself a sibling of root
+ * (both children of the `.ds-tag-input-shell` outer) -- selected via the
+ * general sibling combinator plus one descendant hop through that wrapper.
  *
- * This engine has no focus-driven paint at all (no `useInteractionState`,
- * no `isFocused`) -- the container's border only ever reacts to `data-error`.
+ * Hover lives on `:hover` gated `:not([data-disabled='true'])`; the focus
+ * ring is `:focus-within` on the container (the inline input itself is
+ * `outline: none`, so the container carries the visible focus posture).
  *
  * SPECIFICITY (P-48): the container's `border` paints a color, so its rules
  * reach (0,4,0) via the repeated `[data-part='root']`. Everything else here
@@ -23,35 +33,104 @@
  * at (0,3,0).
  */
 
-.ds-tag-input.ds-tag-input--modern[data-part='root'] {
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input);
+.ds-tag-input-shell.ds-tag-input-shell--modern {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
 }
+
+.ds-tag-input.ds-tag-input--modern[data-part='root'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-tag-input-gap, 4px);
+  padding-block: var(--ds-tag-input-padding-y, 4px);
+  padding-inline: var(--ds-tag-input-padding-x, 8px);
+  border-radius: var(--ds-radius-md);
+  /* Same channel alignment as input-number.css: the certified Input
+     family's `--ds-input-bg` (TMM resolves it light, measured #FFFEFB);
+     the generic `--ds-color-bg-input` resolves near-black under TMM's
+     dark-text theme (1.29:1 on the inline input text, axe-reproduced). */
+  background: var(--ds-input-bg, var(--ds-surface-control));
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Governed channel usage (K2-V Pass-2): the composed primary Tags' SOLID
+   treatment reads `--ds-tag-primary-ink` (tag.css falls back to
+   `--ds-color-text-on-primary`, which TMM sets near-black — 3.57:1 on its
+   teal primary, axe-reproduced). Setting the R0 ink channel on OUR
+   container scopes the fix to this composition without touching Tag:
+   white is the documented R0 solid-ink fallback and measures 5.50:1 on the
+   TMM primary. The OUTLINED treatment consumes the separate
+   `--ds-tag-primary-outlined-ink` channel and is unaffected (BitHire's
+   outlined chips keep their primary ink). */
+.ds-tag-input.ds-tag-input--modern[data-part='root'] {
+  --ds-tag-primary-ink: var(--ds-color-white);
+}
+
+/* Public size geometry (density-scaled, physical px channels). */
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='sm'] {
+  min-block-size: calc(var(--ds-tag-input-sm-height, 32px) * var(--ds-density-effective-scale, 1));
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='md'] {
+  min-block-size: calc(var(--ds-tag-input-md-height, 40px) * var(--ds-density-effective-scale, 1));
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='lg'] {
+  min-block-size: calc(var(--ds-tag-input-lg-height, 48px) * var(--ds-density-effective-scale, 1));
+}
+
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-error='true']) {
+  border-color: var(--ds-tag-input-border-hover, var(--ds-color-border-hover));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'][data-error='true'] {
   border: 1px solid var(--ds-color-error);
 }
-
-.ds-tag-input.ds-tag-input--modern [data-part='tag-chip'] {
-  border-radius: 9999px;
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
+.ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
+  border-color: var(--ds-tag-input-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-focus-ring));
 }
-
-.ds-tag-input.ds-tag-input--modern [data-part='tag-remove'] {
-  background: transparent;
-  color: inherit;
-  border: none;
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-disabled='true'] {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
 }
 
 .ds-tag-input.ds-tag-input--modern [data-part='input'] {
+  flex: 1;
+  min-inline-size: var(--ds-tag-input-input-min-width, 60px);
+  padding: 0;
   outline: none;
   background: transparent;
   border: none;
+  color: var(--ds-color-text-primary);
+}
+.ds-tag-input.ds-tag-input--modern [data-part='input']:disabled {
+  cursor: not-allowed;
 }
 
+.ds-tag-input.ds-tag-input--modern ~ [data-part='error-wrapper'] {
+  margin-block-start: var(--ds-tag-input-error-gap, 4px);
+}
 .ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message'] {
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: 16px;
   color: var(--ds-color-error);
+}
+
+/* Coarse-pointer floor: physical px, never rem (the fluid 15px root erodes
+   rem floors at narrow widths -- measured on the live bundle, Axe R0). */
+@media (pointer: coarse) {
+  .ds-tag-input.ds-tag-input--modern[data-part='root'] {
+    min-block-size: var(--ds-tag-input-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-tag-input.ds-tag-input--modern[data-part='root'] {
+    transition: none;
+  }
 }

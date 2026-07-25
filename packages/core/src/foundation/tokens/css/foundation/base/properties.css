@@ -58,6 +58,46 @@
   initial-value: 0;
 }
 
+/* Widget-board spatial continuity. These scoped geometry channels let entry,
+   hover, drag and FLIP rearrangement compose instead of replacing one another's
+   `transform`. Runtime writes only typed --ds-* values; paint remains owned by
+   the layered widget-board skin. */
+@property --ds-widget-board-layout-x {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --ds-widget-board-layout-y {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --ds-widget-board-hover-lift {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --ds-widget-board-entry-offset {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --ds-widget-board-entry-scale {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --ds-widget-board-interaction-scale {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
 /* Accent color. Always set at :root (foundation/themes/default.css) and by
    tenants, so the transparent initial only applies where the property is unset;
    it never surfaces in normal rendering. transparent is used because an

@@ -1,104 +1,375 @@
 /**
- * Modern Menu skin (WO-SKIN-04 checkpoint N).
+ * Modern Menu skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * PAIRED-SURFACE LAW (K3-B Pass 2): every surface that carries text is
+ * mixed from `--ds-card-bg` (falling back to `--ds-surface-card`), never from
+ * raw `--ds-surface-card` directly: a tenant may define `--ds-surface-card`
+ * as a dark feature surface (TMM compiles it to #18181c) while its text
+ * tokens stay dark, so text-on-surface-card is not guaranteed legible;
+ * `--ds-card-bg`/`--ds-card-color` are the theme's own PAIRED card chrome
+ * (BitHire #fff/#14283b = 15.0:1, TMM #FFFEFB/#2E261C = 14.8:1). Under
+ * BitHire `--ds-card-bg` IS `--ds-surface-card` (#fff), so the light visuals
+ * are byte-identical. The `--dark` root variant keeps `--ds-surface-panel`
+ * (deliberate dark chrome; the lane probe evidences the light variant only).
  *
- * The former document-global singleton's `!important` focus ring, chevron
- * rotation and marker reset now live once in
- * `components/skin/navigation-static.css`. The stylesheet rule — not the old
- * dead `onFocus` write — continues to own the focus ring at the same priority.
- * The `outline: none` rest state below still loses to that `!important` rule.
- *
- * SCOPE ROOT carries `rottay-menu rottay-menu--modern rottay-menu--<theme>` +
- * `data-part='root'`. The theme MODIFIER CLASS (not a `data-theme` attribute) is
- * deliberate: `data-theme` is DaisyUI's own theming hook and is claimed by the
- * tenant layer, so stamping it on a `<ul>` would open a theme scope inside the
- * menu. The class mirrors what the rustic engine already stamps.
- *
- * `data-level` is the other stamp this migration added: the selected tint is 8%
- * on a top-level row and 7% on a child row, and nothing in the DOM distinguished
- * them (the level rode a `--rottay-menu-level` custom property, which a selector
- * cannot read).
- *
- * PRIORITY CHAIN, transcribed from the JS `if` ladder (base → hover → selected →
- * danger → disabled): each rule below carries the `:not()` guards that make
- * exactly one win per state combination. Hover was gated on
- * `!disabled && !isSelected`; danger's colour was gated on `!isSelected`.
- *
- * SPECIFICITY (P-48): `border: none` and `outline: none` are color-free resets,
- * exempt from the (0,4,0) floor. Everything else here is non-border paint and
- * wins unlayered at (0,3,0)+.
+ * The menu is a complete tenant surface: shape, hierarchy, elevation and
+ * motion are component-token driven. Selection is always expressed as a full
+ * framed surface; chromatic side rails are intentionally forbidden.
  */
 
-/* ---- root surface: the one channel that keys on the theme. ---- */
 .rottay-menu.rottay-menu--modern[data-part='root'] {
-  border-radius: var(--ds-radius-lg, 12px);
-}
-.rottay-menu--modern.rottay-menu--light[data-part='root'] {
-  background: var(--ds-surface-card);
-}
-.rottay-menu--modern.rottay-menu--dark[data-part='root'] {
-  background: var(--ds-surface-panel);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding: 10px 8px;
+  overflow: hidden;
+  list-style: none;
+  font-family: var(--ds-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--ds-menu-color, var(--ds-color-text-secondary));
+  border-radius: var(--ds-menu-radius, var(--ds-radius-xl, 16px));
+  box-shadow: var(--ds-menu-shadow, var(--ds-shadow-xs, 0 1px 2px rgb(15 23 42 / 0.04)));
+  transition:
+    background var(--ds-motion-normal) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-normal) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-normal) var(--ds-ease-standard, ease);
 }
 
-/* ---- item + submenu trigger share one chromeless base. ---- */
+.rottay-menu.rottay-menu--modern[data-part='root'][data-mode='horizontal'] {
+  flex-direction: row;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.rottay-menu.rottay-menu--modern[data-part='root'][data-collapsed='true'] {
+  inline-size: 64px;
+}
+
+/* The row wrappers are pure structure: no list chrome, a hair of row rhythm. */
+.rottay-menu--modern[data-part='root'] [data-part='row'],
+.rottay-menu--modern[data-part='root'] [data-part='group'] {
+  margin: 0;
+  margin-block: 0.5px;
+  padding: 0;
+  list-style: none;
+}
+
+.rottay-menu.rottay-menu--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-menu-border, var(--ds-color-border-subtle));
+}
+
+.rottay-menu--modern.rottay-menu--light[data-part='root'] {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%), var(--ds-card-bg, var(--ds-surface-card)));
+}
+
+.rottay-menu--modern.rottay-menu--dark[data-part='root'] {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 94%, white 6%), var(--ds-surface-panel));
+}
+
 .rottay-menu--modern[data-part='root'] [data-part='item'],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'] {
-  border-radius: var(--ds-radius-lg, 12px);
-  color: var(--ds-color-text-secondary);
+  isolation: isolate;
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  inline-size: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--ds-menu-item-gap, var(--ds-sidebar-item-gap, 10px));
+  padding-block: 0;
+  border-radius: var(--ds-menu-item-radius, var(--ds-radius-lg, 12px));
+  color: var(--ds-menu-item-color, var(--ds-color-text-secondary));
+  font-weight: 500;
+  line-height: 1.28;
+  text-align: start;
+  text-decoration: none;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   outline: none;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
 }
 
-.rottay-menu--modern[data-part='root'] [data-part='item'] {
-  border: none;
+/* Level geometry: top rows keep the full item frame; children shrink and
+   indent through the --rottay-menu-level data channel. Logical properties
+   keep the indent on the reading side in RTL.
+   `min-block-size: 0` clears theme.css's legacy sidebar bridge
+   (`[data-tenant] .rottay-menu li > button`, (0,2,2)), whose
+   `min-height: var(--ds-sidebar-item-height, 60px)` clamped EVERY row to
+   60px — flattening the 62/45 hierarchy and defeating density (sighted on
+   the k3-lane-b matrix captures: submenu children rendered as 60px rows).
+   The top chain must NOT read `--ds-menu-item-height`: default.css defines
+   that token (2.5rem) for the compound Item's inline minHeight, so it would
+   hijack the documented 62px frame with the compound's 40px. */
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-level='top'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-level='top'] {
+  min-block-size: 0;
+  block-size: var(--ds-sidebar-item-height, 62px);
+  padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, 16px));
+  font-size: var(--ds-menu-item-font-size, var(--ds-sidebar-item-font-size, 15.75px));
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-level='child'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-level='child'] {
+  min-block-size: 0;
+  block-size: var(--ds-menu-item-child-height, var(--ds-sidebar-item-child-height, 45px));
+  padding-inline-start: calc(
+    var(--ds-menu-child-padding-inline, var(--ds-sidebar-child-padding-inline, 8px)) +
+    var(--rottay-menu-level, 0) * var(--rottay-menu-inline-indent, 24px)
+  );
+  padding-inline-end: var(--ds-menu-child-padding-inline, var(--ds-sidebar-child-padding-inline, 8px));
+  font-size: var(--ds-menu-item-font-size-child, var(--ds-sidebar-item-font-size-child, 13.9px));
+}
+
+/* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-menu--modern[data-part='root'] [data-part='item'],
+  .rottay-menu--modern[data-part='root'] [data-part='trigger'] {
+    min-block-size: var(--ds-menu-touch-target-min, 44px);
+  }
+}
+
+/* Selected rows carry extra ink weight. */
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
+  font-weight: 600;
+}
+
+/* Disabled rows dim and refuse interaction entirely. */
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-disabled],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-part='item'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-part='trigger'] {
+  border: 1px solid transparent;
   background: transparent;
 }
 
-/* ---- hover: only when neither disabled nor already selected. ---- */
-.rottay-menu--modern[data-part='root'] [data-part='item']:not([data-disabled]):not([data-selected='true']):hover {
-  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
-}
-.rottay-menu--modern[data-part='root'] [data-part='item'][data-tone='danger']:not([data-disabled]):not([data-selected='true']):hover {
-  background: color-mix(in srgb, var(--ds-color-error) 6%, transparent);
-}
+.rottay-menu--modern[data-part='root'] [data-part='item']:not([data-disabled]):not([data-selected='true']):hover,
 .rottay-menu--modern[data-part='root'] [data-part='trigger']:not([data-disabled]):hover {
-  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+  color: var(--ds-menu-item-color-hover, var(--ds-color-text-primary));
+  background: var(
+    --ds-menu-item-bg-hover,
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))), color-mix(in srgb, var(--ds-color-primary) 2%, var(--ds-card-bg, var(--ds-surface-card))))
+  );
+  border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+  box-shadow: var(--ds-menu-item-shadow-hover, var(--ds-shadow-xs));
+  transform: translateY(-1px);
 }
 
-/* ---- danger text, only while unselected (selection wins the colour). ---- */
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-tone='danger']:not([data-disabled]):not([data-selected='true']):hover {
+  color: var(--ds-color-error);
+  background: color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-card-bg, var(--ds-surface-card)));
+  border-color: color-mix(in srgb, var(--ds-color-error) 22%, var(--ds-color-border-subtle));
+}
+
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-tone='danger']:not([data-selected='true']) {
   color: var(--ds-color-error);
 }
 
-/* ---- selected: a tint + the active colour. The tint is 8% at the top level
-        and 7% one level down — the reason `data-level` exists. ---- */
+/* A held press drops the lift and presses the frame in. */
+.rottay-menu--modern[data-part='root'] [data-part='item']:not([data-disabled]):not([data-selected='true']):active,
+.rottay-menu--modern[data-part='root'] [data-part='trigger']:not([data-disabled]):active {
+  transform: translateY(0);
+  box-shadow: none;
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
+}
+
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
-  color: var(--ds-sidebar-item-color-active, var(--ds-color-primary));
-}
-.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'][data-level='top'] {
-  background: color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 8%, transparent);
-}
-.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'][data-level='child'] {
-  background: color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 7%, transparent);
-}
-
-/* ---- the left accent bar (rendered only on a selected top-level row, so it
-        needs no state guard of its own). `translateY(-50%)` is optical
-        centering, not a runtime value. ---- */
-.rottay-menu--modern[data-part='root'] [data-part='indicator'] {
-  transform: translateY(-50%);
-  border-radius: 3px;
-  background: var(--ds-color-primary, var(--ds-sidebar-item-color-active));
+  color: var(--ds-menu-item-color-active, var(--ds-sidebar-item-color-active, var(--ds-color-primary)));
+  background: var(
+    --ds-menu-item-bg-active,
+    linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary) 13%, var(--ds-card-bg, var(--ds-surface-card))), color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))))
+  );
+  border-color: var(--ds-menu-item-border-active, color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle)));
+  box-shadow:
+    var(--ds-menu-item-shadow-active, var(--ds-shadow-sm)),
+    inset 0 1px 0 color-mix(in srgb, white 52%, transparent);
 }
 
-/* ---- group heading + divider. ---- */
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-selected-descendant='true'] {
+  color: var(--ds-menu-item-color-active, var(--ds-color-text-primary));
+  background: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card)));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='icon'] {
+  display: flex;
+  flex-shrink: 0;
+  inline-size: var(--ds-menu-icon-column-size, var(--ds-sidebar-icon-column-size, 22px));
+  block-size: var(--ds-menu-icon-column-size, var(--ds-sidebar-icon-column-size, 22px));
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: var(--ds-radius-md, 10px);
+  color: var(--ds-menu-icon-color, currentColor);
+  font-size: var(--ds-menu-icon-size, var(--ds-sidebar-icon-size, 17.25px));
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  opacity: 0.7;
+  transition:
+    opacity var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='item']:hover [data-part='icon'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger']:hover [data-part='icon'],
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] [data-part='icon'] {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+/* The doubled data-part (P-48) out-ranks theme.css's legacy icon bridge
+   (`[data-tenant] .rottay-menu li > button > span:first-child`, (0,3,2)),
+   which otherwise pins an icon-less row's label to `inline-flex` — a flex
+   formatting context never ellipsizes, so long labels clipped without the
+   "…". `display: block` restores the block formatting context text-overflow
+   needs; the label holds plain text only, so nothing depends on flex. */
+.rottay-menu--modern[data-part='root'] [data-part='label'][data-part='label'] {
+  display: block;
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='arrow-icon'] {
+  display: flex;
+  flex-shrink: 0;
+  inline-size: 14px;
+  block-size: 14px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+  opacity: 0.4;
+  transition: transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+}
+
+/* The disclosure chevron rotates open; in RTL it mirrors first so "forward"
+   keeps pointing in the reading direction. */
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(90deg);
+}
+
+[dir='rtl'] .rottay-menu--modern[data-part='root'] [data-part='arrow-icon'] svg {
+  transform: scaleX(-1);
+}
+
+/* Keyboard focus must paint: the ring is the one affordance a keyboard user
+   gets, and the base rule above opts out of the UA outline. */
+.rottay-menu--modern[data-part='root'] [data-part='item']:focus-visible,
+.rottay-menu--modern[data-part='root'] [data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='panel'] {
+  position: relative;
+  margin: 0;
+  margin-block: 2px 5px;
+  padding: 0 0 1px 0;
+  list-style: none;
+  border-radius: var(--ds-radius-lg, 12px);
+  background: color-mix(in srgb, var(--ds-surface-subtle, var(--ds-card-bg, var(--ds-surface-card))) 72%, transparent);
+  animation: ds-menu-panel-enter var(--ds-motion-normal) var(--ds-ease-decelerate, ease-out);
+}
+
 .rottay-menu--modern[data-part='root'] [data-part='group-label'] {
-  color: var(--ds-color-text-muted);
+  padding-block: 6px 3px;
+  padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, 16px));
+  border-radius: var(--ds-radius-sm, 8px);
+  color: var(--ds-menu-group-color, var(--ds-color-text-muted));
+  font-size: var(--ds-menu-group-font-size, var(--ds-sidebar-group-font-size, 10.9px));
+  font-weight: 600;
+  letter-spacing: 0.085em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  user-select: none;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), transparent 72%);
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='divider'] {
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent), transparent);
+  block-size: 1px;
+  margin-block: 4px;
+  margin-inline: 8px;
+  list-style: none;
   border: none;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent) 12%, color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent) 88%, transparent);
+}
+
+.rottay-menu--modern[data-part='root'][data-mode='horizontal'] {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.rottay-menu--modern[data-part='root'][data-mode='horizontal']::-webkit-scrollbar {
+  display: none;
+}
+
+.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='label'],
+.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='arrow-icon'],
+.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='group-label'] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes ds-menu-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-menu--modern[data-part='root'] [data-part='item'],
+  .rottay-menu--modern[data-part='root'] [data-part='trigger'],
+  .rottay-menu--modern[data-part='root'] [data-part='panel'],
+  .rottay-menu--modern[data-part='root'] [data-part='icon'],
+  .rottay-menu--modern[data-part='root'] [data-part='arrow-icon'] {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ---- forced colors: every row keeps a frame; selection and open state survive.
+        Doubled data-part ties the (0,4,0) border shorthand, later source wins. ---- */
+@media (forced-colors: active) {
+  .rottay-menu--modern[data-part='root'] [data-part='item'][data-part='item'],
+  .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-part='trigger'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+
+  .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'],
+  .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-selected-descendant='true'] {
+    border-color: ButtonText;
+  }
+
+  .rottay-menu--modern[data-part='root'] [data-part='divider'] {
+    background: ButtonText;
+  }
 }

@@ -13,12 +13,30 @@ export function extractSemanticDOMAttributes(
   for (const [name, value] of Object.entries(props)) {
     if (
       value !== undefined &&
-      (name.startsWith('data-') || name.startsWith('aria-')) &&
-      (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')
+      (name.startsWith("data-") || name.startsWith("aria-")) &&
+      (typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean")
     ) {
       attributes[name] = value;
     }
   }
+
+  // Keep these reads explicit. Besides making the native allowlist auditable,
+  // this avoids a computed-property capability edge in the supplier graph.
+  const { role, tabIndex, title, lang, dir } = props as {
+    role?: unknown;
+    tabIndex?: unknown;
+    title?: unknown;
+    lang?: unknown;
+    dir?: unknown;
+  };
+
+  if (typeof role === "string") attributes.role = role;
+  if (typeof tabIndex === "number") attributes.tabIndex = tabIndex;
+  if (typeof title === "string") attributes.title = title;
+  if (typeof lang === "string") attributes.lang = lang;
+  if (typeof dir === "string") attributes.dir = dir;
 
   return attributes;
 }

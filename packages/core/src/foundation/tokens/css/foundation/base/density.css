@@ -2,34 +2,138 @@
  * Base Density Attribute Modes - Rottay Design System
  *
  * Container-scoped density. A data-density attribute on ANY container sets a
- * local --ds-density-scale, inherited by descendants, so a compact rail can sit
- * beside comfortable content without a JS factor. The spacing ramp
- * (foundation/base/spacing.css) multiplies every step by var(--ds-density-scale,
- * 1) at its definition site, so these three values scale the whole rhythm of the
- * subtree they annotate.
+ * local --ds-density-local-factor, inherited by descendants, so a compact rail
+ * can sit beside comfortable content without overwriting either the tenant's
+ * structural --ds-density-scale or its appearance --ds-density-mode-factor.
  *
- * The three factors are numerically identical to the appearance density factor
- * in the useTokens JS token graph
- * (infrastructure/runtime/theming/composition/react/tokens/index.ts:
- * general.density 'compact' -> 0.85, 'spacious' -> 1.15, else -> 1), which stays
- * for its JS consumers. The css-to-js equality is pinned by
- * tests/density-scale-parity.test.ts, so the CSS attribute path and the JS
- * factor path can never drift.
+ * The values mirror DENSITY_MODE_FACTORS in the canonical TypeScript density
+ * module. tests/density-scale-parity.test.ts pins this CSS projection to that
+ * authority; useTokens and appearance compilation import the same resolver.
  *
- * Absent attribute => --ds-density-scale unset => the ramp's calc fallback 1 =>
- * byte-identical rendering. --ds-density-scale is produced here (and inline by
- * resolveDensityStyleVars for JS-driven surfaces); it is never given a :root
- * default so an annotated container always wins for its own subtree.
+ * IMPORTANT CASCADE LAW: custom-property var() references are resolved on the
+ * element that declares the custom property. The spacing ramp is declared on
+ * :root, therefore changing only --ds-density-local-factor on a descendant does
+ * NOT recompute an inherited --ds-spacing-* value. The projection block below
+ * deliberately redeclares the effective public spacing ramp on each density
+ * boundary. Descendants inherit that locally computed ramp; a nested boundary
+ * recomputes it again from the still-independent structural scale.
+ *
+ * Absent attribute => --ds-density-local-factor unset => identity factor 1.
+ * The variable has no :root default so an annotated container always wins for
+ * its own subtree without mutating brand/tenant structural density. Fixed-size
+ * accessibility floors such as --ds-touch-target-min are intentionally absent
+ * from this projection and therefore never shrink with density.
  */
 
-[data-density='compact'] {
-  --ds-density-scale: 0.85;
+/*
+ * Root `data-density` is the observable semantic tenant posture already
+ * represented visually by --ds-density-mode-factor. Only non-root boundaries
+ * contribute a LOCAL multiplier; otherwise the global preference is applied
+ * twice (mode factor × local factor).
+ */
+[data-density='compact']:not(:root) {
+  --ds-density-local-factor: 0.85;
 }
 
-[data-density='comfortable'] {
-  --ds-density-scale: 1;
+[data-density='comfortable']:not(:root) {
+  --ds-density-local-factor: 1;
 }
 
-[data-density='spacious'] {
-  --ds-density-scale: 1.15;
+[data-density='spacious']:not(:root) {
+  --ds-density-local-factor: 1.15;
+}
+
+/*
+ * Local effective spacing projection.
+ *
+ * `:where()` keeps selector specificity at zero: an explicit component or
+ * application hook on the density boundary can still win through normal
+ * cascade precedence.
+ * Density-aware white-label overrides should author the
+ * `--ds-density-spacing-*` hooks; the numeric scale continues to use the
+ * structural --ds-density-scale channel.
+ */
+:where(
+  [data-density='compact']:not(:root),
+  [data-density='comfortable']:not(:root),
+  [data-density='spacious']:not(:root)
+) {
+  --ds-density-global-effective-scale: clamp(
+    0.5,
+    calc(var(--ds-density-scale, 1) * var(--ds-density-mode-factor, 1)),
+    3
+  );
+  --ds-density-effective-scale: clamp(
+    0.5,
+    calc(
+      var(--ds-density-global-effective-scale, 1) *
+      var(--ds-density-local-factor, 1)
+    ),
+    3
+  );
+  --ds-spacing-0: 0;
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-4: calc(1rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-7: calc(1.75rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-8: calc(2rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-9: calc(2.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-11: calc(2.75rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-12: calc(3rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-14: calc(3.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-16: calc(4rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-20: calc(5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-24: calc(6rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-28: calc(7rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-32: calc(8rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-36: calc(9rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-40: calc(10rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-44: calc(11rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-48: calc(12rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-52: calc(13rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-56: calc(14rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-60: calc(15rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-72: calc(18rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-80: calc(20rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-96: calc(24rem * var(--ds-density-effective-scale, 1));
+
+  /* Effective aliases after themes/default.css has authored the public map. */
+  --ds-spacing-xxxs: var(--ds-density-spacing-xxxs, var(--ds-spacing-1));
+  --ds-spacing-xxs: var(--ds-density-spacing-xxs, var(--ds-spacing-2));
+  --ds-spacing-xs: var(--ds-density-spacing-xs, var(--ds-spacing-1));
+  --ds-spacing-sm: var(--ds-density-spacing-sm, var(--ds-spacing-2));
+  --ds-spacing-md: var(--ds-density-spacing-md, var(--ds-spacing-4));
+  --ds-spacing-lg: var(--ds-density-spacing-lg, var(--ds-spacing-6));
+  --ds-spacing-xl: var(--ds-density-spacing-xl, var(--ds-spacing-8));
+  --ds-spacing-2xl: var(--ds-density-spacing-2xl, var(--ds-spacing-12));
+  --ds-spacing-3xl: var(--ds-density-spacing-3xl, var(--ds-spacing-16));
+  --ds-spacing-4xl: var(--ds-density-spacing-4xl, var(--ds-spacing-20));
+  --ds-spacing-5xl: var(--ds-density-spacing-5xl, var(--ds-spacing-24));
+
+  --ds-spacing-gutter: var(--ds-density-spacing-gutter, var(--ds-spacing-4));
+  --ds-spacing-gutter-sm: var(--ds-density-spacing-gutter-sm, var(--ds-spacing-2));
+  --ds-spacing-gutter-md: var(--ds-density-spacing-gutter-md, var(--ds-spacing-6));
+  --ds-spacing-gutter-lg: var(--ds-density-spacing-gutter-lg, var(--ds-spacing-8));
+  --ds-spacing-gutter-xl: var(--ds-density-spacing-gutter-xl, var(--ds-spacing-12));
+  --ds-spacing-section: var(--ds-density-spacing-section, var(--ds-spacing-16));
+  --ds-spacing-section-sm: var(--ds-density-spacing-section-sm, var(--ds-spacing-8));
+  --ds-spacing-section-lg: var(--ds-density-spacing-section-lg, var(--ds-spacing-24));
+  --ds-spacing-container: var(--ds-density-spacing-container, var(--ds-spacing-6));
+  --ds-spacing-container-sm: var(--ds-density-spacing-container-sm, var(--ds-spacing-4));
+  --ds-spacing-container-lg: var(--ds-density-spacing-container-lg, var(--ds-spacing-12));
+
+  --ds-spacing-component-gap: var(--ds-density-spacing-component-gap, var(--ds-spacing-4));
+  --ds-spacing-component-gap-sm: var(--ds-density-spacing-component-gap-sm, var(--ds-spacing-2));
+  --ds-spacing-component-gap-lg: var(--ds-density-spacing-component-gap-lg, var(--ds-spacing-6));
+  --ds-spacing-component-padding: var(--ds-density-spacing-component-padding, var(--ds-spacing-4));
+  --ds-spacing-component-padding-sm: var(--ds-density-spacing-component-padding-sm, var(--ds-spacing-2));
+  --ds-spacing-component-padding-lg: var(--ds-density-spacing-component-padding-lg, var(--ds-spacing-6));
+  --ds-spacing-component-margin: var(--ds-density-spacing-component-margin, var(--ds-spacing-4));
+  --ds-spacing-component-margin-sm: var(--ds-density-spacing-component-margin-sm, var(--ds-spacing-2));
+  --ds-spacing-component-margin-lg: var(--ds-density-spacing-component-margin-lg, var(--ds-spacing-8));
 }

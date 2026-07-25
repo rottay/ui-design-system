@@ -183,15 +183,52 @@ describe('PatternDataTable responsive columns', () => {
       const mobileRoot = container.querySelector<HTMLElement>('[data-part="mobile-root"]');
       expect(mobileRoot).toHaveClass('product-mobile-table');
       expect(mobileRoot).toHaveAttribute('data-density', 'compact');
-      expect(mobileRoot?.style.width).toBe('100%');
+      expect(mobileRoot).toHaveAttribute('data-full-width', 'true');
       expect(mobileRoot?.style.backgroundColor).toBe('rgb(1, 2, 3)');
-      expect(mobileRoot?.style.getPropertyValue('--ds-density-scale')).not.toBe('');
+      // Preset density is declarative anatomy; the skin resolves the tenant's
+      // compact factor instead of freezing a visual value inline.
+      expect(mobileRoot?.style.getPropertyValue('--ds-density-local-factor')).toBe('');
+      expect(mobileRoot?.style.getPropertyValue('--ds-density-mode-factor')).toBe('');
+      expect(mobileRoot?.style.getPropertyValue('--ds-density-scale')).toBe('');
 
       fireEvent.click(screen.getByRole('button', { name: 'Toggle Bob' }));
       expect(onSelectionChange).toHaveBeenCalledWith(['1', '2'], rows);
 
       fireEvent.click(screen.getByRole('button', { name: 'Open Bob' }));
       expect(onRowClick).toHaveBeenCalledWith(rows[1], 1);
+    });
+  });
+
+  describe('workspace-controlled responsive posture', () => {
+    it('keeps the table renderer when automatic mobile cards are disabled', async () => {
+      mockMatchMedia(390);
+
+      const { container } = render(
+        <DesignSystemProvider
+          tenantConfig={TEST_TENANT_CONFIG}
+          forceEngine="classic"
+          skipCssLoading
+        >
+          <Suspense fallback={<div>Loading...</div>}>
+            <PatternDataTable<Row>
+              engine="classic"
+              data={rows}
+              rowKey="id"
+              columns={[
+                { key: 'name', header: 'Name', accessorKey: 'name' },
+                { key: 'email', header: 'Email', accessorKey: 'email' },
+              ]}
+              mobileCard={(row) => <div>{`Mobile ${row.name}`}</div>}
+              autoMobileCards={false}
+            />
+          </Suspense>
+        </DesignSystemProvider>,
+      );
+
+      expect(await screen.findByText('Alice')).toBeInTheDocument();
+      expect(container.querySelector('[data-part="mobile-root"]')).toBeNull();
+      expect(container.querySelector('table')).toBeInTheDocument();
+      expect(screen.queryByText('Mobile Alice')).not.toBeInTheDocument();
     });
   });
 

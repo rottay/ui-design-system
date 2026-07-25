@@ -221,5 +221,23 @@
       "empty_title": "Nenhuma visualizacao configurada",
       "empty_description": "Adicione uma ou mais views para renderizar esta surface."
     }
+  },
+  "checkbox": {
+    "group": "Grupo de caixas de seleção"
+  },
+  "radio": {
+    "group": "Grupo de botões de opção"
+  },
+  "rate": {
+    "label": "Avaliação",
+    "star": "{count} estrela",
+    "stars": "{count} estrelas"
+  },
+  "actionDock": {
+    "overflow": {
+      "label": "Mais ações"
+    },
+    "topLabel": "Ações superiores",
+    "bottomLabel": "Ações inferiores"
   }
 }

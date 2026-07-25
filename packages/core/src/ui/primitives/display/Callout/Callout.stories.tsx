@@ -75,3 +75,56 @@ export const WithoutTitle: Story = {
     children: 'File uploaded successfully. It will be processed shortly.',
   },
 };
+
+// ============================================================================
+// Modern Engine Craft Stories
+// ============================================================================
+
+/**
+ * Full hierarchy on the modern engine: icon well, title, wrapped body,
+ * action tray and dismiss control across two tones.
+ */
+export const ModernHierarchy: Story = {
+  name: '🧱 Modern Hierarchy',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <Callout
+        engine="modern"
+        variant="warning"
+        closable
+        title="Certificate expiring in 14 days"
+        action={<button style={{ fontSize: 13, padding: '4px 12px', cursor: 'pointer' }}>Renew now</button>}
+      >
+        The TLS certificate for the evidence archive expires soon. Renew it before the deadline to avoid
+        interrupted synchronization for every workspace in this tenant.
+      </Callout>
+      <Callout
+        engine="modern"
+        variant="error"
+        closable
+        title="Payment method declined by the issuing bank during the automated monthly renewal"
+        action={<button style={{ fontSize: 13, padding: '4px 12px', cursor: 'pointer' }}>Update billing</button>}
+      >
+        We retried the default card three times over the past 48 hours. Update the billing profile to keep
+        premium features active; all data and configurations are preserved for 30 days regardless.
+      </Callout>
+    </div>
+  ),
+};
+
+/**
+ * RTL smoke test: icon well, body and close control mirror cleanly.
+ */
+export const ModernRTL: Story = {
+  name: '🔄 Modern RTL',
+  render: () => (
+    <div dir="rtl" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <Callout engine="modern" variant="info" closable title="تحديث متاح">
+        يتوفر إصدار جديد من لوحة التحكم مع تحسينات على سرعة التحميل ودقة التقارير.
+      </Callout>
+      <Callout engine="modern" variant="success" title="تم الحفظ">
+        تم حفظ جميع التغييرات ومشاركتها مع فريق المراجعة.
+      </Callout>
+    </div>
+  ),
+};

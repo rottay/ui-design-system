@@ -128,7 +128,6 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
   return (
     <Text
       className="ds-decision-inbox__muted-text"
-      data-part="muted-text"
       size="xs"
     >
       {hours}h {mins}m
@@ -357,7 +356,6 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
           {subtitle && (
             <Text
               className="ds-decision-inbox__muted-text"
-              data-part="muted-text"
               size="sm"
               color="muted"
               style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}

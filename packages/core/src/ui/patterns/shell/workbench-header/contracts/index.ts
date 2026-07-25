@@ -63,6 +63,10 @@ export interface WorkbenchSavedView {
  * ```
  */
 export interface WorkbenchHeaderProps extends PatternBaseProps {
+  /** Optional localized context label rendered above the title. */
+  eyebrow?: ReactNode;
+  /** Optional semantic DS icon rendered in a framed identity tile. */
+  icon?: ReactNode;
   /** Main briefing title. */
   title: string;
   /** Optional subtitle or description line. */

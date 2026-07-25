@@ -113,7 +113,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
     justifyContent: 'center',
     zIndex: 1000,
     fontFamily: 'var(--ds-font-family-base)',
-    padding: 'var(--ds-space-4, 1rem)',
+    padding: 'var(--ds-spacing-4, 1rem)',
   };
 
   // Card-like dialog container -- backdrop blur adds frosted-glass depth

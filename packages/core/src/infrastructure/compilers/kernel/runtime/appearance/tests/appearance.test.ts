@@ -10,6 +10,7 @@ import {
   appearanceGeneralToVariables,
   appearanceAdvancedToVariables,
   appearanceToVariables,
+  compileAppearanceVariables,
   deriveAppearanceColorRamps,
 } from '..';
 import { RAMP_STEPS } from '@/foundation/kernel/color/oklch/ramp';
@@ -33,16 +34,90 @@ describe('appearanceGeneralToVariables', () => {
     expect(vars['--ds-color-accent']).toBe('#FFAA00');
   });
 
+  it('derives a readable --ds-color-text-on-primary from a hex primary', () => {
+    const vars = appearanceGeneralToVariables({
+      palette: { primary: '#0F766E', background: '#FBF6EC' },
+    });
+    // APCA: white (≈5.5:1 WCAG) beats dark ink (≈3.1:1) on this teal.
+    expect(vars['--ds-color-text-on-primary']).toBe('#ffffff');
+  });
+
+  it('picks the dark ink when it reads better on a light primary', () => {
+    const vars = appearanceGeneralToVariables({ palette: { primary: '#4FB3AA' } });
+    expect(vars['--ds-color-text-on-primary']).toBe('#171717');
+  });
+
+  it('derives the surface family from a light canvas instead of leaking the dark base', () => {
+    const vars = appearanceGeneralToVariables({ palette: { background: '#FBF6EC' } });
+    // Tenant-tinted near-white, not the dark :root fallbacks (#18181C/#0F0F12)
+    // and not pure white either — the tenant canvas stays in the tint.
+    expect(vars['--ds-color-bg-elevated']).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(vars['--ds-color-bg-elevated']).not.toBe('#18181C');
+    expect(vars['--ds-color-bg-elevated']).not.toBe('#ffffff');
+    expect(vars['--ds-color-bg-input']).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(vars['--ds-color-bg-input']).not.toBe('#0F0F12');
+    // Sunken channels darken the canvas; raised channels lighten it.
+    expect(vars['--ds-color-bg-secondary']).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(vars['--ds-color-bg-secondary']).not.toBe('#0F0F12');
+    expect(vars['--ds-color-bg-tertiary']).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(vars['--ds-color-bg-tertiary']).not.toBe('#141417');
+  });
+
+  it('lifts a dark canvas toward white instead of flattening it', () => {
+    const vars = appearanceGeneralToVariables({
+      palette: { background: '#0C0C0E', backgroundMode: 'dark' },
+    });
+    expect(vars['--ds-color-bg-elevated']).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(vars['--ds-color-bg-elevated']?.toLowerCase()).not.toBe('#0c0c0e');
+  });
+
+  it('emits light-dark() pairs for the derivations under auto with dark seeds', () => {
+    const vars = appearanceGeneralToVariables({
+      palette: {
+        primary: '#0F766E',
+        background: '#FBF6EC',
+        backgroundMode: 'auto',
+        dark: { primary: '#4FB3AA', background: '#0C0C0E' },
+      },
+    });
+    expect(vars['--ds-color-text-on-primary']).toBe('light-dark(#ffffff, #171717)');
+    expect(vars['--ds-color-bg-elevated']).toMatch(/^light-dark\(/);
+    expect(vars['--ds-color-bg-input']).toMatch(/^light-dark\(/);
+  });
+
+  it('skips the derivations for non-hex palette values', () => {
+    const vars = appearanceGeneralToVariables({
+      palette: { primary: 'url(https://attacker.invalid)', background: 'red' },
+    });
+    expect(vars['--ds-color-text-on-primary']).toBeUndefined();
+    expect(vars['--ds-color-bg-elevated']).toBeUndefined();
+    expect(vars['--ds-color-bg-input']).toBeUndefined();
+  });
+
   it('typography.fontFamilyBase produces --ds-font-family-base', () => {
     const vars = appearanceGeneralToVariables({
       typography: { fontFamilyBase: 'Inter, sans-serif' },
     });
-    expect(vars['--ds-font-family-base']).toBe('Inter, sans-serif');
+    expect(vars['--ds-font-family-base']).toBe(
+      'Inter, "Noto Sans Arabic", sans-serif'
+    );
   });
 
-  it('density does NOT emit a CSS var (handled by useTokens JS factor)', () => {
-    const vars = appearanceGeneralToVariables({ density: 'compact' });
+  it.each([
+    ['compact', '0.85'],
+    ['normal', '1'],
+    ['spacious', '1.15'],
+  ] as const)('density %s emits the canonical semantic factor', (density, factor) => {
+    const vars = appearanceGeneralToVariables({ density });
+    expect(vars['--ds-density-mode-factor']).toBe(factor);
     expect(vars['--ds-density-scale']).toBeUndefined();
+  });
+
+  it('does not compile an invalid density mode from untrusted input', () => {
+    const vars = appearanceGeneralToVariables({
+      density: 'url(https://attacker.invalid)',
+    } as unknown as TenantAppearanceGeneral);
+    expect(vars['--ds-density-mode-factor']).toBeUndefined();
   });
 
   it('emits the bounded motion dial for CSS-only pre-hydration seams', () => {
@@ -131,7 +206,7 @@ describe('appearanceGeneralToVariables', () => {
   });
 
   it('returns empty for unset/default values', () => {
-    const vars = appearanceGeneralToVariables({ density: 'normal' });
+    const vars = appearanceGeneralToVariables({});
     expect(Object.keys(vars)).toHaveLength(0);
   });
 });
@@ -178,6 +253,13 @@ describe('appearanceAdvancedToVariables', () => {
         filterPill: {
           frameBorder: '#cccccc',
           countActiveRing: 'inset 0 0 0 1px #cccccc',
+        },
+        badge: {
+          surface: '#fffdf7',
+          frame: '#b7a98f',
+          chipRadius: '4px',
+          removeOpacity: 0.82,
+          pulseScale: 1.2,
         },
         breadcrumb: {
           colorActive: '#111111',
@@ -232,6 +314,11 @@ describe('appearanceAdvancedToVariables', () => {
     expect(vars['--ds-command-grid-size']).toBe('22px');
     expect(vars['--ds-toolbar-control-border']).toBe('#dddddd');
     expect(vars['--ds-filter-pill-count-active-ring']).toBe('inset 0 0 0 1px #cccccc');
+    expect(vars['--ds-badge-surface']).toBe('#fffdf7');
+    expect(vars['--ds-badge-frame']).toBe('#b7a98f');
+    expect(vars['--ds-badge-chip-radius']).toBe('4px');
+    expect(vars['--ds-badge-remove-opacity']).toBe('0.82');
+    expect(vars['--ds-badge-pulse-scale']).toBe('1.2');
     expect(vars['--ds-breadcrumb-active-color']).toBe('#111111');
     expect(vars['--ds-input-search-icon-color']).toBe('#777777');
     expect(vars['--ds-table-row-bg-expanded']).toBe('#f4f4f4');
@@ -293,6 +380,34 @@ describe('appearanceToVariables', () => {
   it('returns empty for undefined appearance tiers', () => {
     const vars = appearanceToVariables({});
     expect(Object.keys(vars)).toHaveLength(0);
+  });
+
+  it('keeps the Arabic-safe tail when Advanced replaces tenant font stacks', () => {
+    const vars = appearanceToVariables({
+      general: {
+        typography: {
+          fontFamilyBase: '"General Sans", sans-serif',
+          fontFamilyHeading: '"General Display", sans-serif',
+        },
+      },
+      advanced: {
+        tokenOverrides: {
+          '--ds-font-family-base': '"Tenant Sans", sans-serif',
+          '--ds-font-family-heading': '"Tenant Heading", serif',
+          '--ds-font-family-display': '"Tenant Display", sans-serif',
+        },
+      },
+    });
+
+    expect(vars['--ds-font-family-base']).toBe(
+      '"Tenant Sans", "Noto Sans Arabic", sans-serif'
+    );
+    expect(vars['--ds-font-family-heading']).toBe(
+      '"Tenant Heading", "Noto Sans Arabic", serif'
+    );
+    expect(vars['--ds-font-family-display']).toBe(
+      '"Tenant Display", "Noto Sans Arabic", sans-serif'
+    );
   });
 
   it('sidebarTone from general + chrome.sidebar from advanced merge correctly', () => {
@@ -397,5 +512,78 @@ describe('appearanceToVariables', () => {
     expect(vars['--ds-color-primary-500']).toBe(
       deriveAppearanceColorRamps({}, { '--ds-color-primary': '#2563EB' })['--ds-color-primary-500'],
     );
+  });
+});
+
+describe('compileAppearanceVariables', () => {
+  it('applies the shared APCA pass for runtime Appearance consumers', () => {
+    const compiled = compileAppearanceVariables({
+      general: {
+        palette: {
+          background: '#FFFFFF',
+          foreground: {
+            primary: '#B8B8B8',
+          },
+        },
+      },
+    });
+
+    expect(compiled.variables['--ds-color-text-primary']).not.toBe('#B8B8B8');
+    expect(compiled.adjustments).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          token: '--ds-color-text-primary',
+          pairedWith: '--ds-color-bg-primary',
+          from: '#B8B8B8',
+        }),
+      ]),
+    );
+  });
+
+  it('preserves a passing foreground without manufacturing adjustments', () => {
+    const compiled = compileAppearanceVariables({
+      general: {
+        palette: {
+          background: '#FFFFFF',
+          foreground: {
+            primary: '#111113',
+          },
+        },
+      },
+    });
+
+    expect(compiled.variables['--ds-color-text-primary']).toBe('#111113');
+    expect(compiled.adjustments).toHaveLength(0);
+  });
+
+  it('snaps an authored on-primary below the floor instead of publishing it', () => {
+    // Codex K2/K3 verdict (TMM 3.57:1): no tenant combination below the
+    // normal-text floor may survive compilation.
+    const compiled = compileAppearanceVariables({
+      general: { palette: { primary: '#0F766E' } },
+      advanced: { tokenOverrides: { '--ds-color-text-on-primary': '#0C0C0E' } },
+    });
+
+    expect(compiled.variables['--ds-color-text-on-primary']).not.toBe('#0C0C0E');
+    expect(compiled.adjustments).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          token: '--ds-color-text-on-primary',
+          pairedWith: '--ds-color-primary',
+          from: '#0C0C0E',
+        }),
+      ]),
+    );
+  });
+
+  it('keeps the derived on-primary when it already clears the floor', () => {
+    const compiled = compileAppearanceVariables({
+      general: { palette: { primary: '#0F766E' } },
+    });
+
+    expect(compiled.variables['--ds-color-text-on-primary']).toBe('#ffffff');
+    expect(
+      compiled.adjustments.filter((a) => a.token === '--ds-color-text-on-primary'),
+    ).toHaveLength(0);
   });
 });

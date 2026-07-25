@@ -49,17 +49,24 @@ describe('Steps real engine coverage', () => {
     );
 
     const list = screen.getByRole('list');
-    expect(list.className).toContain('steps-vertical');
-    expect(list.className).toContain('text-sm');
+    // The ds-* contract: direction/size/state ride data attributes, never
+    // DaisyUI classes (steps/step-primary/step-error are drained).
+    expect(list).toHaveAttribute('data-direction', 'vertical');
+    expect(list).toHaveAttribute('data-size', 'small');
+    expect(list).toHaveAttribute('data-progress-dot', 'true');
+    expect(list.className).not.toContain('steps-vertical');
+    expect(list.className).not.toContain('text-sm');
 
     const draft = screen.getByText('Draft').closest('li');
     const review = screen.getByText('Review').closest('li');
     const broken = screen.getByText('Broken').closest('li');
 
-    expect(draft?.className).toContain('step-primary');
-    expect(review?.className).toContain('step-primary');
-    expect(broken?.className).toContain('step-error');
-    expect(broken?.className).toContain('opacity-50');
+    expect(draft).toHaveAttribute('data-status', 'finish');
+    expect(review).toHaveAttribute('data-status', 'process');
+    expect(broken).toHaveAttribute('data-status', 'error');
+    expect(broken).toHaveAttribute('data-disabled', 'true');
+    expect(broken?.className).not.toContain('step-error');
+    expect(broken?.className).not.toContain('opacity-50');
 
     fireEvent.click(screen.getByText('Draft'));
     fireEvent.click(screen.getByText('Broken'));

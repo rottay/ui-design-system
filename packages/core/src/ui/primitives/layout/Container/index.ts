@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Container Component - Rottay Design System
@@ -112,8 +112,8 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { ContainerProps } from './contracts';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { ContainerProps } from "./contracts";
 
 // ============================================================================
 // TYPE AND CONSTANT EXPORTS
@@ -129,7 +129,7 @@ export {
   CONTAINER_DEFAULTS,
   CONTAINER_MAX_WIDTHS,
   CONTAINER_PADDINGS,
-} from './contracts';
+} from "./contracts";
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT
@@ -156,10 +156,10 @@ export {
  * </Container>
  * ```
  */
-export const Container = createEngineComponent<ContainerProps>('Container', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+export const Container = createEngineComponent<ContainerProps>("Container", {
+  classic: () => import("./engines/classic"),
+  modern: () => import("./engines/modern"),
+  rustic: () => import("./engines/rustic"),
 });
 
 export default Container;

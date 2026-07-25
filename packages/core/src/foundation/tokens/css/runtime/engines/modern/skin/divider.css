@@ -1,26 +1,11 @@
 /**
  * Modern Divider skin (WO-SKIN-05 checkpoint L).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so a layered rule loses to preflight regardless
- * of specificity. Unlayered outranks preflight and still yields to a
- * caller's inline `style`.
- *
- * SCOPE ROOT mints `rottay-divider rottay-divider--modern` (grep-verified
- * free; neither engine carried a first-party scope class before this
- * migration -- DaisyUI's own `divider`/`divider-horizontal`/`divider-start`/
- * `-end` classes stay, untouched, alongside it) + the already-stamped
- * `data-part='root'` + `data-orientation` + `data-with-text`.
- *
- * L.2 (checked live, refuted): the with-text root's own border channel is
- * NOT reproduced here. `theme.css`'s `.divider-horizontal`/`.divider-vertical`
- * bridge is zeroed by Tailwind's preflight before it ever paints (measured
- * `border-top-width: 0px` live, production build, CDP), and this
- * component's with-text root never set a border inline either. The real
- * line paint lives on the `line-before`/`line-after` children (with-text
- * case) or merges onto the root itself (plain divider,
- * `data-with-text='false'`) -- explicitly gated below so the with-text root
- * never receives it.
+ * Imported into `rottay-engines`, above the Modern framework's bounded
+ * `rottay-framework` layer. The engine emits no generic DaisyUI `.divider`
+ * classname: protected DS anatomy owns both line segments, preventing
+ * duplicate framework pseudo-elements and keeping RTL logical positioning in
+ * the component contract rather than the application.
  *
  * `color`/`thickness` are caller-overridable free-form props (`DividerProps`
  * accepts any CSS color string and either a preset or a raw px number), so
@@ -31,30 +16,33 @@
  * hatch the migration kit sanctions for a runtime-computed value); the
  * fallback below matches `DEFAULT_COLORS.modern` + `THICKNESS_MAP.thin` +
  * the default `solid` variant so it is never actually reached in practice.
- * Text color's `plain` branch has the same shape: this engine stamps no
- * `data-plain` (rustic's own skin uses its existing `divider--plain` class
- * instead, since it already renders one), so `plain ? 'inherit' : token`
- * rides `--ds-divider-plain-color`.
+ * Label styling is keyed by the protected `data-plain` anatomy signal, so
+ * typography and color remain tenant-remappable CSS rather than inline paint.
  *
- * SPECIFICITY (P-48): every line rule paints a real border color on one axis
- * per orientation (the other axis is always the colorless reset `none`) and
- * must reach (0,4,0) -- the two root classes + `[data-part='root']` already
- * give (0,3,0), and `[data-orientation='...']` (with-text) or
- * `[data-with-text='false']` (plain) buys the 4th unit. Text color is
- * non-border and clears preflight unlayered at (0,3,0) or better. Values
- * transcribed verbatim from `engines/modern.tsx`.
+ * Layer ownership, not specificity escalation, makes this first-party paint
+ * authoritative while inline caller geometry remains the final local seam.
  */
 
 /* ---- line: with-text spans (was lineBeforeStyle/lineAfterStyle's
         borderTop/borderLeft, both driven by `isHorizontal`). ---- */
-.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-before'],
-.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-after'] {
-  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
+  [data-part="line-before"],
+.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
+  [data-part="line-after"] {
+  border-top: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, oklch(0.746 0 0))
+  );
   border-left: none;
 }
-.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='vertical'] [data-part='line-before'],
-.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='vertical'] [data-part='line-after'] {
-  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"]
+  [data-part="line-before"],
+.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"]
+  [data-part="line-after"] {
+  border-left: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, oklch(0.746 0 0))
+  );
   border-top: none;
 }
 
@@ -62,16 +50,80 @@
         divider return path's `{ ...containerStyle, ...lineStyle }`). Gated
         to `data-with-text='false'` -- the with-text root never carries this
         channel (see header). ---- */
-.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='horizontal'][data-with-text='false'] {
-  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"][data-with-text="false"] {
+  border-top: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, oklch(0.746 0 0))
+  );
   border-left: none;
 }
-.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='vertical'][data-with-text='false'] {
-  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"][data-with-text="false"] {
+  border-left: var(
+    --ds-divider-line,
+    1px solid var(--ds-divider-color, oklch(0.746 0 0))
+  );
   border-top: none;
 }
 
 /* ---- text: color (was textStyle.color's `plain` ternary). ---- */
-.rottay-divider.rottay-divider--modern[data-part='root'] [data-part='text'] {
-  color: var(--ds-divider-plain-color, var(--ds-color-text-secondary));
+.rottay-divider.rottay-divider--modern[data-part="root"] [data-part="text"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  max-width: var(--ds-divider-label-max-width, 100%);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.rottay-divider.rottay-divider--modern[data-part="root"][data-plain="false"]
+  [data-part="text"] {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-divider-label-font-size, var(--ds-font-size-sm));
+  font-weight: var(
+    --ds-divider-label-font-weight,
+    var(--ds-font-weight-semibold)
+  );
+  line-height: var(--ds-divider-label-line-height, var(--ds-line-height-snug));
+  text-transform: var(--ds-divider-label-transform, uppercase);
+  letter-spacing: var(
+    --ds-divider-label-tracking,
+    var(--ds-letter-spacing-wider)
+  );
+}
+
+.rottay-divider.rottay-divider--modern[data-part="root"][data-plain="true"]
+  [data-part="text"] {
+  color: inherit;
+  font: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.rottay-divider.rottay-divider--modern[data-part="root"] {
+  transition: gap
+      var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease)),
+    margin var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease)),
+    opacity var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease));
+}
+
+.rottay-divider.rottay-divider--modern[data-part="root"] [data-part^="line-"] {
+  transition: border-color
+      var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease)),
+    opacity var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-divider.rottay-divider--modern[data-part="root"],
+  .rottay-divider.rottay-divider--modern[data-part="root"]
+    [data-part^="line-"] {
+    transition: none;
+  }
 }

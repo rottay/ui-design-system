@@ -186,9 +186,12 @@ describe('fields skins -- per-component interaction + keyframe pins', () => {
     expect(/voiceInputPulse|voiceInputSpin/.test(NC['voice-input-button'])).toBe(false);
   });
 
-  it('Button.Icon: the removed hover/active state is a :hover/:active rule gated :not(:disabled)', () => {
-    expect(/\[data-part='trigger'\]:hover:not\(:disabled\)/.test(NC['button-icon'])).toBe(true);
-    expect(/\[data-part='trigger'\]:active:not\(:disabled\)/.test(NC['button-icon'])).toBe(true);
+  it('Button.Icon: optical CSS stays compound-only and interaction paint comes from Modern Button', () => {
+    const modernButton = read('runtime/engines/modern/skin/button.css');
+
+    expect(/:hover|:active|background|border-color|box-shadow/.test(NC['button-icon'])).toBe(false);
+    expect(/\[data-state~='hovered'\]/.test(modernButton)).toBe(true);
+    expect(/\[data-state~='pressed'\]/.test(modernButton)).toBe(true);
   });
 });
 

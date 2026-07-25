@@ -3,9 +3,36 @@ import { describe, expect, it } from 'vitest';
 import {
   buildSvgAreaGeometry,
   buildSvgHistogramGeometry,
+  buildSvgRadarGeometry,
   buildSvgSparklineGeometry,
   buildSvgWaterfallGeometry,
 } from '..';
+
+describe('Radar geometry', () => {
+  const data = [
+    { axis: 'Role fit', value: 8 },
+    { axis: 'Experience', value: 7 },
+    { axis: 'Momentum', value: 6 },
+  ];
+
+  it('preserves the label-safe default while allowing compact radars to reclaim plot area', () => {
+    const labelled = buildSvgRadarGeometry({ data, width: 270, height: 216 });
+    const compact = buildSvgRadarGeometry({ data, width: 270, height: 216, padding: 16 });
+
+    expect(labelled.radius).toBe(68);
+    expect(compact.radius).toBe(92);
+    expect(compact.radius).toBeGreaterThan(labelled.radius);
+    expect(compact.axes.every((axis) => Number.isFinite(axis.lineX) && Number.isFinite(axis.lineY))).toBe(true);
+  });
+
+  it('normalises unsafe padding without allowing marks outside the chart bounds', () => {
+    const negative = buildSvgRadarGeometry({ data, width: 160, height: 120, padding: -50 });
+    const excessive = buildSvgRadarGeometry({ data, width: 160, height: 120, padding: 500 });
+
+    expect(negative.radius).toBe(52);
+    expect(excessive.radius).toBe(1);
+  });
+});
 
 describe('Area geometry', () => {
   const series = [

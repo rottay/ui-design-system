@@ -38,6 +38,16 @@ export type {
   TextWeight,
   TextAlign,
   TextColor,
+  TypographyAlign,
+  TypographyStyle,
+  TypographyFamily,
+  TypographyLeading,
+  TypographyTracking,
+  TypographyWrap,
+  TypographyContrast,
+  TypographyMotion,
+  TypographyLocaleProps,
+  TypographyCraftProps,
 } from './contracts';
 
 export { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP, LINE_HEIGHT_MAP } from './contracts';

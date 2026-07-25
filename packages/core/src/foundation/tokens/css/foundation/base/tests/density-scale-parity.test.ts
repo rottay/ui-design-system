@@ -1,97 +1,162 @@
 /**
- * Parity contract for the density axis (W4-D, design section 7c).
+ * Contract for the three-channel density axis.
  *
- * Two code paths carry the same three density factors and must never drift:
- *  - CSS: foundation/base/density.css maps data-density="<mode>" to a local
- *    --ds-density-scale, which the spacing ramp multiplies at its definition
- *    site.
- *  - JS: the useTokens token graph derives an appearanceDensityFactor from
- *    appearance.general.density for its JS consumers.
- *
- * This test reads BOTH sources and asserts the per-mode factor is byte-equal, so
- * a change to either factor without the other fails here. It parses source (no
- * React render, no DOM) exactly like the neutral-derivation contract test.
+ * `--ds-density-scale` is structural and white-labelable. The semantic
+ * compact/comfortable/spacious tenant appearance lives in
+ * `--ds-density-mode-factor`; a component/subtree posture lives in the separate
+ * `--ds-density-local-factor`. CSS projects the same canonical factor map for
+ * local posture, while appearance compilation and useTokens call the canonical
+ * resolver for global appearance.
  */
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
-import { describe, expect, it } from "vitest";
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { describe, expect, it } from 'vitest';
 
-const DENSITY_CSS_PATH = resolve(
-  process.cwd(),
-  "src/foundation/tokens/css/foundation/base/density.css",
+import {
+  DENSITY_MODE_FACTORS,
+  DENSITY_SCALE_BOUNDS,
+  resolveEffectiveDensityScale,
+} from '@/foundation/tokens/ts/foundation/base/density';
+
+const source = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8');
+
+const densityCss = source('src/foundation/tokens/css/foundation/base/density.css');
+const spacingCss = source('src/foundation/tokens/css/foundation/base/spacing.css');
+const defaultThemeCss = source('src/foundation/tokens/css/foundation/themes/default.css');
+const useTokensSource = source(
+  'src/infrastructure/runtime/theming/composition/react/tokens/index.ts',
 );
-const USE_TOKENS_PATH = resolve(
-  process.cwd(),
-  "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
+const appearanceSource = source(
+  'src/infrastructure/compilers/kernel/runtime/appearance/index.ts',
 );
 
-/** compact/comfortable/spacious -> factor, parsed from the CSS attribute rules. */
 function parseCssFactors(css: string): Record<string, number> {
   const factors: Record<string, number> = {};
   const rule =
-    /\[data-density=['"](compact|comfortable|spacious)['"]\]\s*\{[^}]*?--ds-density-scale:\s*([\d.]+)\s*;?[^}]*\}/g;
-  for (const match of css.matchAll(rule)) {
-    factors[match[1]] = Number(match[2]);
-  }
+    /\[data-density=['"](compact|comfortable|spacious)['"]\]:not\(:root\)\s*\{[^}]*?--ds-density-local-factor:\s*([\d.]+)\s*;?[^}]*\}/g;
+  for (const match of css.matchAll(rule)) factors[match[1]] = Number(match[2]);
   return factors;
 }
 
-/**
- * compact/spacious/comfortable -> factor, parsed from the appearanceDensityFactor
- * assignment. compact and spacious read their explicit ternary arms; comfortable
- * is the trailing default arm (the last numeric literal in the expression).
- */
-function parseJsFactors(source: string): Record<string, number> {
-  const assignment = source.match(
-    /appearanceDensityFactor\s*=\s*([\s\S]*?);/,
-  );
-  if (!assignment) {
-    throw new Error("appearanceDensityFactor assignment not found in useTokens");
-  }
-  const expr = assignment[1];
-  const compact = expr.match(/'compact'\s*\?\s*([\d.]+)/);
-  const spacious = expr.match(/'spacious'\s*\?\s*([\d.]+)/);
-  const literals = expr.match(/[\d.]+/g);
-  if (!compact || !spacious || !literals || literals.length === 0) {
-    throw new Error("Could not parse density factors from useTokens ternary");
-  }
-  return {
-    compact: Number(compact[1]),
-    spacious: Number(spacious[1]),
-    // The default arm is the final `: <n>` literal of the ternary chain.
-    comfortable: Number(literals[literals.length - 1]),
-  };
+function spacingDeclarations(css: string): string[] {
+  return [...css.matchAll(/--ds-spacing-(?!0\b)\d+\s*:\s*calc\([^;]+\);/g)]
+    .map((match) => match[0]);
 }
 
-const cssFactors = parseCssFactors(readFileSync(DENSITY_CSS_PATH, "utf8"));
-const jsFactors = parseJsFactors(readFileSync(USE_TOKENS_PATH, "utf8"));
-
-describe("density-scale css/js parity", () => {
-  it("parses all three named modes from the CSS attribute rules", () => {
-    expect(Object.keys(cssFactors).sort()).toEqual([
-      "comfortable",
-      "compact",
-      "spacious",
-    ]);
-  });
-
-  it("parses all three factors from the JS useTokens graph", () => {
-    expect(jsFactors.compact).toBeTypeOf("number");
-    expect(jsFactors.comfortable).toBeTypeOf("number");
-    expect(jsFactors.spacious).toBeTypeOf("number");
-  });
-
-  it.each(["compact", "comfortable", "spacious"] as const)(
-    "css --ds-density-scale for %s equals the js appearanceDensityFactor",
-    (mode) => {
-      expect(cssFactors[mode]).toBe(jsFactors[mode]);
-    },
+function globalEffectiveScaleBounds(css: string): { min: number; max: number } | null {
+  const match = css.match(
+    /--ds-density-global-effective-scale\s*:\s*clamp\(\s*([\d.]+),\s*calc\(var\(--ds-density-scale,\s*1\)\s*\*\s*var\(--ds-density-mode-factor,\s*1\)\),\s*([\d.]+)\s*\);/,
   );
+  return match ? { min: Number(match[1]), max: Number(match[2]) } : null;
+}
 
-  it("keeps the density axis identity at rest (comfortable === 1)", () => {
-    // A comfortable container must be byte-stable against the ramp's calc
-    // fallback of 1, or every default surface would silently reflow.
-    expect(cssFactors.comfortable).toBe(1);
-    expect(jsFactors.comfortable).toBe(1);
+function localEffectiveScaleBounds(css: string): { min: number; max: number } | null {
+  const match = css.match(
+    /--ds-density-effective-scale\s*:\s*clamp\(\s*([\d.]+),\s*calc\(\s*var\(--ds-density-global-effective-scale,\s*1\)\s*\*\s*var\(--ds-density-local-factor,\s*1\)\s*\),\s*([\d.]+)\s*\);/,
+  );
+  return match ? { min: Number(match[1]), max: Number(match[2]) } : null;
+}
+
+const cssFactors = parseCssFactors(densityCss);
+const LOCAL_PROJECTION_SELECTOR =
+  ":where(\n  [data-density='compact']:not(:root),";
+const NUMERIC_SPACING_STEPS = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40,
+  44, 48, 52, 56, 60, 64, 72, 80, 96,
+] as const;
+const SEMANTIC_SPACING_ALIASES = [
+  'xxxs',
+  'xxs',
+  'xs',
+  'sm',
+  'md',
+  'lg',
+  'xl',
+  '2xl',
+  '3xl',
+  '4xl',
+  '5xl',
+  'gutter',
+  'section',
+  'container',
+  'component-gap',
+  'component-padding',
+  'component-margin',
+] as const;
+
+describe('density authority contract', () => {
+  it('projects every CSS attribute mode from the canonical factor table', () => {
+    expect(cssFactors).toEqual({
+      compact: DENSITY_MODE_FACTORS.compact,
+      comfortable: DENSITY_MODE_FACTORS.comfortable,
+      spacious: DENSITY_MODE_FACTORS.spacious,
+    });
+    expect(DENSITY_MODE_FACTORS.normal).toBe(DENSITY_MODE_FACTORS.comfortable);
+  });
+
+  it('composes structural and semantic density identically for numeric tokens', () => {
+    expect(resolveEffectiveDensityScale(0.9, 'compact')).toBeCloseTo(
+      0.9 * cssFactors.compact,
+    );
+    expect(resolveEffectiveDensityScale(1.125, 'spacious')).toBeCloseTo(
+      1.125 * cssFactors.spacious,
+    );
+  });
+
+  it('requires useTokens and appearance to consume the canonical resolver', () => {
+    expect(useTokensSource).toContain('resolveEffectiveDensityScale');
+    expect(useTokensSource).not.toContain('appearanceDensityFactor');
+    expect(appearanceSource).toContain('resolveDensityModeFactor');
+    expect(appearanceSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
+  });
+
+  it('keeps global appearance and local component posture on separate channels', () => {
+    expect(densityCss).toContain('--ds-density-local-factor: 0.85');
+    expect(densityCss).toContain("[data-density='compact']:not(:root)");
+    expect(densityCss).not.toMatch(
+      /\[data-density=['"]compact['"]\]\s*\{[^}]*--ds-density-local-factor:/,
+    );
+    expect(densityCss).not.toMatch(
+      /\[data-density=['"]compact['"]\](?:\:not\(\:root\))?\s*\{[^}]*--ds-density-mode-factor:/,
+    );
+    expect(appearanceSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
+    expect(appearanceSource).not.toContain('DENSITY_LOCAL_FACTOR_VARIABLE');
+  });
+
+  it.each([
+    ['base spacing', spacingCss],
+    ['default theme spacing', defaultThemeCss],
+  ])('%s composes structural, appearance and local factors', (_label, css) => {
+    const declarations = spacingDeclarations(css);
+    expect(declarations.length).toBeGreaterThan(0);
+    expect(globalEffectiveScaleBounds(css)).toEqual(DENSITY_SCALE_BOUNDS);
+    expect(localEffectiveScaleBounds(css)).toEqual(DENSITY_SCALE_BOUNDS);
+    for (const declaration of declarations) {
+      expect(declaration).toContain('var(--ds-density-effective-scale, 1)');
+    }
+  });
+
+  it('reprojects the effective ramp at local density boundaries', () => {
+    // A factor declared on a descendant cannot retroactively recompute a
+    // custom property inherited from :root. This local redeclaration is what
+    // makes nested compact/comfortable/spacious subtrees real rather than an
+    // attribute-only promise.
+    expect(densityCss).toContain(LOCAL_PROJECTION_SELECTOR);
+    expect(globalEffectiveScaleBounds(densityCss)).toEqual(DENSITY_SCALE_BOUNDS);
+    expect(localEffectiveScaleBounds(densityCss)).toEqual(DENSITY_SCALE_BOUNDS);
+    for (const step of NUMERIC_SPACING_STEPS) {
+      const declaration = new RegExp(
+        `--ds-spacing-${step}\\s*:\\s*calc\\([^;]+var\\(--ds-density-effective-scale,\\s*1\\)[^;]*\\);`,
+      );
+      expect(densityCss).toMatch(declaration);
+    }
+    for (const alias of SEMANTIC_SPACING_ALIASES) {
+      expect(densityCss).toContain(`--ds-spacing-${alias}:`);
+    }
+  });
+
+  it('keeps fixed accessibility floors outside density projection', () => {
+    expect(densityCss).not.toContain('--ds-touch-target-min:');
+    expect(densityCss).not.toContain('!important');
   });
 });

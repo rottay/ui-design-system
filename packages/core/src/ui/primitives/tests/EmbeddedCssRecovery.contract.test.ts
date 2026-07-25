@@ -13,9 +13,9 @@ const readSource = (path: string) => readFileSync(resolve(srcRoot, path), 'utf8'
 const readSkin = (name: string) => readSource(`foundation/tokens/css/presentation/components/skin/${name}`);
 
 const SKIN_HASHES = {
-  'data-table-interactions.css': '6d7ee17c26eda20cec65551d28c9ab5080caa74f650c14f0b8ce07a47226a217',
+  'data-table-interactions.css': 'f3dc2338e22744d3c4052e16cd786a3760deaf8f615ca85a21c3277f8c7028fe',
   'form-placeholders.css': 'c26b0d68812a0b668f5992cfa868ce8ee1c9b9047c7e7cbfe91b110d82ab2a8f',
-  'navigation-static.css': '6cd5b7b38182d79521bd23f9832ccda68140e9af6b75bffd39b5576da44c5489',
+  'navigation-static.css': '6dc59cfd7c470f8648d930aa1f4f0260e7746cb4155a327f0ed396029f00613a',
   'primitive-motion.css': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
   'scroll-area.css': '060d4fab16df50659d75c29d41943e8348b25a3d7b249d3ad13d1f43b40714c1',
   'toast-animation-keyframes.css': 'a18d974060652fda28e40aa14d46173de1f766ac067cec4a689b43124c33c62a',
@@ -60,7 +60,11 @@ function declarationMap(
 ): Record<string, string> {
   return Object.fromEntries(
     declarations.map(({ prop, value, important }) => {
-      const normalizedValue = value.replace(/\s+/g, ' ').trim();
+      const normalizedValue = value
+        .replace(/\s+/g, ' ')
+        .replace(/\(\s+/g, '(')
+        .replace(/\s+\)/g, ')')
+        .trim();
       return [prop, important ? `${normalizedValue} !important` : normalizedValue];
     })
   );
@@ -68,8 +72,12 @@ function declarationMap(
 
 function ruleContracts(css: string, selector: string): Array<Record<string, string>> {
   const matches: Array<Record<string, string>> = [];
+  const normalizedSelector = selector.replace(/\s+/g, ' ').trim();
   postcss.parse(css).walkRules((rule) => {
-    if (rule.parent?.type !== 'root' || !rule.selectors.includes(selector)) return;
+    if (
+      rule.parent?.type !== 'root' ||
+      !rule.selectors.some((candidate) => candidate.replace(/\s+/g, ' ').trim() === normalizedSelector)
+    ) return;
     matches.push(declarationMap(rule.nodes.filter((node) => node.type === 'decl')));
   });
   return matches;
@@ -87,7 +95,9 @@ function keyframeContract(css: string, name: string): Record<string, Record<stri
     if (atRule.params !== name) return;
     const frames: Record<string, Record<string, string>> = {};
     atRule.walkRules((rule) => {
-      frames[rule.selector] = declarationMap(rule.nodes.filter((node) => node.type === 'decl'));
+      frames[rule.selector.replace(/\s+/g, ' ').trim()] = declarationMap(
+        rule.nodes.filter((node) => node.type === 'decl')
+      );
     });
     matches.push(frames);
   });
@@ -118,7 +128,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
     }
   });
 
-  it('recovers all 85 classified declarations with the original family floors', () => {
+  it('recovers all 88 classified declarations with the original family floors', () => {
     expect({
       dataTable: paintCount(SKINS.dataTable),
       primitiveMotion: paintCount(SKINS.primitiveMotion),
@@ -127,7 +137,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       navigation: paintCount(SKINS.navigation),
       formPlaceholders: paintCount(SKINS.formPlaceholders),
     }).toEqual({
-      dataTable: 21,
+      dataTable: 24,
       primitiveMotion: 8,
       toast: 20,
       scrollArea: 25,
@@ -183,7 +193,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible')
     ).toEqual({
       outline: 'none',
-      'box-shadow': 'inset 3px 0 0 0 var(--ds-color-primary)',
+      'box-shadow': 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)',
       'background-color': 'color-mix(in srgb, var(--ds-color-primary) 6%, transparent) !important',
     });
     expect(
@@ -221,13 +231,16 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
         ".ds-engine-modern:where(.ds-pattern-data-table) td[data-cell-dirty='true']::before"
       )
     ).toEqual({
-      content: "''",
+      content: '""',
       position: 'absolute',
-      left: '0',
-      top: '0',
-      bottom: '0',
-      width: '3px',
+      'inset-block-start': '5px',
+      'inset-inline-end': '5px',
+      width: '6px',
+      height: '6px',
+      border: '1px solid var(--ds-surface-card, var(--ds-color-bg-elevated))',
+      'border-radius': '999px',
       background: 'var(--ds-color-warning)',
+      'box-shadow': '0 0 0 2px color-mix(in srgb, var(--ds-color-warning) 16%, transparent)',
       'pointer-events': 'none',
     });
 
@@ -287,7 +300,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       outline: '2px solid var(--ds-color-primary) !important',
       'outline-offset': '-2px !important',
     });
-    expect(ruleContract(SKINS.navigation, '.rottay-menu--modern details[open] > summary > span:last-child')).toEqual({
+    expect(ruleContract(SKINS.navigation, ".rottay-menu--modern details[open] > summary > [data-part='arrow-icon']")).toEqual({
       transform: 'rotate(90deg)',
     });
     expect(ruleContract(SKINS.navigation, '.rottay-menu--modern summary::-webkit-details-marker')).toEqual({
@@ -528,7 +541,7 @@ describe('WO-SKIN-06 embedded CSS recovery — producer and hook contract', () =
     expect(select).not.toContain('ds-sel-search-');
     expect(select).not.toContain('searchPlaceholderCSS');
     expect(select.match(/<style/g)).toHaveLength(2);
-    expect(select.match(/className="rottay-select__search-input"/g)).toHaveLength(2);
+    expect(select.match(/className="rottay-select__search-input"/g)).toHaveLength(1);
 
     expect(tabs).not.toContain('::webkit-scrollbar');
     expect(tabs).not.toContain('@keyframes ds-tabs-fade-in');

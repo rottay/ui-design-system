@@ -61,7 +61,7 @@ describe('resolveChartPersonality', () => {
     });
 
     expect(bithire).toMatchObject({
-      lineStyle: 'sharp',
+      lineStyle: 'smooth',
       mountDuration: 400,
       tooltipStyle: 'detailed',
       colorScheme: 'monochrome',
@@ -124,7 +124,7 @@ describe('resolveChartPersonality', () => {
     expect(result).toMatchObject({
       mountDuration: 120,
       showDots: false,
-      lineStyle: 'sharp',
+      lineStyle: 'smooth',
       tooltipStyle: 'detailed',
       colorScheme: 'monochrome',
     });
@@ -190,7 +190,7 @@ describe('useResolvedChartPersonality', () => {
       </>,
     );
 
-    expect(screen.getByTestId('bithire-chart')).toHaveTextContent('sharp:400:detailed');
+    expect(screen.getByTestId('bithire-chart')).toHaveTextContent('smooth:400:detailed');
     expect(screen.getByTestId('management-chart')).toHaveTextContent('smooth:500:glass');
   });
 });

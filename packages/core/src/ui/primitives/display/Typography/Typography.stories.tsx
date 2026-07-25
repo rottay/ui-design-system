@@ -8,6 +8,7 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
+import type { CSSProperties } from 'react';
 import { Typography, Heading, Text, Paragraph } from './';
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
 import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
@@ -64,8 +65,18 @@ const meta: Meta<typeof Typography.Heading> = {
     },
     align: {
       control: 'select',
-      options: ['left', 'center', 'right', 'justify'],
+      options: ['start', 'center', 'end', 'left', 'right', 'justify'],
       description: 'Text alignment',
+    },
+    textStyle: {
+      control: 'select',
+      options: ['display', 'pageTitle', 'sectionTitle', 'body', 'supporting', 'label', 'caption', 'code', 'numeric'],
+      description: 'Semantic, tenant-tokenized type style',
+    },
+    family: {
+      control: 'select',
+      options: ['body', 'heading', 'display', 'mono', 'inherit'],
+      description: 'Typeface channel independent from semantic HTML',
     },
     engine: {
       control: 'select',
@@ -438,5 +449,108 @@ export const SemanticHierarchy: Story = {
         semantic level for design flexibility.
       </Text>
     </article>
+  ),
+};
+
+const premiumTenantStyles = {
+  studio: {
+    '--ds-font-family-display': 'Outfit, var(--ds-font-family-heading)',
+    '--ds-font-family-heading': 'Outfit, var(--ds-font-family-base)',
+    '--ds-type-color-muted': 'var(--ds-color-text-secondary)',
+    '--ds-type-motion-duration': '220ms',
+  } as CSSProperties,
+  editorial: {
+    '--ds-font-family-display': 'Newsreader, Georgia, serif',
+    '--ds-font-family-heading': 'Newsreader, Georgia, serif',
+    '--ds-type-color-muted': 'var(--ds-color-text-tertiary)',
+    '--ds-type-motion-duration': '140ms',
+  } as CSSProperties,
+};
+
+function PremiumTypographySpecimen({
+  eyebrow,
+  title,
+  body,
+  metric,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  metric: string;
+  action: string;
+}) {
+  return (
+    <article style={{ display: 'grid', gap: '0.75rem', maxWidth: '42rem' }}>
+      <Text as="small" textStyle="label" contrast="muted" tracking="wider">
+        {eyebrow}
+      </Text>
+      <Heading level="h2" textStyle="display" wrap="balance" fluid motion="enter">
+        {title}
+      </Heading>
+      <Paragraph textStyle="body" wrap="pretty" hyphenate contrast="muted">
+        {body}
+      </Paragraph>
+      <Text textStyle="numeric" numeric="tabular" family="heading">
+        {metric}
+      </Text>
+      <Typography.Link href="#semantic-contract" textStyle="label" strong>
+        {action}
+      </Typography.Link>
+    </article>
+  );
+}
+
+/** The component tree is identical; only public tokens change the personality. */
+export const PremiumTokenizedFamilies: Story = {
+  name: 'Premium craft — same markup, two brands',
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))', gap: '2rem' }}>
+      <section data-brand="studio" style={premiumTenantStyles.studio}>
+        <PremiumTypographySpecimen
+          eyebrow="DECISION INTELLIGENCE"
+          title="Clarity at the exact moment a decision must move."
+          body="A resilient text system preserves hierarchy, rhythm, and readable measures while every tenant changes its visual voice."
+          metric="92.4% ready"
+          action="Inspect evidence"
+        />
+      </section>
+      <section data-brand="editorial" style={premiumTenantStyles.editorial}>
+        <PremiumTypographySpecimen
+          eyebrow="DECISION INTELLIGENCE"
+          title="Clarity at the exact moment a decision must move."
+          body="A resilient text system preserves hierarchy, rhythm, and readable measures while every tenant changes its visual voice."
+          metric="92.4% ready"
+          action="Inspect evidence"
+        />
+      </section>
+    </div>
+  ),
+};
+
+/** RTL uses the same public props and logical alignment as every LTR locale. */
+export const InternationalizationAndRtl: Story = {
+  name: 'Semantic contract — i18n and RTL',
+  render: () => (
+    <section lang="ar" dir="rtl" style={{ maxWidth: '38rem' }}>
+      <Heading level="h2" textStyle="pageTitle" align="start" wrap="balance">
+        القرار التالي واضح وجاهز للمراجعة
+      </Heading>
+      <Paragraph
+        lang="ar"
+        dir="rtl"
+        textStyle="body"
+        align="start"
+        wrap="pretty"
+        hyphenate
+        lineClamp={3}
+        title="النص الكامل متاح كتلميح أصلي عندما يكون الاختصار مقصودًا"
+      >
+        يحافظ نظام الطباعة على التسلسل الهرمي وسهولة القراءة من دون تغيير بنية المكونات بين العلامات التجارية أو اللغات.
+      </Paragraph>
+      <Text as="code" textStyle="code" dir="ltr" translate="no">
+        candidate.score = 92.4
+      </Text>
+    </section>
   ),
 };

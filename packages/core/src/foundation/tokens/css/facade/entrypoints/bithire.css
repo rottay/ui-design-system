@@ -10,5 +10,11 @@
  * @see base.css - Tenant-free DS foundation
  * @version 1.0.0
  */
+/* BitHire is a first-party vertical, so its authored typography ships with the
+   vertical bundle. Customer tenants still override semantic font channels
+   through their compiled DB theme without importing app-owned CSS. */
+@import '../../foundation/typography/font-packs/humanist-text/index.css';
+@import '../../foundation/typography/font-packs/grotesk-display/index.css';
+@import '../../foundation/typography/font-packs/plex-mono/index.css';
 @import './base.css';
 @import '../artifacts/bithire/index.css' layer(rottay-tenants);

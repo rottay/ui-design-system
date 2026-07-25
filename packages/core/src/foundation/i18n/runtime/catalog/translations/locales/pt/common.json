@@ -58,5 +58,16 @@
   "settings": "Configurações",
   "help": "Ajuda",
   "logout": "Sair",
-  "login": "Entrar"
+  "login": "Entrar",
+  "breadcrumb": "Trilha de navegação",
+  "key_metrics": "Métricas principais",
+  "shortcuts": "Atalhos",
+  "dashboard_status_live": "Ao vivo",
+  "dashboard_status_connected": "Conectado",
+  "dashboard_status_syncing": "Sincronizando",
+  "dashboard_status_offline": "Offline",
+  "dashboard_status_warning": "Aviso",
+  "show_password": "Mostrar senha",
+  "hide_password": "Ocultar senha",
+  "password_strength": "Força da senha"
 }

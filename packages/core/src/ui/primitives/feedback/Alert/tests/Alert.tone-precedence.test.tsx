@@ -18,6 +18,7 @@ import { render } from '@testing-library/react';
 import ClassicAlert from '../engines/classic';
 import ModernAlert from '../engines/modern';
 import RusticAlert from '../engines/rustic';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 describe('Alert tone precedence (real engines)', () => {
   it('classic: tone alone resolves to the mapped AntD type class', () => {
@@ -37,18 +38,38 @@ describe('Alert tone precedence (real engines)', () => {
   });
 
   it('modern: tone alone resolves via data-tone', () => {
-    const { container } = render(<ModernAlert message="m" tone="danger" />);
+    const { container } = renderWithEngine(<ModernAlert message="m" tone="danger" />, 'modern');
     expect(container.querySelector('[data-tone="error"]')).not.toBeNull();
   });
 
   it('modern: tone overrides the deprecated type prop when both are given', () => {
-    const { container } = render(<ModernAlert message="m" tone="danger" type="info" />);
+    const { container } = renderWithEngine(
+      <ModernAlert message="m" tone="danger" type="info" />,
+      'modern',
+    );
     expect(container.querySelector('[data-tone="error"]')).not.toBeNull();
   });
 
   it('modern: falls back to type when tone is not given', () => {
-    const { container } = render(<ModernAlert message="m" type="warning" />);
+    const { container } = renderWithEngine(<ModernAlert message="m" type="warning" />, 'modern');
     expect(container.querySelector('[data-tone="warning"]')).not.toBeNull();
+  });
+
+  it('modern: exposes premium anatomy, semantic icons, and localized close control', () => {
+    const { container } = renderWithEngine(
+      <ModernAlert message="Decision ready" description="Evidence is complete" closable />,
+      'modern',
+    );
+
+    const root = container.querySelector('[data-part="root"]');
+    expect(root).toHaveAttribute('role', 'alert');
+    expect(root).toHaveAttribute('data-has-icon', 'true');
+    expect(root).toHaveAttribute('data-has-description', 'true');
+    expect(root).toHaveAttribute('data-closable', 'true');
+    expect(container.querySelector('[data-icon-name="status.info"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="content"]')).not.toBeNull();
+    expect(container.querySelector('[data-icon-name="action.close"]')).not.toBeNull();
+    expect(container.querySelector('button[type="button"]')).not.toBeNull();
   });
 
   it('rustic: tone alone resolves via data-tone', () => {

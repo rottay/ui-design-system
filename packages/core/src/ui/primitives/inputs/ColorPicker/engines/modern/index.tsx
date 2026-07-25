@@ -2,13 +2,15 @@
 
 /**
  * @fileoverview ColorPicker Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the ColorPicker component
- * with native browser color input and custom preset panels.
+ * @description Tailwind CSS + token implementation of the ColorPicker component
+ * with native browser color input and custom preset panels. No DaisyUI classes
+ * are emitted; paint is owned by the unlayered modern skin
+ * (`skin/color-picker.css`) — K4-C docblock correction.
  *
  * @remarks
  * The Modern engine provides a lightweight color picker using:
  * - **Native color input**: Browser's built-in color picker
- * - **DaisyUI styling**: Consistent with Tailwind design tokens
+ * - **Token skin styling**: the skin owns swatch/dropdown/input paint
  * - **Custom dropdowns**: Styled panel with presets
  * - **Format display**: Shows color value in selected format
  *
@@ -37,6 +39,37 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ColorPickerProps, Color } from '../../contracts';
 import { COLORPICKER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+
+/**
+ * Token-backed default (K4-C): the previous `defaultValue = '#1677ff'` hard
+ * coded Ant Design's brand blue into every tenant. The default is now the
+ * tenant's own `--ds-color-primary`. The swatch consumes the `var()` directly
+ * (CSS resolves it), but the native `<input type="color">` and hex input
+ * require a concrete `#rrggbb`, so the engine resolves the token against the
+ * provider-owned root after mount — the same owner-scoped pattern QRCode and
+ * Watermark use. A resolution that yields no hex keeps the `var()` on the
+ * swatch and never invents a color.
+ */
+const TOKEN_DEFAULT_VALUE = 'var(--ds-color-primary)';
+
+/** Matches exactly `#rrggbb` — the only grammar the native color input accepts. */
+const NATIVE_HEX_RE = /^#[0-9a-fA-F]{6}$/;
+
+/**
+ * Normalize a resolved color to `#rrggbb`. `resolveCssColor` returns whatever
+ * the browser's computed custom property serializes to — Chromium gives
+ * `rgb(r, g, b)` for hex declarations, which the native `<input type="color">`
+ * rejects (it silently falls back to #000000). K4-C Pass-2 live finding.
+ */
+function toNativeHexColor(value: string): string | null {
+  if (NATIVE_HEX_RE.test(value)) return value.toLowerCase();
+  const match = value.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*[\d.]+)?\s*\)$/);
+  if (!match) return null;
+  const to2 = (channel: string) => Number(channel).toString(16).padStart(2, '0');
+  return `#${to2(match[1])}${to2(match[2])}${to2(match[3])}`;
+}
 
 /**
  * Lightweight Color factory that satisfies the DS `Color` interface.
@@ -55,7 +88,7 @@ const createColor = (hex: string): Color => ({
 });
 
 /**
- * Modern engine ColorPicker -- native browser color input with DaisyUI styling.
+ * Modern engine ColorPicker -- native browser color input with token skin styling.
  *
  * Combines the browser's built-in `<input type="color">` with a custom
  * dropdown panel that shows a hex text input, preset swatches, and an
@@ -64,13 +97,13 @@ const createColor = (hex: string): Color => ({
  * by a document-level mousedown listener.
  *
  * @param props - {@link ColorPickerProps} unified color picker props shared across engines.
- * @returns A ref-forwarding color picker with DaisyUI/Tailwind styling.
+ * @returns A ref-forwarding color picker with Tailwind/token styling.
  */
 export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
   (props, ref) => {
     const {
       value: controlledValue,
-      defaultValue = '#1677ff',
+      defaultValue = TOKEN_DEFAULT_VALUE,
       onChange,
       format = COLORPICKER_DEFAULTS.format,
       presets,
@@ -101,6 +134,39 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Viewport collision handling (K4-C Pass 2): the in-tree dropdown is
+    // start-aligned by default, which overflows narrow viewports when the
+    // trigger sits near the inline-end edge (measured 6px horizontal overflow
+    // at 390px). On open, measure once and end-align when the panel would
+    // cross the viewport's inline-end edge. Logical `inset-inline-end` keeps
+    // it correct in RTL. No portal, no dependency — bounded and testable.
+    const [alignEdge, setAlignEdge] = useState<'start' | 'end'>('start');
+    useEffect(() => {
+      if (!isOpen) return;
+      const dropdown = dropdownRef.current;
+      if (!dropdown || typeof window === 'undefined') return;
+      const rect = dropdown.getBoundingClientRect();
+      const overflowEnd = rect.right - (window.innerWidth - 8);
+      setAlignEdge(overflowEnd > 0 ? 'end' : 'start');
+    }, [isOpen]);
+
+    // Action/field strings: translated when an I18nProvider is mounted, with
+    // the documented English fallbacks otherwise (a missing catalog key echoes
+    // the raw key back, which the endsWith guard detects — K4-C wires the
+    // channel ahead of the locale JSONs, so behavior is byte-identical until
+    // they land).
+    const i18n = useOptionalTranslation('components');
+    const colorPickerLabel = (
+      key: string,
+      fallback: string,
+      params?: Record<string, string | number>
+    ): string => {
+      const translated = i18n?.t(key, params);
+      return translated && !translated.endsWith(key) ? translated : fallback;
+    };
+    const clearLabel = colorPickerLabel('colorpicker.clear', 'Clear');
 
     /** Toggles the dropdown, respecting controlled `open` prop when present. */
     const handleOpenChange = useCallback((newOpen: boolean) => {
@@ -137,6 +203,21 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       }
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, handleOpenChange]);
+
+    // Resolve a token-backed uncontrolled value (e.g. the `var(--ds-color-primary)`
+    // default) against the provider-owned root. The swatch consumes the var()
+    // natively, but the native color input and hex input need a concrete
+    // `#rrggbb`; only commit when resolution actually yields one.
+    useEffect(() => {
+      if (isControlled) return;
+      if (!internalValue.includes('var(')) return;
+      const owner = containerRef.current;
+      if (!owner) return;
+      const resolved = toNativeHexColor(resolveCssColor(internalValue, owner, ''));
+      if (resolved) {
+        setInternalValue(resolved);
+      }
+    }, [internalValue, isControlled]);
 
     /** Returns Tailwind size classes for the color swatch button. */
     const getSizeClass = () => {
@@ -191,8 +272,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
         {isOpen && (
           <div
+            ref={dropdownRef}
             data-part="dropdown"
-            className={`absolute z-50 mt-1 p-3 rounded-lg ${placement?.includes('top') ? 'bottom-full mb-1' : ''}`}
+            data-edge={alignEdge}
+            className={`absolute z-50 mt-1 p-3 rounded-lg ${placement?.includes('top') ? 'bottom-full mb-1' : ''} ${alignEdge === 'end' ? 'end-0' : ''}`}
           >
             {/* Color input */}
             <input
@@ -203,6 +286,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
               className="w-full cursor-pointer border-0"
               style={{ height: 'var(--ds-color-picker-height, 10rem)' }}
               disabled={disabled}
+              aria-label={colorPickerLabel('colorpicker.chooseColor', 'Choose color')}
             />
 
             {/* Hex input */}
@@ -212,7 +296,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                 data-part="hex-input"
                 value={currentValue}
                 onChange={(e) => handleChange(e.target.value)}
-                className="w-full font-mono"
+                className="w-full"
                 style={{
                   padding: '4px var(--ds-input-sm-padding-x, 10px)',
                   fontSize: 'var(--ds-input-sm-font-size, 13px)',
@@ -221,6 +305,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                 }}
                 placeholder="#000000"
                 disabled={disabled}
+                aria-label={colorPickerLabel('colorpicker.hexLabel', 'Hex color')}
               />
             </div>
 
@@ -240,6 +325,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                           data-part="preset-swatch"
                           className="w-5 h-5 rounded cursor-pointer hover:scale-110 transition-transform"
                           style={{ '--ds-colorpicker-preset-color': color } as React.CSSProperties}
+                          aria-label={colorPickerLabel('colorpicker.selectColor', `Select color ${color}`, { color })}
                           onClick={() => handleChange(color)}
                           disabled={disabled}
                         />
@@ -260,7 +346,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                   onClick={handleClear}
                   disabled={disabled}
                 >
-                  Clear
+                  {clearLabel}
                 </button>
               </div>
             )}

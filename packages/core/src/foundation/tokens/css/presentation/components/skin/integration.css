@@ -1,6 +1,6 @@
 /** IntegrationSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
 
-.ds-surface.ds-integration .ds-integration__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-integration .ds-integration__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 

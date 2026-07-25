@@ -96,7 +96,6 @@ export function VisualizationSurface({
                           {view.description && (
                             <Text
                               className="ds-visualization__muted-text"
-                              data-part="muted-text"
                             >
                               {view.description}
                             </Text>

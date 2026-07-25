@@ -1,13 +1,10 @@
 /**
- * Modern Card skin (WO-ARC-07).
+ * Modern Card skin.
  *
- * DELIBERATELY UNLAYERED, and every selector carries two classes plus the anatomy
- * part plus a qualifier, reaching (0,4,0). Both are load-bearing:
- *
- *   - no `rottay-*` cascade layer can paint a component at all, because Tailwind's
- *     `@layer base` sorts after all seven of them (measured; P-47);
- *   - the Platform-only Rottay artifact ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
- *     border floor at (0,3,1) that outranks any single-class component rule (P-48).
+ * Imported into the canonical `rottay-engines` layer. React owns semantics and
+ * publishes a finite data contract; this file owns all state paint. BrandTheme
+ * and DB-backed TenantTheme change the public `--ds-card-*` channels without
+ * requiring product selectors or tenant branches.
  *
  * The rules read the `data-*` contract the component stamps. Rest, hover and the
  * keyboard focus ring are photographed per tenant per engine by
@@ -20,16 +17,18 @@
  *   - a toned card's border does not react to hover. The tone was spread last, so
  *     it overwrote the hover border colour. Here the hover rule says
  *     `:not([data-tone])` and means it.
- *   - the focus ring stacks onto whatever shadow the card is already wearing,
- *     which is the variant's at rest and the hover shadow while hovered. That was
- *     `hoverStyle.boxShadow || variantStyle.boxShadow` inside a template string;
- *     here it is one rule per variant, plus one for elevated-and-hovered.
+ *   - keyboard focus is an outline, so it cannot erase a tenant's chosen depth
+ *     or selected-state shadow. Variant elevation remains independently tunable.
  */
 
 /* base */
 .ds-card.ds-card--modern[data-part='root'] {
   position: relative;
+  container-type: inline-size;
+  min-inline-size: 0;
   overflow: hidden;
+  isolation: isolate;
+  color: var(--ds-card-color, var(--ds-color-text-primary));
   transform: translateY(0);
   /* --ds-elevation-lift (registered <number>) rises to 1 on hover;
      --ds-card-elevation-surface reads it so the elevated surface tint cross-fades
@@ -38,10 +37,34 @@
   --ds-elevation-lift: 0;
   --ds-card-elevation-surface: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * (1 + var(--ds-elevation-lift)) * 1%), transparent);
   transition:
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    --ds-elevation-lift var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background-color var(--ds-card-transition-duration) var(--ds-card-transition-timing),
+    border-color var(--ds-card-transition-duration) var(--ds-card-transition-timing),
+    box-shadow var(--ds-card-transition-duration) var(--ds-card-transition-timing),
+    transform var(--ds-card-transition-duration) var(--ds-card-transition-timing),
+    --ds-elevation-lift var(--ds-card-transition-duration) var(--ds-card-transition-timing);
+}
+
+/* A full-surface state wash gives every material a coherent interaction cue.
+   It is deliberately uniform: semantic tone never becomes a side rail. */
+.ds-card.ds-card--modern[data-part='root']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(--ds-card-state-overlay, transparent);
+  opacity: 0;
+  transition: opacity var(--ds-card-transition-duration) var(--ds-card-transition-timing);
+}
+
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
+  color: var(--ds-card-color-hover, var(--ds-card-color));
+  transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform, translateY(-1px)));
+}
+
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true'])::after {
+  opacity: var(--ds-card-state-overlay-hover-opacity, 0.42);
 }
 
 /* a card that paints a pointer; a card that is actually operable */
@@ -50,6 +73,8 @@
 }
 .ds-card.ds-card--modern[data-part='root'][data-actionable='true'] {
   outline: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* radius */
@@ -71,94 +96,144 @@
 
 /* variant, at rest */
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
-  background-color: var(--ds-card-bg, var(--ds-card-elevated-bg, var(--ds-surface-card)));
-  background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-gradient-surface, none);
+  background-color: var(--ds-card-elevated-bg, var(--ds-card-bg, var(--ds-surface-card)));
+  background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-card-surface-gradient, var(--ds-gradient-surface, none));
   border: var(--ds-card-elevated-border-width, 0) solid var(--ds-card-border, transparent);
-  box-shadow: var(--ds-card-shadow);
+  box-shadow: var(--ds-card-elevated-shadow, var(--ds-card-shadow));
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'] {
-  background-color: var(--ds-card-bg, var(--ds-card-bordered-bg, var(--ds-surface-card)));
-  background-image: var(--ds-gradient-surface);
-  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px)) solid var(--ds-card-border, var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle))));
-  box-shadow: var(--ds-card-shadow, var(--ds-card-bordered-shadow, none));
+  background-color: var(--ds-card-bordered-bg, var(--ds-card-bg, var(--ds-surface-card)));
+  background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface, none));
+  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px)) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
+  box-shadow: var(--ds-card-bordered-shadow, none);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'] {
-  background-color: var(--ds-card-bg, var(--ds-card-flat-bg, var(--ds-surface-panel)));
-  background-image: var(--ds-gradient-surface);
+  background-color: var(--ds-card-flat-bg, var(--ds-card-bg, var(--ds-surface-panel)));
+  background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface, none));
   border: var(--ds-card-flat-border-width, 0) solid var(--ds-card-border, transparent);
-  box-shadow: var(--ds-card-shadow, var(--ds-card-flat-shadow, none));
+  box-shadow: var(--ds-card-flat-shadow, none);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'] {
-  background-color: var(--ds-card-bg, var(--ds-card-ghost-bg, transparent));
+  background-color: var(--ds-card-ghost-bg, transparent);
   background-image: none;
   border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color, transparent));
-  box-shadow: var(--ds-card-shadow, var(--ds-card-ghost-shadow, none));
+  box-shadow: var(--ds-card-ghost-shadow, none);
+}
+
+/* Orthogonal frame/elevation switches. Variant chooses the material; these
+   explicit props decide whether its frame and depth are visible. */
+.ds-card.ds-card--modern[data-part='root'][data-bordered='true']:not([data-variant='ghost']) {
+  border-width: var(--ds-card-border-width, 1px);
+  border-style: var(--ds-card-border-style, solid);
+}
+.ds-card.ds-card--modern[data-part='root'][data-bordered='false'] {
+  border-color: transparent;
+}
+.ds-card.ds-card--modern[data-part='root'][data-shadowed='true'] {
+  box-shadow: var(--ds-card-shadow);
+}
+.ds-card.ds-card--modern[data-part='root'][data-shadowed='false'] {
+  box-shadow: none;
+}
+
+/* The shared hover fill is a white-label state channel, independent from the
+   selected/pressed terminal states below. Semantic tones retain their hue and
+   use the state wash instead. */
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-disabled='true']) {
+  background-color: var(--ds-card-bg-hover, var(--ds-material-card-background-hover, var(--ds-card-bg)));
 }
 
 /* hover, only on an interactive card, and only where the variant answers */
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered'] {
-  box-shadow: var(--ds-card-shadow-hover);
-  transform: var(--ds-card-interactive-transform-hover, translateY(-1px));
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']) {
   --ds-elevation-lift: 1;
 }
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]) {
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']):not([data-shadowed='false']) {
+  box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
+}
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-disabled='true']) {
   border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
 }
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true']) {
+  transform: var(--ds-card-active-transform, translateY(0) scale(0.995));
+  color: var(--ds-card-color-active, var(--ds-card-color));
+  background-color: var(--ds-card-bg-active, var(--ds-material-card-background-active, var(--ds-card-bg)));
+  border-color: var(--ds-card-border-active, var(--ds-card-border-hover, var(--ds-card-border)));
+}
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true']):not([data-shadowed='false']) {
+  box-shadow: var(--ds-card-shadow-active, var(--ds-card-shadow));
+}
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true'])::after {
+  opacity: var(--ds-card-state-overlay-active-opacity, 0.68);
+}
 
-/* keyboard focus stacks a ring onto whatever shadow the card is wearing */
-.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='elevated'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-shadow), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true']) {
+  color: var(--ds-card-color-selected, var(--ds-card-color));
+  background-color: var(--ds-card-bg-selected, var(--ds-material-card-background-selected, var(--ds-card-bg)));
+  border-color: var(--ds-card-border-selected, var(--ds-color-primary));
+  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) solid var(--ds-card-border-selected, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
-.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='outlined'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-shadow, var(--ds-card-bordered-shadow, none)), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true']):not([data-shadowed='false']) {
+  box-shadow: var(--ds-card-shadow-selected, var(--ds-card-focus-ring));
 }
-.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='filled'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-shadow, var(--ds-card-flat-shadow, none)), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true'])::after {
+  opacity: var(--ds-card-state-overlay-selected-opacity, 0.3);
 }
-.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='ghost'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-shadow, var(--ds-card-ghost-shadow, none)), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
-}
-.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='elevated'][data-state~='focus-visible'][data-state~='hovered'] {
-  box-shadow: var(--ds-card-shadow-hover), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+
+/* Focus is an outline, so it never destroys tenant elevation or selection. */
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-disabled='true']) {
+  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width, 2px)) solid var(--ds-card-focus-ring-color, var(--ds-focus-ring-color));
+  outline-offset: var(--ds-card-focus-ring-offset, 2px);
 }
 
 /* colour tone: it wins the border and the fill, and it suppresses the surface tint */
 .ds-card.ds-card--modern[data-part='root'][data-tone='primary'] {
-  border-color: var(--ds-color-primary-500, #3b82f6);
-  background-color: var(--ds-color-primary-50, rgba(59, 130, 246, 0.05));
+  border-color: var(--ds-card-primary-border-color, var(--ds-color-primary));
+  background-color: var(--ds-card-primary-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg)));
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='success'] {
-  border-color: var(--ds-color-success-500, #22c55e);
-  background-color: var(--ds-color-success-50, rgba(34, 197, 94, 0.05));
+  border-color: var(--ds-card-success-border-color, var(--ds-color-success));
+  background-color: var(--ds-card-success-bg, color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-card-bg)));
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='warning'] {
-  border-color: var(--ds-color-warning-500, #f59e0b);
-  background-color: var(--ds-color-warning-50, rgba(245, 158, 11, 0.05));
+  border-color: var(--ds-card-warning-border-color, var(--ds-color-warning));
+  background-color: var(--ds-card-warning-bg, color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-card-bg)));
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='error'] {
-  border-color: var(--ds-color-error-500, #ef4444);
-  background-color: var(--ds-color-error-50, rgba(239, 68, 68, 0.05));
+  border-color: var(--ds-card-error-border-color, var(--ds-color-error));
+  background-color: var(--ds-card-error-bg, color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-card-bg)));
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='info'] {
-  border-color: var(--ds-color-info-500, #3b82f6);
-  background-color: var(--ds-color-info-50, rgba(59, 130, 246, 0.05));
+  border-color: var(--ds-card-info-border-color, var(--ds-color-info));
+  background-color: var(--ds-card-info-bg, color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-card-bg)));
   background-image: none;
+}
+
+/* Explicit frame suppression remains authoritative after semantic tones. */
+.ds-card.ds-card--modern[data-part='root'][data-bordered='false'] {
+  border-color: transparent;
+}
+
+/* Selection stays legible on semantic materials without becoming a side rail. */
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-disabled='true']) {
+  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) solid var(--ds-card-border-selected, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
+}
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-disabled='true']):not([data-shadowed='false']) {
+  box-shadow: var(--ds-card-shadow-selected, var(--ds-card-focus-ring));
 }
 
 /* ===========================================================================
  * WO-SKIN-05 checkpoint D1 — everything the ARC-07 migration left inline: the
  * loading state, and the header/body/actions text and rules.
  *
- * THE LOADING ROOT HAS NO `data-part`. It is a separate early return that reuses
- * the class list but never spreads `partAttributes` — so none of the variant, tone
- * or hover rules above have ever painted it, and none of them start now.
- * `:not([data-part='root'])` is how the two roots tell each other apart, and it is
- * load-bearing: `data-part='cover'` names the loading PLACEHOLDER in one render
- * path and the real cover WRAPPER in the other, and only the placeholder is filled.
+ * Loading shares the exact same root contract as the ready state. `data-loading`
+ * distinguishes the placeholder cover from the real cover wrapper, keeping
+ * radius, tenant material and accessibility state stable while content resolves.
  *
  * The `:not(.rottay-card-header)` guard on the header is equally load-bearing.
  * `Card.Header` is a compound a caller can drop into `children`, where it lands as
@@ -174,45 +249,192 @@
  * ======================================================================== */
 
 /* ---- loading: the cover placeholder (a fill the real cover wrapper never has) ---- */
-.ds-card.ds-card--modern:not([data-part='root']) > [data-part='cover'] {
+.ds-card.ds-card--modern[data-part='root'][data-loading='true'] > [data-part='cover'] {
+  height: var(--ds-card-cover-height, var(--ds-card-cover-min-height));
+  opacity: var(--ds-card-loading-cover-opacity, 0.6);
   background-color: var(--ds-surface-inset);
 }
 
 /* ---- loading: the four skeleton bars share one fill and one radius; only their
         widths and heights differ, and those stay inline ---- */
-.ds-card.ds-card--modern:not([data-part='root']) [data-part='skeleton'] [data-part='skeleton-bar'] {
-  background-color: var(--ds-surface-inset);
-  border-radius: var(--ds-radius-sm, 6px);
+.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] [data-part='skeleton-bar'] {
+  background-color: var(--ds-card-skeleton-bg, var(--ds-surface-inset));
+  background-image: linear-gradient(
+    100deg,
+    transparent 18%,
+    var(--ds-card-skeleton-highlight, transparent) 48%,
+    transparent 78%
+  );
+  background-size: 220% 100%;
+  border-radius: var(--ds-card-skeleton-radius, var(--ds-radius-sm, 6px));
+  animation: ds-card-skeleton-sweep var(--ds-card-skeleton-duration, var(--ds-motion-glacial)) var(--ds-card-transition-timing) infinite;
+}
+.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] {
+  opacity: var(--ds-card-loading-skeleton-opacity, 0.52);
 }
 
 /* ---- loading: the frosted spinner scrim ---- */
-.ds-card.ds-card--modern:not([data-part='root']) [data-part='loading-overlay'] {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  background-color: color-mix(in srgb, var(--ds-surface-card) 60%, transparent);
+.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  backdrop-filter: blur(var(--ds-card-loading-backdrop-blur, 4px));
+  -webkit-backdrop-filter: blur(var(--ds-card-loading-backdrop-blur, 4px));
+  background-color: var(--ds-card-loading-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 60%, transparent));
   border-radius: inherit;
+  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
+  display: block;
+  width: var(--ds-card-spinner-size, 24px);
+  height: var(--ds-card-spinner-size, 24px);
+  border: var(--ds-card-spinner-stroke, 2px) solid var(--ds-card-spinner-track, var(--ds-color-border));
+  border-block-start-color: var(--ds-card-spinner-color, var(--ds-color-primary));
+  border-radius: 50%;
+  animation: ds-card-spinner-rotate var(--ds-card-spinner-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
 /* ---- body ---- */
+.ds-card.ds-card--modern[data-part='root'] {
+  --ds-card-padding-current: var(--ds-card-padding-md, var(--ds-card-md-padding, 16px));
+}
+.ds-card.ds-card--modern[data-part='root'][data-padding='none'] {
+  --ds-card-padding-current: 0;
+}
+.ds-card.ds-card--modern[data-part='root'][data-padding='sm'] {
+  --ds-card-padding-current: var(--ds-card-padding-sm, var(--ds-card-sm-padding, 12px));
+}
+.ds-card.ds-card--modern[data-part='root'][data-padding='lg'] {
+  --ds-card-padding-current: var(--ds-card-padding-lg, var(--ds-card-lg-padding, 24px));
+}
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
+  min-inline-size: 0;
+  padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
   color: var(--ds-card-body-color, inherit);
+  font-size: var(--ds-card-body-font-size, inherit);
+  line-height: var(--ds-card-body-line-height, inherit);
+  overflow-wrap: anywhere;
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
+  padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='cover'] {
+  overflow: hidden;
+  line-height: 0;
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='cover'] > [data-part='cover-image'] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--ds-card-cover-object-fit, var(--ds-card-media-object-fit, cover));
+  object-position: var(--ds-card-cover-object-position, center);
+}
+
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='top'] > [data-part='cover'],
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='bottom'] > [data-part='cover'] {
+  aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio, 16 / 9));
+}
+
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='start'],
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='end'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='start'] > [data-part='cover'],
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='end'] > [data-part='cover'] {
+  flex: 1 1 var(--ds-card-cover-inline-size, 12rem);
+  min-inline-size: min(100%, var(--ds-card-cover-inline-min-size, 9rem));
+  min-block-size: var(--ds-card-cover-block-min-size, 10rem);
+}
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='start'] > [data-part='body'],
+.ds-card.ds-card--modern[data-part='root'][data-cover-position='end'] > [data-part='body'] {
+  flex: 999 1 var(--ds-card-body-inline-min-size, 16rem);
 }
 
 /* ---- this engine's OWN header (never the Card.Header compound) ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-card-header-gap, var(--ds-card-header-actions-gap));
+}
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header)[data-divider='true'] {
-  border-bottom: 1px solid var(--ds-card-header-border, var(--ds-color-border));
+  padding-block-end: var(--ds-card-header-padding-bottom);
+  margin-block-end: var(--ds-card-header-padding-bottom);
+  border-block-end: var(--ds-card-header-border-width, 1px) solid var(--ds-card-header-border, var(--ds-color-border));
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
+  flex: 0 0 auto;
+  max-inline-size: 100%;
+  margin-inline-start: var(--ds-card-header-actions-gap);
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div {
+  min-inline-size: 0;
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='title'] {
+  margin: 0;
   color: var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)));
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-card-title-font-size);
+  font-weight: var(--ds-card-title-font-weight);
+  line-height: var(--ds-card-title-line-height);
+  letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading));
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='description'] {
   color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-card-subtitle-font-size);
+  line-height: var(--ds-card-body-line-height);
+  max-inline-size: var(--ds-card-header-copy-max-width, 68ch);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='description'][data-has-title='true'] {
+  margin-block-start: var(--ds-card-subtitle-margin-top);
 }
 
 /* ---- actions rail ---- */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
-  border-top: 1px solid var(--ds-card-footer-border, var(--ds-color-border));
+  border-block-start: var(--ds-card-footer-border-width, 1px) solid var(--ds-card-footer-border, var(--ds-color-border));
   background-color: var(--ds-card-footer-bg, transparent);
+  gap: var(--ds-card-actions-gap, var(--ds-spacing-2, 8px));
+  margin-block-start: var(--ds-card-actions-margin-top, var(--ds-spacing-4, 16px));
+  padding-block-start: var(--ds-card-actions-padding-top, var(--ds-spacing-4, 16px));
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] > * {
+  max-inline-size: 100%;
+}
+
+@container (max-width: 28rem) {
+  .ds-card.ds-card--modern[data-part='root'] {
+    --ds-card-actions-justify: stretch;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+    flex-direction: column;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
+    inline-size: 100%;
+    margin-inline-start: 0;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'][data-cover-position='start'] > [data-part='cover'],
+  .ds-card.ds-card--modern[data-part='root'][data-cover-position='end'] > [data-part='cover'] {
+    flex-basis: 100%;
+    min-block-size: 0;
+    aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio, 16 / 9));
+  }
+
+  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] > * {
+    flex: 1 1 auto;
+  }
 }
 
 /* ===========================================================================
@@ -255,6 +477,95 @@
   background-color: transparent;
   background-image: none;
 }
-[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered'] {
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
   background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
+}
+
+/* Instance-level suppression and unavailable state are terminal even when a
+   tenant selects a stronger anatomy recipe. */
+.ds-card.ds-card--modern[data-part='root'][data-bordered='false'] {
+  border-color: transparent;
+}
+.ds-card.ds-card--modern[data-part='root'][data-shadowed='false'] {
+  box-shadow: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-disabled='true'] {
+  cursor: var(--ds-card-disabled-cursor, not-allowed);
+  opacity: var(--ds-card-disabled-opacity, var(--ds-state-disabled-opacity, 0.6));
+  color: var(--ds-card-color-disabled, var(--ds-color-text-disabled));
+  background-color: var(--ds-card-bg-disabled, var(--ds-material-card-background-disabled));
+  border-color: var(--ds-card-border-disabled, var(--ds-material-card-border-disabled));
+  outline: none;
+  box-shadow: none;
+  transform: none;
+  pointer-events: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-disabled='true']::after {
+  opacity: 0;
+}
+
+@keyframes ds-card-spinner-rotate {
+  to { transform: rotate(1turn); }
+}
+
+@keyframes ds-card-skeleton-sweep {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-card.ds-card--modern[data-part='root'],
+  .ds-card.ds-card--modern[data-part='root'] *,
+  .ds-card.ds-card--modern[data-part='root']::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'] {
+    transform: none;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
+    animation: none;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton-bar'] {
+    animation: none;
+    background-image: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-card.ds-card--modern[data-part='root'] {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible'] {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'] {
+    border-color: Highlight;
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
+    background: Canvas;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
+    border-color: CanvasText;
+    border-block-start-color: Highlight;
+  }
+
+  .ds-card.ds-card--modern[data-part='root']::after {
+    display: none;
+  }
 }

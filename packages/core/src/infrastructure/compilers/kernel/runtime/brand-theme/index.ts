@@ -12,42 +12,53 @@
  * and a CSS string from a BrandTheme + vertical baseline.
  */
 
+import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import type {
   BrandTheme,
   BrandPalette,
   CompileBrandTheme,
   CompiledBrand,
   BrandCompilerInput,
-} from '@/foundation/contracts/composition/tenants/themes';
-import type { EngineName } from '@/foundation/contracts/runtime/engine';
+} from "@/foundation/contracts/composition/tenants/themes";
+import type { EngineName } from "@/foundation/contracts/runtime/engine";
+import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import type {
   TenantBranding,
   TenantTokenOverrides,
-} from '@/foundation/contracts/composition/tenants';
-import type { PersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
+} from "@/foundation/contracts/composition/tenants";
+import type { PersonalityTokens } from "@/foundation/contracts/kernel/tokens/personality";
+import {
+  SEMANTIC_SURFACE_ROLES,
+  type SemanticSurfaceRoleMap,
+} from "@/foundation/contracts/kernel/tokens/materials";
+import {
+  SEMANTIC_TYPOGRAPHY_ROLES,
+  type SemanticTypographyRoleTokens,
+  type SemanticTypographyTokens,
+} from "@/foundation/contracts/kernel/tokens/typography";
 import {
   RAMP_STEPS,
   deriveOklchRamp,
   type RampSurface,
-} from '@/foundation/kernel/color/oklch/ramp';
-import { chromeToVariables } from '../../foundation/css/chrome-variables';
+} from "@/foundation/kernel/color/oklch/ramp";
+import { chromeToVariables } from "../../foundation/css/chrome-variables";
 import {
   springLinearEasing,
   springLinearEasingGentle,
-} from '../../foundation/motion/spring-easing';
+} from "../../foundation/motion/spring-easing";
 
 /**
  * A BrandTheme opts into generated spring physics only when it declares BOTH
  * tension and friction and does not explicitly disable spring (`useSpring:
- * false`, e.g. bithire's flat/calm motion law). Absent `useSpring` defaults
+ * false`, e.g. bithire's calm operational motion law). Absent `useSpring` defaults
  * to enabled, matching every first-party theme that sets tension/friction.
  */
 function isSpringEligible(bt: BrandTheme): boolean {
   const motion = bt.motion;
   return (
     !!motion &&
-    typeof motion.springTension === 'number' &&
-    typeof motion.springFriction === 'number' &&
+    typeof motion.springTension === "number" &&
+    typeof motion.springFriction === "number" &&
     motion.useSpring !== false
   );
 }
@@ -64,7 +75,9 @@ function isSpringEligible(bt: BrandTheme): boolean {
  * generated tenant artifact without a tenant manually authoring a literal
  * override.
  */
-export function brandThemeToTokenOverrides(bt: BrandTheme): Partial<TenantTokenOverrides> {
+export function brandThemeToTokenOverrides(
+  bt: BrandTheme
+): Partial<TenantTokenOverrides> {
   const overrides: Partial<TenantTokenOverrides> = {};
   if (bt.surfaces) {
     overrides.surface = bt.surfaces.surface;
@@ -77,7 +90,10 @@ export function brandThemeToTokenOverrides(bt: BrandTheme): Partial<TenantTokenO
   }
   if (isSpringEligible(bt)) {
     overrides.motion = {
-      spring: springLinearEasing(bt.motion!.springTension!, bt.motion!.springFriction!),
+      spring: springLinearEasing(
+        bt.motion!.springTension!,
+        bt.motion!.springFriction!
+      ),
     };
   }
   return overrides;
@@ -89,7 +105,9 @@ export function brandThemeToTokenOverrides(bt: BrandTheme): Partial<TenantTokenO
  * Maps BrandTheme.motion/charts/chrome/typography to the PersonalityTokens
  * shape that the existing personality merge chain consumes.
  */
-export function brandThemeToPersonality(bt: BrandTheme): Partial<PersonalityTokens> {
+export function brandThemeToPersonality(
+  bt: BrandTheme
+): Partial<PersonalityTokens> {
   const result: Partial<PersonalityTokens> = {};
 
   if (bt.motion) {
@@ -107,11 +125,11 @@ export function brandThemeToPersonality(bt: BrandTheme): Partial<PersonalityToke
       staggerDelay: bt.motion.staggerDelay,
       staggerMax: bt.motion.staggerMax,
       countUpEnabled: bt.motion.countUpEnabled,
-    } as PersonalityTokens['animation'];
+    } as PersonalityTokens["animation"];
   }
 
   if (bt.charts) {
-    result.chart = bt.charts as PersonalityTokens['chart'];
+    result.chart = bt.charts as PersonalityTokens["chart"];
   }
 
   if (bt.typography) {
@@ -119,15 +137,15 @@ export function brandThemeToPersonality(bt: BrandTheme): Partial<PersonalityToke
       headingWeightBias: bt.typography.headingWeightBias,
       headingLetterSpacing: bt.typography.headingLetterSpacing,
       labelStyle: bt.typography.labelStyle,
-    } as PersonalityTokens['typography'];
+    } as PersonalityTokens["typography"];
   }
 
   if (bt.chrome?.accent) {
-    result.accent = bt.chrome.accent as PersonalityTokens['accent'];
+    result.accent = bt.chrome.accent as PersonalityTokens["accent"];
   }
 
   if (bt.chrome?.card) {
-    result.card = bt.chrome.card as PersonalityTokens['card'];
+    result.card = bt.chrome.card as PersonalityTokens["card"];
   }
 
   return result;
@@ -175,18 +193,30 @@ export function brandThemeToBranding(bt: BrandTheme): Partial<TenantBranding> {
  */
 export function deepMergeTokenOverrides(
   base: Partial<TenantTokenOverrides>,
-  override: Partial<TenantTokenOverrides> | undefined,
+  override: Partial<TenantTokenOverrides> | undefined
 ): Partial<TenantTokenOverrides> {
   if (!override) return base;
   return {
-    surface: override.surface ? { ...base.surface, ...override.surface } : base.surface,
-    motion: override.motion ? { ...base.motion, ...override.motion } : base.motion,
-    borderRadius: override.borderRadius ? { ...base.borderRadius, ...override.borderRadius } : base.borderRadius,
-    shadows: override.shadows ? { ...base.shadows, ...override.shadows } : base.shadows,
+    surface: override.surface
+      ? { ...base.surface, ...override.surface }
+      : base.surface,
+    motion: override.motion
+      ? { ...base.motion, ...override.motion }
+      : base.motion,
+    borderRadius: override.borderRadius
+      ? { ...base.borderRadius, ...override.borderRadius }
+      : base.borderRadius,
+    shadows: override.shadows
+      ? { ...base.shadows, ...override.shadows }
+      : base.shadows,
     densityScale: override.densityScale ?? base.densityScale,
     glass: override.glass ? { ...base.glass, ...override.glass } : base.glass,
-    gradients: override.gradients ? { ...base.gradients, ...override.gradients } : base.gradients,
-    overlays: override.overlays ? { ...base.overlays, ...override.overlays } : base.overlays,
+    gradients: override.gradients
+      ? { ...base.gradients, ...override.gradients }
+      : base.gradients,
+    overlays: override.overlays
+      ? { ...base.overlays, ...override.overlays }
+      : base.overlays,
   };
 }
 
@@ -195,14 +225,20 @@ export function deepMergeTokenOverrides(
 /** Merge two partial PersonalityTokens (per-dimension spread). */
 export function mergePartialPersonality(
   base: Partial<PersonalityTokens> | undefined,
-  override: Partial<PersonalityTokens>,
+  override: Partial<PersonalityTokens>
 ): Partial<PersonalityTokens> {
   if (!base) return override;
   return {
-    animation: override.animation ? { ...base.animation, ...override.animation } : base.animation,
+    animation: override.animation
+      ? { ...base.animation, ...override.animation }
+      : base.animation,
     chart: override.chart ? { ...base.chart, ...override.chart } : base.chart,
-    typography: override.typography ? { ...base.typography, ...override.typography } : base.typography,
-    accent: override.accent ? { ...base.accent, ...override.accent } : base.accent,
+    typography: override.typography
+      ? { ...base.typography, ...override.typography }
+      : base.typography,
+    accent: override.accent
+      ? { ...base.accent, ...override.accent }
+      : base.accent,
     card: override.card ? { ...base.card, ...override.card } : base.card,
   };
 }
@@ -211,7 +247,7 @@ export function mergePartialPersonality(
 
 /** The DS foundation's light canvas -- the ground a light-surface tenant
  * falls back to when it does not declare its own `backgroundColor`. */
-const LIGHT_DEFAULT_GROUND = '#FFFFFF';
+const LIGHT_DEFAULT_GROUND = "#FFFFFF";
 
 /**
  * A tenant is dark-surface when it declares ONLY a dark ground
@@ -224,7 +260,9 @@ const LIGHT_DEFAULT_GROUND = '#FFFFFF';
  * light-first). There is no light/dark toggle in the derivation itself --
  * each tenant gets exactly one ramp, keyed to this classification.
  */
-export function isDarkSurfacePalette(palette: BrandPalette | undefined): boolean {
+export function isDarkSurfacePalette(
+  palette: BrandPalette | undefined
+): boolean {
   return !!palette?.darkBackgroundColor && !palette?.backgroundColor;
 }
 
@@ -239,13 +277,25 @@ interface RampRoleSpec {
  * tenant re-derives their ramp from the same seed against its dark ground. */
 function rampRoleSpecs(palette: BrandPalette): readonly RampRoleSpec[] {
   return [
-    { name: 'primary', light: palette.primaryColor, dark: palette.darkPrimaryColor },
-    { name: 'secondary', light: palette.secondaryColor, dark: palette.darkSecondaryColor },
-    { name: 'accent', light: palette.accentColor, dark: palette.darkAccentColor },
-    { name: 'success', light: palette.successColor, dark: undefined },
-    { name: 'warning', light: palette.warningColor, dark: undefined },
-    { name: 'error', light: palette.errorColor, dark: undefined },
-    { name: 'info', light: palette.infoColor, dark: undefined },
+    {
+      name: "primary",
+      light: palette.primaryColor,
+      dark: palette.darkPrimaryColor,
+    },
+    {
+      name: "secondary",
+      light: palette.secondaryColor,
+      dark: palette.darkSecondaryColor,
+    },
+    {
+      name: "accent",
+      light: palette.accentColor,
+      dark: palette.darkAccentColor,
+    },
+    { name: "success", light: palette.successColor, dark: undefined },
+    { name: "warning", light: palette.warningColor, dark: undefined },
+    { name: "error", light: palette.errorColor, dark: undefined },
+    { name: "info", light: palette.infoColor, dark: undefined },
   ];
 }
 
@@ -257,11 +307,16 @@ function rampRoleSpecs(palette: BrandPalette): readonly RampRoleSpec[] {
  * itself (OKLCH lightness/chroma interpolation, hue held constant, gamut
  * mapped per step).
  */
-export function deriveTenantColorRamps(palette: BrandPalette | undefined): Record<string, string> {
+export function deriveTenantColorRamps(
+  palette: BrandPalette | undefined
+): Record<string, string> {
   if (!palette) return {};
   const dark = isDarkSurfacePalette(palette);
-  const surface: RampSurface = dark ? 'dark' : 'light';
-  const ground = dark && palette.darkBackgroundColor ? palette.darkBackgroundColor : (palette.backgroundColor ?? LIGHT_DEFAULT_GROUND);
+  const surface: RampSurface = dark ? "dark" : "light";
+  const ground =
+    dark && palette.darkBackgroundColor
+      ? palette.darkBackgroundColor
+      : palette.backgroundColor ?? LIGHT_DEFAULT_GROUND;
 
   const vars: Record<string, string> = {};
   for (const role of rampRoleSpecs(palette)) {
@@ -283,30 +338,159 @@ export function deriveTenantColorRamps(palette: BrandPalette | undefined): Recor
  * splitting directly; these dark vars are consumed by DB-driven tenants
  * where runtime switching is needed.
  */
-function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
+export function semanticSurfaceRolesToCssVariables(
+  surfaceRoles: SemanticSurfaceRoleMap | undefined
+): Record<string, string> {
+  if (!surfaceRoles) return {};
+
   const vars: Record<string, string> = {};
+  for (const role of SEMANTIC_SURFACE_ROLES) {
+    const surfaceRoleTokens = surfaceRoles[role];
+    if (!surfaceRoleTokens) continue;
+
+    const prefix = `--ds-material-${role}`;
+    if (surfaceRoleTokens.background) {
+      vars[`--ds-surface-${role}`] = surfaceRoleTokens.background;
+      // The semantic surface is the single paint authority. Legacy-prefixed
+      // compatibility channels remain aliases so a later DB TenantTheme
+      // override cannot be masked by a static vertical literal.
+      vars[`${prefix}-background`] = `var(--ds-surface-${role})`;
+    }
+    if (surfaceRoleTokens.backgroundHover)
+      vars[`${prefix}-background-hover`] = surfaceRoleTokens.backgroundHover;
+    if (surfaceRoleTokens.backgroundActive)
+      vars[`${prefix}-background-active`] = surfaceRoleTokens.backgroundActive;
+    if (surfaceRoleTokens.backgroundSelected)
+      vars[`${prefix}-background-selected`] =
+        surfaceRoleTokens.backgroundSelected;
+    if (surfaceRoleTokens.backgroundDisabled)
+      vars[`${prefix}-background-disabled`] =
+        surfaceRoleTokens.backgroundDisabled;
+    if (surfaceRoleTokens.foreground)
+      vars[`${prefix}-foreground`] = surfaceRoleTokens.foreground;
+    if (surfaceRoleTokens.foregroundMuted)
+      vars[`${prefix}-foreground-muted`] = surfaceRoleTokens.foregroundMuted;
+    if (surfaceRoleTokens.foregroundDisabled)
+      vars[`${prefix}-foreground-disabled`] =
+        surfaceRoleTokens.foregroundDisabled;
+    if (surfaceRoleTokens.border)
+      vars[`${prefix}-border`] = surfaceRoleTokens.border;
+    if (surfaceRoleTokens.borderStrong)
+      vars[`${prefix}-border-strong`] = surfaceRoleTokens.borderStrong;
+    if (surfaceRoleTokens.borderHover)
+      vars[`${prefix}-border-hover`] = surfaceRoleTokens.borderHover;
+    if (surfaceRoleTokens.borderActive)
+      vars[`${prefix}-border-active`] = surfaceRoleTokens.borderActive;
+    if (surfaceRoleTokens.borderSelected)
+      vars[`${prefix}-border-selected`] = surfaceRoleTokens.borderSelected;
+    if (surfaceRoleTokens.borderDisabled)
+      vars[`${prefix}-border-disabled`] = surfaceRoleTokens.borderDisabled;
+    if (surfaceRoleTokens.focusRing)
+      vars[`${prefix}-focus-ring`] = surfaceRoleTokens.focusRing;
+    if (surfaceRoleTokens.shadow)
+      vars[`${prefix}-shadow`] = surfaceRoleTokens.shadow;
+    if (surfaceRoleTokens.shadowHover)
+      vars[`${prefix}-shadow-hover`] = surfaceRoleTokens.shadowHover;
+    if (surfaceRoleTokens.shadowActive)
+      vars[`${prefix}-shadow-active`] = surfaceRoleTokens.shadowActive;
+    if (surfaceRoleTokens.shadowSelected)
+      vars[`${prefix}-shadow-selected`] = surfaceRoleTokens.shadowSelected;
+    if (surfaceRoleTokens.highlight)
+      vars[`${prefix}-highlight`] = surfaceRoleTokens.highlight;
+    if (surfaceRoleTokens.texture)
+      vars[`${prefix}-texture`] = surfaceRoleTokens.texture;
+  }
+
+  const card = surfaceRoles.card;
+  if (card?.background)
+    vars["--ds-surface-card-bg"] = "var(--ds-surface-card)";
+  if (card?.border)
+    vars["--ds-surface-card-border"] = "var(--ds-material-card-border)";
+  if (card?.borderStrong)
+    vars["--ds-surface-card-border-strong"] =
+      "var(--ds-material-card-border-strong)";
+  if (card?.shadow)
+    vars["--ds-surface-card-shadow"] = "var(--ds-material-card-shadow)";
+  if (card?.shadowHover)
+    vars["--ds-surface-card-shadow-hover"] =
+      "var(--ds-material-card-shadow-hover)";
+
+  const panel = surfaceRoles.panel;
+  if (panel?.background)
+    vars["--ds-surface-panel-bg"] = "var(--ds-surface-panel)";
+  const control = surfaceRoles.control;
+  if (control?.background)
+    vars["--ds-surface-control-bg"] = "var(--ds-surface-control)";
+  const raised = surfaceRoles.raised;
+  if (raised?.background)
+    vars["--ds-color-surface-raised"] = "var(--ds-surface-raised)";
+
+  return vars;
+}
+
+/**
+ * @deprecated Use `semanticSurfaceRolesToCssVariables`.
+ * Kept for one compatibility cycle; this does not represent Material UI.
+ */
+export const semanticMaterialsToCssVariables =
+  semanticSurfaceRolesToCssVariables;
+
+function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
+  // A compiled BrandTheme is the complete static baseline for a first-party
+  // product. Keep the three ramp axes explicit in that artifact instead of
+  // relying on the consumer-side `var(--ds-*-scale, 1)` fallbacks: a DB
+  // TenantTheme artifact emits the same canonical properties, so both sides
+  // of the cascade remain observable and comparable without a second app-side
+  // theme channel. Type and radius are neutral until a bounded appearance
+  // override retunes them; density preserves the authored BrandTheme value.
+  const vars: Record<string, string> = {
+    "--ds-type-scale": "1",
+    "--ds-radius-scale": "1",
+    "--ds-density-scale": String(bt.surfaces?.densityScale ?? 1),
+  };
   if (bt.palette) {
     // Light-mode palette (default)
-    if (bt.palette.primaryColor) vars['--ds-color-primary'] = bt.palette.primaryColor;
-    if (bt.palette.secondaryColor) vars['--ds-color-secondary'] = bt.palette.secondaryColor;
-    if (bt.palette.accentColor) vars['--ds-color-accent'] = bt.palette.accentColor;
-    if (bt.palette.successColor) vars['--ds-color-success'] = bt.palette.successColor;
-    if (bt.palette.warningColor) vars['--ds-color-warning'] = bt.palette.warningColor;
-    if (bt.palette.errorColor) vars['--ds-color-error'] = bt.palette.errorColor;
-    if (bt.palette.infoColor) vars['--ds-color-info'] = bt.palette.infoColor;
+    if (bt.palette.primaryColor)
+      vars["--ds-color-primary"] = bt.palette.primaryColor;
+    if (bt.palette.secondaryColor)
+      vars["--ds-color-secondary"] = bt.palette.secondaryColor;
+    if (bt.palette.accentColor)
+      vars["--ds-color-accent"] = bt.palette.accentColor;
+    if (bt.palette.textPrimaryColor)
+      vars["--ds-color-text-primary"] = bt.palette.textPrimaryColor;
+    if (bt.palette.textSecondaryColor)
+      vars["--ds-color-text-secondary"] = bt.palette.textSecondaryColor;
+    if (bt.palette.textMutedColor)
+      vars["--ds-color-text-muted"] = bt.palette.textMutedColor;
+    if (bt.palette.textDisabledColor)
+      vars["--ds-color-text-disabled"] = bt.palette.textDisabledColor;
+    if (bt.palette.borderPrimaryColor)
+      vars["--ds-color-border-primary"] = bt.palette.borderPrimaryColor;
+    if (bt.palette.borderSecondaryColor)
+      vars["--ds-color-border-secondary"] = bt.palette.borderSecondaryColor;
+    if (bt.palette.successColor)
+      vars["--ds-color-success"] = bt.palette.successColor;
+    if (bt.palette.warningColor)
+      vars["--ds-color-warning"] = bt.palette.warningColor;
+    if (bt.palette.errorColor) vars["--ds-color-error"] = bt.palette.errorColor;
+    if (bt.palette.infoColor) vars["--ds-color-info"] = bt.palette.infoColor;
 
     // Dark-mode palette aliases consumed by ThemeProvider.
-    if (bt.palette.darkPrimaryColor) vars['--ds-color-dark-primary'] = bt.palette.darkPrimaryColor;
-    if (bt.palette.darkSecondaryColor) vars['--ds-color-dark-secondary'] = bt.palette.darkSecondaryColor;
-    if (bt.palette.darkAccentColor) vars['--ds-color-dark-accent'] = bt.palette.darkAccentColor;
+    if (bt.palette.darkPrimaryColor)
+      vars["--ds-color-dark-primary"] = bt.palette.darkPrimaryColor;
+    if (bt.palette.darkSecondaryColor)
+      vars["--ds-color-dark-secondary"] = bt.palette.darkSecondaryColor;
+    if (bt.palette.darkAccentColor)
+      vars["--ds-color-dark-accent"] = bt.palette.darkAccentColor;
     // The clear-mode ground. The dark twin is emitted by the generator's dark
     // block, which is the only place a `[data-theme='dark']` selector exists.
     if (bt.palette.backgroundColor) {
-      vars['--ds-color-bg-primary'] = bt.palette.backgroundColor;
-      vars['--ds-color-bg'] = bt.palette.backgroundColor;
-      vars['--ds-color-background'] = bt.palette.backgroundColor;
+      vars["--ds-color-bg-primary"] = bt.palette.backgroundColor;
+      vars["--ds-color-bg"] = bt.palette.backgroundColor;
+      vars["--ds-color-background"] = bt.palette.backgroundColor;
     }
-    if (bt.palette.darkBackgroundColor) vars['--ds-color-dark-bg'] = bt.palette.darkBackgroundColor;
+    if (bt.palette.darkBackgroundColor)
+      vars["--ds-color-dark-bg"] = bt.palette.darkBackgroundColor;
 
     // The semantic control surface, which `--ds-surface-control` derives from and
     // every modern input control falls back to. It belongs here and not in the
@@ -315,41 +499,61 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     // white controls on its own dark ground. The dark twin is emitted by the
     // generator's dark block, which is the only place that knows the mode.
     const inputBg = bt.chrome?.controls?.input?.bg;
-    if (inputBg) vars['--ds-color-bg-input'] = inputBg;
+    if (inputBg) vars["--ds-color-bg-input"] = inputBg;
   }
   if (bt.typography) {
     const ty = bt.typography;
-    if (ty.fontFamilyBase) vars['--ds-font-family-base'] = ty.fontFamilyBase;
-    if (ty.fontFamilyHeading) vars['--ds-font-family-heading'] = ty.fontFamilyHeading;
-    if (ty.fontFamilyMono) vars['--ds-font-family-mono'] = ty.fontFamilyMono;
-    if (ty.fontFamilyDisplay) vars['--ds-font-family-display'] = ty.fontFamilyDisplay;
+    if (ty.fontFamilyBase)
+      vars["--ds-font-family-base"] = withArabicSafeFallback(ty.fontFamilyBase);
+    if (ty.fontFamilyHeading)
+      vars["--ds-font-family-heading"] = withArabicSafeFallback(
+        ty.fontFamilyHeading
+      );
+    if (ty.fontFamilyMono) vars["--ds-font-family-mono"] = ty.fontFamilyMono;
+    if (ty.fontFamilyDisplay)
+      vars["--ds-font-family-display"] = withArabicSafeFallback(
+        ty.fontFamilyDisplay
+      );
     if (ty.letterSpacing) {
-      if (ty.letterSpacing.display) vars['--ds-letter-spacing-display'] = ty.letterSpacing.display;
-      if (ty.letterSpacing.heading) vars['--ds-letter-spacing-heading'] = ty.letterSpacing.heading;
-      if (ty.letterSpacing.body) vars['--ds-letter-spacing-body'] = ty.letterSpacing.body;
-      if (ty.letterSpacing.mono) vars['--ds-letter-spacing-mono'] = ty.letterSpacing.mono;
+      if (ty.letterSpacing.display)
+        vars["--ds-letter-spacing-display"] = ty.letterSpacing.display;
+      if (ty.letterSpacing.heading)
+        vars["--ds-letter-spacing-heading"] = ty.letterSpacing.heading;
+      if (ty.letterSpacing.body)
+        vars["--ds-letter-spacing-body"] = ty.letterSpacing.body;
+      if (ty.letterSpacing.mono)
+        vars["--ds-letter-spacing-mono"] = ty.letterSpacing.mono;
     }
     if (ty.lineHeight) {
-      if (ty.lineHeight.display != null) vars['--ds-line-height-display'] = String(ty.lineHeight.display);
-      if (ty.lineHeight.heading != null) vars['--ds-line-height-heading'] = String(ty.lineHeight.heading);
-      if (ty.lineHeight.body != null) vars['--ds-line-height-body'] = String(ty.lineHeight.body);
-      if (ty.lineHeight.tight != null) vars['--ds-line-height-tight'] = String(ty.lineHeight.tight);
-      if (ty.lineHeight.relaxed != null) vars['--ds-line-height-relaxed'] = String(ty.lineHeight.relaxed);
+      if (ty.lineHeight.display != null)
+        vars["--ds-line-height-display"] = String(ty.lineHeight.display);
+      if (ty.lineHeight.heading != null)
+        vars["--ds-line-height-heading"] = String(ty.lineHeight.heading);
+      if (ty.lineHeight.body != null)
+        vars["--ds-line-height-body"] = String(ty.lineHeight.body);
+      if (ty.lineHeight.tight != null)
+        vars["--ds-line-height-tight"] = String(ty.lineHeight.tight);
+      if (ty.lineHeight.relaxed != null)
+        vars["--ds-line-height-relaxed"] = String(ty.lineHeight.relaxed);
     }
   }
   if (bt.surfaces) {
     const su = bt.surfaces;
+    Object.assign(
+      vars,
+      semanticSurfaceRolesToCssVariables(su.surfaceRoles ?? su.materials)
+    );
     if (su.borderRadius) {
-      if (su.borderRadius.sm) vars['--ds-radius-sm'] = su.borderRadius.sm;
-      if (su.borderRadius.md) vars['--ds-radius-md'] = su.borderRadius.md;
-      if (su.borderRadius.lg) vars['--ds-radius-lg'] = su.borderRadius.lg;
-      if (su.borderRadius.xl) vars['--ds-radius-xl'] = su.borderRadius.xl;
+      if (su.borderRadius.sm) vars["--ds-radius-sm"] = su.borderRadius.sm;
+      if (su.borderRadius.md) vars["--ds-radius-md"] = su.borderRadius.md;
+      if (su.borderRadius.lg) vars["--ds-radius-lg"] = su.borderRadius.lg;
+      if (su.borderRadius.xl) vars["--ds-radius-xl"] = su.borderRadius.xl;
     }
     if (su.shadows) {
-      if (su.shadows.sm) vars['--ds-shadow-sm'] = su.shadows.sm;
-      if (su.shadows.md) vars['--ds-shadow-md'] = su.shadows.md;
-      if (su.shadows.lg) vars['--ds-shadow-lg'] = su.shadows.lg;
-      if (su.shadows.xl) vars['--ds-shadow-xl'] = su.shadows.xl;
+      if (su.shadows.sm) vars["--ds-shadow-sm"] = su.shadows.sm;
+      if (su.shadows.md) vars["--ds-shadow-md"] = su.shadows.md;
+      if (su.shadows.lg) vars["--ds-shadow-lg"] = su.shadows.lg;
+      if (su.shadows.xl) vars["--ds-shadow-xl"] = su.shadows.xl;
     }
     if (su.glass) {
       // 'none' is legacy zero-decoration suppression. The premium.css defaults + the
@@ -358,28 +562,35 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       // tenant (including rottay, killing its surface tint). A tenant stays flat via
       // --ds-effect-intensity: 0 (bithire), not by nulling the role token. Only a real
       // (non-'none') value is emitted.
-      if (su.glass.background && su.glass.background !== 'none') vars['--ds-glass-bg'] = su.glass.background;
-      if (su.glass.border && su.glass.border !== 'none') vars['--ds-glass-border'] = su.glass.border;
-      if (su.glass.blur && su.glass.blur !== 'none') vars['--ds-glass-blur'] = su.glass.blur;
+      if (su.glass.background && su.glass.background !== "none")
+        vars["--ds-glass-bg"] = su.glass.background;
+      if (su.glass.border && su.glass.border !== "none")
+        vars["--ds-glass-border"] = su.glass.border;
+      if (su.glass.blur && su.glass.blur !== "none")
+        vars["--ds-glass-blur"] = su.glass.blur;
     }
     if (su.gradients) {
-      if (su.gradients.primary && su.gradients.primary !== 'none') vars['--ds-gradient-primary'] = su.gradients.primary;
-      if (su.gradients.surface && su.gradients.surface !== 'none') vars['--ds-gradient-surface'] = su.gradients.surface;
-      if (su.gradients.mesh && su.gradients.mesh !== 'none') vars['--ds-gradient-mesh'] = su.gradients.mesh;
+      if (su.gradients.primary && su.gradients.primary !== "none")
+        vars["--ds-gradient-primary"] = su.gradients.primary;
+      if (su.gradients.surface && su.gradients.surface !== "none")
+        vars["--ds-gradient-surface"] = su.gradients.surface;
+      if (su.gradients.mesh && su.gradients.mesh !== "none")
+        vars["--ds-gradient-mesh"] = su.gradients.mesh;
     }
     if (su.overlays) {
-      if (su.overlays.light) vars['--ds-overlay-light'] = su.overlays.light;
-      if (su.overlays.medium) vars['--ds-overlay-medium'] = su.overlays.medium;
-      if (su.overlays.heavy) vars['--ds-overlay-heavy'] = su.overlays.heavy;
+      if (su.overlays.light) vars["--ds-overlay-light"] = su.overlays.light;
+      if (su.overlays.medium) vars["--ds-overlay-medium"] = su.overlays.medium;
+      if (su.overlays.heavy) vars["--ds-overlay-heavy"] = su.overlays.heavy;
     }
     // Premium effect-intensity dial (engines/modern spec section 5). Multiplies the
     // gradient/glass/glow layer via --ds-effect-intensity; 0 collapses it to flat.
     // Defaults to 1 (full Quiet Premium) when the theme does not set it.
-    vars['--ds-effect-intensity'] = String(su.effectIntensity ?? 1);
+    vars["--ds-effect-intensity"] = String(su.effectIntensity ?? 1);
   }
   Object.assign(vars, deriveTenantColorRamps(bt.palette));
   setTintScaleVariables(vars, bt);
   setTypeRampVariables(vars);
+  setSemanticTypographyVariables(vars, bt.typography?.roles);
   setMotionVariables(vars, bt);
   return vars;
 }
@@ -396,13 +607,31 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
  * entrances is the same value tabs and tooltips animate at (design-language §2.6
  * notes calm "matches BITHIRE_PROFILE.transitionSpeed: '200ms'").
  */
-function setMotionVariables(vars: Record<string, string>, bt: BrandTheme): void {
+function setMotionVariables(
+  vars: Record<string, string>,
+  bt: BrandTheme
+): void {
   const calmMs = bt.motion?.entranceDuration ?? 200;
-  vars['--ds-motion-instant'] = '120ms';
-  vars['--ds-motion-calm'] = `${calmMs}ms`;
-  vars['--ds-motion-deliberate'] = '320ms';
-  vars['--ds-ease-standard'] = 'cubic-bezier(0.2, 0, 0, 1)';
-  vars['--ds-ease-exit'] = 'cubic-bezier(0.4, 0, 1, 1)';
+  vars["--ds-motion-instant"] = "120ms";
+  vars["--ds-motion-calm"] = `${calmMs}ms`;
+  vars["--ds-motion-deliberate"] = "320ms";
+  vars["--ds-motion-feedback"] =
+    "calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1))";
+  vars["--ds-motion-reveal"] =
+    "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))";
+  vars["--ds-motion-disclosure"] =
+    "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))";
+  vars["--ds-motion-resize"] =
+    "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))";
+  vars["--ds-motion-rearrange"] =
+    "calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1))";
+  vars["--ds-motion-attention"] =
+    "calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1))";
+  vars["--ds-ease-standard"] = "cubic-bezier(0.2, 0, 0, 1)";
+  vars["--ds-ease-exit"] = "cubic-bezier(0.4, 0, 1, 1)";
+  vars["--ds-motion-ease-enter"] = "cubic-bezier(0.16, 1, 0.3, 1)";
+  vars["--ds-motion-ease-exit"] = "var(--ds-ease-exit)";
+  vars["--ds-motion-ease-move"] = "var(--ds-ease-standard)";
 
   // `--ds-motion-spring-gentle` has no consumer in the static generator's
   // tokenOverrideVariables() (unlike `--ds-motion-spring`, routed through
@@ -414,9 +643,9 @@ function setMotionVariables(vars: Record<string, string>, bt: BrandTheme): void 
   // on a per-property basis when a more-specific rule for the same element
   // omits that property entirely.
   if (isSpringEligible(bt)) {
-    vars['--ds-motion-spring-gentle'] = springLinearEasingGentle(
+    vars["--ds-motion-spring-gentle"] = springLinearEasingGentle(
       bt.motion!.springTension!,
-      bt.motion!.springFriction!,
+      bt.motion!.springFriction!
     );
   }
 }
@@ -433,11 +662,41 @@ const TINT_STEPS = [4, 8, 12, 16, 24] as const;
  * weight set is 400/600/700 only; 500 and the 620–860 band are banned.
  */
 const TYPE_RAMP = [
-  { name: 'detail', size: '0.75rem', lineHeight: '1rem', weight: 400, tracking: '0' },
-  { name: 'body', size: '0.875rem', lineHeight: '1.25rem', weight: 400, tracking: '0' },
-  { name: 'emphasis', size: '1rem', lineHeight: '1.5rem', weight: 600, tracking: '0' },
-  { name: 'title', size: '1.25rem', lineHeight: '1.75rem', weight: 600, tracking: '-0.01em' },
-  { name: 'display', size: '2rem', lineHeight: '2.25rem', weight: 700, tracking: '-0.02em' },
+  {
+    name: "detail",
+    size: "0.75rem",
+    lineHeight: "1rem",
+    weight: 400,
+    tracking: "0",
+  },
+  {
+    name: "body",
+    size: "0.875rem",
+    lineHeight: "1.25rem",
+    weight: 400,
+    tracking: "0",
+  },
+  {
+    name: "emphasis",
+    size: "1rem",
+    lineHeight: "1.5rem",
+    weight: 600,
+    tracking: "0",
+  },
+  {
+    name: "title",
+    size: "1.25rem",
+    lineHeight: "1.75rem",
+    weight: 600,
+    tracking: "-0.01em",
+  },
+  {
+    name: "display",
+    size: "2rem",
+    lineHeight: "2.25rem",
+    weight: 700,
+    tracking: "-0.02em",
+  },
 ] as const;
 
 /**
@@ -457,7 +716,7 @@ const TYPE_RAMP = [
  * emitted for every compiled BrandTheme.
  */
 function setTypeRampVariables(vars: Record<string, string>): void {
-  const family = 'var(--ds-font-family-base)';
+  const family = "var(--ds-font-family-base)";
 
   for (const { name, size, lineHeight, weight, tracking } of TYPE_RAMP) {
     vars[`--ds-text-${name}`] = `${weight} ${size}/${lineHeight} ${family}`;
@@ -469,12 +728,121 @@ function setTypeRampVariables(vars: Record<string, string>): void {
 
   // Eyebrow — detail size, weight 600, +0.08em tracking, uppercase (the sole
   // uppercase per BITHIRE_PROFILE.labelStyle: 'sentence').
-  vars['--ds-text-eyebrow'] = `600 0.75rem/1rem ${family}`;
-  vars['--ds-text-eyebrow-size'] = '0.75rem';
-  vars['--ds-text-eyebrow-weight'] = '600';
-  vars['--ds-text-eyebrow-line-height'] = '1rem';
-  vars['--ds-text-eyebrow-letter-spacing'] = '0.08em';
-  vars['--ds-text-eyebrow-transform'] = 'uppercase';
+  vars["--ds-text-eyebrow"] = `600 0.75rem/1rem ${family}`;
+  vars["--ds-text-eyebrow-size"] = "0.75rem";
+  vars["--ds-text-eyebrow-weight"] = "600";
+  vars["--ds-text-eyebrow-line-height"] = "1rem";
+  vars["--ds-text-eyebrow-letter-spacing"] = "0.08em";
+  vars["--ds-text-eyebrow-transform"] = "uppercase";
+}
+
+const DEFAULT_SEMANTIC_TYPOGRAPHY: Record<
+  (typeof SEMANTIC_TYPOGRAPHY_ROLES)[number],
+  Required<SemanticTypographyRoleTokens>
+> = {
+  display: {
+    fontFamily: "var(--ds-font-family-display, var(--ds-font-family-heading))",
+    fontSize: "calc(2rem * var(--ds-type-scale, 1))",
+    fontWeight: 700,
+    lineHeight: 1.1,
+    letterSpacing: "var(--ds-letter-spacing-display, -0.03em)",
+    textTransform: "none",
+    fontVariantNumeric: "normal",
+  },
+  pageTitle: {
+    fontFamily: "var(--ds-font-family-heading)",
+    fontSize: "calc(1.5rem * var(--ds-type-scale, 1))",
+    fontWeight: 700,
+    lineHeight: 1.16,
+    letterSpacing: "var(--ds-letter-spacing-heading, -0.02em)",
+    textTransform: "none",
+    fontVariantNumeric: "normal",
+  },
+  sectionTitle: {
+    fontFamily: "var(--ds-font-family-heading)",
+    fontSize: "calc(1.125rem * var(--ds-type-scale, 1))",
+    fontWeight: 600,
+    lineHeight: 1.3,
+    letterSpacing: "var(--ds-letter-spacing-heading, -0.01em)",
+    textTransform: "none",
+    fontVariantNumeric: "normal",
+  },
+  body: {
+    fontFamily: "var(--ds-font-family-base)",
+    fontSize: "calc(0.875rem * var(--ds-type-scale, 1))",
+    fontWeight: 400,
+    lineHeight: "var(--ds-line-height-body, 1.6)",
+    letterSpacing: "var(--ds-letter-spacing-body, 0)",
+    textTransform: "none",
+    fontVariantNumeric: "normal",
+  },
+  supporting: {
+    fontFamily: "var(--ds-font-family-base)",
+    fontSize: "calc(0.8125rem * var(--ds-type-scale, 1))",
+    fontWeight: 400,
+    lineHeight: 1.5,
+    letterSpacing: "var(--ds-letter-spacing-body, 0)",
+    textTransform: "none",
+    fontVariantNumeric: "normal",
+  },
+  label: {
+    fontFamily: "var(--ds-font-family-base)",
+    fontSize: "calc(0.75rem * var(--ds-type-scale, 1))",
+    fontWeight: 600,
+    lineHeight: 1.3,
+    letterSpacing: "0.04em",
+    textTransform: "none",
+    fontVariantNumeric: "normal",
+  },
+  caption: {
+    fontFamily: "var(--ds-font-family-base)",
+    fontSize: "calc(0.6875rem * var(--ds-type-scale, 1))",
+    fontWeight: 400,
+    lineHeight: 1.35,
+    letterSpacing: "0.01em",
+    textTransform: "none",
+    fontVariantNumeric: "normal",
+  },
+  code: {
+    fontFamily: "var(--ds-font-family-mono)",
+    fontSize: "calc(0.8125rem * var(--ds-type-scale, 1))",
+    fontWeight: 400,
+    lineHeight: 1.5,
+    letterSpacing: "var(--ds-letter-spacing-mono, 0)",
+    textTransform: "none",
+    fontVariantNumeric: "tabular-nums",
+  },
+  numeric: {
+    fontFamily: "var(--ds-font-family-heading)",
+    fontSize: "calc(1rem * var(--ds-type-scale, 1))",
+    fontWeight: 600,
+    lineHeight: 1.2,
+    letterSpacing: "-0.01em",
+    textTransform: "none",
+    fontVariantNumeric: "tabular-nums lining-nums",
+  },
+};
+
+export function setSemanticTypographyVariables(
+  vars: Record<string, string>,
+  authored: SemanticTypographyTokens | undefined
+): void {
+  for (const role of SEMANTIC_TYPOGRAPHY_ROLES) {
+    const value = { ...DEFAULT_SEMANTIC_TYPOGRAPHY[role], ...authored?.[role] };
+    const kebabRole = role.replace(
+      /[A-Z]/g,
+      (letter) => `-${letter.toLowerCase()}`
+    );
+    const prefix = `--ds-type-${kebabRole}`;
+    vars[`${prefix}-font-family`] = String(value.fontFamily);
+    vars[`${prefix}-font-size`] = String(value.fontSize);
+    vars[`${prefix}-font-weight`] = String(value.fontWeight);
+    vars[`${prefix}-line-height`] = String(value.lineHeight);
+    vars[`${prefix}-letter-spacing`] = String(value.letterSpacing);
+    vars[`${prefix}-text-transform`] = String(value.textTransform);
+    vars[`${prefix}-font-variant-numeric`] = String(value.fontVariantNumeric);
+    vars[prefix] = `var(${prefix}-font-weight) var(${prefix}-font-size)/var(${prefix}-line-height) var(${prefix}-font-family)`;
+  }
 }
 
 /**
@@ -494,32 +862,56 @@ function setTypeRampVariables(vars: Record<string, string>): void {
  * border = tint-24 of the tone. A role is skipped when its palette color is
  * absent, so themes that omit a tone simply omit that tone's tints.
  */
-function setTintScaleVariables(vars: Record<string, string>, bt: BrandTheme): void {
+function setTintScaleVariables(
+  vars: Record<string, string>,
+  bt: BrandTheme
+): void {
   const palette = bt.palette;
   if (!palette) return;
 
-  const roles: Array<{ suffix: string; color: string | undefined; colorVar: string }> = [
-    { suffix: '', color: palette.primaryColor, colorVar: '--ds-color-primary' },
-    { suffix: 'success', color: palette.successColor, colorVar: '--ds-color-success' },
-    { suffix: 'warning', color: palette.warningColor, colorVar: '--ds-color-warning' },
-    { suffix: 'error', color: palette.errorColor, colorVar: '--ds-color-error' },
-    { suffix: 'info', color: palette.infoColor, colorVar: '--ds-color-info' },
+  const roles: Array<{
+    suffix: string;
+    color: string | undefined;
+    colorVar: string;
+  }> = [
+    { suffix: "", color: palette.primaryColor, colorVar: "--ds-color-primary" },
+    {
+      suffix: "success",
+      color: palette.successColor,
+      colorVar: "--ds-color-success",
+    },
+    {
+      suffix: "warning",
+      color: palette.warningColor,
+      colorVar: "--ds-color-warning",
+    },
+    {
+      suffix: "error",
+      color: palette.errorColor,
+      colorVar: "--ds-color-error",
+    },
+    { suffix: "info", color: palette.infoColor, colorVar: "--ds-color-info" },
   ];
 
   for (const { suffix, color, colorVar } of roles) {
     if (!color) continue;
     for (const step of TINT_STEPS) {
       const name = suffix ? `--ds-tint-${suffix}-${step}` : `--ds-tint-${step}`;
-      vars[name] = `color-mix(in oklch, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`;
+      vars[
+        name
+      ] = `color-mix(in oklch, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`;
     }
   }
 }
 
 /** Build a CSS string from variables with tenant selector scoping. */
-function buildCssString(vars: Record<string, string>, tenantSlug: string): string {
+function buildCssString(
+  vars: Record<string, string>,
+  tenantSlug: string
+): string {
   const entries = Object.entries(vars).filter(([, v]) => v != null);
-  if (entries.length === 0) return '';
-  const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
+  if (entries.length === 0) return "";
+  const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join("\n");
   return `html[data-tenant='${tenantSlug}'] {\n${declarations}\n}`;
 }
 
@@ -533,7 +925,9 @@ function buildCssString(vars: Record<string, string>, tenantSlug: string): strin
  * mapping is shared with runtime/appearance via kernel/css/chrome-variables,
  * since TenantAppearanceAdvanced.chrome is the same shape as BrandTheme.chrome.
  */
-export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, string> {
+export function brandThemeToChromeVariables(
+  bt: BrandTheme
+): Record<string, string> {
   return chromeToVariables(bt.chrome);
 }
 
@@ -558,26 +952,49 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
 export {
   APCA_BODY_TEXT_MIN_LC,
   apcaContrast,
-} from '@/foundation/kernel/accessibility/branding-contrast';
+} from "@/foundation/kernel/accessibility/branding-contrast";
 
-export const compileBrandTheme: CompileBrandTheme = (input: BrandCompilerInput): CompiledBrand => {
-  const { brandTheme, tenantSlug, verticalPersonality, verticalTokenOverrides } = input;
+export const compileBrandTheme: CompileBrandTheme = (
+  input: BrandCompilerInput
+): CompiledBrand => {
+  const {
+    brandTheme,
+    tenantSlug,
+    verticalPersonality,
+    verticalTokenOverrides,
+  } = input;
 
   // Merge personality: vertical baseline -> brandTheme
   const btPersonality = brandThemeToPersonality(brandTheme);
-  const personality = mergePartialPersonality(verticalPersonality, btPersonality);
+  const personality = mergePartialPersonality(
+    verticalPersonality,
+    btPersonality
+  );
 
   // Merge structural: vertical baseline -> brandTheme
   const btOverrides = brandThemeToTokenOverrides(brandTheme);
   const tokenOverrides = deepMergeTokenOverrides(
     verticalTokenOverrides ?? {},
-    btOverrides,
+    btOverrides
   );
 
   // CSS variables from palette + typography + surfaces + chrome
   const paletteVars = brandThemeToCssVariables(brandTheme);
   const chromeVars = brandThemeToChromeVariables(brandTheme);
   const cssVariables = { ...paletteVars, ...chromeVars };
+
+  // DS-S001: governed recipe-profile selection. Fail-closed — an unknown id,
+  // malformed id or foreign schema version compiles to engine defaults.
+  const recipeProfileValidation = validateRecipeProfileSelection(
+    brandTheme.recipes?.profile,
+    brandTheme.recipes?.schemaVersion
+  );
+  const recipeProfile = recipeProfileValidation.ok
+    ? recipeProfileValidation.profile?.id
+    : undefined;
+  if (recipeProfile) {
+    cssVariables["--ds-recipe-profile"] = `"${recipeProfile}"`;
+  }
 
   // CSS string with tenant selectors
   const cssString = buildCssString(cssVariables, tenantSlug);
@@ -586,5 +1003,12 @@ export const compileBrandTheme: CompileBrandTheme = (input: BrandCompilerInput):
   const engineBridge: Partial<Record<EngineName, Record<string, unknown>>> =
     brandTheme.engineBridge ?? {};
 
-  return { cssVariables, cssString, personality, tokenOverrides, engineBridge };
+  return {
+    cssVariables,
+    cssString,
+    personality,
+    tokenOverrides,
+    engineBridge,
+    ...(recipeProfile ? { recipeProfile } : {}),
+  };
 };

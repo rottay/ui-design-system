@@ -1,61 +1,703 @@
 /**
- * Modern Popover skin (WO-SKIN-04 checkpoint P).
+ * Modern Popover — token-owned contextual surface.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
- *
- * SCOPE IS `rottay-popover--modern`, NEVER `ds-popover` (P3). personality.css carries
- *
- *   .ant-popover, .popover, [data-engine] .ds-popover {
- *     animation: ds-dropdown-enter var(--ds-personality-animation-entrance-duration) …;
- *   }
- *
- * which is DORMANT: neither engine carries any of those three classnames, and neither
- * has ANY entrance animation today (no `<style>`, no `@keyframes`, no `transition`
- * anywhere in either file). Naming this scope class `ds-popover` would wake that rule
- * and hand Popover an entrance animation it has never had — a visual change disguised
- * as a naming choice. The same trap exists for `.ds-dropdown` and Dropdown.
- *
- * PORTAL: this engine does NOT portal (rustic DOES) — the panel renders in-tree as a
- * child of the trigger wrapper in BOTH positioning branches. The scope class anchors
- * every rule regardless.
- *
- * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
- * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
- * genuine runtime data, not paint. The surface carries NO centering transform here:
- * the shared engine emits already-centered coordinates, so a skin translate would
- * double-shift it.
- *
- * SPECIFICITY (P-48): the title's colored border repeats its `data-part` to clear the
- * tenant `*` border-color floor at (0,3,1).
+ * The engine owns stable anatomy and behavior. Brands can independently tune
+ * material, type, density, geometry, arrow craft and motion without an app
+ * reconstructing the component.
  */
 
-/* ---- content panel. The surface-lift gradient is the top background layer over
-        the card fill; it is transparent until a dark surface raises
-        --ds-elevation-lift-strength, where the elevation-2 shadow reads too faint
-        to carry depth. The arrow keeps the flat fill. ---- */
-.rottay-popover--modern[data-part='trigger'] > [data-part='surface'] {
-  border-radius: var(--ds-radius-lg);
-  background: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)), var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
+@keyframes ds-popover-enter-modern {
+  from {
+    opacity: 0;
+    transform: var(--ds-popover-closed-transform);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
 
-/* ---- top-layer branch: the panel carries the `popover` attribute there, and
-        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
-        this surface owns neither. `data-ds-position-strategy` is stamped by the
-        engine alongside data-part. ---- */
-.rottay-popover--modern[data-part='trigger'] > [data-part='surface'][data-ds-position-strategy='anchor-css'] {
-  border: 0;
+@keyframes ds-popover-exit-modern {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: var(--ds-popover-closed-transform);
+  }
+}
+
+.rottay-popover--modern[data-part="trigger"] {
+  position: relative;
+  display: inline-flex;
+  max-inline-size: 100%;
+}
+
+/* The measured branch projects tenant scope into the shared portal and keeps
+ * the same direct-child styling contract without app-owned overlay chrome. */
+.rottay-popover--modern[data-part="trigger"][data-portal-scope="true"] {
+  display: contents;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-part="surface"] {
+  --ds-popover-surface: var(
+    --ds-popover-bordered-background,
+    var(
+      --ds-material-overlay-background,
+      var(--ds-popover-bg, var(--ds-surface-overlay, var(--ds-surface-card)))
+    )
+  );
+  --ds-popover-ink: var(
+    --ds-popover-bordered-foreground,
+    var(--ds-material-overlay-foreground, var(--ds-color-text-primary))
+  );
+  --ds-popover-muted-ink: var(
+    --ds-popover-bordered-muted-foreground,
+    var(--ds-color-text-secondary)
+  );
+  --ds-popover-edge: var(
+    --ds-popover-bordered-border,
+    var(
+      --ds-material-overlay-border,
+      var(--ds-popover-border-color, var(--ds-color-border-primary))
+    )
+  );
+  --ds-popover-edge-width: var(--ds-popover-bordered-border-width, 1px);
+  --ds-popover-radius-current: var(
+    --ds-popover-bordered-radius,
+    var(--ds-popover-radius, var(--ds-radius-lg))
+  );
+  --ds-popover-shadow-current: var(
+    --ds-popover-bordered-shadow,
+    var(
+      --ds-material-overlay-shadow,
+      var(--ds-popover-shadow, var(--ds-elevation-3, var(--ds-shadow-lg)))
+    )
+  );
+  --ds-popover-texture-current: var(
+    --ds-popover-bordered-texture,
+    var(--ds-material-overlay-texture, none)
+  );
+  --ds-popover-highlight-current: var(
+    --ds-popover-bordered-highlight,
+    linear-gradient(
+      150deg,
+      color-mix(in srgb, currentColor 5%, transparent),
+      transparent 48%
+    )
+  );
+  --ds-popover-padding-block-current: var(
+    --ds-popover-bordered-padding-block,
+    var(--ds-spacing-md)
+  );
+  --ds-popover-padding-inline-current: var(
+    --ds-popover-bordered-padding-inline,
+    var(--ds-spacing-md)
+  );
+  --ds-popover-title-gap-current: var(
+    --ds-popover-bordered-title-gap,
+    var(--ds-popover-title-gap, var(--ds-spacing-sm))
+  );
+  --ds-popover-max-width-current: var(
+    --ds-popover-bordered-max-width,
+    var(--ds-popover-max-width, 24rem)
+  );
+  --ds-popover-closed-transform: translate3d(
+      0,
+      var(--ds-popover-motion-distance, 0.25rem),
+      0
+    )
+    scale(var(--ds-popover-motion-scale, 0.975));
+
+  position: fixed;
+  isolation: isolate;
+  z-index: var(
+    --ds-popover-instance-z-index,
+    var(--ds-z-popover, var(--ds-z-index-popover, 1600))
+  );
+  box-sizing: border-box;
+  display: grid;
+  inline-size: max-content;
+  min-inline-size: min(
+    var(--ds-popover-min-width, 12rem),
+    calc(
+      100dvi - var(--ds-popover-viewport-gap, 0.75rem) -
+        var(--ds-popover-viewport-gap, 0.75rem)
+    )
+  );
+  max-inline-size: min(
+    var(--ds-popover-instance-max-width, var(--ds-popover-max-width-current)),
+    calc(
+      100vw - var(--ds-popover-viewport-gap, 0.75rem) -
+        var(--ds-popover-viewport-gap, 0.75rem)
+    )
+  );
+  max-inline-size: min(
+    var(--ds-popover-instance-max-width, var(--ds-popover-max-width-current)),
+    calc(
+      100dvi - var(--ds-popover-viewport-gap, 0.75rem) -
+        var(--ds-popover-viewport-gap, 0.75rem)
+    )
+  );
+  max-block-size: min(
+    var(--ds-popover-max-height, 32rem),
+    calc(
+      100dvb - var(--ds-popover-viewport-gap, 0.75rem) -
+        var(--ds-popover-viewport-gap, 0.75rem)
+    )
+  );
   overflow: visible;
+  border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
+  border-radius: var(--ds-popover-radius-current);
+  background: var(--ds-popover-texture-current),
+    var(--ds-popover-highlight-current), var(--ds-popover-surface);
+  box-shadow: var(--ds-popover-shadow-current);
+  color: var(--ds-popover-ink);
+  font-family: var(--ds-font-family-base);
+  text-align: start;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  direction: inherit;
+  unicode-bidi: plaintext;
+  transform-origin: center bottom;
+  animation: ds-popover-enter-modern
+    var(--ds-popover-enter-duration, var(--ds-motion-calm, 200ms))
+    var(--ds-popover-enter-easing, var(--ds-motion-ease-enter)) both;
+  will-change: opacity, transform;
 }
 
-/* ---- title divider ---- */
-.rottay-popover--modern[data-part='trigger'] [data-part='title'][data-part='title'] {
-  border-bottom: 1px solid var(--ds-color-border);
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-open="false"] {
+  pointer-events: none;
+  animation-name: ds-popover-exit-modern;
+  animation-duration: var(
+    --ds-popover-exit-duration,
+    var(--ds-motion-feedback, 160ms)
+  );
+  animation-timing-function: var(
+    --ds-popover-exit-easing,
+    var(--ds-motion-ease-exit)
+  );
 }
 
-/* ---- arrow: this engine's arrow has NO box-shadow (rustic's does). Preserved. ---- */
-.rottay-popover--modern[data-part='trigger'] [data-part='arrow'] {
-  background: var(--ds-surface-card);
+@starting-style {
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"][data-open="true"] {
+    opacity: 0;
+    transform: var(--ds-popover-closed-transform);
+  }
+}
+
+/* Directional choreography originates at the trigger-facing edge. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-placement^="bottom"] {
+  --ds-popover-closed-transform: translate3d(
+      0,
+      calc(0px - var(--ds-popover-motion-distance, 0.25rem)),
+      0
+    )
+    scale(var(--ds-popover-motion-scale, 0.975));
+
+  transform-origin: center top;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-placement^="left"] {
+  --ds-popover-closed-transform: translate3d(
+      var(--ds-popover-motion-distance, 0.25rem),
+      0,
+      0
+    )
+    scale(var(--ds-popover-motion-scale, 0.975));
+
+  transform-origin: right center;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-placement^="right"] {
+  --ds-popover-closed-transform: translate3d(
+      calc(0px - var(--ds-popover-motion-distance, 0.25rem)),
+      0,
+      0
+    )
+    scale(var(--ds-popover-motion-scale, 0.975));
+
+  transform-origin: left center;
+}
+
+/* Bounded recipes expose meaningful white-label choices without forking DOM. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-recipe="minimal"] {
+  --ds-popover-surface: var(
+    --ds-popover-minimal-background,
+    var(--ds-material-overlay-background, var(--ds-surface-overlay))
+  );
+  --ds-popover-ink: var(
+    --ds-popover-minimal-foreground,
+    var(--ds-color-text-primary)
+  );
+  --ds-popover-muted-ink: var(
+    --ds-popover-minimal-muted-foreground,
+    var(--ds-color-text-secondary)
+  );
+  --ds-popover-edge: var(--ds-popover-minimal-border, transparent);
+  --ds-popover-edge-width: var(--ds-popover-minimal-border-width, 1px);
+  --ds-popover-radius-current: var(
+    --ds-popover-minimal-radius,
+    var(--ds-radius-md)
+  );
+  --ds-popover-shadow-current: var(
+    --ds-popover-minimal-shadow,
+    var(--ds-shadow-md)
+  );
+  --ds-popover-texture-current: var(--ds-popover-minimal-texture, none);
+  --ds-popover-highlight-current: var(--ds-popover-minimal-highlight, none);
+  --ds-popover-padding-block-current: var(
+    --ds-popover-minimal-padding-block,
+    var(--ds-spacing-sm)
+  );
+  --ds-popover-padding-inline-current: var(
+    --ds-popover-minimal-padding-inline,
+    var(--ds-spacing-sm)
+  );
+  --ds-popover-max-width-current: var(--ds-popover-minimal-max-width, 18rem);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-recipe="inverse"] {
+  --ds-popover-surface: var(
+    --ds-popover-inverse-background,
+    var(--ds-color-text-primary)
+  );
+  --ds-popover-ink: var(
+    --ds-popover-inverse-foreground,
+    var(--ds-color-bg-base)
+  );
+  --ds-popover-muted-ink: var(
+    --ds-popover-inverse-muted-foreground,
+    color-mix(in srgb, var(--ds-popover-ink) 72%, transparent)
+  );
+  --ds-popover-edge: var(
+    --ds-popover-inverse-border,
+    color-mix(in srgb, var(--ds-popover-ink) 18%, transparent)
+  );
+  --ds-popover-radius-current: var(
+    --ds-popover-inverse-radius,
+    var(--ds-radius-lg)
+  );
+  --ds-popover-shadow-current: var(
+    --ds-popover-inverse-shadow,
+    var(--ds-shadow-xl)
+  );
+  --ds-popover-texture-current: var(--ds-popover-inverse-texture, none);
+  --ds-popover-highlight-current: var(
+    --ds-popover-inverse-highlight,
+    linear-gradient(
+      155deg,
+      color-mix(in srgb, currentColor 8%, transparent),
+      transparent 58%
+    )
+  );
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-recipe="rich"] {
+  --ds-popover-surface: var(
+    --ds-popover-rich-background,
+    var(--ds-material-raised-background, var(--ds-surface-raised))
+  );
+  --ds-popover-ink: var(
+    --ds-popover-rich-foreground,
+    var(--ds-color-text-primary)
+  );
+  --ds-popover-muted-ink: var(
+    --ds-popover-rich-muted-foreground,
+    var(--ds-color-text-secondary)
+  );
+  --ds-popover-edge: var(
+    --ds-popover-rich-border,
+    var(--ds-material-raised-border, var(--ds-color-border-secondary))
+  );
+  --ds-popover-radius-current: var(
+    --ds-popover-rich-radius,
+    var(--ds-radius-xl, var(--ds-radius-lg))
+  );
+  --ds-popover-shadow-current: var(
+    --ds-popover-rich-shadow,
+    var(--ds-material-raised-shadow, var(--ds-shadow-xl))
+  );
+  --ds-popover-texture-current: var(
+    --ds-popover-rich-texture,
+    var(--ds-material-raised-texture, none)
+  );
+  --ds-popover-highlight-current: var(
+    --ds-popover-rich-highlight,
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, currentColor 7%, transparent),
+      transparent 54%
+    )
+  );
+  --ds-popover-padding-block-current: var(
+    --ds-popover-rich-padding-block,
+    var(--ds-spacing-lg)
+  );
+  --ds-popover-padding-inline-current: var(
+    --ds-popover-rich-padding-inline,
+    var(--ds-spacing-lg)
+  );
+  --ds-popover-max-width-current: var(--ds-popover-rich-max-width, 28rem);
+}
+
+/* Material recipe and density are intentionally orthogonal. The density
+ * attribute is copied through the portal boundary, so DB-driven tenants and
+ * static vertical themes preserve geometry in either positioning strategy. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-density="compact"] {
+  --ds-popover-padding-block-current: var(
+    --ds-popover-compact-padding-block,
+    var(--ds-spacing-xs)
+  );
+  --ds-popover-padding-inline-current: var(
+    --ds-popover-compact-padding-inline,
+    var(--ds-spacing-sm)
+  );
+  --ds-popover-title-gap-current: var(
+    --ds-popover-compact-title-gap,
+    var(--ds-popover-title-gap, var(--ds-spacing-xs))
+  );
+  --ds-popover-body-max-height: var(--ds-popover-compact-max-height, 22rem);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-density="comfortable"] {
+  --ds-popover-padding-block-current: var(
+    --ds-popover-comfortable-padding-block,
+    var(--ds-spacing-md)
+  );
+  --ds-popover-padding-inline-current: var(
+    --ds-popover-comfortable-padding-inline,
+    var(--ds-spacing-md)
+  );
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-density="spacious"] {
+  --ds-popover-padding-block-current: var(
+    --ds-popover-spacious-padding-block,
+    var(--ds-spacing-lg)
+  );
+  --ds-popover-padding-inline-current: var(
+    --ds-popover-spacious-padding-inline,
+    var(--ds-spacing-lg)
+  );
+  --ds-popover-title-gap-current: var(
+    --ds-popover-spacious-title-gap,
+    var(--ds-popover-title-gap, var(--ds-spacing-md))
+  );
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-collision-adjusted="true"] {
+  box-shadow: var(
+    --ds-popover-collision-shadow,
+    var(--ds-popover-shadow-current)
+  );
+}
+
+/* Top-layer popovers must neutralize UA chrome explicitly. */
+.rottay-popover--modern.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-part="surface"][data-ds-position-strategy="anchor-css"] {
+  overflow: visible;
+  border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]
+  > [data-part="title"] {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--ds-popover-title-padding-block, var(--ds-spacing-sm));
+  padding-inline: var(
+    --ds-popover-title-padding-inline,
+    var(--ds-popover-padding-inline-current)
+  );
+  border-block-end: var(--ds-popover-title-divider-width, 1px) solid
+    var(
+      --ds-popover-title-divider,
+      color-mix(in srgb, var(--ds-popover-edge) 74%, transparent)
+    );
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  background: var(
+    --ds-popover-title-background,
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
+      transparent 64%
+    )
+  );
+  color: var(--ds-popover-title-color, var(--ds-popover-ink));
+  font: var(
+    --ds-popover-title-type,
+    var(
+      --ds-type-label,
+      var(--ds-font-weight-semibold) var(--ds-font-size-sm) /
+        var(--ds-line-height-snug) var(--ds-font-family-heading)
+    )
+  );
+  letter-spacing: var(
+    --ds-popover-title-letter-spacing,
+    var(--ds-letter-spacing-heading, -0.01em)
+  );
+  text-wrap: balance;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]
+  > [data-part="body"] {
+  position: relative;
+  z-index: 1;
+  min-inline-size: 0;
+  max-block-size: var(--ds-popover-body-max-height, 26rem);
+  padding-block: var(--ds-popover-padding-block-current);
+  padding-inline: var(--ds-popover-padding-inline-current);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  color: var(--ds-popover-content-color, var(--ds-popover-muted-ink));
+  font: var(
+    --ds-popover-body-type,
+    var(
+      --ds-type-body-sm,
+      var(--ds-font-weight-normal) var(--ds-font-size-sm) /
+        var(--ds-line-height-relaxed) var(--ds-font-family-base)
+    )
+  );
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]:not([data-has-title="true"])
+  > [data-part="body"] {
+  border-radius: inherit;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]:focus-visible,
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]:focus-within {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* Arrow paint derives from the same local material as the surface. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]
+  > [data-part="arrow"][data-part="arrow"] {
+  position: absolute;
+  z-index: 0;
+  inline-size: var(--ds-popover-arrow-size, 0.6875rem);
+  block-size: var(--ds-popover-arrow-size, 0.6875rem);
+  border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
+  background: var(--ds-popover-surface);
   transform: rotate(45deg);
+  transition: inset-block-start var(--ds-motion-feedback)
+      var(--ds-motion-ease-move),
+    inset-block-end var(--ds-motion-feedback) var(--ds-motion-ease-move),
+    inset-inline-start var(--ds-motion-feedback) var(--ds-motion-ease-move),
+    inset-inline-end var(--ds-motion-feedback) var(--ds-motion-ease-move);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-placement^="top"]
+  > [data-part="arrow"] {
+  inset-block-end: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
+  inset-inline-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
+  border-block-start: 0;
+  border-inline-start: 0;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-block-start: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
+  inset-inline-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
+  border-block-end: 0;
+  border-inline-end: 0;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-placement^="left"]
+  > [data-part="arrow"] {
+  inset-block-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
+  inset-inline-end: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
+  border-block-end: 0;
+  border-inline-start: 0;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
+  inset-inline-start: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
+  border-block-start: 0;
+  border-inline-end: 0;
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="top"]
+  > [data-part="arrow"],
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-inline-start: var(--ds-popover-arrow-edge-offset, 1.25rem);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="top"]
+  > [data-part="arrow"],
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-inline: auto var(--ds-popover-arrow-edge-offset, 1.25rem);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="left"]
+  > [data-part="arrow"],
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block-start: var(--ds-popover-arrow-edge-offset, 1.25rem);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="left"]
+  > [data-part="arrow"],
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block: auto var(--ds-popover-arrow-edge-offset, 1.25rem);
+}
+
+/* JS measurement and post-collision geometry publish the anchor's real
+ * cross-axis center. This higher-fidelity position wins over the preferred
+ * alignment offsets above, but remains clamped away from rounded corners. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="top"]
+  > [data-part="arrow"],
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="bottom"]
+  > [data-part="arrow"] {
+  inset-inline: auto;
+  inset-inline-start: clamp(
+    var(--ds-popover-arrow-edge-offset, 1.25rem),
+    calc(
+      var(--ds-popover-arrow-anchor-offset) -
+        var(--ds-popover-arrow-size, 0.6875rem) / 2
+    ),
+    calc(
+      100% - var(--ds-popover-arrow-edge-offset, 1.25rem) -
+        var(--ds-popover-arrow-size, 0.6875rem)
+    )
+  );
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="left"]
+  > [data-part="arrow"],
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="right"]
+  > [data-part="arrow"] {
+  inset-block: auto;
+  inset-block-start: clamp(
+    var(--ds-popover-arrow-edge-offset, 1.25rem),
+    calc(
+      var(--ds-popover-arrow-anchor-offset) -
+        var(--ds-popover-arrow-size, 0.6875rem) / 2
+    ),
+    calc(
+      100% - var(--ds-popover-arrow-edge-offset, 1.25rem) -
+        var(--ds-popover-arrow-size, 0.6875rem)
+    )
+  );
+}
+
+@media (pointer: coarse) {
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"]
+    > [data-part="body"]
+    :where(button, [role="button"], a, input, select, textarea) {
+    min-block-size: var(--ds-popover-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"][data-part="surface"] {
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    transform: none;
+    will-change: auto;
+  }
+
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"]
+    > [data-part="arrow"] {
+    transition: none;
+  }
+}
+
+html[data-ds-motion="reduced"]
+  .rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-part="surface"] {
+  animation-duration: 1ms;
+  animation-timing-function: linear;
+  transform: none;
+  will-change: auto;
+}
+
+html[data-ds-motion="reduced"]
+  .rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]
+  > [data-part="arrow"] {
+  transition: none;
+}
+
+@media (forced-colors: active) {
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"][data-part="surface"] {
+    --ds-popover-highlight-current: none;
+    --ds-popover-texture-current: none;
+
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"]
+    > [data-part="title"] {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"]
+    > [data-part="body"] {
+    color: CanvasText;
+  }
+
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"]
+    > [data-part="arrow"] {
+    border-color: CanvasText;
+    background: Canvas;
+  }
 }

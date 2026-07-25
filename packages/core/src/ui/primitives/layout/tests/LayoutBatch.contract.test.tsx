@@ -258,7 +258,7 @@ describe('Layout-family data-part contract (WO-SKIN-05 checkpoint L)', () => {
       expect(container.querySelector('[data-part="gutter"]')?.getAttribute('data-orientation')).toBe('vertical');
     });
 
-    it.each(ENGINES)('mousedown on the gutter sets data-dragging="true" until mouseup under the %s engine', async (engine) => {
+    it.each(ENGINES)('press on the gutter sets data-dragging="true" until release under the %s engine', async (engine) => {
       const { container } = renderWithEngine(
         <Splitter layout="horizontal">
           <Splitter.Panel>A</Splitter.Panel>
@@ -269,12 +269,22 @@ describe('Layout-family data-part contract (WO-SKIN-05 checkpoint L)', () => {
       await waitForPart(container, 'root');
       const gutter = container.querySelector('[data-part="gutter"]') as HTMLElement;
 
-      fireEvent.mouseDown(gutter);
+      // The modern engine migrated to pointer events in K3-C (touch drag
+      // support); classic/rustic still listen for mouse events.
+      if (engine === 'modern') {
+        fireEvent.pointerDown(gutter);
+      } else {
+        fireEvent.mouseDown(gutter);
+      }
       await waitFor(() => {
         expect(container.querySelector('[data-part="gutter"]')?.getAttribute('data-dragging')).toBe('true');
       });
 
-      fireEvent.mouseUp(document);
+      if (engine === 'modern') {
+        fireEvent.pointerUp(document);
+      } else {
+        fireEvent.mouseUp(document);
+      }
       await waitFor(() => {
         expect(container.querySelector('[data-part="gutter"]')?.getAttribute('data-dragging')).toBe('false');
       });

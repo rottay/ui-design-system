@@ -63,10 +63,28 @@ export interface TabItem {
   disabled?: boolean;
 
   /**
+   * Whether this destination is resolving asynchronous content or state.
+   * Loading tabs stay readable (including when already selected), expose
+   * `aria-busy`, and are temporarily removed from click/keyboard activation.
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
    * Optional icon displayed before the label.
    * Typically a React icon component.
    */
   icon?: ReactNode;
+
+  /**
+   * Optional count or compact status rendered in the component-owned badge.
+   * Prefer this explicit channel over embedding a badge in `label`; it keeps
+   * geometry, contrast and tenant theming under the Tabs contract.
+   */
+  badge?: ReactNode;
+
+  /** Accessible name for a non-text badge (for example an unread dot). */
+  badgeAriaLabel?: string;
 }
 
 // ============================================================================
@@ -77,18 +95,47 @@ export interface TabItem {
  * Visual style variants for the tabs component.
  *
  * @description
- * - `line`: Underlined tabs (default) - clean, minimal appearance
- * - `card`: Card-style tabs - bordered, button-like appearance
- * - `pills`: Pill-shaped tabs - rounded, filled background when active
+ * - `underline`: Quiet rail with a measured active indicator
+ * - `contained`: Framed tray with elevated active destination
+ * - `segmented`: Compact grouped choice without active lift
+ * - `pills`: Rounded tray with a filled active destination
  *
  * @example
  * ```tsx
- * <Tabs type="line" items={items} />   // Underlined style
- * <Tabs type="card" items={items} />   // Card/boxed style
- * <Tabs type="pills" items={items} />  // Pill/rounded style
+ * <Tabs type="underline" items={items} />
+ * <Tabs type="contained" items={items} />
+ * <Tabs type="segmented" items={items} />
+ * <Tabs type="pills" items={items} />
  * ```
  */
-export type TabsType = 'line' | 'card' | 'pills';
+export type TabsRecipe = 'underline' | 'contained' | 'segmented' | 'pills';
+
+/**
+ * Public visual recipe. `line` and `card` remain as compatibility aliases for
+ * `underline` and `contained`; engines stamp the canonical recipe in the DOM.
+ */
+export type TabsType = TabsRecipe | 'line' | 'card';
+
+/** How a constrained tab rail reveals destinations that do not fit. */
+export type TabsOverflow = 'auto' | 'scroll' | 'menu' | 'wrap';
+
+/** Whether focus movement immediately selects a tab. */
+export type TabsActivationMode = 'automatic' | 'manual';
+
+/** Width source for the underline recipe's active indicator. */
+export type TabsIndicator = 'tab' | 'label' | 'none';
+
+/** Visual treatment of the active tab panel. */
+export type TabsPanelVariant = 'plain' | 'contained';
+
+/** Localizable labels for Tabs-owned overflow controls. */
+export interface TabsAccessibilityLabels {
+  previous?: string;
+  next?: string;
+  more?: string;
+  /** Announcement appended to a loading destination in the polite live region. */
+  loading?: string;
+}
 
 /**
  * Size variants for the tabs component.
@@ -167,10 +214,29 @@ export interface TabsProps extends EngineAwareProps {
 
   /**
    * Visual style of the tabs.
-   * @default 'line'
+   * @default 'line' (compatibility alias for `underline`)
    * @see {@link TabsType}
    */
   type?: TabsType;
+
+  /**
+   * Constrained-container behavior. `auto` uses touch scrolling plus edge
+   * controls when needed; `menu` also exposes every destination in a menu.
+   * @default 'auto'
+   */
+  overflow?: TabsOverflow;
+
+  /** Keyboard activation behavior following the WAI-ARIA tabs pattern. */
+  activationMode?: TabsActivationMode;
+
+  /** Underline measurement source, or `none` to remove the indicator. */
+  indicator?: TabsIndicator;
+
+  /** Whether panel content is visually framed by the Tabs primitive. */
+  panelVariant?: TabsPanelVariant;
+
+  /** Localized accessible names for previous/next/more controls. */
+  accessibilityLabels?: TabsAccessibilityLabels;
 
   /**
    * Size variant of the tabs. Accepts a plain value or a responsive breakpoint object.
@@ -251,4 +317,8 @@ export const TABS_DEFAULTS: Partial<TabsProps> = {
   size: 'md',
   /** Default alignment - left aligned */
   centered: false,
+  overflow: 'auto',
+  activationMode: 'automatic',
+  indicator: 'tab',
+  panelVariant: 'plain',
 };

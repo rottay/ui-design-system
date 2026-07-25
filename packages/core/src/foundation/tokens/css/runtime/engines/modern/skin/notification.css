@@ -1,51 +1,231 @@
 /**
- * Modern Notification skin (WO-SKIN-03 checkpoint O).
+ * Modern Notification skin (WO-SKIN-03 checkpoint O; K4-A drain 2026-07-24).
  *
- * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. The item carries
- * DaisyUI's structural `alert` class. Personality contributes only the
- * opacity/transform transition; decorative one-sided borders are forbidden.
+ * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. Neither the
+ * item nor the stack container carries a DaisyUI class: the item tree never
+ * emitted one, and the container's `toast`/`toast-top`/`toast-bottom`/
+ * `toast-center`/`toast-start`/`toast-end` placement classes were drained in
+ * K4-A. This skin is the single paint owner for container placement and item
+ * surface alike. feedback/Message's identical placement classes were drained
+ * in the same wave (its stack is skin-owned via message.css), and theme.css's
+ * `[data-tenant] .toast` bridge was removed with both drains complete.
  *
- * SPECIFICITY (P-48): no rule here paints a border COLOR, so the tenant
- * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply.
- * `border: none` on the close button is a color-free reset and is exempt.
+ * PLACEMENT: keyed on `data-placement` (stamped by the provider). Inline-axis
+ * placement is LOGICAL -- `topLeft`/`bottomLeft` anchor at `inset-inline-start`
+ * and mirror to the physical right under `dir="rtl"`. Centred placements use
+ * `inset-inline: 0` + `margin-inline: auto`: direction-neutral, and unlike the
+ * former `left: 50%; transform: translateX(-50%)` it creates no transform
+ * containing block. The provider's `top`/`bottom` props reach the paint
+ * through the engine-stamped `--ds-notification-stack-offset` channel
+ * (skin-declared consumer), and `--ds-z-notification` keeps its family-local
+ * fallback (1600): it is declared nowhere globally.
  *
- * The `open` type has NO fill/colour rule: its entry in the style table was an
- * empty object, so the item fell through to DaisyUI's own `.alert` paint. That
- * fall-through is preserved by simply not writing a rule for it.
+ * TONES: per-type fill/text/border derive from `--ds-notification-accent`,
+ * keyed on `data-tone` including `open` (primary accent). Decorative one-sided
+ * border rails are forbidden.
  *
- * The stacking container is the external DaisyUI `.toast` class; `theme.css`'s
- * `[data-tenant] .toast` rule references six `--ds-toast-*` tokens that are
- * declared nowhere, leaving that container functionally unstyled. That is
- * untouched here -- the container had no inline paint to migrate.
+ * RTL: the lifetime progress bar spans `inset-inline: 0` and drains toward the
+ * reading direction's end edge via the `:dir(rtl)` transform-origin flip at
+ * the bottom of the file.
  */
 
-/* ---- item: elevation ---- */
-.rottay-notification--modern[data-part='root'] {
-  box-shadow: var(--ds-elevation-2);
+/* ---- fixed placement and stacking: self-contained, no utility dependency ---- */
+.rottay-notification-stack--modern[data-part='stack-container'] {
+  position: fixed;
+  z-index: var(--ds-z-notification, 1600);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3);
+  width: min(26rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  pointer-events: none;
 }
 
-/* ---- the four painted types ---- */
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement^='top'] {
+  top: var(--ds-notification-stack-offset, 0);
+}
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement^='bottom'] {
+  bottom: var(--ds-notification-stack-offset, 0);
+}
+/* Inline placement is LOGICAL: *Left anchors the reading-start edge and
+   mirrors to the physical right under dir="rtl" (and vice versa). */
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement$='Left'] {
+  inset-inline-start: var(--ds-notification-stack-inline-gutter, var(--ds-spacing-4));
+}
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement$='Right'] {
+  inset-inline-end: var(--ds-notification-stack-inline-gutter, var(--ds-spacing-4));
+}
+/* Centred placements: margin-auto centring is direction-neutral and avoids
+   the former translateX(-50%) transform containing block. */
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement='top'],
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement='bottom'] {
+  inset-inline: 0;
+  margin-inline: auto;
+}
+
+/* ---- framed item ---- */
+.rottay-notification--modern.rottay-notification--modern[data-part='root'][data-part='root'] {
+  --ds-notification-accent: var(--ds-color-info);
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: auto;
+  color: var(--ds-color-text-primary);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--ds-notification-accent) 10%, var(--ds-color-bg-primary)) 0%,
+      color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-notification-accent) 2%) 52%,
+      var(--ds-color-bg-primary) 100%
+    );
+  border: 1px solid color-mix(in srgb, var(--ds-notification-accent) 30%, var(--ds-color-border-subtle));
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+  animation: ds-notification-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
 .rottay-notification--modern[data-part='root'][data-tone='success'] {
-  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
-  color: var(--ds-color-success);
+  --ds-notification-accent: var(--ds-color-success);
 }
 .rottay-notification--modern[data-part='root'][data-tone='error'] {
-  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
-  color: var(--ds-color-error);
-}
-.rottay-notification--modern[data-part='root'][data-tone='info'] {
-  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
-  color: var(--ds-color-info);
+  --ds-notification-accent: var(--ds-color-error);
 }
 .rottay-notification--modern[data-part='root'][data-tone='warning'] {
-  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
-  color: var(--ds-color-warning);
+  --ds-notification-accent: var(--ds-color-warning);
+}
+.rottay-notification--modern[data-part='root'][data-tone='open'] {
+  --ds-notification-accent: var(--ds-color-primary);
 }
 
-/* ---- close button ---- */
-.rottay-notification--modern [data-part='close-button'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
+.rottay-notification--modern[data-part='root'] > [data-part='layout'] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--ds-spacing-3);
+  padding: var(--ds-spacing-4);
+}
+
+.rottay-notification--modern[data-part='root'] [data-part='icon'] {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--ds-notification-accent);
+  background: color-mix(in srgb, var(--ds-notification-accent) 11%, var(--ds-color-bg-primary));
+  border: 1px solid color-mix(in srgb, var(--ds-notification-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
-  border: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 56%, transparent);
+}
+
+.rottay-notification--modern[data-part='root'] [data-part='body'] {
+  min-width: 0;
+  padding-block: 0.125rem;
+}
+
+.rottay-notification--modern[data-part='root'] [data-part='title'] {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-sans));
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-snug);
+  letter-spacing: var(--ds-letter-spacing-tight);
+}
+
+.rottay-notification--modern[data-part='root'] [data-part='description'] {
+  margin-top: var(--ds-spacing-1);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-relaxed);
+}
+
+.rottay-notification--modern[data-part='root'] [data-part='actions'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  margin-top: var(--ds-spacing-3);
+  padding-top: var(--ds-spacing-3);
+  border-top: 1px solid color-mix(in srgb, var(--ds-notification-accent) 16%, var(--ds-color-border-subtle));
+}
+
+.rottay-notification--modern[data-part='root'] [data-part='close-button'] {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ds-color-text-secondary);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 82%, transparent);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-md);
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-notification--modern[data-part='root'] [data-part='close-button']:hover {
+  transform: translateY(-1px);
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-surface-highlight);
+  border-color: color-mix(in srgb, var(--ds-notification-accent) 32%, var(--ds-color-border-subtle));
+}
+.rottay-notification--modern[data-part='root'] [data-part='close-button']:focus-visible,
+.rottay-notification--modern[data-part='root'][data-clickable='true']:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ds-notification-accent) 56%, transparent);
+  outline-offset: 2px;
+}
+
+.rottay-notification--modern[data-part='root'][data-clickable='true'] {
+  cursor: pointer;
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-notification--modern[data-part='root'][data-clickable='true']:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--ds-notification-accent) 44%, var(--ds-color-border-subtle));
+  box-shadow: var(--ds-elevation-4, var(--ds-elevation-3));
+}
+
+.rottay-notification--modern[data-part='root'] > [data-part='progress'] {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--ds-notification-accent) 74%, transparent);
+  transform-origin: left center;
+  animation: ds-notification-progress-modern var(--ds-notification-duration) linear both;
+}
+
+@keyframes ds-notification-enter-modern {
+  from {
+    opacity: 0;
+    transform: translateY(-0.75rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-notification-progress-modern {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* RTL: the lifetime bar drains toward the reading direction's end edge. */
+.rottay-notification--modern[data-part='root']:dir(rtl) > [data-part='progress'] {
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-notification--modern.rottay-notification--modern[data-part='root'][data-part='root'],
+  .rottay-notification--modern[data-part='root'] > [data-part='progress'] {
+    animation: none;
+  }
 }

@@ -61,9 +61,17 @@
 /* ---- panel surface: fill + elevation + the default (right-placement) radius,
         which the per-placement rules below override. ---- */
 .rottay-drawer--modern[data-part='surface'] {
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-3);
+  max-width: 100vw;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-color-primary) 2%) 0%,
+      var(--ds-surface-card) 32%,
+      var(--ds-color-bg-primary) 100%
+    );
+  box-shadow: var(--ds-elevation-4, var(--ds-elevation-3));
   border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+  isolation: isolate;
 }
 
 .rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'] {
@@ -106,25 +114,130 @@
 /* ---- header / footer dividers ---- */
 .rottay-drawer--modern.rottay-drawer--modern > [data-part='header'][data-part='header'] {
   border-bottom: 1px solid var(--ds-color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  min-height: 4.5rem;
+  padding-block: var(--ds-spacing-4);
+  padding-inline: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
+  flex-shrink: 0;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-color-bg-primary)) 0%,
+      color-mix(in srgb, var(--ds-color-bg-primary) 97%, var(--ds-color-primary) 3%) 56%,
+      var(--ds-color-bg-primary) 100%
+    );
+  position: relative;
+  overflow: hidden;
 }
 .rottay-drawer--modern.rottay-drawer--modern > [data-part='footer'][data-part='footer'] {
   border-top: 1px solid var(--ds-color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-spacing-2);
+  min-height: 4.5rem;
+  padding-block: var(--ds-spacing-4);
+  padding-inline: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
+  backdrop-filter: blur(var(--ds-glass-blur-sm, 8px));
+  -webkit-backdrop-filter: blur(var(--ds-glass-blur-sm, 8px));
+}
+
+.rottay-drawer--modern > [data-part='header'] > [data-part='heading-group'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3);
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.rottay-drawer--modern > [data-part='header'] [data-part='header-icon'] {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-primary));
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle));
+  border-radius: var(--ds-radius-md);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 54%, transparent);
 }
 
 .rottay-drawer--modern > [data-part='header'] [data-part='title'] {
   color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-sans));
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-tight);
+  letter-spacing: var(--ds-letter-spacing-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rottay-drawer--modern > [data-part='body'] {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
+  color: var(--ds-color-text-primary);
+  scrollbar-gutter: stable;
+  background:
+    radial-gradient(
+      circle at 88% 2%,
+      color-mix(in srgb, var(--ds-color-primary) 5%, transparent) 0%,
+      transparent 30%
+    );
 }
 
 /* ---- close button. The `:hover` rule reproduces the deleted mouseenter/
         mouseleave `.style.backgroundColor` writes. ---- */
 .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
-  border: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  cursor: pointer;
+  border: 1px solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-md);
-  background-color: transparent;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 88%, transparent);
   color: var(--ds-color-text-secondary);
+  box-shadow: var(--ds-elevation-1);
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+  position: relative;
+  z-index: 1;
 }
 .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:hover {
+  transform: translateY(-1px);
   background-color: var(--ds-surface-highlight);
+  border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
+  color: var(--ds-color-text-primary);
+  box-shadow: var(--ds-elevation-2);
+}
+.rottay-drawer--modern > [data-part='header'] [data-part='close-button']:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 56%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
+    transition-duration: 0.01ms;
+  }
 }
 
 /* ---- slide + fade keyframes, engine-namespaced (rustic has none, and must not

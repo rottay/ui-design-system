@@ -104,6 +104,13 @@ export interface TagInputProps extends EngineAwareProps {
   onRemove?: (tag: string, index: number) => void;
   /** Validation function called before adding a tag. Return true to accept, false to reject. */
   validateTag?: (tag: string) => boolean;
+  /**
+   * Accessible name for the inline text input when no surrounding
+   * label/FormField provides one. Without it, a TagInput whose chips hide
+   * the placeholder (any non-empty `value`) has an unnamed input and fails
+   * the axe `label` rule (critical).
+   */
+  'aria-label'?: string;
 }
 
 /**

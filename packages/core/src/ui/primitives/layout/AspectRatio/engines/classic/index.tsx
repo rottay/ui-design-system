@@ -16,11 +16,11 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import type { AspectRatioProps } from '../../contracts';
-import { ASPECT_RATIO_DEFAULTS } from '../../contracts';
+import React from "react";
+import type { AspectRatioProps } from "../../contracts";
+import { ASPECT_RATIO_DEFAULTS } from "../../contracts";
 
 /**
  * Classic (Ant Design) aspect ratio container using the padding-bottom technique.
@@ -32,14 +32,16 @@ import { ASPECT_RATIO_DEFAULTS } from '../../contracts';
  * @param props - {@link AspectRatioProps} including ratio, maxWidth, children, and styling overrides.
  * @returns A React element wrapping children in a fixed aspect ratio container.
  */
-export default function ClassicAspectRatio(props: AspectRatioProps): React.ReactElement {
+export default function ClassicAspectRatio(
+  props: AspectRatioProps
+): React.ReactElement {
   const {
     ratio = ASPECT_RATIO_DEFAULTS.ratio,
     children,
-    className = '',
+    className = "",
     style,
     maxWidth,
-    'data-testid': dataTestId,
+    "data-testid": dataTestId,
   } = props;
 
   // Convert ratio to a percentage for the padding-bottom trick.
@@ -48,8 +50,8 @@ export default function ClassicAspectRatio(props: AspectRatioProps): React.React
 
   // Outer container establishes the width constraint and receives user styles
   const outerStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
+    position: "relative",
+    width: "100%",
     maxWidth: maxWidth,
     ...style,
   };
@@ -57,18 +59,18 @@ export default function ClassicAspectRatio(props: AspectRatioProps): React.React
   // Inner div uses paddingBottom to create the intrinsic ratio box.
   // Height is implicitly zero; the padding creates the visual height.
   const innerStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
+    position: "relative",
+    width: "100%",
     paddingBottom,
   };
 
   // Content layer fills the ratio box absolutely so children stretch to fit
   const contentStyle: React.CSSProperties = {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   };
 
   return (
@@ -78,12 +80,10 @@ export default function ClassicAspectRatio(props: AspectRatioProps): React.React
       data-testid={dataTestId}
     >
       <div style={innerStyle}>
-        <div style={contentStyle}>
-          {children}
-        </div>
+        <div style={contentStyle}>{children}</div>
       </div>
     </div>
   );
 }
 
-ClassicAspectRatio.displayName = 'ClassicAspectRatio';
+ClassicAspectRatio.displayName = "ClassicAspectRatio";

@@ -216,6 +216,15 @@ describe('semantic Icon accessibility and rendering', () => {
     expect(ref.current).toHaveAttribute('height', 'var(--ds-icon-xl-size, 2rem)');
   });
 
+  it('forwards an explicit local color without requiring an inline style map', () => {
+    const { container } = render(
+      <Icon name="status.error" color="var(--ds-color-error)" decorative />,
+    );
+
+    expect(container.querySelector('svg')).toBeInTheDocument();
+    expect(container.innerHTML).toContain('var(--ds-color-error)');
+  });
+
   it('publishes resolved role, state, tone, and internal finish as data attributes', () => {
     render(
       <Icon

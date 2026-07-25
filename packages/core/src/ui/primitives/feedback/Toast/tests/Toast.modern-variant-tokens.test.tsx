@@ -21,10 +21,10 @@ import { fileURLToPath } from 'node:url';
 
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
 import ModernToast from '../engines/modern';
-import { VARIANT_COLORS } from '../contracts';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 const here = dirname(fileURLToPath(import.meta.url));
 // Comments are stripped: the skin's header documents the very declarations
@@ -48,23 +48,24 @@ const VARIANTS = [
 
 describe('Toast modern engine — the tone reaches the DOM', () => {
   it.each(VARIANTS)('%s stamps data-tone on the alert root', (variant) => {
-    render(<ModernToast variant={variant} title="Notice" visible />);
+    renderWithEngine(<ModernToast variant={variant} title="Notice" visible />, 'modern');
     const alert = screen.getByRole('alert');
 
     expect(alert.getAttribute('data-tone')).toBe(variant);
     expect(alert.getAttribute('data-part')).toBe('root');
   });
 
-  it('keeps the structural `alert` class but drops the animate-* utility', () => {
-    render(<ModernToast variant="default" title="Notice" visible />);
+  it('is self-contained and drops external structural/animation utilities', () => {
+    renderWithEngine(<ModernToast variant="default" title="Notice" visible />, 'modern');
     const alert = screen.getByRole('alert');
 
-    expect(alert.className).toContain('alert');
+    expect(alert.className).toContain('rottay-toast--modern');
+    expect(alert.className).not.toContain('alert');
     expect(alert.className).not.toMatch(/animate-fade/);
   });
 
   it('paints nothing inline: the surface is the skin`s to own', () => {
-    render(<ModernToast variant="success" title="Notice" visible />);
+    renderWithEngine(<ModernToast variant="success" title="Notice" visible />, 'modern');
     const alert = screen.getByRole('alert');
 
     expect(alert.style.background).toBe('');
@@ -74,12 +75,12 @@ describe('Toast modern engine — the tone reaches the DOM', () => {
 });
 
 describe('Toast modern engine — the skin derives every variant from tokens', () => {
-  it.each(VARIANTS)('%s carries a fill + text rule keyed on its tone', (variant) => {
+  it.each(VARIANTS)('%s carries a rule keyed on its tone', (variant) => {
     expect(SKIN).toContain(`[data-part='root'][data-tone='${variant}']`);
   });
 
-  it.each(VARIANTS)('%s borders from its VARIANT_COLORS token, as a shorthand', (variant) => {
-    expect(SKIN).toContain(`border: 1px solid ${VARIANT_COLORS[variant].borderColor};`);
+  it('uses one tokenized full-border recipe for every tone', () => {
+    expect(SKIN).toContain('border: 1px solid color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));');
   });
 
   it('never introduces a one-sided decorative border rail', () => {
@@ -93,13 +94,19 @@ describe('Toast modern engine — the skin derives every variant from tokens', (
     ['info', 'var(--ds-color-info)'],
     ['primary', 'var(--ds-color-primary)'],
     ['secondary', 'var(--ds-color-secondary)'],
-  ] as const)('%s still derives its text from its semantic color token', (_variant, colorVar) => {
-    expect(SKIN).toContain(`color: ${colorVar};`);
+  ] as const)('%s derives its accent from its semantic color token', (_variant, colorVar) => {
+    expect(SKIN).toContain(`--ds-toast-accent: ${colorVar};`);
   });
 
-  it('default reads the card surface tokens, not an inherited DaisyUI literal', () => {
-    expect(SKIN).toContain('background: var(--ds-card-bg);');
-    expect(SKIN).toContain('color: var(--ds-card-color);');
+  it('uses the shared premium surface and explicit anatomy', () => {
+    expect(SKIN).toContain("[data-part='layout']");
+    expect(SKIN).toContain("[data-part='icon']");
+    expect(SKIN).toContain("[data-part='actions']");
+    expect(SKIN).toContain('var(--ds-color-bg-primary)');
+  });
+
+  it('clamps the viewport-relative width to the containing block (R1: 390px in-flow hosts)', () => {
+    expect(SKIN).toContain('max-inline-size: 100%;');
   });
 
   it('gradient keeps its token-first chain with the two-stop fallback', () => {

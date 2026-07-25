@@ -1,239 +1,482 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the Dropdown overlay component.
- * Uses DaisyUI `dropdown` and `menu` classes with a controlled/uncontrolled open
- * pattern, click-outside dismissal, and placement via DaisyUI modifier classes.
+ * Modern Dropdown engine.
  *
- * @example
- * ```tsx
- * <Dropdown engine="modern" trigger={['click']}
- *   menu={{ items: [{ key: '1', label: 'Option' }] }}>
- *   <Button>Open Menu</Button>
- * </Dropdown>
- * ```
+ * The engine is deliberately independent from utility-framework and DaisyUI
+ * classes. Its public visual contract is the `data-part` / `data-*` anatomy
+ * painted by the Modern skin, so brand and tenant tokens remain the only
+ * source of visual tenor.
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, {
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
+import type { ReactElement, ReactNode } from 'react';
 import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../contracts';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 
 const MOTION_DURATION = 'var(--ds-motion-fast)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
+const SURFACE_GAP = 8;
 
-const getPlacementClassName = (placement?: DropdownPlacement): string => {
-  if (!placement) return '';
+/**
+ * Measured popup geometry in PHYSICAL host-content coordinates.
+ *
+ * Portal geometry is computed from getBoundingClientRect (viewport space) and
+ * is therefore physical in the same sense as the block-axis `top`: it is
+ * measured, not declared. Placement SEMANTICS stay logical -- `*Left`/`*Right`
+ * mirror under `dir="rtl"` inside updatePortalPosition -- while the in-tree
+ * fallback below declares logical `inset-inline-*` properties so the browser
+ * mirrors it for free.
+ */
+type PopupPosition = { top: number; left: number };
 
-  return [
-    placement.startsWith('top') ? 'dropdown-top' : '',
-    placement.endsWith('Right') ? 'dropdown-end' : '',
-    placement.endsWith('Left') ? 'dropdown-start' : '',
-  ].filter(Boolean).join(' ');
-};
+/**
+ * In-tree (non-portal) placement, declared with LOGICAL inline properties:
+ * `*Left` anchors the reading-start edge and mirrors to the physical right
+ * under `dir="rtl"` (and vice versa). The centred variant keeps physical
+ * `left: 50%` + `translate: -50% 0` -- centring is direction-neutral, and a
+ * logical `inset-inline-start: 50%` would misplace the surface in RTL because
+ * the -50% self-translate does not mirror.
+ */
+function inTreePlacementStyle(placement: DropdownPlacement): React.CSSProperties {
+  const isTop = placement.startsWith('top');
+  const isRight = placement.endsWith('Right');
+  const isLeft = placement.endsWith('Left');
 
-/** Renders a single menu item, divider, or group header using DaisyUI classes. */
+  return {
+    ...(isTop
+      ? { bottom: `calc(100% + ${SURFACE_GAP}px)` }
+      : { top: `calc(100% + ${SURFACE_GAP}px)` }),
+    ...(isRight
+      ? { insetInlineEnd: 0 }
+      : isLeft
+        ? { insetInlineStart: 0 }
+        : { left: '50%', translate: '-50% 0' }),
+  };
+}
+
+/**
+ * Logical reading direction of the trigger context (nearest `[dir]` owner,
+ * falling back to the computed style). Popover's readLocaleContext precedent.
+ */
+function readTriggerDirection(anchor: HTMLElement): 'ltr' | 'rtl' {
+  const directionOwner = anchor.closest<HTMLElement>('[dir]');
+  if (directionOwner?.dir === 'rtl') return 'rtl';
+  return window.getComputedStyle(anchor).direction === 'rtl' ? 'rtl' : 'ltr';
+}
+
+/**
+ * Stamp the menu-button disclosure semantics on the consumer's trigger
+ * ELEMENT (Popover's describeTrigger precedent). A role-less wrapper span
+ * may not carry `aria-haspopup`/`aria-expanded` (axe `aria-allowed-attr`,
+ * critical), so the attributes are cloned onto the child where a compatible
+ * role lives. Non-element children (text nodes, fragments) receive nothing:
+ * there is no valid host for them.
+ */
+function describeTrigger(
+  children: ReactNode,
+  surfaceId: string,
+  open: boolean,
+  disabled: boolean,
+): ReactNode {
+  if (!isValidElement(children) || children.type === React.Fragment) {
+    return children;
+  }
+
+  return cloneElement(
+    children as ReactElement<{
+      'aria-controls'?: string;
+      'aria-expanded'?: boolean;
+      'aria-haspopup'?: 'menu';
+      'aria-disabled'?: boolean;
+    }>,
+    {
+      'aria-controls': surfaceId,
+      'aria-expanded': open,
+      'aria-haspopup': 'menu',
+      'aria-disabled': disabled || undefined,
+    },
+  );
+}
+
 const MenuItem: React.FC<{
   item: DropdownMenuItem;
-  onClick?: (key: string) => void;
-}> = ({ item, onClick }) => {
+  selectedKeys: string[];
+  selectable: boolean;
+  onClick: (key: string) => void;
+  depth?: number;
+}> = ({ item, selectedKeys, selectable, onClick, depth = 0 }) => {
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+
   if (item.type === 'divider') {
-    return <li data-part="divider" style={{ height: 1, margin: '4px 0' }} />;
+    return <li role="separator" data-part="divider" data-depth={depth} />;
   }
 
   if (item.type === 'group') {
     return (
-      <li data-part="group-label" style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+      <li role="presentation" data-part="group-label" data-depth={depth}>
         <span>{item.label}</span>
       </li>
     );
   }
 
-  // The item row's resting chrome AND its hover background are painted by
-  // `modern/theme.css`'s `.menu li > button` rules, keyed on the DaisyUI `menu`
-  // class on the <ul>. Those classes must survive: nothing here may declare a
-  // background on this row.
+  const hasChildren = Boolean(item.children?.length);
+  const isSelected = selectable && selectedKeys.includes(item.key);
+
+  const activate = () => {
+    if (item.disabled) return;
+    if (hasChildren) {
+      setSubmenuOpen((current) => !current);
+      return;
+    }
+    item.onClick?.();
+    onClick(item.key);
+  };
+
   return (
-    <li>
+    <li
+      role="none"
+      data-part="item-shell"
+      data-depth={depth}
+      data-has-children={hasChildren ? 'true' : undefined}
+      data-submenu-open={submenuOpen ? 'true' : undefined}
+      onMouseEnter={() => hasChildren && setSubmenuOpen(true)}
+      onMouseLeave={() => hasChildren && setSubmenuOpen(false)}
+    >
       <button
         type="button"
+        role="menuitem"
         data-part="item"
-        data-tone={item.danger ? 'danger' : undefined}
+        data-tone={item.danger ? 'danger' : 'neutral'}
         data-disabled={item.disabled ? 'true' : undefined}
-        className={[
-          'flex items-center gap-2',
-          item.danger ? 'text-error' : '',
-          item.disabled ? 'disabled' : '',
-        ].filter(Boolean).join(' ')}
+        data-selected={isSelected ? 'true' : undefined}
+        aria-disabled={item.disabled || undefined}
+        aria-haspopup={hasChildren ? 'menu' : undefined}
+        aria-expanded={hasChildren ? submenuOpen : undefined}
         disabled={item.disabled}
-        onClick={() => {
-          item.onClick?.();
-          onClick?.(item.key);
+        onClick={(event) => {
+          event.stopPropagation();
+          activate();
+        }}
+        onKeyDown={(event) => {
+          // Submenu keys are LOGICAL: forward opens, backward closes. Forward
+          // is ArrowRight in LTR and ArrowLeft in RTL (Tabs precedent), so the
+          // reading direction is resolved from the item's context -- nearest
+          // `[dir]` owner first (Popover precedent), computed style as a
+          // fallback.
+          const isRtl =
+            event.currentTarget.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
+            window.getComputedStyle(event.currentTarget).direction === 'rtl';
+          const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
+          const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
+          if (event.key === forwardKey && hasChildren) {
+            event.preventDefault();
+            setSubmenuOpen(true);
+          }
+          if (event.key === backwardKey && hasChildren) {
+            event.preventDefault();
+            setSubmenuOpen(false);
+          }
+          if (event.key === 'Escape' && hasChildren) {
+            event.stopPropagation();
+            setSubmenuOpen(false);
+          }
         }}
       >
-        {item.icon}
-        {item.label}
+        <span data-part="selection-indicator" aria-hidden="true">
+          {isSelected ? <StatusSuccessIcon decorative size={13} /> : null}
+        </span>
+        {item.icon ? <span data-part="icon">{item.icon}</span> : null}
+        <span data-part="label">{item.label}</span>
+        {hasChildren ? (
+          <span data-part="submenu-indicator" aria-hidden="true">
+            <NavigationForwardIcon decorative size={12} />
+          </span>
+        ) : null}
       </button>
+
+      {hasChildren && submenuOpen ? (
+        <ul role="menu" data-part="submenu" aria-orientation="vertical">
+          {item.children?.map((child) => (
+            <MenuItem
+              key={child.key}
+              item={child}
+              selectedKeys={selectedKeys}
+              selectable={selectable}
+              onClick={onClick}
+              depth={depth + 1}
+            />
+          ))}
+        </ul>
+      ) : null}
     </li>
   );
 };
 
-/**
- * Dropdown implementation using DaisyUI dropdown and menu classes.
- *
- * Supports controlled and uncontrolled open state, three trigger modes (click,
- * hover, contextMenu), and DaisyUI placement modifiers (dropdown-top,
- * dropdown-end, dropdown-start). Click-outside dismissal is handled via a
- * global mousedown listener attached only while the menu is open.
- *
- * @param props - {@link DropdownProps} shared across all engines.
- * @returns A ref-forwarded DaisyUI dropdown container.
- */
-export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
-  (props, ref) => {
-    const {
-      menu,
-      trigger = DROPDOWN_DEFAULTS.trigger,
-      placement = DROPDOWN_DEFAULTS.placement,
-      open: controlledOpen,
-      onOpenChange,
-      disabled,
-      children,
-      className,
-      overlayClassName,
-      overlayStyle,
-      getPopupContainer,
-    } = props;
+export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, forwardedRef) => {
+  const {
+    menu,
+    trigger = DROPDOWN_DEFAULTS.trigger,
+    placement = DROPDOWN_DEFAULTS.placement ?? 'bottomLeft',
+    open: controlledOpen,
+    onOpenChange,
+    disabled = false,
+    children,
+    arrow = false,
+    autoAdjustOverflow = true,
+    className,
+    style,
+    overlayClassName,
+    overlayStyle,
+    getPopupContainer,
+  } = props;
 
-    const [internalOpen, setInternalOpen] = useState(false);
-    // Support both controlled (parent owns state) and uncontrolled modes
-    const isControlled = controlledOpen !== undefined;
-    const isOpen = isControlled ? controlledOpen : internalOpen;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
+  const [popupPosition, setPopupPosition] = useState<PopupPosition | null>(null);
+  const isControlled = controlledOpen !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const hasItems = Boolean(menu?.items?.length);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen && hasItems);
+  const triggers = Array.isArray(trigger) ? trigger : [trigger];
+  // Links the consumer's trigger element to the surface (aria-controls).
+  const surfaceId = useId();
 
-    const containerRef = useRef<HTMLDivElement>(null);
-    const hasItems = !!menu?.items;
-    const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen && hasItems);
+  const setContainerRef = useCallback((node: HTMLDivElement | null) => {
+    containerRef.current = node;
+    if (typeof forwardedRef === 'function') forwardedRef(node);
+    else if (forwardedRef) forwardedRef.current = node;
+  }, [forwardedRef]);
 
-    const handleOpenChange = useCallback((newOpen: boolean) => {
-      if (!isControlled) {
-        setInternalOpen(newOpen);
-      }
-      onOpenChange?.(newOpen);
-    }, [isControlled, onOpenChange]);
+  const setSurfaceRef = useCallback((node: HTMLDivElement | null) => {
+    surfaceRef.current = node;
+    presenceRef(node);
+  }, [presenceRef]);
 
-    // Dismiss the dropdown when clicking anywhere outside its container
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-          handleOpenChange(false);
-        }
-      };
+  const handleOpenChange = useCallback((nextOpen: boolean) => {
+    if (disabled && nextOpen) return;
+    if (!isControlled) setInternalOpen(nextOpen);
+    onOpenChange?.(nextOpen);
+  }, [disabled, isControlled, onOpenChange]);
 
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
 
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [isOpen, handleOpenChange]);
+  const scheduleHoverClose = useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => handleOpenChange(false), 110);
+  }, [clearCloseTimer, handleOpenChange]);
 
-    const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
-    const rootClassName = ['dropdown', getPlacementClassName(placement), 'rottay-dropdown--modern', className]
-      .filter(Boolean)
-      .join(' ');
-    const menuClassName = ['dropdown-content', 'menu', overlayClassName]
-      .filter(Boolean)
-      .join(' ');
+  useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
 
-    // Translate the engine-agnostic placement prop into inline position styles
-    const getPlacementStyle = (): React.CSSProperties => {
-      if (!placement) return { top: '100%', left: 0 };
-      const vertical = placement.startsWith('top') ? { bottom: '100%' } : { top: '100%' };
-      const horizontal = placement.endsWith('Right') ? { right: 0 } : placement.endsWith('Left') ? { left: 0 } : { left: 0 };
-      return { ...vertical, ...horizontal };
+  useEffect(() => {
+    if (!shouldRender || !getPopupContainer || !containerRef.current) {
+      setPortalHost(null);
+      return;
+    }
+    setPortalHost(getPopupContainer(containerRef.current));
+  }, [getPopupContainer, shouldRender]);
+
+  const updatePortalPosition = useCallback(() => {
+    if (!portalHost || !containerRef.current || !surfaceRef.current) return;
+
+    const triggerRect = containerRef.current.getBoundingClientRect();
+    const hostRect = portalHost.getBoundingClientRect();
+    const surfaceRect = surfaceRef.current.getBoundingClientRect();
+    const scrollLeft = portalHost === document.body ? window.scrollX : portalHost.scrollLeft;
+    const scrollTop = portalHost === document.body ? window.scrollY : portalHost.scrollTop;
+    const hostWidth = portalHost === document.body ? window.innerWidth : portalHost.clientWidth;
+    const hostHeight = portalHost === document.body ? window.innerHeight : portalHost.clientHeight;
+    const isTop = placement.startsWith('top');
+    const isRight = placement.endsWith('Right');
+    const isLeft = placement.endsWith('Left');
+
+    // Placement semantics are LOGICAL: `*Left` aligns the surface's
+    // reading-start edge with the trigger's reading-start edge. Portal
+    // geometry is measured in physical viewport coordinates, so under RTL the
+    // alignment mirrors (Popover's toPhysicalPlacement precedent) while the
+    // stamped coordinates and the clamp below stay physical.
+    const mirrorInline = readTriggerDirection(containerRef.current) === 'rtl';
+    const alignPhysicalEnd = mirrorInline ? isLeft : isRight;
+    const alignPhysicalStart = mirrorInline ? isRight : isLeft;
+
+    let left = triggerRect.left - hostRect.left + scrollLeft;
+    if (alignPhysicalEnd) left += triggerRect.width - surfaceRect.width;
+    else if (!alignPhysicalStart) left += (triggerRect.width - surfaceRect.width) / 2;
+
+    let top = triggerRect.bottom - hostRect.top + scrollTop + SURFACE_GAP;
+    if (isTop) top = triggerRect.top - hostRect.top + scrollTop - surfaceRect.height - SURFACE_GAP;
+
+    if (autoAdjustOverflow) {
+      const minimum = SURFACE_GAP;
+      const maximumLeft = Math.max(minimum, scrollLeft + hostWidth - surfaceRect.width - SURFACE_GAP);
+      left = Math.min(Math.max(left, scrollLeft + minimum), maximumLeft);
+
+      const maximumTop = Math.max(minimum, scrollTop + hostHeight - surfaceRect.height - SURFACE_GAP);
+      top = Math.min(Math.max(top, scrollTop + minimum), maximumTop);
+    }
+
+    setPopupPosition({ top, left });
+  }, [autoAdjustOverflow, placement, portalHost]);
+
+  useLayoutEffect(() => {
+    if (!portalHost || !shouldRender) return undefined;
+    updatePortalPosition();
+    const observer = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(updatePortalPosition)
+      : null;
+    if (containerRef.current) observer?.observe(containerRef.current);
+    if (surfaceRef.current) observer?.observe(surfaceRef.current);
+    window.addEventListener('resize', updatePortalPosition);
+    window.addEventListener('scroll', updatePortalPosition, true);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', updatePortalPosition);
+      window.removeEventListener('scroll', updatePortalPosition, true);
     };
+  }, [portalHost, shouldRender, updatePortalPosition]);
 
-    const handleClick = () => {
-      if (disabled) return;
-      if (triggerArray.includes('click')) {
-        handleOpenChange(!isOpen);
-      }
-    };
-
-    const handleMouseEnter = () => {
-      if (disabled) return;
-      if (triggerArray.includes('hover')) {
-        handleOpenChange(true);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      if (disabled) return;
-      if (triggerArray.includes('hover')) {
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (!containerRef.current?.contains(target) && !surfaceRef.current?.contains(target)) {
         handleOpenChange(false);
       }
     };
-
-    const handleContextMenu = (e: React.MouseEvent) => {
-      if (disabled) return;
-      if (triggerArray.includes('contextMenu')) {
-        e.preventDefault();
-        handleOpenChange(!isOpen);
-      }
-    };
-
-    const handleItemClick = (key: string) => {
-      menu?.onClick?.({ key });
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
       handleOpenChange(false);
+      // Premium bar: Escape returns focus to the trigger. The natural host is
+      // the first focusable descendant of the trigger CONTENT (never a menu
+      // item -- the in-tree surface also lives inside this container and is
+      // about to unmount); the container itself is the programmatic fallback
+      // (tabIndex -1 keeps it out of the tab order).
+      const container = containerRef.current;
+      const triggerContent = container?.querySelector<HTMLElement>('[data-part="trigger-content"]');
+      const focusTarget =
+        triggerContent?.querySelector<HTMLElement>(
+          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ) ?? container;
+      focusTarget?.focus();
     };
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [handleOpenChange, isOpen]);
 
-    return (
-      <div
-        ref={(node) => {
-          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        data-part="trigger"
-        data-open={isOpen ? 'true' : 'false'}
-        className={rootClassName}
-        style={{ position: 'relative', display: 'inline-block' }}
-        onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onContextMenu={handleContextMenu}
-      >
-        <div tabIndex={0} role="button" className="cursor-pointer">
-          {children}
-        </div>
-        {shouldRender && (
-          <ul
-            ref={presenceRef}
-            tabIndex={0}
-            data-part="surface"
-            data-open={dataState === 'open' ? 'true' : 'false'}
-            className={menuClassName}
-            style={{
-              position: 'absolute',
-              zIndex: 'var(--ds-z-dropdown)',
-              width: 208,
-              padding: 8,
-              listStyle: 'none',
-              margin: 0,
-              animation: `${dataState === 'open' ? 'ds-dropdown-popover-enter-modern' : 'ds-dropdown-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
-              ...getPlacementStyle(),
-              ...overlayStyle,
-            }}
-          >
-            {menu?.items?.map((item) => (
-              <MenuItem key={item.key} item={item} onClick={handleItemClick} />
-            ))}
-          </ul>
-        )}
-      </div>
-    );
-  }
-);
+  const handleItemClick = (key: string) => {
+    menu?.onClick?.({ key });
+    handleOpenChange(false);
+  };
+
+  const surface = shouldRender ? (
+    <div
+      ref={setSurfaceRef}
+      id={surfaceId}
+      data-part="surface"
+      data-state={dataState}
+      data-open={dataState === 'open' ? 'true' : 'false'}
+      data-placement={placement}
+      data-arrow={arrow ? 'true' : undefined}
+      className={['rottay-dropdown__surface', overlayClassName].filter(Boolean).join(' ')}
+      style={{
+        position: 'absolute',
+        zIndex: 'var(--ds-z-dropdown)',
+        ...(portalHost
+          ? (popupPosition ?? { visibility: 'hidden' })
+          : inTreePlacementStyle(placement)),
+        animation: `${dataState === 'open' ? 'ds-dropdown-popover-enter-modern' : 'ds-dropdown-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+        ...overlayStyle,
+      }}
+      onClick={(event) => event.stopPropagation()}
+      onMouseEnter={clearCloseTimer}
+      onMouseLeave={() => triggers.includes('hover') && scheduleHoverClose()}
+    >
+      {arrow ? <span data-part="arrow" aria-hidden="true" /> : null}
+      <ul role="menu" data-part="menu" aria-orientation="vertical">
+        {menu?.items?.map((item) => (
+          <MenuItem
+            key={item.key}
+            item={item}
+            selectedKeys={menu.selectedKeys ?? []}
+            selectable={Boolean(menu.selectable)}
+            onClick={handleItemClick}
+          />
+        ))}
+      </ul>
+    </div>
+  ) : null;
+
+  return (
+    <div
+      ref={setContainerRef}
+      data-part="trigger"
+      data-open={isOpen ? 'true' : 'false'}
+      data-placement={placement}
+      data-disabled={disabled ? 'true' : undefined}
+      className={['rottay-dropdown', 'rottay-dropdown--modern', className].filter(Boolean).join(' ')}
+      style={{ position: 'relative', display: 'inline-flex', ...style }}
+      // Programmatic-focus fallback for the Escape contract only; -1 keeps the
+      // container out of the tab order.
+      tabIndex={-1}
+      onClick={(event) => {
+        if (disabled || surfaceRef.current?.contains(event.target as Node)) return;
+        if (triggers.includes('click')) handleOpenChange(!isOpen);
+      }}
+      onKeyDown={(event) => {
+        if (disabled) return;
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          handleOpenChange(true);
+        }
+        if (event.key === 'Escape') handleOpenChange(false);
+      }}
+      onMouseEnter={() => {
+        clearCloseTimer();
+        if (!disabled && triggers.includes('hover')) handleOpenChange(true);
+      }}
+      onMouseLeave={() => {
+        if (!disabled && triggers.includes('hover')) scheduleHoverClose();
+      }}
+      onContextMenu={(event) => {
+        if (disabled || !triggers.includes('contextMenu')) return;
+        event.preventDefault();
+        handleOpenChange(!isOpen);
+      }}
+    >
+      {/* The disclosure semantics are cloned onto the consumer's trigger
+          ELEMENT (describeTrigger): this role-less wrapper may not carry
+          aria-haspopup/aria-expanded (axe aria-allowed-attr). */}
+      <span data-part="trigger-content">
+        {describeTrigger(children, surfaceId, isOpen, disabled)}
+      </span>
+      {portalHost && surface ? createPortal(surface, portalHost) : surface}
+    </div>
+  );
+});
 
 Dropdown.displayName = 'Dropdown.Modern';
 

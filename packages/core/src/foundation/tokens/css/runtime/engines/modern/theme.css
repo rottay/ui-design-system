@@ -18,83 +18,6 @@
  * @engine Modern (Tailwind CSS 4.x / DaisyUI 5.x)
  */
 
-/* =============================================================================
-   CSS CUSTOM PROPERTIES FOR TAILWIND
-   These can be used with Tailwind's arbitrary value syntax: bg-[var(--ds-*)]
-   ============================================================================= */
-
-[data-tenant] {
-  /* -------------------------------------------------------------------------
-     DaisyUI 5 color system (oklch format)
-     Defaults for tenants that don't override.
-     Each tenant CSS should provide its own --color-* values in oklch format.
-     These defaults provide a reasonable neutral dark baseline.
-     ------------------------------------------------------------------------- */
-  --color-primary: oklch(96.7% 0.008 100);
-  --color-primary-content: oklch(7% 0.01 260);
-  --color-secondary: oklch(53% 0.02 250);
-  --color-secondary-content: oklch(96% 0.008 100);
-  --color-accent: oklch(77% 0.04 70);
-  --color-accent-content: oklch(7% 0.01 260);
-  --color-neutral: oklch(20% 0.01 260);
-  --color-neutral-content: oklch(96% 0.008 100);
-  --color-base-100: oklch(7% 0.01 260);
-  --color-base-200: oklch(10% 0.01 250);
-  --color-base-300: oklch(13% 0.01 250);
-  --color-base-content: oklch(96% 0.008 100);
-  --color-success: oklch(72% 0.15 165);
-  --color-success-content: oklch(7% 0.01 260);
-  --color-warning: oklch(72% 0.12 75);
-  --color-warning-content: oklch(7% 0.01 260);
-  --color-error: oklch(62% 0.12 20);
-  --color-error-content: oklch(96% 0.008 100);
-  --color-info: oklch(67% 0.04 230);
-  --color-info-content: oklch(7% 0.01 260);
-
-  /* -------------------------------------------------------------------------
-     Structural tokens
-     ------------------------------------------------------------------------- */
-  --rounded-box: var(--ds-radius-lg);
-  --rounded-btn: var(--ds-button-md-radius);
-  --rounded-badge: var(--ds-badge-radius);
-  --animation-btn: var(--ds-motion-normal);
-  --animation-input: var(--ds-motion-normal);
-  --btn-focus-scale: 0.98;
-  --border-btn: 1px;
-  --tab-border: 2px;
-  --tab-radius: var(--ds-radius-md);
-
-  /* -------------------------------------------------------------------------
-     Surface hierarchy - material system
-     Provides semantic surface levels for consistent layering across the UI.
-     Canvas < Shell < Panel < Card < Inset / Control / Overlay
-     ------------------------------------------------------------------------- */
-  --ds-surface-canvas: var(--ds-color-bg-primary);
-  --ds-surface-shell: var(--ds-color-bg-secondary);
-  --ds-surface-panel: var(--ds-color-bg-tertiary);
-  --ds-surface-card: var(--ds-color-bg-elevated, var(--ds-color-bg-tertiary));
-  --ds-surface-inset: var(--ds-color-bg-inset, var(--ds-color-bg-secondary));
-  --ds-surface-control: var(--ds-color-bg-input, var(--ds-color-bg-secondary));
-  --ds-surface-overlay: rgba(0, 0, 0, 0.5);
-  --ds-surface-highlight: var(--ds-color-bg-hover, rgba(255, 255, 255, 0.06));
-
-  /* -------------------------------------------------------------------------
-     Focus ring
-     The --ds-focus-ring / --ds-focus-ring-width / --ds-focus-ring-offset /
-     --ds-focus-ring-color contract lives at the foundation layer
-     (foundation/themes/default.css) with a dark-surface override; components
-     reference those tokens directly.
-     ------------------------------------------------------------------------- */
-
-  /* -------------------------------------------------------------------------
-     Motion contract
-     Moved to the foundation --ds-motion-* canon (WO-ENG-01,
-     foundation/animations/transitions.css). Not redefined here: the engine-local
-     [data-tenant] copy carried the wrong cadence (150/250/350) and outranked the
-     canon. Components reference the foundation tokens directly.
-     ------------------------------------------------------------------------- */
-
-}
 
 /* =============================================================================
    BUTTON - .btn
@@ -279,190 +202,11 @@
 }
 
 /* =============================================================================
-   ALERT - .alert
-   ============================================================================= */
-
-[data-tenant] .alert {
-  padding: var(--ds-alert-padding);
-  border-radius: var(--ds-alert-radius);
-  font-size: var(--ds-alert-font-size);
-}
-
-/* =============================================================================
-   AVATAR - .avatar
-   ============================================================================= */
-
-[data-tenant] .avatar > div {
-  background-color: var(--ds-avatar-default-bg);
-  color: var(--ds-avatar-default-color);
-}
-
-/* =============================================================================
-   PROGRESS - .progress
-   ============================================================================= */
-
-[data-tenant] .progress {
-  background-color: var(--ds-progress-bg);
-  border-radius: var(--ds-progress-radius);
-  height: var(--ds-progress-height);
-}
-
-[data-tenant] .progress::-webkit-progress-bar {
-  background-color: var(--ds-progress-bg);
-  border-radius: var(--ds-progress-radius);
-}
-
-[data-tenant] .progress::-webkit-progress-value {
-  background-color: var(--ds-progress-fill-primary);
-  border-radius: var(--ds-progress-radius);
-}
-
-[data-tenant] .progress-primary::-webkit-progress-value {
-  background-color: var(--ds-progress-fill-primary);
-}
-
-[data-tenant] .progress-success::-webkit-progress-value {
-  background-color: var(--ds-progress-fill-success);
-}
-
-[data-tenant] .progress-error::-webkit-progress-value {
-  background-color: var(--ds-progress-fill-error);
-}
-
-/* =============================================================================
    LOADING / SPINNER - .loading
    ============================================================================= */
 
 [data-tenant] .loading {
   color: var(--ds-spinner-color);
-}
-
-/* =============================================================================
-   DIVIDER - .divider
-   ============================================================================= */
-
-[data-tenant] .divider {
-  margin: var(--ds-divider-spacing) 0;
-}
-
-[data-tenant] .divider::before,
-[data-tenant] .divider::after {
-  background-color: var(--ds-divider-color);
-  height: var(--ds-divider-width);
-}
-
-/* =============================================================================
-   DROPDOWN - .dropdown
-   ============================================================================= */
-
-[data-tenant] .dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-[data-tenant] .dropdown-content {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 50;
-  min-width: 180px;
-  background-color: var(--ds-dropdown-bg);
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-dropdown-radius, 12px);
-  box-shadow: var(--ds-dropdown-shadow);
-  padding: 4px;
-}
-
-[data-tenant] .dropdown-end .dropdown-content {
-  left: auto;
-  right: 0;
-}
-
-[data-tenant] .dropdown-top .dropdown-content {
-  top: auto;
-  bottom: 100%;
-}
-
-/* Menu inside dropdown - remove bullets */
-[data-tenant] .dropdown-content.menu,
-[data-tenant] ul.menu {
-  list-style: none !important;
-  margin: 0;
-  padding: 4px;
-}
-
-[data-tenant] .menu li {
-  list-style: none !important;
-  margin: 0;
-}
-
-[data-tenant] .menu li::before {
-  content: none !important;
-  display: none !important;
-}
-
-[data-tenant] .menu li::marker {
-  content: none !important;
-  display: none !important;
-}
-
-[data-tenant] .menu li > a,
-[data-tenant] .menu li > button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: transparent;
-  border-radius: var(--ds-dropdown-item-radius, 8px);
-  color: var(--ds-text-primary);
-  font-size: 14px;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-[data-tenant] .menu li > a:hover,
-[data-tenant] .menu li > button:hover {
-  background-color: var(--ds-dropdown-item-bg-hover);
-}
-
-[data-tenant] .menu li > a.active,
-[data-tenant] .menu li > button.active {
-  background-color: var(--ds-dropdown-item-bg-active);
-  color: var(--ds-dropdown-item-color-active);
-}
-
-/* Danger item */
-[data-tenant] .menu li > button.text-error,
-[data-tenant] .menu li > a.text-error {
-  color: var(--ds-color-error-600);
-}
-
-[data-tenant] .menu li > button.text-error:hover,
-[data-tenant] .menu li > a.text-error:hover {
-  background-color: var(--ds-color-error-50);
-}
-
-/* Disabled item */
-[data-tenant] .menu li > button:disabled,
-[data-tenant] .menu li > button.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* Menu divider */
-[data-tenant] .menu li.divider {
-  height: 1px;
-  margin: 4px 0;
-  background-color: var(--ds-border-color);
-}
-
-/* Base background utility */
-[data-tenant] .bg-base-100 {
-  background-color: var(--ds-dropdown-bg);
 }
 
 /* =============================================================================
@@ -503,13 +247,21 @@
 
 [data-tenant] .rottay-menu li > a:hover,
 [data-tenant] .rottay-menu li > button:hover {
-  background-color: color-mix(in srgb, var(--ds-color-neutral-100) 92%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--ds-color-neutral-100) 92%,
+    transparent
+  );
   color: var(--ds-text-primary);
 }
 
 [data-tenant] .rottay-menu li > a.active,
 [data-tenant] .rottay-menu li > button.active {
-  background-color: color-mix(in srgb, var(--ds-color-primary-50) 78%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--ds-color-primary-50) 78%,
+    transparent
+  );
   color: var(--ds-color-primary-800);
   font-weight: 600;
 }
@@ -551,7 +303,11 @@
 }
 
 [data-tenant] .rottay-menu details > summary:hover {
-  background-color: color-mix(in srgb, var(--ds-color-neutral-100) 92%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--ds-color-neutral-100) 92%,
+    transparent
+  );
   color: var(--ds-text-primary);
 }
 
@@ -566,15 +322,6 @@
   margin-bottom: 3px;
 }
 
-/* Divider */
-[data-tenant] .rottay-menu .divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent), transparent);
-  margin: 4px 8px;
-  opacity: 0.82;
-  list-style: none;
-}
-
 /* Disabled state */
 [data-tenant] .rottay-menu li > a.disabled,
 [data-tenant] .rottay-menu li > button.disabled,
@@ -584,67 +331,12 @@
   pointer-events: none;
 }
 
-/* Danger/Error items */
-[data-tenant] .rottay-menu li > a.text-error,
-[data-tenant] .rottay-menu li > button.text-error {
-  color: var(--ds-color-error-500);
-}
-
-[data-tenant] .rottay-menu li > a.text-error:hover,
-[data-tenant] .rottay-menu li > button.text-error:hover {
-  background-color: var(--ds-color-error-50);
-  color: var(--ds-color-error-600);
-}
-
 /* Table cells and rows should not clip dropdown */
 [data-tenant] table,
 [data-tenant] tbody,
 [data-tenant] tr,
 [data-tenant] td {
   overflow: visible;
-}
-
-/* Dropdown inside table - ensure high z-index */
-[data-tenant] td .dropdown {
-  position: relative;
-}
-
-/* =============================================================================
-   BREADCRUMBS - .breadcrumbs
-   ============================================================================= */
-
-[data-tenant] .breadcrumbs {
-  font-size: var(--ds-breadcrumb-font-size);
-}
-
-[data-tenant] .breadcrumbs li a {
-  color: var(--ds-breadcrumb-color);
-  transition: var(--ds-transition-fast);
-}
-
-[data-tenant] .breadcrumbs li a:hover {
-  color: var(--ds-breadcrumb-color-hover);
-}
-
-[data-tenant] .breadcrumbs li + li::before {
-  color: var(--ds-breadcrumb-separator-color);
-}
-
-[data-tenant] .breadcrumbs li:last-child {
-  color: var(--ds-breadcrumb-color-active);
-}
-
-/* =============================================================================
-   STEPS - .steps
-   ============================================================================= */
-
-[data-tenant] .steps .step::before {
-  background-color: var(--ds-steps-line-color);
-}
-
-[data-tenant] .steps .step::after {
-  background-color: var(--ds-steps-item-bg);
-  color: var(--ds-steps-item-color);
 }
 
 /* =============================================================================
@@ -673,78 +365,19 @@
 /* =============================================================================
    RANGE / SLIDER - .range
    ============================================================================= */
-
-[data-tenant] .range {
-  height: var(--ds-slider-thumb-size);
-}
-
-[data-tenant] .range::-webkit-slider-runnable-track {
-  background-color: var(--ds-slider-track-bg);
-  height: var(--ds-slider-track-height);
-  border-radius: var(--ds-radius-full);
-}
-
-[data-tenant] .range::-webkit-slider-thumb {
-  width: var(--ds-slider-thumb-size);
-  height: var(--ds-slider-thumb-size);
-  background-color: var(--ds-slider-thumb-bg);
-  border-color: var(--ds-slider-thumb-border);
-  box-shadow: var(--ds-slider-thumb-shadow);
-}
-
-[data-tenant] .range:focus::-webkit-slider-thumb {
-  box-shadow: var(--ds-slider-focus-ring);
-}
-
-/* =============================================================================
-   RATING - .rating
-   ============================================================================= */
-
-[data-tenant] .rating input {
-  background-color: var(--ds-rate-color);
-}
-
-[data-tenant] .rating input:checked ~ input {
-  background-color: var(--ds-rate-color);
-}
-
-[data-tenant] .rating input:checked,
-[data-tenant] .rating input:checked ~ input:checked {
-  background-color: var(--ds-rate-color-active);
-}
-
-[data-tenant] .rating:hover input:hover,
-[data-tenant] .rating:hover input:hover ~ input {
-  background-color: var(--ds-rate-color-hover);
-}
-
-/* =============================================================================
-   SKELETON - .skeleton
-   ============================================================================= */
-
-[data-tenant] .skeleton {
-  background-color: var(--ds-skeleton-bg);
-  border-radius: var(--ds-skeleton-radius);
-}
-
+/* Bridge removed (K2-V drain): modern Slider/Rate engines no longer emit the
+   Daisy `.range`/`.rating` classes — slider.css and rate.css are the single
+   paint owners. The `--ds-slider-*`/`--ds-rate-*` token channels stay (the
+   skins consume them). */
 /* =============================================================================
    TOAST - .toast
    ============================================================================= */
-
-[data-tenant] .toast {
-  background-color: var(--ds-toast-bg);
-  border-radius: var(--ds-toast-radius-md);
-  box-shadow: var(--ds-toast-shadow);
-  padding: var(--ds-toast-padding);
-  gap: var(--ds-toast-gap);
-  max-width: var(--ds-toast-max-width);
-}
-
-[data-tenant] .toast-start,
-[data-tenant] .toast-center,
-[data-tenant] .toast-end {
-  z-index: var(--ds-toast-z-index);
-}
+/* Bridge removed (Message drain): the modern Message engine no longer emits
+   the Daisy `.toast`/`toast-top`/`toast-bottom`/`toast-center` placement
+   classes — skin/message.css is the single paint owner for its stack. The
+   six `--ds-toast-*` tokens this bridge referenced were declared nowhere, so
+   the rules were already inert. The Toast primitive never consumed this
+   block (its skins key on `.rottay-toast-*` classes only). */
 
 /* =============================================================================
    LINK - a
@@ -766,21 +399,6 @@
 }
 
 /* =============================================================================
-   STAT
-   ============================================================================= */
-
-[data-tenant] .stat-title {
-  color: var(--ds-statistic-title-color);
-  font-size: var(--ds-statistic-title-font-size);
-}
-
-[data-tenant] .stat-value {
-  color: var(--ds-statistic-value-color);
-  font-size: var(--ds-statistic-value-font-size);
-  font-weight: var(--ds-statistic-value-font-weight);
-}
-
-/* =============================================================================
    TIMELINE
    ============================================================================= */
 
@@ -793,19 +411,6 @@
 [data-tenant] .timeline-middle,
 [data-tenant] .timeline-end {
   color: var(--ds-text-primary);
-}
-
-/* =============================================================================
-   CAROUSEL
-   ============================================================================= */
-
-[data-tenant] .carousel {
-  border-radius: var(--ds-carousel-radius);
-  overflow: hidden;
-}
-
-[data-tenant] .carousel-item {
-  transition: var(--ds-carousel-transition);
 }
 
 /* =============================================================================
@@ -867,479 +472,4 @@
 
 [data-tenant] .rottay-qrcode[data-status="scanned"] {
   opacity: var(--ds-qrcode-status-scanned-opacity);
-}
-
-/* =============================================================================
-   DIVIDER - .divider
-   ============================================================================= */
-
-[data-tenant] .divider {
-  border-color: var(--ds-divider-color);
-  margin: var(--ds-divider-spacing) 0;
-}
-
-[data-tenant] .divider-horizontal {
-  width: 100%;
-  height: 0;
-  border-top: var(--ds-divider-width) solid var(--ds-divider-color);
-}
-
-[data-tenant] .divider-vertical {
-  display: inline-block;
-  height: 1em;
-  width: 0;
-  border-left: var(--ds-divider-width) solid var(--ds-divider-color);
-  margin: 0 var(--ds-divider-spacing);
-  vertical-align: middle;
-}
-
-/* =============================================================================
-   BREADCRUMB - .breadcrumbs (DaisyUI)
-   ============================================================================= */
-
-[data-tenant] .breadcrumbs {
-  padding: 0;
-  margin: 0;
-  font-size: 14px;
-}
-
-[data-tenant] .breadcrumbs ul {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-[data-tenant] .breadcrumbs li {
-  display: flex;
-  align-items: center;
-  list-style: none;
-}
-
-[data-tenant] .breadcrumbs li::before {
-  content: '/';
-  margin: 0 8px;
-  color: var(--ds-text-tertiary);
-}
-
-[data-tenant] .breadcrumbs li:first-child::before {
-  display: none;
-}
-
-[data-tenant] .breadcrumbs li a {
-  color: var(--ds-text-secondary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-[data-tenant] .breadcrumbs li a:hover {
-  color: var(--ds-color-primary-600);
-}
-
-[data-tenant] .breadcrumbs li:last-child span,
-[data-tenant] .breadcrumbs li:last-child {
-  color: var(--ds-text-primary);
-  font-weight: 500;
-}
-
-/* Space component in any context - ensure gap works */
-[data-tenant] .inline-flex.flex-row {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Override for Space with custom gap */
-[data-tenant] .inline-flex.flex-row[style*="gap"] {
-  gap: unset;
-}
-
-/* =============================================================================
-   INPUT - Mejoras adicionales
-   ============================================================================= */
-
-[data-tenant] .input {
-  width: 100%;
-  height: var(--ds-input-md-height, 40px);
-  padding: 0 12px;
-  font-size: 14px;
-  background-color: var(--ds-input-bg);
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-input-radius, 8px);
-  color: var(--ds-text-primary);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  outline: none;
-}
-
-[data-tenant] .input::placeholder {
-  color: var(--ds-text-tertiary);
-}
-
-[data-tenant] .input:hover:not(:disabled):not(:focus) {
-  border-color: var(--ds-input-border-hover);
-}
-
-[data-tenant] .input:focus {
-  border-color: var(--ds-color-primary-500);
-  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-[data-tenant] .input:disabled {
-  background-color: var(--ds-input-disabled-bg);
-  color: var(--ds-text-tertiary);
-  cursor: not-allowed;
-}
-
-/* =============================================================================
-   BUTTON - Mejoras adicionales
-   ============================================================================= */
-
-[data-tenant] .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: var(--ds-button-md-height, 40px);
-  min-height: var(--ds-button-md-height, 40px);
-  padding: 0 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: var(--ds-button-md-radius, 8px);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-[data-tenant] .btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-/* Primary button */
-[data-tenant] .btn-primary {
-  background-color: var(--ds-color-primary-600);
-  border-color: var(--ds-color-primary-600);
-  color: var(--ds-button-primary-color);
-}
-
-[data-tenant] .btn-primary:hover:not(:disabled) {
-  background-color: var(--ds-color-primary-700);
-  border-color: var(--ds-color-primary-700);
-}
-
-/* Ghost button */
-[data-tenant] .btn-ghost {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ds-text-primary);
-}
-
-[data-tenant] .btn-ghost:hover:not(:disabled) {
-  background-color: var(--ds-color-neutral-100);
-}
-
-/* Disabled button */
-[data-tenant] .btn:disabled,
-[data-tenant] .btn[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* =============================================================================
-   SPACE - Utility for vertical/horizontal spacing
-   ============================================================================= */
-
-[data-tenant] .space-y-4 > * + * {
-  margin-top: 16px;
-}
-
-[data-tenant] .space-y-2 > * + * {
-  margin-top: 8px;
-}
-
-/* =============================================================================
-   AVATAR - User avatars
-   ============================================================================= */
-
-[data-tenant] .avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--ds-color-primary-100);
-  color: var(--ds-color-primary-600);
-  font-weight: 600;
-  font-size: 14px;
-  overflow: hidden;
-}
-
-[data-tenant] .avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* =============================================================================
-   LOADING SPINNER
-   ============================================================================= */
-
-[data-tenant] .loading {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--ds-border-color);
-  border-top-color: var(--ds-color-primary-600);
-  border-radius: 50%;
-  animation: ds-foundation-spin 0.6s linear infinite;
-}
-
-/* =============================================================================
-   FLEX UTILITIES - For Space component and general layout
-   ============================================================================= */
-
-[data-tenant] .inline-flex {
-  display: inline-flex;
-}
-
-[data-tenant] .flex {
-  display: flex;
-}
-
-[data-tenant] .flex-row {
-  flex-direction: row;
-}
-
-[data-tenant] .flex-col {
-  flex-direction: column;
-}
-
-[data-tenant] .flex-wrap {
-  flex-wrap: wrap;
-}
-
-/* Alignment */
-[data-tenant] .items-start {
-  align-items: flex-start;
-}
-
-[data-tenant] .items-end {
-  align-items: flex-end;
-}
-
-[data-tenant] .items-center {
-  align-items: center;
-}
-
-[data-tenant] .justify-end {
-  justify-content: flex-end;
-}
-
-[data-tenant] .justify-center {
-  justify-content: center;
-}
-
-[data-tenant] .justify-between {
-  justify-content: space-between;
-}
-
-/* =============================================================================
-   GRID - Responsive grid system
-   ============================================================================= */
-
-[data-tenant] .rottay-grid {
-  display: grid;
-  width: 100%;
-}
-[data-tenant] .gap-1 { gap: 4px; }
-[data-tenant] .gap-2 { gap: 8px; }
-[data-tenant] .gap-4 { gap: 16px; }
-[data-tenant] .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-[data-tenant] .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-/* Responsive grid - Default columns based on data attributes */
-[data-tenant] .rottay-grid[data-cols-xs="1"] { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-[data-tenant] .rottay-grid[data-cols-xs="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-[data-tenant] .rottay-grid[data-cols-xs="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-[data-tenant] .rottay-grid[data-cols-xs="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-/* SM breakpoint (640px) */
-@media (min-width: 640px) {
-  [data-tenant] .rottay-grid[data-cols-sm="1"] { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-sm="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-sm="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-sm="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
-/* MD breakpoint (768px) */
-@media (min-width: 768px) {
-  [data-tenant] .rottay-grid[data-cols-md="1"] { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-md="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-md="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-md="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
-/* LG breakpoint (1024px) */
-@media (min-width: 1024px) {
-  [data-tenant] .rottay-grid[data-cols-lg="1"] { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-lg="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-lg="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-lg="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-lg="5"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-lg="6"] { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-}
-
-/* XL breakpoint (1280px) */
-@media (min-width: 1280px) {
-  [data-tenant] .rottay-grid[data-cols-xl="1"] { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-xl="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-xl="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-xl="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-xl="5"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  [data-tenant] .rottay-grid[data-cols-xl="6"] { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-}
-
-/* =============================================================================
-   INPUT FIX - Inner input inside label wrapper
-   ============================================================================= */
-
-/* When Input has prefix/suffix, outer label has .input class, inner input should be plain */
-[data-tenant] label.input input,
-[data-tenant] .input input {
-  border: none !important;
-  background: transparent !important;
-  outline: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  height: auto !important;
-  flex: 1;
-  min-width: 0;
-}
-
-/* =============================================================================
-   FORM LAYOUT - Alignment fixes
-   ============================================================================= */
-
-/* Form container - vertical layout */
-[data-tenant] form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-}
-
-/* =============================================================================
-   SELECT / DROPDOWN - Styling
-   ============================================================================= */
-
-[data-tenant] select {
-  display: flex;
-  height: 40px;
-  min-height: 40px;
-  padding: 8px 32px 8px 12px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--ds-text-primary);
-  background-color: var(--ds-color-white);
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 8px center;
-  background-repeat: no-repeat;
-  background-size: 20px;
-  border: 1px solid var(--ds-color-border-primary);
-  border-radius: var(--ds-radius-md);
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 100%;
-}
-
-[data-tenant] select:hover {
-  border-color: var(--ds-color-primary-400);
-}
-
-[data-tenant] select:focus {
-  outline: none;
-  border-color: var(--ds-color-primary-500);
-  box-shadow: 0 0 0 2px var(--ds-color-primary-100);
-}
-
-[data-tenant] select:disabled {
-  background-color: var(--ds-color-neutral-100);
-  cursor: not-allowed;
-  opacity: var(--ds-input-disabled-opacity);
-}
-
-/* Textarea specific */
-[data-tenant] textarea {
-  min-height: 100px;
-  padding: 10px 12px;
-  resize: vertical;
-}
-
-/* =============================================================================
-   BUTTON GAP FIX - Space between buttons
-   ============================================================================= */
-
-/* Ensure buttons have gap when in flex/inline containers */
-[data-tenant] .btn + .btn {
-  margin-left: 8px;
-}
-
-/* Generic flex gap for button parents */
-[data-tenant] div:has(> .btn + .btn),
-[data-tenant] span:has(> .btn + .btn) {
-  display: inline-flex;
-  gap: 8px;
-}
-
-/* =============================================================================
-   COLOR INPUT / COLOR PICKER - Styling
-   ============================================================================= */
-
-[data-tenant] input[type="color"] {
-  width: 60px;
-  height: 40px;
-  padding: 4px;
-  border: 1px solid var(--ds-color-border-primary);
-  border-radius: var(--ds-radius-md);
-  cursor: pointer;
-  background-color: var(--ds-color-white);
-}
-
-[data-tenant] input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 2px;
-}
-
-[data-tenant] input[type="color"]::-webkit-color-swatch {
-  border: none;
-  border-radius: var(--ds-radius-sm);
-}
-
-[data-tenant] input[type="color"]::-moz-color-swatch {
-  border: none;
-  border-radius: var(--ds-radius-sm);
-}
-
-/* =============================================================================
-   TOUCH TARGETS - coarse-pointer hit-area floor (WO-ENG-12, spec section 13)
-   ============================================================================= */
-
-/* `@media (pointer: coarse)` is a pointer-capability query, not a viewport
-   fork: it targets touch hardware regardless of screen size, so fine (mouse)
-   pointer rendering is untouched. Button/link/checkbox/radio/select hit
-   areas are already floored by the unlayered rule in foundation/base.css;
-   the modern Input's <input> renders with runtime style props and a
-   per-render hashed class, so `.rottay-input--modern` is its stable hook
-   for this floor. */
-@media (pointer: coarse) {
-  [data-tenant] .rottay-input--modern {
-    min-height: var(--ds-touch-target-min);
-  }
 }

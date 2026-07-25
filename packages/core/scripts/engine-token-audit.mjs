@@ -215,14 +215,26 @@ const DAISY_PAINTED_CLASSES = [
   'modal-action',
 ];
 
-/** Engine files that render at least one DaisyUI class in a real `className`. */
+/**
+ * Engine files that render at least one DaisyUI class.
+ *
+ * Branch 1: literal class strings assigned to `className` (never a doc comment
+ * and never `Array.prototype.join`).
+ * Branch 2 (Codex K2/K3 verdict: the counter missed classes held in MAPS —
+ * Message emitted `.toast` via a placement map for months at count 0): ANY
+ * string literal whose every whitespace token is either an exact Daisy class
+ * or `<daisyClass>-<suffix>` (placement/variant maps are pure-Daisy strings,
+ * while prose like "toast notification" contains non-prefixed tokens and is
+ * excluded). Textual heuristic by design: it errs on the side of counting a
+ * file that merely quotes a full Daisy string, which is exactly the class of
+ * site the drain must review anyway.
+ */
 function countDaisyClassConsumers(files) {
   const painted = new Set(DAISY_PAINTED_CLASSES);
+  const paintedPrefixes = DAISY_PAINTED_CLASSES.map((c) => `${c}-`);
   let consumers = 0;
   for (const file of files) {
     const text = stripBlockComments(readFileSync(file, 'utf8'));
-    // Only literal class strings assigned to className, never a doc comment and
-    // never `Array.prototype.join`.
     const attrs = text.matchAll(/className=(?:\{?\s*)?(?:`([^`]*)`|"([^"]*)"|'([^']*)')/g);
     let hit = false;
     for (const m of attrs) {
@@ -234,6 +246,22 @@ function countDaisyClassConsumers(files) {
         }
       }
       if (hit) break;
+    }
+    if (!hit) {
+      const strings = text.matchAll(/"([^"]*)"|'([^']*)'|`([^`]*)`/g);
+      for (const m of strings) {
+        const value = m[1] ?? m[2] ?? m[3] ?? '';
+        const tokens = value.split(/\s+/).filter(Boolean);
+        if (
+          tokens.length > 0 &&
+          tokens.every(
+            (token) => painted.has(token) || paintedPrefixes.some((p) => token.startsWith(p)),
+          )
+        ) {
+          hit = true;
+          break;
+        }
+      }
     }
     if (hit) consumers += 1;
   }
@@ -582,7 +610,15 @@ function countFallbackParityViolations() {
         const resolvedNorm = normalizeScalar(resolved);
         if (resolvedNorm === null) continue; // token itself isn't a simple scalar (color, composite)
         if (resolvedNorm[0] !== fallbackNorm[0]) continue; // incomparable units, don't guess
-        if (Math.abs(resolvedNorm[1] - fallbackNorm[1]) > 1e-6) violations += 1;
+        if (Math.abs(resolvedNorm[1] - fallbackNorm[1]) > 1e-6) {
+          violations += 1;
+          if (process.env.DEBUG_FALLBACK_PARITY) {
+            const line = text.slice(0, m.index).split('\n').length;
+            console.error(
+              `[fallback-parity] ${rel}:${line} ${token} fallback=${fallback} resolved=${resolved}`,
+            );
+          }
+        }
       }
     }
   }

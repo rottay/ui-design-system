@@ -24,6 +24,25 @@
  * border-radius, color, transform) is non-border and clears preflight
  * unlayered at (0,3,0) or better. Values transcribed verbatim from
  * `engines/modern.tsx`.
+ *
+ * K3-C ADDENDUM (pass 1): the header/content PADDING RHYTHM moved here from
+ * the engine's inline styles so the `size` contract (stamped as `data-size`
+ * on the root: sm|md|lg, legacy small|middle|large normalized by the engine)
+ * has a single owner. Ghost keeps its own pair and sorts LAST so it always
+ * wins the tie against the size rules, reproducing the former JS ternary
+ * (`ghost ? ghostPadding : defaultPadding`). Header hover/pressed and the
+ * keyboard `:focus-visible` ring are new: the K3-C engine made headers real
+ * keyboard controls (`role=button`, tabIndex, Enter/Space), so the skin must
+ * paint the full interaction-state contract it previously lacked.
+ *
+ * K3-C PASS-2 REMEDIATION (nested-interactive + TMM contrast):
+ *  - the padding rhythm retargeted from `[data-part='header']` to
+ *    `[data-part='header-row']`: the engine now renders a plain flex ROW
+ *    holding the toggle (`[data-part='header']`, role=button) and the extra
+ *    actions slot as SIBLINGS, so an interactive extra is never nested
+ *    inside the button;
+ *  - the panel surface consumes the MATERIAL card channel before the raw
+ *    `--ds-surface-card` fallback (see the panel rule's comment).
  */
 
 /* ---- arrow: rotation (was the inline `transform` ternary on `isActive`). ---- */
@@ -38,10 +57,18 @@
         Ghost overrides both to its own token pair; the extra
         `.rottay-collapse--ghost` class naturally out-specifies the default
         rule below, no guard needed since only two mutually distinct states
-        exist. ---- */
+        exist. The K3-C pass-2 contrast remediation inserts the MATERIAL
+        channel between the component channel and the raw surface: the raw
+        `--ds-surface-card` is the brand's dark chrome surface on some
+        tenants (TMM: #18181c), which pairs incoherently with the inherited
+        text ink; the material card channel is the tenant-tuned content
+        surface (TMM: #FFFEFB, BitHire: #fff via its own fallback). ---- */
 .rottay-collapse[data-part='root'] [data-part='panel'] {
   border-radius: var(--ds-collapse-root-default-idle-border-radius, var(--ds-radius-md));
-  background: var(--ds-collapse-root-default-idle-bg, var(--ds-surface-card));
+  background: var(
+    --ds-collapse-root-default-idle-bg,
+    var(--ds-material-card-background, var(--ds-surface-card))
+  );
   box-shadow: var(--ds-collapse-root-default-idle-shadow, none);
 }
 .rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='panel'] {
@@ -99,4 +126,118 @@
 }
 .rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='content-inner'] {
   background: var(--ds-collapse-content-ghost-idle-bg, transparent);
+}
+
+/* ===========================================================================
+ * K3-C: padding rhythm (was engine inline). Size comes from the root's
+ * `data-size` (sm|md|lg); ghost sorts last and wins every tie, mirroring the
+ * former `ghost ? ghostPadding : defaultPadding` ternary. The content-inner
+ * vertical padding collapses to 0 when closed so the grid-template-rows
+ * 0fr track plus the padding transition (engine-injected COLLAPSE_STYLES)
+ * read as one motion.
+ * ======================================================================== */
+
+/* ---- header ROW: padding, default (md) rhythm. The row is the plain flex
+        wrapper that holds the toggle (data-part='header') and the extra
+        actions slot as SIBLINGS (K3-C pass-2 nested-interactive remediation)
+        — the rhythm must cover the whole row so the extra lands inside the
+        same padding boundary the toggle had when it was the row. ---- */
+.rottay-collapse[data-part='root'] [data-part='header-row'] {
+  padding: var(--ds-collapse-header-default-idle-padding-y, 12px)
+    var(--ds-collapse-header-default-idle-padding-x, 16px);
+}
+.rottay-collapse[data-part='root'][data-size='sm'] [data-part='header-row'] {
+  padding: var(--ds-collapse-header-sm-idle-padding-y, 8px)
+    var(--ds-collapse-header-sm-idle-padding-x, 12px);
+}
+.rottay-collapse[data-part='root'][data-size='lg'] [data-part='header-row'] {
+  padding: var(--ds-collapse-header-lg-idle-padding-y, 16px)
+    var(--ds-collapse-header-lg-idle-padding-x, 20px);
+}
+.rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='header-row'] {
+  padding: var(--ds-collapse-header-ghost-idle-padding-y, 8px)
+    var(--ds-collapse-header-ghost-idle-padding-x, 12px);
+}
+
+/* ---- extra: the actions slot is the toggle's SIBLING (never nested in the
+        button); a small logical gap separates it from the toggle. ---- */
+.rottay-collapse[data-part='root'] [data-part='extra'] {
+  margin-inline-start: var(--ds-collapse-extra-margin-inline-start, var(--ds-spacing-2, 8px));
+}
+
+/* ---- content-inner: padding, default (md) rhythm; 0 vertical while collapsed. ---- */
+.rottay-collapse[data-part='root'] [data-part='content-inner'] {
+  padding: 0 var(--ds-collapse-content-default-idle-padding-x, 16px);
+}
+.rottay-collapse[data-part='root'] [data-part='content-inner'][data-expanded='true'] {
+  padding: 0 var(--ds-collapse-content-default-idle-padding-x, 16px)
+    var(--ds-collapse-content-default-idle-padding-y, 16px)
+    var(--ds-collapse-content-default-idle-padding-x, 16px);
+}
+.rottay-collapse[data-part='root'][data-size='sm'] [data-part='content-inner'] {
+  padding: 0 var(--ds-collapse-content-sm-idle-padding-x, 12px);
+}
+.rottay-collapse[data-part='root'][data-size='sm'] [data-part='content-inner'][data-expanded='true'] {
+  padding: 0 var(--ds-collapse-content-sm-idle-padding-x, 12px)
+    var(--ds-collapse-content-sm-idle-padding-y, 12px)
+    var(--ds-collapse-content-sm-idle-padding-x, 12px);
+}
+.rottay-collapse[data-part='root'][data-size='lg'] [data-part='content-inner'] {
+  padding: 0 var(--ds-collapse-content-lg-idle-padding-x, 20px);
+}
+.rottay-collapse[data-part='root'][data-size='lg'] [data-part='content-inner'][data-expanded='true'] {
+  padding: 0 var(--ds-collapse-content-lg-idle-padding-x, 20px)
+    var(--ds-collapse-content-lg-idle-padding-y, 20px)
+    var(--ds-collapse-content-lg-idle-padding-x, 20px);
+}
+
+/* ===========================================================================
+ * K3-C: interaction states the skin never painted. Headers are keyboard
+ * controls now, so hover/pressed/focus-visible must be computable paint.
+ * The motion rides the collapse transition token channel; the global
+ * reduced-motion clamp (personality.css) collapses it for reduced-motion
+ * users.
+ * ======================================================================== */
+
+.rottay-collapse[data-part='root'] [data-part='header'] {
+  transition: background var(--ds-collapse-transition-duration, var(--ds-motion-fast, 120ms))
+    var(--ds-collapse-transition-timing, var(--ds-motion-ease-out));
+}
+.rottay-collapse[data-part='root'] [data-part='header']:hover:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
+  background: var(
+    --ds-collapse-header-default-hover-bg,
+    var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent))
+  );
+}
+.rottay-collapse[data-part='root'] [data-part='header']:active:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
+  background: var(
+    --ds-collapse-header-default-pressed-bg,
+    var(--ds-color-bg-active, color-mix(in srgb, var(--ds-color-primary) 7%, transparent))
+  );
+}
+.rottay-collapse[data-part='root'] [data-part='header']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+  border-radius: var(--ds-collapse-header-focus-ring-radius, var(--ds-radius-md));
+}
+
+/* collapsible='icon': the arrow carries the toggle role and the ring. */
+.rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:hover {
+  color: var(--ds-collapse-arrow-hover-color, var(--ds-color-primary));
+}
+.rottay-collapse[data-part='root'] [data-part='arrow']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+  border-radius: var(--ds-collapse-arrow-focus-ring-radius, var(--ds-radius-sm));
+}
+
+@media (forced-colors: active) {
+  .rottay-collapse[data-part='root'] [data-part='header']:focus-visible,
+  .rottay-collapse[data-part='root'] [data-part='arrow']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
+    color: GrayText;
+  }
 }

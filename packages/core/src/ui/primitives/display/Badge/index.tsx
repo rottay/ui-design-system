@@ -35,6 +35,9 @@ export type {
   BadgeSize,
   BadgeStyle,
   BadgeStatus,
+  BadgeKind,
+  BadgePosition,
+  BadgeRemovalProps,
   BadgeRibbonProps,
   BadgeCountProps,
 } from './contracts';
@@ -67,12 +70,17 @@ export const Badge = forwardRef<any, BadgeProps>((props, ref) => {
   const defaults = tokens ? resolveBadgePersonalityDefaults(tokens) : null;
   const {
     radius,
+    removable,
+    closable,
     ...rest
   } = props;
 
   return createElement(BadgeBase, {
     ref,
     ...rest,
+    // Normalize the preferred discriminated API to the compatibility bit so
+    // every rendering engine receives identical removal behaviour.
+    closable: removable ?? closable,
     // Shape defaults come from personality so badges can shift tone per tenant/profile.
     radius: radius ?? defaults?.radius,
   });

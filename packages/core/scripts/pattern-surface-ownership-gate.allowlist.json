@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "path": "src/ui/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx",
+      "category": "local-svg",
+      "rule": "local-svg-root",
+      "reason": "This owner renders supplier brand marks whose authored vector geometry is the source asset."
+    }
+  ]
+}

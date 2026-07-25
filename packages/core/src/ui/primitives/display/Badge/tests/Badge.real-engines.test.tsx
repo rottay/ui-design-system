@@ -37,6 +37,7 @@ describe('Badge real engine coverage', () => {
         onClick={handleClick}
         closable
         onClose={handleClose}
+        removeLabel="Close badge"
         icon={<span data-testid="modern-badge-icon">*</span>}
       />
     );

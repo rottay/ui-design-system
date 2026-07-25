@@ -66,4 +66,11 @@ describe('Progress tone precedence (real engines)', () => {
     const { container } = render(<RusticProgress percent={50} status="success" />);
     expect(container.querySelector('[data-status="success"]')).not.toBeNull();
   });
+
+  it('rustic circle: carries a localized accessible name including the percent', () => {
+    const { container } = render(<RusticProgress percent={65} type="circle" />);
+    const root = container.querySelector('[role="progressbar"]');
+    // Same catalog contract as the modern engine (components.progress.*).
+    expect(root?.getAttribute('aria-label')).toBe('65% complete');
+  });
 });

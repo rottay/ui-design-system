@@ -33,12 +33,18 @@ describe('ModernButton advanced engine coverage', () => {
     expect(loadingButton.className).toContain('rottay-button--shadow');
     expect(loadingButton).toBeDisabled();
     expect(loadingButton).toHaveAttribute('aria-busy', 'true');
-    const spinner = container.querySelector('svg');
-    expect(spinner).toHaveAttribute('width', '18');
-    expect(spinner).toHaveAttribute('height', '18');
-    expect(screen.getByTestId('start-icon').parentElement).toHaveStyle({ opacity: '0' });
+    const spinner = container.querySelector('[data-part="spinner"]');
+    expect(spinner).toHaveAttribute('data-size', 'xl');
+    expect(spinner).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByTestId('start-icon').closest('[data-part="content"]')).toHaveAttribute(
+      'data-state',
+      'hidden'
+    );
     expect(screen.queryByTestId('prefix')).not.toBeInTheDocument();
-    expect(screen.getByTestId('suffix').parentElement).toHaveStyle({ opacity: '0' });
+    expect(screen.getByTestId('suffix').closest('[data-part="content"]')).toHaveAttribute(
+      'data-state',
+      'hidden'
+    );
 
     fireEvent.click(loadingButton);
     expect(handleClick).not.toHaveBeenCalled();

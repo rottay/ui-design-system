@@ -15,6 +15,16 @@ export type {
 } from './Box';
 export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './Box';
 
+export {
+  SemanticSurface,
+  SemanticSurfaceSupport,
+  SEMANTIC_SURFACE_DEFAULTS,
+} from './SemanticSurface';
+export type {
+  SemanticSurfaceElement,
+  SemanticSurfaceProps,
+  SemanticSurfaceSupportProps,
+} from './SemanticSurface';
 export { Stack } from './Stack';
 export type {
   StackProps,

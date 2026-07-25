@@ -1,319 +1,763 @@
 /**
- * Modern Button skin (WO-ARC-07).
+ * Modern Button skin.
  *
- * DELIBERATELY UNLAYERED. `foundation/base.css` declares seven cascade layers
- * (`rottay-reset` … `rottay-responsive`) and then imports Tailwind, whose own
- * `theme` / `base` / `utilities` layers are absent from that statement and so
- * sort after every one of them. Layer order beats specificity, so a rule here in
- * `@layer rottay-engines` at (0,2,0) loses to Tailwind's preflight at (0,0,1):
- *
- *     @layer base { button { background-color: transparent; border-radius: 0 } }
- *     * { border: 0 solid }
- *
- * Measured on the shipped bundle: with this button's inline style removed and a
- * `@layer rottay-engines` rule applied, the background stayed `rgba(0,0,0,0)`,
- * the radius stayed `0px` and the border stayed `0px`. The identical rule,
- * unlayered, painted the three channels. The former runtime paint occupied
- * the winning position available to this skin in the cascade.
- *
- * Unlayered is the correct position, not a workaround. It outranks preflight and
- * DaisyUI, and it still yields to a consumer's own inline `style` prop -- the
- * exact precedence the inline object had. See P-47 for the architecture question
- * this leaves open.
- *
- * The selectors read the DOM contract the behavior core stamps
- * (`behavior/anatomy.ts`): `data-state~='hovered' | 'pressed' | 'focus-visible'`.
- * A busy or disabled button reports none of those -- `useInteractionState` is
- * constructed with `disabled: disabled || busy` -- so no rule below needs to
- * guard against an inert button reacting.
- *
- * Rule order below mirrors the order the inline object spread its fragments, and
- * ties are broken by position exactly as they were by spread order.
- *
- * Every selector carries BOTH classes the element wears. That is not decoration:
- * the Rottay platform artifact ships an unlayered
- *
- *     html[data-tenant='rottay']:not([data-theme='light']) *, ::after, ::before {
- *       border-color: var(--ds-color-border);
- *     }
- *
- * to undo Tailwind preflight's `border-color: currentColor`. That selector is
- * `html[data-tenant]:not([data-theme]):not(.light)`, i.e. (0,3,1), and it is
- * appended after this file. Any rule below (0,3,1) loses its border colour to a
- * floor meant for elements that have no opinion. Two classes plus the anatomy
- * part and the variant reach (0,4,0), so the variant's own border survives.
- *
- * A consumer that wants a different button border sets `--ds-button-{variant}-border`.
- * The `*` rule outranking every single-class component rule in the design system
- * is filed as P-48; this file does not fix it, it clears it.
+ * The React engine owns semantics, anatomy and interaction state. This file
+ * owns paint and geometry exclusively through public --ds-button-* channels.
+ * Product code can compose the primitive, but it never needs to restyle its
+ * internals for hover, press, focus, busy, touch, RTL or high contrast.
  */
 
-/* base */
-.rottay-button.rottay-button--modern {
+/* -------------------------------------------------------------------------
+   Anatomy and geometry
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-part='trigger'] {
+  --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
+  --ds-button-resolved-radius: var(--ds-button-md-radius);
+  --ds-button-resolved-height: var(--ds-button-md-height);
+  --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
+
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  gap: var(--ds-spacing-2, 8px);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  block-size: calc(
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale, 1)
+  );
+  gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale, 1));
+  padding-block: 0;
+  appearance: none;
+  overflow: clip;
   cursor: pointer;
-  font-weight: var(--ds-font-weight-medium);
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
   user-select: none;
-  box-sizing: border-box;
-  font-family: inherit;
-  letter-spacing: var(--ds-letter-spacing-subtle-wide);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  font-family: var(--ds-button-font-family);
+  font-weight: var(--ds-button-font-weight);
+  line-height: 1;
+  letter-spacing: var(--ds-button-letter-spacing);
+  text-align: center;
+  text-decoration: none;
+  text-transform: var(--ds-button-text-transform);
+  white-space: nowrap;
+
+  border-width: var(--ds-button-border-width);
+  border-style: solid;
+  border-radius: var(--ds-button-resolved-radius);
   outline: none;
+
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    filter var(--ds-motion-fast) var(--ds-motion-ease-out),
-    text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out);
+    transform var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    background-color var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    background-position var(--ds-motion-reveal) var(--ds-button-transition-timing),
+    border-color var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    box-shadow var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    color var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    filter var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    opacity var(--ds-button-transition-duration) var(--ds-button-transition-timing);
 }
 
-.rottay-button.rottay-button--modern[data-part='trigger'][data-full-width='true'] {
-  display: flex;
-  width: 100%;
-  white-space: normal;
+/* A quiet optical highlight gives solid controls material depth without
+   inventing another app-owned gradient. It is a public token channel and is
+   deliberately absent from text, ghost and link controls. */
+.rottay-button.rottay-button--modern:is(
+    [data-variant='primary'],
+    [data-variant='secondary'],
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='danger'],
+    [data-variant='success'],
+    [data-variant='warning'],
+    [data-variant='info'],
+    [data-variant='ai']
+  )::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ds-button-surface-highlight);
+  opacity: var(--ds-button-surface-highlight-opacity);
+  pointer-events: none;
+  content: '';
+  transition: opacity var(--ds-button-transition-duration)
+    var(--ds-button-transition-timing);
 }
 
-/* variant, at rest */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='primary'] {
-  background: var(--ds-gradient-primary), var(--ds-button-primary-bg, var(--ds-color-primary));
-  color: var(--ds-button-primary-color, var(--ds-button-primary-text, var(--ds-color-text-on-primary)));
-  border: 1px solid var(--ds-button-primary-border, var(--ds-color-primary));
-  box-shadow: var(--ds-button-primary-shadow, none);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='secondary'] {
-  background: var(--ds-button-secondary-bg, transparent);
-  color: var(--ds-button-secondary-color, var(--ds-button-secondary-text, var(--ds-color-text-primary)));
-  border: 1px solid var(--ds-button-secondary-border, var(--ds-color-border));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='default'] {
-  background: var(--ds-button-default-bg, transparent);
-  color: var(--ds-button-default-color, var(--ds-button-default-text, var(--ds-color-text-primary)));
-  border: 1px solid var(--ds-button-default-border, var(--ds-color-border));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='outline'] {
-  background: var(--ds-button-default-bg, transparent);
-  color: var(--ds-button-default-color, var(--ds-color-text-primary));
-  border: 1px solid var(--ds-button-default-border, var(--ds-color-border));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='ghost'] {
-  background: var(--ds-button-ghost-bg, transparent);
-  color: var(--ds-button-ghost-color, var(--ds-button-ghost-text, var(--ds-color-text-primary)));
-  border: 1px solid transparent;
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='text'] {
-  background: var(--ds-button-text-bg, transparent);
-  color: var(--ds-button-text-color, var(--ds-button-text-text, var(--ds-color-text-primary)));
-  border: 1px solid transparent;
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='dashed'] {
-  background: var(--ds-button-default-bg, transparent);
-  color: var(--ds-button-default-color, var(--ds-color-text-primary));
-  border: 1px dashed var(--ds-button-default-border, var(--ds-color-border));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='danger'] {
-  background: var(--ds-button-error-bg, var(--ds-color-error));
-  color: var(--ds-button-error-color, var(--ds-button-error-text, var(--ds-color-text-on-primary)));
-  border: 1px solid var(--ds-button-error-border, var(--ds-color-error));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='success'] {
-  background: var(--ds-button-success-bg, var(--ds-color-success));
-  color: var(--ds-button-success-color, var(--ds-button-success-text, var(--ds-color-text-on-primary)));
-  border: 1px solid var(--ds-button-success-border, var(--ds-color-success));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='warning'] {
-  background: var(--ds-button-warning-bg, var(--ds-color-warning));
-  color: var(--ds-button-warning-color, var(--ds-button-warning-text, var(--ds-color-text-on-primary)));
-  border: 1px solid var(--ds-button-warning-border, var(--ds-color-warning));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='info'] {
-  background: var(--ds-button-info-bg, var(--ds-color-info));
-  color: var(--ds-button-info-color, var(--ds-button-info-text, var(--ds-color-text-on-primary)));
-  border: 1px solid var(--ds-button-info-border, var(--ds-color-info));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='link'] {
-  background: transparent;
-  color: var(--ds-button-link-color, var(--ds-color-primary));
-  border: 1px solid transparent;
+.rottay-button.rottay-button--modern [data-part='content'],
+.rottay-button.rottay-button--modern [data-part='busy-content'],
+.rottay-button.rottay-button--modern [data-part='content-frame'],
+.rottay-button.rottay-button--modern [data-part='icon'],
+.rottay-button.rottay-button--modern [data-part='prefix'],
+.rottay-button.rottay-button--modern [data-part='suffix'] {
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: center;
 }
 
-/* size */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-size='xs']:not([data-size-responsive]) {
-  height: var(--ds-button-xs-height, 1.5rem);
-  padding: 0 var(--ds-button-xs-padding-x, 0.5rem);
-  font-size: var(--ds-button-xs-font-size, 0.75rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-size='sm']:not([data-size-responsive]) {
-  height: var(--ds-button-sm-height, 2rem);
-  padding: 0 var(--ds-button-sm-padding-x, 0.75rem);
-  font-size: var(--ds-button-sm-font-size, 0.8125rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-size='md']:not([data-size-responsive]) {
-  height: var(--ds-button-md-height, 2.5rem);
-  padding: 0 var(--ds-button-md-padding-x, 1rem);
-  font-size: var(--ds-button-md-font-size, 0.875rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-size='lg']:not([data-size-responsive]) {
-  height: var(--ds-button-lg-height, 2.75rem);
-  padding: 0 var(--ds-button-lg-padding-x, 1.25rem);
-  font-size: var(--ds-button-lg-font-size, 0.9375rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-size='xl']:not([data-size-responsive]) {
-  height: var(--ds-button-xl-height, 3rem);
-  padding: 0 var(--ds-button-xl-padding-x, 1.5rem);
-  font-size: var(--ds-button-xl-font-size, 1rem);
+.rottay-button.rottay-button--modern [data-part='content'],
+.rottay-button.rottay-button--modern [data-part='busy-content'],
+.rottay-button.rottay-button--modern [data-part='content-frame'] {
+  position: relative;
+  z-index: 1;
 }
 
-/* shape: circle takes the size box */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='xs']:not([data-size-responsive]) {
-  width: var(--ds-button-xs-height, 1.5rem);
-  height: var(--ds-button-xs-height, 1.5rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='sm']:not([data-size-responsive]) {
-  width: var(--ds-button-sm-height, 2rem);
-  height: var(--ds-button-sm-height, 2rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='md']:not([data-size-responsive]) {
-  width: var(--ds-button-md-height, 2.5rem);
-  height: var(--ds-button-md-height, 2.5rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='lg']:not([data-size-responsive]) {
-  width: var(--ds-button-lg-height, 2.75rem);
-  height: var(--ds-button-lg-height, 2.75rem);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='xl']:not([data-size-responsive]) {
-  width: var(--ds-button-xl-height, 3rem);
-  height: var(--ds-button-xl-height, 3rem);
+.rottay-button.rottay-button--modern [data-part='content'],
+.rottay-button.rottay-button--modern [data-part='busy-content'] {
+  gap: inherit;
+  max-inline-size: 100%;
 }
 
-/* shape */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='default'] {
-  border-radius: var(--ds-radius-button, var(--ds-radius-md, 8px));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='round'] {
-  border-radius: var(--ds-radius-full, 9999px);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'] {
-  border-radius: 50%;
-  padding: 0;
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size-responsive] {
-  width: var(--ds-button-md-height, 40px);
-  height: var(--ds-button-md-height, 40px);
+.rottay-button.rottay-button--modern [data-part='label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  translate: 0 var(--ds-button-label-offset-y);
 }
 
-/* press */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-state~='pressed'] {
-  transform: scale(var(--ds-state-press-scale));
+.rottay-button.rottay-button--modern [data-part='icon'] {
+  flex: 0 0 auto;
+  inline-size: var(--ds-button-resolved-icon-size);
+  block-size: var(--ds-button-resolved-icon-size);
+  transition: transform var(--ds-button-transition-duration)
+    var(--ds-button-transition-timing);
 }
 
-/* feedback.press recipe: when the engine stamps the recipe contract, press
-   geometry and the transform channel's timing resolve from the --ds-recipe-*
-   variables. Under reduced motion the resolver emits scale 1 / 0ms and
-   data-recipe-state='final', whose rule below removes interpolation so the
-   settled state renders directly. */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='animated'] {
-  transition:
-    transform var(--ds-recipe-enter, var(--ds-motion-fast)) var(--ds-recipe-curve, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    filter var(--ds-motion-fast) var(--ds-motion-ease-out),
-    text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-recipe-state='final'] {
-  transition: none;
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-recipe='feedback.press'][data-state~='pressed'] {
-  transform: scale(var(--ds-recipe-scale-from, var(--ds-state-press-scale)));
+.rottay-button.rottay-button--modern [data-part='icon'] > svg {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
-/* resting elevation on a raised button; hover lifts it a step via the hover rule */
-.rottay-button.rottay-button--modern[data-part='trigger'].rottay-button--shadow:not([data-state~='hovered']) {
-  box-shadow: var(--ds-elevation-1);
+.rottay-button.rottay-button--modern [data-part='spinner'] {
+  flex: 0 0 var(--ds-button-resolved-icon-size);
+  inline-size: var(--ds-button-resolved-icon-size);
+  block-size: var(--ds-button-resolved-icon-size);
+  color: var(--ds-button-spinner-color);
+  animation: ds-button-spin var(--ds-button-spinner-duration) linear infinite;
 }
 
-/* focus ring: outline-based, so it stacks with elevation instead of replacing it */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-state~='focus-visible'] {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+.rottay-button.rottay-button--modern [data-part='spinner-track'],
+.rottay-button.rottay-button--modern [data-part='spinner-indicator'] {
+  stroke-width: var(--ds-button-spinner-stroke-width);
 }
 
-/* variant, hovered */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='primary'][data-state~='hovered'] {
-  background: var(--ds-gradient-primary), var(--ds-button-primary-bg-hover, var(--ds-color-primary));
-  box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-elevation-2));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='secondary'][data-state~='hovered'] {
-  background: var(--ds-button-secondary-bg-hover, var(--ds-color-bg-subtle));
-  border-color: var(--ds-button-secondary-border-hover, var(--ds-color-border));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='default'][data-state~='hovered'] {
-  background: var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle));
-  border-color: var(--ds-button-default-border-hover, var(--ds-color-border));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='outline'][data-state~='hovered'] {
-  background: var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='ghost'][data-state~='hovered'] {
-  background: var(--ds-button-ghost-bg-hover, var(--ds-color-bg-subtle));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='text'][data-state~='hovered'] {
-  background: var(--ds-button-text-bg-hover, var(--ds-color-bg-subtle));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='dashed'][data-state~='hovered'] {
-  background: var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='danger'][data-state~='hovered'] {
-  background: var(--ds-button-error-bg-hover, var(--ds-color-error));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='success'][data-state~='hovered'] {
-  background: var(--ds-button-success-bg-hover, var(--ds-color-success));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='warning'][data-state~='hovered'] {
-  background: var(--ds-button-warning-bg-hover, var(--ds-color-warning));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='info'][data-state~='hovered'] {
-  background: var(--ds-button-info-bg-hover, var(--ds-color-info));
-}
-.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='link'][data-state~='hovered'] {
-  color: var(--ds-button-link-color-hover, var(--ds-color-primary));
-  text-decoration: underline;
+.rottay-button.rottay-button--modern [data-part='spinner-track'] {
+  opacity: var(--ds-button-spinner-track-opacity);
 }
 
-/* inert postures.
-   `data-disabled` carries the `disabled` PROP. The DOM `disabled` attribute
-   cannot stand in for it: the element sets `disabled={disabled || busy}`, so a
-   merely-pending button also carries it, and a pending button keeps its variant
-   colour while a disabled one dims. The two are indistinguishable without this
-   attribute, which is why it exists. */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-disabled='true'] {
-  cursor: not-allowed;
+.rottay-button.rottay-button--modern [data-part='content-frame'] {
+  position: relative;
+  inline-size: 100%;
 }
-/* busy outranks disabled on the cursor, and only on the cursor: a button that is
-   both waits, it does not refuse. */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-loading='true'],
-.rottay-button.rottay-button--modern[data-part='trigger'][data-pending='true'] {
-  cursor: wait;
+
+.rottay-button.rottay-button--modern [data-part='content'][data-layer='reserve'] {
+  visibility: hidden;
 }
-.rottay-button.rottay-button--modern[data-part='trigger'][data-disabled='true']:not([data-loading='true']) {
-  background: var(--ds-button-disabled-bg);
-  color: var(--ds-button-disabled-color);
-  border-color: var(--ds-button-disabled-border-color, var(--ds-button-disabled-border));
-  opacity: var(--ds-button-disabled-opacity, 0.6);
+
+.rottay-button.rottay-button--modern [data-part='content'][data-state='hidden'] {
+  position: absolute;
+  opacity: 0;
   pointer-events: none;
 }
 
-/* icon-only: a square box, whatever the size says about padding */
-.rottay-button.rottay-button--modern[data-part='trigger'][data-icon-only='true']:not([data-shape='circle']) {
-  aspect-ratio: 1;
+.rottay-button.rottay-button--modern [data-part='busy-content'] {
+  max-inline-size: 100%;
+}
+
+.rottay-button.rottay-button--modern [data-part='content-frame'] > [data-part='busy-content'] {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.rottay-button.rottay-button--modern [data-part='accessible-label'] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
   padding: 0;
-  justify-content: center;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rottay-button.rottay-button--modern[data-full-width='true'] {
+  display: flex;
+  inline-size: 100%;
+  min-block-size: calc(
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale, 1)
+  );
+  block-size: auto;
+  padding-block: calc(
+    var(--ds-button-resolved-padding-y) * var(--ds-density-effective-scale, 1)
+  );
+  white-space: normal;
+}
+
+.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='content'],
+.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='content-frame'] {
+  inline-size: 100%;
+}
+
+.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='label'] {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+}
+
+/* -------------------------------------------------------------------------
+   Size and shape
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-size='xs']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-xs-icon-size);
+  --ds-button-resolved-radius: var(--ds-button-xs-radius);
+  --ds-button-resolved-height: var(--ds-button-xs-height);
+  --ds-button-resolved-padding-y: var(--ds-button-xs-padding-y);
+  padding-inline: calc(
+    var(--ds-button-xs-padding-x) * var(--ds-density-effective-scale, 1)
+  );
+  gap: calc(var(--ds-button-xs-gap) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-button-xs-font-size);
+  line-height: var(--ds-button-xs-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='sm']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-sm-icon-size);
+  --ds-button-resolved-radius: var(--ds-button-sm-radius);
+  --ds-button-resolved-height: var(--ds-button-sm-height);
+  --ds-button-resolved-padding-y: var(--ds-button-sm-padding-y);
+  padding-inline: calc(
+    var(--ds-button-sm-padding-x) * var(--ds-density-effective-scale, 1)
+  );
+  gap: calc(var(--ds-button-sm-gap) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-button-sm-font-size);
+  line-height: var(--ds-button-sm-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
+  --ds-button-resolved-radius: var(--ds-button-md-radius);
+  --ds-button-resolved-height: var(--ds-button-md-height);
+  --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
+  padding-inline: calc(
+    var(--ds-button-md-padding-x) * var(--ds-density-effective-scale, 1)
+  );
+  gap: calc(var(--ds-button-md-gap) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-button-md-font-size);
+  line-height: var(--ds-button-md-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='lg']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-lg-icon-size);
+  --ds-button-resolved-radius: var(--ds-button-lg-radius);
+  --ds-button-resolved-height: var(--ds-button-lg-height);
+  --ds-button-resolved-padding-y: var(--ds-button-lg-padding-y);
+  padding-inline: calc(
+    var(--ds-button-lg-padding-x) * var(--ds-density-effective-scale, 1)
+  );
+  gap: calc(var(--ds-button-lg-gap) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-button-lg-font-size);
+  line-height: var(--ds-button-lg-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='xl']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-xl-icon-size);
+  --ds-button-resolved-radius: var(--ds-button-xl-radius);
+  --ds-button-resolved-height: var(--ds-button-xl-height);
+  --ds-button-resolved-padding-y: var(--ds-button-xl-padding-y);
+  padding-inline: calc(
+    var(--ds-button-xl-padding-x) * var(--ds-density-effective-scale, 1)
+  );
+  gap: calc(var(--ds-button-xl-gap) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-button-xl-font-size);
+  line-height: var(--ds-button-xl-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-shape='circle'],
+.rottay-button.rottay-button--modern[data-icon-only='true'] {
+  aspect-ratio: 1;
+  padding-inline: 0;
+}
+
+.rottay-button.rottay-button--modern[data-shape='circle'] {
+  inline-size: calc(
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale, 1)
+  );
+  border-radius: var(--ds-radius-full);
+}
+
+.rottay-button.rottay-button--modern[data-shape='round'] {
+  border-radius: var(--ds-radius-full);
+}
+
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='none'] {
+  border-radius: 0;
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='sm'] {
+  border-radius: var(--ds-radius-sm);
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='md'] {
+  border-radius: var(--ds-radius-md);
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='lg'] {
+  border-radius: var(--ds-radius-lg);
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='full'] {
+  border-radius: var(--ds-radius-full);
+}
+
+/* -------------------------------------------------------------------------
+   Variant paint. Each state has an explicit tenant-authored channel.
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-variant='primary'] {
+  background-color: var(--ds-button-primary-bg);
+  color: var(--ds-button-primary-color);
+  border-color: var(--ds-button-primary-border);
+  box-shadow: var(--ds-button-primary-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='secondary'] {
+  background-color: var(--ds-button-secondary-bg);
+  color: var(--ds-button-secondary-color);
+  border-color: var(--ds-button-secondary-border);
+  box-shadow: var(--ds-button-secondary-shadow);
+}
+
+.rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline']) {
+  background-color: var(--ds-button-default-bg);
+  color: var(--ds-button-default-color);
+  border-color: var(--ds-button-default-border);
+  box-shadow: var(--ds-button-default-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='ghost'] {
+  background-color: var(--ds-button-ghost-bg);
+  color: var(--ds-button-ghost-color);
+  border-color: var(--ds-button-ghost-border);
+  box-shadow: var(--ds-button-ghost-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='text'] {
+  background-color: var(--ds-button-text-bg);
+  color: var(--ds-button-text-color);
+  border-color: var(--ds-button-text-border);
+  box-shadow: var(--ds-button-text-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='dashed'] {
+  background-color: var(--ds-button-dashed-bg);
+  color: var(--ds-button-dashed-color);
+  border-color: var(--ds-button-dashed-border);
+  border-style: var(--ds-button-dashed-border-style);
+  box-shadow: var(--ds-button-dashed-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='danger'] {
+  background-color: var(--ds-button-error-bg);
+  color: var(--ds-button-error-color);
+  border-color: var(--ds-button-error-border);
+  box-shadow: var(--ds-button-error-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='success'] {
+  background-color: var(--ds-button-success-bg);
+  color: var(--ds-button-success-color);
+  border-color: var(--ds-button-success-border);
+  box-shadow: var(--ds-button-success-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='warning'] {
+  background-color: var(--ds-button-warning-bg);
+  color: var(--ds-button-warning-color);
+  border-color: var(--ds-button-warning-border);
+  box-shadow: var(--ds-button-warning-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='info'] {
+  background-color: var(--ds-button-info-bg);
+  color: var(--ds-button-info-color);
+  border-color: var(--ds-button-info-border);
+  box-shadow: var(--ds-button-info-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='ai'] {
+  background-color: var(--ds-button-ai-bg);
+  background-image: var(--ds-button-ai-texture);
+  color: var(--ds-button-ai-color);
+  border-color: var(--ds-button-ai-border);
+  box-shadow: var(--ds-button-ai-shadow);
+}
+
+.rottay-button.rottay-button--modern[data-variant='link'] {
+  background-color: var(--ds-button-link-bg);
+  color: var(--ds-button-link-color);
+  border-color: var(--ds-button-link-border);
+  box-shadow: var(--ds-button-link-shadow);
+  text-decoration: var(--ds-button-link-text-decoration);
+  text-underline-offset: var(--ds-button-link-underline-offset);
+}
+
+.rottay-button.rottay-button--modern[data-gradient='true'] {
+  background-image: var(--ds-button-gradient);
+  background-position: 0% 50%;
+  background-size: 180% 180%;
+}
+
+.rottay-button.rottay-button--modern[data-bordered='true']:is(
+    [data-variant='ghost'],
+    [data-variant='text'],
+    [data-variant='link']
+  ) {
+  border-color: var(--ds-button-bordered-border);
+}
+
+.rottay-button.rottay-button--modern[data-shadow='true']:not([data-state~='hovered']):not(
+    [data-state~='pressed']
+  ) {
+  box-shadow: var(--ds-button-elevated-shadow);
+}
+
+/* -------------------------------------------------------------------------
+   Interaction states
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-state~='hovered']:not([data-disabled='true']):not(
+    [data-loading='true']
+  ):not([data-pending='true']):not([data-variant='link']):not([data-variant='text']) {
+  transform: var(--ds-button-hover-transform);
+  filter: var(--ds-button-hover-filter);
+}
+
+.rottay-button.rottay-button--modern[data-state~='hovered']::before {
+  opacity: var(--ds-button-surface-highlight-hover-opacity);
+}
+
+.rottay-button.rottay-button--modern[data-state~='hovered'] [data-part='icon'] {
+  transform: var(--ds-button-icon-hover-transform);
+}
+
+.rottay-button.rottay-button--modern[data-state~='pressed'] {
+  transform: var(--ds-button-active-transform);
+  filter: var(--ds-button-active-filter);
+}
+
+.rottay-button.rottay-button--modern[data-state~='pressed']::before {
+  opacity: var(--ds-button-surface-highlight-active-opacity);
+}
+
+.rottay-button.rottay-button--modern[data-state~='pressed'] [data-part='icon'] {
+  transform: var(--ds-button-icon-active-transform);
+}
+
+.rottay-button.rottay-button--modern[data-variant='primary'][data-state~='hovered'] {
+  background-color: var(--ds-button-primary-bg-hover);
+  color: var(--ds-button-primary-color-hover);
+  border-color: var(--ds-button-primary-border-hover);
+  box-shadow: var(--ds-button-primary-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='primary'][data-state~='pressed'] {
+  background-color: var(--ds-button-primary-bg-active);
+  color: var(--ds-button-primary-color-active);
+  border-color: var(--ds-button-primary-border-active);
+  box-shadow: var(--ds-button-primary-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='secondary'][data-state~='hovered'] {
+  background-color: var(--ds-button-secondary-bg-hover);
+  color: var(--ds-button-secondary-color-hover);
+  border-color: var(--ds-button-secondary-border-hover);
+  box-shadow: var(--ds-button-secondary-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='secondary'][data-state~='pressed'] {
+  background-color: var(--ds-button-secondary-bg-active);
+  color: var(--ds-button-secondary-color-active);
+  border-color: var(--ds-button-secondary-border-active);
+  box-shadow: var(--ds-button-secondary-shadow-active);
+}
+
+.rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='hovered'] {
+  background-color: var(--ds-button-default-bg-hover);
+  color: var(--ds-button-default-color-hover);
+  border-color: var(--ds-button-default-border-hover);
+  box-shadow: var(--ds-button-default-shadow-hover);
+}
+.rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='pressed'] {
+  background-color: var(--ds-button-default-bg-active);
+  color: var(--ds-button-default-color-active);
+  border-color: var(--ds-button-default-border-active);
+  box-shadow: var(--ds-button-default-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='ghost'][data-state~='hovered'] {
+  background-color: var(--ds-button-ghost-bg-hover);
+  color: var(--ds-button-ghost-color-hover);
+  border-color: var(--ds-button-ghost-border-hover);
+  box-shadow: var(--ds-button-ghost-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='ghost'][data-state~='pressed'] {
+  background-color: var(--ds-button-ghost-bg-active);
+  color: var(--ds-button-ghost-color-active);
+  border-color: var(--ds-button-ghost-border-active);
+  box-shadow: var(--ds-button-ghost-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='text'][data-state~='hovered'] {
+  background-color: var(--ds-button-text-bg-hover);
+  color: var(--ds-button-text-color-hover);
+  border-color: var(--ds-button-text-border-hover);
+  box-shadow: var(--ds-button-text-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='text'][data-state~='pressed'] {
+  background-color: var(--ds-button-text-bg-active);
+  color: var(--ds-button-text-color-active);
+  border-color: var(--ds-button-text-border-active);
+  box-shadow: var(--ds-button-text-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='dashed'][data-state~='hovered'] {
+  background-color: var(--ds-button-dashed-bg-hover);
+  color: var(--ds-button-dashed-color-hover);
+  border-color: var(--ds-button-dashed-border-hover);
+  box-shadow: var(--ds-button-dashed-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='dashed'][data-state~='pressed'] {
+  background-color: var(--ds-button-dashed-bg-active);
+  color: var(--ds-button-dashed-color-active);
+  border-color: var(--ds-button-dashed-border-active);
+  box-shadow: var(--ds-button-dashed-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='danger'][data-state~='hovered'] {
+  background-color: var(--ds-button-error-bg-hover);
+  color: var(--ds-button-error-color-hover);
+  border-color: var(--ds-button-error-border-hover);
+  box-shadow: var(--ds-button-error-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='danger'][data-state~='pressed'] {
+  background-color: var(--ds-button-error-bg-active);
+  color: var(--ds-button-error-color-active);
+  border-color: var(--ds-button-error-border-active);
+  box-shadow: var(--ds-button-error-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='success'][data-state~='hovered'] {
+  background-color: var(--ds-button-success-bg-hover);
+  color: var(--ds-button-success-color-hover);
+  border-color: var(--ds-button-success-border-hover);
+  box-shadow: var(--ds-button-success-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='success'][data-state~='pressed'] {
+  background-color: var(--ds-button-success-bg-active);
+  color: var(--ds-button-success-color-active);
+  border-color: var(--ds-button-success-border-active);
+  box-shadow: var(--ds-button-success-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='warning'][data-state~='hovered'] {
+  background-color: var(--ds-button-warning-bg-hover);
+  color: var(--ds-button-warning-color-hover);
+  border-color: var(--ds-button-warning-border-hover);
+  box-shadow: var(--ds-button-warning-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='warning'][data-state~='pressed'] {
+  background-color: var(--ds-button-warning-bg-active);
+  color: var(--ds-button-warning-color-active);
+  border-color: var(--ds-button-warning-border-active);
+  box-shadow: var(--ds-button-warning-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='info'][data-state~='hovered'] {
+  background-color: var(--ds-button-info-bg-hover);
+  color: var(--ds-button-info-color-hover);
+  border-color: var(--ds-button-info-border-hover);
+  box-shadow: var(--ds-button-info-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='info'][data-state~='pressed'] {
+  background-color: var(--ds-button-info-bg-active);
+  color: var(--ds-button-info-color-active);
+  border-color: var(--ds-button-info-border-active);
+  box-shadow: var(--ds-button-info-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='ai'][data-state~='hovered'] {
+  background-color: var(--ds-button-ai-bg-hover);
+  color: var(--ds-button-ai-color-hover);
+  border-color: var(--ds-button-ai-border-hover);
+  box-shadow: var(--ds-button-ai-shadow-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='ai'][data-state~='pressed'] {
+  background-color: var(--ds-button-ai-bg-active);
+  color: var(--ds-button-ai-color-active);
+  border-color: var(--ds-button-ai-border-active);
+  box-shadow: var(--ds-button-ai-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-variant='link'][data-state~='hovered'] {
+  background-color: var(--ds-button-link-bg-hover);
+  color: var(--ds-button-link-color-hover);
+  border-color: var(--ds-button-link-border-hover);
+  box-shadow: var(--ds-button-link-shadow-hover);
+  text-decoration: var(--ds-button-link-text-decoration-hover);
+}
+.rottay-button.rottay-button--modern[data-variant='link'][data-state~='pressed'] {
+  background-color: var(--ds-button-link-bg-active);
+  color: var(--ds-button-link-color-active);
+  border-color: var(--ds-button-link-border-active);
+  box-shadow: var(--ds-button-link-shadow-active);
+}
+
+.rottay-button.rottay-button--modern[data-gradient='true'][data-state~='hovered'] {
+  background-position: 100% 50%;
+}
+
+.rottay-button.rottay-button--modern[data-shadow='true'][data-state~='hovered'] {
+  box-shadow: var(--ds-button-elevated-shadow-hover);
+}
+
+.rottay-button.rottay-button--modern:is(
+    [data-state~='focus-visible'],
+    :focus-visible
+  ) {
+  outline: var(--ds-button-border-width-focus) solid transparent;
+  outline-offset: var(--ds-button-focus-ring-offset);
+  box-shadow: var(--ds-button-focus-ring);
+}
+
+.rottay-button.rottay-button--modern[data-pulse='true']:not([data-disabled='true']):not(
+    [data-loading='true']
+  ):not([data-pending='true']) {
+  animation: ds-button-pulse-modern var(--ds-motion-attention)
+    var(--ds-motion-ease-in-out) var(--ds-button-attention-iteration-count);
+}
+
+@keyframes ds-button-pulse-modern {
+  0%,
+  100% {
+    box-shadow: var(--ds-button-pulse-shadow-start);
+  }
+
+  50% {
+    box-shadow: var(--ds-button-pulse-shadow-end);
+  }
+}
+
+/* feedback.press recipe owns the press timing policy, including reduced motion. */
+.rottay-button.rottay-button--modern[data-recipe='feedback.press'][data-recipe-state='animated'] {
+  --ds-button-transition-duration: var(--ds-recipe-enter);
+  --ds-button-transition-timing: var(--ds-recipe-curve);
+}
+.rottay-button.rottay-button--modern[data-recipe='feedback.press'][data-recipe-state='final'] {
+  transition: none;
+}
+
+/* -------------------------------------------------------------------------
+   Inert, touch, RTL and accessibility modes
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-disabled='true'] {
+  cursor: var(--ds-button-disabled-cursor);
+  background: var(--ds-button-disabled-bg);
+  color: var(--ds-button-disabled-color);
+  border-color: var(--ds-button-disabled-border-color);
+  box-shadow: var(--ds-button-disabled-shadow);
+  opacity: var(--ds-button-disabled-opacity);
+  transform: none;
+  filter: none;
+  pointer-events: none;
+}
+
+.rottay-button.rottay-button--modern[data-disabled='true']::before {
+  opacity: 0;
+}
+
+.rottay-button.rottay-button--modern:is([data-loading='true'], [data-pending='true']) {
+  cursor: var(--ds-button-loading-cursor);
+}
+
+[dir='rtl'] .rottay-button.rottay-button--modern [data-part='icon'] {
+  direction: rtl;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .rottay-button.rottay-button--modern[data-part='trigger'] {
+    min-block-size: var(--ds-button-touch-target-min);
+  }
+
+  .rottay-button.rottay-button--modern[data-icon-only='true'] {
+    min-inline-size: var(--ds-button-touch-target-min);
+  }
+
+  .rottay-button.rottay-button--modern[data-state~='hovered'] {
+    transform: none;
+    filter: none;
+  }
+
+  .rottay-button.rottay-button--modern[data-state~='hovered']::before {
+    opacity: var(--ds-button-surface-highlight-opacity);
+  }
+
+  .rottay-button.rottay-button--modern[data-state~='hovered'] [data-part='icon'] {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-button.rottay-button--modern[data-part='trigger'],
+  .rottay-button.rottay-button--modern [data-part='icon'] {
+    transition: none;
+  }
+
+  .rottay-button.rottay-button--modern[data-pulse='true'],
+  .rottay-button.rottay-button--modern [data-part='spinner'] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-button.rottay-button--modern[data-part='trigger'] {
+    forced-color-adjust: auto;
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .rottay-button.rottay-button--modern[data-part='trigger']::before {
+    display: none;
+  }
+
+  .rottay-button.rottay-button--modern:is(
+      [data-state~='focus-visible'],
+      :focus-visible
+    ) {
+    outline: var(--ds-button-border-width-focus) solid Highlight;
+    outline-offset: var(--ds-button-focus-ring-offset);
+    outline-color: Highlight;
+  }
+
+  .rottay-button.rottay-button--modern[data-disabled='true'] {
+    color: GrayText;
+    border-color: GrayText;
+  }
+
+  .rottay-button.rottay-button--modern [data-part='spinner'] {
+    color: ButtonText;
+  }
+}
+
+@media print {
+  .rottay-button.rottay-button--modern[data-part='trigger'] {
+    background: transparent;
+    color: CanvasText;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
 }

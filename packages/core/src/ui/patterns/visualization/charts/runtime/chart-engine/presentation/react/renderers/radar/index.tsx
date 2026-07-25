@@ -119,8 +119,9 @@ export function SvgRadarRenderer({
       height,
       maxValue,
       levels,
+      padding: showLabels ? 40 : 16,
     }),
-    [colors, data, geometryWidth, height, levels, maxValue, series],
+    [colors, data, geometryWidth, height, levels, maxValue, series, showLabels],
   );
   const interactionItems = useMemo(
     () => geometry.series.flatMap((currentSeries, seriesIndex) => (

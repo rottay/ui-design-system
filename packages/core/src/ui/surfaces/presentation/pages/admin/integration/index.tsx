@@ -50,7 +50,6 @@ function ApiKeysSection({ config }: { config: IntegrationSurfaceConfig }): React
                     <Text style={{ fontWeight: 500 }}>{key.name}</Text>
                     <Text
                       className="ds-integration__muted-text"
-                      data-part="muted-text"
                       style={{ fontSize: 12, fontFamily: 'monospace' }}
                     >
                       {key.key}
@@ -62,7 +61,6 @@ function ApiKeysSection({ config }: { config: IntegrationSurfaceConfig }): React
                     </Tag>
                     <Text
                       className="ds-integration__muted-text"
-                      data-part="muted-text"
                       style={{ fontSize: 12 }}
                     >
                       Created {key.createdAt}
@@ -114,7 +112,6 @@ function WebhooksSection({ config }: { config: IntegrationSurfaceConfig }): Reac
                     <Text style={{ fontWeight: 500, fontFamily: 'monospace', fontSize: 13 }}>{wh.url}</Text>
                     <Text
                       className="ds-integration__muted-text"
-                      data-part="muted-text"
                       style={{ fontSize: 12 }}
                     >
                       Events: {wh.events.join(', ')}
@@ -166,7 +163,6 @@ function ConnectedAppsSection({ config }: { config: IntegrationSurfaceConfig }):
                     {app.description && (
                       <Text
                         className="ds-integration__muted-text"
-                        data-part="muted-text"
                         style={{ fontSize: 12 }}
                       >{app.description}</Text>
                     )}

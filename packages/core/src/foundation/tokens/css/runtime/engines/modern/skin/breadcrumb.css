@@ -1,50 +1,179 @@
-/**
- * Modern Breadcrumb skin (WO-SKIN-04 checkpoint N).
+/** Modern Breadcrumb skin: explicit anatomy, full framing and tenant tokens.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * PAIRED-SURFACE LAW (K3-B Pass 2): surfaces behind text mix from
+ * `--ds-card-bg` (fallback `--ds-surface-card`), never raw `--ds-surface-card`
+ * — a tenant may make `--ds-surface-card` a dark feature surface (TMM:
+ * #18181c) with dark text tokens; `--ds-card-bg` is the theme's own paired
+ * card chrome (BitHire #fff, TMM #FFFEFB; ink ratios 15.0:1 / 14.8:1 with
+ * the text tokens). BitHire's `--ds-card-bg` IS `--ds-surface-card`, so the
+ * light visuals are byte-identical.
  *
- * THE SEPARATOR CHANNEL IS NOT TOUCHED (N3). Modern Breadcrumb's separators are
- * DaisyUI `::before` pseudo-elements, and `engines/modern/theme.css` carries TWO
- * independent `.breadcrumbs` blocks whose live separator color is decided by a
- * specificity tie-break that runs OPPOSITE to file order (the earlier block's
- * `li + li::before` out-specifies the later block's `li::before`). Nothing here
- * declares a `::before` rule or a separator token, and the component's
- * `--bc-color` redirection stays inline, verbatim — so the tie-break, and the
- * color a user sees today, are unchanged. Fixing that pair is P-73's job.
- *
- * SCOPE ROOT carries `rottay-breadcrumb-shell rottay-breadcrumb-shell--modern`
- * alongside the DaisyUI `.breadcrumbs` class (kept — it is the pseudo-element
- * separator's only hook) and `data-part='root'`.
- *
- * CHILD COMBINATORS, NOT DESCENDANTS: `Breadcrumb.Item` (the compound) renders
- * the SAME `data-part='crumb'` + `data-current` pair as the engine's own crumbs.
- * A descendant `[data-part='crumb']` rule here would paint a compound Item that
- * ever lands inside this root with the engine's colors. The engine's crumbs are
- * always `root > ul > li > a|span`; the compound's crumb is wrapped in an extra
- * `span.rottay-breadcrumb-item`, so the child chain below cannot reach it.
- *
- * SPECIFICITY (P-48): the root's `border` shorthand carries a real color (a
- * `transparent` fallback is still a color, not a `none`/`0` reset), so it must
- * clear the tenant's unlayered `* { border-color }` floor at (0,3,1) — it
- * reaches (0,4,0) via the two scope classes + a repeated `data-part`, and stays
- * a SHORTHAND. `color` and `background` are non-border paint and win at (0,3,0).
  */
 
 .rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'] {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: var(--ds-breadcrumb-padding, 4px);
   color: var(--ds-breadcrumb-color, var(--ds-color-text-secondary));
-  background: var(--ds-breadcrumb-bg, transparent);
+  background: var(
+    --ds-breadcrumb-bg,
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%), var(--ds-card-bg, var(--ds-surface-card)))
+  );
+  border-radius: var(--ds-breadcrumb-radius, var(--ds-radius-lg, 12px));
+  box-shadow: var(--ds-breadcrumb-shadow, var(--ds-shadow-xs));
+  scrollbar-width: none;
 }
 
 .rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-breadcrumb-border, transparent);
+  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] > ul > li > [data-part='crumb'][data-current='false'] {
-  color: var(--ds-breadcrumb-link-color, var(--ds-color-primary));
+.rottay-breadcrumb-shell--modern[data-part='root']::-webkit-scrollbar {
+  display: none;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] > ul > li > [data-part='crumb'][data-current='true'] {
+.rottay-breadcrumb-shell--modern[data-part='root'] > [data-part='list'] {
+  display: flex;
+  min-width: max-content;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='item'],
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='separator'] {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'] {
+  display: inline-flex;
+  min-height: var(--ds-breadcrumb-item-height, 30px);
+  align-items: center;
+  gap: var(--ds-spacing-1-5, 6px);
+  padding-block: 0;
+  padding-inline: var(--ds-breadcrumb-item-padding-inline, 9px);
+  border-radius: var(--ds-breadcrumb-item-radius, var(--ds-radius-md, 10px));
+  background: transparent;
+  color: var(--ds-breadcrumb-item-color, var(--ds-color-text-secondary));
+  font-family: inherit;
+  font-size: var(--ds-breadcrumb-font-size, var(--ds-font-size-sm, 14px));
+  font-weight: var(--ds-breadcrumb-font-weight, 520);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: default;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+}
+
+/* Crumbs are anchors, buttons (onClick items) or inert spans: the UA chrome
+   of the button case must never leak through the skin. */
+.rottay-breadcrumb-shell--modern[data-part='root'] button[data-part='crumb'] {
+  appearance: none;
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] {
+  cursor: pointer;
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-part='crumb'] {
+  border: 1px solid transparent;
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:hover {
+  color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+  box-shadow: var(--ds-shadow-xs);
+  transform: translateY(-1px);
+}
+
+/* A held press drops the hover lift back onto the surface. */
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
   color: var(--ds-breadcrumb-active-color, var(--ds-breadcrumb-color-active, var(--ds-color-text-primary)));
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 58%, transparent);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='icon'] {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: var(--ds-radius-sm, 8px);
+  color: var(--ds-breadcrumb-link-color, var(--ds-color-primary));
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='separator'] {
+  width: 18px;
+  height: 18px;
+  justify-content: center;
+  color: var(--ds-breadcrumb-separator-color, var(--ds-color-text-tertiary));
+  opacity: 0.72;
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-ellipsis='true'] [data-part='crumb'] {
+  min-width: 30px;
+  justify-content: center;
+  padding-inline: 7px;
+  color: var(--ds-color-text-muted);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* The default separator glyph is directional (parent -> child); mirror it in
+   RTL so the reading direction of the trail stays honest. */
+[dir='rtl'] .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='separator'] svg {
+  transform: scaleX(-1);
+}
+
+/* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] {
+    min-block-size: var(--ds-breadcrumb-touch-target-min, 44px);
+  }
+}
+
+/* ---- forced colors: every crumb keeps a frame; the current page survives.
+        The doubled data-part ties the (0,4,0) border shorthand and wins on
+        source order inside this later media block. ---- */
+@media (forced-colors: active) {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-part='crumb'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
+    border-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'] {
+    transition-duration: 0.01ms;
+  }
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Stack Component - Rottay Design System
@@ -16,7 +16,7 @@
  *
  * This component supports the Rottay multi-engine architecture:
  * - **Classic**: Full-featured implementation using Ant Design patterns
- * - **Modern**: Utility-first implementation using Tailwind flex classes
+ * - **Modern**: Deterministic flex structure with responsive, token-aware rhythm
  * - **Rustic**: Pure HTML/CSS implementation with inline flexbox styles
  *
  * @example Basic Vertical Stack
@@ -107,8 +107,8 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { StackProps } from './contracts';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { StackProps } from "./contracts";
 
 // ============================================================================
 // TYPE EXPORTS
@@ -125,9 +125,10 @@ export type {
   StackJustify,
   StackSpacing,
   StackSpacingPreset,
-} from './contracts';
+  StackMotion,
+} from "./contracts";
 
-export type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+export type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 
 // ============================================================================
 // CONSTANT EXPORTS
@@ -143,15 +144,14 @@ export {
   ALIGN_MAP,
   JUSTIFY_MAP,
   resolveSpacing,
-} from './contracts';
+} from "./contracts";
 
 // ============================================================================
 // NOTE ON UTILITY FUNCTIONS
 // ============================================================================
 
-// Utility functions (buildStackStyles, renderStackChildren, resolveSpacing)
-// are implemented within each engine file to allow engine-specific optimizations.
-// The resolveSpacing function is exported from './contracts' for external use.
+// Responsive projection and scalar presentation live in explicit runtime
+// folders; resolveSpacing remains exported from contracts for consumers.
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT
@@ -179,8 +179,8 @@ export {
  * </EngineProvider>
  * ```
  */
-export const Stack = createEngineComponent<StackProps>('Stack', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+export const Stack = createEngineComponent<StackProps>("Stack", {
+  classic: () => import("./engines/classic"),
+  modern: () => import("./engines/modern"),
+  rustic: () => import("./engines/rustic"),
 });

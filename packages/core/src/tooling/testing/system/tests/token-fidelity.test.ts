@@ -20,9 +20,11 @@ const SRC_ROOT = join(process.cwd(), 'src');
  * Fidelity matrix: each entry maps a component's modern engine file to the
  * token prefix it must reference, with a minimum reference count.
  *
- * The `minRefs` threshold is intentionally conservative -- it represents the
- * floor below which the engine is clearly not consuming its token family.
- * Increase thresholds as engines mature.
+ * The `minRefs` threshold is intentionally strict for flagship families. A
+ * token existing in BrandTheme is not useful white-label capability until the
+ * rendering engine and its skin consume it across anatomy, state and motion.
+ * Small primitives keep a lower floor; premium families must retain a broad
+ * customization surface or this gate fails before an app starts repainting.
  */
 const FIDELITY_MATRIX = [
   {
@@ -36,7 +38,7 @@ const FIDELITY_MATRIX = [
     file: 'ui/primitives/display/Card/engines/modern/index.tsx',
     skin: 'foundation/tokens/css/runtime/engines/modern/skin/card.css',
     prefix: '--ds-card-',
-    minRefs: 10,
+    minRefs: 80,
   },
   {
     component: 'Avatar',
@@ -79,7 +81,49 @@ const FIDELITY_MATRIX = [
     file: 'ui/primitives/inputs/Button/engines/modern/index.tsx',
     skin: 'foundation/tokens/css/runtime/engines/modern/skin/button.css',
     prefix: '--ds-button-',
-    minRefs: 3,
+    minRefs: 120,
+  },
+  {
+    component: 'Typography',
+    file: 'ui/primitives/display/Typography/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/typography.css',
+    prefix: '--ds-type-',
+    minRefs: 12,
+  },
+  {
+    component: 'Tabs',
+    file: 'ui/primitives/navigation/Tabs/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/tabs.css',
+    prefix: '--ds-tabs-',
+    minRefs: 80,
+  },
+  {
+    component: 'Tooltip',
+    file: 'ui/primitives/display/Tooltip/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/tooltip.css',
+    prefix: '--ds-tooltip-',
+    minRefs: 80,
+  },
+  {
+    component: 'Popover',
+    file: 'ui/primitives/overlay/Popover/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/popover.css',
+    prefix: '--ds-popover-',
+    minRefs: 60,
+  },
+  {
+    component: 'DataTable',
+    file: 'ui/patterns/data/data-table/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/data-table.css',
+    prefix: '--ds-table-',
+    minRefs: 80,
+  },
+  {
+    component: 'DecisionComparison',
+    file: 'ui/patterns/data/decision-comparison/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/presentation/components/skin/decision-comparison.css',
+    prefix: '--ds-decision-comparison-',
+    minRefs: 50,
   },
 ];
 

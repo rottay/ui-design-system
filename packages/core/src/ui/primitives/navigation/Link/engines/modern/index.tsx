@@ -1,52 +1,26 @@
 /**
  * @fileoverview Modern Link Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Link component.
- * Uses DaisyUI's link utility classes for consistent Tailwind-based styling.
+ * @description Token-driven link painted by the unlayered modern skin.
  *
  * @remarks
- * The Modern engine uses DaisyUI's link component classes, providing:
- * - Utility-first Tailwind CSS approach
- * - DaisyUI's semantic color system
- * - Lightweight bundle size
- * - Easy customization via className
+ * All paint -- variant ink, underline treatment, hover/pressed/visited/focus
+ * states, disabled policy, and the external-affordance icon -- lives in
+ * `foundation/tokens/css/runtime/engines/modern/skin/link.css`, keyed on the
+ * `rottay-link-shell rottay-link-shell--modern` scope and the `data-*` contract
+ * stamped below. No DaisyUI `link`/`link-*` classes and no Tailwind utilities
+ * are used: identical markup renders identically in apps that compile different
+ * utility sets.
  *
- * Perfect for projects already using Tailwind CSS or preferring utility classes.
- *
- * @example Using Modern Engine
+ * @example
  * ```tsx
  * import { Link } from '@rottay/design-system';
  *
- * // Specify the Modern engine
- * <Link engine="modern" href="/dashboard" type="primary">
- *   Dashboard
+ * <Link engine="modern" href="https://github.com" external>
+ *   View on GitHub
  * </Link>
  * ```
  *
- * @example With Global Engine Provider
- * ```tsx
- * import { EngineProvider, Link } from '@rottay/design-system';
- *
- * <EngineProvider engine="modern">
- *   {/* All Links use DaisyUI styling *\/}
- *   <Link href="/about" type="secondary">About Us</Link>
- *   <Link href="/contact" type="primary">Contact</Link>
- * </EngineProvider>
- * ```
- *
- * @example DaisyUI Class Mapping
- * ```tsx
- * // Type to DaisyUI class mapping:
- * // default   -> link-info
- * // primary   -> link-primary
- * // secondary -> link-secondary
- * // success   -> link-success
- * // warning   -> link-warning
- * // danger    -> link-error
- * ```
- *
  * @see {@link LinkProps} for prop documentation
- * @see {@link https://daisyui.com/components/link DaisyUI Link Component}
- *
  * @module Link/engines/modern
  * @category Navigation
  * @package @rottay/design-system
@@ -55,47 +29,21 @@
 'use client';
 
 import React from 'react';
+import { ActionOpenExternalIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-open-external';
 import type { LinkProps } from '../../contracts';
 import { LINK_DEFAULTS } from '../../contracts';
 
-// ============================================================================
-// DaisyUI Class Mapping
-// ============================================================================
-
 /**
- * Maps semantic link types to DaisyUI link color classes.
- * DaisyUI uses 'link-error' for danger (not 'link-danger'), so we bridge
- * our API naming convention to DaisyUI's naming convention here.
- */
-const typeClassMap: Record<string, string> = {
-  default: 'link-info',
-  primary: 'link-primary',
-  secondary: 'link-secondary',
-  success: 'link-success',
-  warning: 'link-warning',
-  danger: 'link-error',
-};
-
-// ============================================================================
-// Modern Link Component
-// ============================================================================
-
-/**
- * Modern engine Link component using DaisyUI/Tailwind CSS classes.
+ * Modern engine Link component painted by the modern skin.
  *
  * @description
- * Implements the Link component using DaisyUI's utility classes for
- * a lightweight, Tailwind-native approach. Combines DaisyUI's semantic
- * link classes with Tailwind utilities for disabled states.
- *
- * @remarks
- * - Uses DaisyUI's `link` base class and color variants
- * - Applies Tailwind utilities for disabled state (opacity-50, cursor-not-allowed)
- * - Supports `no-underline` class for underline control
- * - Prevents click events when disabled via pointer-events-none
+ * Renders a native anchor whose every visual decision is owned by the skin.
+ * External links gain the semantic open-external affordance icon (mirrored in
+ * RTL by the skin) alongside the `target`/`rel` security attributes; disabled
+ * links drop `href`, suppress navigation, and let the skin mute the ink.
  *
  * @param props - {@link LinkProps}
- * @returns Native anchor element with DaisyUI classes
+ * @returns Native anchor element stamped with the skin's data contract
  *
  * @example
  * ```tsx
@@ -105,10 +53,6 @@ const typeClassMap: Record<string, string> = {
  * ```
  */
 export default function ModernLink(props: LinkProps): React.ReactElement {
-  // ========================================================================
-  // Props Destructuring
-  // ========================================================================
-
   const {
     children,
     href,
@@ -116,15 +60,12 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
     disabled = LINK_DEFAULTS.disabled,
     underline = LINK_DEFAULTS.underline,
     external = LINK_DEFAULTS.external,
+    externalIcon = LINK_DEFAULTS.externalIcon,
     className = '',
     style,
     onClick,
     ...rest
   } = props;
-
-  // ========================================================================
-  // Event Handlers
-  // ========================================================================
 
   /**
    * Handle click events on the link.
@@ -138,69 +79,35 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
     onClick?.(e);
   };
 
-  // ========================================================================
-  // External Link Attributes
-  // ========================================================================
-
   /** Security attributes for external links */
   const externalProps = external
     ? { target: '_blank', rel: 'noopener noreferrer' }
     : {};
 
-  // ========================================================================
-  // Class Name Computation
-  // ========================================================================
-
-  /**
-   * Combine DaisyUI and Tailwind classes for the link element.
-   * - `link`: DaisyUI base link class
-   * - `link-{type}`: DaisyUI color variant
-   * - `no-underline`: Removes underline when underline=false
-   * - Disabled classes: opacity-50, cursor-not-allowed, pointer-events-none
-   */
-  // Array + filter(Boolean) pattern drops empty strings from conditional
-  // classes, producing clean class attributes without extra whitespace
-  const linkClasses = [
-    'rottay-link-shell',
-    'rottay-link-shell--modern',
-    'link',
-    typeClassMap[type],
-    underline ? '' : 'no-underline',
-    disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
-    className,
-  ].filter(Boolean).join(' ');
-
-  // ========================================================================
-  // Render
-  // ========================================================================
-
   return (
     <a
       href={disabled ? undefined : href}
-      className={linkClasses}
+      className={`rottay-link-shell rottay-link-shell--modern ${className}`.trim()}
       onClick={handleClick}
       aria-disabled={disabled}
       data-part="root"
       data-variant={type}
+      data-underline={underline ? 'true' : 'false'}
       data-disabled={disabled || undefined}
-      style={{
-        textDecoration: underline
-          ? 'var(--ds-link-text-decoration, underline)'
-          : 'none',
-        textUnderlineOffset: 'var(--ds-link-underline-offset, 2px)',
-        ...style,
-      }}
+      data-external={external || undefined}
+      style={style}
       {...externalProps}
       {...rest}
     >
       {children}
+      {external && externalIcon && (
+        <span data-part="external-icon" aria-hidden="true">
+          <ActionOpenExternalIcon size={12} decorative />
+        </span>
+      )}
     </a>
   );
 }
-
-// ============================================================================
-// Display Name
-// ============================================================================
 
 /** Set display name for React DevTools debugging */
 ModernLink.displayName = 'ModernLink';

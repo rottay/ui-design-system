@@ -1,0 +1,50 @@
+/**
+ * Modern framework token projection.
+ *
+ * This is deliberately NOT a tenant theme. BrandTheme (first-party products)
+ * and compiled Appearance (DB-authored tenants) own the canonical `--ds-*`
+ * values. This file only projects that resolved authority into the private
+ * DaisyUI variable vocabulary required by the Modern engine.
+ *
+ * Contract:
+ * - framework variables only; never define a canonical `--ds-*` token here;
+ * - every value must resolve from a canonical `--ds-*` token;
+ * - no literal color, typography, spacing, radius, border or motion values;
+ * - product/page customisation stays above this layer through DS props, slots,
+ *   recipes and scoped semantic tokens.
+ */
+
+[data-tenant] {
+  /* DaisyUI colour vocabulary projected from the compiled DS authority. */
+  --color-primary: var(--ds-color-primary);
+  --color-primary-content: var(--ds-button-primary-color);
+  --color-secondary: var(--ds-color-secondary);
+  --color-secondary-content: var(--ds-button-secondary-color);
+  --color-accent: var(--ds-color-accent);
+  --color-accent-content: var(--ds-color-text-on-primary);
+  --color-neutral: var(--ds-color-neutral-800);
+  --color-neutral-content: var(--ds-color-text-inverse);
+  --color-base-100: var(--ds-color-bg-primary);
+  --color-base-200: var(--ds-color-bg-secondary);
+  --color-base-300: var(--ds-color-bg-tertiary);
+  --color-base-content: var(--ds-color-text-primary);
+  --color-success: var(--ds-color-success);
+  --color-success-content: var(--ds-button-success-color);
+  --color-warning: var(--ds-color-warning);
+  --color-warning-content: var(--ds-button-warning-color);
+  --color-error: var(--ds-color-error);
+  --color-error-content: var(--ds-button-error-color);
+  --color-info: var(--ds-color-info);
+  --color-info-content: var(--ds-button-info-color);
+
+  /* DaisyUI 5 structural vocabulary. Do not reintroduce the removed Daisy 4
+     `--rounded-*`, `--animation-*`, `--btn-focus-scale` or `--tab-*` names. */
+  --radius-selector: var(--ds-radius-sm);
+  --radius-field: var(--ds-radius-button);
+  --radius-box: var(--ds-radius-lg);
+  --size-selector: var(--ds-spacing-1);
+  --size-field: var(--ds-spacing-1);
+  --border: var(--ds-border-width-1);
+  --depth: var(--ds-effect-intensity);
+  --noise: var(--ds-effect-intensity);
+}

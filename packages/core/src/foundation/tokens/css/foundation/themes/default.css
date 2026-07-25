@@ -229,6 +229,164 @@
   --ds-color-info-border: rgba(59, 130, 246, 0.2);
 
   /* ─────────────────────────────────────────────────────────────────────────────
+     1.11 MATERIAL ROLES - canonical cross-engine defaults
+
+     These are platform fallbacks, not tenant identity. BrandTheme and compiled
+     Appearance override the same canonical `--ds-*` roles later in the cascade;
+     Modern, Classic and Rustic only consume them. Keeping the material grammar
+     here prevents an engine adapter from becoming a second theming system.
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-surface-canvas: var(--ds-color-bg-primary);
+  --ds-surface-shell: var(--ds-color-bg-secondary);
+  --ds-surface-panel: var(--ds-color-bg-tertiary);
+  --ds-surface-card: var(--ds-color-bg-elevated, var(--ds-color-bg-tertiary));
+  --ds-surface-inset: var(--ds-color-bg-inset, var(--ds-color-bg-secondary));
+  --ds-surface-control: var(--ds-color-bg-input, var(--ds-color-bg-secondary));
+  --ds-surface-raised: color-mix(
+    in srgb,
+    var(--ds-surface-card) 94%,
+    var(--ds-color-bg-primary)
+  );
+  --ds-surface-overlay: rgba(0, 0, 0, 0.5);
+  --ds-surface-highlight: var(--ds-color-bg-hover, rgba(255, 255, 255, 0.06));
+
+  --ds-material-canvas-background: var(--ds-surface-canvas);
+  --ds-material-canvas-foreground: var(--ds-color-text-primary);
+  --ds-material-shell-background: var(--ds-surface-shell);
+  --ds-material-shell-foreground: var(--ds-color-text-primary);
+
+  --ds-material-panel-background: var(--ds-surface-panel);
+  --ds-material-panel-background-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 3%,
+    var(--ds-surface-panel)
+  );
+  --ds-material-panel-background-active: color-mix(
+    in srgb,
+    var(--ds-color-primary) 5%,
+    var(--ds-surface-panel)
+  );
+  --ds-material-panel-background-selected: color-mix(
+    in srgb,
+    var(--ds-color-primary) 7%,
+    var(--ds-surface-panel)
+  );
+  --ds-material-panel-background-disabled: color-mix(
+    in srgb,
+    var(--ds-surface-panel) 82%,
+    var(--ds-surface-canvas)
+  );
+  --ds-material-panel-foreground: var(--ds-color-text-primary);
+  --ds-material-panel-foreground-muted: var(--ds-color-text-secondary);
+  --ds-material-panel-foreground-disabled: var(--ds-color-text-disabled);
+  --ds-material-panel-border: var(--ds-color-border-primary);
+  --ds-material-panel-border-strong: var(--ds-color-border-secondary);
+  --ds-material-panel-border-hover: var(--ds-color-border-secondary);
+  --ds-material-panel-border-active: var(--ds-color-primary);
+  --ds-material-panel-border-selected: var(--ds-color-primary);
+  --ds-material-panel-border-disabled: var(
+    --ds-color-border-disabled,
+    var(--ds-color-border-subtle)
+  );
+  --ds-material-panel-focus-ring: var(
+    --ds-focus-ring,
+    var(--ds-shadow-focus-ring)
+  );
+  --ds-material-panel-shadow: none;
+  --ds-material-panel-shadow-hover: var(--ds-shadow-sm);
+  --ds-material-panel-shadow-active: none;
+  --ds-material-panel-shadow-selected: var(--ds-material-panel-focus-ring);
+
+  --ds-material-card-background: var(--ds-surface-card);
+  --ds-material-card-background-hover: var(
+    --ds-color-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card))
+  );
+  --ds-material-card-background-active: var(
+    --ds-color-bg-active,
+    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
+  );
+  --ds-material-card-background-selected: var(
+    --ds-color-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
+  );
+  --ds-material-card-background-disabled: var(
+    --ds-color-bg-disabled,
+    color-mix(in srgb, var(--ds-surface-card) 82%, var(--ds-surface-panel))
+  );
+  --ds-material-card-foreground: var(--ds-color-text-primary);
+  --ds-material-card-foreground-muted: var(--ds-color-text-secondary);
+  --ds-material-card-foreground-disabled: var(--ds-color-text-disabled);
+  --ds-material-card-border: var(--ds-color-border-primary);
+  --ds-material-card-border-strong: var(--ds-color-border-secondary);
+  --ds-material-card-border-hover: var(
+    --ds-color-border-hover,
+    var(--ds-color-border-secondary)
+  );
+  --ds-material-card-border-active: var(--ds-color-primary);
+  --ds-material-card-border-selected: var(--ds-color-primary);
+  --ds-material-card-border-disabled: var(
+    --ds-color-border-disabled,
+    var(--ds-color-border-subtle)
+  );
+  --ds-material-card-focus-ring: var(
+    --ds-focus-ring,
+    var(--ds-shadow-focus-ring)
+  );
+  --ds-material-card-shadow: var(--ds-shadow-sm);
+  --ds-material-card-shadow-hover: var(--ds-shadow-md);
+  --ds-material-card-shadow-active: var(--ds-shadow-sm);
+  --ds-material-card-shadow-selected: var(--ds-material-card-focus-ring);
+
+  --ds-material-inset-background: var(--ds-surface-inset);
+  --ds-material-inset-foreground: var(--ds-color-text-primary);
+
+  --ds-material-control-background: var(--ds-surface-control);
+  --ds-material-control-background-hover: var(
+    --ds-color-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-control))
+  );
+  --ds-material-control-background-active: var(
+    --ds-color-bg-active,
+    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-control))
+  );
+  --ds-material-control-background-selected: var(
+    --ds-color-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-control))
+  );
+  --ds-material-control-background-disabled: var(
+    --ds-color-bg-disabled,
+    color-mix(in srgb, var(--ds-surface-control) 82%, var(--ds-surface-panel))
+  );
+  --ds-material-control-foreground: var(--ds-color-text-primary);
+  --ds-material-control-foreground-muted: var(--ds-color-text-secondary);
+  --ds-material-control-foreground-disabled: var(--ds-color-text-disabled);
+  --ds-material-control-border: var(--ds-color-border-primary);
+  --ds-material-control-border-strong: var(--ds-color-border-secondary);
+  --ds-material-control-border-hover: var(
+    --ds-color-border-hover,
+    var(--ds-color-border-secondary)
+  );
+  --ds-material-control-border-active: var(--ds-color-primary);
+  --ds-material-control-border-selected: var(--ds-color-primary);
+  --ds-material-control-border-disabled: var(
+    --ds-color-border-disabled,
+    var(--ds-color-border-subtle)
+  );
+  --ds-material-control-focus-ring: var(
+    --ds-focus-ring,
+    var(--ds-shadow-focus-ring)
+  );
+  --ds-material-control-shadow: none;
+  --ds-material-control-shadow-hover: var(--ds-shadow-sm);
+  --ds-material-control-shadow-active: none;
+  --ds-material-control-shadow-selected: var(--ds-material-control-focus-ring);
+
+  --ds-material-raised-background: var(--ds-surface-raised);
+  --ds-material-raised-foreground: var(--ds-color-text-primary);
+  --ds-material-overlay-background: var(--ds-surface-overlay);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
      2. TYPOGRAPHY - Geist/Inter Style
      ───────────────────────────────────────────────────────────────────────────── */
 
@@ -240,6 +398,74 @@
   --ds-font-family-base: var(--ds-font-sans);
   --ds-font-family-heading: var(--ds-font-sans);
   --ds-font-family-mono: var(--ds-font-mono);
+
+
+  /* DS-A007 semantic type-role defaults: every role channel resolves even
+     when a theme authors no roles, so components can consume roles without
+     per-site fallbacks and tenants re-author them channel by channel. */
+  --ds-type-display-font-family: var(--ds-font-family-display, var(--ds-font-family-heading));
+  --ds-type-display-font-size: var(--ds-font-size-5xl);
+  --ds-type-display-font-weight: 700;
+  --ds-type-display-line-height: 1.1;
+  --ds-type-display-letter-spacing: var(--ds-letter-spacing-tight);
+  --ds-type-display-text-transform: none;
+  --ds-type-display-font-variant-numeric: normal;
+  --ds-type-page-title-font-family: var(--ds-font-family-heading);
+  --ds-type-page-title-font-size: var(--ds-font-size-2xl);
+  --ds-type-page-title-font-weight: 700;
+  --ds-type-page-title-line-height: 1.2;
+  --ds-type-page-title-letter-spacing: var(--ds-letter-spacing-tight);
+  --ds-type-page-title-text-transform: none;
+  --ds-type-page-title-font-variant-numeric: normal;
+  --ds-type-section-title-font-family: var(--ds-font-family-heading);
+  --ds-type-section-title-font-size: var(--ds-font-size-xl);
+  --ds-type-section-title-font-weight: 600;
+  --ds-type-section-title-line-height: 1.25;
+  --ds-type-section-title-letter-spacing: var(--ds-letter-spacing-normal);
+  --ds-type-section-title-text-transform: none;
+  --ds-type-section-title-font-variant-numeric: normal;
+  --ds-type-body-font-family: var(--ds-font-family-base);
+  --ds-type-body-font-size: var(--ds-font-size-base);
+  --ds-type-body-font-weight: 400;
+  --ds-type-body-line-height: var(--ds-line-height-normal);
+  --ds-type-body-letter-spacing: var(--ds-letter-spacing-normal);
+  --ds-type-body-text-transform: none;
+  --ds-type-body-font-variant-numeric: normal;
+  --ds-type-supporting-font-family: var(--ds-font-family-base);
+  --ds-type-supporting-font-size: var(--ds-font-size-sm);
+  --ds-type-supporting-font-weight: 400;
+  --ds-type-supporting-line-height: var(--ds-line-height-normal);
+  --ds-type-supporting-letter-spacing: var(--ds-letter-spacing-normal);
+  --ds-type-supporting-text-transform: none;
+  --ds-type-supporting-font-variant-numeric: normal;
+  --ds-type-label-font-family: var(--ds-font-family-base);
+  --ds-type-label-font-size: var(--ds-font-size-sm);
+  --ds-type-label-font-weight: 600;
+  --ds-type-label-line-height: 1.3;
+  --ds-type-label-letter-spacing: 0.04em;
+  --ds-type-label-text-transform: none;
+  --ds-type-label-font-variant-numeric: normal;
+  --ds-type-caption-font-family: var(--ds-font-family-base);
+  --ds-type-caption-font-size: var(--ds-font-size-xs);
+  --ds-type-caption-font-weight: 400;
+  --ds-type-caption-line-height: 1.35;
+  --ds-type-caption-letter-spacing: var(--ds-letter-spacing-normal);
+  --ds-type-caption-text-transform: none;
+  --ds-type-caption-font-variant-numeric: normal;
+  --ds-type-code-font-family: var(--ds-font-family-mono);
+  --ds-type-code-font-size: var(--ds-font-size-sm);
+  --ds-type-code-font-weight: 400;
+  --ds-type-code-line-height: var(--ds-line-height-normal);
+  --ds-type-code-letter-spacing: var(--ds-letter-spacing-normal);
+  --ds-type-code-text-transform: none;
+  --ds-type-code-font-variant-numeric: normal;
+  --ds-type-numeric-font-family: var(--ds-font-family-base);
+  --ds-type-numeric-font-size: var(--ds-font-size-base);
+  --ds-type-numeric-font-weight: 500;
+  --ds-type-numeric-line-height: var(--ds-line-height-snug);
+  --ds-type-numeric-letter-spacing: var(--ds-letter-spacing-normal);
+  --ds-type-numeric-text-transform: none;
+  --ds-type-numeric-font-variant-numeric: tabular-nums;
 
   /* Font Sizes
      This block wins the cascade over foundation/base/typography.css (imported
@@ -297,25 +523,39 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      3. SPACING - 4px Grid System
      ───────────────────────────────────────────────────────────────────────────── */
-  /* Spacing steps multiply against the tenant density dial; this block redefines
-     base/spacing.css in the same layer, so the wrap must live here too. */
+  /* Global spacing steps compose structural tenant scale, tenant appearance and
+     an optional local posture. This block redefines base/spacing.css, so the
+     wrap lives here too; density.css reprojects at local data-density boundaries. */
+  --ds-density-global-effective-scale: clamp(
+    0.5,
+    calc(var(--ds-density-scale, 1) * var(--ds-density-mode-factor, 1)),
+    3
+  );
+  --ds-density-effective-scale: clamp(
+    0.5,
+    calc(
+      var(--ds-density-global-effective-scale, 1) *
+      var(--ds-density-local-factor, 1)
+    ),
+    3
+  );
   --ds-spacing-0: 0;
-  --ds-spacing-1: calc(0.25rem * var(--ds-density-scale, 1));
-  --ds-spacing-2: calc(0.5rem * var(--ds-density-scale, 1));
-  --ds-spacing-3: calc(0.75rem * var(--ds-density-scale, 1));
-  --ds-spacing-4: calc(1rem * var(--ds-density-scale, 1));
-  --ds-spacing-5: calc(1.25rem * var(--ds-density-scale, 1));
-  --ds-spacing-6: calc(1.5rem * var(--ds-density-scale, 1));
-  --ds-spacing-8: calc(2rem * var(--ds-density-scale, 1));
-  --ds-spacing-10: calc(2.5rem * var(--ds-density-scale, 1));
-  --ds-spacing-12: calc(3rem * var(--ds-density-scale, 1));
-  --ds-spacing-16: calc(4rem * var(--ds-density-scale, 1));
-  --ds-spacing-20: calc(5rem * var(--ds-density-scale, 1));
-  --ds-spacing-24: calc(6rem * var(--ds-density-scale, 1));
-  --ds-spacing-32: calc(8rem * var(--ds-density-scale, 1));
-  --ds-spacing-40: calc(10rem * var(--ds-density-scale, 1));
-  --ds-spacing-48: calc(12rem * var(--ds-density-scale, 1));
-  --ds-spacing-64: calc(16rem * var(--ds-density-scale, 1));
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-4: calc(1rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-8: calc(2rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-12: calc(3rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-16: calc(4rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-20: calc(5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-24: calc(6rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-32: calc(8rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-40: calc(10rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-48: calc(12rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));
 
   /* Semantic Spacing */
   --ds-spacing-xs: var(--ds-spacing-1);
@@ -1495,7 +1735,11 @@
   --ds-textarea-filled-bg: #f5f5f5;
 
   /* Textarea Count */
-  --ds-textarea-count-color: #a3a3a3;
+  /* AA floor on light surfaces: #a3a3a3 measured 2.8:1 on white (Axe R0).
+     #6B6B72 converges with the rottay light-section value and clears 4.5:1
+     on white (5.29), #F4F8FB (4.83) and #FBF6EC (4.78). The dark section
+     below keeps #a3a3a3, whose dark-surface pairing already passes (7.0:1). */
+  --ds-textarea-count-color: #6B6B72;
   --ds-textarea-count-font-size: var(--ds-font-size-xs);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1695,9 +1939,9 @@
   --ds-tabs-border: #e5e5e5;
 
   /* Tab Item */
-  --ds-tab-color: #737373;
-  --ds-tab-color-hover: #171717;
-  --ds-tab-color-active: #171717;
+  --ds-tab-color: var(--ds-color-text-secondary);
+  --ds-tab-color-hover: var(--ds-color-text-primary);
+  --ds-tab-color-active: var(--ds-color-text-primary);
   --ds-tab-bg-hover: transparent;
   --ds-tab-border-active: #171717;
   --ds-tab-font-weight: 500;
@@ -2177,4 +2421,10 @@ html.dark {
   --ds-anchor-border-color: var(--ds-color-border-secondary);
 
   --ds-watermark-color: rgba(255, 255, 255, 0.06);
+
+  /* Textarea Count (dark): preserves the pre-existing #a3a3a3 pairing on dark
+     surfaces (7.0:1) after the light `:root` value moved to the AA-safe
+     #6B6B72. Without this line the dark theme would inherit the darker light
+     value and regress to 3.0:1. */
+  --ds-textarea-count-color: #a3a3a3;
 }

@@ -8,7 +8,15 @@ export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant,
 export { TONE_TO_AVATAR_VARIANT } from './Avatar';
 
 export { Badge } from './Badge';
-export type { BadgeProps, BadgeVariant, BadgeSize } from './Badge';
+export type {
+  BadgeProps,
+  BadgeVariant,
+  BadgeSize,
+  BadgeStyle,
+  BadgeStatus,
+  BadgeKind,
+  BadgePosition,
+} from './Badge';
 export { TONE_TO_BADGE_VARIANT } from './Badge';
 
 export { Card } from './Card';
@@ -22,7 +30,14 @@ export type { TagProps, TagSize, TagVariant, TagTone, TagRadius, TagGroupProps }
 export { TONE_TO_TAG_VARIANT } from './Tag';
 
 export { Tooltip } from './Tooltip';
-export type { TooltipProps, TooltipTriggerProps, TooltipContentProps, TooltipPlacement, TooltipTriggerType } from './Tooltip';
+export type {
+  TooltipProps,
+  TooltipTriggerProps,
+  TooltipContentProps,
+  TooltipPlacement,
+  TooltipTriggerType,
+  TooltipTouchBehavior,
+} from './Tooltip';
 
 export { Heading, Text, Paragraph, Link, Typography } from './Typography';
 export type { HeadingProps, TextProps, ParagraphProps, LinkProps, HeadingLevel, TextSize, TextWeight, TextAlign, TextColor } from './Typography';

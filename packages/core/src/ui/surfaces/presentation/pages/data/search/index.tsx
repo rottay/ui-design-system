@@ -57,7 +57,6 @@ function DefaultSearchResult({
             <Stack spacing="xs">
               <Text
                 className="ds-search__result-title"
-                data-part="result-title"
                 style={{ fontWeight: 700 }}
               >
                 {result.title}
@@ -65,7 +64,6 @@ function DefaultSearchResult({
               {result.description && (
                 <Text
                   className="ds-search__result-meta"
-                  data-part="result-meta"
                 >
                   {result.description}
                 </Text>
@@ -73,7 +71,6 @@ function DefaultSearchResult({
               {result.meta && (
                 <Box
                   className="ds-search__result-meta"
-                  data-part="result-meta"
                 >
                   {result.meta}
                 </Box>
@@ -301,7 +298,6 @@ export function SearchSurface({
                           {selectedResult.description && (
                             <Text
                               className="ds-search__muted-text"
-                              data-part="muted-text"
                             >
                               {selectedResult.description}
                             </Text>

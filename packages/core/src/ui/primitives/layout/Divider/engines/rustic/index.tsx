@@ -15,21 +15,26 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import type { DividerProps, DividerVariant, DividerTextPosition } from '../../contracts';
+import React, { forwardRef } from "react";
+import type {
+  DividerProps,
+  DividerVariant,
+  DividerLogicalTextPosition,
+} from "../../contracts";
 import {
   DIVIDER_DEFAULTS,
   SPACING_MAP,
   getThicknessValue,
   DEFAULT_COLORS,
-} from '../../contracts';
+  resolveDividerTextPosition,
+} from "../../contracts";
 
 /**
  * Rustic (vanilla CSS) Divider with full ARIA accessibility.
  *
- * Uses BEM-style class names (`divider`, `divider--horizontal`, `divider__text`)
+ * Uses DS-owned BEM class names (`divider--horizontal`, `divider__text`)
  * and CSS custom properties (`--ds-divider-text-*`, `--ds-color-neutral-*`) for
  * tenant theming. Decorative line spans include `aria-hidden="true"` so screen
  * readers only announce the text content.
@@ -37,167 +42,170 @@ import {
  * @param props - {@link DividerProps} with orientation, variant, text, and styling options.
  * @returns A fully accessible separator element with inline styles.
  */
-const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
-  (props, ref) => {
-    const {
-      orientation: orientationProp,
-      type,
-      variant: variantProp,
-      dashed = DIVIDER_DEFAULTS.dashed,
-      children,
-      textPosition: textPositionProp,
-      orientationMargin,
-      plain = DIVIDER_DEFAULTS.plain!,
-      color,
-      thickness = DIVIDER_DEFAULTS.thickness,
-      spacing: spacingProp,
-      margin,
-      className = '',
-      style = {},
-      'data-testid': testId,
-      ...rest
-    } = props;
+const RusticDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
+  const {
+    orientation: orientationProp,
+    type,
+    variant: variantProp,
+    dashed = DIVIDER_DEFAULTS.dashed,
+    children,
+    textPosition: textPositionProp,
+    orientationMargin,
+    plain = DIVIDER_DEFAULTS.plain!,
+    color,
+    thickness = DIVIDER_DEFAULTS.thickness,
+    spacing: spacingProp,
+    margin,
+    className = "",
+    style = {},
+    "data-testid": testId,
+    ...rest
+  } = props;
 
-    // Resolve prop aliases for backward compatibility
-    const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
-    const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
-    const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
-    const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
+  // Resolve prop aliases for backward compatibility
+  const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
+  const variant: DividerVariant = dashed
+    ? "dashed"
+    : variantProp || DIVIDER_DEFAULTS.variant!;
+  const textPosition: DividerLogicalTextPosition = resolveDividerTextPosition(
+    textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition
+  );
+  const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
-    const isHorizontal = orientation === 'horizontal';
-    // Text is only supported in horizontal orientation
-    const hasChildren = !!children && isHorizontal;
+  const isHorizontal = orientation === "horizontal";
+  // Text is only supported in horizontal orientation
+  const hasChildren =
+    React.Children.toArray(children).length > 0 && isHorizontal;
 
-    const lineThickness = getThicknessValue(thickness);
-    const lineColor = color || DEFAULT_COLORS.rustic;
-    const spacingValue = SPACING_MAP[spacing];
+  const lineThickness = getThicknessValue(thickness);
+  const lineColor = color || DEFAULT_COLORS.rustic;
+  const spacingValue = SPACING_MAP[spacing];
 
-    // BEM class names allow external CSS overrides without specificity wars
-    const classNames = [
-      'rottay-divider',
-      'rottay-divider--rustic',
-      'divider',
-      `divider--${orientation}`,
-      `divider--${variant}`,
-      hasChildren ? 'divider--with-text' : '',
-      hasChildren ? `divider--ds-text-${textPosition}` : '',
-      plain && hasChildren ? 'divider--plain' : '',
-      className,
-    ].filter(Boolean).join(' ');
+  // The generic DaisyUI `.divider` classname is intentionally absent. Rustic
+  // must not inherit Modern framework pseudo-elements or bridge paint.
+  const classNames = [
+    "rottay-divider",
+    "rottay-divider--rustic",
+    `divider--${orientation}`,
+    `divider--${variant}`,
+    hasChildren ? "divider--with-text" : "",
+    hasChildren ? `divider--ds-text-${textPosition}` : "",
+    plain && hasChildren ? "divider--plain" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    // Explicit box-sizing ensures padding/border is included in dimensions.
-    // Vertical dividers use inline-flex so they flow alongside content.
-    const containerStyle: React.CSSProperties = {
-      display: isHorizontal ? 'flex' : 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxSizing: 'border-box',
-      width: isHorizontal ? '100%' : 'auto',
-      height: isHorizontal ? 'auto' : '100%',
-      minHeight: isHorizontal ? undefined : '1em',
-      margin: isHorizontal
-        ? `${spacingValue} 0`
-        : `0 ${spacingValue}`,
-      padding: 0,
-      ...style,
-    };
+  // Explicit box-sizing ensures padding/border is included in dimensions.
+  // Vertical dividers use inline-flex so they flow alongside content.
+  const containerStyle: React.CSSProperties = {
+    display: isHorizontal ? "flex" : "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxSizing: "border-box",
+    width: isHorizontal ? "100%" : "auto",
+    height: isHorizontal ? "auto" : "100%",
+    minHeight: isHorizontal ? undefined : "1em",
+    margin: isHorizontal ? `${spacingValue} 0` : `0 ${spacingValue}`,
+    padding: 0,
+    ...style,
+  };
 
-    // Base line style: layout only. Border (top/left driven by `isHorizontal`,
-    // right/bottom always the static `none` reset) lives in
-    // engines/rustic/skin/divider.css. `color`/`thickness` are
-    // caller-overridable free-form props (see Divider.types.ts), so the
-    // resolved value can't be enumerated into a finite data-* lookup -- it
-    // rides `--ds-divider-line`, read via `var()` in the skin and gated on
-    // `data-orientation` there to land on border-top vs border-left.
-    const lineStyle: React.CSSProperties = {
-      flex: 1,
-      boxSizing: 'border-box',
-      height: isHorizontal ? '0' : '100%',
-      width: isHorizontal ? '100%' : '0',
-      '--ds-divider-line': `${lineThickness} ${variant} ${lineColor}`,
-    } as React.CSSProperties;
+  // Base line style: layout only. Border (top/left driven by `isHorizontal`,
+  // right/bottom always the static `none` reset) lives in
+  // engines/rustic/skin/divider.css. `color`/`thickness` are
+  // caller-overridable free-form props (see Divider.types.ts), so the
+  // resolved value can't be enumerated into a finite data-* lookup -- it
+  // rides `--ds-divider-line`, read via `var()` in the skin and gated on
+  // `data-orientation` there to land on border-top vs border-left.
+  const lineStyle: React.CSSProperties = {
+    flex: 1,
+    boxSizing: "border-box",
+    height: isHorizontal ? "0" : "100%",
+    width: isHorizontal ? "100%" : "0",
+    "--ds-divider-line": `${lineThickness} ${variant} ${lineColor}`,
+  } as React.CSSProperties;
 
-    // Asymmetric flex values create the left/center/right text positioning
-    const lineBeforeStyle: React.CSSProperties = {
-      ...lineStyle,
-      flex: textPosition === 'left' ? '0 0 5%' :
-            textPosition === 'right' ? 1 : 1,
-      minWidth: '5%',
-    };
+  // Asymmetric flex values create the left/center/right text positioning
+  const lineBeforeStyle: React.CSSProperties = {
+    ...lineStyle,
+    flex: textPosition === "start" ? "0 0 5%" : textPosition === "end" ? 1 : 1,
+    minWidth: "5%",
+  };
 
-    const lineAfterStyle: React.CSSProperties = {
-      ...lineStyle,
-      flex: textPosition === 'left' ? 1 :
-            textPosition === 'right' ? '0 0 5%' : 1,
-      minWidth: '5%',
-    };
+  const lineAfterStyle: React.CSSProperties = {
+    ...lineStyle,
+    flex: textPosition === "start" ? 1 : textPosition === "end" ? "0 0 5%" : 1,
+    minWidth: "5%",
+  };
 
-    // Text uses CSS custom property fallbacks for tenant-level overrides.
-    // Color lives in engines/rustic/skin/divider.css, gated on the
-    // already-stamped `divider--plain` class (present only when
-    // `plain && hasChildren`) -- when plain, no rule matches and the text
-    // naturally inherits, matching the original `'inherit'` value exactly.
-    const textStyle: React.CSSProperties = {
-      display: 'inline-block',
-      padding: 'var(--ds-divider-text-padding, 0 1rem)',
-      whiteSpace: 'nowrap',
-      fontSize: plain ? 'inherit' : 'var(--ds-divider-text-size, 0.875rem)',
-      fontWeight: plain ? 'inherit' : 500,
-      lineHeight: 1.5,
-    };
+  // Text uses CSS custom property fallbacks for tenant-level overrides.
+  // Color lives in engines/rustic/skin/divider.css, gated on the
+  // already-stamped `divider--plain` class (present only when
+  // `plain && hasChildren`) -- when plain, no rule matches and the text
+  // naturally inherits, matching the original `'inherit'` value exactly.
+  const textStyle: React.CSSProperties = {
+    display: "inline-block",
+    padding: "var(--ds-divider-text-padding, 0 1rem)",
+    whiteSpace: "nowrap",
+    fontSize: plain ? "inherit" : "var(--ds-divider-text-size, 0.875rem)",
+    fontWeight: plain ? "inherit" : 500,
+    lineHeight: 1.5,
+  };
 
-    // With-text render path: line spans are aria-hidden for accessibility
-    if (hasChildren) {
-      return (
-        <div
-          ref={ref}
-          className={classNames}
-          style={containerStyle}
-          role="separator"
-          aria-orientation={orientation}
-          data-testid={testId}
-          data-part="root"
-          data-orientation={orientation}
-          data-with-text="true"
-          {...rest}
-        >
-          <span
-            className="divider__line divider__line--before"
-            data-part="line-before"
-            style={lineBeforeStyle}
-            aria-hidden="true"
-          />
-          <span className="divider__text" data-part="text" style={textStyle}>
-            {children}
-          </span>
-          <span
-            className="divider__line divider__line--after"
-            data-part="line-after"
-            style={lineAfterStyle}
-            aria-hidden="true"
-          />
-        </div>
-      );
-    }
-
-    // Simple divider: merge container and line styles into a single element
+  // With-text render path: line spans are aria-hidden for accessibility
+  if (hasChildren) {
     return (
       <div
         ref={ref}
         className={classNames}
-        style={{ ...containerStyle, ...lineStyle }}
+        style={containerStyle}
         role="separator"
         aria-orientation={orientation}
         data-testid={testId}
         data-part="root"
         data-orientation={orientation}
-        data-with-text="false"
+        data-with-text="true"
+        data-text-position={textPosition}
         {...rest}
-      />
+      >
+        <span
+          className="divider__line divider__line--before"
+          data-part="line-before"
+          style={lineBeforeStyle}
+          aria-hidden="true"
+        />
+        <span className="divider__text" data-part="text" style={textStyle}>
+          {children}
+        </span>
+        <span
+          className="divider__line divider__line--after"
+          data-part="line-after"
+          style={lineAfterStyle}
+          aria-hidden="true"
+        />
+      </div>
     );
   }
-);
 
-RusticDivider.displayName = 'RusticDivider';
+  // Simple divider: merge container and line styles into a single element
+  return (
+    <div
+      ref={ref}
+      className={classNames}
+      style={{ ...containerStyle, ...lineStyle }}
+      role="separator"
+      aria-orientation={orientation}
+      data-testid={testId}
+      data-part="root"
+      data-orientation={orientation}
+      data-with-text="false"
+      data-text-position={undefined}
+      {...rest}
+    />
+  );
+});
+
+RusticDivider.displayName = "RusticDivider";
 
 export default RusticDivider;

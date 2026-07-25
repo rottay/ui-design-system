@@ -11,11 +11,11 @@
   box-shadow: var(--ds-collection-card-shadow, 0 10px 24px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__muted-text[data-part='muted-text'][data-part='muted-text'][data-tone='disabled'] {
+.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__muted-text[data-part='root'][data-part='root'][data-tone='disabled'] {
   color: var(--ds-color-text-disabled);
 }
 

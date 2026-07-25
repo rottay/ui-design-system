@@ -20,10 +20,9 @@
  * background/border-color/border-radius/box-shadow with an inline `style` that
  * beat ALL of card.css — including its hover/focus rules. Preserving that
  * byte-exact means an unlayered rule that outranks card.css's MAX specificity on
- * those channels. Measured (via the test's bColumn) across modern + rustic
- * card.css: MAX = 9 (the modern outlined-hover `:not([data-tone])` border rule).
- * This rule escalates the `ds-data-table__mobile-card` class to a bColumn of 10
- * (2 scope classes + the card class repeated 8x) — the FFP suppression idiom —
+ * those channels. The contract test measures the current MAX across modern +
+ * rustic card.css rather than relying on a stale literal. This rule uses the
+ * FFP suppression idiom and stays one b-column unit above that measured floor,
  * so it wins at rest and in the (unphotographed) hover/focus a clickable card
  * could take, exactly as the inline style did. Card sets border-WIDTH/STYLE via
  * its variant; this rule overrides only border-COLOR, matching the inline
@@ -38,58 +37,409 @@
  */
 
 /* ---- inline cell editor input: rest + error border, plus the shared chrome --- */
-.ds-pattern-data-table [data-part='editor-input'] {
+.ds-pattern-data-table [data-part="editor-input"] {
   border-radius: var(--ds-radius-sm, 6px);
   background: var(--ds-surface-card, #fff);
   color: var(--ds-color-text-primary, #1a1a1a);
   outline: none;
 }
-.ds-pattern-data-table [data-part='editor-input'][data-part='editor-input'][data-part='editor-input'] {
+.ds-pattern-data-table
+  [data-part="editor-input"][data-part="editor-input"][data-part="editor-input"] {
   border: 1.5px solid var(--ds-color-primary, #3b82f6);
 }
-.ds-pattern-data-table [data-part='editor-input'][data-part='editor-input'][data-invalid='true'] {
+.ds-pattern-data-table
+  [data-part="editor-input"][data-part="editor-input"][data-invalid="true"] {
   border: 1.5px solid var(--ds-color-error, #e53e3e);
 }
 
 /* ---- checkbox editor + error message ---- */
-.ds-pattern-data-table [data-part='editor-checkbox'] {
+.ds-pattern-data-table [data-part="editor-checkbox"] {
   accent-color: var(--ds-color-primary, #3b82f6);
 }
-.ds-pattern-data-table [data-part='editor-error'] {
+.ds-pattern-data-table [data-part="editor-error"] {
   color: var(--ds-color-error, #e53e3e);
 }
 
 /* ---- mobile card chrome (FFP suppression: beats card.css MAX = 9) ---- */
+.ds-data-table-responsive-root[data-part="responsive-root"] {
+  width: 100%;
+  min-width: 0;
+  container-name: ds-data-table-responsive;
+  container-type: inline-size;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"] {
+  --ds-card-bg: var(--ds-collection-card-bg, var(--ds-premium-card-bg));
+  --ds-card-border: var(
+    --ds-collection-card-border,
+    var(--ds-premium-card-border)
+  );
+  --ds-card-border-hover: var(
+    --ds-collection-card-border-hover,
+    var(--ds-premium-card-border-hover)
+  );
+  --ds-card-radius: var(
+    --ds-collection-card-radius,
+    var(--ds-premium-card-radius, var(--ds-radius-lg))
+  );
+  --ds-card-shadow: var(
+    --ds-collection-card-shadow,
+    var(--ds-premium-card-shadow, none)
+  );
+  --ds-card-shadow-hover: var(
+    --ds-collection-card-shadow-hover,
+    var(--ds-premium-card-shadow-hover, var(--ds-elevation-2))
+  );
+
+  width: 100%;
+  min-width: 0;
+  container-name: ds-mobile-table;
+  container-type: inline-size;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="compact"] {
+  --ds-density-local-factor: var(--ds-density-factor-compact, 0.85);
+  --ds-density-card-padding: var(
+    --ds-density-card-padding-compact,
+    calc(
+      0.75rem *
+        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
+    )
+  );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="comfortable"] {
+  --ds-density-local-factor: var(--ds-density-factor-comfortable, 1);
+  --ds-density-card-padding: var(
+    --ds-density-card-padding-comfortable,
+    calc(
+      1rem *
+        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
+    )
+  );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="spacious"] {
+  --ds-density-local-factor: var(--ds-density-factor-spacious, 1.15);
+  --ds-density-card-padding: var(
+    --ds-density-card-padding-spacious,
+    calc(
+      1.125rem *
+        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
+    )
+  );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card {
+  overflow: hidden;
+  transition: var(
+    --ds-transition-rearrange,
+    transform var(--ds-motion-feedback)
+      var(--ds-motion-ease-move, ease-out),
+    box-shadow var(--ds-motion-feedback)
+      var(--ds-motion-ease-move, ease-out)
+  );
+}
+
 .ds-pattern-data-table.ds-data-table--mobile
-  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
+  .ds-data-table__mobile-card--selected {
+  --ds-card-border: var(
+    --ds-collection-card-selected-border,
+    var(--ds-premium-card-selected-border, var(--ds-color-primary))
+  );
+  --ds-card-shadow: var(
+    --ds-collection-card-selected-ring,
+    var(--ds-premium-card-selected-ring)
+  );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-card-custom"][data-selected="true"] {
+  border-radius: var(
+    --ds-collection-card-radius,
+    var(--ds-premium-card-radius, var(--ds-radius-lg))
+  );
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-collection-card-selected-border, var(--ds-color-primary));
+  outline-offset: var(--ds-table-mobile-selected-outline-offset, 2px);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card:hover,
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card:focus-within {
+  transform: translateY(var(--ds-table-mobile-card-hover-lift, -1px));
+  box-shadow: var(
+    --ds-collection-card-shadow-hover,
+    var(--ds-premium-card-shadow-hover, var(--ds-elevation-2))
+  );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-table-mobile-card-focus-ring,
+    0 0 0 var(--ds-focus-ring-width, 2px)
+      color-mix(in srgb, var(--ds-color-primary) 42%, transparent),
+    var(
+      --ds-collection-card-shadow-hover,
+      var(--ds-premium-card-shadow-hover, var(--ds-elevation-2))
+    )
+  );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-primary"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-toolbar"],
+.ds-pattern-data-table.ds-data-table--mobile [data-part="filters"] {
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-toolbar"] > *,
+.ds-pattern-data-table.ds-data-table--mobile [data-part="filters"] > * {
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
   background: var(--ds-collection-card-bg, var(--ds-card-bg));
-  border-radius: var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  border-radius: var(
+    --ds-collection-card-radius,
+    var(--ds-premium-card-radius, var(--ds-radius-lg, 12px))
+  );
   border-color: var(--ds-collection-card-border, var(--ds-card-border-color));
   box-shadow: var(--ds-collection-card-shadow, none);
 }
 .ds-pattern-data-table.ds-data-table--mobile
-  .ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected {
-  border-color: var(--ds-collection-card-selected-border, var(--ds-color-primary));
-  box-shadow: var(--ds-collection-card-selected-ring, 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
+  .ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected {
+  border-color: var(
+    --ds-collection-card-selected-border,
+    var(--ds-color-primary)
+  );
+  box-shadow: var(
+    --ds-collection-card-selected-ring,
+    0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
+  );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-recipe="minimal"]
+  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
+  --ds-card-shadow: var(--ds-table-minimal-shadow, none);
+  box-shadow: var(--ds-table-minimal-shadow, none);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-recipe="ruled"]
+  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
+  --ds-card-radius: var(
+    --ds-table-ruled-mobile-radius,
+    var(--ds-radius-md, 0.5rem)
+  );
+  --ds-card-shadow: var(--ds-table-ruled-mobile-shadow, none);
+  border-radius: var(--ds-table-ruled-mobile-radius, var(--ds-radius-md, 0.5rem));
+  box-shadow: var(--ds-table-ruled-mobile-shadow, none);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-recipe="grid"]
+  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
+  --ds-card-border: var(--ds-table-border, var(--ds-color-border-secondary));
+  border-color: var(--ds-table-border, var(--ds-color-border-secondary));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-recipe="zebra"]
+  .ds-data-table__mobile-card:nth-child(even) {
+  --ds-card-bg: var(--ds-table-row-bg-striped, var(--ds-surface-inset));
+  background: var(--ds-table-row-bg-striped, var(--ds-surface-inset));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-recipe="editorial"]
+  [data-part="mobile-card-title"] {
+  font-family: var(--ds-typography-display-family, var(--ds-font-family-heading));
+  font-size: var(--ds-table-editorial-mobile-title-size, 1rem);
+  letter-spacing: var(--ds-typography-display-tracking, -0.02em);
 }
 
 /* ---- mobile card text (title + summary value Boxes; the summary LABEL is a
         Text prop-swapped to color="subtle", not a rule) ---- */
-.ds-pattern-data-table.ds-data-table--mobile [data-part='mobile-card-title'] {
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-title"] {
   color: var(--ds-color-text-primary);
+  font-family: var(--ds-typography-section-title-family, inherit);
+  font-weight: var(--ds-typography-section-title-weight, 600);
 }
-.ds-pattern-data-table.ds-data-table--mobile [data-part='mobile-card-summary-value'] {
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-card-summary-label"] {
+  flex-shrink: 0;
+  font-family: var(--ds-typography-label-family, inherit);
+  font-size: var(--ds-typography-label-size, 0.6875rem);
+  font-weight: var(--ds-typography-label-weight, 600);
+  letter-spacing: var(--ds-typography-label-tracking, 0.04em);
+  text-transform: var(--ds-typography-label-transform, uppercase);
+}
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-card-summary-value"] {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: end;
   color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-card-summary-row"] {
+  min-width: 0;
+  min-height: var(--ds-table-mobile-summary-min-height, 2rem);
+  padding-block: var(--ds-table-mobile-summary-padding-block, 0.375rem);
+  padding-inline: var(--ds-table-mobile-summary-padding-inline, 0.125rem);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-card-summary-row"]
+  + [data-part="mobile-card-summary-row"] {
+  border-block-start: 1px solid
+    var(
+      --ds-table-mobile-summary-divider,
+      color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)
+    );
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-card-selection"] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--ds-table-mobile-control-size, 2.25rem);
+  min-height: var(--ds-table-mobile-control-size, 2.25rem);
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  background: var(--ds-surface-inset, var(--ds-surface-panel));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-card-actions"][data-part="mobile-card-actions"] {
+  padding-block-start: var(--ds-table-mobile-actions-padding-block, 0.625rem);
+  border-block-start: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-bulk-count"] {
+  font-size: var(--ds-typography-supporting-size, 0.8125rem);
+  font-weight: var(--ds-typography-label-weight, 600);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-bulk-actions"] {
+  padding: var(--ds-table-mobile-bulk-padding, 0.625rem 0.75rem);
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 7%,
+    var(--ds-surface-card)
+  );
+  box-shadow: var(--ds-elevation-1);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-bulk-actions"][data-part="mobile-bulk-actions"] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-pagination"] {
+  padding: var(--ds-table-mobile-pagination-padding, 0.625rem 0.75rem);
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  background: var(--ds-surface-inset, var(--ds-surface-panel));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-pagination"][data-part="mobile-pagination"] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-pagination-range"],
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="mobile-pagination-page"] {
+  font-size: var(--ds-typography-supporting-size, 0.8125rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile:dir(rtl)
+  [data-part="mobile-pagination-actions"] svg {
+  transform: scaleX(-1);
 }
 
 /* ---- mobile loading/empty state panels (one rule, both panels) ----
    COMPOUND selectors, no descendant combinator: the state panels CARRY the
    scope pair themselves (they are top-level mobile elements, not children of
    the cards Stack), so a descendant form would never match them. */
-.ds-pattern-data-table.ds-data-table--mobile[data-part='mobile-state-panel'] {
-  border-radius: 16px;
-  background: var(--ds-color-bg-primary);
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"] {
+  display: grid;
+  place-items: center;
+  min-height: var(--ds-table-mobile-state-min-height, 8rem);
+  padding: var(--ds-table-mobile-state-padding, 2rem 1.25rem);
+  text-align: center;
+  border-radius: var(
+    --ds-table-mobile-state-radius,
+    var(--ds-table-radius, var(--ds-radius-lg))
+  );
+  background: var(--ds-table-bg, var(--ds-color-bg-primary));
+  box-shadow: var(--ds-table-shadow, var(--ds-elevation-1));
 }
-.ds-pattern-data-table.ds-data-table--mobile[data-part='mobile-state-panel'][data-part='mobile-state-panel'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"][data-part="mobile-state-panel"] {
+  border: 1px solid
+    color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"][data-state="error"] {
+  background: color-mix(
+    in srgb,
+    var(--ds-color-error) 4%,
+    var(--ds-color-bg-primary)
+  );
+}
+
+@container ds-mobile-table (max-width: 28rem) {
+  .ds-pattern-data-table.ds-data-table--mobile
+    [data-part="mobile-card-summary-label"] {
+    max-width: 42%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card {
+    transition: none;
+  }
+
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card:hover,
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card:focus-within {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card,
+  .ds-pattern-data-table.ds-data-table--mobile
+    [data-part="mobile-pagination"],
+  .ds-pattern-data-table.ds-data-table--mobile
+    [data-part="mobile-bulk-actions"],
+  .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"] {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card--selected {
+    border-color: Highlight;
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
 }

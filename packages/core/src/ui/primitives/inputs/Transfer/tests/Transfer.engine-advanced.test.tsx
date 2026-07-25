@@ -19,7 +19,7 @@ function filterOption(input: string, item: TransferItem) {
 
 function getModernPanel(container: HTMLElement, title: string) {
   const titleElement = screen.getByText(title);
-  const panel = titleElement.closest('.flex.flex-col.rounded-lg.overflow-hidden');
+  const panel = titleElement.closest('[data-part="panel"]');
 
   if (!(panel instanceof HTMLElement) || !container.contains(panel)) {
     throw new Error(`Expected modern ${title} panel wrapper`);

@@ -86,6 +86,11 @@ describe('tenant css generator', () => {
     const css = generateTenantCss(TENANT);
 
     expect(css).toContain("html[data-tenant='evnto-labs']");
+    // The light block must also declare directly on the DS-root wrapper:
+    // without it, a vertical artifact's own `:where([data-ds-root][data-vertical])`
+    // declarations on that wrapper shadow the tenant's inherited values (the
+    // documented merge order puts Appearance above the vertical artifact).
+    expect(css).toContain("html[data-tenant='evnto-labs'] [data-ds-root]");
     expect(css).toContain("--ds-color-primary: #f97316;");
     expect(css).toContain("--ds-color-primary-500: #f97316;");
     expect(css).toContain("--ds-color-link-hover:");
@@ -185,6 +190,32 @@ describe('tenant css generator', () => {
     expect(css).toContain('--ds-shadow-sm: var(--ds-elevation-1)');
     expect(artifact.path).toBe('evnto-labs/index.css');
     expect(artifact.contents).toContain('Auto-generated tenant theme for Evnto Labs');
+  });
+
+  it('emits the same APCA-corrected foreground used by the runtime provider', () => {
+    const config: TenantConfig = {
+      ...TENANT,
+      slug: 'contrast-proof',
+      appearance: {
+        general: {
+          palette: {
+            background: '#FFFFFF',
+            foreground: {
+              primary: '#B8B8B8',
+            },
+          },
+        },
+      },
+    };
+
+    const css = generateTenantCss(config, {
+      includeDarkSelector: false,
+      includeSystemDarkSelector: false,
+    });
+
+    expect(css).toContain('--ds-color-bg-primary: #FFFFFF;');
+    expect(css).not.toContain('--ds-color-text-primary: #B8B8B8;');
+    expect(css).toMatch(/--ds-color-text-primary: #[0-9A-F]{6};/);
   });
 
   it('can skip dark blocks entirely when requested', () => {

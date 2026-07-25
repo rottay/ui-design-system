@@ -148,7 +148,7 @@ describe('dropdown skins -- portal posture selector pins', () => {
   });
 
   it('TreeSelect modern dropdown is in-tree: reached as a root descendant', () => {
-    expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['modern/tree-select'])).toBe(true);
+    expect(/\[data-part=["']root["']\][^,{]*\[data-part=["']dropdown["']\]/.test(NC['modern/tree-select'])).toBe(true);
     expect(/\.rottay-treeselect__dropdown/.test(NC['modern/tree-select'])).toBe(false);
   });
 
@@ -158,7 +158,7 @@ describe('dropdown skins -- portal posture selector pins', () => {
   });
 
   it('Cascader modern dropdown is in-tree: reached as a root descendant, no standalone popup class', () => {
-    expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['modern/cascader'])).toBe(true);
+    expect(/\[data-part=["']root["']\][^,{]*\[data-part=["']dropdown["']\]/.test(NC['modern/cascader'])).toBe(true);
     expect(/\.rottay-cascader__dropdown/.test(NC['modern/cascader'])).toBe(false);
   });
 

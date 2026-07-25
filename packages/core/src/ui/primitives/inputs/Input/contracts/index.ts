@@ -179,6 +179,12 @@ export interface InputProps extends EngineAwareProps {
   error?: boolean;
   /** Error message to display */
   errorMessage?: string;
+  /**
+   * Announces that the field is processing and replaces destructive inline
+   * actions with the design-system loading affordance. The input remains
+   * readable and focusable unless `disabled` is also supplied.
+   */
+  loading?: boolean;
   /** Maximum length */
   maxLength?: number;
   /** Minimum length */
@@ -235,6 +241,8 @@ export interface InputProps extends EngineAwareProps {
   'aria-describedby'?: string;
   /** ARIA invalid state override */
   'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
+  /** ARIA required state override; mirrors the native `required` contract. */
+  'aria-required'?: boolean | 'false' | 'true';
   /**
    * ARIA role override. Set `role="combobox"` to expose an autocomplete
    * textbox that owns a popup listbox (the WAI-ARIA combobox pattern).
@@ -334,6 +342,7 @@ export const INPUT_DEFAULTS = {
   readOnly: false,
   required: false,
   error: false,
+  loading: false,
   clearable: false,
   showCount: false,
 };
@@ -423,6 +432,9 @@ export interface InputSearchProps extends InputProps {
 export interface InputTextAreaProps extends Omit<InputProps, 'type' | 'prefix' | 'suffix' | 'clearable'> {
   /** Number of rows */
   rows?: number;
-  /** Whether the textarea is resizable */
-  resize?: boolean;
+  /**
+   * Resize behavior. `true` delegates to the tenant theme, while an explicit
+   * logical or physical direction provides a per-instance override.
+   */
+  resize?: boolean | 'none' | 'vertical' | 'horizontal' | 'both' | 'block' | 'inline';
 }

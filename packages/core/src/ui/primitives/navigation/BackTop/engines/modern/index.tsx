@@ -2,18 +2,19 @@
 
 /**
  * @fileoverview BackTop Modern Engine - Rottay Design System
- * @description DS token/Tailwind implementation of the BackTop component.
- * Provides a utility-first, lightweight back-to-top button using DS token classes.
+ * @description Token-driven implementation of the BackTop component.
+ * Provides a lightweight back-to-top button whose chrome, sizing, and
+ * interaction states live in the modern skin (`back-top.css`).
  *
  * @remarks
- * The Modern engine provides a Tailwind CSS-based implementation featuring:
- * - DS token button components for consistent styling
- * - Utility-first CSS approach for easy customization
- * - Minimal JavaScript overhead
- * - Optimized for Tailwind CSS projects
+ * The Modern engine provides:
+ * - Conditional rendering (unmounts when below the visibility threshold)
+ * - The governed semantic icon (`navigation-up`) as the default glyph
+ * - A localized aria-label via the components catalog (English fallback)
+ * - LOGICAL placement utilities (`end-8`, never a physical `right-8`)
  *
- * This implementation uses DS token inline styles for button shape and color,
- * making it easy to customize via design token overrides.
+ * Sizing (44px coarse-pointer floor), hover lift, pressed dip, and the
+ * focus ring are skin-owned; the engine stamps anatomy only.
  *
  * @example
  * ```tsx
@@ -22,17 +23,15 @@
  * <BackTop engine="modern" visibilityHeight={300} />
  * ```
  *
- * @example Custom Styling with Tailwind
+ * @example Custom Content
  * ```tsx
- * <BackTop
- *   engine="modern"
- *   className="hover:scale-110 transition-transform"
- * />
+ * <BackTop engine="modern">
+ *   <span>Top</span>
+ * </BackTop>
  * ```
  *
  * @see {@link BackTop} for the main component
  * @see {@link BackTopProps} for prop documentation
- * @see Design System token reference for button styling
  *
  * @module BackTop/Engines/Modern
  * @category Navigation
@@ -42,20 +41,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { BackTopProps } from '../../contracts';
 import { BACKTOP_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationUpIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-up';
 
 // ============================================================================
 // Component
 // ============================================================================
 
 /**
- * Modern (DS token/Tailwind) implementation of BackTop.
+ * Modern (token-driven) implementation of BackTop.
  *
  * @description
- * A utility-first implementation using DS token button classes. Features:
+ * Features:
  * - Conditional rendering (unmounts when not visible)
- * - Circular button via inline borderRadius: 50%
- * - Fixed positioning with shadow for visibility
+ * - Skin-owned circular chrome, 44px sizing, and interaction states
+ * - Fixed positioning via logical placement utilities
  * - Native smooth scroll behavior
+ * - Localized aria-label (components catalog, English fallback)
  *
  * @remarks
  * Unlike the Rustic engine which uses opacity transitions, Modern
@@ -64,18 +66,14 @@ import { BACKTOP_DEFAULTS } from '../../contracts';
  * @param props - {@link BackTopProps}
  * @param ref - Forwarded ref to the button element
  * @returns The BackTop button or null when hidden
- *
- * @example
- * ```tsx
- * <BackTop
- *   engine="modern"
- *   style={{ background: 'var(--ds-color-accent)' }}
- *   visibilityHeight={100}
- * />
- * ```
  */
 export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
   (props, ref) => {
+    // Optional so standalone renders (no I18nProvider mounted, e.g. direct
+    // engine renders in tests/Storybook isolation) fall back to the
+    // documented English accessibility string instead of throwing.
+    const i18n = useOptionalTranslation('components');
+
     const {
       target,
       visibilityHeight = BACKTOP_DEFAULTS.visibilityHeight!,
@@ -158,27 +156,18 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       <button
         ref={ref}
         type="button"
-        className={`rottay-backtop rottay-backtop--modern fixed bottom-8 right-8 z-50 ${className}`}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 40,
-          height: 40,
-          cursor: 'pointer',
-          ...style,
-        }}
+        // `end-8` is LOGICAL (inset-inline-end): the button parks at the
+        // inline-end corner in both writing directions. Sizing, chrome and
+        // interaction states are skin-owned (`back-top.css`).
+        className={`rottay-backtop rottay-backtop--modern fixed bottom-8 end-8 z-50 ${className}`}
+        style={style}
         onClick={handleClick}
-        aria-label="Back to top"
+        aria-label={i18n?.t('backTop.back_to_top') ?? 'Back to top'}
         data-part="trigger"
       >
-        {/* Default chevron-up icon; consumers can override with children prop
-            for brand-specific icons without needing an icon library */}
-        {children || (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-          </svg>
-        )}
+        {/* Default governed semantic glyph; consumers can override with
+            children for brand-specific content */}
+        {children || <NavigationUpIcon decorative size={20} />}
       </button>
     );
   }

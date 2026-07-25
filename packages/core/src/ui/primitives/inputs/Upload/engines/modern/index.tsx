@@ -2,21 +2,25 @@
 
 /**
  * @fileoverview Upload Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the Upload component
- * with drag-and-drop support, picture-card/picture-circle modes, progress bars,
- * image preview, itemRender, and directory upload.
+ * @description Token-driven, skin-painted implementation of the Upload component
+ * with drag-and-drop support, picture-card/picture-circle modes, DS Progress
+ * composition, image preview, itemRender, and directory upload.
  *
  * @remarks
- * The Modern engine provides a lightweight upload using:
- * - **DaisyUI styling**: Consistent with Tailwind design tokens
+ * The Modern engine provides upload using:
+ * - **Skin-owned paint**: every visual decision lives in the `upload.css`
+ *   modern skin, keyed on the public `data-part` anatomy; this file owns
+ *   semantics and behavior only
+ * - **DS Progress composition**: per-file upload progress renders the public
+ *   `Progress` primitive (no hand-rolled bar, no second paint owner)
  * - **Drag and drop**: Custom dragger with visual feedback
  * - **File validation**: beforeUpload hook support
  * - **Picture modes**: picture-card grid and picture-circle avatar uploads
- * - **Progress**: Per-file upload progress bars
  * - **Preview**: Image preview on hover/click for picture modes
  * - **itemRender**: Custom render function for file list items
  * - **Directory upload**: webkitdirectory attribute support
- * - **Responsive design**: Mobile-friendly interface
+ * - **Localized chrome**: action aria-labels resolve through the
+ *   `components.upload` catalogue namespace
  *
  * @example Basic upload
  * ```tsx
@@ -42,6 +46,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
 import { UPLOAD_DEFAULTS } from '../../contracts';
 import { removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
+import { Progress } from '../../../../feedback/Progress';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------
@@ -84,6 +89,22 @@ function readThumbUrl(thumbUrls: Record<string, string>, uid: string): string | 
   return typeof value === 'string' ? value : undefined;
 }
 
+/**
+ * Localized label with an English floor: when the catalogue entry has not
+ * landed yet the provider echoes the full key, which must never reach an
+ * aria-label.
+ */
+function translateOr(
+  t: (key: string, params?: Record<string, string | number>) => string,
+  key: string,
+  fallback: string,
+  params?: Record<string, string | number>
+): string {
+  const resolved = t(key, params);
+  if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+  return resolved;
+}
+
 // ---------------------------------------------------------------------------
 // Preview Modal
 // ---------------------------------------------------------------------------
@@ -109,7 +130,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
   return (
     <div
       data-part="preview-modal"
-      className="fixed inset-0 z-[9999] flex items-center justify-center"
+      className="fixed inset-0 flex items-center justify-center"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -119,7 +140,6 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
         <button
           type="button"
           data-part="preview-close-button"
-          style={{ position: 'absolute', top: -12, right: -12, width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, padding: 0 }}
           onClick={onClose}
           aria-label={t('upload.close_preview')}
         >
@@ -132,34 +152,35 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
 };
 
 // ---------------------------------------------------------------------------
-// Progress Bar
+// Upload Progress (composes the public DS Progress primitive)
 // ---------------------------------------------------------------------------
 
-interface ProgressBarProps {
+interface UploadProgressProps {
   percent?: number;
   strokeColor?: string | { from: string; to: string };
   strokeWidth?: number;
 }
 
-/** Horizontal progress bar with optional gradient stroke color. */
-const ProgressBar: React.FC<ProgressBarProps> = ({ percent = 0, strokeColor, strokeWidth = 2 }) => {
-  const bg = typeof strokeColor === 'object'
+/**
+ * Per-file upload progress. Composes the public `Progress` primitive so the
+ * meter's paint has exactly one owner (the progress skin); the legacy
+ * track-height contract (`strokeWidth + 4`) rides the governed
+ * `--ds-progress-height` channel and a gradient `{from,to}` stroke is
+ * serialized to the CSS `linear-gradient(...)` the primitive already accepts.
+ */
+const UploadProgress: React.FC<UploadProgressProps> = ({ percent = 0, strokeColor, strokeWidth = 2 }) => {
+  const resolvedStrokeColor = typeof strokeColor === 'object'
     ? `linear-gradient(to right, ${strokeColor.from}, ${strokeColor.to})`
-    : strokeColor || undefined;
+    : strokeColor;
 
   return (
-    <div data-part="progress-track" className="w-full rounded-full overflow-hidden" style={{ height: strokeWidth + 4 }}>
-      <div
-        data-part="progress-bar"
-        className="h-full rounded-full transition-all duration-300 ease-out"
-        style={{ width: `${Math.min(percent, 100)}%`, ...({ '--ds-upload-progress-fill': bg ?? 'var(--ds-color-primary)' } as React.CSSProperties) }}
-        role="progressbar"
-        aria-valuenow={percent}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={`${Math.round(percent)}%`}
-      />
-    </div>
+    <Progress
+      percent={Math.min(percent, 100)}
+      type="line"
+      showInfo={false}
+      strokeColor={resolvedStrokeColor}
+      style={{ '--ds-progress-height': `${strokeWidth + 4}px` } as React.CSSProperties}
+    />
   );
 };
 
@@ -192,6 +213,7 @@ const FileItem: React.FC<FileItemProps> = ({
   progress,
   thumbUrls,
 }) => {
+  const { t } = useTranslation('components');
   const [hovered, setHovered] = useState(false);
   const thumb = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
   const isImg = isImageFile(file);
@@ -203,64 +225,38 @@ const FileItem: React.FC<FileItemProps> = ({
     remove: () => onRemove(file),
   };
 
+  const previewLabel = translateOr(t, 'upload.preview', `Preview ${file.name}`, { name: file.name });
+  const removeLabel = translateOr(t, 'upload.remove_named', `Remove ${file.name}`, { name: file.name });
+
   // -- picture-card: 104x104 grid tile with hover overlay for actions --
   if (listType === 'picture-card') {
-    const cardStyle: React.CSSProperties = {
-      position: 'relative',
-      width: 104,
-      height: 104,
-      overflow: 'hidden',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      transition: 'box-shadow var(--ds-motion-normal), transform var(--ds-motion-normal)',
-      cursor: 'pointer',
-    };
-    const overlayStyle: React.CSSProperties = {
-      position: 'absolute',
-      inset: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 8,
-    };
-    const overlayBtnStyle: React.CSSProperties = {
-      width: 32,
-      height: 32,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      transition: 'background var(--ds-motion-fast)',
-    };
     const originNode = (
       <div
         data-part="file-item"
         data-status={file.status || undefined}
-        style={cardStyle}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         role="listitem"
         aria-label={file.name}
       >
         {isImg && thumb ? (
-          <img src={thumb} alt={file.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img data-part="file-thumb" src={thumb} alt={file.name} />
         ) : (
-          <span style={{ fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '0 4px', textAlign: 'center' }}>{file.name}</span>
+          <span data-part="file-name">{file.name}</span>
         )}
         {isUploading && (
-          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 4 }}>
-            <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
+          <div data-part="file-progress">
+            <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
         {hovered && !isUploading && (
-          <div data-part="file-item-overlay" style={overlayStyle}>
+          <div data-part="file-item-overlay">
             {isImg && (
-              <button type="button" data-part="file-item-action" data-action="preview" style={overlayBtnStyle} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
+              <button type="button" data-part="file-item-action" data-action="preview" onClick={() => onPreview?.(file)} aria-label={previewLabel}>
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
               </button>
             )}
-            <button type="button" data-part="file-item-action" data-action="remove" style={overlayBtnStyle} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
+            <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
               <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
             </button>
           </div>
@@ -275,7 +271,6 @@ const FileItem: React.FC<FileItemProps> = ({
     const originNode = (
       <div
         className={`relative group rounded-full overflow-hidden flex items-center justify-center border-2`}
-        style={{ width: 104, height: 104 }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         role="listitem"
@@ -290,17 +285,17 @@ const FileItem: React.FC<FileItemProps> = ({
         )}
         {isUploading && (
           <div className="absolute inset-x-2 bottom-2">
-            <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
+            <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
         {hovered && !isUploading && (
           <div data-part="file-item-overlay" className="absolute inset-0 rounded-full flex items-center justify-center gap-1">
             {isImg && (
-              <button type="button" data-part="file-item-action" data-action="preview" style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
+              <button type="button" data-part="file-item-action" data-action="preview" onClick={() => onPreview?.(file)} aria-label={previewLabel}>
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
               </button>
             )}
-            <button type="button" data-part="file-item-action" data-action="remove" style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
+            <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
@@ -323,9 +318,9 @@ const FileItem: React.FC<FileItemProps> = ({
         )}
         <div className="flex-1 min-w-0">
           <span className="text-sm truncate block">{file.name}</span>
-          {isUploading && <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
+          {isUploading && <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
         </div>
-        <button type="button" data-part="file-item-action" data-action="remove" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', flexShrink: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>x</button>
+        <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>x</button>
       </div>
     );
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -336,9 +331,9 @@ const FileItem: React.FC<FileItemProps> = ({
     <div data-part="file-item" data-status={file.status || undefined} className={`flex items-center justify-between p-2 rounded transition-colors duration-200 ${file.status === 'error' ? 'border border-error' : ''}`} role="listitem" aria-label={file.name}>
       <div className="flex-1 min-w-0">
         <span className="text-sm truncate block">{file.name}</span>
-        {isUploading && <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
+        {isUploading && <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
       </div>
-      <button type="button" data-part="file-item-action" data-action="remove" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', flexShrink: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>x</button>
+      <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>x</button>
     </div>
   );
   return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -349,11 +344,11 @@ const FileItem: React.FC<FileItemProps> = ({
 // ---------------------------------------------------------------------------
 
 /**
- * Modern Upload component (DaisyUI/Tailwind CSS).
+ * Modern Upload component (skin-painted, DS Progress composition).
  *
  * Provides file selection via a hidden input triggered by a label or button.
  * Supports controlled/uncontrolled file lists, picture-card and picture-circle
- * grid modes, directory upload, and per-file progress bars.
+ * grid modes, directory upload, and per-file progress meters.
  *
  * @param props - {@link UploadProps}
  * @returns A file upload component with file list display and preview modal
@@ -457,6 +452,8 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       className,
     ].filter(Boolean).join(' ');
 
+    const fileListLabel = translateOr(t, 'upload.file_list', 'Uploaded files');
+
     const uploadTrigger = (
       <>
         <input
@@ -466,7 +463,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           multiple={multiple}
           disabled={disabled}
           onChange={handleFileChange}
-          style={{ display: 'none' }}
+          data-part="file-input"
           id={inputId}
           aria-label={t('upload.upload_file')}
           {...directoryAttrs}
@@ -479,7 +476,6 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               className={`flex items-center justify-center border-2 border-dashed hover:border-primary hover:bg-primary/5 transition-all duration-300 ${
                 listType === 'picture-circle' ? 'rounded-full' : 'rounded-lg'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-              style={{ minWidth: 104, minHeight: 104, padding: 16 }}
               role="button"
               tabIndex={disabled ? -1 : 0}
               aria-label={t('upload.add_file')}
@@ -497,11 +493,11 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
         ) : (
           <span
             data-part="trigger"
+            data-disabled={disabled ? 'true' : undefined}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) inputRef.current?.click(); }}
-            style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1 }}
           >
             {children || (
-              <button type="button" style={{ height: 36, padding: '0 16px', fontSize: 14, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1 }} disabled={disabled}>{t('upload.button')}</button>
+              <button type="button" disabled={disabled}>{t('upload.button')}</button>
             )}
           </span>
         )}
@@ -524,7 +520,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     return (
       <div ref={ref} data-part="root" className={rootClassName} style={style}>
         {isPictureCardOrCircle ? (
-          <div data-part="file-list" className="flex flex-wrap gap-2" role="list" aria-label="Uploaded files">
+          <div data-part="file-list" className="flex flex-wrap gap-2" role="list" aria-label={fileListLabel}>
             {showUploadList && fileItems}
             {uploadTrigger}
           </div>
@@ -532,7 +528,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           <>
             {uploadTrigger}
             {showUploadList && actualFileList.length > 0 && (
-              <div data-part="file-list" className="mt-2 space-y-2" role="list" aria-label="Uploaded files">
+              <div data-part="file-list" className="mt-2 space-y-2" role="list" aria-label={fileListLabel}>
                 {fileItems}
               </div>
             )}
@@ -553,7 +549,7 @@ Upload.displayName = 'Upload.Modern';
 // ---------------------------------------------------------------------------
 
 /**
- * Modern Upload.Dragger component (DaisyUI/Tailwind CSS).
+ * Modern Upload.Dragger component (skin-painted).
  *
  * Provides a drag-and-drop zone that highlights on dragOver. Dropped files
  * go through the same beforeUpload validation as manually selected files.
@@ -653,6 +649,8 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       className,
     ].filter(Boolean).join(' ');
 
+    const fileListLabel = translateOr(t, 'upload.file_list', 'Uploaded files');
+
     return (
       <div ref={ref} data-part="root" className={rootClassName} style={style}>
         <div
@@ -671,7 +669,9 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           className={`border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
             isDragOver ? 'border-primary bg-primary/5 shadow-lg scale-[1.01]' : 'hover:border-primary hover:bg-primary/5'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-          style={{ height }}
+          /* Runtime prop-driven height rides the governed channel; the skin
+             owns the block-size declaration. */
+          style={{ '--ds-upload-dropzone-height': typeof height === 'number' ? `${height}px` : height } as React.CSSProperties}
         >
           <input
             ref={inputRef}
@@ -680,8 +680,8 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
             multiple={multiple}
             disabled={disabled}
             onChange={(e) => processFiles(Array.from(e.target.files || []))}
-            style={{ display: 'none' }}
-            aria-label="Upload file"
+            data-part="file-input"
+            aria-label={t('upload.upload_file')}
             {...directoryAttrs}
           />
           {children || (
@@ -695,7 +695,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
         </div>
 
         {showUploadList && actualFileList.length > 0 && (
-          <div data-part="file-list" className="mt-2 space-y-2" role="list" aria-label="Uploaded files">
+          <div data-part="file-list" className="mt-2 space-y-2" role="list" aria-label={fileListLabel}>
             {actualFileList.map(file => (
               <FileItem
                 key={file.uid}

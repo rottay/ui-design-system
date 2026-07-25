@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Classic (Titan) engine for the DataTable pattern, built on top
@@ -9,18 +9,19 @@
  * bulk-action toolbars entirely within this adapter layer.
  */
 
-import React, { useMemo, useState, useCallback, useRef } from 'react';
-import { Table, Space, Button, Empty } from 'antd';
-import { GripVerticalIcon as GripVertical } from '../../../../../../graphics/icons';
-import type { ColumnsType } from 'antd/es/table';
-import type { DataTablePatternProps } from '../../contracts';
-import { resolveAccessor, resolveRowKey } from '../../runtime/row-resolution';
+import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
+import React, { useMemo, useState, useCallback, useRef } from "react";
+import { Table, Space, Button, Empty } from "antd";
+import { GripVerticalIcon as GripVertical } from "../../../../../../graphics/icons";
+import type { ColumnsType } from "antd/es/table";
+import type { DataTablePatternProps } from "../../contracts";
+import { resolveAccessor, resolveRowKey } from "../../runtime/row-resolution";
 
 /** Density → Ant Table size mapping */
 const DENSITY_SIZE_MAP = {
-  compact: 'small' as const,
-  comfortable: 'middle' as const,
-  spacious: 'large' as const,
+  compact: "small" as const,
+  comfortable: "middle" as const,
+  spacious: "large" as const,
 };
 
 /**
@@ -74,10 +75,12 @@ export default function ClassicDataTable<T extends object>(
     // Column pinning
     pinnedColumns,
     // Density
-    density = 'comfortable',
+    density = "comfortable",
   } = props;
 
-  const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
+  const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(
+    []
+  );
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
   // --- Column resize state ---
@@ -123,7 +126,14 @@ export default function ClassicDataTable<T extends object>(
     }
 
     return cols;
-  }, [columns, columnVisibility, visibleColumns, lockedColumns, reorderable, columnOrder]);
+  }, [
+    columns,
+    columnVisibility,
+    visibleColumns,
+    lockedColumns,
+    reorderable,
+    columnOrder,
+  ]);
 
   // --- Resize handlers ---
   const handleResizeStart = useCallback(
@@ -141,16 +151,16 @@ export default function ClassicDataTable<T extends object>(
 
       const handleMouseUp = () => {
         resizeRef.current = null;
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
       };
 
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
     },
     [onColumnResize]
   );
@@ -169,12 +179,17 @@ export default function ClassicDataTable<T extends object>(
       const handleMouseMove = (moveEvent: MouseEvent) => {
         if (!reorderRef.current) return;
         // Find which Ant th the mouse is over by scanning all th with data-col-key
-        const table = (moveEvent.target as HTMLElement)?.closest('.ds-pattern-data-table');
+        const table = (moveEvent.target as HTMLElement)?.closest(
+          ".ds-pattern-data-table"
+        );
         if (!table) return;
-        const ths = table.querySelectorAll<HTMLElement>('[data-col-key]');
+        const ths = table.querySelectorAll<HTMLElement>("[data-col-key]");
         for (const th of ths) {
           const rect = th.getBoundingClientRect();
-          if (moveEvent.clientX >= rect.left && moveEvent.clientX <= rect.right) {
+          if (
+            moveEvent.clientX >= rect.left &&
+            moveEvent.clientX <= rect.right
+          ) {
             const colKey = th.dataset.colKey;
             if (colKey && colKey !== reorderRef.current.sourceKey) {
               setDragOverKey(colKey);
@@ -185,10 +200,10 @@ export default function ClassicDataTable<T extends object>(
       };
 
       const handleMouseUp = (upEvent: MouseEvent) => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
 
         if (!reorderRef.current) {
           setDragSourceKey(null);
@@ -197,10 +212,12 @@ export default function ClassicDataTable<T extends object>(
         }
 
         // Find drop target
-        const table = (upEvent.target as HTMLElement)?.closest('.ds-pattern-data-table');
+        const table = (upEvent.target as HTMLElement)?.closest(
+          ".ds-pattern-data-table"
+        );
         let targetKey: string | null = null;
         if (table) {
-          const ths = table.querySelectorAll<HTMLElement>('[data-col-key]');
+          const ths = table.querySelectorAll<HTMLElement>("[data-col-key]");
           for (const th of ths) {
             const rect = th.getBoundingClientRect();
             if (upEvent.clientX >= rect.left && upEvent.clientX <= rect.right) {
@@ -217,9 +234,10 @@ export default function ClassicDataTable<T extends object>(
 
         if (!targetKey || targetKey === sourceKey) return;
 
-        const currentOrder = columnOrder && columnOrder.length > 0
-          ? columnOrder
-          : processedColumns.map((c) => c.key);
+        const currentOrder =
+          columnOrder && columnOrder.length > 0
+            ? columnOrder
+            : processedColumns.map((c) => c.key);
         const newOrder = [...currentOrder];
         const sourceIdx = newOrder.indexOf(sourceKey);
         const targetIdx = newOrder.indexOf(targetKey);
@@ -230,10 +248,10 @@ export default function ClassicDataTable<T extends object>(
         onColumnReorder(newOrder);
       };
 
-      document.body.style.cursor = 'grabbing';
-      document.body.style.userSelect = 'none';
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = "grabbing";
+      document.body.style.userSelect = "none";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
     },
     [reorderable, onColumnReorder, columnOrder, processedColumns]
   );
@@ -251,35 +269,36 @@ export default function ClassicDataTable<T extends object>(
         return;
       }
 
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', key);
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", key);
       setDragSourceKey(key);
     },
-    [reorderable, onColumnReorder],
+    [reorderable, onColumnReorder]
   );
 
   const handleHeaderDragOver = useCallback(
     (e: React.DragEvent, key: string) => {
       if (!dragSourceKey || dragSourceKey === key) return;
       e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
+      e.dataTransfer.dropEffect = "move";
       setDragOverKey(key);
     },
-    [dragSourceKey],
+    [dragSourceKey]
   );
 
   const handleHeaderDrop = useCallback(
     (e: React.DragEvent, targetKey: string) => {
       e.preventDefault();
-      const sourceKey = e.dataTransfer.getData('text/plain') || dragSourceKey;
+      const sourceKey = e.dataTransfer.getData("text/plain") || dragSourceKey;
       setDragSourceKey(null);
       setDragOverKey(null);
 
       if (!sourceKey || sourceKey === targetKey || !onColumnReorder) return;
 
-      const currentOrder = columnOrder && columnOrder.length > 0
-        ? columnOrder
-        : processedColumns.map((c) => c.key);
+      const currentOrder =
+        columnOrder && columnOrder.length > 0
+          ? columnOrder
+          : processedColumns.map((c) => c.key);
       const newOrder = [...currentOrder];
       const sourceIdx = newOrder.indexOf(sourceKey);
       const targetIdx = newOrder.indexOf(targetKey);
@@ -289,7 +308,7 @@ export default function ClassicDataTable<T extends object>(
       newOrder.splice(targetIdx, 0, sourceKey);
       onColumnReorder(newOrder);
     },
-    [columnOrder, dragSourceKey, onColumnReorder, processedColumns],
+    [columnOrder, dragSourceKey, onColumnReorder, processedColumns]
   );
 
   const handleHeaderDragEnd = useCallback(() => {
@@ -307,12 +326,17 @@ export default function ClassicDataTable<T extends object>(
       .filter((col) => col.visible !== false)
       .map((col) => {
         // Resolve pin: controlled pinnedColumns > column def
-        let fixed: 'left' | 'right' | undefined;
+        let fixed: "left" | "right" | undefined;
         if (pinnedColumns) {
-          if (pinnedColumns.left.includes(col.key)) fixed = 'left';
-          else if (pinnedColumns.right.includes(col.key)) fixed = 'right';
+          if (pinnedColumns.left.includes(col.key)) fixed = "left";
+          else if (pinnedColumns.right.includes(col.key)) fixed = "right";
         } else {
-          fixed = col.pin === 'left' ? 'left' : col.pin === 'right' ? 'right' : undefined;
+          fixed =
+            col.pin === "left"
+              ? "left"
+              : col.pin === "right"
+              ? "right"
+              : undefined;
         }
 
         // Resolve width: controlled columnWidths > column def
@@ -328,9 +352,9 @@ export default function ClassicDataTable<T extends object>(
           sorter: col.sortable ? true : undefined,
           sortOrder:
             sorting?.key === col.key
-              ? sorting.direction === 'asc'
-                ? 'ascend'
-                : 'descend'
+              ? sorting.direction === "asc"
+                ? "ascend"
+                : "descend"
               : undefined,
           render: col.render
             ? (_: unknown, record: T, index: number) =>
@@ -345,39 +369,64 @@ export default function ClassicDataTable<T extends object>(
             <span
               data-col-key={col.key}
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 gap: 4,
-                position: 'relative',
-                userSelect: 'none',
+                position: "relative",
+                userSelect: "none",
                 opacity: dragSourceKey === col.key ? 0.45 : 1,
-                backgroundColor: dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key
-                  ? 'color-mix(in srgb, var(--ds-color-primary, #1677ff) 10%, transparent)'
-                  : undefined,
-                transition: 'opacity 0.2s ease, background-color 0.2s ease',
+                backgroundColor:
+                  dragOverKey === col.key &&
+                  dragSourceKey &&
+                  dragSourceKey !== col.key
+                    ? "color-mix(in srgb, var(--ds-color-primary, #1677ff) 10%, transparent)"
+                    : undefined,
+                transition: "opacity 0.2s ease, background-color 0.2s ease",
                 borderRadius: 4,
-                padding: '0 2px',
-                margin: '0 -2px',
-                cursor: reorderable && onColumnReorder ? 'grab' : undefined,
+                padding: "0 2px",
+                margin: "0 -2px",
+                cursor: reorderable && onColumnReorder ? "grab" : undefined,
               }}
               draggable={reorderable && !!onColumnReorder}
-              title={reorderable && onColumnReorder ? `Drag header to move ${typeof col.header === 'string' ? col.header : col.key}` : undefined}
-              onDragStart={reorderable && onColumnReorder ? (e) => handleHeaderDragStart(e, col.key) : undefined}
-              onDragOver={reorderable && onColumnReorder ? (e) => handleHeaderDragOver(e, col.key) : undefined}
-              onDrop={reorderable && onColumnReorder ? (e) => handleHeaderDrop(e, col.key) : undefined}
-              onDragEnd={reorderable && onColumnReorder ? handleHeaderDragEnd : undefined}
+              title={
+                reorderable && onColumnReorder
+                  ? `Drag header to move ${
+                      typeof col.header === "string" ? col.header : col.key
+                    }`
+                  : undefined
+              }
+              onDragStart={
+                reorderable && onColumnReorder
+                  ? (e) => handleHeaderDragStart(e, col.key)
+                  : undefined
+              }
+              onDragOver={
+                reorderable && onColumnReorder
+                  ? (e) => handleHeaderDragOver(e, col.key)
+                  : undefined
+              }
+              onDrop={
+                reorderable && onColumnReorder
+                  ? (e) => handleHeaderDrop(e, col.key)
+                  : undefined
+              }
+              onDragEnd={
+                reorderable && onColumnReorder ? handleHeaderDragEnd : undefined
+              }
             >
               {reorderable && onColumnReorder && (
                 <span
                   onMouseDown={(e) => handleReorderStart(e, col.key)}
-                  title={`Drag to move ${typeof col.header === 'string' ? col.header : col.key}`}
+                  title={`Drag to move ${
+                    typeof col.header === "string" ? col.header : col.key
+                  }`}
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     width: 18,
                     height: 18,
-                    cursor: dragSourceKey ? 'grabbing' : 'grab',
+                    cursor: dragSourceKey ? "grabbing" : "grab",
                     opacity: dragSourceKey === col.key ? 0.95 : 0.72,
                     fontSize: 11,
                     lineHeight: 1,
@@ -385,29 +434,40 @@ export default function ClassicDataTable<T extends object>(
                     marginRight: 4,
                     padding: 0,
                     borderRadius: 5,
-                    border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary, #d9d9d9) 76%, transparent)',
-                    background: 'color-mix(in srgb, var(--ds-color-bg-primary, #f5f5f5) 34%, transparent)',
-                    color: 'var(--ds-color-text-secondary, #595959)',
-                    transition: 'opacity 0.15s ease, border-color 0.15s ease, background-color 0.15s ease',
+                    border:
+                      "1px solid color-mix(in srgb, var(--ds-color-border-secondary, #d9d9d9) 76%, transparent)",
+                    background:
+                      "color-mix(in srgb, var(--ds-color-bg-primary, #f5f5f5) 34%, transparent)",
+                    color: "var(--ds-color-text-secondary, #595959)",
+                    transition:
+                      "opacity 0.15s ease, border-color 0.15s ease, background-color 0.15s ease",
                   }}
-                  aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
+                  aria-label={`Drag to reorder column ${
+                    typeof col.header === "string" ? col.header : col.key
+                  }`}
                   role="button"
                 >
                   <GripVertical size={13} strokeWidth={2.2} aria-hidden />
                 </span>
               )}
-              <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <span
+                style={{
+                  flex: 1,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {col.header}
               </span>
               {dragOverKey === col.key && dragSourceKey !== col.key && (
                 <span
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     left: -2,
                     top: 0,
                     bottom: 0,
                     width: 3,
-                    background: 'var(--ds-color-primary, #1677ff)',
+                    background: "var(--ds-color-primary, #1677ff)",
                     borderRadius: 1,
                   }}
                 />
@@ -420,51 +480,71 @@ export default function ClassicDataTable<T extends object>(
         // Resize handle
         if (resizable && onColumnResize) {
           antCol.onHeaderCell = () => ({
-            style: { position: 'relative' as const },
+            style: { position: "relative" as const },
           });
           const originalTitle = antCol.title;
           antCol.title = (
-            <span style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-              <span style={{ flex: 1, overflow: 'hidden' }}>{originalTitle}</span>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                position: "relative",
+              }}
+            >
+              <span style={{ flex: 1, overflow: "hidden" }}>
+                {originalTitle}
+              </span>
               <span
                 data-column-resize-handle="true"
                 role="separator"
-                aria-label={`Resize column ${typeof col.header === 'string' ? col.header : col.key}`}
+                aria-label={`Resize column ${
+                  typeof col.header === "string" ? col.header : col.key
+                }`}
                 tabIndex={0}
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   right: -4,
                   top: 0,
                   bottom: 0,
                   width: 8,
-                  cursor: 'col-resize',
+                  cursor: "col-resize",
                   zIndex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
                 onMouseDown={(e) =>
-                  handleResizeStart(e, col.key, (typeof width === 'number' ? width : 150))
+                  handleResizeStart(
+                    e,
+                    col.key,
+                    typeof width === "number" ? width : 150
+                  )
                 }
                 onKeyDown={(e) => {
                   if (!onColumnResize) return;
-                  const currentW = typeof width === 'number' ? width : 150;
-                  if (e.key === 'ArrowRight') {
+                  const currentW = typeof width === "number" ? width : 150;
+                  if (e.key === "ArrowRight") {
                     e.preventDefault();
-                    onColumnResize(col.key, Math.min(currentW + 10, col.maxWidth ?? 1000));
-                  } else if (e.key === 'ArrowLeft') {
+                    onColumnResize(
+                      col.key,
+                      Math.min(currentW + 10, col.maxWidth ?? 1000)
+                    );
+                  } else if (e.key === "ArrowLeft") {
                     e.preventDefault();
-                    onColumnResize(col.key, Math.max(currentW - 10, col.minWidth ?? 50));
+                    onColumnResize(
+                      col.key,
+                      Math.max(currentW - 10, col.minWidth ?? 50)
+                    );
                   }
                 }}
               >
                 <span
                   style={{
                     width: 1,
-                    height: '60%',
-                    background: 'rgba(0,0,0,0.12)',
+                    height: "60%",
+                    background: "rgba(0,0,0,0.12)",
                     borderRadius: 1,
-                    transition: 'background 150ms ease',
+                    transition: "background 150ms ease",
                   }}
                 />
               </span>
@@ -477,12 +557,23 @@ export default function ClassicDataTable<T extends object>(
 
     if (actions) {
       cols.push({
-        key: '__actions',
-        title: '',
+        key: "__actions",
+        title: "",
         width: 120,
-        align: 'right',
-        fixed: 'right',
-        render: (_: unknown, record: T, index: number) => actions(record, index),
+        align: "right",
+        fixed: "right",
+        onHeaderCell: () => ({
+          className: "ds-data-table-actions-header",
+          "data-part": "header-cell",
+          "data-cell-kind": "actions",
+        }),
+        onCell: () => ({
+          className: "ds-data-table-actions-cell",
+          "data-part": "actions-cell",
+        }),
+        render: (_: unknown, record: T, index: number) => (
+          <div data-part="actions-content">{actions(record, index)}</div>
+        ),
       });
     }
 
@@ -513,46 +604,59 @@ export default function ClassicDataTable<T extends object>(
     onSelectionChange?.(strKeys, rows);
   };
 
-  const handleTableChange = (_pagination: unknown, _filters: unknown, sorter: any) => {
+  const handleTableChange = (
+    _pagination: unknown,
+    _filters: unknown,
+    sorter: any
+  ) => {
     if (sorter?.columnKey && onSortChange) {
       onSortChange({
         key: String(sorter.columnKey),
-        direction: sorter.order === 'ascend' ? 'asc' : 'desc',
+        direction: sorter.order === "ascend" ? "asc" : "desc",
       });
     }
   };
 
   const getRowKey = (record: T): string => {
-    return rowKeyLookup.get(record) ?? '';
+    return rowKeyLookup.get(record) ?? "";
   };
 
   const paginationConfig =
     pagination === false
       ? false
       : pagination
-        ? {
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total: pagination.total,
-            pageSizeOptions: pagination.pageSizeOptions?.map(String),
-            showSizeChanger: true,
-            onChange: pagination.onChange,
-          }
-        : { pageSize: 20, showSizeChanger: true };
+      ? {
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          pageSizeOptions: pagination.pageSizeOptions?.map(String),
+          showSizeChanger: true,
+          onChange: pagination.onChange,
+        }
+      : { pageSize: 20, showSizeChanger: true };
 
   // Resolve table size from density (density prop takes precedence over compact boolean)
-  const tableSize = density !== 'comfortable'
-    ? DENSITY_SIZE_MAP[density]
-    : compact
-      ? 'small'
-      : 'middle';
+  const tableSize =
+    density !== "comfortable"
+      ? DENSITY_SIZE_MAP[density]
+      : compact
+      ? "small"
+      : "middle";
 
   const densityClass = `ds-table-density-${density}`;
 
   return (
     <div
-      className={`ds-pattern-data-table ds-engine-classic ${densityClass} ${className ?? ''}`}
-      style={{ width: '100%', ...style }}
+      className={`ds-pattern-data-table ds-engine-classic ${densityClass} ${
+        className ?? ""
+      }`}
+      data-component="data-table"
+      {...densityScopeAttributes(density)}
+      data-has-actions={actions ? "true" : "false"}
+      data-loading={loading ? "true" : "false"}
+      data-part="root"
+      data-selectable={selectable ? "true" : "false"}
+      style={{ width: "100%", ...style }}
     >
       {header}
       {(toolbar || (bulkActions && selectedKeys.length > 0)) && (
@@ -560,9 +664,9 @@ export default function ClassicDataTable<T extends object>(
           className="ds-pattern-data-table__toolbar"
           style={{
             marginBottom: 16,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <div>{toolbar}</div>
@@ -570,8 +674,8 @@ export default function ClassicDataTable<T extends object>(
             <Space>
               <span
                 style={{
-                  color: 'var(--ds-color-neutral-500)',
-                  fontSize: 'var(--ds-font-size-sm)',
+                  color: "var(--ds-color-neutral-500)",
+                  fontSize: "var(--ds-font-size-sm)",
                 }}
               >
                 {selectedKeys.length} selected
@@ -579,8 +683,8 @@ export default function ClassicDataTable<T extends object>(
               {bulkActions.map((action) => (
                 <Button
                   key={action.key}
-                  danger={action.variant === 'danger'}
-                  type={action.variant === 'primary' ? 'primary' : 'default'}
+                  danger={action.variant === "danger"}
+                  type={action.variant === "primary" ? "primary" : "default"}
                   disabled={action.disabled}
                   onClick={() => {
                     const selectedRows = data.filter((row) =>
@@ -607,9 +711,15 @@ export default function ClassicDataTable<T extends object>(
         size={tableSize}
         sticky={stickyHeader}
         scroll={(() => {
-          const hasPinnedColumns = pinnedColumns && (pinnedColumns.left.length > 0 || pinnedColumns.right.length > 0);
-          if (maxHeight) return { y: maxHeight, ...(hasPinnedColumns ? { x: 'max-content' as const } : {}) };
-          if (hasPinnedColumns) return { x: 'max-content' as const };
+          const hasPinnedColumns =
+            pinnedColumns &&
+            (pinnedColumns.left.length > 0 || pinnedColumns.right.length > 0);
+          if (maxHeight)
+            return {
+              y: maxHeight,
+              ...(hasPinnedColumns ? { x: "max-content" as const } : {}),
+            };
+          if (hasPinnedColumns) return { x: "max-content" as const };
           return undefined;
         })()}
         pagination={paginationConfig}
@@ -620,7 +730,7 @@ export default function ClassicDataTable<T extends object>(
         rowSelection={
           selectable
             ? {
-                type: 'checkbox',
+                type: "checkbox",
                 selectedRowKeys: selectedKeys,
                 onChange: handleSelectionChange,
               }
@@ -634,16 +744,18 @@ export default function ClassicDataTable<T extends object>(
             : undefined
         }
         onRow={(record, index) => ({
-          onClick: onRowClick ? () => onRowClick(record, index ?? 0) : undefined,
+          onClick: onRowClick
+            ? () => onRowClick(record, index ?? 0)
+            : undefined,
           style: {
-            cursor: onRowClick ? 'pointer' : undefined,
+            cursor: onRowClick ? "pointer" : undefined,
             background:
               striped && (index ?? 0) % 2 === 1
-                ? 'var(--ds-color-neutral-50)'
+                ? "var(--ds-color-neutral-50)"
                 : undefined,
           },
         })}
-        className={hoverable ? 'ds-table-hoverable' : undefined}
+        className={hoverable ? "ds-table-hoverable" : undefined}
       />
       {footer}
     </div>

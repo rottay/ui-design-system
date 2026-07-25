@@ -19,6 +19,17 @@ export const rottayBrandTheme: BrandTheme = {
   id: 'rottay',
   name: 'Rottay',
 
+  /**
+   * Governed recipe profile (K0.6, 2026-07-23): selected from sighted
+   * same-tree evidence (`/probe/k0-profiles`, captures under
+   * test-artifacts/rottay-design-platform/K0-K1/captures). technical-sharp
+   * matches this theme's declared graphite/mono/border-first posture;
+   * editorial-round was sighted and rejected (illegible active pill tab on
+   * the dark canvas). Explicit component props still win over profile
+   * defaults.
+   */
+  recipes: { schemaVersion: 1, profile: 'rottay/technical-sharp@1' },
+
   palette: {
     // Light-mode runtime colors mirror the explicit light artifact.
     primaryColor: '#0A0A0A',
@@ -253,6 +264,42 @@ export const rottayBrandTheme: BrandTheme = {
       colorActive: '#ECECEC',
       bgHover: 'rgba(255, 255, 255, 0.03)',
       borderActive: '#FFFFFF',
+      listBg: '#141416',
+      listBorder: '#2A2A2F',
+      listRadius: '8px',
+      listPadding: '3px',
+      listShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.035)',
+      listTexture:
+        'radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.14) 0.5px, transparent 0.75px)',
+      listTextureOpacity: 0.12,
+      listHighlight: 'inset 0 1px 0 rgba(255, 255, 255, 0.035)',
+      itemRadius: '6px',
+      itemFontWeight: 450,
+      itemFontWeightActive: 620,
+      activeBg: '#222226',
+      activeShadow:
+        'inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 1px 3px rgba(0, 0, 0, 0.34)',
+      activeHighlight:
+        'linear-gradient(118deg, transparent 12%, rgba(255, 255, 255, 0.06) 48%, transparent 76%)',
+      activeHighlightOpacity: 0.46,
+      pressedTransform: 'translateY(0) scale(0.985)',
+      iconBg: 'rgba(255, 255, 255, 0.025)',
+      iconBgActive: 'rgba(255, 255, 255, 0.055)',
+      iconPadding: '4px',
+      badgeBg: 'rgba(255, 255, 255, 0.035)',
+      badgeBgActive: 'rgba(255, 255, 255, 0.08)',
+      badgeColorActive: '#ECECEC',
+      badgeBorderActive: '#3A3A40',
+      panelBg: '#1A1A1E',
+      panelBorder: '#2A2A2F',
+      panelRadius: '10px',
+      panelShadow: '0 14px 36px rgba(0, 0, 0, 0.18)',
+      panelTexture:
+        'linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 42%)',
+      overflowControlBg: '#1A1A1E',
+      overflowControlBgHover: '#222226',
+      overflowControlShadow: '0 2px 8px rgba(0, 0, 0, 0.22)',
+      overflowControlShadowHover: '0 6px 16px rgba(0, 0, 0, 0.30)',
     },
   },
 };

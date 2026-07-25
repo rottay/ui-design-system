@@ -37,40 +37,66 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode } from 'react';
-import type { BaseComponentProps, WithChildren } from '../../../../../foundation/contracts/kernel/common';
-import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
+import type { ReactNode } from "react";
+import type {
+  BaseComponentProps,
+  WithChildren,
+} from "../../../../../foundation/contracts/kernel/common";
+import type { EngineAwareProps } from "../../../../../foundation/contracts/runtime/engine";
 
 // ============================================================================
 // Type Definitions
 // ============================================================================
 
-/** Tooltip placement options combining edge and alignment. */
+/**
+ * Tooltip placement options combining edge and logical alignment. `start` and
+ * `end` follow writing direction on the inline axis, so a `top-start` tooltip
+ * aligns to the right edge in RTL.
+ */
 export type TooltipPlacement =
-  | 'top'
-  | 'top-start'
-  | 'top-end'
-  | 'bottom'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'left'
-  | 'left-start'
-  | 'left-end'
-  | 'right'
-  | 'right-start'
-  | 'right-end';
+  | "top"
+  | "top-start"
+  | "top-end"
+  | "bottom"
+  | "bottom-start"
+  | "bottom-end"
+  | "left"
+  | "left-start"
+  | "left-end"
+  | "right"
+  | "right-start"
+  | "right-end";
 
 /**
  * Tooltip trigger.
  */
-export type TooltipTrigger = 'hover' | 'click' | 'focus' | 'manual';
+export type TooltipTrigger = "hover" | "click" | "focus" | "manual";
+
+/** Touch equivalent for hover-only tooltip discovery. */
+export type TooltipTouchBehavior = "long-press" | "none";
+
+/**
+ * Bounded visual recipes for the Modern engine. Recipes alter coordinated
+ * material, density and typography tokens without changing tooltip anatomy.
+ */
+export type TooltipRecipe = "minimal" | "bordered" | "inverse" | "rich";
+
+/** Explicit local density override; omitted values inherit the tenant scope. */
+export type TooltipDensity = "compact" | "comfortable" | "spacious";
 
 /**
  * Tooltip component props.
  */
-export interface TooltipProps extends BaseComponentProps, EngineAwareProps, WithChildren {
+export interface TooltipProps
+  extends BaseComponentProps,
+    EngineAwareProps,
+    WithChildren {
   /**
    * Tooltip content.
+   *
+   * Keep non-interactive tooltips concise. When content contains focusable
+   * controls, set `interactive` (which promotes the relationship to a dialog)
+   * or prefer Popover for workflow-critical content.
    */
   content: ReactNode;
 
@@ -103,7 +129,7 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
 
   /**
    * Delay in ms before showing the tooltip.
-   * @default 0
+   * @default 200
    */
   showDelay?: number;
 
@@ -114,10 +140,37 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
   hideDelay?: number;
 
   /**
+   * Touch equivalent for a hover-only tooltip. `long-press` keeps incidental
+   * taps available to the trigger while making its description discoverable
+   * on coarse pointers. Click-triggered tooltips already work with touch and
+   * do not need this fallback.
+   * @default 'long-press'
+   */
+  touchBehavior?: TooltipTouchBehavior;
+
+  /**
+   * Duration in milliseconds before a touch becomes a long press.
+   * @default 500
+   */
+  touchLongPressDelay?: number;
+
+  /**
    * Tooltip color.
    * @default 'default'
    */
-  color?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+  color?: "default" | "primary" | "secondary" | "success" | "warning" | "error";
+
+  /**
+   * Coordinated tooltip material/density recipe.
+   * @default 'bordered'
+   */
+  recipe?: TooltipRecipe;
+
+  /**
+   * Local density override. When omitted, the tooltip inherits the active
+   * tenant density, including when its bubble is rendered through a portal.
+   */
+  density?: TooltipDensity;
 
   /**
    * Whether to show the tooltip arrow.
@@ -129,7 +182,7 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
    * Tooltip border radius.
    * @default 'md'
    */
-  radius?: 'none' | 'sm' | 'md' | 'lg';
+  radius?: "none" | "sm" | "md" | "lg";
 
   /**
    * Offset from the trigger element.
@@ -139,6 +192,7 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
 
   /**
    * Whether the tooltip is disabled.
+   * Disabling tooltip behavior never changes the visual state of its trigger.
    */
   disabled?: boolean;
 
@@ -149,7 +203,7 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
 
   /**
    * Maximum width of the tooltip.
-   * @default 200
+   * @default 300
    */
   maxWidth?: number | string;
 
@@ -159,7 +213,10 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
   children: ReactNode;
 
   /**
-   * Whether to allow interaction with tooltip content.
+   * Whether to allow interaction with overlay content. The Modern engine
+   * promotes interactive content to a non-modal `dialog` relationship because
+   * ARIA tooltips cannot contain focusable controls; use Popover for larger or
+   * workflow-critical interactive surfaces.
    * @default false
    */
   interactive?: boolean;
@@ -230,7 +287,7 @@ export interface TooltipContentProps extends BaseComponentProps {
    * Side of the tooltip where the arrow appears.
    * @default 'top'
    */
-  side?: 'top' | 'bottom' | 'left' | 'right';
+  side?: "top" | "bottom" | "left" | "right";
 }
 
 /**
@@ -239,19 +296,25 @@ export interface TooltipContentProps extends BaseComponentProps {
  */
 export const TOOLTIP_DEFAULTS = {
   /** Default placement position */
-  placement: 'top' as const,
+  placement: "top" as const,
   /** Default trigger type */
-  trigger: 'hover' as const,
+  trigger: "hover" as const,
   /** Whether to show arrow by default */
   arrow: true,
   /** Default delay before showing tooltip (ms) */
   showDelay: 200,
   /** Default delay before hiding tooltip (ms) */
   hideDelay: 0,
+  /** Default coarse-pointer discovery behavior */
+  touchBehavior: "long-press" as const,
+  /** Deliberate enough to avoid competing with ordinary taps */
+  touchLongPressDelay: 500,
   /** Default tooltip color */
-  color: 'default' as const,
+  color: "default" as const,
+  /** Default coordinated Modern recipe */
+  recipe: "bordered" as const,
   /** Default border radius */
-  radius: 'md' as const,
+  radius: "md" as const,
   /** Default offset from trigger element (px) */
   offset: 8,
   /** Default max width (px) */
@@ -278,16 +341,16 @@ export const TOOLTIP_DEFAULTS = {
  * @constant
  */
 export const PLACEMENT_MAP: Record<string, React.CSSProperties> = {
-  top: { bottom: '100%', left: '50%', transform: 'translateX(-50%)' },
-  'top-start': { bottom: '100%', left: '0' },
-  'top-end': { bottom: '100%', right: '0' },
-  bottom: { top: '100%', left: '50%', transform: 'translateX(-50%)' },
-  'bottom-start': { top: '100%', left: '0' },
-  'bottom-end': { top: '100%', right: '0' },
-  left: { right: '100%', top: '50%', transform: 'translateY(-50%)' },
-  'left-start': { right: '100%', top: '0' },
-  'left-end': { right: '100%', bottom: '0' },
-  right: { left: '100%', top: '50%', transform: 'translateY(-50%)' },
-  'right-start': { left: '100%', top: '0' },
-  'right-end': { left: '100%', bottom: '0' },
+  top: { bottom: "100%", left: "50%", transform: "translateX(-50%)" },
+  "top-start": { bottom: "100%", left: "0" },
+  "top-end": { bottom: "100%", right: "0" },
+  bottom: { top: "100%", left: "50%", transform: "translateX(-50%)" },
+  "bottom-start": { top: "100%", left: "0" },
+  "bottom-end": { top: "100%", right: "0" },
+  left: { right: "100%", top: "50%", transform: "translateY(-50%)" },
+  "left-start": { right: "100%", top: "0" },
+  "left-end": { right: "100%", bottom: "0" },
+  right: { left: "100%", top: "50%", transform: "translateY(-50%)" },
+  "right-start": { left: "100%", top: "0" },
+  "right-end": { left: "100%", bottom: "0" },
 };

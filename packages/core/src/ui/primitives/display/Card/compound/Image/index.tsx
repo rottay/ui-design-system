@@ -10,6 +10,7 @@
  * **Position Options:**
  * - `top` - Image at card top (default)
  * - `bottom` - Image at card bottom
+ * - `start` / `end` - Logical inline positions that follow writing direction
  * - `cover` - Full card background
  *
  * **Features:**
@@ -54,6 +55,7 @@
 import React, { useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { CardImageProps } from '../../contracts';
+import { ContentImageIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-image';
 
 /**
  * Border radius to CSS value mapping.
@@ -61,9 +63,9 @@ import type { CardImageProps } from '../../contracts';
  */
 const RADIUS_MAP: Record<string, string> = {
   none: '0',
-  sm: '4px',
-  md: '8px',
-  lg: '12px',
+  sm: 'var(--ds-card-image-radius-sm, var(--ds-radius-sm))',
+  md: 'var(--ds-card-image-radius-md, var(--ds-radius-md))',
+  lg: 'var(--ds-card-image-radius-lg, var(--ds-radius-lg))',
   inherit: 'inherit',
 };
 
@@ -118,8 +120,11 @@ const RADIUS_MAP: Record<string, string> = {
 export function CardImage({
   src,
   alt,
-  height = 200,
-  objectFit = 'cover',
+  errorLabel,
+  loadingLabel,
+  height,
+  aspectRatio,
+  objectFit,
   position = 'top',
   overlay,
   gradient = false,
@@ -128,9 +133,15 @@ export function CardImage({
   onError,
   className = '',
   style,
+  ...rest
 }: CardImageProps): React.ReactElement {
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const logicalPosition = position === 'left'
+    ? 'start'
+    : position === 'right'
+      ? 'end'
+      : position;
 
   /**
    * Handles successful image load
@@ -154,15 +165,19 @@ export function CardImage({
   const containerStyle: CSSProperties = {
     position: 'relative',
     width: '100%',
-    height: typeof height === 'number' ? `${height}px` : height,
+    height:
+      typeof height === 'number'
+        ? `${height}px`
+        : height ?? (aspectRatio ? undefined : 'var(--ds-card-image-height, 12.5rem)'),
+    aspectRatio: aspectRatio
+      ? `var(--ds-card-image-aspect-ratio, ${aspectRatio})`
+      : undefined,
+    '--ds-card-image-aspect-ratio': aspectRatio,
     overflow: 'hidden',
     '--ds-card-image-radius': RADIUS_MAP[radius] || radius,
     ...(position === 'cover' && {
       position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      inset: 0,
       height: '100%',
       zIndex: 0,
     }),
@@ -173,10 +188,7 @@ export function CardImage({
     width: '100%',
     height: '100%',
     objectFit,
-    objectPosition: 'center',
     display: 'block',
-    transition: 'opacity 0.3s ease',
-    opacity: imageLoaded ? 1 : 0,
   };
 
   const placeholderStyle: CSSProperties = {
@@ -213,38 +225,33 @@ export function CardImage({
 
   return (
     <div
+      {...rest}
       className={`rottay-card-image ${className}`}
       data-part="image"
-      data-position={position}
+      data-position={logicalPosition}
+      data-loaded={imageLoaded && !imageError ? 'true' : 'false'}
+      data-error={imageError ? 'true' : 'false'}
+      data-gradient={gradient ? 'true' : 'false'}
       style={containerStyle}
     >
       {/* Placeholder shown while loading or on error */}
       {(!imageLoaded || imageError) && (
-        <div data-part="placeholder" style={placeholderStyle}>
+        <div
+          data-part="placeholder"
+          style={placeholderStyle}
+          role={imageError || loadingLabel ? 'status' : undefined}
+          aria-live={imageError || loadingLabel ? 'polite' : undefined}
+          aria-label={imageError ? (errorLabel ?? alt) : loadingLabel}
+          aria-hidden={!imageError && !loadingLabel ? 'true' : undefined}
+        >
           {imageError ? (
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-              data-part="error-icon"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
+            <span data-part="error-icon" aria-hidden="true">
+              <ContentImageIcon decorative size="2xl" />
+            </span>
           ) : (
             <div
               className="rottay-card-image-loading"
               data-part="spinner"
-              style={{
-                width: '40px',
-                height: '40px',
-                animation: 'ds-card-image-spin 1s linear infinite',
-              }}
             />
           )}
         </div>
@@ -256,6 +263,7 @@ export function CardImage({
           data-part="img"
           src={src}
           alt={alt}
+          decoding="async"
           style={imageStyle}
           onLoad={handleLoad}
           onError={handleError}

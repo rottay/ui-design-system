@@ -276,7 +276,6 @@ function renderFallbackCard<T extends object>({
       <Box style={{ minWidth: 0 }}>
         <Text
           className="ds-collection-render-dispatch__muted-text"
-          data-part="muted-text"
           size="xs"
           style={{
             display: 'block',
@@ -316,7 +315,6 @@ function renderFallbackCard<T extends object>({
           <Box key={column.key} style={{ minWidth: 0 }}>
             <Text
               className="ds-collection-render-dispatch__muted-text"
-              data-part="muted-text"
               size="xs"
               style={{
                 display: 'block',
@@ -433,7 +431,6 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
     >
       <Text
         className="ds-collection-render-dispatch__muted-text"
-        data-part="muted-text"
         size="sm"
       >
         {start}-{end} of {total.toLocaleString()}
@@ -454,7 +451,6 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
         </button>
         <Text
           className="ds-collection-render-dispatch__muted-text"
-          data-part="muted-text"
           size="sm"
         >
           Page {current} of {totalPages}
@@ -689,7 +685,7 @@ export function CollectionRenderDispatch<T extends object>(
     // Grid uses cards config renderCard if grid doesn't have its own
     const cardRenderer = viewModes.cards?.renderCard ?? mobileCard;
     if (!cardRenderer) {
-      return <Box className="ds-surface ds-collection-render-dispatch" data-part="root" data-view-mode="grid" data-state="error" padding="lg"><Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text">Grid mode requires a card renderer (viewModes.cards.renderCard or mobileCard)</Text></Box>;
+      return <Box className="ds-surface ds-collection-render-dispatch" data-part="root" data-view-mode="grid" data-state="error" padding="lg"><Text className="ds-collection-render-dispatch__muted-text">Grid mode requires a card renderer (viewModes.cards.renderCard or mobileCard)</Text></Box>;
     }
     return (
       <PatternGridView<T>
@@ -801,7 +797,7 @@ export function CollectionRenderDispatch<T extends object>(
               </Box>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
                 {items.length === 0 && (
-                  <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" data-tone="disabled" style={{ fontSize: 12, textAlign: 'center' as const, padding: 16 }}>
+                  <Text className="ds-collection-render-dispatch__muted-text" data-tone="disabled" style={{ fontSize: 12, textAlign: 'center' as const, padding: 16 }}>
                     No items
                   </Text>
                 )}
@@ -812,7 +808,7 @@ export function CollectionRenderDispatch<T extends object>(
                       data.indexOf(item),
                       createCardContext(item, data.indexOf(item)),
                     ) ?? (
-                      <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text">No card renderer</Text>
+                      <Text className="ds-collection-render-dispatch__muted-text">No card renderer</Text>
                     )}
                   </Box>
                 ))}
@@ -822,7 +818,7 @@ export function CollectionRenderDispatch<T extends object>(
         })}
         {loading && data.length === 0 && (
           <Box className="ds-collection-render-dispatch__loading-state" data-part="loading-state" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 32 }}>
-            <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text">Loading...</Text>
+            <Text className="ds-collection-render-dispatch__muted-text">Loading...</Text>
           </Box>
         )}
       </Box>
@@ -844,7 +840,7 @@ export function CollectionRenderDispatch<T extends object>(
             padding: '32px 20px',
           }}
         >
-          <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text">Loading...</Text>
+          <Text className="ds-collection-render-dispatch__muted-text">Loading...</Text>
         </Box>
       );
     }
@@ -861,7 +857,7 @@ export function CollectionRenderDispatch<T extends object>(
         >
           {emptyState ?? (
             <Box className="ds-collection-render-dispatch__empty-state" data-part="empty-state" style={{ padding: '32px 20px' }}>
-              <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text">No data</Text>
+              <Text className="ds-collection-render-dispatch__muted-text">No data</Text>
             </Box>
           )}
         </Box>
@@ -990,7 +986,7 @@ export function CollectionRenderDispatch<T extends object>(
         }}
       >
         <Text>Calendar view: {data.length} items with date field "{String(viewModes.calendar.startField)}"</Text>
-        <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" data-tone="disabled" size="sm" style={{ marginTop: 8 }}>
+        <Text className="ds-collection-render-dispatch__muted-text" data-tone="disabled" size="sm" style={{ marginTop: 8 }}>
           Wire PatternCalendarView here for full calendar rendering
         </Text>
       </Box>
@@ -1044,6 +1040,7 @@ export function CollectionRenderDispatch<T extends object>(
       editTrigger={props.editTrigger}
       tabNavigation={props.tabNavigation}
       mobileCard={mobileCard}
+      autoMobileCards={false}
     />
   );
 }

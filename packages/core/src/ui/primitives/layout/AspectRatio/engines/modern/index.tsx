@@ -16,11 +16,16 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import type { AspectRatioProps } from '../../contracts';
-import { ASPECT_RATIO_DEFAULTS } from '../../contracts';
+import React from "react";
+import type { AspectRatioProps } from "../../contracts";
+import { ASPECT_RATIO_DEFAULTS } from "../../contracts";
+
+type AspectRatioInstanceStyle = React.CSSProperties & {
+  "--ds-aspect-ratio-instance-ratio": string;
+  "--ds-aspect-ratio-instance-max-width"?: string;
+};
 
 /**
  * Modern (Tailwind) aspect ratio container using native CSS `aspect-ratio`.
@@ -33,36 +38,55 @@ import { ASPECT_RATIO_DEFAULTS } from '../../contracts';
  * @param props - {@link AspectRatioProps} including ratio, maxWidth, children, and styling overrides.
  * @returns A React element wrapping children in a native aspect ratio container.
  */
-export default function ModernAspectRatio(props: AspectRatioProps): React.ReactElement {
-  const {
-    ratio = ASPECT_RATIO_DEFAULTS.ratio,
-    children,
-    className = '',
-    style,
-    maxWidth,
-    'data-testid': dataTestId,
-  } = props;
+const ModernAspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
+  (props, ref) => {
+    const {
+      ratio = ASPECT_RATIO_DEFAULTS.ratio,
+      children,
+      className = "",
+      style,
+      maxWidth,
+      "data-testid": dataTestId,
+      ...rest
+    } = props;
 
-  // Inline style uses native aspect-ratio, with overflow hidden to clip
-  // children that exceed the ratio box boundaries
-  const containerStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
-    maxWidth: maxWidth,
-    aspectRatio: `${ratio}`,
-    overflow: 'hidden',
-    ...style,
-  };
+    const ratioIsValid = Number.isFinite(ratio) && ratio > 0;
+    const resolvedRatio = ratioIsValid ? ratio : ASPECT_RATIO_DEFAULTS.ratio;
+    const resolvedMaxWidth =
+      typeof maxWidth === "number"
+        ? Number.isFinite(maxWidth) && maxWidth >= 0
+          ? `${maxWidth}px`
+          : undefined
+        : maxWidth;
 
-  return (
-    <div
-      className={`relative w-full overflow-hidden ${className}`}
-      style={containerStyle}
-      data-testid={dataTestId}
-    >
-      {children}
-    </div>
-  );
-}
+    // The instance only supplies geometry values. Structure, material and
+    // reduced-motion behavior are centralized in the Modern skin.
+    const containerStyle: AspectRatioInstanceStyle = {
+      "--ds-aspect-ratio-instance-ratio": `${resolvedRatio}`,
+      ...(resolvedMaxWidth
+        ? { "--ds-aspect-ratio-instance-max-width": resolvedMaxWidth }
+        : {}),
+      ...style,
+    };
 
-ModernAspectRatio.displayName = 'ModernAspectRatio';
+    return (
+      <div
+        ref={ref}
+        {...rest}
+        className={`rottay-aspect-ratio rottay-aspect-ratio--modern ${className}`.trim()}
+        style={containerStyle}
+        data-testid={dataTestId}
+        data-part="root"
+        data-ratio={resolvedRatio}
+        data-invalid-ratio={ratioIsValid ? undefined : "true"}
+        data-component="aspect-ratio"
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+ModernAspectRatio.displayName = "ModernAspectRatio";
+
+export default ModernAspectRatio;

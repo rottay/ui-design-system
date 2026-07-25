@@ -49,7 +49,10 @@ describe('Link integration', () => {
       expect(externalLink).toHaveAttribute('rel', 'noopener noreferrer');
 
       if (engine === 'modern') {
-        expect(externalLink.className).toContain('no-underline');
+        // The modern skin owns the underline policy through the data contract;
+        // the engine stamps no DaisyUI classes or inline paint.
+        expect(externalLink).toHaveAttribute('data-underline', 'false');
+        expect(externalLink.className).not.toMatch(/(^|\s)(link|link-info|no-underline)(\s|$)/);
       } else if (engine === 'rustic') {
         expect(externalLink).toHaveStyle({ textDecoration: 'none' });
       }

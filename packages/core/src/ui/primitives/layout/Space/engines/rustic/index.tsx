@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Space Rustic Engine - Rottay Design System
@@ -35,10 +35,14 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { Children, Fragment } from 'react';
-import type { SpaceProps } from '../../contracts';
-import { SPACE_DEFAULTS, SPACE_SIZE_MAP, SPACE_ALIGN_MAP } from '../../contracts';
-import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+import React, { Children, Fragment } from "react";
+import type { SpaceProps } from "../../contracts";
+import {
+  SPACE_DEFAULTS,
+  SPACE_SIZE_MAP,
+  SPACE_ALIGN_MAP,
+} from "../../contracts";
+import { toLegacySize } from "../../../../../../foundation/contracts/kernel/common";
 
 /**
  * Rustic engine implementation of the Space component.
@@ -63,12 +67,12 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       ...rest
     } = props;
 
-    const isVertical = direction === 'vertical';
+    const isVertical = direction === "vertical";
 
     // Resolve gap identically to the Modern engine, supporting numbers, tuples,
     // and preset CSS variable tokens from SPACE_SIZE_MAP.
     let gapValue: string;
-    if (typeof size === 'number') {
+    if (typeof size === "number") {
       gapValue = `${size}px`;
     } else if (Array.isArray(size)) {
       // CSS gap shorthand: row-gap column-gap
@@ -77,16 +81,18 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       // SPACE_SIZE_MAP is keyed by the legacy 'small' | 'middle' | 'large' spelling;
       // toLegacySize resolves either spelling to it.
       const legacySize = toLegacySize(size);
-      gapValue = `${SPACE_SIZE_MAP[legacySize || 'small'] || SPACE_SIZE_MAP.small}px`;
+      gapValue = `${
+        SPACE_SIZE_MAP[legacySize || "small"] || SPACE_SIZE_MAP.small
+      }px`;
     }
 
     // All layout properties are set inline so no external stylesheet is required.
     // SPACE_ALIGN_MAP translates DS align values ('start', 'end', etc.) to their
     // CSS equivalents ('flex-start', 'flex-end', etc.).
     const spaceStyle: React.CSSProperties = {
-      display: 'inline-flex',
-      flexDirection: isVertical ? 'column' : 'row',
-      flexWrap: wrap ? 'wrap' : 'nowrap',
+      display: "inline-flex",
+      flexDirection: isVertical ? "column" : "row",
+      flexWrap: wrap ? "wrap" : "nowrap",
       alignItems: SPACE_ALIGN_MAP[align!] || SPACE_ALIGN_MAP.center,
       gap: gapValue,
       ...style,
@@ -111,6 +117,6 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   }
 );
 
-Space.displayName = 'Space.Rustic';
+Space.displayName = "Space.Rustic";
 
 export default Space;

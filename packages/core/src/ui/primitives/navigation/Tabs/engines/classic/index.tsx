@@ -64,7 +64,10 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
 // as the closest visual match (raised appearance with background fill).
 const TYPE_MAP = {
   line: 'line' as const,
+  underline: 'line' as const,
   card: 'card' as const,
+  contained: 'card' as const,
+  segmented: 'card' as const,
   pills: 'card' as const,
 };
 
@@ -163,6 +166,11 @@ export default function ClassicTabs(props: TabsProps): React.ReactElement {
     label: (
       <>
         {item.icon} {item.label}
+        {item.badge !== undefined && item.badge !== null && (
+          <span data-part="tab-badge" aria-label={item.badgeAriaLabel}>
+            {item.badge}
+          </span>
+        )}
       </>
     ),
     children: item.children,

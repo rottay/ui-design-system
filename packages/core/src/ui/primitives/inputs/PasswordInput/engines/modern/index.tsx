@@ -1,7 +1,20 @@
 /**
  * @fileoverview PasswordInput Modern Engine - Rottay Design System.
- * DS token inline-styled implementation with a custom visibility toggle button,
- * inline SVG eye icons, and an optional strength indicator bar.
+ * Premium password control painted entirely by the modern skin
+ * (`foundation/tokens/css/runtime/engines/modern/skin/password-input.css`), keyed
+ * on the `data-*` contract this component stamps: `data-variant`, `data-size`,
+ * `data-error`, `data-disabled`, `data-readonly`, `data-filled`,
+ * `data-strength`, and the `data-part` / `data-state` anatomy attributes from
+ * `behavior/anatomy.ts`.
+ *
+ * @remarks
+ * The shell mirrors the Modern Input addon branch: a neutral `<div>` owns the
+ * chrome, the inner `<input>` stays a transparent passthrough, and the
+ * visibility toggle is a real inline button -- keyboard reachable, labeled from
+ * the i18n catalog (`common.show_password` / `common.hide_password`), and
+ * positioned with logical properties so RTL needs no branch. The strength
+ * meter is a real `progressbar` whose fill width/color the skin derives from
+ * `data-strength`, so no runtime paint survives on any part.
  *
  * @example
  * ```tsx
@@ -16,32 +29,46 @@
 'use client';
 
 import React, { useState, useCallback, useId } from 'react';
-import type { PasswordInputProps } from '../../contracts';
-import { PASSWORD_INPUT_DEFAULTS, STRENGTH_COLORS, STRENGTH_WIDTHS } from '../../contracts';
+import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import type { PasswordInputProps, PasswordStrengthLevel } from '../../contracts';
+import { PASSWORD_INPUT_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-/**
- * Maps DS 5-tier size tokens to inline CSSProperties.
- * xl collapses to the lg tier dimensions.
- */
-const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  xs: { height: 24, fontSize: 12, padding: '4px 8px' },
-  sm: { height: 32, fontSize: 13, padding: '4px 10px' },
-  md: { height: 36, fontSize: 14, padding: '6px 12px' },
-  lg: { height: 40, fontSize: 16, padding: '8px 14px' },
-  xl: { height: 40, fontSize: 16, padding: '8px 14px' },
+/** aria-valuenow for the strength progressbar, aligned with STRENGTH_WIDTHS. */
+const STRENGTH_VALUES: Record<PasswordStrengthLevel, number> = {
+  weak: 25,
+  fair: 50,
+  good: 75,
+  strong: 100,
 };
 
+/** Eye (reveal) / eye-off (conceal) glyphs, decorative -- the button carries the name. */
+function VisibilityGlyph({ visible }: { visible: boolean }) {
+  return visible ? (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  ) : (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
 /**
- * Modern engine PasswordInput built with DS token inline styles.
- * Manages its own visibility toggle state and renders inline SVG eye icons
- * rather than importing an icon library, keeping the bundle lightweight.
+ * Modern engine PasswordInput painted by the modern skin.
+ * Manages its own visibility toggle state; every visual decision -- geometry,
+ * density, states, RTL, autofill, strength meter -- lives in the skin.
  *
  * @param props - Unified PasswordInputProps from the design system contract.
- * @returns A DS token-styled password input with toggle, strength bar, and error label.
+ * @returns A token-painted password input with toggle, strength meter, and error anatomy.
  */
 export default function ModernPasswordInput(props: PasswordInputProps): React.ReactElement {
   const {
     size = PASSWORD_INPUT_DEFAULTS.size,
+    variant = PASSWORD_INPUT_DEFAULTS.variant,
     placeholder,
     value,
     defaultValue,
@@ -54,6 +81,8 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     showToggle = PASSWORD_INPUT_DEFAULTS.showToggle,
     strengthIndicator = PASSWORD_INPUT_DEFAULTS.strengthIndicator,
     strengthLevel,
+    visibleIcon,
+    hiddenIcon,
     onChange,
     onFocus,
     onBlur,
@@ -69,10 +98,18 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     'data-testid': dataTestId,
   } = props;
 
+  const translation = useOptionalTranslation('common');
   const generatedId = useId();
-  const inputId = providedId || `password-modern-${generatedId}`;
+  const inputId = providedId || `password-modern-${generatedId.replace(/:/g, '')}`;
+  const errorMessageId = `${inputId}-error`;
   // Local toggle state for password visibility (not exposed to parent)
   const [visible, setVisible] = useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  // The hover/focus triad is decided once, in the behavior core, and the skin
+  // keys off `focused` -- a text field's border is not a keyboard-only
+  // affordance, so the ring follows any real focus, pointer or keyboard.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.value, e);
@@ -85,27 +122,52 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     }
   }, [onKeyDown, onPressEnter]);
 
-  // Merge DS size styles with conditional disabled overrides; border/background
-  // (error, disabled) live in the modern skin, keyed on the `data-error`/
-  // `data-disabled` attributes stamped on root below
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    paddingRight: 40,
-    boxSizing: 'border-box',
-    opacity: disabled ? 0.6 : 1,
-    cursor: disabled ? 'not-allowed' : undefined,
-    ...(SIZE_STYLES[size] || SIZE_STYLES.md),
-  };
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    interactionHandlers.onFocus(e);
+    onFocus?.(e);
+  }, [interactionHandlers, onFocus]);
+
+  const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    interactionHandlers.onBlur(e);
+    onBlur?.(e);
+  }, [interactionHandlers, onBlur]);
+
+  const handleToggleVisibility = useCallback(() => {
+    setVisible((previous) => !previous);
+    inputRef.current?.focus();
+  }, []);
+
+  const isFilled = String(value ?? defaultValue ?? '').length > 0;
+  const describedBy = error && errorMessage ? errorMessageId : undefined;
 
   return (
     <div
-      className={className || undefined}
-      style={{ display: 'flex', flexDirection: 'column', width: '100%', ...style }}
+      className={`ds-password-input-field ${className}`.trim()}
+      data-part="field"
+      style={style}
       data-testid={dataTestId}
     >
-      <div style={{ position: 'relative' }}>
+      <div
+        className="ds-password-input ds-password-input--modern"
+        onClick={(event) => {
+          const target = event.target as HTMLElement;
+          if (!target.closest('input, button')) inputRef.current?.focus();
+        }}
+        onPointerEnter={interactionHandlers.onPointerEnter}
+        onPointerLeave={interactionHandlers.onPointerLeave}
+        {...partAttributes('root', interaction)}
+        data-variant={variant}
+        data-size={size}
+        data-error={error ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
+        data-readonly={readOnly ? 'true' : 'false'}
+        data-filled={isFilled ? 'true' : 'false'}
+      >
         <input
+          ref={inputRef}
           id={inputId}
+          className="ds-password-input__control"
+          data-part="control"
           type={visible ? 'text' : 'password'}
           placeholder={placeholder}
           value={value}
@@ -115,61 +177,51 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           required={required}
           maxLength={maxLength}
           onChange={handleChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           name={name}
           autoComplete={autoComplete}
           autoFocus={autoFocus}
           aria-label={ariaLabel}
-          aria-invalid={error}
-          className="ds-password-input ds-password-input--modern"
-          data-part="root"
-          data-error={error ? 'true' : 'false'}
-          data-disabled={disabled ? 'true' : 'false'}
-          style={inputStyle}
+          aria-invalid={error || undefined}
+          aria-required={required || undefined}
+          aria-describedby={describedBy}
         />
         {showToggle && (
           <button
             type="button"
             data-part="visibility-toggle"
-            style={{ position: 'absolute', right: 8, top: '50%', height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
-            onClick={() => setVisible(!visible)}
-            tabIndex={-1}
-            aria-label={visible ? 'Hide password' : 'Show password'}
+            data-visible={visible ? 'true' : 'false'}
+            disabled={disabled}
+            onClick={handleToggleVisibility}
+            aria-label={
+              visible
+                ? translation?.t('hide_password') ?? 'Hide password'
+                : translation?.t('show_password') ?? 'Show password'
+            }
           >
-            {visible ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                <line x1="1" y1="1" x2="23" y2="23" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-            )}
+            {visible ? (visibleIcon ?? <VisibilityGlyph visible />) : (hiddenIcon ?? <VisibilityGlyph visible={false} />)}
           </button>
         )}
       </div>
-      {/* Strength indicator bar: width and color driven by STRENGTH_WIDTHS/STRENGTH_COLORS constants */}
       {strengthIndicator && strengthLevel && (
-        <div data-part="strength-track" style={{ width: '100%', height: 4, marginTop: 4, overflow: 'hidden' }}>
-          <div
-            data-part="strength-fill"
-            style={{
-              height: '100%',
-              transition: 'all var(--ds-motion-slow)',
-              width: STRENGTH_WIDTHS[strengthLevel],
-              ...({ '--ds-password-strength-fill': STRENGTH_COLORS[strengthLevel] } as React.CSSProperties),
-            }}
-          />
+        <div
+          data-part="strength-track"
+          data-strength={strengthLevel}
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={STRENGTH_VALUES[strengthLevel]}
+          aria-label={translation?.t('password_strength') ?? 'Password strength'}
+        >
+          <div data-part="strength-fill" />
         </div>
       )}
       {error && errorMessage && (
-        <div style={{ paddingTop: 4 }}>
-          <span data-part="error-message" style={{ fontSize: 12 }}>{errorMessage}</span>
-        </div>
+        <span id={errorMessageId} data-part="error-message" role="alert">
+          {errorMessage}
+        </span>
       )}
     </div>
   );

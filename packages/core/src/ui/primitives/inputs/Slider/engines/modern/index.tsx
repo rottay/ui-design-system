@@ -2,17 +2,20 @@
 
 /**
  * @fileoverview Slider Modern Engine - Rottay Design System
- * @description Token-driven Tailwind CSS implementation of the Slider component.
+ * @description Token-driven, skin-painted implementation of the Slider component.
  * Part of the Rottay Design System's input primitives collection.
  *
  * @remarks
- * The Modern engine implements sliders using Tailwind range input classes
- * with custom track overlays for range mode support.
+ * The Modern engine implements sliders with skin-owned native range inputs
+ * and custom track overlays for range mode support. No DaisyUI classes are
+ * consumed: the single-mode native input's thumb/track paint lives in the
+ * `slider.css` modern skin (`::-webkit-slider-thumb`, `::-moz-range-thumb`,
+ * runnable-track pseudos), keyed on `data-part='native-input'`.
  *
  * **Styling:**
- * - `range range-primary` - Base range input styling
  * - DS token `--ds-surface-panel` - Rail background color
- * - DS token `--ds-color-primary` - Active track color
+ * - DS token `--ds-color-primary` - Active track and thumb color
+ * - Skin-owned native thumb/track geometry (`--ds-slider-*` channels)
  * - Custom positioning for handles and marks
  *
  * **Custom Implementation:**
@@ -48,9 +51,10 @@
 import React, { useState, useCallback } from 'react';
 import type { SliderProps } from '../../contracts';
 import { SLIDER_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
- * Modern engine Slider -- built with Tailwind range classes, DS token styles, and custom overlays.
+ * Modern engine Slider -- skin-painted native range inputs, DS token styles, and custom overlays.
  *
  * Supports both single and dual-handle range modes. Range mode stacks two
  * invisible native `<input type="range">` elements on top of a custom track
@@ -58,7 +62,7 @@ import { SLIDER_DEFAULTS } from '../../contracts';
  * accessibility and keyboard control via the native inputs.
  *
  * @param props - {@link SliderProps} unified slider props shared across engines.
- * @returns A ref-forwarding slider with Tailwind/DS token styling.
+ * @returns A ref-forwarding slider painted by the `slider.css` modern skin.
  */
 export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
   (props, ref) => {
@@ -76,7 +80,20 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       vertical,
       className,
       style,
+      'aria-label': ariaLabel,
     } = props;
+
+    const i18n = useOptionalTranslation('components');
+    /**
+     * Localized label with an English floor: when the catalogue entry has not
+     * landed yet the provider echoes the full key, which must never reach an
+     * aria-label.
+     */
+    const tOr = (key: string, fallback: string): string => {
+      const resolved = i18n?.t(key);
+      if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+      return resolved;
+    };
 
     // Lazy initialiser -- defaults to full range when in range mode
     const getInitialValue = (): number | [number, number] => {
@@ -159,7 +176,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
               width: '4px',
             } : {
               top: '50%',
-              left: `${startPercent}%`,
+              // Logical offset: Chromium flips the native range scale under
+              // dir=rtl, so the overlay grammar must follow the inline axis.
+              insetInlineStart: `${startPercent}%`,
               width: `${endPercent - startPercent}%`,
               height: '4px',
             }}
@@ -169,8 +188,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
            * Two invisible native range inputs are stacked over the custom track.
            * They remain fully accessible (keyboard, screen readers) while the
            * visual handles rendered below provide the styled appearance.
+           * Each handle is the ADJACENT next sibling of its input so the skin
+           * can paint the keyboard ring on the visible handle via
+           * `input:focus-visible + [data-part='handle']` (the overlay inputs
+           * themselves are opacity-0 — a ring on them would be invisible).
            */}
-          {/* Start input */}
+          {/* Start input + handle */}
           <input
             type="range"
             min={min}
@@ -181,11 +204,18 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
             disabled={disabled}
-            className="range range-primary absolute inset-0 opacity-0 cursor-pointer"
-            style={{ pointerEvents: 'auto' }}
+            data-part="native-input"
+            data-variant="overlay"
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            aria-label={tOr('slider.start_value', 'Minimum value')}
+          />
+          <div
+            data-part="handle"
+            className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={vertical ? { left: '50%', bottom: `${startPercent}%` } : { top: '50%', insetInlineStart: `${startPercent}%` }}
           />
 
-          {/* End input */}
+          {/* End input + handle */}
           <input
             type="range"
             min={min}
@@ -196,20 +226,15 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
             disabled={disabled}
-            className="range range-primary absolute inset-0 opacity-0 cursor-pointer"
-            style={{ pointerEvents: 'auto' }}
-          />
-
-          {/* Handles */}
-          <div
-            data-part="handle"
-            className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { left: '50%', bottom: `${startPercent}%` } : { top: '50%', left: `${startPercent}%` }}
+            data-part="native-input"
+            data-variant="overlay"
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            aria-label={tOr('slider.end_value', 'Maximum value')}
           />
           <div
             data-part="handle"
             className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { left: '50%', bottom: `${endPercent}%` } : { top: '50%', left: `${endPercent}%` }}
+            style={vertical ? { left: '50%', bottom: `${endPercent}%` } : { top: '50%', insetInlineStart: `${endPercent}%` }}
           />
 
           {/* Marks -- positioned absolutely; supports both string and {label,style} shapes */}
@@ -228,11 +253,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
                 style={vertical ? {
                   left: '100%',
                   bottom: `${percent}%`,
-                  marginLeft: '8px',
                 } : {
                   top: '100%',
-                  left: `${percent}%`,
-                  marginTop: '8px',
+                  insetInlineStart: `${percent}%`,
                 }}
               >
                 {label}
@@ -252,6 +275,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         className={`ds-slider ds-slider--modern relative ${vertical ? 'h-full w-4' : 'w-full'} ${className || ''}`}
         data-part="root"
         data-disabled={disabled ? 'true' : 'false'}
+        data-orientation={vertical ? 'vertical' : 'horizontal'}
         style={style}
       >
         <input
@@ -264,7 +288,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           onMouseUp={handleMouseUp}
           onTouchEnd={handleMouseUp}
           disabled={disabled}
-          className={`range range-primary w-full ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          data-part="native-input"
+          className="w-full"
+          aria-label={ariaLabel ?? tOr('slider.label', 'Slider')}
+          /* Runtime fill hatch: the skin's runnable-track gradient reads this
+             to paint the primary portion (the only legitimate runtime value,
+             mirroring the Upload dropzone-height contract). */
+          style={{ '--ds-slider-single-percent': `${getPercentage(singleValue)}%` } as React.CSSProperties}
         />
 
         {/* Marks */}
@@ -281,8 +311,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
               className="absolute text-xs"
               style={{
                 top: '100%',
-                left: `${markPercent}%`,
-                marginTop: '4px',
+                insetInlineStart: `${markPercent}%`,
               }}
             >
               {label}

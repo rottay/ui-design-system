@@ -28,8 +28,12 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import type { ReactNode, CSSProperties } from 'react';
-import type { Size } from '../../../../../foundation/contracts/kernel/common';
+import type { AriaRole, ReactNode } from "react";
+import type {
+  BaseComponentProps,
+  EngineAwareProps,
+  Size,
+} from "../../../../../foundation/contracts";
 
 /**
  * Preset size options for the Space component, derived from the canonical {@link Size} scale.
@@ -40,13 +44,13 @@ import type { Size } from '../../../../../foundation/contracts/kernel/common';
  * - `md`: Standard spacing (default: 16px)
  * - `lg`: Generous spacing (default: 24px)
  */
-export type SpaceSize = Extract<Size, 'sm' | 'md' | 'lg'>;
+export type SpaceSize = Extract<Size, "sm" | "md" | "lg">;
 
 /**
  * @deprecated Legacy antd-style spelling; use {@link SpaceSize} ('sm' | 'md' | 'lg') instead.
  * Retained for one release so existing values keep compiling.
  */
-export type LegacySpaceSize = 'small' | 'middle' | 'large';
+export type LegacySpaceSize = "small" | "middle" | "large";
 
 /**
  * Flow direction for Space component.
@@ -55,7 +59,7 @@ export type LegacySpaceSize = 'small' | 'middle' | 'large';
  * - `horizontal`: Items flow left-to-right (default)
  * - `vertical`: Items flow top-to-bottom
  */
-export type SpaceDirection = 'horizontal' | 'vertical';
+export type SpaceDirection = "horizontal" | "vertical";
 
 /**
  * Cross-axis alignment options for Space items.
@@ -67,7 +71,7 @@ export type SpaceDirection = 'horizontal' | 'vertical';
  * - `center`: Center alignment (default)
  * - `baseline`: Align to text baseline
  */
-export type SpaceAlign = 'start' | 'end' | 'center' | 'baseline';
+export type SpaceAlign = "start" | "end" | "center" | "baseline";
 
 /**
  * Props for the Space component.
@@ -87,7 +91,7 @@ export type SpaceAlign = 'start' | 'end' | 'center' | 'baseline';
  * </Space>
  * ```
  */
-export interface SpaceProps {
+export interface SpaceProps extends BaseComponentProps, EngineAwareProps {
   /**
    * Size of spacing between items.
    * - Preset: 'sm' | 'md' | 'lg' (or the deprecated 'small' | 'middle' | 'large' spelling)
@@ -124,17 +128,12 @@ export interface SpaceProps {
   /** Child elements to space out. */
   children?: ReactNode;
 
-  /** Additional CSS class names. */
-  className?: string;
-
-  /** Inline CSS styles. */
-  style?: CSSProperties;
-
-  /**
-   * Rendering engine override.
-   * Overrides the engine from EngineProvider context.
-   */
-  engine?: 'classic' | 'modern' | 'rustic';
+  /** Optional semantic grouping role forwarded to the root. */
+  role?: AriaRole;
+  /** BCP 47 language metadata for localized groups. */
+  lang?: string;
+  /** Logical direction; horizontal flow follows this value automatically. */
+  dir?: "ltr" | "rtl" | "auto";
 }
 
 /**
@@ -142,10 +141,10 @@ export interface SpaceProps {
  * Used when props are not explicitly provided.
  */
 export const SPACE_DEFAULTS: Partial<SpaceProps> = {
-  size: 'small',
-  direction: 'horizontal',
+  size: "small",
+  direction: "horizontal",
   wrap: false,
-  align: 'center',
+  align: "center",
 };
 
 /**
@@ -159,9 +158,9 @@ export const SPACE_DEFAULTS: Partial<SpaceProps> = {
  * - `--ds-space-large-size`: Default 24px
  */
 export const SPACE_SIZE_MAP: Record<LegacySpaceSize, string> = {
-  small: 'var(--ds-space-small-size)',
-  middle: 'var(--ds-space-middle-size)',
-  large: 'var(--ds-space-large-size)',
+  small: "var(--ds-space-small-size)",
+  middle: "var(--ds-space-middle-size)",
+  large: "var(--ds-space-large-size)",
 };
 
 /**
@@ -169,8 +168,8 @@ export const SPACE_SIZE_MAP: Record<LegacySpaceSize, string> = {
  * Used by engine implementations for cross-axis alignment.
  */
 export const SPACE_ALIGN_MAP: Record<SpaceAlign, string> = {
-  start: 'flex-start',
-  end: 'flex-end',
-  center: 'center',
-  baseline: 'baseline',
+  start: "flex-start",
+  end: "flex-end",
+  center: "center",
+  baseline: "baseline",
 };

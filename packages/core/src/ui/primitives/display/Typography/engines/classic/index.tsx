@@ -46,17 +46,21 @@ import { forwardRef, useId } from 'react';
 import React from 'react';
 import { Typography as AntTypography } from 'antd';
 import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../../contracts';
-import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP } from '../../contracts';
+import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP, LINE_HEIGHT_MAP } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import {
+  resolveFluidTypographySize,
+  resolveTypographyCraftStyle,
+  typographyDataAttributes,
+} from '../../runtime';
 
 const { Title, Text: AntText, Paragraph: AntParagraph, Link: AntLink } = AntTypography;
 
 /**
  * Maps DS heading levels (h1-h6) to Ant Design Title levels (1-5).
- * AntD only supports 5 levels, so h6 is collapsed into level 5.
- * This is an intentional tradeoff: semantic HTML still renders h6 via
- * AntD internals, but the visual size matches h5.
+ * AntD only supports 5 levels. `h6` is rendered through the native element
+ * branch below so visual-engine choice never corrupts the document outline.
  */
 const LEVEL_MAP: Record<string, 1 | 2 | 3 | 4 | 5> = {
   h1: 1,
@@ -117,6 +121,19 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       color = TYPOGRAPHY_DEFAULTS.heading.color,
       truncate = TYPOGRAPHY_DEFAULTS.heading.truncate,
       lineClamp,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'balance',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
       className,
       style,
@@ -141,7 +158,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       responsiveEntries.push({
         cssProperty: 'font-size',
         value: size,
-        resolve: (v: TextSize) => `${SIZE_MAP.heading[v] || SIZE_MAP.heading.md} !important`,
+        resolve: (v: TextSize) => `${fluid ? resolveFluidTypographySize('heading', v) : SIZE_MAP.heading[v] || SIZE_MAP.heading.md} !important`,
       } as ResponsivePropEntry<any>);
       responsiveEntries.push({
         cssProperty: 'line-height',
@@ -155,6 +172,64 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const responsive = needsResponsiveCSS
       ? generateResponsiveCSS(elementId, responsiveEntries)
       : null;
+    const scalarSize = scalarOrUndefined(size);
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
+    const resolvedStyle: React.CSSProperties = {
+      ...(!sizeIsResponsive && scalarSize && !textStyle
+        ? { fontSize: SIZE_MAP.heading[scalarSize] }
+        : {}),
+      ...(weight ? { fontWeight: WEIGHT_MAP[weight] } : {}),
+      textAlign: align,
+      // Reset AntD's default Title margin and mirror the same behavior in the
+      // native h6 branch so layout primitives own vertical rhythm.
+      margin: 0,
+      ...resolveTypographyCraftStyle({
+        ...craftProps,
+        kind: 'heading',
+        size: scalarSize,
+        align,
+        truncate,
+        lineClamp,
+        responsive: sizeIsResponsive,
+      }),
+      ...style,
+    };
+    const resolvedClassName =
+      `rottay-typography rottay-typography--classic ${className ?? ''}`.trim();
+
+    if (level === 'h6') {
+      return (
+        <>
+          {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+          <h6
+            ref={ref}
+            lang={lang}
+            dir={dir}
+            translate={translate}
+            title={title}
+            {...props}
+            {...(responsive ? responsive.attrs : {})}
+            data-part="root"
+            data-color={color}
+            {...typographyDataAttributes(craftProps)}
+            style={resolvedStyle}
+            className={resolvedClassName}
+          >
+            {children}
+          </h6>
+        </>
+      );
+    }
 
     return (
       <>
@@ -166,17 +241,17 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           level={LEVEL_MAP[level]}
           type={TYPE_MAP[color]}
           ellipsis={ellipsisConfig}
-          style={{
-            textWrap: 'balance',
-            textAlign: align,
-            // Reset AntD's default Title margin to let the DS layout
-            // components (Stack, Flex) control spacing instead.
-            margin: 0,
-            ...style,
-          }}
-          className={className}
-          {...(responsive ? responsive.attrs : {})}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
           {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part="root"
+          data-color={color}
+          {...typographyDataAttributes(craftProps)}
+          style={resolvedStyle}
+          className={resolvedClassName}
         >
           {children}
         </Title>
@@ -207,7 +282,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
       weight,
       color = TYPOGRAPHY_DEFAULTS.text.color,
       align = TYPOGRAPHY_DEFAULTS.text.align,
-      as,
+      as = TYPOGRAPHY_DEFAULTS.text.as,
       truncate = TYPOGRAPHY_DEFAULTS.text.truncate,
       lineClamp,
       underline = TYPOGRAPHY_DEFAULTS.text.underline,
@@ -215,6 +290,19 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
       italic = TYPOGRAPHY_DEFAULTS.text.italic,
       monospace = TYPOGRAPHY_DEFAULTS.text.monospace,
       numeric,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'pretty',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
       className,
       style,
@@ -237,7 +325,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
       responsiveEntries.push({
         cssProperty: 'font-size',
         value: sizeProp,
-        resolve: (v: TextSize) => `${SIZE_MAP.text[v] || SIZE_MAP.text.md} !important`,
+        resolve: (v: TextSize) => `${fluid ? resolveFluidTypographySize('text', v) : SIZE_MAP.text[v] || SIZE_MAP.text.md} !important`,
       } as ResponsivePropEntry<any>);
       responsiveEntries.push({
         cssProperty: 'line-height',
@@ -251,6 +339,72 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
     const responsive = needsResponsiveCSS
       ? generateResponsiveCSS(elementId, responsiveEntries)
       : null;
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.text.size;
+    const craftProps = {
+      textStyle,
+      family: monospace ? ('mono' as const) : family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
+    const resolvedClassName = [
+      'rottay-typography',
+      'rottay-typography--classic',
+      className,
+      numeric === 'tabular' ? 'ds-nums-tabular' : undefined,
+    ].filter(Boolean).join(' ') || undefined;
+    const resolvedStyle: React.CSSProperties = {
+      ...(!sizeIsResponsive && !textStyle ? { fontSize: SIZE_MAP.text[size] } : {}),
+      ...(weight ? { fontWeight: WEIGHT_MAP[weight] } : {}),
+      ...(as !== 'span' ? { color: COLOR_MAP[color] } : {}),
+      ...(underline || strikethrough
+        ? {
+            textDecoration: [underline ? 'underline' : '', strikethrough ? 'line-through' : '']
+              .filter(Boolean)
+              .join(' '),
+          }
+        : {}),
+      ...(italic ? { fontStyle: 'italic' } : {}),
+      ...resolveTypographyCraftStyle({
+        ...craftProps,
+        kind: 'text',
+        size,
+        align,
+        truncate,
+        lineClamp,
+        responsive: sizeIsResponsive,
+      }),
+      ...style,
+    };
+
+    if (as !== 'span') {
+      const TextElement = as as React.ElementType;
+      return (
+        <>
+          {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+          <TextElement
+            ref={ref}
+            lang={lang}
+            dir={dir}
+            translate={translate}
+            title={title}
+            {...props}
+            {...(responsive ? responsive.attrs : {})}
+            data-part="root"
+            data-color={color}
+            {...typographyDataAttributes(craftProps)}
+            className={resolvedClassName}
+            style={resolvedStyle}
+          >
+            {children}
+          </TextElement>
+        </>
+      );
+    }
 
     return (
       <>
@@ -267,14 +421,17 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
           // `code` renders a <code> tag with monospace font
           code={monospace}
           ellipsis={ellipsisConfig}
-          style={{
-            textWrap: 'pretty',
-            textAlign: align,
-            ...style,
-          }}
-          className={[className, numeric === 'tabular' ? 'ds-nums-tabular' : undefined].filter(Boolean).join(' ') || undefined}
-          {...(responsive ? responsive.attrs : {})}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
           {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part="root"
+          data-color={color}
+          {...typographyDataAttributes(craftProps)}
+          style={resolvedStyle}
+          className={resolvedClassName}
         >
           {children}
         </AntText>
@@ -301,12 +458,25 @@ ClassicText.displayName = 'ClassicText';
 export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   (
     {
-      size = TYPOGRAPHY_DEFAULTS.paragraph.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.paragraph.size,
       weight,
       color = TYPOGRAPHY_DEFAULTS.paragraph.color,
       align = TYPOGRAPHY_DEFAULTS.paragraph.align,
       truncate = TYPOGRAPHY_DEFAULTS.paragraph.truncate,
       lineClamp,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'pretty',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
       className,
       style,
@@ -319,21 +489,74 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
     const ellipsisConfig = truncate || lineClamp
       ? { rows: lineClamp || 1 }
       : undefined;
+    const reactId = useId();
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    if (sizeIsResponsive) {
+      responsiveEntries.push(
+        {
+          cssProperty: 'font-size',
+          value: sizeProp,
+          resolve: (value: TextSize) => `${fluid ? resolveFluidTypographySize('text', value) : SIZE_MAP.text[value] || SIZE_MAP.text.md} !important`,
+        } as ResponsivePropEntry<any>,
+        {
+          cssProperty: 'line-height',
+          value: sizeProp,
+          resolve: (value: TextSize) => `${LINE_HEIGHT_MAP.text[value] || '1.5'} !important`,
+        } as ResponsivePropEntry<any>,
+      );
+    }
+    const responsive = responsiveEntries.length
+      ? generateResponsiveCSS(`paragraph-${reactId.replace(/:/g, '')}`, responsiveEntries)
+      : null;
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
 
     return (
-      <AntParagraph
-        ref={ref as React.Ref<HTMLElement>}
-        type={TYPE_MAP[color]}
-        ellipsis={ellipsisConfig}
-        style={{
-          textAlign: align,
-          ...style,
-        }}
-        className={className}
-        {...props}
-      >
-        {children}
-      </AntParagraph>
+      <>
+        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+        <AntParagraph
+          ref={ref as React.Ref<HTMLElement>}
+          type={TYPE_MAP[color]}
+          ellipsis={ellipsisConfig}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part="root"
+          data-color={color}
+          {...typographyDataAttributes(craftProps)}
+          style={{
+            ...(!sizeIsResponsive && !textStyle ? { fontSize: SIZE_MAP.text[size] } : {}),
+            ...(weight ? { fontWeight: WEIGHT_MAP[weight] } : {}),
+            ...resolveTypographyCraftStyle({
+              ...craftProps,
+              kind: 'text',
+              size,
+              align,
+              truncate,
+              lineClamp,
+              responsive: sizeIsResponsive,
+            }),
+            ...style,
+          }}
+          className={`rottay-typography rottay-typography--classic ${className ?? ''}`.trim()}
+        >
+          {children}
+        </AntParagraph>
+      </>
     );
   }
 );
@@ -358,13 +581,26 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
       href,
       target,
       rel,
-      size = TYPOGRAPHY_DEFAULTS.link.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.link.size,
       weight,
       color = TYPOGRAPHY_DEFAULTS.link.color,
       underlineOnHover = TYPOGRAPHY_DEFAULTS.link.underlineOnHover,
       underline = TYPOGRAPHY_DEFAULTS.link.underline,
       disabled = TYPOGRAPHY_DEFAULTS.link.disabled,
       strong = TYPOGRAPHY_DEFAULTS.link.strong,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'auto',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       onClick,
       children,
       className,
@@ -376,27 +612,79 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
     // Security best-practice: external links (_blank) get noopener noreferrer
     // automatically so the opened page cannot access window.opener.
     const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
+    const reactId = useId();
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    if (sizeIsResponsive) {
+      responsiveEntries.push(
+        {
+          cssProperty: 'font-size',
+          value: sizeProp,
+          resolve: (value: TextSize) => `${fluid ? resolveFluidTypographySize('text', value) : SIZE_MAP.text[value] || SIZE_MAP.text.md} !important`,
+        } as ResponsivePropEntry<any>,
+        {
+          cssProperty: 'line-height',
+          value: sizeProp,
+          resolve: (value: TextSize) => `${LINE_HEIGHT_MAP.text[value] || '1.5'} !important`,
+        } as ResponsivePropEntry<any>,
+      );
+    }
+    const responsive = responsiveEntries.length
+      ? generateResponsiveCSS(`link-${reactId.replace(/:/g, '')}`, responsiveEntries)
+      : null;
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
 
     return (
-      <AntLink
-        ref={ref as React.Ref<HTMLElement>}
-        href={href}
-        target={target}
-        rel={computedRel}
-        type={TYPE_MAP[color]}
-        // When underlineOnHover is false we want the underline always
-        // visible, so we pass true. AntD lacks a "hover-only" mode,
-        // making this the closest approximation.
-        underline={underline || !underlineOnHover}
-        disabled={disabled}
-        strong={strong}
-        onClick={onClick}
-        style={style}
-        className={className}
-        {...props}
-      >
-        {children}
-      </AntLink>
+      <>
+        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+        <AntLink
+          ref={ref as React.Ref<HTMLElement>}
+          href={disabled ? undefined : href}
+          target={target}
+          rel={computedRel}
+          type={TYPE_MAP[color]}
+          underline={underline || !underlineOnHover}
+          disabled={disabled}
+          strong={strong}
+          onClick={disabled ? undefined : onClick}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part="root"
+          data-color={color}
+          data-disabled={disabled || undefined}
+          {...typographyDataAttributes(craftProps)}
+          aria-disabled={disabled || undefined}
+          style={{
+            ...(!sizeIsResponsive && !textStyle ? { fontSize: SIZE_MAP.text[size] } : {}),
+            ...(weight ? { fontWeight: WEIGHT_MAP[weight] } : {}),
+            ...resolveTypographyCraftStyle({
+              ...craftProps,
+              kind: 'text',
+              size,
+              responsive: sizeIsResponsive,
+            }),
+            ...style,
+          }}
+          className={`rottay-typography rottay-typography--classic ${className ?? ''}`.trim()}
+        >
+          {children}
+        </AntLink>
+      </>
     );
   }
 );

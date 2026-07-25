@@ -6,9 +6,13 @@ import { CodeBlock, registerHighlighter } from '../index';
 import type { HighlighterAdapter } from '../index';
 
 afterEach(() => {
+  // Unmount before clearing the registry: `registerHighlighter(null)` emits to
+  // `useSyncExternalStore` subscribers, and notifying a still-mounted block
+  // re-renders it outside `act` (React act warning). Cleanup first keeps the
+  // notification silent.
+  cleanup();
   registerHighlighter(null);
   vi.restoreAllMocks();
-  cleanup();
 });
 
 const LABELS = { copyLabel: 'Copy', copiedLabel: 'Copied' };

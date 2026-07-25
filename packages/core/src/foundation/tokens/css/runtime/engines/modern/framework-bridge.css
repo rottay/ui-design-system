@@ -1,0 +1,450 @@
+/**
+ * Modern framework compatibility bridge.
+ *
+ * Temporary ownership boundary for legacy DaisyUI compatibility selectors,
+ * utility shims and raw-control normalization that have not yet migrated to
+ * protected DS anatomy. New component paint is forbidden here. Each rule is
+ * tenant-scoped and this file is reduced as individual primitives graduate.
+ */
+
+/* =============================================================================
+   INPUT - Mejoras adicionales
+   ============================================================================= */
+
+[data-tenant] .input {
+  width: 100%;
+  height: var(--ds-input-md-height, 40px);
+  padding: 0 12px;
+  font-size: 14px;
+  background-color: var(--ds-input-bg);
+  border: 1px solid var(--ds-border-color);
+  border-radius: var(--ds-input-radius, 8px);
+  color: var(--ds-text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+[data-tenant] .input::placeholder {
+  color: var(--ds-text-tertiary);
+}
+
+[data-tenant] .input:hover:not(:disabled):not(:focus) {
+  border-color: var(--ds-input-border-hover);
+}
+
+[data-tenant] .input:focus {
+  border-color: var(--ds-color-primary-500);
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
+}
+
+[data-tenant] .input:disabled {
+  background-color: var(--ds-input-disabled-bg);
+  color: var(--ds-text-tertiary);
+  cursor: not-allowed;
+}
+
+/* =============================================================================
+   BUTTON - Mejoras adicionales
+   ============================================================================= */
+
+[data-tenant] .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--ds-button-md-height, 40px);
+  min-height: var(--ds-button-md-height, 40px);
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--ds-button-md-radius, 8px);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+[data-tenant] .btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100);
+}
+
+/* Primary button */
+[data-tenant] .btn-primary {
+  background-color: var(--ds-color-primary-600);
+  border-color: var(--ds-color-primary-600);
+  color: var(--ds-button-primary-color);
+}
+
+[data-tenant] .btn-primary:hover:not(:disabled) {
+  background-color: var(--ds-color-primary-700);
+  border-color: var(--ds-color-primary-700);
+}
+
+/* Ghost button */
+[data-tenant] .btn-ghost {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ds-text-primary);
+}
+
+[data-tenant] .btn-ghost:hover:not(:disabled) {
+  background-color: var(--ds-color-neutral-100);
+}
+
+/* Disabled button */
+[data-tenant] .btn:disabled,
+[data-tenant] .btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   SPACE - Utility for vertical/horizontal spacing
+   ============================================================================= */
+
+[data-tenant] .space-y-4 > * + * {
+  margin-top: 16px;
+}
+
+[data-tenant] .space-y-2 > * + * {
+  margin-top: 8px;
+}
+
+/* =============================================================================
+   AVATAR - User avatars
+   ============================================================================= */
+
+[data-tenant] .avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--ds-color-primary-100);
+  color: var(--ds-color-primary-600);
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+[data-tenant] .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =============================================================================
+   LOADING SPINNER
+   ============================================================================= */
+
+[data-tenant] .loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ds-border-color);
+  border-top-color: var(--ds-color-primary-600);
+  border-radius: 50%;
+  animation: ds-foundation-spin 0.6s linear infinite;
+}
+
+/* =============================================================================
+   FLEX UTILITIES - For Space component and general layout
+   ============================================================================= */
+
+[data-tenant] .inline-flex {
+  display: inline-flex;
+}
+
+[data-tenant] .flex {
+  display: flex;
+}
+
+[data-tenant] .flex-row {
+  flex-direction: row;
+}
+
+[data-tenant] .flex-col {
+  flex-direction: column;
+}
+
+[data-tenant] .flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* Alignment */
+[data-tenant] .items-start {
+  align-items: flex-start;
+}
+
+[data-tenant] .items-center {
+  align-items: center;
+}
+
+[data-tenant] .justify-end {
+  justify-content: flex-end;
+}
+
+[data-tenant] .justify-center {
+  justify-content: center;
+}
+
+[data-tenant] .justify-between {
+  justify-content: space-between;
+}
+
+/* =============================================================================
+   GRID - Responsive grid system
+   ============================================================================= */
+
+[data-tenant] .rottay-grid {
+  display: grid;
+  width: 100%;
+}
+[data-tenant] .gap-1 {
+  gap: 4px;
+}
+[data-tenant] .gap-2 {
+  gap: 8px;
+}
+[data-tenant] .gap-4 {
+  gap: 16px;
+}
+[data-tenant] .grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+[data-tenant] .grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Responsive grid - Default columns based on data attributes */
+[data-tenant] .rottay-grid[data-cols-xs="1"] {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+[data-tenant] .rottay-grid[data-cols-xs="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+[data-tenant] .rottay-grid[data-cols-xs="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+[data-tenant] .rottay-grid[data-cols-xs="4"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* SM breakpoint (640px) */
+@media (min-width: 640px) {
+  [data-tenant] .rottay-grid[data-cols-sm="1"] {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-sm="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-sm="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-sm="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* MD breakpoint (768px) */
+@media (min-width: 768px) {
+  [data-tenant] .rottay-grid[data-cols-md="1"] {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-md="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-md="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-md="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* LG breakpoint (1024px) */
+@media (min-width: 1024px) {
+  [data-tenant] .rottay-grid[data-cols-lg="1"] {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-lg="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-lg="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-lg="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-lg="5"] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-lg="6"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* XL breakpoint (1280px) */
+@media (min-width: 1280px) {
+  [data-tenant] .rottay-grid[data-cols-xl="1"] {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-xl="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-xl="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-xl="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-xl="5"] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  [data-tenant] .rottay-grid[data-cols-xl="6"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* =============================================================================
+   INPUT FIX - Inner input inside label wrapper
+   ============================================================================= */
+
+/* When Input has prefix/suffix, outer label has .input class, inner input should be plain */
+[data-tenant] label.input input,
+[data-tenant] .input input {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  flex: 1;
+  min-width: 0;
+}
+
+/* =============================================================================
+   FORM LAYOUT - Alignment fixes
+   ============================================================================= */
+
+/* Form container - vertical layout */
+[data-tenant] form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* =============================================================================
+   SELECT / DROPDOWN - Styling
+   ============================================================================= */
+
+[data-tenant] select {
+  display: flex;
+  height: 40px;
+  min-height: 40px;
+  padding: 8px 32px 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ds-text-primary);
+  background-color: var(--ds-color-white);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  border: 1px solid var(--ds-color-border-primary);
+  border-radius: var(--ds-radius-md);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+}
+
+[data-tenant] select:hover {
+  border-color: var(--ds-color-primary-400);
+}
+
+[data-tenant] select:focus {
+  outline: none;
+  border-color: var(--ds-color-primary-500);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-100);
+}
+
+[data-tenant] select:disabled {
+  background-color: var(--ds-color-neutral-100);
+  cursor: not-allowed;
+  opacity: var(--ds-input-disabled-opacity);
+}
+
+/* Textarea specific */
+[data-tenant] textarea {
+  min-height: 100px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+/* =============================================================================
+   BUTTON GAP FIX - Space between buttons
+   ============================================================================= */
+
+/* Ensure buttons have gap when in flex/inline containers */
+[data-tenant] .btn + .btn {
+  margin-left: 8px;
+}
+
+/* Generic flex gap for button parents */
+[data-tenant] div:has(> .btn + .btn),
+[data-tenant] span:has(> .btn + .btn) {
+  display: inline-flex;
+  gap: 8px;
+}
+
+/* =============================================================================
+   COLOR INPUT / COLOR PICKER - Styling
+   ============================================================================= */
+
+[data-tenant] input[type="color"] {
+  width: 60px;
+  height: 40px;
+  padding: 4px;
+  border: 1px solid var(--ds-color-border-primary);
+  border-radius: var(--ds-radius-md);
+  cursor: pointer;
+  background-color: var(--ds-color-white);
+}
+
+[data-tenant] input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+[data-tenant] input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: var(--ds-radius-sm);
+}
+
+[data-tenant] input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: var(--ds-radius-sm);
+}
+
+/* =============================================================================
+   TOUCH TARGETS - coarse-pointer hit-area floor (WO-ENG-12, spec section 13)
+   ============================================================================= */
+
+/* `@media (pointer: coarse)` is a pointer-capability query, not a viewport
+   fork: it targets touch hardware regardless of screen size, so fine (mouse)
+   pointer rendering is untouched. Button/link/checkbox/radio/select hit
+   areas are already floored by the unlayered rule in foundation/base.css;
+   the modern Input's <input> renders with runtime style props and a
+   per-render hashed class, so `.rottay-input--modern` is its stable hook
+   for this floor. */
+@media (pointer: coarse) {
+  [data-tenant] .rottay-input--modern {
+    min-height: var(--ds-touch-target-min);
+  }
+}

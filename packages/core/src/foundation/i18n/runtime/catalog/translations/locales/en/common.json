@@ -11,6 +11,7 @@
   "back": "Back",
   "next": "Next",
   "previous": "Previous",
+  "finish": "Finish",
   "submit": "Submit",
   "search": "Search",
   "filter": "Filter",
@@ -58,5 +59,16 @@
   "settings": "Settings",
   "help": "Help",
   "logout": "Logout",
-  "login": "Login"
+  "login": "Login",
+  "breadcrumb": "Breadcrumb",
+  "key_metrics": "Key metrics",
+  "shortcuts": "Shortcuts",
+  "dashboard_status_live": "Live",
+  "dashboard_status_connected": "Connected",
+  "dashboard_status_syncing": "Syncing",
+  "dashboard_status_offline": "Offline",
+  "dashboard_status_warning": "Warning",
+  "show_password": "Show password",
+  "hide_password": "Hide password",
+  "password_strength": "Password strength"
 }

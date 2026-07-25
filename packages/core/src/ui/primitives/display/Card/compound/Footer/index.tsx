@@ -51,9 +51,9 @@ import type { CardFooterProps } from '../../contracts';
  */
 const PADDING_MAP: Record<string, string> = {
   none: '0',
-  sm: '12px 16px',
-  md: '16px 24px',
-  lg: '20px 32px',
+  sm: 'var(--ds-card-footer-padding-sm, var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px))',
+  md: 'var(--ds-card-footer-padding, var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px))',
+  lg: 'var(--ds-card-footer-padding-lg, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px))',
 };
 
 /**
@@ -112,18 +112,20 @@ export function CardFooter({
   align = 'end',
   className = '',
   style,
+  ...rest
 }: CardFooterProps): React.ReactElement {
   const footerStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: ALIGN_MAP[align],
-    gap: '8px',
+    flexWrap: 'wrap',
+    gap: 'var(--ds-card-footer-actions-gap, var(--ds-spacing-2, 8px))',
     padding: PADDING_MAP[padding],
     ...style,
   };
 
   return (
-    <div className={`rottay-card-footer ${className}`} data-part="footer" data-divider={divider ? 'true' : undefined} style={footerStyle}>
+    <div {...rest} className={`rottay-card-footer ${className}`} data-part="footer" data-divider={divider ? 'true' : undefined} data-align={align} style={footerStyle}>
       {children}
       {actions && actions.length > 0 && (
         <div
@@ -131,8 +133,9 @@ export function CardFooter({
           data-part="actions"
           style={{
             display: 'flex',
+            flexWrap: 'wrap',
             alignItems: 'center',
-            gap: '8px',
+            gap: 'var(--ds-card-footer-actions-gap, var(--ds-spacing-2, 8px))',
           }}
         >
           {actions.map((action, index) => (

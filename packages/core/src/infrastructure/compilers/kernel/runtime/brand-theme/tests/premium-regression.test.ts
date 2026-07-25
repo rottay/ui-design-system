@@ -175,7 +175,7 @@ describe('shared pipeline: personality baseline', () => {
 describe('shared pipeline: density baseline', () => {
   it('bithire generates density scale from brandTheme', () => {
     const css = generateTenantCss(BITHIRE_CONFIG, { includeDarkSelector: false });
-    expect(css).toContain('--ds-density-scale: 0.98');
+    expect(css).toContain('--ds-density-scale: 0.9');
   });
 
   it('evnto generates density scale from vertical + brandTheme', () => {
@@ -334,7 +334,9 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   it('bithire generates input vars with correct values', () => {
     expect(bithireCss).toContain('--ds-input-bg: #ffffff');
     expect(bithireCss).toContain('--ds-input-border-focus: #3A6FB0');
-    expect(bithireCss).toContain('--ds-input-shadow-focus: 0 0 0 1px #3A6FB0');
+    expect(bithireCss).toContain(
+      '--ds-input-shadow-focus: 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08)'
+    );
   });
 
   it('rottay generates layout vars with correct values', () => {
@@ -445,7 +447,7 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
     expect(scopedCss).toContain('--ds-button-primary-bg: #3A6FB0');
     expect(scopedCss).toContain('--ds-sidebar-bg: #ffffff');
     expect(scopedCss).toContain('--ds-command-home-panel-border: #A9C9EA');
-    expect(scopedCss).toContain('--ds-command-home-meter-fill: linear-gradient(90deg, #3A6FB0, #2F7D5E)');
+    expect(scopedCss).toContain('--ds-command-home-meter-fill: linear-gradient(90deg, #315F86, #6F98BC)');
     // NOT inline on :root — proper specificity
     expect(scopedCss).not.toContain(':root');
   });

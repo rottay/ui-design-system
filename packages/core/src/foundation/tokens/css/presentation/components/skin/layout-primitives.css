@@ -1,0 +1,343 @@
+/**
+ * Declarative layout primitives.
+ *
+ * Flex and Stack keep their neutral defaults and scalar prop projections in
+ * CSS so vertical, tenant, family and screen selectors can participate in the
+ * normal cascade. Only numeric parameters and an explicit consumer `style`
+ * override remain inline in the React engines.
+ *
+ * This file is deliberately unlayered for the same reason as the engine skins:
+ * it must survive framework preflight while remaining overridable by consumer
+ * stylesheets loaded after the DS bundle.
+ */
+
+/* Flex defaults. Omitted props intentionally carry no data attribute. */
+.rottay-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.rottay-flex[data-inline="true"] {
+  display: inline-flex;
+}
+
+.rottay-flex[data-direction="row-reverse"] {
+  flex-direction: row-reverse;
+}
+
+.rottay-flex[data-direction="column"] {
+  flex-direction: column;
+}
+
+.rottay-flex[data-direction="column-reverse"] {
+  flex-direction: column-reverse;
+}
+
+.rottay-flex[data-wrap="wrap"] {
+  flex-wrap: wrap;
+}
+
+.rottay-flex[data-wrap="wrap-reverse"] {
+  flex-wrap: wrap-reverse;
+}
+
+.rottay-flex[data-justify="end"] {
+  justify-content: flex-end;
+}
+
+.rottay-flex[data-justify="center"] {
+  justify-content: center;
+}
+
+.rottay-flex[data-justify="between"] {
+  justify-content: space-between;
+}
+
+.rottay-flex[data-justify="around"] {
+  justify-content: space-around;
+}
+
+.rottay-flex[data-justify="evenly"] {
+  justify-content: space-evenly;
+}
+
+.rottay-flex[data-align="start"] {
+  align-items: flex-start;
+}
+
+.rottay-flex[data-align="end"] {
+  align-items: flex-end;
+}
+
+.rottay-flex[data-align="center"] {
+  align-items: center;
+}
+
+.rottay-flex[data-align="baseline"] {
+  align-items: baseline;
+}
+
+.rottay-flex[data-gap="uniform"] {
+  gap: var(--ds-flex-gap);
+}
+
+.rottay-flex[data-gap="split"] {
+  column-gap: var(--ds-flex-column-gap);
+  row-gap: var(--ds-flex-row-gap);
+}
+
+/* Stack defaults. Preset spacing stays connected to the tenant spacing ramp. */
+.rottay-stack {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--ds-spacing-4, 1rem);
+}
+
+.rottay-stack[data-direction="horizontal"] {
+  flex-direction: row;
+}
+
+.rottay-stack[data-reverse="true"] {
+  flex-direction: column-reverse;
+}
+
+.rottay-stack[data-direction="horizontal"][data-reverse="true"] {
+  flex-direction: row-reverse;
+}
+
+.rottay-stack[data-wrap="true"] {
+  flex-wrap: wrap;
+}
+
+.rottay-stack[data-align="start"] {
+  align-items: flex-start;
+}
+
+.rottay-stack[data-align="center"] {
+  align-items: center;
+}
+
+.rottay-stack[data-align="end"] {
+  align-items: flex-end;
+}
+
+.rottay-stack[data-align="baseline"] {
+  align-items: baseline;
+}
+
+.rottay-stack[data-justify="center"] {
+  justify-content: center;
+}
+
+.rottay-stack[data-justify="end"] {
+  justify-content: flex-end;
+}
+
+.rottay-stack[data-justify="space-between"] {
+  justify-content: space-between;
+}
+
+.rottay-stack[data-justify="space-around"] {
+  justify-content: space-around;
+}
+
+.rottay-stack[data-justify="space-evenly"] {
+  justify-content: space-evenly;
+}
+
+.rottay-stack[data-spacing="none"] {
+  gap: 0;
+}
+
+.rottay-stack[data-spacing="xs"] {
+  gap: var(--ds-spacing-1, 0.25rem);
+}
+
+.rottay-stack[data-spacing="sm"] {
+  gap: var(--ds-spacing-2, 0.5rem);
+}
+
+.rottay-stack[data-spacing="md"] {
+  gap: var(--ds-spacing-4, 1rem);
+}
+
+.rottay-stack[data-spacing="lg"] {
+  gap: var(--ds-spacing-6, 1.5rem);
+}
+
+.rottay-stack[data-spacing="xl"] {
+  gap: var(--ds-spacing-8, 2rem);
+}
+
+.rottay-stack[data-spacing="2xl"] {
+  gap: var(--ds-spacing-10, 2.5rem);
+}
+
+.rottay-stack[data-spacing="3xl"] {
+  gap: var(--ds-spacing-12, 3rem);
+}
+
+.rottay-stack[data-spacing="4xl"] {
+  gap: var(--ds-spacing-16, 4rem);
+}
+
+.rottay-stack[data-spacing="custom"] {
+  gap: var(--ds-stack-gap);
+}
+
+.rottay-stack[data-full-width="true"] {
+  width: 100%;
+}
+
+.rottay-stack[data-full-height="true"] {
+  height: 100%;
+}
+
+/* Optional Stack separators are structural children. Their size follows the
+   active flex axis automatically, so the same contract works in LTR, RTL,
+   horizontal and vertical stacks without physical-side paint. */
+.rottay-stack > .rottay-stack-divider[data-part="divider"] {
+  align-self: stretch;
+  flex: 0 0 var(--ds-stack-divider-size, 1px);
+  min-inline-size: 0;
+  min-block-size: 0;
+  background: var(
+    --ds-stack-divider-color,
+    var(--ds-color-border-subtle, currentColor)
+  );
+  opacity: var(--ds-stack-divider-opacity, 0.72);
+  pointer-events: none;
+}
+
+/* Container is intentionally a quiet structural canvas. Vertical/tenant
+   finish arrives through compiler-owned variables; consumer inline styles
+   remain the final override layer. */
+.rottay-container.rottay-container--modern[data-part="root"] {
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  max-width: var(
+    --ds-container-instance-max-width,
+    var(--ds-container-lg, 1024px)
+  );
+  padding: var(--ds-container-instance-padding, var(--ds-spacing-4, 1rem));
+  background: var(--ds-container-background, transparent);
+  border: var(--ds-container-border, 0 solid transparent);
+  border-radius: var(--ds-container-radius, 0);
+  box-shadow: var(--ds-container-shadow, none);
+  transition: max-width
+      var(--ds-container-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-container-motion-easing, var(--ds-motion-ease-standard, ease)),
+    padding
+      var(--ds-container-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-container-motion-easing, var(--ds-motion-ease-standard, ease)),
+    margin var(--ds-container-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-container-motion-easing, var(--ds-motion-ease-standard, ease)),
+    background-color
+      var(--ds-container-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-container-motion-easing, var(--ds-motion-ease-standard, ease)),
+    border-color
+      var(--ds-container-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-container-motion-easing, var(--ds-motion-ease-standard, ease)),
+    box-shadow
+      var(--ds-container-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-container-motion-easing, var(--ds-motion-ease-standard, ease));
+}
+
+.rottay-container.rottay-container--modern[data-centered="true"] {
+  margin-inline: auto;
+}
+
+.rottay-container.rottay-container--modern[data-fluid="true"] {
+  max-inline-size: none;
+}
+
+/* Responsive media frames use the same material channel as every other
+   layout primitive, without owning product-specific imagery or gradients. */
+.rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"] {
+  position: relative;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-width: var(--ds-aspect-ratio-instance-max-width, none);
+  aspect-ratio: var(--ds-aspect-ratio-instance-ratio, 1.7777777778);
+  overflow: var(--ds-aspect-ratio-overflow, hidden);
+  box-sizing: border-box;
+  background: var(--ds-aspect-ratio-background, transparent);
+  border: var(--ds-aspect-ratio-border, 0 solid transparent);
+  border-radius: var(--ds-aspect-ratio-radius, 0);
+  box-shadow: var(--ds-aspect-ratio-shadow, none);
+  transition: aspect-ratio
+      var(--ds-aspect-ratio-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-standard, ease)),
+    max-width
+      var(--ds-aspect-ratio-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-standard, ease)),
+    border-radius
+      var(--ds-aspect-ratio-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-standard, ease)),
+    background-color
+      var(--ds-aspect-ratio-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-standard, ease)),
+    border-color
+      var(--ds-aspect-ratio-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-standard, ease)),
+    box-shadow
+      var(--ds-aspect-ratio-motion-duration, var(--ds-duration-normal, 200ms))
+      var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-standard, ease));
+}
+
+.rottay-space.rottay-space--modern[data-part="root"] {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  gap: var(--ds-space-instance-gap, var(--ds-space-small-size, 0.5rem));
+  transition: gap
+      var(--ds-space-motion-duration, var(--ds-duration-fast, 120ms))
+      var(--ds-space-motion-easing, var(--ds-motion-ease-standard, ease)),
+    align-items var(--ds-space-motion-duration, var(--ds-duration-fast, 120ms))
+      var(--ds-space-motion-easing, var(--ds-motion-ease-standard, ease));
+}
+
+.rottay-space.rottay-space--modern[data-direction="vertical"] {
+  flex-direction: column;
+}
+
+.rottay-space.rottay-space--modern[data-wrap="true"] {
+  flex-wrap: wrap;
+}
+
+.rottay-space.rottay-space--modern[data-align="start"] {
+  align-items: flex-start;
+}
+
+.rottay-space.rottay-space--modern[data-align="end"] {
+  align-items: flex-end;
+}
+
+.rottay-space.rottay-space--modern[data-align="baseline"] {
+  align-items: baseline;
+}
+
+.rottay-space.rottay-space--modern
+  > .rottay-space-separator[data-part="separator"] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-container.rottay-container--modern[data-part="root"],
+  .rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"],
+  .rottay-space.rottay-space--modern[data-part="root"] {
+    transition: none;
+  }
+}

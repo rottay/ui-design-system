@@ -5,13 +5,11 @@
  *
  * @remarks
  * This engine uses the modern Tag skin for paint and DS tokens for theming.
- * No DaisyUI badge classes are used.
- *
- * **Implementation Details:**
- * - Inline pill styles for the container (display, border-radius, etc.)
- * - SIZE_STYLES map for size variants via CSSProperties
- * - Skin-owned color variants via --ds-color-* custom properties
- * - Outline variant uses transparent background with border
+ * No DaisyUI badge classes are used. All geometry, typography, fill, frame and
+ * motion live in `foundation/tokens/css/runtime/engines/modern/skin/tag.css`,
+ * keyed on the `rottay-tag-shell rottay-tag-shell--modern` scope and the
+ * `data-*` contract stamped below; the engine only resolves profile defaults
+ * and stamps that contract.
  *
  * @example Basic Usage
  * ```tsx
@@ -31,39 +29,23 @@
 'use client';
 
 import React, { useCallback } from 'react';
+import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { TagProps } from '../../contracts';
 import { TAG_DEFAULTS, TONE_TO_TAG_VARIANT } from '../../contracts';
 
 /**
- * Close icon SVG component for closable tags.
+ * DS-S001 recipe: the modern Tag shell classes. Variant/size/radius stay on
+ * the `data-*` skin contract; profile-tunable axes arrive with DS-R00x.
  */
-const CloseIcon: React.FC = () => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 12 12"
-    fill="none"
-    aria-hidden="true"
-  >
-    <path
-      d="M9 3L3 9M3 3L9 9"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-  </svg>
-);
-
-/**
- * Maps size prop to inline CSSProperties for the tag pill.
- */
-const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  xs: { height: 'var(--ds-tag-xs-height, 16px)', padding: 'var(--ds-tag-xs-padding, 0 4px)', fontSize: 'var(--ds-tag-xs-font-size, 11px)' },
-  sm: { height: 'var(--ds-tag-sm-height, 20px)', padding: 'var(--ds-tag-sm-padding, 0 6px)', fontSize: 'var(--ds-tag-sm-font-size, 12px)' },
-  md: { height: 'var(--ds-tag-md-height, var(--ds-tag-default-height, 26px))', padding: 'var(--ds-tag-md-padding, var(--ds-tag-default-padding, 0 8px))', fontSize: 'var(--ds-tag-md-font-size, var(--ds-tag-default-font-size, 12px))' },
-  lg: { height: 'var(--ds-tag-lg-height, 28px)', padding: 'var(--ds-tag-lg-padding, 0 10px)', fontSize: 'var(--ds-tag-lg-font-size, 14px)' },
-  xl: { height: 'var(--ds-tag-xl-height, 32px)', padding: 'var(--ds-tag-xl-padding, 0 10px)', fontSize: 'var(--ds-tag-xl-font-size, 16px)' },
-};
+export const modernTagRecipe = defineRecipe({
+  name: 'tag',
+  slots: { root: ['rottay-tag-shell', 'rottay-tag-shell--modern'] },
+  axes: {},
+  defaults: {},
+});
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 /**
  * Modern (token-driven) implementation of the Tag component.
@@ -83,17 +65,18 @@ const SIZE_STYLES: Record<string, React.CSSProperties> = {
  */
 export default function ModernTag(props: TagProps): React.ReactElement {
   const {
-    size = TAG_DEFAULTS.size,
+    size: sizeProp,
     tone,
-    variant: variantProp = TAG_DEFAULTS.variant,
+    variant: variantProp,
     closable = TAG_DEFAULTS.closable,
     onClose,
+    closeLabel,
     icon,
     children,
-    bordered = TAG_DEFAULTS.bordered,
-    radius = TAG_DEFAULTS.radius,
+    bordered: borderedProp,
+    radius: radiusProp,
     color,
-    outlined = TAG_DEFAULTS.outlined,
+    outlined: outlinedProp,
     clickable = TAG_DEFAULTS.clickable,
     onClick,
     className = '',
@@ -101,9 +84,38 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     ...restProps
   } = props;
 
-  // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_STYLES
-  // below is keyed by the same internal color-token name either way.
-  const variant = tone ? TONE_TO_TAG_VARIANT[tone] : variantProp;
+  const i18n = useOptionalTranslation();
+  const tagProfileDefaults = useRecipeProfileDefaults('tag');
+  const size =
+    sizeProp ??
+    (typeof tagProfileDefaults.size === 'string'
+      ? (tagProfileDefaults.size as TagProps['size'])
+      : undefined) ??
+    TAG_DEFAULTS.size;
+  const bordered =
+    borderedProp ??
+    (typeof tagProfileDefaults.bordered === 'boolean'
+      ? tagProfileDefaults.bordered
+      : undefined) ??
+    TAG_DEFAULTS.bordered;
+  const radius =
+    radiusProp ??
+    (typeof tagProfileDefaults.radius === 'string'
+      ? (tagProfileDefaults.radius as TagProps['radius'])
+      : undefined) ??
+    TAG_DEFAULTS.radius;
+  const outlined =
+    outlinedProp ??
+    (typeof tagProfileDefaults.outlined === 'boolean'
+      ? tagProfileDefaults.outlined
+      : undefined) ??
+    TAG_DEFAULTS.outlined;
+
+  // tone (semantic) takes precedence over the deprecated variant prop; the skin's
+  // fill/frame rules are keyed by the same internal color-token name either way.
+  const variant = tone
+    ? TONE_TO_TAG_VARIANT[tone]
+    : variantProp ?? TAG_DEFAULTS.variant;
 
   /**
    * Handles close button click.
@@ -126,32 +138,34 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     }
   }, [clickable, onClick]);
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (!clickable || !onClick) return;
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      onClick();
+    },
+    [clickable, onClick]
+  );
+
   // The `color` prop is an arbitrary caller string, so it cannot be enumerated as a
   // CSS rule; it rides a custom property that every resting-fill rule in tag.css
-  // reads with the variant's own token as the fallback.
+  // reads with the variant's own token as the fallback. Every other paint and
+  // geometry decision belongs to the skin.
   const tagStyle: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 'var(--ds-tag-icon-gap, 4px)',
-    lineHeight: 'var(--ds-tag-line-height, 1)',
-    fontWeight: 'var(--ds-tag-font-weight, 500)',
-    whiteSpace: 'nowrap',
-    maxWidth: '100%',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    boxSizing: 'border-box',
-    transition: 'var(--ds-tag-transition, all var(--ds-motion-normal))',
-    ...(SIZE_STYLES[size] || SIZE_STYLES.md),
     ...(color ? ({ '--ds-tag-custom-bg': color } as React.CSSProperties) : {}),
-    ...(clickable && { cursor: 'pointer' }),
     ...style,
   };
+
+  // Accessible name for the close control: the caller's localized label wins,
+  // then the component catalogue, then the documented English fallback.
+  const removeAriaLabel = closeLabel ?? i18n?.t('common.remove') ?? 'Remove tag';
 
   // Conditionally add button semantics so keyboard users can activate
   // clickable tags via Enter/Space without extra JS key handlers.
   return (
     <span
-      className={`rottay-tag-shell rottay-tag-shell--modern ${className}`.trim()}
+      className={modernTagRecipe.resolve(undefined, { root: className }).root}
       data-part="root"
       data-variant={variant}
       data-size={size}
@@ -159,13 +173,16 @@ export default function ModernTag(props: TagProps): React.ReactElement {
       data-outlined={outlined ? 'true' : undefined}
       data-bordered={bordered ? 'true' : undefined}
       data-clickable={clickable ? 'true' : undefined}
+      data-has-icon={!!icon}
+      data-closable={closable}
       style={tagStyle}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       {...restProps}
     >
-      {icon && <span data-part="icon" style={{ flexShrink: 0 }}>{icon}</span>}
+      {icon && <span data-part="icon">{icon}</span>}
 
       <span data-part="content">{children}</span>
 
@@ -174,10 +191,9 @@ export default function ModernTag(props: TagProps): React.ReactElement {
           type="button"
           data-part="close"
           onClick={handleClose}
-          style={{ marginLeft: 'var(--ds-tag-close-gap, 2px)', padding: 0, cursor: 'pointer', display: 'inline-flex' }}
-          aria-label="Remove tag"
+          aria-label={removeAriaLabel}
         >
-          <CloseIcon />
+          <ActionCloseIcon size={12} decorative />
         </button>
       )}
     </span>

@@ -28,7 +28,7 @@ A toggle/switch component for binary on/off states with multi-engine support.
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | DS tokens (skin-painted) | Vanilla CSS |
 | Animation | Smooth | CSS | Basic |
 | Inner Labels | Full | Partial | Full |
 | Loading State | Built-in | Custom | Custom |
@@ -141,7 +141,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Toggle rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Toggle rendered by Classic (Ant Design), Modern (DS tokens), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -208,6 +208,49 @@ export const StatesComparison: Story = {
         component={Toggle}
         props={{ label: 'Loading', loading: true }}
       />
+    </div>
+  ),
+};
+
+/**
+ * Modern-engine state matrix: off/on, colors, error + message, helper text,
+ * loading, disabled, state labels, sizes, and long Arabic RTL copy.
+ */
+export const ModernStateMatrix: Story = {
+  name: 'Modern State Matrix',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 420 }}>
+      <Toggle engine="modern" label="Off" />
+      <Toggle engine="modern" label="On" defaultChecked />
+      <Toggle engine="modern" label="Success color" color="success" defaultChecked />
+      <Toggle engine="modern" label="Warning color" color="warning" defaultChecked />
+      <Toggle
+        engine="modern"
+        label="Error"
+        error
+        errorMessage="You must enable at least one notification channel to continue with the onboarding flow."
+      />
+      <Toggle engine="modern" label="With helper" helperText="You can change this later in settings." />
+      <Toggle engine="modern" label="Loading" loading />
+      <Toggle engine="modern" label="Disabled" disabled />
+      <Toggle engine="modern" label="Disabled on" disabled defaultChecked />
+      <Toggle
+        engine="modern"
+        label="Availability"
+        checkedLabel="Online"
+        uncheckedLabel="Offline"
+        description="Visible to recruiters when online."
+      />
+      <Toggle engine="modern" label="Label at start" labelPlacement="start" />
+      <Toggle engine="modern" label="Small" size="sm" defaultChecked />
+      <Toggle engine="modern" label="Extra large" size="xl" defaultChecked />
+      <div dir="rtl" lang="ar">
+        <Toggle
+          engine="modern"
+          label="تفعيل الإشعارات الفورية لكل تحديثات الملف الشخصي والرسائل الواردة من جهات التوظيف"
+          defaultChecked
+        />
+      </div>
     </div>
   ),
 };

@@ -1,8 +1,8 @@
 /**
  * Font pack: grotesk-display (Space Grotesk).
  *
- * Opt-in subpath: @rottay/design-system/fonts/grotesk-display.css. NEVER imported
- * by styles.css or any default bundle. Space Grotesk is a variable grotesque
+ * Opt-in subpath: @rottay/design-system/fonts/grotesk-display.css. It also ships
+ * with the first-party BitHire vertical bundle. Space Grotesk is a variable grotesque
  * (OFL-1.1); the latin-subset variable file carries the 400-700 range this pack
  * advertises. The custom property is defined UNCONDITIONALLY so the
  * already-validated var(--ds-font-pack-grotesk-display) channel resolves when

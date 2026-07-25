@@ -1,45 +1,36 @@
 /**
- * Modern Upload skin (WO-SKIN-02 checkpoint C, pickers/movers batch).
+ * Modern Upload skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements at all; unlayered
- * outranks preflight AND every Tailwind utility layer, and still yields to a
- * caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision so a vertical or DB-backed tenant never needs
+ * private selectors. Per-file upload progress is the public DS `Progress`
+ * primitive composed by the engine -- its paint belongs to `progress.css`,
+ * never to this file (single paint owner per part).
+ *
+ * Cascade position (the P-47 preflight fight, current contract): this file is
+ * imported into `layer(rottay-engines)`, which the cross-framework cascade
+ * contract in `entrypoints/base.css` sorts AFTER `rottay-framework` (the
+ * bundled Tailwind artifact, preflight included). Skin rules therefore beat
+ * preflight and every framework utility by layer ownership, while still
+ * yielding to a caller's inline `style` and to the tenant/personality layers
+ * above.
  *
  * SCOPE ROOTS: `Upload` and `Dragger` are two separate top-level components in
- * `engines/modern.tsx`, each with its OWN root `<div data-part='root'>`. Neither
- * root carried a first-party class before this migration -- unlike every other
- * migrated modern-engine component, `className` on both roots was previously
- * caller-only passthrough. This migration adds `ds-upload`/`ds-upload--modern`
- * (Upload) and `ds-upload-dragger`/`ds-upload-dragger--modern` (Dragger),
- * mirroring the `.ds-<comp>.ds-<comp>--modern` convention every sibling skin
- * uses and the BEM pair (`rottay-upload`/`rottay-upload-dragger`) the rustic
- * engine already carried -- without this, no rule below could be scoped to
- * this component without leaking onto any other component that reuses the same
- * generic `data-part` values (`root`, `file-list`, ...) elsewhere on the page.
+ * `engines/modern.tsx`, each with its OWN root `<div data-part='root'>`
+ * carrying `ds-upload ds-upload--modern` / `ds-upload-dragger
+ * ds-upload-dragger--modern` (plus the `ds-upload--${listType}` /
+ * `ds-upload-dragger--${listType}` discriminator when `listType !== 'text'`,
+ * mirroring rustic's pre-existing `rottay-upload--${listType}` BEM modifier).
  *
- * LISTTYPE DISCRIMINATOR: `data-part='file-item'` (and its default-rendered
- * `img`/`span` children) is shared across all four `listType` renders
- * (picture-card, picture-circle, picture, text), each with different static
- * paint. Mirroring rustic's pre-existing `rottay-upload--${listType}` root
- * modifier (added here to `ds-upload`/`ds-upload-dragger` too, and to rustic's
- * Dragger root, which lacked it -- see the rustic skin header), every root
- * additionally carries `ds-upload--${listType}` / `ds-upload-dragger--${listType}`
- * when `listType !== 'text'` (text has no modifier, matching rustic).
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * border-color floor at (0,3,1). Every rule that paints a border COLOR here
+ * reaches (0,4,0) via a listType root modifier class, or (where no modifier
+ * applies) a repeated `[data-part='x'][data-part='x']`. Non-border paint
+ * (background, color, box-shadow, outline, border-radius) wins unlayered at
+ * (0,3,0) or higher.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
- * (0,3,1). Every rule that paints a border COLOR here reaches (0,4,0) via a
- * listType root modifier class, or (where no modifier applies) a repeated
- * `[data-part='x'][data-part='x']`. Non-border paint (background, color,
- * box-shadow, outline, border-radius) wins unlayered at (0,3,0) or higher.
- *
- * The progress-bar fill is a runtime `progress.strokeColor` (plain color or a
- * computed `linear-gradient(...)`), carried via the uncounted custom property
- * `--ds-upload-progress-fill` and consumed by the rule below; only the runtime
- * `width` stays inline.
- *
- * DEVIATION (reported, not silently taken):
- * 2. The Dragger's active-drag paint (`border-primary bg-primary/5 shadow-lg
+ * DEVIATIONS (reported, not silently taken):
+ * 1. The Dragger's active-drag paint (`border-primary bg-primary/5 shadow-lg
  *    scale-[1.01]`, applied via conditional Tailwind utility classes, not an
  *    object-literal style key) is NOT counted by the inline-paint audit and is
  *    left in the JSX untouched -- `Upload.engine-advanced.test.tsx:135`
@@ -48,36 +39,38 @@
  *    verify the exact compiled value of an opacity-modified utility
  *    (`bg-primary/5`) or `shadow-lg`, so duplicating them into a static CSS
  *    rule risked a byte-INEXACT transcription -- a worse RULE ZERO violation
- *    than leaving a harmless, already-correct mechanism alone. Only the
- *    genuinely counted inline site -- the inactive-state `borderColor`
- *    conditional -- moves to CSS below, keyed on the idle branch of the
- *    pre-existing `data-state='dragging'|'idle'` attribute so it cannot fight
- *    the still-Tailwind-driven dragging-state border color.
+ *    than leaving a harmless, already-correct mechanism alone. The idle-state
+ *    border color below is explicitly gated to `[data-state='idle']` so it
+ *    cannot fight the still-Tailwind-driven dragging-state border color.
+ * 2. The dropzone height is a runtime prop (`height`, default 200): it rides
+ *    the `--ds-upload-dropzone-height` custom property stamped by the engine
+ *    and is declared here, keeping the block-size ownership in this file.
  */
 
-/* ---- preview-modal / preview-close-button / progress-track: identical in
-        both Upload and Dragger subtrees (declared once, used by both). ---- */
+/* ---- preview-modal / preview-close-button: identical in both Upload and
+        Dragger subtrees (declared once, used by both). ---- */
 .ds-upload.ds-upload--modern [data-part='preview-modal'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-modal'] {
+  z-index: var(--ds-upload-preview-z, var(--ds-z-index-modal));
   background: var(--ds-upload-preview-backdrop);
 }
 .ds-upload.ds-upload--modern [data-part='preview-close-button'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {
+  position: absolute;
+  inset-block-start: -12px;
+  inset-inline-end: -12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  padding: 0;
+  font-size: var(--ds-upload-preview-close-font-size, 13px);
+  cursor: pointer;
   background: var(--ds-color-error);
   color: var(--ds-color-text-on-primary);
   border-radius: 50%;
   border: none;
-}
-.ds-upload.ds-upload--modern [data-part='progress-track'],
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='progress-track'] {
-  background: var(--ds-surface-panel);
-}
-/* progress-bar fill: a runtime `strokeColor` (plain color or computed gradient)
-   carried via the uncounted custom property `--ds-upload-progress-fill`; only
-   the runtime `width` stays inline. */
-.ds-upload.ds-upload--modern [data-part='progress-bar'],
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='progress-bar'] {
-  background: var(--ds-upload-progress-fill);
 }
 
 /* ---- file-item-overlay: only rendered by the picture-card/picture-circle
@@ -87,9 +80,19 @@
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-overlay'] {
   background: var(--ds-upload-preview-overlay);
 }
+/* Card overlay geometry (circle carries its own Tailwind geometry). */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item-overlay'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item-overlay'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
 
 /* ---- file-item base: circle/picture/text share one background; card is the
-        odd one out (own background + radius + border). ---- */
+        odd one out (own background + radius + border + fixed tile geometry). ---- */
 .ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'] {
   background: var(--ds-surface-inset);
@@ -97,8 +100,22 @@
 
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'] {
+  position: relative;
+  inline-size: var(--ds-upload-card-size, 104px);
+  block-size: var(--ds-upload-card-size, 104px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   background: var(--ds-color-bg-secondary);
   border-radius: var(--ds-upload-file-radius, 6px);
+  transition:
+    box-shadow var(--ds-motion-normal, 200ms),
+    transform var(--ds-motion-normal, 200ms);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'][data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'][data-part='file-item'] {
   border: 1px solid var(--ds-color-border);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'][data-status='error'],
@@ -106,50 +123,46 @@
   border-color: var(--ds-color-error);
 }
 
-/* ---- circle: border-color only (width/style come from the `border-2`
-        Tailwind class, left in place -- non-paint). ---- */
+/* Card thumbnail + fallback filename. */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-thumb'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-thumb'] {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-name'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-name'] {
+  overflow: hidden;
+  padding-inline: 4px;
+  font-size: var(--ds-upload-file-name-font-size, 12px);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ds-color-text-muted);
+}
+
+/* Card in-progress strip: the engine now composes the DS Progress primitive;
+   this part is only the positioning/scrim wrapper. */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-progress'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-progress'] {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  padding: 4px;
+  background: var(--ds-color-alpha-black-40);
+}
+
+/* ---- circle: fixed avatar geometry + border-color (width/style come from
+        the `border-2` Tailwind class, left in place -- non-paint). ---- */
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'] {
+  inline-size: var(--ds-upload-card-size, 104px);
+  block-size: var(--ds-upload-card-size, 104px);
   border-color: var(--ds-color-border);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'][data-status='error'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'][data-status='error'] {
   border-color: var(--ds-color-error);
-}
-
-/* ---- file-item-action: card and circle each own a color/radius/border chrome
-        differing only in background; picture/text share one identical style
-        (button is a direct child of file-item there, never nested inside an
-        overlay). ---- */
-.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item-action'],
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item-action'] {
-  background: var(--ds-color-alpha-white-20);
-  color: var(--ds-upload-overlay-action-color);
-  border-radius: 50%;
-  border: none;
-}
-.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item-action'],
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item-action'] {
-  background: transparent;
-  color: var(--ds-upload-overlay-action-color);
-  border-radius: 50%;
-  border: none;
-}
-.ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item-action'],
-.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item-action'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-
-/* ---- picture-card fallback filename (no thumb) and picture-circle fallback
-        filename: both a bare `<span>` with no data-part, and each the ONLY
-        direct-child span in its branch (mutually exclusive with the `<img>`
-        alternative), so `> span` is unambiguous within its listType scope. ---- */
-.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'] > span,
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'] > span {
-  color: var(--ds-color-text-muted);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'] > span,
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'] > span {
@@ -168,17 +181,60 @@
   color: var(--ds-color-text-secondary);
 }
 
-/* ---- picture-card in-progress overlay strip: the wrapper `<div>` has no
-        data-part, identified by :has()-ing the progress-track it wraps. ---- */
-.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'] > div:has([data-part='progress-track']),
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'] > div:has([data-part='progress-track']) {
-  background: var(--ds-color-alpha-black-40);
+/* ---- file-item-action: card and circle each own a color/radius/border chrome
+        differing only in background and hit-geometry; picture/text share one
+        identical style (button is a direct child of file-item there, never
+        nested inside an overlay). ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item-action'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item-action'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  cursor: pointer;
+  background: var(--ds-color-alpha-white-20);
+  color: var(--ds-upload-overlay-action-color);
+  border-radius: 50%;
+  border: none;
+  transition: background var(--ds-motion-fast, 120ms);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item-action'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item-action'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 24px;
+  block-size: 24px;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ds-upload-overlay-action-color);
+  border-radius: 50%;
+  border: none;
+}
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item-action'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item-action'] {
+  block-size: 24px;
+  flex-shrink: 0;
+  padding-inline: 8px;
+  font-size: var(--ds-upload-action-font-size, 12px);
+  cursor: pointer;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
 }
 
 /* ---- add-button (picture-card/circle "add" tile): Upload only, Dragger has
         no add-button. Border color repeats the data-part to reach (0,4,0)
         (no listType modifier applies -- add-button renders in both card and
         circle with the same border token). ---- */
+.ds-upload.ds-upload--modern [data-part='add-button'] {
+  min-inline-size: var(--ds-upload-card-size, 104px);
+  min-block-size: var(--ds-upload-card-size, 104px);
+  padding: 16px;
+}
 .ds-upload.ds-upload--modern [data-part='add-button'][data-part='add-button'] {
   border-color: var(--ds-color-border);
 }
@@ -187,18 +243,62 @@
 }
 
 /* ---- trigger (text/picture default button): Upload only. ---- */
+.ds-upload.ds-upload--modern [data-part='trigger'] {
+  cursor: pointer;
+}
+.ds-upload.ds-upload--modern [data-part='trigger'][data-disabled='true'] {
+  cursor: not-allowed;
+  opacity: var(--ds-disabled-opacity, 0.5);
+}
 .ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button {
+  block-size: 36px;
+  padding-inline: 16px;
+  font-size: var(--ds-upload-trigger-font-size, 14px);
+  cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: 1px solid var(--ds-color-border);
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button:where(:hover):not(:disabled) {
+  border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border-hover));
+  background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
+}
+.ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button:disabled {
+  cursor: not-allowed;
+  opacity: var(--ds-disabled-opacity, 0.5);
 }
 
-/* ---- dropzone (Dragger only): idle-state border color. The dragging-state
-        color stays on the pre-existing `border-primary` Tailwind class (see
-        header deviation #2) so this rule is explicitly gated to idle -- an
-        unconditional rule would win over the layered Tailwind class (unlayered
-        always outranks layered) and paint over the dragging state. ---- */
+/* Keyboard rings on every Upload-owned action surface. */
+.ds-upload.ds-upload--modern [data-part='trigger'] button:focus-visible,
+.ds-upload.ds-upload--modern [data-part='add-button']:focus-visible,
+.ds-upload.ds-upload--modern [data-part='file-item-action']:focus-visible,
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:focus-visible,
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove-action hover (all list types). */
+.ds-upload.ds-upload--modern [data-part='file-item-action']:where(:hover),
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:where(:hover) {
+  color: var(--ds-color-error);
+}
+
+/* ---- hidden file inputs (Upload + Dragger). ---- */
+.ds-upload.ds-upload--modern [data-part='file-input'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-input'] {
+  display: none;
+}
+
+/* ---- dropzone (Dragger only): runtime height channel + idle-state border
+        color (see header deviation #1 for the dragging-state exception). ---- */
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] {
+  block-size: var(--ds-upload-dropzone-height, 200px);
+}
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='idle'] {
   border-color: var(--ds-color-border);
 }
@@ -207,4 +307,26 @@
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] p {
   color: var(--ds-color-text-secondary);
+}
+
+/* Coarse-pointer floor: secondary icon actions meet the 44px touch target.
+   Physical px, never rem (the fluid 15px root erodes rem floors at narrow
+   widths -- measured on the live bundle, Axe R0). */
+@media (pointer: coarse) {
+  .ds-upload.ds-upload--modern [data-part='file-item-action'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'],
+  .ds-upload.ds-upload--modern [data-part='preview-close-button'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {
+    min-inline-size: var(--ds-upload-touch-target-min, 44px);
+    min-block-size: var(--ds-upload-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-upload.ds-upload--modern [data-part='file-item'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item'],
+  .ds-upload.ds-upload--modern [data-part='file-item-action'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'] {
+    transition: none;
+  }
 }

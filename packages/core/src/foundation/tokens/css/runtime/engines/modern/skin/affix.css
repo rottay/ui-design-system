@@ -1,5 +1,5 @@
 /**
- * Modern Affix skin (WO-SKIN-04 checkpoint N).
+ * Modern Affix skin (WO-SKIN-04 checkpoint N; expanded in K3-C pass 1).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all. Unlayered
@@ -9,9 +9,44 @@
  * `data-sticky` is stamped ONLY in advanced (onChange) mode while affixed; the
  * simple sticky-position mode never carries it and never painted a shadow.
  *
- * SPECIFICITY (P-48): `box-shadow` is non-border paint — (0,3,0) suffices.
+ * K3-C ADDENDUM (pass 1): the K3-C falsification found the family's whitelabel
+ * contract broken TWICE: the engine docblock taught consumers to paint
+ * `bg-white shadow-lg` on children (hardcoded surface + elevation, since
+ * removed), and the affixed state itself had NO surface -- a position:fixed
+ * bar floated transparent over scrolling content. The affixed surface is now
+ * token-owned here (background + elevation + optional radius/backdrop
+ * channels), and the affixed transition moved here from the engine's
+ * `transition-all duration-200` utility (raw motion literal drained to the
+ * canonical motion tokens).
+ *
+ * SPECIFICITY (P-48): `box-shadow`/`background` are non-border paint —
+ * (0,3,0) suffices.
  */
 
+/* ---- affixed transition (was the engine's `transition-all duration-200`
+        utility); narrow channels only, riding the canonical motion tokens. ---- */
+.rottay-affix.rottay-affix--modern[data-part='root'] {
+  transition:
+    background-color var(--ds-affix-transition-duration, var(--ds-motion-normal, 200ms))
+      var(--ds-affix-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-affix-transition-duration, var(--ds-motion-normal, 200ms))
+      var(--ds-affix-transition-timing, var(--ds-motion-ease-out));
+}
+
+/* ---- affixed surface: token-owned background + elevation so a fixed bar
+        never bleeds the content scrolling underneath. Radius/backdrop stay
+        opt-in channels (a full-width bar wants neither by default). The
+        MATERIAL card channel precedes the raw `--ds-surface-card` (K3-C
+        pass-2 contrast remediation): the raw channel is the brand's dark
+        chrome surface on some tenants (TMM: #18181c, incoherent with the
+        inherited text ink), while the material channel is the tenant-tuned
+        content surface (TMM: #FFFEFB, BitHire: #fff). ---- */
 .rottay-affix.rottay-affix--modern[data-part='root'][data-sticky] {
-  box-shadow: var(--ds-elevation-1);
+  background: var(
+    --ds-affix-affixed-bg,
+    var(--ds-material-card-background, var(--ds-surface-card))
+  );
+  box-shadow: var(--ds-affix-affixed-shadow, var(--ds-elevation-1));
+  border-radius: var(--ds-affix-affixed-radius, 0);
+  backdrop-filter: var(--ds-affix-affixed-backdrop, none);
 }

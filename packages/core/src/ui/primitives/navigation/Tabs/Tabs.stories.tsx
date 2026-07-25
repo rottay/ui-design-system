@@ -8,7 +8,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs } from './';
 import type { TabItem } from './contracts';
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
-import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
+import { AiRecommendationIcon } from '../../../../graphics/icons/presentation/semantic/generated/roles/ai-recommendation';
+import { DataReportIcon } from '../../../../graphics/icons/presentation/semantic/generated/roles/data-report';
+import { StatusVerifiedIcon } from '../../../../graphics/icons/presentation/semantic/generated/roles/status-verified';
+import { TimeScheduleIcon } from '../../../../graphics/icons/presentation/semantic/generated/roles/time-schedule';
+import { EngineComparison as EngineComparisonHelper } from '../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Primitives/Navigation/Tabs',
@@ -30,8 +34,8 @@ const meta: Meta<typeof Tabs> = {
   argTypes: {
     type: {
       control: 'select',
-      options: ['line', 'card', 'pills'],
-      description: 'Style type of tabs',
+      options: ['underline', 'contained', 'segmented', 'pills'],
+      description: 'Bounded visual recipe (line/card remain compatibility aliases)',
     },
     size: {
       control: 'select',
@@ -41,6 +45,26 @@ const meta: Meta<typeof Tabs> = {
     centered: {
       control: 'boolean',
       description: 'Center the tabs',
+    },
+    overflow: {
+      control: 'select',
+      options: ['auto', 'scroll', 'menu', 'wrap'],
+      description: 'How a constrained rail reveals additional destinations',
+    },
+    activationMode: {
+      control: 'select',
+      options: ['automatic', 'manual'],
+      description: 'Whether keyboard focus also selects a destination',
+    },
+    indicator: {
+      control: 'select',
+      options: ['tab', 'label', 'none'],
+      description: 'Underline measurement source',
+    },
+    panelVariant: {
+      control: 'select',
+      options: ['plain', 'contained'],
+      description: 'Destination framing owned by Tabs',
     },
   },
   tags: ['autodocs'],
@@ -65,7 +89,7 @@ export const Default: Story = {
 export const Types: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['line', 'card', 'pills'] as const).map((type) => (
+      {(['underline', 'contained', 'segmented', 'pills'] as const).map((type) => (
         <div key={type}>
           <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{type}</h4>
           <Tabs items={defaultItems} type={type} defaultActiveKey="1" />
@@ -147,6 +171,12 @@ export const ManyTabs: Story = {
       children: <p>Content of Tab {i + 1}</p>,
     })),
     defaultActiveKey: '1',
+    overflow: 'auto',
+    accessibilityLabels: {
+      previous: 'Previous views',
+      next: 'Next views',
+      more: 'More views',
+    },
   },
 };
 
@@ -190,6 +220,235 @@ export const CardWithContent: Story = {
       },
     ],
     defaultActiveKey: 'overview',
+  },
+};
+
+const premiumItems: TabItem[] = [
+  {
+    key: 'overview',
+    label: 'Overview',
+    icon: <DataReportIcon decorative size="1em" />,
+    badge: 12,
+    children: (
+      <div>
+        <strong>Decision overview</strong>
+        <p>Evidence, current momentum and the recommended next action stay visually grouped.</p>
+      </div>
+    ),
+  },
+  {
+    key: 'intelligence',
+    label: 'AI intelligence',
+    icon: <AiRecommendationIcon decorative size="1em" />,
+    badge: 'New',
+    children: (
+      <div>
+        <strong>Three recommendations are ready</strong>
+        <p>Each recommendation exposes its evidence and estimated token cost before execution.</p>
+      </div>
+    ),
+  },
+  {
+    key: 'schedule',
+    label: 'Interviews',
+    icon: <TimeScheduleIcon decorative size="1em" />,
+    badge: 4,
+    children: (
+      <div>
+        <strong>Upcoming conversations</strong>
+        <p>Two interviews are confirmed and one panel still needs an owner.</p>
+      </div>
+    ),
+  },
+  {
+    key: 'verified',
+    label: 'Compliance',
+    icon: <StatusVerifiedIcon decorative size="1em" />,
+    children: (
+      <div>
+        <strong>Consent verified</strong>
+        <p>The profile is ready for the next permitted workflow.</p>
+      </div>
+    ),
+  },
+  {
+    key: 'restricted',
+    label: 'Restricted',
+    disabled: true,
+    badge: 2,
+    children: <p>This destination is unavailable for the active role.</p>,
+  },
+];
+
+/** Pass 2 evidence: every recipe, explicit anatomy and contained destination. */
+export const PremiumRecipeGallery: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Pass 2 visual proof for recipe hierarchy, icon containers, badges, disabled state and tokenized panel material.',
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'grid', gap: 28 }}>
+      {(['underline', 'contained', 'segmented', 'pills'] as const).map((recipe) => (
+        <section key={recipe} style={{ minWidth: 0 }}>
+          <h3 style={{ margin: '0 0 10px', textTransform: 'capitalize' }}>{recipe}</h3>
+          <Tabs
+            engine="modern"
+            items={premiumItems}
+            type={recipe}
+            defaultActiveKey="intelligence"
+            panelVariant="contained"
+            indicator={recipe === 'underline' ? 'label' : 'none'}
+          />
+        </section>
+      ))}
+    </div>
+  ),
+};
+
+/** Pass 2 adversarial proof: narrow rail, long translations, RTL and manual activation. */
+export const InternationalizationOverflowAndRtl: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Adversarial layout proof: compact containers, long labels, explicit badges, RTL direction and localized overflow controls.',
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
+      <section
+        lang="en"
+        data-ds-root=""
+        data-vertical="bithire"
+        data-tenant="bithire"
+        data-density="compact"
+        style={{ minWidth: 0 }}
+      >
+        <h3 style={{ margin: '0 0 10px' }}>Long English and German labels</h3>
+        <Tabs
+          engine="modern"
+          type="contained"
+          overflow="auto"
+          activationMode="manual"
+          panelVariant="contained"
+          defaultActiveKey="decision"
+          accessibilityLabels={{
+            previous: 'Previous workspace view',
+            next: 'Next workspace view',
+            more: 'All workspace views',
+            loading: 'loading',
+          }}
+          items={[
+            { key: 'decision', label: 'Decision intelligence', badge: 18, children: 'Decision content' },
+            { key: 'recommendations', label: 'AI recommendations awaiting review', badge: 3, loading: true, children: 'Recommendation content' },
+            { key: 'documentation', label: 'Bewerbungsunterlagen und Nachweise', children: 'Document content' },
+            { key: 'history', label: 'Complete activity history', badge: 128, children: 'History content' },
+          ]}
+        />
+      </section>
+
+      <section
+        dir="rtl"
+        lang="ar"
+        data-ds-root=""
+        data-vertical="core"
+        data-tenant="the-management"
+        data-density="spacious"
+        style={{ minWidth: 0 }}
+      >
+        <h3 style={{ margin: '0 0 10px' }}>اتجاه من اليمين إلى اليسار</h3>
+        <Tabs
+          engine="modern"
+          type="segmented"
+          overflow="menu"
+          panelVariant="contained"
+          defaultActiveKey="overview"
+          accessibilityLabels={{
+            previous: 'علامات التبويب السابقة',
+            next: 'علامات التبويب التالية',
+            more: 'جميع علامات التبويب',
+            loading: 'قيد التحميل',
+          }}
+          items={[
+            { key: 'overview', label: 'نظرة عامة', badge: 8, children: 'محتوى النظرة العامة' },
+            { key: 'evidence', label: 'الأدلة الموثقة', badge: 24, children: 'محتوى الأدلة' },
+            { key: 'recommendations', label: 'توصيات الذكاء الاصطناعي', badge: 3, loading: true, children: 'محتوى التوصيات' },
+            { key: 'history', label: 'السجل الكامل للنشاط', children: 'محتوى السجل' },
+          ]}
+        />
+      </section>
+    </div>
+  ),
+};
+
+/**
+ * Same anatomy, radically different visual outcomes through public channels.
+ * This is evidence for white-label range rather than a product recommendation.
+ */
+export const TokenPersonalityProof: Story = {
+  render: () => {
+    const personalities: Array<{
+      name: string;
+      style: React.CSSProperties;
+    }> = [
+      {
+        name: 'Editorial / flat',
+        style: {
+          '--ds-tabs-list-radius': '2px',
+          '--ds-tabs-item-radius': '1px',
+          '--ds-tabs-list-texture': 'none',
+          '--ds-tabs-list-shadow': 'none',
+          '--ds-tabs-item-font-family': 'Georgia, serif',
+          '--ds-tabs-item-letter-spacing': '0.01em',
+          '--ds-tabs-active-transform': 'none',
+        } as React.CSSProperties,
+      },
+      {
+        name: 'Technical / compact',
+        style: {
+          '--ds-tabs-list-radius': '6px',
+          '--ds-tabs-item-radius': '4px',
+          '--ds-tabs-md-height': '30px',
+          '--ds-tabs-md-padding': '0 9px',
+          '--ds-tabs-item-font-family': 'ui-monospace, monospace',
+          '--ds-tabs-item-letter-spacing': '0.02em',
+          '--ds-tabs-active-transform': 'none',
+        } as React.CSSProperties,
+      },
+      {
+        name: 'Human / soft',
+        style: {
+          '--ds-tabs-list-radius': '18px',
+          '--ds-tabs-item-radius': '14px',
+          '--ds-tabs-list-padding': '5px',
+          '--ds-tabs-gap': '5px',
+          '--ds-tabs-active-transform': 'translateY(-1px)',
+          '--ds-tabs-panel-radius': '18px',
+        } as React.CSSProperties,
+      },
+    ];
+
+    return (
+      <div style={{ display: 'grid', gap: 24 }}>
+        {personalities.map((personality) => (
+          <section key={personality.name} style={personality.style}>
+            <h3 style={{ margin: '0 0 10px' }}>{personality.name}</h3>
+            <Tabs
+              engine="modern"
+              type="contained"
+              items={premiumItems.slice(0, 4)}
+              defaultActiveKey="intelligence"
+              panelVariant="contained"
+            />
+          </section>
+        ))}
+      </div>
+    );
   },
 };
 

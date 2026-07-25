@@ -1,214 +1,180 @@
-/**
- * Self-test for css-layer-paint-gate.mjs (CMP-01 / P-76).
- *
- * Drills the gate against fixtures (paint inside a layered import MUST fail;
- * important/allowlisted/unlayered paint must pass) and pins the structural
- * cascade laws of the paint-bridge system: bridge twins imported unlayered in
- * the right positions, and the reduced-motion --ds-motion-* neutralization
- * sitting AFTER the unlayered animations foundation so it wins the
- * source-order tie on :root.
- */
-import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import test from "node:test";
+import postcss from "postcss";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-const gate = join(scriptDir, 'css-layer-paint-gate.mjs');
-const cssRoot = join(scriptDir, '..', 'src/foundation/tokens/css');
+const gate = join(scriptDir, "css-layer-paint-gate.mjs");
+const cssRoot = join(scriptDir, "..", "src/foundation/tokens/css");
+const canonical =
+  "@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive, components, utilities;";
 
-function runGate(args) {
-  return spawnSync(process.execPath, [gate, ...args], { encoding: 'utf8' });
-}
-
-function fixture() {
-  const dir = mkdtempSync(join(tmpdir(), 'css-layer-paint-gate-'));
-  const write = (rel, source) => {
-    const full = join(dir, rel);
-    mkdirSync(dirname(full), { recursive: true });
-    writeFileSync(full, source);
-    return full;
+function fixture(source) {
+  const dir = mkdtempSync(join(tmpdir(), "css-cascade-contract-"));
+  const entry = join(dir, "entry.css");
+  writeFileSync(entry, source);
+  return {
+    entry,
+    cleanup: () => rmSync(dir, { recursive: true, force: true }),
   };
-  const allowlist = (entries) => write('allowlist.json', JSON.stringify(entries));
-  return { dir, write, allowlist, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
 }
 
-test('gate passes on the real entrypoints with the committed allowlist', () => {
-  const result = runGate([]);
+function run(entry) {
+  return spawnSync(
+    process.execPath,
+    [gate, ...(entry ? ["--entry", entry] : [])],
+    { encoding: "utf8" }
+  );
+}
+
+test("real entrypoints satisfy the deterministic cascade contract", () => {
+  const result = run();
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });
 
-test('negative drill: normal paint inside a layered import fails', () => {
-  const f = fixture();
+test("Modern projects framework tokens from canonical DS authority before paint", () => {
+  const projectionPath = join(
+    cssRoot,
+    "runtime/engines/modern/framework-token-projection.css"
+  );
+  const paintPath = join(cssRoot, "runtime/engines/modern/theme.css");
+  const bridgePath = join(
+    cssRoot,
+    "runtime/engines/modern/framework-bridge.css"
+  );
+  const projection = postcss.parse(readFileSync(projectionPath, "utf8"));
+  const paint = postcss.parse(readFileSync(paintPath, "utf8"));
+  const bridgeCss = readFileSync(bridgePath, "utf8");
+  const bridge = postcss.parse(bridgeCss);
+
+  projection.walkRules((rule) => assert.equal(rule.selector, "[data-tenant]"));
+  projection.walkDecls((declaration) => {
+    assert.doesNotMatch(declaration.prop, /^--ds-/);
+    assert.match(declaration.value.trim(), /^var\(--ds-[a-z0-9-]+\)$/);
+  });
+  paint.walkDecls((declaration) =>
+    assert.doesNotMatch(declaration.prop, /^--/)
+  );
+  bridge.walkRules((rule) => assert.match(rule.selector, /\[data-tenant\]/));
+  bridge.walkDecls((declaration) =>
+    assert.doesNotMatch(declaration.prop, /^--/)
+  );
+  assert.doesNotMatch(bridgeCss, /\.divider(?:\b|-horizontal\b|-vertical\b)/);
+  assert.doesNotMatch(bridgeCss, /\.inline-flex\.flex-row|\[style\*=["']gap["']\]/);
+});
+
+test("canonical order must precede imports", () => {
+  const missing = fixture(
+    "@import './runtime/engines/modern/skin/button.css' layer(rottay-engines);\n"
+  );
+  const late = fixture(
+    "@import './runtime/engines/modern/skin/button.css' layer(rottay-engines);\n" +
+      canonical
+  );
   try {
-    f.write('layered.css', '.x { padding: 4px; }\n');
-    const entry = f.write('entry.css', "@import './layered.css' layer(rottay-components);\n");
-    const allow = f.allowlist([]);
-    const result = runGate(['--entry', entry, '--allowlist', allow]);
+    assert.equal(run(missing.entry).status, 1);
+    const result = run(late.entry);
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /paint inside a layered import/);
-    assert.match(result.stderr, /padding/);
+    assert.match(result.stderr, /before imports/);
+  } finally {
+    missing.cleanup();
+    late.cleanup();
+  }
+});
+
+test("first-party paint cannot escape or use the wrong layer", () => {
+  const unlayered = fixture(
+    `${canonical}\n@import './runtime/engines/modern/skin/button.css';\n`
+  );
+  const wrong = fixture(
+    `${canonical}\n@import './presentation/components/skin/card.css' layer(rottay-engines);\n`
+  );
+  try {
+    const escaped = run(unlayered.entry);
+    assert.equal(escaped.status, 1);
+    assert.match(escaped.stderr, /unlayered first-party import/);
+    const misplaced = run(wrong.entry);
+    assert.equal(misplaced.status, 1);
+    assert.match(misplaced.stderr, /wrong cascade owner/);
+  } finally {
+    unlayered.cleanup();
+    wrong.cleanup();
+  }
+});
+
+test("every owned channel maps to its canonical layer and @property stays document-wide", () => {
+  const f = fixture(
+    [
+      canonical,
+      "@import './foundation/base/index.css' layer(rottay-tokens);",
+      "@import './foundation/base/properties.css';",
+      "@import './foundation/animations/index.css' layer(rottay-motion);",
+      "@import './presentation/components/skin/card.css' layer(rottay-components);",
+      "@import './runtime/engines/modern/skin/card.css' layer(rottay-engines);",
+      "@import './facade/artifacts/bithire/index.css' layer(rottay-tenants);",
+      "@import './runtime/personality.css' layer(rottay-personality);",
+      "@import './foundation/responsive/index.css' layer(rottay-responsive);",
+      "",
+    ].join("\n")
+  );
+  try {
+    const result = run(f.entry);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
   } finally {
     f.cleanup();
   }
 });
 
-test('nested relative imports inherit the layer', () => {
-  const f = fixture();
-  try {
-    f.write('inner.css', '.x { margin: 0; }\n');
-    f.write('outer.css', "@import './inner.css';\n");
-    const entry = f.write('entry.css', "@import './outer.css' layer(rottay-tokens);\n");
-    const allow = f.allowlist([]);
-    const result = runGate(['--entry', entry, '--allowlist', allow]);
-    assert.equal(result.status, 1);
-    assert.match(result.stderr, /inner\.css/);
-  } finally {
-    f.cleanup();
+test("obsolete paint bridges cannot re-enter either entrypoint", () => {
+  for (const entry of [
+    "facade/entrypoints/base.css",
+    "facade/entrypoints/styles.css",
+  ]) {
+    const css = readFileSync(join(cssRoot, entry), "utf8");
+    assert.doesNotMatch(css, /(?:patterns|collapse|personality)-paint\.css/);
   }
 });
 
-test('important declarations, border-radius, custom properties and keyframes are exempt', () => {
-  const f = fixture();
-  try {
-    f.write(
-      'layered.css',
-      [
-        '.x { padding: 4px !important; border-radius: 8px; --ds-thing: 1px; color: red; }',
-        '@keyframes spin { to { margin-left: 4px; } }',
-        '',
-      ].join('\n')
+test("universal tenant border floors are absent from authored extensions", () => {
+  const artifactRoot = join(cssRoot, "facade/artifacts");
+  for (const slug of ["rottay", "bithire", "evnto"]) {
+    const extension = readFileSync(
+      join(artifactRoot, slug, "_source/extension.css"),
+      "utf8"
     );
-    const entry = f.write('entry.css', "@import './layered.css' layer(rottay-components);\n");
-    const allow = f.allowlist([]);
-    const result = runGate(['--entry', entry, '--allowlist', allow]);
-    assert.equal(result.status, 0, result.stderr);
-  } finally {
-    f.cleanup();
-  }
-});
-
-test('unlayered paint passes; a skin import carrying layer() fails', () => {
-  const f = fixture();
-  try {
-    f.write('paint.css', '.x { padding: 4px; }\n');
-    f.write('skin/button.css', '.x { background: red; }\n');
-    const goodEntry = f.write('good.css', "@import './paint.css';\n@import './skin/button.css';\n");
-    const badEntry = f.write('bad.css', "@import './skin/button.css' layer(rottay-engines);\n");
-    const allow = f.allowlist([]);
-    assert.equal(runGate(['--entry', goodEntry, '--allowlist', allow]).status, 0);
-    const bad = runGate(['--entry', badEntry, '--allowlist', allow]);
-    assert.equal(bad.status, 1);
-    assert.match(bad.stderr, /layered skin import/);
-  } finally {
-    f.cleanup();
-  }
-});
-
-test('allowlist: ceiling admits, growth past the ceiling and stale entries fail', () => {
-  const f = fixture();
-  try {
-    f.write('layered.css', '.x { padding: 4px; background: red; }\n');
-    const entry = f.write('entry.css', "@import './layered.css' layer(rottay-components);\n");
-
-    const rel = join(f.dir, 'layered.css');
-    const ok = f.allowlist([{ file: rel, maxDeclarations: 2, reason: 'drill' }]);
-    assert.equal(runGate(['--entry', entry, '--allowlist', ok]).status, 0);
-
-    const tooTight = f.allowlist([{ file: rel, maxDeclarations: 1, reason: 'drill' }]);
-    const grew = runGate(['--entry', entry, '--allowlist', tooTight]);
-    assert.equal(grew.status, 1);
-    assert.match(grew.stderr, /allowlisted layered paint grew/);
-
-    const stale = f.allowlist([
-      { file: rel, maxDeclarations: 2, reason: 'drill' },
-      { file: join(f.dir, 'gone.css'), maxDeclarations: 3, reason: 'drill' },
-    ]);
-    const staleResult = runGate(['--entry', entry, '--allowlist', stale]);
-    assert.equal(staleResult.status, 1);
-    assert.match(staleResult.stderr, /stale allowlist entry/);
-  } finally {
-    f.cleanup();
-  }
-});
-
-test('bridge twins are wired unlayered in both entrypoints, in cascade-correct positions', () => {
-  for (const entry of ['facade/entrypoints/base.css', 'facade/entrypoints/styles.css']) {
-    const css = readFileSync(join(cssRoot, entry), 'utf8');
-
-    const patternsPaint = css.indexOf("@import '../../presentation/components/patterns-paint.css';");
-    assert.ok(patternsPaint >= 0, `${entry}: patterns-paint.css must be imported`);
-    const firstSkin = css.search(/@import '[^']*\/skin\/[^']*';/);
-    assert.ok(firstSkin >= 0, `${entry}: expected skin imports`);
-    assert.ok(patternsPaint < firstSkin, `${entry}: patterns-paint.css must precede every skin so skins win ties`);
-
-    const animations = css.indexOf("@import '../../foundation/animations/index.css';");
-    const personalityPaint = css.indexOf("@import '../../runtime/personality-paint.css';");
-    assert.ok(animations >= 0 && personalityPaint >= 0, `${entry}: animations + personality-paint must be imported`);
-    assert.ok(
-      personalityPaint > animations,
-      `${entry}: personality-paint.css must come after foundation/animations so its :root reduced-motion guard wins the source-order tie`
-    );
-
-    for (const twin of ['patterns-paint.css', 'collapse-paint.css', 'personality-paint.css']) {
-      assert.doesNotMatch(
-        css,
-        new RegExp(`@import '[^']*${twin.replace('.', '\\.')}'\\s+layer\\(`),
-        `${entry}: ${twin} must stay unlayered`
-      );
-    }
-  }
-
-  // The collapse bridge is a base.css-only import (see runtime/engines/index.css);
-  // its paint twin must mirror that asymmetry.
-  const base = readFileSync(join(cssRoot, 'facade/entrypoints/base.css'), 'utf8');
-  const styles = readFileSync(join(cssRoot, 'facade/entrypoints/styles.css'), 'utf8');
-  assert.match(base, /@import '\.\.\/\.\.\/runtime\/bridges\/collapse-paint\.css';/);
-  assert.ok(!styles.includes('collapse-paint.css'), 'styles.css must not import collapse-paint.css');
-  assert.ok(!styles.includes("'../../runtime/bridges/collapse.css'"), 'styles.css must not import the collapse bridge');
-});
-
-test('MOT-03: personality-paint zeroes every --ds-motion-* canon duration under both reduce seams', () => {
-  const css = readFileSync(join(cssRoot, 'runtime/personality-paint.css'), 'utf8');
-  const tokens = ['--ds-motion-instant', '--ds-motion-fast', '--ds-motion-normal', '--ds-motion-slow', '--ds-motion-glacial'];
-
-  const media = css.match(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\n\}/);
-  assert.ok(media, 'expected a prefers-reduced-motion guard');
-  const seam = css.match(/html\[data-ds-motion='reduced'\] \{[\s\S]*?\n\}/);
-  assert.ok(seam, "expected the html[data-ds-motion='reduced'] seam");
-  for (const token of tokens) {
-    assert.match(media[0], new RegExp(`${token}: 0s;`), `${token} must be zeroed under the OS media guard`);
-    assert.match(seam[0], new RegExp(`${token}: 0s;`), `${token} must be zeroed under the runtime seam`);
-  }
-
-  // The base durations live in the UNLAYERED animations foundation; a layered
-  // guard can never beat them. Pin the foundation still declaring them so this
-  // file's tie-breaking position stays meaningful.
-  const foundation = readFileSync(join(cssRoot, 'foundation/animations/transitions.css'), 'utf8');
-  for (const token of tokens) {
-    assert.match(foundation, new RegExp(`${token}:`), `${token} must still be declared by the animations foundation`);
-  }
-});
-
-test('bridge twins carry paint only: no custom properties outside the reduced-motion guards', () => {
-  const twins = [
-    'presentation/components/patterns-paint.css',
-    'runtime/bridges/collapse-paint.css',
-    'runtime/personality-paint.css',
-  ];
-  for (const rel of twins) {
-    const css = readFileSync(join(cssRoot, rel), 'utf8');
-    const withoutGuards = css
-      .replace(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\n\}/g, '')
-      .replace(/html\[data-ds-motion='reduced'\] \{[\s\S]*?\n\}/g, '');
     assert.doesNotMatch(
-      withoutGuards,
-      /^\s*--[a-z]/m,
-      `${rel}: custom properties belong in the layered originals, not the paint twin`
+      extension,
+      /\*\s*,\s*::after\s*,\s*::before\s*,\s*::backdrop\s*,\s*::file-selector-button\s*\{[\s\S]*?border-color/,
+      `${slug}: universal border floor must not return`
     );
-    assert.doesNotMatch(css, /@import/, `${rel}: twins are leaf files`);
+  }
+});
+
+test("reduced-motion authority exists in both OS and runtime policy seams", () => {
+  const transitions = readFileSync(
+    join(cssRoot, "foundation/animations/transitions.css"),
+    "utf8"
+  );
+  const personality = readFileSync(
+    join(cssRoot, "runtime/personality.css"),
+    "utf8"
+  );
+  const tokens = [
+    "--ds-motion-instant",
+    "--ds-motion-fast",
+    "--ds-motion-normal",
+    "--ds-motion-slow",
+    "--ds-motion-glacial",
+    "--ds-motion-rearrange",
+    "--ds-motion-resize",
+  ];
+
+  for (const token of tokens) {
+    assert.match(transitions, new RegExp(`${token}: 0s !important;`));
+    assert.match(personality, new RegExp(`${token}: 0s !important;`));
   }
 });

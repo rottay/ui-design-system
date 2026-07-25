@@ -421,3 +421,92 @@ export const UseCases: Story = {
     </div>
   ),
 };
+
+
+// ============================================================================
+// State Matrix Stories (K1 Lane A)
+// ============================================================================
+
+const matrixLabel = {
+  fontSize: 11,
+  textTransform: 'uppercase',
+  letterSpacing: '0.06em',
+  opacity: 0.55,
+  marginBottom: 8,
+} as const;
+
+/**
+ * Modern state matrix: tones × (solid, outlined, bordered), clickable
+ * (hover/pressed/focus-visible are skin-owned), closable, icon, sizes, the
+ * pill-vs-squared radius recipe, and dense-collection truncation.
+ */
+export const StateMatrix: Story = {
+  name: '🧪 State Matrix',
+  render: () => (
+    <div style={{ display: 'grid', gap: 20, maxWidth: 640 }}>
+      <div>
+        <div style={matrixLabel}>Tone × treatment</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {(['default', 'primary', 'secondary', 'success', 'warning', 'danger'] as const).map((variant) => (
+            <Tag key={variant} variant={variant}>
+              {variant}
+            </Tag>
+          ))}
+          {(['primary', 'success', 'warning', 'danger'] as const).map((variant) => (
+            <Tag key={`${variant}-o`} variant={variant} outlined>
+              {variant} outlined
+            </Tag>
+          ))}
+          <Tag variant="primary" bordered>
+            bordered
+          </Tag>
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Interactive & anatomy</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <Tag clickable onClick={() => undefined} variant="primary">
+            Clickable
+          </Tag>
+          <Tag closable onClose={() => undefined} variant="success">
+            Closable
+          </Tag>
+          <Tag icon={<span>●</span>} variant="warning">
+            With icon
+          </Tag>
+          <Tag closable clickable onClose={() => undefined} onClick={() => undefined} outlined>
+            Both
+          </Tag>
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Sizes</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
+            <Tag key={size} size={size} variant="secondary">
+              {size}
+            </Tag>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Radius recipe (squared → pill)</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {(['none', 'sm', 'md', 'lg', 'full'] as const).map((radius) => (
+            <Tag key={radius} radius={radius} variant="primary">
+              {radius}
+            </Tag>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Dense collection (truncation, no mid-word wraps)</div>
+        <div style={{ display: 'flex', gap: 6, maxWidth: 280, overflow: 'hidden' }}>
+          <Tag variant="primary">Disponibilidad inmediata</Tag>
+          <Tag variant="success">Experiencia verificada</Tag>
+          <Tag variant="warning">Contratación</Tag>
+        </div>
+      </div>
+    </div>
+  ),
+};

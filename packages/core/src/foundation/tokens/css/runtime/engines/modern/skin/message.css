@@ -1,9 +1,10 @@
 /**
- * Modern Message skin (WO-SKIN-03 checkpoint O).
+ * Modern Message skin (WO-SKIN-03 checkpoint O; K1 Lane C exit-lifecycle pass).
  *
- * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. The message item
- * carries DaisyUI's structural `alert` class. Personality contributes only the
- * opacity/transform transition; decorative one-sided borders are forbidden.
+ * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. Personality
+ * contributes only the opacity/transform transition; decorative one-sided
+ * borders are forbidden (semantic tone comes from the governed icon well,
+ * tinted surface and progress line -- never a left accent bar).
  *
  * SPECIFICITY (P-48): the only rule here that paints a border COLOR is the
  * loading spinner's ring, and it reaches exactly b=4 (class + data-tone +
@@ -11,37 +12,91 @@
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). `border: none` on the close button is a color-free reset and is exempt.
  *
- * The stacking container is the external DaisyUI `.toast` class; `theme.css`'s
- * `[data-tenant] .toast` rule references six `--ds-toast-*` tokens that are
- * declared nowhere, leaving that container functionally unstyled. That is
- * untouched here -- the container had no inline paint to migrate.
+ * PLACEMENT: keyed on `data-placement` (stamped by the provider). The engine
+ * emits NO DaisyUI toast placement classes -- those were drained alongside
+ * theme.css's `[data-tenant] .toast` bridge, which referenced six
+ * `--ds-toast-*` tokens declared nowhere; the fixed positioning/flex stack
+ * below is the single paint owner. The provider's `top` prop reaches the
+ * paint through the engine-stamped `--ds-message-stack-offset` channel
+ * (skin-declared consumer), and `--ds-z-message` keeps its family-local
+ * fallback (1590): it is declared nowhere globally. Centring is
+ * direction-neutral `inset-inline: 0` + `margin-inline: auto` -- unlike the
+ * former `left: 50%; transform: translateX(-50%)` it creates no transform
+ * containing block (notification.css precedent).
  */
 
-/* ---- message item: elevation ---- */
-.rottay-message--modern[data-part='root'] {
-  box-shadow: var(--ds-elevation-2);
+.rottay-message-stack--modern[data-part='stack-container'] {
+  position: fixed;
+  z-index: var(--ds-z-message, 1590);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  width: min(34rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  pointer-events: none;
+}
+/* Margin-auto centring is direction-neutral and avoids the former
+   left: 50% + translateX(-50%) transform containing block. The provider's
+   `top` prop arrives on the engine-stamped --ds-message-stack-offset channel;
+   bottom keeps its fixed token gutter. */
+.rottay-message-stack--modern[data-part='stack-container'][data-placement='top'] {
+  top: var(--ds-message-stack-offset, 0);
+  inset-inline: 0;
+  margin-inline: auto;
+}
+.rottay-message-stack--modern[data-part='stack-container'][data-placement='bottom'] {
+  bottom: var(--ds-spacing-4);
+  inset-inline: 0;
+  margin-inline: auto;
 }
 
-/* ---- the five message types ---- */
-.rottay-message--modern[data-part='root'][data-tone='success'] {
-  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
-  color: var(--ds-color-success);
+.rottay-message--modern.rottay-message--modern[data-part='root'][data-part='root'] {
+  --ds-message-accent: var(--ds-color-info);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ds-spacing-3);
+  min-width: min(20rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  max-width: 100%;
+  padding: var(--ds-spacing-3) var(--ds-spacing-4);
+  overflow: hidden;
+  pointer-events: auto;
+  color: var(--ds-color-text-primary);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--ds-message-accent) 9%, var(--ds-color-bg-primary)) 0%,
+      var(--ds-color-bg-primary) 72%
+    );
+  border: 1px solid color-mix(in srgb, var(--ds-message-accent) 30%, var(--ds-color-border-subtle));
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+  animation: ds-message-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out) both;
 }
-.rottay-message--modern[data-part='root'][data-tone='error'] {
-  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
-  color: var(--ds-color-error);
+
+.rottay-message--modern[data-part='root'][data-tone='success'] { --ds-message-accent: var(--ds-color-success); }
+.rottay-message--modern[data-part='root'][data-tone='error'] { --ds-message-accent: var(--ds-color-error); }
+.rottay-message--modern[data-part='root'][data-tone='warning'] { --ds-message-accent: var(--ds-color-warning); }
+.rottay-message--modern[data-part='root'][data-tone='loading'] { --ds-message-accent: var(--ds-color-primary); }
+
+.rottay-message--modern[data-part='root'] > [data-part='icon'] {
+  width: 1.875rem;
+  height: 1.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ds-message-accent);
+  background: color-mix(in srgb, var(--ds-message-accent) 10%, var(--ds-color-bg-primary));
+  border: 1px solid color-mix(in srgb, var(--ds-message-accent) 24%, var(--ds-color-border-subtle));
+  border-radius: var(--ds-radius-md);
 }
-.rottay-message--modern[data-part='root'][data-tone='info'] {
-  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
-  color: var(--ds-color-info);
-}
-.rottay-message--modern[data-part='root'][data-tone='warning'] {
-  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
-  color: var(--ds-color-warning);
-}
-.rottay-message--modern[data-part='root'][data-tone='loading'] {
-  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
-  color: var(--ds-color-info);
+
+.rottay-message--modern[data-part='root'] > [data-part='body'] {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-snug);
 }
 
 /* ---- loading spinner: `data-icon='spinner'` marks the BUILT-IN ring, so a
@@ -55,10 +110,82 @@
   border-radius: 50%;
 }
 
-/* ---- close button ---- */
-.rottay-message--modern [data-part='close-button'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
+.rottay-message--modern[data-part='root'] [data-part='close-button'] {
+  width: 1.875rem;
+  height: 1.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 84%, transparent);
+  color: var(--ds-color-text-secondary);
   border-radius: var(--ds-radius-md);
-  border: none;
+  border: 1px solid var(--ds-color-border-subtle);
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-message--modern[data-part='root'] [data-part='close-button']:hover {
+  transform: translateY(-1px);
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-surface-highlight);
+  border-color: color-mix(in srgb, var(--ds-message-accent) 34%, var(--ds-color-border-subtle));
+}
+.rottay-message--modern[data-part='root'] [data-part='close-button']:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ds-message-accent) 56%, transparent);
+  outline-offset: 2px;
+}
+
+.rottay-message--modern[data-part='root'] > [data-part='progress'] {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--ds-message-accent) 74%, transparent);
+  transform-origin: left center;
+  animation: ds-message-progress-modern var(--ds-message-duration) linear both;
+}
+
+@keyframes ds-message-enter-modern {
+  from { opacity: 0; transform: translateY(-0.65rem) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes ds-message-exit-modern {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-0.5rem) scale(0.98); }
+}
+@keyframes ds-message-exit-bottom-modern {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(0.5rem) scale(0.98); }
+}
+@keyframes ds-message-progress-modern {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* Exit lifecycle: the engine stamps data-state='exit' for one
+   --ds-motion-fast cadence before removing the node (rustic parity), so the
+   stack never witnesses an abrupt disappearance. Bottom-placed stacks let the
+   item settle back DOWN toward the screen edge it entered from. */
+.rottay-message--modern.rottay-message--modern[data-part='root'][data-state='exit'] {
+  animation: ds-message-exit-modern var(--ds-motion-fast) var(--ds-motion-ease-in, ease-in) both;
+}
+.rottay-message-stack--modern[data-placement='bottom'] .rottay-message--modern[data-part='root'][data-state='exit'] {
+  animation-name: ds-message-exit-bottom-modern;
+}
+
+/* RTL: the lifetime bar drains toward the reading direction's end edge. */
+.rottay-message--modern[data-part='root']:dir(rtl) > [data-part='progress'] {
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-message--modern.rottay-message--modern[data-part='root'][data-part='root'],
+  .rottay-message--modern[data-part='root'] > [data-part='progress'] {
+    animation: none;
+  }
 }

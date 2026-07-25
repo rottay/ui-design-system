@@ -23,6 +23,7 @@ import { createElement, forwardRef } from 'react';
 
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import { useOptionalTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
+import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 import { resolveBadgePersonalityDefaults } from '@/foundation/tokens/ts/runtime/personality';
 import type { TagProps } from './contracts';
 import { TagGroup } from './compound';
@@ -48,13 +49,34 @@ const TagBase = createEngineComponent<TagProps>('Tag', {
  */
 const TagComponent = forwardRef<any, TagProps>((props, ref) => {
   const tokens = useOptionalTokens();
+  const profileDefaults = useRecipeProfileDefaults('tag');
   // Tag intentionally shares badge personality: both are small label-like elements.
   const defaults = tokens ? resolveBadgePersonalityDefaults(tokens) : null;
 
   return createElement(TagBase, {
     ref,
     ...props,
-    radius: props.radius ?? defaults?.radius,
+    size:
+      props.size ??
+      (typeof profileDefaults.size === 'string'
+        ? (profileDefaults.size as TagProps['size'])
+        : undefined),
+    radius:
+      props.radius ??
+      (typeof profileDefaults.radius === 'string'
+        ? (profileDefaults.radius as TagProps['radius'])
+        : undefined) ??
+      defaults?.radius,
+    bordered:
+      props.bordered ??
+      (typeof profileDefaults.bordered === 'boolean'
+        ? profileDefaults.bordered
+        : undefined),
+    outlined:
+      props.outlined ??
+      (typeof profileDefaults.outlined === 'boolean'
+        ? profileDefaults.outlined
+        : undefined),
   });
 });
 

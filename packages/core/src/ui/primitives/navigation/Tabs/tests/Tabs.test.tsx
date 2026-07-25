@@ -99,7 +99,14 @@ describe('Tabs', () => {
   });
 
   describe('type prop', () => {
-    it.each(['line', 'card', 'pills'] as const)('renders type %s', (type) => {
+    it.each([
+      'underline',
+      'contained',
+      'segmented',
+      'pills',
+      'line',
+      'card',
+    ] as const)('renders type %s', (type) => {
       render(<Tabs items={defaultItems} type={type} />);
       expect(screen.getByTestId('tabs')).toHaveAttribute('data-type', type);
     });

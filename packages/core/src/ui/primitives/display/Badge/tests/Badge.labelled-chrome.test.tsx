@@ -15,10 +15,17 @@ import { renderWithEngine, STABLE_ENGINES } from '../../../../../tooling/testing
 
 const LONG_LABEL = 'A very long status label that must never wrap or overflow its container';
 
+function paintedBadge(node: HTMLElement, engine: string): HTMLElement {
+  return engine === 'modern'
+    ? (node.closest('.rottay-badge') as HTMLElement)
+    : node;
+}
+
 describe('Badge labelled children paint chrome on every engine (WO-ENG-13)', () => {
   it.each(STABLE_ENGINES)('%s engine paints a background for children with no content/count', async (engine) => {
     const { findByText } = renderWithEngine(<Badge variant="success">Ready</Badge>, engine);
-    const el = await findByText('Ready');
+    const label = await findByText('Ready');
+    const el = paintedBadge(label, engine);
 
     // modern/rustic paint the chrome from engines/*/skin/badge.css, keyed on the
     // stamps; the engine's job there is to RESOLVE the treatment and say so in the
@@ -39,12 +46,18 @@ describe('Badge labelled children paint chrome on every engine (WO-ENG-13)', () 
 
   it.each(STABLE_ENGINES)('%s engine clips a long label with the ENG-09 guard', async (engine) => {
     const { findByText } = renderWithEngine(<Badge variant="info">{LONG_LABEL}</Badge>, engine);
-    const el = await findByText(LONG_LABEL);
+    const label = await findByText(LONG_LABEL);
+    const el = paintedBadge(label, engine);
 
-    expect(el.style.overflow).toBe('hidden');
-    expect(el.style.textOverflow).toBe('ellipsis');
-    expect(el.style.whiteSpace).toBe('nowrap');
-    expect(el.style.maxWidth).toBe('100%');
+    if (engine === 'modern') {
+      expect(el).toHaveAttribute('data-truncate', 'true');
+      expect(label).toHaveAttribute('data-part', 'label');
+    } else {
+      expect(el.style.overflow).toBe('hidden');
+      expect(el.style.textOverflow).toBe('ellipsis');
+      expect(el.style.whiteSpace).toBe('nowrap');
+      expect(el.style.maxWidth).toBe('100%');
+    }
   });
 
   it.each(STABLE_ENGINES)('%s engine renders through a single labelled span, not a bare wrapper div', async (engine) => {
@@ -113,7 +126,8 @@ describe('Badge numeric and indicator semantics stay untouched on every engine (
 describe('Modern Badge - implementation-level routing detail (WO-ENG-13)', () => {
   it('renders through the standalone tag markup, not a bare anchor-only div', () => {
     const { container } = render(<ModernBadge variant="success">Ready</ModernBadge>);
-    const el = screen.getByText('Ready');
+    const label = screen.getByText('Ready');
+    const el = label.closest('.rottay-badge') as HTMLElement;
 
     expect(el.tagName).toBe('SPAN');
     expect(el.className).toContain('rottay-badge--modern');
@@ -124,7 +138,8 @@ describe('Modern Badge - implementation-level routing detail (WO-ENG-13)', () =>
 describe('Badge defaults to soft; the count/dot indicator stays solid (WO-ENG-15)', () => {
   it.each(STABLE_ENGINES)('%s engine defaults a labelled badge to the soft (tinted) treatment', async (engine) => {
     const { findByText } = renderWithEngine(<Badge variant="success">Ready</Badge>, engine);
-    const el = await findByText('Ready');
+    const label = await findByText('Ready');
+    const el = paintedBadge(label, engine);
 
     // The soft tint lives in engines/*/skin/badge.css, keyed on this pair; what the
     // ENGINE decides -- and what this test exists to pin -- is that a LABELLED badge
@@ -151,7 +166,8 @@ describe('Badge defaults to soft; the count/dot indicator stays solid (WO-ENG-15
       <Badge variant="success" badgeStyle="solid">Ready</Badge>,
       engine
     );
-    const el = await findByText('Ready');
+    const label = await findByText('Ready');
+    const el = paintedBadge(label, engine);
 
     // An EXPLICIT badgeStyle always wins over the labelled default. classic paints
     // it inline; modern/rustic stamp the resolved treatment and the skin fills it.

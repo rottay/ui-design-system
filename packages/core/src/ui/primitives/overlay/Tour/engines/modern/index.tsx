@@ -3,14 +3,15 @@
 /**
  * @fileoverview Tour Modern Engine - Rottay Design System
  * @description Modern (token-driven) implementation of the Tour component.
- * Uses Tailwind utility classes with DS token inline styles.
+ * Self-contained `rottay-tour--modern` tree painted by the unlayered skin
+ * `tour.css`; no DaisyUI or utility-framework classes.
  *
  * @remarks
  * The Modern engine provides:
- * - Card structural classes for step content
- * - Button structural classes for navigation
- * - Tailwind utility classes for layout
- * - Portal rendering via createPortal
+ * - A self-contained `rottay-tour--modern` tree: no DaisyUI classes and no
+ *   utility-framework classes (K4-A drained the last Tailwind utilities and
+ *   static inline chrome into the unlayered skin `tour.css`)
+ * - Portal rendering via createPortal (documented direct-body bypass)
  * - Box-shadow spotlight technique
  *
  * Implementation details:
@@ -19,7 +20,9 @@
  *   (`runtime/overlay/positioning`), pinned to its measured branch
  * - The spotlight cutout is measured by `Tour/runtime/spotlight-rect`
  * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
- * - Step indicators use DS token inline styles (--ds-color-primary / --ds-surface-panel)
+ * - Step indicators/actions are skin-owned, keyed on data-part; close/prev/next
+ *   copy uses the common locale (`close`/`previous`/`next`; `Finish` still
+ *   lacks a key -- tracked in the family ficha)
  *
  * @example Using Modern Engine
  * ```tsx
@@ -44,7 +47,7 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import type { TourProps, TourStepProps } from '../../contracts';
 import { TOUR_DEFAULTS } from '../../contracts';
@@ -53,6 +56,8 @@ import {
   useOverlayPosition,
 } from '../../../../runtime/overlay/positioning';
 import { useTourSpotlightRect } from '../../runtime/spotlight-rect';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 /** Breathing room the spotlight cutout keeps around the target element. */
 const SPOTLIGHT_PADDING = 8;
@@ -84,9 +89,50 @@ interface ModernTourChromeProps {
   steps: TourStepProps[];
   currentStep: number;
   targetEl: HTMLElement | null;
+  portalScope: TourPortalScope;
   onClose?: () => void;
   onPrev: () => void;
   onNext: () => void;
+}
+
+/** Tenant/locale attributes projected onto the portaled chrome root. */
+interface TourPortalScope {
+  'data-ds-root'?: string;
+  'data-vertical'?: string;
+  'data-tenant'?: string;
+  'data-theme'?: string;
+  'data-engine'?: string;
+  'data-density'?: string;
+  dir?: 'ltr' | 'rtl';
+  lang?: string;
+}
+
+/**
+ * Read the tenant/locale scope of the nearest DS owner chain (Popover's
+ * readLocaleContext precedent). Tour portals DIRECTLY to document.body, which
+ * escapes the `[data-ds-root]` provider scope carrying DB Appearance tokens
+ * (and any wrapper-level `dir`/`lang`); the chrome re-stamps what this reads
+ * so the portal computes the same tenant tokens and direction as the in-tree
+ * app. Without it, a DB-tenant tour renders with base fallback tokens -- the
+ * K4 remediation color-contrast failure on the TMM cells.
+ */
+function readPortalScope(source: HTMLElement | null): TourPortalScope {
+  if (!source) return {};
+  const readNearest = (attribute: string): string | undefined =>
+    source.closest<HTMLElement>(`[${attribute}]`)?.getAttribute(attribute) ?? undefined;
+  const directionOwner = source.closest<HTMLElement>('[dir]');
+  const languageOwner = source.closest<HTMLElement>('[lang]');
+  const computedDirection = window.getComputedStyle(source).direction;
+  return {
+    'data-ds-root': readNearest('data-ds-root'),
+    'data-vertical': readNearest('data-vertical'),
+    'data-tenant': readNearest('data-tenant'),
+    'data-theme': readNearest('data-theme'),
+    'data-engine': readNearest('data-engine'),
+    'data-density': readNearest('data-density'),
+    dir: directionOwner?.dir === 'rtl' || computedDirection === 'rtl' ? 'rtl' : 'ltr',
+    lang: languageOwner?.lang || document.documentElement.lang || undefined,
+  };
 }
 
 /**
@@ -103,10 +149,14 @@ const ModernTourChrome = ({
   steps,
   currentStep,
   targetEl,
+  portalScope,
   onClose,
   onPrev,
   onNext,
 }: ModernTourChromeProps): React.ReactElement => {
+  // Standalone-render safe: Tour can mount before an app's I18nProvider, so
+  // the optional hook keeps the documented English fallbacks below.
+  const translation = useOptionalTranslation('common');
   const spotlightRect = useTourSpotlightRect(targetEl, SPOTLIGHT_PADDING);
   const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
 
@@ -133,6 +183,9 @@ const ModernTourChrome = ({
       ref={forwardedRef}
       data-part="root"
       className={`rottay-tour--modern ${className || ''}`}
+      // Re-enter the tenant/locale scope the body portal escaped (read from
+      // the target or the in-tree scope marker; empty outside a DS provider).
+      {...portalScope}
       // The mask colour is consumer-supplied and templated into the spotlight's
       // box-shadow, which also carries runtime geometry; the skin reads this
       // custom property (not a paint key) for both surfaces. Left unset when the
@@ -140,11 +193,11 @@ const ModernTourChrome = ({
       // dependent declarations then drop, painting no scrim and no cutout.
       style={{ zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
     >
-      {/* Mask */}
+      {/* Mask. Fixed full-viewport positioning is skin-owned; only the
+          consumer's mask.style spread stays inline (public API). */}
       {mask && (
         <div
           data-part="backdrop"
-          className="fixed inset-0"
           style={{
             ...maskStyle,
           }}
@@ -153,11 +206,15 @@ const ModernTourChrome = ({
       )}
 
       {/* Spotlight: a huge box-shadow creates the "cutout" mask effect around the target.
-          The 9999px spread covers the entire viewport while the element itself stays transparent. */}
-      {spotlightRect && (
+          The 9999px spread covers the entire viewport while the element itself stays transparent.
+          The scrim IS the mask: with mask={false} nothing may veil the page
+          (classic/antd parity), so the whole cutout is gated on `mask` -- a
+          plain boolean used to ship a 50%-black veil over the app anyway.
+          Geometry is measured viewport geometry (getBoundingClientRect) and stays inline;
+          fixed positioning/radius/pointer-events are skin-owned. */}
+      {mask && spotlightRect && (
         <div
           data-part="spotlight"
-          className="fixed rounded-lg pointer-events-none"
           style={{
             top: spotlightRect.top,
             left: spotlightRect.left,
@@ -170,7 +227,9 @@ const ModernTourChrome = ({
 
       {/* Step popover: placed by the shared overlay runtime when a target
           exists (bottom-centered, flip + clamp), centered in the viewport
-          otherwise. The runtime's positioning keys spread last so they win. */}
+          otherwise (the skin's translate centres it -- direction-neutral).
+          The runtime's positioning keys spread last so they win. Chrome
+          (padding/max-inline-size) is skin-owned. */}
       <div
         ref={setSurfaceEl}
         data-part="surface"
@@ -179,72 +238,56 @@ const ModernTourChrome = ({
         data-anchored={targetEl ? 'true' : 'false'}
         data-ds-position-strategy={strategy}
         style={{
-          padding: 16,
-          maxWidth: 384,
           zIndex: zIndex + 2,
           ...(targetEl
             ? positionStyle
             : { position: 'fixed' as const, top: '50%', left: '50%' }),
         }}
       >
-        {/* Close button */}
+        {/* Close button: geometry is skin-owned (logical inset-inline-end so
+            it mirrors to the far corner under RTL); the glyph is the governed
+            ActionCloseIcon (Modal/Toast/Notification pattern), decorative --
+            the button carries the accessible name. */}
         <button
           type="button"
           data-part="close-button"
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 28,
-            height: 28,
-            cursor: 'pointer',
-            fontSize: 14,
-          }}
+          aria-label={translation?.t('close') ?? 'Close'}
         >
-          ✕
+          <ActionCloseIcon decorative size={16} />
         </button>
 
         {/* Content */}
-        {step?.cover && <div className="mb-3">{step.cover}</div>}
-        <h3 data-part="title" className="font-bold text-lg">{step?.title}</h3>
+        {step?.cover && <div data-part="cover">{step.cover}</div>}
+        <h3 data-part="title">{step?.title}</h3>
         {step?.description && (
-          <p data-part="description" className="mt-2">{step.description}</p>
+          <p data-part="description">{step.description}</p>
         )}
 
         {/* Footer */}
-        <div data-part="footer" className="flex items-center justify-between mt-4">
+        <div data-part="footer">
           {/* Indicators */}
-          <div className="flex gap-1">
+          <div data-part="indicators">
             {steps.map((_, index) => (
               <div
                 key={index}
                 data-part="indicator"
                 data-current={index === currentStep ? 'true' : 'false'}
-                className="w-2 h-2 rounded-full"
               />
             ))}
           </div>
 
-          {/* Buttons */}
-          <div className="flex gap-2">
+          {/* Buttons. `Finish` has no common-locale key yet (listed in the
+              family ficha); the literal ships until the key lands. */}
+          <div data-part="actions">
             {currentStep > 0 && (
               <button
                 type="button"
                 data-part="action"
                 data-action="prev"
                 onClick={onPrev}
-                style={{
-                  height: 32,
-                  padding: '0 12px',
-                  fontSize: 13,
-                  cursor: 'pointer',
-                }}
               >
-                Previous
+                {translation?.t('previous') ?? 'Previous'}
               </button>
             )}
             <button
@@ -252,14 +295,8 @@ const ModernTourChrome = ({
               data-part="action"
               data-action="next"
               onClick={onNext}
-              style={{
-                height: 32,
-                padding: '0 12px',
-                fontSize: 13,
-                cursor: 'pointer',
-              }}
             >
-              {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
+              {currentStep === steps.length - 1 ? 'Finish' : (translation?.t('next') ?? 'Next')}
             </button>
           </div>
         </div>
@@ -269,11 +306,11 @@ const ModernTourChrome = ({
 };
 
 /**
- * Modern engine implementation of Tour using Tailwind CSS.
+ * Modern engine implementation of Tour on a self-contained, skin-owned tree.
  *
  * Features:
- * - Card and button structural classes with DS token styles
- * - Tailwind utility classes for layout
+ * - Skin-owned chrome (surface, close button, indicators, nav actions)
+ * - No utility-framework classes (drained in K4-A)
  * - Portal rendering for proper z-index stacking
  * - Spotlight effect with box-shadow technique
  *
@@ -285,7 +322,7 @@ const ModernTourChrome = ({
  *
  * @param props - Tour configuration props
  * @param ref - Forwarded ref to the container div
- * @returns Guided tour using Tailwind CSS
+ * @returns Guided tour on the modern Rottay-native skin
  */
 export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
   (props: TourProps, ref) => {
@@ -307,6 +344,10 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     // The live target element of the active step: the shared overlay runtime
     // and the spotlight measurement both position against it.
     const [targetEl, setTargetEl] = useState<HTMLElement | null>(null);
+    // In-tree marker the tenant/locale scope is read from when the step has
+    // no target element (the chrome portals to body, outside the provider).
+    const [scopeMarkerEl, setScopeMarkerEl] = useState<HTMLSpanElement | null>(null);
+    const [portalScope, setPortalScope] = useState<TourPortalScope>({});
 
     const currentStep = controlledCurrent ?? internalCurrent;
     const step = steps[currentStep];
@@ -342,6 +383,15 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       setTargetEl(null);
     }, [open, step, currentStep]);
 
+    // Re-read the tenant/locale scope on open and on step change (the target
+    // may live under a different scope owner than the previous one). No
+    // MutationObserver, unlike Popover: a mid-tour tenant switch is out of
+    // contract.
+    useLayoutEffect(() => {
+      if (!open) return;
+      setPortalScope(readPortalScope(targetEl ?? scopeMarkerEl));
+    }, [open, targetEl, scopeMarkerEl, currentStep]);
+
     // Return an empty placeholder when closed to preserve ref stability
     if (!open || typeof document === 'undefined') return <div ref={ref} className={className} />;
 
@@ -354,24 +404,30 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     // pins every useOverlayPosition call in this portaled subtree -- the
     // surface's, and any overlay a consumer nests inside step content -- to
     // the measured branch.
-    return createPortal(
-      <OverlayPortalBoundary>
-        <ModernTourChrome
-          forwardedRef={ref}
-          className={className}
-          zIndex={zIndex!}
-          mask={mask}
-          type={type}
-          step={step}
-          steps={steps}
-          currentStep={currentStep}
-          targetEl={targetEl}
-          onClose={onClose}
-          onPrev={handlePrev}
-          onNext={handleNext}
-        />
-      </OverlayPortalBoundary>,
-      document.body
+    return (
+      <>
+        <span ref={setScopeMarkerEl} data-part="scope-marker" hidden aria-hidden="true" />
+        {createPortal(
+          <OverlayPortalBoundary>
+            <ModernTourChrome
+              forwardedRef={ref}
+              className={className}
+              zIndex={zIndex!}
+              mask={mask}
+              type={type}
+              step={step}
+              steps={steps}
+              currentStep={currentStep}
+              targetEl={targetEl}
+              portalScope={portalScope}
+              onClose={onClose}
+              onPrev={handlePrev}
+              onNext={handleNext}
+            />
+          </OverlayPortalBoundary>,
+          document.body
+        )}
+      </>
     );
   }
 );

@@ -48,17 +48,28 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { GridProps, GridItemProps, GridGap, ResponsiveValue } from '../../contracts';
-import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from '../../contracts';
+import React, {
+  forwardRef,
+  useId,
+  type ElementType,
+  type Ref,
+  type CSSProperties,
+} from "react";
+import type {
+  GridProps,
+  GridItemProps,
+  GridGap,
+  ResponsiveValue,
+} from "../../contracts";
+import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from "../../contracts";
 import {
   generateResponsiveGridCSS,
   isResponsiveGridValue,
   type ResponsiveGridTemplateValue,
-} from '../../runtime/responsive';
-import { extractSemanticDOMAttributes } from '../../runtime/dom-attributes';
+} from "../../runtime/responsive";
+import { extractSemanticDOMAttributes } from "../../runtime/dom-attributes";
 
 /**
  * Converts a semantic gap token or raw pixel number into a CSS-compatible string.
@@ -66,7 +77,7 @@ import { extractSemanticDOMAttributes } from '../../runtime/dom-attributes';
  */
 const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   if (gap === undefined) return undefined;
-  if (typeof gap === 'number') return `${gap}px`;
+  if (typeof gap === "number") return `${gap}px`;
   return GAP_MAP[gap as GridGap] || String(gap);
 };
 
@@ -75,12 +86,14 @@ const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
  * Numeric values become `repeat(N, 1fr)` for equal-width tracks;
  * strings pass through to support custom templates like '2fr 1fr'.
  */
-const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): string | undefined => {
+const resolveColumns = (
+  columns: ResponsiveGridTemplateValue | undefined
+): string | undefined => {
   if (columns === undefined) return undefined;
-  if (columns === 'auto') return 'auto';
-  if (columns === 'none') return 'none';
-  if (typeof columns === 'number') return `repeat(${columns}, 1fr)`;
-  if (typeof columns === 'string') return columns;
+  if (columns === "auto") return "auto";
+  if (columns === "none") return "none";
+  if (typeof columns === "number") return `repeat(${columns}, 1fr)`;
+  if (typeof columns === "string") return columns;
   return undefined;
 };
 
@@ -95,20 +108,60 @@ const resolveColumns = (columns: ResponsiveGridTemplateValue | undefined): strin
  * @param skipResponsiveTemplate - Omit gridTemplateColumns/Rows (handled by injected CSS).
  * @returns A CSSProperties object to spread onto the container element.
  */
-const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSProperties => {
+const buildGridStyles = (
+  props: GridProps,
+  skipResponsiveTemplate = false
+): CSSProperties => {
   const {
-    columns, rows, gap, spacing, columnGap, rowGap, templateColumns, templateRows,
-    templateAreas, autoFlow, autoColumns, autoRows, alignItems, justifyItems,
-    placeItems, alignContent, justifyContent, width, height, minHeight, maxWidth, inline, style,
+    columns,
+    rows,
+    gap,
+    spacing,
+    columnGap,
+    rowGap,
+    templateColumns,
+    templateRows,
+    templateAreas,
+    autoFlow,
+    autoColumns,
+    autoRows,
+    alignItems,
+    justifyItems,
+    placeItems,
+    alignContent,
+    justifyContent,
+    width,
+    height,
+    minHeight,
+    maxWidth,
+    inline,
+    style,
   } = props;
   // `spacing` is a legacy alias for `gap`; fall back to the configured default
   const effectiveGap = gap ?? spacing ?? GRID_DEFAULTS.gap;
-  const computedStyle: CSSProperties = { display: inline ? 'inline-grid' : 'grid', ...style };
+  const computedStyle: CSSProperties = {
+    display: inline ? "inline-grid" : "grid",
+    ...style,
+  };
   // Explicit templateColumns takes priority over the `columns` shorthand
   if (templateColumns) computedStyle.gridTemplateColumns = templateColumns;
-  else if (!skipResponsiveTemplate && columns !== undefined && !isResponsiveGridValue(columns)) computedStyle.gridTemplateColumns = resolveColumns(columns as ResponsiveGridTemplateValue);
+  else if (
+    !skipResponsiveTemplate &&
+    columns !== undefined &&
+    !isResponsiveGridValue(columns)
+  )
+    computedStyle.gridTemplateColumns = resolveColumns(
+      columns as ResponsiveGridTemplateValue
+    );
   if (templateRows) computedStyle.gridTemplateRows = templateRows;
-  else if (!skipResponsiveTemplate && rows !== undefined && !isResponsiveGridValue(rows)) computedStyle.gridTemplateRows = resolveColumns(rows as ResponsiveGridTemplateValue);
+  else if (
+    !skipResponsiveTemplate &&
+    rows !== undefined &&
+    !isResponsiveGridValue(rows)
+  )
+    computedStyle.gridTemplateRows = resolveColumns(
+      rows as ResponsiveGridTemplateValue
+    );
   if (templateAreas) computedStyle.gridTemplateAreas = templateAreas;
   const resolvedGap = resolveGap(effectiveGap);
   if (resolvedGap) computedStyle.gap = resolvedGap;
@@ -119,7 +172,10 @@ const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSP
   if (autoRows) computedStyle.gridAutoRows = autoRows;
   // placeItems is the shorthand; when present it overrides individual axes
   if (placeItems) computedStyle.placeItems = placeItems;
-  else { if (alignItems) computedStyle.alignItems = alignItems; if (justifyItems) computedStyle.justifyItems = justifyItems; }
+  else {
+    if (alignItems) computedStyle.alignItems = alignItems;
+    if (justifyItems) computedStyle.justifyItems = justifyItems;
+  }
   if (alignContent) computedStyle.alignContent = alignContent;
   if (justifyContent) computedStyle.justifyContent = justifyContent;
   if (width) computedStyle.width = width;
@@ -136,7 +192,21 @@ const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSP
  * through token-backed style objects (no external CSS classes needed).
  */
 const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
-  const { span, colSpan, rowSpan, colStart, colEnd, rowStart, rowEnd, area, alignSelf, justifySelf, placeSelf, zIndex, style } = props;
+  const {
+    span,
+    colSpan,
+    rowSpan,
+    colStart,
+    colEnd,
+    rowStart,
+    rowEnd,
+    area,
+    alignSelf,
+    justifySelf,
+    placeSelf,
+    zIndex,
+    style,
+  } = props;
   const computedStyle: CSSProperties = { ...style };
   // Named area sets gridArea and bypasses col/row placement entirely
   if (area) computedStyle.gridArea = area;
@@ -144,22 +214,39 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
     // `span` is a convenience alias for `colSpan`
     const effectiveColSpan = colSpan ?? span;
     // Build gridColumn shorthand: "start / span N" or "start / end" or "span N"
-    if (colStart !== undefined || colEnd !== undefined || effectiveColSpan !== undefined) {
-      let col = colStart !== undefined ? String(colStart) : '';
-      if (effectiveColSpan !== undefined) col = col ? `${col} / span ${effectiveColSpan}` : `span ${effectiveColSpan}`;
-      else if (colEnd !== undefined) col = col ? `${col} / ${colEnd}` : `auto / ${colEnd}`;
+    if (
+      colStart !== undefined ||
+      colEnd !== undefined ||
+      effectiveColSpan !== undefined
+    ) {
+      let col = colStart !== undefined ? String(colStart) : "";
+      if (effectiveColSpan !== undefined)
+        col = col
+          ? `${col} / span ${effectiveColSpan}`
+          : `span ${effectiveColSpan}`;
+      else if (colEnd !== undefined)
+        col = col ? `${col} / ${colEnd}` : `auto / ${colEnd}`;
       if (col) computedStyle.gridColumn = col;
     }
     // Same logic for row placement
-    if (rowStart !== undefined || rowEnd !== undefined || rowSpan !== undefined) {
-      let row = rowStart !== undefined ? String(rowStart) : '';
-      if (rowSpan !== undefined) row = row ? `${row} / span ${rowSpan}` : `span ${rowSpan}`;
-      else if (rowEnd !== undefined) row = row ? `${row} / ${rowEnd}` : `auto / ${rowEnd}`;
+    if (
+      rowStart !== undefined ||
+      rowEnd !== undefined ||
+      rowSpan !== undefined
+    ) {
+      let row = rowStart !== undefined ? String(rowStart) : "";
+      if (rowSpan !== undefined)
+        row = row ? `${row} / span ${rowSpan}` : `span ${rowSpan}`;
+      else if (rowEnd !== undefined)
+        row = row ? `${row} / ${rowEnd}` : `auto / ${rowEnd}`;
       if (row) computedStyle.gridRow = row;
     }
   }
   if (placeSelf) computedStyle.placeSelf = placeSelf;
-  else { if (alignSelf) computedStyle.alignSelf = alignSelf; if (justifySelf) computedStyle.justifySelf = justifySelf; }
+  else {
+    if (alignSelf) computedStyle.alignSelf = alignSelf;
+    if (justifySelf) computedStyle.justifySelf = justifySelf;
+  }
   if (zIndex !== undefined) computedStyle.zIndex = zIndex;
   return computedStyle;
 };
@@ -174,59 +261,63 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
  * @param props - Grid container props including columns, rows, gap, template overrides, etc.
  * @returns A polymorphic, ref-forwarding grid container element.
  */
-const RusticGrid = forwardRef<HTMLElement, GridProps>(
-  (props, ref) => {
-    const {
-      as: Component = GRID_DEFAULTS.as,
-      className = '',
-      children,
-      columns,
-      rows,
-      id,
-    } = props;
+const RusticGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
+  const {
+    as: Component = GRID_DEFAULTS.as,
+    className = "",
+    children,
+    columns,
+    rows,
+    id,
+  } = props;
 
-    // SSR-safe unique ID for scoping responsive media-query CSS
-    const reactId = useId();
-    const gridId = `grid-${reactId.replace(/:/g, '')}`;
-    const hasResponsiveColumns = isResponsiveGridValue(columns);
-    const hasResponsiveRows = isResponsiveGridValue(rows);
-    const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
-    // Skip inline template when responsive CSS will provide it via media queries
-    const computedStyle = buildGridStyles(props, needsResponsiveCSS);
-    const responsiveCSS = needsResponsiveCSS
-      ? generateResponsiveGridCSS(
-          gridId,
-          resolveColumns,
-          hasResponsiveColumns ? (columns as ResponsiveValue<ResponsiveGridTemplateValue>) : undefined,
-          hasResponsiveRows ? (rows as ResponsiveValue<ResponsiveGridTemplateValue>) : undefined
-        )
-      : null;
+  // SSR-safe unique ID for scoping responsive media-query CSS
+  const reactId = useId();
+  const gridId = `grid-${reactId.replace(/:/g, "")}`;
+  const hasResponsiveColumns = isResponsiveGridValue(columns);
+  const hasResponsiveRows = isResponsiveGridValue(rows);
+  const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
+  // Skip inline template when responsive CSS will provide it via media queries
+  const computedStyle = buildGridStyles(props, needsResponsiveCSS);
+  const responsiveCSS = needsResponsiveCSS
+    ? generateResponsiveGridCSS(
+        gridId,
+        resolveColumns,
+        hasResponsiveColumns
+          ? (columns as ResponsiveValue<ResponsiveGridTemplateValue>)
+          : undefined,
+        hasResponsiveRows
+          ? (rows as ResponsiveValue<ResponsiveGridTemplateValue>)
+          : undefined
+      )
+    : null;
 
-    const ElementType = Component as ElementType;
-    const semanticAttributes = extractSemanticDOMAttributes(props);
+  const ElementType = Component as ElementType;
+  const semanticAttributes = extractSemanticDOMAttributes(props);
 
-    return (
-      <>
-        {responsiveCSS && <style dangerouslySetInnerHTML={{ __html: responsiveCSS }} />}
-        {React.createElement(
-          ElementType,
-          {
-            ref: ref as Ref<HTMLElement>,
-            className: `rottay-grid rottay-grid--rustic ${className}`.trim(),
-            style: computedStyle,
-            id,
-            ...semanticAttributes,
-            'data-component': 'grid',
-            'data-grid-id': needsResponsiveCSS ? gridId : undefined,
-          },
-          children
-        )}
-      </>
-    );
-  }
-);
+  return (
+    <>
+      {responsiveCSS && (
+        <style dangerouslySetInnerHTML={{ __html: responsiveCSS }} />
+      )}
+      {React.createElement(
+        ElementType,
+        {
+          ref: ref as Ref<HTMLElement>,
+          className: `rottay-grid rottay-grid--rustic ${className}`.trim(),
+          style: computedStyle,
+          id,
+          ...semanticAttributes,
+          "data-component": "grid",
+          "data-grid-id": needsResponsiveCSS ? gridId : undefined,
+        },
+        children
+      )}
+    </>
+  );
+});
 
-RusticGrid.displayName = 'RusticGrid';
+RusticGrid.displayName = "RusticGrid";
 
 /**
  * Rustic GridItem component for positioning children within a RusticGrid.
@@ -238,36 +329,35 @@ RusticGrid.displayName = 'RusticGrid';
  * @param props - Grid item positioning props (span, colSpan, rowSpan, area, etc.)
  * @returns A polymorphic, ref-forwarding grid item element.
  */
-const RusticGridItem = forwardRef<HTMLElement, GridItemProps>(
-  (props, ref) => {
-    const {
-      as: Component = GRID_ITEM_DEFAULTS.as,
-      className = '',
-      children,
+const RusticGridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
+  const {
+    as: Component = GRID_ITEM_DEFAULTS.as,
+    className = "",
+    children,
+    id,
+  } = props;
+
+  const computedStyle = buildGridItemStyles(props);
+
+  const ElementType = Component as ElementType;
+  const semanticAttributes = extractSemanticDOMAttributes(props);
+
+  return React.createElement(
+    ElementType,
+    {
+      ref: ref as Ref<HTMLElement>,
+      className:
+        `rottay-grid-item rottay-grid-item--rustic ${className}`.trim(),
+      style: computedStyle,
       id,
-    } = props;
+      ...semanticAttributes,
+      "data-component": "grid-item",
+    },
+    children
+  );
+});
 
-    const computedStyle = buildGridItemStyles(props);
-
-    const ElementType = Component as ElementType;
-    const semanticAttributes = extractSemanticDOMAttributes(props);
-
-    return React.createElement(
-      ElementType,
-      {
-        ref: ref as Ref<HTMLElement>,
-        className: `rottay-grid-item rottay-grid-item--rustic ${className}`.trim(),
-        style: computedStyle,
-        id,
-        ...semanticAttributes,
-        'data-component': 'grid-item',
-      },
-      children
-    );
-  }
-);
-
-RusticGridItem.displayName = 'RusticGridItem';
+RusticGridItem.displayName = "RusticGridItem";
 
 // Export as default for engine factory
 export default RusticGrid;

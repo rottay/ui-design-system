@@ -18,12 +18,23 @@ function rootOf(container: HTMLElement, engine: 'modern' | 'rustic'): HTMLElemen
 }
 
 describe('Tabs state.change motion recipe', () => {
-  it.each([
-    ['modern', ModernTabs],
-    ['rustic', RusticTabs],
-  ] as const)('%s engine stamps the animated recipe contract on its root', (engine, Engine) => {
-    const { container } = render(<Engine items={items} />);
-    const root = rootOf(container, engine);
+  it('modern stamps motion preference independently from its visual recipe', () => {
+    const { container } = render(<ModernTabs items={items} />);
+    const root = rootOf(container, 'modern');
+
+    expect(root).toHaveAttribute('data-recipe', 'underline');
+    expect(root).toHaveAttribute('data-recipe-state', 'animated');
+    expect(root).not.toHaveAttribute('data-motion-final');
+    expect(root.style.getPropertyValue('--ds-recipe-enter')).not.toBe('0ms');
+
+    const panel = container.querySelector('[data-part="tab-panel"]') as HTMLElement;
+    // Static animation belongs to the Tabs skin, not per-instance inline paint.
+    expect(panel.style.animation).toBe('');
+  });
+
+  it('rustic stamps the animated recipe contract on its root', () => {
+    const { container } = render(<RusticTabs items={items} />);
+    const root = rootOf(container, 'rustic');
 
     expect(root).toHaveAttribute('data-recipe', 'state.change');
     expect(root).toHaveAttribute('data-recipe-state', 'animated');
@@ -47,6 +58,9 @@ describe('Tabs state.change motion recipe', () => {
 
     expect(root).toHaveAttribute('data-recipe-state', 'final');
     expect(root.style.getPropertyValue('--ds-recipe-enter')).toBe('0ms');
+    if (engine === 'modern') {
+      expect(root).toHaveAttribute('data-motion-final', 'true');
+    }
 
     const panel = container.querySelector('[data-part="tab-panel"]') as HTMLElement;
     expect(panel.style.animation).toBe('');

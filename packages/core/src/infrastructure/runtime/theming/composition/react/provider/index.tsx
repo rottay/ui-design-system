@@ -95,7 +95,6 @@ import React, {
 import type { ThemeContextValue, ThemeConfig, TenantBranding, TenantTokenOverrides } from '../../../../../../foundation/contracts';
 import { getDefaultTenant } from '../../../../tenant/foundation/configuration/registry';
 import { errorInDev, warnInDev, warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
-import { buildDaisyUiColorOverrides } from '../../../foundation/color/oklch';
 import {
   isHexColor,
   normalizeHexColor,
@@ -554,7 +553,9 @@ export interface ThemeProviderProps {
   /**
    * CSS custom property overrides derived from TenantAppearance (General + Advanced).
    * Applied as inline style on the root element, layered on top of BrandTheme/tokenOverrides.
-   * Produced by `appearanceToVariables()` in `infrastructure/compilers/kernel/runtime/appearance`.
+   * Produced by `compileAppearanceVariables().variables` in
+   * `infrastructure/compilers/kernel/runtime/appearance`, including the shared
+   * APCA autocorrection pass.
    */
   appearanceVars?: Record<string, string>;
 }
@@ -955,26 +956,6 @@ export function ThemeProvider({
             console.warn(`[DS] Invalid branding ${key} "${value}":`, error);
           }
         }
-      }
-    }
-
-    // ── DaisyUI 5 color bridge (oklch) ─────────────────────────────
-    // DaisyUI 5 uses oklch() format for its --color-* variables.
-    // Convert tenant hex branding colors to oklch and apply as
-    // DaisyUI variable overrides so both DS and DaisyUI components
-    // reflect the tenant's brand.
-    try {
-      const daisyOverrides = buildDaisyUiColorOverrides(
-        activePrimaryColor,
-        activeSecondaryColor,
-        activeAccentColor,
-      );
-      for (const [key, value] of Object.entries(daisyOverrides)) {
-        safeSetProperty(key, value);
-      }
-    } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[DS] Failed to generate DaisyUI oklch color overrides:', error);
       }
     }
 

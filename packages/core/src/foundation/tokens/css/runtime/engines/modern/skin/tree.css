@@ -29,9 +29,13 @@
  * BORDER WIDTHS: the connectors' widths were inline longhands (the Tailwind
  * `border-l` / `border-t` utilities set only the 1px default underneath), so
  * they move here keyed on `data-axis` -- a vertical connector must not grow a
- * top border, nor a horizontal one a left border. The selected row's border
- * width comes from the `border-l-2` utility, which the component emits only in
- * that state; only its color was inline.
+ * top border, nor a horizontal one a left border. The utilities are gone from
+ * the engine (K3-A): this file is the single owner of connector position,
+ * width and color, and of the switcher/icon/checkbox geometry that also sat
+ * inline. The per-level offsets stay inline but are LOGICAL (inline-start),
+ * so the hierarchy mirrors in RTL. The selected row's border width comes from
+ * the `border-l-2` utility, which the component emits only in that state;
+ * only its color was inline.
  *
  * SPECIFICITY (P-48): every border-color rule clears the tenant's unlayered
  * (0,3,1) `*` floor at (0,5,0)+. The hover rule sits at (0,8,0), above the
@@ -44,8 +48,9 @@
   background: var(--ds-tree-bg, transparent);
 }
 
-/* ---- hierarchy lines (their per-node offsets stay inline) ---- */
+/* ---- hierarchy lines (their per-node logical offsets stay inline) ---- */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'] {
+  position: absolute;
   border-color: var(--ds-tree-line-color, var(--ds-color-border));
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'] {
@@ -55,16 +60,29 @@
   border-top-width: var(--ds-tree-line-width, 1px);
 }
 
-/* ---- drop indicator: the line inside the positioned wrapper (its keyframe
-        stays in the component's own <style> block) ---- */
+/* ---- drop indicator: the positioned wrapper + the line inside it (its
+        keyframe lives in the global primitive-motion.css). The wrapper's
+        edges are logical so it spans the row in both directions. ---- */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] {
+  position: absolute;
+  inset-inline: 0;
+  pointer-events: none;
+  z-index: 10;
+}
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div {
+  height: 2px;
+  border-radius: 9999px;
   background: var(--ds-tree-line-color, var(--ds-color-primary));
+  animation: rottay-drop-indicator var(--ds-motion-slow) ease-out;
 }
 
 /* ---- row: rest, disabled, selected, drop-inside, hover. Ordered as the style
         object's spreads were: the disabled color is overridden by the selected
-        color, and the drop-inside background outranks the selected one. ---- */
+        color, and the drop-inside background outranks the selected one. The
+        static padding is the skin's; the per-level inline-start indent stays
+        inline (logical, RTL-safe). ---- */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] {
+  padding: var(--ds-tree-node-padding, 4px 8px);
   background: var(--ds-tree-node-bg, transparent);
   color: var(--ds-tree-node-color, inherit);
 }
@@ -82,18 +100,68 @@
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]) {
   background: var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent));
 }
+/* Keyboard reachability: the roving tab stop lands DOM focus on the row
+   without setting the engine's focus state, so the visible indicator is a
+   platform :focus-visible ring owned here (the state ring only exists once
+   the engine's focusedKey is set). */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -2px;
+}
 
-/* ---- row contents: expander, icon, search highlight ---- */
+/* ---- row contents: expander, spacer, checkbox, icon, search highlight ---- */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] {
+  width: var(--ds-tree-switcher-size, 24px);
+  height: var(--ds-tree-switcher-size, 24px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: var(--ds-font-size-xs, 12px);
+  margin-inline-end: 4px;
+  flex-shrink: 0;
+  cursor: pointer;
   background: transparent;
   color: var(--ds-tree-icon-color, var(--ds-color-text-primary));
   border-radius: 50%;
   border: none;
 }
+/* K3-A Pass 2 (sighted RTL): the collapsed expand caret is a physical
+   right-pointing glyph; in RTL it must point toward the inline direction the
+   hierarchy expands from. The expanded state's 90° turn is direction-neutral
+   (a downward triangle is symmetric under the flip), and Tailwind v4's
+   `rotate-90` utility uses the native `rotate` property, so this transform
+   composes with it instead of overriding it. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] > span:dir(rtl) {
+  transform: scaleX(-1);
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='switcher-spacer'] {
+  width: var(--ds-tree-switcher-size, 24px);
+  margin-inline-end: 4px;
+  flex-shrink: 0;
+}
+/* The DaisyUI checkbox classes are gone: the native control paints its own
+   check/indeterminate marks, tinted by accent-color. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox'] {
+  width: var(--ds-tree-checkbox-size, 16px);
+  height: var(--ds-tree-checkbox-size, 16px);
+  margin-inline-end: var(--ds-tree-checkbox-margin, 8px);
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--ds-color-primary);
+}
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='icon'] {
+  width: var(--ds-tree-icon-size, 16px);
+  height: var(--ds-tree-icon-size, 16px);
+  display: flex;
+  align-items: center;
+  margin-inline-end: 8px;
+  flex-shrink: 0;
   color: var(--ds-tree-icon-color, currentColor);
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight'] {
+  padding-inline: 2px;
+  border-radius: 2px;
   background: color-mix(in srgb, var(--ds-color-warning) 30%, transparent);
   color: var(--ds-color-text-primary);
 }

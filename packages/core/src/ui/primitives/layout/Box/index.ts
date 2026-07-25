@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Box Component - Rottay Design System
@@ -13,7 +13,7 @@
  *
  * This component supports the Rottay multi-engine architecture:
  * - **Classic**: Full-featured implementation using Ant Design patterns
- * - **Modern**: Utility-first implementation using DaisyUI/Tailwind classes
+ * - **Modern**: Deterministic structure with token-selectable visual treatment
  * - **Rustic**: Pure HTML/CSS implementation for maximum compatibility
  *
  * All engines produce visually consistent output while leveraging their
@@ -79,9 +79,9 @@
  * ```tsx
  * import { Box } from '@rottay/design-system';
  *
- * // Force Modern engine for Tailwind classes
+ * // Force Modern engine for responsive, token-aware structure
  * <Box engine="modern" p="md" rounded="lg">
- *   Uses Tailwind utility classes
+ *   Uses DS spacing, radius, and motion contracts
  * </Box>
  * ```
  *
@@ -95,8 +95,8 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { BoxProps } from './contracts';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { BoxProps } from "./contracts";
 
 // ============================================================================
 // TYPE EXPORTS
@@ -114,9 +114,10 @@ export type {
   BoxDisplay,
   BoxPosition,
   BoxOverflow,
-} from './contracts';
+  BoxMotion,
+} from "./contracts";
 
-export type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+export type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 
 // ============================================================================
 // CONSTANT EXPORTS
@@ -126,7 +127,7 @@ export type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/v
  * Re-export default values and mapping constants.
  * Useful for building custom components that extend Box behavior.
  */
-export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './contracts';
+export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from "./contracts";
 
 // ============================================================================
 // BASE COMPONENT EXPORTS
@@ -163,8 +164,8 @@ export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './contracts';
  * </EngineProvider>
  * ```
  */
-export const Box = createEngineComponent<BoxProps>('Box', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+export const Box = createEngineComponent<BoxProps>("Box", {
+  classic: () => import("./engines/classic"),
+  modern: () => import("./engines/modern"),
+  rustic: () => import("./engines/rustic"),
 });

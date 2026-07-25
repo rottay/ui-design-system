@@ -5,8 +5,8 @@
  *
  * @remarks
  * These types support the multi-engine architecture of Rottay Design System,
- * ensuring consistent API across Classic (Ant Design), Modern (DaisyUI), and
- * Rustic (Vanilla) implementations.
+ * ensuring consistent API across Classic (Ant Design), Modern (token-driven),
+ * and Rustic (Vanilla) implementations.
  *
  * @example Type Usage
  * ```tsx

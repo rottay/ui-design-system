@@ -33,24 +33,9 @@
   height: var(--ds-scroll-area-scrollbar-size);
 }
 
-/* Modern */
-.rottay-scroll-area-modern::-webkit-scrollbar-track {
-  background: var(--color-base-200, oklch(0.93 0.01 240));
-  border-radius: var(--ds-scroll-area-scrollbar-radius);
-}
-.rottay-scroll-area-modern::-webkit-scrollbar-thumb {
-  background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.3);
-  border-radius: var(--ds-scroll-area-scrollbar-radius);
-}
-.rottay-scroll-area-modern::-webkit-scrollbar-thumb:hover {
-  background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.5);
-}
-.rottay-scroll-area-modern[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
-  background: transparent;
-}
-.rottay-scroll-area-modern[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
-  background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.3);
-}
+/* Modern scrollbar paint (track/thumb/hover/hide) moved to the single owner:
+   foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css (K3-C
+   lane). This file remains the classic/rustic owner + shared size enum. */
 
 /* Classic */
 .rottay-scroll-area-classic::-webkit-scrollbar-track {

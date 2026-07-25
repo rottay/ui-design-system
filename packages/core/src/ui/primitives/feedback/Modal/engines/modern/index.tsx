@@ -31,6 +31,8 @@ import { MODAL_DEFAULTS, PADDING_MAP } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive/composition/react/provider/phone-state';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Constants
@@ -90,6 +92,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   // contract here also retained touch and motion-preference runtimes in this
   // component's leaf bundle, although neither value affects modal layout.
   const isMobile = usePhoneBreakpoint();
+  const { t } = useTranslation('common');
 
   const {
     open,
@@ -120,8 +123,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
     showBackdrop = MODAL_DEFAULTS.showBackdrop,
     overlayOpacity = MODAL_DEFAULTS.overlayOpacity,
     blurBackdrop = MODAL_DEFAULTS.blurBackdrop,
-    okText = 'OK',
-    cancelText = 'Cancel',
+    okText,
+    cancelText,
     onOk,
     onCancel,
     confirmLoading,
@@ -134,6 +137,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   const backdropClosable = closeOnBackdropClick ?? closeOnOverlayClick;
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen !== false && isMobile;
   const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
+  const resolvedOkText = okText ?? t('ok');
+  const resolvedCancelText = cancelText ?? t('cancel');
 
   useModalInertSiblings(isOpen);
 
@@ -242,8 +247,13 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
           ref={panelRef}
           data-part="surface"
           data-open="true"
+          data-size={size}
+          data-placement={placement}
           data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
           data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
+          data-has-header={Boolean(header || title || description || closable)}
+          data-has-footer={Boolean(!hideFooter && (footer || onOk || onCancel))}
+          data-divider={Boolean(divider)}
           tabIndex={-1}
           role="dialog"
           aria-modal="true"
@@ -284,7 +294,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 flexShrink: 0,
               }}
             >
-              <div style={{ minWidth: 0 }}>
+              <div data-part="heading-group" style={{ minWidth: 0 }}>
                 {header ?? (
                   <>
                     {title && (
@@ -320,7 +330,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                   type="button"
                   data-part="close-button"
                   onClick={handleCancel}
-                  aria-label="Close"
+                  aria-label={t('close')}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -332,9 +342,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                     flexShrink: 0,
                   }}
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
+                  <ActionCloseIcon decorative size={16} />
                 </button>
               )}
             </div>
@@ -370,6 +378,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 <>
                   {onCancel && (
                     <button
+                      type="button"
                       data-part="action"
                       data-action="cancel"
                       style={{
@@ -381,11 +390,12 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                       }}
                       onClick={handleCancel}
                     >
-                      {cancelText}
+                      {resolvedCancelText}
                     </button>
                   )}
                   {onOk && (
                     <button
+                      type="button"
                       data-part="action"
                       data-action="ok"
                       style={{
@@ -399,7 +409,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                       onClick={handleOk}
                       disabled={confirmLoading}
                     >
-                      {okText}
+                      {resolvedOkText}
                     </button>
                   )}
                 </>

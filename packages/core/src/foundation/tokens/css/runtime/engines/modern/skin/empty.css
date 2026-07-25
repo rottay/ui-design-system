@@ -1,33 +1,116 @@
-/**
- * Modern Empty skin (WO-SKIN-05 checkpoint D1).
- *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
- *
- * SCOPE is the root's own `rottay-empty rottay-empty--modern` pair. The bare
- * `rottay-empty` is targeted by a live bridge rule (engines/modern/theme.css:835)
- * whose `color: var(--ds-text-secondary)` paints the root uncontested and is
- * inherited by the footer slot; the root is NOT re-anchored or re-coloured here,
- * so that inheritance survives untouched.
- *
- * Every rule uses a CHILD combinator: `data-part` is a shared vocabulary, and the
- * `children` footer slot is consumer territory that can hold any component
- * (a Card stamps `data-part='description'` too). `>` pins each rule to the
- * element Empty itself renders.
- *
- * `rottay-empty__illustration` is a fresh, grep-verified-free classname on the two
- * first-party SVGs. Their `color` feeds `fill="currentColor"`; the consumer's own
- * `image` ReactNode never carries the class, so it never takes this colour.
- *
- * SPECIFICITY (P-48): `color` is non-border paint and wins unlayered at (0,3,0).
- * Values transcribed verbatim from `engines/modern.tsx`.
- */
+/** Modern Empty: compact, purposeful placeholder for lists and data regions. */
 
-.rottay-empty.rottay-empty--modern > [data-part='description'] {
-  color: var(--ds-color-text-secondary);
+.rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'] {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-block-size: var(--ds-empty-min-height, 10rem);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-empty-gap, var(--ds-spacing-md));
+  overflow: hidden;
+  padding: var(--ds-empty-padding, clamp(var(--ds-spacing-lg), 4vw, var(--ds-spacing-2xl)));
+  border: var(--ds-empty-border-width, 1px) solid var(--ds-empty-border-color, var(--ds-color-border));
+  border-radius: var(--ds-empty-radius, var(--ds-radius-xl));
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent) 0%, transparent 46%),
+    linear-gradient(145deg, var(--ds-empty-surface, var(--ds-color-surface)) 0%, var(--ds-color-surface-raised) 100%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 34%, transparent),
+    var(--ds-empty-shadow, var(--ds-shadow-sm));
+  color: var(--ds-color-text-primary);
+  text-align: center;
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-ease-standard),
+    box-shadow var(--ds-motion-fast) var(--ds-ease-standard),
+    transform var(--ds-motion-fast) var(--ds-ease-standard);
 }
 
-.rottay-empty.rottay-empty--modern .rottay-empty__illustration {
+.rottay-empty.rottay-empty--modern[data-part='root'][data-image='simple'] {
+  min-block-size: var(--ds-empty-simple-min-height, 8rem);
+  padding: var(--ds-empty-simple-padding, var(--ds-spacing-lg));
+}
+
+.rottay-empty.rottay-empty--modern[data-part='root'][data-has-footer='true'] {
+  padding-block-end: var(--ds-empty-footer-padding, var(--ds-spacing-lg));
+}
+
+.rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 36%, var(--ds-color-border));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent),
+    var(--ds-empty-hover-shadow, var(--ds-shadow-md));
+  transform: translateY(-1px);
+}
+
+.rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
+  display: grid;
+  inline-size: var(--ds-empty-visual-size, 4.25rem);
+  block-size: var(--ds-empty-visual-size, 4.25rem);
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 25%, var(--ds-color-border));
+  border-radius: var(--ds-empty-visual-radius, var(--ds-radius-lg));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-surface-raised)), var(--ds-color-surface));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 52%, transparent),
+    0 10px 24px color-mix(in srgb, var(--ds-color-primary) 11%, transparent);
+  color: var(--ds-color-primary);
+  transition:
+    transform var(--ds-motion-base) var(--ds-ease-emphasized),
+    box-shadow var(--ds-motion-base) var(--ds-ease-standard);
+}
+
+.rottay-empty.rottay-empty--modern[data-image='simple'] > .rottay-empty__visual[data-part='image'][data-part='image'] {
+  inline-size: var(--ds-empty-simple-visual-size, 3.25rem);
+  block-size: var(--ds-empty-simple-visual-size, 3.25rem);
+}
+
+.rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover > .rottay-empty__visual[data-part='image'] {
+  transform: translateY(-2px) scale(1.025);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 58%, transparent),
+    0 14px 30px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+}
+
+.rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
+  color: var(--ds-empty-icon-color, var(--ds-color-primary));
+}
+
+.rottay-empty.rottay-empty--modern > .rottay-empty__description[data-part='description'][data-part='description'] {
+  max-inline-size: var(--ds-empty-description-width, 34rem);
+  margin: 0;
   color: var(--ds-color-text-secondary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-empty-description-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-relaxed);
+  text-wrap: balance;
+}
+
+.rottay-empty.rottay-empty--modern > .rottay-empty__footer[data-part='footer'][data-part='footer'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-sm);
+  min-block-size: var(--ds-control-height-md);
+  margin-block-start: var(--ds-spacing-xs);
+  padding: var(--ds-spacing-sm);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg);
+  background: color-mix(in srgb, var(--ds-color-surface-raised) 84%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 32%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'],
+  .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
+    transition: none;
+  }
+
+  .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover,
+  .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover > .rottay-empty__visual[data-part='image'] {
+    transform: none;
+  }
 }

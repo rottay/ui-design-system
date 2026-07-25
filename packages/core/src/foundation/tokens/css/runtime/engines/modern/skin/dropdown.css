@@ -1,78 +1,412 @@
 /**
- * Modern Dropdown skin (WO-SKIN-04 checkpoint P).
+ * Modern Dropdown skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * A fully self-contained contextual surface: no utility-framework or DaisyUI
+ * paint is required. Full borders, hierarchy, interaction states and motion
+ * are driven by component/tenant tokens. Chromatic side rails are forbidden.
  *
- * THE ITEM ROW IS NOT PAINTED HERE, ON PURPOSE (P2b). This engine keeps the DaisyUI
- * `dropdown` / `dropdown-content` / `menu` classes, and the item row's ENTIRE resting
- * chrome plus its hover background come from `modern/theme.css` (layer
- * `rottay-engines`), keyed on `.menu li > button`:
- *
- *   [data-tenant] .menu li > button        { border: none; background: transparent;
- *                                            border-radius: …; color: …; transition: …; }
- *   [data-tenant] .menu li > button:hover  { background-color: var(--ds-dropdown-item-bg-hover); }
- *   [data-tenant] .menu li > button.text-error       { color: var(--ds-color-error-600); }
- *   [data-tenant] .menu li > button.text-error:hover { background-color: var(--ds-color-error-50); }
- *
- * and `personality.css` then replaces the transition timing on the same selector — a
- * THIRD source. Because THIS file is unlayered, ANY `background` it declared on the
- * row (even `transparent`) would outrank the layered `:hover` rule and delete a
- * shipping hover. So the row gets exactly one declaration here: the danger `color`,
- * which was inline before (inline also outranked `.text-error`) and is unlayered now.
- * Same winner, same value, and the layered `.text-error:hover` background survives
- * untouched because this file never mentions background on that element.
- *
- * ContextMenu LOOKS like the same widget but is genuinely hover-less on modern (it
- * renders zero DaisyUI classes). Do not unify the two.
- *
- * The <ul> panel is different: its background/border/radius/shadow were ALREADY inline
- * (masking `theme.css`'s `.dropdown-content` declarations), so moving them to an
- * unlayered rule keeps the same winner with the same values.
- *
- * PORTAL: this engine does NOT portal — the panel is an in-tree absolute sibling. The
- * scope class anchors every rule regardless.
- *
- * SCOPE: `rottay-dropdown--modern`. NOT `ds-dropdown` — that name carries a DORMANT
- * `[data-engine] .ds-dropdown { animation: ds-dropdown-enter … }` rule in
- * personality.css which matches nothing today (P3); adopting it would add a second,
- * independent entrance animation on top of this component's own.
- *
- * SPECIFICITY (P-48): the panel's colored border repeats its `data-part` to clear the
- * tenant `*` border-color floor at (0,3,1). It stays a SHORTHAND: `.dropdown-content`
- * is a layered-rule hook and splitting the border into longhands would let the tenant
- * floor repaint the color channel alone.
+ * RTL: placement is LOGICAL. Submenus hang off the reading-end edge via
+ * `inset-inline-start: calc(100% + ...)` and mirror for free; the open-state
+ * submenu-indicator nudge flips sign under `:dir(rtl)`. The submenu chevron
+ * (NavigationForwardIcon) mirrors through the icon facade's autoMirror.
  */
 
 @keyframes ds-dropdown-popover-enter-modern {
-  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.975);
+    filter: saturate(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: saturate(1);
+  }
 }
+
 @keyframes ds-dropdown-popover-exit-modern {
-  from { opacity: 1; transform: scale(1) translateY(0); }
-  to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.985);
+  }
 }
 
-/* ---- floating menu panel (the <ul>) ---- */
-.rottay-dropdown--modern[data-part='trigger'] > [data-part='surface'] {
+/* NO `isolation: isolate` here (Pass-2 stacking fix): an isolated trigger
+   caps its subtree, so the in-tree surface -- absolute, z-index 1000 --
+   lost every page-level stacking contest to LATER in-flow siblings (the
+   probe's contextmenu section intercepted pointer events over an open
+   menu). The surface carries its own isolation (the -1 arrow stays
+   contained), so the trigger needs none. */
+.rottay-dropdown.rottay-dropdown--modern[data-part='trigger'] {
+  max-inline-size: 100%;
+}
+
+.rottay-dropdown--modern[data-part='trigger'][data-disabled='true'] {
+  cursor: not-allowed;
+  opacity: var(--ds-opacity-disabled, 0.54);
+}
+
+.rottay-dropdown--modern[data-part='trigger'] > [data-part='trigger-content'] {
+  display: inline-flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  align-items: center;
+}
+
+.rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface'] {
+  isolation: isolate;
+  container: rottay-dropdown / inline-size;
+  min-inline-size: min(var(--ds-dropdown-min-width, 14rem), calc(100vw - 1rem));
+  max-inline-size: min(var(--ds-dropdown-max-width, 22rem), calc(100vw - 1rem));
+  padding: var(--ds-dropdown-padding);
+  overflow: visible;
+  color: var(--ds-dropdown-color, var(--ds-color-text-secondary));
+  border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl, 16px));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
+      transparent 44%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-surface-card) 98%, white 2%),
+      color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    var(--ds-dropdown-shadow, var(--ds-elevation-3, 0 16px 40px rgb(15 23 42 / 0.14)));
+  backdrop-filter: blur(var(--ds-dropdown-backdrop-blur, 16px)) saturate(1.08);
+  transform-origin: center top;
+}
+
+.rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface'][data-part='surface'] {
+  border: var(--ds-dropdown-border-width, 1px) solid
+    var(--ds-dropdown-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+}
+
+.rottay-dropdown__surface[data-part='surface'][data-placement^='top'] {
+  transform-origin: center bottom;
+}
+
+.rottay-dropdown__surface[data-part='surface'] > [data-part='menu'] {
+  display: grid;
+  gap: var(--ds-dropdown-item-gap, 0.2rem);
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item-shell'] {
+  position: relative;
+  min-inline-size: 0;
+  list-style: none;
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-part='item'] {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1rem auto minmax(0, 1fr) auto;
+  gap: var(--ds-spacing-sm, 0.5rem);
+  inline-size: 100%;
+  min-block-size: var(--ds-dropdown-item-height, 2.4rem);
+  padding: var(--ds-dropdown-item-padding-y, 0.45rem) var(--ds-dropdown-item-padding-x, 0.55rem);
+  align-items: center;
+  overflow: hidden;
+  color: var(--ds-dropdown-item-color, var(--ds-color-text-secondary));
+  border: 1px solid transparent;
+  border-radius: var(--ds-dropdown-item-radius, var(--ds-radius-lg, 12px));
+  background: transparent;
+  font-family: var(--ds-dropdown-font-family, var(--ds-font-family-base));
+  font-size: var(--ds-dropdown-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-dropdown-font-weight, var(--ds-font-weight-medium, 500));
+  line-height: var(--ds-line-height-snug);
+  text-align: start;
+  cursor: pointer;
+  outline: none;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 20%, color-mix(in srgb, white 28%, transparent) 50%, transparent 80%);
+  opacity: 0;
+  transform: translateX(-40%);
+  transition:
+    opacity var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-normal) var(--ds-ease-standard, ease);
+  content: '';
+  pointer-events: none;
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover,
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+  color: var(--ds-dropdown-item-color-hover, var(--ds-color-text-primary));
+  border-color: var(
+    --ds-dropdown-item-border-hover,
+    color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle))
+  );
+  background: var(
+    --ds-dropdown-item-bg-hover,
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)),
+      color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-card))
+    )
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 58%, transparent),
+    var(--ds-dropdown-item-shadow-hover, var(--ds-shadow-xs));
+  transform: translateY(-1px);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover::after {
+  opacity: 0.8;
+  transform: translateX(40%);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-selected='true'] {
+  color: var(--ds-dropdown-item-color-selected, var(--ds-color-primary));
+  border-color: var(
+    --ds-dropdown-item-border-selected,
+    color-mix(in srgb, var(--ds-color-primary) 36%, var(--ds-color-border-subtle))
+  );
+  background: var(
+    --ds-dropdown-item-bg-selected,
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card)),
+      color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card))
+    )
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 60%, transparent),
+    var(--ds-shadow-xs);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-tone='danger'] {
+  color: var(--ds-dropdown-danger-color, var(--ds-color-error));
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):hover,
+.rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):focus-visible {
+  border-color: color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border-subtle));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card)),
+    color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-card))
+  );
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']:disabled {
+  color: var(--ds-color-text-disabled, var(--ds-color-text-muted));
+  cursor: not-allowed;
+  opacity: var(--ds-opacity-disabled, 0.48);
+  filter: saturate(0.5);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='selection-indicator'],
+.rottay-dropdown__surface[data-part='surface'] [data-part='icon'],
+.rottay-dropdown__surface[data-part='surface'] [data-part='submenu-indicator'] {
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='selection-indicator'] {
+  grid-column: 1;
+  inline-size: 1rem;
+  color: var(--ds-color-primary);
+  opacity: 0;
+  transform: scale(0.72);
+  transition:
+    opacity var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-selected='true'] [data-part='selection-indicator'] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='icon'] {
+  grid-column: 2;
+  inline-size: var(--ds-dropdown-icon-well-size, 1.75rem);
+  block-size: var(--ds-dropdown-icon-well-size, 1.75rem);
+  color: var(--ds-dropdown-icon-color, currentColor);
+  border-radius: var(--ds-radius-md, 10px);
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']:hover [data-part='icon'] {
+  background: color-mix(in srgb, currentColor 11%, transparent);
+  transform: scale(1.04);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='label'] {
+  position: relative;
+  z-index: 1;
+  grid-column: 3;
+  min-inline-size: 0;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* Iconless actions use the icon track instead of collapsing into an intrinsic
+ * auto column. This keeps every label inside the surface and gives it the full
+ * remaining width without fabricating an empty icon well. */
+.rottay-dropdown__surface[data-part='surface']
+  [data-part='selection-indicator'] + [data-part='label'] {
+  grid-column: 2 / 4;
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='submenu-indicator'] {
+  grid-column: 4;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  transition: transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-submenu-open='true'] > [data-part='item'] [data-part='submenu-indicator'] {
+  transform: translateX(2px);
+}
+
+/* RTL: the submenu opens toward the reading-start side, so the nudge mirrors. */
+.rottay-dropdown__surface[data-part='surface'] [data-submenu-open='true'] > [data-part='item'] [data-part='submenu-indicator']:dir(rtl) {
+  transform: translateX(-2px);
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='group-label'] {
+  margin-block: 0.35rem 0.15rem;
+  padding: 0.38rem 0.6rem;
+  color: var(--ds-dropdown-group-color, var(--ds-color-text-muted));
+  border-radius: var(--ds-radius-md, 10px);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), transparent 78%);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: var(--ds-letter-spacing-wide);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='divider'] {
+  block-size: 1px;
+  margin: 0.35rem 0.3rem;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ds-color-border) 92%, transparent) 15%,
+    color-mix(in srgb, var(--ds-color-border) 92%, transparent) 85%,
+    transparent
+  );
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='submenu'] {
+  position: absolute;
+  inset-block-start: -0.42rem;
+  inset-inline-start: calc(100% + 0.48rem);
+  display: grid;
+  gap: 0.2rem;
+  min-inline-size: var(--ds-dropdown-min-width, 14rem);
+  margin: 0;
+  padding: var(--ds-dropdown-padding);
+  list-style: none;
+  border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl, 16px));
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 5%, transparent), transparent 45%),
+    var(--ds-surface-card);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    var(--ds-dropdown-shadow, var(--ds-elevation-3));
+  animation: ds-dropdown-popover-enter-modern var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease) both;
+}
+
+.rottay-dropdown__surface[data-part='surface'] [data-part='submenu'][data-part='submenu'] {
+  border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-border));
+}
+
+.rottay-dropdown__surface[data-part='surface'] > [data-part='arrow'] {
+  position: absolute;
+  z-index: -1;
+  inline-size: 0.72rem;
+  block-size: 0.72rem;
+  border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-border));
   background: var(--ds-surface-card);
-  border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-1);
-}
-.rottay-dropdown--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  transform: rotate(45deg);
 }
 
-/* ---- structural rows ---- */
-.rottay-dropdown--modern[data-part='trigger'] [data-part='divider'] {
-  background: var(--ds-color-border-subtle);
-}
-.rottay-dropdown--modern[data-part='trigger'] [data-part='group-label'] {
-  color: var(--ds-color-text-muted);
+.rottay-dropdown__surface[data-part='surface'][data-placement^='bottom'] > [data-part='arrow'] {
+  inset-block-start: -0.38rem;
+  inset-inline-start: calc(50% - 0.36rem);
+  border-inline-end: 0;
+  border-block-end: 0;
 }
 
-/* ---- danger item: colour ONLY. See the P2b note above — declaring a background
-        on this row would kill the layered `.menu li > button:hover` rule. ---- */
-.rottay-dropdown--modern[data-part='trigger'] [data-part='item'][data-tone='danger'] {
-  color: var(--ds-color-error);
+.rottay-dropdown__surface[data-part='surface'][data-placement^='top'] > [data-part='arrow'] {
+  inset-block-end: -0.38rem;
+  inset-inline-start: calc(50% - 0.36rem);
+  border-inline-start: 0;
+  border-block-start: 0;
+}
+
+@container rottay-dropdown (max-width: 20rem) {
+  .rottay-dropdown__surface[data-part='surface'] [data-part='submenu'] {
+    position: relative;
+    inset: auto;
+    min-inline-size: 0;
+    margin-block-start: 0.25rem;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-dropdown__surface[data-part='surface'],
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item'],
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item']::after,
+  .rottay-dropdown__surface[data-part='surface'] [data-part='icon'],
+  .rottay-dropdown__surface[data-part='surface'] [data-part='selection-indicator'],
+  .rottay-dropdown__surface[data-part='surface'] [data-part='submenu'] {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* forced-colors contract: backgrounds are stripped, so hover/focus must
+   still read -- a plain outline survives the forced palette. */
+@media (forced-colors: active) {
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover,
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+}
+
+/* coarse pointers: physical 44px floor, never a rem floor (tabs.css idiom). */
+@media (pointer: coarse) {
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item'] {
+    min-block-size: max(44px, var(--ds-dropdown-item-height, 2.4rem));
+  }
 }

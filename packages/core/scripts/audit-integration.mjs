@@ -241,9 +241,19 @@ for (const file of contractFiles) {
 // ============================================================================
 // For component token CSS files, count defined --ds-{name}-* vars.
 // For the corresponding modern engine file, count references.
-// Flag if a component has >15 defined tokens but the modern engine references <3.
+// Flag if a component has >15 defined tokens but the modern engine references
+// fewer than the integration floor. Flagship families deliberately carry a
+// much higher floor: declaring a rich white-label contract without consuming
+// it throughout the skin is an integration defect, not future potential.
 
 const COMPONENT_TOKEN_DIR = join(SRC_ROOT, 'foundation/tokens/css/presentation/components');
+const FLAGSHIP_MIN_TOKEN_REFS = new Map([
+  ['button', 120],
+  ['card', 80],
+  ['tabs', 80],
+  ['tooltip', 80],
+  ['popover', 60],
+]);
 const componentTokenFiles = walkFiles(COMPONENT_TOKEN_DIR, /\.css$/).filter(
   (f) => !f.endsWith('index.css')
 );
@@ -305,14 +315,15 @@ for (const tokenFile of componentTokenFiles) {
   const countRefs = (text) => (text.match(new RegExp(tokenPrefix, 'g')) ?? []).length;
   const refCount = countRefs(modernContent) + countRefs(skinContent);
 
-  if (refCount < 3) {
+  const minimumRefs = FLAGSHIP_MIN_TOKEN_REFS.get(baseName) ?? 3;
+  if (refCount < minimumRefs) {
     const searched = skinContent
       ? `${relPath(modernPath)} + ${relPath(skinPath)}`
       : relPath(modernPath);
     violations.push({
       rule: 'token-consumption-ratio',
       path: relPath(modernPath),
-      message: `Component "${baseName}" defines ${definedCount} ${tokenPrefix}* tokens but the modern engine only references ${refCount} (searched ${searched}). Expected >= 3 references.`,
+      message: `Component "${baseName}" defines ${definedCount} ${tokenPrefix}* tokens but the modern engine only references ${refCount} (searched ${searched}). Expected >= ${minimumRefs} references.`,
     });
   }
 }

@@ -70,13 +70,24 @@ test('the twenty runtime paint sites keep their exact property identity', () => 
   );
 });
 
-test('the fourteen static sites live in wired skins with byte-exact values', () => {
+test('the recovered static paint lives in wired, logical-property skins', () => {
   const group = component('primitives/inputs/Input/compound/Group/index.tsx');
   assert.equal(countArc09PaintInFile(group.source, group.file), 0);
   assert.doesNotMatch(group.source, /childStyle\.border(?:Top|Bottom)/);
   assert.match(group.source, /data-compact=\{compact \? 'true' : 'false'\}/);
   const inputCss = stylesheet('presentation/components/skin/input-compounds.css');
-  assert.equal((inputCss.match(/border-(?:top|bottom)-(?:left|right)-radius: 0 !important;/g) ?? []).length, 8);
+  assert.equal(
+    (
+      inputCss.match(
+        /border-(?:start|end)-(?:start|end)-radius: 0 !important;/g,
+      ) ?? []
+    ).length,
+    4,
+  );
+  assert.doesNotMatch(
+    inputCss,
+    /border-(?:top|bottom)-(?:left|right)-radius: 0 !important;/,
+  );
 
   const radiusValues = new Map([
     ['xs', 'var(--ds-radius-xs, 0.1875rem)'],
@@ -100,8 +111,14 @@ test('the fourteen static sites live in wired skins with byte-exact values', () 
     assert.equal(countArc09PaintInFile(box.source, box.file), 8, engine);
     assert.doesNotMatch(box.source, /style\.(?:borderRadius|boxShadow)\s*=/);
     assert.match(box.source, /const radiusValue = props\.borderRadius \|\| props\.rounded;/);
-    assert.match(box.source, /'data-radius': !callerOwnsRadius && radiusValue && radiusValue !== 'none'/);
-    assert.match(box.source, /'data-shadow': !callerOwnsShadow && props\.shadow && props\.shadow !== 'none'/);
+    assert.match(
+      box.source,
+      /["']data-radius["']:\s*!callerOwnsRadius && radiusValue && radiusValue !== ["']none["']/,
+    );
+    assert.match(
+      box.source,
+      /["']data-shadow["']:\s*!callerOwnsShadow && props\.shadow && props\.shadow !== ["']none["']/,
+    );
     const boxCss = stylesheet(`runtime/engines/${engine}/skin/layout.css`);
     const normalizedBoxCss = boxCss.replace(/\s+/g, ' ');
     for (const [token, value] of radiusValues) {

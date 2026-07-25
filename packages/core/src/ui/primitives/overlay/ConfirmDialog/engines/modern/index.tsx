@@ -1,7 +1,9 @@
 /**
  * @fileoverview Modern (Token-driven/Tailwind) engine for the ConfirmDialog overlay component.
- * Renders a confirmation modal using DS token inline styles, with variant-specific
- * button styling (DS token inline styles for primary / warning / error) and a built-in loading spinner.
+ * Renders a native `<dialog>` promoted to the browser top layer via `showModal()`,
+ * portaled through the shared overlay runtime so tenant scope, focus trapping,
+ * background inertness, scroll-lock, Escape routing and focus restore are owned
+ * by the shared substrate instead of ad-hoc per-engine code.
  *
  * @example
  * ```tsx
@@ -17,11 +19,14 @@
 
 'use client';
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { ConfirmDialogProps } from '../../contracts';
 import { CONFIRM_DIALOG_DEFAULTS } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
-/** Maps variant to DS token inline styles applied on the confirm button. */
 /** Maps each variant to an inline SVG so the component stays icon-library-free. */
 const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   info: (
@@ -48,14 +53,19 @@ const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
 };
 
 /**
- * ConfirmDialog implementation using DS token inline styles for modal and buttons.
+ * ConfirmDialog implementation on the shared overlay substrate.
  *
- * Body scroll is locked while the dialog is open. The confirm button receives
- * variant-specific DS token inline styles (e.g. error background for danger) and shows
- * a CSS spinner when `loading` is true. Backdrop click dismisses via `onCancel`.
+ * Same substrate as the modern AlertDialog: `<Portal>` + `<PortalScope>` for
+ * tenant-safe rendering, native `<dialog>` + `showModal()` for the top layer
+ * and focus trap, `useModalInertSiblings` for background inertness, and
+ * `useOverlayLayer` for the canonical z band (replacing the ad-hoc
+ * `var(--ds-z-modal)`), Escape routing, scroll-lock and focus restore.
+ * Escape and backdrop clicks dismiss via `onCancel` (engine parity with
+ * rustic, which already closed on Escape).
  *
  * @param props - {@link ConfirmDialogProps} shared across all engines.
- * @returns A DS token-styled modal element, or an empty fragment when closed.
+ * @returns The portaled modal element (plus an inline scope anchor), or just
+ * the anchor when `open` is false.
  */
 export default function ModernConfirmDialog(props: ConfirmDialogProps): React.ReactElement {
   const {
@@ -77,121 +87,177 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
   // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
 
+  // Inline anchor: the component's DOM position carries the tenant/locale
+  // lineage that PortalScope re-stamps onto the portaled dialog.
+  const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
+  const portalScope = usePortalScope(anchorEl);
+  // State (not a ref): the Portal mounts the dialog one commit later, and the
+  // promotion effect below must re-run when the element actually appears.
+  const [dialogEl, setDialogEl] = useState<HTMLDialogElement | null>(null);
+
   const handleConfirm = useCallback(() => {
     onConfirm?.();
   }, [onConfirm]);
 
-  // Lock body scroll while the dialog is visible to prevent background interaction
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
+  const handleCancel = useCallback(() => {
+    onCancel?.();
+  }, [onCancel]);
 
-  if (!open) return <></>;
+  useModalInertSiblings(open);
+
+  // Shared stack: canonical modal z band, single Escape router (top-most
+  // blocking layer only), scroll-lock refcount and LIFO focus restore.
+  // Escape dismisses via onCancel (parity with the rustic engine).
+  const { layerProps } = useOverlayLayer({
+    kind: 'modal',
+    active: open,
+    modal: true,
+    lockScroll: true,
+    restoreFocus: true,
+    onEscape: handleCancel,
+  });
+
+  // Promote to the native top layer while open. Unmounting on close releases
+  // it; the layer-stack restores focus to the previously focused element.
+  useEffect(() => {
+    if (!dialogEl) return;
+    if (open && !dialogEl.open) {
+      dialogEl.showModal();
+    }
+  }, [open, dialogEl]);
+
+  // The dialog box spans the viewport; clicks landing on the dialog element
+  // itself are backdrop clicks and dismiss via onCancel (always allowed,
+  // unlike AlertDialog).
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (e.target === e.currentTarget) {
+      onCancel?.();
+    }
+  };
+
+  // Native close (e.g. UA-driven) routes through the same cancel contract.
+  const handleDialogClose = () => {
+    if (open) onCancel?.();
+  };
 
   return (
-    <div
-      data-part="backdrop"
-      className={`rottay-confirm-dialog--modern ${className}`}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        // Tokenized overlay stack (spec section 9): modal-tier blocking
-        // dialog instead of a magic 50.
-        zIndex: 'var(--ds-z-modal)',
-        ...style,
-      }}
-      data-testid={dataTestId}
-    >
-      {/* Backdrop delegates dismiss to onCancel (always allowed, unlike AlertDialog) */}
-      <div
-        data-part="scrim"
-        style={{ position: 'absolute', inset: 0 }}
-        onClick={onCancel}
-      />
-      <div
-        data-part="surface"
-        data-open="true"
-        data-variant={variant}
-        style={{
-          position: 'relative',
-          maxWidth: 384,
-          width: '100%',
-          padding: 24,
-        }}
-      >
-        <div className="flex gap-3">
-          {displayIcon && (
-            <div data-part="icon" className="flex-shrink-0 mt-0.5">
-              {displayIcon}
-            </div>
-          )}
-          <div className="flex-1">
-            {title && (
-              <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
-            )}
-            {description && (
-              <p data-part="description" className="text-sm">{description}</p>
-            )}
-          </div>
-        </div>
-        {/* Action buttons -- right-aligned flex container */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
-          <button
-            type="button"
-            data-part="action"
-            data-action="cancel"
-            onClick={onCancel}
-            disabled={loading}
-            style={{
-              height: 36,
-              padding: '0 16px',
-              cursor: 'pointer',
-              fontSize: 14,
-            }}
-          >
-            {cancelLabel}
-          </button>
-          <button
-            type="button"
-            data-part="action"
-            data-action="confirm"
-            data-loading={loading ? 'true' : 'false'}
-            onClick={handleConfirm}
-            disabled={loading}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              height: 36,
-              padding: '0 16px',
-              cursor: 'pointer',
-              fontSize: 14,
-            }}
-          >
-            {loading && (
-              <span
-                data-part="spinner"
-                style={{
-                  display: 'inline-block',
-                  width: 16,
-                  height: 16,
-                  animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
-                }}
+    <>
+      <span ref={setAnchorEl} data-part="anchor" style={{ display: 'contents' }} />
+      {open ? (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
+            <dialog
+              ref={setDialogEl}
+              {...layerProps}
+              data-part="backdrop"
+              className={`rottay-confirm-dialog--modern ${className}`}
+              style={{
+                /* Reset native dialog styling: full-viewport flex container */
+                position: 'fixed',
+                inset: 0,
+                width: '100vw',
+                height: '100vh',
+                maxWidth: '100vw',
+                maxHeight: '100vh',
+                margin: 0,
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                ...layerProps.style,
+                ...style,
+              }}
+              data-testid={dataTestId}
+              onClick={handleBackdropClick}
+              onClose={handleDialogClose}
+            >
+              {/* Backdrop delegates dismiss to onCancel (always allowed, unlike AlertDialog) */}
+              <div
+                data-part="scrim"
+                style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
               />
-            )}
-            {confirmLabel}
-          </button>
-        </div>
-      </div>
-    </div>
+              <div
+                data-part="surface"
+                data-open="true"
+                data-variant={variant}
+                role="alertdialog"
+                aria-modal="true"
+                style={{
+                  position: 'relative',
+                  maxWidth: 384,
+                  width: '100%',
+                  padding: 24,
+                }}
+              >
+                <div className="flex gap-3">
+                  {displayIcon && (
+                    <div data-part="icon" className="flex-shrink-0 mt-0.5">
+                      {displayIcon}
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    {title && (
+                      <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
+                    )}
+                    {description && (
+                      <p data-part="description" className="text-sm">{description}</p>
+                    )}
+                  </div>
+                </div>
+                {/* Action buttons -- right-aligned flex container */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
+                  <button
+                    type="button"
+                    data-part="action"
+                    data-action="cancel"
+                    onClick={onCancel}
+                    disabled={loading}
+                    style={{
+                      height: 36,
+                      padding: '0 16px',
+                      cursor: 'pointer',
+                      fontSize: 14,
+                    }}
+                  >
+                    {cancelLabel}
+                  </button>
+                  <button
+                    type="button"
+                    data-part="action"
+                    data-action="confirm"
+                    data-loading={loading ? 'true' : 'false'}
+                    onClick={handleConfirm}
+                    disabled={loading}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      height: 36,
+                      padding: '0 16px',
+                      cursor: 'pointer',
+                      fontSize: 14,
+                    }}
+                  >
+                    {loading && (
+                      <span
+                        data-part="spinner"
+                        style={{
+                          display: 'inline-block',
+                          width: 16,
+                          height: 16,
+                          animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
+                        }}
+                      />
+                    )}
+                    {confirmLabel}
+                  </button>
+                </div>
+              </div>
+            </dialog>
+          </PortalScope>
+        </Portal>
+      ) : null}
+    </>
   );
 }
 

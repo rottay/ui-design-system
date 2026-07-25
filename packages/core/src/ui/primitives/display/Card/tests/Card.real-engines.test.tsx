@@ -74,9 +74,11 @@ describe('Card real engine coverage', () => {
       </ModernCard>
     );
 
-    const spinner = container.querySelector('svg');
-    expect(spinner).toHaveAttribute('width', '24');
-    expect(spinner).toHaveAttribute('height', '24');
+    const root = container.querySelector('.ds-card--modern');
+    const spinner = container.querySelector('[data-part="spinner"]');
+    expect(root).toHaveAttribute('data-loading', 'true');
+    expect(root).toHaveAttribute('aria-busy', 'true');
+    expect(spinner?.tagName).toBe('SPAN');
   });
 
   it('uses canonical variant border surfaces for outlined and ghost cards', () => {
@@ -89,7 +91,7 @@ describe('Card real engine coverage', () => {
     );
 
     expect(skin).toContain(
-      "border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px)) solid var(--ds-card-border, var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle))))"
+      "border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px)) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))))"
     );
     expect(skin).toContain(
       'border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color, transparent))'
@@ -129,14 +131,17 @@ describe('Card real engine coverage', () => {
       join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/card.css'),
       'utf-8'
     );
-    // Hover elevation is a personality channel (--ds-card-shadow-hover, driven by
-    // CARD_HOVER_ELEVATION_MAP), not a per-variant token. The elevated variant no
-    // longer carries its own hover shadow.
+    // Hover elevation resolves through the finite elevated material channel,
+    // then falls back to the shared Card personality channel.
     expect(skin).toContain(
       "[data-interactive='true'][data-variant='elevated'][data-state~='hovered']"
     );
-    expect(skin).toContain('transform: var(--ds-card-interactive-transform-hover, translateY(-1px))');
-    expect(skin).toContain('box-shadow: var(--ds-card-shadow-hover)');
+    expect(skin).toContain(
+      'transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform, translateY(-1px)))'
+    );
+    expect(skin).toContain(
+      'box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover))'
+    );
 
     fireEvent.click(card);
     expect(handleClick).toHaveBeenCalledTimes(1);

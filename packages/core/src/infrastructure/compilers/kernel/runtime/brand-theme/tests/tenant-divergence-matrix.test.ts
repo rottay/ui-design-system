@@ -17,13 +17,59 @@
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../index';
+import { appearanceToVariables } from '../../appearance';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
+import type { TenantAppearance, TenantConfig } from '@/foundation/contracts';
+import { brandThemeToTenantAppearance } from '@/ui/patterns/customization/brand-studio/runtime/file-export';
 
 const bithire = compileBrandTheme({ brandTheme: bithireBrandTheme });
 const themanagement = compileBrandTheme({ brandTheme: themanagementmiamiBrandTheme });
+const themanagementProjectedAppearance = brandThemeToTenantAppearance(
+  themanagementmiamiBrandTheme
+);
+
+/**
+ * DB representation of The Management. The BrandTheme fixture above remains
+ * the deterministic authoring/migration source, but a customer runtime never
+ * receives it via TenantConfig.brandTheme: it receives this bounded Appearance
+ * projection layered on top of the BitHire vertical.
+ */
+const themanagementDbAppearance: TenantAppearance = {
+  general: {
+    ...themanagementProjectedAppearance.general,
+    typography: {
+      ...themanagementProjectedAppearance.general?.typography,
+      fontFamilyBase: themanagementmiamiBrandTheme.typography?.fontFamilyBase,
+      fontFamilyHeading: themanagementmiamiBrandTheme.typography?.fontFamilyHeading,
+      typePairing: 'editorial',
+      scale: 1.04,
+    },
+    shape: { buttonStyle: 'soft', radiusScale: 0.76 },
+    density: 'spacious',
+    motion: { intensity: 0.62, durationScale: 1.08, ambient: 'subtle' },
+    surfaces: { elevation: 'elevated' },
+    navigation: { sidebarTone: 'strong' },
+  },
+  advanced: {
+    ...themanagementProjectedAppearance.advanced,
+    tokenOverrides: {
+      ...themanagementProjectedAppearance.advanced?.tokenOverrides,
+      '--ds-color-bg-secondary': '#FBF3E7',
+      '--ds-color-surface': '#FFFEFB',
+    },
+  },
+};
+
+const themanagementDbTenant = {
+  slug: 'themanagementmiami',
+  vertical: 'bithire',
+  appearance: themanagementDbAppearance,
+} satisfies Pick<TenantConfig, 'slug' | 'vertical' | 'appearance'>;
+
+const themanagementDbVariables = appearanceToVariables(themanagementDbAppearance);
 
 /**
  * The bounded channels a tenant owns. Every one must differ, or the tenant is
@@ -53,6 +99,12 @@ const BOUNDED_CHANNELS: readonly string[] = [
   '--ds-color-bg-primary',
   '--ds-card-bg',
   '--ds-input-bg',
+  // dedicated compact-label microchannel (not inherited from filter pills)
+  '--ds-badge-radius',
+  '--ds-badge-frame',
+  '--ds-badge-surface-hover',
+  '--ds-badge-count-radius',
+  '--ds-badge-motion-duration',
 ];
 
 /**
@@ -93,14 +145,48 @@ describe('two tenants of the bithire vertical diverge on every bounded channel',
   });
 
   it('a large majority of the compiled surface actually moves', () => {
-    // A weak theme could satisfy every named channel above and leave the other
-    // three hundred variables identical. Measured at authoring time: 281 of 371
-    // compiled variables differ. The floor is deliberately below that, so a
-    // future theme edit does not fail this test for a value it did not change,
-    // but far above a hue rotation.
+    // This guards the quality of the deterministic authoring/migration source.
+    // Runtime-path truth is asserted independently below so this large source
+    // delta cannot masquerade as evidence that the DB Appearance path ran.
     const keys = new Set([...Object.keys(bithire.cssVariables), ...Object.keys(themanagement.cssVariables)]);
     const differing = [...keys].filter((k) => bithire.cssVariables[k] !== themanagement.cssVariables[k]);
     expect(differing.length / keys.size).toBeGreaterThan(0.5);
+  });
+});
+
+describe('The Management traverses the bounded DB Appearance path', () => {
+  it('does not smuggle a customer theme through the static brandTheme field', () => {
+    expect(themanagementDbTenant).not.toHaveProperty('brandTheme');
+    expect(themanagementDbTenant.appearance).toBe(themanagementDbAppearance);
+    expect(themanagementDbTenant.vertical).toBe('bithire');
+  });
+
+  it.each([
+    '--ds-color-primary',
+    '--ds-font-family-base',
+    '--ds-font-family-heading',
+    '--ds-radius-button',
+    '--ds-radius-scale',
+    '--ds-elevation-1',
+    '--ds-color-bg-primary',
+    '--ds-card-bg',
+  ])('%s is emitted by the DB-safe compiler and overrides the vertical baseline', (channel) => {
+    const dbValue = themanagementDbVariables[channel];
+    expect(dbValue, `DB Appearance does not emit ${channel}`).toBeDefined();
+    expect(dbValue, `${channel} leaves The Management wearing BitHire defaults`).not.toBe(
+      bithire.cssVariables[channel]
+    );
+  });
+
+  it('keeps the DB override surface bounded', () => {
+    expect(themanagementDbAppearance).not.toHaveProperty('vertical');
+    expect(themanagementDbAppearance).not.toHaveProperty('engine');
+    expect(themanagementDbAppearance).not.toHaveProperty('productProfile');
+    expect(
+      Object.keys(themanagementDbAppearance.advanced?.tokenOverrides ?? {}).every((key) =>
+        key.startsWith('--ds-')
+      )
+    ).toBe(true);
   });
 });
 
@@ -129,5 +215,8 @@ describe('and converge on the identity of the product they both are', () => {
       expect(theme).not.toHaveProperty('engine');
       expect(theme).not.toHaveProperty('productProfile');
     }
+    expect(themanagementDbAppearance).not.toHaveProperty('vertical');
+    expect(themanagementDbAppearance).not.toHaveProperty('engine');
+    expect(themanagementDbAppearance).not.toHaveProperty('productProfile');
   });
 });

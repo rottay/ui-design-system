@@ -1,9 +1,12 @@
 'use client';
 
 /**
- * @fileoverview Modern engine for the Callout component, powered by DS token inline styles.
- * Renders an alert banner using `alert` structural classes with DS token semantic
- * variant colours, a dismissible close button, and an optional action slot.
+ * @fileoverview Modern engine for the Callout component, painted by the token-driven modern skin.
+ * Renders a guidance banner with a semantic icon well, title/body hierarchy,
+ * an optional action tray, and a dismissible close button. No DaisyUI classes
+ * remain on this tree -- the `alert` structural class was drained in the
+ * K1 Lane C pass (decrementing `daisy.classConsumers`); all layout and paint
+ * live in `foundation/tokens/css/runtime/engines/modern/skin/callout.css`.
  *
  * @example
  * ```tsx
@@ -19,22 +22,35 @@
 
 import React, { useState } from 'react';
 import type { CalloutProps } from '../../contracts';
-import { CALLOUT_DEFAULTS, CALLOUT_ICONS, TONE_TO_CALLOUT_VARIANT } from '../../contracts';
+import type { CalloutVariant } from '../../contracts';
+import { CALLOUT_DEFAULTS, TONE_TO_CALLOUT_VARIANT } from '../../contracts';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+
+const VARIANT_ICONS: Record<CalloutVariant, React.ReactNode> = {
+  info: <StatusInfoIcon decorative size={20} />,
+  success: <StatusSuccessIcon decorative size={20} />,
+  warning: <StatusWarningIcon decorative size={20} />,
+  error: <StatusErrorIcon decorative size={20} />,
+};
 
 /**
  * Modern (token-driven) implementation of the Callout component.
  *
- * Leverages `alert` structural class with DS token inline styles for semantic colouring
- * and layout, with a ghost close button and flex-column content area.
- *
- * Semantic paint (per-tone surface, text and close button) is keyed on
- * `data-tone` by `foundation/tokens/css/runtime/engines/modern/skin/callout.css`; an unrecognised
- * tone falls back to the info palette there, as it did here.
+ * Semantic paint (per-tone surface, icon well, action tray and close button) is
+ * keyed on `data-tone`/`data-part` by
+ * `foundation/tokens/css/runtime/engines/modern/skin/callout.css`; an
+ * unrecognised tone falls back to the info palette there, as it did here.
  *
  * @param props - {@link CalloutProps} controlling variant, content, and behaviour.
- * @returns A DS token-styled alert element, or null when dismissed.
+ * @returns A token-styled callout element, or null when dismissed.
  */
 export default function ModernCallout(props: CalloutProps): React.ReactElement | null {
+  const { t } = useTranslation('common');
   const {
     tone,
     variant: variantProp = CALLOUT_DEFAULTS.variant,
@@ -64,26 +80,29 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
 
   return (
     <div
-      className={`alert rottay-callout-shell rottay-callout-shell--modern ${className}`}
+      className={`rottay-callout-shell rottay-callout-shell--modern ${className}`}
       role="alert"
       data-part="root"
       data-tone={variant}
+      data-has-title={Boolean(title)}
+      data-has-action={Boolean(action)}
+      data-closable={Boolean(closable)}
       style={style}
     >
       {/* Leading icon: custom icon overrides the per-variant default */}
-      <span className="text-lg font-bold" data-part="icon">
-        {icon || CALLOUT_ICONS[variant]}
+      <span className="rottay-callout-shell__icon" data-part="icon">
+        {icon || VARIANT_ICONS[variant]}
       </span>
 
       {/* Content area: flex-col stacks title, body, and action vertically.
           flex-1 ensures it fills available width next to icon and close button. */}
-      <div className="flex flex-col gap-1 flex-1" data-part="body">
+      <div className="rottay-callout-shell__body" data-part="body">
         {title && (
-          <span className="font-semibold text-sm" data-part="title">{title}</span>
+          <span data-part="title">{title}</span>
         )}
-        <span className="text-sm" data-part="description">{children}</span>
+        <span data-part="description">{children}</span>
         {action && (
-          <div className="mt-2" data-part="action">{action}</div>
+          <div className="rottay-callout-shell__action" data-part="action">{action}</div>
         )}
       </div>
 
@@ -92,11 +111,10 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
         <button
           type="button"
           data-part="close-button"
-          style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
           onClick={handleClose}
-          aria-label="Close"
+          aria-label={t('close')}
         >
-          x
+          <ActionCloseIcon decorative size={16} />
         </button>
       )}
     </div>

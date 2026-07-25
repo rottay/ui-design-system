@@ -50,6 +50,11 @@ function EvntoAxes({ testId }: { testId: string }): React.ReactElement {
   );
 }
 
+function DensitySpacing({ testId }: { testId: string }): React.ReactElement {
+  const tokens = useTokens();
+  return <span data-testid={testId}>{tokens.spacing[4]}</span>;
+}
+
 describe('useTokens product profile resolution', () => {
   it('merges engine defaults, product profile, and tenant overrides in the expected order', () => {
     render(
@@ -114,5 +119,38 @@ describe('useTokens product profile resolution', () => {
 
     expect(screen.getByTestId('custom-evnto-axes').textContent)
       .toBe(screen.getByTestId('bundled-evnto-axes').textContent);
+  });
+
+  it('composes tenant structural scale with the canonical appearance factor', () => {
+    render(
+      <>
+        <DesignSystemProvider
+          tenantConfig={TOKEN_TEST_TENANT}
+          tenantOverrides={{
+            tokenOverrides: { densityScale: 1.2 },
+            appearance: { general: { density: 'normal' } },
+          }}
+          forceEngine="classic"
+          skipCssLoading
+        >
+          <DensitySpacing testId="normal-density-spacing" />
+        </DesignSystemProvider>
+        <DesignSystemProvider
+          tenantConfig={TOKEN_TEST_TENANT}
+          tenantOverrides={{
+            tokenOverrides: { densityScale: 1.2 },
+            appearance: { general: { density: 'compact' } },
+          }}
+          forceEngine="classic"
+          skipCssLoading
+        >
+          <DensitySpacing testId="compact-density-spacing" />
+        </DesignSystemProvider>
+      </>,
+    );
+
+    // spacing[4] = 16px. normal: 16 * 1.2; compact: 16 * 1.2 * 0.85.
+    expect(screen.getByTestId('normal-density-spacing')).toHaveTextContent('19');
+    expect(screen.getByTestId('compact-density-spacing')).toHaveTextContent('16');
   });
 });

@@ -22,8 +22,10 @@ import type {
   BrandPalette,
   BrandTypography,
   BrandMotion,
+  TenantAppearance,
   TenantAppearanceAdvanced,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
+import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
 
 /** Deep clone through JSON. BrandTheme is a plain data contract. */
 export function cloneBrandTheme(theme: BrandTheme): BrandTheme {
@@ -63,6 +65,7 @@ const ADVANCED_CHROME_INCLUDE: Record<keyof AdvancedChrome, true> = {
   shell: true,
   toolbar: true,
   filterPill: true,
+  badge: true,
   breadcrumb: true,
   search: true,
   controls: true,
@@ -76,6 +79,8 @@ const ADVANCED_CHROME_INCLUDE: Record<keyof AdvancedChrome, true> = {
   collectionCard: true,
   listingGrid: true,
   modal: true,
+  tooltip: true,
+  popover: true,
   tabs: true,
 };
 
@@ -116,6 +121,13 @@ const PALETTE_TOKENS: Array<[keyof BrandPalette, `--ds-${string}`]> = [
   ['primaryColor', '--ds-color-primary'],
   ['secondaryColor', '--ds-color-secondary'],
   ['accentColor', '--ds-color-accent'],
+  ['textPrimaryColor', '--ds-color-text-primary'],
+  ['textSecondaryColor', '--ds-color-text-secondary'],
+  ['textMutedColor', '--ds-color-text-muted'],
+  ['textDisabledColor', '--ds-color-text-disabled'],
+  ['borderPrimaryColor', '--ds-color-border-primary'],
+  ['borderSecondaryColor', '--ds-color-border-secondary'],
+  ['backgroundColor', '--ds-color-bg-primary'],
   ['successColor', '--ds-color-success'],
   ['warningColor', '--ds-color-warning'],
   ['errorColor', '--ds-color-error'],
@@ -198,4 +210,91 @@ export function brandThemeToTenantAppearanceAdvanced(theme: BrandTheme): TenantA
   if (Object.keys(tokenOverrides).length > 0) advanced.tokenOverrides = tokenOverrides;
 
   return advanced;
+}
+
+/**
+ * Canonical migration projection for a DB-owned tenant. High-signal palette
+ * and typography fields remain editable in General/Simple; expert chrome and
+ * the remaining bounded channels stay in Advanced. The older Advanced-only
+ * exporter remains available for backwards-compatible documents.
+ */
+export function brandThemeToTenantAppearance(theme: BrandTheme): TenantAppearance {
+  const palette = theme.palette;
+  const foreground = palette && (
+    palette.textPrimaryColor
+    || palette.textSecondaryColor
+    || palette.textMutedColor
+    || palette.textDisabledColor
+  ) ? {
+    primary: palette.textPrimaryColor,
+    secondary: palette.textSecondaryColor,
+    muted: palette.textMutedColor,
+    disabled: palette.textDisabledColor,
+  } : undefined;
+  const border = palette && (
+    palette.borderPrimaryColor || palette.borderSecondaryColor
+  ) ? {
+    primary: palette.borderPrimaryColor,
+    secondary: palette.borderSecondaryColor,
+  } : undefined;
+
+  const general: NonNullable<TenantAppearance['general']> = {};
+  if (palette) {
+    const tenantPalette: NonNullable<
+      NonNullable<TenantAppearance['general']>['palette']
+    > = {
+      primary: palette.primaryColor,
+      secondary: palette.secondaryColor,
+      accent: palette.accentColor,
+      foreground,
+      border,
+      backgroundMode: palette.backgroundColor && palette.darkBackgroundColor
+        ? 'auto'
+        : palette.darkBackgroundColor
+          ? 'dark'
+          : 'light',
+    };
+    tenantPalette.background = palette.backgroundColor;
+    if (
+      palette.darkPrimaryColor
+      || palette.darkSecondaryColor
+      || palette.darkAccentColor
+      || palette.darkBackgroundColor
+    ) {
+      const darkPalette: NonNullable<typeof tenantPalette.dark> = {
+        primary: palette.darkPrimaryColor,
+        secondary: palette.darkSecondaryColor,
+        accent: palette.darkAccentColor,
+      };
+      darkPalette.background = palette.darkBackgroundColor;
+      tenantPalette.dark = darkPalette;
+    }
+    general.palette = tenantPalette;
+  }
+  if (theme.typography) {
+    general.typography = {
+      fontFamilyBase: theme.typography.fontFamilyBase,
+      fontFamilyHeading: theme.typography.fontFamilyHeading,
+    };
+  }
+  const authoredEffectIntensity = theme.surfaces?.effectIntensity;
+  if (
+    typeof authoredEffectIntensity === 'number'
+    && Number.isFinite(authoredEffectIntensity)
+  ) {
+    general.surfaces = {
+      effectIntensity: Math.min(
+        TENANT_THEME_EFFECT_INTENSITY_BOUNDS.max,
+        Math.max(
+          TENANT_THEME_EFFECT_INTENSITY_BOUNDS.min,
+          authoredEffectIntensity,
+        ),
+      ),
+    };
+  }
+
+  return {
+    ...(Object.keys(general).length > 0 ? { general } : {}),
+    advanced: brandThemeToTenantAppearanceAdvanced(theme),
+  };
 }

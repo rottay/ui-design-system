@@ -148,7 +148,6 @@ function InsightCard({ insight }: { insight: InsightItem }) {
             {insight.description && (
               <Text
                 className="ds-command-center__muted-text"
-                data-part="muted-text"
                 size="xs"
                 color="muted"
                 style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
@@ -203,7 +202,6 @@ function QuickActionCard({ action }: { action: QuickAction }) {
             {action.description && (
               <Text
                 className="ds-command-center__muted-text"
-                data-part="muted-text"
                 size="xs"
                 color="muted"
                 style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
@@ -329,7 +327,6 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
             {greeting && (
               <Text
                 className="ds-command-center__muted-text"
-                data-part="muted-text"
                 size="sm"
                 color="muted"
                 style={{ marginBottom: 'var(--ds-spacing-xs, 4px)' }}
@@ -387,7 +384,6 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         <Box>
           <Text
             className="ds-command-center__muted-text"
-            data-part="muted-text"
             size="sm"
             weight="medium"
             color="muted"

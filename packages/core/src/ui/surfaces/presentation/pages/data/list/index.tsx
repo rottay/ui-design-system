@@ -219,7 +219,6 @@ function DefaultCardView<TView>({
                       <Box key={column.key}>
                         <Text
                           className="ds-list__card-label"
-                          data-part="card-label"
                           style={{
                             fontSize: 12,
                             fontWeight: 600,
@@ -230,7 +229,6 @@ function DefaultCardView<TView>({
                         </Text>
                         <Text
                           className="ds-list__card-value"
-                          data-part="card-value"
                         >
                           {buildSurfaceCellRenderer(
                             config,

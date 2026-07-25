@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Divider Component - Rottay Design System
@@ -40,11 +40,11 @@
  * // Centered text (default)
  * <Divider>OR</Divider>
  *
- * // Left-aligned text
- * <Divider textPosition="left">Chapter 1</Divider>
+ * // Logical-start text (left in LTR, right in RTL)
+ * <Divider textPosition="start">Chapter 1</Divider>
  *
- * // Right-aligned text
- * <Divider textPosition="right">See more</Divider>
+ * // Logical-end text (right in LTR, left in RTL)
+ * <Divider textPosition="end">See more</Divider>
  * ```
  *
  * @example Line Styles
@@ -105,15 +105,15 @@
  * @package @rottay/design-system
  */
 
-import { createElement, forwardRef } from 'react';
+import { createElement, forwardRef } from "react";
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import { useOptionalTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import { useOptionalTokens } from "@/infrastructure/runtime/theming/composition/react/tokens";
 import {
   mergePersonalityStyle,
   resolveDividerPersonalityDefaults,
-} from '@/foundation/tokens/ts/runtime/personality';
-import type { DividerProps } from './contracts';
+} from "@/foundation/tokens/ts/runtime/personality";
+import type { DividerProps } from "./contracts";
 
 // ============================================================================
 // TYPE AND CONSTANT EXPORTS
@@ -127,6 +127,7 @@ export {
   type DividerOrientation,
   type DividerVariant,
   type DividerTextPosition,
+  type DividerLogicalTextPosition,
   type DividerThickness,
   type DividerThicknessPreset,
   type DividerSpacing,
@@ -135,7 +136,8 @@ export {
   THICKNESS_MAP,
   DEFAULT_COLORS,
   getThicknessValue,
-} from './contracts';
+  resolveDividerTextPosition,
+} from "./contracts";
 
 // ============================================================================
 // BASE COMPONENT EXPORTS
@@ -169,20 +171,16 @@ export {
  * <Divider engine="modern" orientation="vertical" />
  * ```
  */
-const DividerBase = createEngineComponent<DividerProps>('Divider', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+const DividerBase = createEngineComponent<DividerProps>("Divider", {
+  classic: () => import("./engines/classic"),
+  modern: () => import("./engines/modern"),
+  rustic: () => import("./engines/rustic"),
 });
 
 export const Divider = forwardRef<any, DividerProps>((props, ref) => {
   const tokens = useOptionalTokens();
   const defaults = tokens ? resolveDividerPersonalityDefaults(tokens) : null;
-  const {
-    variant,
-    style,
-    ...rest
-  } = props;
+  const { variant, style, ...rest } = props;
 
   return createElement(DividerBase, {
     ref,
@@ -192,4 +190,4 @@ export const Divider = forwardRef<any, DividerProps>((props, ref) => {
   });
 });
 
-Divider.displayName = 'Divider';
+Divider.displayName = "Divider";

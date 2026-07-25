@@ -1,47 +1,150 @@
 /**
- * Modern Result skin (WO-SKIN-03 checkpoint O).
+ * Modern Result skin (K1 Lane C premium pass; supersedes the WO-SKIN-03
+ * checkpoint-O color-only rules).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * base layer, so a layered rule loses to preflight regardless of specificity.
  * Unlayered outranks preflight and still yields to a caller's inline `style`.
  *
- * PERSONALITY: no rule in runtime/personality.css matches any element here.
+ * LAYOUT OWNERSHIP: the engine used to render raw utilities (`flex flex-col
+ * items-center justify-center text-center py-12 px-6`, `text-2xl font-bold`,
+ * `text-8xl`, `h-24 w-24`, `mb-*`, `max-w-md`, `max-w-lg`). All of it lives
+ * here now, on governed tokens, so density/typography/elevation retunes reach
+ * Result like every other family.
  *
- * SPECIFICITY (P-48): nothing in this file paints a border, so the tenant
- * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply.
+ * SLOT CONFINEMENT (K1 sighted-review fix): every part selector below is a
+ * DIRECT CHILD of the Result root (`>`). The engine renders icon/title/
+ * description/extra/content as direct children, so paint is unchanged -- but
+ * components slotted into `extra` or `children` can carry colliding
+ * `data-part` names of their own (the modern Button wraps its label in
+ * `<span data-part="content">`). A bare descendant `[data-part='content']`
+ * here repainted that span with Result body styling (text-secondary on the
+ * primary-filled button = dark-on-teal under the TMM DB appearance).
+ *
+ * GRAMMAR: Result is the completion/error counterpart to Empty's framed
+ * placeholder -- open composition (no box), a large tone-tinted glyph disc,
+ * heading-level title, balanced guidance, then the action row. The bounded
+ * min-height keeps short content from collapsing without ever producing a
+ * giant blank box.
+ *
+ * SPECIFICITY (P-48): the only border painted is the glyph well's, at (0,4,1)
+ * (two root classes + data-tone attr + data-part attr), clearing the tenant
+ * `* { border-color }` floor at (0,3,1).
  *
  * `data-part='status-icon'` / `'status-code'` mark the BUILT-IN icon shapes, so a
  * consumer-supplied `icon` -- rendered into the same slot and never coloured by
- * this engine -- stays unpainted. The icons stroke `currentColor`, so setting
- * `color` on the shape reproduces the inline value exactly.
+ * this engine -- stays unpainted.
  */
 
-.rottay-result--modern[data-tone='success'] [data-part='status-icon'] {
+/* ---- root: open centered composition on a bounded rhythm ---- */
+.rottay-result--modern.rottay-result--modern[data-part='root'][data-part='root'] {
+  display: flex;
+  min-block-size: var(--ds-result-min-height, 14rem);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-result-gap, var(--ds-spacing-md));
+  padding: var(--ds-result-padding, clamp(var(--ds-spacing-xl), 5vw, var(--ds-spacing-3xl))) var(--ds-result-padding-inline, clamp(var(--ds-spacing-lg), 4vw, var(--ds-spacing-2xl)));
+  color: var(--ds-color-text-primary);
+  text-align: center;
+}
+
+/* ---- status glyph well: large tone-tinted disc (built-in glyph only,
+        direct-child scoped so slotted content's own icon parts never match) ---- */
+.rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
+  display: grid;
+  inline-size: var(--ds-result-icon-well-size, 6rem);
+  block-size: var(--ds-result-icon-well-size, 6rem);
+  place-items: center;
+  border-radius: 50%;
+}
+
+.rottay-result--modern[data-tone='success'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-color-surface));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent),
+    0 12px 28px color-mix(in srgb, var(--ds-color-success) 14%, transparent);
   color: var(--ds-color-success);
 }
-.rottay-result--modern[data-tone='error'] [data-part='status-icon'] {
+.rottay-result--modern[data-tone='error'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-error) 9%, var(--ds-color-surface));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent),
+    0 12px 28px color-mix(in srgb, var(--ds-color-error) 14%, transparent);
   color: var(--ds-color-error);
 }
-.rottay-result--modern[data-tone='info'] [data-part='status-icon'] {
+.rottay-result--modern[data-tone='info'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-info) 30%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-info) 9%, var(--ds-color-surface));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent),
+    0 12px 28px color-mix(in srgb, var(--ds-color-info) 14%, transparent);
   color: var(--ds-color-info);
 }
-.rottay-result--modern[data-tone='warning'] [data-part='status-icon'] {
+.rottay-result--modern[data-tone='warning'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border));
+  background: color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-color-surface));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent),
+    0 12px 28px color-mix(in srgb, var(--ds-color-warning) 14%, transparent);
   color: var(--ds-color-warning);
 }
 
-.rottay-result--modern[data-tone='404'] [data-part='status-code'] {
+/* ---- HTTP status codes: display-size, clamped so narrow frames don't clip ---- */
+.rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='icon'] > [data-part='status-code'][data-part='status-code'] {
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-result-code-size, clamp(3.5rem, 12vw, 6rem));
+  font-weight: var(--ds-font-weight-bold);
+  letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  line-height: 1;
+}
+
+.rottay-result--modern[data-tone='404'][data-part='root'] > [data-part='icon'] > [data-part='status-code'] {
   color: var(--ds-color-primary);
 }
-.rottay-result--modern[data-tone='403'] [data-part='status-code'] {
+.rottay-result--modern[data-tone='403'][data-part='root'] > [data-part='icon'] > [data-part='status-code'] {
   color: var(--ds-color-warning);
 }
-.rottay-result--modern[data-tone='500'] [data-part='status-code'] {
+.rottay-result--modern[data-tone='500'][data-part='root'] > [data-part='icon'] > [data-part='status-code'] {
   color: var(--ds-color-error);
 }
 
-.rottay-result--modern [data-part='title'] {
+/* ---- hierarchy: title vs guidance (direct children only) ---- */
+.rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='title'][data-part='title'] {
+  margin: 0;
   color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-result-title-size, var(--ds-font-size-2xl, var(--ds-font-size-xl)));
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  line-height: var(--ds-line-height-tight);
+  text-wrap: balance;
 }
-.rottay-result--modern [data-part='description'] {
+
+.rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='description'][data-part='description'] {
+  max-inline-size: var(--ds-result-description-width, 32rem);
+  margin: 0;
   color: var(--ds-color-text-secondary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-result-description-size, var(--ds-font-size-base));
+  line-height: var(--ds-line-height-relaxed);
+  text-wrap: balance;
+}
+
+/* ---- action row: visible, attached, wraps under narrow frames ---- */
+.rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='extra'][data-part='extra'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-sm);
+  margin-block-start: var(--ds-spacing-xs);
+}
+
+/* ---- freeform content: bounded width, top separation ---- */
+.rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='content'][data-part='content'] {
+  inline-size: 100%;
+  max-inline-size: var(--ds-result-content-width, 32rem);
+  margin-block-start: var(--ds-spacing-sm);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-relaxed);
 }

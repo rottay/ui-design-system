@@ -1,27 +1,94 @@
 /**
- * Modern Mentions skin (WO-SKIN-02 checkpoint B, dropdown family).
+ * Modern Mentions skin (WO-SKIN-02 checkpoint B, dropdown family;
+ * K4-D Pass 1: geometry/layout drained from the engine's inline styles).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
  *
- * SCOPE ROOT is the wrapper `<div>`, carrying the pair
+ * SINGLE PAINT OWNER. SCOPE ROOT is the wrapper `<div>`, carrying the pair
  * `ds-mentions ds-mentions--modern` + `data-part='root'`; the textarea and its
  * suggestion popup are IN-TREE descendants with a `data-part` (Mentions never
- * portals -- the popup anchors to the textarea box, not the caret).
+ * portals -- the popup anchors to the textarea box, not the caret). The root
+ * also owns `position: relative` (the popup's absolute anchor), drained from
+ * the engine's former `relative` utility class.
  *
  * The textarea border reproduces `getStatusBorderColor()`'s 3-way chain
  * error > warning > default, read off the textarea's `data-status`. The
- * suggestion `option` carries no inline paint (its highlight rides the external
- * `active`/`disabled` classes, unchanged), so it has no rule here.
+ * suggestion `option` rows carried no rule at migration time (their highlight
+ * rode the external `active`/`disabled` classes); K4-D Pass 2 gives them the
+ * dropdown-family row grammar (block rows, wrapped long words, hover/active
+ * primary-tint repaint, disabled posture) -- see the option block below.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`.
+ * CONTROL SURFACE (K4-D remediation round 2, axe color-contrast/serious on
+ * themanagement-db): the background reads the certified Input family's
+ * `--ds-input-bg` (NOT the generic `--ds-color-bg-input`): the TMM DB
+ * projection resolves `--ds-input-bg` to its light control surface (#FFFEFB,
+ * measured by the InputNumber/TagInput lanes) while `--ds-color-bg-input`
+ * resolves near-black under its dark-text theme (#0F0F12 -- the tenant
+ * compiler deliberately does not emit it, visual-config/index.ts:399), which
+ * put the dark `--ds-color-text-primary` value ink at ~1.3:1 on the rest,
+ * error AND warning cells. BitHire resolves #fff on both channels, so this
+ * is a no-op there. The placeholder reads the certified
+ * `--ds-input-color-placeholder` channel with an explicit rule (the UA
+ * default rode `currentColor` at reduced alpha; the certified Input family
+ * ships these same raw values and passes the wave's axe gates, which do not
+ * evaluate placeholder ink). INTERACTION STATES: a default-status-only
+ * border repaint on `:hover` (`--ds-color-border-hover`) and the certified
+ * Input/Textarea focus grammar on `:focus` (native `:focus`, not
+ * `:focus-visible` -- a text field's border is not a keyboard-only
+ * affordance): the default-status border reads
+ * `--ds-mentions-border-focus, --ds-input-border-focus` and the halo ring
+ * reads `--ds-mentions-shadow-focus, --ds-input-shadow-focus` with
+ * status-aware error/warning halo overrides; status borders stay sovereign
+ * (the focus border is gated `:not([data-status])`), disabled opts out,
+ * motion is honoured via the standard reduced-motion guard (K4-D
+ * remediation rounds 2-3).
+ *
+ * GEOMETRY drained from the engine (K4-D): textarea inline-size/padding/
+ * font-size (`--ds-input-md-*` channels) and the auto-size `resize: none`
+ * (keyed on `data-autosize`); the popup's absolute placement (`position`,
+ * `z-index`, logical inset/margin keyed on `data-placement`, list reset,
+ * `--ds-dropdown-*` padding/max-block-size channels); the empty state's
+ * padding/centering (former `p-3 text-center` utilities). Physical top/bottom
+ * became LOGICAL `inset-block-start/end` + `margin-block-start/end` (RTL-safe
+ * by construction; block direction is what top/bottom meant here). What stays
+ * in JS: the auto-size `style.height`/`overflowY` measurements -- truly
+ * dynamic per keystroke.
+ *
+ * Values are transcribed verbatim from `engines/modern/index.tsx`.
  */
 
+.ds-mentions.ds-mentions--modern[data-part='root'] {
+  position: relative;
+}
+
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'] {
+  inline-size: 100%;
+  padding: var(--ds-input-md-padding-y, 8px) var(--ds-input-md-padding-x, 12px);
+  font-size: var(--ds-input-md-font-size, 14px);
+  font-family: inherit;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input);
+  /* See CONTROL SURFACE in the header: certified Input channel, never the
+     generic --ds-color-bg-input (near-black under TMM). */
+  background: var(--ds-mentions-input-bg, var(--ds-input-bg, var(--ds-surface-control)));
   color: var(--ds-color-text-primary);
   outline: none;
+  transition:
+    border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    background-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-autosize='true'] {
+  resize: none;
+}
+/* Default-status hover: the Input grammar's border repaint (status borders
+   stay sovereign on error/warning; focus and disabled opt out). */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):hover:not(:focus) {
+  border-color: var(--ds-mentions-border-hover, var(--ds-color-border-hover));
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']::placeholder {
+  color: var(--ds-mentions-placeholder-color, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
+  opacity: var(--ds-input-placeholder-opacity, 1);
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-status='error'] {
   border-color: var(--ds-color-error);
@@ -30,13 +97,97 @@
   border-color: var(--ds-color-warning);
 }
 
+/* Focus: the certified Input/Textarea grammar. The default-status border
+   reads the Input focus channel (status borders stay sovereign via the
+   :not([data-status]) gate); the halo ring shows on ANY focus (mouse or
+   keyboard), with status-aware error/warning halo overrides. */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):focus {
+  border-color: var(--ds-mentions-border-focus, var(--ds-input-border-focus, var(--ds-color-primary)));
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:focus:not([data-disabled='true']) {
+  box-shadow: var(--ds-mentions-shadow-focus, var(--ds-input-shadow-focus, var(--ds-focus-ring)));
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:focus:not([data-disabled='true'])[data-status='error'] {
+  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-mentions-shadow-focus, var(--ds-focus-ring)));
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:focus:not([data-disabled='true'])[data-status='warning'] {
+  box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-mentions-shadow-focus, var(--ds-focus-ring)));
+}
+
+/* Disabled posture (K4-D Pass 2 review): the Input grammar's disabled
+   channels -- quieter ink/surface/border, not-allowed cursor, governed
+   opacity. */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-disabled='true'] {
+  color: var(--ds-color-text-disabled);
+  background: var(--ds-mentions-input-bg-disabled, var(--ds-input-bg-disabled, #fafafa));
+  border-color: var(--ds-mentions-border-disabled, var(--ds-input-border-disabled, var(--ds-color-border)));
+  cursor: not-allowed;
+  opacity: var(--ds-mentions-disabled-opacity, var(--ds-input-disabled-opacity, 0.6));
+}
+
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+  position: absolute;
+  z-index: 50;
+  inline-size: 100%;
+  list-style: none;
+  margin: 0;
+  padding: var(--ds-dropdown-padding, 6px);
+  max-block-size: var(--ds-dropdown-max-height, 192px);
+  overflow-y: auto;
   border-radius: var(--ds-radius-lg);
   border: 1px solid var(--ds-color-border-subtle);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
 }
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='top'] {
+  inset-block-end: 100%;
+  margin-block-end: var(--ds-spacing-1, 4px);
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='bottom'] {
+  inset-block-start: 100%;
+  margin-block-start: var(--ds-spacing-1, 4px);
+}
+
+/* Option rows (K4-D Pass 2): the migrated markup carried only the external
+   `active`/`disabled` classes with no rule, so the rows rendered as raw UA
+   buttons. Full-width block rows on the dropdown-family grammar (Select's
+   option idiom, light): block layout, start-aligned, wrapped long words,
+   hover/active repaint as a primary tint over the dropdown surface,
+   disabled posture, motion guarded below. */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--ds-mentions-option-padding, var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px));
+  border: 1px solid transparent;
+  border-radius: var(--ds-mentions-option-radius, var(--ds-radius-md));
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  font: inherit;
+  text-align: start;
+  /* Word-first wrapping; a word that alone exceeds the line still breaks. */
+  overflow-wrap: break-word;
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):hover,
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+  background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  cursor: var(--ds-mentions-option-disabled-cursor, not-allowed);
+  opacity: var(--ds-mentions-option-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
+}
 
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'] {
+  padding: var(--ds-spacing-3, 12px);
+  text-align: center;
   color: var(--ds-color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'],
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+    transition-duration: 0.01ms;
+  }
 }

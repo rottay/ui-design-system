@@ -1,28 +1,151 @@
 /**
- * Modern Rate skin (WO-SKIN-03 checkpoint S).
+ * Modern Rate skin.
  *
- * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
- * layer and loses to preflight/DaisyUI; unlayered outranks them and still yields
- * to the caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision through the documented `--ds-rate-*` channels
+ * (presentation/components/rate.css) so a vertical or DB-backed tenant never
+ * needs private selectors.
  *
- * SCOPE ROOT carries `rottay-rate rottay-rate--modern` + `data-part='root'`; each
- * star is a `<label data-part='star' data-state>`.
+ * Cascade position (the P-47 preflight fight, current contract): this file is
+ * imported into `layer(rottay-engines)`, which the cross-framework cascade
+ * contract in `entrypoints/base.css` sorts AFTER `rottay-framework` (the
+ * bundled Tailwind/DaisyUI artifact, preflight included). Skin rules therefore
+ * beat preflight and every framework utility by layer ownership, while still
+ * yielding to a caller's inline `style` and to the tenant/personality layers
+ * above. (The old "DELIBERATELY UNLAYERED" header described the pre-layer-
+ * ownership wiring and was corrected in the K2-V pass.)
  *
- * Per-star fill color is runtime (it follows `displayValue`, hover included), so
- * it rides the `--ds-rate-star-fill` custom-property hatch stamped on each star.
- * The half-star foreground inherits that fill (active for a half star); the
- * half-star background is the constant inactive color, which rides
+ * DAISY DRAIN (K2-V): until this wave the root carried the DaisyUI `rating`
+ * + `rating-{size}` classes and they were the DE-FACTO sizing owner -- the
+ * engine's inline size hatch was malformed (`var(--ds-rate-md-size)px`,
+ * invalid CSS the browser dropped), so without those classes the stars
+ * collapsed. Sizing now lives here, keyed on `data-size`, consuming the
+ * canonical `--ds-rate-{xs,sm,md,lg,xl}-size` channels. The hover scale,
+ * focus ring and transitions that were Tailwind utilities
+ * (`hover:scale-110`, `ring-2 ring-offset-2`, `transition-all duration-200`)
+ * moved here as well, keyed on `data-focused` / `:hover`.
+ *
+ * SCOPE ROOT is `.ds-rate.ds-rate--modern[data-part='root']` (the legacy
+ * `rottay-rate rottay-rate--modern` pair stays on the element as a
+ * compatibility alias; no paint keys on it), carrying `data-size`,
+ * `data-disabled`, `data-readonly`; each star is a
+ * `<span data-part='star' data-state='full'|'half'|'empty' data-focused>`.
+ *
+ * Per-star fill color is runtime (it follows `displayValue`, hover included),
+ * so it rides the `--ds-rate-star-fill` custom-property hatch stamped on each
+ * star. The half-star foreground inherits that fill (active for a half star);
+ * the half-star background is the constant inactive color, which rides
  * `--ds-rate-star-inactive` stamped on the root and is applied via the
- * `rottay-rate-star-track` marker. `color` is non-border, so (0,3,0)+ suffices.
- * The hover scale (`hover:scale-110`) and focus ring (`ring-2`, `--tw-ring-color`
- * hatch) stay as Tailwind classes/hatch inline — they were never counted paint.
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * `rottay-rate-star-track` marker.
+ *
+ * RTL (K2-V sweep, sighted): the half-star hit overlay is the leading
+ * half via logical `start-0`, and the AR sweep cells confirmed the fill
+ * leads from the right with the half star's leading half painted on the
+ * right -- the grammar holds under `direction: rtl`.
  */
 
-.rottay-rate.rottay-rate--modern [data-part='star'] {
-  color: var(--ds-rate-star-fill);
+.ds-rate.ds-rate--modern[data-part='root'] {
+  display: inline-flex;
+  gap: var(--ds-rate-gap, 4px);
 }
 
-.rottay-rate.rottay-rate--modern [data-part='star'] .rottay-rate-star-track {
+/* Public size geometry: the canonical component channels (this is the rule
+   set that replaces the drained DaisyUI `rating-{size}` classes). */
+.ds-rate.ds-rate--modern[data-part='root'][data-size='xs'] [data-part='star'] {
+  inline-size: var(--ds-rate-xs-size, 16px);
+  block-size: var(--ds-rate-xs-size, 16px);
+}
+.ds-rate.ds-rate--modern[data-part='root'][data-size='sm'] [data-part='star'] {
+  inline-size: var(--ds-rate-sm-size, 20px);
+  block-size: var(--ds-rate-sm-size, 20px);
+}
+.ds-rate.ds-rate--modern[data-part='root'][data-size='md'] [data-part='star'] {
+  inline-size: var(--ds-rate-md-size, 24px);
+  block-size: var(--ds-rate-md-size, 24px);
+}
+.ds-rate.ds-rate--modern[data-part='root'][data-size='lg'] [data-part='star'] {
+  inline-size: var(--ds-rate-lg-size, 32px);
+  block-size: var(--ds-rate-lg-size, 32px);
+}
+.ds-rate.ds-rate--modern[data-part='root'][data-size='xl'] [data-part='star'] {
+  inline-size: var(--ds-rate-xl-size, 40px);
+  block-size: var(--ds-rate-xl-size, 40px);
+}
+
+.ds-rate.ds-rate--modern [data-part='star'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  color: var(--ds-rate-star-fill);
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-in-out, ease-in-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-in-out, ease-in-out);
+}
+
+/* Interactive postures (gated on the root state channels). */
+.ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star'] {
+  cursor: pointer;
+}
+.ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:hover {
+  transform: scale(var(--ds-rate-hover-scale, 1.1));
+}
+
+/* Keyboard ring: the engine stamps `data-focused` on the star that matches
+   the roving focus index (replaces the Tailwind `ring-2 ring-offset-2`
+   conditional class and its `--tw-ring-color` hatch). */
+.ds-rate.ds-rate--modern [data-part='star'][data-focused='true'] {
+  outline: var(--ds-rate-focus-ring-width, 2px) solid var(--ds-rate-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-rate-focus-ring-offset, 2px);
+}
+
+.ds-rate.ds-rate--modern[data-part='root'][data-disabled='true'] [data-part='star'] {
+  cursor: not-allowed;
+  opacity: var(--ds-disabled-opacity, 0.5);
+}
+
+/* Half-star foreground: clips the active fill to the leading half. */
+.ds-rate.ds-rate--modern [data-part='star-half'] {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 50%;
+  overflow: hidden;
+}
+
+/* Half-star background track: constant inactive color via the root hatch. */
+.ds-rate.ds-rate--modern .rottay-rate-star-track {
   color: var(--ds-rate-star-inactive);
+}
+
+/* Forced colors (K2-V sweep, sighted defect): with `forced-color-adjust:
+   auto` every star is forced to ButtonText, so a 3.5 value read as five
+   identical filled stars. Empty stars and the half-star background track
+   opt out of the adjustment and render the system GrayText, keeping the
+   value perceivable (filled stars stay ButtonText). */
+@media (forced-colors: active) {
+  .ds-rate.ds-rate--modern [data-part='star'][data-state='empty'],
+  .ds-rate.ds-rate--modern .rottay-rate-star-track {
+    forced-color-adjust: none;
+    color: GrayText;
+  }
+}
+
+/* Coarse-pointer floor: the star box (and with it the glyph) meets the 44px
+   touch target, matching the K1 control-floor semantics. Physical px, never
+   rem (the fluid 15px root erodes rem floors at narrow widths). */
+@media (pointer: coarse) {
+  .ds-rate.ds-rate--modern [data-part='star'] {
+    min-inline-size: var(--ds-rate-touch-target-min, 44px);
+    min-block-size: var(--ds-rate-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-rate.ds-rate--modern [data-part='star'],
+  .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:hover {
+    transition: none;
+    transform: none;
+  }
 }

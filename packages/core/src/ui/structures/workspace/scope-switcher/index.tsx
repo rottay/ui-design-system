@@ -59,11 +59,11 @@ export function ScopeSwitcher({
     >
       <Flex
         align="center"
-        gap={8}
+        gap={isInline ? 5 : 8}
         data-ds-scope-switcher-row="true"
         style={{
-          minWidth: 'min-content',
-          flexWrap: 'wrap',
+          minWidth: isInline ? 'max-content' : 'min-content',
+          flexWrap: isInline ? 'nowrap' : 'wrap',
         }}
       >
         {scopes.map((scope) => {
@@ -80,9 +80,9 @@ export function ScopeSwitcher({
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 8,
+                gap: isInline ? 5 : 8,
                 height: isInline ? 30 : 32,
-                padding: isInline ? '0 11px' : '0 12px',
+                padding: isInline ? '0 7px' : '0 12px',
                 fontSize: 13,
                 fontWeight: isActive ? 700 : 600,
                 cursor: 'pointer',
@@ -112,7 +112,7 @@ export function ScopeSwitcher({
                     justifyContent: 'center',
                     minWidth: 18,
                     height: 18,
-                    padding: '0 6px',
+                    padding: isInline ? '0 4px' : '0 6px',
                     fontSize: 10,
                     fontWeight: 700,
                     lineHeight: 1,

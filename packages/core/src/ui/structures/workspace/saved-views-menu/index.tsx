@@ -683,83 +683,94 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
 
   return (
     <Box
-      as="button"
       data-part="view-item"
       data-active={isActive}
-      onClick={() => onSelect(view.key)}
       style={{
         width: '100%',
         padding: 0,
-        textAlign: 'left' as const,
-        cursor: 'pointer',
       }}
     >
-      <Flex align="start" justify="between" gap={12} style={{ padding: 12 }}>
-        <Flex align="start" gap={10} style={{ minWidth: 0, flex: 1 }}>
-          <ViewGlyph isSystem={view.isSystem} active={isActive} />
-          <Box style={{ minWidth: 0, flex: 1 }}>
-            <Flex align="center" gap={6} wrap="wrap">
-              <Text
-                data-part="view-item-label"
-                size="sm"
-                weight={isActive ? 'medium' : undefined}
-                style={{
-                  maxWidth: 180,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap' as const,
-                }}
-              >
-                {view.label}
-              </Text>
-              {isActive && <StatusPill label="Current" tone="primary" />}
-              {view.isDefault && <StatusPill label="Default" tone="neutral" />}
-              <StatusPill label={kindLabel} tone="neutral" />
+      <Flex align="stretch" justify="between" gap={6}>
+        <button
+          type="button"
+          data-part="view-item-select"
+          onClick={() => onSelect(view.key)}
+          style={{
+            minWidth: 0,
+            flex: 1,
+            padding: 12,
+            textAlign: 'left' as const,
+            cursor: 'pointer',
+          }}
+        >
+          <Flex align="start" justify="between" gap={12}>
+            <Flex align="start" gap={10} style={{ minWidth: 0, flex: 1 }}>
+              <ViewGlyph isSystem={view.isSystem} active={isActive} />
+              <Box style={{ minWidth: 0, flex: 1 }}>
+                <Flex align="center" gap={6} wrap="wrap">
+                  <Text
+                    data-part="view-item-label"
+                    size="sm"
+                    weight={isActive ? 'medium' : undefined}
+                    style={{
+                      maxWidth: 180,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap' as const,
+                    }}
+                  >
+                    {view.label}
+                  </Text>
+                  {isActive && <StatusPill label="Current" tone="primary" />}
+                  {view.isDefault && <StatusPill label="Default" tone="neutral" />}
+                  <StatusPill label={kindLabel} tone="neutral" />
+                </Flex>
+                <Text
+                  data-part="view-item-description"
+                  size="xs"
+                  style={{
+                    display: 'block',
+                    marginTop: 5,
+                    fontSize: 12,
+                  }}
+                >
+                  {describeView(view)}
+                </Text>
+              </Box>
             </Flex>
-            <Text
-              data-part="view-item-description"
-              size="xs"
-              style={{
-                display: 'block',
-                marginTop: 5,
-                fontSize: 12,
-              }}
-            >
-              {describeView(view)}
-            </Text>
-          </Box>
-        </Flex>
-
-        <Flex align="center" gap={6} style={{ flexShrink: 0 }}>
-          {isActive && (
-            <Check
-              data-part="checkmark"
-              data-active={true}
-              style={{
-                width: 14,
-                height: 14,
-              }}
-            />
-          )}
-          {onDelete && (
-            <Box
-              as="button"
-              data-part="delete"
-              onClick={onDelete}
-              aria-label={`Delete ${view.label}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 28,
-                height: 28,
-                cursor: 'pointer',
-              }}
-            >
-              <Trash2 style={{ width: 13, height: 13 }} />
-            </Box>
-          )}
-        </Flex>
+            {isActive && (
+              <Check
+                data-part="checkmark"
+                data-active={true}
+                style={{
+                  width: 14,
+                  height: 14,
+                  flexShrink: 0,
+                }}
+              />
+            )}
+          </Flex>
+        </button>
+        {onDelete && (
+          <button
+            type="button"
+            data-part="delete"
+            onClick={onDelete}
+            aria-label={`Delete ${view.label}`}
+            style={{
+              alignSelf: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 28,
+              height: 28,
+              marginRight: 8,
+              cursor: 'pointer',
+            }}
+          >
+            <Trash2 style={{ width: 13, height: 13 }} />
+          </button>
+        )}
       </Flex>
     </Box>
   );

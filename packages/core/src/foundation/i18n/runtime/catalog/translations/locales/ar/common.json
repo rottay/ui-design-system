@@ -11,6 +11,7 @@
   "back": "رجوع",
   "next": "التالي",
   "previous": "السابق",
+  "finish": "إنهاء",
   "submit": "إرسال",
   "search": "بحث",
   "filter": "تصفية",
@@ -58,5 +59,16 @@
   "settings": "الإعدادات",
   "help": "مساعدة",
   "logout": "تسجيل الخروج",
-  "login": "تسجيل الدخول"
+  "login": "تسجيل الدخول",
+  "breadcrumb": "مسار التنقل",
+  "key_metrics": "المؤشرات الرئيسية",
+  "shortcuts": "الاختصارات",
+  "dashboard_status_live": "مباشر",
+  "dashboard_status_connected": "متصل",
+  "dashboard_status_syncing": "جارٍ المزامنة",
+  "dashboard_status_offline": "غير متصل",
+  "dashboard_status_warning": "تحذير",
+  "show_password": "إظهار كلمة المرور",
+  "hide_password": "إخفاء كلمة المرور",
+  "password_strength": "قوة كلمة المرور"
 }

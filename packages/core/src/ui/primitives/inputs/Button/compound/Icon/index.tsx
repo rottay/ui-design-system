@@ -70,7 +70,13 @@
 import React, { forwardRef } from 'react';
 import type { ReactNode, CSSProperties, MouseEvent } from 'react';
 import type { ButtonSize, ButtonVariant } from '../../contracts';
-import { SIZE_MAP, VARIANT_MAP } from '../../contracts';
+import ModernButton from '../../engines/modern';
+import ModernTooltip from '../../../../display/Tooltip/engines/modern';
+import { useOptionalTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
+import {
+  mergePersonalityStyle,
+  resolveButtonPersonalityStyle,
+} from '@/foundation/tokens/ts/runtime/personality';
 
 export interface ButtonIconProps {
   /** Icon to display */
@@ -96,46 +102,9 @@ export interface ButtonIconProps {
 }
 
 /**
- * Spinner size mapping to CSS variables
- */
-const SPINNER_SIZE_MAP = {
-  xs: 'var(--ds-button-spinner-size-xs)',
-  sm: 'var(--ds-button-spinner-size-sm)',
-  md: 'var(--ds-button-spinner-size-md)',
-  lg: 'var(--ds-button-spinner-size-lg)',
-  xl: 'var(--ds-button-spinner-size-xl)',
-};
-
-/**
- * Loading spinner for icon button
- */
-const LoadingSpinner: React.FC<{ size: keyof typeof SPINNER_SIZE_MAP }> = ({ size }) => {
-  const spinnerSize = SPINNER_SIZE_MAP[size] || SPINNER_SIZE_MAP.md;
-  return (
-    <svg
-      data-part="spinner"
-      width={spinnerSize}
-      height={spinnerSize}
-      viewBox="0 0 24 24"
-      fill="none"
-      style={{ animation: 'ds-button-spin 1s linear infinite' }}
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeDasharray="31.416"
-        strokeDashoffset="25"
-      />
-    </svg>
-  );
-};
-
-/**
- * Icon-only button component
+ * Icon-only button component. It intentionally composes the same Modern
+ * primitive as labelled Button instead of maintaining a second paint engine:
+ * focus, busy, forced-colors, tenant chrome and motion therefore cannot drift.
  */
 export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
   (
@@ -153,63 +122,32 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
     },
     ref
   ) => {
-    // Get size configuration
-    const sizeConfig = SIZE_MAP[size as keyof typeof SIZE_MAP] || SIZE_MAP.md;
-    const buttonSize = sizeConfig.height;
+    const tokens = useOptionalTokens();
+    const resolvedStyle = tokens
+      ? mergePersonalityStyle(style, resolveButtonPersonalityStyle(tokens))
+      : style;
 
-    // Get variant colors
-    const variantConfig = VARIANT_MAP[variant as keyof typeof VARIANT_MAP] || VARIANT_MAP.default;
-
-    const buttonStyle: CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: buttonSize,
-      height: buttonSize,
-      minWidth: buttonSize,
-      padding: 0,
-      cursor: disabled || loading ? 'not-allowed' : 'pointer',
-      opacity: disabled ? 0.5 : 1,
-      transition: 'all 0.2s ease',
-      ...({
-        '--ds-button-icon-bg': variantConfig.bg,
-        '--ds-button-icon-hover-bg': variantConfig.hoverBg,
-        '--ds-button-icon-border': variant === 'ghost' || variant === 'text' || variant === 'link'
-          ? 'none'
-          : `1px solid ${variantConfig.borderColor}`,
-        '--ds-button-icon-color': variantConfig.color,
-      } as CSSProperties),
-      ...style,
-    };
-
-    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-      if (disabled || loading) {
-        e.preventDefault();
-        return;
-      }
-      onClick?.(e);
-    };
-
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={`rottay-button-icon ds-button-icon rottay-button-icon--${size} rottay-button-icon--${variant} ${className}`}
-        data-part="trigger"
-        data-variant={variant}
-        data-disabled={disabled || loading ? 'true' : 'false'}
-        data-loading={loading ? 'true' : 'false'}
-        style={buttonStyle}
-        onClick={handleClick}
-        disabled={disabled || loading}
+    const control = (
+      <ModernButton
+        ref={ref as React.ForwardedRef<HTMLButtonElement | HTMLAnchorElement>}
+        className={`rottay-button-icon ds-button-icon ${className}`}
+        size={size}
+        variant={variant}
+        shape="default"
+        icon={icon}
+        loading={loading}
+        disabled={disabled}
+        onClick={onClick}
+        style={resolvedStyle}
         aria-label={ariaLabel}
-        aria-disabled={disabled || loading}
-        aria-busy={loading}
-        title={tooltip}
-      >
-        {loading ? <LoadingSpinner size={size as keyof typeof SPINNER_SIZE_MAP} /> : icon}
-      </button>
+      />
     );
+
+    return tooltip ? (
+      <ModernTooltip content={tooltip} recipe="bordered" placement="top">
+        {control}
+      </ModernTooltip>
+    ) : control;
   }
 );
 

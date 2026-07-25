@@ -36,7 +36,7 @@ export {
 export const ScrollArea = createEngineComponent<ScrollAreaProps>('ScrollArea', {
   /** Ant Design compatible wrapper with styled scrollbar */
   classic: () => import('./engines/classic'),
-  /** Tailwind CSS with utility scrollbar classes */
+  /** Token-driven; scrollbar paint and overflow contract live in the modern skin */
   modern: () => import('./engines/modern'),
   /** Pure CSS with ::-webkit-scrollbar customization */
   rustic: () => import('./engines/rustic'),

@@ -34,6 +34,9 @@
 
 import React from 'react';
 import type { PageShellProps } from '../../contracts';
+import Button from '../../../../../primitives/inputs/Button/engines/modern';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 /* ------------------------------------------------------------------ */
 /* Shared style constants                                              */
@@ -128,13 +131,15 @@ function TabButton({
       data-active={isActive ? 'true' : 'false'}
       style={{
         position: 'relative',
-        padding: '8px 16px',
-        fontSize: 13,
-        fontWeight: isActive ? 600 : 500,
-        lineHeight: 1.4,
-        marginBottom: -1,
+        minHeight: 'var(--ds-tabs-md-height)',
+        padding: 'var(--ds-tabs-md-padding)',
+        fontSize: 'var(--ds-tabs-md-font-size)',
+        fontWeight: isActive
+          ? 'var(--ds-tabs-item-font-weight-active)'
+          : 'var(--ds-tabs-item-font-weight)',
+        lineHeight: 'var(--ds-line-height-body)',
         cursor: 'pointer',
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
+        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
       }}
     >
       {label}
@@ -151,47 +156,34 @@ function TabButton({
  */
 function BackButton({
   label,
+  ariaLabel,
   onClick,
 }: {
   label?: string;
+  ariaLabel?: string;
   onClick: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label ? `Go back to ${label}` : 'Go back'}
+    <span
       data-part="back"
       data-has-label={label ? 'true' : 'false'}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 6,
-        padding: label ? '6px 12px 6px 8px' : '6px',
-        fontSize: 13,
-        fontWeight: 500,
-        lineHeight: 1.4,
-        cursor: 'pointer',
-        flexShrink: 0,
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}`,
-      }}
+      style={{ display: 'contents' }}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-        style={{ width: 16, height: 16, flexShrink: 0 }}
+      <Button
+        htmlType="button"
+        variant="ghost"
+        size="sm"
+        shape={label ? 'default' : 'circle'}
+        onClick={onClick}
+        aria-label={ariaLabel ?? label ?? 'Back'}
+        style={{ flexShrink: 0 }}
+        icon={(
+          <NavigationBackIcon size={15} decorative />
+        )}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-        />
-      </svg>
-      {label}
-    </button>
+        {label ?? <span className="ds-sr-only">{ariaLabel ?? 'Back'}</span>}
+      </Button>
+    </span>
   );
 }
 
@@ -212,6 +204,8 @@ function BackButton({
 export default function ModernPageShell(props: PageShellProps) {
   const {
     title,
+    eyebrow,
+    icon,
     hideHeader = false,
     subtitle,
     headerContent,
@@ -237,13 +231,13 @@ export default function ModernPageShell(props: PageShellProps) {
         data-part="root"
         data-loading="true"
         style={{
-          padding: '24px 24px 0',
+          padding: 'var(--ds-page-shell-header-padding)',
           maxWidth: maxWidth ?? undefined,
           margin: maxWidth ? '0 auto' : undefined,
           ...style,
         }}
       >
-        <div className="ds-pattern-page-shell__loading-skeleton" data-part="skeleton-group" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="ds-pattern-page-shell__loading-skeleton" data-part="skeleton-group" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-page-shell-item-gap)' }}>
           {/* Breadcrumb skeleton */}
           <div
             data-part="skeleton"
@@ -259,10 +253,10 @@ export default function ModernPageShell(props: PageShellProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              gap: 16,
+              gap: 'var(--ds-page-shell-section-gap)',
             }}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
               <div
                 data-part="skeleton"
                 style={{
@@ -283,7 +277,7 @@ export default function ModernPageShell(props: PageShellProps) {
                 }}
               />
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 'var(--ds-page-shell-action-gap)' }}>
               <div
                 data-part="skeleton"
                 style={{
@@ -327,8 +321,11 @@ export default function ModernPageShell(props: PageShellProps) {
       {!hideHeader && (
         <div
           data-part="header"
+          data-has-actions={actions ? 'true' : 'false'}
+          data-has-tabs={tabs && tabs.length > 0 ? 'true' : 'false'}
+          data-has-rich-content={headerContent ? 'true' : 'false'}
           style={{
-            padding: '20px 24px 0',
+            padding: 'var(--ds-page-shell-header-padding)',
           }}
         >
         {/* ---- Breadcrumb trail ---- */}
@@ -339,10 +336,10 @@ export default function ModernPageShell(props: PageShellProps) {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 6,
-              marginBottom: 12,
-              fontSize: 13,
-              lineHeight: 1.4,
+              gap: 'var(--ds-spacing-2, 8px)',
+              marginBottom: 'var(--ds-spacing-3, 12px)',
+              fontSize: 'var(--ds-font-size-sm)',
+              lineHeight: 'var(--ds-line-height-body)',
             }}
           >
             {breadcrumbs.map((bc, idx) => {
@@ -358,7 +355,7 @@ export default function ModernPageShell(props: PageShellProps) {
                       }}
                       aria-hidden="true"
                     >
-                      /
+                      <NavigationForwardIcon size={11} decorative />
                     </span>
                   )}
                   <BreadcrumbItem
@@ -380,7 +377,7 @@ export default function ModernPageShell(props: PageShellProps) {
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between',
-            gap: 16,
+            gap: 'var(--ds-page-shell-section-gap)',
             flexWrap: 'wrap',
           }}
         >
@@ -390,23 +387,32 @@ export default function ModernPageShell(props: PageShellProps) {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
+              gap: 'var(--ds-page-shell-item-gap)',
               minWidth: 0,
               flex: 1,
             }}
           >
             {back && (
-              <BackButton label={back.label} onClick={back.onClick} />
+              <BackButton label={back.label} ariaLabel={back.ariaLabel} onClick={back.onClick} />
             )}
+
+            {icon ? (
+              <span data-part="header-icon" aria-hidden="true">
+                {icon}
+              </span>
+            ) : null}
 
             {/* Title + badge + subtitle */}
             <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
+              {eyebrow ? (
+                <div data-part="eyebrow">{eyebrow}</div>
+              ) : null}
               <div
                 data-part="title-row"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 10,
+                  gap: 'var(--ds-page-shell-item-gap)',
                   flexWrap: 'wrap',
                 }}
               >
@@ -420,12 +426,10 @@ export default function ModernPageShell(props: PageShellProps) {
                     // static 24px exactly; it steps down toward 20px as the shell is
                     // squeezed by a sibling rail/chat panel.
                     fontSize: 'var(--ds-font-size-fluid-2xl, 1.5rem)',
-                    fontWeight: 700,
-                    lineHeight: 1.2,
-                    letterSpacing: '-0.025em',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    fontWeight: 'var(--ds-font-weight-bold)',
+                    lineHeight: 'var(--ds-line-height-display)',
+                    letterSpacing: 'var(--ds-letter-spacing-display)',
+                    textWrap: 'balance',
                   }}
                 >
                   {title}
@@ -437,8 +441,8 @@ export default function ModernPageShell(props: PageShellProps) {
                   data-part="subtitle"
                   style={{
                     margin: '4px 0 0',
-                    fontSize: 14,
-                    lineHeight: 1.5,
+                    fontSize: 'var(--ds-font-size-md)',
+                    lineHeight: 'var(--ds-line-height-body)',
                   }}
                 >
                   {subtitle}
@@ -454,7 +458,7 @@ export default function ModernPageShell(props: PageShellProps) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
+                gap: 'var(--ds-page-shell-action-gap)',
                 flexShrink: 0,
               }}
             >
@@ -464,7 +468,7 @@ export default function ModernPageShell(props: PageShellProps) {
         </div>
 
         {headerContent && (
-          <div data-part="header-content" style={{ marginTop: 18 }}>
+          <div data-part="header-content" style={{ marginTop: 'var(--ds-page-shell-section-gap)' }}>
             {headerContent}
           </div>
         )}
@@ -479,8 +483,8 @@ export default function ModernPageShell(props: PageShellProps) {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 0,
-              marginTop: 16,
+              gap: 'var(--ds-tabs-gap)',
+              marginTop: 'var(--ds-page-shell-section-gap)',
             }}
           >
             {tabs.map((tab) => (
@@ -497,7 +501,7 @@ export default function ModernPageShell(props: PageShellProps) {
           <div
             data-part="rule"
             style={{
-              marginTop: 16,
+              marginTop: 'var(--ds-page-shell-section-gap)',
             }}
           />
         )}
@@ -505,7 +509,7 @@ export default function ModernPageShell(props: PageShellProps) {
       )}
 
       {/* ---- Content area ---- */}
-      <div data-part="content" style={{ padding: '16px 24px 24px' }}>
+      <div data-part="content" style={{ padding: 'var(--ds-page-shell-content-padding)' }}>
         {tabs && tabs.length > 0
           ? tabs.find((t) => t.key === activeTabKey)?.content
           : children}

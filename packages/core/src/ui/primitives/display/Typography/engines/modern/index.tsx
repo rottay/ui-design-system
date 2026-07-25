@@ -49,6 +49,12 @@ import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } fro
 import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import {
+  normalizeLineClamp,
+  resolveFluidTypographySize,
+  resolveTypographyCraftStyle,
+  typographyDataAttributes,
+} from '../../runtime';
 
 /**
  * Heading sizes are intentionally one step larger than text sizes (e.g.
@@ -146,6 +152,17 @@ const ALIGN_CLASSES: Record<string, string> = {
   center: 'text-center',
   right: 'text-right',
   justify: 'text-justify',
+  start: 'text-start',
+  end: 'text-end',
+};
+
+const DEFAULT_HEADING_SIZE: Record<string, TextSize> = {
+  h1: '3xl',
+  h2: '2xl',
+  h3: 'xl',
+  h4: 'lg',
+  h5: 'md',
+  h6: 'sm',
 };
 
 /**
@@ -189,7 +206,21 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       color = TYPOGRAPHY_DEFAULTS.heading.color,
       truncate = TYPOGRAPHY_DEFAULTS.heading.truncate,
       lineClamp,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'balance',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
@@ -209,7 +240,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       responsiveEntries.push({
         cssProperty: 'font-size',
         value: size,
-        resolve: (v: TextSize) => SIZE_MAP.heading[v] || SIZE_MAP.heading.md,
+        resolve: (v: TextSize) => fluid ? resolveFluidTypographySize('heading', v) : SIZE_MAP.heading[v] || SIZE_MAP.heading.md,
       } as ResponsivePropEntry<any>);
       responsiveEntries.push({
         cssProperty: 'line-height',
@@ -230,6 +261,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       : null;
 
     const scalarSize = scalarOrUndefined(size);
+    const effectiveSize = scalarSize ?? DEFAULT_HEADING_SIZE[level];
 
     // Resolve the effective weight class. When the consumer explicitly
     // passes a weight we honour it; otherwise fall back to the
@@ -243,12 +275,13 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     // stray spaces from falsy entries (e.g. when size is undefined).
     // Heading size is now applied via inline fontSize (DS token), not
     // a Tailwind text-* class.
+    const normalizedClamp = normalizeLineClamp(lineClamp);
     const classes = [
       SCOPE_CLASSES,
       resolvedWeightClass,
       ALIGN_CLASSES[align],
       truncate ? 'truncate' : '',
-      lineClamp ? `line-clamp-${lineClamp}` : '',
+      normalizedClamp ? `line-clamp-${normalizedClamp}` : '',
       className,
     ]
       .filter(Boolean)
@@ -259,14 +292,35 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     // sizes. These inline styles give headings the editorial feel of
     // Linear/Vercel/Stripe typography.
     const typographyStyle: React.CSSProperties = {};
-    if (scalarSize && !sizeIsResponsive) {
-      typographyStyle.fontSize = HEADING_SIZE_STYLES[scalarSize] || HEADING_SIZE_STYLES.md;
-      const ls = HEADING_LETTER_SPACING[scalarSize];
+    if (!sizeIsResponsive && !textStyle) {
+      typographyStyle.fontSize = HEADING_SIZE_STYLES[effectiveSize] || HEADING_SIZE_STYLES.md;
+      const ls = HEADING_LETTER_SPACING[effectiveSize];
       if (ls && ls !== '0') {
         typographyStyle.letterSpacing = ls;
       }
-      typographyStyle.lineHeight = HEADING_LINE_HEIGHT[scalarSize] || '1.25';
+      typographyStyle.lineHeight = HEADING_LINE_HEIGHT[effectiveSize] || '1.25';
     }
+
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
+    const craftStyle = resolveTypographyCraftStyle({
+      ...craftProps,
+      kind: 'heading',
+      size: effectiveSize,
+      align,
+      truncate,
+      lineClamp,
+      responsive: sizeIsResponsive,
+    });
 
     return (
       <>
@@ -276,11 +330,18 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         <Component
           ref={ref as React.Ref<HTMLHeadingElement>}
           className={classes}
-          data-part="root"
-          data-color={color}
-          style={{ textWrap: 'balance', ...typographyStyle, ...style }}
-          {...(responsive ? responsive.attrs : {})}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
           {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part={dataPart ?? "root"}
+          data-color={color}
+          data-size={effectiveSize}
+          data-line-clamp={normalizedClamp}
+          {...typographyDataAttributes(craftProps)}
+          style={{ ...typographyStyle, ...craftStyle, ...style }}
         >
           {children}
         </Component>
@@ -307,7 +368,7 @@ ModernHeading.displayName = 'ModernHeading';
 export const ModernText = forwardRef<HTMLElement, TextProps>(
   (
     {
-      size: sizeProp = TYPOGRAPHY_DEFAULTS.text.size,
+      size: sizeRequested,
       weight = TYPOGRAPHY_DEFAULTS.text.weight,
       color = TYPOGRAPHY_DEFAULTS.text.color,
       align = TYPOGRAPHY_DEFAULTS.text.align,
@@ -319,13 +380,28 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       italic = TYPOGRAPHY_DEFAULTS.text.italic,
       monospace = TYPOGRAPHY_DEFAULTS.text.monospace,
       numeric,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'pretty',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
     },
     ref
   ) => {
+    const sizeProp = sizeRequested ?? TYPOGRAPHY_DEFAULTS.text.size;
     // The `as` prop controls the rendered HTML tag (span, em, strong, etc.)
     // giving consumers semantic flexibility without additional wrappers.
     const Component = as;
@@ -339,7 +415,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       responsiveEntries.push({
         cssProperty: 'font-size',
         value: sizeProp,
-        resolve: (v: TextSize) => SIZE_MAP.text[v] || SIZE_MAP.text.md,
+        resolve: (v: TextSize) => fluid ? resolveFluidTypographySize('text', v) : SIZE_MAP.text[v] || SIZE_MAP.text.md,
       } as ResponsivePropEntry<any>);
       responsiveEntries.push({
         cssProperty: 'line-height',
@@ -360,6 +436,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
     // keeping the compiled output minimal compared to inline style equivalents.
     // Text size is now applied via inline fontSize (DS token), not a Tailwind
     // text-* class.
+    const normalizedClamp = normalizeLineClamp(lineClamp);
     const classes = [
       SCOPE_CLASSES,
       WEIGHT_CLASSES[weight],
@@ -368,18 +445,43 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       strikethrough ? 'line-through' : '',
       italic ? 'italic' : '',
       monospace ? 'font-mono' : '',
-      truncate ? 'truncate' : '',
-      lineClamp ? `line-clamp-${lineClamp}` : '',
       numeric === 'tabular' ? 'ds-nums-tabular' : '',
+      truncate ? 'truncate' : '',
+      normalizedClamp ? `line-clamp-${normalizedClamp}` : '',
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
-    // Apply DS token-based font-size for non-responsive sizes
-    const textSizeStyle: React.CSSProperties = !sizeIsResponsive
-      ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
-      : {};
+    // Apply DS token-based font-size for non-responsive sizes. Semantic roles
+    // remain explicit until their defaults have deterministic visual evidence;
+    // silently opting every existing Text consumer into `body` would retune
+    // tenant typography without an application markup change.
+    const effectiveTextStyle = textStyle;
+    const textSizeStyle: React.CSSProperties =
+      !sizeIsResponsive && effectiveTextStyle === undefined
+        ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
+        : {};
+    const craftProps = {
+      textStyle: effectiveTextStyle,
+      family: monospace ? ('mono' as const) : family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
+    };
+    const craftStyle = resolveTypographyCraftStyle({
+      ...craftProps,
+      kind: 'text',
+      size,
+      align,
+      truncate,
+      lineClamp,
+      responsive: sizeIsResponsive,
+    });
 
     return (
       <>
@@ -389,11 +491,18 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
         <Component
           ref={ref as any}
           className={classes}
-          data-part="root"
-          data-color={color}
-          style={{ textWrap: 'pretty', ...textSizeStyle, ...style }}
-          {...(responsive ? responsive.attrs : {})}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
           {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part={dataPart ?? "root"}
+          data-color={color}
+          data-size={size}
+          data-line-clamp={normalizedClamp}
+          {...typographyDataAttributes(craftProps)}
+          style={{ ...textSizeStyle, ...craftStyle, ...style }}
         >
           {children}
         </Component>
@@ -420,13 +529,27 @@ ModernText.displayName = 'ModernText';
 export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   (
     {
-      size = TYPOGRAPHY_DEFAULTS.paragraph.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.paragraph.size,
       weight = TYPOGRAPHY_DEFAULTS.paragraph.weight,
       color = TYPOGRAPHY_DEFAULTS.paragraph.color,
       align = TYPOGRAPHY_DEFAULTS.paragraph.align,
       truncate = TYPOGRAPHY_DEFAULTS.paragraph.truncate,
       lineClamp,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'pretty',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
@@ -437,6 +560,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     // body text needs generous line-height and vertical rhythm to remain
     // readable at longer lengths. These can be overridden via className.
     // Paragraph size is now applied via inline fontSize (DS token).
+    const normalizedClamp = normalizeLineClamp(lineClamp);
     const classes = [
       SCOPE_CLASSES,
       WEIGHT_CLASSES[weight],
@@ -444,20 +568,79 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       'leading-relaxed',
       'mb-4',
       truncate ? 'truncate' : '',
-      lineClamp ? `line-clamp-${lineClamp}` : '',
+      normalizedClamp ? `line-clamp-${normalizedClamp}` : '',
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const paragraphSizeStyle: React.CSSProperties = {
-      fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
+    const reactId = useId();
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    if (sizeIsResponsive) {
+      responsiveEntries.push(
+        {
+          cssProperty: 'font-size',
+          value: sizeProp,
+          resolve: (value: TextSize) => fluid ? resolveFluidTypographySize('text', value) : SIZE_MAP.text[value] || SIZE_MAP.text.md,
+        } as ResponsivePropEntry<any>,
+        {
+          cssProperty: 'line-height',
+          value: sizeProp,
+          resolve: (value: TextSize) => LINE_HEIGHT_MAP.text[value] || '1.5',
+        } as ResponsivePropEntry<any>,
+      );
+    }
+    const responsive = responsiveEntries.length
+      ? generateResponsiveCSS(`paragraph-${reactId.replace(/:/g, '')}`, responsiveEntries)
+      : null;
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
+    const paragraphSizeStyle: React.CSSProperties = !sizeIsResponsive
+      ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
+      : {};
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
     };
+    const craftStyle = resolveTypographyCraftStyle({
+      ...craftProps,
+      kind: 'text',
+      size,
+      align,
+      truncate,
+      lineClamp,
+      responsive: sizeIsResponsive,
+    });
 
     return (
-      <p ref={ref} className={classes} data-part="root" data-color={color} style={{ ...paragraphSizeStyle, ...style }} {...props}>
-        {children}
-      </p>
+      <>
+        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+        <p
+          ref={ref}
+          className={classes}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part={dataPart ?? "root"}
+          data-color={color}
+          data-size={size}
+          data-line-clamp={normalizedClamp}
+          {...typographyDataAttributes(craftProps)}
+          style={{ ...paragraphSizeStyle, ...craftStyle, ...style }}
+        >
+          {children}
+        </p>
+      </>
     );
   }
 );
@@ -482,15 +665,29 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       href,
       target,
       rel,
-      size = TYPOGRAPHY_DEFAULTS.link.size,
+      size: sizeProp = TYPOGRAPHY_DEFAULTS.link.size,
       weight,
       color = TYPOGRAPHY_DEFAULTS.link.color,
       underlineOnHover = TYPOGRAPHY_DEFAULTS.link.underlineOnHover,
       underline = TYPOGRAPHY_DEFAULTS.link.underline,
       disabled = TYPOGRAPHY_DEFAULTS.link.disabled,
       strong = TYPOGRAPHY_DEFAULTS.link.strong,
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap = 'auto',
+      hyphenate,
+      contrast,
+      motion = 'none',
+      lang,
+      dir,
+      translate,
+      title,
       onClick,
       children,
+      'data-part': dataPart,
       className,
       style,
       ...props
@@ -519,29 +716,78 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       .filter(Boolean)
       .join(' ');
 
-    const linkSizeStyle: React.CSSProperties = {
-      fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
+    const reactId = useId();
+    const sizeIsResponsive = isResponsiveValue(sizeProp);
+    const responsiveEntries: ResponsivePropEntry<any>[] = [];
+    if (sizeIsResponsive) {
+      responsiveEntries.push(
+        {
+          cssProperty: 'font-size',
+          value: sizeProp,
+          resolve: (value: TextSize) => fluid ? resolveFluidTypographySize('text', value) : SIZE_MAP.text[value] || SIZE_MAP.text.md,
+        } as ResponsivePropEntry<any>,
+        {
+          cssProperty: 'line-height',
+          value: sizeProp,
+          resolve: (value: TextSize) => LINE_HEIGHT_MAP.text[value] || '1.5',
+        } as ResponsivePropEntry<any>,
+      );
+    }
+    const responsive = responsiveEntries.length
+      ? generateResponsiveCSS(`link-${reactId.replace(/:/g, '')}`, responsiveEntries)
+      : null;
+    const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;
+    const linkSizeStyle: React.CSSProperties = !sizeIsResponsive
+      ? { fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md }
+      : {};
+    const craftProps = {
+      textStyle,
+      family,
+      fluid,
+      leading,
+      tracking,
+      wrap,
+      hyphenate,
+      contrast,
+      motion,
     };
+    const craftStyle = resolveTypographyCraftStyle({
+      ...craftProps,
+      kind: 'text',
+      size,
+      truncate: false,
+      responsive: sizeIsResponsive,
+    });
 
     return (
-      /* Disabled links have href removed entirely so they are not
-          navigable via keyboard or assistive technology. */
-      <a
-        ref={ref}
-        href={disabled ? undefined : href}
-        target={target}
-        rel={computedRel}
-        onClick={disabled ? undefined : onClick}
-        className={classes}
-        data-part="root"
-        data-color={color}
-        data-disabled={disabled || undefined}
-        style={{ ...linkSizeStyle, ...style }}
-        aria-disabled={disabled}
-        {...props}
-      >
-        {children}
-      </a>
+      <>
+        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+        {/* Disabled links have href removed entirely so they are not
+            navigable via keyboard or assistive technology. */}
+        <a
+          ref={ref}
+          href={disabled ? undefined : href}
+          target={target}
+          rel={computedRel}
+          onClick={disabled ? undefined : onClick}
+          className={classes}
+          lang={lang}
+          dir={dir}
+          translate={translate}
+          title={title}
+          {...props}
+          {...(responsive ? responsive.attrs : {})}
+          data-part={dataPart ?? "root"}
+          data-color={color}
+          data-size={size}
+          data-disabled={disabled || undefined}
+          {...typographyDataAttributes(craftProps)}
+          style={{ ...linkSizeStyle, ...craftStyle, ...style }}
+          aria-disabled={disabled || undefined}
+        >
+          {children}
+        </a>
+      </>
     );
   }
 );

@@ -36,12 +36,16 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { AriaRole, ReactNode } from "react";
+import type {
+  BaseComponentProps,
+  EngineAwareProps,
+} from "../../../../../foundation/contracts";
 
-export type ContainerMaxWidth = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
-export type ContainerPadding = 'none' | 'sm' | 'md' | 'lg';
+export type ContainerMaxWidth = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+export type ContainerPadding = "none" | "sm" | "md" | "lg";
 
-export interface ContainerProps {
+export interface ContainerProps extends BaseComponentProps, EngineAwareProps {
   /** Maximum width of the container */
   maxWidth?: ContainerMaxWidth | number;
   /** Center the container horizontally */
@@ -52,33 +56,35 @@ export interface ContainerProps {
   fluid?: boolean;
   /** Container content */
   children?: ReactNode;
-  /** Additional CSS classes */
-  className?: string;
-  /** Inline styles */
-  style?: CSSProperties;
+  /** Optional landmark or grouping role forwarded to the root. */
+  role?: AriaRole;
+  /** BCP 47 language metadata for localized descendants. */
+  lang?: string;
+  /** Logical reading direction used by centering and descendant layout. */
+  dir?: "ltr" | "rtl" | "auto";
 }
 
 export const CONTAINER_DEFAULTS: Partial<ContainerProps> = {
   center: true,
-  padding: 'md',
+  padding: "md",
   fluid: false,
-  maxWidth: 'lg',
+  maxWidth: "lg",
 };
 
 /** Max width values — resolves through DS CSS custom properties */
 export const CONTAINER_MAX_WIDTHS: Record<ContainerMaxWidth, string> = {
-  sm: 'var(--ds-container-sm, 640px)',
-  md: 'var(--ds-container-md, 768px)',
-  lg: 'var(--ds-container-lg, 1024px)',
-  xl: 'var(--ds-container-xl, 1280px)',
-  '2xl': 'var(--ds-container-2xl, 1536px)',
-  full: '100%',
+  sm: "var(--ds-container-sm, 640px)",
+  md: "var(--ds-container-md, 768px)",
+  lg: "var(--ds-container-lg, 1024px)",
+  xl: "var(--ds-container-xl, 1280px)",
+  "2xl": "var(--ds-container-2xl, 1536px)",
+  full: "100%",
 };
 
 /** Padding values — resolves through DS CSS custom properties */
 export const CONTAINER_PADDINGS: Record<ContainerPadding, string> = {
-  none: '0',
-  sm: 'var(--ds-spacing-2, 8px)',
-  md: 'var(--ds-spacing-4, 16px)',
-  lg: 'var(--ds-spacing-6, 24px)',
+  none: "0",
+  sm: "var(--ds-spacing-2, 8px)",
+  md: "var(--ds-spacing-4, 16px)",
+  lg: "var(--ds-spacing-6, 24px)",
 };

@@ -13,7 +13,7 @@
  * - **Tagging systems**: #hashtags, #topics, #categories
  *
  * Key features:
- * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (custom, skin-painted), Rustic (Vanilla)
  * - **Custom prefixes**: Support for @, #, or any custom trigger
  * - **Multiple prefixes**: Different suggestions for different triggers
  * - **Async search**: Fetch suggestions dynamically
@@ -73,7 +73,7 @@
  * // Classic engine (Ant Design - default)
  * <Mentions engine="classic" options={users} autoSize />
  *
- * // Modern engine (DaisyUI/Tailwind)
+ * // Modern engine (custom, skin-painted)
  * <Mentions engine="modern" options={users} rows={5} />
  *
  * // Rustic engine (Pure HTML/CSS)
@@ -106,7 +106,7 @@ export {
  *
  * Engines:
  * - **classic**: Full-featured implementation using Ant Design (default)
- * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **modern**: Lightweight custom implementation painted by the modern skin
  * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const Mentions = createEngineComponent<MentionsProps>('Mentions', {

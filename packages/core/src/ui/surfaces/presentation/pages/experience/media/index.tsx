@@ -46,7 +46,7 @@ function DefaultMediaCard({
             <Stack spacing="xs">
               {item.title && <Text style={{ fontWeight: 700 }}>{item.title}</Text>}
               {item.description && (
-                <Text className="ds-media__muted-text" data-part="muted-text">{item.description}</Text>
+                <Text className="ds-media__muted-text">{item.description}</Text>
               )}
               {item.meta}
             </Stack>
@@ -213,7 +213,7 @@ export function MediaSurface({
                     <Stack spacing="xs">
                       {selectedItem.meta}
                       {selectedItem.description && (
-                        <Text className="ds-media__muted-text" data-part="muted-text">
+                        <Text className="ds-media__muted-text">
                           {selectedItem.description}
                         </Text>
                       )}

@@ -12,34 +12,44 @@
  * @package @rottay/design-system
  */
 
-import type { EngineAwareProps } from '../../../../../foundation/contracts';
-import type { ReactNode, CSSProperties } from 'react';
+import type {
+  BaseComponentProps,
+  EngineAwareProps,
+} from "../../../../../foundation/contracts";
+import type { AriaRole, ReactNode } from "react";
 
-export type AspectRatioPreset = '1/1' | '4/3' | '16/9' | '21/9' | '3/2' | '2/3' | '9/16';
+export type AspectRatioPreset =
+  | "1/1"
+  | "4/3"
+  | "16/9"
+  | "21/9"
+  | "3/2"
+  | "2/3"
+  | "9/16";
 
-export interface AspectRatioProps extends EngineAwareProps {
+export interface AspectRatioProps extends BaseComponentProps, EngineAwareProps {
   /** Aspect ratio as a number (width / height). Default is 16/9. */
   ratio?: number;
   /** Children content to render inside the aspect ratio container */
   children?: ReactNode;
-  /** Additional CSS class */
-  className?: string;
-  /** Inline styles applied to the outer container */
-  style?: CSSProperties;
   /** Max width of the container */
   maxWidth?: string | number;
-  /** Data test id */
-  'data-testid'?: string;
+  /** Optional semantic role forwarded to the root media frame. */
+  role?: AriaRole;
+  /** BCP 47 language metadata for localized descendants. */
+  lang?: string;
+  /** Logical reading direction inherited by descendants. */
+  dir?: "ltr" | "rtl" | "auto";
 }
 
 export const RATIO_PRESETS: Record<AspectRatioPreset, number> = {
-  '1/1': 1,
-  '4/3': 4 / 3,
-  '16/9': 16 / 9,
-  '21/9': 21 / 9,
-  '3/2': 3 / 2,
-  '2/3': 2 / 3,
-  '9/16': 9 / 16,
+  "1/1": 1,
+  "4/3": 4 / 3,
+  "16/9": 16 / 9,
+  "21/9": 21 / 9,
+  "3/2": 3 / 2,
+  "2/3": 2 / 3,
+  "9/16": 9 / 16,
 };
 
 export const ASPECT_RATIO_DEFAULTS = {

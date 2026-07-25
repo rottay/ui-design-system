@@ -1,16 +1,24 @@
 /**
- * @fileoverview Modern Tree engine -- DaisyUI/Tailwind implementation.
+ * @fileoverview Modern Tree engine -- semantic markup painted by the modern skin.
  *
- * Full-featured hierarchical tree built with DaisyUI classes and Tailwind utilities.
- * Implements expand/collapse, checkable nodes with cascading half-checked state,
- * drag-and-drop reordering, async child loading, search/filter with auto-expand,
- * tree-line connectors, and WAI-ARIA TreeView keyboard navigation -- all without
- * Ant Design.
+ * Full-featured hierarchical tree. Implements expand/collapse, checkable nodes
+ * with cascading half-checked state, drag-and-drop reordering, async child
+ * loading, search/filter with auto-expand, tree-line connectors, and WAI-ARIA
+ * TreeView keyboard navigation -- all without Ant Design.
+ *
+ * All paint (connector lines, row hover/selection, drop indicator, checkbox
+ * tint, search highlight) and static geometry (switcher size, icon box, row
+ * padding) live in the modern skin
+ * (`foundation/tokens/css/runtime/engines/modern/skin/tree.css`), keyed on the
+ * `data-part` hooks stamped here. The DaisyUI checkbox classes and the
+ * Tailwind `absolute border-l` connector paint are gone. Inline styles are
+ * reserved for per-level computed offsets -- which are LOGICAL
+ * (inline-start) so indentation and connectors mirror correctly in RTL.
  *
  * The component is split into a recursive `TreeNodeInternal` (one per visible node)
  * and a root `ModernTree` that manages shared state and event handlers.
  *
- * Engine: **DaisyUI / Tailwind CSS**
+ * Engine: **Modern skin (`rottay-tree rottay-tree--modern`) + data-part hooks**
  *
  * @example
  * ```tsx
@@ -28,6 +36,7 @@ import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { TreeProps, TreeDataNode } from '../../contracts';
 import { TREE_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   type TreeEngineKey,
   normalizeTreeKey,
@@ -56,7 +65,7 @@ function highlightText(text: React.ReactNode, searchValue: string): React.ReactN
   return (
     <>
       {before}
-      <span className="rottay-tree-search-highlight rounded-sm px-0.5" data-part="tree-node-highlight">
+      <span className="rottay-tree-search-highlight" data-part="tree-node-highlight">
         {match}
       </span>
       {after}
@@ -94,23 +103,19 @@ const DropIndicator: React.FC<{
   level: number;
 }> = ({ position, level }) => {
   if (position === 'inside') return null;
-  const left = level * 24;
+  const indent = level * 24;
   return (
     <div
-      className="absolute left-0 right-0 pointer-events-none z-10"
       data-part="drop-indicator"
       style={{
         top: position === 'before' ? -1 : undefined,
         bottom: position === 'after' ? -1 : undefined,
-        paddingLeft: left,
+        // The indentation tracks the node's logical inline-start so the
+        // indicator lines up under the title in both LTR and RTL.
+        paddingInlineStart: indent,
       }}
     >
-      <div
-        className="h-0.5 rounded-full"
-        style={{
-          animation: 'rottay-drop-indicator var(--ds-motion-slow) ease-out',
-        }}
-      />
+      <div />
     </div>
   );
 };
@@ -129,6 +134,8 @@ interface TreeNodeInternalProps extends TreeDataNode {
   isLoading: boolean;
   isFocused: boolean;
   isFiltered: boolean;
+  /** The key that carries the tree's single tab stop (roving tabindex). */
+  tabbableKey: TreeEngineKey | null;
   onToggle: (key: TreeEngineKey) => void;
   onSelect: (key: TreeEngineKey, node: TreeDataNode) => void;
   onCheck: (key: TreeEngineKey, node: TreeDataNode) => void;
@@ -176,6 +183,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   isLoading,
   isFocused,
   isFiltered,
+  tabbableKey,
   onToggle,
   onSelect,
   onCheck,
@@ -207,15 +215,33 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   // Non-leaf nodes without children are assumed to support async loading,
   // so they get an expander arrow that triggers loadData on first click.
   const showExpander = (hasChildren || (!isLeaf && !hasChildren)) && !isLeaf;
-  // Modern engine uses paddingLeft via inline style because Tailwind's pl-*
-  // utilities are static and don't support dynamic token values.
-  const paddingLeft = level === 0 ? 0 : `calc(${level} * var(--ds-tree-indent, 24px))`;
+  // Indentation is computed per level, so it stays inline -- but it is a
+  // LOGICAL inline-start offset, so the hierarchy indents from the correct
+  // side in RTL. Static padding lives in the skin.
+  const paddingInlineStart = level === 0 ? 0 : `calc(${level} * var(--ds-tree-indent, 24px))`;
 
   const isDraggable = propDraggable && !disabled;
   const isDropTarget = dropTarget?.key === nodeKey;
   const dropPosition = isDropTarget ? dropTarget!.position : null;
 
   const displayTitle = searchValue ? highlightText(title, searchValue) : title;
+
+  // Accessibility labels: translated when an I18nProvider is mounted, with the
+  // documented English fallback otherwise (a missing catalog key echoes back,
+  // which the endsWith guard detects).
+  const i18n = useOptionalTranslation('components');
+  const treeLabel = (
+    key: string,
+    fallback: string,
+    params?: Record<string, string | number>
+  ): string => {
+    const translated = i18n?.t(key, params);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
+  const collapseLabel = treeLabel('tree.collapse', 'Collapse');
+  const expandLabel = treeLabel('tree.expand', 'Expand');
+  const nodeTitle = typeof title === 'string' ? title : '';
+  const selectNodeLabel = treeLabel('tree.select_node', `Select ${nodeTitle}`, { title: nodeTitle });
 
   const handleClick = () => {
     if (disabled) return;
@@ -249,32 +275,31 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             !pIsLast ? (
               <div
                 key={i}
-                className="absolute top-0 bottom-0 border-l"
                 data-part="connector"
                 data-axis="vertical"
                 style={{
-                  left: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)`,
+                  insetInlineStart: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)`,
+                  top: 0,
+                  bottom: 0,
                 }}
               />
             ) : null
           )}
           <div
-            className="absolute border-t"
             data-part="connector"
             data-axis="horizontal"
             style={{
-              left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
+              insetInlineStart: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
               top: '50%',
               width: 12,
             }}
           />
           {isLast && (
             <div
-              className="absolute border-l"
               data-part="connector"
               data-axis="vertical"
               style={{
-                left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
+                insetInlineStart: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
                 height: '50%',
               }}
@@ -282,11 +307,10 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           )}
           {!isLast && (
             <div
-              className="absolute border-l"
               data-part="connector"
               data-axis="vertical"
               style={{
-                left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
+                insetInlineStart: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
                 bottom: 0,
               }}
@@ -319,8 +343,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           .filter(Boolean)
           .join(' ')}
         style={{
-          padding: 'var(--ds-tree-node-padding, 4px 8px)',
-          paddingLeft,
+          paddingInlineStart,
           ...(isFocused
             ? ({
                 '--tw-ring-color': 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)',
@@ -339,7 +362,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         aria-disabled={disabled}
         aria-checked={checkable ? (isHalfChecked ? 'mixed' : isChecked) : undefined}
         aria-level={level + 1}
-        tabIndex={isFocused ? 0 : -1}
+        tabIndex={nodeKey === tabbableKey ? 0 : -1}
         data-tree-node-key={nodeKey}
         data-part="row"
         data-selected={isSelected ? 'true' : 'false'}
@@ -375,20 +398,8 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           <button
             type="button"
             data-part="tree-node-toggle"
-            style={{
-              width: 'var(--ds-tree-switcher-size, 24px)',
-              height: 'var(--ds-tree-switcher-size, 24px)',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 0,
-              fontSize: 12,
-              marginRight: 4,
-              flexShrink: 0,
-            }}
             onClick={handleToggle}
-            aria-label={isExpanded ? 'Collapse' : 'Expand'}
+            aria-label={isExpanded ? collapseLabel : expandLabel}
             tabIndex={-1}
           >
             <span
@@ -405,21 +416,16 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             </span>
           </button>
         ) : (
-          <span className="w-6 mr-1 flex-shrink-0" />
+          <span data-part="switcher-spacer" aria-hidden="true" />
         )}
 
-        {/* Checkbox */}
-        {/* DaisyUI checkbox-primary provides themed coloring. The indeterminate
-            state is set via ref because there is no HTML attribute for it --
-            the checkbox-indeterminate class only styles, it does not set the property. */}
+        {/* The indeterminate state is set via ref because there is no HTML
+            attribute for it; the browser paints the indeterminate mark
+            natively, and the skin tints the control with accent-color. */}
         {checkable && (
           <input
             type="checkbox"
             data-part="checkbox"
-            className={[
-              'checkbox checkbox-sm checkbox-primary mr-2 flex-shrink-0',
-              isHalfChecked ? 'checkbox-indeterminate' : '',
-            ].join(' ')}
             checked={isChecked}
             ref={(el) => {
               if (el) el.indeterminate = isHalfChecked && !isChecked;
@@ -427,22 +433,14 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             disabled={disabled || disableCheckbox}
             onChange={handleCheck}
             onClick={(e) => e.stopPropagation()}
-            style={{ marginRight: 'var(--ds-tree-checkbox-margin, 8px)' }}
-            aria-label={`Select ${typeof title === 'string' ? title : ''}`}
+            aria-label={selectNodeLabel}
             tabIndex={-1}
           />
         )}
 
         {/* Icon */}
         {showIcon && icon && (
-          <span
-            className="mr-2 flex-shrink-0 flex items-center"
-            data-part="icon"
-            style={{
-              width: 'var(--ds-tree-icon-size, 16px)',
-              height: 'var(--ds-tree-icon-size, 16px)',
-            }}
-          >
+          <span data-part="icon">
             {icon}
           </span>
         )}
@@ -477,6 +475,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 isLoading={loadingKeys.includes(childKey)}
                 isFocused={focusedKey === childKey}
                 isFiltered={filteredKeys ? filteredKeys.has(childKey) : true}
+                tabbableKey={tabbableKey}
                 onToggle={onToggle}
                 onSelect={onSelect}
                 onCheck={onCheck}
@@ -634,6 +633,11 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   // visible nodes (respecting which branches are expanded). This powers
   // ArrowUp/ArrowDown keyboard navigation with O(1) index lookups.
   const visibleKeys = useMemo(() => flattenVisibleKeys(treeData, actualExpandedKeys), [treeData, actualExpandedKeys]);
+
+  // The roving tab stop: while no node has been keyboard-focused, the first
+  // visible node carries it so a Tab into the tree lands somewhere (WAI-ARIA
+  // TreeView). Once focus moves, focusedKey owns the stop.
+  const tabbableKey = focusedKey ?? arrayValueAt(visibleKeys, 0) ?? null;
 
   // -----------------------------------------------------------------------
   // Event handlers
@@ -807,14 +811,13 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      // Auto-focus the first visible node when the tree receives keyboard
-      // input but no node is focused yet (e.g., first Tab into the tree).
-      if (!focusedKey) {
-        const firstKey = arrayValueAt(visibleKeys, 0);
-        if (firstKey !== undefined) setFocusedKey(firstKey);
-        return;
-      }
-      const currentIndex = visibleKeys.indexOf(focusedKey);
+      // Roving-stop bootstrap: Tab lands DOM focus on the tabbable node
+      // WITHOUT setting focusedKey. Anchor on that node instead of swallowing
+      // the first keystroke -- previously the auto-init path consumed the
+      // first ArrowDown just to set state, and DOM focus never moved.
+      const anchorKey = focusedKey ?? tabbableKey;
+      if (anchorKey === null) return;
+      const currentIndex = visibleKeys.indexOf(anchorKey);
       if (currentIndex === -1) return;
 
       switch (e.key) {
@@ -840,19 +843,19 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         }
         case 'ArrowRight': {
           e.preventDefault();
-          const node = findNode(focusedKey);
-          if (node && node.children && node.children.length > 0 && !actualExpandedKeys.includes(focusedKey)) {
-            handleToggle(focusedKey);
+          const node = findNode(anchorKey);
+          if (node && node.children && node.children.length > 0 && !actualExpandedKeys.includes(anchorKey)) {
+            handleToggle(anchorKey);
           }
           break;
         }
         case 'ArrowLeft': {
           e.preventDefault();
-          if (actualExpandedKeys.includes(focusedKey)) {
-            handleToggle(focusedKey);
+          if (actualExpandedKeys.includes(anchorKey)) {
+            handleToggle(anchorKey);
           } else {
             // Move to parent
-            const parentKey = parentMap.get(focusedKey);
+            const parentKey = parentMap.get(anchorKey);
             if (parentKey !== undefined) {
               setFocusedKey(parentKey);
               nodeRefs.current.get(parentKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
@@ -863,18 +866,18 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         case ' ': {
           e.preventDefault();
           if (checkable) {
-            const node = findNode(focusedKey);
+            const node = findNode(anchorKey);
             if (node && !node.disabled && !node.disableCheckbox) {
-              handleCheck(focusedKey, node);
+              handleCheck(anchorKey, node);
             }
           }
           break;
         }
         case 'Enter': {
           e.preventDefault();
-          const node = findNode(focusedKey);
+          const node = findNode(anchorKey);
           if (node && !node.disabled) {
-            handleSelect(focusedKey, node);
+            handleSelect(anchorKey, node);
           }
           break;
         }
@@ -882,6 +885,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
     },
     [
       focusedKey,
+      tabbableKey,
       visibleKeys,
       actualExpandedKeys,
       findNode,
@@ -926,6 +930,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
             isLoading={loadingKeys.includes(nodeKey)}
             isFocused={focusedKey === nodeKey}
             isFiltered={filteredKeys ? filteredKeys.has(nodeKey) : true}
+            tabbableKey={tabbableKey}
             onToggle={handleToggle}
             onSelect={handleSelect}
             onCheck={handleCheck}

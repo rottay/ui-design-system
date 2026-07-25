@@ -43,6 +43,9 @@ import React, { forwardRef, useId } from 'react';
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import type { ButtonProps, ButtonSize } from '../../contracts';
+import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
+
 import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP, resolveButtonBusyState } from '../../contracts';
 import {
   generateResponsiveCSS,
@@ -50,7 +53,6 @@ import {
   scalarOrUndefined,
   type ResponsivePropEntry,
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
 /**
  * The variants the modern skin paints. An unknown variant falls back to
@@ -62,7 +64,7 @@ import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/v
  * added here without a rule there renders unpainted, and the state matrix in
  * `packages/showroom/e2e/visual/states.spec.ts` is what says so.
  */
-const KNOWN_VARIANTS: ReadonlySet<string> = new Set([
+const KNOWN_VARIANT_VALUES = [
   'primary',
   'secondary',
   'default',
@@ -74,8 +76,43 @@ const KNOWN_VARIANTS: ReadonlySet<string> = new Set([
   'success',
   'warning',
   'info',
+  'ai',
   'link',
-]);
+] as const;
+const KNOWN_VARIANTS: ReadonlySet<string> = new Set(KNOWN_VARIANT_VALUES);
+
+const BUTTON_SHAPES = ['default', 'circle', 'round'] as const;
+
+const axisFromDomain = <const Value extends string>(values: readonly Value[]) =>
+  Object.fromEntries(
+    [...values].map((value) => [value, { root: `rottay-button--${value}` }])
+  ) as Record<Value, { root: string }>;
+
+/**
+ * DS-S001 recipe: the same semantic classes the skin has always selected on,
+ * resolved through the Rottay recipe engine. Axis order mirrors the historical
+ * class order exactly (variant, size, shape, then the boolean states).
+ */
+export const modernButtonRecipe = defineRecipe({
+  name: 'button',
+  slots: { root: ['rottay-button', 'rottay-button--modern'] },
+  axes: {
+    variant: axisFromDomain(KNOWN_VARIANT_VALUES),
+    size: axisFromDomain(
+      Object.keys(BUTTON_SIZE_MAP) as Array<keyof typeof BUTTON_SIZE_MAP>
+    ),
+    shape: axisFromDomain(BUTTON_SHAPES),
+    block: { true: { root: 'rottay-button--block' } },
+    loading: { true: { root: 'rottay-button--loading' } },
+    pending: { true: { root: 'rottay-button--pending' } },
+    disabled: { true: { root: 'rottay-button--disabled' } },
+    shadow: { true: { root: 'rottay-button--shadow' } },
+    gradient: { true: { root: 'rottay-button--gradient' } },
+    pulse: { true: { root: 'rottay-button--pulse' } },
+    bordered: { true: { root: 'rottay-button--bordered' } },
+  },
+  defaults: {},
+});
 
 // ---------------------------------------------------------------------------
 // Loading spinner
@@ -85,40 +122,31 @@ const KNOWN_VARIANTS: ReadonlySet<string> = new Set([
  * text color. Size-aware: smaller buttons get a smaller spinner.
  */
 const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
-  const spinnerSize =
-    size === 'xs' ? 12
-    : size === 'sm' ? 14
-    : size === 'lg' || size === 'xl' ? 18
-    : 16;
-
   return (
     <svg
-      width={spinnerSize}
-      height={spinnerSize}
+      data-part="spinner"
+      data-size={size}
       viewBox="0 0 24 24"
       fill="none"
-      style={{
-        animation: 'ds-button-spin var(--ds-motion-glacial) linear infinite',
-        flexShrink: 0,
-      }}
+      aria-hidden="true"
+      focusable="false"
     >
       <circle
+        data-part="spinner-track"
         cx="12"
         cy="12"
         r="10"
         stroke="currentColor"
-        strokeWidth="2.5"
         strokeLinecap="round"
         strokeDasharray="31.416"
         strokeDashoffset="10"
-        opacity="0.2"
       />
       <circle
+        data-part="spinner-indicator"
         cx="12"
         cy="12"
         r="10"
         stroke="currentColor"
-        strokeWidth="2.5"
         strokeLinecap="round"
         strokeDasharray="31.416"
         strokeDashoffset="25"
@@ -142,12 +170,12 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
  * @param ref   - Forwarded ref attached to the native `<button>` element.
  * @returns A premium-styled button with token-driven interaction animations.
  */
-const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>((props, ref) => {
   const {
     children,
-    variant = BUTTON_DEFAULTS.variant,
-    size: sizeProp = BUTTON_DEFAULTS.size,
-    shape = BUTTON_DEFAULTS.shape,
+    variant: variantProp,
+    size: sizeProp,
+    shape: shapeProp,
     htmlType = BUTTON_DEFAULTS.htmlType,
     disabled = BUTTON_DEFAULTS.disabled,
     loading = BUTTON_DEFAULTS.loading,
@@ -162,11 +190,57 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     prefix,
     suffix,
     shadow,
+    gradient,
+    pulse,
+    bordered,
+    radius,
+    href,
+    target,
+    rel,
+    // Reserved for a future cross-engine Slot contract. It is consumed here
+    // so it can never leak as a non-standard DOM attribute.
+    asChild: _asChild,
     onClick,
     className = '',
     style,
+    onPointerEnter,
+    onPointerLeave,
+    onPointerDown,
+    onPointerUp,
+    onPointerCancel,
+    onKeyDown,
+    onKeyUp,
+    onFocus,
+    onBlur,
+    // P-79: an explicit caller data-part wins over the default root anatomy
+    // part ('trigger'); the default applies only when the caller passed none.
+    'data-part': dataPart,
     ...nativeButtonProps
   } = props;
+
+  void _asChild;
+
+  // DS-S001: profile defaults apply only where the caller left the axis
+  // unset; explicit props always win, then the engine default.
+  const buttonProfileDefaults = useRecipeProfileDefaults('button');
+  const variant =
+    variantProp ??
+    (typeof buttonProfileDefaults.variant === 'string'
+      ? (buttonProfileDefaults.variant as ButtonProps['variant'])
+      : undefined) ??
+    BUTTON_DEFAULTS.variant;
+  const shape =
+    shapeProp ??
+    (typeof buttonProfileDefaults.shape === 'string'
+      ? (buttonProfileDefaults.shape as ButtonProps['shape'])
+      : undefined) ??
+    BUTTON_DEFAULTS.shape;
+  const resolvedSizeProp =
+    sizeProp ??
+    (typeof buttonProfileDefaults.size === 'string'
+      ? (buttonProfileDefaults.size as ButtonSize)
+      : undefined) ??
+    BUTTON_DEFAULTS.size;
 
   // Single documented resolution point for the overlapping busy props (see
   // `resolveButtonBusyState` in Button.types.ts for the precedence rules).
@@ -191,30 +265,58 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const isFocused = interaction.focusVisible;
 
   const isFullWidth = fullWidth ?? block;
-  const isIconOnly = !children && (icon || prefix || suffix);
+  const hasLabel = React.Children.count(children) > 0;
+  const isIconOnly = !hasLabel && Boolean(icon || prefix || suffix);
 
   // -------------------------------------------------------------------------
   // Responsive size handling
   // -------------------------------------------------------------------------
   const reactId = useId();
   const responsiveEntries: ResponsivePropEntry<any>[] = [];
-  const sizeIsResponsive = isResponsiveValue(sizeProp);
+  const sizeIsResponsive = isResponsiveValue(resolvedSizeProp);
 
   if (sizeIsResponsive) {
     responsiveEntries.push({
-      cssProperty: 'height',
-      value: sizeProp,
+      cssProperty: '--ds-button-resolved-height',
+      value: resolvedSizeProp,
       resolve: (v: ButtonSize) => (BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).height,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
-      cssProperty: 'padding',
-      value: sizeProp,
-      resolve: (v: ButtonSize) => (BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).padding,
+      cssProperty: '--ds-button-resolved-padding-y',
+      value: resolvedSizeProp,
+      resolve: (v: ButtonSize) => `var(--ds-button-${v}-padding-y)`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'padding-inline',
+      value: resolvedSizeProp,
+      resolve: (v: ButtonSize) =>
+        `calc(var(--ds-button-${v}-padding-x) * var(--ds-density-effective-scale, 1))`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: 'font-size',
-      value: sizeProp,
+      value: resolvedSizeProp,
       resolve: (v: ButtonSize) => (BUTTON_SIZE_MAP[v as keyof typeof BUTTON_SIZE_MAP] || BUTTON_SIZE_MAP.md).fontSize,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'line-height',
+      value: resolvedSizeProp,
+      resolve: (v: ButtonSize) => `var(--ds-button-${v}-line-height)`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'gap',
+      value: resolvedSizeProp,
+      resolve: (v: ButtonSize) =>
+        `calc(var(--ds-button-${v}-gap) * var(--ds-density-effective-scale, 1))`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: '--ds-button-resolved-icon-size',
+      value: resolvedSizeProp,
+      resolve: (v: ButtonSize) => `var(--ds-button-${v}-icon-size)`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: '--ds-button-resolved-radius',
+      value: resolvedSizeProp,
+      resolve: (v: ButtonSize) => `var(--ds-button-${v}-radius)`,
     } as ResponsivePropEntry<any>);
   }
 
@@ -224,34 +326,43 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     ? generateResponsiveCSS(elementId, responsiveEntries)
     : null;
 
-  const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
+  const size = scalarOrUndefined(resolvedSizeProp) ?? BUTTON_DEFAULTS.size;
 
   // Explicit `danger` prop takes priority over `variant`.
   // Unknown variants fall back to the public primary contract for className,
   // data attributes, and inline styles consistently.
   const requestedVariant = variant || 'primary';
+  const normalizedVariant = requestedVariant === 'error'
+    ? 'danger'
+    : requestedVariant === 'gradient'
+      ? 'primary'
+      : requestedVariant;
   const effectiveVariant = danger
     ? 'danger'
-    : KNOWN_VARIANTS.has(requestedVariant)
-      ? requestedVariant
+    : KNOWN_VARIANTS.has(normalizedVariant)
+      ? normalizedVariant
       : 'primary';
+  const usesGradient = gradient || requestedVariant === 'gradient';
 
   // -------------------------------------------------------------------------
   // Class names (no DaisyUI btn-* classes)
   // -------------------------------------------------------------------------
-  const classes = [
-    'rottay-button',
-    'rottay-button--modern',
-    `rottay-button--${effectiveVariant}`,
-    `rottay-button--${size}`,
-    `rottay-button--${shape}`,
-    isFullWidth && 'rottay-button--block',
-    loading && 'rottay-button--loading',
-    pending && 'rottay-button--pending',
-    disabled && 'rottay-button--disabled',
-    shadow && 'rottay-button--shadow',
-    className,
-  ].filter(Boolean).join(' ');
+  const classes = modernButtonRecipe.resolve(
+    {
+      variant: effectiveVariant,
+      size,
+      shape,
+      block: isFullWidth,
+      loading,
+      pending,
+      disabled,
+      shadow,
+      gradient: usesGradient,
+      pulse,
+      bordered,
+    },
+    { root: className }
+  ).root;
 
   // `busy` (pending or the deprecated loading) shares the inert interaction
   // model (no press/hover/focus affordance) but keeps its variant colour —
@@ -278,142 +389,161 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const endContent = iconPosition === 'end' ? icon : undefined;
   const renderedChildren = React.Children.toArray(children);
 
-  // Content opacity when busy (smooth fade)
-  const contentOpacity: React.CSSProperties = busy ? {
-    opacity: 0,
-    position: 'absolute' as const,
-    pointerEvents: 'none' as const,
-  } : {};
-
-  // Single source of truth for the resting content's layout, shared by the
-  // resting/loading render path (visible) and the `pending` width-stable
-  // overlay's hidden layer (invisible but in flow). Keeping ONE copy means
-  // the two can never drift apart and silently break width stability.
-  const restingContentStyle: React.CSSProperties = {
-    display: isFullWidth ? 'flex' : 'inline-flex',
-    alignItems: 'center',
-    justifyContent: isFullWidth ? 'inherit' : undefined,
-    gap: 'var(--ds-spacing-2, 8px)',
-    width: isFullWidth ? '100%' : undefined,
-    minWidth: 0,
-    whiteSpace: isFullWidth ? 'normal' : 'nowrap',
-  };
-
   const restingContentNode = (
     <>
-      {startContent || prefix}
-      {renderedChildren.length > 0 && (
-        <span
-          style={{
-            display: isFullWidth ? 'block' : 'inline',
-            flex: isFullWidth ? '1 1 auto' : undefined,
-            width: isFullWidth ? '100%' : undefined,
-            minWidth: 0,
-            whiteSpace: isFullWidth ? 'normal' : 'inherit',
-          }}
-        >
-          {renderedChildren}
+      {startContent ? (
+        <span data-part="icon" data-position="start" aria-hidden="true">
+          {startContent}
         </span>
+      ) : prefix ? (
+        <span data-part="prefix">{prefix}</span>
+      ) : null}
+      {renderedChildren.length > 0 && (
+        <span data-part="label">{renderedChildren}</span>
       )}
-      {endContent || suffix}
+      {endContent ? (
+        <span data-part="icon" data-position="end" aria-hidden="true">
+          {endContent}
+        </span>
+      ) : suffix ? (
+        <span data-part="suffix">{suffix}</span>
+      ) : null}
     </>
   );
 
+  const accessibleBusyLabel = resolvedBusyLabel == null ? children : null;
+  const content = widthStable ? (
+    <span data-part="content-frame">
+      <span data-part="content" data-layer="reserve" aria-hidden="true">
+        {restingContentNode}
+      </span>
+      <span data-part="busy-content" aria-live="polite">
+        <LoadingSpinner size={size} />
+        {resolvedBusyLabel != null && <span data-part="label">{resolvedBusyLabel}</span>}
+      </span>
+      {accessibleBusyLabel != null && (
+        <span data-part="accessible-label">{accessibleBusyLabel}</span>
+      )}
+    </span>
+  ) : (
+    <>
+      {busy && (
+        <span data-part="busy-content" aria-live="polite">
+          <LoadingSpinner size={size} />
+          {resolvedBusyLabel != null && <span data-part="label">{resolvedBusyLabel}</span>}
+        </span>
+      )}
+      <span data-part="content" data-state={busy ? 'hidden' : 'visible'} aria-hidden={busy || undefined}>
+        {restingContentNode}
+      </span>
+      {busy && accessibleBusyLabel != null && (
+        <span data-part="accessible-label">{accessibleBusyLabel}</span>
+      )}
+    </>
+  );
+
+  const chain = <Event,>(
+    internal: ((event: Event) => void) | undefined,
+    consumer: ((event: Event) => void) | undefined
+  ) => (event: Event) => {
+    internal?.(event);
+    consumer?.(event);
+  };
+
+  const interactionProps = {
+    onPointerEnter: chain(interactionHandlers.onPointerEnter, onPointerEnter as never),
+    onPointerLeave: chain(interactionHandlers.onPointerLeave, onPointerLeave as never),
+    onPointerDown: chain(interactionHandlers.onPointerDown, onPointerDown as never),
+    onPointerUp: chain(interactionHandlers.onPointerUp, onPointerUp as never),
+    onPointerCancel: chain(interactionHandlers.onPointerUp, onPointerCancel as never),
+    onKeyDown: (event: React.KeyboardEvent<Element>) => {
+      if (event.key === ' ' || event.key === 'Enter') {
+        interactionHandlers.onPointerDown(event as unknown as React.PointerEvent);
+      }
+      (onKeyDown as unknown as React.KeyboardEventHandler<Element> | undefined)?.(event);
+    },
+    onKeyUp: (event: React.KeyboardEvent<Element>) => {
+      if (event.key === ' ' || event.key === 'Enter') {
+        interactionHandlers.onPointerUp(event as unknown as React.PointerEvent);
+      }
+      (onKeyUp as unknown as React.KeyboardEventHandler<Element> | undefined)?.(event);
+    },
+    onFocus: chain(interactionHandlers.onFocus, onFocus as never),
+    onBlur: (event: React.FocusEvent<Element>) => {
+      interactionHandlers.onPointerUp(event as unknown as React.PointerEvent);
+      interactionHandlers.onBlur(event);
+      (onBlur as unknown as React.FocusEventHandler<Element> | undefined)?.(event);
+    },
+  };
+
+  const anatomyProps = {
+    ...pressMotion.attributes,
+    'data-variant': effectiveVariant,
+    'data-size': size,
+    'data-shape': shape,
+    'data-radius': radius,
+    'data-loading': loading ? 'true' : undefined,
+    'data-pending': pending ? 'true' : undefined,
+    'data-full-width': isFullWidth ? 'true' : undefined,
+    'data-focus-visible': isFocused && !isInert ? 'true' : undefined,
+    'data-disabled': disabled ? 'true' : undefined,
+    'data-icon-only': isIconOnly ? 'true' : undefined,
+    'data-size-responsive': sizeIsResponsive ? 'true' : undefined,
+    'data-gradient': usesGradient ? 'true' : undefined,
+    'data-shadow': shadow ? 'true' : undefined,
+    'data-pulse': pulse ? 'true' : undefined,
+    'data-bordered': bordered ? 'true' : undefined,
+    ...partAttributes(dataPart ?? 'trigger', interaction),
+    ...(responsive ? responsive.attrs : {}),
+  };
+
+  const responsiveStyleTag = responsive?.css ? (
+    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+  ) : null;
+
+  // A navigational action remains a native anchor so open-in-new-tab,
+  // context-menu and assistive-technology semantics all work. Inert links use
+  // the button path below because HTML anchors have no disabled primitive.
+  if (href && !isInert) {
+    const safeRel = target === '_blank' ? rel ?? 'noopener noreferrer' : rel;
+    return (
+      <>
+        {responsiveStyleTag}
+        <a
+          {...(nativeButtonProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+          {...interactionProps}
+          {...anatomyProps}
+          ref={ref as React.ForwardedRef<HTMLAnchorElement>}
+          href={href}
+          target={target}
+          rel={safeRel}
+          className={classes}
+          onClick={onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
+          style={interactiveStyle}
+        >
+          {content}
+        </a>
+      </>
+    );
+  }
+
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
+      {responsiveStyleTag}
       <button
         {...nativeButtonProps}
-        ref={ref}
+        {...interactionProps}
+        {...anatomyProps}
+        ref={ref as React.ForwardedRef<HTMLButtonElement>}
         type={htmlType}
         className={classes}
         disabled={disabled || busy}
         onClick={onClick}
         style={interactiveStyle}
-        {...interactionHandlers}
         aria-disabled={disabled || busy}
         aria-busy={busy}
-        {...pressMotion.attributes}
-        data-variant={effectiveVariant}
-        data-size={size}
-        data-shape={shape}
-        data-loading={loading ? 'true' : undefined}
-        data-pending={pending ? 'true' : undefined}
-        data-full-width={isFullWidth ? 'true' : undefined}
-        data-focus-visible={isFocused && !isInert ? 'true' : undefined}
-        // The `disabled` PROP, which the DOM `disabled` attribute above cannot
-        // stand in for: that attribute is `disabled || busy`, and a pending
-        // button keeps its variant colour while a disabled one dims.
-        data-disabled={disabled ? 'true' : undefined}
-        data-icon-only={isIconOnly ? 'true' : undefined}
-        // A responsively-sized button takes its box from the generated
-        // breakpoint rules below, not from the skin's static size rules.
-        data-size-responsive={sizeIsResponsive ? 'true' : undefined}
-        {...partAttributes('trigger', interaction)}
-        {...(responsive ? responsive.attrs : {})}
       >
-        {widthStable ? (
-          // Width-stable busy posture (`pending`): the resting content renders
-          // at `visibility: hidden` in normal flow, so it ALONE determines this
-          // wrapper's box. The spinner + resolved label render in an
-          // absolutely-positioned overlay inside that box, which cannot grow
-          // it. A `resolvedBusyLabel` wider than the resting content clips
-          // (`overflow: hidden`) instead of reflowing the button -- this is
-          // what makes the width guarantee unconditional, not just true for
-          // short labels.
-          <span
-            style={{
-              position: 'relative',
-              display: isFullWidth ? 'flex' : 'inline-flex',
-              alignItems: 'center',
-              justifyContent: isFullWidth ? 'inherit' : undefined,
-              width: isFullWidth ? '100%' : undefined,
-              minWidth: 0,
-            }}
-          >
-            <span aria-hidden="true" style={{ ...restingContentStyle, visibility: 'hidden' }}>
-              {restingContentNode}
-            </span>
-            <span
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 'var(--ds-spacing-2, 8px)',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <LoadingSpinner size={size} />
-              {resolvedBusyLabel != null && (
-                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{resolvedBusyLabel}</span>
-              )}
-            </span>
-          </span>
-        ) : (
-          <>
-            {/* Busy spinner - centered, replaces content. Label-less busy still
-                lets the button shrink to spinner-only width -- use `pending`
-                instead when the box must never reflow. */}
-            {busy && <LoadingSpinner size={size} />}
-            {busy && resolvedBusyLabel != null && <span>{resolvedBusyLabel}</span>}
-
-            {/* Content wrapper - hidden (but in DOM) during busy for layout stability */}
-            <span
-              style={{
-                ...restingContentStyle,
-                transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                ...contentOpacity,
-              }}
-            >
-              {restingContentNode}
-            </span>
-          </>
-        )}
+        {content}
       </button>
     </>
   );

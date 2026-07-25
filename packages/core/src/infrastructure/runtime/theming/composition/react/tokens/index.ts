@@ -34,6 +34,7 @@ import {
   brandThemeToPersonality,
   brandThemeToTokenOverrides,
 } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '@/foundation/contracts';
 
 export { getEngineTokens, ENGINE_TOKENS } from '../../../foundation/engine-tokens';
@@ -208,14 +209,10 @@ export function useTokens(): DesignTokens {
     let motion: typeof verticalMotion;
     let densityScale: number;
 
-    // Appearance density factor (General tier): multiplies the final densityScale
-    // AFTER BrandTheme/legacy resolution. This means a BrandTheme with densityScale=0.9
-    // and appearance density='compact' (0.85) produces effective scale of 0.9 * 0.85 = 0.765.
-    // The factor is multiplicative, not an override.
+    // Appearance density is a semantic factor composed AFTER the structural
+    // BrandTheme/legacy resolution. The canonical resolver is also the source
+    // for the CSS mode-factor channel, preventing JS/CSS drift.
     const appearance = config.appearance;
-    const appearanceDensityFactor = appearance?.general?.density === 'compact' ? 0.85
-      : appearance?.general?.density === 'spacious' ? 1.15
-      : 1;
 
     if (hasBrandTheme) {
       // BrandTheme path: engine -> vertical -> brandTheme -> appearance -> tenant overrides.
@@ -249,7 +246,10 @@ export function useTokens(): DesignTokens {
       motion = tenantTokenOverrides?.motion
         ? { ...btMotion, ...tenantTokenOverrides.motion }
         : btMotion;
-      densityScale = (tenantTokenOverrides?.densityScale ?? btDensityScale) * appearanceDensityFactor;
+      densityScale = resolveEffectiveDensityScale(
+        tenantTokenOverrides?.densityScale ?? btDensityScale,
+        appearance?.general?.density,
+      );
     } else {
       // Legacy path: profile -> tenant on top of vertical
       const productProfileTokenOverrides = profile.tokenOverrides;
@@ -280,7 +280,10 @@ export function useTokens(): DesignTokens {
       motion = tenantTokenOverrides?.motion
         ? { ...ppMotion, ...tenantTokenOverrides.motion }
         : ppMotion;
-      densityScale = (tenantTokenOverrides?.densityScale ?? ppDensityScale) * appearanceDensityFactor;
+      densityScale = resolveEffectiveDensityScale(
+        tenantTokenOverrides?.densityScale ?? ppDensityScale,
+        appearance?.general?.density,
+      );
     }
 
     // 4. Personality tokens — BrandTheme or legacy merge.
@@ -359,10 +362,14 @@ export function useTokens(): DesignTokens {
       // Spacing values are density-scaled at resolution time rather than via
       // CSS calc() because components consume them as numeric pixel values
       // for style objects and layout calculations.
-      // Clamp densityScale to safe range (0.5-3) to prevent layout breakage
-      // from extreme tenant overrides or DB corruption.
+      //
+      // IMPORTANT: this array is provider-global (structural scale × tenant
+      // appearance). It cannot observe a descendant `data-density` boundary.
+      // Components that promise subtree-local density must consume the CSS
+      // `--ds-spacing-*` ramp instead. A future DensityScope context is required
+      // before numeric JS layout can claim the same local override semantics.
       spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96].map(
-        v => Math.round(v * Math.max(0.5, Math.min(3, densityScale)))
+        v => Math.round(v * densityScale)
       ),
       typography: {
         fontSize: {

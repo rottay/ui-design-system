@@ -1,13 +1,27 @@
 /**
  * @fileoverview Carousel Modern Engine - Rottay Design System
- * @description Token-driven carousel with scroll-snap navigation.
+ * @description Token-driven carousel with transform-based navigation.
  *
  * @remarks
  * All visual styling uses DS token CSS custom properties (`--ds-*`).
- * Arrow buttons and dot indicators are painted by the unlayered modern skin.
+ * The unlayered modern skin (`skin/carousel.css`) is the SINGLE paint owner
+ * for every part (root frame, arrows, dots, slide transform). K4-C Pass 1
+ * drained the four DaisyUI literals (`carousel`, `carousel-vertical`,
+ * `carousel-inner`, `carousel-item`): they were never structural here — the
+ * engine positions slides by inline transform, not scroll-snap — and the
+ * `theme.css` `.carousel` bridge they enabled co-painted the root frame,
+ * violating single-owner paint. The skin now owns that frame.
+ *
+ * RTL: arrow and dot placement uses LOGICAL utilities (`start-2`/`end-2`),
+ * horizontal arrow glyphs mirror via a `:dir(rtl)` rule in the skin, and the
+ * horizontal slide offset multiplies by `--ds-carousel-rtl-factor` (1 in LTR,
+ * -1 under `:dir(rtl)`) so the travel direction mirrors too. The `left-1/2`
+ * horizontal centring of top/bottom dot rows is deliberately PHYSICAL: it is
+ * direction-invariant, and a logical `start-1/2` would break the centre in
+ * RTL.
  *
  * **Features:**
- * - Scroll-snap based navigation
+ * - Transform-based slide navigation
  * - Interval-based autoplay
  * - Imperative ref methods
  * - DS token theme adaptation
@@ -23,7 +37,6 @@
  * </Carousel>
  * ```
  *
- * @see {@link Carousel} for the main component
  * @see {@link Carousel} for the main component
  * @module Carousel/engines/modern
  * @category Display
@@ -42,6 +55,7 @@ import React, {
 } from 'react';
 import type { CarouselProps, CarouselRef } from '../../contracts';
 import { CAROUSEL_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Modern Carousel - Token-driven Tailwind Implementation
@@ -95,6 +109,21 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     // Autoplay timer ref is stored outside state to avoid triggering
     // re-renders when the interval is created or cleared.
     const autoplayRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Accessibility labels: translated when an I18nProvider is mounted, with
+    // the documented English fallbacks otherwise (a missing catalog key
+    // echoes the raw key back, which the endsWith guard detects — K4-C wires
+    // the channel ahead of the locale JSONs, so behavior is byte-identical
+    // until they land).
+    const i18n = useOptionalTranslation('components');
+    const carouselLabel = (
+      key: string,
+      fallback: string,
+      params?: Record<string, string | number>
+    ): string => {
+      const translated = i18n?.t(key, params);
+      return translated && !translated.endsWith(key) ? translated : fallback;
+    };
 
     /**
      * Navigate to a specific slide by index.
@@ -174,21 +203,22 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     };
 
     // Pre-compute the positional Tailwind classes for the dot container.
-    // Each position needs both placement (top/bottom/left/right) and
-    // centering (translate) plus a flex direction for the dot row/column.
+    // Each position needs both placement and centering plus a flex direction
+    // for the dot row/column. `start-2`/`end-2` are LOGICAL (inset-inline-*),
+    // so the lateral positions mirror under RTL. The top/bottom `left-1/2`
+    // horizontal centring is deliberately physical: it is direction-invariant
+    // and a logical `start-1/2` would break the centre in RTL.
     const dotsPositionClass = {
       top: 'top-2 left-1/2 -translate-x-1/2 flex-row',
       bottom: 'bottom-2 left-1/2 -translate-x-1/2 flex-row',
-      left: 'left-2 top-1/2 -translate-y-1/2 flex-col',
-      right: 'right-2 top-1/2 -translate-y-1/2 flex-col',
+      left: 'start-2 top-1/2 -translate-y-1/2 flex-col',
+      right: 'end-2 top-1/2 -translate-y-1/2 flex-col',
     }[dotPosition];
-
-    const carouselClass = vertical ? 'carousel-vertical' : '';
 
     return (
       <div
         ref={containerRef}
-        className={`rottay-carousel rottay-carousel--modern carousel w-full relative ${carouselClass} ${className}`}
+        className={`rottay-carousel rottay-carousel--modern w-full relative ${className}`}
         data-part="root"
         data-vertical={vertical ? 'true' : undefined}
         data-fade={fade ? 'true' : undefined}
@@ -200,14 +230,14 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       >
         {/* Slides Container */}
         <div
-          className="carousel-inner relative w-full overflow-hidden"
+          className="relative w-full overflow-hidden"
           data-part="track"
           style={{ height: style?.height || 'var(--ds-carousel-height, 300px)' }}
         >
           {slides.map((slide, index) => (
             <div
               key={index}
-              className="carousel-item absolute w-full h-full"
+              className="absolute w-full h-full"
               data-part="slide"
               data-selected={index === currentSlide ? 'true' : 'false'}
               style={{
@@ -216,17 +246,20 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                 // using translateX for horizontal or translateY for vertical.
                 // The offset is arithmetic over the live index, so carousel.css
                 // consumes it as a custom property rather than enumerating it.
+                // The horizontal offset rides `--ds-carousel-rtl-factor` (1 in
+                // LTR, -1 under `:dir(rtl)` from the skin) so the travel
+                // direction mirrors in RTL.
                 opacity: fade ? (index === currentSlide ? 1 : 0) : 1,
                 '--ds-carousel-slide-transform': fade
                   ? 'none'
                   : vertical
                     ? `translateY(${(index - currentSlide) * 100}%)`
-                    : `translateX(${(index - currentSlide) * 100}%)`,
+                    : `translateX(calc(${(index - currentSlide) * 100}% * var(--ds-carousel-rtl-factor, 1)))`,
                 transition: `all ${speed}ms var(--ds-motion-ease-out)`,
               } as React.CSSProperties}
               role="group"
               aria-roledescription="slide"
-              aria-label={`Slide ${index + 1} of ${slides.length}`}
+              aria-label={carouselLabel('carousel.slideOf', `Slide ${index + 1} of ${slides.length}`, { index: index + 1, total: slides.length })}
               aria-hidden={index !== currentSlide}
             >
               {slide}
@@ -234,27 +267,31 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           ))}
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows — `start-2`/`end-2` are LOGICAL (inset-inline-*):
+            both buttons mirror sides under RTL, and the skin flips the
+            horizontal glyphs via `:dir(rtl) scaleX(-1)`. */}
         {arrows && (
           <>
             <button
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
+              className="absolute start-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="prev"
-              style={{ width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
+              // Size + font-size are skin-owned (coarse-pointer floor needs a
+              // media query an inline var() cannot see — K4-C Pass 2).
+              style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
               onClick={prev}
-              aria-label="Previous slide"
+              aria-label={carouselLabel('carousel.previousSlide', 'Previous slide')}
               type="button"
             >
               {vertical ? '\u2191' : '\u2190'}
             </button>
             <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
+              className="absolute end-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="next"
-              style={{ width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
+              style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
               onClick={next}
-              aria-label="Next slide"
+              aria-label={carouselLabel('carousel.nextSlide', 'Next slide')}
               type="button"
             >
               {vertical ? '\u2193' : '\u2192'}
@@ -268,7 +305,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             className={`absolute flex gap-1 z-10 ${dotsPositionClass}`}
             data-part="dots"
             role="tablist"
-            aria-label="Carousel navigation"
+            aria-label={carouselLabel('carousel.navigation', 'Carousel navigation')}
           >
             {slides.map((_, index) => (
               <button
@@ -279,7 +316,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                 data-part="dot"
                 data-selected={index === currentSlide ? 'true' : 'false'}
                 onClick={() => goTo(index)}
-                aria-label={`Go to slide ${index + 1}`}
+                aria-label={carouselLabel('carousel.goToSlide', `Go to slide ${index + 1}`, { index: index + 1 })}
                 aria-selected={index === currentSlide}
                 role="tab"
                 type="button"

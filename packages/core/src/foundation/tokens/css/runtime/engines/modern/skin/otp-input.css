@@ -1,33 +1,82 @@
 /**
- * Modern OTPInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern OTPInput skin (WO-SKIN-02 checkpoint A, fields batch;
+ * K4-D Pass 1: geometry/layout drained from the engine's inline styles).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule can't paint these elements; unlayered outranks
  * preflight and still yields to a caller's inline `style`.
  *
- * SCOPE ROOT is `.ds-otp-input.ds-otp-input--modern[data-part='root']`, carrying
- * `data-disabled`. Each digit is a `[data-part='slot']` (`data-error`,
- * `data-filled`); `error-message` is a nephew (inside an unclassed div that is a
- * sibling of root), reached via `root ~ * [data-part='error-message']`.
+ * SINGLE PAINT OWNER. SCOPE ROOT is `.ds-otp-input.ds-otp-input--modern
+ * [data-part='root']`, carrying `data-disabled` and `data-size`
+ * ('sm'|'md'|'lg', K4-D). Each digit is a `[data-part='slot']` (`data-error`,
+ * `data-filled`); `error-message` is a nephew (inside a
+ * `[data-part='error-wrapper']` div that is a sibling of root), reached via
+ * `root ~ * [data-part='error-message']` -- the TagInput idiom.
  *
  * The slot's focus border reproduces the removed IMPERATIVE handlers
  * (`onFocus`/`onBlur` wrote `.style.borderColor` directly, gated `!error`) as a
  * `:focus:not([data-error='true'])` rule; the blurred border returns to the base
  * rule. `onFocus`'s `.select()` is kept.
  *
+ * GEOMETRY drained from the engine (K4-D): the row's `display: flex; gap: 8`
+ * (`--ds-otp-slot-gap` channel), the per-size slot box (former `SIZE_STYLES`
+ * lookup, now `data-size` rules density-scaled by `--ds-density-effective-scale`,
+ * font-size stays a fixed step per tier), the slot's `monospace` literal
+ * (tokenised to `--ds-font-family-mono`, matching the rustic engine's chain),
+ * padding/text-align/font-weight, the disabled opacity+cursor (keyed on
+ * root's `data-disabled`), and the error wrapper gap + message typography
+ * (`margin-block-start`, logical). No inline styles remain on any part.
+ *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * the slot border reaches (0,4,0) via the repeated `[data-part='slot']`.
  * Non-border paint wins unlayered at (0,3,0).
+ *
+ * CONTROL SURFACE (K4-D remediation round 2, axe color-contrast/serious on
+ * themanagement-db): the slot background reads the certified Input family's
+ * `--ds-input-bg` (NOT the generic `--ds-color-bg-input`): the TMM DB
+ * projection resolves `--ds-input-bg` to its light control surface (#FFFEFB,
+ * measured by the InputNumber/TagInput lanes) while `--ds-color-bg-input`
+ * resolves near-black under its dark-text theme (#0F0F12), which put the
+ * dark slot value ink at ~1.3:1. BitHire resolves #fff on both channels, so
+ * this is a no-op there.
+ *
+ * PASS 2 (K4-D): filled slots read one border step stronger than empty
+ * (`--ds-otp-slot-border-filled, --ds-color-border-hover`); keyboard focus
+ * shows the Input grammar's halo ring (border + `box-shadow`, error slots
+ * halo in the error channel); slots floor at 44px under
+ * `media (pointer: coarse)` (the sm tier's 36px box fails the wave touch
+ * floor); border/box-shadow transitions carry the standard reduced-motion
+ * guard.
  */
 
+.ds-otp-input.ds-otp-input--modern[data-part='root'] {
+  display: flex;
+  gap: var(--ds-otp-slot-gap, 8px);
+}
+
 .ds-otp-input.ds-otp-input--modern [data-part='slot'] {
+  padding: 0;
+  text-align: center;
+  font-family: var(--ds-font-family-mono, monospace);
+  font-weight: 700;
+  cursor: text;
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input);
+  /* See CONTROL SURFACE in the header: certified Input channel, never the
+     generic --ds-color-bg-input (near-black under TMM). */
+  background: var(--ds-otp-slot-bg, var(--ds-input-bg, var(--ds-surface-control)));
   color: var(--ds-color-text-primary);
   outline: none;
+  transition:
+    border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
 }
 .ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'] {
   border: 1px solid var(--ds-color-border);
+}
+/* Filled slots read one step stronger than empty (state distinction, K4-D
+   Pass 2); the focus/error chains below stay sovereign. */
+.ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-filled='true'] {
+  border-color: var(--ds-otp-slot-border-filled, var(--ds-color-border-hover));
 }
 .ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-error='true'] {
   border: 1px solid var(--ds-color-error);
@@ -35,7 +84,74 @@
 .ds-otp-input.ds-otp-input--modern [data-part='slot']:focus:not([data-error='true']) {
   border-color: var(--ds-color-primary);
 }
+/* Focus halo (K4-D Pass 2): the Input grammar's ring so keyboard focus is
+   visible at a glance, not a 1px border hue change. Error slots halo in the
+   error channel; the ring shows on ANY focus, like the certified Input. */
+.ds-otp-input.ds-otp-input--modern [data-part='slot']:focus {
+  box-shadow: var(--ds-otp-slot-shadow-focus, var(--ds-input-shadow-focus, var(--ds-focus-ring)));
+}
+.ds-otp-input.ds-otp-input--modern [data-part='slot']:focus[data-error='true'] {
+  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-otp-slot-shadow-focus, var(--ds-focus-ring)));
+}
 
+/* Public size geometry (density-scaled box, fixed font step per tier). */
+.ds-otp-input.ds-otp-input--modern[data-part='root'][data-size='sm'] [data-part='slot'] {
+  inline-size: calc(var(--ds-otp-slot-sm-size, 36px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-otp-slot-sm-size, 36px) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-otp-slot-sm-font-size, 16px);
+}
+.ds-otp-input.ds-otp-input--modern[data-part='root'][data-size='md'] [data-part='slot'] {
+  inline-size: calc(var(--ds-otp-slot-md-size, 44px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-otp-slot-md-size, 44px) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-otp-slot-md-font-size, 20px);
+}
+.ds-otp-input.ds-otp-input--modern[data-part='root'][data-size='lg'] [data-part='slot'] {
+  inline-size: calc(var(--ds-otp-slot-lg-size, 52px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-otp-slot-lg-size, 52px) * var(--ds-density-effective-scale, 1));
+  font-size: var(--ds-otp-slot-lg-font-size, 24px);
+}
+
+.ds-otp-input.ds-otp-input--modern[data-part='root'][data-disabled='true'] [data-part='slot'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ds-otp-input.ds-otp-input--modern[data-part='root'] ~ [data-part='error-wrapper'] {
+  margin-block-start: var(--ds-otp-error-gap, 4px);
+}
 .ds-otp-input.ds-otp-input--modern ~ * [data-part='error-message'] {
-  color: var(--ds-color-error);
+  font-size: var(--ds-otp-error-font-size, 12px);
+  line-height: 16px;
+  /* CONTRAST LAW (K4-D remediation, axe color-contrast/serious): the raw
+     error channel fails AA for 12px TEXT on the page surface of a governed
+     source (bithire #C5504C on #F4F8FB = 4.25:1; TMM DB #C0392B on #FBF6EC =
+     5.05:1 passes but holds no margin). The ink deepens 30% toward the
+     source's own primary text ink -- hue-faithful, mode-adaptive (dark-mode
+     text-primary is light, so the mix lightens), no tenant fork (measured:
+     bithire 6.34:1, TMM 7.06:1). The semantic `--ds-color-error` itself is
+     NOT repainted -- borders/icons only need 3:1. A tenant's explicit
+     `--ds-otp-error-ink` stays raw. */
+  color: var(
+    --ds-otp-error-ink,
+    color-mix(
+      in srgb,
+      var(--ds-color-error) 70%,
+      var(--ds-color-text-primary) 30%
+    )
+  );
+}
+
+/* Coarse-pointer floor (K4-D Pass 2): the sm tier's 36px box fails the 44px
+   wave touch floor; md/lg already pass, the floor is a min, not a resize. */
+@media (pointer: coarse) {
+  .ds-otp-input.ds-otp-input--modern [data-part='slot'] {
+    min-inline-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-otp-input.ds-otp-input--modern [data-part='slot'] {
+    transition-duration: 0.01ms;
+  }
 }

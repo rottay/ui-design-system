@@ -129,6 +129,10 @@ export interface MentionsProps {
   className?: string;
   /** Additional styles */
   style?: CSSProperties;
+  /** Accessible name for the textarea. Resolution order in the modern engine:
+   *  this prop, then `placeholder`, then the localized `mentions.input_label`
+   *  catalog entry (English fallback "Mentions"). */
+  'aria-label'?: string;
   /** Textarea class name */
   textareaClassName?: string;
   /** Popup class name */

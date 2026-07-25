@@ -11,26 +11,31 @@ export const badgeSize = {
     minWidth: 'var(--ds-badge-xs-min-width)',
     height: 'var(--ds-badge-xs-height)',
     fontSize: 'var(--ds-badge-xs-font-size)',
+    paddingX: 'var(--ds-badge-xs-padding-x)',
   },
   sm: {
     minWidth: 'var(--ds-badge-sm-min-width)',
     height: 'var(--ds-badge-sm-height)',
     fontSize: 'var(--ds-badge-sm-font-size)',
+    paddingX: 'var(--ds-badge-sm-padding-x)',
   },
   md: {
     minWidth: 'var(--ds-badge-md-min-width)',
     height: 'var(--ds-badge-md-height)',
     fontSize: 'var(--ds-badge-md-font-size)',
+    paddingX: 'var(--ds-badge-md-padding-x)',
   },
   lg: {
     minWidth: 'var(--ds-badge-lg-min-width)',
     height: 'var(--ds-badge-lg-height)',
     fontSize: 'var(--ds-badge-lg-font-size)',
+    paddingX: 'var(--ds-badge-lg-padding-x)',
   },
   xl: {
     minWidth: 'var(--ds-badge-xl-min-width)',
     height: 'var(--ds-badge-xl-height)',
     fontSize: 'var(--ds-badge-xl-font-size)',
+    paddingX: 'var(--ds-badge-xl-padding-x)',
   },
 } as const;
 
@@ -116,8 +121,24 @@ export const badgeTransition = {
 
 // Badge Typography
 export const badgeTypography = {
+  fontFamily: 'var(--ds-badge-font-family)',
   fontWeight: 'var(--ds-badge-font-weight)',
   lineHeight: 'var(--ds-badge-line-height)',
+  letterSpacing: 'var(--ds-badge-letter-spacing)',
+} as const;
+
+export const badgeAnatomy = {
+  gap: 'var(--ds-badge-gap)',
+  maxInlineSize: 'var(--ds-badge-max-inline-size)',
+  chipMaxInlineSize: 'var(--ds-badge-chip-max-inline-size)',
+  pillMaxInlineSize: 'var(--ds-badge-pill-max-inline-size)',
+  frameWidth: 'var(--ds-badge-frame-width)',
+  iconSize: 'var(--ds-badge-icon-size)',
+  avatarBleed: 'var(--ds-badge-avatar-bleed)',
+  countMinSize: 'var(--ds-badge-count-min-size)',
+  countSize: 'var(--ds-badge-count-size)',
+  removeSize: 'var(--ds-badge-remove-size)',
+  touchTarget: 'var(--ds-badge-touch-target)',
 } as const;
 
 // Combined badge tokens
@@ -131,6 +152,7 @@ export const badgeTokens = {
   border: badgeBorder,
   transition: badgeTransition,
   typography: badgeTypography,
+  anatomy: badgeAnatomy,
   zIndex: 'var(--ds-badge-z-index)',
 } as const;
 

@@ -67,7 +67,6 @@ function TemplateSelector({
                 {template.description && (
                   <Text
                     className="ds-report__muted-text"
-                    data-part="muted-text"
                     style={{ fontSize: 12 }}
                   >
                     {template.description}
@@ -76,7 +75,6 @@ function TemplateSelector({
                 {template.category && (
                   <Text
                     className="ds-report__muted-text"
-                    data-part="muted-text"
                     style={{ fontSize: 11 }}
                   >
                     {template.category}
@@ -148,7 +146,6 @@ function ReportResults({
           <Flex justify="center" style={{ padding: '32px 0' }}>
             <Text
               className="ds-report__muted-text"
-              data-part="muted-text"
             >Generating report...</Text>
           </Flex>
         </Card.Body>
@@ -195,7 +192,6 @@ function ReportResults({
           <Stack key={key} spacing="xs">
             <Text
               className="ds-report__muted-text"
-              data-part="muted-text"
               style={{ fontSize: 12 }}
             >{key}</Text>
             <Text style={{ fontWeight: 600 }}>{String(value)}</Text>

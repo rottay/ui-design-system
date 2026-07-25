@@ -170,7 +170,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Skeleton rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Skeleton rendered by Classic (Ant Design), Modern (token skin), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -195,5 +195,50 @@ export const VariantMatrix: Story = {
       variantProp="variant"
       variants={['text', 'circular', 'rectangular', 'rounded']}
     />
+  ),
+};
+
+// ============================================================================
+// Modern Engine Craft Stories
+// ============================================================================
+
+/**
+ * Card-shaped skeleton sized exactly like the content it stands in for: the
+ * swap reserves identical geometry, so there is no layout jump when content
+ * arrives. Cadence comes from the canon shimmer and pins to a static frame
+ * under reduced motion.
+ */
+export const ModernCardSwap: Story = {
+  name: '🃏 Modern Card Swap (no layout jump)',
+  render: () => (
+    <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+      <div style={{ width: 280 }} aria-hidden="true">
+        <Skeleton engine="modern" active avatar avatarSize={40} title paragraph={{ rows: 2 }} />
+      </div>
+      <div style={{ width: 280, border: '1px dashed var(--ds-color-border, #d9d9d9)', borderRadius: 8, padding: 12 }}>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--ds-color-primary, #1677ff)', color: '#fff', display: 'grid', placeItems: 'center' }}>A</div>
+          <div>
+            <strong>Loaded card title</strong>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--ds-color-text-secondary, #666)' }}>
+              Two body lines of identical rhythm to the skeleton beside this card.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * Density retune through skin tokens: the same anatomy at a compact cadence
+ * via --ds-skeleton-* geometry overrides (governance hatch, not a new theme).
+ */
+export const ModernTokenDensity: Story = {
+  name: '📐 Modern Token Geometry',
+  render: () => (
+    <div style={{ ['--ds-skeleton-gap' as string]: '0.5rem', ['--ds-skeleton-line-gap' as string]: '0.25rem', ['--ds-skeleton-line-height' as string]: '0.75rem', ['--ds-skeleton-title-height' as string]: '1rem' }}>
+      <Skeleton engine="modern" active avatar avatarSize={32} title paragraph={{ rows: 3 }} />
+    </div>
   ),
 };

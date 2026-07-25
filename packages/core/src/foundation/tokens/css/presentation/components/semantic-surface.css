@@ -1,0 +1,342 @@
+/**
+ * SemanticSurface skin (DS-A004).
+ *
+ * Public terminology is “semantic surface roles”. The historic
+ * `--ds-material-*` prefix is retained only as a compatibility channel between
+ * the BrandTheme/Appearance compilers and this skin; it does not refer to
+ * Material UI or any external component framework.
+ *
+ * Every role maps governed channels into private local variables. One shared
+ * state machine then paints the component, preventing role blocks from
+ * drifting and keeping nested surfaces isolated.
+ */
+
+/* ── governed role projections ─────────────────────────────────── */
+
+.ds-semantic-surface[data-surface-role="canvas"] {
+  --_surface-background: var(--ds-material-canvas-background, var(--ds-surface-canvas, transparent));
+  --_surface-background-hover: var(--ds-material-canvas-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-canvas-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-canvas-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-canvas-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-canvas-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-canvas-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-canvas-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-canvas-border, transparent);
+  --_surface-border-strong: var(--ds-material-canvas-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-canvas-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-canvas-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-canvas-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-canvas-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-canvas-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-canvas-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-canvas-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-canvas-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-canvas-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-canvas-highlight, none);
+  --_surface-texture: var(--ds-material-canvas-texture, none);
+}
+
+.ds-semantic-surface[data-surface-role="shell"] {
+  --_surface-background: var(--ds-material-shell-background, var(--ds-surface-shell, transparent));
+  --_surface-background-hover: var(--ds-material-shell-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-shell-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-shell-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-shell-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-shell-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-shell-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-shell-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-shell-border, transparent);
+  --_surface-border-strong: var(--ds-material-shell-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-shell-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-shell-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-shell-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-shell-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-shell-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-shell-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-shell-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-shell-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-shell-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-shell-highlight, none);
+  --_surface-texture: var(--ds-material-shell-texture, none);
+}
+
+.ds-semantic-surface[data-surface-role="panel"] {
+  --_surface-background: var(--ds-material-panel-background, var(--ds-surface-panel, transparent));
+  --_surface-background-hover: var(--ds-material-panel-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-panel-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-panel-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-panel-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-panel-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-panel-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-panel-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-panel-border, transparent);
+  --_surface-border-strong: var(--ds-material-panel-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-panel-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-panel-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-panel-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-panel-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-panel-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-panel-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-panel-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-panel-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-panel-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-panel-highlight, none);
+  --_surface-texture: var(--ds-material-panel-texture, none);
+}
+
+.ds-semantic-surface[data-surface-role="card"] {
+  --_surface-background: var(--ds-material-card-background, var(--ds-surface-card, transparent));
+  --_surface-background-hover: var(--ds-material-card-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-card-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-card-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-card-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-card-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-card-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-card-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-card-border, transparent);
+  --_surface-border-strong: var(--ds-material-card-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-card-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-card-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-card-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-card-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-card-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-card-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-card-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-card-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-card-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-card-highlight, none);
+  --_surface-texture: var(--ds-material-card-texture, none);
+}
+
+.ds-semantic-surface[data-surface-role="inset"] {
+  --_surface-background: var(--ds-material-inset-background, var(--ds-surface-inset, transparent));
+  --_surface-background-hover: var(--ds-material-inset-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-inset-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-inset-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-inset-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-inset-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-inset-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-inset-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-inset-border, transparent);
+  --_surface-border-strong: var(--ds-material-inset-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-inset-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-inset-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-inset-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-inset-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-inset-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-inset-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-inset-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-inset-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-inset-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-inset-highlight, none);
+  --_surface-texture: var(--ds-material-inset-texture, none);
+}
+
+.ds-semantic-surface[data-surface-role="control"] {
+  --_surface-background: var(--ds-material-control-background, var(--ds-surface-control, transparent));
+  --_surface-background-hover: var(--ds-material-control-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-control-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-control-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-control-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-control-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-control-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-control-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-control-border, transparent);
+  --_surface-border-strong: var(--ds-material-control-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-control-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-control-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-control-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-control-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-control-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-control-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-control-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-control-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-control-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-control-highlight, none);
+  --_surface-texture: var(--ds-material-control-texture, none);
+}
+
+.ds-semantic-surface[data-surface-role="raised"] {
+  --_surface-background: var(--ds-material-raised-background, var(--ds-surface-raised, transparent));
+  --_surface-background-hover: var(--ds-material-raised-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-raised-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-raised-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-raised-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-raised-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-raised-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-raised-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-raised-border, transparent);
+  --_surface-border-strong: var(--ds-material-raised-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-raised-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-raised-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-raised-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-raised-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-raised-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-raised-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-raised-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-raised-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-raised-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-raised-highlight, none);
+  --_surface-texture: var(--ds-material-raised-texture, none);
+}
+
+.ds-semantic-surface[data-surface-role="overlay"] {
+  --_surface-background: var(--ds-material-overlay-background, var(--ds-surface-overlay, transparent));
+  --_surface-background-hover: var(--ds-material-overlay-background-hover, var(--_surface-background));
+  --_surface-background-active: var(--ds-material-overlay-background-active, var(--_surface-background));
+  --_surface-background-selected: var(--ds-material-overlay-background-selected, var(--_surface-background));
+  --_surface-background-disabled: var(--ds-material-overlay-background-disabled, var(--_surface-background));
+  --_surface-foreground: var(--ds-material-overlay-foreground, inherit);
+  --_surface-foreground-muted: var(--ds-material-overlay-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-disabled: var(--ds-material-overlay-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
+  --_surface-border: var(--ds-material-overlay-border, transparent);
+  --_surface-border-strong: var(--ds-material-overlay-border-strong, var(--_surface-border));
+  --_surface-border-hover: var(--ds-material-overlay-border-hover, var(--_surface-border));
+  --_surface-border-active: var(--ds-material-overlay-border-active, var(--_surface-border));
+  --_surface-border-selected: var(--ds-material-overlay-border-selected, var(--_surface-border-strong));
+  --_surface-border-disabled: var(--ds-material-overlay-border-disabled, var(--_surface-border));
+  --_surface-focus-ring: var(--ds-material-overlay-focus-ring, var(--ds-focus-ring, none));
+  --_surface-shadow: var(--ds-material-overlay-shadow, none);
+  --_surface-shadow-hover: var(--ds-material-overlay-shadow-hover, var(--_surface-shadow));
+  --_surface-shadow-active: var(--ds-material-overlay-shadow-active, var(--_surface-shadow));
+  --_surface-shadow-selected: var(--ds-material-overlay-shadow-selected, var(--_surface-shadow));
+  --_surface-highlight: var(--ds-material-overlay-highlight, none);
+  --_surface-texture: var(--ds-material-overlay-texture, none);
+}
+
+/* ── shared rendered state machine ─────────────────────────────── */
+
+.ds-semantic-surface {
+  position: relative;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  background: var(--_surface-texture, none),
+    var(--_surface-background, transparent);
+  color: var(--_surface-foreground, inherit);
+  border-width: var(--ds-surface-border-width, var(--ds-border-width-1, 1px));
+  border-style: var(--ds-surface-border-style, solid);
+  border-color: var(--_surface-border, transparent);
+  border-radius: var(--ds-surface-radius-md, var(--ds-radius-md, 8px));
+  box-shadow: var(--_surface-shadow, none);
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease);
+}
+
+.ds-semantic-surface::before,
+.ds-semantic-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ds-semantic-surface::before {
+  box-shadow: var(--_surface-highlight, none);
+}
+
+.ds-semantic-surface::after {
+  box-shadow: var(--_surface-focus-ring, var(--ds-focus-ring, none));
+  opacity: 0;
+  transition: opacity var(--ds-motion-fast, 120ms)
+    var(--ds-motion-ease-out, ease);
+}
+
+.ds-semantic-surface[data-emphasis="strong"] {
+  border-color: var(--_surface-border-strong, var(--_surface-border));
+}
+
+.ds-semantic-surface > .ds-semantic-surface__support {
+  color: var(--_surface-foreground-muted, var(--ds-color-text-secondary, inherit));
+}
+
+@media (hover: hover) {
+  .ds-semantic-surface[data-interactive="true"]:hover {
+    background: var(--_surface-texture, none),
+      var(--_surface-background-hover, var(--_surface-background));
+    border-color: var(--_surface-border-hover, var(--_surface-border));
+    box-shadow: var(--_surface-shadow-hover, var(--_surface-shadow));
+  }
+}
+
+.ds-semantic-surface[data-interactive="true"]:active {
+  background: var(--_surface-texture, none),
+    var(--_surface-background-active, var(--_surface-background));
+  border-color: var(--_surface-border-active, var(--_surface-border));
+  box-shadow: var(--_surface-shadow-active, var(--_surface-shadow));
+}
+
+.ds-semantic-surface[data-interactive="true"]:focus-visible {
+  outline: none;
+}
+
+.ds-semantic-surface[data-interactive="true"]:focus-visible::after {
+  opacity: 1;
+}
+
+.ds-semantic-surface[data-selected="true"] {
+  background: var(--_surface-texture, none),
+    var(--_surface-background-selected, var(--_surface-background));
+  border-color: var(--_surface-border-selected, var(--_surface-border-strong));
+  box-shadow: var(--_surface-shadow-selected, var(--_surface-shadow));
+}
+
+.ds-semantic-surface[data-dragging="true"] {
+  border-color: var(--_surface-border-active, var(--_surface-border-strong));
+  box-shadow: var(--_surface-shadow-active, var(--_surface-shadow-hover));
+  cursor: grabbing;
+}
+
+.ds-semantic-surface[data-loading="true"] {
+  color: var(--_surface-foreground-muted, var(--_surface-foreground));
+  cursor: progress;
+}
+
+.ds-semantic-surface[data-disabled="true"] {
+  background: var(--_surface-texture, none),
+    var(--_surface-background-disabled, var(--_surface-background));
+  color: var(--_surface-foreground-disabled, var(--_surface-foreground-muted));
+  border-color: var(--_surface-border-disabled, var(--_surface-border));
+  box-shadow: var(--_surface-shadow, none);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-semantic-surface,
+  .ds-semantic-surface::after {
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-semantic-surface {
+    background: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .ds-semantic-surface::before,
+  .ds-semantic-surface::after {
+    box-shadow: none;
+  }
+
+  .ds-semantic-surface[data-selected="true"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  .ds-semantic-surface[data-interactive="true"]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .ds-semantic-surface[data-disabled="true"] {
+    color: GrayText;
+    border-color: GrayText;
+  }
+}

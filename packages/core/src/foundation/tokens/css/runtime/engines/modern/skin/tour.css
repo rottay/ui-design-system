@@ -1,8 +1,33 @@
 /**
- * Modern Tour skin (WO-SKIN-04 checkpoint P).
+ * Modern Tour skin (WO-SKIN-04 checkpoint P; K4-A geometry drain 2026-07-24;
+ * R2 material-role repair 2026-07-24).
+ *
+ * R2 NOTE (DB-tenant contrast): `--ds-surface-card`, `--ds-color-neutral` and
+ * `--ds-color-text-on-primary` have NO Appearance emitter -- under a DB tenant
+ * they fall back to the DARK base theme (#18181C surface, #0C0C0E ink) while
+ * the color inks DO arrive inline from the tenant. An overlay surface must
+ * read bg and inks from one coherent role, so the surface/copy now resolve
+ * the CARD material (`--ds-material-card-background/-foreground`, authored
+ * per tenant; bithire aliases them to its own surface-card/text-primary, so
+ * bithire paint is byte-identical) and the solid next action inks from the
+ * tenant-authored OVERLAY foreground (`--ds-material-overlay-foreground`;
+ * bithire's #FFFFFF equals its on-primary). Every channel keeps a
+ * `--ds-tour-*` raw escape hatch.
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * GEOMETRY (K4-A): backdrop fixed positioning, spotlight fixed/radius/
+ * pointer-events, surface padding + logical `max-inline-size`, close-button
+ * geometry (LOGICAL `inset-inline-end` so it mirrors to the far corner under
+ * RTL), copy margins, footer layout, indicator size, and nav-action chrome
+ * were drained from engine Tailwind utilities (`fixed inset-0`, `flex`,
+ * `w-2 h-2 rounded-full`, `font-bold text-lg`, `mt-2`, `mb-3`…) and static
+ * inline styles (`padding: 16; maxWidth: 384`, `right: 8; width: 28`,
+ * `height: 32; padding: '0 12px'; fontSize: 13`). Shipped values are
+ * transcribed verbatim onto family-local `--ds-tour-*` channels with
+ * fallbacks. Copy margins also carry `margin: 0` resets the consumer's
+ * Tailwind preflight used to provide.
  *
  * PORTAL: both engines portal via a DIRECT `createPortal(…, document.body)` — not through
  * the shared `Portal` util, so this tree carries no `data-rottay-portal` marker and is not
@@ -28,11 +53,15 @@
  * overlay positioning runtime (measured branch), which centers them mathematically, so their
  * transform must stay `none` — a translate here would double-shift the popover. Unanchored
  * surfaces (no target resolved) center in the viewport via 50%/50% insets plus the base
- * translate below.
+ * translate below. The self-referential -50%/-50% translate is direction-neutral.
  *
- * NEITHER engine has any hover/focus/active feedback anywhere — no `:hover` rule, no
- * handler, no imperative write. That absence is the shipped behaviour and is preserved; do
- * not add interaction paint to the nav buttons or the close button here.
+ * INTERACTION (leveled in Pass 2, K4-A): the P2b-era zero-hover/focus/active
+ * contract for the nav actions and the close button is RETIRED -- the
+ * premium bar requires visible feedback on interactive chrome (the Pass-2
+ * dispatch leveled the same law for sibling lanes). The grammar matches the
+ * lane's overlay family: a quiet lift + elevation on hover, an accent ring
+ * on focus-visible, a pressed state on :active, a physical 44px floor under
+ * coarse pointers, and an outline contract under forced colors.
  *
  * SPECIFICITY (P-48): the surface's colored border is a SHORTHAND per `data-type`, repeated
  * to clear the tenant `*` border-color floor at (0,3,1).
@@ -40,15 +69,33 @@
 
 /* ---- mask + spotlight cutout ---- */
 .rottay-tour--modern[data-part='root'] > [data-part='backdrop'] {
+  position: fixed;
+  inset: 0;
   background-color: var(--ds-tour-mask-color);
 }
 .rottay-tour--modern[data-part='root'] > [data-part='spotlight'] {
+  position: fixed;
+  border-radius: var(--ds-radius-lg);
+  pointer-events: none;
   box-shadow: 0 0 0 9999px var(--ds-tour-mask-color);
 }
 
 /* ---- step popover ---- */
 .rottay-tour--modern[data-part='root'] > [data-part='surface'] {
-  background: var(--ds-surface-card);
+  padding: var(--ds-tour-surface-padding, var(--ds-spacing-4, 1rem));
+  max-inline-size: var(--ds-tour-surface-max-width, 24rem);
+  /* Font channels consumed like every sibling (dropdown/toast/notification):
+     without them the chrome borrowed the APP's body font (GeistSans in the
+     showroom) instead of the tenant's -- measured live: --ds-font-family-base
+     resolves Optima at the chrome root while the tour painted GeistSans. */
+  font-family: var(--ds-tour-font-family, var(--ds-font-family-base));
+  /* An overlay surface must read its bg and inks from ONE coherent role.
+     `--ds-surface-card` has no DB-Appearance emitter: under a DB tenant it
+     falls back to the DARK base theme (#18181C) while the inks arrive inline
+     from the tenant -- the R2 mismatch. The card material is authored per
+     tenant (TMM #FFFEFB; bithire aliases it to its own --ds-surface-card, so
+     bithire's white surface is byte-identical). */
+  background: var(--ds-tour-surface-bg, var(--ds-material-card-background, var(--ds-surface-card)));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
   transform: translate(-50%, -50%);
@@ -63,43 +110,165 @@
   border: 1px solid var(--ds-color-border-subtle);
 }
 
-/* ---- close button (no hover, by design) ---- */
+/* ---- close button; LOGICAL offset mirrors under RTL. The glyph is the
+        governed ActionCloseIcon (decorative, facade-sized) -- no font-size
+        here: that belonged to the retired ✕ text glyph. ---- */
 .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
+  position: absolute;
+  inset-block-start: var(--ds-tour-close-offset, var(--ds-spacing-2, 0.5rem));
+  inset-inline-end: var(--ds-tour-close-offset, var(--ds-spacing-2, 0.5rem));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-tour-close-size, 1.75rem);
+  block-size: var(--ds-tour-close-size, 1.75rem);
+  padding: 0;
+  cursor: pointer;
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: var(--ds-color-text-primary);
+  color: var(--ds-tour-close-ink, var(--ds-material-card-foreground-muted, var(--ds-color-text-secondary)));
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
 }
 
-/* ---- copy ---- */
+/* ---- copy (margins reset: preflight used to zero the UA h3/p margins) ---- */
+.rottay-tour--modern[data-part='root'] [data-part='cover'] {
+  margin-block-end: var(--ds-spacing-3, 0.75rem);
+}
+.rottay-tour--modern[data-part='root'] [data-part='title'] {
+  margin: 0;
+  /* Heading channel (toast/notification precedent): TMM renders Fraunces
+     (Art-Deco serif), bithire its grotesk display -- the tenant's authored
+     divergence, not the app shell's font. */
+  font-family: var(--ds-tour-title-font-family, var(--ds-font-family-heading, var(--ds-tour-font-family, var(--ds-font-family-base))));
+  /* Card-foreground is the tenant-authored ink for this surface (identical
+     to text-primary under bithire/TMM); text-primary is the fallback. */
+  color: var(--ds-tour-title-ink, var(--ds-material-card-foreground, var(--ds-color-text-primary)));
+  font-size: var(--ds-font-size-lg, 1.125rem);
+  font-weight: var(--ds-font-weight-bold, 700);
+  line-height: var(--ds-tour-title-line-height, 1.75rem);
+}
 .rottay-tour--modern[data-part='root'] [data-part='description'] {
-  color: var(--ds-color-text-secondary);
+  margin: 0;
+  margin-block-start: var(--ds-spacing-2, 0.5rem);
+  /* text-secondary passes on the card material under both probe tenants
+     (7.4:1 TMM, 5.9:1 bithire); the channel gets a raw escape hatch. */
+  color: var(--ds-tour-description-ink, var(--ds-color-text-secondary));
 }
 
-/* ---- step indicators ---- */
+/* ---- footer / indicators / nav actions ---- */
+.rottay-tour--modern[data-part='root'] [data-part='footer'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-start: var(--ds-spacing-4, 1rem);
+}
+.rottay-tour--modern[data-part='root'] [data-part='indicators'] {
+  display: flex;
+  gap: var(--ds-spacing-1, 0.25rem);
+}
 .rottay-tour--modern[data-part='root'] [data-part='indicator'] {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-surface-panel);
 }
 .rottay-tour--modern[data-part='root'] [data-part='indicator'][data-current='true'] {
   background: var(--ds-color-primary);
 }
+.rottay-tour--modern[data-part='root'] [data-part='actions'] {
+  display: flex;
+  gap: var(--ds-spacing-2, 0.5rem);
+}
 
-/* ---- nav actions (no hover, by design) ---- */
+/* ---- nav actions ---- */
 .rottay-tour--modern[data-part='root'] [data-part='action'] {
+  block-size: var(--ds-tour-action-height, 2rem);
+  padding-block: 0;
+  padding-inline: var(--ds-tour-action-padding-inline, 0.75rem);
+  cursor: pointer;
+  font-size: var(--ds-tour-action-font-size, 0.8125rem);
   border-radius: var(--ds-radius-md);
   border: none;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
 }
 .rottay-tour--modern[data-part='root'] [data-part='action'][data-action='prev'] {
   background: transparent;
   color: var(--ds-color-text-primary);
 }
 .rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next'] {
-  background: var(--ds-color-neutral);
-  color: var(--ds-color-text-on-primary);
+  /* `--ds-color-neutral` is declared NOWHERE in the token fleet: its
+     background declaration dropped, shipping an invisible white-on-white
+     button on default-type tours under bithire. Primary is the resilient
+     fallback. The ink prefers the tenant-authored overlay foreground: under
+     a DB tenant `--ds-color-text-on-primary` has no Appearance emitter and
+     falls back to the dark base (#0C0C0E on TMM teal = 3.6:1, the R2 axe
+     failure); overlay-foreground is authored (#FFF9F0 on TMM teal = 5.2:1;
+     bithire's #FFFFFF equals its on-primary -- byte-identical paint). */
+  background: var(--ds-tour-action-next-bg, var(--ds-color-neutral, var(--ds-color-primary)));
+  color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));
 }
 .rottay-tour--modern[data-part='root']
   [data-part='surface'][data-type='primary']
   [data-part='action'][data-action='next'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
+  background: var(--ds-tour-action-next-bg, var(--ds-color-primary));
+  color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));
+}
+
+/* ---- interaction feedback (leveled in Pass 2): ghost prev deepens, solid
+        next lifts; the close button fills quietly. ---- */
+.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='prev']:not(:disabled):hover {
+  background: var(--ds-tour-action-prev-bg-hover, color-mix(in srgb, currentColor 7%, transparent));
+}
+.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next']:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ds-elevation-1);
+}
+.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next']:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+.rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):focus-visible,
+.rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):focus-visible {
+  outline: 2px solid var(--ds-tour-focus-ring, color-mix(in srgb, var(--ds-color-primary) 56%, transparent));
+  outline-offset: 2px;
+}
+.rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):hover {
+  color: var(--ds-tour-close-ink-hover, var(--ds-material-card-foreground, var(--ds-color-text-primary)));
+  background: var(--ds-tour-close-bg-hover, color-mix(in srgb, currentColor 8%, transparent));
+}
+
+/* forced-colors contract: backgrounds/shadows are stripped, hover must still read. */
+@media (forced-colors: active) {
+  .rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):hover,
+  .rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):hover {
+    outline: 1px solid;
+  }
+}
+
+/* coarse pointers: physical 44px floor, never a rem floor (tabs.css idiom). */
+@media (pointer: coarse) {
+  .rottay-tour--modern[data-part='root'] [data-part='action'] {
+    min-block-size: max(44px, var(--ds-tour-touch-target-min, 2rem));
+  }
+  .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
+    inline-size: max(44px, var(--ds-tour-touch-target-min, 1.75rem));
+    block-size: max(44px, var(--ds-tour-touch-target-min, 1.75rem));
+    inset-block-start: var(--ds-spacing-1, 0.25rem);
+    inset-inline-end: var(--ds-spacing-1, 0.25rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-tour--modern[data-part='root'] [data-part='action'],
+  .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
+    transition-duration: 0.01ms;
+  }
 }

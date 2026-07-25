@@ -24,7 +24,8 @@
  *
  * This component supports the Rottay multi-engine architecture:
  * - **Classic**: Wraps Ant Design Splitter with full feature parity
- * - **Modern**: Tailwind CSS implementation with custom drag handling
+ * - **Modern**: Token-driven implementation (skin-owned structure and
+ *   interactive paint) with pointer + keyboard resize handling
  * - **Rustic**: Pure CSS flexbox with inline styles and drag logic
  *
  * @example Basic Horizontal Split

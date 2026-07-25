@@ -89,8 +89,9 @@ export const RadarChart = memo(function RadarChart({
       height: 400,
       maxValue: maxValueProp,
       levels,
+      padding: showLabels ? 40 : 16,
     }),
-    [data, levels, maxValueProp, palette, series],
+    [data, levels, maxValueProp, palette, series, showLabels],
   );
   const fallbackMessage = model.fallbackMessage;
   const canRender = fallbackMessage === null;

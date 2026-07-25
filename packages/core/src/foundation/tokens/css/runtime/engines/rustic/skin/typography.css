@@ -66,3 +66,19 @@
 .rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='error'] {
   color: var(--ds-color-error-500);
 }
+
+.rottay-typography.rottay-typography--rustic[data-contrast='strong'] {
+  color: var(--ds-type-color-strong, var(--ds-color-text-primary));
+}
+.rottay-typography.rottay-typography--rustic[data-contrast='default'] {
+  color: var(--ds-type-color-default, var(--ds-color-text-primary));
+}
+.rottay-typography.rottay-typography--rustic[data-contrast='muted'] {
+  color: var(--ds-type-color-muted, var(--ds-color-text-secondary));
+}
+.rottay-typography.rottay-typography--rustic[data-contrast='subtle'] {
+  color: var(--ds-type-color-subtle, var(--ds-color-text-tertiary));
+}
+.rottay-typography.rottay-typography--rustic[data-contrast='inverse'] {
+  color: var(--ds-type-color-inverse, var(--ds-color-text-inverse));
+}

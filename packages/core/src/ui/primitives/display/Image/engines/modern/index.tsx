@@ -166,14 +166,16 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      {/* Loading Placeholder */}
+      {/* Loading Placeholder — the pulse animation is owned by the skin
+          (ds-foundation-pulse), not a raw Tailwind `animate-pulse` utility;
+          the global reduced-motion guard neutralizes it. */}
       {status === 'loading' && (
         <div
           data-part="placeholder"
           className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
         >
           {placeholder || (
-            <div className="rottay-image__pulse animate-pulse w-full h-full" />
+            <div className="rottay-image__pulse w-full h-full" />
           )}
         </div>
       )}
@@ -209,9 +211,11 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
         </div>
       )}
 
-      {/* Zoom indicator for zoomable images */}
+      {/* Zoom indicator for zoomable images — `end-2` is LOGICAL
+          (inset-inline-end), so the badge mirrors under RTL. `bottom-2`
+          stays physical: block direction does not flip in RTL. */}
       {zoomable && isHovered && (
-        <div data-part="zoom-indicator" className="absolute bottom-2 right-2 p-1.5 rounded-full">
+        <div data-part="zoom-indicator" className="absolute bottom-2 end-2 p-1.5 rounded-full">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
           </svg>

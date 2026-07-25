@@ -24,10 +24,10 @@ describe('Badge hover transform (P-43)', () => {
   describe('modern engine', () => {
     it('stamps data-interactive on a clickable standalone badge, and omits it otherwise', () => {
       const { rerender } = render(<ModernBadge clickable onClick={vi.fn()}>Ready</ModernBadge>);
-      expect(screen.getByText('Ready')).toHaveAttribute('data-interactive', 'true');
+      expect(screen.getByText('Ready').closest('.rottay-badge')).toHaveAttribute('data-interactive', 'true');
 
       rerender(<ModernBadge>Static</ModernBadge>);
-      expect(screen.getByText('Static')).not.toHaveAttribute('data-interactive');
+      expect(screen.getByText('Static').closest('.rottay-badge')).not.toHaveAttribute('data-interactive');
     });
 
     it('carries the indicator badge corner offset as --ds-badge-position-transform, not the transform property', () => {
@@ -56,7 +56,7 @@ describe('Badge hover transform (P-43)', () => {
 
     it('carries the modern skin class the stylesheet selects on', () => {
       render(<ModernBadge clickable onClick={vi.fn()}>Ready</ModernBadge>);
-      const el = screen.getByText('Ready');
+      const el = screen.getByText('Ready').closest('.rottay-badge')!;
 
       expect(el.className).toContain('rottay-badge');
       expect(el.className).toContain('rottay-badge--modern');
@@ -121,17 +121,17 @@ describe('Badge hover transform (P-43)', () => {
   });
 
   describe('skin stylesheets', () => {
-    it('modern skin composes the personality hover transform onto the position offset, keyed on data-interactive and :hover', () => {
+    it('modern skin composes the personality hover transform onto the position offset through anatomy state', () => {
       const skin = readFileSync(
         join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/badge.css'),
         'utf-8'
       );
 
-      expect(skin).toContain('.rottay-badge.rottay-badge--modern {');
+      expect(skin).toContain(".rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'] {");
       expect(skin).toContain('transform: var(--ds-badge-position-transform, translateY(0));');
-      expect(skin).toContain(".rottay-badge.rottay-badge--modern[data-interactive='true']:hover {");
+      expect(skin).toContain(".rottay-badge.rottay-badge--modern[data-state~='hovered'] {");
       expect(skin).toContain(
-        'transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));'
+        'var(--ds-badge-hover-transform, translateY(-1px));'
       );
       // The `none` keyword cannot be combined with a transform function in the
       // same value -- see the file's own header comment. Regression guard.
@@ -153,13 +153,17 @@ describe('Badge hover transform (P-43)', () => {
       expect(skin).not.toContain('position-transform, none)');
     });
 
-    it('both skin files are imported unlayered from foundation/base.css and entrypoints/styles.css', () => {
+    it('imports both engine skins into the explicit engine cascade layer from every public stylesheet', () => {
       const base = readFileSync(join(__dirname, '../../../../../foundation/tokens/css/facade/entrypoints/base.css'), 'utf-8');
       const entry = readFileSync(join(__dirname, '../../../../../foundation/tokens/css/facade/entrypoints/styles.css'), 'utf-8');
 
       for (const sheet of [base, entry]) {
-        expect(sheet).toContain("@import '../../runtime/engines/modern/skin/badge.css';");
-        expect(sheet).toContain("@import '../../runtime/engines/rustic/skin/badge.css';");
+        expect(sheet).toMatch(
+          /@import ["']\.\.\/\.\.\/runtime\/engines\/modern\/skin\/badge\.css["'] layer\(rottay-engines\);/
+        );
+        expect(sheet).toMatch(
+          /@import ["']\.\.\/\.\.\/runtime\/engines\/rustic\/skin\/badge\.css["'] layer\(rottay-engines\);/
+        );
       }
     });
   });

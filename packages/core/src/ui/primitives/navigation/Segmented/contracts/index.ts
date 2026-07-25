@@ -50,7 +50,7 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { ReactNode, CSSProperties } from "react";
 
 // ============================================================================
 // Type Definitions
@@ -135,6 +135,9 @@ export interface SegmentedOption {
    * @example "premium-tier"
    */
   className?: string;
+
+  /** Accessible name when the visual label is icon-only or abbreviated. */
+  ariaLabel?: string;
 }
 
 // ============================================================================
@@ -242,7 +245,10 @@ export interface SegmentedProps {
    *
    * @default 'middle'
    */
-  size?: 'large' | 'middle' | 'small';
+  size?: "large" | "middle" | "small";
+
+  /** Accessible name for the grouped choice control. */
+  ariaLabel?: string;
 
   // ---------------------------------------------------------------------------
   // Styling
@@ -284,7 +290,7 @@ export interface SegmentedProps {
  */
 export const SEGMENTED_DEFAULTS: Partial<SegmentedProps> = {
   /** Default size is middle */
-  size: 'middle',
+  size: "middle",
 
   /** Not block mode by default */
   block: false,

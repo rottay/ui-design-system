@@ -42,7 +42,6 @@ function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactE
               <Text style={{ fontSize: 20, fontWeight: 700 }}>{currentPlan.name}</Text>
               <Text
                 className="ds-billing__muted-text"
-                data-part="muted-text"
               >
                 {currentPlan.price} / {currentPlan.interval}
               </Text>
@@ -66,7 +65,6 @@ function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactE
                 <Text
                   key={i}
                   className="ds-billing__muted-text"
-                  data-part="muted-text"
                   style={{ fontSize: 14 }}
                 >
                   {feature}
@@ -102,7 +100,6 @@ function UsageSection({ config }: { config: BillingSurfaceConfig }): React.React
                   <Text style={{ fontWeight: 500 }}>{item.label}</Text>
                   <Text
                     className="ds-billing__muted-text"
-                    data-part="muted-text"
                     style={{ fontSize: 12 }}
                   >
                     {item.current} / {item.limit} {item.unit}
@@ -182,13 +179,11 @@ function PaymentMethodsSection({ config }: { config: BillingSurfaceConfig }): Re
                 <Text style={{ fontWeight: 500 }}>{method.type}</Text>
                 <Text
                   className="ds-billing__muted-text"
-                  data-part="muted-text"
                 >
                   **** {method.last4}
                 </Text>
                 <Text
                   className="ds-billing__muted-text"
-                  data-part="muted-text"
                   style={{ fontSize: 12 }}
                 >
                   Exp {method.expiry}

@@ -1,0 +1,686 @@
+/**
+ * DecisionComparison — aligned, evidence-led comparison instrument.
+ *
+ * This pattern owns its complete shared chrome. Products provide decision data,
+ * copy, permissions and DS-composed actions; they must not repaint descendants.
+ * Every visual channel below is a documented custom property so a vertical or
+ * DB-owned tenant can change the personality without changing this anatomy.
+ */
+
+.ds-pattern-decision-comparison[data-part="root"][data-part="root"] {
+  --ds-decision-comparison-pad: var(--ds-spacing-4, 1rem);
+  --ds-decision-comparison-row-height: 3rem;
+  --ds-decision-comparison-radius: var(--ds-radius-xl, 1rem);
+  --ds-decision-comparison-border: var(
+    --ds-surface-card-border-strong,
+    var(--ds-color-border-secondary)
+  );
+  --ds-decision-comparison-section-border: color-mix(
+    in srgb,
+    var(--ds-surface-card-border, var(--ds-color-border-primary)) 88%,
+    var(--ds-color-text-primary) 12%
+  );
+  --ds-decision-comparison-body-font-size: var(
+    --ds-font-size-sm,
+    0.875rem
+  );
+  --ds-decision-comparison-detail-font-size: var(
+    --ds-font-size-xs,
+    0.75rem
+  );
+  --ds-decision-comparison-title-font-size: var(
+    --ds-font-size-lg,
+    1rem
+  );
+  --ds-decision-comparison-bg: linear-gradient(
+      180deg,
+      color-mix(
+          in srgb,
+          var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 97%,
+          var(--ds-color-primary) 3%
+        )
+        0,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 16rem
+    );
+  --ds-decision-comparison-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
+    0 1px 2px
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 1.125rem 2.75rem -1.75rem
+      color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent);
+  --ds-decision-comparison-toolbar-min-height: 4.25rem;
+  --ds-decision-comparison-toolbar-bg: linear-gradient(
+    100deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 88%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 94%,
+      var(--ds-color-primary) 6%
+    )
+  );
+  --ds-decision-comparison-verdict-bg: linear-gradient(
+    112deg,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 9%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 52%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    )
+  );
+  --ds-decision-comparison-subject-bg: linear-gradient(
+    180deg,
+    color-mix(
+        in srgb,
+        var(--ds-color-primary) 3%,
+        var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+      )
+      0,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 13.125rem
+  );
+  --ds-decision-comparison-subject-leading-bg: radial-gradient(
+      circle at 100% 0%,
+      color-mix(in srgb, var(--ds-color-primary) 9%, transparent),
+      transparent 34%
+    ),
+    var(--ds-decision-comparison-subject-bg);
+  --ds-decision-comparison-leading-accent: linear-gradient(
+    90deg,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 62%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    ),
+    var(--ds-color-primary)
+  );
+  --ds-decision-comparison-identity-min-height: 5.75rem;
+  --ds-decision-comparison-badges-min-height: 3.375rem;
+  --ds-decision-comparison-visual-min-height: 13.625rem;
+  --ds-decision-comparison-visual-grid-size: 1.75rem;
+  --ds-decision-comparison-visual-grid-color: color-mix(
+    in srgb,
+    var(--ds-surface-card-border, var(--ds-color-border-primary)) 9%,
+    transparent
+  );
+  --ds-decision-comparison-footer-bg: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 56%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+  );
+  --ds-decision-comparison-insight-bg: linear-gradient(
+    100deg,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 7%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 97%,
+      var(--ds-color-primary)
+    )
+  );
+  --ds-decision-comparison-motion-duration: var(
+    --ds-motion-reveal,
+    280ms
+  );
+  --ds-decision-comparison-motion-easing: var(
+    --ds-motion-ease-enter,
+    cubic-bezier(0.22, 1, 0.36, 1)
+  );
+
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  container-name: ds-decision-comparison;
+  container-type: inline-size;
+  border: 1px solid var(--ds-decision-comparison-border);
+  border-radius: var(--ds-decision-comparison-radius);
+  background: var(--ds-decision-comparison-bg);
+  box-shadow: var(--ds-decision-comparison-shadow);
+  color: var(--ds-color-text-primary);
+  animation: ds-decision-comparison-enter
+    var(--ds-decision-comparison-motion-duration)
+    var(--ds-decision-comparison-motion-easing) both;
+}
+
+.ds-pattern-decision-comparison[data-density="comfortable"] {
+  --ds-decision-comparison-pad: var(--ds-spacing-5, 1.25rem);
+  --ds-decision-comparison-row-height: 3.25rem;
+}
+
+.ds-pattern-decision-comparison[data-loading="true"] {
+  cursor: progress;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__toolbar {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ds-spacing-5, 1.25rem);
+  min-height: var(--ds-decision-comparison-toolbar-min-height);
+  padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
+  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  background: var(--ds-decision-comparison-toolbar-bg);
+  box-shadow: inset 0 -1px 0
+    color-mix(in srgb, var(--ds-decision-comparison-section-border) 54%, transparent);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__context {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 0.5rem);
+  min-width: 0;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__context-primary {
+  min-width: 0;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-typography-section-title-family, inherit);
+  font-size: var(--ds-decision-comparison-body-font-size);
+  font-weight: var(--ds-typography-section-title-weight, 650);
+  letter-spacing: var(--ds-typography-section-title-tracking, -0.012em);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__context-meta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.625rem;
+  padding-inline: var(--ds-spacing-2, 0.5rem);
+  border: 1px solid
+    var(--ds-surface-chip-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-surface-chip-radius, var(--ds-radius-full, 9999px));
+  background: var(--ds-surface-chip-bg, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-decision-comparison-detail-font-size);
+  line-height: 1.35;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__toolbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 0.5rem);
+  min-width: 0;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__verdict {
+  position: relative;
+  z-index: 1;
+  padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
+  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  background: var(--ds-decision-comparison-verdict-bg);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__viewport {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__grid {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--ds-decision-comparison-columns, 2),
+    minmax(17.25rem, 1fr)
+  );
+  align-items: stretch;
+  min-width: calc(var(--ds-decision-comparison-columns, 2) * 17.25rem);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__subject {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto minmax(
+      var(--ds-decision-comparison-visual-min-height),
+      auto
+    ) 1fr auto;
+  min-width: 0;
+  border-inline-end: 1px solid var(--ds-decision-comparison-section-border);
+  background: var(--ds-decision-comparison-subject-bg);
+  animation: ds-decision-comparison-subject-enter
+    var(--ds-decision-comparison-motion-duration)
+    var(--ds-decision-comparison-motion-easing) both;
+  animation-delay: calc(
+    var(--ds-decision-comparison-subject-index, 0) * 44ms
+  );
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__subject:last-child {
+  border-inline-end: 0;
+}
+
+.ds-pattern-decision-comparison
+  .ds-decision-comparison__subject[data-leading="true"] {
+  background: var(--ds-decision-comparison-subject-leading-bg);
+  box-shadow: inset 0 3px 0 var(--ds-color-primary);
+}
+
+.ds-pattern-decision-comparison
+  .ds-decision-comparison__subject[data-leading="true"]::before {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  height: 3px;
+  content: "";
+  background: var(--ds-decision-comparison-leading-accent);
+  pointer-events: none;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3, 0.75rem);
+  min-width: 0;
+  min-height: var(--ds-decision-comparison-identity-min-height);
+  padding: var(--ds-decision-comparison-pad);
+  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__avatar {
+  flex: 0 0 auto;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__identity-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--ds-spacing-3, 0.75rem);
+  min-width: 0;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-typography-section-title-family, inherit);
+  font-size: var(--ds-decision-comparison-title-font-size);
+  font-weight: var(--ds-typography-section-title-weight, 650);
+  letter-spacing: var(--ds-typography-section-title-tracking, -0.015em);
+  line-height: 1.35;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__title > * {
+  max-width: 100%;
+  block-size: auto;
+  overflow: visible;
+  line-height: inherit;
+  text-align: start;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__score {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding-inline: var(--ds-spacing-2, 0.5rem);
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 24%,
+      var(--ds-decision-comparison-section-border)
+    );
+  border-radius: var(--ds-radius-lg, 0.75rem);
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 7%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+  );
+  color: var(--ds-color-primary);
+  font-family: var(--ds-typography-numeric-family, inherit);
+  font-size: var(--ds-font-size-xl, 1.375rem);
+  font-weight: var(--ds-font-weight-bold, 700);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 84%, transparent);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__subtitle,
+.ds-pattern-decision-comparison .ds-decision-comparison__score-label {
+  margin-top: 0.1875rem;
+  overflow: hidden;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-decision-comparison-detail-font-size);
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__score-label {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-decision-comparison-detail-font-size);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__badges {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-1, 0.25rem);
+  min-height: var(--ds-decision-comparison-badges-min-height);
+  padding: var(--ds-spacing-2, 0.5rem) var(--ds-decision-comparison-pad);
+  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__visual {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: var(--ds-decision-comparison-visual-min-height);
+  padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
+  overflow: hidden;
+  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  background: radial-gradient(
+      circle at 50% 46%,
+      color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
+      transparent 42%
+    ),
+    linear-gradient(
+      90deg,
+      var(--ds-decision-comparison-visual-grid-color) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      180deg,
+      var(--ds-decision-comparison-visual-grid-color) 1px,
+      transparent 1px
+    );
+  background-size: auto,
+    var(--ds-decision-comparison-visual-grid-size)
+      var(--ds-decision-comparison-visual-grid-size),
+    var(--ds-decision-comparison-visual-grid-size)
+      var(--ds-decision-comparison-visual-grid-size);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__visual > * {
+  width: 100%;
+  max-width: 17rem;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__facts {
+  display: grid;
+  align-content: start;
+  margin: 0;
+  padding: 0;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__fact {
+  display: grid;
+  grid-template-columns: minmax(6.75rem, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: var(--ds-spacing-3, 0.75rem);
+  min-height: var(--ds-decision-comparison-row-height);
+  padding: var(--ds-spacing-2, 0.5rem) var(--ds-decision-comparison-pad);
+  border-bottom: 1px solid var(--ds-decision-comparison-section-border);
+  transition: background-color var(--ds-motion-feedback, 160ms)
+      var(--ds-motion-ease-move, ease-out),
+    box-shadow var(--ds-motion-feedback, 160ms)
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-decision-comparison
+  .ds-decision-comparison__fact:nth-child(even) {
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 34%,
+    transparent
+  );
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__fact:hover {
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 3.5%,
+    transparent
+  );
+  box-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
+    inset 0 -1px 0
+      color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__fact-label,
+.ds-pattern-decision-comparison .ds-decision-comparison__fact-value {
+  min-width: 0;
+  margin: 0;
+  font-size: var(--ds-decision-comparison-body-font-size);
+  line-height: 1.4;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__fact-label {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__fact-value {
+  display: grid;
+  justify-items: end;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-typography-numeric-family, inherit);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__fact-supporting {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-typography-supporting-family, inherit);
+  font-size: var(--ds-decision-comparison-detail-font-size);
+  font-weight: var(--ds-font-weight-regular, 400);
+}
+
+.ds-pattern-decision-comparison
+  .ds-decision-comparison__fact[data-tone="positive"]
+  .ds-decision-comparison__fact-value {
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-decision-comparison
+  .ds-decision-comparison__fact[data-tone="warning"]
+  .ds-decision-comparison__fact-value {
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-decision-comparison
+  .ds-decision-comparison__fact[data-tone="critical"]
+  .ds-decision-comparison__fact-value {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-decision-comparison
+  .ds-decision-comparison__fact[data-tone="info"]
+  .ds-decision-comparison__fact-value {
+  color: var(--ds-color-info);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__subject-footer {
+  display: grid;
+  align-self: end;
+  gap: var(--ds-spacing-2, 0.5rem);
+  padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
+  border-top: 1px solid var(--ds-decision-comparison-section-border);
+  background: var(--ds-decision-comparison-footer-bg);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__subject-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 0.5rem);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__subject-actions > * {
+  flex: 1 1 auto;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__footnote {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-typography-supporting-family, inherit);
+  font-size: var(--ds-decision-comparison-detail-font-size);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__insight {
+  padding: var(--ds-spacing-3, 0.75rem) var(--ds-decision-comparison-pad);
+  border-top: 1px solid var(--ds-decision-comparison-section-border);
+  background: var(--ds-decision-comparison-insight-bg);
+}
+
+.ds-pattern-decision-comparison .ds-decision-comparison__empty {
+  display: grid;
+  min-height: 13.75rem;
+  place-items: center;
+  padding: var(--ds-spacing-6, 1.5rem);
+  background: radial-gradient(
+    circle at 50% 42%,
+    color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
+    transparent 38%
+  );
+}
+
+@container ds-decision-comparison (max-width: 62rem) {
+  .ds-pattern-decision-comparison .ds-decision-comparison__toolbar {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: var(--ds-spacing-3, 0.75rem);
+  }
+
+  .ds-pattern-decision-comparison .ds-decision-comparison__toolbar-actions {
+    justify-content: flex-start;
+  }
+}
+
+@container ds-decision-comparison (max-width: 47.9375rem) {
+  .ds-pattern-decision-comparison[data-part="root"][data-part="root"] {
+    --ds-decision-comparison-pad: var(--ds-spacing-3, 0.75rem);
+    --ds-decision-comparison-radius: var(--ds-radius-lg, 0.75rem);
+    --ds-decision-comparison-identity-min-height: 5.25rem;
+    --ds-decision-comparison-visual-min-height: 12rem;
+  }
+
+  .ds-pattern-decision-comparison .ds-decision-comparison__grid {
+    grid-template-columns: repeat(
+      var(--ds-decision-comparison-columns, 2),
+      minmax(82cqi, 1fr)
+    );
+    min-width: calc(var(--ds-decision-comparison-columns, 2) * 82cqi);
+    scroll-snap-type: x mandatory;
+  }
+
+  .ds-pattern-decision-comparison .ds-decision-comparison__subject {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .ds-pattern-decision-comparison .ds-decision-comparison__identity {
+    align-items: flex-start;
+  }
+
+  .ds-pattern-decision-comparison .ds-decision-comparison__subtitle,
+  .ds-pattern-decision-comparison .ds-decision-comparison__score-label {
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .ds-pattern-decision-comparison .ds-decision-comparison__fact {
+    grid-template-columns: minmax(5.75rem, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+@container ds-decision-comparison (max-width: 30rem) {
+  .ds-pattern-decision-comparison .ds-decision-comparison__toolbar-actions,
+  .ds-pattern-decision-comparison .ds-decision-comparison__subject-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ds-pattern-decision-comparison .ds-decision-comparison__toolbar-actions > *,
+  .ds-pattern-decision-comparison .ds-decision-comparison__subject-actions > * {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.ds-pattern-decision-comparison:dir(rtl)
+  .ds-decision-comparison__fact-value {
+  justify-items: start;
+  text-align: start;
+}
+
+@keyframes ds-decision-comparison-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.998);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-decision-comparison-subject-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.625rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-decision-comparison[data-part="root"],
+  .ds-pattern-decision-comparison .ds-decision-comparison__subject,
+  .ds-pattern-decision-comparison .ds-decision-comparison__fact {
+    animation: none;
+    scroll-behavior: auto;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-pattern-decision-comparison[data-part="root"][data-part="root"],
+  .ds-pattern-decision-comparison .ds-decision-comparison__toolbar,
+  .ds-pattern-decision-comparison .ds-decision-comparison__verdict,
+  .ds-pattern-decision-comparison .ds-decision-comparison__subject,
+  .ds-pattern-decision-comparison .ds-decision-comparison__subject-footer,
+  .ds-pattern-decision-comparison .ds-decision-comparison__insight {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .ds-pattern-decision-comparison
+    .ds-decision-comparison__subject[data-leading="true"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

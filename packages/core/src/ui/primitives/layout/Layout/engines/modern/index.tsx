@@ -6,9 +6,10 @@
  * Uses Tailwind CSS utility classes for styling with DS token theme integration.
  *
  * @remarks
- * The Modern engine generates:
- * - `flex flex-col min-h-screen` for main layout
- * - `md:flex-row` when hasSider is true (responsive row layout)
+ * The Modern engine stamps anatomy (class pairs + data parts); the modern
+ * skin (`layout.css`) owns structure and paint:
+ * - flex column with full-viewport min block size for the main layout
+ * - row direction at the `md` breakpoint when hasSider is true
  * - `var(--ds-surface-inset)` for header/footer backgrounds
  * - `var(--ds-surface-card)` or `var(--ds-surface-panel)` for sider based on theme
  * - Custom collapsible sidebar with controlled/uncontrolled state
@@ -45,14 +46,16 @@ import type {
 import { LAYOUT_DEFAULTS } from '../../contracts';
 
 /**
- * Modern Layout shell using Tailwind flexbox utilities.
+ * Modern Layout shell.
  *
- * Renders a full-height flex column by default. When `hasSider` is true,
- * switches to a row direction at the `md` breakpoint so the sidebar sits
- * alongside the content area on wider screens.
+ * Structure (flex direction, min block size, responsive row with sider) is
+ * skin-owned (`layout.css`), keyed on the class pair + `data-has-sider` --
+ * the engine stamps anatomy only. Historically these were Tailwind
+ * utilities (`flex flex-col min-h-screen`, `md:flex-row`); K3-C drained
+ * them so the skin is the single owner of the shell's structure.
  *
  * @param props - Layout container props (hasSider, className, style).
- * @returns A ref-forwarding div styled with Tailwind flex utilities.
+ * @returns A ref-forwarding div stamped with the layout anatomy.
  */
 export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
   (props, ref) => {
@@ -60,7 +63,7 @@ export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     return (
       <div
         ref={ref}
-        className={`rottay-layout rottay-layout--modern flex flex-col min-h-screen ${hasSider ? 'md:flex-row' : ''} ${className}`}
+        className={`rottay-layout rottay-layout--modern ${className}`}
         style={style}
         data-part="root"
         data-has-sider={hasSider ? 'true' : 'false'}
@@ -73,8 +76,8 @@ export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
 Layout.displayName = 'Layout.Modern';
 
 /**
- * Modern Header using DS token surface-inset background and flex alignment.
- * Height is set via inline style to support both pixel and string values.
+ * Modern Header. Alignment and padding rhythm are skin-owned (`layout.css`);
+ * height stays inline to support both pixel and string values.
  *
  * @param props - Header props (height, className, style).
  * @returns A ref-forwarding semantic `<header>` element.
@@ -85,7 +88,7 @@ export const Header = React.forwardRef<HTMLElement, LayoutHeaderProps>(
     return (
       <header
         ref={ref}
-        className={`rottay-layout-header rottay-layout-header--modern px-4 flex items-center shrink-0 ${className}`}
+        className={`rottay-layout-header rottay-layout-header--modern ${className}`}
         style={{ height: typeof height === 'number' ? `${height}px` : height, ...style }}
         data-part="header"
       >
@@ -138,11 +141,13 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     };
 
     const currentWidth = isCollapsed ? collapsedWidth : width;
-    // DS tokens: surface-panel for dark sidebar, surface-card for light
+    // DS tokens: surface-panel for dark sidebar, surface-card for light.
+    // Width stays inline (runtime value); shrink/overflow/collapse transition
+    // and the trigger chrome are skin-owned (`layout.css`).
     return (
       <aside
         ref={ref}
-        className={`rottay-layout-sider rottay-layout-sider--modern shrink-0 overflow-y-auto transition-all duration-300 ${className}`}
+        className={`rottay-layout-sider rottay-layout-sider--modern ${className}`}
         style={{
           width: typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth,
           ...style,
@@ -155,7 +160,6 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
         {collapsible && (
           <button
             type="button"
-            style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', width: '100%', marginTop: 8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleToggle}
             data-part="trigger"
             data-collapsed={isCollapsed ? 'true' : 'false'}
@@ -170,7 +174,10 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
 Sider.displayName = 'Layout.Sider.Modern';
 
 /**
- * Modern Content area -- a flex-growing `<main>` with default padding and scroll.
+ * Modern Content area -- a flex-growing `<main>`. Growth, padding rhythm and
+ * scroll behavior are skin-owned (`layout.css`); the engine stamps anatomy
+ * only. `rottay-layout-content--modern` was minted in K3-C so the skin can
+ * address this engine's content without touching rustic's.
  *
  * @param props - Content props (className, style).
  * @returns A ref-forwarding semantic `<main>` element.
@@ -179,7 +186,7 @@ export const Content = React.forwardRef<HTMLElement, LayoutContentProps>(
   (props, ref) => {
     const { children, className = '', style } = props;
     return (
-      <main ref={ref} className={`rottay-layout-content flex-1 p-4 overflow-auto ${className}`} style={style} data-part="content">
+      <main ref={ref} className={`rottay-layout-content rottay-layout-content--modern ${className}`} style={style} data-part="content">
         {children}
       </main>
     );
@@ -189,7 +196,8 @@ Content.displayName = 'Layout.Content.Modern';
 
 /**
  * Modern Footer using DS token surface-inset background.
- * Shrink-proof so it stays at its natural height even in flex overflow.
+ * Shrink-proof so it stays at its natural height even in flex overflow;
+ * padding rhythm and shrink behavior are skin-owned (`layout.css`).
  *
  * @param props - Footer props (className, style).
  * @returns A ref-forwarding semantic `<footer>` element.
@@ -198,7 +206,7 @@ export const Footer = React.forwardRef<HTMLElement, LayoutFooterProps>(
   (props, ref) => {
     const { children, className = '', style } = props;
     return (
-      <footer ref={ref} className={`rottay-layout-footer rottay-layout-footer--modern px-4 py-2 shrink-0 ${className}`} style={style} data-part="footer">
+      <footer ref={ref} className={`rottay-layout-footer rottay-layout-footer--modern ${className}`} style={style} data-part="footer">
         {children}
       </footer>
     );

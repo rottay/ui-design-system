@@ -158,6 +158,22 @@ describe('Card.Header', () => {
     expect(screen.getByText('Subtitle')).toBeInTheDocument();
   });
 
+  it('renders premium context anatomy with eyebrow and semantic icon', () => {
+    const { container } = render(
+      <Card.Header
+        eyebrow="Decision intelligence"
+        icon={<span data-testid="semantic-icon">I</span>}
+        title="Evidence readiness"
+      />
+    );
+
+    expect(screen.getByText('Decision intelligence')).toBeInTheDocument();
+    expect(screen.getByTestId('semantic-icon')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="icon"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+    expect(container.querySelector('[data-has-icon="true"]')).not.toBeNull();
+  });
+
   it('renders with extra content', () => {
     render(
       <Card.Header

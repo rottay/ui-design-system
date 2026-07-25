@@ -77,7 +77,6 @@ export function SettingsSurface({
       {tab.description && (
         <Text
           className="ds-settings__muted-text"
-          data-part="muted-text"
           size="sm"
           style={{
             lineHeight: 1.5,
@@ -112,7 +111,6 @@ export function SettingsSurface({
       {config.presentation.intro && (
         <Text
           className="ds-settings__muted-text"
-          data-part="muted-text"
           size="sm"
           style={{
             lineHeight: 1.6,

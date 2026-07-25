@@ -78,25 +78,25 @@ import { SKELETON_DEFAULTS } from '../../contracts';
  * Modern Engine implementation of the Skeleton component.
  *
  * @description
- * Custom skeleton implementation using DaisyUI classes and Tailwind utilities.
- * Provides a lightweight alternative to Ant Design with smaller bundle size.
+ * Token-driven skeleton: the unlayered modern skin
+ * (`skin/skeleton.css`) owns the flat/shimmer fills, the canon animation
+ * wiring, all layout and the line/title geometry. No DaisyUI `skeleton`
+ * class remains (drained in the TASK S canon-shimmer pass, decrementing
+ * `daisy.classConsumers`).
  *
  * @remarks
  * **Implementation Details:**
- * - Uses DaisyUI `skeleton` class for base styling
- * - Flexbox layout for avatar + content structure
- * - Dynamic border-radius for shape variants
- * - Percentage-based last line width for realistic text appearance
- *
- * **CSS Classes Used:**
- * - `rottay-skeleton` / `rottay-skeleton-wrapper`: scope classes the unlayered
- *   modern Skeleton skin paints (fill + canon animation), mirroring rustic
- * - `flex`, `gap-4`: Container layout
- * - `space-y-2`: Paragraph line spacing
- * - `flex-1`: Content area expansion
+ * - Canon keyframe set (ds-skeleton-pulse/shimmer/wave) selected through
+ *   `--ds-skeleton-animation-name`; cadence rides
+ *   `--ds-skeleton-animation-duration`; the global reduced-motion guard
+ *   (personality.css wildcard, OS media query + data-ds-motion='reduced')
+ *   pins every canon animation to its final frame instantly.
+ * - `data-animation` selects the flat-vs-gradient background in the skin.
+ * - `data-part='content'` marks the text column so the skin owns the
+ *   title/line rhythm (60% title, 80% natural-ending last line).
  *
  * @param props - {@link SkeletonProps}
- * @returns The rendered DaisyUI Skeleton
+ * @returns The rendered token-driven Skeleton
  *
  * @example
  * ```tsx
@@ -208,11 +208,13 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // so it carries `.rottay-skeleton-wrapper` and owns --ds-skeleton-animation-name
   // plus the personality style (which carries --ds-skeleton-animation-duration);
   // both inherit to the avatar/title/line blocks below, which the unlayered skin
-  // paints as descendants keyed on data-part + data-animation.
+  // paints as descendants keyed on data-part + data-animation. All layout
+  // (wrapper gap, content column, title/line geometry, the natural 80% last
+  // line) lives in the skin so density tokens can retune it.
   return (
     <div
       data-part="root"
-      className={`flex gap-4 rottay-skeleton-wrapper rottay-skeleton--modern ${className}`}
+      className={`rottay-skeleton-wrapper rottay-skeleton--modern ${className}`}
       style={{ ...style, '--ds-skeleton-animation-name': animationName } as React.CSSProperties}
     >
       {/* Avatar placeholder */}
@@ -229,13 +231,11 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
         />
       )}
 
-      {/* Content section with title and paragraph lines */}
-      <div className="flex-1 space-y-2">
-        {/* Title line is 60% width to visually distinguish it from body text */}
-        {title && <div data-part="title" data-animation={resolvedStyle} style={{ height: '1.25rem', width: '60%' }} />}
+      {/* Content section with title and paragraph lines; geometry is
+          skin-owned (title 60% / last line 80% widths, token line heights). */}
+      <div data-part="content">
+        {title && <div data-part="title" data-animation={resolvedStyle} />}
 
-        {/* Last paragraph line is 80% width to simulate a natural text ending,
-            preventing the skeleton from looking like a uniform block */}
         {paragraph &&
           Array.from({
             length: typeof paragraph === 'object' ? paragraph.rows || rows! : rows!,
@@ -244,7 +244,6 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
               key={i}
               data-part="line"
               data-animation={resolvedStyle}
-              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%' }}
             />
           ))}
       </div>

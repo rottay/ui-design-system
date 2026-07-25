@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Space Component - Rottay Design System
@@ -109,8 +109,8 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { SpaceProps } from './contracts';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { SpaceProps } from "./contracts";
 
 // Export types
 export {
@@ -122,7 +122,7 @@ export {
   SPACE_DEFAULTS,
   SPACE_SIZE_MAP,
   SPACE_ALIGN_MAP,
-} from './contracts';
+} from "./contracts";
 
 /**
  * Space component with multi-engine support.
@@ -133,10 +133,10 @@ export {
  * @param props - Space component props
  * @returns React element
  */
-export const Space = createEngineComponent<SpaceProps>('Space', {
-  classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
-  rustic: () => import('./engines/rustic'),
+export const Space = createEngineComponent<SpaceProps>("Space", {
+  classic: () => import("./engines/classic"),
+  modern: () => import("./engines/modern"),
+  rustic: () => import("./engines/rustic"),
 });
 
 export default Space;

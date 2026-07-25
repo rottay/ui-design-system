@@ -35,61 +35,914 @@
  * the canonical `components/skin/data-table-interactions.css` recovery skin.
  */
 
-/* ---- card surface ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='card'] {
-  background: var(--ds-table-bg, var(--ds-surface-card));
-  border-radius: var(--ds-radius-lg);
+/**
+ * Modern DataTable structural presentation.
+ *
+ * Runtime geometry remains in React only when it is measured or supplied by
+ * the caller (column widths, bounded height and virtualization spacers). All
+ * stable layout and state presentation is addressed through the engine's
+ * neutral anatomy contract.
+ */
+
+.ds-pattern-data-table.ds-engine-modern[data-part="root"] {
+  --ds-modern-table-cell-padding: var(
+    --ds-table-padding-comfortable,
+    var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.875rem 1rem))
+  );
+  --ds-modern-table-leading-cell-padding: var(
+    --ds-table-leading-cell-padding-comfortable,
+    0.75rem 1rem 0.75rem 0.1875rem
+  );
+  --ds-modern-table-selection-cell-padding: var(
+    --ds-table-selection-cell-padding-comfortable,
+    0 0 0 0.4375rem
+  );
+  --ds-modern-table-action-cell-padding: var(
+    --ds-table-action-cell-padding-comfortable,
+    0 0.625rem
+  );
+  --ds-modern-table-control-size: var(--ds-table-control-size, 2rem);
+  --ds-modern-table-control-radius: var(
+    --ds-table-control-radius,
+    var(--ds-radius-md, 0.5rem)
+  );
+  --ds-modern-table-divider: var(
+    --ds-table-row-border,
+    var(--ds-color-border-subtle)
+  );
+  --ds-table-row-transition: var(
+    --ds-transition-rearrange,
+    background-color var(--ds-motion-feedback)
+        var(--ds-motion-ease-move, ease-out),
+      box-shadow var(--ds-motion-feedback)
+        var(--ds-motion-ease-move, ease-out)
+  );
+
+  width: 100%;
+  min-width: 0;
+  color: var(--ds-table-cell-color, var(--ds-color-text-primary));
+  font-family: var(--ds-typography-body-family, inherit);
+  contain: layout style;
+  container-name: ds-table;
+  container-type: inline-size;
+  animation: ds-data-table-arrive var(--ds-motion-reveal)
+    var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)) both;
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='card'][data-part='card'] {
+
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"] {
+  --ds-modern-table-cell-padding: var(
+    --ds-table-padding-compact,
+    var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.5rem 0.75rem))
+  );
+  --ds-modern-table-leading-cell-padding: var(
+    --ds-table-leading-cell-padding-compact,
+    0.375rem 0.75rem 0.375rem 0.125rem
+  );
+  --ds-modern-table-selection-cell-padding: var(
+    --ds-table-selection-cell-padding-compact,
+    0 0 0 0.375rem
+  );
+  --ds-modern-table-action-cell-padding: var(
+    --ds-table-action-cell-padding-compact,
+    0 0.5rem
+  );
+  --ds-modern-table-control-size: var(--ds-table-control-size-compact, 1.75rem);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"] {
+  --ds-modern-table-cell-padding: var(
+    --ds-table-padding-spacious,
+    var(--ds-density-cell-padding, var(--ds-table-cell-padding, 16px 16px))
+  );
+  --ds-modern-table-leading-cell-padding: var(
+    --ds-table-leading-cell-padding-spacious,
+    1rem 1rem 1rem 0.25rem
+  );
+  --ds-modern-table-selection-cell-padding: var(
+    --ds-table-selection-cell-padding-spacious,
+    0 0 0 0.5rem
+  );
+  --ds-modern-table-action-cell-padding: var(
+    --ds-table-action-cell-padding-spacious,
+    0 0.75rem
+  );
+  --ds-modern-table-control-size: var(--ds-table-control-size-spacious, 2.25rem);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="inline-edit-actions"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="inline-edit-action"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
+    var(--ds-motion-ease-move, ease);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="inline-edit-action"]:disabled {
+  cursor: wait;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="inline-edit-action"][data-intent="save"][data-saving="true"] {
+  opacity: 0.72;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="inline-edit-action"][data-intent="cancel"][data-saving="true"] {
+  opacity: 0.5;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="toolbar"] {
+  display: grid;
+  gap: var(--ds-table-toolbar-gap, var(--ds-spacing-2, 0.5rem));
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="toolbar-stack"],
+.ds-pattern-data-table.ds-engine-modern [data-part="filters"] {
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="filters"] > * {
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="card"] {
+  min-width: 0;
+  overflow: visible;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="scroll"] {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable both-edges;
+  border-radius: inherit;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="scroll"][data-bounded="true"] {
+  overflow-y: auto;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton"] {
+  width: 100%;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header"] {
+  display: flex;
+  gap: 16px;
+  padding: 14px 16px;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
+  flex: 1;
+  height: 10px;
+  opacity: 0.5;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="skeleton-header-col"][data-leading="true"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="skeleton-cell"][data-leading="true"] {
+  flex-grow: 1.5;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-row"] {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
+  flex: 1;
+  height: 14px;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="empty-state"],
+.ds-pattern-data-table.ds-engine-modern [data-part="error-state"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 64px 24px;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="state-icon-tile"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 4px;
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="empty-state"]
+  [data-part="state-icon-tile"] {
+  color: var(--ds-color-primary);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="error-state"]
+  [data-part="state-icon-tile"] {
+  background: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="state-title"] {
+  max-inline-size: var(--ds-table-state-copy-max-inline-size, 32rem);
+  text-align: center;
+  text-wrap: balance;
+  font-family: var(--ds-typography-section-title-family, inherit);
+  font-size: var(--ds-table-empty-title-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-typography-section-title-weight, 600);
+  letter-spacing: var(--ds-typography-section-title-tracking, -0.01em);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="state-description"] {
+  max-inline-size: var(--ds-table-state-copy-max-inline-size, 32rem);
+  text-align: center;
+  text-wrap: pretty;
+  font-size: var(
+    --ds-table-empty-description-font-size,
+    var(--ds-button-sm-font-size, var(--ds-font-size-sm))
+  );
+  line-height: 1.5;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="table"] {
+  width: 100%;
+  min-width: var(--ds-table-min-inline-size, 42rem);
+  border-collapse: collapse;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="table"][data-resizable="true"] {
+  table-layout: fixed;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="table-head"][data-sticky="true"] {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="header-cell"] {
+  height: var(--ds-table-header-block-size, auto);
+  padding: var(--ds-modern-table-cell-padding);
+  font-size: var(--ds-table-header-font-size, 13px);
+  font-family: var(
+    --ds-table-header-font-family,
+    var(--ds-typography-label-family, inherit)
+  );
+  font-weight: var(--ds-table-header-font-weight, 500);
+  letter-spacing: var(
+    --ds-table-header-letter-spacing,
+    var(--ds-text-eyebrow-letter-spacing, 0.05em)
+  );
+  text-transform: var(
+    --ds-table-header-text-transform,
+    var(--ds-text-eyebrow-transform, uppercase)
+  );
+  vertical-align: middle;
+  transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out)),
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out));
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-align="left"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-align="left"] {
+  text-align: start;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-align="center"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-align="center"] {
+  text-align: center;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-align="right"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-align="right"] {
+  text-align: end;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-cell-kind="selection"],
+.ds-pattern-data-table.ds-engine-modern [data-part="selection-cell"] {
+  box-sizing: border-box;
+  width: 22px;
+  min-width: 22px;
+  max-width: 22px;
+  padding: var(--ds-modern-table-selection-cell-padding);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-cell-kind="expansion"] {
+  width: 40px;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-leading="true"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-leading="true"] {
+  padding: var(--ds-modern-table-leading-cell-padding);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-column-interactive="true"] {
+  user-select: none;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"] {
+  cursor: pointer;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-reorderable="true"] {
+  cursor: grab;
+  touch-action: none;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-drag-source="true"] {
+  opacity: 0.45;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-resizable="true"]:not([data-pinned="true"]) {
+  position: relative;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-pinned="true"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-pinned="true"] {
+  position: sticky;
+  z-index: 2;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-pin-side="left"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-pin-side="left"] {
+  inset-inline-start: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-pin-side="right"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-pin-side="right"] {
+  inset-inline-end: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="header-content"] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-table-header-content-gap, 0.375rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-modern-table-control-size);
+  height: var(--ds-modern-table-control-size);
+  margin-inline-end: var(--ds-table-drag-grip-offset, 0.125rem);
+  padding: 0;
+  font-size: var(
+    --ds-table-drag-handle-font-size,
+    calc(var(--ds-font-size-xs) * 0.9167)
+  );
+  line-height: 1;
+  cursor: grab;
+  opacity: var(--ds-table-drag-grip-opacity, 0.58);
+  transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    border-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-column-dragging="true"]
+  [data-part="drag-grip"] {
+  cursor: grabbing;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="drag-grip"][data-drag-source="true"] {
+  opacity: 1;
+  transform: scale(0.96);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="header-label"] {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: inherit;
+  white-space: nowrap;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"] {
+  display: inline-flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 1px;
+  margin-inline-start: 0.125rem;
+  color: var(--ds-table-sort-color, var(--ds-color-text-muted));
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="drop-indicator"] {
+  position: absolute;
+  inset: -0.25rem;
+  border-radius: var(--ds-modern-table-control-radius);
+  pointer-events: none;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="resize-handle"] {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-table-resize-hit-size, 1rem);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"] {
+  width: var(--ds-table-resize-bar-width, 0.125rem);
+  height: var(--ds-table-resize-bar-height, 58%);
+  transition: width var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    height var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    background var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-cell-kind="actions"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="actions-cell"][data-part="actions-cell"] {
+  inset-inline-end: 0;
+  z-index: 2;
+  padding: var(--ds-modern-table-action-cell-padding);
+  text-align: end;
+  white-space: nowrap;
+  border-inline-start: 1px solid
+    var(--ds-table-action-border, var(--ds-table-row-border, transparent));
+  background: var(--ds-table-action-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-table-action-shadow, none);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-cell-kind="actions"],
+.ds-pattern-data-table.ds-engine-modern [data-part="actions-cell"] {
+  position: sticky;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="body-row"] {
+  background-color: var(--ds-table-row-bg, transparent);
+  transition: var(--ds-table-row-transition);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-clickable="true"],
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-row"] {
+  cursor: pointer;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-virtualized="true"] {
+  box-sizing: border-box;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="expand-cell"],
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
+  padding: var(--ds-modern-table-cell-padding);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="expand-button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-modern-table-control-size);
+  height: var(--ds-modern-table-control-size);
+  font-size: var(--ds-table-caption-font-size, var(--ds-font-size-xs));
+  cursor: pointer;
+  transition: background var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="data-cell"] {
+  padding: var(--ds-modern-table-cell-padding);
+  overflow: hidden;
+  font-size: var(--ds-table-cell-font-size, var(--ds-font-size-sm));
+  line-height: var(--ds-table-cell-line-height, 1.35);
+  text-overflow: ellipsis;
+  unicode-bidi: plaintext;
+  white-space: nowrap;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-editable="true"]:not([data-pinned="true"]) {
+  position: relative;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-editing="true"] {
+  padding: 4px 6px;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="expanded-row"],
+.ds-pattern-data-table.ds-engine-modern [data-part="virtual-spacer"] {
+  padding: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
+  width: 100%;
+  padding: var(--ds-table-expanded-padding, 0.875rem 1rem 1rem);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
+  font-family: var(--ds-typography-section-title-family, inherit);
+  font-size: var(
+    --ds-table-group-header-font-size,
+    var(--ds-button-sm-font-size, var(--ds-font-size-sm))
+  );
+  font-weight: var(--ds-typography-section-title-weight, 600);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-content"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-chevron"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: var(
+    --ds-table-group-disclosure-font-size,
+    calc(var(--ds-font-size-xs) * 0.8333)
+  );
+  transition: transform var(--ds-motion-feedback, var(--ds-motion-fast))
+    var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-count-pill"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: var(
+    --ds-table-group-count-font-size,
+    calc(var(--ds-font-size-xs) * 0.9167)
+  );
+  font-weight: 500;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-aggregate"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 4px;
+  font-size: var(--ds-table-caption-font-size, var(--ds-font-size-xs));
+  font-weight: 400;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="group-header-aggregate-separator"] {
+  margin: 0 2px;
+  opacity: 0.4;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-bar"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--ds-table-pagination-min-height, 3.25rem);
+  padding: var(--ds-table-pagination-padding, 0.625rem 1rem);
+  font-size: var(
+    --ds-table-control-font-size,
+    var(--ds-button-sm-font-size, var(--ds-font-size-sm))
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-range"],
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-page-button"] {
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-controls"] {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-nav-button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 10px;
+  font-size: var(
+    --ds-table-control-font-size,
+    var(--ds-button-sm-font-size, var(--ds-font-size-sm))
+  );
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 1;
+  transition: background var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-nav-button"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-ellipsis"],
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-page-button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: var(
+    --ds-table-control-font-size,
+    var(--ds-button-sm-font-size, var(--ds-font-size-sm))
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-ellipsis"] {
+  user-select: none;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-page-button"] {
+  font-weight: 400;
+  cursor: pointer;
+  transition: background var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-page-button"][data-current="true"] {
+  font-weight: 600;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar"] {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--ds-table-bulk-bar-min-height, 3.5rem);
+  padding: var(--ds-table-bulk-bar-padding, 0.625rem 1rem);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
+  font-size: var(
+    --ds-table-control-font-size,
+    var(--ds-button-sm-font-size, var(--ds-font-size-sm))
+  );
+  font-weight: 500;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-actions"] {
+  display: flex;
+  gap: 8px;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"] {
+  display: inline-flex;
+  align-items: center;
+  opacity: 1;
+  transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
+    var(--ds-motion-ease-move, ease);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ---- card surface ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part="card"] {
+  background: var(--ds-table-sheen, none),
+    var(--ds-table-bg, var(--ds-surface-card));
+  border-radius: var(--ds-table-radius, var(--ds-radius-lg));
+  box-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    var(
+      --ds-table-shadow,
+      var(--ds-workspace-card-shadow, var(--ds-elevation-1))
+    );
+  transition: border-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part="card"][data-part="card"] {
   border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
 }
 
 /* ---- loading skeleton parts ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header'] {
-  background: var(--ds-table-header-bg, var(--ds-surface-inset, var(--ds-surface-panel)));
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header"] {
+  background: var(
+    --ds-table-header-bg,
+    var(--ds-surface-inset, var(--ds-surface-panel))
+  );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header'][data-part='skeleton-header'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="skeleton-header"][data-part="skeleton-header"] {
   border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header-col'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
   border-radius: var(--ds-radius-sm, 6px);
-  background: var(--ds-color-border-subtle);
+  background: var(
+    --ds-table-skeleton-fill,
+    linear-gradient(
+      105deg,
+      var(--ds-color-border-subtle) 24%,
+      color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent) 44%,
+      var(--ds-color-border-subtle) 64%
+    )
+  );
+  background-size: 220% 100%;
+  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
+    var(--ds-motion-ease-standard, ease-in-out) infinite;
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-row'][data-divider='true'] {
-  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="skeleton-row"][data-divider="true"] {
+  border-bottom: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-cell'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
   border-radius: var(--ds-radius-sm, 6px);
-  background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  background: var(
+    --ds-table-skeleton-fill,
+    linear-gradient(
+      105deg,
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 24%,
+      color-mix(in srgb, var(--ds-color-bg-elevated) 74%, transparent) 44%,
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 64%
+    )
+  );
+  background-size: 220% 100%;
+  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
+    var(--ds-motion-ease-standard, ease-in-out) infinite;
+  animation-delay: calc(
+    var(--ds-modern-table-skeleton-index, 0) * var(--ds-motion-fast)
+  );
 }
 
-/* ---- empty state (container tint + default icon-tile/title/description) ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='empty-state'] {
+/* ---- empty/error state (container tint + default icon-tile/title/description) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part="empty-state"],
+.ds-pattern-data-table.ds-engine-modern [data-part="error-state"] {
   color: var(--ds-color-text-muted);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='empty-icon-tile'] {
-  border-radius: var(--ds-radius-lg, 12px);
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="card"][data-state="error"] {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-error) 34%,
+    var(--ds-table-border, var(--ds-color-border-subtle))
+  );
+}
+.ds-pattern-data-table.ds-engine-modern [data-part="error-state"] {
+  background: color-mix(
+    in srgb,
+    var(--ds-color-error) 4%,
+    var(--ds-table-bg, var(--ds-surface-card))
+  );
+}
+.ds-pattern-data-table.ds-engine-modern [data-part="state-icon-tile"] {
+  border-radius: var(--ds-modern-table-control-radius);
   background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='empty-title'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="state-icon-tile"][data-part="state-icon-tile"] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  box-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    0 10px 22px -18px color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part="state-title"] {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='empty-description'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="state-description"] {
   color: var(--ds-color-text-muted);
 }
 
 /* ---- thead sticky shadow (position/top/z-index stay inline; only the shadow
         the `stickyHeader` branch painted moves here) ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='table-head'][data-sticky='true'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="table-head"][data-sticky="true"] {
   box-shadow: var(--ds-elevation-1);
 }
 
 /* ---- header row ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='header-row'] {
-  background: var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%));
+.ds-pattern-data-table.ds-engine-modern [data-part="header-row"] {
+  background: var(
+    --ds-table-header-bg,
+    linear-gradient(
+      112deg,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 5%,
+        var(--ds-surface-inset, var(--ds-surface-panel))
+      ),
+      var(--ds-surface-inset, var(--ds-surface-panel)) 58%,
+      color-mix(
+        in srgb,
+        var(--ds-surface-card) 72%,
+        var(--ds-surface-inset, var(--ds-surface-panel))
+      )
+    )
+  );
+  background-position: 0% 50%;
+  background-size: 180% 180%;
+  box-shadow: var(
+    --ds-table-header-shadow,
+    inset 0 -1px 0 var(--ds-table-header-border, var(--ds-table-border))
+  );
+  transition: background-position var(--ds-motion-ambient, var(--ds-motion-slow))
+      var(--ds-motion-ease-move, ease-out),
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='header-row'][data-part='header-row'] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-row"]:hover {
+  background: var(
+    --ds-table-header-bg-hover,
+    var(--ds-table-header-bg, var(--ds-surface-inset))
+  );
+  background-position: 100% 50%;
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-row"][data-part="header-row"] {
+  border-bottom: 1px solid
+    var(
+      --ds-table-header-border,
+      var(--ds-table-border, var(--ds-color-border-subtle))
+    );
 }
 
 /* ---- header cells: shared label color, then the 3-way background
@@ -97,199 +950,641 @@
         the always-sticky actions header, so one pinned rule serves both. Order
         matters: drag-over first, pinned last, so a cell that is BOTH resolves to
         the pinned fill, exactly as the JSX ternary did. ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="header-cell"] {
   color: var(--ds-table-header-color, var(--ds-color-text-secondary));
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'][data-drag-over='true'] {
-  background-color: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+.ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
+  [data-part="header-cell"][data-part="header-cell"]:not(:first-child) {
+  border-inline-start: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-table-border, var(--ds-color-border-subtle)) 72%,
+      transparent
+    );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'][data-pinned='true'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-drag-over="true"] {
+  background-color: var(
+    --ds-table-reorder-bg,
+    color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
+  );
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-pinned="true"] {
   background-color: var(--ds-surface-inset, var(--ds-surface-panel));
 }
 
 /* ---- reorder drag grip ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='drag-grip'] {
-  border-radius: 5px;
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
+  border-radius: var(--ds-modern-table-control-radius);
+  background: var(
+    --ds-table-drag-grip-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)
+  );
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='drag-grip'][data-part='drag-grip'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent);
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="drag-grip"][data-part="drag-grip"] {
+  border: 1px solid
+    var(
+      --ds-table-drag-grip-border,
+      color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)
+    );
+}
+.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover,
+.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible {
+  border-color: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
+  background: var(--ds-table-reorder-bg, var(--ds-surface-inset));
+  opacity: 1;
+  transform: translateY(-1px);
 }
 
 /* ---- reorder drop indicator ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='drop-indicator'] {
-  background: var(--ds-color-primary);
-  border-radius: 1px;
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="drop-indicator"][data-part="drop-indicator"] {
+  border: 1px dashed
+    color-mix(in srgb, var(--ds-color-primary) 62%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 
 /* ---- resize handle bar (rest; the :hover width/color swap is owned by
         data-table-interactions.css) ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='resize-handle-bar'] {
-  border-radius: 1px;
-  background: var(--ds-color-border);
+.ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-table-resize-bg, var(--ds-color-border));
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="resize-handle"]:hover
+  [data-part="resize-handle-bar"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="resize-handle"]:focus-visible
+  [data-part="resize-handle-bar"] {
+  width: var(--ds-table-resize-bar-width-active, 0.1875rem);
+  height: var(--ds-table-resize-bar-height-active, 74%);
+  background: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
 }
 
 /* ---- body row: rest fill (selected > striped > transparent) + the one hover
         rule replacing both imperative handler pairs + the not-last divider.
         striped before selected so a selected+striped row lands on selected. ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
-  background-color: var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-striped="true"] {
+  background-color: var(
+    --ds-table-row-bg-striped,
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel, var(--ds-color-text-primary)) 4%,
+      transparent
+    )
+  );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-selected='true'] {
-  background-color: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-selected="true"] {
+  background-color: var(
+    --ds-table-row-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 9%, transparent)
+  );
+  box-shadow: var(
+    --ds-table-row-selected-shadow,
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
+  );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-hoverable='true']:not([data-selected='true']):hover {
-  background-color: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:focus-visible {
+  outline: none;
+  background-color: var(
+    --ds-table-row-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
+  );
+  box-shadow: var(
+    --ds-table-row-focus-shadow,
+    inset 0 0 0 2px
+      color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
+  );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
-  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-hoverable="true"]:not(
+    [data-selected="true"]
+  ):hover {
+  background-color: var(
+    --ds-table-row-bg-hover,
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
+  box-shadow: var(
+    --ds-table-row-hover-shadow,
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
+  );
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-last="false"] {
+  border-bottom: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
 
 /* ---- expand toggle column ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='expand-button'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="expand-button"] {
   border: none;
   border-radius: var(--ds-radius-sm, 6px);
   background: transparent;
   color: var(--ds-color-text-secondary);
 }
+.ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover,
+.ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:focus-within {
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  transform: scale(1.03);
+}
 
 /* ---- data cells: text color always; pinned cells take an opaque card fill so
         scrolled content cannot bleed through ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='data-cell'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="data-cell"] {
   color: var(--ds-table-cell-color, var(--ds-color-text-primary));
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='data-cell'][data-pinned='true'] {
-  background-color: var(--ds-surface-card);
+.ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
+  [data-part="data-cell"][data-part="data-cell"]:not(:first-child) {
+  border-inline-start: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-table-row-border, var(--ds-color-border-subtle)) 56%,
+      transparent
+    );
 }
-
-/* ---- actions cell (always sticky/opaque) ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='actions-cell'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-pinned="true"] {
   background-color: var(--ds-surface-card);
 }
 
 /* ---- expanded row: the wrapper td's not-last divider + the inner content fill ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='expanded-row'][data-last='false'] {
-  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="expanded-row"][data-last="false"] {
+  border-bottom: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='expanded-row-content'] {
-  background: var(--ds-surface-inset);
+.ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
+  background: var(--ds-table-row-bg-expanded, var(--ds-surface-inset));
 }
 
 /* ---- group header row + its cell, chevron (rotates with data-collapsed),
         count pill and aggregate summary ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='group-header-row'] {
-  background: var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%));
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-row"] {
+  background: var(
+    --ds-table-header-bg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-inset, var(--ds-surface-panel)) 92%,
+      var(--ds-color-text-primary) 8%
+    )
+  );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='group-header-row'][data-part='group-header-row'] {
-  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="group-header-row"][data-part="group-header-row"] {
+  border-bottom: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='group-header-cell'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
   color: var(--ds-color-text-primary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='group-header-chevron'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-chevron"] {
   color: var(--ds-color-text-secondary);
   transform: rotate(0deg);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='group-header-chevron'][data-collapsed='true'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="group-header-chevron"][data-collapsed="true"] {
   transform: rotate(-90deg);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='group-header-count-pill'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-count-pill"] {
   border-radius: var(--ds-radius-full, 9999px);
   background: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='group-header-aggregate'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="group-header-count-pill"][data-part="group-header-count-pill"] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part="group-header-aggregate"] {
   color: var(--ds-color-text-muted);
 }
 
 /* ---- inline-edit action buttons: shared chrome (the base border sets only
         width/style so it carries no color and needs no (0,4,0) floor; the
         variant supplies the border color, at (0,4,0)) + save/cancel variants ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'] {
-  border-radius: var(--ds-radius-sm, 6px);
-  border-width: 1px;
-  border-style: solid;
-  background: var(--ds-surface-card);
-}
-.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'][data-variant='save'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="inline-edit-action"][data-intent="save"] {
   color: var(--ds-color-success);
-  border-color: color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-subtle));
-  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card));
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'][data-variant='cancel'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="inline-edit-action"][data-intent="cancel"] {
   color: var(--ds-color-error);
-  border-color: color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border-subtle));
-  background: color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card));
 }
 
-/* ---- pagination bar + controls. nav buttons carry a border, so their color
-        rule (rest + native :disabled) and border sit on (0,4,0). page buttons
-        reset their border to none (exempt) and flip to primary when current. ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-bar'] {
+/* ---- pagination bar + control wrappers. The DS Button children own paint,
+        focus, disabled, and current-page treatment; wrappers own layout only. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-bar"] {
   color: var(--ds-color-text-secondary);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-surface-inset)),
+    var(--ds-surface-card)
+  );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-bar'][data-part='pagination-bar'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-bar"][data-part="pagination-bar"] {
   border-top: 1px solid var(--ds-color-border-subtle);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button'] {
-  border-radius: var(--ds-radius-sm, 6px);
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-nav-button"] {
   background: transparent;
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button'][data-part='pagination-nav-button'] {
-  border: 1px solid var(--ds-color-border-subtle);
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-nav-button"][data-part="pagination-nav-button"] {
+  border: 0;
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button']:disabled {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-nav-button"]:disabled {
   color: var(--ds-color-text-muted);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-ellipsis'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-ellipsis"] {
   color: var(--ds-color-text-muted);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-page-button'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="pagination-page-button"] {
   border: none;
-  border-radius: var(--ds-radius-sm, 6px);
   background: transparent;
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='pagination-page-button'][data-current='true'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-page-button"]:hover,
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-page-button"]:focus-within {
+  box-shadow: var(--ds-table-page-button-hover-shadow, none);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="pagination-page-button"][data-current="true"] {
+  background: transparent;
+  color: inherit;
 }
 
 /* ---- bulk selection bar + count label + per-variant action buttons ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar'] {
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar"] {
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card) 90%,
+    var(--ds-color-primary) 10%
+  );
+  box-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    var(--ds-elevation-2);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar'][data-part='bulk-bar'] {
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="bulk-bar"][data-part="bulk-bar"] {
   border-top: 1px solid var(--ds-color-border-subtle);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-count'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'] {
-  border-radius: var(--ds-radius-sm, 6px);
-}
-.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='default'] {
-  border: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-card);
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"] {
   color: var(--ds-color-text-primary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='danger'] {
-  border: 1px solid var(--ds-color-error);
-  background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="bulk-bar-action"][data-variant="default"] {
+  color: var(--ds-color-text-primary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='primary'] {
-  border: 1px solid var(--ds-color-primary);
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="bulk-bar-action"][data-variant="danger"] {
+  color: var(--ds-color-error);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="bulk-bar-action"][data-variant="primary"] {
+  color: var(--ds-color-primary);
+}
+
+/* ===========================================================================
+ * Pass 2 craft layer
+ *
+ * These rules deliberately stay on the public DataTable anatomy and open
+ * `--ds-table-*` channels. They refine affordances and state continuity while
+ * keeping brand paint entirely token-driven. Selection/focus/drop feedback is
+ * always an all-around treatment: no accent rail is introduced on either
+ * logical edge.
+ * ======================================================================== */
+
+/* Tooltip is a DS primitive. Its wrapper participates in table layout while
+   the tooltip bubble remains owned and themed by Tooltip itself. */
+.ds-pattern-data-table.ds-engine-modern
+  .ds-data-table__column-tooltip--reorder {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  line-height: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  .ds-data-table__column-tooltip--resize.ds-data-table__column-tooltip--resize {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: calc(var(--ds-table-resize-hit-size, 1rem) / -2);
+  z-index: 4;
+  display: block;
+  width: var(--ds-table-resize-hit-size, 1rem);
+  min-width: var(--ds-table-resize-hit-size, 1rem);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  .ds-data-table__column-tooltip--resize
+  [data-part="resize-handle"] {
+  inset: 0;
+  width: 100%;
+}
+
+/* Column affordances are compact micro-surfaces, not floating glyphs. */
+.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
+  width: var(
+    --ds-table-drag-grip-size,
+    calc(var(--ds-modern-table-control-size) - 0.375rem)
+  );
+  height: var(
+    --ds-table-drag-grip-size,
+    calc(var(--ds-modern-table-control-size) - 0.375rem)
+  );
+  margin-inline-end: var(--ds-table-drag-grip-offset, 0);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"] {
+  display: inline-grid;
+  place-items: center;
+  width: var(--ds-table-sort-control-size, 1.375rem);
+  height: var(--ds-table-sort-control-size, 1.375rem);
+  margin-inline-start: var(--ds-table-sort-control-offset, 0.125rem);
+  border-radius: var(
+    --ds-table-sort-control-radius,
+    var(--ds-radius-sm, 0.375rem)
+  );
+  background: var(--ds-table-sort-bg, transparent);
+  color: var(--ds-table-sort-color, var(--ds-color-text-muted));
+  opacity: var(--ds-table-sort-opacity, 0.68);
+  transform: rotate(0deg);
+  transition:
+    color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    border-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    opacity var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="sort-icon"][data-part="sort-icon"] {
+  border: 1px solid var(--ds-table-sort-border, transparent);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"]:hover
+  [data-part="sort-icon"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"]:focus-visible
+  [data-part="sort-icon"] {
+  border-color: var(
+    --ds-table-sort-border-hover,
+    color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+  background: var(
+    --ds-table-sort-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
+  );
+  color: var(--ds-table-sort-color-hover, var(--ds-color-text-secondary));
+  opacity: 1;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="sort-icon"][data-active="true"] {
+  border-color: var(
+    --ds-table-sort-border-active,
+    color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
+  );
+  background: var(
+    --ds-table-sort-bg-active,
+    color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
+  );
+  color: var(--ds-table-sort-color-active, var(--ds-color-primary));
+  opacity: 1;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="sort-icon"][data-sort-state="asc"] {
+  transform: rotate(180deg);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="drop-indicator"][data-part="drop-indicator"] {
+  inset: var(--ds-table-drop-indicator-inset, 0.1875rem);
+  border: 1px solid
+    var(
+      --ds-table-drop-indicator-border,
+      color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
+    );
+  border-radius: var(
+    --ds-table-drop-indicator-radius,
+    var(--ds-modern-table-control-radius)
+  );
+  background: var(
+    --ds-table-drop-indicator-bg,
+    color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
+  );
+  box-shadow: var(
+    --ds-table-drop-indicator-shadow,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
+  );
+}
+
+/* Sticky cells retain the active row material instead of reading as a second
+   disconnected layer while content scrolls beneath them. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-pinned="true"] {
+  background: var(
+    --ds-table-header-pinned-bg,
+    var(--ds-table-header-bg, var(--ds-surface-inset))
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]
+  [data-part="data-cell"][data-pinned="true"] {
+  background: var(--ds-table-pinned-cell-bg, var(--ds-table-row-bg, var(--ds-surface-card)));
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]
+  [data-part="actions-cell"] {
+  background: var(--ds-table-action-bg, var(--ds-surface-card));
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]
+  :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
+  transition:
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-striped="true"]
+  :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
+  background: var(
+    --ds-table-pinned-cell-bg-striped,
+    var(--ds-table-row-bg-striped, var(--ds-surface-inset))
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-selected="true"]
+  :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
+  background: var(
+    --ds-table-pinned-cell-bg-selected,
+    var(
+      --ds-table-row-bg-selected,
+      color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
+    )
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+  :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
+  background: var(
+    --ds-table-pinned-cell-bg-hover,
+    var(
+      --ds-table-row-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card))
+    )
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:focus-visible
+  :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
+  background: var(
+    --ds-table-pinned-cell-bg-focus,
+    var(
+      --ds-table-row-bg-selected,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
+    )
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-sortable="true"]:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-table-header-focus-shadow,
+    inset 0 0 0 2px
+      color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
+  );
 }
 
 /* ---- virtual-scroll spacer rows/cells: the defensive `border: none` reset ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part='virtual-spacer'] {
+.ds-pattern-data-table.ds-engine-modern [data-part="virtual-spacer"] {
   border: none;
+}
+
+/* ===========================================================================
+ * Local bounded recipes. These select information rhythm; semantic material
+ * tokens and tenant anatomy remain the paint authority. The finite vocabulary
+ * prevents route CSS from inventing a sixth, incompatible table anatomy.
+ * ======================================================================== */
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="minimal"]
+  [data-part="body-row"][data-last="false"] {
+  border-bottom: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="minimal"]
+  [data-part="card"] {
+  box-shadow: var(--ds-table-minimal-shadow, none);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="ruled"]
+  [data-part="body-row"][data-last="false"] {
+  border-bottom: 1px solid
+    var(--ds-table-rule-strong, var(--ds-color-border-secondary));
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
+  [data-part="body-row"][data-last="false"] {
+  border-bottom: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
+  [data-part="expand-cell"][data-part="expand-cell"]:not(:first-child),
+.ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
+  [data-part="actions-cell"][data-part="actions-cell"]:not(:first-child) {
+  border-inline-start: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="zebra"]
+  [data-part="body-row"][data-last="false"],
+.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+  [data-part="body-row"][data-last="false"] {
+  border-bottom: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="zebra"]
+  [data-part="body-row"]:nth-of-type(even):not([data-selected="true"]) {
+  background-color: var(
+    --ds-table-row-bg-striped,
+    color-mix(in srgb, var(--ds-surface-inset) 68%, transparent)
+  );
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+  [data-part="header-row"] {
+  background: var(--ds-table-editorial-header-bg, transparent);
+  box-shadow: none;
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+  [data-part="header-cell"] {
+  padding-block: var(--ds-table-editorial-header-padding-block, 1rem);
+  font-family: var(--ds-typography-label-family, inherit);
+  letter-spacing: var(--ds-typography-label-tracking, 0.08em);
+  text-transform: var(--ds-table-editorial-header-transform, uppercase);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+  [data-part="data-cell"] {
+  padding-block: var(--ds-table-editorial-cell-padding-block, 1.125rem);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+  [data-part="data-cell"]:first-of-type {
+  font-family: var(--ds-typography-section-title-family, inherit);
+  font-weight: var(--ds-typography-section-title-weight, 600);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+  [data-part="pagination-bar"] {
+  font-family: var(--ds-typography-supporting-family, inherit);
+}
+
+.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+  [data-part="body-row"][data-hoverable="true"]:not(
+    [data-selected="true"]
+  ):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ds-table-editorial-row-shadow, var(--ds-elevation-1));
 }
 
 /* ===========================================================================
@@ -306,35 +1601,195 @@
 
 /* ruled: row hairlines, no stripes. Suppress any striped fill; the not-last
    divider below reasserts the hairline so the mode is self-contained. */
-[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+[data-anatomy-table="ruled"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-striped="true"] {
   background-color: transparent;
 }
-[data-anatomy-table='ruled'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
-  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+[data-anatomy-table="ruled"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-last="false"] {
+  border-bottom: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
 
 /* zebra: alternating stripe on even rows (independent of the striped prop), no
    hairlines. Selected rows keep their selection fill; hover re-asserts above. */
-[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row']:nth-of-type(even):not([data-selected='true']) {
-  background-color: var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+[data-anatomy-table="zebra"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:nth-of-type(even):not([data-selected="true"]) {
+  background-color: var(
+    --ds-table-row-bg-striped,
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
 }
-[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+[data-anatomy-table="zebra"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-last="false"] {
   border-bottom: 0;
 }
-[data-anatomy-table='zebra'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-hoverable='true']:not([data-selected='true']):hover {
-  background-color: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
+[data-anatomy-table="zebra"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-hoverable="true"]:not(
+    [data-selected="true"]
+  ):hover {
+  background-color: var(
+    --ds-table-row-bg-hover,
+    color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)
+  );
 }
 
 /* open: no row hairlines or stripes, header rule only, roomier vertical rhythm. */
-[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+[data-anatomy-table="open"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-striped="true"] {
   background-color: transparent;
 }
-[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+
+[data-anatomy-table="open"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"][data-last="false"] {
   border-bottom: 0;
 }
-[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='header-row'][data-part='header-row'] {
+[data-anatomy-table="open"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="header-row"][data-part="header-row"] {
   border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
 }
-[data-anatomy-table='open'] .ds-pattern-data-table.ds-engine-modern [data-part='data-cell'] {
+[data-anatomy-table="open"]
+  .ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"] {
   padding-block: var(--ds-table-open-cell-padding-block, 0.875rem);
+}
+
+@keyframes ds-data-table-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.998);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Priority is a semantic responsive contract, not an app-owned media query.
+   Pinned columns always remain available; low-priority supporting context
+   yields first as the table container narrows. */
+@container ds-table (max-width: 52rem) {
+  .ds-pattern-data-table.ds-engine-modern
+    [data-col-priority="low"]:not([data-pinned="true"]) {
+    display: none;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="pagination-controls"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-actions"] {
+    flex-wrap: wrap;
+  }
+}
+
+@container ds-table (max-width: 640px) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="table"] {
+    min-width: var(--ds-table-collapsed-min-inline-size, 34rem);
+  }
+
+  .ds-pattern-data-table.ds-engine-modern
+    [data-col-priority="low"][data-pinned="true"] {
+    display: table-cell;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="pagination-bar"] {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--ds-spacing-2, 0.5rem);
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="pagination-controls"] {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar"] {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--ds-spacing-2, 0.5rem);
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-actions"] {
+    width: 100%;
+  }
+}
+
+.ds-pattern-data-table.ds-engine-modern:dir(rtl)
+  [data-part="pagination-nav-button"]
+  svg {
+  transform: scaleX(-1);
+}
+
+.ds-pattern-data-table.ds-engine-modern:dir(rtl)
+  [data-part="group-header-chevron"][data-collapsed="true"] {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-data-table.ds-engine-modern[data-part="root"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="card"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="header-row"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="header-cell"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="body-row"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="group-header-chevron"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"] {
+    animation: none;
+    transition: none;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+    [data-part="body-row"][data-hoverable="true"]:not(
+      [data-selected="true"]
+    ):hover,
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover,
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible,
+  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover,
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="expand-button"]:focus-within {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="card"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="header-row"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="body-row"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="pagination-bar"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar"] {
+    forced-color-adjust: none;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="card"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="header-row"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="body-row"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="pagination-bar"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar"] {
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-selected="true"] {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="drop-indicator"] {
+    border-color: Highlight;
+    background: Highlight;
+    box-shadow: none;
+  }
 }

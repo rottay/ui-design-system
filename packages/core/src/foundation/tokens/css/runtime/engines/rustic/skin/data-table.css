@@ -163,9 +163,12 @@
 
 /* ---- pinned cell fill: one rule set (base + the two row-state overrides)
         replacing the 3x-duplicated ternary. actions-cell is always pinned. ---- */
-.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='data-cell'][data-pinned='true'],
-.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='actions-cell'][data-pinned='true'] {
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='data-cell'][data-pinned='true'] {
   background: var(--ds-color-surface, #fff);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='actions-cell'][data-pinned='true'] {
+  background: var(--ds-table-action-bg, var(--ds-color-surface, #fff));
+  box-shadow: inset 1px 0 0 var(--ds-table-action-border, transparent);
 }
 .ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] [data-part='data-cell'][data-pinned='true'],
 .ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] [data-part='actions-cell'][data-pinned='true'] {

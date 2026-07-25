@@ -1,77 +1,229 @@
 /**
- * Modern Switch skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern Switch skin.
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
- * rule can't paint these elements at all; unlayered outranks preflight and
- * still yields to a caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision through documented `--ds-switch-*` channels so a
+ * vertical or DB-backed tenant never needs private selectors. Geometry
+ * consumes the `--ds-switch-{size}-*` scale multiplied by the three-plane
+ * density channel `--ds-density-effective-scale`.
  *
- * SCOPE ROOT is `.ds-switch.ds-switch--modern[data-part='root']` (a `<label>`),
- * carrying `data-checked` and `data-disabled`. `track`, `thumb`, and `label`
- * are descendants; the hidden accessibility `<input>` is a direct child.
+ * SCOPE ROOT is `.ds-switch.ds-switch--modern[data-part='root']` (a
+ * `<label>`), carrying `data-size`, `data-checked`, `data-disabled`, and
+ * `data-loading`. `track`, `thumb`, `label`, and `loading-indicator` are
+ * descendants; the hidden accessibility `<input>` is a direct child.
  *
- * The track background reproduces the removed `trackBg` IIFE (checked/hover/
- * disabled). Hover was the removed `isHovered` state, driven by
- * onMouseEnter/onMouseLeave on the label root -> `:hover` here, gated
- * `:not([data-disabled='true'])` exactly where the JS gated `!isDisabled`.
- * The focus ring was the removed `isFocusVisible` state, set from the input's
- * `:focus-visible` -> `input:focus-visible ~ [data-part='track']` (a disabled
- * input cannot be focused, so the `!isDisabled` guard is implicit).
- *
- * The thumb slide is `translateX` of a per-size travel distance, carried via
- * the runtime custom property `--ds-switch-thumb-x` (uncounted) since the
- * value is computed per size.
+ * THUMB TRAVEL is pure CSS: the per-size track defines
+ * `--ds-switch-resolved-travel` (= trackW - trackH, density-scaled, because
+ * inset = (trackH - thumb)/2 makes travel = trackW - trackH), the thumb
+ * anchors at `inset-inline-start`, and `:dir(rtl)` / `[dir='rtl']` flip the
+ * sign -- identical markup works in both directions with no runtime branch.
+ * State clarity never relies on color alone: the thumb also translates and
+ * the track changes tone.
  *
  * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
  * unlayered at (0,3,0) or higher.
  */
 
-/* track ------------------------------------------------------------------- */
-.ds-switch.ds-switch--modern [data-part='track'] {
-  border-radius: var(--ds-radius-full);
-}
-.ds-switch.ds-switch--modern[data-checked='true'] [data-part='track'] {
-  background-color: var(--ds-color-primary);
-}
-.ds-switch.ds-switch--modern[data-checked='false'] [data-part='track'] {
-  background-color: var(--ds-color-border-secondary);
-}
-.ds-switch.ds-switch--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='track'] {
-  background-color: var(--ds-color-primary-hover);
-}
-.ds-switch.ds-switch--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
-  background-color: var(--ds-color-border);
-}
-.ds-switch.ds-switch--modern input:focus-visible ~ [data-part='track'] {
-  outline: 2px solid var(--ds-color-primary);
-  outline-offset: 2px;
+@keyframes ds-switch-modern-spin {
+  to { transform: rotate(1turn); }
 }
 
-/* thumb ------------------------------------------------------------------- */
+/* Root row ------------------------------------------------------------- */
+.ds-switch.ds-switch--modern[data-part='root'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-switch-label-gap, var(--ds-spacing-2));
+  max-inline-size: 100%;
+  /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
+     root at narrow widths (measured on the live bundle, Axe R0) — the 44px
+     coarse-touch law is physical. */
+  min-block-size: var(--ds-switch-touch-target-min, 44px);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ds-switch.ds-switch--modern[data-part='root'][data-disabled='true'] {
+  cursor: var(--ds-switch-disabled-cursor, not-allowed);
+}
+
+/* Track ---------------------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='track'] {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  border-radius: var(--ds-switch-track-radius, var(--ds-radius-full));
+  transition:
+    background-color var(--ds-switch-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out),
+    opacity var(--ds-switch-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out);
+}
+
+/* Size geometry + resolved thumb travel (density-scaled). */
+.ds-switch.ds-switch--modern[data-part='root'][data-size='sm'] [data-part='track'] {
+  --ds-switch-resolved-track-w: calc(var(--ds-switch-sm-width, 1.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-sm-height, 1rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-thumb: calc(var(--ds-switch-sm-thumb, 0.75rem) * var(--ds-density-effective-scale, 1));
+}
+.ds-switch.ds-switch--modern[data-part='root'][data-size='md'] [data-part='track'] {
+  --ds-switch-resolved-track-w: calc(var(--ds-switch-md-width, 2.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-md-height, 1.375rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-thumb: calc(var(--ds-switch-md-thumb, 1rem) * var(--ds-density-effective-scale, 1));
+}
+.ds-switch.ds-switch--modern[data-part='root'][data-size='lg'] [data-part='track'] {
+  --ds-switch-resolved-track-w: calc(var(--ds-switch-lg-width, 3.5rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-lg-height, 1.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-thumb: calc(var(--ds-switch-lg-thumb, 1.25rem) * var(--ds-density-effective-scale, 1));
+}
+
+.ds-switch.ds-switch--modern [data-part='track'][data-part='track'] {
+  inline-size: var(--ds-switch-resolved-track-w);
+  block-size: var(--ds-switch-resolved-track-h);
+}
+
+.ds-switch.ds-switch--modern[data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-switch-checked-bg, var(--ds-color-primary));
+}
+.ds-switch.ds-switch--modern[data-checked='false'] [data-part='track'] {
+  background-color: var(--ds-switch-unchecked-bg, var(--ds-color-border-secondary));
+}
+.ds-switch.ds-switch--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-switch-checked-bg-hover, var(--ds-color-primary-hover));
+}
+.ds-switch.ds-switch--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-switch-unchecked-bg-hover, var(--ds-color-border));
+}
+.ds-switch.ds-switch--modern[data-disabled='true'] [data-part='track'] {
+  opacity: var(--ds-switch-disabled-opacity, 0.5);
+}
+.ds-switch.ds-switch--modern input:focus-visible ~ [data-part='track'] {
+  outline: var(--ds-switch-focus-ring-width, 2px) solid var(--ds-switch-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-switch-focus-ring-offset, 2px);
+}
+
+/* Thumb ---------------------------------------------------------------- */
 .ds-switch.ds-switch--modern [data-part='thumb'] {
+  position: absolute;
+  inset-block-start: calc((var(--ds-switch-resolved-track-h) - var(--ds-switch-resolved-thumb)) / 2);
+  inset-inline-start: calc((var(--ds-switch-resolved-track-h) - var(--ds-switch-resolved-thumb)) / 2);
+  inline-size: var(--ds-switch-resolved-thumb);
+  block-size: var(--ds-switch-resolved-thumb);
   border-radius: 50%;
-  background-color: var(--ds-surface-control, var(--ds-color-text-on-primary));
-  box-shadow: var(--ds-elevation-1);
-  transform: translateX(var(--ds-switch-thumb-x));
+  background-color: var(--ds-switch-thumb-bg, var(--ds-surface-control, var(--ds-color-text-on-primary)));
+  box-shadow: var(--ds-switch-thumb-shadow, var(--ds-elevation-1));
+  transform: translateX(0);
+  transition:
+    transform var(--ds-switch-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out),
+    box-shadow var(--ds-switch-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out);
+}
+
+.ds-switch.ds-switch--modern[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc(var(--ds-switch-resolved-track-w) - var(--ds-switch-resolved-track-h)));
+}
+
+/* RTL: the same markup travels toward the inline end, which is negative X. */
+.ds-switch.ds-switch--modern[data-checked='true']:dir(rtl) [data-part='thumb'],
+[dir='rtl'] .ds-switch.ds-switch--modern[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc((var(--ds-switch-resolved-track-w) - var(--ds-switch-resolved-track-h)) * -1));
 }
 
 /* press: the thumb dips while holding its travel position, extending the
    interaction-state choreography (--ds-state-press-scale) to the switch. The
-   thumb already transitions transform (engine index) on --ds-motion-normal,
-   which zeroes under reduced motion, so the dip settles back on release. */
-.ds-switch.ds-switch--modern:active:not([data-disabled='true']) [data-part='thumb'] {
-  transform: translateX(var(--ds-switch-thumb-x)) scale(var(--ds-state-press-scale));
+   thumb transitions transform on --ds-motion-normal, which zeroes under
+   reduced motion, so the dip settles back on release. */
+.ds-switch.ds-switch--modern:active:not([data-disabled='true'])[data-checked='false'] [data-part='thumb'] {
+  transform: translateX(0) scale(var(--ds-state-press-scale));
+}
+.ds-switch.ds-switch--modern:active:not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc(var(--ds-switch-resolved-track-w) - var(--ds-switch-resolved-track-h))) scale(var(--ds-state-press-scale));
+}
+.ds-switch.ds-switch--modern:active:not([data-disabled='true'])[data-checked='true']:dir(rtl) [data-part='thumb'],
+[dir='rtl'] .ds-switch.ds-switch--modern:active:not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc((var(--ds-switch-resolved-track-w) - var(--ds-switch-resolved-track-h)) * -1)) scale(var(--ds-state-press-scale));
 }
 
-/* label ------------------------------------------------------------------- */
+/* Label ---------------------------------------------------------------- */
 .ds-switch.ds-switch--modern [data-part='label'] {
-  color: var(--ds-color-text-primary);
+  color: var(--ds-switch-label-color, var(--ds-color-text-primary));
+  font-size: var(--ds-switch-label-font-size, var(--ds-font-size-sm));
+  line-height: var(--ds-switch-label-line-height, var(--ds-line-height-snug));
+  hyphens: auto;
+  overflow-wrap: anywhere;
 }
 .ds-switch.ds-switch--modern[data-disabled='true'] [data-part='label'] {
   color: var(--ds-color-text-disabled);
 }
 
+/* Loading indicator ----------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='loading-indicator'] {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--ds-switch-loading-size, 0.875rem);
+  block-size: var(--ds-switch-loading-size, 0.875rem);
+}
+
+.ds-switch.ds-switch--modern [data-part='loading-indicator'] svg {
+  inline-size: 100%;
+  block-size: 100%;
+  animation: ds-switch-modern-spin var(--ds-switch-loading-duration, 900ms) linear infinite;
+}
+
+/* Spinner paint lives here, never in the runtime: the track ring and the
+   sweeping arc read the same channels the rest of the control reads. */
+.ds-switch.ds-switch--modern [data-part='loading-indicator'] [data-part='loading-track'] {
+  stroke: var(--ds-switch-loading-track-color, var(--ds-color-border-secondary));
+}
+
+.ds-switch.ds-switch--modern [data-part='loading-indicator'] [data-part='loading-arc'] {
+  stroke: var(--ds-switch-loading-arc-color, var(--ds-color-primary));
+}
+
 /* hidden accessibility input (visually clipped): no border. */
 .ds-switch.ds-switch--modern input {
   border: 0;
+}
+
+@media (pointer: coarse) {
+  .ds-switch.ds-switch--modern[data-part='root'] {
+    /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
+     root at narrow widths (measured on the live bundle, Axe R0) — the 44px
+     coarse-touch law is physical. */
+  min-block-size: var(--ds-switch-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-switch.ds-switch--modern [data-part='track'],
+  .ds-switch.ds-switch--modern [data-part='thumb'] {
+    transition-duration: 0.01ms;
+  }
+
+  .ds-switch.ds-switch--modern [data-part='loading-indicator'] svg {
+    animation-duration: 1.8s;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-switch.ds-switch--modern [data-part='track'] {
+    forced-color-adjust: auto;
+    background-color: Field;
+    border: 1px solid ButtonText;
+  }
+  .ds-switch.ds-switch--modern[data-checked='true'] [data-part='track'] {
+    background-color: Highlight;
+    border-color: Highlight;
+  }
+  .ds-switch.ds-switch--modern [data-part='thumb'] {
+    background-color: ButtonText;
+    box-shadow: none;
+  }
+  .ds-switch.ds-switch--modern[data-checked='true'] [data-part='thumb'] {
+    background-color: HighlightText;
+  }
+  .ds-switch.ds-switch--modern[data-disabled='true'] [data-part='track'] {
+    border-color: GrayText;
+  }
+  .ds-switch.ds-switch--modern input:focus-visible ~ [data-part='track'] {
+    outline-color: Highlight;
+  }
 }

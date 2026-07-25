@@ -137,6 +137,15 @@ export function extractConsumedAnatomySelectors(text) {
 
 /** Reason attached to an accepted-dead channel when the baseline is authored. */
 export function reasonFor(name) {
+  if (name.startsWith('--ds-material-')) {
+    return 'legacy-prefixed semantic surface-role channel landed ahead of a public SemanticSurface consumer; the prefix is compiler compatibility, not an external Material framework';
+  }
+  if (name.startsWith('--ds-type-')) {
+    return 'semantic typography facet emitted by the compiler but not yet consumed by a DS typography role; not accepted as visually effective until the role reads this exact facet';
+  }
+  if (name === '--ds-input-search-icon-color') {
+    return 'input search-icon channel emitted before the Modern search action consumed it; keep baselined only if that consumer is removed';
+  }
   if (name.startsWith('--ds-workspace-card-') || name.startsWith('--ds-tall-card-')) {
     return 'premium-card namespace emitted with no var() consumer (compactCard/collectionCard are the live premium-card channels); redundancy hand-off to the CONTRACT/SCHEMA/EMITTER owner';
   }

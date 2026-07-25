@@ -1,5 +1,6 @@
 'use client';
 
+import type { CSSProperties } from 'react';
 import { Box, Text, Stack, Flex, Grid } from '@/ui/primitives';
 import {
   ActivityIcon as Activity,
@@ -7,7 +8,7 @@ import {
   TrendingUpIcon as TrendingUp,
 } from '../../../../../../../graphics/icons';
 import { useSmoothCounter } from '@/graphics/motion/react/runtime';
-import { DENSITY_PRESETS, resolveDensityStyleVars } from '@/foundation/tokens/ts/foundation/base/density';
+import { DENSITY_PRESETS } from '@/foundation/tokens/ts/foundation/base/density';
 import type { MetricsProps, KeyMetric } from '../../../foundation/contracts';
 import {
   METRIC_CARD_BG,
@@ -173,14 +174,16 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
       className="ds-metrics-cards"
       data-part="root"
       style={{
-        ...resolveDensityStyleVars(density),
+        '--ds-density-cell-padding': densityPreset.cellPadding,
+        '--ds-density-card-padding': densityPreset.cardPadding,
+        '--ds-density-local-factor': String(densityPreset.modeFactor),
         height: 415,
         padding: '16px',
         position: 'relative',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-      }}
+      } as CSSProperties}
     >
       <Flex
         align="center"

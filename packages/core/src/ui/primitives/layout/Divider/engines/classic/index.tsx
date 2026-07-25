@@ -14,16 +14,21 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef } from 'react';
-import type { DividerProps, DividerVariant, DividerTextPosition } from '../../contracts';
+import React, { forwardRef } from "react";
+import type {
+  DividerProps,
+  DividerVariant,
+  DividerLogicalTextPosition,
+} from "../../contracts";
 import {
   DIVIDER_DEFAULTS,
   SPACING_MAP,
   getThicknessValue,
   DEFAULT_COLORS,
-} from '../../contracts';
+  resolveDividerTextPosition,
+} from "../../contracts";
 
 /**
  * Classic Divider component styled to match Ant Design conventions.
@@ -51,21 +56,26 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       thickness = DIVIDER_DEFAULTS.thickness,
       spacing: spacingProp,
       margin,
-      className = '',
+      className = "",
       style = {},
-      'data-testid': testId,
+      "data-testid": testId,
       ...rest
     } = props;
 
     // Resolve prop aliases: `type` is the legacy name for `orientation`,
     // `orientationMargin` is the Ant Design alias for `textPosition`,
     // and `margin` is the legacy alias for `spacing`
-    const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
-    const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
-    const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
+    const orientation =
+      orientationProp || type || DIVIDER_DEFAULTS.orientation!;
+    const variant: DividerVariant = dashed
+      ? "dashed"
+      : variantProp || DIVIDER_DEFAULTS.variant!;
+    const textPosition: DividerLogicalTextPosition = resolveDividerTextPosition(
+      textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition
+    );
     const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
-    const isHorizontal = orientation === 'horizontal';
+    const isHorizontal = orientation === "horizontal";
     // Text is only rendered inside horizontal dividers
     const hasChildren = !!children && isHorizontal;
 
@@ -75,69 +85,72 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
 
     // Build Ant Design class names for external CSS overrides
     const classNames = [
-      'ant-divider',
+      "ant-divider",
       `ant-divider-${orientation}`,
-      hasChildren ? 'ant-divider-with-text' : '',
-      hasChildren ? `ant-divider-with-text-${textPosition}` : '',
-      plain && hasChildren ? 'ant-divider-plain' : '',
-      variant === 'dashed' ? 'ant-divider-dashed' : '',
-      variant === 'dotted' ? 'ant-divider-dotted' : '',
+      hasChildren ? "ant-divider-with-text" : "",
+      hasChildren ? `ant-divider-with-text-${textPosition}` : "",
+      plain && hasChildren ? "ant-divider-plain" : "",
+      variant === "dashed" ? "ant-divider-dashed" : "",
+      variant === "dotted" ? "ant-divider-dotted" : "",
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     // Flexbox container: row for horizontal, inline-flex for vertical.
     // `clear: both` ensures the divider breaks past floated elements.
     const containerStyle: React.CSSProperties = {
-      display: isHorizontal ? 'flex' : 'inline-flex',
-      alignItems: 'center',
-      width: isHorizontal ? '100%' : 'auto',
-      height: isHorizontal ? 'auto' : '100%',
-      minHeight: isHorizontal ? undefined : '0.9em',
-      margin: isHorizontal
-        ? `${spacingValue} 0`
-        : `0 ${spacingValue}`,
-      clear: 'both',
+      display: isHorizontal ? "flex" : "inline-flex",
+      alignItems: "center",
+      width: isHorizontal ? "100%" : "auto",
+      height: isHorizontal ? "auto" : "100%",
+      minHeight: isHorizontal ? undefined : "0.9em",
+      margin: isHorizontal ? `${spacingValue} 0` : `0 ${spacingValue}`,
+      clear: "both",
       ...style,
     };
 
     // Base line style using border-top (horizontal) or border-left (vertical)
     const lineStyle: React.CSSProperties = {
       flex: 1,
-      borderTop: isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
-      borderLeft: !isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
-      height: isHorizontal ? '0' : '100%',
-      width: isHorizontal ? '100%' : '0',
+      borderTop: isHorizontal
+        ? `${lineThickness} ${variant} ${lineColor}`
+        : "none",
+      borderLeft: !isHorizontal
+        ? `${lineThickness} ${variant} ${lineColor}`
+        : "none",
+      height: isHorizontal ? "0" : "100%",
+      width: isHorizontal ? "100%" : "0",
     };
 
     // When text is left-aligned, the line before it is short (5%)
     // and the line after it fills the remaining space
     const lineBeforeStyle: React.CSSProperties = {
       ...lineStyle,
-      flex: textPosition === 'left' ? '0 0 5%' :
-            textPosition === 'right' ? 1 : 1,
-      minWidth: textPosition === 'left' ? '5%' : undefined,
+      flex:
+        textPosition === "start" ? "0 0 5%" : textPosition === "end" ? 1 : 1,
+      minWidth: textPosition === "start" ? "5%" : undefined,
     };
 
     // Mirror logic for right-aligned text
     const lineAfterStyle: React.CSSProperties = {
       ...lineStyle,
-      flex: textPosition === 'left' ? 1 :
-            textPosition === 'right' ? '0 0 5%' : 1,
-      minWidth: textPosition === 'right' ? '5%' : undefined,
+      flex:
+        textPosition === "start" ? 1 : textPosition === "end" ? "0 0 5%" : 1,
+      minWidth: textPosition === "end" ? "5%" : undefined,
     };
 
     // Text styling follows Ant Design conventions: 16px/500 weight when
     // not plain, with a three-level CSS variable fallback chain for color
     const textStyle: React.CSSProperties = {
-      padding: '0 1em',
-      display: 'inline-block',
-      whiteSpace: 'nowrap',
-      fontSize: plain ? 'inherit' : '16px',
-      fontWeight: plain ? 'inherit' : 500,
-      color:
-        plain
-          ? 'inherit'
-          : 'var(--ds-divider-text-color, var(--ds-color-text-primary, var(--ds-color-neutral-900, rgba(0, 0, 0, 0.85))))',
+      padding: "0 1em",
+      display: "inline-block",
+      whiteSpace: "nowrap",
+      fontSize: plain ? "inherit" : "16px",
+      fontWeight: plain ? "inherit" : 500,
+      color: plain
+        ? "inherit"
+        : "var(--ds-divider-text-color, var(--ds-color-text-primary, var(--ds-color-neutral-900, rgba(0, 0, 0, 0.85))))",
     };
 
     // Two render paths: with inline text (three spans) or simple line (single div)
@@ -150,13 +163,20 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
           role="separator"
           aria-orientation={orientation}
           data-testid={testId}
+          data-text-position={textPosition}
           {...rest}
         >
-          <span className="ant-divider-inner-text-before" style={lineBeforeStyle} />
+          <span
+            className="ant-divider-inner-text-before"
+            style={lineBeforeStyle}
+          />
           <span className="ant-divider-inner-text" style={textStyle}>
             {children}
           </span>
-          <span className="ant-divider-inner-text-after" style={lineAfterStyle} />
+          <span
+            className="ant-divider-inner-text-after"
+            style={lineAfterStyle}
+          />
         </div>
       );
     }
@@ -170,12 +190,13 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
         role="separator"
         aria-orientation={orientation}
         data-testid={testId}
+        data-text-position={undefined}
         {...rest}
       />
     );
   }
 );
 
-ClassicDivider.displayName = 'ClassicDivider';
+ClassicDivider.displayName = "ClassicDivider";
 
 export default ClassicDivider;

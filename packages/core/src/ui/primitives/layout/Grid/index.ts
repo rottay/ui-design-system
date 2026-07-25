@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Grid Component - Rottay Design System
@@ -15,7 +15,7 @@
  *
  * This component supports the Rottay multi-engine architecture:
  * - **Classic**: Full-featured implementation using Ant Design patterns
- * - **Modern**: Utility-first implementation using Tailwind grid classes
+ * - **Modern**: Deterministic grid structure with safe tracks and token-aware gaps
  * - **Rustic**: Pure HTML/CSS implementation with inline grid styles
  *
  * @example Basic Grid
@@ -81,7 +81,7 @@
  *
  * // Cards automatically wrap and fill available space
  * <Grid
- *   templateColumns="repeat(auto-fit, minmax(280px, 1fr))"
+ *   minColumnWidth="280px"
  *   gap="lg"
  * >
  *   {cards.map(card => (
@@ -94,9 +94,9 @@
  * ```tsx
  * import { Grid } from '@rottay/design-system';
  *
- * // Force Modern engine for Tailwind grid classes
+ * // Force Modern engine for safely shrinking tracks
  * <Grid engine="modern" columns={3} gap="md">
- *   Outputs: class="grid grid-cols-3 gap-4"
+ *   Uses minmax(0, 1fr) tracks and the DS medium gap token
  * </Grid>
  * ```
  *
@@ -110,9 +110,9 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { GridProps } from './contracts';
-import { GridItem } from './compound';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { GridProps } from "./contracts";
+import { GridItem } from "./compound";
 
 // ============================================================================
 // TYPE EXPORTS
@@ -136,8 +136,9 @@ export type {
   GridAlignContent,
   GridJustifyContent,
   GridPlaceItems,
+  GridMotion,
   ResponsiveValue,
-} from './contracts';
+} from "./contracts";
 
 // ============================================================================
 // CONSTANT EXPORTS
@@ -153,7 +154,7 @@ export {
   GAP_MAP,
   ALIGN_ITEMS_MAP,
   JUSTIFY_ITEMS_MAP,
-} from './contracts';
+} from "./contracts";
 
 // ============================================================================
 // COMPOUND COMPONENT EXPORTS
@@ -201,10 +202,10 @@ export { GridItem };
  * ```
  */
 export const Grid = Object.assign(
-  createEngineComponent<GridProps>('Grid', {
-    classic: () => import('./engines/classic'),
-    modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
+  createEngineComponent<GridProps>("Grid", {
+    classic: () => import("./engines/classic"),
+    modern: () => import("./engines/modern"),
+    rustic: () => import("./engines/rustic"),
   }),
   {
     /** Grid.Item compound component for positioning items within the grid */

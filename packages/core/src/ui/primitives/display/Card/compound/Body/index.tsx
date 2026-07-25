@@ -45,9 +45,9 @@ import type { CardBodyProps } from '../../contracts';
  */
 const PADDING_MAP: Record<string, string> = {
   none: '0',
-  sm: '12px 16px',
-  md: '16px 24px',
-  lg: '24px 32px',
+  sm: 'var(--ds-card-body-padding-sm, var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px))',
+  md: 'var(--ds-card-body-padding, var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px))',
+  lg: 'var(--ds-card-body-padding-lg, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px))',
 };
 
 /**
@@ -86,6 +86,7 @@ export function CardBody({
   padding = 'md',
   className = '',
   style,
+  ...rest
 }: CardBodyProps): React.ReactElement {
   const bodyStyle: CSSProperties = {
     padding: PADDING_MAP[padding],
@@ -95,7 +96,7 @@ export function CardBody({
   const renderedChildren = React.Children.toArray(children);
 
   return (
-    <div className={`rottay-card-body ${className}`} data-part="body" style={bodyStyle}>
+    <div {...rest} className={`rottay-card-body ${className}`} data-part="body" style={bodyStyle}>
       {renderedChildren}
     </div>
   );

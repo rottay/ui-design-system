@@ -171,12 +171,14 @@ export type Alignment = 'start' | 'center' | 'end';
  *
  * Pass-through honesty law (binding on every engine implementation):
  * `id`, `aria-*`, and `data-*` attributes declared here MUST reach the root
- * DOM element the engine owns -- an engine may not silently drop them. The
- * single exception is `data-part`: the engine owns its anatomy vocabulary, so
- * every engine spreads the caller's passthrough FIRST and stamps its own
- * `data-part` (and skin-contract `data-*` keys) LAST. A caller-supplied
- * `data-part` therefore never renames an engine part, while every other
- * caller attribute survives to the DOM.
+ * DOM element the engine owns -- an engine may not silently drop them.
+ * `data-part` follows the anatomy-ownership rule (P-79, superseding the
+ * SKN-03 always-engine-wins wording): an explicit caller `data-part` names
+ * the part the COMPOSING component owns, so it MUST reach the DOM and win;
+ * the engine stamps its own default root part only when the caller passed
+ * none, so standalone use keeps the primitive's own anatomy contract. Inner
+ * sub-parts (spinner/icon/label/content/...) stay engine-owned and can never
+ * be renamed by a root `data-part`.
  */
 export interface BaseComponentProps {
   /** Arbitrary semantic state hooks forwarded to the rendered DOM element. */

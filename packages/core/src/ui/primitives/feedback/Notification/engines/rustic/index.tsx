@@ -231,7 +231,7 @@ const styles = {
     padding: '4px',
     fontSize: '14px',
     lineHeight: 1,
-    transition: 'color var(--ds-duration-fast, 150ms)',
+    transition: 'color var(--ds-duration-fast, 120ms)',
     marginLeft: '8px',
   } as React.CSSProperties,
 };

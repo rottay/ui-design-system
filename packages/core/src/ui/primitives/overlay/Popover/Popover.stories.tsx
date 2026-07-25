@@ -7,10 +7,15 @@
  * all features, variants, placements, and engine implementations.
  */
 
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Popover } from './';
+import { Badge } from '../../display/Badge';
+import { Text } from '../../display/Typography';
+import { Button } from '../../inputs/Button';
+import { Stack } from '../../layout/Stack';
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
-import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
+import { EngineComparison as EngineComparisonHelper } from '../../../../../.storybook/helpers';
 
 /**
  * Popover component metadata for Storybook.
@@ -71,6 +76,16 @@ Supports multiple placement positions, trigger types, and content configurations
     arrow: {
       control: 'boolean',
       description: 'Whether to show the arrow indicator',
+    },
+    recipe: {
+      control: 'select',
+      options: ['minimal', 'bordered', 'inverse', 'rich'],
+      description: 'Coordinated material and density recipe in Modern',
+    },
+    touchBehavior: {
+      control: 'select',
+      options: ['toggle', 'none'],
+      description: 'Touch fallback for a hover/focus-only popover',
     },
   },
   tags: ['autodocs'],
@@ -285,5 +300,158 @@ export const WithDelays: Story = {
   ),
 };
 
-// Need React for controlled story
-import React from 'react';
+/**
+ * Adversarial material evidence. Every surface keeps the same anatomy; only
+ * the bounded recipe changes coordinated paint, density and typography.
+ */
+export const PremiumRecipeMatrix: Story = {
+  render: () => (
+    <Stack direction="horizontal" spacing={112} wrap align="center">
+      {(['minimal', 'bordered', 'inverse', 'rich'] as const).map((recipe, index) => (
+        <Popover
+          key={recipe}
+          open
+          trigger="click"
+          placement="bottom"
+          recipe={recipe}
+          density={(['compact', 'comfortable', 'spacious'] as const)[index % 3]}
+          title={`${recipe} decision context`}
+          content={
+            <Stack spacing="sm">
+              <Text size="sm">
+                Three verified signals support the recommended next action.
+              </Text>
+              <Stack direction="horizontal" spacing="xs" align="center">
+                <Badge tone="primary">92 fit</Badge>
+                <Text size="xs" color="subtle">Updated 2 min ago</Text>
+              </Stack>
+              {recipe === 'rich' ? (
+                <Button size="sm" variant="outline">Review evidence</Button>
+              ) : null}
+            </Stack>
+          }
+        >
+          <Button size="sm" variant="outline">{recipe}</Button>
+        </Popover>
+      ))}
+    </Stack>
+  ),
+};
+
+/**
+ * RTL, long unbroken copy and viewport pressure evidence. The panel must flip,
+ * wrap and preserve locale context without physical left/right assumptions.
+ */
+export const LocaleViewportAndLongCopy: Story = {
+  render: () => (
+    <Stack
+      dir="rtl"
+      lang="ar"
+      spacing="md"
+      style={{ inlineSize: 'min(17rem, calc(100vw - 2rem))' }}
+    >
+      <Popover
+        open
+        trigger="click"
+        placement="bottomLeft"
+        recipe="rich"
+        maxWidth="min(24rem, calc(100dvi - 1rem))"
+        title="سياق القرار"
+        content={
+          <Stack spacing="sm">
+            <Text size="sm">
+              راجع الأدلة الموثقة قبل نقل المرشح إلى المرحلة التالية؛ يمكن تعديل التوصية قبل تنفيذها.
+            </Text>
+            <Text size="xs" color="subtle">
+              ExtremelyLongUnbrokenEvidenceIdentifier_2026_07_22_candidate_decision_context
+            </Text>
+            <Button size="sm">مراجعة الأدلة</Button>
+          </Stack>
+        }
+      >
+        <Button block variant="outline">فتح سياق القرار</Button>
+      </Popover>
+    </Stack>
+  ),
+};
+
+/** Identical surface anatomy under two intentionally distant tenant systems. */
+export const TenantLocaleContrast: Story = {
+  render: () => (
+    <Stack direction="horizontal" spacing={112} wrap align="center">
+      <div
+        lang="en"
+        data-ds-root=""
+        data-vertical="bithire"
+        data-tenant="bithire"
+        data-density="compact"
+        style={{
+          '--ds-popover-bordered-radius': '7px',
+          '--ds-popover-bordered-shadow': '0 12px 30px rgba(20, 40, 59, .14)',
+        } as React.CSSProperties}
+      >
+        <Popover open trigger="click" density="compact" placement="bottomLeft" title="Candidate evidence" content="Three verified signals are ready for review.">
+          <Button variant="outline">BitHire decision</Button>
+        </Popover>
+      </div>
+      <div
+        dir="rtl"
+        lang="ar"
+        data-ds-root=""
+        data-vertical="core"
+        data-tenant="the-management"
+        data-density="spacious"
+        style={{
+          '--ds-popover-bordered-radius': '20px',
+          '--ds-popover-bordered-shadow': '0 22px 56px rgba(28, 28, 28, .18)',
+        } as React.CSSProperties}
+      >
+        <Popover open trigger="click" density="spacious" placement="bottomLeft" title="سياق الإدارة" content="ثلاث إشارات موثقة جاهزة للمراجعة.">
+          <Button variant="outline">فتح السياق</Button>
+        </Popover>
+      </div>
+    </Stack>
+  ),
+};
+
+/**
+ * Nested interactive evidence for stack order, hoverable content, focus
+ * transfer and top-most Escape dismissal. The inner panel is intentionally
+ * aligned against the opposite edge to exercise diagonal collision craft.
+ */
+export const NestedInteractiveLayers: Story = {
+  render: () => (
+    <Popover
+      open
+      trigger="click"
+      placement="bottomRight"
+      recipe="rich"
+      title="Candidate decision"
+      content={
+        <Stack spacing="sm">
+          <Text size="sm">
+            Evidence is complete; choose how to prepare the next conversation.
+          </Text>
+          <Popover
+            open
+            trigger="click"
+            placement="rightTop"
+            recipe="inverse"
+            title="AI preparation"
+            content={
+              <Stack spacing="xs">
+                <Badge tone="primary">850 tokens</Badge>
+                <Text size="xs">Generates an editable interview brief.</Text>
+                <Button size="sm">Prepare brief</Button>
+              </Stack>
+            }
+          >
+            <Button size="sm" variant="outline">Review AI action</Button>
+          </Popover>
+        </Stack>
+      }
+    >
+      <Button variant="outline">Open nested decision context</Button>
+    </Popover>
+  ),
+};

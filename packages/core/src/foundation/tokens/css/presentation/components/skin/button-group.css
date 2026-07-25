@@ -1,0 +1,94 @@
+/**
+ * Button.Group compound skin.
+ *
+ * Layout and connected geometry are expressed with logical properties so the
+ * same DOM is correct in LTR and RTL. Child paint remains entirely owned by
+ * the selected Button engine; this seam never reaches into a variant color.
+ */
+
+.rottay-button-group[data-part='group'] {
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: stretch;
+  gap: var(--ds-button-group-instance-gap, var(--ds-button-group-gap));
+}
+
+.rottay-button-group[data-orientation='horizontal'] {
+  flex-flow: row wrap;
+}
+
+.rottay-button-group[data-orientation='vertical'] {
+  flex-direction: column;
+}
+
+.rottay-button-group[data-connected='true'] {
+  gap: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  isolation: isolate;
+}
+
+.rottay-button-group[data-connected='true'] > .rottay-button {
+  position: relative;
+  border-radius: 0;
+}
+
+.rottay-button-group[data-connected='true'][data-orientation='horizontal']
+  > .rottay-button:not(:first-child) {
+  margin-inline-start: calc(var(--ds-button-border-width) * -1);
+}
+
+.rottay-button-group[data-connected='true'][data-orientation='horizontal']
+  > .rottay-button:first-child {
+  border-start-start-radius: var(--ds-button-resolved-radius);
+  border-end-start-radius: var(--ds-button-resolved-radius);
+}
+
+.rottay-button-group[data-connected='true'][data-orientation='horizontal']
+  > .rottay-button:last-child {
+  border-start-end-radius: var(--ds-button-resolved-radius);
+  border-end-end-radius: var(--ds-button-resolved-radius);
+}
+
+.rottay-button-group[data-connected='true'][data-orientation='vertical']
+  > .rottay-button:not(:first-child) {
+  margin-block-start: calc(var(--ds-button-border-width) * -1);
+}
+
+.rottay-button-group[data-connected='true'][data-orientation='vertical']
+  > .rottay-button:first-child {
+  border-start-start-radius: var(--ds-button-resolved-radius);
+  border-start-end-radius: var(--ds-button-resolved-radius);
+}
+
+.rottay-button-group[data-connected='true'][data-orientation='vertical']
+  > .rottay-button:last-child {
+  border-end-start-radius: var(--ds-button-resolved-radius);
+  border-end-end-radius: var(--ds-button-resolved-radius);
+}
+
+.rottay-button-group[data-connected='true'] > .rottay-button:is(:hover, :focus-visible),
+.rottay-button-group[data-connected='true']
+  > .rottay-button[data-state~='focus-visible'] {
+  z-index: 1;
+}
+
+@media (max-width: 639px) {
+  .rottay-button-group[data-part='group']:not([data-connected='true']) {
+    inline-size: var(--ds-button-group-mobile-width);
+    flex-direction: var(--ds-button-group-mobile-direction);
+    gap: var(--ds-button-group-mobile-gap);
+  }
+
+  .rottay-button-group[data-part='group']:not([data-connected='true'])
+    > .rottay-button {
+    inline-size: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-button-group[data-connected='true'] > .rottay-button {
+    forced-color-adjust: auto;
+  }
+}

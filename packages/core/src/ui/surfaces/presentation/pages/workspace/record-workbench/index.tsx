@@ -171,7 +171,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                   </span>
                 )}
               </Flex>
-              {subtitle && <Text className="ds-record-workbench__muted-text" data-part="muted-text" size="sm" color="muted">{subtitle}</Text>}
+              {subtitle && <Text className="ds-record-workbench__muted-text" size="sm" color="muted">{subtitle}</Text>}
             </Box>
           </>
         )}
@@ -313,7 +313,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                 <Stack spacing="sm">
                   {metadata.map((field) => (
                     <Box key={field.key}>
-                      <Text className="ds-record-workbench__muted-text" data-part="muted-text" size="xs" color="muted">{field.label}</Text>
+                      <Text className="ds-record-workbench__muted-text" size="xs" color="muted">{field.label}</Text>
                       <Box style={{ marginTop: '2px' }}>
                         {typeof field.value === 'string' ? (
                           <Text size="sm">{field.value}</Text>

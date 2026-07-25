@@ -12,8 +12,11 @@
  *
  * **Multi-Engine Architecture:**
  * - **Classic** (Ant Design): Full-featured form with async validation and rich feedback
- * - **Modern** (DaisyUI/Tailwind): Lightweight form with custom validation
+ * - **Modern** (token skin): Lightweight self-contained form with custom validation
  * - **Rustic** (Vanilla HTML/CSS): Headless form with full accessibility
+ * - **Custom**: White-label packs do not expose a form runtime contract today;
+ *   `Form`, its compounds and `useForm` resolve to the Classic binding so the
+ *   imperative API stays available (pinned in `resolveFormEngine`).
  *
  * **Multi-Tenant Support:**
  * Form appearance adapts to tenant themes via CSS custom properties
@@ -168,9 +171,9 @@ function resolveFormEngine(engine: EngineName) {
 }
 
 /**
- * Las compounds tienen que seguir el engine activo; si las atamos al shared
- * clásico, `Form.Item/List/ErrorList` terminan montando contexto de Ant Design
- * incluso cuando el formulario base es Modern o Rustic.
+ * The compound components must follow the active engine; binding them to the
+ * shared classic implementation would mount Ant Design context inside
+ * `Form.Item/List/ErrorList` even when the base form is Modern or Rustic.
  */
 const EngineAwareFormItem: React.FC<FormItemProps> = (props) => {
   const { engine } = useEngineContext();
@@ -193,18 +196,19 @@ const EngineAwareFormErrorList: React.FC<FormErrorListProps> = (props) => {
 };
 
 /**
- * `useForm` también tiene que resolver contra el engine activo para mantener
- * el mismo contrato que el componente `Form`. Fuera de un provider cae en
- * classic vía `useEngineContext()`.
+ * `useForm` must also resolve against the active engine to keep the same
+ * contract as the `Form` component. Outside a provider it falls back to
+ * classic via `useEngineContext()`.
  */
 export function useForm<T = unknown>(): [FormInstance<T>] {
   const { engine } = useEngineContext();
   return resolveFormEngine(engine).useForm<T>() as [FormInstance<T>];
 }
 
-// Export the Form component with compound components attached
-// Compound components (Item, List, ErrorList) are attached from the Classic engine
-// They work with any engine since they render children normally
+// Export the Form component with compound components attached.
+// The compounds are engine-aware: each resolves Item/List/ErrorList against
+// the ACTIVE engine context (see `resolveFormEngine`), so a Modern form never
+// mounts Ant Design context through its compound children.
 export const Form = Object.assign(FormBase, {
   /** Field wrapper with label, validation, and feedback slots. */
   Item: EngineAwareFormItem,

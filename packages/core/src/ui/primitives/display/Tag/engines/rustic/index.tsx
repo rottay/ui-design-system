@@ -40,26 +40,7 @@
 import React, { useCallback } from 'react';
 import type { TagProps } from '../../contracts';
 import { TAG_DEFAULTS, SIZE_MAP, TONE_TO_TAG_VARIANT } from '../../contracts';
-
-/**
- * Close icon SVG component for closable tags.
- */
-const CloseIcon: React.FC = () => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 12 12"
-    fill="none"
-    aria-hidden="true"
-  >
-    <path
-      d="M9 3L3 9M3 3L9 9"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-  </svg>
-);
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 /**
  * Rustic (Pure HTML/CSS) implementation of the Tag component.
@@ -84,6 +65,7 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     variant: variantProp = TAG_DEFAULTS.variant,
     closable = TAG_DEFAULTS.closable,
     onClose,
+    closeLabel: _closeLabel,
     icon,
     children,
     bordered = TAG_DEFAULTS.bordered,
@@ -97,6 +79,10 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     ...restProps
   } = props;
 
+  // closeLabel is consumed by the modern engine only; swallowed here so it
+  // never leaks onto the DOM through restProps.
+  void _closeLabel;
+
   // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_COLORS
   // below is keyed by the same internal color-token name either way.
   const variant = tone ? TONE_TO_TAG_VARIANT[tone] : variantProp;
@@ -109,6 +95,16 @@ export default function RusticTag(props: TagProps): React.ReactElement {
       onClick();
     }
   }, [clickable, onClick]);
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (!clickable || !onClick) return;
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      onClick();
+    },
+    [clickable, onClick]
+  );
 
   /**
    * Handles close button click.
@@ -196,6 +192,7 @@ export default function RusticTag(props: TagProps): React.ReactElement {
       data-clickable={clickable ? 'true' : undefined}
       style={containerStyle}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       {...restProps}
@@ -217,7 +214,7 @@ export default function RusticTag(props: TagProps): React.ReactElement {
           aria-label="Remove tag"
           style={closeButtonStyle}
         >
-          <CloseIcon />
+          <ActionCloseIcon size={12} decorative />
         </button>
       )}
     </span>

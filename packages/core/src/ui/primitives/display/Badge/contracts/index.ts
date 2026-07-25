@@ -36,7 +36,15 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Size, Tone, Variant, WithChildren } from '../../../../../foundation/contracts/kernel/common';
+import type {
+  BaseComponentProps,
+  DisableableProps,
+  LoadableProps,
+  Size,
+  Tone,
+  Variant,
+  WithChildren,
+} from '../../../../../foundation/contracts/kernel/common';
 import { TONE_TO_VARIANT } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
@@ -67,6 +75,23 @@ export const TONE_TO_BADGE_VARIANT: Record<Tone, BadgeVariant | 'info'> = TONE_T
 export type BadgeStyle = 'solid' | 'outline' | 'soft' | 'ghost';
 
 /**
+ * Structural role inside the compact-label family. It changes anatomy and
+ * density, never semantic colour: `tone` remains the single colour meaning.
+ */
+export type BadgeKind = 'badge' | 'chip' | 'pill';
+
+/** Logical positions mirror automatically in RTL. Physical aliases remain for compatibility. */
+export type BadgePosition =
+  | 'top-start'
+  | 'top-end'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right';
+
+/**
  * Badge status for status indicators.
  */
 export type BadgeStatus = 'processing' | 'default' | 'success' | 'error' | 'warning';
@@ -74,7 +99,18 @@ export type BadgeStatus = 'processing' | 'default' | 'success' | 'error' | 'warn
 /**
  * Badge component props.
  */
-export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithChildren {
+export interface BadgeBaseProps
+  extends BaseComponentProps,
+    DisableableProps,
+    LoadableProps,
+    EngineAwareProps,
+    WithChildren {
+  /**
+   * Compact-label anatomy. `badge` preserves notification/count behaviour;
+   * `chip` and `pill` expose selection, avatar, count and removal anatomy.
+   * @default 'badge'
+   */
+  kind?: BadgeKind;
   /**
    * Badge size. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
@@ -167,17 +203,27 @@ export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithCh
 
   /**
    * Badge position when over another element.
-   * @default 'top-right'
+   * @default 'top-end'
    */
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  position?: BadgePosition;
 
   /**
    * Icon to show before content.
    */
   icon?: ReactNode;
 
+  /** Avatar or compact identity mark rendered before the label. */
+  avatar?: ReactNode;
+
+  /** Controlled selected state for filter chips and selectable pills. */
+  selected?: boolean;
+
+  /** Selection callback. Providing it makes the main label keyboard interactive. */
+  onSelectedChange?: (selected: boolean) => void;
+
   /**
-   * Whether the badge can be closed.
+   * @deprecated Use `removable` with a localized `removeLabel`. Kept for one
+   * compatibility cycle so existing badges do not lose their close control.
    */
   closable?: boolean;
 
@@ -206,7 +252,29 @@ export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithCh
    * @default 'full'
    */
   radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+
+  /** Truncate long labels at the tenant-owned max inline size. @default true */
+  truncate?: boolean;
 }
+
+/**
+ * Removal is deliberately discriminated: the preferred `removable` API can
+ * never create an unnamed icon button. The legacy `closable` branch remains
+ * accepted through {@link BadgeBaseProps} for source compatibility, but new
+ * product code receives a compile-time requirement for localized copy.
+ */
+export type BadgeRemovalProps =
+  | {
+      removable: true;
+      removeLabel: string;
+    }
+  | {
+      removable?: false;
+      /** May be prepared while removal is disabled, or used by legacy `closable`. */
+      removeLabel?: string;
+    };
+
+export type BadgeProps = BadgeBaseProps & BadgeRemovalProps;
 
 /**
  * Badge.Ribbon component props (ribbon/banner badge).
@@ -290,7 +358,9 @@ export const BADGE_DEFAULTS = {
   /** Whether to render as a dot indicator */
   dot: false,
   /** Default position when attached to an element */
-  position: 'top-right' as const,
+  position: 'top-end' as const,
+  /** Default compact-label anatomy */
+  kind: 'badge' as const,
   /** Default border radius style */
   radius: 'full' as const,
   /** Default visual style */

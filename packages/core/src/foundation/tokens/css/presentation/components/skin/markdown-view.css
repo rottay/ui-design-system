@@ -1,0 +1,56 @@
+/**
+ * MarkdownView skin -- engine-agnostic, no `@layer` in-file (the facade
+ * entrypoints import it into `layer(rottay-components)`, the same
+ * registration as the voice-input-button family skin).
+ * Home: foundation/tokens/css/presentation/components/skin/markdown-view.css --
+ * this component has no engine split (one `index.tsx` renders under every
+ * engine).
+ *
+ * SCOPE ROOT is `.ds-markdown-view[data-part='root']`.
+ *
+ * OWNERSHIP (single owner PER PART): this skin owns ONLY the link part --
+ * wholesale: ink, the underline mandated by axe link-in-text-block (K4-B R3),
+ * and the hover/focus-visible states. Every other part (blockquote, lists,
+ * tables, code, task checkbox) keeps its inline paint in `index.tsx`. Inline
+ * styles cannot express :hover/:focus-visible, which is why the interactive
+ * part lives here.
+ *
+ * Hover deepens the link ink 28% toward the source's own primary text ink --
+ * hue-faithful, mode-adaptive, and always a contrast-safe direction on the
+ * page surface. Escape hatches `--ds-markdown-*` stay raw.
+ */
+
+.ds-markdown-view[data-part='root'] a[data-part='link'] {
+  color: var(--ds-color-link);
+  text-decoration: underline;
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.15em;
+  text-decoration-skip-ink: auto;
+}
+
+.ds-markdown-view[data-part='root'] a[data-part='link']:hover {
+  color: var(
+    --ds-markdown-link-ink-hover,
+    color-mix(in srgb, var(--ds-color-link) 72%, var(--ds-color-text-primary))
+  );
+  text-decoration-thickness: var(--ds-markdown-link-decoration-hover, 0.09em);
+}
+
+.ds-markdown-view[data-part='root'] a[data-part='link']:focus-visible {
+  outline: none;
+  border-radius: var(--ds-radius-sm);
+  box-shadow: var(
+    --ds-markdown-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+
+@media (forced-colors: active) {
+  .ds-markdown-view[data-part='root'] a[data-part='link'] {
+    text-decoration-thickness: 2px;
+  }
+  .ds-markdown-view[data-part='root'] a[data-part='link']:focus-visible {
+    outline: 2px solid Highlight;
+    box-shadow: none;
+  }
+}

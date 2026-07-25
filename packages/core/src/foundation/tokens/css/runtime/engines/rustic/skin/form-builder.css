@@ -128,7 +128,8 @@
 }
 .ds-pattern-form-builder.ds-engine-rustic [data-part='field-error'][data-part='field-error'] {
   color: var(--ds-color-error, var(--ds-color-danger));
-  border-left: 2px solid var(--ds-color-error, var(--ds-color-danger));
+  border: 1px solid color-mix(in srgb, var(--ds-color-error, var(--ds-color-danger)) 42%, transparent);
+  border-radius: var(--ds-radius-sm, 6px);
 }
 
 /* ---- rating stars ---- */

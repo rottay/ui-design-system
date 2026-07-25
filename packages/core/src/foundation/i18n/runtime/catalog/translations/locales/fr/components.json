@@ -221,5 +221,23 @@
       "empty_title": "Aucune visualisation configuree",
       "empty_description": "Ajoutez une ou plusieurs vues pour afficher cette surface."
     }
+  },
+  "checkbox": {
+    "group": "Groupe de cases à cocher"
+  },
+  "radio": {
+    "group": "Groupe de boutons radio"
+  },
+  "rate": {
+    "label": "Note",
+    "star": "{count} étoile",
+    "stars": "{count} étoiles"
+  },
+  "actionDock": {
+    "overflow": {
+      "label": "Plus d'actions"
+    },
+    "topLabel": "Actions en haut",
+    "bottomLabel": "Actions en bas"
   }
 }

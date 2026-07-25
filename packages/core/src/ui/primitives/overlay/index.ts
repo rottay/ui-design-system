@@ -61,6 +61,9 @@ export type {
   PopoverProps,
   PopoverTrigger,
   PopoverPlacement,
+  PopoverRecipe,
+  PopoverRole,
+  PopoverTouchBehavior,
 } from './Popover';
 export { POPOVER_DEFAULTS } from './Popover';
 
@@ -134,3 +137,16 @@ export type {
   OverlayLayerProps,
   OverlayLayerHandle,
 } from '../runtime/overlay/layer-stack';
+
+// Portal scope re-stamping (tenant/locale/DS variables across the portal boundary)
+export {
+  readPortalScope,
+  readLocaleContext,
+  usePortalScope,
+  PortalScope,
+} from '../runtime/overlay/portal-scope';
+export type {
+  PortalScopeAttributes,
+  PortalScopeSnapshot,
+  PortalScopeProps,
+} from '../runtime/overlay/portal-scope';

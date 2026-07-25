@@ -25,8 +25,12 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 // data-disabled/data-open/data-current/data-placement/data-variant/data-shape/
 // data-tone/data-direction/data-sticky/data-state) onto all twelve components
 // and their compounds without moving any paint -- per P-73/N1, Steps and
-// Stepper's DaisyUI pseudo-element mechanism is untouched; per N2, FloatButton's
-// `btn` class list is untouched. This file proves the stamp reached the DOM for
+// Stepper's DaisyUI pseudo-element mechanism is untouched. FloatButton's `btn`
+// class list, which N2 kept load-bearing for the layered theme.css hover/press
+// scale, has since been DRAINED (K4-C Pass 1): the unlayered modern skin is now
+// the single paint owner and carries the interaction verbatim, so this file's
+// data-part assertions are the contract that drain had to preserve. This file
+// proves the stamp reached the DOM for
 // each component under every engine it supports, mirroring
 // StatusBatch.contract.test.tsx's structure. It does not assert paint (that is
 // navigation-batch.spec.ts's job).

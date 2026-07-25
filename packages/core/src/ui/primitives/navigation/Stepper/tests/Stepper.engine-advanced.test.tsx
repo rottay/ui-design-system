@@ -64,9 +64,14 @@ describe('Stepper advanced engine coverage', () => {
     const review = screen.getByText('Review').closest('li');
     const publish = screen.getByText('Publish').closest('li');
 
-    expect(draft?.className).toContain('step-primary');
-    expect(review?.className).toContain('step-primary');
-    expect(publish?.className).toContain('step-error');
+    // The ds-* contract: step state rides data-status, never DaisyUI classes
+    // (step-primary/step-error are drained from the modern engine).
+    expect(draft).toHaveAttribute('data-status', 'finish');
+    expect(review).toHaveAttribute('data-status', 'process');
+    expect(publish).toHaveAttribute('data-status', 'error');
+    expect(publish).toHaveAttribute('data-disabled', 'true');
+    expect(draft?.className).not.toContain('step-primary');
+    expect(publish?.className).not.toContain('step-error');
 
     fireEvent.click(screen.getByText('Draft'));
     expect(onChange).toHaveBeenCalledWith(0);

@@ -14,9 +14,10 @@
  *   containing-block traps and needs no z-index escalation, so the portal
  *   runtime is BYPASSED in this branch: adopters render the overlay inline.
  *   `dialog-attributes` and `focus-management` compose unchanged on top.
- * - `js`: the shared measured implementation -- `getBoundingClientRect` plus
- *   window resize/scroll (capture) listeners. Adopters render the overlay
- *   through `runtime/overlay/portal`.
+ * - `js`: the shared measured implementation -- `getBoundingClientRect`,
+ *   element ResizeObserver, layout-viewport resize/scroll and visual-viewport
+ *   resize/scroll listeners. Adopters render the overlay through
+ *   `runtime/overlay/portal`.
  *
  * Branch choice is `overlayCapabilities` (module-scope probe; tests override
  * it to force either branch) PLUS the nested-chain rule: an overlay instance
@@ -246,6 +247,20 @@ function resolveBoundaryRect(boundary: 'viewport' | HTMLElement): BoundaryRect {
     const rect = boundary.getBoundingClientRect();
     return { top: rect.top, left: rect.left, right: rect.right, bottom: rect.bottom };
   }
+  // Fixed-position coordinates use the layout viewport, while the actually
+  // visible region can be smaller and offset during pinch zoom or while a
+  // mobile virtual keyboard is open. Prefer the visual viewport whenever the
+  // browser exposes it so collision handling never places an overlay behind
+  // chrome that the user cannot currently see.
+  const visualViewport = window.visualViewport;
+  if (visualViewport) {
+    return {
+      top: visualViewport.offsetTop,
+      left: visualViewport.offsetLeft,
+      right: visualViewport.offsetLeft + visualViewport.width,
+      bottom: visualViewport.offsetTop + visualViewport.height,
+    };
+  }
   return {
     top: 0,
     left: 0,
@@ -263,6 +278,15 @@ interface MeasuredPosition {
   left: number;
 }
 
+function overflowAmount(
+  start: number,
+  size: number,
+  minimum: number,
+  maximum: number,
+): number {
+  return Math.max(minimum - start, 0) + Math.max(start + size - maximum, 0);
+}
+
 function computeMeasuredPosition(
   anchorRect: DOMRect,
   overlayWidth: number,
@@ -277,7 +301,9 @@ function computeMeasuredPosition(
   let left: number;
 
   if (side === 'top' || side === 'bottom') {
-    top = side === 'top' ? anchorRect.top - offset - overlayHeight : anchorRect.bottom + offset;
+    const topPosition = anchorRect.top - offset - overlayHeight;
+    const bottomPosition = anchorRect.bottom + offset;
+    top = side === 'top' ? topPosition : bottomPosition;
     if (align === 'start') {
       left = anchorRect.left;
     } else if (align === 'end') {
@@ -287,14 +313,27 @@ function computeMeasuredPosition(
     }
 
     if (flip) {
-      if (side === 'top' && top < bounds.top + BOUNDARY_MARGIN) {
-        top = anchorRect.bottom + offset;
-      } else if (side === 'bottom' && top + overlayHeight > bounds.bottom - BOUNDARY_MARGIN) {
-        top = anchorRect.top - offset - overlayHeight;
+      const minimum = bounds.top + BOUNDARY_MARGIN;
+      const maximum = bounds.bottom - BOUNDARY_MARGIN;
+      const preferredOverflow = overflowAmount(top, overlayHeight, minimum, maximum);
+      const opposite = side === 'top' ? bottomPosition : topPosition;
+      const oppositeOverflow = overflowAmount(
+        opposite,
+        overlayHeight,
+        minimum,
+        maximum,
+      );
+      // Flip only when the preferred side clips and the opposite side is a
+      // genuine improvement. This avoids a jarring diagonal jump into an even
+      // smaller region when neither side can fully contain long content.
+      if (preferredOverflow > 0 && oppositeOverflow < preferredOverflow) {
+        top = opposite;
       }
     }
   } else {
-    left = side === 'left' ? anchorRect.left - offset - overlayWidth : anchorRect.right + offset;
+    const leftPosition = anchorRect.left - offset - overlayWidth;
+    const rightPosition = anchorRect.right + offset;
+    left = side === 'left' ? leftPosition : rightPosition;
     if (align === 'start') {
       top = anchorRect.top;
     } else if (align === 'end') {
@@ -304,10 +343,18 @@ function computeMeasuredPosition(
     }
 
     if (flip) {
-      if (side === 'left' && left < bounds.left + BOUNDARY_MARGIN) {
-        left = anchorRect.right + offset;
-      } else if (side === 'right' && left + overlayWidth > bounds.right - BOUNDARY_MARGIN) {
-        left = anchorRect.left - offset - overlayWidth;
+      const minimum = bounds.left + BOUNDARY_MARGIN;
+      const maximum = bounds.right - BOUNDARY_MARGIN;
+      const preferredOverflow = overflowAmount(left, overlayWidth, minimum, maximum);
+      const opposite = side === 'left' ? rightPosition : leftPosition;
+      const oppositeOverflow = overflowAmount(
+        opposite,
+        overlayWidth,
+        minimum,
+        maximum,
+      );
+      if (preferredOverflow > 0 && oppositeOverflow < preferredOverflow) {
+        left = opposite;
       }
     }
   }
@@ -438,12 +485,22 @@ export function useOverlayPosition(request: OverlayPositionRequest): OverlayPosi
     update();
     // One extra frame: the overlay's first layout can change its size.
     const frame = window.requestAnimationFrame(update);
+    const resizeObserver =
+      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(update);
+    resizeObserver?.observe(anchor);
+    resizeObserver?.observe(overlay);
+    const visualViewport = window.visualViewport;
     window.addEventListener('resize', update);
     window.addEventListener('scroll', update, true);
+    visualViewport?.addEventListener('resize', update);
+    visualViewport?.addEventListener('scroll', update);
     return () => {
       window.cancelAnimationFrame(frame);
+      resizeObserver?.disconnect();
       window.removeEventListener('resize', update);
       window.removeEventListener('scroll', update, true);
+      visualViewport?.removeEventListener('resize', update);
+      visualViewport?.removeEventListener('scroll', update);
     };
   }, [strategy, anchor, overlay, placement, offset, flip, boundary]);
 

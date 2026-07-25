@@ -32,12 +32,7 @@ import React, {
   createContext,
   useContext,
 } from 'react';
-import type {
-  AppShellProps,
-  ShellInset,
-  ShellInsetByPosture,
-  ShellPosture,
-} from './contracts';
+import type { AppShellProps, ShellInset, ShellInsetByPosture, ShellPosture } from './contracts';
 import { SHELL_DEFAULTS } from './contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
@@ -101,9 +96,7 @@ function resolveBottomInset(
   }
 
   const postureValue = value?.[posture];
-  return postureValue === undefined
-    ? SHELL_DEFAULTS.bottomInset
-    : toCssLength(postureValue);
+  return postureValue === undefined ? SHELL_DEFAULTS.bottomInset : toCssLength(postureValue);
 }
 
 // ---------------------------------------------------------------------------
@@ -143,11 +136,7 @@ export function AppShell({
   const [navigationOpen, setNavigationOpen] = useState(false);
   const navigationDialogId = useId();
   const { isMobile, isTablet, isMobileOrTablet } = useBreakpoints();
-  const posture: ShellPosture = isTablet
-    ? 'tablet'
-    : isMobile
-      ? 'phone'
-      : 'desktop';
+  const posture: ShellPosture = isTablet ? 'tablet' : isMobile ? 'phone' : 'desktop';
   const isCompact = isMobileOrTablet;
 
   const openNavigation = useCallback(() => setNavigationOpen(true), []);
@@ -164,92 +153,74 @@ export function AppShell({
 
   // -- Geometry --------------------------------------------------------------
   const sidebarWidth = geometry?.sidebarWidth ?? SHELL_DEFAULTS.sidebarWidth;
-  const sidebarCollapsedWidth = geometry?.sidebarCollapsedWidth ?? SHELL_DEFAULTS.sidebarCollapsedWidth;
+  const sidebarCollapsedWidth =
+    geometry?.sidebarCollapsedWidth ?? SHELL_DEFAULTS.sidebarCollapsedWidth;
   const headerHeight = geometry?.headerHeight ?? SHELL_DEFAULTS.headerHeight;
   const sidebarHeaderHeight = geometry?.sidebarHeaderHeight ?? SHELL_DEFAULTS.sidebarHeaderHeight;
   const transition = geometry?.collapseTransition ?? SHELL_DEFAULTS.collapseTransition;
-  const bottomInset = resolveBottomInset(
-    geometry?.bottomInset,
-    posture,
-  );
+  const bottomInset = resolveBottomInset(geometry?.bottomInset, posture);
   const navigationLabel = sidebar?.navigationLabel?.trim() || 'Navigation';
 
   const sidebarInlineSize = `var(--ds-shell-sidebar-width, ${sidebarWidth}px)`;
   const sidebarCollapsedInlineSize = `var(--ds-shell-sidebar-collapsed-width, ${sidebarCollapsedWidth}px)`;
-  const headerBlockSize =
-    `var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, ${headerHeight}px))`;
-  const sidebarHeaderBlockSize =
-    `var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, ${sidebarHeaderHeight}px))`;
-  const activeSidebarInlineSize = collapsed
-    ? sidebarCollapsedInlineSize
-    : sidebarInlineSize;
+  const headerBlockSize = `var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, ${headerHeight}px))`;
+  const sidebarHeaderBlockSize = `var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, ${sidebarHeaderHeight}px))`;
+  const activeSidebarInlineSize = collapsed ? sidebarCollapsedInlineSize : sidebarInlineSize;
   const hasHeader = Boolean(header || (isCompact && sidebar));
-  const desktopSidebarInset = sidebar && !isCompact
-    ? `calc(${activeSidebarInlineSize} + var(--ds-shell-safe-area-left))`
-    : '0px';
+  const desktopSidebarInset =
+    sidebar && !isCompact
+      ? `calc(${activeSidebarInlineSize} + var(--ds-shell-safe-area-left))`
+      : '0px';
 
   // -- Context value --------------------------------------------------------
-  const contextValue = useMemo<ShellContextValue>(() => ({
-    collapsed,
-    posture,
-    isCompact,
-    navigationOpen,
-    sidebarWidth,
-    sidebarCollapsedWidth,
-    headerHeight,
-    toggleCollapse,
-    openNavigation,
-    closeNavigation,
-  }), [
-    closeNavigation,
-    collapsed,
-    headerHeight,
-    isCompact,
-    navigationOpen,
-    openNavigation,
-    posture,
-    sidebarCollapsedWidth,
-    sidebarWidth,
-    toggleCollapse,
-  ]);
+  const contextValue = useMemo<ShellContextValue>(
+    () => ({
+      collapsed,
+      posture,
+      isCompact,
+      navigationOpen,
+      sidebarWidth,
+      sidebarCollapsedWidth,
+      headerHeight,
+      toggleCollapse,
+      openNavigation,
+      closeNavigation,
+    }),
+    [
+      closeNavigation,
+      collapsed,
+      headerHeight,
+      isCompact,
+      navigationOpen,
+      openNavigation,
+      posture,
+      sidebarCollapsedWidth,
+      sidebarWidth,
+      toggleCollapse,
+    ],
+  );
 
   // -- Shared sidebar content renderer --------------------------------------
   const renderSidebarContent = (isDrawer: boolean) => (
     <>
       {isDrawer && (
         <div
+          className="rottay-app-shell__navigation-drawer-header"
           data-part="navigation-drawer-header"
-          style={{
-            '--ds-shell-resolved-sidebar-header-min-block-size':
-              `max(${sidebarHeaderBlockSize}, 44px)`,
-            minHeight: 'var(--ds-shell-resolved-sidebar-header-min-block-size)',
-            flexShrink: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 'var(--ds-spacing-3, 12px)',
-            padding: '0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px)',
-            overflow: 'hidden',
-          } as ShellCustomProperties}
+          data-compact="true"
+          style={
+            {
+              '--ds-shell-resolved-sidebar-header-min-block-size': `max(${sidebarHeaderBlockSize}, 44px)`,
+            } as ShellCustomProperties
+          }
         >
-          <div style={{ minWidth: 0, overflow: 'hidden' }}>{sidebar?.logo}</div>
+          <div className="rottay-app-shell__navigation-drawer-logo">{sidebar?.logo}</div>
           <button
             type="button"
+            className="rottay-app-shell__navigation-close"
             data-part="navigation-close"
             onClick={closeNavigation}
             aria-label={`Close ${navigationLabel}`}
-            style={{
-              width: 44,
-              minWidth: 44,
-              height: 44,
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              padding: 0,
-              color: 'var(--ds-color-text-primary)',
-              cursor: 'pointer',
-            }}
           >
             <ActionCloseIcon decorative size={20} />
           </button>
@@ -257,49 +228,35 @@ export function AppShell({
       )}
       {!isDrawer && sidebar?.logo && (
         <div
+          className="rottay-app-shell__navigation-logo"
           data-part="navigation-logo"
-          style={{
-            '--ds-shell-resolved-sidebar-header-block-size': sidebarHeaderBlockSize,
-            height: 'var(--ds-shell-resolved-sidebar-header-block-size)',
-            flexShrink: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: (!isDrawer && collapsed) ? 'center' : 'flex-start',
-            padding: (!isDrawer && collapsed) ? '0' : '0 var(--ds-spacing-5, 20px)',
-            borderBottom: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-            overflow: 'hidden',
-          } as ShellCustomProperties}
+          data-collapsed={collapsed ? 'true' : 'false'}
+          data-compact="false"
+          style={
+            {
+              '--ds-shell-resolved-sidebar-header-block-size': sidebarHeaderBlockSize,
+            } as ShellCustomProperties
+          }
         >
           {sidebar.logo}
         </div>
       )}
       {sidebar?.nav && (
         <div
+          className="rottay-app-shell__navigation-body"
           data-part="navigation-body"
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            padding: (!isDrawer && collapsed)
-              ? 'var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px))'
-              : 'var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px))',
-            scrollPaddingBlockEnd: 'calc(var(--ds-spacing-6, 24px) + 76px)',
-          }}
+          data-collapsed={!isDrawer && collapsed ? 'true' : 'false'}
+          data-compact={isDrawer ? 'true' : 'false'}
         >
           {sidebar.nav}
         </div>
       )}
       {sidebar?.footer && (
         <div
+          className="rottay-app-shell__navigation-footer"
           data-part="navigation-footer"
-          style={{
-            flexShrink: 0,
-            padding: (!isDrawer && collapsed)
-              ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
-              : 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px)',
-            borderTop: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-            background: 'var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))',
-          }}
+          data-collapsed={!isDrawer && collapsed ? 'true' : 'false'}
+          data-compact={isDrawer ? 'true' : 'false'}
         >
           {sidebar.footer}
         </div>
@@ -322,9 +279,8 @@ export function AppShell({
       ? 'var(--ds-shell-safe-area-left)'
       : desktopSidebarInset,
     '--ds-shell-inline-end-inset': 'var(--ds-shell-safe-area-right)',
-    minHeight: '100dvh',
-    display: 'flex',
-    background: 'var(--ds-surface-canvas)',
+    '--ds-shell-collapse-transition': transition,
+    '--ds-shell-resolved-main-transition': isCompact ? 'none' : `margin-left ${transition}`,
     ...style,
   };
 
@@ -334,32 +290,18 @@ export function AppShell({
         className={['rottay-app-shell', className].filter(Boolean).join(' ')}
         data-part="root"
         data-posture={posture}
+        data-collapsed={collapsed ? 'true' : 'false'}
+        data-compact={isCompact ? 'true' : 'false'}
         style={rootStyle}
       >
         {/* ---- Desktop sidebar ---- */}
         {sidebar && !isCompact && (
           <aside
+            className="rottay-app-shell__navigation-sidebar"
             data-part="navigation-sidebar"
+            data-collapsed={collapsed ? 'true' : 'false'}
+            data-compact="false"
             aria-label={navigationLabel}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              bottom: 0,
-              width: 'var(--ds-shell-inline-start-inset)',
-              zIndex: 100,
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              boxSizing: 'border-box',
-              paddingInlineStart: 'var(--ds-shell-safe-area-left)',
-              paddingBlockStart: 'var(--ds-shell-safe-area-top)',
-              paddingBlockEnd: 'var(--ds-shell-safe-area-bottom)',
-              transition: `width ${transition}`,
-              background:
-                'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))',
-              borderRight: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-            }}
           >
             {renderSidebarContent(false)}
           </aside>
@@ -379,33 +321,16 @@ export function AppShell({
             id={navigationDialogId}
             aria-label={navigationLabel}
             surfaceClassName="rottay-app-shell__navigation-drawer"
-            surfaceStyle={{
-              '--ds-shell-resolved-drawer-inline-size':
-                `min(${sidebarInlineSize}, 100dvw)`,
-              width: 'var(--ds-shell-resolved-drawer-inline-size)',
-              maxWidth: '100dvw',
-              height: '100dvh',
-              maxHeight: '100dvh',
-              boxSizing: 'border-box',
-              // Sheet is portaled to document.body, so root-scoped custom
-              // properties do not inherit into it. Resolve device env() values
-              // at the surface and keep the public variables on the shell root.
-              paddingBlockStart: 'env(safe-area-inset-top, 0px)',
-              paddingBlockEnd: 'env(safe-area-inset-bottom, 0px)',
-              paddingInlineStart: 'env(safe-area-inset-left, 0px)',
-              background:
-                'var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))',
-              borderRight:
-                '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
-              boxShadow: 'var(--ds-elevation-3)',
-            } as ShellCustomProperties}
-            bodyStyle={{
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: 0,
-              padding: 0,
-              overflow: 'hidden',
-            }}
+            bodyClassName="rottay-app-shell__navigation-drawer-body"
+            surfaceStyle={
+              {
+                '--ds-shell-resolved-drawer-inline-size': `min(${sidebarInlineSize}, 100dvw)`,
+                // Sheet owns the portal position inline. The shell contributes only
+                // the runtime width that cannot be expressed from portal-inherited
+                // state; every static declaration lives in the colocated stylesheet.
+                width: 'var(--ds-shell-resolved-drawer-inline-size)',
+              } as ShellCustomProperties
+            }
           >
             {renderSidebarContent(true)}
           </Sheet>
@@ -413,84 +338,58 @@ export function AppShell({
 
         {/* ---- Main area ---- */}
         <div
+          className="rottay-app-shell__main"
           data-part="main-area"
-          style={{
-            flex: 1,
-            marginLeft: isCompact ? 0 : 'var(--ds-shell-inline-start-inset)',
-            transition: isCompact ? 'none' : `margin-left ${transition}`,
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100dvh',
-            minWidth: 0,
-            boxSizing: 'border-box',
-            paddingBlockStart: hasHeader ? 0 : 'var(--ds-shell-safe-area-top)',
-            paddingBlockEnd: 'var(--ds-shell-bottom-inset)',
-            paddingInlineStart: isCompact ? 'var(--ds-shell-safe-area-left)' : 0,
-            paddingInlineEnd: 'var(--ds-shell-safe-area-right)',
-          }}
+          data-compact={isCompact ? 'true' : 'false'}
+          data-has-header={hasHeader ? 'true' : 'false'}
         >
           {/* Header */}
           {hasHeader && (
             <header
+              className="rottay-app-shell__header"
               data-part="header"
-              style={{
-                position: 'sticky',
-                top: 0,
-                zIndex: 50,
-                height: 'var(--ds-shell-top-inset)',
-                boxSizing: 'border-box',
-                paddingTop: 'var(--ds-shell-safe-area-top)',
-                flexShrink: 0,
-                display: 'flex',
-                alignItems: 'center',
-                paddingInline: 'var(--ds-spacing-6, 24px)',
-                background: 'var(--ds-layout-header-bg, var(--ds-surface-canvas))',
-                borderBottom: '1px solid var(--ds-layout-header-border, var(--ds-color-border-subtle))',
-                backdropFilter: 'var(--ds-layout-header-backdrop, blur(12px))',
-                WebkitBackdropFilter: 'var(--ds-layout-header-backdrop, blur(12px))',
-              }}
+              data-compact={isCompact ? 'true' : 'false'}
             >
               {/* Compact navigation trigger */}
               {isCompact && sidebar && (
                 <button
                   type="button"
+                  className="rottay-app-shell__navigation-trigger"
                   data-part="navigation-trigger"
                   onClick={openNavigation}
                   aria-label={`Open ${navigationLabel}`}
                   aria-expanded={navigationOpen}
                   aria-controls={navigationDialogId}
-                  style={{
-                    width: 44,
-                    minWidth: 44,
-                    height: 44,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--ds-color-text-primary)',
-                    cursor: 'pointer',
-                    marginRight: 'var(--ds-spacing-3, 12px)',
-                    padding: 0,
-                  }}
                 >
                   <NavigationMenuIcon decorative size={22} />
                 </button>
               )}
-              <div data-part="header-left" style={{ flex: 1, minWidth: 0 }}>{header?.left}</div>
-              <div data-part="header-center" style={{ flex: 1, minWidth: 0, display: 'flex', justifyContent: 'center' }}>{header?.center}</div>
-              <div data-part="header-right" style={{ flex: 1, minWidth: 0, display: 'flex', justifyContent: 'flex-end', gap: 'var(--ds-spacing-1, 4px)' }}>{header?.right}</div>
+              <div className="rottay-app-shell__header-slot" data-part="header-left">
+                {header?.left}
+              </div>
+              <div
+                className="rottay-app-shell__header-slot rottay-app-shell__header-slot--center"
+                data-part="header-center"
+              >
+                {header?.center}
+              </div>
+              <div
+                className="rottay-app-shell__header-slot rottay-app-shell__header-slot--right"
+                data-part="header-right"
+              >
+                {header?.right}
+              </div>
             </header>
           )}
 
           {/* Content */}
-          <main data-part="content" style={{ flex: 1, minWidth: 0 }}>
+          <main className="rottay-app-shell__content" data-part="content">
             {children}
           </main>
 
           {/* Footer */}
           {footer && (
-            <footer data-part="footer" style={{ flexShrink: 0 }}>
+            <footer className="rottay-app-shell__footer" data-part="footer">
               {footer}
             </footer>
           )}

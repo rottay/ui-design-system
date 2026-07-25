@@ -1,29 +1,34 @@
 /**
  * @fileoverview Box Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Box component.
- * Provides utility-first Box using Tailwind CSS classes.
+ * @description Modern, token-aware implementation of the Box component.
+ * Provides deterministic structure and responsive styles without generated classes.
  *
  * @module Box/Engines/Modern
  * @category Layout
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { BoxProps, BoxSpacing } from '../../contracts';
-import { BOX_DEFAULTS, SPACING_MAP, isVoidElement } from '../../contracts';
+import React, {
+  forwardRef,
+  useId,
+  type ElementType,
+  type Ref,
+  type CSSProperties,
+} from "react";
+import type { BoxProps, BoxSpacing } from "../../contracts";
+import { BOX_DEFAULTS, SPACING_MAP, isVoidElement } from "../../contracts";
 import {
   generateResponsiveCSS,
-  isResponsiveValue,
   scalarOrUndefined,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import { collectBoxResponsiveEntries } from '../../runtime/responsive';
+} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
-// Inline style builder for properties that cannot be expressed as static
-// Tailwind classes (dimensions, colors, transforms, etc.).
+// Deterministic style builder. Consumer-supplied paint stays available through
+// `style`, while DS-owned spacing and motion remain connected to tokens.
 function resolveSpacing(value: BoxSpacing | undefined): string | undefined {
-  if (!value || value === 'none') return undefined;
+  if (!value) return undefined;
   return SPACING_MAP[value];
 }
 
@@ -31,70 +36,137 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   const style: CSSProperties = {};
 
   // Spacing — resolved via DS CSS custom properties (tenant-overrideable)
-  const padding = scalarOrUndefined(props.padding) || scalarOrUndefined(props.p);
-  if (padding && padding !== 'none') style.padding = SPACING_MAP[padding];
-  const pxVal = scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
-  const pyVal = scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
-  if (pxVal && pxVal !== 'none') {
-    style.paddingLeft = SPACING_MAP[pxVal];
-    style.paddingRight = SPACING_MAP[pxVal];
+  const padding =
+    scalarOrUndefined(props.padding) ?? scalarOrUndefined(props.p);
+  if (padding !== undefined) style.padding = resolveSpacing(padding);
+  const pxVal =
+    scalarOrUndefined(props.paddingX) ?? scalarOrUndefined(props.px);
+  const pyVal =
+    scalarOrUndefined(props.paddingY) ?? scalarOrUndefined(props.py);
+  if (pxVal !== undefined) {
+    style.paddingLeft = resolveSpacing(pxVal);
+    style.paddingRight = resolveSpacing(pxVal);
   }
-  if (pyVal && pyVal !== 'none') {
-    style.paddingTop = SPACING_MAP[pyVal];
-    style.paddingBottom = SPACING_MAP[pyVal];
+  if (pyVal !== undefined) {
+    style.paddingTop = resolveSpacing(pyVal);
+    style.paddingBottom = resolveSpacing(pyVal);
   }
-  const ptVal = scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
-  if (ptVal && ptVal !== 'none') style.paddingTop = SPACING_MAP[ptVal];
-  const prVal = scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
-  if (prVal && prVal !== 'none') style.paddingRight = SPACING_MAP[prVal];
-  const pbVal = scalarOrUndefined(props.paddingBottom) || scalarOrUndefined(props.pb);
-  if (pbVal && pbVal !== 'none') style.paddingBottom = SPACING_MAP[pbVal];
-  const plVal = scalarOrUndefined(props.paddingLeft) || scalarOrUndefined(props.pl);
-  if (plVal && plVal !== 'none') style.paddingLeft = SPACING_MAP[plVal];
+  const ptVal =
+    scalarOrUndefined(props.paddingTop) ?? scalarOrUndefined(props.pt);
+  if (ptVal !== undefined) style.paddingTop = resolveSpacing(ptVal);
+  const prVal =
+    scalarOrUndefined(props.paddingRight) ?? scalarOrUndefined(props.pr);
+  if (prVal !== undefined) style.paddingRight = resolveSpacing(prVal);
+  const pbVal =
+    scalarOrUndefined(props.paddingBottom) ?? scalarOrUndefined(props.pb);
+  if (pbVal !== undefined) style.paddingBottom = resolveSpacing(pbVal);
+  const plVal =
+    scalarOrUndefined(props.paddingLeft) ?? scalarOrUndefined(props.pl);
+  if (plVal !== undefined) style.paddingLeft = resolveSpacing(plVal);
 
-  const margin = scalarOrUndefined(props.margin) || scalarOrUndefined(props.m);
-  if (margin && margin !== 'none') style.margin = SPACING_MAP[margin];
-  const mxVal = scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
-  const myVal = scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
-  if (mxVal && mxVal !== 'none') {
-    style.marginLeft = SPACING_MAP[mxVal];
-    style.marginRight = SPACING_MAP[mxVal];
+  const paddingInline = scalarOrUndefined(props.paddingInline);
+  if (paddingInline !== undefined) {
+    style.paddingInline = resolveSpacing(paddingInline);
   }
-  if (myVal && myVal !== 'none') {
-    style.marginTop = SPACING_MAP[myVal];
-    style.marginBottom = SPACING_MAP[myVal];
+  const paddingBlock = scalarOrUndefined(props.paddingBlock);
+  if (paddingBlock !== undefined) {
+    style.paddingBlock = resolveSpacing(paddingBlock);
   }
-  const mtVal = scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
-  if (mtVal && mtVal !== 'none') style.marginTop = SPACING_MAP[mtVal];
-  const mrVal = scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
-  if (mrVal && mrVal !== 'none') style.marginRight = SPACING_MAP[mrVal];
-  const mbVal = scalarOrUndefined(props.marginBottom) || scalarOrUndefined(props.mb);
-  if (mbVal && mbVal !== 'none') style.marginBottom = SPACING_MAP[mbVal];
-  const mlVal = scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
-  if (mlVal && mlVal !== 'none') style.marginLeft = SPACING_MAP[mlVal];
+  const paddingInlineStart = scalarOrUndefined(props.paddingInlineStart);
+  if (paddingInlineStart !== undefined) {
+    style.paddingInlineStart = resolveSpacing(paddingInlineStart);
+  }
+  const paddingInlineEnd = scalarOrUndefined(props.paddingInlineEnd);
+  if (paddingInlineEnd !== undefined) {
+    style.paddingInlineEnd = resolveSpacing(paddingInlineEnd);
+  }
+  const paddingBlockStart = scalarOrUndefined(props.paddingBlockStart);
+  if (paddingBlockStart !== undefined) {
+    style.paddingBlockStart = resolveSpacing(paddingBlockStart);
+  }
+  const paddingBlockEnd = scalarOrUndefined(props.paddingBlockEnd);
+  if (paddingBlockEnd !== undefined) {
+    style.paddingBlockEnd = resolveSpacing(paddingBlockEnd);
+  }
+
+  const margin = scalarOrUndefined(props.margin) ?? scalarOrUndefined(props.m);
+  if (margin !== undefined) style.margin = resolveSpacing(margin);
+  const mxVal = scalarOrUndefined(props.marginX) ?? scalarOrUndefined(props.mx);
+  const myVal = scalarOrUndefined(props.marginY) ?? scalarOrUndefined(props.my);
+  if (mxVal !== undefined) {
+    style.marginLeft = resolveSpacing(mxVal);
+    style.marginRight = resolveSpacing(mxVal);
+  }
+  if (myVal !== undefined) {
+    style.marginTop = resolveSpacing(myVal);
+    style.marginBottom = resolveSpacing(myVal);
+  }
+  const mtVal =
+    scalarOrUndefined(props.marginTop) ?? scalarOrUndefined(props.mt);
+  if (mtVal !== undefined) style.marginTop = resolveSpacing(mtVal);
+  const mrVal =
+    scalarOrUndefined(props.marginRight) ?? scalarOrUndefined(props.mr);
+  if (mrVal !== undefined) style.marginRight = resolveSpacing(mrVal);
+  const mbVal =
+    scalarOrUndefined(props.marginBottom) ?? scalarOrUndefined(props.mb);
+  if (mbVal !== undefined) style.marginBottom = resolveSpacing(mbVal);
+  const mlVal =
+    scalarOrUndefined(props.marginLeft) ?? scalarOrUndefined(props.ml);
+  if (mlVal !== undefined) style.marginLeft = resolveSpacing(mlVal);
+
+  const marginInline = scalarOrUndefined(props.marginInline);
+  if (marginInline !== undefined) {
+    style.marginInline = resolveSpacing(marginInline);
+  }
+  const marginBlock = scalarOrUndefined(props.marginBlock);
+  if (marginBlock !== undefined) {
+    style.marginBlock = resolveSpacing(marginBlock);
+  }
+  const marginInlineStart = scalarOrUndefined(props.marginInlineStart);
+  if (marginInlineStart !== undefined) {
+    style.marginInlineStart = resolveSpacing(marginInlineStart);
+  }
+  const marginInlineEnd = scalarOrUndefined(props.marginInlineEnd);
+  if (marginInlineEnd !== undefined) {
+    style.marginInlineEnd = resolveSpacing(marginInlineEnd);
+  }
+  const marginBlockStart = scalarOrUndefined(props.marginBlockStart);
+  if (marginBlockStart !== undefined) {
+    style.marginBlockStart = resolveSpacing(marginBlockStart);
+  }
+  const marginBlockEnd = scalarOrUndefined(props.marginBlockEnd);
+  if (marginBlockEnd !== undefined) {
+    style.marginBlockEnd = resolveSpacing(marginBlockEnd);
+  }
 
   // Dimensions - only inline when NOT responsive
-  const widthValue = scalarOrUndefined(props.width) || scalarOrUndefined(props.w);
+  const widthValue =
+    scalarOrUndefined(props.width) ?? scalarOrUndefined(props.w);
   if (widthValue !== undefined) {
     style.width = widthValue;
   }
-  const heightValue = props.height || props.h;
+  const heightValue =
+    scalarOrUndefined(props.height) ?? scalarOrUndefined(props.h);
   if (heightValue !== undefined) {
     style.height = heightValue;
   }
-  const minWidthValue = scalarOrUndefined(props.minWidth) || scalarOrUndefined(props.minW);
+  const minWidthValue =
+    scalarOrUndefined(props.minWidth) ?? scalarOrUndefined(props.minW);
   if (minWidthValue !== undefined) {
     style.minWidth = minWidthValue;
   }
-  const maxWidthValue = scalarOrUndefined(props.maxWidth) || scalarOrUndefined(props.maxW);
+  const maxWidthValue =
+    scalarOrUndefined(props.maxWidth) ?? scalarOrUndefined(props.maxW);
   if (maxWidthValue !== undefined) {
     style.maxWidth = maxWidthValue;
   }
-  const minHeightValue = props.minHeight || props.minH;
+  const minHeightValue =
+    scalarOrUndefined(props.minHeight) ?? scalarOrUndefined(props.minH);
   if (minHeightValue !== undefined) {
     style.minHeight = minHeightValue;
   }
-  const maxHeightValue = props.maxHeight || props.maxH;
+  const maxHeightValue =
+    scalarOrUndefined(props.maxHeight) ?? scalarOrUndefined(props.maxH);
   if (maxHeightValue !== undefined) {
     style.maxHeight = maxHeightValue;
   }
@@ -149,6 +221,12 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   }
   if (props.transition !== undefined) {
     style.transition = props.transition;
+  } else if (props.motion === "resize") {
+    style.transition = "var(--ds-transition-resize)";
+  } else if (props.motion === "rearrange") {
+    style.transition = "var(--ds-transition-rearrange)";
+  } else if (props.motion === "none") {
+    style.transition = "none";
   }
   if (props.cursor !== undefined) {
     style.cursor = props.cursor;
@@ -162,6 +240,16 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (props.userSelect !== undefined) {
     style.userSelect = props.userSelect;
   }
+
+  const display = scalarOrUndefined(props.display);
+  if (display !== undefined) style.display = display;
+  if (props.position !== undefined) style.position = props.position;
+  const overflow = scalarOrUndefined(props.overflow);
+  const overflowX = scalarOrUndefined(props.overflowX);
+  const overflowY = scalarOrUndefined(props.overflowY);
+  if (overflow !== undefined) style.overflow = overflow;
+  if (overflowX !== undefined) style.overflowX = overflowX;
+  if (overflowY !== undefined) style.overflowY = overflowY;
 
   // Flex
   if (props.flex !== undefined) {
@@ -208,45 +296,15 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
 // are selected by data attributes in the Box skin so tenant overrides still
 // flow through the same token values without static paint living in JS.
 
-function buildTailwindClasses(props: BoxProps): string[] {
-  const classes: string[] = [];
-
-  // Spacing stays inline; radius and shadow are handled by the Box skin.
-
-  // Display - only scalar
-  const display = scalarOrUndefined(props.display);
-  if (display) {
-    classes.push(display as string);
-  }
-
-  // Position
-  if (props.position) {
-    classes.push(props.position);
-  }
-
-  // Overflow
-  if (props.overflow) {
-    classes.push(`overflow-${props.overflow}`);
-  }
-  if (props.overflowX) {
-    classes.push(`overflow-x-${props.overflowX}`);
-  }
-  if (props.overflowY) {
-    classes.push(`overflow-y-${props.overflowY}`);
-  }
-
-  return classes;
-}
-
 /**
  * Modern Box component.
- * Uses DaisyUI/Tailwind styling conventions while maintaining
- * compatibility with the Box API.
+ * Uses deterministic DOM styles and token-backed skin attributes, without
+ * relying on runtime-generated utility classes being present in the bundle.
  */
 const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const {
     as: Component = BOX_DEFAULTS.as,
-    className = '',
+    className = "",
     children,
     // Extract all known Box props to separate from HTML attributes
     engine: _engine,
@@ -260,6 +318,12 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     pb: _pb,
     paddingLeft: _paddingLeft,
     pl: _pl,
+    paddingInline: _paddingInline,
+    paddingBlock: _paddingBlock,
+    paddingInlineStart: _paddingInlineStart,
+    paddingInlineEnd: _paddingInlineEnd,
+    paddingBlockStart: _paddingBlockStart,
+    paddingBlockEnd: _paddingBlockEnd,
     paddingX: _paddingX,
     px: _px,
     paddingY: _paddingY,
@@ -274,6 +338,12 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     mb: _mb,
     marginLeft: _marginLeft,
     ml: _ml,
+    marginInline: _marginInline,
+    marginBlock: _marginBlock,
+    marginInlineStart: _marginInlineStart,
+    marginInlineEnd: _marginInlineEnd,
+    marginBlockStart: _marginBlockStart,
+    marginBlockEnd: _marginBlockEnd,
     marginX: _marginX,
     mx: _mx,
     marginY: _marginY,
@@ -327,24 +397,30 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     visibility: _visibility,
     pointerEvents: _pointerEvents,
     userSelect: _userSelect,
+    motion: _motion,
     style: _style,
     // Remaining props are HTML attributes (onClick, onMouseEnter, etc.)
     ...htmlAttributes
   } = props;
 
   const computedStyle = buildBoxStyles(props);
-  const tailwindClasses = buildTailwindClasses(props);
 
   // Responsive CSS generation
   const reactId = useId();
   const responsiveEntries = collectBoxResponsiveEntries(props);
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
-  const elementId = needsResponsiveCSS ? `box-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
+  const elementId = needsResponsiveCSS
+    ? `box-${reactId.replace(/:/g, "")}`
+    : "";
+  const responsive = needsResponsiveCSS
+    ? generateResponsiveCSS(elementId, responsiveEntries)
+    : null;
 
-  // Build class names with Modern-specific prefixes and Tailwind classes
-  const classNames = ['rottay-box', 'rottay-box--modern', ...tailwindClasses, className].filter(Boolean).join(' ');
+  // Stable engine hooks only; dynamic utility names are intentionally avoided.
+  const classNames = ["rottay-box", "rottay-box--modern", className]
+    .filter(Boolean)
+    .join(" ");
 
   // Box stamps NO data-part of its own. It is the style-injection escape hatch
   // every other component composes with, so a default part would put
@@ -353,14 +429,29 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   // for X's own root would match them too. Box's skin anchors on its class.
   const ElementType = Component as ElementType;
   const radiusValue = props.borderRadius || props.rounded;
-  const callerOwnsRadius = Object.prototype.hasOwnProperty.call(props.style ?? {}, 'borderRadius');
-  const callerOwnsShadow = Object.prototype.hasOwnProperty.call(props.style ?? {}, 'boxShadow');
+  const callerOwnsRadius = Object.prototype.hasOwnProperty.call(
+    props.style ?? {},
+    "borderRadius"
+  );
+  const callerOwnsShadow = Object.prototype.hasOwnProperty.call(
+    props.style ?? {},
+    "boxShadow"
+  );
   const elementProps = {
     ...htmlAttributes,
     ref: ref as Ref<HTMLElement>,
     className: classNames,
-    'data-radius': !callerOwnsRadius && radiusValue && radiusValue !== 'none' ? radiusValue : undefined,
-    'data-shadow': !callerOwnsShadow && props.shadow && props.shadow !== 'none' ? props.shadow : undefined,
+    "data-radius":
+      !callerOwnsRadius && radiusValue && radiusValue !== "none"
+        ? radiusValue
+        : undefined,
+    "data-shadow":
+      !callerOwnsShadow && props.shadow && props.shadow !== "none"
+        ? props.shadow
+        : undefined,
+    "data-layout-motion":
+      props.motion && props.motion !== "none" ? props.motion : undefined,
+    "data-component": "box",
     style: computedStyle,
     ...(responsive ? responsive.attrs : {}),
   };
@@ -377,12 +468,14 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+      {responsive && responsive.css && (
+        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
+      )}
       {element}
     </>
   );
 });
 
-ModernBox.displayName = 'ModernBox';
+ModernBox.displayName = "ModernBox";
 
 export default ModernBox;

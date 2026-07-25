@@ -1,6 +1,6 @@
 /** HeaderSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
 
-.ds-surface.ds-header .ds-header__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-header .ds-header__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -9,7 +9,7 @@
 }
 
 .ds-surface.ds-header[data-mobile-compact='true']
-  .ds-header__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  .ds-header__muted-text[data-part='root'][data-part='root'] {
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-snug);
 }

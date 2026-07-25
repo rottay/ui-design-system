@@ -1,538 +1,627 @@
 'use client';
 
 /**
- * @fileoverview Tabs Modern Engine - Rottay Design System
- * @description Premium token-driven tabs with sliding indicator, refined states,
- * and badge/icon support. Linear/Vercel/Stripe quality.
+ * Modern Tabs engine.
  *
- * @remarks
- * The Modern engine uses CSS custom property tokens for all visual decisions.
- * No DaisyUI classes - all styling is inline via design tokens.
- *
- * **Tab Types:**
- * - `line`: Bottom border indicator (default). Sliding animated underline.
- * - `card`: Rounded tab buttons with bg fill + elevation when active.
- * - `pills`: Pill-shaped buttons with bg fill when active.
- *
- * **Sizes:**
- * - `sm`: text-xs, 32px height
- * - `md`: text-sm, 36px height
- * - `lg`: text-base, 40px height
- *
- * @module Tabs/Engines/Modern
- * @category Navigation
- * @package @rottay/design-system
+ * The engine owns interaction and measurement; the Modern skin owns every
+ * static geometry, paint, type and motion channel. This keeps Tabs responsive,
+ * accessible and completely re-skinnable through BrandTabsChrome.
  */
 
-import React, { useCallback, useId, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { flushSync } from 'react-dom';
+
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { NavigationMoreIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-more';
 import {
   directionFromIndexDelta,
   tabPanelTransitionStyle,
   useDirectionalViewTransition,
 } from '@/graphics/motion/react/runtime';
-import type { TabsProps, TabItem, TabsSize } from '../../contracts';
-import { TABS_DEFAULTS } from '../../contracts';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import {
-  isResponsiveValue,
   generateResponsiveCSS,
+  isResponsiveValue,
   type ResponsivePropEntry,
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
-import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
+import { Dropdown } from '../../../../overlay/Dropdown';
+import type {
+  TabItem,
+  TabsProps,
+  TabsRecipe,
+  TabsSize,
+  TabsType,
+} from '../../contracts';
 
-// ============================================================================
-// Constants
-// ============================================================================
-
-const TRANSITION_FAST = [
-  'color var(--ds-motion-fast) var(--ds-motion-ease-out)',
-  'background-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
-  'border-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
-  'box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)',
-  'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)',
-].join(', ');
+/**
+ * DS-S001 recipe: the modern Tabs root classes. The visual recipe axis
+ * (underline/contained/segmented/pills) stays on the `data-recipe` skin
+ * contract; DS-R004 may promote it into typed recipe axes later.
+ */
+export const modernTabsRecipe = defineRecipe({
+  name: 'tabs',
+  slots: { root: ['rottay-tabs', 'rottay-tabs--modern'] },
+  axes: {},
+  defaults: {},
+});
 
 const SIZE_CONFIG: Record<
-  string,
+  TabsSize,
   {
     height: string;
-    fontSize: string;
     padding: string;
+    fontSize: string;
     iconSize: string;
-    badgeFontSize: string;
   }
 > = {
   sm: {
     height: 'var(--ds-tabs-sm-height, 32px)',
-    fontSize: 'var(--ds-font-size-xs, 12px)',
-    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
+    padding: 'var(--ds-tabs-sm-padding, 0 var(--ds-spacing-3, 12px))',
+    fontSize: 'var(--ds-tabs-sm-font-size, var(--ds-font-size-xs, 12px))',
     iconSize: 'var(--ds-tabs-sm-icon-size, 14px)',
-    badgeFontSize: 'var(--ds-font-size-2xs, 10px)',
   },
   md: {
     height: 'var(--ds-tabs-md-height, 36px)',
-    fontSize: 'var(--ds-font-size-sm, 14px)',
-    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
+    padding: 'var(--ds-tabs-md-padding, 0 var(--ds-spacing-4, 16px))',
+    fontSize: 'var(--ds-tabs-md-font-size, var(--ds-font-size-sm, 14px))',
     iconSize: 'var(--ds-tabs-md-icon-size, 16px)',
-    badgeFontSize: 'var(--ds-font-size-2xs, 11px)',
   },
   lg: {
     height: 'var(--ds-tabs-lg-height, 40px)',
-    fontSize: 'var(--ds-font-size-base, 15px)',
-    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
+    padding: 'var(--ds-tabs-lg-padding, 0 var(--ds-spacing-4, 16px))',
+    fontSize: 'var(--ds-tabs-lg-font-size, var(--ds-font-size-base, 15px))',
     iconSize: 'var(--ds-tabs-lg-icon-size, 18px)',
-    badgeFontSize: 'var(--ds-font-size-2xs, 11px)',
   },
 };
 
-// ============================================================================
-// Helpers
-// ============================================================================
-
-function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
-  if (value === undefined || value === null) return undefined;
-  if (isResponsiveValue(value)) return undefined;
-  return value as T;
-}
-
-// ============================================================================
-// Indicator position type
-// ============================================================================
-
-interface IndicatorPos {
+interface IndicatorPosition {
   left: number;
   width: number;
 }
 
-// ============================================================================
-// Tab item style by type
-// ============================================================================
-
-function getTabItemStyle(type: string, isActive: boolean, isDisabled: boolean, sizeKey: string): React.CSSProperties {
-  const sizeStyle = SIZE_CONFIG[sizeKey] || SIZE_CONFIG.md;
-  const base: React.CSSProperties = {
-    transition: TRANSITION_FAST,
-    height: sizeStyle.height,
-    padding: sizeStyle.padding,
-    fontSize: sizeStyle.fontSize,
-    lineHeight: '1',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '8px',
-    whiteSpace: 'nowrap' as const,
-    position: 'relative' as const,
-    userSelect: 'none' as const,
-    flexShrink: 0,
-    cursor: isDisabled ? 'not-allowed' : 'pointer',
-    opacity: isDisabled ? 0.4 : 1,
-  };
-
-  switch (type) {
-    case 'line': {
-      return {
-        ...base,
-        paddingBottom: 'var(--ds-tabs-line-padding-bottom, 10px)',
-        marginBottom: '-1px',
-        fontWeight: isActive ? 500 : 400,
-      };
-    }
-
-    case 'card':
-    case 'pills': {
-      return {
-        ...base,
-        fontWeight: isActive ? 500 : 400,
-      };
-    }
-
-    default:
-      return base;
-  }
+interface OverflowState {
+  overflowing: boolean;
+  before: boolean;
+  after: boolean;
 }
 
-// ============================================================================
-// Badge sub-component (inline)
-// ============================================================================
+const EMPTY_OVERFLOW: OverflowState = {
+  overflowing: false,
+  before: false,
+  after: false,
+};
 
-function TabBadge({ children, sizeKey }: { children: React.ReactNode; sizeKey: string }): React.ReactElement {
-  const sizeStyle = SIZE_CONFIG[sizeKey] || SIZE_CONFIG.md;
+function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
+  if (value === undefined || value === null || isResponsiveValue(value)) return undefined;
+  return value as T;
+}
+
+function canonicalRecipe(type: TabsType | undefined): TabsRecipe {
+  if (type === 'line') return 'underline';
+  if (type === 'card') return 'contained';
+  return type ?? 'underline';
+}
+
+function firstSelectableKey(items: TabItem[]): string | undefined {
   return (
-    <span
-      data-part="tab-badge"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minWidth: '18px',
-        height: '18px',
-        padding: '0 6px',
-        fontSize: sizeStyle.badgeFontSize,
-        fontWeight: 500,
-        lineHeight: '1',
-        letterSpacing: '0.01em',
-      }}
-    >
-      {children}
-    </span>
+    items.find((item) => !item.disabled && !item.loading)?.key ??
+    arrayValueAt(items, 0)?.key
   );
 }
 
-// ============================================================================
-// Label parser -- detects label+badge pattern
-// ============================================================================
-
-/**
- * If the label is a string like "Groups 4" where the last token is a number,
- * we split it into the text label and a badge. Otherwise, render as-is.
- */
-function parseLabel(label: React.ReactNode, sizeKey: string): React.ReactNode {
-  if (typeof label === 'string') {
-    const match = label.match(/^(.+?)\s+(\d+)$/);
-    if (match) {
-      return (
-        <>
-          {match[1]}
-          <TabBadge sizeKey={sizeKey}>{match[2]}</TabBadge>
-        </>
-      );
-    }
-  }
-  return label;
+/** Resolve writing direction from semantic markup before computed CSS. */
+function elementDirection(element: HTMLElement): 'ltr' | 'rtl' {
+  const directionOwner = element.closest<HTMLElement>('[dir]');
+  if (directionOwner?.dir === 'rtl') return 'rtl';
+  return getComputedStyle(element).direction === 'rtl' ? 'rtl' : 'ltr';
 }
 
-// ============================================================================
-// Component
-// ============================================================================
+function inlineOffsetWithin(node: HTMLElement, ancestor: HTMLElement): number {
+  let offset = 0;
+  let current: HTMLElement | null = node;
+  while (current && current !== ancestor) {
+    offset += current.offsetLeft;
+    current = current.offsetParent as HTMLElement | null;
+  }
+  if (current === ancestor) return offset;
 
-/**
- * Modern engine Tabs component using token-driven inline styles.
- * Premium quality: sliding indicator, refined states, badge/icon support.
- *
- * @param props - {@link TabsProps}
- * @returns React element
- */
+  const ancestorRect = ancestor.getBoundingClientRect();
+  const nodeRect = node.getBoundingClientRect();
+  return nodeRect.left - ancestorRect.left + ancestor.scrollLeft;
+}
+
+/** Keeps the former "Label 4" convenience while making explicit badges first-class. */
+function splitLegacyBadge(label: React.ReactNode): {
+  label: React.ReactNode;
+  badge?: React.ReactNode;
+} {
+  if (typeof label !== 'string') return { label };
+  const match = label.match(/^(.+?)\s+(\d+)$/);
+  return match ? { label: match[1], badge: match[2] } : { label };
+}
+
 export default function ModernTabs(props: TabsProps): React.ReactElement {
   const {
     items,
     activeKey,
     defaultActiveKey,
-    type = TABS_DEFAULTS.type,
-    size: sizeProp = TABS_DEFAULTS.size,
-    centered = TABS_DEFAULTS.centered,
+    type: typeProp,
+    size: sizeProp = 'md',
+    centered = false,
+    overflow = 'auto',
+    activationMode = 'automatic',
+    indicator = 'tab',
+    panelVariant = 'plain',
+    accessibilityLabels,
     onChange,
     className = '',
     style,
   } = props;
 
+  // DS-S001: profile defaults apply only where the caller left the axis
+  // unset; explicit props always win, then the engine default.
+  const tabsProfileDefaults = useRecipeProfileDefaults('tabs');
+  const type: TabsType =
+    typeProp ??
+    (typeof tabsProfileDefaults.recipe === 'string'
+      ? (tabsProfileDefaults.recipe as TabsRecipe)
+      : undefined) ??
+    'line';
+
   const tabsId = useId().replace(/:/g, '');
+  const recipe = canonicalRecipe(type);
+  const scalarSize = scalarOrUndefined(sizeProp) ?? 'md';
+  const responsiveSize = isResponsiveValue<TabsSize>(sizeProp)
+    ? sizeProp
+    : undefined;
+  const sizeIsResponsive = responsiveSize !== undefined;
+  const responsiveEntries: ResponsivePropEntry<TabsSize>[] = [];
 
-  // Responsive size handling
-  const responsiveEntries: ResponsivePropEntry<any>[] = [];
-  const sizeIsResponsive = isResponsiveValue(sizeProp);
-
-  if (sizeIsResponsive) {
-    const TABS_SIZE_STYLES: Record<string, { padding: string; fontSize: string }> = {
-      sm: {
-        padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
-        fontSize: 'var(--ds-font-size-xs, 12px)',
-      },
-      md: {
-        padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
-        fontSize: 'var(--ds-font-size-sm, 14px)',
-      },
-      lg: {
-        padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
-        fontSize: 'var(--ds-font-size-base, 15px)',
-      },
+  if (responsiveSize) {
+    const addResponsiveSizeChannel = (
+      cssProperty: string,
+      channel: keyof (typeof SIZE_CONFIG)['md']
+    ) => {
+      responsiveEntries.push({
+        cssProperty,
+        value: responsiveSize,
+        resolve: (value: TabsSize) => (SIZE_CONFIG[value] ?? SIZE_CONFIG.md)[channel],
+      });
     };
-    responsiveEntries.push({
-      cssProperty: 'padding',
-      value: sizeProp,
-      resolve: (v: TabsSize) => (TABS_SIZE_STYLES[v as keyof typeof TABS_SIZE_STYLES] || TABS_SIZE_STYLES.md).padding,
-    } as ResponsivePropEntry<any>);
-    responsiveEntries.push({
-      cssProperty: 'font-size',
-      value: sizeProp,
-      resolve: (v: TabsSize) => (TABS_SIZE_STYLES[v as keyof typeof TABS_SIZE_STYLES] || TABS_SIZE_STYLES.md).fontSize,
-    } as ResponsivePropEntry<any>);
+    addResponsiveSizeChannel('--ds-tabs-current-height', 'height');
+    addResponsiveSizeChannel('--ds-tabs-current-padding', 'padding');
+    addResponsiveSizeChannel('--ds-tabs-current-font-size', 'fontSize');
+    addResponsiveSizeChannel('--ds-tabs-current-icon-size', 'iconSize');
   }
 
-  const needsResponsiveCSS = responsiveEntries.length > 0;
-  const responsiveElementId = needsResponsiveCSS ? `tabs-${tabsId}` : '';
-  const responsive = needsResponsiveCSS ? generateResponsiveCSS(responsiveElementId, responsiveEntries) : null;
+  const responsiveElementId = sizeIsResponsive ? `tabs-${tabsId}` : '';
+  const responsive = sizeIsResponsive
+    ? generateResponsiveCSS(responsiveElementId, responsiveEntries)
+    : null;
 
-  const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
   const tabListRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<Map<string, HTMLButtonElement | null>>(new Map());
-  const [indicatorPos, setIndicatorPos] = useState<IndicatorPos | null>(null);
+  const labelRefs = useRef<Map<string, HTMLSpanElement | null>>(new Map());
+  const [internalActive, setInternalActive] = useState(
+    activeKey ?? defaultActiveKey ?? firstSelectableKey(items)
+  );
+  const [focusedKey, setFocusedKey] = useState(
+    activeKey ?? defaultActiveKey ?? firstSelectableKey(items)
+  );
+  const [indicatorPosition, setIndicatorPosition] = useState<IndicatorPosition | null>(null);
+  const [overflowState, setOverflowState] = useState<OverflowState>(EMPTY_OVERFLOW);
+  const [writingDirection, setWritingDirection] = useState<'ltr' | 'rtl'>('ltr');
 
-  // ============================================================================
-  // State Management
-  // ============================================================================
-
-  const [active, setActive] = useState(activeKey || defaultActiveKey || arrayValueAt(items, 0)?.key);
-
+  const requestedKey = activeKey ?? internalActive;
+  const currentKey = items.some((item) => item.key === requestedKey)
+    ? requestedKey
+    : firstSelectableKey(items);
+  const activeItem = items.find((item) => item.key === currentKey);
+  const enabledItems = useMemo(
+    () => items.filter((item) => !item.disabled && !item.loading),
+    [items]
+  );
+  const loadingItems = useMemo(
+    () => items.filter((item) => item.loading),
+    [items]
+  );
   const runPanelTransition = useDirectionalViewTransition();
-
-  // state.change recipe (motion canon): panel entrance and indicator glide
-  // timing resolve from the stamped `--ds-recipe-*` variables. Under reduced
-  // motion the resolver returns the settled state and both declarations are
-  // dropped, so the swap renders instantly with no interpolation.
   const stateMotion = useMotionRecipePresentation('state.change');
   const motionIsFinal = stateMotion.recipe.state === 'final';
 
-  const handleChange = (key: string) => {
-    const previousKey = activeKey || active;
-    if (key === previousKey) {
-      onChange?.(key);
+  useEffect(() => {
+    if (currentKey && items.some((item) => item.key === currentKey)) {
+      setFocusedKey(currentKey);
       return;
     }
-    const direction = directionFromIndexDelta(
-      items.findIndex((item) => item.key === previousKey),
-      items.findIndex((item) => item.key === key)
-    );
-    // The panel swap must be IN the DOM before the browser captures the new
-    // snapshot, so the state change (and any controlled parent's re-render via
-    // onChange) is flushed synchronously inside the transition's update
-    // callback. On the immediate path (no API / reduced motion) the callback
-    // runs inline and this degrades to an instant swap.
-    runPanelTransition(
-      () => {
-        flushSync(() => {
-          if (!activeKey) setActive(key);
-          onChange?.(key);
-        });
-      },
-      { direction }
-    );
-  };
+    const fallback = firstSelectableKey(items);
+    setFocusedKey(fallback);
+    if (activeKey === undefined) setInternalActive(fallback);
+  }, [activeKey, currentKey, items]);
 
-  const enabledItems = items.filter((item) => !item.disabled);
-
-  const focusAndActivate = useCallback(
+  const handleChange = useCallback(
     (key: string) => {
-      handleChange(key);
+      const item = items.find((candidate) => candidate.key === key);
+      if (!item || item.disabled || item.loading) return;
+
+      const previousKey = activeKey ?? internalActive;
+      setFocusedKey(key);
+      if (key === previousKey) {
+        onChange?.(key);
+        return;
+      }
+
+      const previousIndex = items.findIndex(
+        (candidate) => candidate.key === previousKey
+      );
+      const nextIndex = items.findIndex((candidate) => candidate.key === key);
+      const isRtl = tabListRef.current
+        ? elementDirection(tabListRef.current) === 'rtl'
+        : false;
+      const direction = directionFromIndexDelta(
+        isRtl ? nextIndex : previousIndex,
+        isRtl ? previousIndex : nextIndex
+      );
+
+      runPanelTransition(
+        () => {
+          flushSync(() => {
+            if (activeKey === undefined) setInternalActive(key);
+            onChange?.(key);
+          });
+        },
+        { direction }
+      );
+    },
+    [activeKey, internalActive, items, onChange, runPanelTransition]
+  );
+
+  const moveFocus = useCallback(
+    (key: string, activate: boolean) => {
+      setFocusedKey(key);
+      if (activate) handleChange(key);
+      // The roving-tabindex target already exists in the DOM. Focusing it in
+      // the same keyboard turn keeps focus deterministic for assistive tech
+      // and for manual activation; deferring to rAF allowed the previous tab
+      // to retain DOM focus while state had already moved to the new key.
       tabRefs.current.get(key)?.focus();
     },
-    [tabRefs]
+    [handleChange]
   );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>, key: string) => {
       const enabledIndex = enabledItems.findIndex((item) => item.key === key);
-      if (enabledIndex === -1) return;
+      if (enabledIndex === -1 || enabledItems.length === 0) return;
 
+      const isRtl = elementDirection(event.currentTarget) === 'rtl';
+      const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
+      const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
       let nextKey: string | undefined;
 
-      switch (event.key) {
-        case 'ArrowRight':
-        case 'ArrowDown':
-          nextKey = arrayValueAt(enabledItems, (enabledIndex + 1) % enabledItems.length)?.key;
-          break;
-        case 'ArrowLeft':
-        case 'ArrowUp':
-          nextKey = arrayValueAt(enabledItems, (enabledIndex - 1 + enabledItems.length) % enabledItems.length)?.key;
-          break;
-        case 'Home':
-          nextKey = arrayValueAt(enabledItems, 0)?.key;
-          break;
-        case 'End':
-          nextKey = arrayValueAt(enabledItems, -1)?.key;
-          break;
-        default:
-          return;
+      if (event.key === forwardKey || event.key === 'ArrowDown') {
+        nextKey = arrayValueAt(enabledItems, (enabledIndex + 1) % enabledItems.length)?.key;
+      } else if (event.key === backwardKey || event.key === 'ArrowUp') {
+        nextKey = arrayValueAt(
+          enabledItems,
+          (enabledIndex - 1 + enabledItems.length) % enabledItems.length
+        )?.key;
+      } else if (event.key === 'Home') {
+        nextKey = arrayValueAt(enabledItems, 0)?.key;
+      } else if (event.key === 'End') {
+        nextKey = arrayValueAt(enabledItems, -1)?.key;
+      } else if (
+        activationMode === 'manual' &&
+        (event.key === 'Enter' || event.key === ' ')
+      ) {
+        event.preventDefault();
+        handleChange(key);
+        return;
+      } else {
+        return;
       }
 
       if (!nextKey) return;
       event.preventDefault();
-      focusAndActivate(nextKey);
+      moveFocus(nextKey, activationMode !== 'manual');
     },
-    [enabledItems, focusAndActivate]
+    [activationMode, enabledItems, handleChange, moveFocus]
   );
 
-  // ============================================================================
-  // Derived Values
-  // ============================================================================
+  const refreshOverflow = useCallback(() => {
+    const list = tabListRef.current;
+    const first = arrayValueAt(items, 0);
+    const last = arrayValueAt(items, -1);
+    if (!list) {
+      setOverflowState(EMPTY_OVERFLOW);
+      return;
+    }
 
-  const currentKey = activeKey || active;
-  const activeItem = items.find((item: TabItem) => item.key === currentKey);
+    const isRtl = elementDirection(list) === 'rtl';
+    setWritingDirection((current) =>
+      current === (isRtl ? 'rtl' : 'ltr') ? current : isRtl ? 'rtl' : 'ltr'
+    );
 
-  // ============================================================================
-  // Sliding indicator measurement (line type only)
-  // ============================================================================
+    if (!first || !last || overflow === 'wrap') {
+      setOverflowState(EMPTY_OVERFLOW);
+      return;
+    }
+
+    const listRect = list.getBoundingClientRect();
+    const firstRect = tabRefs.current.get(first.key)?.getBoundingClientRect();
+    const lastRect = tabRefs.current.get(last.key)?.getBoundingClientRect();
+    const nextState: OverflowState = {
+      overflowing: list.scrollWidth - list.clientWidth > 1,
+      before: !!firstRect &&
+        (isRtl
+          ? firstRect.right > listRect.right + 1
+          : firstRect.left < listRect.left - 1),
+      after: !!lastRect &&
+        (isRtl
+          ? lastRect.left < listRect.left - 1
+          : lastRect.right > listRect.right + 1),
+    };
+    setOverflowState((previous) =>
+      previous.overflowing === nextState.overflowing &&
+      previous.before === nextState.before &&
+      previous.after === nextState.after
+        ? previous
+        : nextState
+    );
+  }, [items, overflow]);
 
   useLayoutEffect(() => {
-    if (type !== 'line' || !currentKey) {
-      setIndicatorPos(null);
+    const list = tabListRef.current;
+    if (!list) return;
+
+    refreshOverflow();
+    const activeTab = currentKey ? tabRefs.current.get(currentKey) : null;
+    activeTab?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+
+    if (recipe !== 'underline' || indicator === 'none' || !currentKey) {
+      setIndicatorPosition(null);
       return;
     }
 
-    const activeTab = tabRefs.current.get(currentKey);
-    const tabList = tabListRef.current;
-    if (!activeTab || !tabList) {
-      setIndicatorPos(null);
+    const measuredNode =
+      indicator === 'label' ? labelRefs.current.get(currentKey) : activeTab;
+    if (!measuredNode) {
+      setIndicatorPosition(null);
       return;
     }
 
-    const tabListRect = tabList.getBoundingClientRect();
-    const activeRect = activeTab.getBoundingClientRect();
-
-    setIndicatorPos({
-      left: activeRect.left - tabListRect.left + tabList.scrollLeft,
-      width: activeRect.width,
+    setIndicatorPosition({
+      left: inlineOffsetWithin(measuredNode, list),
+      width: measuredNode.offsetWidth || measuredNode.getBoundingClientRect().width,
     });
-  }, [currentKey, type, items]);
+  }, [currentKey, indicator, items, recipe, refreshOverflow]);
 
-  // ============================================================================
-  // Container styles by type
-  // ============================================================================
+  useEffect(() => {
+    const list = tabListRef.current;
+    if (!list || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(refreshOverflow);
+    observer.observe(list);
+    for (const node of tabRefs.current.values()) {
+      if (node) observer.observe(node);
+    }
+    return () => observer.disconnect();
+  }, [items, refreshOverflow]);
 
-  const tabListStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'flex-end',
-    gap: type === 'line' ? '4px' : '4px',
-    position: 'relative',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    WebkitOverflowScrolling: 'touch',
-    scrollbarWidth: 'none',
-    ...(type === 'card' && {
-      padding: '4px',
-      alignItems: 'center',
-      gap: '2px',
-    }),
-    ...(type === 'pills' && {
-      padding: '4px',
-      gap: '4px',
-      alignItems: 'center',
-    }),
-    ...(centered && {
-      justifyContent: 'center',
-    }),
+  const scrollRail = (visualDirection: -1 | 1) => {
+    const list = tabListRef.current;
+    if (!list) return;
+    const isRtl = elementDirection(list) === 'rtl';
+    const physicalDirection = isRtl ? -visualDirection : visualDirection;
+    list.scrollBy?.({
+      left: physicalDirection * list.clientWidth * 0.72,
+      behavior: motionIsFinal ? 'auto' : 'smooth',
+    });
   };
 
-  // ============================================================================
-  // Sliding indicator style
-  // ============================================================================
-
-  // Compositor-only (transform-only) glide: the indicator's own box stays a
-  // fixed 1px wide; `scaleX` (from a `left`-anchored transform-origin)
-  // supplies the visual width instead of transitioning the `width` property,
-  // which the engine-token-audit.mjs compositor-only counter flags as a
-  // layout-property animation.
-  // The `transform` is the one genuinely RUNTIME paint value in this family: it
-  // is measured from `getBoundingClientRect()` on every active-tab change, so it
-  // cannot be enumerated as CSS states and stays inline (contract-exempt).
-  const indicatorStyle: React.CSSProperties | null =
-    type === 'line' && indicatorPos
-      ? {
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          height: '2px',
-          width: '1px',
-          transformOrigin: 'left',
-          transform: `translateX(${indicatorPos.left}px) scaleX(${indicatorPos.width})`,
-          transition: motionIsFinal
-            ? undefined
-            : 'transform var(--ds-recipe-settle, var(--ds-motion-normal)) var(--ds-recipe-curve, var(--ds-motion-ease-out))',
-          pointerEvents: 'none',
+  const renderOverflowControl = (
+    part: 'previous' | 'next',
+    disabled: boolean
+  ): React.ReactElement => {
+    const isPrevious = part === 'previous';
+    return (
+      <button
+        type="button"
+        data-part={isPrevious ? 'overflow-previous' : 'overflow-next'}
+        aria-label={
+          isPrevious
+            ? (accessibilityLabels?.previous ?? 'Previous tabs')
+            : (accessibilityLabels?.next ?? 'Next tabs')
         }
-      : null;
+        disabled={disabled}
+        onClick={() => scrollRail(isPrevious ? -1 : 1)}
+      >
+        {isPrevious ? (
+          <NavigationBackIcon decorative size="sm" />
+        ) : (
+          <NavigationForwardIcon decorative size="sm" />
+        )}
+      </button>
+    );
+  };
 
-  // ============================================================================
-  // Render
-  // ============================================================================
+  const showScrollControls =
+    overflowState.overflowing && (overflow === 'auto' || overflow === 'scroll');
+  const showOverflowMenu =
+    overflowState.overflowing && (overflow === 'auto' || overflow === 'menu');
+  const menuItems = items.map((item) => ({
+    key: item.key,
+    label: item.label,
+    icon: item.icon,
+    disabled: item.disabled || item.loading,
+    onClick: () => handleChange(item.key),
+  }));
+
+  const indicatorStyle: React.CSSProperties | undefined = indicatorPosition
+    ? {
+        transform: `translateX(${indicatorPosition.left}px) scaleX(${indicatorPosition.width})`,
+      }
+    : undefined;
 
   return (
     <div
-      className={`rottay-tabs rottay-tabs--modern ${className}`.trim()}
+      className={modernTabsRecipe.resolve(undefined, { root: className }).root}
       style={{ ...stateMotion.variables, ...style }}
       data-part="root"
       {...stateMotion.attributes}
-      data-variant={type || 'line'}
+      {...(responsive?.attrs ?? {})}
+      data-variant={type ?? 'line'}
+      data-recipe={recipe}
+      data-size={sizeIsResponsive ? 'responsive' : scalarSize}
+      data-centered={centered}
+      data-overflow={overflow}
+      data-overflowing={overflowState.overflowing || undefined}
+      data-before-overflow={overflowState.before || undefined}
+      data-after-overflow={overflowState.after || undefined}
+      data-indicator={indicator}
+      data-panel-variant={panelVariant}
+      data-activation-mode={activationMode}
+      data-motion-final={motionIsFinal || undefined}
+      data-has-icons={items.some((item) => !!item.icon)}
+      data-has-loading={loadingItems.length > 0 || undefined}
+      data-direction={writingDirection}
+      data-active-key={currentKey}
     >
-      {responsive && responsive.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
+      {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
 
-      {/* Tab List */}
-      <div
-        ref={tabListRef}
-        role="tablist"
-        aria-orientation="horizontal"
-        data-tabs-id={tabsId}
-        data-part="tab-list"
-        style={tabListStyle}
-        {...(responsive ? responsive.attrs : {})}
-      >
-        {items.map((item: TabItem) => {
-          const isActive = item.key === currentKey;
-          const isDisabled = !!item.disabled;
-          const itemStyle = getTabItemStyle(type || 'line', isActive, isDisabled, size as string);
+      <div data-part="tab-rail">
+        {showScrollControls && renderOverflowControl('previous', !overflowState.before)}
 
-          return (
-            <button
-              key={item.key}
-              ref={(node) => {
-                tabRefs.current.set(item.key, node);
-              }}
-              id={`tabs-tab-${tabsId}-${item.key}`}
-              role="tab"
-              data-part="tab-button"
-              data-selected={isActive}
-              data-disabled={isDisabled || undefined}
-              aria-selected={isActive}
-              aria-controls={`tabs-panel-${tabsId}-${item.key}`}
-              tabIndex={isActive ? 0 : -1}
-              disabled={item.disabled}
-              onClick={() => handleChange(item.key)}
-              onKeyDown={(event) => handleKeyDown(event, item.key)}
-              style={itemStyle}
-            >
-              {item.icon && (
+        <div
+          ref={tabListRef}
+          role="tablist"
+          aria-orientation="horizontal"
+          data-tabs-id={tabsId}
+          data-part="tab-list"
+          onScroll={refreshOverflow}
+        >
+          {items.map((item) => {
+            const selected = item.key === currentKey;
+            const unavailable = Boolean(item.disabled || item.loading);
+            const legacy = splitLegacyBadge(item.label);
+            const badge = item.badge ?? legacy.badge;
+            return (
+              <button
+                key={item.key}
+                ref={(node) => {
+                  tabRefs.current.set(item.key, node);
+                }}
+                id={`tabs-tab-${tabsId}-${item.key}`}
+                role="tab"
+                type="button"
+                data-part="tab-button"
+                data-selected={selected}
+                data-disabled={item.disabled || undefined}
+                data-loading={item.loading || undefined}
+                data-has-badge={
+                  (badge !== undefined && badge !== null) || undefined
+                }
+                aria-selected={selected}
+                aria-disabled={unavailable || undefined}
+                aria-busy={item.loading || undefined}
+                aria-controls={`tabs-panel-${tabsId}-${item.key}`}
+                tabIndex={(focusedKey ?? currentKey) === item.key ? 0 : -1}
+                disabled={item.disabled}
+                onClick={() => handleChange(item.key)}
+                onFocus={() => setFocusedKey(item.key)}
+                onKeyDown={(event) => handleKeyDown(event, item.key)}
+              >
+                {item.icon && (
+                  <span data-part="icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                )}
+                {item.loading ? (
+                  <span data-part="loading-indicator" aria-hidden="true" />
+                ) : null}
                 <span
-                  data-part="icon"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: (SIZE_CONFIG[size as string] || SIZE_CONFIG.md).iconSize,
-                    height: (SIZE_CONFIG[size as string] || SIZE_CONFIG.md).iconSize,
-                    flexShrink: 0,
+                  ref={(node) => {
+                    labelRefs.current.set(item.key, node);
                   }}
+                  data-part="tab-label"
                 >
-                  {item.icon}
+                  {legacy.label}
                 </span>
-              )}
-              {parseLabel(item.label, size as string)}
-            </button>
-          );
-        })}
+                {badge !== undefined && badge !== null && (
+                  <span
+                    data-part="tab-badge"
+                    aria-label={item.badgeAriaLabel}
+                  >
+                    {badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
 
-        {/* Sliding indicator for line type */}
-        {indicatorStyle && <span data-part="indicator" style={indicatorStyle} aria-hidden="true" />}
+          {indicatorStyle && (
+            <span
+              data-part="indicator"
+              data-visible="true"
+              style={indicatorStyle}
+              aria-hidden="true"
+            />
+          )}
+        </div>
+
+        {showScrollControls && renderOverflowControl('next', !overflowState.after)}
+        {showOverflowMenu && (
+          <Dropdown
+            trigger={['click']}
+            placement={writingDirection === 'rtl' ? 'bottomLeft' : 'bottomRight'}
+            menu={{ items: menuItems }}
+          >
+            <button
+              type="button"
+              data-part="overflow-more"
+              aria-label={accessibilityLabels?.more ?? 'More tabs'}
+            >
+              <NavigationMoreIcon decorative size="sm" />
+            </button>
+          </Dropdown>
+        )}
       </div>
 
-      {/* Tab Panel */}
-      {activeItem?.children && (
+      <span data-part="loading-status" role="status" aria-live="polite">
+        {loadingItems.length > 0 ? (
+          <>
+            {loadingItems.map((item, index) => (
+              <React.Fragment key={item.key}>
+                {index > 0 ? ', ' : null}
+                {item.label}
+              </React.Fragment>
+            ))}{' '}
+            {accessibilityLabels?.loading ?? 'Loading'}
+          </>
+        ) : null}
+      </span>
+
+      {activeItem && activeItem.children !== undefined && (
         <div
           id={`tabs-panel-${tabsId}-${activeItem.key}`}
           role="tabpanel"
           data-part="tab-panel"
+          data-active-key={activeItem.key}
           aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
           tabIndex={0}
-          style={{
-            padding: 'var(--ds-spacing-4, 16px) 0 0 0',
-            animation: motionIsFinal
-              ? undefined
-              : 'ds-tabs-fade-in var(--ds-recipe-enter, var(--ds-motion-fast)) var(--ds-recipe-curve, var(--ds-motion-ease-out))',
-            // Names the panel as its own view-transition group so a tab switch
-            // slides/crossfades just the panel instead of the whole page. The
-            // useId-derived scope keeps the name unique per mounted instance
-            // (duplicate names make the browser skip a transition outright).
-            ...tabPanelTransitionStyle(tabsId),
-          }}
+          style={tabPanelTransitionStyle(tabsId)}
         >
           {activeItem.children}
         </div>

@@ -1,9 +1,12 @@
 import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ColorPicker as ModernColorPicker } from '../engines/modern';
 import { ColorPicker as RusticColorPicker } from '../engines/rustic';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 const presetGroups = [
   { label: 'Brand', colors: ['#111111', '#222222'] },
@@ -93,6 +96,124 @@ describe('ColorPicker runtime engine coverage', () => {
     const trueCallsBeforeDisabledClick = handleOpenChange.mock.calls.filter(([value]) => value === true).length;
     fireEvent.click(trigger);
     expect(handleOpenChange.mock.calls.filter(([value]) => value === true).length).toBe(trueCallsBeforeDisabledClick);
+  });
+
+  it('resolves the token-backed default against the provider-owned root (K4-C modern)', async () => {
+    // No defaultValue: the engine defaults to var(--ds-color-primary). The
+    // swatch consumes the var() natively; the value resolves to #rrggbb once
+    // the provider paint is readable (var supplied on the root inline style,
+    // the happy-dom-compatible form of the QRCode provider test).
+    const { container, unmount } = render(
+      <ModernColorPicker
+        showText
+        style={{ '--ds-color-primary': '#2a7d4f' } as React.CSSProperties}
+      />,
+    );
+
+    const swatch = container.querySelector('[data-part="swatch"]') as HTMLElement;
+    expect(swatch).not.toBeNull();
+
+    await waitFor(() => {
+      expect(swatch.style.getPropertyValue('--ds-colorpicker-swatch-color')).toBe('#2a7d4f');
+    });
+    expect(screen.getByText('#2a7d4f')).toBeInTheDocument();
+    unmount();
+
+    // Unresolvable token: the swatch keeps the var() and never invents a color.
+    const { container: bareContainer } = render(<ModernColorPicker />);
+    const bareSwatch = bareContainer.querySelector('[data-part="swatch"]') as HTMLElement;
+    expect(bareSwatch.style.getPropertyValue('--ds-colorpicker-swatch-color')).toBe(
+      'var(--ds-color-primary)',
+    );
+  });
+
+  it('normalizes rgb() resolutions to #rrggbb for the native input (K4-C Pass-2 live finding)', async () => {
+    // Chromium serializes computed color custom properties as `rgb(r, g, b)`,
+    // which the native <input type="color"> cannot consume. Simulate that
+    // serialization path by resolving through an rgb() intermediate var chain.
+    const { container } = render(
+      <ModernColorPicker
+        showText
+        style={{ '--ds-color-primary': 'rgb(42, 125, 79)' } as React.CSSProperties}
+      />,
+    );
+    const swatch = container.querySelector('[data-part="swatch"]') as HTMLElement;
+    await waitFor(() => {
+      expect(swatch.style.getPropertyValue('--ds-colorpicker-swatch-color')).toBe('#2a7d4f');
+    });
+    expect(screen.getByText('#2a7d4f')).toBeInTheDocument();
+  });
+
+  it('places the modern dropdown above the trigger for top placements', () => {
+    const { container } = render(<ModernColorPicker open placement="topLeft" />);
+    const dropdown = container.querySelector('[data-part="dropdown"]') as HTMLElement;
+    expect(dropdown).not.toBeNull();
+    expect(dropdown.className).toContain('bottom-full');
+  });
+
+  it('rides the tenant mono channel on the hex input via the skin, not a Tailwind utility (K4-C Pass-2 live finding)', () => {
+    const skin = readFileSync(
+      resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/color-picker.css'),
+      'utf8',
+    );
+    expect(skin).toContain('font-family: var(--ds-font-family-mono, ui-monospace, monospace);');
+    // The engine no longer relies on the shadowed Tailwind font-mono utility.
+    const { container } = render(<ModernColorPicker open />);
+    const hex = container.querySelector('[data-part="hex-input"]') as HTMLElement;
+    expect(hex.className).not.toContain('font-mono');
+  });
+
+  it('end-aligns the dropdown when it would overflow the viewport inline-end (K4-C Pass 2)', () => {
+    // Default (happy-dom zero rects): start-aligned, no edge flip.
+    const { container, unmount } = render(<ModernColorPicker open />);
+    const startDropdown = container.querySelector('[data-part="dropdown"]') as HTMLElement;
+    expect(startDropdown.getAttribute('data-edge')).toBe('start');
+    expect(startDropdown.className).not.toContain('end-0');
+    unmount();
+
+    // Force the panel to cross the viewport's inline-end edge.
+    const original = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = function getBoundingClientRect() {
+      return {
+        x: 0, y: 0, top: 0, left: 0, bottom: 100,
+        right: window.innerWidth + 24,
+        width: 200, height: 100,
+        toJSON: () => ({}),
+      } as DOMRect;
+    };
+    try {
+      const { container: c2 } = render(<ModernColorPicker open />);
+      const endDropdown = c2.querySelector('[data-part="dropdown"]') as HTMLElement;
+      expect(endDropdown.getAttribute('data-edge')).toBe('end');
+      expect(endDropdown.className).toContain('end-0');
+    } finally {
+      Element.prototype.getBoundingClientRect = original;
+    }
+  });
+
+  it('renders the Clear fallback with a provider mounted and catalog keys absent (i18n echo guard, K4-C)', () => {
+    // The suites above render WITHOUT a provider (no-provider fallback path).
+    // With a provider mounted but the key still absent from the catalog, the
+    // missing key echoes the raw key back and the endsWith guard falls back.
+    renderWithEngine(<ModernColorPicker open allowClear />, 'modern');
+    expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
+  });
+
+  it('names the native input, hex input, and preset swatches (K4-C axe remediation)', () => {
+    // No provider: documented English fallbacks.
+    render(<ModernColorPicker open allowClear presets={presetGroups} />);
+    expect(screen.getByLabelText('Choose color')).toBeInTheDocument();
+    expect(screen.getByLabelText('Hex color')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Select color #111111' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Select color #222222' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Select color #abcdef' })).toBeInTheDocument();
+  });
+
+  it('renders label fallbacks with a provider mounted and catalog keys absent (echo guard)', () => {
+    renderWithEngine(<ModernColorPicker open allowClear presets={presetGroups} />, 'modern');
+    expect(screen.getByLabelText('Choose color')).toBeInTheDocument();
+    expect(screen.getByLabelText('Hex color')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Select color #111111' })).toBeInTheDocument();
   });
 
   it('covers rustic engine portal open/close, hover trigger, controlled values, clear branch, and disabled guards', async () => {

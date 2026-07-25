@@ -1,9 +1,12 @@
-'use client';
+"use client";
 
 /**
- * @fileoverview Table - Data table with sorting, filtering, pagination, and selection.
+ * @fileoverview Table - embedded tabular-document primitive.
  * Supports row selection (checkbox/radio), expandable rows, virtual scrolling,
  * fixed columns, and custom cell renderers. No compound sub-components.
+ * Operational collection screens (toolbar + bulk workflow + mobile cards +
+ * product filtering) belong to `PatternDataTable`; applications must not
+ * reconstruct that pattern by adding route CSS around this primitive.
  *
  * @example
  * ```tsx
@@ -21,9 +24,9 @@
  * @category Display
  */
 
-import React from 'react';
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { TableProps } from './contracts';
+import React from "react";
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { TableProps } from "./contracts";
 
 export type {
   TableProps,
@@ -37,9 +40,9 @@ export type {
   FilterMode,
   TableCellFieldType,
   EditingCell,
-} from './contracts';
+} from "./contracts";
 
-export { TABLE_DEFAULTS } from './contracts';
+export { TABLE_DEFAULTS } from "./contracts";
 
 /**
  * Engine-aware Table.
@@ -48,8 +51,17 @@ export { TABLE_DEFAULTS } from './contracts';
  * because `createEngineComponent` works with non-generic signatures internally.
  * Generic type safety is preserved at the public prop level for consumers.
  */
-export const Table = createEngineComponent<TableProps>('Table', {
-  classic: () => import('./engines/classic') as Promise<{ default: React.ComponentType<TableProps> }>,
-  modern: () => import('./engines/modern') as Promise<{ default: React.ComponentType<TableProps> }>,
-  rustic: () => import('./engines/rustic') as Promise<{ default: React.ComponentType<TableProps> }>,
+export const Table = createEngineComponent<TableProps>("Table", {
+  classic: () =>
+    import("./engines/classic") as Promise<{
+      default: React.ComponentType<TableProps>;
+    }>,
+  modern: () =>
+    import("./engines/modern") as Promise<{
+      default: React.ComponentType<TableProps>;
+    }>,
+  rustic: () =>
+    import("./engines/rustic") as Promise<{
+      default: React.ComponentType<TableProps>;
+    }>,
 });

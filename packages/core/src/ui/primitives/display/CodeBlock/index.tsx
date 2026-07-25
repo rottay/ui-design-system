@@ -7,9 +7,14 @@
  * its own DOM (the sanctioned raw-element tier of the design system, like every
  * primitive engine implementation and the chart renderers) and stays
  * token-governed through CSS custom properties and `data-part` anatomy so skins
- * can restyle it per engine/tenant. The default renderer is honest and
- * dependency-free: a `pre`/`code` block with an optional line-number gutter, a
- * line-highlight band, and a selection-safe copy control.
+ * can restyle it per engine/tenant. Paint ownership is per part: the inline
+ * style objects own the static parts (root surface, header, gutter, code) with
+ * canonical `--ds-*` tokens and logical directional properties, while the
+ * family skin (`presentation/components/skin/code-block.css`) owns the
+ * interactive copy-button part and the scroll region's focus ring (inline
+ * styles cannot express :hover/:focus-visible). The default renderer is honest
+ * and dependency-free: a `pre`/`code` block with an optional line-number
+ * gutter, a line-highlight band, and a selection-safe copy control.
  *
  * Syntax highlighting is delegated to an app-registered
  * {@link HighlighterAdapter}; the design system imports no tokenizer of its
@@ -20,6 +25,7 @@
 
 import React from 'react';
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { CODE_BLOCK_DEFAULTS } from './contracts';
 import type { CodeBlockProps, HighlightTokenLine } from './contracts';
 import { useHighlighter } from './runtime/highlighter';
@@ -73,6 +79,16 @@ export function CodeBlock({
   className,
 }: CodeBlockProps): React.ReactElement {
   const adapter = useHighlighter();
+
+  // Component-owned strings: translated when an I18nProvider is mounted, with
+  // the documented English fallbacks otherwise (a missing catalog key echoes
+  // back the full key, which the endsWith guard detects). Behavior is
+  // byte-identical until the locale JSONs land (K4-B guarded i18n channel).
+  const i18n = useOptionalTranslation('components');
+  const codeBlockLabel = (key: string, fallback: string): string => {
+    const translated = i18n?.t(key);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
 
   // For an SSR-capable synchronous adapter, resolve highlighting during render
   // so the server and first client render match. Everything else starts plain
@@ -147,6 +163,10 @@ export function CodeBlock({
   const rawLines = React.useMemo(() => code.replace(/\n$/, '').split('\n'), [code]);
   const highlightSet = React.useMemo(() => new Set(highlightLines ?? []), [highlightLines]);
   const gutterWidth = `${String(rawLines.length).length + 1}ch`;
+  // The scroll region only engages when horizontal scrolling is possible
+  // (no wrap) or a maxHeight caps the block; only then does it need keyboard
+  // reachability (axe scrollable-region-focusable, K4-B remediation R4).
+  const scrollable = !wrap || maxHeight !== undefined;
 
   const renderLineContent = (lineIndex: number): React.ReactNode => {
     const tokenLine = lines?.[lineIndex];
@@ -176,10 +196,9 @@ export function CodeBlock({
       data-part="root"
       data-language={language}
       style={{
-        borderRadius: 'var(--ds-radius-md, 0.5rem)',
-        border: '1px solid var(--ds-color-border, rgba(120,120,120,0.2))',
-        background:
-          'var(--ds-color-surface-sunken, var(--ds-color-fill-secondary, rgba(120,120,120,0.08)))',
+        borderRadius: 'var(--ds-radius-md)',
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-surface-inset)',
         overflow: 'hidden',
       }}
     >
@@ -189,9 +208,9 @@ export function CodeBlock({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 'var(--ds-spacing-2, 0.5rem)',
-          padding: 'var(--ds-spacing-2, 0.5rem) var(--ds-spacing-3, 0.75rem)',
-          borderBottom: '1px solid var(--ds-color-border, rgba(120,120,120,0.15))',
+          gap: 'var(--ds-spacing-2)',
+          padding: 'var(--ds-spacing-2) var(--ds-spacing-3)',
+          borderBottom: '1px solid var(--ds-color-border)',
           minHeight: '2.25rem',
         }}
       >
@@ -199,7 +218,7 @@ export function CodeBlock({
           data-part="title"
           style={{
             fontSize: '0.8125rem',
-            color: 'var(--ds-color-text-secondary, inherit)',
+            color: 'var(--ds-color-text-secondary)',
             fontFamily: title ? undefined : MONO_FONT,
           }}
         >
@@ -211,19 +230,6 @@ export function CodeBlock({
           data-copied={copied ? 'true' : 'false'}
           onClick={handleCopy}
           aria-label={copied ? copiedLabel : copyLabel}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 'var(--ds-spacing-1, 0.25rem)',
-            padding: 'var(--ds-spacing-1, 0.25rem) var(--ds-spacing-2, 0.5rem)',
-            borderRadius: 'var(--ds-radius-sm, 0.25rem)',
-            border: '1px solid var(--ds-color-border, rgba(120,120,120,0.25))',
-            background: 'transparent',
-            color: 'var(--ds-color-text-secondary, inherit)',
-            font: 'inherit',
-            fontSize: '0.8125rem',
-            cursor: 'pointer',
-          }}
         >
           <span aria-hidden="true" data-part="copy-tick" data-copied={copied ? 'true' : 'false'}>
             {copied ? '✓' : ''}
@@ -238,6 +244,13 @@ export function CodeBlock({
 
       <div
         data-part="scroll"
+        role={scrollable ? 'region' : undefined}
+        tabIndex={scrollable ? 0 : undefined}
+        aria-label={
+          scrollable
+            ? (ariaLabel ?? codeBlockLabel('codeBlock.regionLabel', 'Code block'))
+            : undefined
+        }
         style={{
           overflowX: wrap ? 'hidden' : 'auto',
           overflowY: maxHeight ? 'auto' : undefined,
@@ -246,14 +259,14 @@ export function CodeBlock({
       >
         <pre
           role="group"
-          aria-label={ariaLabel ?? 'Code block'}
+          aria-label={ariaLabel ?? codeBlockLabel('codeBlock.regionLabel', 'Code block')}
           data-part="pre"
           style={{
             margin: 0,
-            padding: 'var(--ds-spacing-3, 0.75rem)',
+            padding: 'var(--ds-spacing-3)',
             fontFamily: MONO_FONT,
             fontSize: '0.85rem',
-            lineHeight: 1.6,
+            lineHeight: 'var(--ds-line-height-body)',
             tabSize: 2,
           }}
         >
@@ -269,7 +282,7 @@ export function CodeBlock({
                   style={{
                     display: 'flex',
                     background: highlighted
-                      ? 'var(--ds-color-warning-subtle, rgba(250,204,21,0.14))'
+                      ? 'color-mix(in srgb, var(--ds-color-warning) 14%, transparent)'
                       : undefined,
                     whiteSpace: wrap ? 'pre-wrap' : 'pre',
                     wordBreak: wrap ? 'break-word' : undefined,
@@ -282,10 +295,20 @@ export function CodeBlock({
                       style={{
                         flex: '0 0 auto',
                         width: gutterWidth,
-                        marginRight: 'var(--ds-spacing-3, 0.75rem)',
-                        textAlign: 'right',
+                        marginInlineEnd: 'var(--ds-spacing-3)',
+                        textAlign: 'end',
                         userSelect: 'none',
-                        color: 'var(--ds-color-text-tertiary, rgba(120,120,120,0.7))',
+                        // CONTRAST LAW (K4-B remediation, axe color-contrast/
+                        // serious): raw tertiary ink fails AA on the inset
+                        // surface (3.27:1 measured on the bithire light pair;
+                        // TMM DB rides the same vertical base). The ink deepens
+                        // 45% toward the source's own primary text ink —
+                        // hue-faithful, mode-adaptive (6.13:1 bithire, 6.09:1
+                        // TMM, computed from the compiled themes). A tenant's
+                        // explicit `--ds-code-block-gutter-ink` stays raw
+                        // (escape hatch).
+                        color:
+                          'var(--ds-code-block-gutter-ink, color-mix(in srgb, var(--ds-color-text-tertiary) 55%, var(--ds-color-text-primary)))',
                       }}
                     >
                       {lineNumber}

@@ -8,6 +8,6 @@
   border-color: var(--ds-color-primary-500);
 }
 
-.ds-surface.ds-media .ds-media__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-media .ds-media__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }

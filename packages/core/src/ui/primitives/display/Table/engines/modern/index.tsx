@@ -1,19 +1,24 @@
 'use client';
 
 /**
- * @fileoverview Modern Table engine -- DS token inline-style implementation.
+ * @fileoverview Modern Table engine -- semantic markup painted by the modern skin.
  *
- * Full-featured data table built on inline styles and DS CSS custom properties
- * instead of DaisyUI or Tailwind utility classes. Implements sorting, filtering,
- * pagination, row selection, expandable rows, virtual scrolling, column resize,
- * nested header groups, inline cell editing, and summary rows -- all with
- * WAI-ARIA grid semantics.
+ * Full-featured data table rendered as semantic `<table>` markup with WAI-ARIA
+ * grid semantics. All paint (colors, borders, fills, interaction states) and all
+ * static geometry (cell padding per size, sort/resize affordances, pagination
+ * chrome, loading overlay) live in the modern skin
+ * (`foundation/tokens/css/runtime/engines/modern/skin/table.css`), keyed on the
+ * `data-part` / `data-size` / `data-align` / `data-fixed` hooks this file stamps.
+ * Inline styles are reserved for values that are genuinely dynamic -- measured
+ * column widths, sticky header offsets, virtual-scroll spacer heights, the
+ * consumer's `scroll` bounds -- and for the public `style` / `column.style`
+ * override channels.
  *
  * The heavy lifting (sort/filter/paginate/virtual-scroll state) lives in the
  * shared `useTableFeatures` hook; this file is responsible only for rendering
  * that state into semantic markup and wiring user interactions back to the hook.
  *
- * Engine: **DS Token / Inline Styles**
+ * Engine: **Modern skin (`ds-table ds-table--modern`) + data-part hooks**
  *
  * @example
  * ```tsx
@@ -25,7 +30,7 @@
  * @package @rottay/design-system
  */
 import React, { Fragment, useState, useRef, useEffect, useCallback } from 'react';
-import type { TableProps, ColumnType, SortOrder, TableCellFieldType } from '../../contracts';
+import type { TableProps, ColumnType, TableCellFieldType } from '../../contracts';
 import {
   useTableFeatures,
   columnFieldKey,
@@ -34,42 +39,15 @@ import {
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
-/** Padding tokens per canonical `sm | md | lg` size step (replaces DaisyUI table-xs/md/lg). */
-const SIZE_PADDING: Record<'sm' | 'md' | 'lg', { cell: string; fontSize: number }> = {
-  sm: { cell: '4px 8px', fontSize: 12 },
-  md: { cell: '8px 12px', fontSize: 14 },
-  lg: { cell: '12px 16px', fontSize: 16 },
-};
-
-/** Layout for inline inputs; the paint is the modern skin's `[data-part='field']`. */
-const inlineInputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '2px 6px',
-  fontSize: 12,
-};
-
-/** Layout for inline selects; `[data-part='field']` paints them, `appearance` stays inline. */
-const inlineSelectStyle: React.CSSProperties = {
-  ...inlineInputStyle,
-  appearance: 'auto' as const,
-};
-
-/** Layout for inline checkboxes/radios; the paint is the modern skin's `[data-part='selection-control']`. */
-const inlineCheckboxStyle: React.CSSProperties = {
-  width: 16,
-  height: 16,
-  cursor: 'pointer',
-};
-
 /**
- * Modern Table engine backed by DS token inline styles.
+ * Modern Table engine painted by the modern skin (`table.css`).
  *
- * Renders a full-featured data grid using semantic `<table>` markup styled
- * with inline DS token styles. All stateful logic (sort, filter, pagination,
- * selection, virtual scroll, column resize) is delegated to `useTableFeatures`.
+ * Renders a full-featured data grid using semantic `<table>` markup. All
+ * stateful logic (sort, filter, pagination, selection, virtual scroll, column
+ * resize) is delegated to `useTableFeatures`.
  *
  * @param props - Unified DS TableProps (see Table.types.ts)
- * @returns A DS-token-styled table element with pagination controls
+ * @returns A skin-painted table element with pagination controls
  */
 export const Table = <T extends object = object>(props: TableProps<T>) => {
   const { t } = useTranslation('components');
@@ -141,39 +119,22 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
   const { onCellEdit } = props;
   // Normalize size (canonical sm/md/lg or the deprecated small/middle/large/
-  // default spellings) to one of our three DS tokens. Any unrecognized value
-  // falls through to 'md' so the table always has valid sizing.
+  // default spellings) to one of our three canonical steps. Any unrecognized
+  // value falls through to 'md' so the table always has valid sizing. The skin
+  // keys cell padding and font size on the stamped `data-size`.
   const sizeKey = toCanonicalSize(size) ?? 'md';
-  const sizeTokens = SIZE_PADDING[sizeKey];
   const hasExpandable = !!expandable?.expandedRowRender;
   // The expand column is rendered unless the consumer explicitly opts out via
   // showExpandColumn: false -- useful when they want expand-on-row-click only.
   const showExpandCol = hasExpandable && expandable?.showExpandColumn !== false;
   // Only render the filter row if at least one column declares filterSearch or filters.
   const hasFilters = leafColumns.some((c) => c.filterSearch || c.filters);
-  // Header/body separator: `bordered` implies the full cell-border treatment
-  // (see the <td> borderBottom below, gated on `bordered` alone), which always
-  // includes this line. `headerBordered` controls the line independently so an
-  // unconfigured <Table> still separates header from body; passing
-  // `headerBordered={false}` is the only way to reach a fully borderless table.
+  // Header/body separator: `bordered` implies the full cell-border treatment,
+  // which always includes this line. `headerBordered` controls the line
+  // independently so an unconfigured <Table> still separates header from body;
+  // passing `headerBordered={false}` is the only way to reach a fully
+  // borderless table. The skin paints the hairline keyed on `data-hairline`.
   const showHeaderHairline = bordered || headerBordered;
-
-  /**
-   * Returns inline styles for fixed (pinned) columns. Sticky positioning with
-   * an opaque background prevents scrolling content from bleeding through.
-   * z-index 10 keeps them above normal cells but below sticky headers (z-20)
-   * and loading overlays (z-30).
-   */
-  const getFixedStyle = (position: 'left' | 'right' | boolean | undefined): React.CSSProperties => {
-    if (!position) return {};
-    const base: React.CSSProperties = {
-      position: 'sticky',
-      zIndex: 10,
-    };
-    if (position === 'left' || position === true) return { ...base, left: 0 };
-    if (position === 'right') return { ...base, right: 0 };
-    return base;
-  };
 
   const getColumnWidth = (col: ColumnType<T>): number | string | undefined => {
     const field = columnFieldKey(col) || String(col.key);
@@ -244,7 +205,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <input
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
-          style={inlineCheckboxStyle}
           data-part="selection-control"
           checked={!!cellValue}
           onChange={(e) => {
@@ -262,7 +222,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       return (
         <select
           ref={inputRef as React.RefObject<HTMLSelectElement>}
-          style={inlineSelectStyle}
           data-part="field"
           data-field="edit"
           value={String(cellValue ?? '')}
@@ -288,7 +247,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <input
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="date"
-          style={inlineInputStyle}
           data-part="field"
           data-field="edit"
           value={String(cellValue ?? '')}
@@ -305,7 +263,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       <input
         ref={inputRef as React.RefObject<HTMLInputElement>}
         type={fieldType === 'number' ? 'number' : 'text'}
-        style={inlineInputStyle}
         data-part="field"
         data-field="edit"
         value={cellValue == null ? '' : String(cellValue)}
@@ -351,32 +308,46 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           data-sticky={stickyConfig.enabled ? 'true' : undefined}
           data-hairline={showHeaderHairline ? 'true' : undefined}
           data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
+          data-align={column.align || undefined}
           style={{
-            padding: sizeTokens.cell,
             width,
             minWidth: column.minWidth,
-            textAlign: column.align,
-            position: stickyConfig.enabled || column.fixed ? 'sticky' : undefined,
-            ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40, zIndex: 20 } : {}),
-            ...getFixedStyle(column.fixed),
-            ...(isSortable ? { cursor: 'pointer', userSelect: 'none' as const, transition: 'color var(--ds-motion-fast)' } : {}),
+            // Sticky header offsets are computed per header row, so only the
+            // `top` stays inline; position/z-index are the skin's, keyed on
+            // `data-sticky`. 40px is the estimated header-row height used for
+            // stacking multi-row group headers.
+            ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40 } : {}),
             ...column.style,
           }}
           onClick={() => isSortable && handleSort(column)}
+          // Sortable headers are keyboard-operable: the header IS the sort
+          // button (the grid pattern has no nested control), so it takes a tab
+          // stop and activates on Enter/Space. aria-sort above announces the
+          // resulting state change.
+          tabIndex={isSortable ? 0 : undefined}
+          onKeyDown={
+            isSortable
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSort(column);
+                  }
+                }
+              : undefined
+          }
           aria-sort={ariaSortValue}
           role="columnheader"
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, position: 'relative' }}>
-            <span style={{ flex: 1 }}>{column.title}</span>
+          <div data-part="header-content">
+            <span data-part="header-title">{column.title}</span>
             {isSortable && (
               <span
                 data-part="sort-indicator"
                 data-order={isCurrentSort ? sortState.order : 'none'}
-                style={{ fontSize: 12, opacity: 0.6, display: 'inline-block', transition: 'transform var(--ds-motion-normal)' }}
               >
                 {isCurrentSort
-                  ? '\u25B2'
-                  : '\u21C5'}
+                  ? '▲'
+                  : '⇅'}
               </span>
             )}
             {/* Resize handle -- only on leaf columns (colSpan <= 1) because
@@ -386,14 +357,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               <span
                 data-part="resize-handle"
                 data-resizing={resizingColumn === field ? 'true' : undefined}
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 4,
-                  cursor: 'col-resize',
-                }}
                 onMouseDown={(e) => {
                   e.stopPropagation();
                   if (field) handleResizeStart(field, e.clientX);
@@ -414,21 +377,20 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     return (
-      <tr data-part="filter-row" style={{ transition: 'background-color var(--ds-motion-normal)' }}>
-        {rowSelection && <th style={{ width: 48 }} />}
-        {showExpandCol && <th style={{ width: 48 }} />}
+      <tr data-part="filter-row">
+        {rowSelection && <th data-part="filter-spacer" />}
+        {showExpandCol && <th data-part="filter-spacer" />}
         {leafColumns.map((col, i) => {
           const field = columnFieldKey(col);
           if (!col.filterSearch && !col.filters) {
             return <th key={col.key || field || i} />;
           }
           return (
-            <th key={col.key || field || i} style={{ padding: 4 }}>
+            <th key={col.key || field || i} data-part="filter-cell">
               <input
                 type="text"
                 data-part="field"
                 data-field="filter"
-                style={{ ...inlineInputStyle, transition: 'border-color var(--ds-motion-normal)' }}
                 placeholder={t('table.filter_column', { column: String(col.title || '') })}
                 value={columnFilters[field || ''] || ''}
                 onChange={(e) => field && handleColumnFilter(field, e.target.value)}
@@ -446,11 +408,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     if (displayData.length === 0) {
       return (
         <tr>
-          <td
-            colSpan={totalColSpan}
-            data-part="empty-cell"
-            style={{ textAlign: 'center', padding: '32px 0' }}
-          >
+          <td colSpan={totalColSpan} data-part="empty-cell">
             {locale?.emptyText || t('table.empty')}
           </td>
         </tr>
@@ -477,15 +435,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             data-part="row"
             data-selected={isSelected ? 'true' : undefined}
             data-hoverable={rowHoverable ? 'true' : undefined}
-            style={{
-              transition: rowHoverable ? 'background-color var(--ds-motion-normal)' : undefined,
-            }}
             aria-expanded={hasExpandable ? isExpanded : undefined}
             {...(onRow?.(record, actualIndex) || {})}
           >
             {/* Expand column */}
             {showExpandCol && (
-              <td style={{ width: 48, textAlign: 'center', padding: sizeTokens.cell }}>
+              <td data-part="expand-cell">
                 {canExpand ? (
                   expandable?.expandIcon ? (
                     expandable.expandIcon({
@@ -496,11 +451,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   ) : (
                     <button
                       data-part="expand-button"
-                      style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
                       onClick={() => handleToggleExpand(record, actualIndex)}
                       aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
                     >
-                      <span data-part="expand-indicator" data-expanded={isExpanded ? 'true' : undefined} style={{ display: 'inline-block', transition: 'transform var(--ds-motion-normal)' }}>{'\u25B6'}</span>
+                      <span data-part="expand-indicator" data-expanded={isExpanded ? 'true' : undefined}>{'▶'}</span>
                     </button>
                   )
                 ) : null}
@@ -509,10 +463,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
             {/* Selection column */}
             {rowSelection && (
-              <td style={{ width: 48, padding: sizeTokens.cell }}>
+              <td data-part="selection-cell">
                 <input
                   type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
-                  style={inlineCheckboxStyle}
                   data-part="selection-control"
                   checked={isSelected}
                   onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
@@ -552,13 +505,13 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-editable={cellEditable && !cellIsEditing ? 'true' : undefined}
                   data-bordered={bordered ? 'true' : undefined}
                   data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
+                  data-align={column.align || undefined}
                   style={{
-                    padding: sizeTokens.cell,
-                    textAlign: column.align,
                     width,
+                    // Ellipsis is a per-column prop projection (overflow +
+                    // max-width cap); it stays inline next to the column's own
+                    // style overrides.
                     ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, maxWidth: 320 } : {}),
-                    ...getFixedStyle(column.fixed),
-                    ...(cellEditable && !cellIsEditing ? { cursor: 'pointer', transition: 'all var(--ds-motion-fast)' } : {}),
                     ...column.style,
                   }}
                   role="gridcell"
@@ -578,7 +531,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           {/* Expanded row content */}
           {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
             <tr data-part="expanded-row">
-              <td colSpan={totalColSpan} style={{ padding: 16, animation: 'ds-table-expand-modern var(--ds-motion-slow) ease-out' }}>
+              <td colSpan={totalColSpan}>
                 {expandable.expandedRowRender(record, actualIndex, expandable.indentSize || 0, true)}
               </td>
             </tr>
@@ -601,9 +554,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       data-bordered={bordered ? 'true' : undefined}
       data-size={sizeKey}
       style={{
+        // The table's own width is a projection of the consumer's `scroll.x`
+        // contract, and `tableLayout` is a direct prop -- both stay inline.
         width: scrollXValue ? (typeof scrollXValue === 'number' ? scrollXValue : scrollXValue === true ? '100%' : scrollXValue) : '100%',
-        borderCollapse: 'collapse',
-        fontSize: sizeTokens.fontSize,
         tableLayout: props.tableLayout === 'fixed' ? 'fixed' : undefined,
       }}
     >
@@ -627,8 +580,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               {rowIndex === 0 && showExpandCol && (
                 <th
                   data-part="header-cell"
+                  data-cell-kind="expand"
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
-                  style={{ width: 48, padding: sizeTokens.cell, ...(stickyConfig.enabled ? { position: 'sticky' as const, top: stickyConfig.offsetHeader, zIndex: 20 } : {}) }}
+                  style={stickyConfig.enabled ? { top: stickyConfig.offsetHeader } : undefined}
+                  data-sticky={stickyConfig.enabled ? 'true' : undefined}
                 >
                   {expandable?.columnTitle || ''}
                 </th>
@@ -636,13 +591,14 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               {rowIndex === 0 && rowSelection && (
                 <th
                   data-part="header-cell"
+                  data-cell-kind="selection"
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
-                  style={{ width: 48, padding: sizeTokens.cell, ...(stickyConfig.enabled ? { position: 'sticky' as const, top: stickyConfig.offsetHeader, zIndex: 20 } : {}) }}
+                  style={stickyConfig.enabled ? { top: stickyConfig.offsetHeader } : undefined}
+                  data-sticky={stickyConfig.enabled ? 'true' : undefined}
                 >
                   {rowSelection.type !== 'radio' && !rowSelection.hideSelectAll && (
                     <input
                       type="checkbox"
-                      style={inlineCheckboxStyle}
                       data-part="selection-control"
                       checked={isAllSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
@@ -696,25 +652,19 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   );
 
   return (
-    <div className={['ds-table', 'ds-table--modern', className].filter(Boolean).join(' ')} style={{ position: 'relative', ...style }} id={id}>
+    <div className={['ds-table', 'ds-table--modern', className].filter(Boolean).join(' ')} style={style} id={id}>
       {/* Title */}
       {title && (
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>
+        <div data-part="title">
           {title(processedData)}
         </div>
       )}
 
       {/* Loading overlay */}
       {loading && (
-        <div data-part="loading-overlay" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 30 }}>
+        <div data-part="loading-overlay">
           <span
             data-part="spinner"
-            style={{
-              display: 'inline-block',
-              width: 24,
-              height: 24,
-              animation: 'ds-table-spin-modern var(--ds-motion-glacial) linear infinite',
-            }}
             role="status"
             aria-label="Loading"
           />
@@ -724,12 +674,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       {/* Table container */}
       <div
         ref={virtualEnabled ? scrollContainerRef : undefined}
+        data-part="scroll-container"
+        data-loading={loading ? 'true' : undefined}
+        data-resizing={resizingColumn ? 'true' : undefined}
         style={{
-          overflowX: 'auto',
           maxHeight: scrollYValue,
           overflowY: scrollYValue ? 'auto' : undefined,
-          ...(loading ? { opacity: 0.5 } : {}),
-          ...(resizingColumn ? { userSelect: 'none' as const } : {}),
         }}
       >
         {tableContent}
@@ -737,7 +687,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       {/* Footer */}
       {footer && (
-        <div data-part="footer" style={{ marginTop: 8, fontSize: 14 }}>
+        <div data-part="footer">
           {footer(processedData)}
         </div>
       )}
@@ -746,24 +696,22 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           when the consumer passes an empty object (default). Explicitly passing
           `false` hides them for cases like infinite scroll or server-side paging. */}
       {pagination !== false && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 8, marginTop: 16 }}>
-          <span data-part="pagination-range" style={{ fontSize: 14 }}>{paginationRange}</span>
-          <div style={{ display: 'inline-flex' }}>
+        <div data-part="pagination">
+          <span data-part="pagination-range">{paginationRange}</span>
+          <div data-part="pagination-controls">
             <button
               data-part="pagination-button"
-              style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
               aria-label={t('table.previous_page')}
             >
               &#171;
             </button>
-            <button data-part="pagination-button" style={{ height: 32, padding: '0 12px', fontSize: 13, pointerEvents: 'none', fontWeight: 600 }} aria-current="page">
+            <button data-part="pagination-button" data-current="true" aria-current="page">
               {t('table.page', { current: currentPage })}
             </button>
             <button
               data-part="pagination-button"
-              style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
               disabled={currentPage * pageSize >= totalItems}
               onClick={() => setCurrentPage(currentPage + 1)}
               aria-label={t('table.next_page')}

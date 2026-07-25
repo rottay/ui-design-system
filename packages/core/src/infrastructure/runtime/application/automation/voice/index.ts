@@ -12,6 +12,11 @@
  * (e.g. Firefox without the flag). Consumers should hide UI in that
  * case and gracefully fall back to text input.
  *
+ * Error strings resolve through the guarded `components` i18n channel
+ * (`voiceInput.error.*` keys, endsWith echo guard) with the documented
+ * English fallbacks from `getErrorMessage` — byte-identical behavior until
+ * the locale JSONs land (K4-B).
+ *
  * Originally lived in app-platform's `_shared/voice-input/` and was
  * relocated to the design system as part of Wave 4.2 of the canonical
  * execution plan (correcting the Wave 1 misclassification — voice
@@ -21,6 +26,8 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 type VoiceStatus = 'unsupported' | 'idle' | 'listening' | 'transcribing' | 'error';
 type MicrophonePermissionState = 'unknown' | 'prompt' | 'granted' | 'denied';
@@ -108,6 +115,19 @@ function getErrorMessage(errorCode?: string): string {
   }
 }
 
+/**
+ * Catalog keys for the hook-owned error strings (K4-B guarded i18n channel,
+ * `components` namespace). English defaults stay in {@link getErrorMessage}
+ * and remain the byte-identical fallback until the locale JSONs land.
+ */
+const VOICE_ERROR_KEY_BY_CODE: Record<string, string> = {
+  'not-allowed': 'voiceInput.error.notAllowed',
+  'service-not-allowed': 'voiceInput.error.notAllowed',
+  'no-speech': 'voiceInput.error.noSpeech',
+  'audio-capture': 'voiceInput.error.audioCapture',
+  network: 'voiceInput.error.network',
+};
+
 export interface UseVoiceInputOptions {
   lang?: string;
   onTranscript: (transcript: string) => void;
@@ -146,6 +166,28 @@ export function useVoiceInput({
   useEffect(() => {
     onTranscriptRef.current = onTranscript;
   }, [onTranscript]);
+
+  // Guarded i18n channel (K4-B): error strings resolve through the
+  // `components` catalog when an I18nProvider is mounted; a missing key
+  // echoes the full key back, the endsWith guard detects it, and the
+  // documented English fallback is used, so behavior is byte-identical until
+  // the locale JSONs land. A ref carries the resolver into effect-assigned
+  // recognition handlers and stable callbacks without re-running the
+  // recognition setup effect or growing dependency arrays.
+  const i18n = useOptionalTranslation('components');
+  const resolveErrorRef = useRef<(errorCode?: string, fallback?: string) => string>(
+    (errorCode, fallback) => fallback ?? getErrorMessage(errorCode),
+  );
+  useEffect(() => {
+    resolveErrorRef.current = (errorCode?: string, fallback?: string): string => {
+      const key =
+        (errorCode ? VOICE_ERROR_KEY_BY_CODE[errorCode] : undefined) ??
+        'voiceInput.error.generic';
+      const english = fallback ?? getErrorMessage(errorCode);
+      const translated = i18n?.t(key);
+      return translated && !translated.endsWith(key) ? translated : english;
+    };
+  });
 
   useEffect(() => {
     const Recognition = getSpeechRecognitionConstructor();
@@ -201,7 +243,7 @@ export function useVoiceInput({
       }
 
       setStatus('error');
-      setErrorMessage(getErrorMessage(event.error));
+      setErrorMessage(resolveErrorRef.current(event.error));
       setTranscriptPreview('');
       finalTranscriptRef.current = '';
       interimTranscriptRef.current = '';
@@ -283,18 +325,23 @@ export function useVoiceInput({
       if (errorName === 'NotAllowedError' || errorName === 'PermissionDeniedError') {
         setPermissionState('denied');
         setStatus('error');
-        setErrorMessage(getErrorMessage('not-allowed'));
+        setErrorMessage(resolveErrorRef.current('not-allowed'));
         return false;
       }
 
       if (errorName === 'NotFoundError' || errorName === 'DevicesNotFoundError') {
         setStatus('error');
-        setErrorMessage(getErrorMessage('audio-capture'));
+        setErrorMessage(resolveErrorRef.current('audio-capture'));
         return false;
       }
 
       setStatus('error');
-      setErrorMessage('We could not access the microphone. Try again or type your query.');
+      setErrorMessage(
+        resolveErrorRef.current(
+          undefined,
+          'We could not access the microphone. Try again or type your query.',
+        ),
+      );
       return false;
     }
   }, []);
@@ -305,7 +352,7 @@ export function useVoiceInput({
     void (async () => {
       if (permissionState === 'denied') {
         setStatus('error');
-        setErrorMessage(getErrorMessage('not-allowed'));
+        setErrorMessage(resolveErrorRef.current('not-allowed'));
         return;
       }
 
@@ -322,7 +369,12 @@ export function useVoiceInput({
         recognitionRef.current?.start();
       } catch {
         setStatus('error');
-        setErrorMessage('Voice input could not start. Try again or type your query.');
+        setErrorMessage(
+          resolveErrorRef.current(
+            undefined,
+            'Voice input could not start. Try again or type your query.',
+          ),
+        );
       }
     })();
   }, [isSupported, permissionState, requestMicrophoneAccess]);
@@ -346,7 +398,7 @@ export function useVoiceInput({
 
   const resetVoiceFeedback = useCallback(() => {
     if (permissionState === 'denied') {
-      setErrorMessage(getErrorMessage('not-allowed'));
+      setErrorMessage(resolveErrorRef.current('not-allowed'));
       setStatus('error');
       return;
     }

@@ -70,6 +70,12 @@ import React, { useState, useId } from 'react';
 import type { AlertProps, AlertType } from '../../contracts';
 import { ALERT_DEFAULTS, TONE_TO_ALERT_TYPE } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Constants
@@ -78,35 +84,15 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 /**
  * Default icons for each alert type.
  * Used when `showIcon` is true and no custom `icon` is provided.
- * Using inline SVGs for consistent rendering across themes.
+ * Uses semantic roles so every tenant inherits the configured icon language.
  *
  * @internal
  */
 const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
-  /** Info circle icon */
-  info: (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
-  /** Checkmark circle for successful operations */
-  success: (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
-  /** Warning triangle for caution messages */
-  warning: (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-    </svg>
-  ),
-  /** X circle for errors and failures */
-  error: (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
+  info: <StatusInfoIcon decorative size={20} />,
+  success: <StatusSuccessIcon decorative size={20} />,
+  warning: <StatusWarningIcon decorative size={20} />,
+  error: <StatusErrorIcon decorative size={20} />,
 };
 
 // ============================================================================
@@ -117,27 +103,25 @@ const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
  * Modern Engine implementation of the Alert component.
  *
  * @description
- * Custom alert implementation using DS token inline styles and Tailwind utilities.
- * Provides a lightweight alternative to Ant Design with smaller bundle size.
+ * Custom alert implementation whose paint is fully owned by the token-driven
+ * modern skin (`skin/alert.css`). Provides a lightweight alternative to
+ * Ant Design with no DaisyUI or AntD CSS dependency.
  *
  * @remarks
  * **Implementation Details:**
  * - Uses `useState` for dismiss state management
- * - DS token inline styles for alert type colors
- * - Custom close button with ghost styling
+ * - All paint lives in the unlayered modern skin
+ *   (`foundation/tokens/css/runtime/engines/modern/skin/alert.css`), keyed on
+ *   `rottay-alert-shell--modern` + `data-part`/`data-tone`; no DaisyUI classes
+ *   remain on this tree (the `alert` structural class was drained in the
+ *   K1 Lane C pass, decrementing `daisy.classConsumers`).
+ * - Custom close button with governed token styling
  * - Flexbox layout for icon and content alignment
  *
- * **CSS Classes Used:**
- * - `alert`: Base alert structural class
- * - DS token inline styles for type-specific colors
- * - `btn`, `btn-sm`, `btn-ghost`: Close button
- * - `font-bold`: Message text styling
- * - `text-sm`: Description text styling
- *
  * **Accessibility:**
- * - Semantic HTML structure
- * - Close button is focusable
- * - Icon provides visual context
+ * - `role="alert"` announces the message assertively on mount
+ * - Close button is focusable with a governed focus ring
+ * - Icon provides visual context (decorative, screen-reader hidden)
  *
  * @param props - {@link AlertProps}
  * @returns The rendered DS token-styled Alert or null when dismissed
@@ -155,6 +139,7 @@ const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
  * ```
  */
 export default function ModernAlert(props: AlertProps): React.ReactElement | null {
+  const { t } = useTranslation('common');
   // ---------------------------------------------------------------------------
   // State
   // ---------------------------------------------------------------------------
@@ -255,25 +240,33 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     <div
       data-part="root"
       data-tone={alertType}
-      className={`rottay-alert-shell rottay-alert-shell--modern alert ${isCompact ? 'p-2 text-sm' : ''} ${className}`}
+      data-compact={compactIsResponsive ? 'responsive' : isCompact}
+      data-has-icon={showIcon}
+      data-has-description={Boolean(description)}
+      data-closable={closable}
+      className={`rottay-alert-shell rottay-alert-shell--modern ${className}`}
       style={style}
+      role="alert"
       {...(responsive ? responsive.attrs : {})}
     >
       {/* Icon Section */}
-      {showIcon && <span data-part="icon">{icon || TYPE_ICONS[alertType]}</span>}
+      {showIcon && <span className="rottay-alert-shell__icon" data-part="icon">{icon || TYPE_ICONS[alertType]}</span>}
 
       {/* Content Section */}
-      <div>
-        <div data-part="label" className="font-bold">{message}</div>
-        {description && <div data-part="description" className="text-sm">{description}</div>}
+      <div className="rottay-alert-shell__content" data-part="content">
+        <div data-part="label">{message}</div>
+        {description && <div data-part="description">{description}</div>}
       </div>
 
       {/* Close Button */}
       {closable && (
-        <button data-part="action" style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={handleClose} aria-label="Close">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current w-4 h-4">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+        <button
+          type="button"
+          data-part="action"
+          onClick={handleClose}
+          aria-label={t('close')}
+        >
+          <ActionCloseIcon decorative size={16} />
         </button>
       )}
     </div>

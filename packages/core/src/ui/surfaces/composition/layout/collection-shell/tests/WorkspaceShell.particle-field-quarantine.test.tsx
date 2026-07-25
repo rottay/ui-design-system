@@ -152,7 +152,7 @@ describe('WO-CRA-14 WorkspaceShell ParticleField quarantine', () => {
     expect(shellSource).toContain('.then(({ ParticleField }) => ({');
     expect(shellSkin).toContain('.ds-collection-shell__static-particle-field');
     expect(consumablePlatformSkin).toContain('.ds-collection-shell__static-particle-field');
-    expect(shellSkin).toContain("[data-field-pattern='hybrid']");
+    expect(shellSkin).toMatch(/\[data-field-pattern=(["'])hybrid\1\]/);
     expect(shellSkin).toContain('background-image: radial-gradient');
     expect(motionEffectsBarrel).toContain(
       "export { ParticleField, Particles } from './particles'",

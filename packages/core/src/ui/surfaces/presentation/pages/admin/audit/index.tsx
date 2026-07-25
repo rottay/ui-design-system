@@ -9,6 +9,7 @@
  * layout while the app owns the data fetching and domain-specific renderers.
  */
 
+import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
 import React, { useMemo } from 'react';
 import { Box, Button, Card, Flex, Stack, Text } from '../../../../../primitives';
 import { PatternDataTable, PatternFilterPanel } from '../../../../../patterns';
@@ -84,7 +85,9 @@ export function AuditSurface({
       <Stack
         className="ds-surface ds-audit"
         data-part="root"
-        data-density={config.visual.density ?? 'default'}
+        {...densityScopeAttributes(
+          config.visual.density === 'compact' ? 'compact' : 'comfortable'
+        )}
         data-loading={loading ? 'true' : 'false'}
         spacing="lg"
       >
@@ -134,7 +137,6 @@ export function AuditSurface({
           <Flex justify="end">
             <Text
               className="ds-audit__muted-text"
-              data-part="muted-text"
               style={{ fontSize: 12 }}
             >
               Page {config.behavior.pagination.current} - {config.behavior.pagination.total} total entries

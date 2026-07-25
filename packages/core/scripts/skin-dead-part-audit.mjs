@@ -55,7 +55,18 @@ const SKIN_DIRS = [
 /** Every literal `data-part` a single TS/TSX source stamps. */
 export function collectStampedPartsFromSource(src) {
   const stamped = new Set();
-  for (const m of src.matchAll(/data-part\s*=\s*["'`{\s]*([a-z0-9-]+)/gi)) stamped.add(m[1]);
+  for (const m of src.matchAll(/data-part\s*=\s*(?:["'`]([a-z0-9-]+)["'`]|{\s*["'`]([a-z0-9-]+)["'`])/gi)) {
+    stamped.add(m[1] ?? m[2]);
+  }
+  // JSX often chooses one of two stable anatomy names at runtime:
+  // `data-part={previous ? 'overflow-previous' : 'overflow-next'}`. Both
+  // branches are literal production stamps and must be visible to the audit;
+  // treating the whole expression as dynamic creates dead-part false positives.
+  for (const expression of src.matchAll(/data-part\s*=\s*\{([^{}]*)\}/gi)) {
+    for (const literal of expression[1].matchAll(/["'`]([a-z0-9-]+)["'`]/gi)) {
+      stamped.add(literal[1]);
+    }
+  }
   for (const m of src.matchAll(/["']data-part["']\s*:\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
   // D3-authored SVG anatomy uses selection.attr(name, value).
   for (const m of src.matchAll(/\.attr\(\s*["']data-part["']\s*,\s*["']([a-z0-9-]+)["']\s*\)/gi)) stamped.add(m[1]);

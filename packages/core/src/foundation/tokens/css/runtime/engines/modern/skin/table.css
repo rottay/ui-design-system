@@ -1,10 +1,19 @@
 /**
- * Modern Table skin (WO-ARC-09 checkpoint 1).
+ * Modern Table skin (WO-ARC-09 checkpoint 1; K3-A Pass 1: geometry consolidated).
  *
  * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
  * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule loses
  * to preflight regardless of specificity (P-47). Unlayered outranks preflight +
  * DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SINGLE PAINT OWNER. This file owns every painted channel AND every static
+ * geometry channel of the modern Table: cell padding per `data-size`, text
+ * alignment per `data-align`, sticky/fixed positioning, the sort and resize
+ * affordances, the filter row, the loading overlay, and the pagination chrome.
+ * The engine keeps inline only what is genuinely dynamic (measured column
+ * widths, sticky header offsets computed per row, virtual-scroll spacer
+ * heights, the consumer's `scroll` bounds, per-column ellipsis) plus the
+ * public `style` / `column.style` override channels, which therefore still win.
  *
  * SCOPE ROOT IS THE OUTER `<div>`, not the `<table>`. The loading overlay, the
  * spinner, the title/footer and the pagination controls are SIBLINGS of the
@@ -28,14 +37,10 @@
  * `aria-label`, `placeholder`). Pure `border: none` resets carry no color and
  * are exempt from the (0,4,0) floor. This is the pattern the other five
  * components will copy.
- *
- * Values are transcribed verbatim from `engines/modern.tsx`; the rule order
- * mirrors the order that file paints them, so the visual result is byte-identical.
  */
 
-/* ---- keyframes: referenced by the inline `animation` shorthands the engine
-        sets on the spinner and the expanded-row cell (sanctioned inline
-        residuals, WO-ARC-09). Defined globally here, not per table instance. ---- */
+/* ---- keyframes: referenced by the spinner and expanded-row rules below.
+        Defined globally here, not per table instance. ---- */
 @keyframes ds-table-spin-modern {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -45,6 +50,59 @@
   to { opacity: 1; max-height: 500px; transform: translateY(0); }
 }
 
+/* ---- scope root: positioning context for the loading overlay ---- */
+.ds-table.ds-table--modern {
+  position: relative;
+}
+
+/* ---- title block above the table ---- */
+.ds-table.ds-table--modern [data-part='title'] {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+/* ---- table element geometry: font size keyed on the stamped `data-size` ---- */
+.ds-table.ds-table--modern [data-part='table'] {
+  border-collapse: collapse;
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] {
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] {
+  font-size: var(--ds-font-size-sm, 14px);
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] {
+  font-size: var(--ds-font-size-base, 16px);
+}
+
+/* ---- cell padding per size step (the retired inline SIZE_PADDING map) ---- */
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='header-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='expand-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='selection-cell'] {
+  padding: 4px 8px;
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='header-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='expand-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='selection-cell'] {
+  padding: 8px 12px;
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='header-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='expand-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='selection-cell'] {
+  padding: 12px 16px;
+}
+
+/* ---- per-column alignment, stamped as `data-align` (left is the default) ---- */
+.ds-table.ds-table--modern [data-align='center'] {
+  text-align: center;
+}
+.ds-table.ds-table--modern [data-align='right'] {
+  text-align: right;
+}
+
 /* ---- table element: border only in `bordered` mode ---- */
 .ds-table.ds-table--modern [data-part='table'][data-bordered='true'] {
   border: 1px solid var(--ds-table-border, var(--ds-color-border));
@@ -52,21 +110,66 @@
 
 /* ---- header cells ---- */
 .ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'] {
+  position: sticky;
+  /* the per-row `top` offset stays inline -- it is computed from the measured
+     header offset and the row index */
+  z-index: 20;
   background: var(--ds-table-header-bg, var(--ds-surface-inset));
 }
 .ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true'] {
   border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
 }
+/* the expand/selection header cells share the data-part; their fixed 48px
+   column width is keyed on the explicit `data-cell-kind` */
+.ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='expand'],
+.ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='selection'] {
+  width: 48px;
+}
+
+/* ---- sortable header: affordance + keyboard focus ring ---- */
+.ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true'] {
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--ds-motion-fast);
+}
+.ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -2px;
+}
+
+/* ---- header cell content: title + sort indicator + resize handle ---- */
+.ds-table.ds-table--modern [data-part='header-content'] {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+.ds-table.ds-table--modern [data-part='header-title'] {
+  flex: 1;
+}
 
 /* ---- sort indicator: rotates with the sort order ---- */
 .ds-table.ds-table--modern [data-part='sort-indicator'] {
+  font-size: var(--ds-font-size-xs, 12px);
+  opacity: 0.6;
+  display: inline-block;
+  transition: transform var(--ds-motion-normal);
   transform: rotate(0deg);
 }
 .ds-table.ds-table--modern [data-part='sort-indicator'][data-order='descend'] {
   transform: rotate(180deg);
 }
 
-/* ---- resize handle: a live drag, and a hover the pointer paints ---- */
+/* ---- resize handle: a live drag, and a hover the pointer paints. The edge
+        is logical so the handle tracks the column's inline-end in RTL. ---- */
+.ds-table.ds-table--modern [data-part='resize-handle'] {
+  position: absolute;
+  inset-inline-end: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: col-resize;
+}
 .ds-table.ds-table--modern [data-part='resize-handle'][data-resizing='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 60%, transparent);
 }
@@ -77,37 +180,69 @@
 /* ---- filter row + its inputs ---- */
 .ds-table.ds-table--modern [data-part='filter-row'] {
   background: var(--ds-table-header-bg, var(--ds-surface-inset));
+  transition: background-color var(--ds-motion-normal);
+}
+.ds-table.ds-table--modern [data-part='filter-spacer'] {
+  width: 48px;
+}
+.ds-table.ds-table--modern [data-part='filter-cell'] {
+  padding: 4px;
 }
 
-/* ---- fields: filter input, and the editable text/number/date/select cells,
-        which all shared `inlineInputStyle` before the migration. `data-field`
-        ('filter' | 'edit') is stamped for cross-engine contract parity with
-        rustic, whose two field kinds paint different borders; modern paints
-        both kinds identically, so one declaration block serves both
-        selectors. ---- */
+/* ---- fields: filter input, and the editable text/number/date/select cells.
+        `data-field` ('filter' | 'edit') is stamped for cross-engine contract
+        parity with rustic, whose two field kinds paint different borders;
+        modern paints both kinds identically, so one declaration block serves
+        both selectors. ---- */
 .ds-table.ds-table--modern [data-part='field'][data-field='filter'],
 .ds-table.ds-table--modern [data-part='field'][data-field='edit'] {
+  width: 100%;
+  padding: 2px 6px;
+  font-size: var(--ds-font-size-xs, 12px);
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
   outline: none;
 }
+.ds-table.ds-table--modern select[data-part='field'][data-field='edit'] {
+  appearance: auto;
+}
+.ds-table.ds-table--modern [data-part='field'][data-field='filter'] {
+  transition: border-color var(--ds-motion-normal);
+}
 
 /* ---- selection controls: checkbox/radio row-selection inputs (including
         select-all) + the editable checkbox cell ---- */
 .ds-table.ds-table--modern [data-part='selection-control'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
   accent-color: var(--ds-color-primary);
 }
 
 /* ---- muted text: empty-state cell, footer, pagination range ---- */
+.ds-table.ds-table--modern [data-part='empty-cell'] {
+  text-align: center;
+  padding: 32px 0;
+}
 .ds-table.ds-table--modern [data-part='empty-cell'],
 .ds-table.ds-table--modern [data-part='footer'],
 .ds-table.ds-table--modern [data-part='pagination-range'] {
   color: var(--ds-color-text-secondary);
 }
+.ds-table.ds-table--modern [data-part='footer'] {
+  margin-top: 8px;
+  font-size: var(--ds-font-size-sm, 14px);
+}
+.ds-table.ds-table--modern [data-part='pagination-range'] {
+  font-size: var(--ds-font-size-sm, 14px);
+}
 
 /* ---- body row: selected fill, and the hover a non-selected hoverable row takes ---- */
+.ds-table.ds-table--modern [data-part='row'][data-hoverable='true'] {
+  transition: background-color var(--ds-motion-normal);
+}
 .ds-table.ds-table--modern [data-part='row'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
 }
@@ -119,27 +254,56 @@
 .ds-table.ds-table--modern [data-part='cell'][data-bordered='true'] {
   border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
 }
+.ds-table.ds-table--modern [data-part='cell'][data-editable='true'] {
+  cursor: pointer;
+  transition: all var(--ds-motion-fast);
+}
 .ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
   outline: 1px dashed color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   outline-offset: -1px;
   background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
 }
 
-/* ---- pinned/fixed columns: an opaque fill so scrolled content cannot bleed
-        through. Applies to both header and body cells. ---- */
+/* ---- pinned/fixed columns: sticky positioning with an opaque fill so
+        scrolled content cannot bleed through. Applies to header and body
+        cells; the offsets are physical because the `fixed` column contract is
+        itself physical ('left' | 'right'). ---- */
 .ds-table.ds-table--modern [data-part='cell'][data-fixed],
 .ds-table.ds-table--modern [data-part='header-cell'][data-fixed] {
+  position: sticky;
+  z-index: 10;
   background: var(--ds-table-bg, var(--ds-surface-card));
+}
+.ds-table.ds-table--modern [data-fixed='true'],
+.ds-table.ds-table--modern [data-fixed='left'] {
+  left: 0;
+}
+.ds-table.ds-table--modern [data-fixed='right'] {
+  right: 0;
 }
 
 /* ---- expand column ---- */
+.ds-table.ds-table--modern [data-part='expand-cell'] {
+  width: 48px;
+  text-align: center;
+}
+.ds-table.ds-table--modern [data-part='selection-cell'] {
+  width: 48px;
+}
 .ds-table.ds-table--modern [data-part='expand-button'] {
+  height: 24px;
+  padding: 0 8px;
+  font-size: var(--ds-font-size-xs, 12px);
+  cursor: pointer;
+  transition: all var(--ds-motion-normal);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
   border-radius: var(--ds-radius-md);
 }
 .ds-table.ds-table--modern [data-part='expand-indicator'] {
+  display: inline-block;
+  transition: transform var(--ds-motion-normal);
   transform: rotate(0deg);
 }
 .ds-table.ds-table--modern [data-part='expand-indicator'][data-expanded='true'] {
@@ -150,23 +314,68 @@
 .ds-table.ds-table--modern [data-part='expanded-row'] {
   background: var(--ds-table-row-bg-striped, var(--ds-surface-inset));
 }
+.ds-table.ds-table--modern [data-part='expanded-row'] > td {
+  padding: 16px;
+  animation: ds-table-expand-modern var(--ds-motion-slow) ease-out;
+}
 
 /* ---- loading overlay + spinner. The spinner needs (0,4,0): its
         `border-top-color` longhand would otherwise lose to the tenant `*`
         border-color floor and never show the primary colour. ---- */
 .ds-table.ds-table--modern [data-part='loading-overlay'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
   background: color-mix(in srgb, var(--ds-table-bg, var(--ds-surface-card)) 50%, transparent);
 }
 .ds-table.ds-table--modern [data-part='spinner'][data-part='spinner'] {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  animation: ds-table-spin-modern var(--ds-motion-glacial) linear infinite;
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
 }
 
+/* ---- scroll container: horizontal overflow always, vertical bounds stay
+        inline (they project the consumer's `scroll.y` contract). ---- */
+.ds-table.ds-table--modern [data-part='scroll-container'] {
+  overflow-x: auto;
+}
+.ds-table.ds-table--modern [data-part='scroll-container'][data-loading='true'] {
+  opacity: 0.5;
+}
+.ds-table.ds-table--modern [data-part='scroll-container'][data-resizing='true'] {
+  user-select: none;
+}
+
 /* ---- pagination controls ---- */
+.ds-table.ds-table--modern [data-part='pagination'] {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.ds-table.ds-table--modern [data-part='pagination-controls'] {
+  display: inline-flex;
+}
 .ds-table.ds-table--modern [data-part='pagination-button'] {
+  height: 32px;
+  padding: 0 12px;
+  font-size: var(--ds-table-pagination-font-size, 13px);
+  cursor: pointer;
+  transition: all var(--ds-motion-normal);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
   border-radius: var(--ds-radius-md);
+}
+.ds-table.ds-table--modern [data-part='pagination-button'][data-current='true'] {
+  pointer-events: none;
+  font-weight: 600;
 }

@@ -5,14 +5,26 @@
  *
  * SCOPE ROOT is `.ds-voice-input-button[data-part='root']` (a `<button>`),
  * carrying `data-status`, `data-active`, `data-error`, `data-blocked`, plus
- * `data-variant` ('ghost'|'filled') added for this migration. All paint lives on
- * the root: the border reproduces the `borderColor` chain (error > active >
- * default), the background the `bgColor` chain (ghost transparent; filled by
- * state), the text the `textColor` chain.
+ * `data-variant` ('ghost'|'filled') and `data-size` ('sm'|'md'). All paint
+ * lives on the root: the border reproduces the `borderColor` chain (error >
+ * active > default), the background the `bgColor` chain (ghost transparent;
+ * filled by state), the text the `textColor` chain.
+ *
+ * GEOMETRY MOVED HERE (K4-B Pass 1): the button box (28/34px), icon box
+ * (13/15px), layout display, transition and listening/transcribing animations
+ * were inline styles in `index.tsx`; they are transcribed verbatim below, so
+ * this file is the single paint+geometry owner and the component ships zero
+ * inline style. No global control-size token covers these values (they are
+ * family-owned control geometry, like every skin-transcribed value). The
+ * transition duration rides `--ds-motion-feedback` (density/motion scaled;
+ * zeroed under reduced motion by the foundation) instead of the old literal
+ * `0.14s`.
  *
  * The two per-mount `<style>` keyframes are moved here renamed
- * `ds-voice-input-button-pulse` / `-spin`; the inline `animation` references the
- * new names, and `-spin` no longer shadows the global `ds-foundation-spin`.
+ * `ds-voice-input-button-pulse` / `-spin`; the skin's `animation` declarations
+ * reference the new names, and `-spin` no longer shadows the global
+ * `ds-foundation-spin`. Under `prefers-reduced-motion: reduce` the decorative
+ * pulse is silenced; the spinner stays (functional progress indication).
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1); with only ONE root class, the border rules reach (0,4,0) via a
@@ -21,9 +33,68 @@
  */
 
 .ds-voice-input-button[data-part='root'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
   border-radius: 999px;
   background: transparent;
   color: var(--ds-color-text-muted);
+  transition:
+    background-color var(--ds-motion-feedback) ease,
+    border-color var(--ds-motion-feedback) ease,
+    color var(--ds-motion-feedback) ease;
+}
+
+/* control + icon geometry per size preset (transcribed verbatim: no global
+   control-size token covers these values) */
+.ds-voice-input-button[data-part='root'][data-size='sm'] {
+  inline-size: 28px;
+  block-size: 28px;
+  min-inline-size: 28px;
+}
+.ds-voice-input-button[data-part='root'][data-size='md'] {
+  inline-size: 34px;
+  block-size: 34px;
+  min-inline-size: 34px;
+}
+.ds-voice-input-button[data-part='root'][data-size='sm'] > .rottay-icon {
+  inline-size: 13px;
+  block-size: 13px;
+}
+.ds-voice-input-button[data-part='root'][data-size='md'] > .rottay-icon {
+  inline-size: 15px;
+  block-size: 15px;
+}
+
+/* state animations (keyframes declared at the bottom of this file) */
+.ds-voice-input-button[data-part='root'][data-status='listening'] {
+  animation: ds-voice-input-button-pulse 1.6s ease-out infinite;
+}
+.ds-voice-input-button[data-part='root'][data-status='transcribing'] > .rottay-icon {
+  animation: ds-voice-input-button-spin 1s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-voice-input-button[data-part='root'][data-status='listening'] {
+    animation: none;
+  }
+}
+
+/* focus ring (K4-B Pass 2: the button relied on the UA outline) — badge idiom. */
+.ds-voice-input-button[data-part='root']:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-voice-input-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+@media (forced-colors: active) {
+  .ds-voice-input-button[data-part='root']:focus-visible {
+    outline: 2px solid Highlight;
+    box-shadow: none;
+  }
 }
 
 /* border color: default (base) > active > error (error wins the tie, last). */

@@ -179,7 +179,10 @@ export const StaggerChildren = forwardRef<HTMLDivElement, StaggerChildrenProps>(
         initial={isStatic ? false : "hidden"}
         {...(isStatic
           ? { animate: "visible" }
-          : { whileInView: "visible", viewport: { once, amount: 0.2 } })}
+          : {
+              whileInView: "visible",
+              viewport: { once, amount: "some" as const },
+            })}
         variants={{
           hidden: isStatic
             ? { opacity: 1 }

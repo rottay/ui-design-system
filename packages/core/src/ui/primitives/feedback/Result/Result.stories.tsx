@@ -345,7 +345,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Result rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Result rendered by Classic (Ant Design), Modern (token skin), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -371,5 +371,78 @@ export const VariantMatrix: Story = {
       variantProp="status"
       variants={['success', 'error', 'info', 'warning']}
     />
+  ),
+};
+
+// ============================================================================
+// Modern Engine Craft Stories
+// ============================================================================
+
+/**
+ * Completion vs error grammar on the modern engine: tone-tinted glyph discs,
+ * heading hierarchy, balanced guidance, attached action rows.
+ */
+export const ModernCompletionGrammar: Story = {
+  name: '✅ Modern Completion Grammar',
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
+      <Result
+        engine="modern"
+        status="success"
+        title="Evidence package approved"
+        subTitle="All 14 documents passed review and the package is now locked for the quarterly audit trail."
+        extra={<button style={{ padding: '8px 16px', cursor: 'pointer' }}>View package</button>}
+      />
+      <Result
+        engine="modern"
+        status="error"
+        title="Evidence package rejected during the final automated compliance verification pass"
+        subTitle="Three documents failed the integrity check. Re-upload the corrected files; every approved document keeps its current review state and no resubmission is required for them."
+        extra={
+          <>
+            <button style={{ padding: '8px 16px', cursor: 'pointer' }}>Re-upload files</button>
+            <button style={{ padding: '8px 16px', cursor: 'pointer' }}>Download report</button>
+          </>
+        }
+      />
+    </div>
+  ),
+};
+
+/**
+ * Narrow frame: the status code clamps, guidance wraps, actions stack without
+ * clipping or horizontal overflow.
+ */
+export const ModernNarrowFrame: Story = {
+  name: '📱 Modern Narrow Frame',
+  render: () => (
+    <div style={{ maxWidth: 320, border: '1px dashed var(--ds-color-border, #d9d9d9)', borderRadius: 8 }}>
+      <Result
+        engine="modern"
+        status="404"
+        title="Page not found"
+        subTitle="The page you are looking for was moved, renamed, or never existed in this workspace."
+        extra={<button style={{ padding: '8px 16px', cursor: 'pointer' }}>Back to dashboard</button>}
+      />
+    </div>
+  ),
+};
+
+/**
+ * RTL smoke test: centered composition is direction-agnostic; the action row
+ * order mirrors through the flex direction.
+ */
+export const ModernRTL: Story = {
+  name: '🔄 Modern RTL',
+  render: () => (
+    <div dir="rtl">
+      <Result
+        engine="modern"
+        status="warning"
+        title="يلزم اتخاذ إجراء"
+        subTitle="تنتهي صلاحية شهادة الأمان خلال سبعة أيام. جددها الآن لتجنب انقطاع المزامنة."
+        extra={<button style={{ padding: '8px 16px', cursor: 'pointer' }}>تجديد الشهادة</button>}
+      />
+    </div>
   ),
 };

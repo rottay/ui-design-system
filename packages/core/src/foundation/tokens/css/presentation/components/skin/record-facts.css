@@ -1,0 +1,372 @@
+/**
+ * RecordFacts — premium dense-read anatomy for business records.
+ *
+ * One section boundary, then internal segmentation. There are deliberately no
+ * accent rails and no card-per-value treatment.
+ */
+
+.ds-pattern-record-facts[data-part="root"][data-part="root"] {
+  --ds-record-facts-border: var(
+    --ds-surface-card-border-strong,
+    var(--ds-color-border-secondary)
+  );
+  --ds-record-facts-divider: color-mix(
+    in srgb,
+    var(--ds-surface-card-border, var(--ds-color-border-primary)) 82%,
+    transparent
+  );
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  container-type: inline-size;
+  border: 1px solid var(--ds-record-facts-border);
+  border-radius: var(--ds-record-facts-radius, var(--ds-radius-xl, 16px));
+  background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
+  box-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent),
+    var(--ds-record-facts-shadow, var(--ds-shadow-sm));
+  color: var(--ds-color-text-primary);
+  isolation: isolate;
+}
+
+.ds-pattern-record-facts .ds-record-facts__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-4, 16px);
+  min-width: 0;
+  min-height: var(--ds-record-facts-header-height, 66px);
+  padding: var(--ds-record-facts-header-padding, 14px 18px);
+  border-bottom: 1px solid var(--ds-record-facts-divider);
+  background: radial-gradient(
+      circle at 10% 0%,
+      color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
+      transparent 40%
+    ),
+    linear-gradient(
+      110deg,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 5%,
+        var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))
+      ),
+      color-mix(
+          in srgb,
+          var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 94%,
+          var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))
+        )
+        70%
+    );
+}
+
+.ds-pattern-record-facts .ds-record-facts__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  min-width: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__section-icon,
+.ds-pattern-record-facts .ds-record-facts__fact-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 18%,
+      var(--ds-color-border-primary)
+    );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 7%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+  );
+  color: var(--ds-color-primary);
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 70%, transparent);
+}
+
+.ds-pattern-record-facts .ds-record-facts__section-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-record-facts .ds-record-facts__heading-copy,
+.ds-pattern-record-facts .ds-record-facts__fact-copy {
+  min-width: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__title,
+.ds-pattern-record-facts .ds-record-facts__description {
+  margin: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__title {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-display, var(--ds-font-family-base));
+  font-size: var(--ds-record-facts-title-size, var(--ds-font-size-md, 16px));
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: -0.018em;
+  line-height: 1.25;
+}
+
+.ds-pattern-record-facts .ds-record-facts__description {
+  margin-top: 3px;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-text-detail-size, var(--ds-font-size-xs, 12px));
+  line-height: 1.35;
+}
+
+.ds-pattern-record-facts .ds-record-facts__action {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.ds-pattern-record-facts .ds-record-facts__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1px;
+  min-width: 0;
+  margin: 0;
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 28%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+  );
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: center;
+  gap: var(--ds-spacing-3, 12px);
+  min-width: 0;
+  min-height: var(--ds-record-facts-item-height, 82px);
+  margin: 0;
+  padding: var(--ds-record-facts-item-padding, 16px 18px);
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 96%,
+    var(--ds-color-primary)
+  );
+  grid-column: span var(--ds-record-fact-span, 3);
+}
+
+.ds-pattern-record-facts[data-density="compact"] .ds-record-facts__fact {
+  min-height: var(--ds-record-facts-compact-item-height, 70px);
+  padding: var(--ds-record-facts-compact-item-padding, 12px 16px);
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact[data-span="full"] {
+  grid-column: 1 / -1;
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact[data-state="empty"] {
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 52%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+  );
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact[data-emphasis="narrative"] {
+  min-height: 0;
+  align-content: start;
+  padding-block: 18px;
+  background: linear-gradient(
+    125deg,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 3%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    ),
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 74%
+  );
+}
+
+.ds-pattern-record-facts .ds-record-facts__fact-icon {
+  width: 30px;
+  height: 30px;
+  margin-top: 1px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-record-facts .ds-record-facts__label {
+  overflow: hidden;
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  font-size: var(--ds-record-facts-label-size, 0.69rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.055em;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ds-pattern-record-facts .ds-record-facts__value,
+.ds-pattern-record-facts .ds-record-facts__supporting {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.ds-pattern-record-facts .ds-record-facts__value {
+  margin-top: 6px;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-body, var(--ds-font-family-base));
+  font-size: var(--ds-record-facts-value-size, var(--ds-font-size-sm, 14px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: -0.012em;
+  line-height: 1.4;
+}
+
+.ds-pattern-record-facts
+  .ds-record-facts__fact[data-emphasis="strong"]
+  .ds-record-facts__value,
+.ds-pattern-record-facts
+  .ds-record-facts__fact[data-emphasis="accent"]
+  .ds-record-facts__value {
+  font-family: var(--ds-font-family-display, var(--ds-font-family-base));
+  font-size: var(
+    --ds-record-facts-strong-value-size,
+    var(--ds-font-size-lg, 18px)
+  );
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: -0.025em;
+}
+
+.ds-pattern-record-facts
+  .ds-record-facts__fact[data-emphasis="accent"]
+  .ds-record-facts__value {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-record-facts
+  .ds-record-facts__fact[data-emphasis="narrative"]
+  .ds-record-facts__value {
+  max-width: 92ch;
+  font-size: var(
+    --ds-record-facts-narrative-size,
+    var(--ds-font-size-sm, 14px)
+  );
+  font-weight: var(--ds-font-weight-regular, 400);
+  line-height: 1.65;
+}
+
+.ds-pattern-record-facts .ds-record-facts__supporting {
+  margin-top: 5px;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-text-detail-size, var(--ds-font-size-xs, 12px));
+  line-height: 1.35;
+}
+
+.ds-pattern-record-facts .ds-record-facts__skeleton {
+  display: grid;
+  grid-column: span 4;
+  align-content: center;
+  gap: 8px;
+  min-height: var(--ds-record-facts-compact-item-height, 70px);
+  padding: var(--ds-record-facts-compact-item-padding, 12px 16px);
+  background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
+}
+
+.ds-pattern-record-facts .ds-record-facts__skeleton-line {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 8%,
+    var(--ds-surface-panel-bg, var(--ds-color-bg-secondary))
+  );
+}
+
+.ds-pattern-record-facts .ds-record-facts__skeleton-line {
+  width: min(72%, 180px);
+  height: 8px;
+  margin: 0;
+}
+
+.ds-pattern-record-facts .ds-record-facts__skeleton-line:last-child {
+  width: min(92%, 280px);
+  height: 12px;
+}
+
+.ds-pattern-record-facts .ds-record-facts__skeleton-line::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: ds-record-facts-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes ds-record-facts-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@container (max-width: 900px) {
+  .ds-pattern-record-facts .ds-record-facts__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  /* Preserve the caller's deliberate 6+3+3 and 4+4+4 compositions. Flattening
+     every fact to 6 columns created half-empty final rows for odd item counts. */
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="1"],
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="2"] {
+    grid-column: span 3;
+  }
+
+  .ds-pattern-record-facts .ds-record-facts__skeleton {
+    grid-column: span 4;
+  }
+
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="7"],
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="8"],
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="9"],
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="10"],
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="11"],
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="12"],
+  .ds-pattern-record-facts .ds-record-facts__fact[data-span="full"] {
+    grid-column: span 12;
+  }
+}
+
+@container (max-width: 560px) {
+  .ds-pattern-record-facts .ds-record-facts__header {
+    align-items: flex-start;
+    padding: 13px 14px;
+  }
+
+  .ds-pattern-record-facts .ds-record-facts__description {
+    display: none;
+  }
+
+  .ds-pattern-record-facts .ds-record-facts__fact,
+  .ds-pattern-record-facts .ds-record-facts__skeleton {
+    grid-column: span 12;
+    min-height: 68px;
+    padding: 12px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-record-facts .ds-record-facts__skeleton-line::after {
+    animation: none;
+  }
+}

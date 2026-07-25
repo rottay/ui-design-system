@@ -10,10 +10,10 @@
      SIZES - Card Padding Variants
      Three size variants for different card densities
      ======================================================================== */
-  --ds-card-sm-padding: 0.75rem;           /* 12px */
-  --ds-card-md-padding: 1rem;              /* 16px - Default */
-  --ds-card-lg-padding: 1.5rem;            /* 24px */
-  --ds-card-xl-padding: 2rem;              /* 32px */
+  --ds-card-sm-padding: 0.75rem; /* 12px */
+  --ds-card-md-padding: 1rem; /* 16px - Default */
+  --ds-card-lg-padding: 1.5rem; /* 24px */
+  --ds-card-xl-padding: 2rem; /* 32px */
 
   --ds-card-default-padding: var(--ds-card-md-padding);
 
@@ -24,9 +24,18 @@
   --ds-card-bg: var(--ds-color-white);
   --ds-card-bg-hover: var(--ds-color-neutral-50);
   --ds-card-bg-active: var(--ds-color-neutral-100);
+  --ds-card-bg-selected: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-card-bg)
+  );
   --ds-card-bg-disabled: var(--ds-color-neutral-50);
 
   --ds-card-color: var(--ds-color-neutral-900);
+  --ds-card-color-hover: var(--ds-card-color);
+  --ds-card-color-active: var(--ds-card-color);
+  --ds-card-color-selected: var(--ds-card-color);
+  --ds-card-color-disabled: var(--ds-color-text-disabled);
   --ds-card-color-muted: var(--ds-color-neutral-600);
 
   /* ========================================================================
@@ -36,9 +45,26 @@
   --ds-card-border-width: 1px;
   --ds-card-border-color: var(--ds-color-neutral-200);
   --ds-card-border-color-hover: var(--ds-color-neutral-300);
+  --ds-card-border-color-active: var(--ds-card-border-color-hover);
+  --ds-card-border-color-selected: color-mix(
+    in srgb,
+    var(--ds-color-primary) 52%,
+    var(--ds-card-border-color)
+  );
+  --ds-card-border-color-disabled: color-mix(
+    in srgb,
+    var(--ds-card-border-color) 58%,
+    transparent
+  );
+  --ds-card-border-active: var(--ds-card-border-color-active);
+  --ds-card-border-selected: var(--ds-card-border-color-selected);
+  --ds-card-border-disabled: var(--ds-card-border-color-disabled);
   --ds-card-border-style: solid;
   --ds-card-border-radius: var(--ds-radius-lg);
   --ds-card-radius: var(--ds-card-border-radius);
+  --ds-card-radius-sm: var(--ds-radius-sm);
+  --ds-card-radius-lg: var(--ds-radius-xl);
+  --ds-card-radius-xl: var(--ds-radius-2xl);
 
   /* Borderless variant */
   --ds-card-borderless-border-width: 0;
@@ -56,6 +82,7 @@
   /* Interactive shadows */
   --ds-card-shadow-hover: var(--ds-shadow-card-hover);
   --ds-card-shadow-active: var(--ds-shadow-card-active);
+  --ds-card-shadow-selected: var(--ds-shadow-focus-ring);
 
   /* Default shadow */
   --ds-card-shadow-default: var(--ds-card-shadow-sm);
@@ -65,15 +92,45 @@
      Card header section styling
      ======================================================================== */
   --ds-card-header-padding: var(--ds-card-default-padding);
+  --ds-card-header-padding-sm: var(--ds-spacing-3, 12px)
+    var(--ds-spacing-4, 16px);
+  --ds-card-header-padding-lg: var(--ds-spacing-5, 20px)
+    var(--ds-spacing-6, 24px);
+  --ds-card-header-gap: var(--ds-spacing-3, 12px);
   --ds-card-header-padding-bottom: calc(var(--ds-card-default-padding) * 0.75);
   --ds-card-header-border-width: 1px;
   --ds-card-header-border-color: var(--ds-color-neutral-200);
   --ds-card-header-bg: transparent;
+  --ds-card-header-min-height: 4rem;
+  --ds-card-header-copy-max-width: 68ch;
+  --ds-card-header-eyebrow-size: 0.625rem;
+  --ds-card-header-eyebrow-tracking: 0.11em;
+  --ds-card-header-icon-size: 2.25rem;
+  --ds-card-header-icon-radius: var(--ds-radius-lg);
+  --ds-card-header-icon-bg: var(
+    --ds-surface-icon-bg,
+    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg))
+  );
+  --ds-card-header-icon-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 20%,
+    var(--ds-card-border-color)
+  );
+  --ds-card-header-icon-color: var(--ds-color-primary);
+  --ds-card-header-extra-bg: color-mix(
+    in srgb,
+    var(--ds-card-bg) 94%,
+    var(--ds-color-primary)
+  );
+  --ds-card-header-extra-border: var(--ds-card-header-border-color);
+  --ds-card-header-extra-radius: var(--ds-radius-lg);
+  --ds-card-header-extra-padding: 3px;
 
   /* Header title */
   --ds-card-title-font-size: var(--ds-font-size-lg);
   --ds-card-title-font-weight: var(--ds-font-weight-semibold);
   --ds-card-title-line-height: var(--ds-line-height-tight);
+  --ds-card-title-letter-spacing: var(--ds-letter-spacing-heading);
   --ds-card-title-color: var(--ds-color-neutral-900);
 
   /* Header subtitle */
@@ -89,6 +146,10 @@
      Card content area styling
      ======================================================================== */
   --ds-card-body-padding: var(--ds-card-default-padding);
+  --ds-card-body-padding-sm: var(--ds-spacing-3, 12px)
+    var(--ds-spacing-4, 16px);
+  --ds-card-body-padding-lg: var(--ds-spacing-5, 20px)
+    var(--ds-spacing-6, 24px);
   --ds-card-body-color: var(--ds-color-neutral-700);
   --ds-card-body-font-size: var(--ds-font-size-base);
   --ds-card-body-line-height: var(--ds-line-height-normal);
@@ -98,6 +159,10 @@
      Card footer section styling
      ======================================================================== */
   --ds-card-footer-padding: var(--ds-card-default-padding);
+  --ds-card-footer-padding-sm: var(--ds-spacing-3, 12px)
+    var(--ds-spacing-4, 16px);
+  --ds-card-footer-padding-lg: var(--ds-spacing-5, 20px)
+    var(--ds-spacing-6, 24px);
   --ds-card-footer-padding-top: calc(var(--ds-card-default-padding) * 0.75);
   --ds-card-footer-border-width: 1px;
   --ds-card-footer-border-color: var(--ds-color-neutral-200);
@@ -107,6 +172,9 @@
   /* Footer actions */
   --ds-card-footer-actions-gap: 0.5rem;
   --ds-card-footer-actions-justify: flex-end;
+  --ds-card-actions-gap: var(--ds-spacing-2, 8px);
+  --ds-card-actions-margin-top: var(--ds-spacing-4, 16px);
+  --ds-card-actions-padding-top: var(--ds-spacing-4, 16px);
 
   /* ========================================================================
      MEDIA/IMAGE
@@ -116,15 +184,38 @@
   --ds-card-media-border-radius-bottom: 0;
   --ds-card-media-aspect-ratio: 16 / 9;
   --ds-card-media-object-fit: cover;
+  --ds-card-image-height: 12.5rem;
 
   /* Cover variant (full background image) */
-  --ds-card-cover-min-height: 12rem;       /* 192px */
+  --ds-card-cover-min-height: 12rem; /* 192px */
   --ds-card-cover-overlay-bg: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
     rgba(0, 0, 0, 0.6) 100%
   );
   --ds-card-cover-content-color: var(--ds-color-white);
+  --ds-card-cover-inline-size: 12rem;
+  --ds-card-cover-inline-min-size: 9rem;
+  --ds-card-cover-block-min-size: 10rem;
+  --ds-card-cover-aspect-ratio: var(--ds-card-media-aspect-ratio);
+  --ds-card-cover-object-position: center;
+  --ds-card-cover-object-fit: cover;
+  --ds-card-body-inline-min-size: 16rem;
+
+  /* Image loading/error anatomy */
+  --ds-card-image-loading-track: var(--ds-color-neutral-200);
+  --ds-card-image-loading-active: var(--ds-color-primary);
+  --ds-card-image-loading-size: 2.5rem;
+  --ds-card-image-loading-stroke: 3px;
+  --ds-card-image-loading-duration: var(--ds-motion-glacial);
+  --ds-card-image-error-icon-size: 3rem;
+
+  /* Root loading anatomy */
+  --ds-card-spinner-size: 1.5rem;
+  --ds-card-spinner-stroke: 2px;
+  --ds-card-spinner-track: var(--ds-color-border);
+  --ds-card-spinner-color: var(--ds-color-primary);
+  --ds-card-spinner-duration: var(--ds-motion-glacial);
 
   /* ========================================================================
      VARIANTS
@@ -138,20 +229,20 @@
 
   /* Bordered variant (emphasized border, no shadow) */
   --ds-card-bordered-bg: var(--ds-card-bg);
-  --ds-card-bordered-border-width: 2px;
-  --ds-card-bordered-border-color: var(--ds-color-neutral-300);
+  --ds-card-bordered-border-width: var(--ds-card-border-width);
+  --ds-card-bordered-border-color: var(--ds-card-border, var(--ds-card-border-color));
   --ds-card-bordered-shadow: none;
 
   /* Flat variant (no border, no shadow) */
-  --ds-card-flat-bg: var(--ds-card-bg);
+  --ds-card-flat-bg: var(--ds-surface-panel, var(--ds-card-bg));
   --ds-card-flat-border-width: 0;
   --ds-card-flat-shadow: none;
 
   /* Elevated variant (strong shadow, no border) */
   --ds-card-elevated-bg: var(--ds-card-bg);
   --ds-card-elevated-border-width: 0;
-  --ds-card-elevated-shadow: var(--ds-card-shadow-lg);
-  --ds-card-elevated-shadow-hover: var(--ds-card-shadow-xl);
+  --ds-card-elevated-shadow: var(--ds-card-shadow, var(--ds-card-shadow-md));
+  --ds-card-elevated-shadow-hover: var(--ds-card-shadow-hover, var(--ds-card-shadow-lg));
 
   /* Ghost variant (transparent background) */
   --ds-card-ghost-bg: transparent;
@@ -163,8 +254,24 @@
      Clickable/hoverable cards
      ======================================================================== */
   --ds-card-interactive-cursor: pointer;
-  --ds-card-interactive-transform-hover: translateY(-2px);
-  --ds-card-interactive-transition: all 0.3s ease;
+  --ds-card-interactive-transform-hover: translateY(-1px);
+  --ds-card-active-transform: translateY(0) scale(0.995);
+  --ds-card-interactive-transition: var(--ds-transition-card);
+  --ds-card-surface-gradient: var(--ds-gradient-surface, none);
+  --ds-card-texture: var(--ds-premium-card-grid-bg);
+  --ds-card-texture-size: var(--ds-premium-card-grid-size)
+    var(--ds-premium-card-grid-size);
+  --ds-card-texture-opacity: calc(var(--ds-effect-intensity, 1) * 0.1);
+  --ds-card-overlay: var(--ds-premium-card-overlay);
+  --ds-card-state-overlay: linear-gradient(
+    118deg,
+    color-mix(in srgb, var(--ds-color-primary) 10%, transparent),
+    transparent 42%,
+    color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)
+  );
+  --ds-card-state-overlay-hover-opacity: 0.42;
+  --ds-card-state-overlay-active-opacity: 0.68;
+  --ds-card-state-overlay-selected-opacity: 0.3;
 
   /* ========================================================================
      PREMIUM WHITE-LABEL CARD FOUNDATION
@@ -175,28 +282,126 @@
   --ds-premium-card-gap: var(--ds-spacing-3, 12px);
   --ds-premium-card-min-height: auto;
   --ds-premium-card-grid-size: 22px;
-  --ds-premium-card-grid-line: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
-  --ds-premium-card-grid-bg:
-    linear-gradient(var(--ds-premium-card-grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--ds-premium-card-grid-line) 1px, transparent 1px);
-  --ds-premium-card-bg: var(--ds-card-bg);
-  --ds-premium-card-bg-hover: var(--ds-card-bg-hover);
-  --ds-premium-card-glass-bg: color-mix(in srgb, var(--ds-card-bg) 86%, transparent);
+  --ds-premium-card-grid-line: color-mix(
+    in srgb,
+    var(--ds-color-primary) 7%,
+    transparent
+  );
+  --ds-premium-card-grid-bg: linear-gradient(
+      var(--ds-premium-card-grid-line) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      var(--ds-premium-card-grid-line) 1px,
+      transparent 1px
+    );
+  --ds-premium-card-bg: var(--ds-material-card-background, var(--ds-card-bg));
+  --ds-premium-card-bg-hover: var(
+    --ds-material-card-background-hover,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 4%,
+      var(--ds-material-card-background, var(--ds-card-bg-hover))
+    )
+  );
+  --ds-premium-card-bg-active: var(
+    --ds-material-card-background-active,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 7%,
+      var(--ds-material-card-background, var(--ds-card-bg))
+    )
+  );
+  --ds-premium-card-bg-selected: var(
+    --ds-material-card-background-selected,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 9%,
+      var(--ds-material-card-background, var(--ds-card-bg))
+    )
+  );
+  --ds-premium-card-bg-disabled: var(
+    --ds-material-card-background-disabled,
+    color-mix(
+      in srgb,
+      var(--ds-material-card-background, var(--ds-card-bg)) 82%,
+      var(--ds-surface-panel-bg)
+    )
+  );
+  --ds-premium-card-glass-bg: color-mix(
+    in srgb,
+    var(--ds-material-card-background, var(--ds-card-bg)) 86%,
+    transparent
+  );
   --ds-premium-card-overlay: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-color-primary) 4%, transparent),
     transparent 48%
   );
-  --ds-premium-card-border: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-border-color));
-  --ds-premium-card-border-hover: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-card-border-color));
-  --ds-premium-card-selected-border: color-mix(in srgb, var(--ds-color-primary) 46%, var(--ds-card-border-color));
-  --ds-premium-card-selected-ring: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
-  --ds-premium-card-shadow: var(--ds-card-shadow-sm);
-  --ds-premium-card-shadow-hover: var(--ds-card-shadow-hover);
-  --ds-premium-card-depth:
-    0 1px 2px color-mix(in srgb, var(--ds-card-color) 4%, transparent),
+  --ds-premium-card-border: var(
+    --ds-material-card-border,
+    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-border-color))
+  );
+  --ds-premium-card-border-hover: var(
+    --ds-material-card-border-hover,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 24%,
+      var(--ds-material-card-border-strong, var(--ds-card-border-color))
+    )
+  );
+  --ds-premium-card-active-border: var(
+    --ds-material-card-border-active,
+    var(--ds-premium-card-border-hover)
+  );
+  --ds-premium-card-selected-border: var(
+    --ds-material-card-border-selected,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 46%,
+      var(--ds-material-card-border-strong, var(--ds-card-border-color))
+    )
+  );
+  --ds-premium-card-disabled-border: var(
+    --ds-material-card-border-disabled,
+    color-mix(
+      in srgb,
+      var(--ds-material-card-border, var(--ds-card-border-color)) 58%,
+      transparent
+    )
+  );
+  --ds-premium-card-selected-ring: var(
+    --ds-material-card-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)
+  );
+  --ds-premium-card-shadow: var(
+    --ds-material-card-shadow,
+    var(--ds-card-shadow-sm)
+  );
+  --ds-premium-card-shadow-hover: var(
+    --ds-material-card-shadow-hover,
+    var(--ds-card-shadow-hover)
+  );
+  --ds-premium-card-shadow-active: var(
+    --ds-material-card-shadow-active,
+    var(--ds-material-card-shadow, var(--ds-card-shadow-sm))
+  );
+  --ds-premium-card-shadow-selected: var(
+    --ds-material-card-shadow-selected,
+    var(
+      --ds-material-card-focus-ring,
+      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)
+    )
+  );
+  --ds-premium-card-depth: 0 1px 2px
+      color-mix(in srgb, var(--ds-card-color) 4%, transparent),
     0 12px 28px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--ds-card-bg) 72%, transparent);
+    var(
+      --ds-material-card-highlight,
+      inset 0 1px 0 color-mix(in srgb, var(--ds-card-bg) 72%, transparent)
+    );
+  --ds-premium-card-texture: var(--ds-material-card-texture, none);
   --ds-premium-card-sheen: linear-gradient(
     90deg,
     transparent,
@@ -204,14 +409,20 @@
     transparent
   );
   --ds-premium-card-hover-transform: translateY(-2px) scale(1);
-  --ds-premium-card-transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  --ds-premium-card-transition: background var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 
-  --ds-premium-card-icon-bg: var(--ds-surface-icon-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg)));
-  --ds-premium-card-icon-border: var(--ds-surface-icon-border, color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-card-border-color)));
+  --ds-premium-card-icon-bg: var(
+    --ds-surface-icon-bg,
+    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg))
+  );
+  --ds-premium-card-icon-border: var(
+    --ds-surface-icon-border,
+    color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-card-border-color))
+  );
   --ds-premium-card-icon-color: var(--ds-color-primary);
   --ds-premium-card-title-color: var(--ds-card-title-color);
   --ds-premium-card-body-color: var(--ds-card-body-color);
@@ -220,18 +431,54 @@
   --ds-premium-card-value-color-hover: var(--ds-color-primary);
   --ds-premium-card-number-min-width: 4ch;
   --ds-premium-card-number-font-variant: tabular-nums;
-  --ds-premium-card-footer-bg: color-mix(in srgb, var(--ds-color-bg-secondary) 72%, var(--ds-card-bg));
-  --ds-premium-card-footer-border: color-mix(in srgb, var(--ds-card-border-color) 72%, transparent);
+  --ds-premium-card-footer-bg: color-mix(
+    in srgb,
+    var(--ds-color-bg-secondary) 72%,
+    var(--ds-card-bg)
+  );
+  --ds-premium-card-footer-border: color-mix(
+    in srgb,
+    var(--ds-card-border-color) 72%,
+    transparent
+  );
   --ds-premium-card-footer-color: var(--ds-card-footer-color);
-  --ds-premium-card-status-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg));
-  --ds-premium-card-status-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-card-border-color));
+  --ds-premium-card-status-bg: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-card-bg)
+  );
+  --ds-premium-card-status-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 22%,
+    var(--ds-card-border-color)
+  );
   --ds-premium-card-status-color: var(--ds-color-primary);
-  --ds-premium-card-action-bg: color-mix(in srgb, var(--ds-card-bg) 84%, transparent);
-  --ds-premium-card-action-border: color-mix(in srgb, var(--ds-card-border-color) 82%, transparent);
+  --ds-premium-card-action-bg: color-mix(
+    in srgb,
+    var(--ds-card-bg) 84%,
+    transparent
+  );
+  --ds-premium-card-action-border: color-mix(
+    in srgb,
+    var(--ds-card-border-color) 82%,
+    transparent
+  );
   --ds-premium-card-action-color: var(--ds-color-primary);
-  --ds-premium-card-meter-track: color-mix(in srgb, var(--ds-card-border-color) 48%, var(--ds-color-bg-secondary));
-  --ds-premium-card-meter-track-border: color-mix(in srgb, var(--ds-card-border-color) 82%, transparent);
-  --ds-premium-card-meter-fill: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary));
+  --ds-premium-card-meter-track: color-mix(
+    in srgb,
+    var(--ds-card-border-color) 48%,
+    var(--ds-color-bg-secondary)
+  );
+  --ds-premium-card-meter-track-border: color-mix(
+    in srgb,
+    var(--ds-card-border-color) 82%,
+    transparent
+  );
+  --ds-premium-card-meter-fill: linear-gradient(
+    90deg,
+    var(--ds-color-primary),
+    var(--ds-color-secondary)
+  );
 
   /* ========================================================================
      LOADING STATE
@@ -245,6 +492,22 @@
     transparent 100%
   );
   --ds-card-loading-animation: ds-foundation-shimmer 2s infinite;
+  --ds-card-loading-overlay-bg: color-mix(
+    in srgb,
+    var(--ds-surface-card) 62%,
+    transparent
+  );
+  --ds-card-loading-backdrop-blur: 4px;
+  --ds-card-loading-cover-opacity: 0.6;
+  --ds-card-loading-skeleton-opacity: 0.52;
+  --ds-card-skeleton-bg: var(--ds-surface-inset);
+  --ds-card-skeleton-highlight: color-mix(
+    in srgb,
+    var(--ds-color-bg-elevated) 82%,
+    transparent
+  );
+  --ds-card-skeleton-radius: var(--ds-radius-sm, 6px);
+  --ds-card-skeleton-duration: var(--ds-motion-glacial);
 
   /* ========================================================================
      DIVIDER
@@ -268,9 +531,9 @@
      GRID/LAYOUT
      Settings for card grids
      ======================================================================== */
-  --ds-card-grid-gap: 1rem;                /* 16px */
-  --ds-card-grid-gap-sm: 0.75rem;          /* 12px */
-  --ds-card-grid-gap-lg: 1.5rem;           /* 24px */
+  --ds-card-grid-gap: 1rem; /* 16px */
+  --ds-card-grid-gap-sm: 0.75rem; /* 12px */
+  --ds-card-grid-gap-lg: 1.5rem; /* 24px */
 
   /* Responsive columns */
   --ds-card-grid-columns-mobile: 1;
@@ -282,9 +545,17 @@
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-card-transition-duration: 0.3s;
-  --ds-card-transition-timing: ease-in-out;
-  --ds-card-transition: all var(--ds-card-transition-duration) var(--ds-card-transition-timing);
+  --ds-card-transition-duration: var(--ds-motion-feedback);
+  --ds-card-transition-timing: var(--ds-motion-ease-enter);
+  --ds-card-transition: background-color var(--ds-card-transition-duration)
+      var(--ds-card-transition-timing),
+    border-color var(--ds-card-transition-duration)
+      var(--ds-card-transition-timing),
+    color var(--ds-card-transition-duration) var(--ds-card-transition-timing),
+    box-shadow var(--ds-card-transition-duration)
+      var(--ds-card-transition-timing),
+    transform var(--ds-card-transition-duration)
+      var(--ds-card-transition-timing);
 
   /* ========================================================================
      SEMANTIC VARIANTS
@@ -321,7 +592,10 @@
      Focus states and keyboard navigation
      ======================================================================== */
   --ds-card-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-card-focus-ring-color: var(--ds-focus-ring-color);
+  --ds-card-focus-ring-width: var(--ds-focus-ring-width, 2px);
   --ds-card-focus-ring-offset: 2px;
+  --ds-card-selected-outline-width: var(--ds-card-border-width);
   --ds-card-focus-outline: none;
 
   /* ========================================================================
@@ -334,23 +608,36 @@
 }
 
 .ds-card {
+  position: relative;
   isolation: isolate;
 }
 
-.ds-card::before {
+.ds-card.ds-card--modern::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image:
-    var(--ds-premium-card-grid-bg),
-    var(--ds-premium-card-overlay);
-  background-size:
-    var(--ds-premium-card-grid-size) var(--ds-premium-card-grid-size),
-    auto;
-  opacity: var(--ds-premium-card-grid-opacity, 0.18);
-  mask-image: linear-gradient(180deg, var(--ds-color-text-primary), transparent 86%);
+  border-radius: inherit;
+  background-image: var(--ds-card-texture), var(--ds-card-overlay);
+  background-size: var(--ds-card-texture-size), auto;
+  opacity: var(--ds-card-texture-opacity);
+  mask-image: linear-gradient(
+    180deg,
+    var(--ds-color-text-primary),
+    transparent 86%
+  );
+}
+
+.ds-card.ds-card--modern[data-variant='ghost']::before,
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern::before {
+  opacity: 0;
+}
+
+@media (forced-colors: active) {
+  .ds-card.ds-card--modern::before {
+    display: none;
+  }
 }
 
 .ds-card > * {

@@ -8,6 +8,7 @@
  */
 
 import type {
+  BrandBadgeChrome,
   BrandBreadcrumbChrome,
   BrandCardChrome,
   BrandControlsChrome,
@@ -17,18 +18,96 @@ import type {
   BrandMetricCardChrome,
   BrandModalChrome,
   BrandPremiumCardChrome,
+  BrandPopoverChrome,
   BrandSearchChrome,
   BrandShellChrome,
   BrandSidebarChrome,
   BrandSignalCardChrome,
   BrandTableChrome,
   BrandTabsChrome,
+  BrandTooltipChrome,
   BrandToolbarChrome,
   TenantAppearanceGeneral,
 } from "..";
 
 /** The only TenantThemeConfig schema accepted by this release. */
 export const TENANT_THEME_SCHEMA_VERSION = 1 as const;
+
+const TENANT_SEMANTIC_SURFACE_ROLES = [
+  "canvas",
+  "shell",
+  "panel",
+  "card",
+  "inset",
+  "control",
+  "raised",
+  "overlay",
+] as const;
+
+const TENANT_SEMANTIC_SURFACE_FACETS = [
+  "background-hover",
+  "background-active",
+  "background-selected",
+  "background-disabled",
+  "foreground",
+  "foreground-muted",
+  "foreground-disabled",
+  "border",
+  "border-strong",
+  "border-hover",
+  "border-active",
+  "border-selected",
+  "border-disabled",
+  "focus-ring",
+  "shadow",
+  "shadow-hover",
+  "shadow-active",
+  "shadow-selected",
+  "highlight",
+  "texture",
+] as const;
+
+type TenantSemanticSurfaceToken =
+  `--ds-material-${(typeof TENANT_SEMANTIC_SURFACE_ROLES)[number]}-${(typeof TENANT_SEMANTIC_SURFACE_FACETS)[number]}`;
+
+const TENANT_SEMANTIC_SURFACE_TOKENS: readonly TenantSemanticSurfaceToken[] =
+  TENANT_SEMANTIC_SURFACE_ROLES.flatMap((role) =>
+    TENANT_SEMANTIC_SURFACE_FACETS.map(
+      (facet) => `--ds-material-${role}-${facet}` as const
+    )
+  );
+
+const TENANT_SEMANTIC_TYPOGRAPHY_ROLES = [
+  "display",
+  "page-title",
+  "section-title",
+  "body",
+  "supporting",
+  "label",
+  "caption",
+  "code",
+  "numeric",
+] as const;
+
+const TENANT_SEMANTIC_TYPOGRAPHY_FACETS = [
+  "font-family",
+  "font-size",
+  "font-weight",
+  "line-height",
+  "letter-spacing",
+  "text-transform",
+  "font-variant-numeric",
+] as const;
+
+type TenantSemanticTypographyToken =
+  `--ds-type-${(typeof TENANT_SEMANTIC_TYPOGRAPHY_ROLES)[number]}-${(typeof TENANT_SEMANTIC_TYPOGRAPHY_FACETS)[number]}`;
+
+const TENANT_SEMANTIC_TYPOGRAPHY_TOKENS: readonly TenantSemanticTypographyToken[] =
+  TENANT_SEMANTIC_TYPOGRAPHY_ROLES.flatMap((role) =>
+    TENANT_SEMANTIC_TYPOGRAPHY_FACETS.map(
+      (facet) => `--ds-type-${role}-${facet}` as const
+    )
+  );
 
 /**
  * Closed set of semantic DS variables exposed to Advanced tenants in v1.
@@ -64,8 +143,18 @@ export const TENANT_THEME_OVERRIDE_TOKENS = [
   "--ds-color-text-primary",
   "--ds-color-text-secondary",
   "--ds-color-text-muted",
+  "--ds-color-text-disabled",
   "--ds-color-border-primary",
   "--ds-color-border-secondary",
+  "--ds-surface-canvas",
+  "--ds-surface-shell",
+  "--ds-surface-panel",
+  "--ds-surface-card",
+  "--ds-surface-inset",
+  "--ds-surface-control",
+  "--ds-surface-raised",
+  "--ds-surface-overlay",
+  ...TENANT_SEMANTIC_SURFACE_TOKENS,
   "--ds-font-family-base",
   "--ds-font-family-heading",
   "--ds-font-family-mono",
@@ -79,6 +168,7 @@ export const TENANT_THEME_OVERRIDE_TOKENS = [
   "--ds-line-height-body",
   "--ds-line-height-tight",
   "--ds-line-height-relaxed",
+  ...TENANT_SEMANTIC_TYPOGRAPHY_TOKENS,
   "--ds-radius-sm",
   "--ds-radius-md",
   "--ds-radius-lg",
@@ -112,6 +202,7 @@ export const TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS = [
   "--ds-color-text-primary",
   "--ds-color-text-secondary",
   "--ds-color-text-muted",
+  "--ds-color-text-disabled",
   "--ds-color-border-primary",
   "--ds-color-border-secondary",
 ] as const satisfies readonly TenantThemeOverrideToken[];
@@ -134,39 +225,37 @@ const TENANT_THEME_COLOR_STEPS = [
  * `var()`. Prefix-only admission is forbidden because `--ds-*` also contains
  * private implementation tokens.
  */
-export const TENANT_THEME_REFERENCE_TOKENS: readonly string[] =
-  Object.freeze(
-    Array.from(
-      new Set([
-        ...TENANT_THEME_OVERRIDE_TOKENS,
-        "--ds-color-white",
-        "--ds-color-bg-primary",
-        "--ds-color-bg-secondary",
-        "--ds-color-bg-tertiary",
-        "--ds-color-bg-elevated",
-        "--ds-color-bg-hover",
-        "--ds-color-text-primary",
-        "--ds-color-text-secondary",
-        "--ds-color-text-muted",
-        "--ds-color-border-primary",
-        "--ds-color-border-secondary",
-        "--ds-radius-button",
-        "--ds-tint-4",
-        "--ds-tint-8",
-        "--ds-tint-12",
-        "--ds-tint-16",
-        "--ds-tint-24",
-        ...TENANT_THEME_COLOR_ROLES.flatMap((role) =>
-          TENANT_THEME_COLOR_STEPS.map(
-            (step) => `--ds-color-${role}-${step}`
-          )
-        ),
-        ...(["success", "warning", "error", "info"] as const).flatMap((role) =>
-          [4, 8, 12, 16, 24].map((step) => `--ds-tint-${role}-${step}`)
-        ),
-      ])
-    )
-  );
+export const TENANT_THEME_REFERENCE_TOKENS: readonly string[] = Object.freeze(
+  Array.from(
+    new Set([
+      ...TENANT_THEME_OVERRIDE_TOKENS,
+      "--ds-color-white",
+      "--ds-color-bg-primary",
+      "--ds-color-bg-secondary",
+      "--ds-color-bg-tertiary",
+      "--ds-color-bg-elevated",
+      "--ds-color-bg-hover",
+      "--ds-color-text-primary",
+      "--ds-color-text-secondary",
+      "--ds-color-text-muted",
+      "--ds-color-text-disabled",
+      "--ds-color-border-primary",
+      "--ds-color-border-secondary",
+      "--ds-radius-button",
+      "--ds-tint-4",
+      "--ds-tint-8",
+      "--ds-tint-12",
+      "--ds-tint-16",
+      "--ds-tint-24",
+      ...TENANT_THEME_COLOR_ROLES.flatMap((role) =>
+        TENANT_THEME_COLOR_STEPS.map((step) => `--ds-color-${role}-${step}`)
+      ),
+      ...(["success", "warning", "error", "info"] as const).flatMap((role) =>
+        [4, 8, 12, 16, 24].map((step) => `--ds-tint-${role}-${step}`)
+      ),
+    ])
+  )
+);
 
 /**
  * Closed anatomy-variant vocabulary per participating chrome family.
@@ -237,6 +326,7 @@ export interface TenantThemeChrome {
   shell?: TenantThemeShellChrome;
   toolbar?: BrandToolbarChrome;
   filterPill?: BrandFilterPillChrome;
+  badge?: BrandBadgeChrome;
   breadcrumb?: BrandBreadcrumbChrome;
   search?: BrandSearchChrome;
   controls?: BrandControlsChrome;
@@ -250,6 +340,8 @@ export interface TenantThemeChrome {
   collectionCard?: TenantThemePremiumCardChrome;
   listingGrid?: TenantThemeListingGridChrome;
   modal?: BrandModalChrome;
+  tooltip?: BrandTooltipChrome;
+  popover?: BrandPopoverChrome;
   tabs?: BrandTabsChrome;
 }
 
@@ -259,6 +351,7 @@ export const TENANT_THEME_CHROME_FAMILIES = [
   "shell",
   "toolbar",
   "filterPill",
+  "badge",
   "breadcrumb",
   "search",
   "controls",
@@ -272,6 +365,8 @@ export const TENANT_THEME_CHROME_FAMILIES = [
   "collectionCard",
   "listingGrid",
   "modal",
+  "tooltip",
+  "popover",
   "tabs",
 ] as const satisfies readonly (keyof TenantThemeChrome)[];
 
@@ -289,8 +384,7 @@ export const TENANT_THEME_FONT_PACK_IDS = [
   "geometric-display",
   "plex-mono",
 ] as const;
-export type TenantThemeFontPackId =
-  (typeof TENANT_THEME_FONT_PACK_IDS)[number];
+export type TenantThemeFontPackId = (typeof TENANT_THEME_FONT_PACK_IDS)[number];
 
 export interface TenantThemeAdvancedAppearance {
   chrome?: TenantThemeChrome;
@@ -309,6 +403,11 @@ export const TENANT_THEME_TYPE_SCALE_BOUNDS = {
 export const TENANT_THEME_RADIUS_SCALE_BOUNDS = {
   min: 0.75,
   max: 1.25,
+} as const;
+/** Global safety bounds for the coordinated gradient/glass/glow layer. */
+export const TENANT_THEME_EFFECT_INTENSITY_BOUNDS = {
+  min: 0,
+  max: 1,
 } as const;
 
 export type TenantThemeChromeFamily = keyof TenantThemeChrome;
@@ -343,6 +442,12 @@ export interface TenantThemeVerticalEnvelope {
 export interface TenantVisualFoundation {
   general?: TenantAppearanceGeneral;
   advanced?: TenantThemeAdvancedAppearance;
+  /**
+   * Governed recipe-profile selection (DS-S001). Customer tenants may only
+   * SELECT a registry id; the compiler validates fail-closed against the
+   * closed first-party registry and drops anything unknown or malformed.
+   */
+  recipeProfile?: string;
 }
 
 export interface TenantThemeConfigIdentity {
@@ -392,6 +497,8 @@ export type TenantThemeConfig =
 export interface NormalizedTenantThemeAppearance {
   general?: TenantAppearanceGeneral;
   advanced?: TenantThemeAdvancedAppearance;
+  /** Validated recipe profile selected by the DB-owned appearance document. */
+  recipeProfile?: string;
 }
 
 export interface TenantThemeScopeDescriptor {

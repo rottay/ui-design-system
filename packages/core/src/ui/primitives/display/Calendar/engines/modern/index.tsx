@@ -1,15 +1,27 @@
 'use client';
 
 /**
- * @fileoverview Modern Calendar engine -- DaisyUI/Tailwind implementation.
+ * @fileoverview Modern Calendar engine -- Tailwind utilities + unlayered skin.
  *
- * Lightweight calendar built with a CSS Grid layout, DaisyUI button classes,
- * and native `Date` objects (no dayjs dependency). Supports month view (7-column
- * day grid) and year view (3-column month grid), controlled and uncontrolled
- * value modes, date disabling via `disabledDate`/`validRange`, and custom
- * cell renderers for both day and month cells.
+ * Lightweight calendar built with a CSS Grid layout, Tailwind layout utilities,
+ * and native `Date` objects (no dayjs dependency, no Daisy classes). Supports
+ * month view (7-column day grid) and year view (3-column month grid), controlled
+ * and uncontrolled value modes, date disabling via `disabledDate`/`validRange`,
+ * and custom cell renderers for both day and month cells.
  *
- * Engine: **DaisyUI / Tailwind CSS**
+ * Paint and header-control geometry live in the modern skin
+ * (`runtime/engines/modern/skin/calendar.css`), keyed by `data-part` +
+ * `data-selected`/`data-today`/`data-disabled`/`data-active`: the skin is the
+ * single paint owner (selected/today/hover surfaces, nav-button geometry, the
+ * today-ring's border width, and the `[dir='rtl']` nav-glyph flip). The
+ * utilities below own layout only; directional utilities are logical
+ * (`start-0`/`end-0`). Cells carry NO `transition-*` utility (K4-B round 2):
+ * Tailwind's `utilities` layer sorts above the skin's `rottay-engines` layer,
+ * so a utility transition cannot be overridden by the skin and defers the
+ * skin-owned hover paint through a fade-from-transparent; state paint is
+ * instant instead (motion re-ownership is a Pass-2 skin decision).
+ *
+ * Engine: **Tailwind CSS + skin (calendar.css)**
  *
  * @example
  * ```tsx
@@ -21,12 +33,21 @@
  * @package @rottay/design-system
  */
 import React, { useState, useMemo, useCallback } from 'react';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { CalendarProps, CalendarMode } from '../../contracts';
 
-// English day/month labels. Localization is handled at a higher layer; the
-// modern engine uses these as display-only labels in the grid header.
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+// English day/month fallback labels. Names resolve through the guarded
+// `components` i18n channel (`calendar.weekdays.*` / `calendar.months.*` /
+// `calendar.yearToggle`): with no I18nProvider — or until the locale JSONs
+// land — a missing key echoes back the full key, the endsWith guard detects
+// it, and these literals render, so behavior is byte-identical. The catalog
+// channel (not Intl/toLocaleDateString) is deliberate: it keeps weekday and
+// month names inside the same tenant-overridable dictionary as every other
+// DS string, consistent with the K4-D/Mentions idiom.
+const FALLBACK_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const FALLBACK_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
+const MONTH_KEYS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const;
 
 // Normalizes the incoming value (Date, ISO string, or undefined) into a Date.
 // Falls back to "now" so the calendar always has a valid reference date.
@@ -36,7 +57,8 @@ const parseDate = (value: Date | string | undefined): Date => {
 };
 
 /**
- * Modern Calendar backed by DaisyUI/Tailwind -- no external date library.
+ * Modern Calendar backed by Tailwind utilities + the family skin -- no
+ * external date library, no Daisy classes.
  *
  * Uses a 7-column CSS Grid for month view and a 3-column grid for year view.
  * Supports controlled (`value`) and uncontrolled (`defaultValue`) modes,
@@ -44,7 +66,7 @@ const parseDate = (value: Date | string | undefined): Date => {
  * `validRange`.
  *
  * @param props - Unified DS CalendarProps (see Calendar.types.ts)
- * @returns A DaisyUI-styled calendar component
+ * @returns A skin-painted calendar component
  */
 export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, ref) => {
   const {
@@ -64,6 +86,31 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     style,
     id,
   } = props;
+
+  // Guarded i18n channel (K4-B): names resolve through the `components`
+  // catalog when an I18nProvider is mounted, else the English fallback tables
+  // above (missing key echoes the full key, endsWith guard detects it).
+  const i18n = useOptionalTranslation('components');
+  const calendarLabel = (key: string, fallback: string): string => {
+    const translated = i18n?.t(key);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
+  const days = WEEKDAY_KEYS.map((key, index) =>
+    calendarLabel(`calendar.weekdays.${key}`, FALLBACK_DAYS[index]),
+  );
+  const months = MONTH_KEYS.map((key, index) =>
+    calendarLabel(`calendar.months.${key}`, FALLBACK_MONTHS[index]),
+  );
+  const yearToggleLabel = calendarLabel('calendar.yearToggle', 'Year');
+  // Accessible names for the glyph-only nav buttons (Pass 2 a11y: '«' is not
+  // an accessible name). Text content stays the glyph; RTL still flips it
+  // visually via the skin.
+  const navLabels = {
+    prevYear: calendarLabel('calendar.navPrevYear', 'Previous year'),
+    prevMonth: calendarLabel('calendar.navPrevMonth', 'Previous month'),
+    nextMonth: calendarLabel('calendar.navNextMonth', 'Next month'),
+    nextYear: calendarLabel('calendar.navNextYear', 'Next year'),
+  };
 
   // Controlled vs uncontrolled: when `value` is provided, the consumer owns
   // the selected date and we read from it on every render. Otherwise internal
@@ -162,8 +209,10 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     d1.getDate() === d2.getDate();
 
   // Fullscreen fills the parent container; compact mode constrains to w-80
-  // (320px) for use in popovers, sidebars, or date picker dropdowns.
-  const containerClass = fullscreen ? 'w-full' : 'w-80';
+  // (320px) for use in popovers, sidebars, or date picker dropdowns. On coarse
+  // pointers the compact root widens to 364px (22.75rem) so the skin's 44px
+  // day-cell touch targets fit (7 tracks + gaps + padding) without clipping.
+  const containerClass = fullscreen ? 'w-full' : 'w-80 pointer-coarse:w-[22.75rem]';
 
   return (
     <div
@@ -177,32 +226,30 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
       {/* Header */}
       <div className="flex items-center justify-between mb-4" data-part="header">
         <div className="flex items-center gap-2">
-          <button data-part="nav-button" data-direction="prev-year" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={handlePrevYear}>«</button>
-          {mode === 'month' && <button data-part="nav-button" data-direction="prev-month" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={handlePrevMonth}>‹</button>}
+          <button data-part="nav-button" data-direction="prev-year" aria-label={navLabels.prevYear} onClick={handlePrevYear}>«</button>
+          {mode === 'month' && <button data-part="nav-button" data-direction="prev-month" aria-label={navLabels.prevMonth} onClick={handlePrevMonth}>‹</button>}
         </div>
         <div className="flex items-center gap-2">
           <button
             data-part="mode-toggle"
             data-mode="month"
             data-active={mode === 'month' ? 'true' : 'false'}
-            style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }}
             onClick={() => handleModeChange('month')}
           >
-            {MONTHS[viewMonth]} {viewYear}
+            {months[viewMonth]} {viewYear}
           </button>
           <button
             data-part="mode-toggle"
             data-mode="year"
             data-active={mode === 'year' ? 'true' : 'false'}
-            style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }}
             onClick={() => handleModeChange('year')}
           >
-            Year
+            {yearToggleLabel}
           </button>
         </div>
         <div className="flex items-center gap-2">
-          {mode === 'month' && <button data-part="nav-button" data-direction="next-month" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={handleNextMonth}>›</button>}
-          <button data-part="nav-button" data-direction="next-year" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={handleNextYear}>»</button>
+          {mode === 'month' && <button data-part="nav-button" data-direction="next-month" aria-label={navLabels.nextMonth} onClick={handleNextMonth}>›</button>}
+          <button data-part="nav-button" data-direction="next-year" aria-label={navLabels.nextYear} onClick={handleNextYear}>»</button>
         </div>
       </div>
 
@@ -210,7 +257,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
         <>
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {DAYS.map((day) => (
+            {days.map((day) => (
               <div key={day} className="text-center text-sm font-medium py-2" data-part="weekday-header">
                 {fullscreen ? day : day.charAt(0)}
               </div>
@@ -241,16 +288,15 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                   data-disabled={isDisabled || undefined}
                   className={`
                     aspect-square flex flex-col items-center justify-center rounded-lg
-                    transition-colors relative
+                    relative
                     ${isDisabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}
-                    ${isToday && !isSelected ? 'border' : ''}
                   `}
                   onClick={() => handleDateClick(day)}
                   disabled={isDisabled}
                 >
                   <span className={fullscreen ? 'text-sm' : 'text-xs'}>{day}</span>
                   {dateCellRender && (
-                    <div className="absolute bottom-0 left-0 right-0 text-xs truncate" data-part="cell-content">
+                    <div className="absolute bottom-0 start-0 end-0 text-xs truncate" data-part="cell-content">
                       {dateCellRender(date)}
                     </div>
                   )}
@@ -262,7 +308,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
       ) : (
         /* Year view - show months */
         <div className="grid grid-cols-3 gap-2" data-part="grid">
-          {MONTHS.map((month, i) => {
+          {months.map((month, i) => {
             const date = new Date(viewYear, i, 1);
             const isCurrentMonth = i === today.getMonth() && viewYear === today.getFullYear();
             const isSelected = i === currentDate.getMonth() && viewYear === currentDate.getFullYear();
@@ -273,10 +319,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                 data-part="cell"
                 data-selected={isSelected ? 'true' : 'false'}
                 data-today={isCurrentMonth ? 'true' : 'false'}
-                className={`
-                  p-4 rounded-lg text-center transition-colors
-                  ${isCurrentMonth && !isSelected ? 'border' : ''}
-                `}
+                className="p-4 rounded-lg text-center"
                 onClick={() => handleMonthClick(i)}
               >
                 <span className={fullscreen ? 'text-sm' : 'text-xs'}>{month}</span>

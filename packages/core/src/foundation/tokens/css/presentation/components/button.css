@@ -21,56 +21,62 @@
   --ds-button-xs-icon-size: 0.75rem;       /* 12px */
   --ds-button-xs-gap: 0.25rem;             /* 4px */
   --ds-button-xs-border-radius: var(--ds-radius-sm);
+  --ds-button-xs-radius: var(--ds-button-xs-border-radius);
 
   /* SM - Small */
   --ds-button-sm-height: 2rem;             /* 32px */
   --ds-button-sm-padding-x: 0.75rem;       /* 12px */
   --ds-button-sm-padding-y: 0.25rem;       /* 4px */
   --ds-button-sm-padding: 0 0.75rem;       /* 0 12px - shorthand */
-  --ds-button-sm-font-size: 0.875rem;      /* 14px */
-  --ds-button-sm-line-height: 1.5rem;      /* 24px */
+  --ds-button-sm-font-size: var(--ds-font-size-xs);
+  --ds-button-sm-line-height: 1.25;
   --ds-button-sm-icon-size: 1rem;          /* 16px */
   --ds-button-sm-gap: 0.375rem;            /* 6px */
   --ds-button-sm-border-radius: var(--ds-radius-md);
+  --ds-button-sm-radius: var(--ds-button-sm-border-radius);
 
   /* MD - Medium (Default) */
   --ds-button-md-height: 2.5rem;           /* 40px */
   --ds-button-md-padding-x: 1rem;          /* 16px */
   --ds-button-md-padding-y: 0.5rem;        /* 8px */
   --ds-button-md-padding: 0 1rem;          /* 0 16px - shorthand */
-  --ds-button-md-font-size: 1rem;          /* 16px */
-  --ds-button-md-line-height: 1.5rem;      /* 24px */
-  --ds-button-md-icon-size: 1.25rem;       /* 20px */
-  --ds-button-md-gap: 0.5rem;              /* 8px */
+  --ds-button-md-font-size: var(--ds-font-size-sm);
+  --ds-button-md-line-height: 1.25;
+  --ds-button-md-icon-size: 1.125rem;       /* 18px */
+  --ds-button-md-gap: 0.4375rem;            /* 7px */
   --ds-button-md-border-radius: var(--ds-radius-md);
+  --ds-button-md-radius: var(--ds-button-md-border-radius);
 
   /* LG - Large */
   --ds-button-lg-height: 3rem;             /* 48px */
   --ds-button-lg-padding-x: 1.5rem;        /* 24px */
   --ds-button-lg-padding-y: 0.75rem;       /* 12px */
   --ds-button-lg-padding: 0 1.5rem;        /* 0 24px - shorthand */
-  --ds-button-lg-font-size: 1.125rem;      /* 18px */
-  --ds-button-lg-line-height: 1.75rem;     /* 28px */
-  --ds-button-lg-icon-size: 1.5rem;        /* 24px */
+  --ds-button-lg-font-size: var(--ds-font-size-base);
+  --ds-button-lg-line-height: 1.25;
+  --ds-button-lg-icon-size: 1.25rem;       /* 20px */
   --ds-button-lg-gap: 0.625rem;            /* 10px */
   --ds-button-lg-border-radius: var(--ds-radius-lg);
+  --ds-button-lg-radius: var(--ds-button-lg-border-radius);
 
   /* XL - Extra Large */
   --ds-button-xl-height: 3.5rem;           /* 56px */
   --ds-button-xl-padding-x: 2rem;          /* 32px */
   --ds-button-xl-padding-y: 1rem;          /* 16px */
   --ds-button-xl-padding: 0 2rem;          /* 0 32px - shorthand */
-  --ds-button-xl-font-size: 1.25rem;       /* 20px */
-  --ds-button-xl-line-height: 1.75rem;     /* 28px */
-  --ds-button-xl-icon-size: 1.75rem;       /* 28px */
+  --ds-button-xl-font-size: var(--ds-font-size-lg);
+  --ds-button-xl-line-height: 1.2;
+  --ds-button-xl-icon-size: 1.5rem;         /* 24px */
   --ds-button-xl-gap: 0.75rem;             /* 12px */
   --ds-button-xl-border-radius: var(--ds-radius-lg);
+  --ds-button-xl-radius: var(--ds-button-xl-border-radius);
 
   /* Default size */
   --ds-button-default-height: var(--ds-button-md-height);
   --ds-button-default-padding-x: var(--ds-button-md-padding-x);
   --ds-button-default-padding-y: var(--ds-button-md-padding-y);
   --ds-button-default-font-size: var(--ds-button-md-font-size);
+  --ds-button-gap: var(--ds-button-md-gap);
 
   /* ========================================================================
      VARIANTS - Button Visual Styles
@@ -82,44 +88,76 @@
   --ds-button-primary-bg-hover: var(--ds-color-primary-600);
   --ds-button-primary-bg-active: var(--ds-color-primary-700);
   --ds-button-primary-color: var(--ds-color-white);
-  --ds-button-primary-border-color: transparent;
+  --ds-button-primary-color-hover: var(--ds-button-primary-color);
+  --ds-button-primary-color-active: var(--ds-button-primary-color);
+  --ds-button-primary-border: var(--ds-color-primary-600);
+  --ds-button-primary-border-hover: var(--ds-color-primary-700);
+  --ds-button-primary-border-active: var(--ds-color-primary-800);
   --ds-button-primary-shadow: var(--ds-shadow-button-rest);
   --ds-button-primary-shadow-hover: var(--ds-shadow-button-hover);
+  --ds-button-primary-shadow-active: var(--ds-shadow-button-rest);
+  --ds-button-primary-border-color: var(--ds-button-primary-border);
 
   /* SECONDARY - Secondary actions */
   --ds-button-secondary-bg: var(--ds-color-secondary-500);
   --ds-button-secondary-bg-hover: var(--ds-color-secondary-600);
   --ds-button-secondary-bg-active: var(--ds-color-secondary-700);
   --ds-button-secondary-color: var(--ds-color-white);
-  --ds-button-secondary-border-color: transparent;
+  --ds-button-secondary-color-hover: var(--ds-button-secondary-color);
+  --ds-button-secondary-color-active: var(--ds-button-secondary-color);
+  --ds-button-secondary-border: var(--ds-color-secondary-600);
+  --ds-button-secondary-border-hover: var(--ds-color-secondary-700);
+  --ds-button-secondary-border-active: var(--ds-color-secondary-800);
   --ds-button-secondary-shadow: var(--ds-shadow-button-rest);
   --ds-button-secondary-shadow-hover: var(--ds-shadow-button-hover);
+  --ds-button-secondary-shadow-active: var(--ds-shadow-button-rest);
+  --ds-button-secondary-border-color: var(--ds-button-secondary-border);
 
   /* DEFAULT - Neutral actions */
   --ds-button-default-bg: var(--ds-color-white);
   --ds-button-default-bg-hover: var(--ds-color-neutral-50);
   --ds-button-default-bg-active: var(--ds-color-neutral-100);
   --ds-button-default-color: var(--ds-color-neutral-900);
-  --ds-button-default-border-color: var(--ds-color-neutral-300);
+  --ds-button-default-color-hover: var(--ds-button-default-color);
+  --ds-button-default-color-active: var(--ds-button-default-color);
+  --ds-button-default-border: var(--ds-color-neutral-300);
+  --ds-button-default-border-hover: var(--ds-color-neutral-400);
+  --ds-button-default-border-active: var(--ds-color-neutral-500);
   --ds-button-default-shadow: var(--ds-shadow-button-rest);
   --ds-button-default-shadow-hover: var(--ds-shadow-button-hover);
+  --ds-button-default-shadow-active: var(--ds-shadow-button-rest);
+  --ds-button-default-border-color: var(--ds-button-default-border);
 
   /* GHOST - Minimal appearance */
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-bg-hover: var(--ds-color-neutral-100);
   --ds-button-ghost-bg-active: var(--ds-color-neutral-200);
   --ds-button-ghost-color: var(--ds-color-neutral-700);
-  --ds-button-ghost-border-color: transparent;
+  --ds-button-ghost-color-hover: var(--ds-color-neutral-900);
+  --ds-button-ghost-color-active: var(--ds-color-neutral-900);
+  --ds-button-ghost-border: transparent;
+  --ds-button-ghost-border-hover: transparent;
+  --ds-button-ghost-border-active: transparent;
   --ds-button-ghost-shadow: none;
+  --ds-button-ghost-shadow-hover: var(--ds-button-ghost-shadow);
+  --ds-button-ghost-shadow-active: var(--ds-button-ghost-shadow);
+  --ds-button-ghost-border-color: var(--ds-button-ghost-border);
 
   /* DASHED - Outlined with dashed border */
   --ds-button-dashed-bg: transparent;
   --ds-button-dashed-bg-hover: var(--ds-color-neutral-50);
   --ds-button-dashed-bg-active: var(--ds-color-neutral-100);
   --ds-button-dashed-color: var(--ds-color-neutral-700);
-  --ds-button-dashed-border-color: var(--ds-color-neutral-300);
+  --ds-button-dashed-color-hover: var(--ds-button-dashed-color);
+  --ds-button-dashed-color-active: var(--ds-button-dashed-color);
+  --ds-button-dashed-border: var(--ds-color-neutral-300);
+  --ds-button-dashed-border-hover: var(--ds-color-neutral-400);
+  --ds-button-dashed-border-active: var(--ds-color-neutral-500);
   --ds-button-dashed-border-style: dashed;
   --ds-button-dashed-shadow: none;
+  --ds-button-dashed-shadow-hover: var(--ds-button-dashed-shadow);
+  --ds-button-dashed-shadow-active: var(--ds-button-dashed-shadow);
+  --ds-button-dashed-border-color: var(--ds-button-dashed-border);
 
   /* TEXT - Text-only button */
   --ds-button-text-bg: transparent;
@@ -127,18 +165,32 @@
   --ds-button-text-bg-active: var(--ds-color-neutral-200);
   --ds-button-text-color: var(--ds-color-primary-600);
   --ds-button-text-color-hover: var(--ds-color-primary-700);
-  --ds-button-text-border-color: transparent;
+  --ds-button-text-color-active: var(--ds-color-primary-800);
+  --ds-button-text-border: transparent;
+  --ds-button-text-border-hover: var(--ds-button-text-border);
+  --ds-button-text-border-active: var(--ds-button-text-border);
   --ds-button-text-shadow: none;
+  --ds-button-text-shadow-hover: var(--ds-button-text-shadow);
+  --ds-button-text-shadow-active: var(--ds-button-text-shadow);
+  --ds-button-text-border-color: var(--ds-button-text-border);
 
   /* LINK - Link-styled button */
   --ds-button-link-bg: transparent;
   --ds-button-link-bg-hover: transparent;
+  --ds-button-link-bg-active: transparent;
   --ds-button-link-color: var(--ds-color-primary-600);
   --ds-button-link-color-hover: var(--ds-color-primary-700);
-  --ds-button-link-border-color: transparent;
+  --ds-button-link-color-active: var(--ds-color-primary-800);
+  --ds-button-link-border: transparent;
+  --ds-button-link-border-hover: var(--ds-button-link-border);
+  --ds-button-link-border-active: var(--ds-button-link-border);
   --ds-button-link-text-decoration: none;
   --ds-button-link-text-decoration-hover: underline;
+  --ds-button-link-underline-offset: 0.18em;
   --ds-button-link-shadow: none;
+  --ds-button-link-shadow-hover: var(--ds-button-link-shadow);
+  --ds-button-link-shadow-active: var(--ds-button-link-shadow);
+  --ds-button-link-border-color: var(--ds-button-link-border);
 
   /* ========================================================================
      SEMANTIC VARIANTS - Status Colors
@@ -150,24 +202,74 @@
   --ds-button-success-bg-hover: var(--ds-color-success-600);
   --ds-button-success-bg-active: var(--ds-color-success-700);
   --ds-button-success-color: var(--ds-color-white);
-  --ds-button-success-border-color: transparent;
+  --ds-button-success-color-hover: var(--ds-button-success-color);
+  --ds-button-success-color-active: var(--ds-button-success-color);
+  --ds-button-success-border: var(--ds-color-success-600);
+  --ds-button-success-border-hover: var(--ds-color-success-700);
+  --ds-button-success-border-active: var(--ds-color-success-800);
   --ds-button-success-shadow: var(--ds-shadow-success-sm);
+  --ds-button-success-shadow-hover: var(--ds-button-success-shadow);
+  --ds-button-success-shadow-active: var(--ds-button-success-shadow);
+  --ds-button-success-border-color: var(--ds-button-success-border);
 
   /* WARNING */
   --ds-button-warning-bg: var(--ds-color-warning-500);
   --ds-button-warning-bg-hover: var(--ds-color-warning-600);
   --ds-button-warning-bg-active: var(--ds-color-warning-700);
   --ds-button-warning-color: var(--ds-color-white);
-  --ds-button-warning-border-color: transparent;
+  --ds-button-warning-color-hover: var(--ds-button-warning-color);
+  --ds-button-warning-color-active: var(--ds-button-warning-color);
+  --ds-button-warning-border: var(--ds-color-warning-600);
+  --ds-button-warning-border-hover: var(--ds-color-warning-700);
+  --ds-button-warning-border-active: var(--ds-color-warning-800);
   --ds-button-warning-shadow: var(--ds-shadow-warning-sm);
+  --ds-button-warning-shadow-hover: var(--ds-button-warning-shadow);
+  --ds-button-warning-shadow-active: var(--ds-button-warning-shadow);
+  --ds-button-warning-border-color: var(--ds-button-warning-border);
 
   /* ERROR/DANGER */
   --ds-button-error-bg: var(--ds-color-error-500);
   --ds-button-error-bg-hover: var(--ds-color-error-600);
   --ds-button-error-bg-active: var(--ds-color-error-700);
   --ds-button-error-color: var(--ds-color-white);
-  --ds-button-error-border-color: transparent;
+  --ds-button-error-color-hover: var(--ds-button-error-color);
+  --ds-button-error-color-active: var(--ds-button-error-color);
+  --ds-button-error-border: var(--ds-color-error-600);
+  --ds-button-error-border-hover: var(--ds-color-error-700);
+  --ds-button-error-border-active: var(--ds-color-error-800);
   --ds-button-error-shadow: var(--ds-shadow-error-sm);
+  --ds-button-error-shadow-hover: var(--ds-shadow-error-sm);
+  --ds-button-error-shadow-active: var(--ds-shadow-error-sm);
+  --ds-button-error-border-color: var(--ds-button-error-border);
+
+  /* INFO */
+  --ds-button-info-bg: var(--ds-color-info-500);
+  --ds-button-info-bg-hover: var(--ds-color-info-600);
+  --ds-button-info-bg-active: var(--ds-color-info-700);
+  --ds-button-info-color: var(--ds-color-white);
+  --ds-button-info-color-hover: var(--ds-button-info-color);
+  --ds-button-info-color-active: var(--ds-button-info-color);
+  --ds-button-info-border: var(--ds-color-info-600);
+  --ds-button-info-border-hover: var(--ds-color-info-700);
+  --ds-button-info-border-active: var(--ds-color-info-800);
+  --ds-button-info-shadow: var(--ds-shadow-button-rest);
+  --ds-button-info-shadow-hover: var(--ds-button-info-shadow);
+  --ds-button-info-shadow-active: var(--ds-button-info-shadow);
+
+  /* AI - Assisted/generative actions; every channel remains brand-authored. */
+  --ds-button-ai-bg: var(--ds-color-primary-600);
+  --ds-button-ai-bg-hover: var(--ds-color-primary-700);
+  --ds-button-ai-bg-active: var(--ds-color-primary-800);
+  --ds-button-ai-color: var(--ds-color-text-on-primary);
+  --ds-button-ai-color-hover: var(--ds-button-ai-color);
+  --ds-button-ai-color-active: var(--ds-button-ai-color);
+  --ds-button-ai-border: var(--ds-color-primary-500);
+  --ds-button-ai-border-hover: var(--ds-color-primary-600);
+  --ds-button-ai-border-active: var(--ds-color-primary-700);
+  --ds-button-ai-shadow: var(--ds-shadow-button-rest);
+  --ds-button-ai-shadow-hover: var(--ds-shadow-button-hover);
+  --ds-button-ai-shadow-active: var(--ds-shadow-button-rest);
+  --ds-button-ai-texture: var(--ds-material-control-texture);
 
   /* ========================================================================
      STATES - Interactive States
@@ -178,7 +280,7 @@
   --ds-button-disabled-bg: var(--ds-color-neutral-100);
   --ds-button-disabled-color: var(--ds-color-neutral-400);
   --ds-button-disabled-border-color: var(--ds-color-neutral-200);
-  --ds-button-disabled-opacity: 0.6;
+  --ds-button-disabled-opacity: 0.58;
   --ds-button-disabled-cursor: not-allowed;
   --ds-button-disabled-shadow: none;
 
@@ -215,7 +317,10 @@
      BUTTON GROUP
      Settings for button groups
      ======================================================================== */
-  --ds-button-group-gap: 0;
+  --ds-button-group-gap: var(--ds-spacing-2);
+  --ds-button-group-mobile-direction: column;
+  --ds-button-group-mobile-gap: var(--ds-spacing-2);
+  --ds-button-group-mobile-width: 100%;
   --ds-button-group-border-radius-first: var(--ds-radius-md) 0 0 var(--ds-radius-md);
   --ds-button-group-border-radius-last: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
   --ds-button-group-border-radius-middle: 0;
@@ -225,8 +330,8 @@
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-button-transition-duration: 0.2s;
-  --ds-button-transition-timing: ease-in-out;
+  --ds-button-transition-duration: var(--ds-motion-feedback);
+  --ds-button-transition-timing: var(--ds-motion-ease-out);
   --ds-button-transition: all var(--ds-button-transition-duration) var(--ds-button-transition-timing);
 
   /* ========================================================================
@@ -234,9 +339,32 @@
      Font settings for button text
      ======================================================================== */
   --ds-button-font-family: var(--ds-font-family-base);
-  --ds-button-font-weight: var(--ds-font-weight-medium);
-  --ds-button-letter-spacing: 0.025em;
+  --ds-button-font-weight: var(--ds-font-weight-semibold);
+  --ds-button-letter-spacing: -0.006em;
   --ds-button-text-transform: none;
+  --ds-button-hover-transform: translateY(-1px);
+  --ds-button-active-transform: scale(var(--ds-state-press-scale));
+  --ds-button-icon-hover-transform: translateY(-0.03125rem);
+  --ds-button-icon-active-transform: scale(var(--ds-state-press-scale));
+  --ds-button-label-offset-y: -0.015em;
+  --ds-button-hover-filter: saturate(1.025);
+  --ds-button-active-filter: saturate(0.985);
+  --ds-button-surface-highlight: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 0.22),
+    transparent 58%
+  );
+  --ds-button-surface-highlight-opacity: 0.52;
+  --ds-button-surface-highlight-hover-opacity: 0.72;
+  --ds-button-surface-highlight-active-opacity: 0.26;
+  --ds-button-gradient: var(--ds-gradient-primary);
+  --ds-button-bordered-border: var(--ds-color-border);
+  --ds-button-elevated-shadow: var(--ds-elevation-1);
+  --ds-button-elevated-shadow-hover: var(--ds-elevation-2);
+  --ds-button-pulse-ring-color: color-mix(in srgb, var(--ds-color-primary-500) 36%, transparent);
+  --ds-button-pulse-shadow-start: 0 0 0 0 var(--ds-button-pulse-ring-color);
+  --ds-button-pulse-shadow-end: 0 0 0 0.5rem transparent;
+  --ds-button-attention-iteration-count: 1;
 
   /* ========================================================================
      TOUCH TARGETS
@@ -261,4 +389,7 @@
   --ds-button-spinner-size-lg: 1.5rem;
   --ds-button-spinner-size-xl: 1.75rem;
   --ds-button-spinner-color: currentColor;
+  --ds-button-spinner-track-opacity: 0.2;
+  --ds-button-spinner-stroke-width: 2.5;
+  --ds-button-spinner-duration: var(--ds-motion-attention);
 }

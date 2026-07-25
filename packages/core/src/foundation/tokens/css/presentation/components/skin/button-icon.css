@@ -1,39 +1,20 @@
 /**
- * Button.Icon skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: components/skin/button-icon.css -- Button.Icon renders one bare
- * `<button>` under every engine (it is NOT the Button engine, and nothing in
- * the engine `button.css` skins targets it).
+ * Button.Icon optical seam.
  *
- * SCOPE ROOT is `.rottay-button-icon.ds-button-icon[data-part='trigger']`,
- * carrying `data-variant`, `data-disabled`, `data-loading`. It reuses the same
- * `--ds-button-*` token surface as the rustic Button skin but has its own
- * ruleset from scratch.
- *
- * The removed `isHovered`/`isActive` React state maps to `:hover`/`:active`
- * gated `:not(:disabled)` -- the `<button>` is natively `disabled` whenever
- * `disabled || loading`, the exact `!disabled && !loading` gate the JS
- * evaluated. The per-variant `bg`/`hoverBg`/`border`/`color` (from
- * `VARIANT_MAP`, all `var(--ds-button-<variant>-*, #hex)` references) are
- * carried byte-exact via the uncounted custom properties `--ds-button-icon-*`.
- *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
- * the border reaches (0,4,0) via the repeated `[data-part='trigger']` beyond
- * the two root classes. Non-border paint wins unlayered at (0,3,0) or higher.
+ * Button.Icon now composes the same Modern Button anatomy and skin as every
+ * labelled action. This file owns only compound-specific geometry: it must
+ * never duplicate palette, focus, disabled or motion paint from button.css.
  */
 
-.rottay-button-icon.ds-button-icon[data-part='trigger'] {
-  border-radius: var(--ds-button-radius, 6px);
-  background: var(--ds-button-icon-bg);
-  color: var(--ds-button-icon-color);
-  outline: none;
-  transform: scale(1);
+.rottay-button.rottay-button--modern.rottay-button-icon.ds-button-icon[data-icon-only='true'] {
+  flex: 0 0 auto;
+  min-inline-size: calc(
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale, 1)
+  );
+  padding: 0;
 }
-.rottay-button-icon.ds-button-icon[data-part='trigger'][data-part='trigger'] {
-  border: var(--ds-button-icon-border);
-}
-.rottay-button-icon.ds-button-icon[data-part='trigger']:hover:not(:disabled) {
-  background: var(--ds-button-icon-hover-bg);
-}
-.rottay-button-icon.ds-button-icon[data-part='trigger']:active:not(:disabled) {
-  transform: scale(0.95);
+
+.rottay-button.rottay-button--modern.rottay-button-icon.ds-button-icon [data-part='content'] {
+  inline-size: 100%;
+  block-size: 100%;
 }

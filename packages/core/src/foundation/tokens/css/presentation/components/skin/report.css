@@ -12,7 +12,7 @@
 }
 
 .ds-surface.ds-report
-  .ds-report__muted-text[data-part="muted-text"][data-part="muted-text"] {
+  .ds-report__muted-text[data-part="root"][data-part="root"] {
   color: var(--ds-color-text-muted);
 }
 

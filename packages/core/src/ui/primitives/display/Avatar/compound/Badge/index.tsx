@@ -8,6 +8,7 @@
 
 import React from 'react';
 import type { ReactNode, CSSProperties } from 'react';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /** Supported presence/status values for the badge indicator. */
 export type BadgeStatus = 'online' | 'offline' | 'busy' | 'away';
@@ -48,6 +49,7 @@ export function AvatarBadge({
   className = '',
   style,
 }: AvatarBadgeProps): React.ReactElement {
+  const i18n = useOptionalTranslation('components');
   // Relative container so the badge dot can be absolutely positioned.
   const containerStyle: CSSProperties = {
     position: 'relative',
@@ -56,27 +58,31 @@ export function AvatarBadge({
   };
 
   // The dot is sized based on the `dot` prop: 10px for a subtle indicator,
-  // 14px for a larger, more prominent one. Its fill and the 2px cut-out frame that
-  // separates it from the avatar are painted by
-  // foundation/tokens/css/presentation/components/skin/avatar-compounds.css, keyed on the data-status stamp.
+  // 14px for a larger, more prominent one (both tenant-tunable channels). Its
+  // fill and the 2px cut-out frame that separates it from the avatar are painted
+  // by foundation/tokens/css/presentation/components/skin/avatar-compounds.css,
+  // keyed on the data-status stamp. Positioning is logical: the dot rides the
+  // inline-end corner in both writing directions.
   const badgeStyle: CSSProperties = {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: dot ? '10px' : '14px',
-    height: dot ? '10px' : '14px',
+    insetBlockEnd: 0,
+    insetInlineEnd: 0,
+    width: dot ? 'var(--ds-avatar-badge-dot-size, 10px)' : 'var(--ds-avatar-badge-size, 14px)',
+    height: dot ? 'var(--ds-avatar-badge-dot-size, 10px)' : 'var(--ds-avatar-badge-size, 14px)',
   };
 
   return (
     <div className={`rottay-avatar-badge ${className}`} data-part="anchor" style={containerStyle}>
       {children}
-      {/* aria-label exposes the status to assistive technologies */}
+      {/* aria-label exposes the status to assistive technologies; the catalogue
+          carries the localized status names, with the legacy English template as
+          the provider-less fallback. */}
       <span
         className="rottay-avatar-badge-dot"
         data-part="dot"
         data-status={status}
         style={badgeStyle}
-        aria-label={`Status: ${status}`}
+        aria-label={i18n ? i18n.t(`avatar.status.${status}`) : `Status: ${status}`}
       />
     </div>
   );

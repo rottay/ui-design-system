@@ -1,0 +1,74 @@
+/**
+ * CodeBlock skin -- engine-agnostic, no `@layer` in-file (the facade
+ * entrypoints import it into `layer(rottay-components)`, the same
+ * registration as the voice-input-button family skin).
+ * Home: foundation/tokens/css/presentation/components/skin/code-block.css --
+ * this component has no engine split (one `index.tsx` renders under every
+ * engine).
+ *
+ * SCOPE ROOT is `.ds-code-block[data-part='root']`.
+ *
+ * OWNERSHIP (single owner PER PART): this skin owns ONLY
+ *   (a) the copy-button part -- wholesale: geometry, static paint (transcribed
+ *       verbatim from the old inline styles) and its interaction states; and
+ *   (b) the scroll region's focus ring (the region became keyboard-focusable
+ *       in the K4-B R4 remediation; the ring is its contract).
+ * Every other part (root surface, header, gutter, code) keeps its inline
+ * paint in `index.tsx`. Inline styles cannot express :hover/:focus-visible,
+ * which is why the interactive part lives here.
+ *
+ * Hover grammar: the certified ghost-button law (same as Transfer's
+ * move/pagination buttons and Calendar's header chrome) --
+ * `--ds-button-ghost-bg-hover` over a `--ds-surface-inset` floor, gated
+ * `:not(:disabled)`, family escape hatches `--ds-code-block-*`.
+ */
+
+.ds-code-block[data-part='root'] [data-part='copy-button'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1);
+  padding: var(--ds-spacing-1) var(--ds-spacing-2);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-color-border);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
+  background: var(--ds-code-block-copy-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+  color: var(--ds-code-block-copy-ink-hover, var(--ds-color-text-primary));
+}
+
+.ds-code-block[data-part='root'] [data-part='copy-button']:active:not(:disabled) {
+  background: var(
+    --ds-code-block-copy-bg-pressed,
+    color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)
+  );
+}
+
+.ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible,
+.ds-code-block[data-part='root'] [data-part='scroll']:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-code-block-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+
+@media (forced-colors: active) {
+  .ds-code-block[data-part='root'] [data-part='copy-button'] {
+    border-color: ButtonBorder;
+  }
+  .ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .ds-code-block[data-part='root'] [data-part='copy-button']:focus-visible,
+  .ds-code-block[data-part='root'] [data-part='scroll']:focus-visible {
+    outline: 2px solid Highlight;
+    box-shadow: none;
+  }
+}

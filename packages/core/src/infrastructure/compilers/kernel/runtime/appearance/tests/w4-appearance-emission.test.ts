@@ -41,6 +41,61 @@ describe("W4 type-scale and radius-scale dial emission", () => {
   });
 });
 
+describe("W4 coordinated surface-detail dial emission", () => {
+  it("emits the general effect intensity into the shared Modern material channel", () => {
+    const vars = appearanceToVariables({
+      general: { surfaces: { effectIntensity: 0.42 } },
+    });
+    expect(vars["--ds-effect-intensity"]).toBe("0.42");
+  });
+
+  it("clamps unsafe runtime values and ignores non-finite input", () => {
+    expect(
+      appearanceToVariables({
+        general: { surfaces: { effectIntensity: 3 } },
+      })["--ds-effect-intensity"]
+    ).toBe("1");
+    expect(
+      appearanceToVariables({
+        general: { surfaces: { effectIntensity: -2 } },
+      })["--ds-effect-intensity"]
+    ).toBe("0");
+    expect(
+      appearanceToVariables({
+        general: { surfaces: { effectIntensity: Number.NaN } },
+      })["--ds-effect-intensity"]
+    ).toBeUndefined();
+  });
+});
+
+describe("W4 overlay chrome parity", () => {
+  it("projects DB-owned tooltip and popover chrome into engine variables", () => {
+    const vars = appearanceToVariables({
+      advanced: {
+        chrome: {
+          tooltip: {
+            borderedBackground: "#142238",
+            borderedRadius: "0.35rem",
+            enterDuration: "180ms",
+          },
+          popover: {
+            borderedBackground: "#FFFCF6",
+            borderedMutedForeground: "#6F665C",
+            comfortablePaddingInline: "1.1rem",
+          },
+        },
+      },
+    });
+
+    expect(vars["--ds-tooltip-bordered-background"]).toBe("#142238");
+    expect(vars["--ds-tooltip-bordered-radius"]).toBe("0.35rem");
+    expect(vars["--ds-tooltip-enter-duration"]).toBe("180ms");
+    expect(vars["--ds-popover-bordered-background"]).toBe("#FFFCF6");
+    expect(vars["--ds-popover-bordered-muted-foreground"]).toBe("#6F665C");
+    expect(vars["--ds-popover-comfortable-padding-inline"]).toBe("1.1rem");
+  });
+});
+
 describe("W4 dual-ramp light-dark emission", () => {
   const dualGeneral = {
     palette: {
@@ -140,6 +195,70 @@ describe("W4 dual-ramp light-dark emission", () => {
   });
 });
 
+describe("W4 first-class canvas, reading ink and separator emission", () => {
+  const light = {
+    background: "#FBF6EC",
+    foreground: {
+      primary: "#2E261C",
+      secondary: "#5C4F3D",
+      muted: "#6B5B48",
+      disabled: "#74644F",
+    },
+    border: { primary: "#C8B9A5", secondary: "#E2D9CC" },
+  };
+  const dark = {
+    background: "#17130F",
+    foreground: {
+      primary: "#FFF8ED",
+      secondary: "#E2D6C4",
+      muted: "#C1B39F",
+      disabled: "#9A8C79",
+    },
+    border: { primary: "#685B4A", secondary: "#40362B" },
+  };
+
+  it("emits the complete light hierarchy from General instead of raw overrides", () => {
+    const vars = appearanceToVariables({
+      general: { palette: { ...light, backgroundMode: "light" } },
+    });
+    expect(vars["--ds-color-bg-primary"]).toBe(light.background);
+    expect(vars["--ds-color-bg"]).toBe(light.background);
+    expect(vars["--ds-color-background"]).toBe(light.background);
+    expect(vars["--ds-color-text-primary"]).toBe(light.foreground.primary);
+    expect(vars["--ds-color-text-secondary"]).toBe(light.foreground.secondary);
+    expect(vars["--ds-color-text-muted"]).toBe(light.foreground.muted);
+    expect(vars["--ds-color-text-disabled"]).toBe(light.foreground.disabled);
+    expect(vars["--ds-color-border-primary"]).toBe(light.border.primary);
+    expect(vars["--ds-color-border-secondary"]).toBe(light.border.secondary);
+  });
+
+  it("selects the authored dark hierarchy in dark mode", () => {
+    const vars = appearanceToVariables({
+      general: { palette: { ...light, backgroundMode: "dark", dark } },
+    });
+    expect(vars["--ds-color-bg-primary"]).toBe(dark.background);
+    expect(vars["--ds-color-text-primary"]).toBe(dark.foreground.primary);
+    expect(vars["--ds-color-text-muted"]).toBe(dark.foreground.muted);
+    expect(vars["--ds-color-border-primary"]).toBe(dark.border.primary);
+  });
+
+  it("emits mode-aware foundations under auto without pinning light ink", () => {
+    const vars = appearanceToVariables({
+      general: { palette: { ...light, backgroundMode: "auto", dark } },
+    });
+    expect(vars["--ds-color-bg-primary"]).toBe(
+      `light-dark(${light.background}, ${dark.background})`
+    );
+    expect(vars["--ds-color-text-primary"]).toBe(
+      `light-dark(${light.foreground.primary}, ${dark.foreground.primary})`
+    );
+    expect(vars["--ds-color-border-secondary"]).toBe(
+      `light-dark(${light.border.secondary}, ${dark.border.secondary})`
+    );
+    expect(vars["--ds-color-scheme"]).toBe("light dark");
+  });
+});
+
 describe("W4 generated chart series (compiler-owned, always on a concrete seed)", () => {
   it("emits ten hex series colors when a hex primary seed exists", () => {
     const vars = appearanceToVariables({
@@ -180,8 +299,12 @@ describe("W4 typePairing preset application", () => {
         },
       },
     });
-    expect(vars["--ds-font-family-heading"]).toBe("'Custom Serif', serif");
-    expect(vars["--ds-font-family-base"]).toBe("'Custom Sans', sans-serif");
+    expect(vars["--ds-font-family-heading"]).toBe(
+      "'Custom Serif', \"Noto Sans Arabic\", serif"
+    );
+    expect(vars["--ds-font-family-base"]).toBe(
+      "'Custom Sans', \"Noto Sans Arabic\", sans-serif"
+    );
   });
 
   it("emits the pairing families and tuned dials when no explicit family is set", () => {

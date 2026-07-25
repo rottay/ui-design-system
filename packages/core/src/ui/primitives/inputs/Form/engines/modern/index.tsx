@@ -2,21 +2,10 @@
 
 /**
  * @fileoverview Form Modern Engine - Rottay Design System
- * @description DS token inline-styled implementation of the Form component.
+ * @description Self-contained, token-driven implementation of the Form component.
  * Part of the Rottay Design System's input primitives collection.
  *
  * @remarks
- * The Modern engine implements forms using DaisyUI's utility-first approach
- * with Tailwind CSS classes and custom validation logic. It provides a
- * lightweight alternative to Classic with smaller bundle size.
- *
- * **DaisyUI Features Utilized:**
- * - Form control wrapper classes
- * - Label text styling via inline styles
- * - Text error/warning/success color utilities
- * - Flex layout utilities for form layouts
- * - Tooltip for field hints
- *
  * **Custom Implementation:**
  * Unlike Classic which wraps Ant Design, Modern provides its own:
  * - Form state management via React context
@@ -64,39 +53,43 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle, useEffect } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { FeedbackHelpIcon } from '@/graphics/icons/presentation/semantic/generated/roles/feedback-help';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { StatusLoadingIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-loading';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 
 /**
- * Renders an inline SVG icon corresponding to the current validation status.
- * Uses DaisyUI semantic color classes (text-success, text-error, etc.) and a
- * shared entrance animation so the icon pops in when validation completes.
+ * Renders a semantic DS icon corresponding to the current validation status.
  */
 const FeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'validating' }> = ({ status }) => {
-  switch (status) {
-    case 'success':
-      return (
-        <span data-part="feedback-icon" data-status="success" className="ml-2 inline-flex items-center" aria-label="Validation passed" style={{ animation: 'ds-form-modern-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-        </span>
-      );
-    case 'error':
-      return (
-        <span data-part="feedback-icon" data-status="error" className="ml-2 inline-flex items-center" aria-label="Validation failed" style={{ animation: 'ds-form-modern-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-        </span>
-      );
-    case 'warning':
-      return (
-        <span data-part="feedback-icon" data-status="warning" className="ml-2 inline-flex items-center" aria-label="Validation warning" style={{ animation: 'ds-form-modern-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.832c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
-        </span>
-      );
-    case 'validating':
-      return (
-        <span data-part="feedback-icon" data-status="validating" className="ml-2 inline-flex items-center animate-spin" aria-label="Validating">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-        </span>
-      );
-  }
+  const { t } = useTranslation('validation');
+  const Icon = status === 'success'
+    ? StatusSuccessIcon
+    : status === 'error'
+      ? StatusErrorIcon
+      : status === 'warning'
+        ? StatusWarningIcon
+        : StatusLoadingIcon;
+  const labelKey = status === 'success'
+    ? 'passed'
+    : status === 'error'
+      ? 'failed'
+      : status === 'warning'
+        ? 'warning_state'
+        : 'validating';
+
+  return (
+    <span
+      data-part="feedback-icon"
+      data-status={status}
+      role="status"
+      aria-label={t(labelKey)}
+    >
+      <Icon decorative size={15} />
+    </span>
+  );
 };
 
 // ---------------------------------------------------------------------------
@@ -239,7 +232,7 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
 }
 
 /**
- * Modern Form base component (DaisyUI/Tailwind CSS).
+ * Modern Form base component (token-driven, painted by the form.css skin).
  *
  * Manages form state via React context, validates fields on change and submit,
  * and supports scrollToFirstError for long forms. The component wraps the
@@ -250,6 +243,7 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
  * @returns A `<form>` element wrapped in a FormContext provider
  */
 const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
+  const { t: tValidation } = useTranslation('validation');
   const {
     form,
     initialValues = {},
@@ -400,16 +394,16 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     for (const rule of rules) {
       // Check required first - empty values fail immediately
       if (rule.required && (value === undefined || value === null || value === '')) {
-        fieldErrors.push(rule.message || `${fieldName} is required`);
+        fieldErrors.push(rule.message || tValidation('required'));
       }
       if (rule.min !== undefined && typeof value === 'string' && value.length < rule.min) {
-        fieldErrors.push(rule.message || `${fieldName} must be at least ${rule.min} characters`);
+        fieldErrors.push(rule.message || tValidation('min_length', { min: rule.min }));
       }
       if (rule.max !== undefined && typeof value === 'string' && value.length > rule.max) {
-        fieldErrors.push(rule.message || `${fieldName} must be at most ${rule.max} characters`);
+        fieldErrors.push(rule.message || tValidation('max_length', { max: rule.max }));
       }
       if (rule.pattern && typeof value === 'string' && !rule.pattern.test(value)) {
-        fieldErrors.push(rule.message || `${fieldName} format is invalid`);
+        fieldErrors.push(rule.message || tValidation('pattern'));
       }
       // Custom validator: rejection or thrown error means validation failed
       if (rule.validator) {
@@ -424,7 +418,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     setValidating((prev) => copyWithOwnRecordValue(prev, fieldName, false));
     setError(fieldName, fieldErrors);
     return fieldErrors;
-  }, [values, setError]);
+  }, [setError, tValidation]);
 
   // Submit handler: validates ALL registered fields in parallel, then either
   // calls onFinish (success) or onFinishFailed (errors) with scroll-to-error UX.
@@ -491,20 +485,17 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 
   useImperativeHandle(ref, () => resolvedForm as FormInstance, [resolvedForm]);
 
-  const layoutClasses = {
-    horizontal: 'flex flex-row flex-wrap items-start gap-4',
-    vertical: 'flex flex-col gap-4',
-    inline: 'flex flex-row flex-wrap items-end gap-4',
-  };
-
   return (
     <FormContext.Provider value={contextValue}>
       <form
         ref={formElementRef}
         name={name}
         role="form"
-        className={`ds-form ds-form--modern ${layoutClasses[layout]} ${className}`}
+        className={`ds-form ds-form--modern ${className}`.trim()}
         data-part="root"
+        data-layout={layout}
+        data-size={toCanonicalSize(size)}
+        data-disabled={disabled || undefined}
         style={style}
         onSubmit={handleSubmit}
         autoComplete={autoComplete}
@@ -526,6 +517,7 @@ FormBase.displayName = 'Form.Modern';
  * @returns A labelled form control wrapper with error/help/extra messaging
  */
 const FormItem: React.FC<FormItemProps> = (props) => {
+  const { t } = useTranslation('common');
   const {
     name,
     label,
@@ -561,7 +553,6 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     registerField,
     layout,
     colon,
-    size,
     disabled,
     requiredMark,
     hasFeedback: formHasFeedback,
@@ -602,6 +593,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   const showColon = itemColon ?? colon;
   const generatedControlId = fieldName ? `form-${fieldName}` : undefined;
   const showFeedback = itemHasFeedback ?? formHasFeedback;
+  const messageId = fieldName ? `${generatedControlId}-message` : undefined;
 
   const computedFeedbackStatus = (): 'success' | 'error' | 'warning' | 'validating' | null => {
     if (validateStatus === 'validating' || isFieldValidating) return 'validating';
@@ -626,17 +618,11 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
   if (hidden) return null;
 
-  const sizeFontMap: Record<'sm' | 'md' | 'lg', number> = {
-    sm: 14,
-    md: 16,
-    lg: 18,
-  };
-
   // Clone children to inject controlled value, onChange, disabled, and id props.
   // This is how the Form.Item takes ownership of its child input element without
   // the consumer needing to wire up onChange/value manually.
   const childrenWithProps = React.Children.map(children, (child) => {
-    if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean; checked?: boolean; id?: string }>(child)) {
+    if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean; checked?: boolean; id?: string; 'aria-describedby'?: string; 'aria-invalid'?: boolean; 'aria-required'?: boolean }>(child)) {
       const usesCheckedValue = valuePropName === 'checked' || (child.props as { type?: string }).type === 'checkbox';
       const childId = (child.props as { id?: string }).id ?? generatedControlId;
 
@@ -647,6 +633,9 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           : (fieldValue ?? ''),
         onChange: handleChange,
         disabled: disabled || (child as React.ReactElement<any>).props.disabled,
+        'aria-describedby': (help || fieldErrors.length > 0 || extra) ? messageId : undefined,
+        'aria-invalid': hasError || undefined,
+        'aria-required': isRequired || undefined,
       });
     }
     return child;
@@ -654,75 +643,62 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
   const feedbackStatus = computedFeedbackStatus();
 
+  // Layout (horizontal label split, label/field geometry, message rhythm) is
+  // owned by the form.css skin, keyed on `data-layout` here and `data-size`
+  // on the form root -- moving it out of inline styles also revives the
+  // skin's `@container` collapse for horizontal items on narrow containers,
+  // which an inline `flexDirection` previously overrode.
   return (
     <div
       className={`ds-form-item ds-form-item--modern ${className || ''}`}
       data-part="item"
-      style={{
-        display: 'flex',
-        flexDirection: layout === 'horizontal' ? 'row' : 'column',
-        alignItems: layout === 'horizontal' ? 'center' : undefined,
-        width: '100%',
-        ...style,
-      }}
+      data-layout={layout}
+      data-validation={feedbackStatus ?? 'neutral'}
+      data-required={isRequired || undefined}
+      style={style}
     >
       {label && (
         <label
           htmlFor={generatedControlId}
           data-part="label"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingBottom: 4,
-            ...(layout === 'horizontal' ? { width: '25%' } : {}),
-          }}
         >
-          <span data-part="label-text" style={{ fontWeight: 500, letterSpacing: '-0.01em', fontSize: sizeFontMap[size || 'md'] || 16 }}>
+          <span data-part="label-text">
             {label}
             {isRequired && requiredMark && (
-              <span data-part="required-mark" style={{ marginLeft: 4 }}>*</span>
+              <span data-part="required-mark" data-kind="required">*</span>
             )}
             {showColon && ':'}
           </span>
+          {!isRequired && requiredMark === 'optional' && (
+            <span data-part="required-mark" data-kind="optional">{t('optional')}</span>
+          )}
           {tooltip && (
             <span
               data-part="tooltip-icon"
               title={typeof tooltip === 'string' ? tooltip : undefined}
-              style={{
-                marginLeft: 4,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 16,
-                height: 16,
-                fontSize: 11,
-                fontWeight: 600,
-                cursor: 'help',
-              }}
             >
-              ?
+              <FeedbackHelpIcon decorative size={13} />
             </span>
           )}
         </label>
       )}
-      <div style={{ flex: layout === 'horizontal' ? 1 : undefined, width: layout === 'horizontal' ? undefined : '100%' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ flex: 1 }}>{childrenWithProps}</div>
+      <div data-part="field">
+        <div data-part="control-row">
+          <div data-part="control">{childrenWithProps}</div>
           {showFeedback && feedbackStatus && (
             <FeedbackIcon status={feedbackStatus} />
           )}
         </div>
         {(help || fieldErrors.length > 0) && (
-          <div style={{ paddingTop: 4, animation: hasError ? 'ds-form-modern-error-slide var(--ds-motion-normal) ease-out' : undefined }}>
-            <span data-part="help-text" data-error={hasError ? 'true' : 'false'} style={{ fontSize: 12 }}>
+          <div data-part="message" id={messageId}>
+            <span data-part="help-text" data-error={hasError ? 'true' : 'false'}>
               {help || fieldErrors[0]}
             </span>
           </div>
         )}
         {extra && (
-          <div style={{ paddingTop: 4 }}>
-            <span data-part="extra-text" style={{ fontSize: 12 }}>{extra}</span>
+          <div data-part="message" id={!help && fieldErrors.length === 0 ? messageId : undefined}>
+            <span data-part="extra-text">{extra}</span>
           </div>
         )}
       </div>
@@ -807,9 +783,12 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   if (errors.length === 0) return null;
 
   return (
-    <ul data-part="error-list" className={`ds-form-error-list ds-form-error-list--modern text-sm list-disc pl-4 ${className}`} style={{ ...style }}>
+    <ul data-part="error-list" className={`ds-form-error-list ds-form-error-list--modern ${className}`} style={{ ...style }}>
       {errors.map((error, index) => (
-        <li key={index}>{error}</li>
+        <li key={index} data-part="error-item">
+          <StatusErrorIcon decorative size={14} />
+          <span>{error}</span>
+        </li>
       ))}
     </ul>
   );
@@ -824,7 +803,7 @@ FormErrorList.displayName = 'Form.ErrorList.Modern';
  * `<Form.Item>` and `<Form.List>` without extra imports.
  *
  * @param props - {@link FormProps}
- * @returns A DaisyUI/Tailwind-styled form with context-based state management
+ * @returns A token-driven form with context-based state management
  */
 export const Form = Object.assign(FormBase, {
   Item: FormItem,

@@ -36,6 +36,35 @@ const RECIPE_DEFINITIONS = Object.freeze({
     xPx: 0, yPx: 2, scaleFrom: 0.985,
     staggerStepMs: 0, staggerMaxMs: 0, live: false,
   },
+  // Hover is the quietest state explanation: opacity/transform only, faster
+  // than press so the pointer never feels ahead of the surface.
+  'feedback.hover': {
+    enterMs: 96, exitMs: 120, settleMs: 96, cycleMs: 0,
+    xPx: 0, yPx: -1, scaleFrom: 1,
+    staggerStepMs: 0, staggerMaxMs: 0, live: false,
+  },
+  // Focus must appear immediately for keyboard users; the settle exists only
+  // so the ring's opacity ramp reads as placed rather than popped.
+  'feedback.focus': {
+    enterMs: 80, exitMs: 80, settleMs: 80, cycleMs: 0,
+    xPx: 0, yPx: 0, scaleFrom: 1,
+    staggerStepMs: 0, staggerMaxMs: 0, live: false,
+  },
+  // Error feedback is a bounded lateral shake substitute: one compositor-safe
+  // offset-and-return, never a loop, slightly longer settle so the state
+  // change registers before the user retries.
+  'feedback.error': {
+    enterMs: 140, exitMs: 112, settleMs: 220, cycleMs: 0,
+    xPx: 3, yPx: 0, scaleFrom: 1,
+    staggerStepMs: 0, staggerMaxMs: 0, live: false,
+  },
+  // Progressive disclosure: content reveals downward with a small travel so
+  // the spatial origin of the new region is legible.
+  'disclosure.reveal': {
+    enterMs: 200, exitMs: 160, settleMs: 200, cycleMs: 0,
+    xPx: 0, yPx: 6, scaleFrom: 0.99,
+    staggerStepMs: 24, staggerMaxMs: 96, live: false,
+  },
   'state.change': {
     enterMs: 180, exitMs: 144, settleMs: 200, cycleMs: 0,
     xPx: 0, yPx: 2, scaleFrom: 1,

@@ -1,12 +1,27 @@
 /**
- * Modern HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C).
+ * Modern HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C;
+ * K4-A geometry drain 2026-07-24).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
  *
  * This engine applies NO DaisyUI class (its file header used to claim it rides
- * DaisyUI's `card` — it does not, and the comment is corrected). Nothing in
- * theme.css or personality.css matches any element here.
+ * DaisyUI's `card` — it does not, and the comment is corrected) and NO
+ * utility-framework class. Nothing in theme.css or personality.css matches any
+ * element here.
+ *
+ * GEOMETRY (K4-A): the trigger's positioning context (`position: relative;
+ * display: inline-block`, formerly Tailwind's `relative inline-block`
+ * utilities) and the card chrome (`inline-size`/`padding`, formerly inline
+ * `width: 288; padding: 16`) live here on family-local `--ds-hover-card-*`
+ * channels with the shipped values as fallbacks.
+ *
+ * COHERENCE (Pass 2, K4-A): the surface shares the lane's overlay material
+ * register with Dropdown and ContextMenu (same widget class): the subtle
+ * primary-tinted gradient, tinted border, inset highlight, elevation-3 and
+ * backdrop blur, unified at radius-xl. Previously a flat
+ * `--ds-surface-card`/`border-subtle` card, which read as a different system
+ * beside the Dropdown surface in the same captures.
  *
  * PORTAL: this engine does NOT portal (rustic DOES) — the surface renders in-tree
  * as a child of the trigger wrapper in BOTH positioning branches: top-layer
@@ -16,19 +31,44 @@
  *
  * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
  * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
- * genuine runtime data, not paint.
+ * genuine runtime data, not paint. `align: start/end` is logical along the
+ * inline axis: the engine resolves the mirrored physical placement under RTL.
  *
  * SPECIFICITY (P-48): the card's colored border repeats its `data-part` to clear the
  * tenant `*` border-color floor at (0,3,1).
  */
 
+.rottay-hover-card--modern[data-part='trigger'] {
+  position: relative;
+  display: inline-block;
+}
+
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
-  background: var(--ds-surface-card);
-  border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
+  inline-size: var(--ds-hover-card-width, 18rem);
+  padding: var(--ds-hover-card-padding, var(--ds-spacing-4, 1rem));
+  /* Pass-2 coherence: the lane's overlay surfaces share Dropdown's material
+     register (same widget class) -- subtle primary-tinted gradient, tinted
+     border, inset highlight, elevation-3, backdrop blur, radius-xl. */
+  border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl, 16px));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
+      transparent 44%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-surface-card) 98%, white 2%),
+      color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    var(--ds-hover-card-shadow, var(--ds-elevation-3));
+  backdrop-filter: blur(var(--ds-hover-card-backdrop-blur, 16px)) saturate(1.08);
 }
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-hover-card-border-width, 1px) solid
+    var(--ds-hover-card-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
 }
 
 /* ---- top-layer branch: the surface carries the `popover` attribute there, and

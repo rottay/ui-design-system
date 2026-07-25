@@ -27,6 +27,7 @@ export * from './foundation/contracts';
 // -- Runtime builders, helpers, hooks, states, and profile defaults --
 export * from './runtime/builders';
 export * from './runtime/helpers';
+export * from './runtime/helpers/rendering';
 export * from './runtime/helpers/states';
 export { SurfaceErrorBoundary } from './runtime/error-boundary';
 export type { SurfaceErrorBoundaryProps } from './runtime/error-boundary';

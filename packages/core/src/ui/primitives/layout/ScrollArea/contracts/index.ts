@@ -38,6 +38,21 @@ export interface ScrollAreaProps extends EngineAwareProps {
   style?: CSSProperties;
   /** Data test id */
   'data-testid'?: string;
+  /**
+   * Accessible name for the scroll region. When supplied (or
+   * `aria-labelledby`), the engine promotes the root to a named
+   * `role="region"` landmark. Omit it for ordinary scroll containers: an
+   * unnamed scroll area is NOT a landmark, so multiple instances on one
+   * page cannot collide (axe landmark-unique; K3-C remediation). The name
+   * MUST be meaningful and unique within the page when supplied.
+   */
+  'aria-label'?: string;
+  /**
+   * ID of the element that names the scroll region. Same landmark
+   * promotion rule as `aria-label`; takes precedence in the accessible
+   * name computation when both are supplied.
+   */
+  'aria-labelledby'?: string;
 }
 
 export const SCROLLBAR_SIZES: Record<ScrollAreaScrollbarSize, number> = {

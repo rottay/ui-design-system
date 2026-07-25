@@ -69,6 +69,26 @@ describe('collection.insert stagger preset', () => {
   });
 });
 
+describe('legacy duration aliases drain onto the canonical cadence', () => {
+  const css = read('foundation/animations/transitions.css');
+
+  it('keeps the unscoped and legacy fast step at the same 120ms authority', () => {
+    expect(css).toContain('--ds-motion-instant: 120ms');
+    expect(css).toContain(
+      '--duration-fastest: var(--ds-motion-instant, 120ms)',
+    );
+    expect(css).toContain('--duration-faster: var(--ds-motion-fast, 120ms)');
+  });
+
+  it('forces both canonical and compatibility duration families to zero when reduced', () => {
+    const reduced = css.slice(
+      css.indexOf('@media (prefers-reduced-motion: reduce)'),
+    );
+    expect(reduced).toContain('--ds-motion-instant: 0s !important');
+    expect(reduced).toContain('--ds-duration-fast: 0s');
+  });
+});
+
 describe('modern skin micro-interactions honor reduced motion', () => {
   const checkbox = read('runtime/engines/modern/skin/checkbox.css');
   const select = read('runtime/engines/modern/skin/select.css');
@@ -92,10 +112,10 @@ describe('modern skin micro-interactions honor reduced motion', () => {
 
   it('select open-tick transitions ride the motion canon and never animate `all`', () => {
     // arrow rotation + trigger state shifts use --ds-motion-fast, no raw times
-    expect(select).toMatch(/transition:\s*transform var\(--ds-motion-fast\)/);
-    expect(select).toMatch(/transition:[\s\S]*?var\(--ds-motion-fast\)/);
+    expect(select).toMatch(/transition:[\s\S]*?transform var\(--ds-motion-fast/);
+    expect(select).toMatch(/transition:[\s\S]*?var\(--ds-motion-fast(?:,[^)]+)?\)/);
     expect(select).not.toMatch(/transition:[^;]*\ball\b/);
     // no raw ms/s literal inside any transition value
-    expect(select).not.toMatch(/transition:[^;]*\d+m?s\b/);
+    expect(select.replace(/var\(--ds-motion-[^)]+\)/g, '')).not.toMatch(/transition:[^;]*\d+m?s\b/);
   });
 });

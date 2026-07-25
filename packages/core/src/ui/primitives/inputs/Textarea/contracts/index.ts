@@ -144,6 +144,8 @@ export interface TextareaProps extends EngineAwareProps {
   autoComplete?: string;
   /** Whether to auto-focus the textarea on mount */
   autoFocus?: boolean;
+  /** Test identifier for automated testing frameworks (stamped on the field wrapper) */
+  'data-testid'?: string;
 }
 
 /**

@@ -23,7 +23,7 @@
  *
  * This component supports the Rottay multi-engine architecture:
  * - **Classic**: Wraps Ant Design Layout components with full feature parity
- * - **Modern**: Tailwind CSS implementation with DaisyUI theming
+ * - **Modern**: Token-driven implementation (skin-owned structure and paint)
  * - **Rustic**: Pure CSS flexbox layout with inline styles
  *
  * @example Basic Page Layout

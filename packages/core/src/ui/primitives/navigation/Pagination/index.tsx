@@ -32,7 +32,7 @@ export { type PaginationProps, type PaginationSize, PAGINATION_DEFAULTS } from '
 export const Pagination = createEngineComponent<PaginationProps>('Pagination', {
   /** Ant Design implementation - full-featured with animations */
   classic: () => import('./engines/classic'),
-  /** DaisyUI/Tailwind implementation - utility-first styling */
+  /** Rottay-native premium implementation - token-driven, skin-painted */
   modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies */
   rustic: () => import('./engines/rustic'),

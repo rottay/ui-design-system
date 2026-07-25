@@ -29,7 +29,7 @@ export { type BackTopProps, BACKTOP_DEFAULTS } from './contracts';
 export const BackTop = createEngineComponent<BackTopProps>('BackTop', {
   /** Ant Design implementation - uses FloatButton.BackTop with full animations */
   classic: () => import('./engines/classic'),
-  /** DaisyUI/Tailwind implementation - utility-first styling with btn classes */
+  /** Token-driven implementation - skin-owned chrome and interaction states */
   modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies, maximum control */
   rustic: () => import('./engines/rustic'),

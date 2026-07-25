@@ -1,8 +1,14 @@
 /**
  * @fileoverview ScrollArea Modern Engine - Rottay Design System
- * Tailwind/DaisyUI scrollable container with custom scrollbar styling.
- * Uses Tailwind overflow utilities for axis control and DaisyUI's oklch
- * color tokens for scrollbar theming that adapts to theme changes.
+ * Token-driven scrollable container with a skin-owned custom scrollbar.
+ *
+ * @remarks
+ * Paint AND the overflow contract live in the modern engine skin
+ * (`runtime/engines/modern/skin/scroll-area.css`), keyed on this engine's
+ * class pair + `data-part='root'` + `data-orientation`. The engine itself
+ * only stamps anatomy and keeps the measured `maxHeight`/`maxWidth` inline
+ * (runtime values, not paint). No Tailwind utilities and no DaisyUI tokens
+ * remain in this engine.
  *
  * @example
  * ```tsx
@@ -23,13 +29,26 @@ import type { ScrollAreaProps } from '../../contracts';
 import { SCROLL_AREA_DEFAULTS } from '../../contracts';
 
 /**
- * Modern ScrollArea component using Tailwind overflow classes and DaisyUI tokens.
+ * Modern ScrollArea component.
  *
- * Overflow control is expressed via Tailwind classes (overflow-x-auto, etc.)
- * while scrollbar appearance uses the shared ScrollArea skin with DaisyUI oklch color
- * variables (--b2, --bc) for automatic dark/light theme adaptation.
+ * Scrollbar appearance (size, track, thumb, hover-reveal, Firefox
+ * `scrollbar-width`/`scrollbar-color`) and the overflow axes are owned by the
+ * modern skin, keyed on `data-scrollbar-size`, `data-hide-scrollbar` and
+ * `data-orientation`. `rottay-scroll-area-modern` is retained one release for
+ * the legacy shared skin (`presentation/components/skin/scroll-area.css`);
+ * the canonical `rottay-scroll-area rottay-scroll-area--modern` pair is what
+ * the engine skin anchors on.
  *
- * @param props - ScrollArea props (maxHeight, maxWidth, orientation, scrollbarSize, hideScrollbar, etc.)
+ * Landmark law (axe landmark-unique; K3-C remediation): a scroll container
+ * is NOT a landmark by default. The root is promoted to a named
+ * `role="region"` ONLY when the consumer supplies a meaningful, unique
+ * accessible name via `aria-label` or `aria-labelledby`; the old blanket
+ * "Scrollable content" default made every instance an indistinguishable
+ * landmark. Keyboard focus (`tabIndex=0`) is unconditional: axe
+ * scrollable-region-focusable requires keyboard reachability, not a
+ * region role.
+ *
+ * @param props - ScrollArea props (maxHeight, maxWidth, orientation, scrollbarSize, hideScrollbar, aria-label, etc.)
  * @returns A scrollable div stamped with the closed scrollbar-state contract.
  */
 export default function ModernScrollArea(props: ScrollAreaProps): React.ReactElement {
@@ -43,35 +62,40 @@ export default function ModernScrollArea(props: ScrollAreaProps): React.ReactEle
     className = '',
     style,
     'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
   } = props;
 
-  // Use Tailwind overflow utilities instead of inline styles for better
-  // integration with utility-first class composition
-  const overflowClasses = (() => {
-    switch (orientation) {
-      case 'horizontal':
-        return 'overflow-x-auto overflow-y-hidden';
-      case 'both':
-        return 'overflow-auto';
-      default:
-        return 'overflow-x-hidden overflow-y-auto';
-    }
-  })();
-
-  // maxHeight/maxWidth remain element-style values; overflow is class-based
+  // maxHeight/maxWidth are runtime-measured values and stay inline; every
+  // other channel (overflow axes, scrollbar paint) is skin-owned.
   const containerStyle: React.CSSProperties = {
     maxHeight,
     maxWidth,
     ...style,
   };
 
+  // A blank/whitespace-only name is not meaningful: the root stays a plain
+  // (non-landmark) scrollable div and the naming attribute is dropped.
+  const hasRegionName = Boolean(ariaLabel?.trim()) || Boolean(ariaLabelledBy?.trim());
+  const landmarkProps = hasRegionName
+    ? {
+        role: 'region' as const,
+        ...(ariaLabel !== undefined ? { 'aria-label': ariaLabel } : {}),
+        ...(ariaLabelledBy !== undefined ? { 'aria-labelledby': ariaLabelledBy } : {}),
+      }
+    : {};
+
   return (
     <div
-      className={`${overflowClasses} rottay-scroll-area-modern ${className}`}
+      className={`rottay-scroll-area rottay-scroll-area--modern rottay-scroll-area-modern ${className}`.trim()}
       style={containerStyle}
+      data-part="root"
+      data-orientation={orientation}
       data-scrollbar-size={scrollbarSize}
       data-hide-scrollbar={hideScrollbar ? 'true' : 'false'}
       data-testid={dataTestId}
+      tabIndex={0}
+      {...landmarkProps}
     >
       {children}
     </div>

@@ -103,8 +103,8 @@ Component skins, interaction states and keyframes live in the stylesheet.
 | --------------------------------------- | ------------------------------------------------ |
 | `@rottay/design-system`                 | Components, providers, hooks                     |
 | `@rottay/design-system/server`          | Server-side utilities                            |
-| `@rottay/design-system/icons`           | Stable 50-role semantic facade + compatibility  |
-| `@rottay/design-system/icons/{foundation,bithire,identity,intelligence,operations}` | Generated packs (263 roles total) |
+| `@rottay/design-system/icons`           | Governed 282-name semantic facade + compatibility |
+| `@rottay/design-system/icons/{foundation,bithire,identity,intelligence,operations}` | Generated packs (282 names total) |
 | `@rottay/design-system/marks`           | Governed brand and cloud-provider marks          |
 | `@rottay/design-system/charts`          | Focused chart components                         |
 | `@rottay/design-system/charts/spec`     | Server-safe visualization contracts              |

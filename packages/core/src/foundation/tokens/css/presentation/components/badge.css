@@ -15,26 +15,31 @@
   --ds-badge-xs-min-width: 0.875rem;       /* 14px */
   --ds-badge-xs-height: 0.875rem;          /* 14px */
   --ds-badge-xs-font-size: 0.5625rem;      /* 9px */
+  --ds-badge-xs-padding-x: 0.375rem;
 
   /* SM - Small */
   --ds-badge-sm-min-width: 1rem;           /* 16px */
   --ds-badge-sm-height: 1rem;              /* 16px */
   --ds-badge-sm-font-size: 0.625rem;       /* 10px */
+  --ds-badge-sm-padding-x: 0.5rem;
 
   /* MD - Medium (Default) */
   --ds-badge-md-min-width: 1.25rem;        /* 20px */
   --ds-badge-md-height: 1.25rem;           /* 20px */
   --ds-badge-md-font-size: 0.75rem;        /* 12px */
+  --ds-badge-md-padding-x: 0.625rem;
 
   /* LG - Large */
   --ds-badge-lg-min-width: 1.5rem;         /* 24px */
   --ds-badge-lg-height: 1.5rem;            /* 24px */
   --ds-badge-lg-font-size: 0.875rem;       /* 14px */
+  --ds-badge-lg-padding-x: 0.75rem;
 
   /* XL - Extra Large */
   --ds-badge-xl-min-width: 1.75rem;        /* 28px */
   --ds-badge-xl-height: 1.75rem;           /* 28px */
   --ds-badge-xl-font-size: 1rem;           /* 16px */
+  --ds-badge-xl-padding-x: 0.875rem;
 
   /* Default size (can be overridden) */
   --ds-badge-default-min-width: var(--ds-badge-md-min-width);
@@ -145,7 +150,7 @@
 
   --ds-badge-transition-duration: 0.2s;
   --ds-badge-transition-timing: ease-in-out;
-  --ds-badge-transition: all var(--ds-badge-transition-duration) var(--ds-badge-transition-timing);
+  --ds-badge-transition: var(--ds-badge-transition-duration) var(--ds-badge-transition-timing);
 
   /* ========================================================================
      PULSE ANIMATION
@@ -164,6 +169,31 @@
 
   --ds-badge-font-weight: 500;
   --ds-badge-line-height: 1;
+
+  /* ========================================================================
+     COMPACT LABEL FAMILY — Badge / Chip / Pill
+     Tenant compilers may override these channels without changing anatomy.
+     ======================================================================== */
+
+  --ds-badge-font-family: var(--ds-font-family-base);
+  --ds-badge-letter-spacing: var(--ds-letter-spacing-body, -0.01em);
+  --ds-badge-gap: 0.25rem;
+  --ds-badge-max-inline-size: 18rem;
+  --ds-badge-chip-max-inline-size: 22rem;
+  --ds-badge-pill-max-inline-size: 22rem;
+  --ds-badge-frame-width: 1px;
+  --ds-badge-icon-size: 1em;
+  --ds-badge-avatar-bleed: 0.125rem;
+  --ds-badge-count-min-size: 1rem;
+  --ds-badge-count-size: 1rem;
+  --ds-badge-count-padding-inline: 0.25rem;
+  --ds-badge-remove-size: 1.125rem;
+  --ds-badge-remove-bleed: 0.1875rem;
+  --ds-badge-disabled-opacity: 0.48;
+  --ds-badge-loading-opacity: 0.76;
+  --ds-badge-motion-duration: var(--ds-motion-fast);
+  --ds-badge-motion-easing: var(--ds-motion-ease-out, ease-out);
+  --ds-badge-touch-target: 2.75rem;
 
   /* ========================================================================
      Z-INDEX

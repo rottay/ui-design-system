@@ -3,7 +3,7 @@
 /**
  * @fileoverview Alert - contextual feedback messages (info, success, warning, error).
  * Supports a compound `Alert.Description` sub-component for expanded detail text.
- * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
+ * Multi-engine: Classic (Ant Design), Modern (token skin), Rustic (Vanilla).
  *
  * @example
  * ```tsx
@@ -33,7 +33,7 @@ export const Alert = Object.assign(
   // Create the engine-switchable base component
   createEngineComponent<AlertProps>('Alert', {
     classic: () => import('./engines/classic'),  // Ant Design
-    modern: () => import('./engines/modern'),     // DaisyUI / Tailwind
+    modern: () => import('./engines/modern'),     // Token skin (no DaisyUI)
     rustic: () => import('./engines/rustic'),      // Vanilla HTML/CSS
   }),
   // Attach compound sub-components for dot-notation access (Alert.Description)

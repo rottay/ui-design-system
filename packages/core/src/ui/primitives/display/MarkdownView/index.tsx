@@ -6,9 +6,15 @@
  *
  * As a leaf primitive it emits its own DOM (the sanctioned raw-element tier of
  * the design system) and stays token-governed through CSS custom properties and
- * `data-part` anatomy so skins can restyle it per engine/tenant. The parser
- * (runtime/parser) produces an AST; this component walks it and constructs
- * React elements whose children are escaped text nodes.
+ * `data-part` anatomy so skins can restyle it per engine/tenant. Paint
+ * ownership is per part: the inline style objects own the static parts
+ * (blockquote, lists, tables, code, task checkbox) with canonical `--ds-*`
+ * tokens and logical directional properties, while the family skin
+ * (`presentation/components/skin/markdown-view.css`) owns the interactive
+ * link part including its underline and hover/focus-visible states (inline
+ * styles cannot express pseudo-states). The parser
+ * (runtime/parser) produces an AST; this component walks it and
+ * constructs React elements whose children are escaped text nodes.
  *
  * Security invariant (independent of which element tag wraps the text):
  *   (a) every node is built via React element construction with escaped
@@ -25,6 +31,8 @@
 
 import React from 'react';
 
+import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { parseMarkdown } from './runtime/parser';
 import { sanitizeHref } from './runtime/link-safety';
 import type {
@@ -67,18 +75,17 @@ export { sanitizeHref } from './runtime/link-safety';
 const MONO_FONT = 'var(--ds-font-family-mono, ui-monospace, SFMono-Regular, Menlo, monospace)';
 
 const BLOCK_GAP: Record<'compact' | 'comfortable', string> = {
-  compact: 'var(--ds-spacing-2, 0.5rem)',
-  comfortable: 'var(--ds-spacing-4, 1rem)',
+  compact: 'var(--ds-spacing-2)',
+  comfortable: 'var(--ds-spacing-4)',
 };
 
 const INLINE_CODE_STYLE: React.CSSProperties = {
   fontFamily: MONO_FONT,
   fontSize: '0.875em',
   padding: '0.1em 0.35em',
-  borderRadius: 'var(--ds-radius-sm, 0.25rem)',
-  background:
-    'var(--ds-color-surface-sunken, var(--ds-color-fill-secondary, rgba(120,120,120,0.14)))',
-  color: 'var(--ds-color-text-primary, inherit)',
+  borderRadius: 'var(--ds-radius-sm)',
+  background: 'var(--ds-surface-inset)',
+  color: 'var(--ds-color-text-primary)',
 };
 
 // ---------------------------------------------------------------------------
@@ -139,7 +146,6 @@ function renderLink(
       href={safe}
       rel="noopener noreferrer"
       data-part="link"
-      style={{ color: 'var(--ds-color-link, var(--ds-color-primary, inherit))' }}
       onClick={
         onNavigate
           ? (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -159,10 +165,23 @@ function renderLink(
 // ---------------------------------------------------------------------------
 
 function alignToStyle(align: MarkdownTableAlign): React.CSSProperties['textAlign'] {
+  // Logical alignment: an authored `---:` column reads as "toward the end of
+  // the line", so RTL tables mirror without a markup branch.
   if (align === 'center') return 'center';
-  if (align === 'right') return 'right';
-  if (align === 'left') return 'left';
+  if (align === 'right') return 'end';
+  if (align === 'left') return 'start';
   return undefined;
+}
+
+/**
+ * Component-owned accessibility strings, resolved in the component through the
+ * guarded i18n channel and threaded into the pure block walkers.
+ */
+interface MarkdownA11yLabels {
+  /** Accessible name for a checked task-list indicator. */
+  taskChecked: string;
+  /** Accessible name for an unchecked task-list indicator. */
+  taskUnchecked: string;
 }
 
 function renderBlocks(
@@ -170,6 +189,7 @@ function renderBlocks(
   props: MarkdownViewProps,
   density: 'compact' | 'comfortable',
   keyPrefix: string,
+  a11y: MarkdownA11yLabels,
 ): React.ReactNode[] {
   const policy = props.linkPolicy;
   const gap = BLOCK_GAP[density];
@@ -202,21 +222,20 @@ function renderBlocks(
                 data-language={node.language}
                 style={{
                   margin: 0,
-                  padding: 'var(--ds-spacing-3, 0.75rem)',
+                  padding: 'var(--ds-spacing-3)',
                   overflowX: 'auto',
-                  borderRadius: 'var(--ds-radius-md, 0.5rem)',
-                  background:
-                    'var(--ds-color-surface-sunken, var(--ds-color-fill-secondary, rgba(120,120,120,0.12)))',
-                  border: '1px solid var(--ds-color-border, rgba(120,120,120,0.2))',
+                  borderRadius: 'var(--ds-radius-md)',
+                  background: 'var(--ds-surface-inset)',
+                  border: '1px solid var(--ds-color-border)',
                 }}
               >
                 <code
                   style={{
                     fontFamily: MONO_FONT,
                     fontSize: '0.85rem',
-                    lineHeight: 1.6,
+                    lineHeight: 'var(--ds-line-height-body)',
                     whiteSpace: 'pre',
-                    color: 'var(--ds-color-text-primary, inherit)',
+                    color: 'var(--ds-color-text-primary)',
                   }}
                 >
                   {node.value}
@@ -232,21 +251,20 @@ function renderBlocks(
             data-part="blockquote"
             style={{
               marginTop: spacing,
-              marginLeft: 0,
-              marginRight: 0,
-              paddingLeft: 'var(--ds-spacing-4, 1rem)',
-              borderLeft: '3px solid var(--ds-color-border, rgba(120,120,120,0.3))',
-              color: 'var(--ds-color-text-secondary, inherit)',
+              marginInline: 0,
+              paddingInlineStart: 'var(--ds-spacing-4)',
+              borderInlineStart: '3px solid var(--ds-color-border)',
+              color: 'var(--ds-color-text-secondary)',
             }}
           >
-            {renderBlocks(node.children, props, density, key)}
+            {renderBlocks(node.children, props, density, key, a11y)}
           </blockquote>
         );
       case 'list': {
         const isTaskList = node.items.some((it) => it.checked !== null);
         const listStyle: React.CSSProperties = {
           marginTop: spacing,
-          paddingLeft: 'var(--ds-spacing-6, 1.5rem)',
+          paddingInlineStart: 'var(--ds-spacing-6)',
           listStyleType: isTaskList ? 'none' : undefined,
         };
         const items = node.items.map((item, itemIndex) => {
@@ -257,10 +275,10 @@ function renderBlocks(
               key={itemKey}
               data-part="list-item"
               style={{
-                marginTop: itemIndex === 0 ? undefined : 'var(--ds-spacing-1, 0.25rem)',
+                marginTop: itemIndex === 0 ? undefined : 'var(--ds-spacing-1)',
                 display: isTask ? 'flex' : undefined,
                 alignItems: isTask ? 'flex-start' : undefined,
-                gap: isTask ? 'var(--ds-spacing-2, 0.5rem)' : undefined,
+                gap: isTask ? 'var(--ds-spacing-2)' : undefined,
               }}
             >
               {isTask ? (
@@ -268,6 +286,7 @@ function renderBlocks(
                   role="checkbox"
                   aria-checked={item.checked === true}
                   aria-disabled="true"
+                  aria-label={item.checked ? a11y.taskChecked : a11y.taskUnchecked}
                   data-part="task-checkbox"
                   data-checked={item.checked ? 'true' : 'false'}
                   style={{
@@ -275,19 +294,19 @@ function renderBlocks(
                     width: '0.95em',
                     height: '0.95em',
                     marginTop: '0.2em',
-                    borderRadius: 'var(--ds-radius-sm, 0.25rem)',
-                    border: '1px solid var(--ds-color-border, rgba(120,120,120,0.5))',
+                    borderRadius: 'var(--ds-radius-sm)',
+                    border: '1px solid var(--ds-color-border)',
                     background: item.checked
-                      ? 'var(--ds-color-primary, #4b5563)'
+                      ? 'var(--ds-color-primary)'
                       : 'transparent',
                     boxShadow: item.checked
-                      ? 'inset 0 0 0 0.12em var(--ds-color-surface, #fff)'
+                      ? 'inset 0 0 0 0.12em var(--ds-surface-canvas)'
                       : undefined,
                   }}
                 />
               ) : null}
               <span data-part="list-item-content" style={{ flex: '1 1 auto', minWidth: 0 }}>
-                {renderBlocks(item.children, props, density, itemKey)}
+                {renderBlocks(item.children, props, density, itemKey, a11y)}
               </span>
             </li>
           );
@@ -318,9 +337,12 @@ function renderBlocks(
                       key={`${key}-h${cellIndex}`}
                       data-part="table-header-cell"
                       style={{
-                        textAlign: alignToStyle(node.align[cellIndex] ?? null),
-                        padding: 'var(--ds-spacing-2, 0.5rem)',
-                        borderBottom: '2px solid var(--ds-color-border, rgba(120,120,120,0.3))',
+                        // Null align defaults to logical start (UA centers th,
+                        // which misaligns against the start-aligned body
+                        // column below it).
+                        textAlign: alignToStyle(node.align[cellIndex] ?? null) ?? 'start',
+                        padding: 'var(--ds-spacing-2)',
+                        borderBottom: '2px solid var(--ds-color-border)',
                         fontWeight: 600,
                       }}
                     >
@@ -338,8 +360,8 @@ function renderBlocks(
                         data-part="table-cell"
                         style={{
                           textAlign: alignToStyle(node.align[cellIndex] ?? null),
-                          padding: 'var(--ds-spacing-2, 0.5rem)',
-                          borderBottom: '1px solid var(--ds-color-border, rgba(120,120,120,0.2))',
+                          padding: 'var(--ds-spacing-2)',
+                          borderBottom: '1px solid var(--ds-color-border)',
                         }}
                       >
                         {renderInline(cell.children, policy, `${key}-r${rowIndex}c${cellIndex}`)}
@@ -359,7 +381,7 @@ function renderBlocks(
             style={{
               marginTop: spacing,
               border: 'none',
-              borderTop: '1px solid var(--ds-color-border, rgba(120,120,120,0.3))',
+              borderTop: '1px solid var(--ds-color-border)',
             }}
           />
         );
@@ -382,13 +404,33 @@ export function MarkdownView({
   const blocks = React.useMemo(() => parseMarkdown(source), [source]);
   const props: MarkdownViewProps = { source, density, linkPolicy, slots, className };
 
+  // Component-owned accessibility strings: translated when an I18nProvider is
+  // mounted, with the documented English fallbacks otherwise (a missing
+  // catalog key echoes the full key, which the endsWith guard detects).
+  // Behavior is byte-identical until the locale JSONs land (K4-B guarded
+  // i18n channel, remediation R1: axe aria-toggle-field-name).
+  const i18n = useOptionalTranslation('components');
+  const markdownLabel = (key: string, fallback: string): string => {
+    const translated = i18n?.t(key);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
+  const a11y: MarkdownA11yLabels = {
+    taskChecked: markdownLabel('markdownView.taskChecked', 'Task completed'),
+    taskUnchecked: markdownLabel('markdownView.taskUnchecked', 'Task not completed'),
+  };
+
   return (
     <div
       className={['ds-markdown-view', className].filter(Boolean).join(' ')}
       data-part="root"
-      data-density={density}
+      {...densityScopeAttributes(density)}
+      style={{
+        // Unbroken hostile tokens (long URLs/identifiers) wrap instead of
+        // overflowing the column (Pass 2 capture evidence: 390px overflow).
+        overflowWrap: 'break-word',
+      }}
     >
-      {renderBlocks(blocks, props, density, 'md')}
+      {renderBlocks(blocks, props, density, 'md', a11y)}
     </div>
   );
 }

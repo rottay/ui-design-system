@@ -149,8 +149,8 @@ describe('ActionDock', () => {
   });
 
   it('keeps collection integration selectors aligned with composed component anatomy', () => {
-    expect(COLLECTION_WORKSPACE_SKIN).toContain(
-      ".ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode='sticky']"
+    expect(COLLECTION_WORKSPACE_SKIN).toMatch(
+      /\.ds-collection-workspace__sticky-action-bar\.rottay-action-dock\[data-mode=["']sticky["']\]/
     );
     expect(COLLECTION_WORKSPACE_SKIN).toContain('.rottay-button.ds-collection-workspace__sticky-primary-action');
     expect(COLLECTION_WORKSPACE_SKIN).not.toContain("[data-part='sticky-action-bar']");

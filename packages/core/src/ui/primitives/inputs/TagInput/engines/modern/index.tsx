@@ -1,9 +1,17 @@
 'use client';
 
 /**
- * @fileoverview Modern engine for TagInput, built with DaisyUI badges and a native text input.
+ * @fileoverview Modern engine for TagInput: skin-painted container with the
+ * public Tag primitive composed for chips, plus a native text input.
  * Manages its own local input state and converts keystrokes / separator characters into tags,
  * giving full control over the creation flow unlike the Classic (Ant) delegation approach.
+ *
+ * @remarks
+ * Chip paint has exactly one owner: the composed `Tag` (its own certified
+ * skin, keyboard-focusable close control and `common.remove` localized
+ * accessible name). This file owns semantics and behavior only; container
+ * paint lives in the `tag-input.css` modern skin keyed on `data-part`,
+ * `data-size`, `data-error` and `data-disabled`.
  *
  * @example
  * ```tsx
@@ -18,31 +26,18 @@
 import React, { useState, useCallback, useId, useRef } from 'react';
 import type { TagInputProps } from '../../contracts';
 import { TAGINPUT_DEFAULTS } from '../../contracts';
-
-/** Inline size styles for the outer input container. */
-const SIZE_MIN_HEIGHTS: Record<string, number> = {
-  sm: 32,
-  md: 40,
-  lg: 48,
-};
-
-/** Inline size styles for individual tag badges. */
-const BADGE_SIZE_STYLES: Record<string, React.CSSProperties> = {
-  sm: { fontSize: 11, padding: '1px 6px', gap: 2 },
-  md: { fontSize: 12, padding: '2px 8px', gap: 4 },
-  lg: { fontSize: 14, padding: '4px 10px', gap: 4 },
-};
+import { Tag } from '../../../../display/Tag';
 
 /**
- * Modern (DaisyUI) implementation of TagInput.
+ * Modern (skin-painted) implementation of TagInput.
  *
- * Renders tags as DaisyUI badges inside a bordered input container. A hidden native
+ * Renders tags as composed `Tag` chips inside a bordered input container. A hidden native
  * text input captures keystrokes; tags are created on Enter, the configured separator
  * character, or when the separator appears via paste. Backspace on an empty input
  * removes the last tag for quick editing.
  *
  * @param props - Standard TagInputProps shared across all engines.
- * @returns A flex container of badge tags with an inline text input and optional error label.
+ * @returns A flex container of Tag chips with an inline text input and optional error label.
  */
 export default function ModernTagInput(props: TagInputProps): React.ReactElement {
   const {
@@ -63,6 +58,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
     autoFocus,
     onRemove,
     validateTag,
+    'aria-label': ariaLabel,
   } = props;
 
   // Local state tracks the text being typed before it becomes a tag
@@ -113,33 +109,33 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
   }, [separator, addTag]);
 
   return (
-    <div className={className || ''} style={{ display: 'flex', flexDirection: 'column', width: '100%', ...style }}>
-      {/* Container mimics a DaisyUI input but uses flex-wrap so tags flow naturally */}
+    <div className={`ds-tag-input-shell ds-tag-input-shell--modern ${className || ''}`.trim()} style={style}>
+      {/* Container mimics an input but uses flex-wrap so chips flow naturally */}
       <div
         className="ds-tag-input ds-tag-input--modern"
         data-part="root"
+        data-size={size}
         data-error={error ? 'true' : 'false'}
         data-disabled={disabled ? 'true' : 'false'}
-        style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4, height: 'auto', minHeight: SIZE_MIN_HEIGHTS[size] || 40, paddingBlock: 4, paddingInline: 8, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
         onClick={() => inputRef.current?.focus()}
       >
         {value.map((tag, index) => (
-          <span key={`${tag}-${index}`} data-part="tag-chip" style={{ display: 'inline-flex', alignItems: 'center', ...(BADGE_SIZE_STYLES[size] || BADGE_SIZE_STYLES.md) }}>
+          // Chip paint/keyboard/close-label belong to the composed Tag; the
+          // remove path (onChange + onRemove) is preserved through onClose.
+          <Tag
+            key={`${tag}-${index}`}
+            size={size}
+            tone="primary"
+            closable={!disabled}
+            onClose={() => removeTag(index)}
+          >
             {tag}
-            {!disabled && (
-              <button
-                type="button"
-                data-part="tag-remove"
-                style={{ height: 'auto', padding: 0, fontSize: 12, cursor: 'pointer', minHeight: 0, lineHeight: 1 }}
-                onClick={(e) => { e.stopPropagation(); removeTag(index); }}
-                aria-label={`Remove ${tag}`}
-              >
-                x
-              </button>
-            )}
-          </span>
+          </Tag>
         ))}
-        {/* Inline input grows to fill remaining space; placeholder only shows when empty */}
+        {/* Inline input grows to fill remaining space; placeholder only shows when empty.
+            The accessible name prefers the explicit prop and falls back to the
+            (non-empty) placeholder text -- with chips present the placeholder
+            collapses to '', which must not become an empty aria-label. */}
         <input
           ref={inputRef}
           id={inputId}
@@ -152,12 +148,12 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
           placeholder={value.length === 0 ? placeholder : ''}
           disabled={disabled}
           autoFocus={autoFocus}
-          style={{ flex: 1, minWidth: 60, padding: 0 }}
+          aria-label={ariaLabel || placeholder || undefined}
         />
       </div>
       {error && errorMessage && (
-        <div style={{ marginTop: 4 }}>
-          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px' }}>{errorMessage}</span>
+        <div data-part="error-wrapper">
+          <span data-part="error-message">{errorMessage}</span>
         </div>
       )}
     </div>

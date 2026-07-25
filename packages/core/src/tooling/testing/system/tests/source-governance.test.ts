@@ -437,4 +437,46 @@ describe('import boundaries', () => {
 
     expect(matches).toEqual([]);
   });
+
+  it('keeps the recipe supplier confined to the recipe engine owner (DS-S001/DS-S005)', () => {
+    const recipeEngineOwner = join(
+      SRC_ROOT,
+      'infrastructure',
+      'runtime',
+      'foundation',
+      'recipes',
+      'engine'
+    );
+    const violations: string[] = [];
+
+    for (const file of collectSourceFiles(SRC_ROOT)) {
+      if (file.startsWith(recipeEngineOwner)) continue;
+      const source = readFileSync(file, 'utf8');
+      if (
+        source.includes("from 'tailwind-variants") ||
+        source.includes('from "tailwind-variants') ||
+        source.includes("require('tailwind-variants") ||
+        source.includes('require("tailwind-variants')
+      ) {
+        violations.push(file);
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it('keeps supplier types out of the public recipe contracts (DS-S005)', () => {
+    const contractsFile = join(
+      SRC_ROOT,
+      'infrastructure',
+      'runtime',
+      'foundation',
+      'recipes',
+      'contracts',
+      'index.ts'
+    );
+    const source = readFileSync(contractsFile, 'utf8');
+    expect(source.includes('tailwind-variants')).toBe(false);
+    expect(source.includes('VariantProps')).toBe(false);
+  });
 });

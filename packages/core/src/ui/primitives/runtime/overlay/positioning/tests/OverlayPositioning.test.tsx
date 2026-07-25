@@ -11,10 +11,20 @@ import {
 } from '..';
 
 const ORIGINAL_CAPABILITIES = { ...overlayCapabilities };
+const ORIGINAL_VISUAL_VIEWPORT = Object.getOwnPropertyDescriptor(
+  window,
+  'visualViewport',
+);
 
 afterEach(() => {
   cleanup();
   Object.assign(overlayCapabilities, ORIGINAL_CAPABILITIES);
+  if (ORIGINAL_VISUAL_VIEWPORT) {
+    Object.defineProperty(window, 'visualViewport', ORIGINAL_VISUAL_VIEWPORT);
+  } else {
+    delete (window as unknown as { visualViewport?: VisualViewport })
+      .visualViewport;
+  }
 });
 
 function forceAnchorBranch(): void {
@@ -148,6 +158,67 @@ describe('useOverlayPosition - js branch (native in this DOM environment)', () =
     const { captured } = renderHarness({ placement: 'bottom-start' });
 
     expect(captured.result?.style).toMatchObject({ top: 128, left: 100 });
+  });
+
+  it('uses the offset visual viewport for diagonal flip and cross-axis shift', () => {
+    const addEventListener = vi.fn();
+    Object.defineProperty(window, 'visualViewport', {
+      configurable: true,
+      value: {
+        offsetTop: 50,
+        offsetLeft: 100,
+        width: 300,
+        height: 200,
+        addEventListener,
+        removeEventListener: vi.fn(),
+      } as unknown as VisualViewport,
+    });
+
+    const { captured } = renderHarness({
+      placement: 'bottom',
+      anchorRect: {
+        top: 180,
+        bottom: 200,
+        left: 340,
+        right: 380,
+        width: 40,
+        height: 20,
+      },
+      overlayRect: { width: 120, height: 80 },
+    });
+
+    // Bottom clips below the visible viewport, so it flips above. The
+    // cross-axis center is then shifted inside offsetLeft + width.
+    expect(captured.result?.style).toMatchObject({ top: 92, left: 272 });
+    expect(addEventListener).toHaveBeenCalledWith('resize', expect.any(Function));
+    expect(addEventListener).toHaveBeenCalledWith('scroll', expect.any(Function));
+  });
+
+  it('does not flip into a side with more overflow when neither side fits', () => {
+    const boundary = document.createElement('div');
+    boundary.getBoundingClientRect = stubRect({
+      top: 0,
+      left: 0,
+      right: 800,
+      bottom: 800,
+      width: 800,
+      height: 800,
+    });
+    const { captured } = renderHarness({
+      placement: 'top',
+      boundary,
+      anchorRect: {
+        top: 650,
+        bottom: 670,
+        left: 100,
+        right: 140,
+        width: 40,
+        height: 20,
+      },
+      overlayRect: { width: 100, height: 700 },
+    });
+
+    expect(captured.result?.style.top).toBe(8);
   });
 });
 

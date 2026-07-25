@@ -52,11 +52,23 @@ describe('Menu integration', () => {
     fireEvent.click(await screen.findByText('Settings', undefined, { timeout: 10000 }));
     expect(onOpenChange).toHaveBeenCalledWith(['settings']);
 
+    // Closed submenu: the trigger reports collapsed and the panel stays
+    // unmounted (closed submenus never leak items into the a11y tree).
+    const collapsed = (await screen.findByText('Settings', undefined, { timeout: 10000 })).closest(
+      '[data-part="trigger"]'
+    );
+    expect(collapsed).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByText('Profile')).not.toBeInTheDocument();
+
     view.rerender(
       <Menu engine="modern" items={items} openKeys={['settings']} onOpenChange={onOpenChange} />
     );
 
-    expect((await screen.findByText('Settings', undefined, { timeout: 10000 })).closest('details')).toHaveAttribute('open');
+    const expanded = (await screen.findByText('Settings', undefined, { timeout: 10000 })).closest(
+      '[data-part="trigger"]'
+    );
+    expect(expanded).toHaveAttribute('aria-expanded', 'true');
+    expect(await screen.findByText('Profile', undefined, { timeout: 10000 })).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Settings'));
     expect(onOpenChange).toHaveBeenLastCalledWith([]);

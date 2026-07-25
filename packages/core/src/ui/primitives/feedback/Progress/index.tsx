@@ -3,7 +3,7 @@
 /**
  * @fileoverview Progress - visual indicator for operation completion (line or circle).
  * Compound sub-components: Circle, Line for explicit shape variants.
- * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
+ * Multi-engine: Classic (Ant Design), Modern (token skin), Rustic (Vanilla).
  *
  * @example
  * ```tsx
@@ -38,7 +38,7 @@ export const Progress = Object.assign(
   // Create the engine-switchable base component
   createEngineComponent<ProgressProps>('Progress', {
     classic: () => import('./engines/classic'),  // Ant Design
-    modern: () => import('./engines/modern'),     // DaisyUI / Tailwind
+    modern: () => import('./engines/modern'),     // Token skin (no DaisyUI)
     rustic: () => import('./engines/rustic'),      // Vanilla HTML/CSS
   }),
   // Attach compound sub-components for explicit shape selection (Progress.Circle, .Line)

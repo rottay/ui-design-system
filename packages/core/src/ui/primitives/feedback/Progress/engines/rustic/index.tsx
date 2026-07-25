@@ -65,6 +65,7 @@
 import React from 'react';
 import type { ProgressProps } from '../../contracts';
 import { PROGRESS_DEFAULTS, TONE_TO_PROGRESS_STATUS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // Constants
@@ -119,6 +120,9 @@ import { PROGRESS_DEFAULTS, TONE_TO_PROGRESS_STATUS } from '../../contracts';
  * ```
  */
 export default function RusticProgress(props: ProgressProps): React.ReactElement {
+  // Optional: standalone renders (no I18nProvider) use the documented English
+  // accessibility fallback instead of throwing.
+  const i18n = useOptionalTranslation('components');
   // ---------------------------------------------------------------------------
   // Props Destructuring
   // ---------------------------------------------------------------------------
@@ -129,6 +133,7 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
     status = PROGRESS_DEFAULTS.status,
     tone,
     showInfo = PROGRESS_DEFAULTS.showInfo,
+    indeterminate = PROGRESS_DEFAULTS.indeterminate,
     strokeColor,
     strokeWidth = PROGRESS_DEFAULTS.strokeWidth,
     className,
@@ -159,7 +164,11 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
     const center = size / 2;
     const radius = (size - strokeWidth!) / 2;
     const circumference = 2 * Math.PI * radius;
-    const offset = circumference - (clampedPercent / 100) * circumference;
+    // Indeterminate shows a quarter arc that rotates continuously; the
+    // determinate arc resolves from the clamped percent.
+    const offset = indeterminate
+      ? circumference * 0.75
+      : circumference - (clampedPercent / 100) * circumference;
 
     // Container styles for circle type
     const containerStyle: React.CSSProperties = {
@@ -177,11 +186,32 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
       <div
         data-part="root"
         data-status={resolvedStatus}
+        data-indeterminate={indeterminate ? 'true' : 'false'}
         className={['rottay-progress-shell', 'rottay-progress-shell--rustic', className].filter(Boolean).join(' ')}
         style={containerStyle}
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={
+          indeterminate
+            ? i18n?.t('progress.indeterminate') ?? 'In progress'
+            : i18n?.t('progress.percent_complete', { percent: clampedPercent }) ??
+              `${clampedPercent}% complete`
+        }
+        {...(indeterminate ? {} : { 'aria-valuenow': clampedPercent })}
       >
-        {/* SVG Circle Container */}
-        <svg width={size} height={size}>
+        {/* SVG Circle Container; indeterminate spins the quarter arc on the
+            canon keyframe, cadence from the motion authority (collapses to a
+            static arc under reduced motion). */}
+        <svg
+          width={size}
+          height={size}
+          style={
+            indeterminate
+              ? { animation: 'ds-foundation-spin calc(var(--ds-motion-glacial, 500ms) * 2.4) linear infinite' }
+              : undefined
+          }
+        >
           {/* Background Track Circle */}
           <circle
             data-part="track"
@@ -212,8 +242,8 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
           />
         </svg>
 
-        {/* Center Percentage Display */}
-        {showInfo && (
+        {/* Center Percentage Display (determinate only) */}
+        {showInfo && !indeterminate && (
           <div
             data-part="label"
             style={{
@@ -257,16 +287,27 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   // effect) to convey ongoing activity. This pattern provides motion cues
   // beyond color alone, benefiting users who may miss subtle color differences.
   // The semi-transparent white stripes (alpha-white-20) work on any bar color.
-  const barStyle: React.CSSProperties = {
-    height: '100%',
-    width: `${clampedPercent}%`,
-    transition: 'width 0.3s ease',
-  };
+  // Indeterminate instead renders a full-width bar sliding on the canon
+  // `ds-foundation-progress-indeterminate` keyframe, cadence from the motion
+  // authority (collapses to a static bar under reduced motion).
+  const barStyle: React.CSSProperties = indeterminate
+    ? {
+        height: '100%',
+        width: '100%',
+        animation:
+          'ds-foundation-progress-indeterminate calc(var(--ds-motion-glacial, 500ms) * 3) var(--ds-motion-ease-in-out, ease-in-out) infinite',
+      }
+    : {
+        height: '100%',
+        width: `${clampedPercent}%`,
+        transition: 'width 0.3s ease',
+      };
 
   return (
     <div
       data-part="root"
       data-status={resolvedStatus}
+      data-indeterminate={indeterminate ? 'true' : 'false'}
       className={['rottay-progress-shell', 'rottay-progress-shell--rustic', className].filter(Boolean).join(' ')}
       style={containerStyle}
     >
@@ -275,8 +316,8 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
         <div data-part="fill" style={barStyle} />
       </div>
 
-      {/* Percentage Info Display */}
-      {showInfo && (
+      {/* Percentage Info Display (determinate only) */}
+      {showInfo && !indeterminate && (
         <div data-part="label" style={{ marginTop: '0.25rem', fontSize: '0.875rem', textAlign: 'right' }}>
           {clampedPercent}%
         </div>

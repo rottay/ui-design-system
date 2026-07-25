@@ -8,6 +8,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Badge } from './';
+import { Avatar } from '../Avatar';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
 import { EngineComparison, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
@@ -34,15 +36,14 @@ positioned over other elements or used as standalone elements. It supports
 multiple engines (Classic, Modern, Rustic) for different UI library implementations.
 
 ## Features
-- Multiple size variants (xs, sm, md, lg, xl)
-- Color variants (default, primary, secondary, success, warning, error, info)
-- Style variants (solid, outline, soft, ghost)
-- Dot indicator mode
-- Pulse animation for notifications
-- Configurable position (top-left, top-right, bottom-left, bottom-right)
-- Overflow count handling
-- Optional close button
-- Click handlers
+- One tokenized anatomy for badge, chip and pill roles
+- Multiple size and density variants (xs, sm, md, lg, xl)
+- Semantic tones plus solid, outline, soft and ghost treatments
+- Icon, avatar, dot, label, count, loading and localized remove anatomy
+- Selected, interactive, disabled and loading states with native controls
+- Logical overlay positions that mirror in RTL (physical aliases remain compatible)
+- Long-copy truncation, container adaptation and coarse-pointer touch targets
+- Reduced-motion and forced-colors safeguards
         `,
       },
     },
@@ -74,10 +75,19 @@ multiple engines (Classic, Modern, Rustic) for different UI library implementati
     },
     position: {
       control: 'select',
-      options: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+      options: [
+        'top-start',
+        'top-end',
+        'bottom-start',
+        'bottom-end',
+        'top-left',
+        'top-right',
+        'bottom-left',
+        'bottom-right',
+      ],
       description: 'Position when badge overlays an element',
       table: {
-        defaultValue: { summary: 'top-right' },
+        defaultValue: { summary: 'top-end' },
       },
     },
     engine: {
@@ -124,7 +134,11 @@ multiple engines (Classic, Modern, Rustic) for different UI library implementati
     },
     closable: {
       control: 'boolean',
-      description: 'Show close button',
+      description: 'Deprecated compatibility alias for removable',
+    },
+    removable: {
+      control: 'boolean',
+      description: 'Show a remove control; requires localized removeLabel when true',
     },
   },
   tags: ['autodocs'],
@@ -227,7 +241,7 @@ export const Styles: Story = {
 export const Positions: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 48 }}>
-      {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map((position) => (
+      {(['top-start', 'top-end', 'bottom-start', 'bottom-end'] as const).map((position) => (
         <Badge key={position} count={5} position={position} variant="error">
           <div style={{
             width: 48,
@@ -449,13 +463,15 @@ export const Closable: Story = {
       <Badge
         content="Closable"
         variant="primary"
-        closable
+        removable
+        removeLabel="Remove Closable"
         onClose={() => alert('Badge closed!')}
       />
       <Badge
         content="Error"
         variant="error"
-        closable
+        removable
+        removeLabel="Remove Error"
         onClose={() => alert('Error badge closed!')}
       />
     </div>
@@ -517,6 +533,169 @@ export const ShowZero: Story = {
             borderRadius: 8,
           }} />
         </Badge>
+      </div>
+    </div>
+  ),
+};
+
+/** Premium anatomy and state coverage for the shared compact-label family. */
+export const PremiumCompactLabelFamily: Story = {
+  name: 'Premium · Badge / Chip / Pill anatomy',
+  parameters: {
+    docs: {
+      description: {
+        story: 'One tokenized anatomy across passive labels, status pills, selectable filters, counts, identity, removal, disabled and loading states.',
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'grid', gap: 'var(--ds-spacing-lg)', maxWidth: 760 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ds-spacing-sm)' }}>
+        <Badge kind="badge" tone="success" icon={<StatusSuccessIcon decorative />}>
+          Verified
+        </Badge>
+        <Badge kind="pill" tone="primary" dot selected>
+          Interview ready
+        </Badge>
+        <Badge kind="chip" count={18} selected onSelectedChange={() => undefined}>
+          Active candidates
+        </Badge>
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ds-spacing-sm)' }}>
+        <Badge
+          kind="chip"
+          avatar={<Avatar initials="LF" size="xs" />}
+          removable
+          removeLabel="Remove Lucía Fernández"
+          onClose={() => undefined}
+        >
+          Lucía Fernández
+        </Badge>
+        <Badge kind="pill" disabled onClick={() => undefined} aria-label="Archived filter">
+          Archived
+        </Badge>
+        <Badge
+          kind="pill"
+          loading
+          loadingText="Updating recommendation"
+          onClick={() => undefined}
+          aria-label="AI recommendation"
+        >
+          AI recommendation
+        </Badge>
+      </div>
+    </div>
+  ),
+};
+
+/** Long-copy, translated accessible labels and logical RTL layout. */
+export const LocalizedLongCopyAndRtl: Story = {
+  name: 'Premium · locale, overflow & RTL',
+  render: () => (
+    <div style={{ display: 'grid', gap: 'var(--ds-spacing-lg)', maxWidth: 520 }}>
+      <Badge
+        kind="chip"
+        count={24}
+        removable
+        removeLabel="Quitar filtro de candidatos recomendados"
+      >
+        Candidatos recomendados con disponibilidad inmediata y experiencia verificada
+      </Badge>
+      <div dir="rtl">
+        <Badge
+          kind="chip"
+          count={12}
+          selected
+          removable
+          removeLabel="إزالة عامل تصفية المرشحين"
+        >
+          المرشحون الموصى بهم ذوو الخبرة الموثقة والتوفر الفوري
+        </Badge>
+      </div>
+    </div>
+  ),
+};
+
+
+// ============================================================================
+// State Matrix Stories (K1 Lane A)
+// ============================================================================
+
+const matrixLabel = {
+  fontSize: 11,
+  textTransform: 'uppercase',
+  letterSpacing: '0.06em',
+  opacity: 0.55,
+  marginBottom: 8,
+} as const;
+
+/**
+ * Full interaction-state matrix for the modern engine: rest, selected,
+ * disabled, loading, pulse and removable across kinds and treatments.
+ * Hover/pressed/focus-visible are skin-owned and verifiable by pointer and
+ * keyboard directly on the interactive cells.
+ */
+export const InteractionStateMatrix: Story = {
+  name: '🧪 Interaction State Matrix',
+  render: () => (
+    <div style={{ display: 'grid', gap: 20, maxWidth: 640 }}>
+      <div>
+        <div style={matrixLabel}>Rest × treatment × tone</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {(['solid', 'soft', 'outline', 'ghost'] as const).map((badgeStyle) => (
+            <Badge key={badgeStyle} kind="chip" badgeStyle={badgeStyle} tone="primary">
+              {badgeStyle}
+            </Badge>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Interactive states (hover / pressed / focus-visible)</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <Badge kind="chip" clickable onClick={() => undefined} aria-label="Rest filter">
+            Rest
+          </Badge>
+          <Badge kind="chip" selected onSelectedChange={() => undefined} aria-label="Selected filter">
+            Selected
+          </Badge>
+          <Badge kind="chip" disabled onClick={() => undefined} aria-label="Disabled filter">
+            Disabled
+          </Badge>
+          <Badge kind="chip" loading loadingText="Loading filter" onClick={() => undefined}>
+            Loading
+          </Badge>
+          <Badge kind="chip" pulse tone="danger">
+            Pulse
+          </Badge>
+          <Badge kind="chip" removable removeLabel="Remove filter" onClose={() => undefined}>
+            Removable
+          </Badge>
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Counts & dot</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+          <Badge count={0} showZero kind="pill" />
+          <Badge count={7} kind="pill" tone="primary" />
+          <Badge count={99} kind="pill" tone="success" />
+          <Badge count={128} max={99} kind="pill" tone="danger" />
+          <Badge dot tone="success" aria-label="Active" />
+          <Badge kind="chip" icon={<span>★</span>} count={4} tone="warning">
+            Watching
+          </Badge>
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Truncation (narrow collection, no mid-word wraps)</div>
+        <div style={{ display: 'flex', gap: 8, maxWidth: 260, overflow: 'hidden' }}>
+          <Badge kind="chip" tone="primary">
+            Recomendaciones destacadas
+          </Badge>
+          <Badge kind="chip" variant="secondary">
+            Candidatos con disponibilidad inmediata
+          </Badge>
+        </div>
       </div>
     </div>
   ),

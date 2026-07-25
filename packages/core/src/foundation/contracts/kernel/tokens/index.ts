@@ -14,8 +14,33 @@
  * @package @rottay/design-system
  */
 
-export type { PersonalityTokens, AnimationPersonalityTokens, ChartPersonalityTokens, TypographyPersonalityTokens, AccentPersonalityTokens, CardPersonalityTokens } from './personality';
-import type { PersonalityTokens } from './personality';
+export type {
+  PersonalityTokens,
+  AnimationPersonalityTokens,
+  ChartPersonalityTokens,
+  TypographyPersonalityTokens,
+  AccentPersonalityTokens,
+  CardPersonalityTokens,
+} from "./personality";
+export type {
+  SemanticSurfaceRole,
+  SemanticSurfaceRoleTokens,
+  SemanticSurfaceRoleMap,
+  SemanticMaterialRole,
+  SemanticMaterialRoleTokens,
+  SemanticMaterialTokens,
+} from "./materials";
+export {
+  SEMANTIC_SURFACE_ROLES,
+  SEMANTIC_MATERIAL_ROLES,
+} from "./materials";
+export type {
+  SemanticTypographyRole,
+  SemanticTypographyRoleTokens,
+  SemanticTypographyTokens,
+} from "./typography";
+export { SEMANTIC_TYPOGRAPHY_ROLES } from "./typography";
+import type { PersonalityTokens } from "./personality";
 
 /**
  * Color scale with 10 levels (50-900)
@@ -149,9 +174,9 @@ export interface DesignTokens {
       md: string;
       lg: string;
       xl: string;
-      '2xl': string;
-      '3xl': string;
-      '4xl': string;
+      "2xl": string;
+      "3xl": string;
+      "4xl": string;
     };
     fontWeight: {
       normal: number;

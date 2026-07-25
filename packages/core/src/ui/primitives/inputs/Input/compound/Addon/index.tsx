@@ -48,9 +48,7 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
 import type { InputAddonProps } from '../../contracts';
-import { SIZE_MAP } from '../../contracts';
 
 /**
  * Addon element for input groups that renders a decorative prefix or suffix.
@@ -71,26 +69,14 @@ export function InputAddon({
   className = '',
   style,
 }: InputAddonProps): React.ReactElement {
-  const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
-
-  const addonStyle: CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: sizeValues.height,
-    padding: `0 ${sizeValues.paddingX}`,
-    fontSize: sizeValues.fontSize,
-    whiteSpace: 'nowrap',
-    transition: 'all 0.2s',
-    ...style,
-  };
-
   return (
     <span
       className={`rottay-input-addon ds-input-addon rottay-input-addon--${position} ${className}`}
       data-part="root"
       data-variant={variant}
-      style={addonStyle}
+      data-position={position}
+      data-size={size}
+      style={style}
     >
       {children}
     </span>

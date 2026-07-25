@@ -12,13 +12,13 @@ import {
   RESPONSIVE_BREAKPOINTS,
   RESPONSIVE_BREAKPOINT_ORDER,
   type ResponsiveBreakpointKey,
-} from '@/foundation/contracts/kernel/responsive/breakpoints';
-import type { ResponsiveValue } from '../../contracts';
+} from "@/foundation/contracts/kernel/responsive/breakpoints";
+import type { ResponsiveValue } from "../../contracts";
 
 export { RESPONSIVE_BREAKPOINTS as GRID_BREAKPOINTS };
 export type GridBreakpointKey = ResponsiveBreakpointKey;
 
-export type ResponsiveGridTemplateValue = number | string | 'auto' | 'none';
+export type ResponsiveGridTemplateValue = number | string | "auto" | "none";
 
 /**
  * Detects the Grid-specific responsive object shape used by columns/rows.
@@ -26,12 +26,14 @@ export type ResponsiveGridTemplateValue = number | string | 'auto' | 'none';
 export function isResponsiveGridValue(
   value: unknown
 ): value is ResponsiveValue<ResponsiveGridTemplateValue> {
-  if (typeof value !== 'object' || value === null) {
+  if (typeof value !== "object" || value === null) {
     return false;
   }
 
   const keys = Object.keys(value);
-  return keys.some((key) => RESPONSIVE_BREAKPOINT_ORDER.includes(key as ResponsiveBreakpointKey));
+  return keys.some((key) =>
+    RESPONSIVE_BREAKPOINT_ORDER.includes(key as ResponsiveBreakpointKey)
+  );
 }
 
 /**
@@ -42,11 +44,13 @@ export function isResponsiveGridValue(
  */
 export function generateResponsiveGridCSS(
   gridId: string,
-  resolveTemplate: (value: ResponsiveGridTemplateValue | undefined) => string | undefined,
+  resolveTemplate: (
+    value: ResponsiveGridTemplateValue | undefined
+  ) => string | undefined,
   columns?: ResponsiveValue<ResponsiveGridTemplateValue>,
   rows?: ResponsiveValue<ResponsiveGridTemplateValue>
 ): string {
-  let css = '';
+  let css = "";
 
   const xsColumns = resolveTemplate(columns?.xs);
   const xsRows = resolveTemplate(rows?.xs);
@@ -59,11 +63,11 @@ export function generateResponsiveGridCSS(
     if (xsRows) {
       css += `  grid-template-rows: ${xsRows};\n`;
     }
-    css += '}\n';
+    css += "}\n";
   }
 
   for (const breakpoint of RESPONSIVE_BREAKPOINT_ORDER) {
-    if (breakpoint === 'xs') {
+    if (breakpoint === "xs") {
       continue;
     }
 
@@ -82,8 +86,8 @@ export function generateResponsiveGridCSS(
     if (rowValue) {
       css += `    grid-template-rows: ${rowValue};\n`;
     }
-    css += '  }\n';
-    css += '}\n';
+    css += "  }\n";
+    css += "}\n";
   }
 
   return css;

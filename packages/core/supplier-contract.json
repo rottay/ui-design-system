@@ -140,6 +140,7 @@
         "DEFAULT_TENANT_CONFIG",
         "DEFAULT_TENANT_SLUG",
         "DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS",
+        "DENSITY_POSTURES",
         "DIVIDER_DEFAULTS",
         "DIVIDER_DEFAULT_COLORS",
         "DIVIDER_SPACING_MAP",
@@ -151,7 +152,10 @@
         "DataTerminalCardProvider",
         "DataTerminalStat",
         "DatePicker",
+        "DecisionComparison",
         "DecisionInboxSurface",
+        "DecisionPanorama",
+        "DensityScope",
         "Descriptions",
         "DesignSystemProvider",
         "DetailFormSurface",
@@ -187,6 +191,7 @@
         "FeatureContext",
         "FeatureGate",
         "FeatureProvider",
+        "FeatureWorkspaceFrame",
         "FieldFiltersPanel",
         "FileBrowserSurface",
         "Flex",
@@ -328,9 +333,12 @@
         "PatternCommandPalette",
         "PatternCommentThread",
         "PatternDataTable",
+        "PatternDecisionComparison",
+        "PatternDecisionPanorama",
         "PatternDetailPanel",
         "PatternEmptyState",
         "PatternEnvironmentToggle",
+        "PatternFeatureWorkspaceFrame",
         "PatternFileManager",
         "PatternFilterBuilder",
         "PatternFilterPanel",
@@ -348,6 +356,7 @@
         "PatternOperationalLedger",
         "PatternPageShell",
         "PatternPricingTable",
+        "PatternRecordFacts",
         "PatternSavedViewsBar",
         "PatternShiftMatrix",
         "PatternShortcutsOverlay",
@@ -358,6 +367,7 @@
         "PatternTreeView",
         "PatternUserProfileCard",
         "PatternVirtualList",
+        "PatternWidgetBoard",
         "PatternWorkbenchHeader",
         "PatternWorkspaceSwitcher",
         "PieChart",
@@ -381,6 +391,8 @@
         "RATE_DEFAULTS",
         "RATE_SIZE_MAP",
         "RATIO_PRESETS",
+        "RECIPE_PROFILES",
+        "RECIPE_PROFILE_SCHEMA_VERSION",
         "RECORD_MORPH_TRANSITION_CLASS",
         "RESPONSIVE_BREAKPOINTS",
         "RESPONSIVE_BREAKPOINT_ORDER",
@@ -388,7 +400,9 @@
         "Radio",
         "RadioGroup",
         "Rate",
+        "RecipeProfileProvider",
         "RecordActionBar",
+        "RecordFacts",
         "RecordField",
         "RecordFieldGrid",
         "RecordPanel",
@@ -402,6 +416,10 @@
         "SCROLLBAR_SIZES",
         "SCROLL_AREA_DEFAULTS",
         "SEGMENTED_DEFAULTS",
+        "SEMANTIC_MATERIAL_ROLES",
+        "SEMANTIC_SURFACE_DEFAULTS",
+        "SEMANTIC_SURFACE_ROLES",
+        "SEMANTIC_TYPOGRAPHY_ROLES",
         "SHADOW_MAP",
         "SHEET_DEFAULTS",
         "SHELL_DEFAULTS",
@@ -434,6 +452,8 @@
         "Segmented",
         "Select",
         "SelectionPreviewRail",
+        "SemanticSurface",
+        "SemanticSurfaceSupport",
         "SettingsSurface",
         "Sheet",
         "ShimmerText",
@@ -467,6 +487,7 @@
         "StepperStep",
         "Steps",
         "StreamingText",
+        "SurfaceActionBar",
         "SurfaceActionFooter",
         "SurfaceCapabilityAnatomy",
         "SurfaceEmptyState",
@@ -480,8 +501,10 @@
         "SurfaceOfflineBanner",
         "SurfacePanel",
         "SurfaceReadField",
+        "SurfaceSectionCard",
         "SurfaceStaleBanner",
         "SurfaceSummaryStrip",
+        "SurfaceTabbedLabel",
         "Switch",
         "SystemCssVariablesBridge",
         "TAB_PANEL_TRANSITION_CLASS",
@@ -492,6 +515,7 @@
         "TENANT_THEME_CONFIG_SCHEMA",
         "TENANT_THEME_CONFIG_SCHEMA_DIGEST",
         "TENANT_THEME_DOCUMENT_SCHEMA_DIGEST",
+        "TENANT_THEME_EFFECT_INTENSITY_BOUNDS",
         "TENANT_THEME_FONT_PACK_IDS",
         "TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS",
         "TENANT_THEME_OVERRIDE_TOKENS",
@@ -555,6 +579,7 @@
         "WATERMARK_DEFAULTS",
         "WaterfallChart",
         "Watermark",
+        "WidgetBoard",
         "WizardSurface",
         "WorkspaceAdvancedFilters",
         "WorkspaceColumnsMenu",
@@ -576,12 +601,14 @@
         "brandThemeToBranding",
         "brandThemeToChromeVariables",
         "brandThemeToPersonality",
+        "brandThemeToTenantAppearance",
         "brandThemeToTenantAppearanceAdvanced",
         "brandThemeToTokenOverrides",
         "buildChartTrendPoints",
         "buildHideMediaQuery",
         "buildMinWidthQuery",
         "buildRangeQuery",
+        "buildRecipeManifest",
         "buildShowMediaQuery",
         "buildTenantSelector",
         "buildTenantThemePreviewScope",
@@ -737,6 +764,7 @@
         "resolveListCardMinWidth",
         "resolvePersonalityPreset",
         "resolvePosture",
+        "resolveRecipeProfile",
         "resolveRequestTenant",
         "resolveRequestTenantAsync",
         "resolveRowKey",
@@ -756,12 +784,16 @@
         "rottayBrandTheme",
         "sanitizeHref",
         "selectTenantThemeAdjustments",
+        "semanticMaterialsToCssVariables",
+        "semanticSurfaceRolesToCssVariables",
         "serializeBrandTheme",
+        "setSemanticTypographyVariables",
         "setServerHeaders",
         "sha256TenantThemeValue",
         "startDirectionalViewTransition",
         "startDsViewTransition",
         "stringifySurfaceValue",
+        "surfaceSectionCardRecipe",
         "tabPanelTransitionName",
         "tabPanelTransitionStyle",
         "tenantThemeAnatomyAttributes",
@@ -802,6 +834,7 @@
         "useCustomStatus",
         "useDataTable",
         "useDeferredPending",
+        "useDensity",
         "useDirectionalViewTransition",
         "useDraftSave",
         "useDsFocusMode",
@@ -844,6 +877,7 @@
         "useOptimisticList",
         "useOptimisticUpdate",
         "useOptionalTokens",
+        "useOptionalTranslation",
         "useOverlayLayer",
         "usePdfExport",
         "usePortalContainer",
@@ -851,6 +885,8 @@
         "useProductProfile",
         "useProductProfileContext",
         "usePulseOnChange",
+        "useRecipeProfile",
+        "useRecipeProfileDefaults",
         "useReducedMotion",
         "useRegisterCommandSource",
         "useRegisterCommands",
@@ -887,6 +923,7 @@
         "useViewTransition",
         "useVirtualScroll",
         "useVoiceInput",
+        "validateRecipeProfileSelection",
         "validateTenantThemeAgainstVerticalEnvelope",
         "validateTenantThemeConfig",
         "validateTenantThemeDocument",
@@ -895,7 +932,9 @@
       ],
       "symbols": {
         "ActionDock": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "ActiveFiltersBar": [
           "@phosphor-icons/react",
@@ -930,6 +969,7 @@
           "motion"
         ],
         "AdaptiveOverlay": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
@@ -937,6 +977,7 @@
           "antd"
         ],
         "Alert": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "AlertDialog": [
@@ -990,9 +1031,11 @@
           "antd"
         ],
         "BackTop": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Badge": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "BarChart": [
@@ -1011,7 +1054,13 @@
           "antd"
         ],
         "Breadcrumb": [
+          "@phosphor-icons/react",
           "antd"
+        ],
+        "buildRecipeManifest": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "buildViewModes": [
           "@phosphor-icons/react",
@@ -1039,7 +1088,11 @@
           "d3",
           "motion"
         ],
+        "Callout": [
+          "@phosphor-icons/react"
+        ],
         "Card": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Carousel": [
@@ -1095,6 +1148,7 @@
         ],
         "CommandCenterSurface": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "CompareSurface": [
@@ -1204,10 +1258,12 @@
           "antd"
         ],
         "Drawer": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
         "Dropdown": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
@@ -1225,6 +1281,7 @@
           "motion"
         ],
         "Empty": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "EmptyStateSurface": [
@@ -1262,6 +1319,7 @@
           "antd"
         ],
         "Form": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "FormFactsCard": [
@@ -1391,6 +1449,7 @@
           "motion"
         ],
         "Input": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "InputNumber": [
@@ -1466,9 +1525,11 @@
           "antd"
         ],
         "Menu": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "message": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "MessageBubble": [
@@ -1477,9 +1538,11 @@
           "motion"
         ],
         "MessageItem": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "MessageProvider": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "MetricsCards": [
@@ -1506,6 +1569,7 @@
           "antd"
         ],
         "Modal": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "MODAL_PROMOTE_TRANSITION_NAME": [
@@ -1524,6 +1588,7 @@
           "motion"
         ],
         "NavLink": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "NetworkGraph": [
@@ -1535,12 +1600,15 @@
           "antd"
         ],
         "notification": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "NotificationItem": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "NotificationProvider": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "NotificationSurface": [
@@ -1588,6 +1656,7 @@
         ],
         "PatternActivityLog": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternApprovalInbox": [
@@ -1631,9 +1700,11 @@
         ],
         "PatternDetailPanel": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternEmptyState": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternEnvironmentToggle": [
@@ -1653,6 +1724,7 @@
           "antd"
         ],
         "PatternFormBuilder": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternGalleryView": [
@@ -1706,6 +1778,7 @@
         ],
         "PatternPageShell": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternPricingTable": [
@@ -1741,6 +1814,11 @@
         "PatternUserProfileCard": [
           "@ant-design/icons",
           "antd"
+        ],
+        "PatternWidgetBoard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "PatternWorkbenchHeader": [
           "@phosphor-icons/react",
@@ -1881,6 +1959,7 @@
           "antd"
         ],
         "Result": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "SankeyChart": [
@@ -1934,6 +2013,7 @@
           "antd"
         ],
         "Select": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "SelectionPreviewRail": [
@@ -2024,6 +2104,11 @@
           "antd",
           "motion"
         ],
+        "SurfaceActionBar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
         "SurfaceActionFooter": [
           "@phosphor-icons/react",
           "antd",
@@ -2092,12 +2177,27 @@
           "antd",
           "motion"
         ],
+        "SurfaceSectionCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "surfaceSectionCardRecipe": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
         "SurfaceStaleBanner": [
           "@phosphor-icons/react",
           "antd",
           "motion"
         ],
         "SurfaceSummaryStrip": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceTabbedLabel": [
           "@phosphor-icons/react",
           "antd",
           "motion"
@@ -2126,13 +2226,16 @@
           "motion"
         ],
         "Tabs": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
         "Tag": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "TagInput": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "TeamSurface": [
@@ -2151,6 +2254,7 @@
           "antd"
         ],
         "Textarea": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "TextReveal": [
@@ -2164,10 +2268,12 @@
           "antd"
         ],
         "Toast": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
         "ToastContainer": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
@@ -2183,6 +2289,7 @@
           "antd"
         ],
         "Tour": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Transfer": [
@@ -2237,9 +2344,11 @@
           "motion"
         ],
         "useForm": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "useMessage": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "useMotionPersonality": [
@@ -2250,6 +2359,7 @@
           "antd"
         ],
         "useNotification": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "useOptionalTokens": [
@@ -2310,6 +2420,11 @@
         ],
         "Watermark": [
           "antd"
+        ],
+        "WidgetBoard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "WizardSurface": [
           "@ant-design/icons",
@@ -2395,7 +2510,6 @@
         "CONTAINER_MAX_WIDTHS",
         "CONTAINER_PADDINGS",
         "CONTEXTMENU_DEFAULTS",
-        "Callout",
         "ChartFamilyFrame",
         "ChartFrame",
         "ChartImperativePlot",
@@ -2417,11 +2531,15 @@
         "DEFAULT_TENANT_CONFIG",
         "DEFAULT_TENANT_SLUG",
         "DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS",
+        "DENSITY_POSTURES",
         "DIVIDER_DEFAULTS",
         "DIVIDER_DEFAULT_COLORS",
         "DIVIDER_SPACING_MAP",
         "DROPDOWN_DEFAULTS",
         "DSErrorBoundary",
+        "DecisionComparison",
+        "DecisionPanorama",
+        "DensityScope",
         "ENGINE_REGISTRY",
         "EXAMPLE_SKIN_PACK",
         "EffectRuntimeProvider",
@@ -2443,6 +2561,7 @@
         "FeatureContext",
         "FeatureGate",
         "FeatureProvider",
+        "FeatureWorkspaceFrame",
         "FocusModeProvider",
         "FocusTrap",
         "GAP_MAP",
@@ -2499,6 +2618,10 @@
         "POPOVER_DEFAULTS",
         "PREVIEW_SCOPE_ATTRIBUTE",
         "PRODUCT_PROFILES",
+        "PatternDecisionComparison",
+        "PatternDecisionPanorama",
+        "PatternFeatureWorkspaceFrame",
+        "PatternRecordFacts",
         "PatternTenantPreview",
         "PatternVirtualList",
         "Portal",
@@ -2509,15 +2632,23 @@
         "RATE_DEFAULTS",
         "RATE_SIZE_MAP",
         "RATIO_PRESETS",
+        "RECIPE_PROFILES",
+        "RECIPE_PROFILE_SCHEMA_VERSION",
         "RESPONSIVE_BREAKPOINTS",
         "RESPONSIVE_BREAKPOINT_ORDER",
         "RadioGroup",
+        "RecipeProfileProvider",
+        "RecordFacts",
         "ResponsiveContext",
         "ResponsiveProvider",
         "ResponsiveSlot",
         "SCROLLBAR_SIZES",
         "SCROLL_AREA_DEFAULTS",
         "SEGMENTED_DEFAULTS",
+        "SEMANTIC_MATERIAL_ROLES",
+        "SEMANTIC_SURFACE_DEFAULTS",
+        "SEMANTIC_SURFACE_ROLES",
+        "SEMANTIC_TYPOGRAPHY_ROLES",
         "SHADOW_MAP",
         "SHEET_DEFAULTS",
         "SHELL_DEFAULTS",
@@ -2538,6 +2669,8 @@
         "STRENGTH_COLORS",
         "STRENGTH_WIDTHS",
         "ScrollArea",
+        "SemanticSurface",
+        "SemanticSurfaceSupport",
         "ShortcutProvider",
         "ShortcutScope",
         "Show",
@@ -2560,6 +2693,7 @@
         "TENANT_THEME_CONFIG_SCHEMA",
         "TENANT_THEME_CONFIG_SCHEMA_DIGEST",
         "TENANT_THEME_DOCUMENT_SCHEMA_DIGEST",
+        "TENANT_THEME_EFFECT_INTENSITY_BOUNDS",
         "TENANT_THEME_FONT_PACK_IDS",
         "TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS",
         "TENANT_THEME_OVERRIDE_TOKENS",
@@ -2603,6 +2737,7 @@
         "brandThemeToBranding",
         "brandThemeToChromeVariables",
         "brandThemeToPersonality",
+        "brandThemeToTenantAppearance",
         "brandThemeToTenantAppearanceAdvanced",
         "brandThemeToTokenOverrides",
         "buildChartTrendPoints",
@@ -2753,6 +2888,7 @@
         "resolveHeader",
         "resolvePersonalityPreset",
         "resolvePosture",
+        "resolveRecipeProfile",
         "resolveRequestTenant",
         "resolveRequestTenantAsync",
         "resolveRowKey",
@@ -2768,7 +2904,10 @@
         "rottayBrandTheme",
         "sanitizeHref",
         "selectTenantThemeAdjustments",
+        "semanticMaterialsToCssVariables",
+        "semanticSurfaceRolesToCssVariables",
         "serializeBrandTheme",
+        "setSemanticTypographyVariables",
         "setServerHeaders",
         "sha256TenantThemeValue",
         "stringifySurfaceValue",
@@ -2804,6 +2943,7 @@
         "useCrossTabSync",
         "useCustomStatus",
         "useDataTable",
+        "useDensity",
         "useDraftSave",
         "useDsFocusMode",
         "useEngineContext",
@@ -2838,12 +2978,15 @@
         "useNotificationPreferences",
         "useOptimisticList",
         "useOptimisticUpdate",
+        "useOptionalTranslation",
         "useOverlayLayer",
         "usePdfExport",
         "usePortalContainer",
         "useProductProfile",
         "useProductProfileContext",
         "usePulseOnChange",
+        "useRecipeProfile",
+        "useRecipeProfileDefaults",
         "useRegisterCommandSource",
         "useRegisterCommands",
         "useRegisteredShortcuts",
@@ -2872,6 +3015,7 @@
         "useVariant",
         "useVirtualScroll",
         "useVoiceInput",
+        "validateRecipeProfileSelection",
         "validateTenantThemeAgainstVerticalEnvelope",
         "validateTenantThemeConfig",
         "validateTenantThemeDocument",

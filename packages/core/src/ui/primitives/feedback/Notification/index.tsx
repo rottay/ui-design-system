@@ -1,7 +1,7 @@
 /**
  * @fileoverview Notification - imperative API for corner-positioned rich alerts.
  * More prominent than Message/Toast: includes title, description, and optional actions.
- * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
+ * Multi-engine: Classic (Ant Design), Modern (Rottay-native skin), Rustic (Vanilla).
  *
  * @example
  * ```tsx

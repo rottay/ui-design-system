@@ -9,6 +9,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import ClassicTabs from '../engines/classic';
+import ModernTabs from '../engines/modern';
 
 const TAB_ITEMS = [
   { key: '1', label: 'Tab 1', children: <div>Content 1</div> },
@@ -74,5 +75,23 @@ describe('ClassicTabs responsive size', () => {
       // desktop -> lg (1024px)
       expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
     });
+  });
+});
+
+describe('ModernTabs responsive size', () => {
+  it('projects the full tab anatomy through responsive custom properties', () => {
+    const { container } = render(
+      <ModernTabs size={{ base: 'sm', lg: 'lg' }} items={TAB_ITEMS} />
+    );
+    const styleTag = container.querySelector('style');
+    const root = container.querySelector('.rottay-tabs--modern');
+
+    expect(root).toHaveAttribute('data-size', 'responsive');
+    expect(root).toHaveAttribute('data-responsive-id');
+    expect(styleTag?.textContent).toContain('--ds-tabs-current-height:');
+    expect(styleTag?.textContent).toContain('--ds-tabs-current-padding:');
+    expect(styleTag?.textContent).toContain('--ds-tabs-current-font-size:');
+    expect(styleTag?.textContent).toContain('--ds-tabs-current-icon-size:');
+    expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
   });
 });

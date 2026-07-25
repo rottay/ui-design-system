@@ -17,6 +17,12 @@
  * the Web Speech API (e.g. Firefox without the flag) — consumers
  * don't need to gate on `isSupported` themselves.
  *
+ * All paint and geometry lives in the family skin
+ * (`foundation/tokens/css/presentation/components/skin/voice-input-button.css`),
+ * keyed by `data-part`/`data-status`/`data-variant`/`data-size` — the skin is
+ * the single paint owner and also owns the `ds-voice-input-button-pulse` /
+ * `-spin` keyframes referenced below. This file carries no inline paint.
+ *
  * Originally lived in app-platform's `_shared/voice-input/` and was
  * relocated to the design system as part of Wave 4.2 of the canonical
  * execution plan (correcting the Wave 1 misclassification — voice
@@ -31,6 +37,7 @@ import {
   MicOffIcon as MicOff,
 } from '../../../../graphics/icons';
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useVoiceInput } from '../../../../infrastructure/runtime/application/automation/voice';
 
 export interface VoiceInputButtonProps {
@@ -45,11 +52,6 @@ export interface VoiceInputButtonProps {
   /** Optional aria-label override. */
   ariaLabel?: string;
 }
-
-const SIZE_MAP = {
-  sm: { button: 28, icon: 13 },
-  md: { button: 34, icon: 15 },
-} as const;
 
 export function VoiceInputButton({
   lang = 'en-US',
@@ -68,12 +70,24 @@ export function VoiceInputButton({
     stopListening,
   } = useVoiceInput({ lang, onTranscript });
 
+  // Component-owned strings: translated when an I18nProvider is mounted, with
+  // the documented English fallbacks otherwise (a missing catalog key echoes
+  // back the full key, which the endsWith guard detects). Behavior is
+  // byte-identical until the locale JSONs land (K4-B guarded i18n channel).
+  // The hook-owned error strings resolve through the same guard inside
+  // `useVoiceInput` (keys `voiceInput.error.*`). NOTE: this hook call must
+  // stay above the `isSupported` early return — hooks are unconditional.
+  const i18n = useOptionalTranslation('components');
+  const voiceLabel = (key: string, fallback: string): string => {
+    const translated = i18n?.t(key);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
+
   // Hide entirely on browsers without Web Speech API support
   if (!isSupported) {
     return null;
   }
 
-  const dims = SIZE_MAP[size];
   const isActive = status === 'listening' || status === 'transcribing';
   const isError = status === 'error';
   const isBlocked = permissionState === 'denied';
@@ -87,74 +101,56 @@ export function VoiceInputButton({
   };
 
   const title = isBlocked
-    ? 'Microphone blocked. Allow access in browser settings.'
+    ? voiceLabel('voiceInput.blocked', 'Microphone blocked. Allow access in browser settings.')
     : status === 'listening'
-      ? 'Listening… click to stop'
+      ? voiceLabel('voiceInput.listeningStop', 'Listening… click to stop')
       : status === 'transcribing'
-        ? 'Transcribing…'
+        ? voiceLabel('voiceInput.transcribing', 'Transcribing…')
         : isError
-          ? errorMessage ?? 'Voice input unavailable'
-          : 'Speak';
+          ? errorMessage ?? voiceLabel('voiceInput.unavailable', 'Voice input unavailable')
+          : voiceLabel('voiceInput.speak', 'Speak');
 
   const resolvedAriaLabel =
     ariaLabel ??
-    (isActive ? 'Stop voice input' : 'Start voice input');
+    (isActive
+      ? voiceLabel('voiceInput.stop', 'Stop voice input')
+      : voiceLabel('voiceInput.start', 'Start voice input'));
 
   const tooltipContent = isError ? errorMessage ?? '' : transcriptPreview ?? '';
   const tooltipDisabled = !isError && !transcriptPreview;
 
   return (
-    <>
-      <Tooltip
-        content={tooltipContent}
-        disabled={tooltipDisabled}
-        placement="top"
-        color={isError ? 'error' : 'default'}
-        maxWidth={280}
+    <Tooltip
+      content={tooltipContent}
+      disabled={tooltipDisabled}
+      placement="top"
+      color={isError ? 'error' : 'default'}
+      maxWidth="var(--ds-voice-input-tooltip-max-width, 280px)"
+    >
+      <Box
+        as="button"
+        className="ds-voice-input-button"
+        data-part="root"
+        data-size={size}
+        data-status={status}
+        data-active={isActive ? 'true' : 'false'}
+        data-error={isError ? 'true' : 'false'}
+        data-variant={variant}
+        data-blocked={isBlocked ? 'true' : 'false'}
+        onClick={handleClick}
+        aria-label={resolvedAriaLabel}
+        title={title}
       >
-        <Box
-          as="button"
-          className="ds-voice-input-button"
-          data-part="root"
-          data-status={status}
-          data-active={isActive ? 'true' : 'false'}
-          data-error={isError ? 'true' : 'false'}
-          data-variant={variant}
-          data-blocked={isBlocked ? 'true' : 'false'}
-          onClick={handleClick}
-          aria-label={resolvedAriaLabel}
-          title={title}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: dims.button,
-            height: dims.button,
-            minWidth: dims.button,
-            padding: 0,
-            cursor: 'pointer',
-            transition: 'background 0.14s ease, border-color 0.14s ease, color 0.14s ease',
-            animation: status === 'listening' ? 'ds-voice-input-button-pulse 1.6s ease-out infinite' : undefined,
-            flexShrink: 0,
-          }}
-        >
-          {status === 'transcribing' ? (
-            <LoaderCircle
-              style={{
-                width: dims.icon,
-                height: dims.icon,
-                animation: 'ds-voice-input-button-spin 1s linear infinite',
-              }}
-            />
-          ) : status === 'listening' ? (
-            <AudioLines style={{ width: dims.icon, height: dims.icon }} />
-          ) : isBlocked ? (
-            <MicOff style={{ width: dims.icon, height: dims.icon }} />
-          ) : (
-            <Mic style={{ width: dims.icon, height: dims.icon }} />
-          )}
-        </Box>
-      </Tooltip>
-    </>
+        {status === 'transcribing' ? (
+          <LoaderCircle />
+        ) : status === 'listening' ? (
+          <AudioLines />
+        ) : isBlocked ? (
+          <MicOff />
+        ) : (
+          <Mic />
+        )}
+      </Box>
+    </Tooltip>
   );
 }

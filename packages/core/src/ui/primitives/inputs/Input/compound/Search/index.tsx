@@ -45,19 +45,13 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import type { KeyboardEvent } from 'react';
-import type { InputSearchProps } from '../../contracts';
-import { BaseInput } from '../../engines';
-
-/** SVG magnifying glass icon for the search button. */
-const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-);
+import { useEffect, useRef, type KeyboardEvent } from "react";
+import type { InputSearchProps } from "../../contracts";
+import { BaseInput } from "../../engines";
+import { ActionSearchIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-search";
+import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 
 /**
  * Search input with integrated search action button.
@@ -80,34 +74,45 @@ const SearchIcon = () => (
  * ```
  */
 export const InputSearch = (props: InputSearchProps) => {
+  const translation = useOptionalTranslation("common");
   const {
     onSearch,
-    loading: _loading,
+    loading = false,
     showSearchButton = true,
     searchButtonText,
     ...inputProps
   } = props;
+  const queryRef = useRef(
+    String(inputProps.value ?? inputProps.defaultValue ?? "")
+  );
+
+  useEffect(() => {
+    if (inputProps.value !== undefined)
+      queryRef.current = String(inputProps.value);
+  }, [inputProps.value]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onSearch?.((inputProps as any).value || '');
+    if (e.key === "Enter" && !loading) {
+      onSearch?.(e.currentTarget.value);
     }
-    (inputProps as any).onKeyDown?.(e);
+    inputProps.onKeyDown?.(e);
+  };
+
+  const handleChange: InputSearchProps["onChange"] = (value, event) => {
+    queryRef.current = value;
+    inputProps.onChange?.(value, event);
   };
 
   const searchButton = showSearchButton ? (
     <button
       type="button"
       data-part="search-button"
-      onClick={() => onSearch?.((inputProps as any).value || '')}
-      style={{
-        cursor: 'pointer',
-        padding: '4px',
-        display: 'flex',
-      }}
-      aria-label="Search"
+      onClick={() => onSearch?.(queryRef.current)}
+      onPointerDown={(event) => event.preventDefault()}
+      aria-label={translation?.t("search") ?? "Search"}
+      disabled={Boolean(loading || inputProps.disabled)}
     >
-      {searchButtonText || <SearchIcon />}
+      {searchButtonText || <ActionSearchIcon decorative size="sm" />}
     </button>
   ) : null;
 
@@ -115,10 +120,12 @@ export const InputSearch = (props: InputSearchProps) => {
     <BaseInput
       {...inputProps}
       type="text"
+      loading={loading || undefined}
       suffix={searchButton}
+      onChange={handleChange}
       onKeyDown={handleKeyDown}
     />
   );
 };
 
-InputSearch.displayName = 'Input.Search';
+InputSearch.displayName = "Input.Search";

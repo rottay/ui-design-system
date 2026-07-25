@@ -73,10 +73,10 @@ describe('Calendar modern engine', () => {
     expect(getDayButton(12)).toBeDisabled();
     expect(getDayButton(15)).not.toBeDisabled();
 
-    fireEvent.click(screen.getByRole('button', { name: '«' }));
-    fireEvent.click(screen.getByRole('button', { name: '»' }));
-    fireEvent.click(screen.getByRole('button', { name: '‹' }));
-    fireEvent.click(screen.getByRole('button', { name: '›' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Previous year' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next year' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Previous month' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next month' }));
 
     fireEvent.click(getDayButton(5));
     expect(onChange).not.toHaveBeenCalled();

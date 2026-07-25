@@ -78,6 +78,7 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
     variant: variantProp = TAG_DEFAULTS.variant,
     closable = TAG_DEFAULTS.closable,
     onClose,
+    closeLabel: _closeLabel,
     icon,
     children,
     bordered = TAG_DEFAULTS.bordered,
@@ -90,6 +91,10 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
     style = {},
     ...restProps
   } = props;
+
+  // closeLabel is consumed by the modern engine only; swallowed here so it
+  // never leaks onto the DOM through restProps.
+  void _closeLabel;
 
   // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_TO_ANT_COLOR
   // below is keyed by the same internal color-token name either way.

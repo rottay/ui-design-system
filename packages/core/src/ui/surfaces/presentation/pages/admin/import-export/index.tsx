@@ -94,13 +94,11 @@ function ImportPanel({
                   <Stack spacing="md">
                     <Text
                       className="ds-import-export__muted-text"
-                      data-part="muted-text"
                     >
                       Drop a file here or click to browse
                     </Text>
                     <Text
                       className="ds-import-export__muted-text"
-                      data-part="muted-text"
                       style={{ fontSize: 12 }}
                     >
                       Accepted formats: {importConfig.acceptedFormats.join(', ')}
@@ -118,7 +116,6 @@ function ImportPanel({
               {importConfig.templateUrl && (
                 <Text
                   className="ds-import-export__muted-text"
-                  data-part="muted-text"
                   style={{ fontSize: 13 }}
                 >
                   Need a template? Download it from the provided URL.
@@ -155,7 +152,6 @@ function ImportPanel({
                         <Text
                           key={i}
                           className="ds-import-export__muted-text"
-                          data-part="muted-text"
                           style={{ fontSize: 13 }}
                         >
                           Row {err.row}, {err.field}: {err.message}
@@ -164,7 +160,6 @@ function ImportPanel({
                       {importResult.errors.length > 5 && (
                         <Text
                           className="ds-import-export__muted-text"
-                          data-part="muted-text"
                           style={{ fontSize: 12 }}
                         >
                           ...and {importResult.errors.length - 5} more
@@ -282,7 +277,6 @@ function ExportPanel({
               <Text style={{ fontWeight: 500 }}>Fields</Text>
               <Text
                 className="ds-import-export__muted-text"
-                data-part="muted-text"
                 style={{ fontSize: 12 }}
               >
                 {selectedFields.length} of {exportConfig.fields.length} selected
@@ -347,7 +341,6 @@ function HistoryPanel({
                 <Text style={{ fontWeight: 500 }}>{entry.date}</Text>
                 <Text
                   className="ds-import-export__muted-text"
-                  data-part="muted-text"
                   style={{ fontSize: 13 }}
                 >
                   {entry.recordCount} records

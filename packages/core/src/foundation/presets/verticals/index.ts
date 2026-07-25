@@ -24,12 +24,12 @@
  * chain.
  */
 
-import type { VerticalKey } from '@/foundation/contracts/kernel/verticals';
-import type { VerticalPreset } from '@/foundation/contracts/composition/tenants';
+import type { VerticalKey } from "@/foundation/contracts/kernel/verticals";
+import type { VerticalPreset } from "@/foundation/contracts/composition/tenants";
 import {
   EVNTO_CANONICAL_MOTION,
   EVNTO_CANONICAL_SURFACES,
-} from '@/foundation/presets/policy/experience-baselines/evnto';
+} from "@/foundation/presets/policy/experience-baselines/evnto";
 
 /**
  * Registry of all known vertical presets.
@@ -49,41 +49,42 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
    * Personality: expressive, slideUp entrance, spring physics, comfortable layout
    */
   evnto: {
-    key: 'evnto',
-    label: 'Evnto',
-    description: 'Event management vertical with expressive animations, comfortable layout, and live-status presentation.',
-    engine: 'modern',
-    motionProfile: 'expressive',
-    density: 'comfortable',
+    key: "evnto",
+    label: "Evnto",
+    description:
+      "Event management vertical with expressive animations, comfortable layout, and live-status presentation.",
+    engine: "modern",
+    motionProfile: "expressive",
+    density: "comfortable",
     personality: {
       animation: EVNTO_CANONICAL_MOTION,
       chart: {
         animateOnMount: true,
         mountDuration: 1000,
-        lineStyle: 'smooth',
+        lineStyle: "smooth",
         showDots: true,
         useGradientFill: true,
-        tooltipStyle: 'glass',
+        tooltipStyle: "glass",
       },
       typography: {
-        headingWeightBias: 'heavier',
-        headingLetterSpacing: '-0.02em',
-        labelStyle: 'capitalize',
+        headingWeightBias: "heavier",
+        headingLetterSpacing: "-0.02em",
+        labelStyle: "capitalize",
       },
       accent: {
-        barPosition: 'top',
+        barPosition: "top",
         barThickness: 4,
-        barStyle: 'gradient',
-        iconContainerShape: 'circle',
-        badgeShape: 'pill',
-        dividerStyle: 'dashed',
+        barStyle: "gradient",
+        iconContainerShape: "circle",
+        badgeShape: "pill",
+        dividerStyle: "dashed",
       },
       card: {
-        defaultElevation: 'md',
-        hoverElevation: 'lift-two',
+        defaultElevation: "md",
+        hoverElevation: "lift-two",
         showBorder: false,
         hoverTint: true,
-        paddingDensity: 'spacious',
+        paddingDensity: "spacious",
       },
     },
     tokenOverrides: {
@@ -91,17 +92,17 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
       borderRadius: EVNTO_CANONICAL_SURFACES.borderRadius,
       shadows: EVNTO_CANONICAL_SURFACES.shadows,
     },
-    defaultProductProfile: 'events.organizer',
-    features: ['events', 'ticketing', 'check-in', 'analytics'],
+    defaultProductProfile: "events.organizer",
+    features: ["events", "ticketing", "check-in", "analytics"],
     surfaceDefaults: {
-      listView: 'table',
-      density: 'comfortable',
-      schedulerView: 'week',
+      listView: "table",
+      density: "comfortable",
+      schedulerView: "week",
     },
     suggestedPalette: {
-      primaryColor: '#FF6B35',
-      secondaryColor: '#EA580C',
-      accentColor: '#06b6d4',
+      primaryColor: "#FF6B35",
+      secondaryColor: "#EA580C",
+      accentColor: "#06b6d4",
     },
   },
 
@@ -112,71 +113,72 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
    * Personality: editorial, fade entrance, no spring, comfortable people-first layout
    */
   bithire: {
-    key: 'bithire',
-    label: 'BitHire',
-    description: 'Recruiting vertical with editorial aesthetics, comfortable density, and people-first workflows.',
-    engine: 'modern',
-    motionProfile: 'calm',
-    density: 'comfortable',
+    key: "bithire",
+    label: "BitHire",
+    description:
+      "Recruiting vertical with editorial aesthetics, comfortable density, and people-first workflows.",
+    engine: "modern",
+    motionProfile: "calm",
+    density: "comfortable",
     personality: {
       animation: {
         intensity: 0.4,
         staggerDelay: 30,
         staggerMax: 200,
-        entrance: 'fade',
+        entrance: "fade",
         entranceDuration: 200,
         hoverLift: 1,
         hoverScale: 1.0,
         useSpring: false,
         springTension: 170,
         springFriction: 26,
-        pulseSpeed: 'slow',
-        skeletonStyle: 'pulse',
+        pulseSpeed: "slow",
+        skeletonStyle: "pulse",
         countUpEnabled: true,
       },
       chart: {
         animateOnMount: true,
         mountDuration: 500,
-        lineStyle: 'sharp',
+        lineStyle: "sharp",
         showDots: true,
         useGradientFill: false,
-        tooltipStyle: 'detailed',
+        tooltipStyle: "detailed",
       },
       typography: {
-        headingWeightBias: 'heavier',
-        headingLetterSpacing: '-0.01em',
-        labelStyle: 'sentence',
+        headingWeightBias: "heavier",
+        headingLetterSpacing: "-0.01em",
+        labelStyle: "sentence",
       },
       accent: {
-        barPosition: 'left',
-        barThickness: 3,
-        barStyle: 'solid',
-        iconContainerShape: 'circle',
-        badgeShape: 'pill',
-        dividerStyle: 'solid',
+        barPosition: "none",
+        barThickness: 0,
+        barStyle: "solid",
+        iconContainerShape: "circle",
+        badgeShape: "pill",
+        dividerStyle: "solid",
       },
       card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
+        defaultElevation: "sm",
+        hoverElevation: "lift-one",
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'normal',
+        paddingDensity: "normal",
       },
     },
     tokenOverrides: {
       densityScale: 0.98,
     },
-    defaultProductProfile: 'recruiting.operator',
-    features: ['recruiting', 'candidates', 'interviews', 'offers'],
+    defaultProductProfile: "recruiting.operator",
+    features: ["recruiting", "candidates", "interviews", "offers"],
     surfaceDefaults: {
-      listView: 'table',
-      density: 'comfortable',
-      schedulerView: 'week',
+      listView: "table",
+      density: "comfortable",
+      schedulerView: "week",
     },
     suggestedPalette: {
-      primaryColor: '#0A66C2',
-      secondaryColor: '#004182',
-      accentColor: '#7FC15E',
+      primaryColor: "#5B50E6",
+      secondaryColor: "#4439B8",
+      accentColor: "#8B6FE8",
     },
   },
 
@@ -188,66 +190,67 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
    * Engine: modern is the flagship target; classic remains a supported engine path
    */
   platform: {
-    key: 'platform',
-    label: 'Platform',
-    description: 'Admin vertical with sharp aesthetics, compact density, and operational dashboard defaults.',
-    engine: 'modern',
-    motionProfile: 'precise',
-    density: 'compact',
+    key: "platform",
+    label: "Platform",
+    description:
+      "Admin vertical with sharp aesthetics, compact density, and operational dashboard defaults.",
+    engine: "modern",
+    motionProfile: "precise",
+    density: "compact",
     personality: {
       animation: {
         intensity: 0.4,
         staggerDelay: 24,
         staggerMax: 160,
-        entrance: 'fade',
+        entrance: "fade",
         entranceDuration: 180,
         hoverLift: 1,
         hoverScale: 1.0,
         useSpring: false,
         springTension: 170,
         springFriction: 22,
-        pulseSpeed: 'normal',
-        skeletonStyle: 'shimmer',
+        pulseSpeed: "normal",
+        skeletonStyle: "shimmer",
         countUpEnabled: true,
       },
       chart: {
         animateOnMount: true,
         mountDuration: 720,
-        lineStyle: 'sharp',
+        lineStyle: "sharp",
         showDots: true,
         useGradientFill: false,
-        tooltipStyle: 'detailed',
+        tooltipStyle: "detailed",
       },
       typography: {
-        headingWeightBias: 'normal',
-        headingLetterSpacing: '-0.015em',
-        labelStyle: 'sentence',
+        headingWeightBias: "normal",
+        headingLetterSpacing: "-0.015em",
+        labelStyle: "sentence",
       },
       accent: {
-        barPosition: 'top',
+        barPosition: "top",
         barThickness: 3,
-        barStyle: 'solid',
-        iconContainerShape: 'rounded',
-        badgeShape: 'rounded',
-        dividerStyle: 'solid',
+        barStyle: "solid",
+        iconContainerShape: "rounded",
+        badgeShape: "rounded",
+        dividerStyle: "solid",
       },
       card: {
-        defaultElevation: 'sm',
-        hoverElevation: 'lift-one',
+        defaultElevation: "sm",
+        hoverElevation: "lift-one",
         showBorder: true,
         hoverTint: false,
-        paddingDensity: 'compact',
+        paddingDensity: "compact",
       },
     },
-    defaultProductProfile: 'platform.admin',
-    features: ['admin', 'settings', 'users', 'billing'],
+    defaultProductProfile: "platform.admin",
+    features: ["admin", "settings", "users", "billing"],
     surfaceDefaults: {
-      listView: 'table',
-      density: 'compact',
-      schedulerView: 'month',
+      listView: "table",
+      density: "compact",
+      schedulerView: "month",
     },
     suggestedPalette: {
-      primaryColor: '#6366F1',
+      primaryColor: "#6366F1",
     },
   },
 };
@@ -259,7 +262,9 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
  * fallback strategy (unlike product profiles which always fall back to
  * a default). Verticals are optional -- the system works fine without one.
  */
-export function getVerticalPreset(key: VerticalKey): VerticalPreset | undefined {
+export function getVerticalPreset(
+  key: VerticalKey
+): VerticalPreset | undefined {
   // Unlike product profiles, verticals are optional. Callers can choose to
   // continue without one instead of forcing a DS-owned fallback.
   return VERTICAL_REGISTRY[key];

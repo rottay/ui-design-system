@@ -8,7 +8,7 @@
 
 import { type TenantAppearance } from "@/foundation/contracts/composition/tenants/themes";
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
-import { enforceTextContrast } from "@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect";
+import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import type {
   NormalizedTenantThemeAppearance,
   TenantThemeArtifact,
@@ -24,6 +24,7 @@ import type {
 import {
   TENANT_THEME_ANATOMY_VARIANTS,
   TENANT_THEME_CHROME_FAMILIES,
+  TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
   TENANT_THEME_FONT_PACK_IDS,
   TENANT_THEME_RADIUS_SCALE_BOUNDS,
   TENANT_THEME_REFERENCE_TOKENS,
@@ -39,7 +40,7 @@ import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
-import { appearanceToVariables } from "../../kernel/runtime/appearance";
+import { compileAppearanceVariables } from "../../kernel/runtime/appearance";
 
 export { TENANT_THEME_CONFIG_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
 export type { TenantThemeSchemaNode } from "../../kernel/foundation/schemas/tenant-theme";
@@ -1038,7 +1039,7 @@ export function validateTenantThemeAgainstVerticalEnvelope(
 
   const rangeBounds = {
     densityScale: { min: 0.75, max: 1.25 },
-    effectIntensity: { min: 0, max: 1 },
+    effectIntensity: TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
     motionIntensity: { min: 0, max: 1 },
     motionDurationScale: { min: 0.5, max: 1.5 },
     typeScale: TENANT_THEME_TYPE_SCALE_BOUNDS,
@@ -1101,6 +1102,11 @@ export function validateTenantThemeAgainstVerticalEnvelope(
     ],
     ["typography.scale", general?.typography?.scale, ranges?.typeScale],
     ["shape.radiusScale", general?.shape?.radiusScale, ranges?.radiusScale],
+    [
+      "surfaces.effectIntensity",
+      general?.surfaces?.effectIntensity,
+      ranges?.effectIntensity,
+    ],
   ] as const;
   for (const [field, value, range] of rangedValues) {
     if (
@@ -1201,6 +1207,9 @@ function normalizeAppearance(
       : {}),
     ...(config.visualFoundation.advanced
       ? { advanced: config.visualFoundation.advanced }
+      : {}),
+    ...(config.visualFoundation.recipeProfile
+      ? { recipeProfile: config.visualFoundation.recipeProfile }
       : {}),
   });
 }
@@ -1438,15 +1447,33 @@ export function compileTenantThemeConfig(
   }
 
   const normalizedAppearance = normalizeAppearance(config);
-  const mergedVariables = sortedVariables(
-    appearanceToVariables(normalizedAppearance as TenantAppearance)
+  // The shared runtime/static Appearance compiler owns APCA autocorrection so
+  // artifact, provider and generated-CSS paths cannot drift.
+  const { variables: contrastedVariables, adjustments } =
+    compileAppearanceVariables(normalizedAppearance as TenantAppearance);
+  // DS-S001: the schema already closes recipeProfile to the published
+  // registry; the compiler still revalidates the raw value fail-closed so a
+  // bad row can never emit a profile channel.
+  const requestedRecipeProfile =
+    config.mode === "advanced"
+      ? config.visualFoundation.recipeProfile
+      : undefined;
+  const recipeProfileValidation = validateRecipeProfileSelection(
+    requestedRecipeProfile
   );
-  // Contrast autocorrect runs before chart validation so categorical marks
-  // are checked against the corrected surfaces the artifact actually emits.
-  const { variables: contrastedVariables, adjustments } = enforceTextContrast(
-    mergedVariables,
-    normalizedAppearance
-  );
+  if (requestedRecipeProfile !== undefined && !recipeProfileValidation.ok) {
+    throw new TenantThemeValidationError([
+      {
+        code: "invalid_value",
+        path: "$.visualFoundation.recipeProfile",
+        message: `Recipe profile rejected: ${recipeProfileValidation.reason}`,
+      },
+    ]);
+  }
+  if (recipeProfileValidation.profile) {
+    contrastedVariables["--ds-recipe-profile"] =
+      `"${recipeProfileValidation.profile.id}"`;
+  }
   const variables = sortedVariables(contrastedVariables);
   const chartCategoryIssues = validateCompiledChartCategories(
     normalizedAppearance,
@@ -1468,9 +1495,18 @@ export function compileTenantThemeConfig(
     ]);
   }
   for (const [key, value] of Object.entries(variables)) {
+    // The recipe channel is not authored CSS: it is a compiler-generated,
+    // quoted identifier that has already passed the closed registry above.
+    // Keep the general visual-value parser hostile to `@`/arbitrary strings
+    // and admit only this exact validated declaration.
+    const isValidatedRecipeProfileChannel =
+      key === "--ds-recipe-profile" &&
+      recipeProfileValidation.profile !== undefined &&
+      value === `"${recipeProfileValidation.profile.id}"`;
     if (
       !key.startsWith("--ds-") ||
-      !isSafeVisualValue(value, `$.variables[${JSON.stringify(key)}]`, false)
+      (!isValidatedRecipeProfileChannel &&
+        !isSafeVisualValue(value, `$.variables[${JSON.stringify(key)}]`, false))
     ) {
       throw new TenantThemeValidationError([
         {

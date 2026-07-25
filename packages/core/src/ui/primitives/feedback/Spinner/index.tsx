@@ -3,7 +3,7 @@
 /**
  * @fileoverview Spinner - animated loading indicator for async operations.
  * Four sizes (sm/md/lg/xl), customizable color, optional label.
- * Multi-engine: Classic (Ant Design Spin), Modern (DaisyUI), Rustic (pure CSS keyframes).
+ * Multi-engine: Classic (Ant Design Spin), Modern (token skin), Rustic (pure CSS keyframes).
  *
  * @example
  * ```tsx
@@ -32,6 +32,6 @@ export {
  */
 export const Spinner = createEngineComponent<SpinnerProps>('Spinner', {
   classic: () => import('./engines/classic'),  // Ant Design Spin
-  modern: () => import('./engines/modern'),     // DaisyUI loading class
+  modern: () => import('./engines/modern'),     // Token skin (no DaisyUI)
   rustic: () => import('./engines/rustic'),      // Pure CSS keyframes
 });

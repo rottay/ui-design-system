@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { render, renderHook, waitFor } from '@testing-library/react';
 import {
   formatDate,
   formatNumber,
@@ -48,6 +48,26 @@ describe('i18n System', () => {
 
       expect(result.current.t('pagination.page', { current: 1, total: 10 }))
         .toBe('Página 1 de 10');
+    });
+
+    it('synchronizes document language and direction with the active locale', async () => {
+      const { rerender } = render(
+        <I18nProvider locale="en"><span>locale boundary</span></I18nProvider>
+      );
+
+      await waitFor(() => {
+        expect(document.documentElement.lang).toBe('en');
+        expect(document.documentElement.dir).toBe('ltr');
+      });
+
+      rerender(
+        <I18nProvider locale="ar"><span>locale boundary</span></I18nProvider>
+      );
+
+      await waitFor(() => {
+        expect(document.documentElement.lang).toBe('ar');
+        expect(document.documentElement.dir).toBe('rtl');
+      });
     });
   });
 

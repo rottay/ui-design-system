@@ -4,7 +4,7 @@
  * @fileoverview Skeleton - placeholder loading indicators that mimic content shape.
  * Compound sub-components: Avatar, Text, Button, Card, ListItem, Table, Form, Paragraph.
  * Animation defaults resolve from the tenant personality tokens when available.
- * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
+ * Multi-engine: Classic (Ant Design), Modern (token skin), Rustic (Vanilla).
  *
  * @example
  * ```tsx
@@ -53,7 +53,7 @@ export type { SkeletonCardProps, SkeletonListItemProps, SkeletonTableProps, Skel
 // wraps it to inject personality-aware animation defaults.
 const SkeletonBase = createEngineComponent<SkeletonProps>('Skeleton', {
     classic: () => import('./engines/classic'),  // Ant Design
-    modern: () => import('./engines/modern'),     // DaisyUI / Tailwind
+    modern: () => import('./engines/modern'),     // Token skin (no DaisyUI)
     rustic: () => import('./engines/rustic'),      // Vanilla HTML/CSS
   });
 

@@ -1,0 +1,387 @@
+/**
+ * DecisionPanorama — balanced context / identity / active-decision instrument.
+ *
+ * The silhouette intentionally reads as one product surface. Separation is
+ * created with shared borders, tonal depth and spacing — never accent rails.
+ */
+
+.ds-pattern-decision-panorama[data-part='root'][data-part='root'] {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  container-type: inline-size;
+  border: 1px solid var(--ds-surface-card-border-strong, var(--ds-color-border-secondary));
+  border-radius: var(--ds-radius-2xl, 20px);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-color-primary) 2%, var(--ds-surface-card-bg, var(--ds-color-bg-elevated))),
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) 32%
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 92%, transparent),
+    var(--ds-shadow-md, 0 12px 30px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent));
+  color: var(--ds-color-text-primary);
+  isolation: isolate;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.9fr) minmax(300px, 1.15fr) minmax(260px, 0.95fr);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__context,
+.ds-pattern-decision-panorama .ds-decision-panorama__decision,
+.ds-pattern-decision-panorama .ds-decision-panorama__identity {
+  min-width: 0;
+  padding: clamp(22px, 2.5cqi, 36px);
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__context,
+.ds-pattern-decision-panorama .ds-decision-panorama__decision {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 64%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 38%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    )
+  );
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__context {
+  border-inline-end: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__decision {
+  border-inline-start: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card-bg, var(--ds-color-bg-elevated))),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 32%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    )
+  );
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__eyebrow,
+.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__facts {
+  display: grid;
+  gap: 0;
+  margin: var(--ds-spacing-4, 16px) 0 0;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--ds-spacing-3, 12px);
+  min-width: 0;
+  padding-block: var(--ds-spacing-3, 12px);
+  border-bottom: 1px solid color-mix(
+    in srgb,
+    var(--ds-surface-card-border, var(--ds-color-border-primary)) 76%,
+    transparent
+  );
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact:last-child {
+  border-bottom: 0;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact-icon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-md, 8px);
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg));
+  color: var(--ds-color-primary);
+  font-size: var(--ds-decision-panorama-fact-icon-size, var(--ds-font-size-sm));
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact-copy {
+  min-width: 0;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact dt {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-text-detail-size, var(--ds-font-size-xs));
+  line-height: 1.3;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact dd {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  margin: 3px 0 0;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact strong {
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 14px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: 1.35;
+  text-overflow: ellipsis;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__fact small {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-text-detail-size, var(--ds-font-size-xs));
+  line-height: 1.35;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__identity {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 46%,
+      color-mix(in srgb, var(--ds-color-primary) 13%, transparent),
+      transparent 40%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-color-primary) 2%, var(--ds-surface-card-bg)),
+      var(--ds-surface-card-bg)
+    );
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__visual {
+  position: relative;
+  display: grid;
+  width: clamp(120px, 11cqi, 154px);
+  height: clamp(120px, 11cqi, 154px);
+  margin-top: var(--ds-spacing-4, 16px);
+  place-items: center;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__visual-aura {
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
+    transparent 66%
+  );
+  box-shadow:
+    0 0 0 7px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
+    0 20px 44px -16px color-mix(in srgb, var(--ds-color-primary) 32%, transparent);
+  animation: ds-decision-panorama-breathe 5s ease-in-out infinite;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__visual > :not(.ds-decision-panorama__visual-aura) {
+  position: relative;
+  z-index: 1;
+  transform: scale(1.55);
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__identity-copy {
+  display: grid;
+  gap: var(--ds-spacing-1, 4px);
+  margin-top: var(--ds-spacing-5, 20px);
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__title {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-decision-panorama-title-size, var(--ds-font-size-fluid-4xl));
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__subtitle {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 14px);
+  line-height: 1.45;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 8px);
+  margin-top: var(--ds-spacing-4, 16px);
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__decision-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ds-spacing-4, 16px);
+  margin-top: var(--ds-spacing-4, 16px);
+  padding-bottom: var(--ds-spacing-3, 12px);
+  border-bottom: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__decision-title {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-decision-panorama-decision-title-size, var(--ds-font-size-fluid-2xl));
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__score {
+  color: var(--ds-color-primary);
+  font-size: var(--ds-decision-panorama-score-size, var(--ds-font-size-fluid-5xl));
+  font-weight: var(--ds-font-weight-bold, 700);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__decision-summary {
+  margin-top: var(--ds-spacing-3, 12px);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: 1.55;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__progress {
+  margin-top: var(--ds-spacing-4, 16px);
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__decision-meta {
+  margin-top: var(--ds-spacing-4, 16px);
+  padding-top: var(--ds-spacing-3, 12px);
+  border-top: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: 1.5;
+}
+
+.ds-pattern-decision-panorama .ds-decision-panorama__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 8px);
+  padding: var(--ds-spacing-3, 12px) clamp(20px, 3cqi, 40px);
+  border-top: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 72%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 48%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
+    )
+  );
+}
+
+.ds-pattern-decision-panorama[data-loading='true'] {
+  opacity: 0.64;
+  pointer-events: none;
+}
+
+@keyframes ds-decision-panorama-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.78; }
+  50% { transform: scale(1.025); opacity: 1; }
+}
+
+@container (max-width: 820px) {
+  .ds-pattern-decision-panorama .ds-decision-panorama__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__identity {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    min-height: 310px;
+    border-bottom: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__context {
+    grid-column: 1;
+    grid-row: 2;
+    border-inline-end: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision {
+    grid-column: 2;
+    grid-row: 2;
+    border-inline-start: 0;
+  }
+}
+
+@container (max-width: 540px) {
+  .ds-pattern-decision-panorama[data-part='root'][data-part='root'] {
+    border-radius: var(--ds-radius-xl, 16px);
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__identity,
+  .ds-pattern-decision-panorama .ds-decision-panorama__context,
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision {
+    grid-column: 1;
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__identity {
+    grid-row: 1;
+    min-height: 300px;
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision {
+    grid-row: 2;
+    border-bottom: 1px solid var(--ds-surface-card-border, var(--ds-color-border-primary));
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__context {
+    grid-row: 3;
+    border-inline-end: 0;
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ds-pattern-decision-panorama .ds-decision-panorama__actions > * {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-decision-panorama .ds-decision-panorama__visual-aura {
+    animation: none;
+  }
+}

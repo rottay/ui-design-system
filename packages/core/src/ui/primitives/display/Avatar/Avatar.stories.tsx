@@ -216,3 +216,118 @@ export const WithBadge: Story = {
     </div>
   ),
 };
+
+// ============================================================================
+// State Matrix Stories (K1 Lane A)
+// ============================================================================
+
+const matrixLabel = {
+  fontSize: 11,
+  textTransform: 'uppercase',
+  letterSpacing: '0.06em',
+  opacity: 0.55,
+  marginBottom: 8,
+} as const;
+
+/**
+ * Interactive-state matrix: rest, clickable (hover/focus via pointer/keyboard),
+ * ring, and every presence status across the core sizes. Pseudo states are
+ * skin-owned; this grid pins the prop-representable contract.
+ */
+export const StateMatrix: Story = {
+  name: '🧪 State Matrix',
+  render: () => (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <div>
+        <div style={matrixLabel}>Rest × sizes</div>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as const).map((size) => (
+            <Avatar key={size} size={size} name="Jane Doe" tone="primary" />
+          ))}
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Interactive (hover / focus-visible / pressed)</div>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          <Avatar name="Jane Doe" tone="primary" clickable onClick={() => undefined} />
+          <Avatar name="Jane Doe" variant="secondary" clickable onClick={() => undefined} ring />
+          <Avatar src="https://i.pravatar.cc/150?img=8" clickable onClick={() => undefined} bordered />
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Presence × tone</div>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          {(['online', 'offline', 'away', 'busy'] as const).map((status) => (
+            <Avatar key={status} name="Jane Doe" variant="gradient" status={status} />
+          ))}
+          {(['online', 'offline', 'away', 'busy'] as const).map((status) => (
+            <Avatar.Badge key={status} status={status}>
+              <Avatar name="Ana Ruiz" size="sm" />
+            </Avatar.Badge>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div style={matrixLabel}>Shapes × variants</div>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          {(['circle', 'rounded', 'square'] as const).map((shape) => (
+            <Avatar key={shape} shape={shape} name="Jane Doe" tone="success" />
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * Content stress: single-character names, very long names, Arabic names,
+ * missing every value, and a broken image falling back to initials.
+ */
+export const ContentStress: Story = {
+  name: '🧪 Content Stress',
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+      <Avatar name="X" />
+      <Avatar name="Alejandra Konstantinopoulos" />
+      <Avatar name="فاطمة الزهراء" />
+      <Avatar />
+      <Avatar src="https://broken.invalid/avatar.png" name="Error Fallback" tone="danger" />
+      <Avatar initials="DS" tone="warning" />
+    </div>
+  ),
+};
+
+/**
+ * Group behavior: overflow surplus, exact-max boundary, single avatar, and an
+ * RTL stack (row-reverse mirrors the overlap without a markup fork).
+ */
+export const GroupStates: Story = {
+  name: '🧪 Group States',
+  render: () => (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <div>
+        <div style={matrixLabel}>Overflow (max 3 of 6)</div>
+        <Avatar.Group max={3}>
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <Avatar key={n} name={`User Number${n}`} variant={n % 2 ? 'primary' : 'secondary'} />
+          ))}
+        </Avatar.Group>
+      </div>
+      <div>
+        <div style={matrixLabel}>Exact max (no surplus)</div>
+        <Avatar.Group max={2}>
+          <Avatar name="Ana Ruiz" />
+          <Avatar name="John Doe" />
+        </Avatar.Group>
+      </div>
+      <div dir="rtl">
+        <div style={matrixLabel}>RTL stack</div>
+        <Avatar.Group max={3}>
+          {[1, 2, 3, 4].map((n) => (
+            <Avatar key={n} name={`مستخدم ${n}`} tone={n % 2 ? 'success' : 'primary'} />
+          ))}
+        </Avatar.Group>
+      </div>
+    </div>
+  ),
+};

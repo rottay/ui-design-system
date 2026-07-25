@@ -2,23 +2,26 @@
 
 /**
  * @fileoverview Steps Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Steps component.
- * Leverages DaisyUI's steps classes for a utility-first, lightweight
- * step navigation component.
+ * @description Token-driven implementation of the Steps component.
  *
  * @remarks
- * The Modern engine uses DaisyUI's steps component classes, providing:
- * - Lightweight bundle size with Tailwind utilities
- * - Easy customization via CSS classes
- * - Consistent styling with DaisyUI themes
- * - Support for horizontal and vertical layouts
+ * The engine stamps anatomy (`data-part` hooks) and step state
+ * (`data-status`, `aria-current="step"`); the modern skin
+ * (`modern/skin/steps.css`) owns 100% of layout and paint — INCLUDING the
+ * step circle and the connector, which are skin pseudo-elements keyed on
+ * `data-part`/`data-status`, never DaisyUI `.step::before/::after` hooks.
+ * No DaisyUI classes, no Tailwind utilities, no inline style objects.
  *
- * This implementation adapts Rottay's unified props interface to work
- * with DaisyUI's class-based styling system.
+ * Contract notes:
+ * - Steps render as an ordered list; the step at `current` carries
+ *   `aria-current="step"`.
+ * - Clickable steps (`onChange` + not disabled) render a real `<button>`
+ *   trigger inside the item — keyboard-reachable by construction.
+ * - `progressDot` supports both the boolean dot mode and the custom render
+ *   function (`data-part="dot-slot"`), matching the rustic engine's contract.
  *
  * @example
  * ```tsx
- * // Use Modern engine for DaisyUI styling
  * <Steps
  *   engine="modern"
  *   items={[
@@ -30,7 +33,6 @@
  * ```
  *
  * @see {@link StepsProps} for prop documentation
- * @see {@link https://daisyui.com/components/steps/} for DaisyUI Steps docs
  *
  * @module Steps/Engines/Modern
  * @category Navigation
@@ -38,30 +40,12 @@
  */
 
 import React, { useMemo } from 'react';
-import type { StepsProps, StepStatus } from '../../contracts';
+import type { StepsProps, StepStatus, ProgressDotInfo } from '../../contracts';
 import { STEPS_DEFAULTS } from '../../contracts';
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/**
- * Maps step status to DaisyUI step class.
- *
- * @param status - The step status
- * @returns DaisyUI class name for the status
- */
-const getStepClass = (status: StepStatus): string => {
-  switch (status) {
-    case 'finish':
-    case 'process':
-      return 'step-primary';
-    case 'error':
-      return 'step-error';
-    default:
-      return '';
-  }
-};
 
 /**
  * Calculates the effective status for a step based on its position.
@@ -93,25 +77,18 @@ const getEffectiveStatus = (
 // ============================================================================
 
 /**
- * Steps component - Modern Engine (DaisyUI/Tailwind)
+ * Steps component - Modern Engine (token-driven, skin-painted).
  *
  * @description
- * Lightweight implementation using DaisyUI's utility classes.
- * Optimized for projects already using Tailwind CSS.
- *
- * @remarks
- * Features supported:
- * - Horizontal and vertical layouts
- * - Size variants (default, small)
- * - Step status indicators (primary, error)
- * - Progress dot mode
- * - Clickable steps with onChange
- * - Disabled step styling
+ * Self-contained anatomy: root (`data-direction`, `data-size`,
+ * `data-progress-dot`), items (`data-part="item"` + `data-status`), an
+ * optional icon slot, a text column (label/subtitle/description), and a
+ * `<button data-part="trigger">` when the step is clickable.
  *
  * @param props - {@link StepsProps}
- * @returns Steps component rendered with DaisyUI classes
+ * @returns Steps component rendered for the modern skin
  */
-export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
+export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
   (props, ref) => {
     // ========================================================================
     // Props Destructuring with Defaults
@@ -130,30 +107,18 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
     } = props;
 
     // ========================================================================
-    // Computed Classes
-    // ========================================================================
-
-    /** Direction class for layout */
-    const directionClass = direction === 'vertical' ? 'steps-vertical' : 'steps-horizontal';
-
-    /** Size class for smaller variant */
-    const sizeClass = size === 'small' ? 'text-sm' : '';
-
-    // ========================================================================
     // Memoized Step Computation
     // ========================================================================
 
     /**
-     * Compute effective status and styling for each step.
-     * Memoized to prevent unnecessary recalculations.
+     * Compute effective status for each step. Memoized because this runs on
+     * every render and the items array may be large; only recomputes when
+     * items, current position, or overall status change.
      */
-    // Pre-compute status and DaisyUI class for each step. Memoized because
-    // this runs on every render and the items array may be large. Only
-    // recomputes when items, current position, or overall status change.
     const computedSteps = useMemo(() => {
       return items.map((item, index) => {
         const effectiveStatus = getEffectiveStatus(index, current, item.status, overallStatus);
-        return { ...item, effectiveStatus, stepClass: getStepClass(effectiveStatus) };
+        return { ...item, effectiveStatus };
       });
     }, [items, current, overallStatus]);
 
@@ -174,43 +139,61 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
     // ========================================================================
 
     return (
-      <ul
+      <ol
         ref={ref}
-        className={`rottay-steps rottay-steps--modern steps ${directionClass} ${sizeClass} ${className}`.trim()}
+        className={`rottay-steps rottay-steps--modern ${className}`.trim()}
         style={style}
         data-part="root"
+        data-direction={direction}
+        data-size={size}
+        data-progress-dot={progressDot ? 'true' : undefined}
       >
         {computedSteps.map((step, index) => {
-          const isClickable = !step.disabled && onChange;
+          const isClickable = !step.disabled && Boolean(onChange);
+
+          const text = (
+            <>
+              {step.icon && !progressDot && <span data-part="icon">{step.icon}</span>}
+              <span data-part="label">{step.title}</span>
+              {step.subTitle && <span data-part="subtitle">{step.subTitle}</span>}
+              {step.description && <span data-part="description">{step.description}</span>}
+            </>
+          );
+
           return (
             <li
               key={index}
-              className={`step ${step.stepClass} ${step.disabled ? 'opacity-50' : ''} ${isClickable ? 'cursor-pointer' : ''}`}
-              onClick={() => handleStepClick(index, step.disabled)}
-              // In progressDot mode, replace the default number/icon with a
-              // simple filled circle via DaisyUI's data-content attribute
-              data-content={progressDot ? '●' : undefined}
               data-part="item"
               data-status={step.effectiveStatus}
               data-disabled={step.disabled || undefined}
+              data-clickable={isClickable || undefined}
+              aria-current={step.effectiveStatus === 'process' ? 'step' : undefined}
             >
-              <div className="flex flex-col items-start">
-                {/* Custom icon if provided and not in progressDot mode */}
-                {step.icon && !progressDot && <span className="mb-1" data-part="icon">{step.icon}</span>}
-
-                {/* Step title */}
-                <span className="font-medium" data-part="label">{step.title}</span>
-
-                {/* Optional subtitle */}
-                {step.subTitle && <span className="text-xs" data-part="subtitle">{step.subTitle}</span>}
-
-                {/* Optional description */}
-                {step.description && <span className="text-sm mt-1" data-part="description">{step.description}</span>}
-              </div>
+              {typeof progressDot === 'function' && (
+                <span data-part="dot-slot">
+                  {progressDot({
+                    index,
+                    status: step.effectiveStatus,
+                    title: step.title ?? '',
+                    description: step.description ?? '',
+                  } satisfies ProgressDotInfo)}
+                </span>
+              )}
+              {isClickable ? (
+                <button
+                  type="button"
+                  data-part="trigger"
+                  onClick={() => handleStepClick(index, step.disabled)}
+                >
+                  {text}
+                </button>
+              ) : (
+                <span data-part="content">{text}</span>
+              )}
             </li>
           );
         })}
-      </ul>
+      </ol>
     );
   }
 );

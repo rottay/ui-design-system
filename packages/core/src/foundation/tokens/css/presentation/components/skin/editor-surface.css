@@ -3,6 +3,6 @@
  * unlayered; specificity clears Typography's color rule.
  */
 
-.ds-surface.ds-editor .ds-editor__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-editor .ds-editor__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }

@@ -35,29 +35,27 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-// Modern's scope class lives on the trigger wrapper with the panel nested;
-// rustic fuses scope class and data-part onto the portaled panel itself.
+// Modern keeps a scope wrapper around its surface in both strategies; the
+// measured branch projects that wrapper through the shared portal.
 const MODERN_SURFACE_SELECTOR = ".rottay-popover--modern [data-part='surface']";
 const RUSTIC_SURFACE_SELECTOR = ".rottay-popover--rustic[data-part='surface']";
 const TRIGGER_SELECTOR = "[data-part='trigger']";
 
 describe('ModernPopover positioning branches', () => {
-  it('js branch: stays in-tree (never portals) and stamps the strategy', () => {
+  it('js branch: escapes clipping through the shared portal and stamps the strategy', () => {
     const { container } = render(
       <ModernPopover open content="Popover content" title="Popover title">
         <button type="button">Open</button>
       </ModernPopover>,
     );
 
-    const surface = container.querySelector(MODERN_SURFACE_SELECTOR) as HTMLElement;
+    const surface = document.querySelector(MODERN_SURFACE_SELECTOR) as HTMLElement;
     expect(surface).not.toBeNull();
     expect(surface.getAttribute('data-ds-position-strategy')).toBe('js');
     expect(surface.hasAttribute('popover')).toBe(false);
-    // Modern never portals, in either branch (checkpoint contract P4).
-    expect(surface.closest('[data-rottay-portal]')).toBeNull();
-    // The panel stays a descendant of the trigger wrapper.
+    expect(surface.closest('[data-rottay-portal]')).not.toBeNull();
     const trigger = container.querySelector(TRIGGER_SELECTOR) as HTMLElement;
-    expect(trigger.contains(surface)).toBe(true);
+    expect(trigger.contains(surface)).toBe(false);
   });
 
   it('anchor-css branch: promotes the panel via the popover API in place, with anchor attributes', () => {
@@ -86,7 +84,7 @@ describe('ModernPopover positioning branches', () => {
   it('nested-chain rule: a portal-rendered ancestor forces the js branch', () => {
     forceAnchorBranch();
 
-    const { container } = render(
+    render(
       <OverlayPortalBoundary>
         <ModernPopover open content="Popover content">
           <button type="button">Open</button>
@@ -94,9 +92,10 @@ describe('ModernPopover positioning branches', () => {
       </OverlayPortalBoundary>,
     );
 
-    const surface = container.querySelector(MODERN_SURFACE_SELECTOR) as HTMLElement;
+    const surface = document.querySelector(MODERN_SURFACE_SELECTOR) as HTMLElement;
     expect(surface.getAttribute('data-ds-position-strategy')).toBe('js');
     expect(surface).not.toHaveAttribute('popover');
+    expect(surface.closest('[data-rottay-portal]')).not.toBeNull();
   });
 });
 

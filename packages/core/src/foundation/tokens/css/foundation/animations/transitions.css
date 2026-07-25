@@ -10,15 +10,20 @@
      DURATION - Transition Speeds
      Standard durations for different types of animations
      ======================================================================== */
+  /* DS-A008: every legacy step resolves to a canonical --ds-motion-* channel
+     so this catalog can never drift from the 120/200/320ms cadence law
+     (engines/modern spec section 2). The raw-second literals below are
+     last-resort fallbacks equal to the canonical defaults, never a second
+     authority. */
   --duration-instant: 0s;
-  --duration-fastest: 0.1s;      /* 100ms - Micro-interactions */
-  --duration-faster: 0.15s;      /* 150ms - Quick feedback */
-  --duration-fast: 0.2s;         /* 200ms - Standard transitions */
-  --duration-normal: 0.3s;       /* 300ms - Default duration */
-  --duration-slow: 0.4s;         /* 400ms - Deliberate transitions */
-  --duration-slower: 0.5s;       /* 500ms - Emphasized animations */
-  --duration-slowest: 0.6s;      /* 600ms - Complex animations */
-  --duration-glacial: 1s;        /* 1000ms - Very slow, special cases */
+  --duration-fastest: var(--ds-motion-instant, 120ms);
+  --duration-faster: var(--ds-motion-fast, 120ms);
+  --duration-fast: var(--ds-motion-fast, 120ms);
+  --duration-normal: var(--ds-motion-normal, 200ms);
+  --duration-slow: var(--ds-motion-slow, 320ms);
+  --duration-slower: var(--ds-motion-slow, 320ms);
+  --duration-slowest: var(--ds-motion-glacial, 500ms);
+  --duration-glacial: var(--ds-motion-glacial, 500ms);
 
   /* Semantic durations */
   --duration-default: var(--duration-normal);
@@ -41,8 +46,8 @@
 
   /* Custom ease-out (most common) */
   --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --easing-emphasized: cubic-bezier(0.0, 0, 0.2, 1);
-  --easing-decelerated: cubic-bezier(0.0, 0, 0.2, 1);
+  --easing-emphasized: cubic-bezier(0, 0, 0.2, 1);
+  --easing-decelerated: cubic-bezier(0, 0, 0.2, 1);
 
   /* Custom ease-in */
   --easing-accelerated: cubic-bezier(0.4, 0, 1, 1);
@@ -66,9 +71,9 @@
   --easing-anticipate: cubic-bezier(0.36, 0, 0.66, -0.56);
 
   /* Material Design easings */
-  --easing-material-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
-  --easing-material-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
-  --easing-material-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+  --easing-material-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-material-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --easing-material-accelerate: cubic-bezier(0.4, 0, 1, 1);
 
   /* ========================================================================
      MOTION CANON (--ds-motion-*) — Quiet Premium
@@ -90,10 +95,36 @@
   --ds-motion-normal: 200ms;
   --ds-motion-slow: 320ms;
   --ds-motion-glacial: 500ms;
+  --ds-motion-duration-scale: 1;
+
+  /* Intent-based cadence. Components bind to WHY motion exists instead of
+     choosing arbitrary speeds, which keeps dense tools calm and AI feedback
+     expressive without becoming decorative noise. */
+  --ds-motion-feedback: calc(
+    var(--ds-motion-fast) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-reveal: calc(
+    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-disclosure: calc(
+    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-resize: calc(
+    var(--ds-motion-normal) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-rearrange: calc(
+    var(--ds-motion-slow) * var(--ds-motion-duration-scale, 1)
+  );
+  --ds-motion-attention: calc(
+    var(--ds-motion-slow) * var(--ds-motion-duration-scale, 1)
+  );
 
   /* Easings. ease-out is the premium curve (formerly copy-pasted as a literal). */
   --ds-motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ds-motion-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+  --ds-motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-motion-ease-move: cubic-bezier(0.2, 0, 0, 1);
   /* Fallback only: a tenant BrandTheme with spring physics (springTension +
      springFriction, useSpring !== false) overrides these with a generated
      `linear()` curve scoped to its own [data-tenant] selector (see
@@ -112,24 +143,47 @@
   /* Pre-composed per-component transitions, re-expressed on the canon primitives.
      These are the ONLY thing modern components reference for multi-property
      transitions (no inline literals). */
-  --ds-transition-button: background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
-  --ds-transition-input: border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
-  --ds-transition-card: transform var(--ds-motion-normal) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out);
-  --ds-transition-surface: background-color var(--ds-motion-normal) var(--ds-motion-ease-out),
-    color var(--ds-motion-normal) var(--ds-motion-ease-out);
-  --ds-transition-overlay: opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
-    transform var(--ds-motion-normal) var(--ds-motion-ease-out);
-  --ds-transition-fade: opacity var(--ds-motion-normal) var(--ds-motion-ease-out);
-  --ds-transition-color: color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+  --ds-transition-button: background-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
+  --ds-transition-input: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
+  --ds-transition-card: transform var(--ds-motion-feedback)
+      var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
+  --ds-transition-surface: background-color var(--ds-motion-reveal)
+      var(--ds-motion-ease-out),
+    color var(--ds-motion-reveal) var(--ds-motion-ease-out);
+  --ds-transition-overlay: opacity var(--ds-motion-reveal)
+      var(--ds-motion-ease-out),
+    transform var(--ds-motion-reveal) var(--ds-motion-ease-out);
+  --ds-transition-fade: opacity var(--ds-motion-reveal)
+    var(--ds-motion-ease-out);
+  --ds-transition-color: color var(--ds-motion-feedback)
+      var(--ds-motion-ease-out),
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
+  --ds-transition-rearrange: transform var(--ds-motion-rearrange)
+      var(--ds-motion-ease-move),
+    inline-size var(--ds-motion-rearrange) var(--ds-motion-ease-move),
+    block-size var(--ds-motion-rearrange) var(--ds-motion-ease-move);
+  --ds-transition-resize: inline-size var(--ds-motion-resize)
+      var(--ds-motion-ease-move),
+    block-size var(--ds-motion-resize) var(--ds-motion-ease-move),
+    transform var(--ds-motion-resize) var(--ds-motion-ease-move);
+  --ds-transition-disclosure: grid-template-rows var(--ds-motion-disclosure)
+      var(--ds-motion-ease-move),
+    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-disclosure) var(--ds-motion-ease-enter);
+  --ds-transition-ai-feedback: opacity var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 
   /* ========================================================================
      PROPERTY-SPECIFIC TRANSITIONS
@@ -143,34 +197,41 @@
 
   /* Opacity */
   --transition-opacity: opacity var(--duration-fast) var(--easing-standard);
-  --transition-opacity-slow: opacity var(--duration-normal) var(--easing-standard);
+  --transition-opacity-slow: opacity var(--duration-normal)
+    var(--easing-standard);
 
   /* Transform */
-  --transition-transform: transform var(--duration-normal) var(--easing-standard);
-  --transition-transform-fast: transform var(--duration-fast) var(--easing-standard);
-  --transition-transform-bounce: transform var(--duration-normal) var(--easing-bounce-out);
+  --transition-transform: transform var(--duration-normal)
+    var(--easing-standard);
+  --transition-transform-fast: transform var(--duration-fast)
+    var(--easing-standard);
+  --transition-transform-bounce: transform var(--duration-normal)
+    var(--easing-bounce-out);
 
   /* Colors */
   --transition-color: color var(--duration-fast) var(--easing-standard);
-  --transition-background: background-color var(--duration-fast) var(--easing-standard);
+  --transition-background: background-color var(--duration-fast)
+    var(--easing-standard);
   --transition-border: border-color var(--duration-fast) var(--easing-standard);
 
   /* Box shadow */
   --transition-shadow: box-shadow var(--duration-normal) var(--easing-standard);
-  --transition-shadow-fast: box-shadow var(--duration-fast) var(--easing-standard);
+  --transition-shadow-fast: box-shadow var(--duration-fast)
+    var(--easing-standard);
 
   /* Width/Height */
   --transition-width: width var(--duration-normal) var(--easing-standard);
   --transition-height: height var(--duration-normal) var(--easing-standard);
   --transition-size: width var(--duration-normal) var(--easing-standard),
-                     height var(--duration-normal) var(--easing-standard);
+    height var(--duration-normal) var(--easing-standard);
 
   /* Margin/Padding */
   --transition-spacing: margin var(--duration-normal) var(--easing-standard),
-                        padding var(--duration-normal) var(--easing-standard);
+    padding var(--duration-normal) var(--easing-standard);
 
   /* Border radius */
-  --transition-radius: border-radius var(--duration-normal) var(--easing-standard);
+  --transition-radius: border-radius var(--duration-normal)
+    var(--easing-standard);
 
   /* ========================================================================
      COMPOSITE TRANSITIONS
@@ -184,28 +245,30 @@
 
   /* Scale */
   --transition-scale: transform var(--duration-normal) var(--easing-standard);
-  --transition-scale-up: transform var(--duration-normal) var(--easing-decelerated);
-  --transition-scale-down: transform var(--duration-fast) var(--easing-accelerated);
+  --transition-scale-up: transform var(--duration-normal)
+    var(--easing-decelerated);
+  --transition-scale-down: transform var(--duration-fast)
+    var(--easing-accelerated);
 
   /* Slide */
   --transition-slide: transform var(--duration-normal) var(--easing-emphasized);
 
   /* Expand/Collapse */
   --transition-expand: height var(--duration-normal) var(--easing-emphasized),
-                       opacity var(--duration-normal) var(--easing-standard);
+    opacity var(--duration-normal) var(--easing-standard);
 
   /* Fade + Scale (common for modals, popovers) */
   --transition-fade-scale: opacity var(--duration-normal) var(--easing-standard),
-                           transform var(--duration-normal) var(--easing-standard);
+    transform var(--duration-normal) var(--easing-standard);
 
   /* Fade + Slide */
   --transition-fade-slide: opacity var(--duration-normal) var(--easing-standard),
-                           transform var(--duration-normal) var(--easing-emphasized);
+    transform var(--duration-normal) var(--easing-emphasized);
 
   /* Color change */
   --transition-color-change: color var(--duration-fast) var(--easing-standard),
-                             background-color var(--duration-fast) var(--easing-standard),
-                             border-color var(--duration-fast) var(--easing-standard);
+    background-color var(--duration-fast) var(--easing-standard),
+    border-color var(--duration-fast) var(--easing-standard);
 
   /* ========================================================================
      COMPONENT-SPECIFIC TRANSITIONS
@@ -213,30 +276,33 @@
      ======================================================================== */
 
   /* Button */
-  --transition-button: background-color var(--duration-fast) var(--easing-standard),
-                       color var(--duration-fast) var(--easing-standard),
-                       border-color var(--duration-fast) var(--easing-standard),
-                       box-shadow var(--duration-fast) var(--easing-standard),
-                       transform var(--duration-fastest) var(--easing-standard);
+  --transition-button: background-color var(--duration-fast)
+      var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard),
+    border-color var(--duration-fast) var(--easing-standard),
+    box-shadow var(--duration-fast) var(--easing-standard),
+    transform var(--duration-fastest) var(--easing-standard);
 
   /* Input */
   --transition-input: border-color var(--duration-fast) var(--easing-standard),
-                      box-shadow var(--duration-fast) var(--easing-standard);
+    box-shadow var(--duration-fast) var(--easing-standard);
 
   /* Card */
   --transition-card: transform var(--duration-normal) var(--easing-standard),
-                     box-shadow var(--duration-normal) var(--easing-standard);
+    box-shadow var(--duration-normal) var(--easing-standard);
 
   /* Modal overlay */
-  --transition-modal-overlay: opacity var(--duration-normal) var(--easing-standard);
+  --transition-modal-overlay: opacity var(--duration-normal)
+    var(--easing-standard);
 
   /* Modal content */
-  --transition-modal-content: opacity var(--duration-normal) var(--easing-standard),
-                              transform var(--duration-normal) var(--easing-emphasized);
+  --transition-modal-content: opacity var(--duration-normal)
+      var(--easing-standard),
+    transform var(--duration-normal) var(--easing-emphasized);
 
   /* Dropdown */
   --transition-dropdown: opacity var(--duration-fast) var(--easing-decelerated),
-                         transform var(--duration-fast) var(--easing-decelerated);
+    transform var(--duration-fast) var(--easing-decelerated);
 
   /* Tooltip */
   --transition-tooltip: opacity var(--duration-faster) var(--easing-standard);
@@ -246,23 +312,23 @@
 
   /* Toast/Notification */
   --transition-toast: opacity var(--duration-normal) var(--easing-standard),
-                      transform var(--duration-normal) var(--easing-emphasized);
+    transform var(--duration-normal) var(--easing-emphasized);
 
   /* Accordion */
   --transition-accordion: height var(--duration-normal) var(--easing-emphasized),
-                          opacity var(--duration-fast) var(--easing-standard);
+    opacity var(--duration-fast) var(--easing-standard);
 
   /* Tab */
   --transition-tab: color var(--duration-fast) var(--easing-standard),
-                    border-color var(--duration-fast) var(--easing-standard);
+    border-color var(--duration-fast) var(--easing-standard);
 
   /* Avatar */
   --transition-avatar: transform var(--duration-fast) var(--easing-standard),
-                       box-shadow var(--duration-fast) var(--easing-standard);
+    box-shadow var(--duration-fast) var(--easing-standard);
 
   /* Switch/Toggle */
   --transition-switch: transform var(--duration-fast) var(--easing-standard),
-                       background-color var(--duration-fast) var(--easing-standard);
+    background-color var(--duration-fast) var(--easing-standard);
 
   /* Progress bar */
   --transition-progress: width var(--duration-slower) var(--easing-standard);
@@ -275,11 +341,11 @@
      Stagger delays for sequential animations
      ======================================================================== */
   --delay-none: 0s;
-  --delay-xs: 0.05s;       /* 50ms */
-  --delay-sm: 0.1s;        /* 100ms */
-  --delay-md: 0.15s;       /* 150ms */
-  --delay-lg: 0.2s;        /* 200ms */
-  --delay-xl: 0.3s;        /* 300ms */
+  --delay-xs: 0.05s; /* 50ms */
+  --delay-sm: 0.1s; /* 100ms */
+  --delay-md: 0.15s; /* 150ms */
+  --delay-lg: 0.2s; /* 200ms */
+  --delay-xl: 0.3s; /* 300ms */
 
   /* Stagger increments for lists */
   --delay-stagger-increment: 0.05s; /* 50ms between items */
@@ -324,8 +390,8 @@
 :root {
   /* Duration aliases */
   --ds-duration-instant: var(--duration-instant, 0s);
-  --ds-duration-fast: var(--duration-faster, 0.15s);
-  --ds-duration-normal: var(--duration-fast, 0.2s);
+  --ds-duration-fast: var(--ds-motion-fast, 120ms);
+  --ds-duration-normal: var(--ds-motion-normal, 200ms);
   --ds-duration-slow: var(--duration-normal, 0.3s);
   --ds-duration-gentle: var(--duration-slow, 0.4s);
 
@@ -354,11 +420,23 @@
        :root source-order tie between the two files yields 0s either way (no
        double-definition conflict). Durations only; the easing and geometry
        tokens are inert at zero duration. */
-    --ds-motion-instant: 0s;
-    --ds-motion-fast: 0s;
-    --ds-motion-normal: 0s;
-    --ds-motion-slow: 0s;
-    --ds-motion-glacial: 0s;
+    /* Important is intentional here: compiled BrandTheme declarations are
+       tenant-scoped (`html[data-tenant]`) and therefore outrank `:root` by
+       specificity. Accessibility preference must win over both static and
+       DB-authored brand cadence, including inline custom-property injection. */
+    --ds-motion-instant: 0s !important;
+    --ds-motion-calm: 0s !important;
+    --ds-motion-deliberate: 0s !important;
+    --ds-motion-fast: 0s !important;
+    --ds-motion-normal: 0s !important;
+    --ds-motion-slow: 0s !important;
+    --ds-motion-glacial: 0s !important;
+    --ds-motion-feedback: 0s !important;
+    --ds-motion-reveal: 0s !important;
+    --ds-motion-disclosure: 0s !important;
+    --ds-motion-resize: 0s !important;
+    --ds-motion-rearrange: 0s !important;
+    --ds-motion-attention: 0s !important;
   }
 }
 
@@ -422,7 +500,8 @@
    scroll timeline drives progress but is kept on the --ds-motion canon. */
 @supports (animation-timeline: view()) {
   .ds-scroll-reveal {
-    animation: ds-scroll-reveal-in var(--ds-motion-slow) var(--ds-motion-ease-out) both;
+    animation: ds-scroll-reveal-in var(--ds-motion-slow)
+      var(--ds-motion-ease-out) both;
     animation-timeline: view();
     animation-range: entry 0% entry 60%;
   }
@@ -473,11 +552,13 @@
 }
 
 ::view-transition-old(*.ds-vt-tab-panel) {
-  animation: ds-view-transition-fade-out var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+  animation: ds-view-transition-fade-out var(--ds-motion-fast)
+    var(--ds-motion-ease-out) both;
 }
 
 ::view-transition-new(*.ds-vt-tab-panel) {
-  animation: ds-view-transition-fade-in var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+  animation: ds-view-transition-fade-in var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
 }
 
 /* Direction-aware slide: old exits toward, new enters from. Each keyframe set
@@ -532,19 +613,23 @@
    so the reduced-motion neutralization block below can out-cascade them the
    same way. Do not replace :where() with a bare attribute selector. */
 :where(html[data-ds-vt-direction='forward'])::view-transition-old(*.ds-vt-tab-panel) {
-  animation: ds-vt-panel-exit-toward-start var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+  animation: ds-vt-panel-exit-toward-start var(--ds-motion-fast)
+    var(--ds-motion-ease-out) both;
 }
 
 :where(html[data-ds-vt-direction='forward'])::view-transition-new(*.ds-vt-tab-panel) {
-  animation: ds-vt-panel-enter-from-end var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+  animation: ds-vt-panel-enter-from-end var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
 }
 
 :where(html[data-ds-vt-direction='backward'])::view-transition-old(*.ds-vt-tab-panel) {
-  animation: ds-vt-panel-exit-toward-end var(--ds-motion-fast) var(--ds-motion-ease-out) both;
+  animation: ds-vt-panel-exit-toward-end var(--ds-motion-fast)
+    var(--ds-motion-ease-out) both;
 }
 
 :where(html[data-ds-vt-direction='backward'])::view-transition-new(*.ds-vt-tab-panel) {
-  animation: ds-vt-panel-enter-from-start var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+  animation: ds-vt-panel-enter-from-start var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
 }
 
 /* Record morphs (kanban card -> detail, row -> detail): the browser's default
@@ -614,7 +699,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    ========================================================================= */
 @keyframes ds-pulse-changed-flash {
   from {
-    box-shadow: inset 0 0 0 9999px rgba(var(--ds-color-primary-rgb), calc(0.14 * var(--ds-effect-intensity, 1)));
+    box-shadow: inset 0 0 0 9999px
+      rgba(
+        var(--ds-color-primary-rgb),
+        calc(0.14 * var(--ds-effect-intensity, 1))
+      );
   }
   to {
     box-shadow: inset 0 0 0 9999px rgba(var(--ds-color-primary-rgb), 0);

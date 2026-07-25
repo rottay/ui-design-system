@@ -1,17 +1,21 @@
 /**
  * @fileoverview Notification Modern Engine - Rottay Design System
- * @description Token-driven Tailwind implementation of the Notification component.
- * Provides a lightweight notification experience using utility-first CSS classes.
+ * @description Token-driven implementation of the Notification component.
+ * Provides a lightweight notification experience on a self-contained,
+ * skin-owned tree — no DaisyUI or utility-framework classes.
  *
  * @remarks
- * The Modern engine leverages DS token inline styles and toast structural classes to provide:
- * - Utility-first Tailwind CSS styling
+ * The Modern engine is a self-contained `rottay-notification--modern` tree:
+ * - No DaisyUI classes: the stack container's `toast`/`toast-top`/
+ *   `toast-bottom`/`toast-center`/`toast-start`/`toast-end` placement classes
+ *   were drained (K4-A); the unlayered skin `notification.css` owns fixed
+ *   placement, stacking and item surface paint outright
  * - Lightweight bundle size
- * - Easy customization through class overrides
+ * - Easy customization through class overrides and token channels
  * - Consistent DS token theming integration
  *
- * This engine is recommended for applications using Tailwind CSS,
- * or those prioritizing bundle size over feature richness.
+ * This engine is recommended for applications prioritizing bundle size and
+ * token theming over feature richness.
  *
  * Note: Static methods are not supported in Modern. Always use the Provider
  * and useNotification hook pattern.
@@ -65,6 +69,13 @@ import type {
 } from '../../contracts';
 import { NOTIFICATION_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { CommunicationNotificationIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-notification';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Internal Types
@@ -121,14 +132,16 @@ const generateId = () => `modern-notification-${++notificationId}`;
  *
  * @description
  * Provides notification context to child components and manages the
- * notification state. Renders notifications using toast structural classes with DS tokens.
+ * notification state. Placement and surface paint are owned by the unlayered
+ * skin `notification.css`, keyed on the stamped `data-placement`/`data-tone`
+ * attributes.
  *
  * @remarks
  * Key features:
  * - Context-based notification management
  * - Supports multiple placements simultaneously
  * - Automatic notification stacking and limiting
- * - Toast positioning classes
+ * - Skin-owned placement (no DaisyUI toast classes)
  *
  * @param props - {@link NotificationProviderProps}
  * @returns Provider component with notification containers
@@ -192,6 +205,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         actions: config.actions,
         closeIcon: config.closeIcon,
         closable: config.closable ?? NOTIFICATION_DEFAULTS.closable,
+        role: config.role,
         placement: config.placement || placement,
       };
 
@@ -255,8 +269,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
   // Grouping by placement creates separate DOM containers for each position,
   // allowing simultaneous notifications in different corners (e.g., success
-  // in topRight while an error shows in bottomRight). Each group renders
-  // its own toast container with appropriate positioning classes.
+  // in topRight while an error shows in bottomRight). Each group renders its
+  // own stack container keyed on `data-placement` -- the unlayered skin
+  // `notification.css` owns fixed placement outright; no DaisyUI toast
+  // classes are emitted (drained in K4-A).
   const groupedNotifications = notifications.reduce<Record<NotificationPlacement, InternalNotification[]>>(
     (acc: Record<NotificationPlacement, InternalNotification[]>, notification) => {
       const p = notification.placement || placement;
@@ -267,28 +283,21 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     {} as Record<NotificationPlacement, InternalNotification[]>
   );
 
-  /**
-   * Toast positioning classes for each placement.
-   */
-  const placementClasses: Record<NotificationPlacement, string> = {
-    top: 'toast toast-top toast-center',
-    topLeft: 'toast toast-top toast-start',
-    topRight: 'toast toast-top toast-end',
-    bottom: 'toast toast-bottom toast-center',
-    bottomLeft: 'toast toast-bottom toast-start',
-    bottomRight: 'toast toast-bottom toast-end',
-  };
+  // The provider's top/bottom props are block-axis offsets from the viewport
+  // edge (pixel numbers per the contracts). The engine stamps the dynamic
+  // value on the --ds-notification-stack-offset channel and the skin declares
+  // the top/bottom property that consumes it, keeping the skin the single
+  // paint owner while preserving the configurable-offset public API.
+  const stackOffset = (value: number): React.CSSProperties =>
+    ({ '--ds-notification-stack-offset': `${value}px` }) as React.CSSProperties;
 
-  // Margin-based offsets rather than top/bottom CSS properties because
-  // Toast classes already use fixed positioning. Margins push the toast
-  // container away from its default edge position.
   const placementStyles: Record<NotificationPlacement, React.CSSProperties> = {
-    top: { marginTop: top },
-    topLeft: { marginTop: top },
-    topRight: { marginTop: top },
-    bottom: { marginBottom: bottom },
-    bottomLeft: { marginBottom: bottom },
-    bottomRight: { marginBottom: bottom },
+    top: stackOffset(top),
+    topLeft: stackOffset(top),
+    topRight: stackOffset(top),
+    bottom: stackOffset(bottom),
+    bottomLeft: stackOffset(bottom),
+    bottomRight: stackOffset(bottom),
   };
 
   // ========================================================================
@@ -304,7 +313,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
           key={p}
           data-part="stack-container"
           data-placement={p}
-          className={`${placementClasses[p as NotificationPlacement]} rottay-notification-stack--modern`}
+          className="rottay-notification-stack--modern"
           style={placementStyles[p as NotificationPlacement]}
         >
           {items.map((notification) => {
@@ -386,14 +395,15 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
  * NotificationItem component for the Modern engine.
  *
  * @description
- * Renders an individual notification using DS token inline styles.
- * Supports all standard notification features with Tailwind styling.
+ * Renders an individual notification as a self-contained
+ * `rottay-notification--modern` tree. All static surface paint lives in the
+ * unlayered skin `notification.css`.
  *
  * @remarks
- * Uses DS token alert style mapping:
- * - `alert` structural class for base styling
- * - Token-driven backgrounds and colors for type variants (success, error, info, warning)
- * - `var(--ds-elevation-2)` for elevation shadow
+ * Skin-owned paint, keyed on stamped data attributes:
+ * - No DaisyUI classes; tone is keyed on `data-tone`
+ * - Token-driven backgrounds and colors for type variants (success, error, info, warning, open)
+ * - Skin-owned elevation shadow
  *
  * @param props - {@link NotificationItemProps}
  * @returns A DS token-styled notification item
@@ -425,8 +435,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   actions,
   closeIcon,
   closable = NOTIFICATION_DEFAULTS.closable,
+  role,
   onRemove,
 }) => {
+  const { t } = useTranslation('common');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ========================================================================
@@ -468,91 +480,84 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // ========================================================================
 
   // Per-type fill and text colour are keyed on `data-tone` in the unlayered modern
-  // Notification skin. Unlayered is load-bearing: the root carries DaisyUI's
-  // `alert` class, whose base rule paints a border-color, and personality.css adds
-  // a `border-left-width` accent bar on the same class -- both are layered, and
-  // an unlayered rule (or the former element-style site) out-ranks them.
-  // The `open` type has no entry, as before: it inherits DaisyUI's own fill.
+  // Notification skin. The root carries NO DaisyUI class: the skin is the single
+  // paint owner and derives every tone -- including `open` (primary accent) --
+  // from --ds-notification-accent.
 
-  // Inline SVGs (h-6 w-6 = 24px) are slightly larger than Message icons
-  // (h-5 w-5 = 20px) because notifications have more content area and
-  // need proportional visual weight. "open" type has null icon since
-  // it's a generic notification where consumers provide their own icon.
   const icons: Record<NotificationType, ReactNode> = {
-    success: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    error: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    info: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    warning: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-      </svg>
-    ),
-    open: null,
+    success: <StatusSuccessIcon decorative size={20} />,
+    error: <StatusErrorIcon decorative size={20} />,
+    info: <StatusInfoIcon decorative size={20} />,
+    warning: <StatusWarningIcon decorative size={20} />,
+    open: <CommunicationNotificationIcon decorative size={20} />,
   };
 
   // ========================================================================
   // Render
   // ========================================================================
 
-  // min-w-80 (320px) ensures notifications are readable even with short
-  // messages. shadow-lg provides elevation to distinguish from page content.
-  // role="alert" triggers immediate screen reader announcement.
+  // The skin owns width (full-width of the stack container) and elevation.
+  // role="alert" triggers immediate screen reader announcement for urgent
+  // types; quieter types announce politely through role="status".
   return (
     <div
       data-part="root"
       data-tone={type}
-      className={`alert min-w-80 rottay-notification--modern ${className}`}
-      style={style}
+      data-has-description={description ? 'true' : 'false'}
+      data-has-actions={actions ? 'true' : 'false'}
+      data-closable={closable ? 'true' : 'false'}
+      data-clickable={onClick ? 'true' : 'false'}
+      className={`rottay-notification--modern ${className}`}
+      style={{
+        '--ds-notification-duration': duration && duration > 0 ? `${duration}s` : undefined,
+        ...style,
+      } as React.CSSProperties}
       onClick={onClick}
-      role="alert"
+      onKeyDown={onClick ? (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick();
+        }
+      } : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      role={role ?? (type === 'error' || type === 'warning' ? 'alert' : 'status')}
     >
-      <div className="flex gap-3 w-full">
+      <div data-part="layout">
         {/* Icon */}
         {icon !== null && <span data-part="icon">{icon || icons[type]}</span>}
 
         {/* Content */}
-        <div className="flex-1" data-part="body">
+        <div data-part="body">
           {/* Title */}
-          <div className="font-bold" data-part="title">{message}</div>
+          <div data-part="title">{message}</div>
 
           {/* Description */}
-          {description && <div className="text-sm opacity-80" data-part="description">{description}</div>}
+          {description && <div data-part="description">{description}</div>}
 
           {/* Action Button */}
-          {actions && <div className="mt-2" data-part="action">{actions}</div>}
+          {actions && (
+            <div data-part="action" data-slot="actions">
+              {actions}
+            </div>
+          )}
         </div>
 
         {/* Close Button */}
         {closable && (
           <button
+            type="button"
             data-part="close-button"
-            style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
             onClick={(e) => {
               e.stopPropagation();
               handleClose();
             }}
-            aria-label="Close"
+            aria-label={t('close')}
           >
-            {closeIcon || (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            )}
+            {closeIcon || <ActionCloseIcon decorative size={16} />}
           </button>
         )}
       </div>
+      {duration !== null && duration > 0 && <span data-part="progress" aria-hidden="true" />}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import ModernDrawer from '../engines/modern';
 import { MotionProvider } from '@/infrastructure/runtime/motion';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 function surface(): HTMLElement {
   const node = document.body.querySelector('[role="dialog"][data-part="surface"]');
@@ -13,10 +14,11 @@ function surface(): HTMLElement {
 
 describe('Drawer overlay.sheet motion recipe', () => {
   it('modern engine stamps the animated recipe contract and recipe-driven animation', () => {
-    render(
+    renderWithEngine(
       <ModernDrawer open onClose={vi.fn()} title="Recipe">
         body
-      </ModernDrawer>
+      </ModernDrawer>,
+      'modern'
     );
     const panel = surface();
 
@@ -27,12 +29,13 @@ describe('Drawer overlay.sheet motion recipe', () => {
   });
 
   it('modern engine declares NO animation under reduced motion (final state)', () => {
-    render(
+    renderWithEngine(
       <MotionProvider reducedMotion>
         <ModernDrawer open onClose={vi.fn()} title="Recipe">
           body
         </ModernDrawer>
-      </MotionProvider>
+      </MotionProvider>,
+      'modern'
     );
     const panel = surface();
 

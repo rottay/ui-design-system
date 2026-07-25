@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import ModernDrawer from '../engines/modern';
 import RusticDrawer from '../engines/rustic';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 describe('Drawer advanced engine coverage', () => {
   afterEach(() => {
@@ -14,7 +15,7 @@ describe('Drawer advanced engine coverage', () => {
     const onClose = vi.fn();
     const onOpenChange = vi.fn();
 
-    const { container, rerender } = render(
+    const { container, rerender } = renderWithEngine(
       <ModernDrawer
         open
         placement="top"
@@ -25,13 +26,18 @@ describe('Drawer advanced engine coverage', () => {
         onOpenChange={onOpenChange}
       >
         Drawer body
-      </ModernDrawer>
+      </ModernDrawer>,
+      'modern'
     );
 
     expect(document.body.style.overflow).toBe('hidden');
     expect(screen.getByText('Filters')).toBeInTheDocument();
     expect(screen.getByText('Footer actions')).toBeInTheDocument();
     expect(screen.getByText('Drawer body')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="surface"]')).toHaveAttribute('data-size', 'lg');
+    expect(container.querySelector('[data-part="header-icon"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="heading-group"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="surface"]')).toHaveAttribute('data-has-footer', 'true');
     expect(container.querySelector('.rottay-drawer')?.getAttribute('style') ?? '').toContain('height: 520px');
 
     fireEvent.click(container.querySelector('.rottay-drawer-overlay') as HTMLDivElement);

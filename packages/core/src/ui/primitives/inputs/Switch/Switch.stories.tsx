@@ -28,7 +28,7 @@ A switch component for binary on/off states with multi-engine support.
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | DS tokens (skin-painted) | Vanilla CSS |
 | Animation | Smooth | CSS | Basic |
 | Loading | Built-in | Custom | Custom |
 | Labels | Full | Partial | Full |
@@ -136,7 +136,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Switch rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Switch rendered by Classic (Ant Design), Modern (DS tokens), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -195,6 +195,30 @@ export const StatesComparison: Story = {
         component={Switch}
         props={{ loading: true }}
       />
+    </div>
+  ),
+};
+
+/**
+ * Modern-engine state matrix: off/on, labels, loading, disabled, sizes, and
+ * an Arabic RTL context (thumb travel flips in the skin, markup identical).
+ */
+export const ModernStateMatrix: Story = {
+  name: 'Modern State Matrix',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 420 }}>
+      <Switch engine="modern" />
+      <Switch engine="modern" defaultChecked />
+      <Switch engine="modern" unCheckedChildren="Off" checkedChildren="On" />
+      <Switch engine="modern" defaultChecked unCheckedChildren="Off" checkedChildren="On" />
+      <Switch engine="modern" loading />
+      <Switch engine="modern" disabled />
+      <Switch engine="modern" disabled defaultChecked />
+      <Switch engine="modern" size="sm" defaultChecked />
+      <Switch engine="modern" size="lg" defaultChecked />
+      <div dir="rtl" lang="ar">
+        <Switch engine="modern" defaultChecked unCheckedChildren="مغلق" checkedChildren="مفتوح" />
+      </div>
     </div>
   ),
 };

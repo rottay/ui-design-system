@@ -31,10 +31,46 @@
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] {
-  background: var(--ds-surface-card);
+  --ds-cockpit-header-padding: clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px));
+  --ds-cockpit-header-padding-compact: var(--ds-spacing-3, 12px) clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px));
+  --ds-cockpit-header-section-gap: var(--ds-spacing-4, 16px);
+  --ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, var(--ds-spacing-3, 12px));
+  --ds-cockpit-header-action-gap: var(--ds-spacing-2, 8px);
+  overflow: hidden;
+  background: var(
+    --ds-cockpit-header-bg,
+    var(
+      --ds-card-header-bg,
+      linear-gradient(
+        112deg,
+        color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
+        var(--ds-surface-card) 56%,
+        var(--ds-surface-panel)
+      )
+    )
+  );
+  background-position: 0% 50%;
+  background-size: 180% 180%;
+  border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
+    var(--ds-workspace-card-shadow, var(--ds-elevation-1));
+  transition:
+    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  animation: ds-cockpit-header-arrive var(--ds-motion-calm, 220ms)
+    var(--ds-motion-ease-out, ease-out) both;
+  container-type: inline-size;
+  container-name: ds-cockpit-header;
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
-  border-bottom: 1px solid var(--ds-color-border-subtle);
+  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover {
+  background-position: 100% 50%;
+  border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border-subtle)));
+  box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
 }
 
 /* ---- sticky elevation: only when the header is sticky AND scrolled compact
@@ -48,6 +84,17 @@
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
   color: var(--ds-color-text-muted);
 }
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'][data-part='breadcrumb'] {
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px 9px;
+  overflow-x: auto;
+  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
+  scrollbar-width: none;
+}
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
   color: var(--ds-color-text-secondary);
 }
@@ -60,20 +107,49 @@
 
 /* ---- separator ---- */
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='separator'] {
+  display: inline-flex;
+  align-items: center;
   color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='header-icon'][data-part='header-icon'] {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: var(--ds-cockpit-header-icon-size, 40px);
+  height: var(--ds-cockpit-header-icon-size, 40px);
+  place-items: center;
+  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card));
+  color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+  transform: translateY(-1px) scale(1.025);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='eyebrow'] {
+  margin-bottom: 4px;
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  font-size: 10px;
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.11em;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 /* ---- back button: ghost with a visible border only when highlighted. Rest
         `border: 1px solid transparent` is NOT a reset, so it repeats the
         data-part to reach the (0,4,0) border floor. Highlight = hover||focus. ---- */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] {
-  border: 1px solid transparent;
-  border-radius: var(--ds-radius-md);
-  background: transparent;
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] > .rottay-button {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back']:hover,
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back']:focus {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] > .rottay-button:hover,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] > .rottay-button:focus {
   border-color: var(--ds-color-border);
   background: var(--ds-color-neutral-50);
   color: var(--ds-color-text-primary);
@@ -113,9 +189,24 @@
 /* ---- title / subtitle ---- */
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='title'] {
   color: var(--ds-color-text-primary);
+  max-width: 34ch;
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  text-wrap: balance;
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle'] {
   color: var(--ds-color-text-secondary);
+  max-width: 72ch;
+  text-wrap: pretty;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='actions'][data-part='actions'] {
+  min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
+  padding: 3px;
+  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
+  background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
+  backdrop-filter: blur(var(--ds-glass-blur, 8px));
 }
 
 /* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
@@ -123,6 +214,22 @@
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
   border-radius: var(--ds-cockpit-header-skeleton-radius, var(--ds-radius-sm));
   background: var(--ds-color-neutral-100);
+}
+
+@container ds-cockpit-header (max-width: 640px) {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='main-row'] {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='actions'] {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='actions'] > * {
+    flex: 1 0 max-content;
+  }
 }
 
 /* ===========================================================================
@@ -151,4 +258,17 @@
   border-radius: var(--ds-radius-lg, 12px);
   box-shadow: var(--ds-elevation-2);
   margin: var(--ds-spacing-2, 8px);
+}
+
+@keyframes ds-cockpit-header-arrive {
+  from { opacity: 0; transform: translateY(8px) scale(0.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'],
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='header-icon'] {
+    animation: none;
+    transition: none;
+  }
 }

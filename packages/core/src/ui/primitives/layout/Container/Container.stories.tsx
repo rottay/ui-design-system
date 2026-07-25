@@ -3,14 +3,17 @@
  * Colocated with component following approved architecture
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
-import { Container } from './';
-import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
-import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../.storybook/helpers';
-import React from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Container } from "./";
+import { DesignSystemProvider } from "../../../../infrastructure/runtime/bootstrap";
+import {
+  EngineComparison as EngineComparisonHelper,
+  VariantEngineMatrix,
+} from "../../../../../.storybook/helpers";
+import React from "react";
 
 const meta: Meta<typeof Container> = {
-  title: 'Primitives/Layout/Container',
+  title: "Primitives/Layout/Container",
   component: Container,
   decorators: [
     (Story) => (
@@ -38,30 +41,30 @@ It's commonly used as a wrapper for page content to maintain consistent margins 
   },
   argTypes: {
     maxWidth: {
-      control: 'select',
-      options: ['sm', 'md', 'lg', 'xl', '2xl', 'full'],
-      description: 'Maximum width of the container',
+      control: "select",
+      options: ["sm", "md", "lg", "xl", "2xl", "full"],
+      description: "Maximum width of the container",
     },
     padding: {
-      control: 'select',
-      options: ['none', 'sm', 'md', 'lg'],
-      description: 'Padding inside the container',
+      control: "select",
+      options: ["none", "sm", "md", "lg"],
+      description: "Padding inside the container",
     },
     center: {
-      control: 'boolean',
-      description: 'Center the container horizontally',
+      control: "boolean",
+      description: "Center the container horizontally",
     },
     fluid: {
-      control: 'boolean',
-      description: 'Container takes full width of parent',
+      control: "boolean",
+      description: "Container takes full width of parent",
     },
     engine: {
-      control: 'select',
-      options: ['classic', 'modern', 'rustic'],
-      description: 'Rendering engine to use',
+      control: "select",
+      options: ["classic", "modern", "rustic"],
+      description: "Rendering engine to use",
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 };
 
 export default meta;
@@ -69,14 +72,16 @@ type Story = StoryObj<typeof Container>;
 
 // Helper component for visual demonstration
 const ContentBlock = ({ label }: { label: string }) => (
-  <div style={{
-    padding: '24px',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    color: 'white',
-    borderRadius: '8px',
-    textAlign: 'center',
-    fontWeight: 500,
-  }}>
+  <div
+    style={{
+      padding: "24px",
+      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      color: "white",
+      borderRadius: "8px",
+      textAlign: "center",
+      fontWeight: 500,
+    }}
+  >
     {label}
   </div>
 );
@@ -84,8 +89,8 @@ const ContentBlock = ({ label }: { label: string }) => (
 // Default story
 export const Default: Story = {
   args: {
-    maxWidth: 'lg',
-    padding: 'md',
+    maxWidth: "lg",
+    padding: "md",
     center: true,
     children: <ContentBlock label="Default Container (lg)" />,
   },
@@ -93,11 +98,19 @@ export const Default: Story = {
 
 // Max width variants
 export const MaxWidthVariants: Story = {
-  name: 'Max Width Sizes',
+  name: "Max Width Sizes",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', background: '#f5f5f5', padding: '16px' }}>
-      {(['sm', 'md', 'lg', 'xl', '2xl', 'full'] as const).map((size) => (
-        <Container key={size} maxWidth={size} style={{ background: '#fff' }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+        background: "#f5f5f5",
+        padding: "16px",
+      }}
+    >
+      {(["sm", "md", "lg", "xl", "2xl", "full"] as const).map((size) => (
+        <Container key={size} maxWidth={size} style={{ background: "#fff" }}>
           <ContentBlock label={`maxWidth="${size}"`} />
         </Container>
       ))}
@@ -107,10 +120,10 @@ export const MaxWidthVariants: Story = {
 
 // Custom max width
 export const CustomMaxWidth: Story = {
-  name: 'Custom Max Width',
+  name: "Custom Max Width",
   render: () => (
-    <div style={{ background: '#f5f5f5', padding: '16px' }}>
-      <Container maxWidth={800} style={{ background: '#fff' }}>
+    <div style={{ background: "#f5f5f5", padding: "16px" }}>
+      <Container maxWidth={800} style={{ background: "#fff" }}>
         <ContentBlock label="maxWidth={800} (800px)" />
       </Container>
     </div>
@@ -119,18 +132,25 @@ export const CustomMaxWidth: Story = {
 
 // Padding variants
 export const PaddingVariants: Story = {
-  name: 'Padding Sizes',
+  name: "Padding Sizes",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['none', 'sm', 'md', 'lg'] as const).map((padding) => (
-        <Container key={padding} maxWidth="md" padding={padding} style={{ background: '#e0e7ff' }}>
-          <div style={{
-            background: '#6366f1',
-            color: 'white',
-            padding: '16px',
-            borderRadius: '8px',
-            textAlign: 'center',
-          }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      {(["none", "sm", "md", "lg"] as const).map((padding) => (
+        <Container
+          key={padding}
+          maxWidth="md"
+          padding={padding}
+          style={{ background: "#e0e7ff" }}
+        >
+          <div
+            style={{
+              background: "#6366f1",
+              color: "white",
+              padding: "16px",
+              borderRadius: "8px",
+              textAlign: "center",
+            }}
+          >
             padding="{padding}"
           </div>
         </Container>
@@ -141,17 +161,25 @@ export const PaddingVariants: Story = {
 
 // Center vs non-centered
 export const CenteringBehavior: Story = {
-  name: 'Centering Behavior',
+  name: "Centering Behavior",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', background: '#f5f5f5', padding: '16px' }}>
-      <Container maxWidth="md" center style={{ background: '#d1fae5' }}>
-        <div style={{ padding: '16px', textAlign: 'center' }}>
-          center={'{true}'} (default) - Container is centered
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+        background: "#f5f5f5",
+        padding: "16px",
+      }}
+    >
+      <Container maxWidth="md" center style={{ background: "#d1fae5" }}>
+        <div style={{ padding: "16px", textAlign: "center" }}>
+          center={"{true}"} (default) - Container is centered
         </div>
       </Container>
-      <Container maxWidth="md" center={false} style={{ background: '#fee2e2' }}>
-        <div style={{ padding: '16px', textAlign: 'center' }}>
-          center={'{false}'} - Container aligns to the left
+      <Container maxWidth="md" center={false} style={{ background: "#fee2e2" }}>
+        <div style={{ padding: "16px", textAlign: "center" }}>
+          center={"{false}"} - Container aligns to the left
         </div>
       </Container>
     </div>
@@ -160,17 +188,25 @@ export const CenteringBehavior: Story = {
 
 // Fluid container
 export const FluidContainer: Story = {
-  name: 'Fluid Container',
+  name: "Fluid Container",
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', background: '#f5f5f5', padding: '16px' }}>
-      <Container maxWidth="lg" style={{ background: '#dbeafe' }}>
-        <div style={{ padding: '16px', textAlign: 'center' }}>
-          fluid={'{false}'} (default) - Constrained to maxWidth
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+        background: "#f5f5f5",
+        padding: "16px",
+      }}
+    >
+      <Container maxWidth="lg" style={{ background: "#dbeafe" }}>
+        <div style={{ padding: "16px", textAlign: "center" }}>
+          fluid={"{false}"} (default) - Constrained to maxWidth
         </div>
       </Container>
-      <Container fluid style={{ background: '#fef3c7' }}>
-        <div style={{ padding: '16px', textAlign: 'center' }}>
-          fluid={'{true}'} - Takes full width regardless of maxWidth
+      <Container fluid style={{ background: "#fef3c7" }}>
+        <div style={{ padding: "16px", textAlign: "center" }}>
+          fluid={"{true}"} - Takes full width regardless of maxWidth
         </div>
       </Container>
     </div>
@@ -179,18 +215,30 @@ export const FluidContainer: Story = {
 
 // Page layout example
 export const PageLayoutExample: Story = {
-  name: 'Page Layout Example',
+  name: "Page Layout Example",
   render: () => (
-    <div style={{ background: '#f5f5f5', minHeight: '400px' }}>
+    <div style={{ background: "#f5f5f5", minHeight: "400px" }}>
       {/* Header - Full width */}
-      <div style={{ background: '#1f2937', color: 'white', padding: '16px 0' }}>
+      <div style={{ background: "#1f2937", color: "white", padding: "16px 0" }}>
         <Container maxWidth="xl">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 'bold' }}>Logo</span>
-            <nav style={{ display: 'flex', gap: '24px' }}>
-              <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Home</a>
-              <a href="#" style={{ color: 'white', textDecoration: 'none' }}>About</a>
-              <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Contact</a>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span style={{ fontWeight: "bold" }}>Logo</span>
+            <nav style={{ display: "flex", gap: "24px" }}>
+              <a href="#" style={{ color: "white", textDecoration: "none" }}>
+                Home
+              </a>
+              <a href="#" style={{ color: "white", textDecoration: "none" }}>
+                About
+              </a>
+              <a href="#" style={{ color: "white", textDecoration: "none" }}>
+                Contact
+              </a>
             </nav>
           </div>
         </Container>
@@ -198,18 +246,37 @@ export const PageLayoutExample: Story = {
 
       {/* Main content */}
       <Container maxWidth="xl" padding="lg">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px', marginTop: '24px' }}>
-          <main style={{ background: 'white', padding: '24px', borderRadius: '8px' }}>
-            <h1 style={{ margin: '0 0 16px 0' }}>Main Content</h1>
-            <p style={{ color: '#6b7280', lineHeight: 1.6 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 300px",
+            gap: "24px",
+            marginTop: "24px",
+          }}
+        >
+          <main
+            style={{
+              background: "white",
+              padding: "24px",
+              borderRadius: "8px",
+            }}
+          >
+            <h1 style={{ margin: "0 0 16px 0" }}>Main Content</h1>
+            <p style={{ color: "#6b7280", lineHeight: 1.6 }}>
               This demonstrates how Container can be used to build page layouts.
               The content is constrained to a maximum width while the background
               can extend full width.
             </p>
           </main>
-          <aside style={{ background: 'white', padding: '24px', borderRadius: '8px' }}>
-            <h3 style={{ margin: '0 0 16px 0' }}>Sidebar</h3>
-            <p style={{ color: '#6b7280', fontSize: '14px' }}>
+          <aside
+            style={{
+              background: "white",
+              padding: "24px",
+              borderRadius: "8px",
+            }}
+          >
+            <h3 style={{ margin: "0 0 16px 0" }}>Sidebar</h3>
+            <p style={{ color: "#6b7280", fontSize: "14px" }}>
               Additional content goes here.
             </p>
           </aside>
@@ -217,9 +284,18 @@ export const PageLayoutExample: Story = {
       </Container>
 
       {/* Footer */}
-      <div style={{ background: '#374151', color: 'white', padding: '24px 0', marginTop: '48px' }}>
+      <div
+        style={{
+          background: "#374151",
+          color: "white",
+          padding: "24px 0",
+          marginTop: "48px",
+        }}
+      >
         <Container maxWidth="xl">
-          <div style={{ textAlign: 'center', fontSize: '14px', color: '#9ca3af' }}>
+          <div
+            style={{ textAlign: "center", fontSize: "14px", color: "#9ca3af" }}
+          >
             © 2024 Your Company. All rights reserved.
           </div>
         </Container>
@@ -230,14 +306,18 @@ export const PageLayoutExample: Story = {
 
 // Nested containers
 export const NestedContainers: Story = {
-  name: 'Nested Containers',
+  name: "Nested Containers",
   render: () => (
-    <Container maxWidth="xl" padding="lg" style={{ background: '#f3f4f6' }}>
-      <h2 style={{ margin: '0 0 16px 0' }}>Outer Container (xl)</h2>
-      <Container maxWidth="md" padding="md" style={{ background: '#e0e7ff' }}>
-        <h3 style={{ margin: '0 0 12px 0' }}>Middle Container (md)</h3>
-        <Container maxWidth="sm" padding="sm" style={{ background: '#6366f1', color: 'white' }}>
-          <p style={{ margin: 0, textAlign: 'center' }}>Inner Container (sm)</p>
+    <Container maxWidth="xl" padding="lg" style={{ background: "#f3f4f6" }}>
+      <h2 style={{ margin: "0 0 16px 0" }}>Outer Container (xl)</h2>
+      <Container maxWidth="md" padding="md" style={{ background: "#e0e7ff" }}>
+        <h3 style={{ margin: "0 0 12px 0" }}>Middle Container (md)</h3>
+        <Container
+          maxWidth="sm"
+          padding="sm"
+          style={{ background: "#6366f1", color: "white" }}
+        >
+          <p style={{ margin: 0, textAlign: "center" }}>Inner Container (sm)</p>
         </Container>
       </Container>
     </Container>
@@ -252,11 +332,12 @@ export const NestedContainers: Story = {
  * Side-by-side comparison of Container across all 3 engines.
  */
 export const CompareEngines: Story = {
-  name: '🔄 Engine Comparison',
+  name: "🔄 Engine Comparison",
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Container rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story:
+          "Compare the same Container rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).",
       },
     },
   },
@@ -265,19 +346,21 @@ export const CompareEngines: Story = {
       component={Container}
       props={{
         children: (
-          <div style={{
-            background: '#3b82f6',
-            color: 'white',
-            padding: '16px',
-            borderRadius: '8px',
-            textAlign: 'center',
-          }}>
+          <div
+            style={{
+              background: "#3b82f6",
+              color: "white",
+              padding: "16px",
+              borderRadius: "8px",
+              textAlign: "center",
+            }}
+          >
             Container Content
           </div>
         ),
-        maxWidth: 'md',
-        padding: 'md',
-        style: { background: '#dbeafe' },
+        maxWidth: "md",
+        padding: "md",
+        style: { background: "#dbeafe" },
       }}
       showDescriptions
       direction="vertical"
@@ -287,23 +370,25 @@ export const CompareEngines: Story = {
 
 // Responsive content
 export const ResponsiveContent: Story = {
-  name: 'Responsive Content',
+  name: "Responsive Content",
   render: () => (
     <Container maxWidth="lg" padding="md">
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '16px',
-      }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "16px",
+        }}
+      >
         {[1, 2, 3, 4, 5, 6].map((item) => (
           <div
             key={item}
             style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
-              padding: '24px',
-              borderRadius: '8px',
-              textAlign: 'center',
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              color: "white",
+              padding: "24px",
+              borderRadius: "8px",
+              textAlign: "center",
             }}
           >
             Card {item}
@@ -316,45 +401,104 @@ export const ResponsiveContent: Story = {
 
 // Article/Blog layout
 export const ArticleLayout: Story = {
-  name: 'Article Layout',
+  name: "Article Layout",
   render: () => (
     <Container maxWidth="md" padding="lg">
       <article>
-        <h1 style={{ fontSize: '32px', marginBottom: '8px' }}>
+        <h1 style={{ fontSize: "32px", marginBottom: "8px" }}>
           Building Scalable Design Systems
         </h1>
-        <p style={{ color: '#6b7280', marginBottom: '24px' }}>
+        <p style={{ color: "#6b7280", marginBottom: "24px" }}>
           Published on December 26, 2024 · 5 min read
         </p>
         <img
           src="https://picsum.photos/800/400"
           alt="Article hero"
-          style={{ width: '100%', borderRadius: '8px', marginBottom: '24px' }}
+          style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }}
         />
-        <p style={{ fontSize: '18px', lineHeight: 1.8, color: '#374151' }}>
-          Design systems have become essential for building consistent, scalable user interfaces.
-          They provide a shared language between designers and developers, ensuring that components
-          look and behave the same way across an entire application.
+        <p style={{ fontSize: "18px", lineHeight: 1.8, color: "#374151" }}>
+          Design systems have become essential for building consistent, scalable
+          user interfaces. They provide a shared language between designers and
+          developers, ensuring that components look and behave the same way
+          across an entire application.
         </p>
-        <p style={{ fontSize: '18px', lineHeight: 1.8, color: '#374151' }}>
-          The Container component is a fundamental building block in any design system. It provides
-          consistent horizontal spacing and maximum widths, making content readable on all screen sizes.
+        <p style={{ fontSize: "18px", lineHeight: 1.8, color: "#374151" }}>
+          The Container component is a fundamental building block in any design
+          system. It provides consistent horizontal spacing and maximum widths,
+          making content readable on all screen sizes.
         </p>
-        <blockquote style={{
-          borderLeft: '4px solid #6366f1',
-          paddingLeft: '24px',
-          margin: '32px 0',
-          fontStyle: 'italic',
-          color: '#4b5563',
-        }}>
-          "A good design system removes the need to think about mundane decisions, freeing designers
-          and developers to focus on solving real problems."
+        <blockquote
+          style={{
+            border: "1px solid var(--ds-color-border)",
+            borderRadius: "var(--ds-radius-lg)",
+            padding: "24px",
+            margin: "32px 0",
+            fontStyle: "italic",
+            color: "#4b5563",
+          }}
+        >
+          "A good design system removes the need to think about mundane
+          decisions, freeing designers and developers to focus on solving real
+          problems."
         </blockquote>
-        <p style={{ fontSize: '18px', lineHeight: 1.8, color: '#374151' }}>
-          By using the Container component consistently, you ensure that all pages in your application
-          have proper margins and readable line lengths, regardless of the viewport size.
+        <p style={{ fontSize: "18px", lineHeight: 1.8, color: "#374151" }}>
+          By using the Container component consistently, you ensure that all
+          pages in your application have proper margins and readable line
+          lengths, regardless of the viewport size.
         </p>
       </article>
     </Container>
   ),
+};
+
+/** Same Modern anatomy; tenant tokens alone change the container personality. */
+export const TokenizedModernFrames: Story = {
+  name: "Modern contract — same markup, two token sets",
+  render: () => {
+    const Specimen = () => (
+      <Container
+        engine="modern"
+        maxWidth="sm"
+        padding="lg"
+        role="region"
+        aria-label="Decision workspace"
+      >
+        <strong>Decision workspace</strong>
+        <p style={{ marginBlockEnd: 0 }}>
+          The frame remains responsive and neutral while tenant tokens own its
+          finish.
+        </p>
+      </Container>
+    );
+
+    return (
+      <div style={{ display: "grid", gap: "var(--ds-spacing-6)" }}>
+        <section
+          style={
+            {
+              "--ds-container-background": "var(--ds-color-surface-raised)",
+              "--ds-container-border":
+                "1px solid var(--ds-color-border-subtle)",
+              "--ds-container-radius": "var(--ds-radius-lg)",
+              "--ds-container-shadow": "var(--ds-shadow-sm)",
+            } as React.CSSProperties
+          }
+        >
+          <Specimen />
+        </section>
+        <section
+          style={
+            {
+              "--ds-container-background": "var(--ds-color-surface-subtle)",
+              "--ds-container-border": "1px solid var(--ds-color-border)",
+              "--ds-container-radius": "var(--ds-radius-none)",
+              "--ds-container-shadow": "none",
+            } as React.CSSProperties
+          }
+        >
+          <Specimen />
+        </section>
+      </div>
+    );
+  },
 };

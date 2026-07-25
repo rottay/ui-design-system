@@ -31,7 +31,7 @@ export { type SegmentedProps, type SegmentedOption, SEGMENTED_DEFAULTS } from '.
 export const Segmented = createEngineComponent<SegmentedProps>('Segmented', {
   /** Ant Design implementation - full-featured with animations */
   classic: () => import('./engines/classic'),
-  /** DaisyUI/Tailwind implementation - utility-first styling */
+  /** Rottay-native premium implementation - token-driven, skin-painted */
   modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies */
   rustic: () => import('./engines/rustic'),

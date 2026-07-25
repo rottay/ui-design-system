@@ -25,9 +25,10 @@ describe('Pagination engine advanced coverage', () => {
     expect(screen.getByText('Total 200 items')).toBeInTheDocument();
     expect(screen.getAllByText('...')).toHaveLength(2);
 
-    fireEvent.click(screen.getByRole('button', { name: '«' }));
+    // Prev/next are glyph-only buttons named through the pagination i18n keys.
+    fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
     fireEvent.click(screen.getByRole('button', { name: '7' }));
-    fireEvent.click(screen.getByRole('button', { name: '»' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
     expect(onChange).toHaveBeenNthCalledWith(1, 5, 10);
     expect(onChange).toHaveBeenNthCalledWith(2, 7, 10);

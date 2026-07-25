@@ -40,6 +40,10 @@ import type { PatternBaseProps } from '../../../../../foundation/contracts/runti
 export interface PageShellProps extends PatternBaseProps {
   /** Page title displayed as the primary heading */
   title: string;
+  /** Optional localized context label rendered above the primary heading. */
+  eyebrow?: ReactNode;
+  /** Optional semantic DS icon rendered in the page-header identity tile. */
+  icon?: ReactNode;
   /** Hide the shell header row entirely when a surface renders its own top chrome. */
   hideHeader?: boolean;
   /** Optional subtitle or description rendered below the title */
@@ -59,7 +63,13 @@ export interface PageShellProps extends PatternBaseProps {
   /** Main page content rendered below the header/tabs area */
   children: ReactNode;
   /** Back navigation button configuration */
-  back?: { label?: string; onClick: () => void };
+  back?: {
+    /** Optional visible label next to the back icon. */
+    label?: string;
+    /** Localized accessible label. Required by consumers when `label` is omitted. */
+    ariaLabel?: string;
+    onClick: () => void;
+  };
   /** Badge element rendered next to the title (e.g. status indicator) */
   badge?: ReactNode;
   /** Maximum width constraint for the page content area */

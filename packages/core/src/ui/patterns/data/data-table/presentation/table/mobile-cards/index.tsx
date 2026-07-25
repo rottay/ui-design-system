@@ -1,20 +1,21 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Box, Card, Checkbox, Flex, Stack, Text } from '@/ui/primitives';
+import React from "react";
+import { Box, Card, Checkbox, Flex, Stack, Text } from "@/ui/primitives";
 import type {
   ColumnDef,
   ResponsiveColumnMode,
-} from '@/foundation/contracts/runtime/components/patterns/core';
-import type { DataTableMobileCardContext } from '../../../contracts';
-import { resolveAccessor } from '../../../runtime/row-resolution';
+} from "@/foundation/contracts/runtime/components/patterns/core";
+import type { DataTableMobileCardContext } from "../../../contracts";
+import type { DataTableMessages } from "../../../contracts";
+import { resolveAccessor } from "../../../runtime/row-resolution";
 
 function stringifyMobileValue(value: unknown): string {
-  if (value === null || value === undefined || value === '') {
-    return '—';
+  if (value === null || value === undefined || value === "") {
+    return "—";
   }
 
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (typeof value === "string" || typeof value === "number") {
     return String(value);
   }
 
@@ -39,7 +40,7 @@ export interface DataTableMobileCardsProps<T extends object> {
   data: T[];
   columns: ColumnDef<T>[];
   /** Current device class key, used to resolve responsive column roles. */
-  deviceKey?: 'phone' | 'tablet' | 'desktop';
+  deviceKey?: "phone" | "tablet" | "desktop";
   getRowKey: (row: T, index: number) => string;
   selectedKeys?: string[];
   selectable?: boolean;
@@ -49,22 +50,26 @@ export interface DataTableMobileCardsProps<T extends object> {
   mobileCard?: (
     row: T,
     index: number,
-    context: DataTableMobileCardContext<T>,
+    context: DataTableMobileCardContext<T>
   ) => React.ReactNode;
+  messages?: DataTableMessages;
 }
 
 /**
  * Resolves the responsive mode for a column at the given device class.
  * Falls back to `'visible'` when the column has no responsive config.
  */
-function getMode<T>(column: ColumnDef<T>, deviceKey: 'phone' | 'tablet' | 'desktop'): ResponsiveColumnMode {
-  return column.responsive?.[deviceKey] ?? 'visible';
+function getMode<T>(
+  column: ColumnDef<T>,
+  deviceKey: "phone" | "tablet" | "desktop"
+): ResponsiveColumnMode {
+  return column.responsive?.[deviceKey] ?? "visible";
 }
 
 export function DataTableMobileCards<T extends object>({
   data,
   columns,
-  deviceKey = 'phone',
+  deviceKey = "phone",
   getRowKey,
   selectedKeys = [],
   selectable = false,
@@ -72,6 +77,7 @@ export function DataTableMobileCards<T extends object>({
   onRowClick,
   actions,
   mobileCard,
+  messages,
 }: DataTableMobileCardsProps<T>): React.ReactElement {
   const visibleColumns = columns.filter((column) => column.visible !== false);
 
@@ -87,17 +93,25 @@ export function DataTableMobileCards<T extends object>({
 
   if (hasResponsiveConfig) {
     // Use explicit responsive roles
-    const primaryCols = visibleColumns.filter((col) => getMode(col, deviceKey) === 'primary');
-    const summaryCols = visibleColumns.filter((col) => getMode(col, deviceKey) === 'summary');
+    const primaryCols = visibleColumns.filter(
+      (col) => getMode(col, deviceKey) === "primary"
+    );
+    const summaryCols = visibleColumns.filter(
+      (col) => getMode(col, deviceKey) === "summary"
+    );
 
     // If there are primary columns, use the first as card title.
     // Otherwise fall back to the first visible column (legacy behavior).
     titleColumn = primaryCols[0] ?? visibleColumns[0];
-    summaryColumns = summaryCols.length > 0
-      ? summaryCols
-      : visibleColumns.filter(
-          (col) => col !== titleColumn && getMode(col, deviceKey) === 'visible'
-        ).slice(0, 3);
+    summaryColumns =
+      summaryCols.length > 0
+        ? summaryCols
+        : visibleColumns
+            .filter(
+              (col) =>
+                col !== titleColumn && getMode(col, deviceKey) === "visible"
+            )
+            .slice(0, 3);
   } else {
     // Legacy positional heuristic: first column is title, next 3 are summary.
     titleColumn = visibleColumns[0];
@@ -132,7 +146,7 @@ export function DataTableMobileCards<T extends object>({
             <Box
               key={rowKey}
               data-part="mobile-card-custom"
-              data-selected={isSelected ? 'true' : 'false'}
+              data-selected={isSelected ? "true" : "false"}
             >
               {mobileCard(row, index, mobileCardContext)}
             </Box>
@@ -146,15 +160,14 @@ export function DataTableMobileCards<T extends object>({
             hoverable={!!onRowClick}
             clickable={!!onRowClick}
             onClick={() => onRowClick?.(row, index)}
-            className={`ds-data-table__mobile-card${isSelected ? ' ds-data-table__mobile-card--selected' : ''}`}
-            style={{
-              overflow: 'hidden',
-            }}
+            className={`ds-data-table__mobile-card${
+              isSelected ? " ds-data-table__mobile-card--selected" : ""
+            }`}
           >
             <Card.Body>
               <Stack spacing="md">
                 <Flex justify="between" align="start" gap={12}>
-                  <Stack spacing="xs" style={{ flex: 1, minWidth: 0 }}>
+                  <Stack spacing="xs" data-part="mobile-card-primary">
                     {titleColumn && (
                       <Box data-part="mobile-card-title">
                         {renderDefaultField(titleColumn, row, index)}
@@ -163,11 +176,16 @@ export function DataTableMobileCards<T extends object>({
                   </Stack>
 
                   {selectable && onToggleSelection && (
-                    <Box onClick={(event) => event.stopPropagation()}>
+                    <Box
+                      data-part="mobile-card-selection"
+                      onClick={(event) => event.stopPropagation()}
+                    >
                       <Checkbox
                         checked={isSelected}
                         onChange={() => onToggleSelection(rowKey)}
-                        aria-label={`Select ${rowKey}`}
+                        aria-label={
+                          messages?.selectRow?.(rowKey) ?? `Select ${rowKey}`
+                        }
                       />
                     </Box>
                   )}
@@ -176,27 +194,22 @@ export function DataTableMobileCards<T extends object>({
                 {summaryColumns.length > 0 && (
                   <Stack spacing="sm">
                     {summaryColumns.map((column) => (
-                      <Flex key={column.key} justify="between" align="start" gap={12}>
-                        <Text
-                          data-part="mobile-card-summary-label"
-                          color="subtle"
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 600,
-                            letterSpacing: '0.04em',
-                            textTransform: 'uppercase',
-                            flexShrink: 0,
-                          }}
-                        >
-                          {column.header}
-                        </Text>
-                        <Box
-                          data-part="mobile-card-summary-value"
-                          style={{
-                            textAlign: 'right',
-                            minWidth: 0,
-                          }}
-                        >
+                      <Flex
+                        key={column.key}
+                        data-part="mobile-card-summary-row"
+                        justify="between"
+                        align="start"
+                        gap={12}
+                      >
+                        {/*
+                         * Typography owns data-part="root" as part of its
+                         * primitive contract. Keep the pattern slot on Box so
+                         * the DataTable skin has a stable, engine-neutral hook.
+                         */}
+                        <Box data-part="mobile-card-summary-label">
+                          <Text color="subtle">{column.header}</Text>
+                        </Box>
+                        <Box data-part="mobile-card-summary-value">
                           {renderDefaultField(column, row, index)}
                         </Box>
                       </Flex>
@@ -205,7 +218,10 @@ export function DataTableMobileCards<T extends object>({
                 )}
 
                 {resolvedActions && (
-                  <Box onClick={(event) => event.stopPropagation()}>
+                  <Box
+                    data-part="mobile-card-actions"
+                    onClick={(event) => event.stopPropagation()}
+                  >
                     <Flex gap={8} wrap="wrap">
                       {resolvedActions}
                     </Flex>

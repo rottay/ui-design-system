@@ -159,7 +159,7 @@ export const SlideIn = forwardRef<HTMLDivElement, SlideInProps>(
           : once
           ? {
               whileInView: { opacity: 1, x: 0, y: 0 },
-              viewport: { once: true, amount: 0.3 },
+              viewport: { once: true, amount: "some" as const },
             }
           : { animate: { opacity: 1, x: 0, y: 0 } })}
         transition={transition}

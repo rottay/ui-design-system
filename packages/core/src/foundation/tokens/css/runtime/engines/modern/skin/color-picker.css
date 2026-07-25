@@ -46,6 +46,11 @@
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
+  /* K4-C Pass 2: the dropdown sized to the UA-native color input (~44px),
+     truncating the hex input and wrapping every preset onto its own row.
+     A token-bound minimum keeps the panel legible; 11rem fits the hex input,
+     a 3-swatch preset row and the clear button at every density. */
+  min-inline-size: var(--ds-colorpicker-dropdown-min-width, 11rem);
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'] {
@@ -53,6 +58,14 @@
   background: var(--ds-color-bg-input, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
+  /* Hex data rides the TENANT mono channel (K4-C Pass-2 live finding): the
+     engine previously used Tailwind's static `font-mono` utility, which (a)
+     ignored the tenant mono and (b) is now shadowed inside `data-ds-root`
+     boundaries — the coordinator's `:where([data-ds-root])` font rule is
+     unlayered, so it beats every LAYERED Tailwind utility regardless of the
+     :where() zero specificity. This unlayered rule wins both and resolves to
+     the tenant mono (IBM Plex Mono / Courier New). */
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][data-part='hex-input'] {
   border: 1px solid var(--ds-color-border);

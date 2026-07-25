@@ -6,6 +6,9 @@ import { collectStampedPartsFromSource } from './skin-dead-part-audit.mjs';
 test('dead-part audit recognizes JSX, createElement, forwarded and D3 anatomy', () => {
   const source = `
     const jsx = <div data-part="root" />;
+    const conditional = (
+      <button data-part={isPrevious ? 'overflow-previous' : 'overflow-next'} />
+    );
     const props = { 'data-part': 'brush-selection' };
     const forwarded = <SkeletonBlock part="skeleton-row" />;
     g.append('line')
@@ -15,7 +18,15 @@ test('dead-part audit recognizes JSX, createElement, forwarded and D3 anatomy', 
 
   assert.deepEqual(
     [...collectStampedPartsFromSource(source)].sort(),
-    ['axis-domain', 'axis-tick', 'brush-selection', 'root', 'skeleton-row'],
+    [
+      'axis-domain',
+      'axis-tick',
+      'brush-selection',
+      'overflow-next',
+      'overflow-previous',
+      'root',
+      'skeleton-row',
+    ],
   );
 });
 

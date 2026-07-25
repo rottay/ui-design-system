@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Tooltip - Contextual overlay triggered by hover, click, or focus.
@@ -18,19 +18,22 @@
  * @category Display
  */
 
-import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { TooltipProps } from './contracts';
-import { TooltipTrigger, TooltipContent } from './compound';
+import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { TooltipProps } from "./contracts";
+import { TooltipTrigger, TooltipContent } from "./compound";
 
 export type {
   TooltipProps,
   TooltipPlacement,
   TooltipTrigger as TooltipTriggerType,
+  TooltipTouchBehavior,
+  TooltipRecipe,
+  TooltipDensity,
   TooltipState,
   TooltipTriggerProps,
   TooltipContentProps,
-} from './contracts';
-export { TOOLTIP_DEFAULTS, PLACEMENT_MAP } from './contracts';
+} from "./contracts";
+export { TOOLTIP_DEFAULTS, PLACEMENT_MAP } from "./contracts";
 
 export { TooltipTrigger, TooltipContent };
 
@@ -40,10 +43,10 @@ export { TooltipTrigger, TooltipContent };
  * is for advanced scenarios where trigger/content need separate wrappers.
  */
 export const Tooltip = Object.assign(
-  createEngineComponent<TooltipProps>('Tooltip', {
-    classic: () => import('./engines/classic'),
-    modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
+  createEngineComponent<TooltipProps>("Tooltip", {
+    classic: () => import("./engines/classic"),
+    modern: () => import("./engines/modern"),
+    rustic: () => import("./engines/rustic"),
   }),
   {
     /** Wraps the element that activates the tooltip on hover/click/focus. */

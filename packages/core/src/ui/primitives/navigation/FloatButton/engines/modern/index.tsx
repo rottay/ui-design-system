@@ -6,12 +6,18 @@
  * Provides utility-first styled floating action buttons.
  *
  * @remarks
- * The Modern engine uses Tailwind CSS and DS tokens for a lightweight,
- * utility-first implementation including:
- * - Tailwind utility classes for styling
- * - DS token inline styles via --ds-* CSS custom properties
+ * The Modern engine uses Tailwind CSS structural utilities and the unlayered
+ * modern skin (`skin/float-button.css`) as the SINGLE paint owner:
+ * - No DaisyUI classes (K4-C drained `btn`/`btn-circle`/`btn-primary`/
+ *   `btn-ghost`/`bg-base-100`/`bg-error`): the skin now owns trigger paint,
+ *   footprint geometry, badge paint+geometry, AND the hover/press scale and
+ *   focus ring (transcribed verbatim from the theme.css `.btn` rules that
+ *   used to own the interaction through the drained `btn` class).
+ * - Logical placement utilities (`end-6`, never a physical `right-6`) so the
+ *   fixed Group/BackTop placement mirrors under RTL; badge offsets are
+ *   `inset-inline-end` in the skin for the same reason.
  * - Minimal JavaScript footprint
- * - Easy customization via Tailwind config
+ * - Easy customization via the `--ds-floatbutton-*` token family
  *
  * This engine is ideal for projects using Tailwind CSS where bundle
  * size and utility-first CSS are priorities.
@@ -43,33 +49,33 @@
 import React, { useState, useEffect } from 'react';
 import type { FloatButtonProps, FloatButtonGroupProps, FloatButtonBackTopProps } from '../../contracts';
 import { FLOAT_BUTTON_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-function getFloatButtonClassName(
-  type: FloatButtonProps['type'],
-  shape: FloatButtonProps['shape'],
-  className = ''
-): string {
-  const typeClassName = type === 'primary'
-    ? 'btn-primary'
-    : 'btn-ghost bg-base-100';
-  const shapeClassName = shape === 'circle'
-    ? 'btn-circle'
-    : 'rounded-lg';
+/**
+ * Accessible-name channel for icon-only triggers (K4-C axe remediation,
+ * `button-name` critical): translated when an I18nProvider is mounted, with
+ * the documented English fallbacks otherwise (a missing catalog key echoes
+ * the raw key back, which the endsWith guard detects). Shared by all three
+ * modern render sites.
+ */
+function useFloatButtonLabel(): (key: string, fallback: string) => string {
+  const i18n = useOptionalTranslation('components');
+  return (key: string, fallback: string): string => {
+    const translated = i18n?.t(key);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
+}
 
-  // The DaisyUI `btn` class list is load-bearing beyond color: `theme.css`'s
-  // layered `.btn:hover` / `.btn:active` rules are authoritative for this
-  // button's hover/press SCALE — no runtime paint ever contested them, so the
-  // interaction exists nowhere else. Removing or renaming these classes deletes
-  // it silently. The scope classes are prepended alongside, never in place of.
-  return [
-    'rottay-float-button',
-    'rottay-float-button--modern',
-    'btn',
-    shapeClassName,
-    typeClassName,
-    'shadow-lg',
-    className,
-  ]
+function getFloatButtonClassName(className = ''): string {
+  // K4-C Pass 1: the DaisyUI class list (`btn`, `btn-circle`, `btn-primary`,
+  // `btn-ghost`, `bg-base-100`, `bg-error`, `shadow-lg`) is DRAINED. The
+  // unlayered modern skin (`skin/float-button.css`) is now the single paint
+  // owner for the trigger — including the hover/press scale and focus ring,
+  // transcribed verbatim from the theme.css `.btn` rules that previously only
+  // matched because of the `btn` class. The skin keys everything off
+  // `data-part='trigger'` + `data-variant` + `data-shape`, which the three
+  // render sites stamp below.
+  return ['rottay-float-button', 'rottay-float-button--modern', className]
     .filter(Boolean)
     .join(' ');
 }
@@ -79,16 +85,17 @@ function getFloatButtonClassName(
 // ============================================================================
 
 /**
- * FloatButton component using Tailwind CSS and DS tokens.
+ * FloatButton component using Tailwind CSS structural utilities and the
+ * modern skin as single paint owner.
  *
  * @description
- * Implements floating action button with Tailwind utility classes
- * and DS token inline styles for consistent styling.
+ * Implements floating action button with Tailwind structural utilities;
+ * all paint, footprint geometry and interaction states live in the skin.
  *
  * @remarks
- * - Uses DS token inline styles for base styling
- * - Tailwind utilities for positioning and effects
- * - Badge support via badge structural class with DS token colors
+ * - Skin owns trigger paint, footprint, interaction (hover/press/focus)
+ * - Tailwind logical utilities for fixed placement
+ * - Badge support via data-part hooks painted+positioned by the skin
  * - Supports both button and anchor rendering
  *
  * @param props - {@link FloatButtonProps}
@@ -112,30 +119,31 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       children,
     } = props;
 
+    // Structural layout stays inline; the footprint (circle 40px / square
+    // padding) is skin-owned via data-shape (K4-C single paint owner).
     const baseStyle: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
       position: 'relative',
-      ...(shape === 'circle'
-        ? { width: 40, height: 40 }
-        : { padding: '8px 12px' }),
     };
 
     // Badge rendering: dot takes priority over count to avoid conflicting
     // indicators. Count is capped at 99+ to prevent badge overflow on
-    // the small circular button surface.
+    // the small circular button surface. Both badges are painted AND
+    // positioned by the skin (`inset-inline-end`, so they mirror in RTL);
+    // no classes or inline geometry remain here (K4-C).
     const content = (
       <>
         {icon}
         {description && <span className="text-xs">{description}</span>}
         {children}
         {badge?.dot && (
-          <span data-part="badge" data-variant="dot" className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error" />
+          <span data-part="badge" data-variant="dot" />
         )}
         {badge?.count && (
-          <span data-part="badge" data-variant="count" style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '1px 6px', fontSize: 11, lineHeight: '16px' }}>
+          <span data-part="badge" data-variant="count">
             {badge.count > 99 ? '99+' : badge.count}
           </span>
         )}
@@ -145,7 +153,17 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
     // When href is provided, render as <a> for native link semantics and
     // accessibility; otherwise render as <button> for click-only actions
     const floatStyle: React.CSSProperties = { ...style };
-    const floatClassName = getFloatButtonClassName(type, shape, className);
+    const floatClassName = getFloatButtonClassName(className);
+
+    // Accessible name (K4-C axe remediation): `description`/`children` are
+    // discernible text and name the trigger by content. Icon-only triggers
+    // fall back to the string tooltip, then to the guarded generic label.
+    const fbLabel = useFloatButtonLabel();
+    const hasDiscernibleText = description != null || children != null;
+    const ariaLabel = hasDiscernibleText
+      ? undefined
+      : (typeof tooltip === 'string' ? tooltip : undefined) ??
+        fbLabel('floatbutton.actionLabel', 'Floating action button');
 
     const buttonElement = href ? (
       <a
@@ -155,6 +173,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         className={floatClassName}
         style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
+        aria-label={ariaLabel}
         data-part="trigger"
         data-variant={type}
         data-shape={shape}
@@ -169,6 +188,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         className={floatClassName}
         style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
+        aria-label={ariaLabel}
         data-part="trigger"
         data-variant={type}
         data-shape={shape}
@@ -254,22 +274,34 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
     };
 
     // flex-col-reverse places the trigger button at the visual bottom
-    // so child items expand upward, matching FAB menu conventions
+    // so child items expand upward, matching FAB menu conventions.
+    // `end-6` is LOGICAL (inset-inline-end): the fixed placement mirrors RTL.
+    //
+    // Accessible name (K4-C axe remediation): the trigger is icon-only by
+    // design. A string tooltip names it; otherwise the guarded state-aware
+    // label applies. A custom `closeIcon` node owns the open-state name.
+    const fbLabel = useFloatButtonLabel();
+    const tooltipText = typeof tooltip === 'string' ? tooltip : undefined;
+    const triggerAriaLabel = isOpen
+      ? closeIcon != null
+        ? tooltipText
+        : tooltipText ?? fbLabel('floatbutton.closeGroup', 'Close action group')
+      : tooltipText ?? fbLabel('floatbutton.openGroup', 'Open action group');
     return (
       <div
         ref={ref}
-        className={`fixed bottom-6 right-6 flex flex-col-reverse items-center gap-2 ${className}`}
+        className={`fixed bottom-6 end-6 flex flex-col-reverse items-center gap-2 ${className}`}
         style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         data-part="root"
         data-open={isOpen}
       >
-        {/* Trigger button */}
+        {/* Trigger button — footprint is skin-owned via data-shape (K4-C) */}
         <button
           type="button"
           onClick={trigger === 'click' ? handleToggle : undefined}
-          className={getFloatButtonClassName(type, shape)}
+          className={getFloatButtonClassName()}
           data-part="trigger"
           data-variant={type}
           data-shape={shape}
@@ -280,11 +312,9 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
             justifyContent: 'center',
             cursor: 'pointer',
             zIndex: 10,
-            ...(shape === 'circle'
-              ? { width: 40, height: 40 }
-              : { padding: '8px 12px' }),
           }}
           title={typeof tooltip === 'string' ? tooltip : undefined}
+          aria-label={triggerAriaLabel}
         >
           {isOpen ? (closeIcon ?? '×') : icon}
         </button>
@@ -373,6 +403,16 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
       onClick?.();
     };
 
+    // Accessible name (K4-C axe remediation): `description` names the trigger
+    // by content; otherwise a string tooltip, then the guarded "Back to top"
+    // label — the default `↑` glyph alone is not a meaningful name. The hook
+    // stays above the visibility early-return (hooks must be unconditional).
+    const fbLabel = useFloatButtonLabel();
+    const backTopAriaLabel = description != null
+      ? undefined
+      : (typeof tooltip === 'string' ? tooltip : undefined) ??
+        fbLabel('floatbutton.backTop', 'Back to top');
+
     // Don't render when not visible
     if (!visible) return null;
 
@@ -381,7 +421,9 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         ref={ref}
         type="button"
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 transition-opacity duration-200 ${getFloatButtonClassName(type, shape, className)}`}
+        // `end-6` is LOGICAL (inset-inline-end): the fixed placement mirrors
+        // RTL. Footprint is skin-owned via data-shape (K4-C).
+        className={`fixed bottom-6 end-6 transition-opacity duration-200 ${getFloatButtonClassName(className)}`}
         data-part="trigger"
         data-variant={type}
         data-shape={shape}
@@ -390,12 +432,10 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          ...(shape === 'circle'
-            ? { width: 40, height: 40 }
-            : { padding: '8px 12px' }),
           ...style,
         }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
+        aria-label={backTopAriaLabel}
       >
         {icon ?? '↑'}
         {description && <span className="text-xs">{description}</span>}

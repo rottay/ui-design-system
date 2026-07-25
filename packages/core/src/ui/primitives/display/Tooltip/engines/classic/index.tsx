@@ -44,13 +44,13 @@
  * @package @rottay/design-system
  */
 
-'use client';
+"use client";
 
-import { forwardRef, type CSSProperties } from 'react';
-import { Tooltip as AntTooltip } from 'antd';
-import type { TooltipProps } from '../../contracts';
-import { TOOLTIP_DEFAULTS } from '../../contracts';
-import { formatShortcutKey } from '../../../../../../infrastructure/runtime/application/interaction/shortcuts';
+import { forwardRef, type CSSProperties } from "react";
+import { Tooltip as AntTooltip } from "antd";
+import type { TooltipProps } from "../../contracts";
+import { TOOLTIP_DEFAULTS } from "../../contracts";
+import { formatShortcutKey } from "../../../../../../infrastructure/runtime/application/interaction/shortcuts";
 
 /**
  * Layout + chip styles for the optional `shortcut` prop. Built on
@@ -58,23 +58,23 @@ import { formatShortcutKey } from '../../../../../../infrastructure/runtime/appl
  * tooltip body ends up using, without a second color map to keep in sync.
  */
 const SHORTCUT_ROW_STYLE: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
   gap: 8,
 };
 const SHORTCUT_CHIPS_STYLE: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
+  display: "inline-flex",
+  alignItems: "center",
   gap: 3,
   flexShrink: 0,
 };
 const SHORTCUT_KBD_STYLE: CSSProperties = {
-  padding: '1px 5px',
-  borderRadius: 'var(--ds-radius-sm)',
-  border: '1px solid color-mix(in srgb, currentColor 30%, transparent)',
-  background: 'color-mix(in srgb, currentColor 12%, transparent)',
-  fontSize: '0.85em',
-  fontFamily: 'var(--ds-font-family-mono, monospace)',
+  padding: "1px 5px",
+  borderRadius: "var(--ds-radius-sm)",
+  border: "1px solid color-mix(in srgb, currentColor 30%, transparent)",
+  background: "color-mix(in srgb, currentColor 12%, transparent)",
+  fontSize: "0.85em",
+  fontFamily: "var(--ds-font-family-mono, monospace)",
   lineHeight: 1.4,
 };
 
@@ -83,22 +83,22 @@ const SHORTCUT_KBD_STYLE: CSSProperties = {
  * Ant Design uses different naming conventions for placement positions.
  */
 const PLACEMENT_MAP: Record<string, string> = {
-  'top': 'top',
-  'top-start': 'topLeft',
-  'top-end': 'topRight',
-  'bottom': 'bottom',
-  'bottom-start': 'bottomLeft',
-  'bottom-end': 'bottomRight',
-  'left': 'left',
-  'left-start': 'leftTop',
-  'left-end': 'leftBottom',
-  'right': 'right',
-  'right-start': 'rightTop',
-  'right-end': 'rightBottom',
+  top: "top",
+  "top-start": "topLeft",
+  "top-end": "topRight",
+  bottom: "bottom",
+  "bottom-start": "bottomLeft",
+  "bottom-end": "bottomRight",
+  left: "left",
+  "left-start": "leftTop",
+  "left-end": "leftBottom",
+  right: "right",
+  "right-start": "rightTop",
+  "right-end": "rightBottom",
 };
 
-function resolveMaxWidth(maxWidth: TooltipProps['maxWidth']): string | number {
-  return maxWidth ?? 'var(--ds-tooltip-max-width, 300px)';
+function resolveMaxWidth(maxWidth: TooltipProps["maxWidth"]): string | number {
+  return maxWidth ?? "var(--ds-tooltip-max-width, 300px)";
 }
 
 /**
@@ -128,11 +128,17 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       arrow = TOOLTIP_DEFAULTS.arrow,
       showDelay = TOOLTIP_DEFAULTS.showDelay,
       hideDelay = TOOLTIP_DEFAULTS.hideDelay,
+      touchBehavior: _touchBehavior,
+      touchLongPressDelay: _touchLongPressDelay,
       visible,
       defaultVisible,
       onVisibleChange,
       disabled,
       color,
+      recipe: _recipe,
+      radius: _radius,
+      offset: _offset,
+      interactive: _interactive,
       zIndex,
       maxWidth = TOOLTIP_DEFAULTS.maxWidth,
       className,
@@ -141,13 +147,24 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       ...restProps
     } = props;
 
+    // Recipes are a bounded Modern-engine material contract. Consume the prop
+    // here so it is never forwarded as an unknown Ant/DOM attribute.
+    void _recipe;
+    void _radius;
+    void _offset;
+    void _interactive;
+    void _touchBehavior;
+    void _touchLongPressDelay;
+
     // Normalise trigger to an array and strip 'manual' -- Ant Design has no
     // manual trigger mode; controlled visibility is achieved via the open prop.
     const rawTriggers = Array.isArray(trigger) ? trigger : [trigger];
-    const triggers = rawTriggers.filter((t): t is 'hover' | 'click' | 'focus' => t !== 'manual');
+    const triggers = rawTriggers.filter(
+      (t): t is "hover" | "click" | "focus" => t !== "manual"
+    );
 
     // Translate DS placement names (e.g. 'top-start') to Ant Design equivalents
-    const antPlacement = PLACEMENT_MAP[placement] || 'top';
+    const antPlacement = PLACEMENT_MAP[placement] || "top";
 
     // Ant Design expects delays in seconds; our API uses milliseconds for
     // consistency with setTimeout and the modern/rustic engines.
@@ -158,19 +175,19 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     // token layer can override tooltip colours per-theme.
     const colorMap: Record<string, string | undefined> = {
       default: undefined, // Use Ant Design's default
-      primary: 'var(--ds-tooltip-primary-bg, #1677ff)',
-      secondary: 'var(--ds-tooltip-secondary-bg, #722ed1)',
-      success: 'var(--ds-tooltip-success-bg, #52c41a)',
-      warning: 'var(--ds-tooltip-warning-bg, #faad14)',
-      error: 'var(--ds-tooltip-error-bg, #ff4d4f)',
+      primary: "var(--ds-tooltip-primary-bg, #1677ff)",
+      secondary: "var(--ds-tooltip-secondary-bg, #722ed1)",
+      success: "var(--ds-tooltip-success-bg, #52c41a)",
+      warning: "var(--ds-tooltip-warning-bg, #faad14)",
+      error: "var(--ds-tooltip-error-bg, #ff4d4f)",
     };
 
     const bodyStyle: CSSProperties = {
       maxWidth: resolveMaxWidth(maxWidth),
-      whiteSpace: 'normal',
-      overflowWrap: 'anywhere',
-      wordBreak: 'normal',
-      textAlign: 'left',
+      whiteSpace: "normal",
+      overflowWrap: "anywhere",
+      wordBreak: "normal",
+      textAlign: "left",
       lineHeight: 1.35,
     };
 
@@ -217,6 +234,6 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
   }
 );
 
-ClassicTooltip.displayName = 'ClassicTooltip';
+ClassicTooltip.displayName = "ClassicTooltip";
 
 export default ClassicTooltip;

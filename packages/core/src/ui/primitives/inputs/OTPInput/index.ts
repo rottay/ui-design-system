@@ -11,7 +11,7 @@
  *
  * **Multi-Engine Architecture:**
  * - **Classic**: Styled with Ant Design tokens
- * - **Modern**: DaisyUI input classes with Tailwind styling
+ * - **Modern**: custom skin-painted inputs (no DaisyUI), density-scaled sizing
  * - **Rustic**: Pure CSS with comprehensive a11y support
  *
  * @example Basic Usage

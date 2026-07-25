@@ -10,7 +10,11 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
+import type { CSSProperties } from 'react';
 import { Card } from './';
+import { Button } from '../../inputs/Button';
+import { ContentImageIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-image';
+import { chromeToVariables } from '@/infrastructure/compilers/kernel/foundation/css/chrome-variables';
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
 import { EngineComparison, VariantEngineMatrix } from '../../../../../.storybook/helpers';
 
@@ -153,29 +157,8 @@ export const WithCompoundComponents: Story = {
         </p>
       </Card.Body>
       <Card.Footer divider align="end">
-        <button
-          style={{
-            padding: '8px 16px',
-            borderRadius: '4px',
-            border: '1px solid #d9d9d9',
-            background: '#fff',
-            cursor: 'pointer',
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          style={{
-            padding: '8px 16px',
-            borderRadius: '4px',
-            border: 'none',
-            background: '#1890ff',
-            color: '#fff',
-            cursor: 'pointer',
-          }}
-        >
-          Submit
-        </button>
+        <Button variant="secondary">Cancel</Button>
+        <Button variant="primary">Submit</Button>
       </Card.Footer>
     </Card>
   ),
@@ -219,18 +202,7 @@ export const WithImage: Story = {
         </p>
       </Card.Body>
       <Card.Footer divider>
-        <button
-          style={{
-            padding: '8px 16px',
-            borderRadius: '4px',
-            border: 'none',
-            background: '#1890ff',
-            color: '#fff',
-            cursor: 'pointer',
-          }}
-        >
-          View Details
-        </button>
+        <Button variant="primary">View details</Button>
       </Card.Footer>
     </Card>
   ),
@@ -324,7 +296,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Card rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Card contract across Classic, token-native Modern, and Rustic engines.',
       },
     },
   },
@@ -386,18 +358,7 @@ export const WithHeaderAvatar: Story = {
           </div>
         }
         extra={
-          <button
-            style={{
-              padding: '4px 8px',
-              borderRadius: '4px',
-              border: '1px solid #d9d9d9',
-              background: '#fff',
-              cursor: 'pointer',
-              fontSize: '12px',
-            }}
-          >
-            Follow
-          </button>
+          <Button size="sm" variant="secondary">Follow</Button>
         }
         divider
       />
@@ -434,6 +395,232 @@ export const CardGrid: Story = {
           </Card.Body>
         </Card>
       ))}
+    </div>
+  ),
+};
+
+/** Pass 1 contract evidence: finite anatomy, semantic state and DS-owned actions. */
+export const ModernPass1Contract: Story = {
+  name: 'Modern · Pass 1 contract',
+  render: () => (
+    <Card
+      engine="modern"
+      variant="outlined"
+      selectable
+      selected
+      onSelect={() => undefined}
+      aria-label="Selected decision evidence card"
+    >
+      <Card.Header
+        eyebrow="Decision intelligence"
+        icon={<ContentImageIcon decorative size={18} />}
+        headingLevel={2}
+        title="Evidence readiness"
+        subtitle="A token-owned card shell with explicit hierarchy and state."
+        extra={<Button size="sm">Review</Button>}
+        divider
+      />
+      <Card.Body>
+        Strong fit evidence is verified across the active role and candidate context.
+      </Card.Body>
+      <Card.Footer
+        divider
+        actions={[
+          <Button key="details" variant="secondary" size="sm">Details</Button>,
+          <Button key="continue" variant="primary" size="sm">Continue</Button>,
+        ]}
+      />
+    </Card>
+  ),
+};
+
+type CardTokenStyle = CSSProperties & Record<`--${string}`, string | number>;
+
+const CANDIDATE_COVER = `data:image/svg+xml,${encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+    <defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#dbe8f4"/><stop offset="1" stop-color="#f2eadf"/></linearGradient></defs>
+    <rect width="800" height="450" fill="url(#g)"/>
+    <circle cx="400" cy="190" r="82" fill="#fff" fill-opacity=".86"/>
+    <path d="M240 450c16-104 76-158 160-158s144 54 160 158" fill="#fff" fill-opacity=".86"/>
+  </svg>
+`)}`;
+
+const BITHIRE_CARD_TOKENS = chromeToVariables({
+  cardComponent: {
+    bg: '#FFFFFF',
+    bgHover: '#F7FAFD',
+    border: '#D4E0EA',
+    radius: '12px',
+    shadow: '0 1px 2px rgba(20, 40, 59, 0.06)',
+    shadowHover: '0 12px 28px rgba(20, 40, 59, 0.10)',
+    headerBg: 'linear-gradient(112deg, #EDF5FC, #FFFFFF 58%, #F6F2EA)',
+    titleColor: '#14283B',
+    bodyColor: '#53697E',
+    titleFontSize: '0.875rem',
+    titleLetterSpacing: '-0.01em',
+    headerIconColor: '#3A6FB0',
+    coverAspectRatio: '16 / 9',
+    coverObjectPosition: '50% 32%',
+    hoverTransform: 'translateY(-1px)',
+    transitionDuration: '160ms',
+    texture: 'linear-gradient(90deg, transparent, rgba(58,111,176,.07))',
+    textureOpacity: 0.06,
+    surfaceGradient: 'linear-gradient(180deg, #FFFFFF, #F9FBFD)',
+    stateOverlayHoverOpacity: 0.28,
+    headerGap: '10px',
+    bodyLineHeight: '1.5',
+  },
+}) as CardTokenStyle;
+
+const MANAGEMENT_CARD_TOKENS = chromeToVariables({
+  cardComponent: {
+    bg: '#FFFEFB',
+    bgHover: '#FBF5EB',
+    border: '#9B8A73',
+    radius: '6px',
+    shadow: '0 8px 24px rgba(46, 38, 28, 0.12)',
+    shadowHover: '0 16px 38px rgba(46, 38, 28, 0.16)',
+    headerBg: 'linear-gradient(112deg, #FFFFFF, #FBF3E7)',
+    titleColor: '#2E261C',
+    bodyColor: '#74644F',
+    titleFontSize: '1rem',
+    titleLetterSpacing: '0.01em',
+    headerIconColor: '#0F766E',
+    coverAspectRatio: '4 / 3',
+    coverObjectPosition: '50% 18%',
+    hoverTransform: 'translateY(-2px)',
+    transitionDuration: '240ms',
+    texture: 'radial-gradient(circle, rgba(155,138,115,.18) 1px, transparent 1px)',
+    textureSize: '18px 18px',
+    textureOpacity: 0.12,
+    surfaceGradient: 'linear-gradient(180deg, #FFFEFB, #FBF3E7)',
+    stateOverlayHoverOpacity: 0.52,
+    headerGap: '14px',
+    bodyLineHeight: '1.65',
+  },
+}) as CardTokenStyle;
+
+function TenantCardFixture({ tenant }: { tenant: 'bithire' | 'management' }) {
+  const bithire = tenant === 'bithire';
+  return (
+    <div lang={bithire ? 'en' : 'es'} style={bithire ? BITHIRE_CARD_TOKENS : MANAGEMENT_CARD_TOKENS}>
+      <Card engine="modern" variant="elevated" hoverable selectable onSelect={() => undefined} padding="none">
+        <Card.Image
+          src={CANDIDATE_COVER}
+          alt={bithire ? 'Candidate profile illustration' : 'Ilustración del perfil de la candidata'}
+          height="auto"
+          style={{ aspectRatio: 'var(--ds-card-cover-aspect-ratio)' }}
+        />
+        <Card.Header
+          eyebrow={bithire ? 'Decision intelligence' : 'Inteligencia de decisión'}
+          icon={<ContentImageIcon decorative size={18} />}
+          headingLevel={2}
+          title={bithire ? 'Candidate ready for the next decision' : 'Candidata lista para la próxima decisión'}
+          subtitle={bithire
+            ? 'Verified evidence, active context, and the next recommended action in one calm surface.'
+            : 'Evidencia verificada, contexto activo y la próxima acción recomendada en una única superficie.'}
+          extra={<Button size="sm">{bithire ? 'Review' : 'Revisar'}</Button>}
+          divider
+        />
+        <Card.Body>
+          {bithire
+            ? 'The same component tree receives the static BitHire preset.'
+            : 'El mismo árbol de componentes recibe el tema del tenant desde la configuración publicada.'}
+        </Card.Body>
+        <Card.Footer
+          divider
+          actions={[
+            <Button key="secondary" variant="secondary" size="sm">{bithire ? 'Evidence' : 'Evidencia'}</Button>,
+            <Button key="primary" variant="primary" size="sm">{bithire ? 'Continue' : 'Continuar'}</Button>,
+          ]}
+        />
+      </Card>
+    </div>
+  );
+}
+
+/** Same DS tree, two materially different token configurations and locales. */
+export const ModernTenantAndLocaleDivergence: Story = {
+  name: 'Modern · tenant × locale divergence',
+  render: () => (
+    <div style={{ display: 'grid', gap: '24px' }}>
+      <TenantCardFixture tenant="bithire" />
+      <TenantCardFixture tenant="management" />
+    </div>
+  ),
+};
+
+/** RTL and long-copy stress fixture for logical media and container reflow. */
+export const ModernRtlLongCopy: Story = {
+  name: 'Modern · RTL + long copy',
+  render: () => (
+    <div dir="rtl" lang="ar">
+      <Card
+        engine="modern"
+        variant="outlined"
+        cover={CANDIDATE_COVER}
+        coverAlt="صورة توضيحية للمرشحة"
+        coverPosition="start"
+        titleHeadingLevel={2}
+        title="ملخص القرار المهني الطويل الذي يجب أن يلتف بوضوح من دون تداخل أو قص للمحتوى"
+        description="تجمع هذه البطاقة الأدلة الموثقة والسياق النشط والتوصية التالية في تسلسل هرمي واضح ومتجاوب."
+        actions={[<Button key="review" size="sm">مراجعة الأدلة</Button>]}
+      >
+        تظهر الصورة في البداية المنطقية وتنتقل تلقائيًا مع اتجاه الكتابة.
+      </Card>
+    </div>
+  ),
+};
+
+/** Container and breakpoint stress fixture: media reflows, actions wrap, and the
+ * responsive padding contract reaches the visible body rather than the shell. */
+export const ModernResponsiveComposition: Story = {
+  name: 'Modern · responsive composition',
+  parameters: {
+    viewport: { defaultViewport: 'responsive' },
+  },
+  render: () => (
+    <Card
+      engine="modern"
+      variant="elevated"
+      cover={CANDIDATE_COVER}
+      coverAlt="Candidate profile illustration"
+      coverPosition="start"
+      padding={{ xs: 'sm', md: 'md', xl: 'lg' }}
+      titleHeadingLevel={2}
+      title="Decision context stays legible at every card width"
+      description="Logical media, balanced headings, long copy, and action wrapping are owned by the same responsive anatomy."
+      extra={<Button size="sm" variant="secondary">Inspect</Button>}
+      actions={[
+        <Button key="evidence" size="sm" variant="secondary">Open evidence</Button>,
+        <Button key="decision" size="sm" variant="primary">Continue decision</Button>,
+      ]}
+    >
+      Resize the story canvas below the compact threshold to inspect the media and action reflow.
+    </Card>
+  ),
+};
+
+/** Terminal-state evidence for selection, disabled paint, semantic tone and load. */
+export const ModernStateMatrix: Story = {
+  name: 'Modern · state matrix',
+  render: () => (
+    <div style={{ display: 'grid', gap: '16px' }}>
+      <Card engine="modern" variant="outlined" hoverable onClick={() => undefined}>
+        <Card.Header title="Interactive" subtitle="Hover, press, and keyboard focus preserve the material ladder." />
+      </Card>
+      <Card engine="modern" variant="elevated" selectable selected onSelect={() => undefined}>
+        <Card.Header title="Selected" subtitle="A complete outline and calm tint communicate selection." />
+      </Card>
+      <Card engine="modern" variant="filled" colorVariant="warning" selectable selected onSelect={() => undefined}>
+        <Card.Header title="Selected semantic tone" subtitle="Tone and selection remain independently legible." />
+      </Card>
+      <Card engine="modern" variant="elevated" disabled onClick={() => undefined}>
+        <Card.Header title="Unavailable" subtitle="Disabled paint is terminal across every anatomy recipe." />
+      </Card>
+      <Card engine="modern" variant="outlined" loading aria-label="Loading decision evidence">
+        Loading
+      </Card>
     </div>
   ),
 };

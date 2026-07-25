@@ -33,6 +33,7 @@
 import React from 'react';
 import type { SpinnerProps } from '../../contracts';
 import { SPINNER_DEFAULTS } from '../../contracts';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // Size Mapping
@@ -69,6 +70,7 @@ const SIZE_MAP: Record<string, { dimension: string; ringWidth: number }> = {
  * ```
  */
 export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
+  const { t } = useTranslation('common');
   const {
     size = SPINNER_DEFAULTS.size,
     label,
@@ -82,17 +84,15 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   // Render
   // ============================================================================
 
+  // Layout (column stack, token gap) lives in the unlayered modern skin; the
+  // engine keeps only prop-driven geometry/cadence hatches inline. The spin
+  // cadence rides --ds-motion-slow, which the motion authority zeroes under
+  // reduced motion -- the ring then rests as a calm static arc.
   return (
     <div
       data-part="root"
       className={['rottay-spinner', 'rottay-spinner--modern', className].filter(Boolean).join(' ')}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 8,
-        ...style,
-      }}
+      style={style}
     >
       <span
         data-part="indicator"
@@ -104,7 +104,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
           animation: `ds-spinner-modern-spin var(--ds-motion-slow) linear infinite`,
         } as React.CSSProperties}
         role="status"
-        aria-label={label || 'Loading'}
+        aria-label={label || t('loading')}
       />
       {label && (
         <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)' }}>{label}</span>

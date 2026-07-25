@@ -107,7 +107,7 @@ import { SystemCssVariablesBridge } from '@/infrastructure/runtime/theming/prese
 import { ResponsiveProvider } from '../../../../responsive';
 import { MotionProvider } from '../../../../motion';
 import { AntdConfigProvider } from '../../../../engines/presentation/adapters/antd';
-import { appearanceToVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
+import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
 import { isBundledTenant } from '../../../../tenant/foundation/configuration/registry';
 import { resolveEngine } from '../../../../engines/runtime/resolution';
 import {
@@ -116,6 +116,14 @@ import {
   resolveTenantVisualConfig,
 } from '../../../../../compilers/runtime/tenant-css/visual-config';
 import { CommandRegistryProvider } from '../../../../application/commands';
+import {
+  RecipeProfileProvider,
+  RECIPE_PROFILE_SCHEMA_VERSION,
+} from '../../../../foundation/recipes/profiles';
+import {
+  RootDensityProvider,
+  deriveDensityPosture,
+} from '../../../../foundation/density';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -525,6 +533,26 @@ export function DesignSystemProvider({
   }, [tenantConfig, resolvedVertical]);
 
   const normalizedConfig = resolvedVisualConfig?.config ?? null;
+  const recipeProfileSelection = useMemo(() => {
+    const dbProfile = normalizedConfig?.appearance?.recipeProfile;
+    if (dbProfile) {
+      return {
+        profileId: dbProfile,
+        schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION,
+      };
+    }
+
+    const staticSelection = normalizedConfig?.brandTheme?.recipes;
+    return staticSelection
+      ? {
+          profileId: staticSelection.profile,
+          schemaVersion: staticSelection.schemaVersion,
+        }
+      : undefined;
+  }, [
+    normalizedConfig?.appearance?.recipeProfile,
+    normalizedConfig?.brandTheme?.recipes,
+  ]);
   const motionProfile = resolvedVertical?.motionProfile ?? 'calm';
   const tenantMotionDial = useMemo(
     () => resolveTenantMotionDial(normalizedConfig, motionProfile),
@@ -536,7 +564,7 @@ export function DesignSystemProvider({
   const appearanceCssVars = useMemo(() => {
     if (visualAuthority === 'compiled-artifact') return undefined;
     if (!normalizedConfig?.appearance) return undefined;
-    const vars = appearanceToVariables(normalizedConfig.appearance);
+    const vars = compileAppearanceVariables(normalizedConfig.appearance).variables;
     return Object.keys(vars).length > 0 ? vars : undefined;
   }, [normalizedConfig?.appearance, visualAuthority]);
 
@@ -580,44 +608,59 @@ export function DesignSystemProvider({
   // "which UX preset should we apply within that product space?".
   const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
 
+  // The root posture mirrors only the semantic Appearance preference.
+  // BrandTheme/tenant `densityScale` is a separate structural axis already
+  // composed by CSS and useTokens; converting it into data-density would
+  // multiply the same brand decision twice.
+  const rootDensityPosture = deriveDensityPosture(
+    normalizedConfig.appearance?.general?.density
+  );
+
   return (
     <TenantProvider config={normalizedConfig} vertical={resolvedVertical}>
-      <ProductProfileProvider profile={resolvedProductProfile}>
-        <I18nProvider
-          locale={locale}
-          fallbackLocale={fallbackLocale}
-          customTranslations={customTranslations}
-          onLocaleChange={onLocaleChange}
-        >
-          <EngineProvider defaultEngine={engine}>
-            <ThemeProvider
-              theme={theme}
-              tenant={normalizedConfig.slug}
-              visualAuthority={visualAuthority}
-              vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
-              branding={visualAuthority === 'provider' ? normalizedConfig.branding : undefined}
-              tokenOverrides={visualAuthority === 'provider' ? normalizedConfig.tokenOverrides : undefined}
-              appearanceVars={appearanceCssVars}
-              generatedChromeCss={generatedTenantCss}
-              skipCssLoading={skipCssLoading}
-              cssBaseUrl={cssBaseUrl}
-            >
-              <FeatureProvider features={normalizedConfig.features ?? []}>
-                <MotionProvider profile={motionProfile} tenantDial={tenantMotionDial}>
-                  <ResponsiveProvider>
-                    <CommandRegistryProvider>
-                      <AntdConfigProvider>
-                        {visualAuthority === 'provider' ? <SystemCssVariablesBridge /> : null}
-                        <MemoizedChildren>{children}</MemoizedChildren>
-                      </AntdConfigProvider>
-                    </CommandRegistryProvider>
-                  </ResponsiveProvider>
-                </MotionProvider>
-              </FeatureProvider>
-            </ThemeProvider>
-          </EngineProvider>
-        </I18nProvider>
-      </ProductProfileProvider>
+      <RecipeProfileProvider
+        profileId={recipeProfileSelection?.profileId}
+        schemaVersion={recipeProfileSelection?.schemaVersion}
+      >
+      <RootDensityProvider posture={rootDensityPosture}>
+        <ProductProfileProvider profile={resolvedProductProfile}>
+          <I18nProvider
+            locale={locale}
+            fallbackLocale={fallbackLocale}
+            customTranslations={customTranslations}
+            onLocaleChange={onLocaleChange}
+          >
+            <EngineProvider defaultEngine={engine}>
+              <ThemeProvider
+                theme={theme}
+                tenant={normalizedConfig.slug}
+                visualAuthority={visualAuthority}
+                vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
+                branding={visualAuthority === 'provider' ? normalizedConfig.branding : undefined}
+                tokenOverrides={visualAuthority === 'provider' ? normalizedConfig.tokenOverrides : undefined}
+                appearanceVars={appearanceCssVars}
+                generatedChromeCss={generatedTenantCss}
+                skipCssLoading={skipCssLoading}
+                cssBaseUrl={cssBaseUrl}
+              >
+                <FeatureProvider features={normalizedConfig.features ?? []}>
+                  <MotionProvider profile={motionProfile} tenantDial={tenantMotionDial}>
+                    <ResponsiveProvider>
+                      <CommandRegistryProvider>
+                        <AntdConfigProvider>
+                          {visualAuthority === 'provider' ? <SystemCssVariablesBridge /> : null}
+                          <MemoizedChildren>{children}</MemoizedChildren>
+                        </AntdConfigProvider>
+                      </CommandRegistryProvider>
+                    </ResponsiveProvider>
+                  </MotionProvider>
+                </FeatureProvider>
+              </ThemeProvider>
+            </EngineProvider>
+          </I18nProvider>
+        </ProductProfileProvider>
+      </RootDensityProvider>
+      </RecipeProfileProvider>
     </TenantProvider>
   );
 }

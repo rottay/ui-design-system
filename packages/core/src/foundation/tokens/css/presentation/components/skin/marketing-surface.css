@@ -11,10 +11,10 @@
     repeating-linear-gradient(180deg, transparent 0, transparent 95px, color-mix(in srgb, var(--ds-color-neutral-900) 1.8%, transparent) 96px);
 }
 
-.ds-surface.ds-marketing .ds-marketing__muted-text[data-part='muted-text'][data-part='muted-text'] {
+.ds-surface.ds-marketing .ds-marketing__muted-text[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-marketing .ds-marketing__description[data-part='description'][data-part='description'] {
+.ds-surface.ds-marketing .ds-marketing__description[data-part='root'][data-part='root'] {
   color: var(--ds-color-text-secondary);
 }

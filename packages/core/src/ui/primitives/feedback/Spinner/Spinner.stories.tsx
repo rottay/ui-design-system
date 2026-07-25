@@ -119,7 +119,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Spinner rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Spinner rendered by Classic (Ant Design), Modern (token skin), and Rustic (Vanilla CSS).',
       },
     },
   },

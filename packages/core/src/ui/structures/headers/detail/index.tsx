@@ -56,6 +56,7 @@ import {
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
 } from '../../../patterns/foundation/header-actions';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
 
 export type DetailHeaderArchetype = 'editorial' | 'control' | 'technical' | 'governance';
 
@@ -194,7 +195,7 @@ export function DetailHeader({
   avatar,
   status,
   backHref,
-  backLabel = 'Back',
+  backLabel,
   breadcrumb,
   actions = [],
   tabs,
@@ -206,6 +207,8 @@ export function DetailHeader({
   contextRail,
   children,
 }: DetailHeaderProps) {
+  const { t } = useTranslation('common');
+  const resolvedBackLabel = backLabel ?? t('back');
   // Resolve the framework-specific Link component once. Falls back to a
   // native <a> tag when no NavigationLinkProvider is mounted, which keeps
   // the DS package framework-agnostic.
@@ -262,7 +265,7 @@ export function DetailHeader({
               >
                 <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
                 <Text data-part="back-label" size="xs">
-                  {backLabel}
+                  {resolvedBackLabel}
                 </Text>
               </Flex>,
               { textDecoration: 'none' },

@@ -1,0 +1,133 @@
+/**
+ * Modern ScrollArea skin (K3-C pass 1 — FIRST modern engine skin for this
+ * family; previously the family's only paint lived in the engine-agnostic
+ * `presentation/components/skin/scroll-area.css`).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-scroll-area rottay-scroll-area--modern` +
+ * `data-part='root'` (minted in K3-C; the legacy `.rottay-scroll-area-modern`
+ * class stays on the element one release so the legacy presentation skin
+ * degrades gracefully — this file's (0,3,0)+ compound selectors outrank the
+ * presentation file's single-class rules, making THIS file the single paint
+ * owner for the modern engine).
+ *
+ * OWNS:
+ *  - the overflow contract (was Tailwind `overflow-x-auto` etc. in the
+ *    engine), keyed on `data-orientation`;
+ *  - the scrollbar size/radius channels (thin|normal|wide, values
+ *    transcribed verbatim from the presentation skin);
+ *  - WebKit track/thumb/hover-reveal paint;
+ *  - the Firefox `scrollbar-width`/`scrollbar-color` pair the presentation
+ *    skin never gave the modern engine (classic had it, modern did not).
+ *
+ * SPECIFICITY (P-48): scrollbar paint is non-border and clears preflight
+ * unlayered at (0,3,0); the two scope classes + `[data-part='root']` reach
+ * it exactly, and the size/behavior attributes only narrow, never fight the
+ * tenant border floor.
+ *
+ * K3-C PASS-2 REMEDIATION (scrollable-region-focusable): the engine made the
+ * root a keyboard-focusable `role="region"` (tabIndex + localized
+ * aria-label), so the skin must paint a visible keyboard focus ring.
+ */
+
+/* ---- keyboard focus ring (the root is a focusable scroll region). ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-scroll-area-focus-ring-offset, 2px);
+  border-radius: var(--ds-scroll-area-focus-ring-radius, var(--ds-radius-sm));
+}
+
+/* ---- overflow contract (was engine utilities), keyed on data-orientation. ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-orientation='vertical'] {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-orientation='horizontal'] {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-orientation='both'] {
+  overflow: auto;
+}
+
+/* ---- scrollbar size channels (closed enum; values transcribed verbatim). ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-scrollbar-size='thin'] {
+  --ds-scroll-area-scrollbar-size: 4px;
+  --ds-scroll-area-scrollbar-radius: 2px;
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-scrollbar-size='normal'] {
+  --ds-scroll-area-scrollbar-size: 8px;
+  --ds-scroll-area-scrollbar-radius: 4px;
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-scrollbar-size='wide'] {
+  --ds-scroll-area-scrollbar-size: 12px;
+  --ds-scroll-area-scrollbar-radius: 6px;
+}
+
+/* ---- Firefox standard scrollbar pair (modern never had one). ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'] {
+  scrollbar-width: thin;
+  scrollbar-color: var(
+      --ds-scroll-area-thumb-bg,
+      color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 28%, transparent)
+    )
+    var(--ds-scroll-area-track-bg, transparent);
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true'] {
+  scrollbar-color: transparent transparent;
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover {
+  scrollbar-color: var(
+      --ds-scroll-area-thumb-bg,
+      color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 28%, transparent)
+    )
+    var(--ds-scroll-area-track-bg, transparent);
+}
+
+/* ---- WebKit scrollbar geometry. ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar {
+  width: var(--ds-scroll-area-scrollbar-size);
+  height: var(--ds-scroll-area-scrollbar-size);
+}
+
+/* ---- WebKit track: transparent by default (premium minimal rail). ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-track {
+  background: var(--ds-scroll-area-track-bg, transparent);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+
+/* ---- WebKit thumb: quiet token ink, deepened on hover. ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-thumb {
+  background: var(
+    --ds-scroll-area-thumb-bg,
+    color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 28%, transparent)
+  );
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-thumb:hover {
+  background: var(
+    --ds-scroll-area-thumb-bg-hover,
+    color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 48%, transparent)
+  );
+}
+
+/* ---- hover-reveal: the thumb stays hidden until the area is hovered. ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+  background: var(
+    --ds-scroll-area-thumb-bg,
+    color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 28%, transparent)
+  );
+}
+
+@media (forced-colors: active) {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:focus-visible {
+    outline: 2px solid Highlight;
+  }
+}

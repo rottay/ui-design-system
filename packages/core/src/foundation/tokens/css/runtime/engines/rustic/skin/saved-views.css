@@ -25,7 +25,6 @@
 
 .ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__tab[data-part="tab"][data-part="tab"] {
   border-bottom: 2px solid transparent;
-  border-left: 2px solid transparent;
 }
 
 .ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__tab[data-part="tab"][data-active="true"] {
@@ -34,7 +33,8 @@
 
 .ds-pattern-saved-views.ds-engine-rustic
   .ds-saved-views__tab[data-part="tab"][data-drop-target="true"] {
-  border-left-color: var(--ds-color-primary, var(--ds-color-primary-500));
+  border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: inset 0 0 0 1px var(--ds-color-primary, var(--ds-color-primary-500));
 }
 
 .ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__drag-handle[data-part="drag-handle"] {

@@ -1,42 +1,342 @@
 /**
- * Modern Toggle skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern Toggle skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements; unlayered outranks
- * preflight and still yields to a caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision through documented `--ds-toggle-*` channels so a
+ * vertical or DB-backed tenant never needs private selectors. Geometry
+ * consumes the canonical `--ds-toggle-{size}-*` scale multiplied by the
+ * three-plane density channel `--ds-density-effective-scale`.
  *
- * SCOPE ROOT is `.ds-toggle.ds-toggle--modern[data-part='root']` (a `<label>`),
- * carrying `data-checked`, `data-disabled`, `data-error`. `track`, `thumb`,
- * `label`, `description` are descendants.
+ * SCOPE ROOT is `.ds-toggle.ds-toggle--modern[data-part='root']` (a
+ * `<label>`), carrying `data-size`, `data-color`, `data-checked`,
+ * `data-error`, `data-disabled`, `data-loading`, and
+ * `data-label-placement`. `track`, `thumb`, `text`, `label`, `state-label`,
+ * `description`, and `loading-indicator` are descendants; the hidden
+ * accessibility `<input>` is a direct child. Helper and error text flow
+ * beneath the row inside the `field` wrapper.
  *
- * The track background (`trackColor`: error > checked-color > unchecked) and the
- * pill radius (the per-size track height) are runtime-computed, carried via the
- * uncounted custom properties `--ds-toggle-track-fill` / `--ds-toggle-track-r`;
- * the thumb slide (a per-size calc) via `--ds-toggle-thumb-x`.
+ * THUMB TRAVEL is pure CSS: each size defines density-scaled
+ * `--ds-toggle-resolved-*` channels (travel = trackW - trackH because the
+ * canonical dot is trackH - 2*dot-offset with dot-offset folded into the
+ * height), the thumb anchors at `inset-inline-start`, and `:dir(rtl)` /
+ * `[dir='rtl']` flip the sign -- identical markup works in both directions.
+ * State clarity never relies on color alone: the thumb also translates.
  *
- * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
- * unlayered at (0,3,0) or higher.
+ * SPECIFICITY (P-48): the only border-painted rules are inside
+ * `@media (forced-colors)`, which the structural contract strips before
+ * measuring; every other rule wins unlayered at (0,3,0) or higher.
  */
 
-.ds-toggle.ds-toggle--modern [data-part='track'] {
-  border-radius: var(--ds-toggle-track-r);
-  background: var(--ds-toggle-track-fill);
+@keyframes ds-toggle-modern-spin {
+  to { transform: rotate(1turn); }
 }
 
+/* Field wrapper --------------------------------------------------------- */
+.ds-toggle-field[data-part='field'] {
+  container-type: inline-size;
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: var(--ds-toggle-message-gap, var(--ds-input-message-gap, var(--ds-spacing-1)));
+}
+
+/* Root row ------------------------------------------------------------- */
+.ds-toggle.ds-toggle--modern[data-part='root'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-toggle-label-gap, var(--ds-spacing-2));
+  max-inline-size: 100%;
+  /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
+     root at narrow widths (measured on the live bundle, Axe R0) — the 44px
+     coarse-touch law is physical. */
+  min-block-size: var(--ds-toggle-touch-target-min, 44px);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ds-toggle.ds-toggle--modern[data-part='root'][data-label-placement='start'] {
+  flex-direction: row-reverse;
+}
+
+.ds-toggle.ds-toggle--modern[data-part='root'][data-disabled='true'] {
+  cursor: var(--ds-toggle-disabled-cursor, not-allowed);
+}
+
+/* Track ---------------------------------------------------------------- */
+.ds-toggle.ds-toggle--modern [data-part='track'] {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  border-radius: var(--ds-toggle-track-border-radius, var(--ds-radius-full));
+  background-color: var(--ds-toggle-track-bg, var(--ds-color-border-secondary));
+  transition:
+    background-color var(--ds-toggle-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out),
+    opacity var(--ds-toggle-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out);
+}
+
+/* Size geometry + resolved thumb travel (density-scaled). */
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='track'] {
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xs-width, 1.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height, 1rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xs-dot, 0.75rem) * var(--ds-density-effective-scale, 1));
+}
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='sm'] [data-part='track'] {
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-sm-width, 32px) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-sm-height, 18px) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-sm-dot, 14px) * var(--ds-density-effective-scale, 1));
+}
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='md'] [data-part='track'] {
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-md-width, 2.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-md-height, 1.5rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-md-dot, 1.25rem) * var(--ds-density-effective-scale, 1));
+}
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='lg'] [data-part='track'] {
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-lg-width, 56px) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-lg-height, 30px) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-lg-dot, 26px) * var(--ds-density-effective-scale, 1));
+}
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xl'] [data-part='track'] {
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xl-width, 3.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xl-height, 2rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xl-dot, 1.75rem) * var(--ds-density-effective-scale, 1));
+}
+
+.ds-toggle.ds-toggle--modern [data-part='track'][data-part='track'] {
+  inline-size: var(--ds-toggle-resolved-track-w);
+  block-size: var(--ds-toggle-resolved-track-h);
+}
+
+/* Track fill: checked color per variant channel; error overrides all. */
+.ds-toggle.ds-toggle--modern[data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-toggle-checked-bg, var(--ds-toggle-primary-bg-checked, var(--ds-color-primary)));
+}
+.ds-toggle.ds-toggle--modern[data-color='default'][data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-toggle-default-bg-checked, var(--ds-color-primary));
+}
+.ds-toggle.ds-toggle--modern[data-color='secondary'][data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-toggle-secondary-bg-checked, var(--ds-color-secondary));
+}
+.ds-toggle.ds-toggle--modern[data-color='success'][data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-toggle-success-bg-checked, var(--ds-color-success));
+}
+.ds-toggle.ds-toggle--modern[data-color='warning'][data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-toggle-warning-bg-checked, var(--ds-color-warning));
+}
+.ds-toggle.ds-toggle--modern[data-color='error'][data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-toggle-error-bg-checked, var(--ds-color-error));
+}
+.ds-toggle.ds-toggle--modern[data-error='true'] [data-part='track'] {
+  background-color: var(--ds-toggle-error-track-bg, var(--ds-color-error));
+}
+
+/* hover (not disabled): quiet tone shift, unchecked and checked. */
+.ds-toggle.ds-toggle--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-toggle-track-bg-hover, var(--ds-color-border));
+}
+.ds-toggle.ds-toggle--modern[data-checked='true']:hover:not([data-disabled='true']):not([data-error='true']) [data-part='track'] {
+  filter: var(--ds-toggle-checked-hover-filter, brightness(1.06));
+}
+
+/* disabled: the whole control quiets, semantics stay on the input. */
+.ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='track'] {
+  opacity: var(--ds-toggle-disabled-opacity, 0.5);
+}
+
+/* focus ring from the hidden input's :focus-visible. */
+.ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
+  outline: var(--ds-toggle-focus-ring-width, 2px) solid var(--ds-toggle-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-toggle-focus-ring-offset, 2px);
+}
+
+/* Thumb ---------------------------------------------------------------- */
 .ds-toggle.ds-toggle--modern [data-part='thumb'] {
-  border-radius: 50%;
-  background: var(--ds-surface-control, var(--ds-color-text-on-primary));
-  box-shadow: var(--ds-elevation-1);
-  transform: translateX(var(--ds-toggle-thumb-x));
+  position: absolute;
+  inset-block-start: calc((var(--ds-toggle-resolved-track-h) - var(--ds-toggle-resolved-thumb)) / 2);
+  inset-inline-start: calc((var(--ds-toggle-resolved-track-h) - var(--ds-toggle-resolved-thumb)) / 2);
+  inline-size: var(--ds-toggle-resolved-thumb);
+  block-size: var(--ds-toggle-resolved-thumb);
+  border-radius: var(--ds-toggle-dot-border-radius, 50%);
+  background-color: var(--ds-toggle-dot-bg, var(--ds-surface-control, var(--ds-color-text-on-primary)));
+  box-shadow: var(--ds-toggle-dot-shadow, var(--ds-elevation-1));
+  transform: translateX(0);
+  transition:
+    transform var(--ds-toggle-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out),
+    box-shadow var(--ds-toggle-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out);
+}
+
+.ds-toggle.ds-toggle--modern[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc(var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h)));
+}
+
+/* RTL: the same markup travels toward the inline end, which is negative X. */
+.ds-toggle.ds-toggle--modern[data-checked='true']:dir(rtl) [data-part='thumb'],
+[dir='rtl'] .ds-toggle.ds-toggle--modern[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc((var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h)) * -1));
+}
+
+/* press: the thumb dips while holding its travel position. */
+.ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='false'] [data-part='thumb'] {
+  transform: translateX(0) scale(var(--ds-state-press-scale));
+}
+.ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc(var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h))) scale(var(--ds-state-press-scale));
+}
+.ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true']:dir(rtl) [data-part='thumb'],
+[dir='rtl'] .ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
+  transform: translateX(calc((var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h)) * -1)) scale(var(--ds-state-press-scale));
+}
+
+/* Text column ------------------------------------------------------------ */
+.ds-toggle.ds-toggle--modern [data-part='text'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-toggle-text-gap, 0.125rem);
+  /* Never crushable below the longest word: with `min-inline-size: 0` the
+     column's min-content is a single character under `overflow-wrap`, and any
+     narrow flex parent (a horizontal Stack, a toolbar row) would wrap the
+     label per character. Word-boundary wrapping keeps multi-line labels
+     readable in every parent shape. */
+  min-inline-size: min-content;
 }
 
 .ds-toggle.ds-toggle--modern [data-part='label'] {
-  color: var(--ds-color-text-primary);
+  color: var(--ds-toggle-label-color, var(--ds-color-text-primary));
+  font-size: var(--ds-toggle-label-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-toggle-label-font-weight, var(--ds-font-weight-medium));
+  line-height: var(--ds-toggle-label-line-height, var(--ds-line-height-snug));
+  /* No `hyphens: auto` here: with hyphenation the column's min-content shrinks
+     to a hyphenated segment ("pro-") and the label breaks mid-word when the
+     parent squeezes. Without it, min-content holds the full longest word. */
+  overflow-wrap: break-word;
 }
+
+/* Label type scales with the track size, on the canonical channels. */
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-xs-label-font-size)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-sm-label-font-size)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-md-label-font-size)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-lg-label-font-size)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-xl-label-font-size)); }
 .ds-toggle.ds-toggle--modern[data-error='true'] [data-part='label'] {
-  color: var(--ds-color-error);
+  color: var(--ds-toggle-error-label-color, var(--ds-color-error));
+}
+.ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-color-text-disabled);
+}
+
+.ds-toggle.ds-toggle--modern [data-part='state-label'] {
+  color: var(--ds-toggle-state-label-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-toggle-state-label-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-toggle-state-label-line-height, var(--ds-line-height-snug));
 }
 
 .ds-toggle.ds-toggle--modern [data-part='description'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-toggle-description-color, var(--ds-color-text-muted));
+  font-size: var(--ds-toggle-description-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-toggle-description-line-height, var(--ds-line-height-snug));
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+.ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='description'],
+.ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='state-label'] {
+  color: var(--ds-color-text-disabled);
+}
+
+/* Loading indicator ----------------------------------------------------- */
+.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--ds-toggle-loading-size, 0.875rem);
+  block-size: var(--ds-toggle-loading-size, 0.875rem);
+}
+
+.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] svg {
+  inline-size: 100%;
+  block-size: 100%;
+  animation: ds-toggle-modern-spin var(--ds-toggle-loading-duration, 900ms) linear infinite;
+}
+
+/* Spinner paint lives here, never in the runtime: the track ring and the
+   sweeping arc read the same channels the rest of the control reads. */
+.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] [data-part='loading-track'] {
+  stroke: var(--ds-toggle-loading-track-color, var(--ds-color-border-secondary));
+}
+
+.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] [data-part='loading-arc'] {
+  stroke: var(--ds-toggle-loading-arc-color, var(--ds-color-primary));
+}
+
+/* Helper + error text stay in logical flow: no absolute text, no collisions
+   in long locales, and correct alignment in RTL. Word-boundary wrapping only
+   -- never per-character, whatever the parent width. */
+.ds-toggle-field[data-part='field'] > [data-part='helper-text'],
+.ds-toggle-field[data-part='field'] > [data-part='error-message'] {
+  margin: 0;
+  font-size: var(--ds-toggle-helper-font-size, var(--ds-input-helper-font-size, var(--ds-font-size-xs)));
+  line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.ds-toggle-field[data-part='field'] > [data-part='helper-text'] {
+  color: var(--ds-toggle-helper-color, var(--ds-color-text-secondary));
+}
+
+.ds-toggle-field[data-part='field'] > [data-part='error-message'] {
+  color: var(--ds-toggle-error-message-color, var(--ds-color-error));
+  font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
+}
+
+/* hidden accessibility input (visually clipped): no border. */
+.ds-toggle.ds-toggle--modern input {
+  border: 0;
+}
+
+@media (pointer: coarse) {
+  .ds-toggle.ds-toggle--modern[data-part='root'] {
+    /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
+     root at narrow widths (measured on the live bundle, Axe R0) — the 44px
+     coarse-touch law is physical. */
+  min-block-size: var(--ds-toggle-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-toggle.ds-toggle--modern [data-part='track'],
+  .ds-toggle.ds-toggle--modern [data-part='thumb'] {
+    transition-duration: 0.01ms;
+  }
+
+  .ds-toggle.ds-toggle--modern [data-part='loading-indicator'] svg {
+    animation-duration: 1.8s;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-toggle.ds-toggle--modern [data-part='track'] {
+    forced-color-adjust: auto;
+    background-color: Field;
+    border: 1px solid ButtonText;
+  }
+  .ds-toggle.ds-toggle--modern[data-checked='true'] [data-part='track'] {
+    background-color: Highlight;
+    border-color: Highlight;
+  }
+  .ds-toggle.ds-toggle--modern[data-error='true'] [data-part='track'] {
+    border-color: MarkText;
+  }
+  .ds-toggle.ds-toggle--modern [data-part='thumb'] {
+    background-color: ButtonText;
+    box-shadow: none;
+  }
+  .ds-toggle.ds-toggle--modern[data-checked='true'] [data-part='thumb'] {
+    background-color: HighlightText;
+  }
+  .ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='track'] {
+    border-color: GrayText;
+  }
+  .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
+    outline-color: Highlight;
+  }
 }

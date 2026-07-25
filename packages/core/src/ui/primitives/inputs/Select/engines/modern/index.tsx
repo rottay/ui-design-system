@@ -28,12 +28,19 @@ import React, {
   useMemo,
   useImperativeHandle,
   useId,
+  useLayoutEffect,
 } from 'react';
 
-import { createPortal } from 'react-dom';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { SelectProps, SelectOption, SelectSize } from '../../contracts';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+} from '../../../../runtime/overlay/positioning';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 import {
   isResponsiveValue,
   generateResponsiveCSS,
@@ -47,6 +54,10 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
   return value as T;
 }
 import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { ActionSearchIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-search';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import {
   getLabelText,
   buildRenderableList,
@@ -135,66 +146,19 @@ function buildTriggerStyle(size: keyof typeof SIZES, variant: string, isDisabled
 }
 
 /* ------------------------------------------------------------------ */
-/*  Dropdown panel style                                               */
-/* ------------------------------------------------------------------ */
-
-const DROPDOWN_STYLE: React.CSSProperties = {
-  position: 'absolute',
-  top: 'calc(100% + var(--ds-spacing-1, 4px))',
-  left: 0,
-  right: 0,
-  zIndex: 180,
-  padding: '4px',
-  overflow: 'hidden',
-  transformOrigin: 'top center',
-};
-
-/* ------------------------------------------------------------------ */
 /*  Checkmark icon for selected items                                  */
 /* ------------------------------------------------------------------ */
 
 function CheckIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={{ flexShrink: 0 }}
-    >
-      <path d="M20 6L9 17l-5-5" />
-    </svg>
-  );
+  return <StatusSuccessIcon decorative size={14} />;
 }
 
 /* ------------------------------------------------------------------ */
 /*  Chevron icon                                                       */
 /* ------------------------------------------------------------------ */
 
-function ChevronIcon({ isOpen }: { isOpen: boolean }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      data-part="arrow-icon"
-      style={{
-        flexShrink: 0,
-        transition: 'transform var(--ds-motion-fast) var(--ds-motion-ease-out)',
-      }}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
+function ChevronIcon() {
+  return <NavigationDownIcon decorative size={16} data-part="arrow-icon" />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -202,35 +166,19 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
 /* ------------------------------------------------------------------ */
 
 function SearchIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      data-part="search-icon"
-      style={{ flexShrink: 0 }}
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="M21 21l-4.35-4.35" />
-    </svg>
-  );
+  return <ActionSearchIcon decorative size={14} data-part="search-icon" />;
 }
 
 /* ------------------------------------------------------------------ */
 /*  Clear button                                                       */
 /* ------------------------------------------------------------------ */
 
-function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
+function ClearButton({ onClick, label }: { onClick: (e: React.MouseEvent) => void; label: string }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label="Clear selection"
+      aria-label={label}
       tabIndex={-1}
       data-part="clear-button"
       style={{
@@ -245,18 +193,7 @@ function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
         transition: 'background-color var(--ds-motion-fast)',
       }}
     >
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
+      <ActionCloseIcon decorative size={13} />
     </button>
   );
 }
@@ -279,6 +216,7 @@ function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
  */
 const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const { t } = useTranslation('components');
+  const { t: tCommon } = useTranslation('common');
 
   const {
     value,
@@ -319,6 +257,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   // Responsive size handling
   const reactId = useId();
+  const selectId = `select-${reactId.replace(/:/g, '')}`;
+  const listboxId = `${selectId}-listbox`;
   const responsiveEntries: ResponsivePropEntry<any>[] = [];
   const sizeIsResponsive = isResponsiveValue(sizeProp);
 
@@ -336,7 +276,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `select-${reactId.replace(/:/g, '')}` : '';
+  const elementId = needsResponsiveCSS ? selectId : '';
   const responsiveCSS = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
 
   const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
@@ -351,8 +291,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   // Determine effective status
   const effectiveStatus = error ? 'error' : status;
-  const hasError = error || status === 'error';
-  const hasWarning = !hasError && status === 'warning';
 
   // Flatten grouped options
   const allOptions = useMemo(() => {
@@ -377,11 +315,22 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const nativeSelectRef = useRef<HTMLSelectElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const [dropdownPosition, setDropdownPosition] = useState({
-    top: 0,
-    left: 0,
-    width: 0,
-  });
+  // Element states (not just refs) so the overlay runtime hooks re-run when
+  // the anchor/dropdown mount or unmount.
+  const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null);
+  const [dropdownEl, setDropdownEl] = useState<HTMLDivElement | null>(null);
+  const [dropdownWidth, setDropdownWidth] = useState(0);
+  const [resolvedPlacement, setResolvedPlacement] = useState<'top' | 'bottom'>('bottom');
+
+  const setContainerNode = useCallback((node: HTMLDivElement | null) => {
+    containerRef.current = node;
+    setContainerEl(node);
+  }, []);
+
+  const setDropdownNode = useCallback((node: HTMLDivElement | null) => {
+    dropdownRef.current = node;
+    setDropdownEl(node);
+  }, []);
 
   useImperativeHandle(
     ref,
@@ -627,57 +576,112 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     }
   }, [isOpen]);
 
-  const updateDropdownPosition = useCallback(() => {
-    if (!containerRef.current || typeof window === 'undefined') return;
-
-    const rect = containerRef.current.getBoundingClientRect();
-    const gutter = 12;
-    const minWidth = hasRichDropdownOptions ? 320 : 240;
-    const maxWidth = Math.min(
-      hasRichDropdownOptions ? 440 : window.innerWidth - gutter * 2,
-      window.innerWidth - gutter * 2
-    );
-    const width = Math.min(Math.max(rect.width, minWidth), maxWidth);
-    const left = Math.min(Math.max(gutter, rect.left), window.innerWidth - width - gutter);
-
-    setDropdownPosition({
-      top: rect.bottom + 6,
-      left,
-      width,
-    });
-  }, [hasRichDropdownOptions]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    updateDropdownPosition();
-
-    const handleViewportChange = () => updateDropdownPosition();
-    window.addEventListener('resize', handleViewportChange);
-    window.addEventListener('scroll', handleViewportChange, true);
-
-    return () => {
-      window.removeEventListener('resize', handleViewportChange);
-      window.removeEventListener('scroll', handleViewportChange, true);
-    };
-  }, [isOpen, updateDropdownPosition]);
-
-  // Click outside handler
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node;
-
-      if (containerRef.current?.contains(target)) return;
-      if (dropdownRef.current?.contains(target)) return;
-
-      if (containerRef.current) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+  const closeDropdown = useCallback(() => {
+    setIsOpen(false);
+    setFocusedIndex(-1);
   }, []);
+
+  // Shared overlay stack: canonical dropdown z band + single Escape router.
+  // Registered as a blocking layer (like Popover/Tooltip, but without scroll
+  // lock or focus restore) so a nested select blocks lower dialogs from
+  // consuming the same Escape press.
+  const { isTopMost, layerProps } = useOverlayLayer({
+    kind: 'dropdown',
+    active: isOpen,
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onEscape: closeDropdown,
+  });
+
+  // Shared measured positioning: fixed coordinates pinned to the trigger,
+  // flipped to `top` near the viewport bottom edge.
+  const { style: positionStyle } = useOverlayPosition({
+    anchor: containerEl,
+    overlay: isOpen ? dropdownEl : null,
+    placement: 'bottom-start',
+    offset: 6,
+    flip: true,
+  });
+
+  // Tenant/locale/DS-variable context re-stamped onto the portaled dropdown.
+  const portalScope = usePortalScope(containerEl);
+
+  // Dropdown width: at least the trigger width, clamped to the viewport
+  // gutter and the rich-options band (unchanged from the previous ad-hoc
+  // measurer; the shared runtime owns only the position, not the width).
+  useLayoutEffect(() => {
+    if (!isOpen || !containerEl || typeof window === 'undefined') return undefined;
+
+    const updateWidth = (): void => {
+      const rect = containerEl.getBoundingClientRect();
+      const gutter = 12;
+      const minWidth = hasRichDropdownOptions ? 320 : 240;
+      const maxWidth = Math.min(
+        hasRichDropdownOptions ? 440 : window.innerWidth - gutter * 2,
+        window.innerWidth - gutter * 2
+      );
+      setDropdownWidth((prev) => {
+        const next = Math.min(Math.max(rect.width, minWidth), maxWidth);
+        return prev === next ? prev : next;
+      });
+    };
+
+    updateWidth();
+    const observer =
+      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(updateWidth);
+    observer?.observe(containerEl);
+    return () => observer?.disconnect();
+  }, [isOpen, containerEl, hasRichDropdownOptions]);
+
+  // Resolve the painted side for data-placement from the measured geometry
+  // (the positioning runtime flips silently near the viewport edge).
+  useLayoutEffect(() => {
+    if (!isOpen || !containerEl || !dropdownEl || typeof window === 'undefined')
+      return undefined;
+
+    const update = (): void => {
+      const anchorRect = containerEl.getBoundingClientRect();
+      const dropdownRect = dropdownEl.getBoundingClientRect();
+      const next =
+        dropdownRect.top + dropdownRect.height / 2 <
+        anchorRect.top + anchorRect.height / 2
+          ? ('top' as const)
+          : ('bottom' as const);
+      setResolvedPlacement((prev) => (prev === next ? prev : next));
+    };
+
+    update();
+    const frame = window.requestAnimationFrame(update);
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, true);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update, true);
+    };
+  }, [isOpen, containerEl, dropdownEl]);
+
+  // Outside interaction dismisses the dropdown (capture-phase pointerdown,
+  // top-most layer only -- a nested overlay above the select keeps it open).
+  useEffect(() => {
+    if (!isOpen || typeof document === 'undefined') return undefined;
+
+    const onPointerDown = (event: PointerEvent): void => {
+      if (!isTopMost()) return;
+      const target = event.target as Node | null;
+      if (
+        target &&
+        (containerRef.current?.contains(target) ||
+          dropdownRef.current?.contains(target))
+      )
+        return;
+      setIsOpen(false);
+    };
+
+    document.addEventListener('pointerdown', onPointerDown, true);
+    return () => document.removeEventListener('pointerdown', onPointerDown, true);
+  }, [isOpen, isTopMost]);
 
   // Display value
   const displayValue = useMemo(() => {
@@ -688,79 +692,26 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       const hiddenCount = selectedOptions.length - visibleTags.length;
 
       return (
-        <div
-          data-part="value"
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 'var(--ds-spacing-1, 4px)',
-            alignItems: 'center',
-          }}
-        >
+        <div data-part="value" data-mode="multiple">
           {visibleTags.map((opt) => (
-            <span
-              key={opt.value}
-              data-part="tag"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 'var(--ds-spacing-1, 4px)',
-                padding: '1px var(--ds-spacing-2, 8px)',
-                fontSize: 'var(--ds-font-size-xs, 12px)',
-                lineHeight: 'var(--ds-line-height-xs, 20px)',
-                maxWidth: '150px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{opt.label}</span>
+            <span key={opt.value} data-part="tag">
+              <span data-part="tag-label">{opt.label}</span>
               <button
                 type="button"
                 tabIndex={-1}
+                aria-label={`${tCommon('remove')} ${getLabelText(opt.label)}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleSelect(opt.value, opt);
                 }}
                 data-part="tag-remove"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '14px',
-                  height: '14px',
-                  padding: 0,
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  transition: 'color var(--ds-motion-fast)',
-                }}
               >
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
+                <ActionCloseIcon decorative size={10} />
               </button>
             </span>
           ))}
           {hiddenCount > 0 && (
-            <span
-              data-part="tag-count"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '1px var(--ds-spacing-2, 8px)',
-                fontSize: 'var(--ds-font-size-xs, 12px)',
-                lineHeight: 'var(--ds-line-height-xs, 20px)',
-              }}
-            >
+            <span data-part="tag-count">
               +{hiddenCount}
             </span>
           )}
@@ -769,18 +720,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     }
 
     return (
-      <span
-        data-part="value"
-        style={{
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-        }}
-      >
+      <span data-part="value" data-mode="single">
         {selectedOptions[0].label}
       </span>
     );
-  }, [selectedOptions, multiple, maxTagCount, handleSelect]);
+  }, [selectedOptions, multiple, maxTagCount, handleSelect, tCommon]);
 
   /* ---------------------------------------------------------------- */
   /*  Native <select> fallback for simple cases                        */
@@ -849,6 +793,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       <div
         className={`ds-select-shell ds-select-shell--modern ${className || ''}`}
         data-part="root"
+        data-size={size}
+        data-loading={loading || undefined}
+        data-disabled={disabled || undefined}
         style={{ ...style, position: 'relative' }}
       >
         {responsiveCSS && responsiveCSS.css && <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />}
@@ -857,7 +804,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           {...(responsiveCSS ? responsiveCSS.attrs : {})}
           data-part="trigger"
           data-variant={variant}
-          data-status={hasError ? 'error' : hasWarning ? 'warning' : undefined}
+          data-status={effectiveStatus !== 'default' ? effectiveStatus : undefined}
           data-disabled={disabled || undefined}
           style={nativeSelectStyle}
           value={internalValue[0] ?? ''}
@@ -882,6 +829,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             </option>
           ))}
         </select>
+        <span data-part="native-arrow" aria-hidden="true">
+          <NavigationDownIcon decorative size={16} />
+        </span>
         {loading && (
           <span
             className="rottay-select__loading-indicator"
@@ -943,35 +893,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     setScrollTop(e.currentTarget.scrollTop);
   };
 
-  // Option item styles
-  const optionBaseStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '10px 12px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    lineHeight: '20px',
-    transition:
-      'background-color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)',
-    userSelect: 'none',
-    width: '100%',
-    textAlign: 'left',
-    fontFamily: 'inherit',
-    boxSizing: 'border-box',
-  };
-
-  // Group header style
-  const groupHeaderStyle: React.CSSProperties = {
-    fontSize: '11px',
-    lineHeight: '16px',
-    fontWeight: 500,
-    letterSpacing: '0.05em',
-    textTransform: 'uppercase',
-    padding: '8px 12px 4px 12px',
-    userSelect: 'none',
-  };
-
   // Renders a single dropdown item
   const renderOptionItem = (item: RenderableItem, idx: number, isFocusedItem: boolean) => {
     if (item.type === 'group-header') {
@@ -980,10 +901,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           key={`gh-${idx}`}
           data-part="group-label"
           data-divider={idx > 0 ? 'true' : undefined}
-          style={{
-            ...groupHeaderStyle,
-            ...(idx > 0 ? { marginTop: '4px', paddingTop: '8px' } : {}),
-          }}
         >
           {item.groupLabel}
         </div>
@@ -994,19 +911,16 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     return (
       <div
         key={option.value}
+        id={`${selectId}-option-${idx}`}
         role="option"
         aria-selected={isSelected}
         data-part="option"
         data-selected={isSelected || undefined}
         data-active={isFocusedItem || undefined}
         data-disabled={option.disabled || undefined}
-        style={{
-          ...optionBaseStyle,
-          ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
-          ...(isSelected ? { fontWeight: 500 } : {}),
-        }}
         onClick={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           if (!option.disabled) {
             handleSelect(option.value, option);
           }
@@ -1016,81 +930,21 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         {multiple && (
           <span
             data-part="option-checkbox"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '14px',
-              height: '14px',
-              flexShrink: 0,
-              transition: 'all var(--ds-motion-fast)',
-            }}
           >
-            {isSelected && (
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth={3}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-            )}
+            {isSelected ? <CheckIcon /> : null}
           </span>
         )}
-        {option.icon && (
-          <span
-            data-part="option-icon"
-            style={{
-              display: 'inline-flex',
-              flexShrink: 0,
-              marginTop: option.description ? 1 : 0,
-            }}
-          >
-            {option.icon}
-          </span>
-        )}
-        <span
-          style={{
-            flex: 1,
-            minWidth: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: option.description ? 2 : 0,
-            overflow: 'hidden',
-          }}
-        >
-          <span
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {option.label}
-          </span>
+        {option.icon ? <span data-part="option-icon">{option.icon}</span> : null}
+        <span data-part="option-content" data-has-description={option.description ? 'true' : undefined}>
+          <span data-part="option-label">{option.label}</span>
           {option.description && (
-            <span
-              data-part="option-description"
-              style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                fontSize: 11,
-                lineHeight: '14px',
-                fontWeight: 450,
-              }}
-            >
+            <span data-part="option-description">
               {option.description}
             </span>
           )}
         </span>
         {!multiple && isSelected && (
-          <span data-part="option-check" style={{ display: 'inline-flex', flexShrink: 0 }}>
+          <span data-part="option-check">
             <CheckIcon />
           </span>
         )}
@@ -1098,30 +952,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     );
   };
 
-  // Search input style
-  const searchInputContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '8px 12px',
-  };
-
-  const searchInputStyle: React.CSSProperties = {
-    flex: 1,
-    fontSize: '14px',
-    lineHeight: '20px',
-    fontFamily: 'inherit',
-    padding: 0,
-    minWidth: 0,
-  };
-
   return (
     <div
-      ref={containerRef}
+      ref={setContainerNode}
       className={`ds-select-shell ds-select-shell--modern ${className || ''}`}
       data-part="root"
       data-open={isOpen || undefined}
       data-disabled={disabled || undefined}
+      data-loading={loading || undefined}
+      data-size={size}
+      data-mode={multiple ? 'multiple' : 'single'}
+      data-searchable={isSearchable || undefined}
       style={{ ...style, position: 'relative', width: '100%' }}
       onKeyDown={handleKeyDown}
     >
@@ -1134,7 +975,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         data-variant={variant}
         data-open={isOpen || undefined}
         data-disabled={disabled || undefined}
-        data-status={hasError ? 'error' : hasWarning ? 'warning' : undefined}
+        data-status={effectiveStatus !== 'default' ? effectiveStatus : undefined}
         style={triggerStyle}
         onClick={() => {
           if (!disabled && !loading) {
@@ -1148,53 +989,20 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
+        aria-controls={isOpen ? listboxId : undefined}
+        aria-activedescendant={isOpen && focusedIndex >= 0 ? `${selectId}-option-${focusedIndex}` : undefined}
         aria-required={customRequired ? true : undefined}
         onFocus={onFocus as any}
         onBlur={onBlur as any}
       >
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            overflow: 'hidden',
-            minWidth: 0,
-          }}
-        >
-          {isSearchable && isOpen ? (
-            <input
-              ref={inputRef}
-              type="text"
-              className="rottay-select__search-input"
-              data-part="search-input"
-              style={{
-                flex: 1,
-                minWidth: 0,
-                fontSize: 'inherit',
-                lineHeight: 'inherit',
-                fontFamily: 'inherit',
-                padding: 0,
-              }}
-              value={searchValue}
-              onChange={handleSearchInput}
-              placeholder={selectedOptions.length === 0 ? displayPlaceholder : ''}
-              onClick={(e) => e.stopPropagation()}
-            />
-          ) : (
-            displayValue || <span data-part="placeholder">{displayPlaceholder}</span>
-          )}
+        <div data-part="trigger-value">
+          {displayValue || <span data-part="placeholder">{displayPlaceholder}</span>}
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            flexShrink: 0,
-          }}
-        >
-          {isClearable && internalValue.length > 0 && !disabled && <ClearButton onClick={handleClear} />}
+        <div data-part="trigger-actions">
+          {isClearable && internalValue.length > 0 && !disabled && (
+            <ClearButton onClick={handleClear} label={t('select.clear')} />
+          )}
           {loading && (
             <span
               className="rottay-select__loading-indicator"
@@ -1208,47 +1016,50 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               }}
             />
           )}
-          <ChevronIcon isOpen={isOpen} />
+          <ChevronIcon />
         </div>
       </div>
 
       {/* Hidden input for form submission */}
       {name && <input type="hidden" name={name} value={multiple ? internalValue.join(',') : internalValue[0] || ''} />}
 
-      {/* Dropdown */}
-      {isOpen &&
-        typeof document !== 'undefined' &&
-        createPortal(
-          <div
-            ref={dropdownRef}
-            className="ds-select-shell__dropdown"
-            data-part="dropdown"
-            data-rottay-portal="true"
-            role="listbox"
-            style={{
-              ...DROPDOWN_STYLE,
-              position: 'fixed',
-              top: dropdownPosition.top,
-              left: dropdownPosition.left,
-              right: 'auto',
-              width: dropdownPosition.width || undefined,
-              zIndex: 2400,
-              animation: 'ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
-            }}
-          >
+      {/* Dropdown -- shared overlay portal with tenant scope re-stamped */}
+      {isOpen && (
+        <Portal>
+          <OverlayPortalBoundary>
+            <PortalScope snapshot={portalScope}>
+              <div
+                ref={setDropdownNode}
+                {...layerProps}
+                className="ds-select-shell__dropdown"
+                data-part="dropdown"
+                data-rottay-portal="true"
+                data-placement={resolvedPlacement}
+                data-mode={multiple ? 'multiple' : 'single'}
+                data-searchable={isSearchable || undefined}
+                data-rich-options={hasRichDropdownOptions || undefined}
+                role="presentation"
+                dir={portalScope.direction}
+                lang={portalScope.language}
+                style={{
+                  width: dropdownWidth || undefined,
+                  animation: 'ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
+                  ...positionStyle,
+                  ...layerProps.style,
+                }}
+              >
             {/* Search input inside dropdown */}
             {isSearchable && (
-              <div data-part="search-input-wrapper" style={searchInputContainerStyle}>
+              <div data-part="search-input-wrapper">
                 <SearchIcon />
                 <input
-                  ref={!isOpen ? undefined : inputRef}
+                  ref={inputRef}
                   type="text"
                   className="rottay-select__search-input"
                   data-part="search-input"
-                  style={searchInputStyle}
                   value={searchValue}
                   onChange={handleSearchInput}
-                  placeholder={t('select.search') || 'Search...'}
+                  placeholder={t('select.search')}
                   onClick={(e) => e.stopPropagation()}
                   autoFocus
                 />
@@ -1257,7 +1068,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
             {/* Options list */}
             <div
+              id={listboxId}
+              role="listbox"
+              aria-multiselectable={multiple || undefined}
               data-part="option-list"
+              data-virtual={virtualEnabled || undefined}
               style={{
                 ...(virtualEnabled
                   ? {
@@ -1268,7 +1083,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                       maxHeight: 'var(--ds-select-max-height, 240px)',
                       overflowY: 'auto' as const,
                     }),
-                padding: isSearchable ? '6px 0 0 0' : '0',
               }}
               onScroll={virtualEnabled ? handleDropdownScroll : undefined}
             >
@@ -1283,7 +1097,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                     }}
                   >
                     {visibleItems.length === 0 ? (
-                      <div data-part="empty" data-virtual="true" style={{ padding: '12px 16px', fontSize: '14px' }}>
+                      <div data-part="empty" data-virtual="true">
                         {noOptionsText}
                       </div>
                     ) : (
@@ -1297,7 +1111,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                               data-virtual="true"
                               data-divider={realIdx > 0 ? 'true' : undefined}
                               style={{
-                                ...groupHeaderStyle,
                                 height: `${itemHeight}px`,
                                 display: 'flex',
                                 alignItems: 'center',
@@ -1313,6 +1126,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                         return (
                           <div
                             key={option.value}
+                            id={`${selectId}-option-${realIdx}`}
                             role="option"
                             aria-selected={isSelected}
                             data-part="option"
@@ -1321,14 +1135,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             data-active={isFocusedItem || undefined}
                             data-disabled={option.disabled || undefined}
                             style={{
-                              ...optionBaseStyle,
                               height: `${itemHeight}px`,
-                              boxSizing: 'border-box',
-                              ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
-                              ...(isSelected ? { fontWeight: 500 } : {}),
                             }}
                             onClick={(e) => {
                               e.preventDefault();
+                              e.stopPropagation();
                               if (!option.disabled) {
                                 handleSelect(option.value, option);
                               }
@@ -1338,87 +1149,21 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             {multiple && (
                               <span
                                 data-part="option-checkbox"
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  width: '16px',
-                                  height: '16px',
-                                  flexShrink: 0,
-                                  transition: 'all var(--ds-motion-fast)',
-                                }}
                               >
-                                {isSelected && (
-                                  <svg
-                                    width="10"
-                                    height="10"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="white"
-                                    strokeWidth={3}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="M20 6L9 17l-5-5" />
-                                  </svg>
-                                )}
+                                {isSelected ? <CheckIcon /> : null}
                               </span>
                             )}
-                            {option.icon && (
-                              <span
-                                data-part="option-icon"
-                                style={{
-                                  display: 'inline-flex',
-                                  flexShrink: 0,
-                                  marginTop: option.description ? 1 : 0,
-                                }}
-                              >
-                                {option.icon}
-                              </span>
-                            )}
-                            <span
-                              style={{
-                                flex: 1,
-                                minWidth: 0,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: option.description ? 2 : 0,
-                                overflow: 'hidden',
-                              }}
-                            >
-                              <span
-                                style={{
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                {option.label}
-                              </span>
+                            {option.icon ? <span data-part="option-icon">{option.icon}</span> : null}
+                            <span data-part="option-content" data-has-description={option.description ? 'true' : undefined}>
+                              <span data-part="option-label">{option.label}</span>
                               {option.description && (
-                                <span
-                                  data-part="option-description"
-                                  style={{
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    fontSize: 11,
-                                    lineHeight: '14px',
-                                    fontWeight: 450,
-                                  }}
-                                >
+                                <span data-part="option-description">
                                   {option.description}
                                 </span>
                               )}
                             </span>
                             {!multiple && isSelected && (
-                              <span
-                                data-part="option-check"
-                                style={{
-                                  display: 'inline-flex',
-                                  flexShrink: 0,
-                                }}
-                              >
+                              <span data-part="option-check">
                                 <CheckIcon />
                               </span>
                             )}
@@ -1429,16 +1174,18 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   </div>
                 </div>
               ) : renderableItems.length === 0 ? (
-                <div data-part="empty" style={{ padding: '12px 16px', fontSize: '14px' }}>
+                <div data-part="empty">
                   {noOptionsText}
                 </div>
               ) : (
                 renderableItems.map((item, idx) => renderOptionItem(item, idx, idx === focusedIndex))
               )}
             </div>
-          </div>,
-          document.body
-        )}
+              </div>
+            </PortalScope>
+          </OverlayPortalBoundary>
+        </Portal>
+      )}
     </div>
   );
 });

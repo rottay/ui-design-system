@@ -1,61 +1,245 @@
 /**
- * Modern Progress skin (WO-SKIN-03 checkpoint S).
+ * Modern Progress skin (K1 Lane C Daisy-drain pass; supersedes the WO-SKIN-03
+ * checkpoint-S split).
  *
  * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
  * layer and loses to preflight/DaisyUI; unlayered outranks them and still yields
  * to the caller's inline `style`.
  *
- * SCOPE ROOT carries `rottay-progress-shell rottay-progress-shell--modern` +
- * `data-part='root'` + `data-status`. The circle root additionally carries the
- * DaisyUI `radial-progress` class (its arc reads `currentColor`); the line root
- * carries `w-full` and holds a native `<progress data-part='fill'>` + optional
- * `[data-part='label']`.
+ * DAISY DRAIN: the engine no longer renders `progress`, `progress-primary`,
+ * `progress-success`, `progress-error` or `radial-progress`. Every paint those
+ * classes supplied is owned here:
+ *  - line: track surface/radius/height, webkit+moz fill pseudos, the
+ *    `:indeterminate` neutralization, and the sliding bar (canon
+ *    `ds-foundation-progress-indeterminate` keyframe on a sibling
+ *    `[data-part='indeterminate']` element sharing the track's grid area --
+ *    the native element alone cannot carry a cross-browser indeterminate bar
+ *    once `appearance: none` strips the platform animation);
+ *  - circle: the conic-gradient ring technique (track + fill + end cap), the
+ *    `@property`-registered `--ds-progress-circle-value` so percent changes
+ *    sweep smoothly (parity with the drained DaisyUI `--radialprogress`
+ *    registration), and the indeterminate spin.
  *
- * The status color is status-driven with a `strokeColor` prop override: the prop
- * rides the `--ds-progress-arc-color` custom-property hatch stamped inline (only
- * when set), and each `[data-status]` rule falls back to the status token. The
- * circle arc uses `color`, the line fill uses `accent-color` — neither is a
- * border COLOR, so (0,3,0)+ suffices (the tenant `* { border-color }` floor does
- * not apply). Runtime `--value` (circle) / `value=` attribute (line) stay inline.
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * MOTION AUTHORITY: every cadence rides `--ds-motion-*` durations, which the
+ * foundation zeroes under reduced motion (transitions.css media query +
+ * `html[data-ds-motion='reduced']`); the indeterminate animations additionally
+ * sit behind `prefers-reduced-motion: no-preference` so the meter rests as a
+ * calm static arc/bar without relying on duration-zeroing alone.
+ *
+ * SCOPE ROOT carries `rottay-progress-shell rottay-progress-shell--modern` +
+ * `data-part='root'` + `data-type` ('line'|'circle') + `data-status` +
+ * `data-indeterminate`. The status color resolves to
+ * `--ds-progress-resolved-fill`: the `strokeColor` prop rides the
+ * `--ds-progress-arc-color` inline hatch (set only when provided) and each
+ * `[data-status]` rule falls back to the status token. Painting the resolved
+ * fill as a `background` (not `accent-color`) repairs gradient `strokeColor`
+ * values on the LINE; the circle's conic color-stop still requires a plain
+ * color (a gradient there is invalid CSS, as it was under the drained
+ * currentColor DaisyUI arc -- documented limitation, not a regression).
+ *
+ * SPECIFICITY (P-48): nothing here paints a border COLOR, so (0,3,0)+
+ * unlayered suffices and the tenant `* { border-color }` floor does not apply.
  */
 
-/* ---- circle arc + center text: `color` drives DaisyUI's conic-gradient.
-        Scoped to `.radial-progress` so the line root's color is untouched. ---- */
-.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='normal'] {
-  color: var(--ds-progress-arc-color, var(--ds-color-primary));
-}
-.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='success'] {
-  color: var(--ds-progress-arc-color, var(--ds-color-success));
-}
-.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='error'] {
-  color: var(--ds-progress-arc-color, var(--ds-color-error));
-}
-.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='active'] {
-  color: var(--ds-progress-arc-color, var(--ds-color-primary));
+/* Registered so percent changes interpolate the arc (DaisyUI parity). The
+   engine stamps plain numbers (0..100); the gradient scales them to %. */
+@property --ds-progress-circle-value {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
 }
 
-/* ---- line fill: status-driven accent-color (was accentColor) ---- */
-.rottay-progress-shell.rottay-progress-shell--modern[data-status='normal'] [data-part='fill'] {
-  accent-color: var(--ds-progress-arc-color, var(--ds-color-primary));
+/* ---- resolved fill per status (line + circle share the one hatch) ---- */
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='normal'] {
+  --ds-progress-resolved-fill: var(--ds-progress-arc-color, var(--ds-color-primary));
 }
-.rottay-progress-shell.rottay-progress-shell--modern[data-status='success'] [data-part='fill'] {
-  accent-color: var(--ds-progress-arc-color, var(--ds-color-success));
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='success'] {
+  --ds-progress-resolved-fill: var(--ds-progress-arc-color, var(--ds-color-success));
 }
-.rottay-progress-shell.rottay-progress-shell--modern[data-status='error'] [data-part='fill'] {
-  accent-color: var(--ds-progress-arc-color, var(--ds-color-error));
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='error'] {
+  --ds-progress-resolved-fill: var(--ds-progress-arc-color, var(--ds-color-error));
 }
-.rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill'] {
-  accent-color: var(--ds-progress-arc-color, var(--ds-color-primary));
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] {
+  --ds-progress-resolved-fill: var(--ds-progress-arc-color, var(--ds-color-primary));
 }
 
-/* ---- line fill surface: status-independent track background + radius ---- */
-.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill'] {
-  background: var(--ds-progress-bg);
+/* ==========================================================================
+   LINE
+   ========================================================================== */
+
+/* ---- line root: grid lets the indeterminate bar share the track area ---- */
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line'] {
+  display: grid;
+  inline-size: 100%;
+}
+
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line'][data-indeterminate='true'] {
+  overflow: hidden;
   border-radius: var(--ds-progress-radius);
 }
 
-/* ---- line label (info text) ---- */
-.rottay-progress-shell.rottay-progress-shell--modern [data-part='label'] {
+/* ---- track + fused native fill ---- */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill'] {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: var(--ds-progress-height);
+  overflow: hidden;
+  appearance: none;
+  background: var(--ds-progress-bg);
+  border: 0;
+  border-radius: var(--ds-progress-radius);
+}
+
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-webkit-progress-bar {
+  border-radius: inherit;
+  background: var(--ds-progress-bg);
+}
+
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-webkit-progress-value {
+  border-radius: inherit;
+  background: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+  transition: width var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-moz-progress-bar {
+  border-radius: inherit;
+  background: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+}
+
+/* Firefox paints ::-moz-progress-bar full-width in the indeterminate state;
+   the sliding span owns the motion there, so the native bar stays invisible. */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']:indeterminate::-moz-progress-bar {
+  background: transparent;
+}
+
+/* ---- indeterminate sliding bar (canon keyframe, motion-authority cadence) ---- */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='indeterminate'][data-part='indeterminate'] {
+  grid-area: 1 / 1;
+  align-self: center;
+  inline-size: 100%;
+  block-size: var(--ds-progress-height);
+  border-radius: var(--ds-progress-radius);
+  background: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rottay-progress-shell.rottay-progress-shell--modern [data-part='indeterminate'][data-part='indeterminate'] {
+    animation: ds-foundation-progress-indeterminate
+      calc(var(--ds-motion-glacial) * 3)
+      var(--ds-motion-ease-in-out, ease-in-out) infinite;
+  }
+}
+
+/* RTL: the indeterminate sweep travels with the reading direction. */
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='indeterminate'][data-part='indeterminate'] {
+  animation-direction: reverse;
+}
+
+/* ---- line label (info text); scoped so the circle's centered value text
+        keeps its own geometry below ---- */
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line'] [data-part='label'] {
+  margin-block-start: var(--ds-progress-label-gap, var(--ds-spacing-xs, 0.25rem));
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 14px);
+  text-align: center;
+}
+
+/* ==========================================================================
+   CIRCLE (skin-owned conic ring; no DaisyUI radial-progress)
+   ========================================================================== */
+
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-type='circle'] {
+  --ds-progress-circle-size-resolved: var(--ds-progress-circle-size, 6rem);
+  --ds-progress-circle-thickness-resolved: var(
+    --ds-progress-circle-thickness,
+    calc(var(--ds-progress-circle-size-resolved) / 10)
+  );
+  position: relative;
+  display: inline-grid;
+  inline-size: var(--ds-progress-circle-size-resolved);
+  block-size: var(--ds-progress-circle-size-resolved);
+  box-sizing: content-box;
+  place-content: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  transition: --ds-progress-circle-value var(--ds-motion-normal) linear;
+}
+
+/* Ring: fill arc over the full track, masked down to the ring thickness. */
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-type='circle']::before {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  content: '';
+  background: conic-gradient(
+    var(--ds-progress-resolved-fill, var(--ds-color-primary))
+      calc(var(--ds-progress-circle-value) * 1%),
+    var(--ds-progress-bg) 0
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - var(--ds-progress-circle-thickness-resolved)),
+    #000 calc(100% + 0.5px - var(--ds-progress-circle-thickness-resolved))
+  );
+  mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - var(--ds-progress-circle-thickness-resolved)),
+    #000 calc(100% + 0.5px - var(--ds-progress-circle-thickness-resolved))
+  );
+}
+
+/* Rounded cap at the arc tip (determinate only; hidden while spinning). */
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-indeterminate='false']::after {
+  position: absolute;
+  inset: calc(50% - var(--ds-progress-circle-thickness-resolved) / 2);
+  border-radius: 50%;
+  content: '';
+  background: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+  transform: rotate(calc(var(--ds-progress-circle-value) * 3.6deg - 90deg))
+    translate(calc(var(--ds-progress-circle-size-resolved) / 2 - 50%));
+}
+
+/* Indeterminate circle: the quarter arc stamped by the engine spins calmly. */
+@media (prefers-reduced-motion: no-preference) {
+  .rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-indeterminate='true']::before {
+    animation: ds-foundation-spin calc(var(--ds-motion-glacial) * 2.4) linear infinite;
+  }
+}
+
+/* Center value text: sized off the ring so it scales with the token. */
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'] > [data-part='label'] {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: calc(var(--ds-progress-circle-size-resolved) * 0.22);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: 1;
+}
+
+/* Forced colors: native progress parts map to system colors so the fill
+   stays visible on any HC theme (K2-V sweep finding: Upload's text-list
+   progress rendered invisible under forced-colors). Track -> ButtonFace
+   with a ButtonText edge, value -> Highlight; the indeterminate sliding
+   bar takes the same ink. The circle ring's conic gradient keeps its
+   token path (HC re-trace is a separate evidence cell, not this block). */
+@media (forced-colors: active) {
+  .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill'] {
+    background: ButtonFace;
+    border: 1px solid ButtonText;
+  }
+
+  .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-webkit-progress-bar {
+    background: ButtonFace;
+  }
+
+  .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-webkit-progress-value {
+    background: Highlight;
+  }
+
+  .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-moz-progress-bar {
+    background: Highlight;
+  }
+
+  .rottay-progress-shell.rottay-progress-shell--modern [data-part='indeterminate'][data-part='indeterminate'] {
+    background: Highlight;
+  }
 }

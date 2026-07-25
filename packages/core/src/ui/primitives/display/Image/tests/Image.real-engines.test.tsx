@@ -77,6 +77,34 @@ describe('Image real engine coverage', () => {
     });
   });
 
+  it('keeps the modern pulse animation skin-owned and the zoom badge logical (K4-C)', async () => {
+    render(
+      <ModernImage
+        src="/pending.jpg"
+        alt="Pending image"
+        width={200}
+        height={120}
+        zoomable
+      />
+    );
+
+    // Loading state: the default pulse block renders WITHOUT the raw Tailwind
+    // `animate-pulse` utility — the skin owns the animation via
+    // `ds-foundation-pulse` (single paint/motion owner per part).
+    const placeholder = document.querySelector('[data-part="placeholder"]') as HTMLElement;
+    expect(placeholder).not.toBeNull();
+    const pulse = placeholder.querySelector('.rottay-image__pulse') as HTMLElement;
+    expect(pulse).not.toBeNull();
+    expect(pulse.classList.contains('animate-pulse')).toBe(false);
+
+    // Zoom badge: physical `right-2` drained to logical `end-2` so it mirrors RTL.
+    fireEvent.pointerEnter(placeholder.parentElement as HTMLElement);
+    const badge = document.querySelector('[data-part="zoom-indicator"]') as HTMLElement;
+    expect(badge).not.toBeNull();
+    expect(badge.className).toContain('end-2');
+    expect(badge.className).not.toContain('right-2');
+  });
+
   it('covers rustic image zoom, overlay, load, and error branches', async () => {
     const handleLoad = vi.fn();
     const handleError = vi.fn();

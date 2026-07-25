@@ -7,6 +7,7 @@ import {
   PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
 } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { QRCodeProps } from '../../contracts';
 
 const QR_FOREGROUND_FALLBACK = '#000000';
@@ -103,6 +104,20 @@ export function EncodedQRCodeSymbol({
   const resolved = useResolvedQRCodeColors(ownerRef, color, bgColor);
   const accessibleValue = value || 'empty value';
 
+  // Accessible name: translated when an I18nProvider is mounted, with the
+  // documented English fallback otherwise (a missing catalog key echoes the
+  // raw key back, which the endsWith guard detects — K4-C wires the channel
+  // ahead of the locale JSONs). Shared by every engine that renders this
+  // symbol, so the channel lands once for all of them.
+  const i18n = useOptionalTranslation('components');
+  const containsKey = 'qrcode.contains';
+  const containsFallback = `QR code containing: ${accessibleValue}`;
+  const containsTranslated = i18n?.t(containsKey, { value: accessibleValue });
+  const accessibleName =
+    containsTranslated && !containsTranslated.endsWith(containsKey)
+      ? containsTranslated
+      : containsFallback;
+
   return (
     <AntQRCode
       value={value || ' '}
@@ -118,7 +133,7 @@ export function EncodedQRCodeSymbol({
       iconSize={iconSize}
       status="active"
       bordered={false}
-      aria-label={`QR code containing: ${accessibleValue}`}
+      aria-label={accessibleName}
       data-part="canvas"
       data-qr-encoder="standards"
       data-qr-error-level={errorLevel}

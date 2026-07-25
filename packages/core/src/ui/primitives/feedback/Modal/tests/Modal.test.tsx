@@ -11,6 +11,7 @@ import {
   ResponsiveContext,
   type ResponsiveContextValue,
 } from '../../../../../infrastructure/runtime/responsive';
+import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
 const PHONE_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
   deviceClass: 'phone',
@@ -111,10 +112,11 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
 describe('Modal', () => {
   describe('Modern responsive posture', () => {
     it('opens fullscreen on phone and preserves explicit fullscreen on desktop', () => {
-      const { rerender } = render(
+      const { rerender } = renderWithEngine(
         <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
           <ModernModal open title="Phone modal">Content</ModernModal>
         </ResponsiveContext.Provider>,
+        'modern',
       );
 
       const phoneSurface = screen.getByRole('dialog');

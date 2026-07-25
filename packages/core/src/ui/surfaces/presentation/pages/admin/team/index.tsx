@@ -55,7 +55,6 @@ function MemberRow({
           <Text style={{ fontWeight: 600 }}>{member.name}</Text>
           <Text
             className="ds-team__muted-text"
-            data-part="muted-text"
             style={{ fontSize: 13 }}
           >
             {member.email}
@@ -84,7 +83,6 @@ function MemberRow({
           // (stale data), show the raw role id as last resort.
           <Text
             className="ds-team__muted-text"
-            data-part="muted-text"
             style={{ fontSize: 13 }}
           >
             {config.behavior.roles.find((r) => r.id === member.role)?.label ?? member.role}

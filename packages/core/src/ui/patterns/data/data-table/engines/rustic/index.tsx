@@ -23,6 +23,7 @@
  * />
  */
 
+import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
 import React, { useMemo, useState, useCallback, useRef } from 'react';
 import { GripVerticalIcon as GripVertical } from '../../../../../../graphics/icons';
 import type { DataTablePatternProps } from '../../contracts';
@@ -606,7 +607,12 @@ export default function RusticDataTable<T extends object>(props: DataTablePatter
   return (
     <div
       className={`ds-pattern-data-table ds-engine-rustic ${className ?? ''}`}
+      data-component="data-table"
+      {...densityScopeAttributes(density)}
+      data-has-actions={actions ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
       data-part="root"
+      data-selectable={selectable ? 'true' : 'false'}
       style={{ ...styles.container, ...style }}
     >
       {header}
@@ -725,6 +731,7 @@ export default function RusticDataTable<T extends object>(props: DataTablePatter
                 {actions && (
                   <th
                     data-part="header-cell"
+                    data-cell-kind="actions"
                     style={{
                       ...styles.th,
                       ...densityTh,
@@ -747,6 +754,7 @@ export default function RusticDataTable<T extends object>(props: DataTablePatter
                         Selection uses primary-50 for a subtle highlight, striping
                         uses neutral-50 for alternating rows. */}
                     <tr
+                      data-row-key={key}
                       data-part="body-row"
                       data-state={
                         selectedKeys.includes(key) ? 'selected' : striped && index % 2 === 1 ? 'striped' : 'default'
@@ -817,7 +825,9 @@ export default function RusticDataTable<T extends object>(props: DataTablePatter
                           }}
                           onClick={(e) => e.stopPropagation()}
                         >
-                          {actions(row, index)}
+                          <div data-part="actions-content">
+                            {actions(row, index)}
+                          </div>
                         </td>
                       )}
                     </tr>

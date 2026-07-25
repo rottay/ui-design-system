@@ -5,11 +5,13 @@
  *
  * Documents that use none of the new surface must keep their EMISSION stable:
  * normalizedAppearance, scopes and every pre-W4 variable stay byte-identical.
- * Two divergences are sanctioned and pinned exactly:
+ * Three divergences are sanctioned and pinned exactly:
  * - digest/verticalEnvelopeDigest move once because both registered envelopes
  *   deliberately gained `allowAnatomyVariants` + typeScale/radiusScale ranges;
  * - a document with a concrete primary seed additionally emits the ten
- *   compiler-owned `--ds-chart-series-*` variables and nothing else.
+ *   compiler-owned `--ds-chart-series-*` variables;
+ * - an explicit density mode emits `--ds-density-mode-factor`, keeping the
+ *   semantic mode separate from the existing structural density scale.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -30,10 +32,17 @@ const readFixture = (name: string): TenantThemeArtifact =>
   JSON.parse(readFileSync(resolve(FIXTURE_DIR, name), "utf8"));
 
 const CHART_SERIES_TOKEN = /^--ds-chart-series-(?:[1-9]|10)$/;
+const DENSITY_MODE_FACTOR_TOKEN = "--ds-density-mode-factor";
 
 /** The artifact css minus its digest banner line. */
 const cssBody = (artifact: Pick<TenantThemeArtifact, "css">): string =>
   artifact.css.split("\n").slice(1).join("\n");
+
+const withoutDensityModeFactor = (css: string): string =>
+  css
+    .split("\n")
+    .filter((line) => !line.includes(DENSITY_MODE_FACTOR_TOKEN))
+    .join("\n");
 
 function expectStableEmission(
   artifact: TenantThemeArtifact,
@@ -148,10 +157,10 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     );
     const fixture = readFixture("populated-simple-artifact.fixture.json");
     const additions = expectStableEmission(artifact, fixture);
-    expect(additions.every((token) => CHART_SERIES_TOKEN.test(token))).toBe(
-      true
-    );
-    expect(additions).toHaveLength(10);
+    expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(10);
+    expect(additions).toContain(DENSITY_MODE_FACTOR_TOKEN);
+    expect(additions).toHaveLength(11);
+    expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("1");
   });
 
   it("keeps an advanced document ABSENT of every W4 field byte-identical", () => {
@@ -163,11 +172,9 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     );
     const fixture = readFixture("w4-absent-new-fields-artifact.fixture.json");
     const additions = expectStableEmission(artifact, fixture);
-    expect(additions).toEqual([]);
-    expect(JSON.stringify(artifact.variables)).toBe(
-      JSON.stringify(fixture.variables)
-    );
-    expect(cssBody(artifact)).toBe(cssBody(fixture));
+    expect(additions).toEqual([DENSITY_MODE_FACTOR_TOKEN]);
+    expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("0.85");
+    expect(withoutDensityModeFactor(cssBody(artifact))).toBe(cssBody(fixture));
   });
 
   it("emits variables in deterministic UTF-16 code-unit order", () => {

@@ -39,6 +39,9 @@ export const ARC09_PAINT_EXEMPT = new Set([
   // pattern happens to match. Counting them invents paint that cannot exist.
   "bordered",
   "borderless",
+  // Semantic recipe / data-contract names, not CSS declarations.
+  "outlined",
+  "backgroundMode",
 ]);
 
 /**
@@ -177,9 +180,40 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
-    "ui/primitives/layout/Stack/runtime/responsive/index",
+    "ui/primitives/layout/Flex/runtime/presentation/index",
     new Map([
-      ["buildStackStyles", ownedStyle([{ index: 0, mode: "propBag" }])],
+      [
+        "resolveFlexAttributes",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "resolveFlexParameterStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    "ui/primitives/layout/Stack/runtime/presentation/index",
+    new Map([
+      [
+        "resolveStackPresentation",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["style"]),
+          transparentArgs: [{ index: 0, mode: "propBag" }],
+        },
+      ],
     ]),
   ],
   [
@@ -291,6 +325,20 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
+    "infrastructure/runtime/foundation/density/index",
+    new Map([
+      [
+        "densityScopeAttributes",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
     "infrastructure/runtime/responsive/runtime/style-properties/index",
     new Map([
       [
@@ -350,6 +398,31 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
+    // Typography craft emits layout and type declarations only. Contrast paint
+    // is selected by the engine skins through the stable `data-contrast` stamp.
+    "ui/primitives/display/Typography/runtime",
+    new Map([
+      [
+        "resolveTypographyCraftStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "typographyDataAttributes",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
     // Shared overlay positioning engine: `style` carries only positioning
     // declarations (position/top/left/visibility/inset/margins plus the CSS
     // anchor-positioning properties) and `anchorAttrs` only `data-ds-anchor`;
@@ -364,6 +437,40 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
           ownership: "zeroPaint",
           stylePaths: new Set(["style"]),
           nonStylePaths: new Set(["anchorAttrs"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    // The overlay stack returns a spreadable `layerProps` bag whose only style
+    // declaration is z-index geometry. Certify the complete bag so consumers
+    // do not treat its JSX spread as opaque component paint.
+    "ui/primitives/runtime/overlay/layer-stack/index",
+    new Map([
+      [
+        "useOverlayLayer",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["layerProps.style"]),
+          nonStylePaths: new Set(["layerProps"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    // Portal scoping transports already-resolved `--ds-*` custom properties
+    // across a DOM portal. It owns no visual property of its own.
+    "ui/primitives/runtime/overlay/portal-theme/index",
+    new Map([
+      [
+        "readDsPortalVariables",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
           transparentArgs: [],
         },
       ],
@@ -858,7 +965,17 @@ function countExplicitObjectPaintInFile(text) {
       // and the key do not hide the key.
       const atKeyPosition = prevMeaningful === "{" || prevMeaningful === ",";
       const m = atKeyPosition ? ARC09_PAINT_KEY_RE.exec(ahead) : null;
-      if (m && !ARC09_PAINT_EXEMPT.has(m[1])) count += 1;
+      if (m && !ARC09_PAINT_EXEMPT.has(m[1])) {
+        count += 1;
+        if (process.env.DEBUG_INLINE_PAINT) {
+          const line = text.slice(0, i).split("\n").length;
+          console.error(
+            `[inline-paint explicit] line ${line} ${m[1]} ${ahead
+              .slice(0, 100)
+              .replace(/\s+/g, " ")}`
+          );
+        }
+      }
     }
     if (!/\s/.test(c)) prevMeaningful = c;
     i++;
@@ -1583,7 +1700,8 @@ function countScopedStylePaintInFile(text, fileName) {
       const sources = [
         entry.initializer,
         ...(bindingAssignments.get(entry) ?? []).filter(
-          (value) => value.getStart(sourceFile) < expression.getStart(sourceFile)
+          (value) =>
+            value.getStart(sourceFile) < expression.getStart(sourceFile)
         ),
       ].filter(Boolean);
       if (sources.length > 0) {
@@ -1701,7 +1819,11 @@ function countScopedStylePaintInFile(text, fileName) {
    * chains all reach the same sink. Leaving those spellings unclassified lets
    * an inline style bypass an exact-zero counter without changing behavior.
    */
-  function resolveAttributeWriter(node, directInvocation = false, seen = new Set()) {
+  function resolveAttributeWriter(
+    node,
+    directInvocation = false,
+    seen = new Set()
+  ) {
     const expression = unwrapExpression(node);
     if (!expression || seen.has(expression)) return null;
     seen.add(expression);
@@ -1736,9 +1858,7 @@ function countScopedStylePaintInFile(text, fileName) {
               ["setAttribute", "setAttributeNS"].includes(name)
             )
           : [];
-        return methods.length > 0
-          ? { method: methods[0], bound: false }
-          : null;
+        return methods.length > 0 ? { method: methods[0], bound: false } : null;
       }
       if (bind?.name === "bind") {
         const writer = resolveAttributeWriter(bind.object, false, seen);
@@ -1774,7 +1894,10 @@ function countScopedStylePaintInFile(text, fileName) {
       for (const element of expression.elements) {
         if (ts.isOmittedExpression(element)) return null;
         if (ts.isSpreadElement(element)) {
-          const nested = staticApplyArguments(element.expression, new Set(seen));
+          const nested = staticApplyArguments(
+            element.expression,
+            new Set(seen)
+          );
           if (!nested) return null;
           args.push(...nested);
         } else {
@@ -1816,7 +1939,11 @@ function countScopedStylePaintInFile(text, fileName) {
       const writer = resolveAttributeWriter(access.object);
       if (!writer) return null;
       if (access.name === "call") {
-        return { writer, args: [...node.arguments].slice(1), opaqueArgs: false };
+        return {
+          writer,
+          args: [...node.arguments].slice(1),
+          opaqueArgs: false,
+        };
       }
       const args = staticApplyArguments(node.arguments[1]);
       return { writer, args, opaqueArgs: args === null };
@@ -2135,6 +2262,15 @@ function countScopedStylePaintInFile(text, fileName) {
       ? `${entry.declaration.pos}:${entry.declaration.end}`
       : `${node.getText(sourceFile)}:${nearestScope(node)?.pos ?? 0}`;
     opaqueRoots.add(`${mode}:${identity}`);
+    if (process.env.DEBUG_INLINE_PAINT) {
+      const { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
+      console.error(
+        `[inline-paint opaque] ${fileName}:${line + 1}:${character + 1} ${mode} ${node
+          .getText(sourceFile)
+          .slice(0, 160)
+          .replace(/\s+/g, " ")}`
+      );
+    }
   }
 
   function markFunction(fn, mode) {
@@ -2845,7 +2981,19 @@ function countScopedStylePaintInFile(text, fileName) {
     if (access.name === "cssText") return countCssTextExpression(value);
     // A computed name on a proven style object fails closed. A known non-paint
     // property (width, opacity, animation, etc.) remains outside this channel.
-    return access.name === null ? 1 : Number(isPaintProperty(access.name));
+    const result =
+      access.name === null ? 1 : Number(isPaintProperty(access.name));
+    if (result > 0 && process.env.DEBUG_INLINE_PAINT) {
+      const { line, character } = sourceFile.getLineAndCharacterOfPosition(
+        left.getStart(sourceFile)
+      );
+      console.error(
+        `[inline-paint write] ${fileName}:${line + 1}:${character + 1} ${
+          access.name ?? "<computed>"
+        }`
+      );
+    }
+    return result;
   }
 
   let count = 0;
@@ -2910,14 +3058,17 @@ function countScopedStylePaintInFile(text, fileName) {
       if (!attributeWriter.args) {
         count += 1;
       } else {
-        const attributeIndex = attributeWriter.writer.method === "setAttributeNS" ? 1 : 0;
+        const attributeIndex =
+          attributeWriter.writer.method === "setAttributeNS" ? 1 : 0;
         const valueIndex = attributeIndex + 1;
         const attributes = staticStringValues(
           attributeWriter.args[attributeIndex]
         );
         if (
           attributes &&
-          [...attributes].some((attribute) => attribute.toLowerCase() === "style")
+          [...attributes].some(
+            (attribute) => attribute.toLowerCase() === "style"
+          )
         ) {
           count += countCssTextExpression(attributeWriter.args[valueIndex]);
         } else if (attributes === null && attributeWriter.opaqueArgs) {

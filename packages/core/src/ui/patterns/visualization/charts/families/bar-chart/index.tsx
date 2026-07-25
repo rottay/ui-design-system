@@ -344,6 +344,9 @@ export const BarChart = memo(function BarChart({
           bandPadding={resolvedBarGap}
           barRadius={resolvedBarRadius}
           showValues={showValues}
+          {...(Number.isFinite(compactState.maxTicks)
+            ? { maxTicks: compactState.maxTicks }
+            : {})}
           {...(xAxisLabel === undefined ? {} : { xLabel: xAxisLabel })}
           {...(yAxisLabel === undefined ? {} : { yLabel: yAxisLabel })}
           {...(interaction === undefined ? {} : { interaction })}

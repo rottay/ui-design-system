@@ -42,17 +42,19 @@ async function waitForPart(container: HTMLElement, part: string): Promise<Elemen
   return container.querySelector(`[data-part="${part}"]`) as Element;
 }
 
-/** Waits for a `data-part="surface"` to appear anywhere in `document`
- * (portaled surfaces render under document.body, outside the render
- * container). Excludes Drawer's surface (always carries data-placement)
- * since only Modal's surface is expected to be portal-located in this file. */
+/** Waits for a Modal-owned `data-part="surface"` anywhere in `document`.
+ * Modal placement is now explicit in both responsive and desktop postures,
+ * so ownership is identified through the modal root instead of attribute
+ * absence (which previously conflated placement with component identity). */
 async function waitForDocumentModalSurface(): Promise<HTMLElement> {
+  const selector = [
+    '.rottay-modal-root--modern [data-part="surface"]',
+    '.rottay-modal-root--rustic [data-part="surface"]',
+  ].join(', ');
   await waitFor(() => {
-    expect(
-      document.querySelectorAll('[data-part="surface"]:not([data-placement])').length
-    ).toBeGreaterThan(0);
+    expect(document.querySelectorAll(selector).length).toBeGreaterThan(0);
   });
-  return document.querySelector('[data-part="surface"]:not([data-placement])') as HTMLElement;
+  return document.querySelector(selector) as HTMLElement;
 }
 
 describe('Overlays-family data-part contract (WO-SKIN-03 checkpoint O)', () => {

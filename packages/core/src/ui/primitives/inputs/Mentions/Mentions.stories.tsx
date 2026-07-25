@@ -30,7 +30,7 @@ Mentions component for @mentions in text input with dropdown suggestions.
 
 | Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
-| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Library | Ant Design | Custom (skin) | Vanilla CSS |
 | Dropdown | Built-in | Custom | Custom |
 | Multi Prefix | Full | Limited | Full |
 | Async Search | Built-in | Manual | Built-in |
@@ -335,7 +335,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Mentions rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Mentions rendered by Classic (Ant Design), Modern (custom, skin-painted), and Rustic (Vanilla CSS).',
       },
     },
   },

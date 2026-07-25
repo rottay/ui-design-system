@@ -23,13 +23,17 @@ export {
   type PopoverProps,
   type PopoverTrigger,
   type PopoverPlacement,
+  type PopoverRecipe,
+  type PopoverDensity,
+  type PopoverRole,
+  type PopoverTouchBehavior,
   POPOVER_DEFAULTS,
 } from './contracts';
 
 /** Popover component with multi-engine support. No compound sub-components. */
 export const Popover = createEngineComponent<PopoverProps>('Popover', {
   classic: () => import('./engines/classic'),  // Ant Design Popover
-  modern: () => import('./engines/modern'),     // DaisyUI / Tailwind
+  modern: () => import('./engines/modern'),     // Token-owned Modern overlay
   rustic: () => import('./engines/rustic'),      // Vanilla portal
 });
 

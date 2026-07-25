@@ -209,10 +209,13 @@ describe('PatternDataTable runtime engines', () => {
       fireEvent.click(archiveButton);
       expect(onBulkExecute).toHaveBeenCalled();
 
+      // Modern/classic expose an accessible icon button. Rustic still owns a
+      // visible glyph, so keep that legacy engine's truthful contract until
+      // its own accessibility pass migrates it.
       const expandButton =
-        engine === 'classic'
-          ? screen.getAllByLabelText(/expand row/i)[0]
-          : screen.getAllByRole('button').find((button) => button.textContent === '▶' || button.textContent === '▼');
+        engine === 'rustic'
+          ? screen.getAllByRole('button').find((button) => button.textContent === '▶' || button.textContent === '▼')
+          : screen.getAllByLabelText(/expand row/i)[0];
 
       if (!expandButton) {
         throw new Error(`Missing expand trigger for ${engine}`);

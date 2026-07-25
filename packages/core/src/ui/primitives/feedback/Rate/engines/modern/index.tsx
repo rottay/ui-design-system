@@ -1,35 +1,39 @@
 /**
  * @fileoverview Rate Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Rate component.
- * Utility-first styling for modern, lightweight applications.
+ * @description Token-driven, skin-painted implementation of the Rate component.
+ * Part of the Rottay Design System's feedback primitives collection.
  *
  * @remarks
  * **Engine Overview:**
- * Modern is the utility-first engine in the Rottay Design System, built on
- * DaisyUI and Tailwind CSS. It provides:
- * - DaisyUI rating component classes
- * - Tailwind utility-based styling
- * - Smaller bundle size than Classic
- * - Consistent with Tailwind design patterns
+ * Modern is the premium Rottay-native engine. All paint lives in the
+ * `rate.css` modern skin (layer `rottay-engines`), keyed on the public
+ * anatomy (`data-part`, `data-size`, `data-state`, `data-focused`,
+ * `data-disabled`, `data-readonly`); this file owns semantics and behavior
+ * only. No DaisyUI classes are consumed -- the `rating`/`rating-{size}`
+ * projection was drained in the K2-V pass, which also fixed the malformed
+ * inline size hatch (`var(--ds-rate-md-size)px`, invalid CSS) that had made
+ * Daisy the de-facto sizing owner.
  *
- * **When to Use Modern:**
- * - Projects using Tailwind CSS
- * - Applications prioritizing bundle size
- * - When you prefer utility-first styling
- * - Modern, lightweight applications
- *
- * **Multi-Tenant Theming:**
- * Modern rates use DaisyUI theme variables and Tailwind configuration,
- * allowing per-tenant customization through theme configuration.
- *
- * **DaisyUI Rating Classes:**
- * | Size | DaisyUI Class |
- * |------|---------------|
- * | xs | rating-xs |
- * | sm | rating-sm |
- * | md | rating-md |
- * | lg | rating-lg |
- * | xl | rating-lg (fallback) |
+ * **Key Features:**
+ * - Coherent APG radio-group composite (K2 remediation): `role="radiogroup"`
+ *   root + `span role="radio"` stars -- no native radio inputs and no
+ *   `<label>` semantics (a `<label role="radio">` wrapping a native radio was
+ *   invalid per ARIA-in-HTML and split the widget across two competing
+ *   models)
+ * - Roving tabindex on the radios (W6): exactly one star is tabbable -- the
+ *   checked one, or the first when the value is 0 -- the radiogroup root is
+ *   never a tab stop, and arrows move focus together with the selection.
+ *   The checked radio announces the committed VALUE, preserving half-point
+ *   identity (2.5 reads as "2.5 stars", never "third star")
+ * - Single hidden `type="hidden"` input mirrors the committed value for
+ *   native form participation (stable `useId` group name); `type="hidden"`
+ *   carries no ARIA semantics, so the composite model stays pure
+ * - Exactly one `aria-checked="true"` radio (the star the committed value
+ *   rounds to), computed from the committed value -- never the hover preview
+ * - Custom star SVG for consistent cross-browser rendering
+ * - Half-star support via overlay technique
+ * - Full keyboard navigation with a skin-painted focus ring
+ * - Localized accessible names (English fallback)
  *
  * @example Basic Usage
  * ```tsx
@@ -38,26 +42,9 @@
  * <Rate engine="modern" defaultValue={3} />
  * ```
  *
- * @example With DaisyUI Theming
- * ```tsx
- * // Uses DaisyUI's warning color for active stars by default
- * <Rate engine="modern" defaultValue={4} allowHalf />
- * ```
- *
- * @example Custom Styling
- * ```tsx
- * <Rate
- *   engine="modern"
- *   defaultValue={3}
- *   activeColor="#ff4d4f"
- *   className="custom-rating"
- * />
- * ```
- *
  * @see {@link RateProps} - Component props interface
  * @see {@link ClassicRate} - Ant Design alternative
  * @see {@link RusticRate} - Vanilla alternative
- * @see {@link https://daisyui.com/components/rating/} - DaisyUI Rating docs
  * @module Rate/Engines/Modern
  * @category Feedback
  * @package @rottay/design-system
@@ -65,32 +52,10 @@
 
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useId } from 'react';
 import type { RateProps, RateCharacterProps } from '../../contracts';
-import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../../contracts';
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-/**
- * Map design system sizes to DaisyUI/Tailwind classes.
- * Note: DaisyUI doesn't have an 'xl' size, so we fall back to 'lg'.
- *
- * @internal
- */
-const SIZE_CLASSES: Record<string, string> = {
-  /** Extra small rating */
-  xs: 'rating-xs',
-  /** Small rating */
-  sm: 'rating-sm',
-  /** Medium rating (default) */
-  md: 'rating-md',
-  /** Large rating */
-  lg: 'rating-lg',
-  /** Extra large - falls back to large */
-  xl: 'rating-lg',
-};
+import { RATE_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // Component
@@ -100,35 +65,15 @@ const SIZE_CLASSES: Record<string, string> = {
  * Modern Engine implementation of the Rate component.
  *
  * @description
- * Custom implementation using DaisyUI rating classes and Tailwind utilities.
- * Provides a lightweight rating component with utility-first styling.
- *
- * @remarks
- * **Key Features:**
- * - DaisyUI rating class integration
- * - Tailwind utility-based styling
- * - Custom half-star support
- * - Full keyboard navigation
- * - Responsive design support
- *
- * **Implementation Notes:**
- * - Uses hidden radio inputs for accessibility
- * - Custom star SVG for consistent cross-browser rendering
- * - Half-star support via overlay technique
- * - Focus ring using Tailwind ring utilities
- *
- * **Tailwind Classes Used:**
- * - `rating`, `rating-{size}`: DaisyUI rating container
- * - `text-warning`: Active star color
- * - `text-base-300`: Inactive star color
- * - `cursor-pointer`, `cursor-not-allowed`: Interaction states
- * - `transition-all`, `duration-200`: Animations
- * - `hover:scale-110`: Hover effect
- * - `ring-2`, `ring-warning`: Focus indicator
+ * Skin-painted implementation: APG radio-group composite (`span role="radio"`
+ * stars inside a `role="radiogroup"` root), a single hidden form carrier for
+ * native forms, custom half-star overlay, keyboard navigation. Paint (size,
+ * fill, hover scale, focus ring, transitions) belongs to the `rate.css`
+ * modern skin.
  *
  * @param props - {@link RateProps}
  * @param ref - Forwarded ref to the container div
- * @returns The rendered DaisyUI-styled Rate component
+ * @returns The rendered token-skinned Rate component
  *
  * @example
  * ```tsx
@@ -172,6 +117,18 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       ...restProps
     } = props;
 
+    const i18n = useOptionalTranslation('components');
+    /**
+     * Localized label with an English floor: when the catalogue entry has not
+     * landed yet the provider echoes the full key, which must never reach an
+     * aria-label.
+     */
+    const tOr = (key: string, fallback: string, params?: Record<string, string | number>): string => {
+      const resolved = i18n?.t(key, params);
+      if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+      return resolved;
+    };
+
     // -------------------------------------------------------------------------
     // State Management
     // -------------------------------------------------------------------------
@@ -181,8 +138,19 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
-    const [focusIndex, setFocusIndex] = useState<number | null>(null);
+    // Roving tabindex (APG radio-group): the RADIOS own focus, never the
+    // radiogroup root. Exactly one star is tabbable — the checked one, or
+    // the first star when the value is 0 — and arrows move focus together
+    // with the selection. `focusedStar` only drives the skin's focus ring.
+    const [focusedStar, setFocusedStar] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const starRefs = useRef<Array<HTMLSpanElement | null>>([]);
+    // Stable group name for the hidden form carrier (native form
+    // participation). The old `Math.random()`-in-render name changed identity
+    // every render and used the deprecated `substr`; `useId` is stable and
+    // SSR-safe.
+    const radioGroupId = useId();
+    const radioGroupName = `rottay-rate-${radioGroupId}`;
 
     // displayValue prioritises hover feedback so the user sees a live
     // preview before committing their selection via click
@@ -190,17 +158,29 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     const displayValue = hoverValue !== null ? hoverValue : currentValue;
     const isInteractive = !disabled && !readOnly;
 
+    // Roving tab stop: the star the committed value falls on (value 2.5 →
+    // star 3), or the first star when nothing is committed.
+    const rovingIndex = Math.min(count, Math.max(1, Math.round(currentValue || 0)));
+
+    const focusStar = useCallback((starIndex: number) => {
+      starRefs.current[starIndex - 1]?.focus();
+    }, []);
+
     // -------------------------------------------------------------------------
     // Effects
     // -------------------------------------------------------------------------
 
     /**
-     * Auto focus on mount if requested.
+     * Auto focus on mount if requested — lands on the roving tab stop star,
+     * matching where Tab would put the user.
      */
     useEffect(() => {
-      if (autoFocus && containerRef.current) {
-        containerRef.current.focus();
+      if (autoFocus && isInteractive) {
+        focusStar(rovingIndex);
       }
+      // rovingIndex is derived from the committed value; only the mount-time
+      // autoFocus intent matters here.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [autoFocus]);
 
     // -------------------------------------------------------------------------
@@ -208,10 +188,12 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     // -------------------------------------------------------------------------
 
     /**
-     * Handle click on a star.
+     * Handle click on a star. Focus follows the pointer, like a native radio.
      */
     const handleClick = useCallback((starValue: number) => {
       if (!isInteractive) return;
+
+      focusStar(Math.min(count, Math.max(1, Math.ceil(starValue))));
 
       let newValue = starValue;
 
@@ -224,7 +206,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         setInternalValue(newValue);
       }
       onChange?.(newValue);
-    }, [isInteractive, allowClear, currentValue, isControlled, onChange]);
+    }, [isInteractive, allowClear, currentValue, isControlled, onChange, count, focusStar]);
 
     /**
      * Handle hover state changes.
@@ -240,7 +222,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     }, [isInteractive, onHoverChange]);
 
     /**
-     * Handle keyboard navigation.
+     * Handle keyboard navigation on a star (APG radio-group: arrows move
+     * BOTH the selection and the focus to the star the new value falls on).
      */
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
       if (!keyboard || !isInteractive) return;
@@ -275,7 +258,10 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         setInternalValue(newValue);
       }
       onChange?.(newValue);
-    }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange]);
+      // Roving: focus lands on the star owning the new value (2.5 → star 3;
+      // 0 → first star, since no radio is checked).
+      focusStar(Math.min(count, Math.max(1, Math.round(newValue))));
+    }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange, focusStar]);
 
     // -------------------------------------------------------------------------
     // Render Helpers
@@ -304,72 +290,67 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     };
 
     // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    // Get size value for custom sizing
-    const sizeValue = RATE_SIZE_MAP[size];
-
-    // -------------------------------------------------------------------------
     // Render Stars
     // -------------------------------------------------------------------------
+
+    // APG radio semantics: at most ONE radio in a group may be checked. The
+    // checked star is the one the COMMITTED value rounds to (with allowHalf,
+    // 2.5 checks star 3 -- the star the value falls on); the old model marked
+    // every filled star checked (N checked radios, invalid) and drove it from
+    // the hover preview, churning state for assistive tech.
+    const checkedIndex = Math.min(count, Math.max(0, Math.round(currentValue || 0)));
 
     const stars = Array.from({ length: count }, (_, index) => {
       const starIndex = index + 1;
       const isFilled = (displayValue || 0) >= starIndex;
       const isHalfFilled = allowHalf && (displayValue || 0) >= starIndex - 0.5 && (displayValue || 0) < starIndex;
-      const isFocused = focusIndex === starIndex;
+      const isFocused = focusedStar === starIndex;
+      const isChecked = starIndex === checkedIndex;
+      // Half-point semantics: when the committed value is fractional the
+      // checked radio announces the VALUE (2.5 stars — the half identity is
+      // preserved), never the ordinal position of the star it falls on.
+      const valueLabel = isChecked && typeof currentValue === 'number' && currentValue % 1 !== 0
+        ? tOr('rate.stars', `${currentValue} stars`, { count: currentValue })
+        : tOr(
+            starIndex === 1 ? 'rate.star' : 'rate.stars',
+            `${starIndex} star${starIndex > 1 ? 's' : ''}`,
+            { count: starIndex },
+          );
 
       return (
-        <label
+        <span
           key={index}
+          ref={(node) => {
+            starRefs.current[index] = node;
+          }}
           data-part="star"
           data-state={isFilled && !isHalfFilled ? 'full' : isHalfFilled ? 'half' : 'empty'}
-          className={`
-            relative inline-flex items-center justify-center
-            transition-all duration-200
-            ${isInteractive ? 'cursor-pointer hover:scale-110' : disabled ? 'cursor-not-allowed opacity-50' : 'cursor-default'}
-            ${isFocused ? 'ring-2 ring-offset-2' : ''}
-          `}
+          data-focused={isFocused ? 'true' : undefined}
           style={{
-            width: `${sizeValue}px`,
-            height: `${sizeValue}px`,
             // Runtime per-star fill (active when filled/half, else inactive)
-            // rides the hatch consumed by the unlayered skin's star color rule.
+            // rides the hatch consumed by the skin's star color rule.
             '--ds-rate-star-fill': isFilled || isHalfFilled
               ? activeColor || 'var(--ds-rate-active-color)'
               : inactiveColor || 'var(--ds-rate-inactive-color)',
-            // DS token override for the focus ring color; Tailwind's
-            // ring-warning is replaced by an inline value so tenants
-            // can control focus appearance.
-            '--tw-ring-color': 'var(--ds-rate-focus-ring-color)',
-            transitionDuration: 'var(--ds-motion-fast)',
           } as React.CSSProperties}
           title={tooltips?.[index]}
+          onClick={() => handleClick(starIndex)}
           onMouseEnter={() => handleHover(starIndex)}
           onMouseLeave={() => handleHover(null)}
           role="radio"
-          aria-checked={isFilled}
-          aria-label={tooltips?.[index] || `${starIndex} star${starIndex > 1 ? 's' : ''}`}
+          aria-checked={isChecked}
+          aria-label={tooltips?.[index] || valueLabel}
+          tabIndex={isInteractive && starIndex === rovingIndex ? 0 : -1}
+          onFocus={() => setFocusedStar(starIndex)}
+          onBlur={() => setFocusedStar(null)}
+          onKeyDown={handleKeyDown}
         >
-          {/* Hidden radio input ensures the rating works inside native forms.
-              Random name avoids radio-group collisions when multiple Rate
-              instances coexist on the same page. */}
-          <input
-            type="radio"
-            name={`rating-${Math.random().toString(36).substr(2, 9)}`}
-            className="hidden"
-            value={starIndex}
-            disabled={!isInteractive}
-            onClick={() => handleClick(starIndex)}
-            onChange={() => {}}
-          />
-          {/* Invisible overlay covering the left half of the star.
+          {/* Invisible overlay covering the leading half of the star.
               stopPropagation prevents the full-star handler from firing
               when the user interacts with the half-star zone. */}
           {allowHalf && (
             <span
-              className="absolute left-0 top-0 w-1/2 h-full z-10"
+              className="absolute start-0 top-0 w-1/2 h-full z-10"
               onMouseEnter={(e) => {
                 e.stopPropagation();
                 handleHover(starIndex - 0.5);
@@ -389,17 +370,14 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
                 {renderCharacter(index)}
               </span>
               {/* Foreground (active) half star inherits the star's active fill. */}
-              <span
-                className="absolute inset-0 overflow-hidden"
-                style={{ width: '50%' }}
-              >
+              <span data-part="star-half">
                 {renderCharacter(index)}
               </span>
             </span>
           ) : (
             renderCharacter(index)
           )}
-        </label>
+        </span>
       );
     });
 
@@ -407,11 +385,12 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     // Render
     // -------------------------------------------------------------------------
 
-    // Combine DaisyUI classes
-    const ratingClasses = [
-      'rating',
-      SIZE_CLASSES[size] || SIZE_CLASSES.md,
-      'gap-1',
+    // `ds-rate ds-rate--modern` is the skin scope; the legacy `rottay-rate`
+    // pair stays as a compatibility alias for consumers/tests that hook the
+    // historical BEM naming (no paint keys on it anymore).
+    const rootClassName = [
+      'ds-rate',
+      'ds-rate--modern',
       'rottay-rate',
       'rottay-rate--modern',
       className,
@@ -430,27 +409,47 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
         data-part="root"
-        className={ratingClasses}
+        className={rootClassName}
         style={{
           direction,
           ...style,
           ...({ '--ds-rate-star-inactive': inactiveColor || 'var(--ds-rate-inactive-color)' } as React.CSSProperties),
         }}
         role="radiogroup"
-        aria-label="Rating"
+        aria-label={tOr('rate.label', 'Rating')}
         aria-disabled={disabled}
         aria-readonly={readOnly}
-        aria-valuenow={currentValue}
-        aria-valuemin={0}
-        aria-valuemax={count}
-        tabIndex={isInteractive ? 0 : -1}
-        onKeyDown={handleKeyDown}
-        onFocus={() => setFocusIndex(Math.ceil(currentValue || 0.5))}
-        onBlur={() => setFocusIndex(null)}
+        /* APG radio-group: the radiogroup is NEVER a tab stop — the radios
+           own focus through the roving tabindex stamped per star. */
+        data-size={size}
+        data-disabled={disabled ? 'true' : 'false'}
+        data-readonly={readOnly ? 'true' : 'false'}
         data-testid="rate"
+        /* APG: a radiogroup carries NO aria-valuenow/min/max (axe
+           aria-allowed-attr, critical) -- the legacy triad was dropped in the
+           K2-V pass and the value is mirrored on data-* for tests/specs.
+           Rustic still stamps the triad (documented cross-engine divergence,
+           lane ficha). */
+        data-value={currentValue ?? undefined}
+        data-count={count}
         {...restProps}
       >
         {stars}
+        {/* Native form participation without breaking the composite model:
+            a single type="hidden" input mirrors the COMMITTED value (clicks,
+            keyboard and controlled updates alike -- the old per-star native
+            radios only tracked mouse clicks). type="hidden" has no implicit
+            ARIA role and is never exposed to assistive tech, so the APG
+            radio-group stays the single semantic model. Submission gating
+            matches the legacy behavior: disabled/readOnly ratings do not
+            submit. */}
+        <input
+          type="hidden"
+          name={radioGroupName}
+          value={currentValue ?? 0}
+          disabled={!isInteractive}
+          readOnly
+        />
       </div>
     );
   }

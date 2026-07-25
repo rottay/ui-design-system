@@ -156,7 +156,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Empty rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
+        story: 'Compare the same Empty rendered by Classic (Ant Design), Modern (token skin), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -322,4 +322,43 @@ export const TableEmpty: Story = {
       },
     },
   },
+};
+
+// ============================================================================
+// Modern Engine Craft Stories
+// ============================================================================
+
+/**
+ * RTL smoke test: the centered anatomy is direction-agnostic; the action tray
+ * wraps without pushing the description out of the bounded surface.
+ */
+export const ModernRTL: Story = {
+  name: '🔄 Modern RTL',
+  render: () => (
+    <div dir="rtl">
+      <Empty
+        engine="modern"
+        description="لا توجد نتائج مطابقة لبحثك. جرّب توسيع نطاق التصفية أو أضف سجلاً جديداً للبدء."
+      >
+        <button style={{ padding: '8px 16px', cursor: 'pointer' }}>إضافة سجل</button>
+      </Empty>
+    </div>
+  ),
+};
+
+/**
+ * Long guidance copy wraps inside the bounded surface (text-wrap: balance)
+ * and the primary action stays visibly attached -- never a giant blank box.
+ */
+export const ModernLongGuidance: Story = {
+  name: '📏 Modern Long Guidance',
+  render: () => (
+    <Empty
+      engine="modern"
+      description="No candidates match the current filter combination across all three active pipelines. Loosen the seniority requirement or clear the location filter to widen the pool, or create a new candidate profile right away."
+    >
+      <button style={{ padding: '8px 16px', cursor: 'pointer' }}>Create candidate</button>
+      <button style={{ padding: '8px 16px', cursor: 'pointer' }}>Clear filters</button>
+    </Empty>
+  ),
 };

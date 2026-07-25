@@ -2,23 +2,22 @@
 
 /**
  * @fileoverview InputNumber Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind CSS implementation of the InputNumber component.
- * Part of the Rottay Design System's input primitives collection.
+ * @description Token-driven, skin-painted implementation of the InputNumber
+ * component. Part of the Rottay Design System's input primitives collection.
  *
  * @remarks
- * The Modern engine implements numeric input using DaisyUI's input classes
- * with custom step control buttons. It provides a lightweight alternative
- * with utility-first styling.
- *
- * **Styling:**
- * - DS token inline styles for border, radius, size, and status
- * - Custom step control buttons with inline styles
+ * The Modern engine implements numeric input with custom step control buttons.
+ * All paint lives in the `input-number.css` modern skin, keyed on the public
+ * anatomy (`data-part`, `data-size`, `data-status`, `data-disabled`,
+ * `data-has-prefix`, `data-has-trailing`); this file owns semantics and
+ * behavior only. No DaisyUI classes are consumed.
  *
  * **Custom Implementation:**
- * - Step up/down buttons with ▲/▼ arrows
+ * - Step up/down buttons with localized accessible names (English fallback)
  * - Keyboard navigation (Arrow Up/Down)
  * - Precision formatting
  * - Min/max bounds checking
+ * - RTL-correct affix/stepper placement via logical properties
  *
  * @example Using Modern Engine
  * ```tsx
@@ -43,22 +42,16 @@
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
-
-/** Maps the canonical `sm | md | lg` size step to inline style dimensions. */
-const sizeStyles: Record<'sm' | 'md' | 'lg', React.CSSProperties> = {
-  sm: { height: 32, fontSize: 13, padding: '4px 10px' },
-  md: { height: 36, fontSize: 14, padding: '6px 12px' },
-  lg: { height: 40, fontSize: 16, padding: '8px 14px' },
-};
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
- * Modern engine InputNumber built with DaisyUI / Tailwind CSS.
+ * Modern engine InputNumber painted by the `input-number.css` modern skin.
  * Implements controlled/uncontrolled modes, step buttons, keyboard navigation,
  * and precision formatting without relying on a third-party input-number library.
  *
  * @param props - Unified InputNumberProps from the design system contract.
  * @param ref - Forwarded ref attached to the underlying native `<input>` element.
- * @returns A DaisyUI-styled numeric input with optional step controls and addons.
+ * @returns A token-skinned numeric input with optional step controls and addons.
  */
 export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
   (props, ref) => {
@@ -87,7 +80,20 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       autoFocus,
       id,
       name,
+      'aria-label': ariaLabel,
     } = props;
+
+    const i18n = useOptionalTranslation('components');
+    /**
+     * Localized label with an English floor: when the catalogue entry has not
+     * landed yet the provider echoes the full key, which must never reach an
+     * aria-label.
+     */
+    const tOr = (key: string, fallback: string): string => {
+      const resolved = i18n?.t(key);
+      if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+      return resolved;
+    };
 
     // Controlled vs uncontrolled: if `value` is provided, the parent owns state
     const isControlled = value !== undefined;
@@ -161,28 +167,29 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       }
     };
 
-    // Resolve size to inline style values (paint is in the modern skin, keyed
-    // on the `data-status` attribute stamped on root below)
+    // Size enters the skin through `data-size`; the skin owns every dimension
+    // (density-scaled `--ds-input-number-{size}-*` channels). Affix presence
+    // stamps `data-has-prefix` / `data-has-trailing` so the skin can reserve
+    // logical padding that flips correctly under RTL (the old inline padding
+    // shorthand silently beat the pl-8/pr-16 utilities and overlapped affixes).
     const sizeKey = toCanonicalSize(size) ?? 'md';
-    const sizeStyle = sizeStyles[sizeKey];
+    const hasTrailing = Boolean(suffix) || (controls && !disabled && !readOnly);
 
     return (
       <div className="flex items-center gap-1" style={style}>
-        {addonBefore && <span data-part="addon-before" className="px-2 py-1 rounded-l">{addonBefore}</span>}
+        {addonBefore && <span data-part="addon-before" className="px-2 py-1 rounded-s">{addonBefore}</span>}
         <div className="relative flex items-center">
-          {prefix && <span data-part="prefix" className="absolute left-2">{prefix}</span>}
+          {prefix && <span data-part="prefix" className="absolute start-2">{prefix}</span>}
           <input
             ref={ref}
             type="number"
-            className={`ds-input-number ds-input-number--modern ${prefix ? 'pl-8' : ''} ${suffix || controls ? 'pr-16' : ''} ${className}`}
+            className={`ds-input-number ds-input-number--modern ${className}`}
             data-part="root"
+            data-size={sizeKey}
             data-status={status ?? 'default'}
             data-disabled={disabled ? 'true' : 'false'}
-            style={{
-              boxSizing: 'border-box',
-              width: '100%',
-              ...sizeStyle,
-            }}
+            data-has-prefix={prefix ? 'true' : undefined}
+            data-has-trailing={hasTrailing ? 'true' : undefined}
             value={formatValue(currentValue)}
             min={min}
             max={max}
@@ -195,8 +202,12 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             autoFocus={autoFocus}
             id={id}
             name={name}
+            aria-label={ariaLabel}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-valuenow={typeof currentValue === 'number' && !Number.isNaN(currentValue) ? currentValue : undefined}
           />
-          <div className="absolute right-2 flex items-center gap-1">
+          <div className="absolute end-2 flex items-center gap-1">
             {suffix && <span data-part="suffix">{suffix}</span>}
             {controls && !disabled && !readOnly && (
               <div className="flex flex-col">
@@ -204,9 +215,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
                   type="button"
                   data-part="stepper-button"
                   data-direction="up"
-                  style={{ height: 16, padding: '0 4px', fontSize: 12, cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('up')}
                   tabIndex={-1}
+                  aria-label={tOr('input_number.increase', 'Increase')}
                 >
                   ▲
                 </button>
@@ -214,9 +225,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
                   type="button"
                   data-part="stepper-button"
                   data-direction="down"
-                  style={{ height: 16, padding: '0 4px', fontSize: 12, cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('down')}
                   tabIndex={-1}
+                  aria-label={tOr('input_number.decrease', 'Decrease')}
                 >
                   ▼
                 </button>
@@ -224,7 +235,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             )}
           </div>
         </div>
-        {addonAfter && <span data-part="addon-after" className="px-2 py-1 rounded-r">{addonAfter}</span>}
+        {addonAfter && <span data-part="addon-after" className="px-2 py-1 rounded-e">{addonAfter}</span>}
       </div>
     );
   }

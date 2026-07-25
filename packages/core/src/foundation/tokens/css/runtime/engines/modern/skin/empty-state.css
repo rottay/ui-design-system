@@ -1,37 +1,221 @@
-/**
- * Modern EmptyState skin (WO-SKIN-06 checkpoint CK-H2).
- *
- * DELIBERATELY UNLAYERED (P-47): layered component rules sort before
- * Tailwind's base layer. Border rules combine both root classes with a
- * private ownership class and repeated part, clearing the tenant border
- * floor at (0,3,1). The existing `ds-spin` keyframe remains shared.
- *
- * The dormant `--ds-empty-state-*` aliases are intentionally not connected;
- * this component has never consumed them.
- */
+/** Modern EmptyState: expressive framed placeholder with tenant-controlled tenor. */
+
+.ds-pattern-empty-state.ds-engine-modern[data-part='root'][data-part='root'] {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-block-size: var(--ds-empty-state-min-height, 14rem);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: var(--ds-empty-state-padding, clamp(var(--ds-spacing-xl), 5vw, var(--ds-spacing-3xl)));
+  border: var(--ds-empty-state-border-width, 1px) solid var(--ds-empty-state-border-color, var(--ds-color-border));
+  border-radius: var(--ds-empty-state-radius, var(--ds-radius-xl));
+  background:
+    radial-gradient(circle at 50% -15%, color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 0%, transparent 45%),
+    linear-gradient(150deg, var(--ds-empty-state-surface, var(--ds-color-surface)) 0%, var(--ds-color-surface-raised) 100%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 38%, transparent),
+    var(--ds-empty-state-shadow, var(--ds-shadow-sm));
+  color: var(--ds-color-text-primary);
+  text-align: center;
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-size='sm'][data-part='root'] {
+  min-block-size: var(--ds-empty-state-sm-min-height, 10rem);
+  padding: var(--ds-empty-state-sm-padding, var(--ds-spacing-lg));
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-size='lg'][data-part='root'] {
+  min-block-size: var(--ds-empty-state-lg-min-height, 18rem);
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-loading='true'][data-part='root'] {
+  min-block-size: var(--ds-empty-state-loading-height, 8rem);
+}
+
+.ds-pattern-empty-state.ds-engine-modern > .ds-empty-state__content[data-part='content'][data-part='content'] {
+  display: flex;
+  inline-size: min(100%, var(--ds-empty-state-content-width, 38rem));
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-spacing-md);
+}
+
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__visual[data-part='visual'][data-part='visual'] {
+  display: grid;
+  inline-size: var(--ds-empty-state-visual-size, 5rem);
+  block-size: var(--ds-empty-state-visual-size, 5rem);
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
+  border-radius: var(--ds-empty-state-visual-radius, var(--ds-radius-xl));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-color-surface-raised)), var(--ds-color-surface));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 50%, transparent),
+    0 14px 34px color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  color: var(--ds-color-primary);
+  transition:
+    transform var(--ds-motion-base) var(--ds-ease-emphasized),
+    box-shadow var(--ds-motion-base) var(--ds-ease-standard);
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-size='sm'] .ds-empty-state__visual[data-part='visual'][data-part='visual'] {
+  inline-size: var(--ds-empty-state-sm-visual-size, 3.75rem);
+  block-size: var(--ds-empty-state-sm-visual-size, 3.75rem);
+  border-radius: var(--ds-radius-lg);
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-size='lg'] .ds-empty-state__visual[data-part='visual'][data-part='visual'] {
+  inline-size: var(--ds-empty-state-lg-visual-size, 6.25rem);
+  block-size: var(--ds-empty-state-lg-visual-size, 6.25rem);
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-part='root'][data-part='root']:hover .ds-empty-state__visual[data-part='visual'] {
+  transform: translateY(-3px) scale(1.025);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 60%, transparent),
+    0 18px 40px color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+}
+
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__visual[data-part='visual'] > [data-part='image'] {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__visual[data-part='visual'] > [data-part='icon'] {
+  display: grid;
+  place-items: center;
+}
+
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__copy[data-part='copy'][data-part='copy'] {
+  display: grid;
+  gap: var(--ds-spacing-xs);
+  justify-items: center;
+}
+
+.ds-pattern-empty-state.ds-engine-modern [data-part='title'][data-part='title'] {
+  max-inline-size: 30ch;
+  margin: 0;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-empty-state-title-size, var(--ds-font-size-xl));
+  font-weight: var(--ds-font-weight-bold);
+  letter-spacing: var(--ds-letter-spacing-tight);
+  line-height: var(--ds-line-height-tight);
+  text-wrap: balance;
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-size='sm'] [data-part='title'][data-part='title'] {
+  font-size: var(--ds-empty-state-sm-title-size, var(--ds-font-size-base));
+}
+
+.ds-pattern-empty-state.ds-engine-modern[data-size='lg'] [data-part='title'][data-part='title'] {
+  font-size: var(--ds-empty-state-lg-title-size, var(--ds-font-size-2xl));
+}
+
+.ds-pattern-empty-state.ds-engine-modern [data-part='description'][data-part='description'] {
+  max-inline-size: 52ch;
+  margin: 0;
+  color: var(--ds-color-text-secondary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-empty-state-description-size, var(--ds-font-size-sm));
+  line-height: var(--ds-line-height-relaxed);
+  text-wrap: balance;
+}
+
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__actions[data-part='actions'][data-part='actions'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-sm);
+  margin-block-start: var(--ds-spacing-xs);
+  padding: var(--ds-spacing-sm);
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg);
+  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 34%, transparent);
+}
 
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__spinner[data-part='spinner'][data-part='spinner'] {
+  display: inline-block;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
   border: 3px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
+  animation: ds-spin var(--ds-motion-glacial) linear infinite;
 }
 
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-part='action'],
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action'] {
+  display: inline-flex;
+  min-block-size: var(--ds-control-height-md);
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--ds-spacing-lg);
   border-radius: var(--ds-radius-md);
-  border: 1px solid transparent;
-  background: transparent;
+  border: 1px solid var(--ds-color-border);
+  background: var(--ds-color-surface);
   color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+  cursor: pointer;
+  box-shadow: var(--ds-shadow-xs);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-ease-standard),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard),
+    box-shadow var(--ds-motion-fast) var(--ds-ease-standard),
+    color var(--ds-motion-fast) var(--ds-ease-standard),
+    transform var(--ds-motion-fast) var(--ds-ease-emphasized);
 }
 
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-variant='primary'] {
   border: 1px solid var(--ds-color-primary);
-  background: var(--ds-color-primary);
+  background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-hover));
+  color: var(--ds-color-text-on-primary);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 24%, transparent),
+    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+}
+
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-part='action']:hover,
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 38%, var(--ds-color-border));
+  background: var(--ds-color-surface-hover, var(--ds-color-surface-raised));
+  box-shadow: var(--ds-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-variant='primary']:hover {
+  border-color: var(--ds-color-primary-hover);
+  background: linear-gradient(135deg, var(--ds-color-primary-hover), var(--ds-color-primary));
   color: var(--ds-color-text-on-primary);
 }
 
-/* The headline is tenant typography: an editorial tenant's heading face must
- * reach empty states, not only page titles. */
-.ds-pattern-empty-state.ds-engine-modern [data-part='title'][data-part='title'] {
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-part='action']:focus-visible,
+.ds-pattern-empty-state.ds-engine-modern .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action']:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 64%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__visual[data-part='visual'][data-part='visual'],
+  .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-part='action'],
+  .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action'] {
+    transition: none;
+  }
+
+  .ds-pattern-empty-state.ds-engine-modern[data-part='root'][data-part='root']:hover .ds-empty-state__visual[data-part='visual'],
+  .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-part='action']:hover,
+  .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action']:hover {
+    transform: none;
+  }
+
+  .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__spinner[data-part='spinner'][data-part='spinner'] {
+    animation-duration: 1.5s;
+  }
 }

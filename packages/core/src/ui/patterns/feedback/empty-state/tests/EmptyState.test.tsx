@@ -223,3 +223,40 @@ describe('PatternEmptyState', () => {
     },
   );
 });
+
+describe('PatternEmptyState modern anatomy', () => {
+  it('exposes its visual hierarchy and semantic fallback icon', () => {
+    const { container } = renderWithEngine(
+      <ModernEmptyState {...createProps({ size: 'lg' })} />,
+      'modern',
+    );
+
+    const root = container.querySelector('[data-part="root"]');
+    expect(root).toHaveAttribute('data-size', 'lg');
+    expect(root).toHaveAttribute('data-visual', 'semantic-icon');
+    expect(root).toHaveAttribute('data-has-description', 'true');
+    expect(root).toHaveAttribute('data-has-action', 'false');
+    expect(root).toHaveAttribute('aria-live', 'polite');
+    expect(container.querySelector('[data-icon-name="communication.inbox"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="content"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="visual"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="copy"]')).not.toBeNull();
+  });
+
+  it('marks its action tray and uses explicit button types', () => {
+    const { container } = renderWithEngine(
+      <ModernEmptyState
+        {...createProps({
+          action: { label: 'Create', onClick: vi.fn(), variant: 'primary' },
+          secondaryAction: { label: 'Import', onClick: vi.fn() },
+        })}
+      />,
+      'modern',
+    );
+
+    expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-has-action', 'true');
+    expect(container.querySelector('[data-part="actions"]')).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Create' })).toHaveAttribute('type', 'button');
+    expect(screen.getByRole('button', { name: 'Import' })).toHaveAttribute('type', 'button');
+  });
+});

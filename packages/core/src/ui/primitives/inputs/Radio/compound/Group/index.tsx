@@ -72,6 +72,7 @@ import React, { createContext, useContext, useState, useCallback, useMemo, useId
 import type { CSSProperties } from 'react';
 import type { RadioGroupProps, RadioOption, RadioSize, RadioVariant } from '../../contracts';
 import { RADIO_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // Context for radio group
 interface RadioGroupContextValue {
@@ -107,6 +108,7 @@ export function RadioGroup({
 }: RadioGroupComponentProps): React.ReactElement {
   const generatedId = useId();
   const name = providedName || `radio-group-${generatedId}`;
+  const translation = useOptionalTranslation('components');
 
   // Internal state for uncontrolled mode
   const [internalValue, setInternalValue] = useState<string | number | undefined>(defaultValue);
@@ -296,7 +298,7 @@ export function RadioGroup({
         className={`rottay-radio-group rottay-radio-group--${direction} ${buttonStyle ? 'rottay-radio-group--button' : ''} ${className}`}
         style={containerStyle}
         role="radiogroup"
-        aria-label="Radio group"
+        aria-label={translation?.t('radio.group') ?? 'Radio group'}
       >
         {options ? renderOptions() : children}
       </div>

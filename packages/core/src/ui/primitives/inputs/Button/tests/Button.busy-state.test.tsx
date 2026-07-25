@@ -82,11 +82,8 @@ describe('ModernButton pending posture', () => {
       </ModernButton>
     );
 
-    // Not queried by accessible name: a `pending` button with no
-    // `pendingLabel` has no visible/accessible text in the modern engine
-    // (the resting label is `visibility: hidden`, pre-existing behavior this
-    // change does not alter) -- there is exactly one button in this render.
-    const button = screen.getByRole('button');
+    // Busy presentation never erases the action's accessible name.
+    const button = screen.getByRole('button', { name: 'Save' });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute('aria-busy', 'true');
 
@@ -118,77 +115,35 @@ describe('ModernButton pending posture', () => {
   });
 });
 
-/**
- * happy-dom (this project's test environment) does not compute real CSS
- * layout, so `offsetWidth` is always 0 on every element. This measures a
- * deterministic pseudo-width from the DOM tree using the two CSS rules the
- * `pending` posture's width-stability depends on:
- *   - `display: none` and `position: absolute` remove an element from normal
- *     flow, so it contributes 0 to its parent's auto width.
- *   - Everything else (including `visibility: hidden`, which still occupies
- *     space) contributes the sum of its children, or its own trimmed text
- *     length for a leaf.
- * If the modern engine's overlay ever loses its `position: absolute` (or the
- * hidden reserve layer loses its normal-flow placement), this measurement
- * changes and the assertions below fail.
- */
-function measureFlowWidth(el: Element): number {
-  const style = (el as HTMLElement).style;
-  if (style.display === 'none' || style.position === 'absolute') {
-    return 0;
-  }
-  const children = Array.from(el.children);
-  if (children.length === 0) {
-    return (el.textContent ?? '').trim().length;
-  }
-  return children.reduce((sum, child) => sum + measureFlowWidth(child), 0);
-}
-
-function stubOffsetWidth(el: HTMLElement): void {
-  Object.defineProperty(el, 'offsetWidth', {
-    configurable: true,
-    get: () => measureFlowWidth(el),
-  });
-}
-
 describe('ModernButton pending width stability', () => {
-  it('never changes the button offsetWidth, even when pendingLabel is longer than the resting label', () => {
-    const { rerender } = render(<ModernButton>Save</ModernButton>);
-    const button = screen.getByRole('button', { name: /save/i });
-    stubOffsetWidth(button);
-
-    const restingWidth = button.offsetWidth;
-    expect(restingWidth).toBeGreaterThan(0);
-
-    rerender(<ModernButton pending>Save</ModernButton>);
-    expect(button.offsetWidth).toBe(restingWidth);
-
-    rerender(
+  it('reserves the resting content in flow and isolates any longer pending label in an overlay', () => {
+    const { container } = render(
       <ModernButton pending pendingLabel="Saving your extremely long document title now">
         Save
       </ModernButton>
     );
-    expect(button.offsetWidth).toBe(restingWidth);
+
+    const frame = container.querySelector('[data-part="content-frame"]');
+    const reserve = frame?.querySelector('[data-part="content"][data-layer="reserve"]');
+    const busyLayer = frame?.querySelector('[data-part="busy-content"]');
+    expect(frame).toBeInTheDocument();
+    expect(reserve).toHaveTextContent('Save');
+    expect(reserve).toHaveAttribute('aria-hidden', 'true');
+    expect(busyLayer).toHaveTextContent('Saving your extremely long document title now');
+    expect(screen.getByRole('button', { name: /saving your extremely long/i })).toBeDisabled();
   });
 
-  it('stays width-stable with icon and full-width buttons too', () => {
-    const { rerender } = render(
-      <ModernButton fullWidth icon={<span>*</span>}>
-        Publish changes
-      </ModernButton>
-    );
-    const button = screen.getByRole('button', { name: /publish changes/i });
-    stubOffsetWidth(button);
-
-    const restingWidth = button.offsetWidth;
-    expect(restingWidth).toBeGreaterThan(0);
-
-    rerender(
+  it('keeps the same reserve anatomy for icon and full-width buttons', () => {
+    const { container } = render(
       <ModernButton fullWidth icon={<span>*</span>} pending pendingLabel="Publishing your changes to production">
         Publish changes
       </ModernButton>
     );
-    expect(button.offsetWidth).toBe(restingWidth);
+
+    const button = screen.getByRole('button', { name: /publishing your changes/i });
+    expect(button).toHaveAttribute('data-full-width', 'true');
+    expect(container.querySelector('[data-layer="reserve"] [data-part="icon"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="content-frame"]')).toBeInTheDocument();
   });
 });
 

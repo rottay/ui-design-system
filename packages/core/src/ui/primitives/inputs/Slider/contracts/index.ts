@@ -96,6 +96,13 @@ export interface SliderProps {
   className?: string;
   /** Additional styles */
   style?: CSSProperties;
+  /**
+   * Accessible name for the single-mode native input when no surrounding
+   * label provides one (without a name, a standalone slider fails the axe
+   * `label` rule, critical). Range mode ignores this prop and uses the
+   * localized per-handle defaults instead.
+   */
+  'aria-label'?: string;
 }
 
 export const SLIDER_DEFAULTS: Partial<SliderProps> = {

@@ -1,14 +1,24 @@
 /**
- * Modern InputNumber skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern InputNumber skin.
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
- * rule can't paint these elements at all; unlayered outranks preflight and
- * still yields to a caller's inline `style`.
+ * The React engine owns semantics and stamps the public anatomy; this file
+ * owns every visual decision through documented `--ds-input-number-*`
+ * channels so a vertical or DB-backed tenant never needs private selectors.
+ * Geometry consumes the per-size `--ds-input-number-{size}-*` channels
+ * multiplied by the three-plane density channel `--ds-density-effective-scale`.
+ *
+ * Cascade position (the P-47 preflight fight, current contract): this file is
+ * imported into `layer(rottay-engines)`, which the cross-framework cascade
+ * contract in `entrypoints/base.css` sorts AFTER `rottay-framework` (the
+ * bundled Tailwind/DaisyUI artifact, preflight included). Skin rules therefore
+ * beat preflight and every framework utility by layer ownership, while still
+ * yielding to a caller's inline `style` and to the tenant/personality layers
+ * above.
  *
  * SCOPE ROOT is `.ds-input-number.ds-input-number--modern[data-part='root']`,
- * the `<input>` itself -- carrying `data-status` ('default'|'error'|'warning')
- * and `data-disabled`. Unlike a container-root component (TagInput, Textarea),
+ * the `<input>` itself -- carrying `data-size` ('sm'|'md'|'lg'), `data-status`
+ * ('default'|'error'|'warning'), `data-disabled`, `data-has-prefix` and
+ * `data-has-trailing`. Unlike a container-root component (TagInput, Textarea),
  * a void `<input>` cannot have descendants, so every other part
  * (`addon-before`, `prefix`, `suffix`, `stepper-button`, `addon-after`) is a
  * SIBLING or NEPHEW of root, not a child -- some of them (`addon-before`,
@@ -22,8 +32,10 @@
  * so no rule can bleed into an unrelated component that happens to reuse the
  * same `data-part` name elsewhere on the page.
  *
- * This engine has no focus-driven paint (no `useInteractionState`) -- the
- * root's border only ever reacts to `data-status`.
+ * Hover/focus live on the root input itself (`:hover`, `:focus-visible`) --
+ * the input IS the focus target, so no behavior layer is needed. The focus
+ * ring reads the canonical `--ds-focus-ring` through the
+ * `--ds-input-number-shadow-focus` channel.
  *
  * SPECIFICITY (P-48): the root's `border` paints a color, so its rules reach
  * (0,4,0) via the repeated `[data-part='root']`. Everything else here is
@@ -32,14 +44,76 @@
  */
 
 .ds-input-number.ds-input-number--modern[data-part='root'] {
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  box-sizing: border-box;
+  inline-size: 100%;
+  /* The control-surface channel is the certified Input family's
+     `--ds-input-bg` (NOT the generic `--ds-color-bg-input`): the TMM DB
+     projection resolves `--ds-input-bg` to its light control surface
+     (#FFFEFB, measured) while `--ds-color-bg-input`/`--ds-surface-control`
+     resolve near-black under its dark-text theme (1.29:1, axe-reproduced).
+     BitHire resolves #fff on both channels, so this is a no-op there. */
+  background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
   border-radius: var(--ds-radius-md);
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+
+/* The engine renders its own steppers; the native number spinners are a
+   second, untokenized paint owner and are removed. */
+.ds-input-number.ds-input-number--modern[data-part='root']::-webkit-outer-spin-button,
+.ds-input-number.ds-input-number--modern[data-part='root']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.ds-input-number.ds-input-number--modern[data-part='root'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Public size geometry (density-scaled, physical px channels). */
+.ds-input-number.ds-input-number--modern[data-part='root'][data-size='sm'] {
+  block-size: calc(var(--ds-input-number-sm-height, 32px) * var(--ds-density-effective-scale, 1));
+  padding-block: var(--ds-input-number-sm-padding-y, 4px);
+  padding-inline: var(--ds-input-number-sm-padding-x, 10px);
+  font-size: var(--ds-input-number-sm-font-size, 13px);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-size='md'] {
+  block-size: calc(var(--ds-input-number-md-height, 36px) * var(--ds-density-effective-scale, 1));
+  padding-block: var(--ds-input-number-md-padding-y, 6px);
+  padding-inline: var(--ds-input-number-md-padding-x, 12px);
+  font-size: var(--ds-input-number-md-font-size, 14px);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-size='lg'] {
+  block-size: calc(var(--ds-input-number-lg-height, 40px) * var(--ds-density-effective-scale, 1));
+  padding-block: var(--ds-input-number-lg-padding-y, 8px);
+  padding-inline: var(--ds-input-number-lg-padding-x, 14px);
+  font-size: var(--ds-input-number-lg-font-size, 16px);
+}
+
+/* Affix-aware logical padding: reserves room for the absolutely-positioned
+   prefix / suffix+stepper cluster; flips under RTL with the writing
+   direction, no runtime branch. */
+.ds-input-number.ds-input-number--modern[data-part='root'][data-has-prefix='true'] {
+  padding-inline-start: var(--ds-input-number-prefix-space, 32px);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-has-trailing='true'] {
+  padding-inline-end: var(--ds-input-number-trailing-space, 64px);
 }
 
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-status='error']):not([data-status='warning']) {
+  border-color: var(--ds-input-number-border-hover, var(--ds-color-border-hover));
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:focus-visible {
+  border-color: var(--ds-input-number-border-focus, var(--ds-color-primary));
+}
+.ds-input-number.ds-input-number--modern[data-part='root']:focus-visible {
+  box-shadow: var(--ds-input-number-shadow-focus, var(--ds-focus-ring));
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='error'] {
   border: 1px solid var(--ds-color-error);
@@ -47,12 +121,18 @@
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='warning'] {
   border: 1px solid var(--ds-color-warning);
 }
+.ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true'] {
+  opacity: var(--ds-disabled-opacity, 0.58);
+  cursor: not-allowed;
+}
 
 [data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--modern[data-part='root']) {
   background: var(--ds-surface-inset);
+  color: var(--ds-color-text-secondary);
 }
 div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-part='addon-after'] {
   background: var(--ds-surface-inset);
+  color: var(--ds-color-text-secondary);
 }
 
 [data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {
@@ -63,8 +143,44 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 }
 
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  block-size: var(--ds-input-number-stepper-height, 16px);
+  min-block-size: 0;
+  padding-inline: var(--ds-input-number-stepper-padding-x, 4px);
+  font-size: var(--ds-input-number-stepper-font-size, 12px);
+  line-height: 1;
+  cursor: pointer;
   background: transparent;
-  color: var(--ds-color-text-primary);
+  color: var(--ds-color-text-secondary);
   border-radius: var(--ds-radius-sm, 6px);
   border: none;
+  transition:
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:where(:hover) {
+  color: var(--ds-color-primary);
+  background: var(--ds-input-number-stepper-bg-hover, var(--ds-surface-inset));
+}
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:focus-visible {
+  color: var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
+  outline-offset: 1px;
+}
+
+/* Coarse-pointer floor: physical px, never rem (the fluid 15px root erodes
+   rem floors at narrow widths -- measured on the live bundle, Axe R0). */
+@media (pointer: coarse) {
+  .ds-input-number.ds-input-number--modern[data-part='root'] {
+    min-block-size: var(--ds-input-number-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-input-number.ds-input-number--modern[data-part='root'],
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
+    transition: none;
+  }
 }

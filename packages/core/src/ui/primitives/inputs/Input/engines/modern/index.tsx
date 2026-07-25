@@ -42,6 +42,9 @@ import {
   type ResponsivePropEntry,
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { StatusLoadingIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-loading';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
   if (value === undefined || value === null) return undefined;
@@ -53,39 +56,18 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
 /*  Clear button (ghost, appears on hover / when content present)      */
 /* ------------------------------------------------------------------ */
 
-function ClearButton({ onClick, visible }: { onClick: () => void; visible: boolean }) {
+function ClearButton({ onClick }: { onClick: () => void }) {
+  const translation = useOptionalTranslation('common');
+
   return (
     <button
       type="button"
       data-part="clear-button"
       onClick={onClick}
-      aria-label="Clear input"
-      tabIndex={-1}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 'var(--ds-icon-size-sm, 20px)',
-        height: 'var(--ds-icon-size-sm, 20px)',
-        padding: 0,
-        cursor: 'pointer',
-        opacity: visible ? 1 : 0,
-        transition: 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast)',
-        flexShrink: 0,
-      }}
+      onPointerDown={(event) => event.preventDefault()}
+      aria-label={translation?.t('clear') ?? 'Clear'}
     >
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
+      <ActionCloseIcon decorative size="sm" />
     </button>
   );
 }
@@ -98,9 +80,9 @@ function ClearButton({ onClick, visible }: { onClick: () => void; visible: boole
  * Modern (premium) engine for the Input component.
  *
  * Renders a native `<input>` painted by the modern skin stylesheet. When
- * prefix, suffix, or clearable content is present, wraps the input in a
- * `<label>` for correct flex alignment -- the LABEL is the shell in that
- * case (it carries the skin's classes, `data-part`, `data-state`, and every
+ * prefix, suffix, loading, or clearable content is present, wraps the input in
+ * a neutral flex shell so interactive suffix actions never nest inside a
+ * `<label>`. The wrapper carries `data-part`, `data-state`, and every
  * `data-*` paint attribute), while the inner `<input>` stays a transparent,
  * chrome-free passthrough. In the plain branch the `<input>` itself is both
  * the shell and the focusable control. Both branches carry the same class
@@ -120,6 +102,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     required = INPUT_DEFAULTS.required,
     error = INPUT_DEFAULTS.error,
     errorMessage,
+    loading = INPUT_DEFAULTS.loading,
     maxLength,
     minLength,
     min,
@@ -149,6 +132,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid,
+    'aria-required': ariaRequired,
     role,
     spellCheck,
     'aria-autocomplete': ariaAutocomplete,
@@ -164,15 +148,36 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const sizeIsResponsive = isResponsiveValue(sizeProp);
 
   if (sizeIsResponsive) {
+    const resolvedSize = (value: InputSize) => INPUT_SIZE_MAP[value as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md;
     responsiveEntries.push({
       cssProperty: 'height',
       value: sizeProp,
-      resolve: (v: InputSize) => (INPUT_SIZE_MAP[v as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md).height,
+      resolve: (v: InputSize) => `${resolvedSize(v).height} !important`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: 'font-size',
       value: sizeProp,
-      resolve: (v: InputSize) => (INPUT_SIZE_MAP[v as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md).fontSize,
+      resolve: (v: InputSize) => `${resolvedSize(v).fontSize} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'padding-inline',
+      value: sizeProp,
+      resolve: (v: InputSize) => `${resolvedSize(v).paddingX} !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'line-height',
+      value: sizeProp,
+      resolve: (v: InputSize) => `var(--ds-input-${v}-line-height) !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'border-radius',
+      value: sizeProp,
+      resolve: (v: InputSize) => `var(--ds-input-${v}-radius, var(--ds-input-${v}-border-radius)) !important`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: 'gap',
+      value: sizeProp,
+      resolve: (v: InputSize) => `var(--ds-input-${v}-gap, var(--ds-input-affix-gap)) !important`,
     } as ResponsivePropEntry<any>);
   }
 
@@ -260,14 +265,17 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   }, [isControlled, onChange, onClear]);
 
   // Determine status
-  const hasError = error || status === 'error';
+  const hasError = Boolean(error || status === 'error' || ariaInvalid === true || ariaInvalid === 'true');
   const hasWarning = !hasError && status === 'warning';
-  // Not painted by the modern skin -- this engine has never rendered a
-  // distinct success posture (unlike rustic). Stamped anyway so the DOM
-  // contract is consistent across engines; see the skin's header comment.
   const hasSuccess = !hasError && !hasWarning && status === 'success';
-
-  const showClearButton = clearable && currentValue && !disabled && !readOnly;
+  const currentValueString = String(currentValue ?? '');
+  const isFilled = currentValueString.length > 0;
+  const showClearButton = Boolean(clearable && isFilled && !disabled && !readOnly && !loading);
+  const generatedControlId = id || `input-${reactId.replace(/:/g, '')}`;
+  const errorMessageId = `${generatedControlId}-error`;
+  const describedBy = [ariaDescribedBy, hasError && errorMessage ? errorMessageId : undefined]
+    .filter(Boolean)
+    .join(' ') || undefined;
 
   // Hidden inputs carry no visible chrome: render a bare, form-participating
   // `<input type="hidden">` so server-action forms receive the value via
@@ -278,7 +286,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         type="hidden"
         name={name}
         id={id}
-        value={(currentValue ?? '') as string}
+        value={currentValueString}
         readOnly
         data-testid={dataTestId}
       />
@@ -299,6 +307,8 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         accept={props.accept}
         multiple={props.multiple}
         disabled={disabled}
+        required={required}
+        aria-required={ariaRequired ?? (required || undefined)}
         className={className}
         style={style}
         data-testid={dataTestId}
@@ -312,7 +322,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
   /** The DOM contract the modern Input skin selects on. Spread onto the
-   *  shell element -- the `<label>` in the addon branch, the `<input>`
+   *  shell element -- the neutral `<div>` in the addon branch, the `<input>`
    *  itself otherwise. */
   const skinAttributes = {
     'data-variant': variant,
@@ -321,52 +331,21 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'data-warning': hasWarning ? 'true' : undefined,
     'data-success': hasSuccess ? 'true' : undefined,
     'data-disabled': disabled ? 'true' : undefined,
+    'data-readonly': readOnly ? 'true' : undefined,
+    'data-loading': loading ? 'true' : undefined,
+    'data-filled': isFilled ? 'true' : undefined,
     'data-size-responsive': sizeIsResponsive ? 'true' : undefined,
   } as const;
 
   const shellClassName = 'rottay-input rottay-input--modern';
 
-  // Addon (prefix/suffix) style
-  const addonStyle: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    flexShrink: 0,
-    lineHeight: 1,
-  };
-
-  // Inner input style (strips decoration when inside a shell label)
-  const innerInputStyle: React.CSSProperties = {
-    flex: 1,
-    minWidth: 0,
-    width: '100%',
-    fontSize: 'inherit',
-    lineHeight: 'inherit',
-    fontFamily: 'inherit',
-    padding: 0,
-  };
-
-  // Count / error message styles
-  const countStyle: React.CSSProperties = {
-    fontSize: 'var(--ds-font-size-xs, 12px)',
-    lineHeight: 'var(--ds-line-height-xs, 16px)',
-    marginTop: 'var(--ds-spacing-1, 4px)',
-    textAlign: 'right' as const,
-  };
-
-  const errorMessageStyle: React.CSSProperties = {
-    fontSize: 'var(--ds-font-size-xs, 12px)',
-    lineHeight: 'var(--ds-line-height-xs, 16px)',
-    marginTop: 'var(--ds-spacing-1, 4px)',
-    display: 'block',
-  };
-
   // Shared input props
   const inputProps = {
     ref: inputRef,
-    id,
+    id: generatedControlId,
     name,
     type,
-    value: currentValue,
+    value: currentValueString,
     placeholder,
     disabled,
     readOnly,
@@ -385,8 +364,10 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     spellCheck,
     role,
     'aria-label': ariaLabel,
-    'aria-describedby': ariaDescribedBy,
+    'aria-describedby': describedBy,
     'aria-invalid': ariaInvalid ?? (hasError || undefined),
+    'aria-required': ariaRequired ?? (required || undefined),
+    'aria-busy': loading || undefined,
     'aria-autocomplete': ariaAutocomplete,
     'aria-controls': ariaControls,
     'aria-expanded': ariaExpanded,
@@ -399,66 +380,88 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     onKeyDown: handleKeyDown,
   };
 
-  // When addons are present, the input is wrapped in a <label> shell
-  if (prefix || suffix || showClearButton) {
+  const messages = (
+    <>
+      {showCount && maxLength && (
+        <div
+          data-part="count"
+          data-count-state={
+            hasError
+              ? 'error'
+              : currentValueString.length >= maxLength
+                ? 'limit'
+                : currentValueString.length / maxLength >= 0.9
+                  ? 'warning'
+                  : undefined
+          }
+          data-invalid={hasError ? 'true' : undefined}
+          aria-live="polite"
+        >
+          {currentValueString.length}/{maxLength}
+        </div>
+      )}
+      {hasError && errorMessage && (
+        <span id={errorMessageId} data-part="error-message" role="alert">
+          {errorMessage}
+        </span>
+      )}
+    </>
+  );
+
+  const loadingIndicator = loading ? (
+    <span data-part="loading-indicator" aria-hidden="true">
+      <StatusLoadingIcon decorative size="sm" />
+    </span>
+  ) : null;
+
+  // When addons are present, a non-label shell keeps interactive suffix
+  // buttons valid while the actual input remains associated by FormField.
+  if (prefix || suffix || showClearButton || loading) {
     return (
-      <div className={className} style={style}>
+      <div className={`rottay-input-field ${className}`.trim()} data-part="field" style={style}>
         {responsiveStyleTag}
-        <label
+        <div
           className={shellClassName}
-          onClick={() => inputRef.current?.focus()}
+          onClick={(event) => {
+            const target = event.target as HTMLElement;
+            if (!target.closest('input, button')) inputRef.current?.focus();
+          }}
           onPointerEnter={interactionHandlers.onPointerEnter}
           onPointerLeave={interactionHandlers.onPointerLeave}
           {...partAttributes('root', interaction)}
           {...skinAttributes}
+          {...responsiveAttrs}
         >
           {prefix && (
-            <span data-part="affix-prefix" style={addonStyle}>
+            <span data-part="affix-prefix">
               {prefix}
             </span>
           )}
 
           <input
             {...inputProps}
-            // `rottay-input rottay-input--modern` is carried here too, WITHOUT
-            // `data-part`/`data-state`/the skin attributes: no rule in the skin
-            // matches without `[data-part='root']`, so this is inert for paint,
-            // but it keeps the bare class present on the actual <input> for any
-            // external selector (e.g. a tenant extension sheet) that targets it
-            // there rather than on the shell.
-            className={shellClassName}
-            style={innerInputStyle}
+            className="rottay-input__control"
+            data-part="control"
           />
 
-          {showClearButton && (
-            <ClearButton onClick={handleClear} visible={interaction.hovered || interaction.focused} />
-          )}
+          {showClearButton && <ClearButton onClick={handleClear} />}
+
+          {loadingIndicator}
 
           {suffix && (
-            <span data-part="affix-suffix" style={addonStyle}>
+            <span data-part="affix-suffix">
               {suffix}
             </span>
           )}
-        </label>
-
-        {showCount && maxLength && (
-          <div data-part="count" data-error={hasError ? 'true' : 'false'} style={countStyle}>
-            {currentValue.length}/{maxLength}
-          </div>
-        )}
-
-        {hasError && errorMessage && (
-          <span data-part="error-message" style={errorMessageStyle}>
-            {errorMessage}
-          </span>
-        )}
+        </div>
+        {messages}
       </div>
     );
   }
 
   // Simple input without prefix/suffix -- the shell IS the input element
   return (
-    <div className={className} style={style}>
+    <div className={`rottay-input-field ${className}`.trim()} data-part="field" style={style}>
       {responsiveStyleTag}
       <input
         {...inputProps}
@@ -469,18 +472,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         {...partAttributes('root', interaction)}
         {...skinAttributes}
       />
-
-      {showCount && maxLength && (
-        <div data-part="count" style={countStyle}>
-          {currentValue.length}/{maxLength}
-        </div>
-      )}
-
-      {hasError && errorMessage && (
-        <span data-part="error-message" style={errorMessageStyle}>
-          {errorMessage}
-        </span>
-      )}
+      {messages}
     </div>
   );
 });

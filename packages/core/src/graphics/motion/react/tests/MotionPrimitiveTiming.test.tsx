@@ -101,6 +101,28 @@ describe("public motion primitive timing", () => {
     expect(lastCall().props["data-ds-motion-state"]).toBe("entrance");
   });
 
+  it.each([
+    ["FadeIn", <FadeIn>tall fade content</FadeIn>],
+    ["SlideIn", <SlideIn>tall slide content</SlideIn>],
+    ["ScaleIn", <ScaleIn>tall scale content</ScaleIn>],
+    [
+      "StaggerChildren",
+      <StaggerChildren>
+        <div>tall stagger content</div>
+      </StaggerChildren>,
+    ],
+  ])(
+    "reveals %s when any portion enters so tall surfaces cannot remain hidden",
+    (_primitive, node) => {
+      render(node);
+
+      expect(lastCall().props.viewport).toMatchObject({
+        once: true,
+        amount: "some",
+      });
+    }
+  );
+
   it("keeps legacy seconds and legacy millisecond values compatible", () => {
     const { rerender } = render(
       <SlideIn duration={0.32} delay={0.12}>
